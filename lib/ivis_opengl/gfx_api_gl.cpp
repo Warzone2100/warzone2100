@@ -4531,6 +4531,7 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.presentColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
+	inputs.smaa = smaaEnabled();
 	return inputs;
 }
 
@@ -5808,6 +5809,21 @@ bool gl_context::setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mo
 	return syncPipelineSurfaces();
 }
 
+bool gl_context::setSmaaEnabled(bool enabled)
+{
+	if (enabled == smaaEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setSmaaEnabled(enabled);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		// no usable drawable right now, the setting applies when the scene framebuffer is next created
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
 bool gl_context::setSceneDynamicResolution(bool enabled)
 {
 	if (enabled == sceneDynamicResolutionEnabled())
@@ -6136,9 +6152,26 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 		{
 		case gfx_api::SurfaceStorageKind::SampledColor2D:
 		{
-			const bool useRgba = (createSpec.format == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
-			const GLenum colorInternalFormat = useRgba ? root.multiSampledBufferInternalFormat : GL_RGB8;
-			const GLenum colorBaseFormat = useRgba ? root.multiSampledBufferBaseFormat : GL_RGB;
+			GLenum colorInternalFormat = GL_RGB8;
+			GLenum colorBaseFormat = GL_RGB;
+			switch (createSpec.format)
+			{
+			case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+				colorInternalFormat = root.multiSampledBufferInternalFormat;
+				colorBaseFormat = root.multiSampledBufferBaseFormat;
+				break;
+			case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			{
+				// compact two channel target, expanded to RGBA8 where RG8 is not renderable
+				const bool rg8Supported = root.textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d,
+					gfx_api::pixel_format::FORMAT_RG8_UNORM, gfx_api::pixel_format_usage::sampled_image);
+				colorInternalFormat = rg8Supported ? GL_RG8 : GL_RGBA8;
+				colorBaseFormat = rg8Supported ? GL_RG : GL_RGBA;
+				break;
+			}
+			default:
+				break;
+			}
 			auto* sceneTex = root.create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE,
 				createSpec.width, createSpec.height, "<scene texture>");
 			if (!sceneTex)

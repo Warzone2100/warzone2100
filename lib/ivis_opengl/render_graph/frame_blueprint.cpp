@@ -72,6 +72,49 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 
 	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
 
+	const bool smaaActive = (snapshot.features & RenderFeatures::Smaa) != 0;
+	const bool smaaIntermediate = (snapshot.features & RenderFeatures::SmaaIntermediate) != 0;
+	if (smaaActive)
+	{
+		// SMAA: edge detection and blending weights at scene resolution, then
+		// the neighborhood blend either into a scene-sized intermediate for a
+		// following scaling pass or straight into the swapchain
+		builder.beginPass(PassId::SmaaEdges, std::string("SmaaEdges"));
+		builder.color(PipelineSurfaceId::SmaaEdges, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
+
+		builder.beginPass(PassId::SmaaWeights, std::string("SmaaWeights"));
+		builder.color(PipelineSurfaceId::SmaaWeights, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::SmaaEdges, AttachmentRole::PrimaryColor);
+
+		builder.beginPass(PassId::SmaaBlend, std::string("SmaaBlend"));
+		if (smaaIntermediate)
+		{
+			builder.color(PipelineSurfaceId::SmaaColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::SceneColorTarget);
+		}
+		else if (snapshot.swapchainMsaa)
+		{
+			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
+				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+				.viewport(ViewportRule::Drawable);
+		}
+		else
+		{
+			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store)
+				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+				.viewport(ViewportRule::Drawable);
+		}
+		builder.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::SmaaWeights, AttachmentRole::PrimaryColor);
+	}
+
+	// the blit or upscale chain consumes the anti-aliased intermediate when present
+	const PassId sceneOutputSource = smaaIntermediate ? PassId::SmaaBlend : PassId::ScenePass;
+
 	if (snapshot.features & RenderFeatures::SceneUpscale)
 	{
 		// FSR1: edge adaptive upscale into a drawable-sized intermediate,
@@ -79,7 +122,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		builder.beginPass(PassId::SceneUpscaleEASU, std::string("SceneUpscaleEASU"));
 		builder.color(PipelineSurfaceId::UpscaledColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::Drawable)
-			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
+			.readFrom(sceneOutputSource, AttachmentRole::PrimaryColor);
 
 		builder.beginPass(PassId::SceneUpscaleRCAS, std::string("SceneUpscaleRCAS"));
 		if (snapshot.swapchainMsaa)
@@ -95,7 +138,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::Drawable)
 			.readFrom(PassId::SceneUpscaleEASU, AttachmentRole::PrimaryColor);
 	}
-	else
+	else if (!smaaActive || smaaIntermediate)
 	{
 		builder.beginPass(PassId::SceneBlit, std::string("SceneBlit"));
 		if (snapshot.swapchainMsaa)
@@ -109,7 +152,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		}
 		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
 			.viewport(ViewportRule::Drawable)
-			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
+			.readFrom(sceneOutputSource, AttachmentRole::PrimaryColor);
 	}
 
 	addSwapchainPassToBuilder(builder, PassId::TargettingEffects, "TargettingEffects", snapshot.swapchainMsaa,

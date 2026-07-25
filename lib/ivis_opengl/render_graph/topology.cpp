@@ -56,6 +56,12 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 	{
 		++count; // SceneBlit becomes the EASU and RCAS pass pair
 	}
+	if (snapshot.features & RenderFeatures::Smaa)
+	{
+		// edge detection and blending weights, plus a separate blend pass when
+		// it feeds an intermediate instead of replacing the swapchain output
+		count += (snapshot.features & RenderFeatures::SmaaIntermediate) ? 3 : 2;
+	}
 	if (snapshot.features & RenderFeatures::DebugOverlays)
 	{
 		++count;
@@ -166,6 +172,14 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 		if (query.sceneUpscaleActive())
 		{
 			snapshot.features |= RenderFeatures::SceneUpscale;
+		}
+		if (query.smaaActive())
+		{
+			snapshot.features |= RenderFeatures::Smaa;
+			if (query.smaaIntermediateActive())
+			{
+				snapshot.features |= RenderFeatures::SmaaIntermediate;
+			}
 		}
 	}
 

@@ -62,6 +62,11 @@ struct RenderFeatures
 		FrozenWorldOverlay = 1u << 3,
 		/// Replace the scene blit with the FSR1 upscale + sharpen pass pair.
 		SceneUpscale       = 1u << 4,
+		/// Insert the SMAA edge detection, blending weight and neighborhood blend passes.
+		Smaa               = 1u << 5,
+		/// The SMAA blend writes a scene-sized intermediate consumed by the
+		/// blit or upscale chain (otherwise it writes the swapchain directly).
+		SmaaIntermediate   = 1u << 6,
 	};
 };
 
@@ -131,6 +136,11 @@ public:
 	virtual std::pair<uint32_t, uint32_t> sceneColorDimensions() const = 0;
 	/// True when the backend has an upscale intermediate surface for the FSR1 pass pair.
 	virtual bool sceneUpscaleActive() const = 0;
+	/// True when the backend has the SMAA edge/weight surfaces for the SMAA pass chain.
+	virtual bool smaaActive() const = 0;
+	/// True when the backend has a scene-sized SMAA blend output surface for a
+	/// following scaling pass to consume.
+	virtual bool smaaIntermediateActive() const = 0;
 	virtual uint32_t shadowMapSize() const = 0;
 	/// True when the in-game debug overlay pass slot should exist (persistent toggles only).
 	virtual bool debugOverlaysEnabled() const = 0;

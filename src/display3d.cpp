@@ -38,6 +38,7 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/smaa_luts.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/pieclip.h"
 
@@ -1477,6 +1478,7 @@ void shutdown3DView_FullReset()
 
 	delete pScreenTriangleVBO;
 	pScreenTriangleVBO = nullptr;
+	smaaFreeLutTextures();
 }
 
 /// set the view position from save game
@@ -4541,6 +4543,79 @@ static void drawFsr1Rcas(gfx_api::abstract_texture* sourceTexture)
 	gfx_api::Fsr1RcasPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
 }
 
+// SMAA quality parameters, defaults matching the reference high preset
+static float smaaThreshold = 0.1f;
+static float smaaMaxSearchSteps = 16.f;
+static float smaaMaxSearchStepsDiag = 8.f;
+static float smaaCornerRounding = 0.25f;
+
+void display3d_setSmaaParameters(float threshold, float maxSearchSteps, float maxSearchStepsDiag, float cornerRounding)
+{
+	smaaThreshold = glm::clamp(threshold, 0.f, 0.5f);
+	smaaMaxSearchSteps = glm::clamp(maxSearchSteps, 1.f, 112.f);
+	smaaMaxSearchStepsDiag = glm::clamp(maxSearchStepsDiag, 0.f, 20.f);
+	smaaCornerRounding = glm::clamp(cornerRounding, 0.f, 1.f);
+}
+
+// rtMetrics carries the physical input size, uvScaleClamp maps viewport
+// spanning texcoords onto the rendered sub-rect and bounds every tap inside it
+static void smaaCommonConstants(gfx_api::abstract_texture* sourceTexture, glm::vec4& rtMetrics, glm::vec4& uvScaleClamp)
+{
+	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
+	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTexture).value_or(renderedDims);
+	const float texW = static_cast<float>(std::max<uint32_t>(textureDims.first, 1));
+	const float texH = static_cast<float>(std::max<uint32_t>(textureDims.second, 1));
+	rtMetrics = glm::vec4(1.f / texW, 1.f / texH, texW, texH);
+	uvScaleClamp = glm::vec4(
+		renderedDims.first / texW, renderedDims.second / texH,
+		(renderedDims.first - 0.5f) / texW, (renderedDims.second - 0.5f) / texH);
+}
+
+static void drawSmaaEdges(gfx_api::abstract_texture* sourceTexture)
+{
+	gfx_api::constant_buffer_type<SHADER_SMAA_EDGES> cbuf;
+	smaaCommonConstants(sourceTexture, cbuf.rtMetrics, cbuf.uvScaleClamp);
+	cbuf.params = glm::vec4(smaaThreshold, 0.f, 0.f, 0.f);
+
+	gfx_api::SmaaEdgesPSO::get().bind();
+	gfx_api::SmaaEdgesPSO::get().bind_constants(cbuf);
+	gfx_api::SmaaEdgesPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+	gfx_api::SmaaEdgesPSO::get().bind_textures(sourceTexture);
+	gfx_api::SmaaEdgesPSO::get().draw(3, 0);
+	gfx_api::SmaaEdgesPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+}
+
+static void drawSmaaWeights(gfx_api::abstract_texture* edgesTexture)
+{
+	gfx_api::texture* areaTexture = smaaGetAreaTexture();
+	gfx_api::texture* searchTexture = smaaGetSearchTexture();
+	ASSERT_OR_RETURN(, areaTexture != nullptr && searchTexture != nullptr, "Failed to create SMAA lookup textures");
+
+	gfx_api::constant_buffer_type<SHADER_SMAA_WEIGHTS> cbuf;
+	smaaCommonConstants(edgesTexture, cbuf.rtMetrics, cbuf.uvScaleClamp);
+	cbuf.params = glm::vec4(smaaMaxSearchSteps, smaaMaxSearchStepsDiag, smaaCornerRounding, 0.f);
+
+	gfx_api::SmaaWeightsPSO::get().bind();
+	gfx_api::SmaaWeightsPSO::get().bind_constants(cbuf);
+	gfx_api::SmaaWeightsPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+	gfx_api::SmaaWeightsPSO::get().bind_textures(edgesTexture, areaTexture, searchTexture);
+	gfx_api::SmaaWeightsPSO::get().draw(3, 0);
+	gfx_api::SmaaWeightsPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+}
+
+static void drawSmaaBlend(gfx_api::abstract_texture* colorTexture, gfx_api::abstract_texture* weightsTexture)
+{
+	gfx_api::constant_buffer_type<SHADER_SMAA_BLEND> cbuf;
+	smaaCommonConstants(colorTexture, cbuf.rtMetrics, cbuf.uvScaleClamp);
+
+	gfx_api::SmaaBlendPSO::get().bind();
+	gfx_api::SmaaBlendPSO::get().bind_constants(cbuf);
+	gfx_api::SmaaBlendPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+	gfx_api::SmaaBlendPSO::get().bind_textures(colorTexture, weightsTexture);
+	gfx_api::SmaaBlendPSO::get().draw(3, 0);
+	gfx_api::SmaaBlendPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+}
+
 void display3d_renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4& skyboxViewMatrix)
 {
 	renderSurroundings(projectionMatrix, skyboxViewMatrix);
@@ -4569,6 +4644,21 @@ void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)
 void display3d_drawFsr1Rcas(gfx_api::abstract_texture* sourceTexture)
 {
 	drawFsr1Rcas(sourceTexture);
+}
+
+void display3d_drawSmaaEdges(gfx_api::abstract_texture* sourceTexture)
+{
+	drawSmaaEdges(sourceTexture);
+}
+
+void display3d_drawSmaaWeights(gfx_api::abstract_texture* edgesTexture)
+{
+	drawSmaaWeights(edgesTexture);
+}
+
+void display3d_drawSmaaBlend(gfx_api::abstract_texture* colorTexture, gfx_api::abstract_texture* weightsTexture)
+{
+	drawSmaaBlend(colorTexture, weightsTexture);
 }
 
 void display3d_processSensorTarget()

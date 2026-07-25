@@ -576,6 +576,16 @@ namespace gfx_api
 			return true;
 		}
 
+		/// SMAA 1x post-process antialiasing over the scene color
+		bool smaaEnabled() const { return _smaaEnabled; }
+		/// Backend overrides store the value via this base implementation and rebuild
+		/// their scene targets, creating or dropping the SMAA surfaces.
+		virtual bool setSmaaEnabled(bool enabled)
+		{
+			_smaaEnabled = enabled;
+			return true;
+		}
+
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
 		/// afterward for GPU commit.
@@ -659,6 +669,7 @@ namespace gfx_api
 		optional<float> _mipLodBias;
 		uint32_t _sceneRenderScalePercent = 100;
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
+		bool _smaaEnabled = false;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;

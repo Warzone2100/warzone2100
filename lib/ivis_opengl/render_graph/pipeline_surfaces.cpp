@@ -111,6 +111,43 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
+	// SmaaEdges
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::FixedRG8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SmaaActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// SmaaWeights holds four independent blend weights, so it must not follow a
+	// scene color format with reduced alpha precision
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::FixedRGBA8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SmaaActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// SmaaColor
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SmaaIntermediateActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
 	// ShadowMap
 	makeCatalogEntry(
 		PipelineSurfaceUsage::DepthOnly,
@@ -246,6 +283,12 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 		return inputs.fsr1SceneUpscale
 			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH
 				|| inputs.sceneDynamicResolution);
+	case SurfaceEnablePolicy::SmaaActive:
+		return inputs.smaa;
+	case SurfaceEnablePolicy::SmaaIntermediateActive:
+		return inputs.smaa
+			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH
+				|| inputs.sceneDynamicResolution);
 	}
 	return false;
 }
@@ -315,6 +358,10 @@ pixel_format resolveFormat(SurfaceFormatClass formatClass, PipelineSurfaceId for
 		ASSERT(static_cast<size_t>(formatCompanion) < PIPELINE_SURFACE_COUNT,
 			"Invalid formatCompanion id");
 		return out[static_cast<size_t>(formatCompanion)].format;
+	case SurfaceFormatClass::FixedRG8:
+		return pixel_format::FORMAT_RG8_UNORM;
+	case SurfaceFormatClass::FixedRGBA8:
+		return pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	}
 	return pixel_format::invalid;
 }

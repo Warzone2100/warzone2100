@@ -105,6 +105,16 @@ public:
 		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::UpscaledColor) != nullptr;
 	}
 
+	bool smaaActive() const override
+	{
+		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::SmaaEdges) != nullptr;
+	}
+
+	bool smaaIntermediateActive() const override
+	{
+		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::SmaaColor) != nullptr;
+	}
+
 	uint32_t shadowMapSize() const override
 	{
 		return static_cast<uint32_t>(gfx_api::context::get().getDepthPassDimensions(0));

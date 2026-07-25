@@ -6038,6 +6038,7 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	}
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
+	inputs.smaa = smaaEnabled();
 	return inputs;
 }
 
@@ -7191,6 +7192,22 @@ bool VkRoot::setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode)
 	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
 	{
 		// no surfaces exist yet, the mode applies when they are created
+		return true;
+	}
+	invalidateWarmEntries();
+	return syncPipelineSurfaces();
+}
+
+bool VkRoot::setSmaaEnabled(bool enabled)
+{
+	if (enabled == smaaEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setSmaaEnabled(enabled);
+	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		// no surfaces exist yet, the setting applies when they are created
 		return true;
 	}
 	invalidateWarmEntries();
