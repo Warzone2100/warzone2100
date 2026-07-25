@@ -29,11 +29,9 @@ if(("${CPACK_GENERATOR}" IN_LIST CPACK_SOURCE_GENERATOR) OR ("${CPACK_GENERATOR}
 	# (without running their own CMake build to generate netplay_config.h)
 
 	set(OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/lib/netplay/netplay_config.gen")
-	set(CACHEFILE "${AUTOREVISION_OUTPUT_FILE}")
 	set(_netplay_config_template_file "@PROJECT_SOURCE_DIR@/lib/netplay/netplay_config.h.in")
-	set(_project_root "@PROJECT_SOURCE_DIR@")
 
-	execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DPROJECT_ROOT=${_project_root} -DTEMPLATE_FILE=${_netplay_config_template_file} -DOUTPUT_FILE=${OUTPUT_FILE} -P "@PROJECT_SOURCE_DIR@/lib/netplay/autorevision_netplay.cmake"
+	execute_process(COMMAND ${CMAKE_COMMAND} -DTEMPLATE_FILE=${_netplay_config_template_file} -DOUTPUT_FILE=${OUTPUT_FILE} -P "@PROJECT_SOURCE_DIR@/lib/netplay/autorevision_netplay.cmake"
 		WORKING_DIRECTORY "@PROJECT_SOURCE_DIR@")
 
 endif()

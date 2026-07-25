@@ -335,11 +335,6 @@ static PlayerManagementRecord playerManagementRecord;
 PortMappingAsyncRequestHandle ipv4MappingRequest;
 
 // ////////////////////////////////////////////////////////////////////////////
-/************************************************************************************
- **  NOTE (!)  Increment NETCODE_VERSION_MINOR on each release.
- **
- ************************************************************************************
-**/
 static char const *versionString = version_getVersionString();
 
 #include "lib/netplay/netplay_config.h"
