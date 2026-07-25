@@ -99,6 +99,7 @@
 #include "shadowcascades.h"
 #include "profiling.h"
 #include "game_world.h"
+#include "corridor_map.h"
 
 
 /********************  Prototypes  ********************/
@@ -173,6 +174,7 @@ static bool	bDrawProximitys = true;
 bool	godMode;
 bool	showGateways = false;
 bool	showPath = false;
+bool	showCorridors = false;
 
 // Skybox data
 static float wind = 0.0f;
@@ -859,6 +861,45 @@ static void showDroidPaths(const GameWorld& world)
 				effectGiveAuxVar(80);
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 			}
+		}
+	}
+}
+
+/// Marks detected corridor centerlines in the world, a marker at each centerline
+/// point and a larger one at each mouth. Placed at the exact tile-center world
+/// coordinates, so it shows the true geometry rather than the half-tile-shifted
+/// lightmap. Only points near the camera are drawn, so a large map stays cheap.
+static void showCorridorCenterlines(const GameWorld& world)
+{
+	if ((graphicsTime / 250 % 2) != 0)
+	{
+		return;
+	}
+	const CorridorMap *cmap = world.map.corridors.get();
+	if (cmap == nullptr)
+	{
+		return;
+	}
+	const Vector2i cam(playerPos.p.x, playerPos.p.z);
+	const int64_t cullSq = static_cast<int64_t>(30 * TILE_UNITS) * static_cast<int64_t>(30 * TILE_UNITS);
+	for (const Corridor &c : cmap->corridors)
+	{
+		const size_t last = c.centerline.size() - 1;
+		for (size_t i = 0; i < c.centerline.size(); ++i)
+		{
+			const Vector2i w = c.centerline[i];
+			const int64_t dx = w.x - cam.x, dy = w.y - cam.y;
+			if (dx * dx + dy * dy > cullSq || !worldOnMap(world.map, w.x, w.y))
+			{
+				continue;
+			}
+			const bool mouth = (i == 0 || i == last);
+			Vector3i pos;
+			pos.x = w.x;
+			pos.z = w.y;
+			pos.y = map_Height(world.map, w.x, w.y) + 8;
+			effectGiveAuxVar(mouth ? 120 : 60);
+			addEffect(&pos, EFFECT_EXPLOSION, mouth ? EXPLOSION_TYPE_SMALL : EXPLOSION_TYPE_LASER, false, nullptr, 0);
 		}
 	}
 }
@@ -4865,4 +4906,9 @@ void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext&)
 	}
 
 	pie_DebugDrawTessellationTestPatch(); // dev-only (no-op unless WZ_DEBUG_TESS_TEST=1)
+
+	if (showCorridors)
+	{
+		showCorridorCenterlines(gameWorld);
+	}
 }

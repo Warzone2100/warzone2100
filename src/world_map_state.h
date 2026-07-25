@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "gateway.h"
+#include "corridor_map.h"
 
 #include <array>
 #include <memory>
@@ -89,4 +90,6 @@ struct WorldMapState
 	WorldScrollLimits scroll;
 	/// the list of gateways on the current map
 	GATEWAY_LIST gateways;
+	/// detected narrow passages, built after load, null until then
+	std::unique_ptr<CorridorMap> corridors;
 };

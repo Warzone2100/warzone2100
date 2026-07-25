@@ -126,6 +126,7 @@ extern Vector2i mousePos;
 
 extern bool showGateways;
 extern bool showPath;
+extern bool showCorridors;
 extern const Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/

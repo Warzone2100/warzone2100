@@ -46,6 +46,7 @@
 #include "movebench.h"
 #include "pathbench.h"
 #include "pathfinding_backend.h"
+#include "corridordump.h"
 #include "multiplay.h"
 #include "version.h"
 #include "warzoneconfig.h"
@@ -393,6 +394,7 @@ typedef enum
 	CLI_PATHBENCH,
 	CLI_PATHBENCHREPEATS,
 	CLI_PATHFINDINGBACKEND,
+	CLI_CORRIDORDUMP,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
@@ -505,6 +507,7 @@ static const struct poptOption *getOptionsTable()
 		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
 		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
 		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy, 1 directional bias)"), N_("features") },
+		{ "corridordump", POPT_ARG_STRING, CLI_CORRIDORDUMP,   N_("Detect corridors on the named map, dump the geometry, and quit"), N_("map") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1343,6 +1346,26 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Bad pathfinding backend value");
 			}
 			wz_pathfinding_backend = parsePathfindingBackendArg(token);
+			break;
+
+		case CLI_CORRIDORDUMP:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad corridor dump map name");
+			}
+			if (!corridorDumpSelectMap(token))
+			{
+				qFatal("Bad corridor dump map name");
+			}
+			// Launched like the movement bench, a headless skirmish that loads the
+			// requested map. The map override in loadMapChallengeSettings points it
+			// at the chosen level rather than the config's placeholder.
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = "corridordump.json";
+			wz_autogame = true;
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
 			break;
 
 		case CLI_GAMEPORT:

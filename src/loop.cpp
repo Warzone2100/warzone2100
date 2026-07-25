@@ -46,6 +46,7 @@
 #include "gamestate_serialize.h"
 #include "movebench.h"
 #include "pathbench.h"
+#include "corridordump.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -615,6 +616,7 @@ static void gameStateUpdate()
 		GameStoryLogger::instance().logGameFrame();
 		movementBenchUpdate();
 		pathBenchUpdate();
+		corridorDumpUpdate();
 	}
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.

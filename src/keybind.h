@@ -154,6 +154,7 @@ MappableFunction kf_SelectCommander_N(const unsigned int n);
 
 void kf_ToggleShowGateways();
 void kf_ToggleShowPath();
+void kf_ToggleShowCorridors();
 
 void kf_FaceNorth();
 void kf_FaceSouth();
