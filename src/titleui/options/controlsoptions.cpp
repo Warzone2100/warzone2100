@@ -1607,6 +1607,7 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 	addFixedRow("gamepadCore.queueOrder", N_("Queue Move / Order"), chord(GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_EAST));
 	addFixedRow("gamepadCore.menu", N_("Menu / Back"), buttonName(GPAD_BTN_START));
 	addFixedRow("gamepadCore.confirm", N_("Confirm / Chat"), buttonName(GPAD_BTN_WEST));
+	addFixedRow("gamepadCore.stopHold", N_("Stop / Hold Position"), buttonName(GPAD_BTN_NORTH), N_("Tap to stop the selected units and hold to have them hold position"));
 	addFixedRow("gamepadCore.panCamera", N_("Pan Camera / Scroll"), cameraStickName, N_("Scrolls instead when the cursor is over a scrollable list"));
 	addFixedRow("gamepadCore.rotateCamera", N_("Rotate / Pitch Camera"), [cameraStickName]() -> WzString {
 		return WzString::fromUtf8(astringf("%s + %s", gamepadButtonName(GPAD_BTN_RIGHT_SHOULDER), cameraStickName().toUtf8().c_str()));

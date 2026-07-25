@@ -119,6 +119,7 @@ static BindingLabels buildBindingLabels()
 	setBindingLabel(labels, MetaLayer::NONE, GPAD_BTN_SOUTH, _("Left Click / Select"));
 	setBindingLabel(labels, MetaLayer::NONE, GPAD_BTN_EAST, _("Right Click / Order"));
 	setBindingLabel(labels, MetaLayer::NONE, GPAD_BTN_WEST, _("Confirm / Chat"));
+	setBindingLabel(labels, MetaLayer::NONE, GPAD_BTN_NORTH, _("Stop / Hold Position"), true);
 
 	setBindingLabel(labels, MetaLayer::LB, GPAD_BTN_SOUTH, _("Add to Selection"));
 	setBindingLabel(labels, MetaLayer::LB, GPAD_BTN_EAST, _("Queue Move / Order"));
@@ -736,7 +737,7 @@ private:
 		auto centerZone = GamepadLayoutZone::make(_("Center"), {GPAD_BTN_BACK, GPAD_BTN_START});
 		auto rightZone = GamepadLayoutZone::make(_("Right Side"), {GPAD_BTN_RIGHT_SHOULDER, GPAD_BTN_RIGHT_TRIGGER, rightMove, rightPress});
 		auto dpadZone = GamepadLayoutZone::make(_("D-Pad"), {GPAD_BTN_DPAD_UP, GPAD_BTN_DPAD_RIGHT, GPAD_BTN_DPAD_DOWN, GPAD_BTN_DPAD_LEFT}, WzString("* ") + _("tap: recall, hold: assign"));
-		auto faceZone = GamepadLayoutZone::make(_("Face Buttons"), {GPAD_BTN_SOUTH, GPAD_BTN_EAST, GPAD_BTN_WEST, GPAD_BTN_NORTH});
+		auto faceZone = GamepadLayoutZone::make(_("Face Buttons"), {GPAD_BTN_SOUTH, GPAD_BTN_EAST, GPAD_BTN_WEST, GPAD_BTN_NORTH}, WzString("* ") + _("tap: stop, hold: hold position"));
 		zones = {leftZone, centerZone, rightZone, dpadZone, faceZone};
 
 		if (wideMode)

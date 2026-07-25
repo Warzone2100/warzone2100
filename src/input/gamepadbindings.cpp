@@ -36,6 +36,9 @@
 // group instead of recalling the group
 static const uint32_t GAMEPAD_GROUP_ASSIGN_HOLD_MS = 400;
 
+// Keeping the stop button held this long upgrades the order to hold position
+static const uint32_t GAMEPAD_STOP_HOLD_MS = 400;
+
 struct GroupButtonState
 {
 	unsigned int group = 0;   // latched at press, including the shoulder layer offset
@@ -93,6 +96,24 @@ void gamepadProcessBindings()
 	updateGroupButton(GPAD_BTN_DPAD_RIGHT, 2, dpadRight);
 	updateGroupButton(GPAD_BTN_DPAD_DOWN, 3, dpadDown);
 	updateGroupButton(GPAD_BTN_DPAD_LEFT, 4, dpadLeft);
+
+	// the north face button orders the selection to stop on the press edge so
+	// it stays immediate, and keeping it held upgrades the order to hold
+	// position (hold implies stop, so the early stop is harmless) - shoulder
+	// chords on the button belong to the keymap
+	static uint32_t stopPressTime = 0;
+	static bool stopHoldIssued = true;
+	if (gamepadButtonPressed(GPAD_BTN_NORTH) && !gamepadButtonDown(GPAD_BTN_LEFT_SHOULDER) && !gamepadButtonDown(GPAD_BTN_RIGHT_SHOULDER))
+	{
+		stopPressTime = wzGetTicks();
+		stopHoldIssued = false;
+		kf_OrderDroid(DORDER_STOP)();
+	}
+	if (!stopHoldIssued && gamepadButtonDown(GPAD_BTN_NORTH) && wzGetTicks() - stopPressTime >= GAMEPAD_STOP_HOLD_MS)
+	{
+		stopHoldIssued = true;
+		kf_OrderDroid(DORDER_HOLD)();
+	}
 
 	// back toggles game info - the objectives screen in campaign and the
 	// multiplayer options / alliances dialog in multiplayer
