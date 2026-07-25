@@ -154,5 +154,8 @@ int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY);
 void display3d_setUpscalingSharpness(float stops);
 float display3d_getUpscalingSharpness();
 void display3d_setSmaaParameters(float threshold, float maxSearchSteps, float maxSearchStepsDiag, float cornerRounding);
+enum class SMAA_MODE : uint8_t;
+// Applies an SMAA quality preset and enables or disables the pass chain
+bool display3d_setSmaaMode(SMAA_MODE mode);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

@@ -789,6 +789,33 @@ bool loadConfig()
 		}
 	}
 	war_setUpscalingSharpness(iniGetInteger("upscalingSharpness", war_getUpscalingSharpness()).value());
+	{
+		std::string smaaValue = iniGetString("smaa", "off").value();
+		if (smaaValue == "low")
+		{
+			war_setSmaaMode(SMAA_MODE::LOW);
+		}
+		else if (smaaValue == "medium")
+		{
+			war_setSmaaMode(SMAA_MODE::MEDIUM);
+		}
+		else if (smaaValue == "high")
+		{
+			war_setSmaaMode(SMAA_MODE::HIGH);
+		}
+		else if (smaaValue == "ultra")
+		{
+			war_setSmaaMode(SMAA_MODE::ULTRA);
+		}
+		else
+		{
+			if (smaaValue != "off")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid smaa value: \"%s\"; using \"off\"", smaaValue.c_str());
+			}
+			war_setSmaaMode(SMAA_MODE::OFF);
+		}
+	}
 
 	{
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
@@ -1023,6 +1050,14 @@ bool saveConfig()
 	iniSetInteger("renderResolution", (int)war_getRenderResolutionPercent());
 	iniSetString("upscaling", (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1) ? "fsr1" : "bilinear");
 	iniSetInteger("upscalingSharpness", war_getUpscalingSharpness());
+	switch (war_getSmaaMode())
+	{
+		case SMAA_MODE::OFF: iniSetString("smaa", "off"); break;
+		case SMAA_MODE::LOW: iniSetString("smaa", "low"); break;
+		case SMAA_MODE::MEDIUM: iniSetString("smaa", "medium"); break;
+		case SMAA_MODE::HIGH: iniSetString("smaa", "high"); break;
+		case SMAA_MODE::ULTRA: iniSetString("smaa", "ultra"); break;
+	}
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());

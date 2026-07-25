@@ -118,6 +118,7 @@ struct WARZONE_GLOBALS
 	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
 	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
+	SMAA_MODE smaaMode = SMAA_MODE::OFF;
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -917,6 +918,16 @@ int war_getUpscalingSharpness()
 void war_setUpscalingSharpness(int hundredthsOfStops)
 {
 	warGlobs.upscalingSharpness = std::min(std::max(hundredthsOfStops, 0), 200);
+}
+
+SMAA_MODE war_getSmaaMode()
+{
+	return warGlobs.smaaMode;
+}
+
+void war_setSmaaMode(SMAA_MODE mode)
+{
+	warGlobs.smaaMode = mode;
 }
 
 bool war_getPointLightPerPixelLighting()
