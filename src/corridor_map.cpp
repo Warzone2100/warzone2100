@@ -430,6 +430,21 @@ int32_t measureWidth(const Grid &g, const std::vector<uint8_t> &passable, int tx
 	return TILE_UNITS + steps * stepUnits;
 }
 
+// Passable distance from the centerline tile to the wall on each side,
+// perpendicular to the local direction, in world units. +perp is the direction's
+// right (verified against the movement convention), so it is the right extent.
+// Half the centerline tile counts toward each side.
+void measureExtents(const Grid &g, const std::vector<uint8_t> &passable, int tx, int ty, int dirX, int dirY,
+                    int32_t &rightOut, int32_t &leftOut)
+{
+	const int perpX = -dirY;
+	const int perpY = dirX;
+	const bool diagonal = (perpX != 0 && perpY != 0);
+	const int32_t stepUnits = diagonal ? (TILE_UNITS * 181 / 128) : TILE_UNITS;
+	rightOut = TILE_UNITS / 2 + countSpan(g, passable, tx, ty, perpX, perpY) * stepUnits;
+	leftOut = TILE_UNITS / 2 + countSpan(g, passable, tx, ty, -perpX, -perpY) * stepUnits;
+}
+
 // True when the full skeleton branches off the narrow set at this tile, meaning
 // the passage opens into a wider area here. This is a skeleton tile the narrow
 // width threshold excluded, so the medial axis is running out into free space.
@@ -745,6 +760,8 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 			return;   // a dead-end pocket, not a through-corridor
 		}
 		std::vector<int32_t> widths(chain.size());
+		std::vector<int32_t> rightExt(chain.size());
+		std::vector<int32_t> leftExt(chain.size());
 		for (size_t i = 0; i < chain.size(); ++i)
 		{
 			const Vector2i prev = chain[i > 0 ? i - 1 : i];
@@ -756,6 +773,7 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 				dirX = 1;
 			}
 			widths[i] = measureWidth(g, passable, chain[i].x, chain[i].y, dirX, dirY);
+			measureExtents(g, passable, chain[i].x, chain[i].y, dirX, dirY, rightExt[i], leftExt[i]);
 		}
 		const int32_t minW = *std::min_element(widths.begin(), widths.end());
 		if (minW > MAX_CORRIDOR_WIDTH_WORLD)
@@ -770,6 +788,8 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 			c.centerline.push_back(tileCentre(t.x, t.y));
 		}
 		c.widthProfile = widths;
+		c.rightExtent = rightExt;
+		c.leftExtent = leftExt;
 		c.mouthA = c.centerline.front();
 		c.mouthB = c.centerline.back();
 		c.minWidth = minW;
