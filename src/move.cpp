@@ -2429,6 +2429,14 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	}
 
+	// Hold a droid waiting to enter a corridor whose flow runs the other way, so
+	// the two directions alternate instead of stuffing head-on. It keeps its
+	// facing and resumes on its own once its direction has the corridor.
+	if (pathfindingCorridorLanesEnabled() && corridorShouldHold(psDroid))
+	{
+		moveSpeed = 0;
+	}
+
 	// Update the movement model for the droid
 	oldx = psDroid->pos.x;
 	oldy = psDroid->pos.y;

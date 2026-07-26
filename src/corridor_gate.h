@@ -22,8 +22,10 @@
  *  Corridor coordination, the layer between the route planner and local
  *  steering. A droid moving through a detected corridor is steered to keep to
  *  its own side, so opposing flows split into two lanes rather than colliding
- *  as a blob. The droid's route is not changed, only the point its steering
- *  aims at while inside the corridor.
+ *  as a blob. A droid waiting to enter a corridor whose flow runs the other way
+ *  is held outside until its turn, so the two directions alternate instead of
+ *  stuffing head-on. The droid's route is never changed, only the point its
+ *  steering aims at and whether it advances this tick.
  */
 
 #pragma once
@@ -32,8 +34,16 @@
 
 struct DROID;
 
+/// Recomputes the per-corridor flow state for this tick. Call once before any
+/// droid moves, so every droid decides against the same snapshot.
+void corridorGateUpdate();
+
 /// If the droid is inside a detected corridor, fills laneTarget with a steering
-/// point that keeps it on its side of the corridor and returns true. Returns
-/// false when the droid is not in a corridor, so the caller steers to its own
-/// waypoint as usual. Deterministic and integer, reads only synced state.
+/// point that keeps it on its side and returns true. Returns false when the
+/// droid is not inside a corridor, so the caller steers to its own waypoint.
+/// Deterministic and integer, reads only synced state.
 bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget);
+
+/// True if the droid is waiting to enter a corridor whose current flow runs the
+/// other way, so the movement layer should hold it in place until its turn.
+bool corridorShouldHold(const DROID *psDroid);
