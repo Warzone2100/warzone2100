@@ -987,9 +987,10 @@ LoadingTask<> loadSaveGameResourceTaskImpl(ResourceLoadingController &controller
 	co_await controller.yieldFrame();
 
 	// When this folder has a GameState state blob, route to the new cold-load path (the default). The
-	// devForceOldSavegameLoad config option forces the legacy loadGameInit even for a dual-written folder
-	// (its legacy .json files are always still present); a folder without a blob always takes the legacy path.
-	if (!war_getDevForceOldSavegameLoad() && gamestate::savegame::isNewFormatSaveFolder(saveGameName))
+	// devForceOldSavegameLoad config option (or the temporary --tmp-prefer-old-save CLI flag) forces the
+	// legacy loadGameInit even for a dual-written folder (its legacy .json files are always still present);
+	// a folder without a blob always takes the legacy path.
+	if (!war_getDevForceOldSavegameLoad() && !gamestate::savegame::preferLegacyLoadOverride() && gamestate::savegame::isNewFormatSaveFolder(saveGameName))
 	{
 		if (!(co_await gamestate::savegame::coldLoadGameInit(controller, saveGameName))) {
 			co_return load_fail();
