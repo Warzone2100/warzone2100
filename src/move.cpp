@@ -39,6 +39,8 @@
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
+#include "corridor_gate.h"
 #include "loop.h"
 #include "geometry.h"
 #include "action.h"
@@ -1354,6 +1356,14 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	ctx.droid = psDroid;
 	ctx.currentPos = psDroid->pos.xy();
 	ctx.targetPos = psDroid->sMove.target;
+	// Inside a corridor, aim at the droid's lane instead of straight at the
+	// waypoint, so opposing flows split into two passing lanes. The waypoint and
+	// the route are unchanged, only where the steering points.
+	Vector2i laneTarget;
+	if (pathfindingCorridorLanesEnabled() && corridorLaneTarget(psDroid, laneTarget))
+	{
+		ctx.targetPos = laneTarget;
+	}
 	ctx.velocity = iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed);
 	ctx.moveDir = psDroid->sMove.moveDir;
 	ctx.speed = psDroid->sMove.speed;
