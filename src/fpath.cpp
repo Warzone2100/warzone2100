@@ -663,6 +663,11 @@ bool pathfindingOverlayEnabled()
 	return (game.pathfindingBackend & PF_DIRECTIONAL_BIAS) != 0;
 }
 
+bool pathfindingCorridorLanesEnabled()
+{
+	return (game.pathfindingBackend & PF_CORRIDOR_LANES) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;

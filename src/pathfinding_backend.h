@@ -61,10 +61,13 @@ struct WorldMapState;
 enum PathfindingFeature : uint8_t
 {
 	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping in the planner (not built yet)
+	PF_CORRIDOR_LANES    = 1 << 1,   ///< steer into lanes through detected corridors
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
 bool pathfindingOverlayEnabled();
+/// True if the movement layer should steer droids into corridor lanes.
+bool pathfindingCorridorLanesEnabled();
 
 class IPathfindingBackend
 {
