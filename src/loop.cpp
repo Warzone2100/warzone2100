@@ -47,6 +47,7 @@
 #include "movebench.h"
 #include "pathbench.h"
 #include "corridordump.h"
+#include "corridor_gate.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -561,6 +562,10 @@ static void gameStateUpdate()
 
 	// update the command droids
 	cmdDroidUpdate();
+
+	// Snapshot each corridor's flow direction before any droid moves, so every
+	// droid this tick decides against the same picture.
+	corridorGateUpdate();
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
