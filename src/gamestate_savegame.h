@@ -190,6 +190,12 @@ bool writeGameStateBlobToFolder(const std::string &folderPath, SaveType saveType
 /// the load entry point to route new-format saves here while leaving legacy .gam saves untouched.
 bool isNewFormatSaveFolder(const std::string &folderPath);
 
+/// Session-only override (set by the temporary --tmp-prefer-old-save CLI flag): when true, the load
+/// router uses the legacy loadGameInit even for a folder that also has the new-format blob. Unlike
+/// the devForceOldSavegameLoad config option, this is not persisted and lasts only for the run.
+void setPreferLegacyLoadOverride(bool prefer);
+bool preferLegacyLoadOverride();
+
 /// Cold-load entry, mirroring loadGameInit for the new format. Reads the folder (restoring the
 /// setup/identity globals), remounts the save's mods + resolves the level, loads the level dataset
 /// (so rules/stats/VIEWDATA/scripts/tileset exist), then applies the GameState world/objects. The

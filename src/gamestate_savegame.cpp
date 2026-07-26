@@ -1293,6 +1293,18 @@ bool isNewFormatSaveFolder(const std::string &folderPath)
 	return PHYSFS_exists(blobPath.c_str()) != 0;
 }
 
+static bool g_preferLegacyLoadOverride = false;
+
+void setPreferLegacyLoadOverride(bool prefer)
+{
+	g_preferLegacyLoadOverride = prefer;
+}
+
+bool preferLegacyLoadOverride()
+{
+	return g_preferLegacyLoadOverride;
+}
+
 bool takeColdLoadReconstructFlag()
 {
 	const bool wasReconstruct = g_coldLoadReconstruct;
