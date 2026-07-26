@@ -53,6 +53,10 @@ const int LOOKAHEAD = 3;
 // still at the entrance rather than through it.
 const int MOUTH_MARGIN = 2;
 
+// Keep a lane this far in from the corridor wall, so a droid steered to its side
+// is not pushed onto the wall. A little over a unit radius.
+const int32_t WALL_MARGIN = 3 * TILE_UNITS / 4;
+
 // Which way a droid relates to a corridor this tick.
 enum Relation
 {
@@ -70,9 +74,30 @@ struct Query
 	int dir = 0;                ///< +1 travelling toward the far mouth, -1 toward the near one
 };
 
+// How close to a mouth counts as its apron, and how many droids the apron holds
+// before the rest are paced back. Keeps the entrance an orderly queue rather
+// than a blob that shuffles and spins.
+const int32_t APRON_RADIUS = 3 * TILE_UNITS;
+const int APRON_CAPACITY = 4;
+
 // Per-corridor flow direction for this tick: +1, -1, or 0 for open. Rebuilt each
 // tick from synced droid state, so it is never saved.
 std::vector<int8_t> g_activeDir;
+
+// Per-corridor-mouth droid count in the apron this tick, indexed 2*corridor plus
+// 0 for the front mouth, 1 for the back. Paces entry so a mouth does not blob.
+std::vector<int32_t> g_apronCount;
+
+int mouthIndex(int dir)
+{
+	return dir > 0 ? 0 : 1;   // dir +1 enters the front mouth, -1 the back
+}
+
+int64_t distSqTo(const Vector2i &a, const Vector2i &b)
+{
+	const Vector2i d = a - b;
+	return static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y;
+}
 
 Query queryCorridor(const Vector2i &pos, const Vector2i &target)
 {
@@ -182,6 +207,7 @@ void corridorGateUpdate()
 	std::vector<int> insideBwd(n, 0);
 	std::vector<uint32_t> lowestId(n, UINT32_MAX);
 	std::vector<int8_t> lowestIdDir(n, 0);
+	g_apronCount.assign(n * 2, 0);
 
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
@@ -201,6 +227,12 @@ void corridorGateUpdate()
 			{
 				lowestId[c] = psDroid->id;
 				lowestIdDir[c] = static_cast<int8_t>(q.dir);
+			}
+			const Corridor &cor = cmap->corridors[c];
+			const Vector2i entryMouth = q.dir > 0 ? cor.centerline.front() : cor.centerline.back();
+			if (distSqTo(psDroid->pos.xy(), entryMouth) < static_cast<int64_t>(APRON_RADIUS) * APRON_RADIUS)
+			{
+				g_apronCount[c * 2 + mouthIndex(q.dir)] += 1;
 			}
 		}
 	}
@@ -228,7 +260,11 @@ void corridorGateUpdate()
 bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 {
 	const Query q = queryDroid(psDroid);
-	if (q.relation != INSIDE)
+	// Steer any droid near a corridor, not only those already through a mouth, so
+	// approaching droids are pre-sorted into their lane before they reach it. The
+	// ones that must wait are held by the flow gate, so steering them costs
+	// nothing.
+	if (q.corridorId < 0)
 	{
 		return false;
 	}
@@ -238,7 +274,11 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 	const int aheadIdx = std::clamp(static_cast<int>(q.nearest) + q.dir * LOOKAHEAD,
 	                                0, static_cast<int>(c.centerline.size()) - 1);
 	const Vector2i ahead = c.centerline[aheadIdx];
-	const int32_t laneOffset = c.widthProfile[q.nearest] / 4;
+	// A quarter of the width to the droid's right, but never so far that it is
+	// pushed onto the wall. The cap uses the local width, so the lane pulls in
+	// where the passage pinches.
+	const int32_t halfWidth = c.widthProfile[q.nearest] / 2;
+	const int32_t laneOffset = std::min(c.widthProfile[q.nearest] / 4, std::max(0, halfWidth - WALL_MARGIN));
 	const uint16_t travelDir = iAtan2(travel);
 	// Angles run clockwise from a downward y axis, so a right turn is minus a
 	// quarter, which puts each direction on its own right and the two on opposite
@@ -267,19 +307,31 @@ bool corridorShouldHold(const DROID *psDroid)
 		return false;
 	}
 	const size_t c = static_cast<size_t>(q.corridorId);
-	if (c >= g_activeDir.size() || g_activeDir[c] == 0 || q.dir == g_activeDir[c])
+	if (c >= g_activeDir.size())
 	{
-		return false;   // corridor open, or this droid's direction has it
+		return false;
 	}
 	const Corridor &cor = gameWorld.map.corridors->corridors[c];
-	if (cor.minWidth >= METER_MAX_WIDTH)
-	{
-		return false;   // wide enough for both directions at once
-	}
-	// Only hold droids still back from the mouth. One already at the apron enters
-	// rather than stopping on the exit, and the rest queue behind it.
 	const Vector2i mouth = q.dir > 0 ? cor.centerline.front() : cor.centerline.back();
-	const Vector2i d = psDroid->pos.xy() - mouth;
-	const int64_t distSq = static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y;
-	return distSq >= static_cast<int64_t>(HOLD_STANDOFF) * HOLD_STANDOFF;
+	const int64_t distSq = distSqTo(psDroid->pos.xy(), mouth);
+
+	// Entry pacing, on any corridor: hold back from a mouth whose apron is
+	// already full, so the entrance stays an orderly queue. One already at the
+	// apron carries on, the rest wait behind it.
+	if (distSq >= static_cast<int64_t>(APRON_RADIUS) * APRON_RADIUS
+	    && g_apronCount[c * 2 + mouthIndex(q.dir)] >= APRON_CAPACITY)
+	{
+		return true;
+	}
+
+	// Flow gate, narrow corridors only: hold if the other direction has the
+	// corridor. A wider one takes both at once in lanes. Keep a standoff so a held
+	// droid does not block the exit the opposing flow needs.
+	if (g_activeDir[c] != 0 && q.dir != g_activeDir[c]
+	    && cor.minWidth < METER_MAX_WIDTH
+	    && distSq >= static_cast<int64_t>(HOLD_STANDOFF) * HOLD_STANDOFF)
+	{
+		return true;
+	}
+	return false;
 }
