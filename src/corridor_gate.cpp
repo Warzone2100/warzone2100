@@ -32,6 +32,7 @@
 #include "droid.h"
 #include "game_world.h"
 #include "map.h"
+#include "move.h"
 #include "pathfinding_backend.h"
 
 #include <algorithm>
@@ -52,10 +53,6 @@ const int LOOKAHEAD = 3;
 // A droid whose nearest centerline point is within this of a mouth counts as
 // still at the entrance rather than through it.
 const int MOUTH_MARGIN = 2;
-
-// Keep a lane this far in from the corridor wall, so a droid steered to its side
-// is not pushed onto the wall. A little over a unit radius.
-const int32_t WALL_MARGIN = 3 * TILE_UNITS / 4;
 
 // Which way a droid relates to a corridor this tick.
 enum Relation
@@ -80,9 +77,17 @@ struct Query
 const int32_t APRON_RADIUS = 3 * TILE_UNITS;
 const int APRON_CAPACITY = 4;
 
+// Keep a lane centre this far from a wall and from the centreline, so a droid is
+// off the wall and clearly on its own side. About a unit radius.
+const int32_t LANE_MARGIN = TILE_UNITS / 2;
+
 // Per-corridor flow direction for this tick: +1, -1, or 0 for open. Rebuilt each
 // tick from synced droid state, so it is never saved.
 std::vector<int8_t> g_activeDir;
+
+// Per-corridor, whether both directions have droids at it this tick. When only
+// one direction is present it fills the whole passage, when both it splits.
+std::vector<uint8_t> g_contested;
 
 // Per-corridor-mouth droid count in the apron this tick, indexed 2*corridor plus
 // 0 for the front mouth, 1 for the back. Paces entry so a mouth does not blob.
@@ -207,6 +212,8 @@ void corridorGateUpdate()
 	std::vector<int> insideBwd(n, 0);
 	std::vector<uint32_t> lowestId(n, UINT32_MAX);
 	std::vector<int8_t> lowestIdDir(n, 0);
+	std::vector<uint8_t> hasFwd(n, 0);
+	std::vector<uint8_t> hasBwd(n, 0);
 	g_apronCount.assign(n * 2, 0);
 
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
@@ -219,6 +226,7 @@ void corridorGateUpdate()
 				continue;
 			}
 			const size_t c = static_cast<size_t>(q.corridorId);
+			(q.dir > 0 ? hasFwd[c] : hasBwd[c]) = 1;
 			if (q.relation == INSIDE)
 			{
 				(q.dir > 0 ? insideFwd[c] : insideBwd[c]) += 1;
@@ -238,8 +246,10 @@ void corridorGateUpdate()
 	}
 
 	g_activeDir.assign(n, 0);
+	g_contested.assign(n, 0);
 	for (size_t c = 0; c < n; ++c)
 	{
+		g_contested[c] = (hasFwd[c] && hasBwd[c]) ? 1 : 0;
 		if (insideFwd[c] > insideBwd[c])
 		{
 			g_activeDir[c] = 1;
@@ -269,23 +279,61 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 		return false;
 	}
 	const Corridor &c = gameWorld.map.corridors->corridors[static_cast<size_t>(q.corridorId)];
-	const Vector2i travel = q.axis * q.dir;
-
 	const int aheadIdx = std::clamp(static_cast<int>(q.nearest) + q.dir * LOOKAHEAD,
 	                                0, static_cast<int>(c.centerline.size()) - 1);
 	const Vector2i ahead = c.centerline[aheadIdx];
-	// A quarter of the width to the droid's right, but never so far that it is
-	// pushed onto the wall. The cap uses the local width, so the lane pulls in
-	// where the passage pinches.
-	const int32_t halfWidth = c.widthProfile[q.nearest] / 2;
-	const int32_t laneOffset = std::min(c.widthProfile[q.nearest] / 4, std::max(0, halfWidth - WALL_MARGIN));
-	const uint16_t travelDir = iAtan2(travel);
-	// Angles run clockwise from a downward y axis, so a right turn is minus a
-	// quarter, which puts each direction on its own right and the two on opposite
-	// sides of the corridor.
-	const Vector2i toRight = iSinCosR(static_cast<uint16_t>(travelDir - DEG(90)), laneOffset);
 
-	laneTarget = ahead + toRight;
+	// Place the lane from the real passable room on each side of the centerline.
+	// Positive is toward the axis right (the index-increasing side). Where the
+	// passage pinches the extents shrink, so the lane pulls in on its own side
+	// rather than onto the corner, and it never crosses to the opposing side.
+	const int32_t rightExt = c.rightExtent[q.nearest];
+	const int32_t leftExt = c.leftExtent[q.nearest];
+	const bool contested = static_cast<size_t>(q.corridorId) < g_contested.size()
+	                       && g_contested[static_cast<size_t>(q.corridorId)];
+
+	// With no opposing flow the passage is not split, so a droid is left to steer
+	// through it naturally and the whole width fills on its own. Lanes are only
+	// imposed to keep two opposing flows apart.
+	if (!contested)
+	{
+		return false;
+	}
+
+	// The band of lateral offsets this droid's direction may use, positive toward
+	// the axis right, plus the narrowest that band gets over the whole corridor.
+	// Each direction keeps to its own side of the centerline.
+	int32_t bandMin, bandMax, minBand;
+	if (q.dir > 0)
+	{
+		bandMin = LANE_MARGIN;
+		bandMax = rightExt - LANE_MARGIN;
+		minBand = *std::min_element(c.rightExtent.begin(), c.rightExtent.end()) - 2 * LANE_MARGIN;
+	}
+	else
+	{
+		bandMin = -(leftExt - LANE_MARGIN);
+		bandMax = -LANE_MARGIN;
+		minBand = *std::min_element(c.leftExtent.begin(), c.leftExtent.end()) - 2 * LANE_MARGIN;
+	}
+	if (bandMax < bandMin)
+	{
+		bandMin = bandMax = (bandMin + bandMax) / 2;   // side too narrow for a full lane
+	}
+
+	// Divide the band into sub-lanes a body wide and give this droid a fixed one
+	// by id, so same-direction droids run several abreast and fill the passage
+	// instead of single filing, a wider body taking a wider slot. The lane count
+	// is set by the narrowest point, so it does not change as the droid moves and
+	// make it jump sub-lanes, while the positions scale with the local width.
+	const int32_t laneWidth = std::max(2 * moveObjRadius(psDroid), TILE_UNITS / 2);
+	const int lanes = std::max(1, (minBand + laneWidth / 2) / laneWidth);
+	const int subLane = static_cast<int>(psDroid->id % static_cast<uint32_t>(lanes));
+	const int32_t bandWidth = bandMax - bandMin;
+	const int32_t lateral = bandMin + (2 * subLane + 1) * bandWidth / (2 * lanes);
+
+	const uint16_t axisRightDir = static_cast<uint16_t>(iAtan2(q.axis) - DEG(90));
+	laneTarget = ahead + iSinCosR(axisRightDir, lateral);
 	return true;
 }
 
@@ -310,6 +358,10 @@ bool corridorShouldHold(const DROID *psDroid)
 	if (c >= g_activeDir.size())
 	{
 		return false;
+	}
+	if (c >= g_contested.size() || !g_contested[c])
+	{
+		return false;   // no opposing flow, so nothing to wait for
 	}
 	const Corridor &cor = gameWorld.map.corridors->corridors[c];
 	const Vector2i mouth = q.dir > 0 ? cor.centerline.front() : cor.centerline.back();
