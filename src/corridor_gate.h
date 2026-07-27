@@ -44,6 +44,18 @@ void corridorGateUpdate();
 /// Deterministic and integer, reads only synced state.
 bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget);
 
-/// True if the droid is waiting to enter a corridor whose current flow runs the
-/// other way, so the movement layer should hold it in place until its turn.
-bool corridorShouldHold(const DROID *psDroid);
+/// The speed a droid queued at a corridor may move at this tick, ramping down
+/// as it nears its queue slot and zero once there, so the file rolls smoothly.
+/// Returns moveSpeed unchanged for a droid that is not queued.
+int corridorQueueSpeed(const DROID *psDroid, int moveSpeed);
+
+/// Keeps collision slides from shoving a droid across the centerline into the
+/// opposing lane. Steering keeps a droid on its side, but contact resolution
+/// knows nothing of lanes, and under crowding it is what actually moves droids.
+/// Cuts only the crossing component of the given velocity, in place.
+void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy);
+
+/// True while the droid is queued or laned at a corridor with opposing flows.
+/// Waiting there is deliberate, so the blocked watchdog should not read it as
+/// stuck and abandon the move.
+bool corridorManaged(const DROID *psDroid);
