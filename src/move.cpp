@@ -818,6 +818,16 @@ bool moveBlocked(DROID *psDroid)
 		return false;
 	}
 
+	// A droid queued or laned at a corridor with opposing flows is waiting or
+	// filing by design, not stuck, so don't reroute it or give up its move. The
+	// watchdog resumes once the corridor clears.
+	if (pathfindingCorridorLanesEnabled() && corridorManaged(psDroid))
+	{
+		psDroid->sMove.bumpTime = 0;
+		psDroid->sMove.lastBump = 0;
+		return false;
+	}
+
 	// See if the block can be cancelled
 	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))
 	{
@@ -1722,6 +1732,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveOpenGates(psDroid);
 	moveCheckSquished(psDroid, dx, dy);
 	moveCalcDroidSlide(psDroid, &dx, &dy);
+	if (pathfindingCorridorLanesEnabled())
+	{
+		corridorClampSlide(psDroid, &dx, &dy);
+	}
 	bx = dx;
 	by = dy;
 	moveCalcBlockingSlide(psDroid, &bx, &by, direction, &slideDir);
@@ -1783,6 +1797,10 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
 	moveOpenGates(psDroid);
 	moveCalcDroidSlide(psDroid, &dx, &dy);
+	if (pathfindingCorridorLanesEnabled())
+	{
+		corridorClampSlide(psDroid, &dx, &dy);
+	}
 	moveCalcBlockingSlide(psDroid, &dx, &dy, direction, &slideDir);
 	moveUpdateDroidPos(psDroid, dx, dy);
 
@@ -2429,12 +2447,12 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	}
 
-	// Hold a droid waiting to enter a corridor whose flow runs the other way, so
-	// the two directions alternate instead of stuffing head-on. It keeps its
-	// facing and resumes on its own once its direction has the corridor.
-	if (pathfindingCorridorLanesEnabled() && corridorShouldHold(psDroid))
+	// A droid queued at a corridor slows into its place in the file and waits
+	// there, resuming on its own as the queue rolls forward. It keeps its
+	// facing throughout.
+	if (pathfindingCorridorLanesEnabled())
 	{
-		moveSpeed = 0;
+		moveSpeed = corridorQueueSpeed(psDroid, moveSpeed);
 	}
 
 	// Update the movement model for the droid
