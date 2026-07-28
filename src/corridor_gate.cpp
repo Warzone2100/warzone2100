@@ -169,13 +169,72 @@ void chainEnsure(const CorridorMap *cmap)
 	g_mouthAOuter.assign(n, 1);
 	g_mouthBOuter.assign(n, 1);
 	g_chainMinWidth.assign(n, 0);
-	std::vector<int> parent(n);
-	std::vector<int8_t> sign(n, 1);   // orientation relative to parent chain root
 	for (size_t i = 0; i < n; ++i)
 	{
-		parent[i] = static_cast<int>(i);
 		g_chainMinWidth[i] = cmap->corridors[i].minWidth;
 	}
+
+	// Collect every mouth adjacency. Adjacency alone decides inner mouths, so
+	// no queue ever parks in a junction pocket, whatever the orientation below.
+	struct Link
+	{
+		int64_t distSq;
+		int i;
+		int j;
+		int8_t rel;
+	};
+	std::vector<Link> links;
+	for (size_t i = 0; i < n; ++i)
+	{
+		for (size_t j = i + 1; j < n; ++j)
+		{
+			for (int ei = 0; ei < 2; ++ei)
+			{
+				for (int ej = 0; ej < 2; ++ej)
+				{
+					const Vector2i mi = ei ? cmap->corridors[i].mouthB : cmap->corridors[i].mouthA;
+					const Vector2i mj = ej ? cmap->corridors[j].mouthB : cmap->corridors[j].mouthA;
+					const int64_t dSq = distSqToFwd(mi, mj);
+					if (dSq > static_cast<int64_t>(CHAIN_LINK_DIST) * CHAIN_LINK_DIST)
+					{
+						continue;
+					}
+					(ei ? g_mouthBOuter : g_mouthAOuter)[i] = 0;
+					(ej ? g_mouthBOuter : g_mouthAOuter)[j] = 0;
+					// Leaving one corridor's end into the other's opposite end keeps
+					// the travel direction, same ends adjoining flips it.
+					links.push_back({dSq, static_cast<int>(i), static_cast<int>(j),
+					                 static_cast<int8_t>(ei != ej ? 1 : -1)});
+				}
+			}
+		}
+	}
+
+	// A loop of passages with an odd orientation twist cannot carry one
+	// direction convention, and forcing one makes a single stream crossing the
+	// odd link read as two opposing flows. So the flow grouping drops links
+	// until a consistent orientation exists, splitting such a loop rather than
+	// degrading it. Closest adjacencies merge first, which lands the drop on
+	// the most distant one, the roomiest junction, where uncoordinated meeting
+	// costs least. Deterministic order, so every client splits identically.
+	std::sort(links.begin(), links.end(), [](const Link &a, const Link &b)
+	{
+		if (a.distSq != b.distSq)
+		{
+			return a.distSq < b.distSq;
+		}
+		if (a.i != b.i)
+		{
+			return a.i < b.i;
+		}
+		if (a.j != b.j)
+		{
+			return a.j < b.j;
+		}
+		return a.rel < b.rel;
+	});
+	std::vector<int> parent(n);
+	std::vector<int8_t> sign(n, 1);   // orientation relative to parent chain root
 	std::function<int(int)> find = [&](int x)
 	{
 		while (parent[x] != x)
@@ -197,37 +256,36 @@ void chainEnsure(const CorridorMap *cmap)
 		}
 		return s;
 	};
-	for (size_t i = 0; i < n; ++i)
+	std::vector<uint8_t> dropped(links.size(), 0);
+	for (bool retry = true; retry;)
 	{
-		for (size_t j = i + 1; j < n; ++j)
+		retry = false;
+		for (size_t i = 0; i < n; ++i)
 		{
-			for (int ei = 0; ei < 2; ++ei)
+			parent[i] = static_cast<int>(i);
+			sign[i] = 1;
+		}
+		for (size_t k = 0; k < links.size(); ++k)
+		{
+			if (dropped[k])
 			{
-				for (int ej = 0; ej < 2; ++ej)
-				{
-					const Vector2i mi = ei ? cmap->corridors[i].mouthB : cmap->corridors[i].mouthA;
-					const Vector2i mj = ej ? cmap->corridors[j].mouthB : cmap->corridors[j].mouthA;
-					if (distSqToFwd(mi, mj) > static_cast<int64_t>(CHAIN_LINK_DIST) * CHAIN_LINK_DIST)
-					{
-						continue;
-					}
-					(ei ? g_mouthBOuter : g_mouthAOuter)[i] = 0;
-					(ej ? g_mouthBOuter : g_mouthAOuter)[j] = 0;
-					// Leaving one corridor's end into the other's opposite end keeps
-					// the travel direction, same ends adjoining flips it.
-					const int8_t rel = (ei != ej) ? 1 : -1;
-					const int ri = find(static_cast<int>(i));
-					const int rj = find(static_cast<int>(j));
-					if (ri != rj)
-					{
-						const int8_t si = signToRoot(static_cast<int>(i));
-						const int8_t sj = signToRoot(static_cast<int>(j));
-						parent[rj] = ri;
-						sign[rj] = static_cast<int8_t>(si * rel * sj);
-					}
-					// A link that would conflict inside one chain (a loop with an
-					// odd twist) is simply not merged again, first orientation wins.
-				}
+				continue;
+			}
+			const Link &l = links[k];
+			const int ri = find(l.i);
+			const int rj = find(l.j);
+			const int8_t si = signToRoot(l.i);
+			const int8_t sj = signToRoot(l.j);
+			if (ri != rj)
+			{
+				parent[rj] = ri;
+				sign[rj] = static_cast<int8_t>(si * l.rel * sj);
+			}
+			else if (si * l.rel != sj)
+			{
+				dropped[k] = 1;
+				retry = true;
+				break;
 			}
 		}
 	}
@@ -321,13 +379,21 @@ Query queryCorridor(const Vector2i &pos, const Vector2i &target)
 
 	const size_t last = c.centerline.size() - 1;
 	const bool endpoint = (nearest == 0 || nearest == last);
+	// Inside means on the passable ground of this cross-section. The room is
+	// measured per side, since an even-width passage puts its centerline off
+	// centre, and half the total width would misplace the boundary on both
+	// sides - droids crowded onto the roomy side flapped in and out of the
+	// corridor with sub-tile jitter while standing on plain corridor ground.
 	const Vector2i fromLine = pos - c.centerline[nearest];
-	int64_t lateral = static_cast<int64_t>(fromLine.x) * axis.y - static_cast<int64_t>(fromLine.y) * axis.x;
-	if (lateral < 0)
-	{
-		lateral = -lateral;
-	}
-	const bool withinWidth = lateral <= static_cast<int64_t>(c.widthProfile[nearest] / 2) * iHypot(axis);
+	const int64_t latRight = static_cast<int64_t>(fromLine.y) * axis.x - static_cast<int64_t>(fromLine.x) * axis.y;
+	const int32_t sideRoom = latRight >= 0 ? c.rightExtent[nearest] : c.leftExtent[nearest];
+	const int64_t lateral = latRight >= 0 ? latRight : -latRight;
+	// At a sharp bend the frame is ill conditioned: the nearest point alternates
+	// between the two limbs and the lateral against either limb's axis can read
+	// outside while the droid stands almost on the centerline itself. Plain
+	// closeness to the line also counts as inside, which no frame can dispute.
+	const bool withinWidth = lateral <= static_cast<int64_t>(sideRoom) * iHypot(axis)
+	                         || nearestDistSq <= static_cast<int64_t>(TILE_UNITS) * TILE_UNITS;
 
 	if (!endpoint && withinWidth)
 	{
@@ -435,10 +501,13 @@ int routeDir(const DROID *psDroid, const Corridor &c)
 		{
 			return -1;
 		}
-		if (diff == 1 || diff == -1)
+		if ((diff == 1 || diff == -1) && (idx == 0 || idx == last))
 		{
-			// A single step of progression is kept as weak evidence, enough to
-			// settle a droid one point from an end that the strong test skips.
+			// A single step of progression toward a terminal point, the mouth
+			// itself, settles a droid one point from an end that the strong
+			// test skips. A single step elsewhere is position noise, ex. a
+			// fresh path's first waypoint at the droid's own tile projecting
+			// one point back, which would manufacture a reverse direction.
 			weak = diff;
 		}
 	}
@@ -471,21 +540,15 @@ Query queryDroid(const DROID *psDroid)
 	}
 	else if (rd == 0 && q.relation == INSIDE)
 	{
-		// Near an inner junction end with no route evidence, ex. a route that
-		// bends hard out of the mouth, only the local axis is left and its sign
+		// No route evidence through this corridor at all, ex. a route that
+		// leaves through a nearby mouth into another passage, or one just
+		// issued that ends close by. Only the local axis is left and its sign
 		// flaps with sub-tile position, flipping the lane and the slide clamp
-		// each tick and pinning the droid at the bend. With nothing reliable to
-		// say, say nothing, and the droid drives the junction on its own route.
-		const size_t ci = static_cast<size_t>(q.corridorId);
-		const size_t last = c.centerline.size() - 1;
-		const size_t margin = static_cast<size_t>(MOUTH_MARGIN) + 1;
-		const bool nearInnerEnd =
-			(q.nearest <= margin && ci < g_mouthAOuter.size() && !g_mouthAOuter[ci])
-			|| (q.nearest + margin >= last && ci < g_mouthBOuter.size() && !g_mouthBOuter[ci]);
-		if (nearInnerEnd)
-		{
-			return Query();
-		}
+		// each tick, shoving the droid in circles and feeding phantom opposing
+		// flow into the counts. A distance condition here just moves the flap
+		// to its boundary. With nothing reliable to say, say nothing, and the
+		// droid drives its own route.
+		return Query();
 	}
 	return q;
 }
@@ -951,6 +1014,17 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 
 	if (q.relation == APPROACHING)
 	{
+		// The funnel is an open-field mechanism. At an inner junction there is
+		// no room for its flared aim, which fights the previous corridor's lane
+		// and the droid's own route in the handoff, arcing the droid in circles
+		// as the nearest-corridor classification alternates. The junction is
+		// driven on the route alone.
+		const bool entryOuter = q.dir > 0 ? (cid < g_mouthAOuter.size() && g_mouthAOuter[cid])
+		                                  : (cid < g_mouthBOuter.size() && g_mouthBOuter[cid]);
+		if (!entryOuter)
+		{
+			return false;
+		}
 		// Drive to this droid's queue slot on the lane extended out past the
 		// mouth, so a blob approaches as files that fit the passage, each droid
 		// falling in behind the one ahead. Far out the aim is flared wider onto
