@@ -103,8 +103,15 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       add_custom_command(
          OUTPUT "${_gmoFile}"
          COMMAND ${CMAKE_COMMAND} -E make_directory ${_gmoDirectory}
-         COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} -c --statistics -o ${_gmoFile} ${_updatedPoFile}
-         DEPENDS "${_absPotFile}" "${_updatedPoFile}"
+         COMMAND
+          ${CMAKE_COMMAND}
+          -DMSGFMT_EXECUTABLE=${GETTEXT_MSGFMT_EXECUTABLE}
+          -DINPUT_FILE=${_updatedPoFile}
+          -DOUTPUT_FILE=${_gmoFile}
+          -P "${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_msgfmt.cmake"
+         DEPENDS "${_absPotFile}" "${_updatedPoFile}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/run_msgfmt.cmake"
+         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+         USES_TERMINAL
          VERBATIM
       )
 
