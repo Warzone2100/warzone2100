@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "77df67cfff9c12ccfdb52284e07c87c75092f723",
+	"builtin-baseline": "7ed6d1a07ef0d35aac5960fd67ed6686c7802bc7",
 	"dependencies": [
 		"physfs",
 		{
@@ -101,7 +101,8 @@
 		}
 	],
 	"overrides": [
-		{ "name": "sqlite3", "version": "3.49.2" }
+		{ "name": "sqlite3", "version": "3.49.2" },
+		{ "name": "libiconv", "version": "1.18", "port-version": 3 }
 	],
 	"default-features": [
 		"vulkan"
