@@ -4,3 +4,6 @@
 
 # Exclude external stuff from Github's language statistics.
 3rdparty/* linguist-vendored
+
+# Ensure that patch files (used for vcpkg overlay ports, etc) preserve line-endings
+*.patch -text
