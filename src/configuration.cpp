@@ -52,6 +52,7 @@
 #include "nethelpers.h"
 #include "lib/framework/wzapp.h"
 #include "display3d.h" // for building animation speed
+#include "atmos.h"
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
@@ -433,6 +434,7 @@ bool loadConfig()
 		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
 	setShakeStatus(iniGetBool("shake", false).value());
+	atmosSetWeatherEnabled(iniGetBool("weather", true).value());
 	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());
 	war_setOptionsButtonVisibility(iniGetInteger("optionsButtonVisibility", war_getOptionsButtonVisibility()).value());
@@ -922,6 +924,7 @@ bool saveConfig()
 	iniSetInteger("lodDistanceBias", war_getLODDistanceBiasPercentage());
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
+	iniSetBool("weather", atmosGetWeatherEnabled());
 	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
 	iniSetInteger("optionsButtonVisibility", (int)war_getOptionsButtonVisibility());
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse

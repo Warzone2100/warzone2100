@@ -26,6 +26,7 @@
 
 #include "../../warzoneconfig.h"
 #include "../../terrain.h"
+#include "../../atmos.h"
 #include "../../display.h"
 #include "../../display3d.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -375,6 +376,25 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			},
 			[](const auto& newValue) -> bool {
 				setShakeStatus(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.weather", N_("Weather"), N_("Show weather effects, like rain and snow, on maps that use them."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(atmosGetWeatherEnabled());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				atmosSetWeatherEnabled(newValue);
 				return true;
 			}, false
 		);
