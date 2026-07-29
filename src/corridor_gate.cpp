@@ -131,6 +131,13 @@ std::vector<uint8_t> g_contested;
 // one or two. Rebuilt each tick from synced droid state, so it is never saved.
 std::unordered_map<uint32_t, int32_t> g_slotAlong;
 
+// Per-corridor lane handedness for this tick: +1 keeps each direction to its
+// right, -1 to its left. Keeping right is an arbitrary convention, and the
+// right convention is dictated by where the traffic exits: a flow turning off
+// to one side wants the lane on the inside of its turn, or it must cross the
+// opposing lane exactly at the turn. Rebuilt each tick, never saved.
+std::vector<int8_t> g_handed;
+
 // Corridors whose mouths adjoin form a chain, one constrained passage the
 // detector split at junctions and openings. Flow is coordinated over the whole
 // chain: whether it is contested, which way it runs, and where the waiting side
@@ -514,6 +521,57 @@ int routeDir(const DROID *psDroid, const Corridor &c)
 	return weak;
 }
 
+// Which side of its travel a droid's route leaves the corridor on: -1 left,
+// +1 right, 0 straight through or unknown. The first route waypoint clearly
+// beyond the exit mouth, in that mouth's frame, tells the turn. The frame's
+// pVec is the right of travel into the corridor, so the sign flips for the
+// droid heading out.
+int exitSide(const DROID *psDroid, const Corridor &c, int dir)
+{
+	const std::vector<Vector2i> &path = psDroid->sMove.asPath;
+	const int start = std::max(psDroid->sMove.pathIndex, 0);
+	const int stop = std::min(static_cast<int>(path.size()), start + 8);
+	for (int i = start; i < stop; ++i)
+	{
+		const ApproachFrame f = approachFrame(c, dir > 0 ? -1 : 1, path[i]);
+		const Vector2i rel = path[i] - f.mouth;
+		// The mouth plane, not distance out along the axis, splits inside from
+		// beyond. A sharp turn's waypoints sit beside the mouth with hardly any
+		// outward component, and an outward-distance filter skipped exactly the
+		// turns this exists for.
+		const int64_t rawAlong = (static_cast<int64_t>(rel.x) * f.gVec.x + static_cast<int64_t>(rel.y) * f.gVec.y) / DIR_UNIT;
+		if (rawAlong > TILE_UNITS / 2)
+		{
+			continue;   // still inside the corridor
+		}
+		// A sharp turn shows itself within a couple of tiles of the mouth. A
+		// first waypoint far beyond it, however far off axis, is a route
+		// through open ground, not a turn out of the corridor.
+		if (distSqTo(path[i], f.mouth) > static_cast<int64_t>(3 * TILE_UNITS) * (3 * TILE_UNITS))
+		{
+			return 0;
+		}
+		const int64_t latF = (static_cast<int64_t>(rel.x) * f.pVec.x + static_cast<int64_t>(rel.y) * f.pVec.y) / DIR_UNIT;
+		const int64_t out = -rawAlong;
+		if (out <= TILE_UNITS / 2 && latF > -TILE_UNITS / 2 && latF < TILE_UNITS / 2)
+		{
+			continue;   // at the mouth itself, keep looking
+		}
+		// A turn means the route goes more sideways than out. A goal merely a
+		// couple of tiles off axis in the open is straight enough.
+		if (latF > TILE_UNITS && latF > out)
+		{
+			return -1;
+		}
+		if (latF < -TILE_UNITS && -latF > out)
+		{
+			return 1;
+		}
+		return 0;   // straight out
+	}
+	return 0;
+}
+
 Query queryDroid(const DROID *psDroid)
 {
 	Query q = queryCorridor(psDroid->pos.xy(), psDroid->sMove.target);
@@ -675,10 +733,11 @@ void logClassification(const DROID *psDroid, const Query &q, int rdir)
 }
 
 // How many body-wide sub-lanes this droid's direction can run abreast, set by
-// the narrowest the side band gets over the whole corridor.
-int laneCount(const Corridor &c, int dir, const DROID *psDroid)
+// the narrowest the side band gets over the whole corridor. side is positive
+// for the band right of the axis.
+int laneCount(const Corridor &c, int side, const DROID *psDroid)
 {
-	const std::vector<int32_t> &sideExt = dir > 0 ? c.rightExtent : c.leftExtent;
+	const std::vector<int32_t> &sideExt = side > 0 ? c.rightExtent : c.leftExtent;
 	const int32_t globalMin = *std::min_element(sideExt.begin(), sideExt.end()) - 2 * LANE_MARGIN;
 	const int32_t laneWidth = std::max(2 * moveObjRadius(psDroid), TILE_UNITS / 2);
 	return std::max(1, (globalMin + laneWidth / 2) / laneWidth);
@@ -784,6 +843,20 @@ void corridorGateUpdate()
 	};
 	std::vector<Approacher> approachers;
 
+	// Exit-side preference per corridor and direction, anchored to the oldest
+	// member that expresses one. Members with no preference cannot hold the
+	// anchor: same-flow voters agree with each other, so the vote stays stable
+	// however the anchor identity churns among them, where anchoring on the
+	// oldest member outright let one droid with a flapping direction steal the
+	// anchor each tick and erase its own flow's vote.
+	struct SidePref
+	{
+		uint32_t id = UINT32_MAX;
+		int8_t side = 0;
+		uint8_t firm = 0;   ///< a member is inside or committed to the approach
+	};
+	std::vector<SidePref> prefFwd(n), prefBwd(n);
+
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
 		for (const DROID *psDroid : gameWorld.objects.droids[player])
@@ -817,10 +890,28 @@ void corridorGateUpdate()
 				lowestInsideId[chain] = psDroid->id;
 				lowestInsideDir[chain] = static_cast<int8_t>(chainDir);
 			}
+			SidePref &pref = q.dir > 0 ? prefFwd[c] : prefBwd[c];
+			if (psDroid->id < pref.id)
+			{
+				const int side = exitSide(psDroid, cmap->corridors[c], q.dir);
+				if (side != 0)
+				{
+					pref.id = psDroid->id;
+					pref.side = static_cast<int8_t>(side);
+				}
+			}
+			if (q.relation == INSIDE)
+			{
+				pref.firm = 1;
+			}
 			if (q.relation == APPROACHING)
 			{
 				const Corridor &cor = cmap->corridors[c];
 				const ApproachFrame f = approachFrame(cor, q.dir, psDroid->pos.xy());
+				if (f.along > -APPROACH_RADIUS / 2)
+				{
+					pref.firm = 1;
+				}
 				approachers.push_back({psDroid, q.corridorId, q.dir, f.along});
 			}
 		}
@@ -842,6 +933,42 @@ void corridorGateUpdate()
 		const int8_t chainActive = lowestInsideId[chain] != UINT32_MAX
 		                           ? lowestInsideDir[chain] : lowestIdDir[chain];
 		g_activeDir[c] = static_cast<int8_t>(chainActive * g_chainSign[c]);
+	}
+
+	// Lane handedness per corridor: keep left only when at least one direction
+	// exits to its left and neither exits to its right, so the turning flow
+	// gets the inside of its turn instead of crossing the opposing lane at it.
+	// Any conflict or ambiguity keeps the default.
+	g_handed.assign(n, 1);
+	for (size_t c = 0; c < n; ++c)
+	{
+		// A preference only participates once its direction is committed, a
+		// member inside or well within the approach. A droid hovering at the
+		// capture boundary toggles its whole management status with sub-tile
+		// motion, and its preference appearing and vanishing flapped the
+		// handedness mid-episode.
+		const int8_t pf = prefFwd[c].firm ? prefFwd[c].side : 0;
+		const int8_t pb = prefBwd[c].firm ? prefBwd[c].side : 0;
+		if ((pf == -1 || pb == -1) && pf != 1 && pb != 1)
+		{
+			g_handed[c] = -1;
+		}
+	}
+	if (enabled_debug[LOG_MOVEMENT])
+	{
+		static std::vector<int8_t> prevHanded;
+		prevHanded.resize(n, 0);
+		for (size_t c = 0; c < n; ++c)
+		{
+			if (prevHanded[c] != g_handed[c])
+			{
+				prevHanded[c] = g_handed[c];
+				debug(LOG_MOVEMENT, "corridor t=%u corridor %zu handed=%s prefFwd=%d(id %u firm %d) prefBwd=%d(id %u firm %d)",
+				      gameTime, c, g_handed[c] > 0 ? "right" : "left",
+				      prefFwd[c].side, prefFwd[c].id, prefFwd[c].firm,
+				      prefBwd[c].side, prefBwd[c].id, prefBwd[c].firm);
+			}
+		}
 	}
 	if (enabled_debug[LOG_MOVEMENT])
 	{
@@ -925,7 +1052,7 @@ void corridorGateUpdate()
 				continue;
 			}
 			const DROID *psDroid = approachers[i].droid;
-			const int lanes = laneCount(cor, dir, psDroid);
+			const int lanes = laneCount(cor, dir * g_handed[c], psDroid);
 			const int subLane = static_cast<int>(psDroid->id % static_cast<uint32_t>(lanes));
 			int32_t &depth = laneDepth[subLane];
 			g_slotAlong[psDroid->id] = base - depth;
@@ -985,9 +1112,11 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 	const int32_t leftExt = c.leftExtent[extIdx];
 
 	// The band of lateral offsets this droid's direction may use, positive toward
-	// the axis right. Each direction keeps to its own side of the centerline.
+	// the axis right. Each direction keeps to its own side of the centerline,
+	// which side being the corridor's handedness for this episode.
+	const int sideSign = q.dir * (cid < g_handed.size() ? g_handed[cid] : 1);
 	int32_t bandMin, bandMax;
-	if (q.dir > 0)
+	if (sideSign > 0)
 	{
 		bandMin = LANE_MARGIN;
 		bandMax = rightExt - LANE_MARGIN;
@@ -1007,7 +1136,7 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 	// instead of single filing, a wider body taking a wider slot. The lane count
 	// is set by the narrowest point, so it does not change as the droid moves and
 	// make it jump sub-lanes, while the positions scale with the local width.
-	const int lanes = laneCount(c, q.dir, psDroid);
+	const int lanes = laneCount(c, sideSign, psDroid);
 	const int subLane = static_cast<int>(psDroid->id % static_cast<uint32_t>(lanes));
 	const int32_t bandWidth = bandMax - bandMin;
 	const int32_t lateral = bandMin + (2 * subLane + 1) * bandWidth / (2 * lanes);
@@ -1042,7 +1171,7 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 		int32_t aimLat = lateral;
 		if (aimAlong < -FUNNEL_MERGE)
 		{
-			aimLat += q.dir * FUNNEL_FLARE * (-aimAlong - FUNNEL_MERGE) / (APPROACH_RADIUS - FUNNEL_MERGE);
+			aimLat += sideSign * FUNNEL_FLARE * (-aimAlong - FUNNEL_MERGE) / (APPROACH_RADIUS - FUNNEL_MERGE);
 		}
 		laneTarget.x = f.mouth.x + static_cast<int32_t>((static_cast<int64_t>(f.pVec.x) * aimLat + static_cast<int64_t>(f.gVec.x) * aimAlong) / DIR_UNIT);
 		laneTarget.y = f.mouth.y + static_cast<int32_t>((static_cast<int64_t>(f.pVec.y) * aimLat + static_cast<int64_t>(f.gVec.y) * aimAlong) / DIR_UNIT);
@@ -1158,10 +1287,12 @@ void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy)
 	{
 		return;
 	}
-	// The droid's lateral position, positive into its own half of the corridor.
-	// Well onto its own side, slides resolve collisions within the band as usual.
+	// The droid's lateral position, positive into its own half of the corridor,
+	// which half being the corridor's handedness for this episode. Well onto its
+	// own side, slides resolve collisions within the band as usual.
+	const int sideSign = q.dir * (c < g_handed.size() ? g_handed[c] : 1);
 	const Vector2i rel = psDroid->pos.xy() - cor.centerline[q.nearest];
-	const int64_t latPos = q.dir * (static_cast<int64_t>(rel.y) * q.axis.x - static_cast<int64_t>(rel.x) * q.axis.y);
+	const int64_t latPos = sideSign * (static_cast<int64_t>(rel.y) * q.axis.x - static_cast<int64_t>(rel.x) * q.axis.y);
 	if (latPos > 0)
 	{
 		return;
@@ -1169,14 +1300,14 @@ void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy)
 	// At or past the centerline, so cut any further push toward the opposing
 	// side and keep only the motion along the corridor. Movement back onto its
 	// own side stays free, so a droid bumped across works its way back.
-	const int64_t latMove = q.dir * (static_cast<int64_t>(*pdy) * q.axis.x - static_cast<int64_t>(*pdx) * q.axis.y);
+	const int64_t latMove = sideSign * (static_cast<int64_t>(*pdy) * q.axis.x - static_cast<int64_t>(*pdx) * q.axis.y);
 	if (latMove >= 0)
 	{
 		return;
 	}
 	const int64_t axisSq = static_cast<int64_t>(q.axis.x) * q.axis.x + static_cast<int64_t>(q.axis.y) * q.axis.y;
-	*pdx -= static_cast<int32_t>(q.dir * -q.axis.y * latMove / axisSq);
-	*pdy -= static_cast<int32_t>(q.dir * q.axis.x * latMove / axisSq);
+	*pdx -= static_cast<int32_t>(sideSign * -q.axis.y * latMove / axisSq);
+	*pdy -= static_cast<int32_t>(sideSign * q.axis.x * latMove / axisSq);
 }
 
 bool corridorManaged(const DROID *psDroid)
