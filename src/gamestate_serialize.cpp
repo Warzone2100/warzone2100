@@ -184,7 +184,6 @@ static std::vector<uint8_t> decodeBase64Field(const nlohmann::ordered_json &j, s
 // MARK: - Section: determinism core
 
 constexpr uint32_t DETERMINISM_CORE_VERSION = 1;
-constexpr size_t RNG_STATE_WORDS = 624;
 
 nlohmann::ordered_json writeDeterminismCore()
 {

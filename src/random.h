@@ -22,6 +22,8 @@
 
 #include "lib/framework/types.h"
 
+constexpr size_t RNG_STATE_WORDS = 624;
+
 // Pseudorandom number generator with 19937 bit state and period of 2**19937 - 1. Equidistributed in up to 623 dimensions.
 // See http://en.wikipedia.org/wiki/Mersenne_twister
 // If all clients use the same seed, they will generate the same pseudorandom number sequence.
@@ -32,22 +34,22 @@ public:
 	uint32_t u32();  ///< Generates a random number in the interval [0...UINT32_MAX].
 
 	/// Exports the full internal generator state, for snapshotting.
-	void getInternalState(uint32_t (&outState)[624], int32_t &outOffset) const;
+	void getInternalState(uint32_t (&outState)[RNG_STATE_WORDS], int32_t &outOffset) const;
 	/// Restores the full internal generator state, from a snapshot.
-	void setInternalState(const uint32_t (&inState)[624], int32_t inOffset);
+	void setInternalState(const uint32_t (&inState)[RNG_STATE_WORDS], int32_t inOffset);
 
 private:
 	void generate();  ///< Generates more random numbers.
 
 	int offset;  ///< Index in state.
-	uint32_t state[624];  ///< 19937 bit state, rounded up to next 32 bits.
+	uint32_t state[RNG_STATE_WORDS];  ///< 19937 bit state, rounded up to next 32 bits.
 };
 
 /// The complete, restorable state of the game's synchronised RNG (live internal state, not just the seed).
 /// Required to snapshot/restore the RNG mid-game so a resumed client generates an identical number sequence.
 struct GameRandomState
 {
-	uint32_t state[624];
+	uint32_t state[RNG_STATE_WORDS];
 	int32_t  offset;
 	uint32_t lastSeed;
 };
