@@ -88,6 +88,9 @@ jobs:
       run: |
         echo "::group::brew install"
         brew install --quiet autoconf autoconf-archive automake libtool gettext pkg-config xcbeautify
+        if [ "${VCPKG_DEFAULT_TRIPLET}" == "x64-osx" ]; then
+          brew install --quiet nasm
+        fi
         echo "::endgroup::"
 
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds

@@ -354,8 +354,11 @@ lib/sdl/gfx_api_sdl.cpp
 lib/sdl/gfx_api_vk_sdl.cpp
 lib/sdl/main_sdl.cpp
 lib/sdl/resume_init_helpers.cpp
+lib/sequence/ogg_decoder.cpp
 lib/sequence/sequence.cpp
-lib/sequence/timer.cpp
+lib/sequence/video_decoder.cpp
+lib/sequence/video_provider.cpp
+lib/sequence/webm_decoder.cpp
 lib/sound/audio.cpp
 lib/sound/audio_id.cpp
 lib/sound/cdaudio.cpp
@@ -364,8 +367,10 @@ lib/sound/oggvorbis.cpp
 lib/sound/openal_error.cpp
 lib/sound/openal_info.cpp
 lib/sound/openal_track.cpp
+lib/sound/opus_packet.cpp
 lib/sound/playlist.cpp
 lib/sound/track.cpp
+lib/sound/vorbis_packet.cpp
 lib/widget/alignment.cpp
 lib/widget/bar.cpp
 lib/widget/button.cpp

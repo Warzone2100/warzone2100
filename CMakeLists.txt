@@ -15,6 +15,7 @@ OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) war
 OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
 OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
+OPTION(WZ_ENABLE_WEBM "Enable WebM (VP8/VP9) video support (requires libvpx)" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
 if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	OPTION(ENABLE_DOCS "Enable documentation generation" ON)
