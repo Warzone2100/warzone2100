@@ -173,10 +173,18 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 #endif
 		case gfx_api::pixel_format::FORMAT_R16_UNORM:
 			// desktop OpenGL only (not supported on OpenGL ES)
+#if !defined(__EMSCRIPTEN__)
 			return (!gles) ? GL_R16 : GL_INVALID_ENUM;
+#else
+			return GL_INVALID_ENUM;
+#endif
 		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
 			// desktop OpenGL only (not supported on OpenGL ES)
+#if !defined(__EMSCRIPTEN__)
 			return (!gles) ? GL_RG16 : GL_INVALID_ENUM;
+#else
+			return GL_INVALID_ENUM;
+#endif
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			return GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
@@ -329,7 +337,13 @@ static GLenum to_gl(const gfx_api::primitive_type& primitive)
 		case gfx_api::primitive_type::triangle_strip:
 			return GL_TRIANGLE_STRIP;
 		case gfx_api::primitive_type::patch_list_4:
+#if !defined(WZ_STATIC_GL_BINDINGS)
 			return GL_PATCHES;
+#else
+			// the static GLES bindings lack GL_PATCHES
+			debug(LOG_FATAL, "Tessellation patches are unavailable with static GLES bindings");
+			break;
+#endif
 		default:
 			debug(LOG_FATAL, "Unrecognised primitive type");
 	}
@@ -1904,6 +1918,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 	}
 
 	// optional tessellation stages
+#if !defined(WZ_STATIC_GL_BINDINGS)
 	auto compileSimpleStage = [&](GLenum stageType, const char* stage_header, const std::string& stagePath, const char* stageTypeName, GLuint& outShader) -> bool {
 		std::string stageContents = readShaderBuf(stagePath);
 		if (stageContents.empty())
@@ -1944,6 +1959,10 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 	{
 		success = compileSimpleStage(GL_TESS_EVALUATION_SHADER, tess_header, tessEvalPath, "Tessellation evaluation", tessEvalShader);
 	}
+#else
+	// the static GLES bindings lack the tessellation stage enums
+	ASSERT(tessControlPath.empty() && tessEvalPath.empty(), "Tessellation shaders are unavailable with static GLES bindings");
+#endif
 
 	std::vector<std::string> duplicateFragmentUniformNames;
 
@@ -3157,10 +3176,12 @@ int32_t gl_context::get_context_value(const context_value property)
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			return maxMultiSampleBufferFormatSamples;
 		case gfx_api::context::context_value::MAX_TESS_GEN_LEVEL:
+#if !defined(WZ_STATIC_GL_BINDINGS)
 			if (hasTessellationSupport)
 			{
 				glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &value);
 			}
+#endif
 			return value;
 		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
 			// special-handling for MAX_VERTEX_OUTPUT_COMPONENTS
