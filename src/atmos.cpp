@@ -69,6 +69,7 @@ enum AP_STATUS
 static ATPART	*asAtmosParts = nullptr;
 static UDWORD	freeParticle = 0;
 static WT_CLASS	weather = WT_NONE;
+static bool	weatherEnabled = true;
 
 /* Setup all the particles */
 void atmosInitSystem()
@@ -258,7 +259,7 @@ void atmosUpdateSystem(WorldMapState& mapState)
 	UDWORD	numberToAdd;
 	Vector3f pos;
 
-	if (!asAtmosParts)
+	if (!asAtmosParts || !weatherEnabled)
 	{
 		return;
 	}
@@ -339,7 +340,7 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiv
 	WZ_PROFILE_SCOPE(atmosDrawParticles);
 	UDWORD	i;
 
-	if (weather == WT_NONE || !asAtmosParts)
+	if (weather == WT_NONE || !asAtmosParts || !weatherEnabled)
 	{
 		return;
 	}
@@ -394,4 +395,24 @@ void atmosSetWeatherType(WT_CLASS type)
 WT_CLASS atmosGetWeatherType()
 {
 	return weather;
+}
+
+void atmosSetWeatherEnabled(bool enabled)
+{
+	if (weatherEnabled == enabled)
+	{
+		return;
+	}
+	weatherEnabled = enabled;
+	if (!enabled && asAtmosParts)
+	{
+		// drop any live particles so re-enabling starts clean
+		memset(asAtmosParts, 0, MAX_ATMOS_PARTICLES * sizeof(*asAtmosParts));
+		freeParticle = 0;
+	}
+}
+
+bool atmosGetWeatherEnabled()
+{
+	return weatherEnabled;
 }

@@ -49,5 +49,9 @@ void renderParticle(ATPART *psPart, const glm::mat4 &perspectiveViewMatrix);
 void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 void atmosSetWeatherType(WT_CLASS type);
 WT_CLASS atmosGetWeatherType();
+// User preference gating the weather particle simulation and rendering,
+// independent of the weather type set by the map or scripts
+void atmosSetWeatherEnabled(bool enabled);
+bool atmosGetWeatherEnabled();
 
 #endif // __INCLUDED_SRC_ATMOS_H__
