@@ -120,6 +120,7 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "help - Get this message", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "admin - Display currently-connected admin players", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "me - Display your information", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "hostmsg <message> - Send a message only to the host", receiver, true);
 	if (!senderHasLobbyCommandAdminPrivs(receiver, true))
 	{
 		sendRoomSystemMessageToSingleReceiver("(Additional commands are available for admins)", receiver, true);
@@ -131,10 +132,14 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makespec <slot> - Move a player to spectators", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makeplayer s<slot> - Request to move a spectator to players", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "ban <slot> - Ban a player; (or s<slot> for spectator - ex. s0)", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "alliance <alliance type> - Change alliance setting (0, 1, 2, 3)", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "scav <scav level> - Change scav setting (0=off, 1=on, 2=ultimate)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "mute <slot> - Disable free chat for a player (or s<slot> for a spectator)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "unmute <slot> - Enable free chat for a player (or s<slot> for a spectator)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "hostexit - Shut down the room (host only unless enabled)", receiver, true);
 }
 
 static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
