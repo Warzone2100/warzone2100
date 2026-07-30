@@ -114,7 +114,6 @@ SIMPLE_OBJECT::~SIMPLE_OBJECT()
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
 	, selected(false)
-	, lastEmission(0)
 	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
 	, timeLastHit(UDWORD_MAX)
 	, body(0)
@@ -122,6 +121,7 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, periodicalDamage(0)
 	, timeAnimationStarted(0)
 	, animationEvent(ANIM_EVENT_NONE)
+	, lastEmission(0)
 {
 	memset(visible, 0, sizeof(visible));
 	sDisplay.imd = nullptr;
