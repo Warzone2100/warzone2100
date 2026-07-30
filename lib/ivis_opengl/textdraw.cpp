@@ -522,8 +522,9 @@ struct TextRun
 	hb_language_t language;
 	FTFace* fontFace;
 
-	hb_buffer_t* buffer = nullptr; // owned
 	unsigned int glyphCount;
+	// Point into the shaper's shared HarfBuzz buffer, and so are only valid until the next run is
+	// shaped. Not owned here.
 	hb_glyph_info_t* glyphInfos = nullptr;
 	hb_glyph_position_t* glyphPositions = nullptr;
 	const uint32_t* codePoints = nullptr;
@@ -533,14 +534,6 @@ public:
 	TextRun(const uint32_t* codePoints, int startOffset, int endOffset, hb_script_t script, hb_direction_t direction, hb_language_t language, FTFace& face)
 	: startOffset(startOffset), endOffset(endOffset), script(script), direction(direction), language(language), fontFace(&face), codePoints(codePoints)
 	{ }
-
-	~TextRun()
-	{
-		if (buffer)
-		{
-			hb_buffer_destroy(buffer);
-		}
-	}
 
 public:
 	// Prevent copies
@@ -552,12 +545,6 @@ public:
 	{
 		if (this != &other)
 		{
-			// Free the existing (owned) buffer, if any
-			if (buffer)
-			{
-				hb_buffer_destroy(buffer);
-			}
-
 			// Get the other data
 			startOffset = other.startOffset;
 			endOffset = other.endOffset;
@@ -566,14 +553,12 @@ public:
 			language = other.language;
 			fontFace = other.fontFace;
 
-			buffer = other.buffer; // owned
 			glyphCount = other.glyphCount;
 			glyphInfos = other.glyphInfos;
 			glyphPositions = other.glyphPositions;
 			codePoints = other.codePoints;
 
 			// Reset other's pointer types
-			other.buffer = nullptr;
 			other.glyphInfos = nullptr;
 			other.glyphPositions = nullptr;
 		}
@@ -644,11 +629,24 @@ struct TextShaper
 		int32_t y_advance = 0;
 	};
 
+	// One buffer reused for every run of every shape. HarfBuzz recommends this over creating and
+	// destroying a buffer per run. Shaping a run resets it, so a run's glyph arrays must be consumed
+	// before the next run is shaped.
+	hb_buffer_t* m_hbBuffer = nullptr;
+
 	TextShaper()
-	{ }
+	{
+		m_hbBuffer = hb_buffer_create();
+	}
 
 	~TextShaper()
-	{ }
+	{
+		if (m_hbBuffer)
+		{
+			hb_buffer_destroy(m_hbBuffer);
+			m_hbBuffer = nullptr;
+		}
+	}
 
 	// Returns the maximum text run length (in WzString characters) that fits within a max width (supplied *IN PIXELS*)
 	uint32_t getTextMaxLenForWidth(const WzString& text, iV_fonts fontID, uint32_t maxWidthInPixels, bool rightToLeft)
@@ -1037,15 +1035,15 @@ struct TextShaper
 
 		ShapingResult shapingResult;
 
-		for (int i = 0; i < textRuns.size(); ++i)
-		{
-			shapeHarfbuzz(textRuns[i], *textRuns[i].fontFace);
-		}
-
 		int32_t x = 0;
 		int32_t y = 0;
 
-		auto processTextRunGlyphs = [&](const TextRun& run) {
+		// Shaping a run resets the shared HarfBuzz buffer its glyph arrays point into, so each run is
+		// shaped and consumed in the same step rather than shaping them all up front. Runs shape
+		// independently of one another, so this produces the same glyphs either way.
+		auto processTextRunGlyphs = [&](TextRun& run) {
+			shapeHarfbuzz(run, *run.fontFace);
+
 			for (unsigned int glyphIndex = 0; glyphIndex < run.glyphCount; ++glyphIndex)
 			{
 				hb_glyph_position_t& current_glyphPos = run.glyphPositions[glyphIndex];
@@ -1063,12 +1061,12 @@ struct TextShaper
 		if (!(FRIBIDI_IS_RTL(baseDirection)))
 		{
 #endif // defined(WZ_FRIBIDI_ENABLED)
-			std::for_each(textRuns.cbegin(), textRuns.cend(), processTextRunGlyphs);
+			std::for_each(textRuns.begin(), textRuns.end(), processTextRunGlyphs);
 #if defined(WZ_FRIBIDI_ENABLED)
 		}
 		else
 		{
-			std::for_each(textRuns.crbegin(), textRuns.crend(), processTextRunGlyphs);
+			std::for_each(textRuns.rbegin(), textRuns.rend(), processTextRunGlyphs);
 		}
 #endif // defined(WZ_FRIBIDI_ENABLED)
 
@@ -1089,22 +1087,24 @@ struct TextShaper
 		return shapeText(codePoints, fontID);
 	}
 
+	// Shapes one run into the shared buffer. The run's glyph arrays point into that buffer, so the run
+	// must be consumed before another one is shaped.
 	inline void shapeHarfbuzz(TextRun& run, FTFace& face)
 	{
-		run.buffer = hb_buffer_create();
-		hb_buffer_set_direction(run.buffer, run.direction);
-		hb_buffer_set_script(run.buffer, run.script);
-		hb_buffer_set_language(run.buffer, run.language);
-		hb_buffer_add_utf32(run.buffer, run.codePoints + run.startOffset,
+		hb_buffer_reset(m_hbBuffer);
+		hb_buffer_set_direction(m_hbBuffer, run.direction);
+		hb_buffer_set_script(m_hbBuffer, run.script);
+		hb_buffer_set_language(m_hbBuffer, run.language);
+		hb_buffer_add_utf32(m_hbBuffer, run.codePoints + run.startOffset,
                             run.endOffset - run.startOffset, 0,
                             run.endOffset - run.startOffset);
-		hb_buffer_set_flags(run.buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
-		std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
+		hb_buffer_set_flags(m_hbBuffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
+		static const std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
 
-		hb_shape(face.m_font, run.buffer, features.data(), static_cast<unsigned int>(features.size()));
+		hb_shape(face.m_font, m_hbBuffer, features.data(), static_cast<unsigned int>(features.size()));
 
-		run.glyphInfos = hb_buffer_get_glyph_infos(run.buffer, &run.glyphCount);
-		run.glyphPositions = hb_buffer_get_glyph_positions(run.buffer, &run.glyphCount);
+		run.glyphInfos = hb_buffer_get_glyph_infos(m_hbBuffer, &run.glyphCount);
+		run.glyphPositions = hb_buffer_get_glyph_positions(m_hbBuffer, &run.glyphCount);
 	}
 };
 
