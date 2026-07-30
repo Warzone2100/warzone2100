@@ -44,6 +44,7 @@
 #include "display3d.h"      // playerPos (camera) - local view state
 #include "radar.h"          // Get/SetRadarZoom - local view state
 #include "mission.h"        // Cheated - local meta flag
+#include "effects.h"        // serialize/restoreActiveEffects - local display state
 #include "multistat.h"      // loadMultiStats, setMultiStats, getMultiStats
 #include "modding.h"        // getLoadedMods, setOverrideMods, clearOverrideMods
 #include "init.h"           // rebuildSearchPath, buildMapList, searchPathMode
@@ -634,6 +635,11 @@ static nlohmann::ordered_json writeLocalState()
 		guide["disableTopicPopups"] = getGameGuideDisableTopicPopups();
 		j["guideTopics"] = std::move(guide);
 	}
+
+	// The live effect list (smoke, fire, explosions, debris). Purely so a loaded game looks like the
+	// one that was saved, ex. a destroyed oil derrick still burning. Per-client and display-only, so
+	// it belongs here rather than in the game state document. Empty in headless mode.
+	j["effects"] = serializeActiveEffects();
 	return j;
 }
 
@@ -668,6 +674,14 @@ static void readLocalState(const nlohmann::ordered_json &j)
 			restoreLoadedGuideTopics(guide.at("loaded").get<std::vector<std::string>>());
 		}
 		setGameGuideDisableTopicPopups(guide.value("disableTopicPopups", false));
+	}
+
+	// The saved effect list (see writeLocalState). Applied after the world restore, so it also clears
+	// the effects that restore re-created. Absent for saves written before this section existed, in
+	// which case the world restore's own effects are simply left alone.
+	if (j.contains("effects") && j.at("effects").is_array())
+	{
+		restoreActiveEffects(j.at("effects").get<std::vector<nlohmann::ordered_json>>());
 	}
 }
 
