@@ -507,53 +507,52 @@ int routeDir(const DROID *psDroid, const Corridor &c)
 	return weak;
 }
 
-// Which side of its travel a droid's route leaves the corridor on: -1 left,
-// +1 right, 0 straight through or unknown. The first route waypoint clearly
-// beyond the exit mouth, in that mouth's frame, tells the turn. The frame's
-// pVec is the right of travel into the corridor, so the sign flips for the
-// droid heading out.
-int exitSide(const DROID *psDroid, const Corridor &c, int dir)
+// Which side the droid's route next turns toward: -1 left, +1 right, 0 none.
+// The first bend past 45 degrees among its upcoming waypoints that is not just
+// the corridor winding. Winding means the route stays in the same corridor
+// across the bend, where the lane follows the centerline anyway and the bend
+// says nothing about sides - counting those made the vote alternate switchback
+// by switchback through a winding chain, mirroring the lanes mid-transit.
+// A bend that changes context, into another corridor, a junction or open
+// ground, is where the route actually departs and casts the vote - judged by
+// the route's own before and after, not by where the bend vertex happens to
+// sit, since a corner-cutting path can place the vertex of a genuine departure
+// a tile inside the corridor it is leaving. A flow's lane preference is a
+// property of its route: the side of its next departing turn is the side it
+// wants to already be on, and members sharing the same flows then agree on
+// handedness by construction.
+int routeTurnSide(const DROID *psDroid)
 {
 	const std::vector<Vector2i> &path = psDroid->sMove.asPath;
 	const int start = std::max(psDroid->sMove.pathIndex, 0);
 	const int stop = std::min(static_cast<int>(path.size()), start + 8);
+	Vector2i prev = psDroid->pos.xy();
+	Vector2i seg(0, 0);
 	for (int i = start; i < stop; ++i)
 	{
-		const ApproachFrame f = approachFrame(c, dir > 0 ? -1 : 1, path[i]);
-		const Vector2i rel = path[i] - f.mouth;
-		// The mouth plane, not distance out along the axis, splits inside from
-		// beyond. A sharp turn's waypoints sit beside the mouth with hardly any
-		// outward component, and an outward-distance filter skipped exactly the
-		// turns this exists for.
-		const int64_t rawAlong = (static_cast<int64_t>(rel.x) * f.gVec.x + static_cast<int64_t>(rel.y) * f.gVec.y) / DIR_UNIT;
-		if (rawAlong > TILE_UNITS / 2)
+		const Vector2i next = path[i] - prev;
+		if (iHypot(next) < TILE_UNITS / 2)
 		{
-			continue;   // still inside the corridor
+			continue;   // too short to carry a direction
 		}
-		// A sharp turn shows itself within a couple of tiles of the mouth. A
-		// first waypoint far beyond it, however far off axis, is a route
-		// through open ground, not a turn out of the corridor.
-		if (distSqTo(path[i], f.mouth) > static_cast<int64_t>(3 * TILE_UNITS) * (3 * TILE_UNITS))
+		if (seg.x != 0 || seg.y != 0)
 		{
-			return 0;
+			const int64_t cross = static_cast<int64_t>(seg.x) * next.y - static_cast<int64_t>(seg.y) * next.x;
+			const int64_t dot = static_cast<int64_t>(seg.x) * next.x + static_cast<int64_t>(seg.y) * next.y;
+			if ((cross < 0 ? -cross : cross) > (dot < 0 ? -dot : dot))
+			{
+				const Query at = queryCorridor(prev, prev);
+				const Query after = queryCorridor(path[i], path[i]);
+				const bool winding = at.relation == INSIDE && after.relation == INSIDE
+				                     && at.corridorId == after.corridorId;
+				if (!winding)
+				{
+					return cross > 0 ? 1 : -1;
+				}
+			}
 		}
-		const int64_t latF = (static_cast<int64_t>(rel.x) * f.pVec.x + static_cast<int64_t>(rel.y) * f.pVec.y) / DIR_UNIT;
-		const int64_t out = -rawAlong;
-		if (out <= TILE_UNITS / 2 && latF > -TILE_UNITS / 2 && latF < TILE_UNITS / 2)
-		{
-			continue;   // at the mouth itself, keep looking
-		}
-		// A turn means the route goes more sideways than out. A goal merely a
-		// couple of tiles off axis in the open is straight enough.
-		if (latF > TILE_UNITS && latF > out)
-		{
-			return -1;
-		}
-		if (latF < -TILE_UNITS && -latF > out)
-		{
-			return 1;
-		}
-		return 0;   // straight out
+		seg = next;
+		prev = path[i];
 	}
 	return 0;
 }
@@ -837,12 +836,15 @@ void corridorGateUpdate()
 	};
 	std::vector<Approacher> approachers;
 
-	// Exit-side preference per corridor and direction, anchored to the oldest
-	// member that expresses one. Members with no preference cannot hold the
-	// anchor: same-flow voters agree with each other, so the vote stays stable
-	// however the anchor identity churns among them, where anchoring on the
-	// oldest member outright let one droid with a flapping direction steal the
-	// anchor each tick and erase its own flow's vote.
+	// Turn-side preference per corridor and direction, anchored to the oldest
+	// member that expresses one. The vote is route-intrinsic, so the same droid
+	// votes the same in every member it touches and adjacent members carrying
+	// the same flows agree on handedness by construction, lanes running
+	// continuous across their junctions. Members with no preference cannot hold
+	// the anchor: same-flow voters agree with each other, so the vote stays
+	// stable however the anchor identity churns among them, where anchoring on
+	// the oldest member outright let one droid with a flapping direction steal
+	// the anchor each tick and erase its own flow's vote.
 	struct SidePref
 	{
 		uint32_t id = UINT32_MAX;
@@ -891,7 +893,7 @@ void corridorGateUpdate()
 			SidePref &pref = q.dir > 0 ? prefFwd[c] : prefBwd[c];
 			if (psDroid->id < pref.id)
 			{
-				const int side = exitSide(psDroid, cmap->corridors[c], q.dir);
+				const int side = routeTurnSide(psDroid);
 				if (side != 0)
 				{
 					pref.id = psDroid->id;
