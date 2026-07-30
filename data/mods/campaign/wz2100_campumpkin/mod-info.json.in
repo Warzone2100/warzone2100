@@ -95,6 +95,11 @@
             "id": "noCommander",
             "default": false,
             "userEditable": true
+        },
+        {
+            "id": "activateWeather",
+            "default": true,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [

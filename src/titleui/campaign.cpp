@@ -1735,6 +1735,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"activateWeather",
+		_("Activate Weather"),
+		_("Toggles the weather system (Disable for consistent FPS tests or to help weak computers)."),
+		true, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )

@@ -8,7 +8,7 @@ function wRandom(max)
 
 function weatherCycle()
 {
-	if (wRandom(100) > 33)
+	if (tweakOptions.activateWeather && wRandom(100) > 33)
 	{
 		if (tilesetType === "URBAN")
 		{
