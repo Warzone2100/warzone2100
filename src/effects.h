@@ -28,6 +28,10 @@
 	temporary world 'effects
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
+#include <vector>
+
+#include <nlohmann/json_fwd.hpp>
+
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/pietypes.h"
@@ -166,6 +170,18 @@ struct WorldMapState;
 
 bool	readFXData(const char *fileName, WorldMapState& mapState);
 bool	writeFXData(const char *fileName);
+
+/// Serializes the live effect list, one JSON object per effect.
+/// Effects are display-only, so this belongs to the savegame's local (per-client) section and is
+/// never part of the networked game state. Returns an empty list in headless mode.
+std::vector<nlohmann::ordered_json> serializeActiveEffects();
+
+/// Replaces the live effect list with a previously serialized one. Clears whatever is already there,
+/// so the restore is authoritative and effects the world restore re-created (ex. the landing lights
+/// setNoGoArea adds) are not doubled up. Malformed entries are skipped rather than failing the load.
+/// Unlike readFXData(), this does NOT set tiles on fire: the savegame restores that from the map.
+void restoreActiveEffects(const std::vector<nlohmann::ordered_json> &effects);
+
 void	effectSetSize(UDWORD size);
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 void	SetEffectForPlayer(uint8_t player);
