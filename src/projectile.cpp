@@ -60,6 +60,7 @@
 #include "display3d.h"
 #include "profiling.h"
 #include "game_world.h"
+#include "wrappers.h"
 
 #include <algorithm>
 #include <functional>
@@ -1016,7 +1017,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 	}
 
 	/* Paint effects if visible */
-	if (gfxVisible(psProj))
+	if (!headlessGameMode() && gfxVisible(psProj))
 	{
 		uint32_t effectTime;
 		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)
