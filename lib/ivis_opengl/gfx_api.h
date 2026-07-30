@@ -637,7 +637,7 @@ namespace gfx_api
 		void bind_textures(Args&&... args)
 		{
 			static_assert(sizeof...(args) == std::tuple_size<texture_inputs>::value, "Wrong number of textures");
-			gfx_api::context::get().bind_textures(untuple<texture_input>(texture_inputs{}), { args... });
+			gfx_api::context::get().bind_textures(texture_descriptions(), { args... });
 		}
 
 		void bind_constants(const constant_buffer_type<shader>& data)
@@ -684,7 +684,7 @@ namespace gfx_api
 
 		bool recompile()
 		{
-			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{})));
+			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), texture_descriptions(), untuple<vertex_buffer>(vertex_buffer_inputs{})));
 			return nextpso != nullptr && !nextpso->broken;
 		}
 
@@ -718,10 +718,21 @@ namespace gfx_api
 
 		// C++11, but requires specifying Output type
 		template<typename Output, typename...Args>
-		std::vector<Output> untuple(const std::tuple<Args...>&)
+		static std::vector<Output> untuple(const std::tuple<Args...>&)
 		{
 			return std::vector<Output>({ Args::get_desc()... });
 		}
+
+		// The texture descriptors are built purely from texture_inputs' template arguments
+		// (texture_description::get_desc() is static and returns its own non-type parameters), so they
+		// are identical for every draw through this pipeline. Build the list once per instantiation
+		// rather than allocating a fresh vector on every bind_textures() call.
+		static const std::vector<texture_input>& texture_descriptions()
+		{
+			static const std::vector<texture_input> descriptions = untuple<texture_input>(texture_inputs{});
+			return descriptions;
+		}
+
 		template<typename...Args>
 		std::vector<std::type_index> untuple_typeinfo(const std::tuple<Args...>&) const
 		{
