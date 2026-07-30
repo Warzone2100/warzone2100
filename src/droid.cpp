@@ -915,16 +915,12 @@ void droidUpdate(DROID *psDroid)
 			// Done animating (animation is defined by body - other components should follow suit)
 			if (psDroid->animationEvent == ANIM_EVENT_DYING)
 			{
-				// case theoretically should not happen anymore, as death animations are handled separately as effects now?
+				// Death animations are handled separately as effects, so a live droid should never
+				// reach this. A pre-2023 savegame can still restore one, so clear it and carry on.
 				debug(LOG_DEATH, "%s (%d) died to burn anim (died=%d)", objInfo(psDroid), (int)psDroid->id, (int)psDroid->died);
-				return;
 			}
 			psDroid->animationEvent = ANIM_EVENT_NONE;
 		}
-	}
-	else if (psDroid->animationEvent == ANIM_EVENT_DYING)
-	{
-		return; // rest below is irrelevant if dead
 	}
 
 	// Restore group from repairGroup if the droid gets interrupted while retreating.
