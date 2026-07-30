@@ -1069,13 +1069,19 @@ private:
 
 	MemoryPool memoryPool{ memPoolOpts };
 	PoolAllocator<SHAPE> poolAllocator;
+	// InsertionOrderMap holds its value allocator by reference, so the batches need an allocator of
+	// their own exact type to point at rather than a converted temporary.
+	PoolAllocator<gfx_api::Draw3DShapePerInstanceInterleavedData> instanceDataPoolAllocator;
 
 	using ShapeVector = std::vector<SHAPE, PoolAllocator<SHAPE>>;
+	// The instanced batches hold the interleaved data the buffer upload wants, built when the mesh is
+	// queued. Only the non-instanced fallback path still needs a SHAPE per instance.
+	using InstanceDataVector = std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData, PoolAllocator<gfx_api::Draw3DShapePerInstanceInterleavedData>>;
 	typedef templatedState MeshInstanceKey;
-	std::unordered_map<MeshInstanceKey, ShapeVector, std::hash<MeshInstanceKey>, std::equal_to<MeshInstanceKey>, PoolAllocator<std::pair<const MeshInstanceKey, ShapeVector>>> instanceMeshes;
-	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceTranslucentMeshes;
-	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceTranslucentMeshesNoDepthWrite;
-	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceAdditiveMeshes;
+	std::unordered_map<MeshInstanceKey, InstanceDataVector, std::hash<MeshInstanceKey>, std::equal_to<MeshInstanceKey>, PoolAllocator<std::pair<const MeshInstanceKey, InstanceDataVector>>> instanceMeshes;
+	InsertionOrderMap<MeshInstanceKey, InstanceDataVector> instanceTranslucentMeshes;
+	InsertionOrderMap<MeshInstanceKey, InstanceDataVector> instanceTranslucentMeshesNoDepthWrite;
+	InsertionOrderMap<MeshInstanceKey, InstanceDataVector> instanceAdditiveMeshes;
 	size_t instancesCount = 0;
 	size_t translucentInstancesCount = 0;
 	size_t additiveInstancesCount = 0;
@@ -1111,10 +1117,11 @@ private:
 
 InstancedMeshRenderer::InstancedMeshRenderer()
 	: poolAllocator(memoryPool),
-	instanceMeshes(poolAllocator),
-	instanceTranslucentMeshes(poolAllocator),
-	instanceTranslucentMeshesNoDepthWrite(poolAllocator),
-	instanceAdditiveMeshes(poolAllocator),
+	instanceDataPoolAllocator(memoryPool),
+	instanceMeshes(instanceDataPoolAllocator),
+	instanceTranslucentMeshes(instanceDataPoolAllocator),
+	instanceTranslucentMeshesNoDepthWrite(instanceDataPoolAllocator),
+	instanceAdditiveMeshes(instanceDataPoolAllocator),
 	tshapes(poolAllocator),
 	shapes(poolAllocator)
 {
@@ -1219,39 +1226,46 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 
 	templatedState currentState = templatedState((light) ? ((useInstancedRendering) ? SHADER_COMPONENT_INSTANCED : SHADER_COMPONENT) : ((useInstancedRendering) ? SHADER_NOLIGHT_INSTANCED : SHADER_NOLIGHT), shape, pieFlag);
 
-	SHAPE tshape;
-	tshape.shape = shape;
-	tshape.frame = frame;
-	tshape.colour = colour;
-	tshape.teamcolour = teamcolour;
-	tshape.flag = pieFlag;
-	tshape.flag_data = pieFlagData;
-	tshape.stretch = stretchDepth;
-	tshape.modelMatrix = modelMatrix;
+	glm::mat4 shapeModelMatrix = modelMatrix;
 
 	if (pieFlag & pie_SHIELD)
 	{
-		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(pie_SHIELD_FACTOR, pie_SHIELD_FACTOR, pie_SHIELD_FACTOR));
+		shapeModelMatrix = glm::scale(shapeModelMatrix, glm::vec3(pie_SHIELD_FACTOR, pie_SHIELD_FACTOR, pie_SHIELD_FACTOR));
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
-		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
+		shapeModelMatrix = glm::scale(shapeModelMatrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
 	}
 	if (pieFlag & pie_RAISE)		// collapse
 	{
-		tshape.modelMatrix = glm::translate(tshape.modelMatrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
+		shapeModelMatrix = glm::translate(shapeModelMatrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
 	}
+
+	// The instanced path stores the interleaved data directly, so no SHAPE is built for it at all.
+	// Only the non-instanced fallback still needs one.
+	auto fallbackShape = [&]() {
+		SHAPE tshape;
+		tshape.shape = shape;
+		tshape.frame = frame;
+		tshape.colour = colour;
+		tshape.teamcolour = teamcolour;
+		tshape.flag = pieFlag;
+		tshape.flag_data = pieFlagData;
+		tshape.stretch = stretchDepth;
+		tshape.modelMatrix = shapeModelMatrix;
+		return tshape;
+	};
 
 	if (pieFlag & (pie_ADDITIVE | pie_PREMULTIPLIED))
 	{
 		if (useInstancedRendering)
 		{
-			instanceAdditiveMeshes[currentState].push_back(tshape);
+			instanceAdditiveMeshes[currentState].push_back(GenerateInstanceData(frame, colour, teamcolour, pieFlag, pieFlagData, shapeModelMatrix, stretchDepth));
 		}
 		else
 		{
-			tshapes.push_back(tshape);
+			tshapes.push_back(fallbackShape());
 		}
 		++additiveInstancesCount;
 	}
@@ -1261,16 +1275,16 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 		{
 			if (pieFlag & pie_NODEPTHWRITE)
 			{
-				instanceTranslucentMeshesNoDepthWrite[currentState].push_back(tshape);
+				instanceTranslucentMeshesNoDepthWrite[currentState].push_back(GenerateInstanceData(frame, colour, teamcolour, pieFlag, pieFlagData, shapeModelMatrix, stretchDepth));
 			}
 			else
 			{
-				instanceTranslucentMeshes[currentState].push_back(tshape);
+				instanceTranslucentMeshes[currentState].push_back(GenerateInstanceData(frame, colour, teamcolour, pieFlag, pieFlagData, shapeModelMatrix, stretchDepth));
 			}
 		}
 		else
 		{
-			tshapes.push_back(tshape);
+			tshapes.push_back(fallbackShape());
 		}
 		++translucentInstancesCount;
 	}
@@ -1304,12 +1318,12 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 		}
 		if (useInstancedRendering)
 		{
-			auto [it, _] = instanceMeshes.try_emplace(currentState, poolAllocator);
-			it->second.push_back(tshape);
+			auto [it, _] = instanceMeshes.try_emplace(currentState, instanceDataPoolAllocator);
+			it->second.push_back(GenerateInstanceData(frame, colour, teamcolour, pieFlag, pieFlagData, shapeModelMatrix, stretchDepth));
 		}
 		else
 		{
-			shapes.push_back(tshape);
+			shapes.push_back(fallbackShape());
 		}
 
 		++instancesCount;
@@ -1508,10 +1522,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 			continue;
 		}
 		size_t startingIdxInInstancesBuffer = instancesData.size();
-		for (const auto& instance : meshInstances)
-		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
-		}
+		instancesData.insert(instancesData.end(), meshInstances.begin(), meshInstances.end());
 		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
 
@@ -1521,10 +1532,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	{
 		const auto& meshInstances = mesh.second;
 		size_t startingIdxInInstancesBuffer = instancesData.size();
-		for (const auto& instance : meshInstances)
-		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
-		}
+		instancesData.insert(instancesData.end(), meshInstances.begin(), meshInstances.end());
 		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
 
@@ -1534,10 +1542,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	{
 		const auto& meshInstances = mesh.second;
 		size_t startingIdxInInstancesBuffer = instancesData.size();
-		for (const auto& instance : meshInstances)
-		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
-		}
+		instancesData.insert(instancesData.end(), meshInstances.begin(), meshInstances.end());
 		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
 
@@ -1547,10 +1552,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	{
 		const auto& meshInstances = mesh.second;
 		size_t startingIdxInInstancesBuffer = instancesData.size();
-		for (const auto& instance : meshInstances)
-		{
-			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
-		}
+		instancesData.insert(instancesData.end(), meshInstances.begin(), meshInstances.end());
 		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
 
