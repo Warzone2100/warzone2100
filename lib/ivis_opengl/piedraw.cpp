@@ -970,22 +970,48 @@ public:
 		{
 			return values[it->second].second;
 		}
-		auto idx = values.size();
-		values.emplace_back(k, allocator);
+		auto idx = usedCount++;
+		if (idx < values.size())
+		{
+			// Re-use a slot left over from a previous frame. Its value was emptied by
+			// clearRetainingCapacity(), so this hands back a vector that kept its capacity.
+			values[idx].first = k;
+		}
+		else
+		{
+			values.emplace_back(k, allocator);
+		}
 		keyToValuesIdxMap[k] = idx;
 		return values[idx].second;
 	}
-	void clear() noexcept
+	// Empties the map for the next frame while keeping the slots (and so the capacity of each value)
+	// allocated. Slots are handed back out in insertion order, so the order this map exists to
+	// preserve is still the current frame's, not the order keys were first seen in.
+	void clearRetainingCapacity() noexcept
 	{
-		values.clear();
+		for (size_t i = 0; i < usedCount; ++i)
+		{
+			values[i].second.clear();
+		}
+		usedCount = 0;
 		keyToValuesIdxMap.clear();
 	}
+	// Drops the retained slots as well. For teardown, not for per-frame use.
+	void releaseMemory() noexcept
+	{
+		usedCount = 0;
+		PairVector().swap(values);
+		std::unordered_map<Key, size_t>().swap(keyToValuesIdxMap);
+	}
 	iterator begin() noexcept { return values.begin(); }
-	iterator end() noexcept { return values.end(); }
+	iterator end() noexcept { return values.begin() + usedCount; }
 	const_iterator cbegin() const noexcept { return values.cbegin(); }
-	const_iterator cend() const noexcept { return values.cend(); }
+	const_iterator cend() const noexcept { return values.cbegin() + usedCount; }
 private:
 	PairVector values;
+	// Number of leading entries in `values` that are live this frame. Anything past it is a retained
+	// but currently unused slot.
+	size_t usedCount = 0;
 	std::unordered_map<Key, size_t> keyToValuesIdxMap;
 	const ValueAllocator& allocator;
 };
@@ -1022,6 +1048,9 @@ public:
 public:
 	bool initialize();
 	void clear();
+	// Drops the batch storage retained across frames by clear(). Call when the match ends, so a
+	// finished game's peak batch memory (and the shape pointers its keys hold) is not kept around.
+	void releaseBatchMemory();
 	void reset();
 	void setLightmap(gfx_api::texture* _lightmapTexture, const glm::mat4& _modelUVLightmapMatrix)
 	{
@@ -1112,10 +1141,16 @@ bool InstancedMeshRenderer::initialize()
 
 void InstancedMeshRenderer::clear()
 {
-	instanceMeshes.clear();
-	instanceTranslucentMeshes.clear();
-	instanceTranslucentMeshesNoDepthWrite.clear();
-	instanceAdditiveMeshes.clear();
+	// Empty the batches but keep them, along with the capacity of each batch's vector. Consecutive
+	// frames draw a near-identical set of meshes, so destroying the batches here only means regrowing
+	// every one of them from zero next frame. Batches left empty are skipped in FinalizeInstances().
+	for (auto& mesh : instanceMeshes)
+	{
+		mesh.second.clear();
+	}
+	instanceTranslucentMeshes.clearRetainingCapacity();
+	instanceTranslucentMeshesNoDepthWrite.clearRetainingCapacity();
+	instanceAdditiveMeshes.clearRetainingCapacity();
 	instancesCount = 0;
 	translucentInstancesCount = 0;
 	additiveInstancesCount = 0;
@@ -1125,9 +1160,27 @@ void InstancedMeshRenderer::clear()
 	modelUVLightmapMatrix = glm::mat4();
 }
 
+void InstancedMeshRenderer::releaseBatchMemory()
+{
+	instanceMeshes.clear();
+	instanceMeshes.rehash(0);
+	instanceTranslucentMeshes.releaseMemory();
+	instanceTranslucentMeshesNoDepthWrite.releaseMemory();
+	instanceAdditiveMeshes.releaseMemory();
+	instancesCount = 0;
+	translucentInstancesCount = 0;
+	additiveInstancesCount = 0;
+	ShapeVector(poolAllocator).swap(tshapes);
+	ShapeVector(poolAllocator).swap(shapes);
+	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData>().swap(instancesData);
+	std::vector<InstancedDrawCall>().swap(finalizedDrawCalls);
+	lightmapTexture = nullptr;
+	modelUVLightmapMatrix = glm::mat4();
+}
+
 void InstancedMeshRenderer::reset()
 {
-	clear();
+	releaseBatchMemory();
 	for (auto buffer : instanceDataBuffers)
 	{
 		delete buffer;
@@ -1270,6 +1323,11 @@ static InstancedMeshRenderer instancedMeshRenderer;
 void pie_InitializeInstancedRenderer()
 {
 	instancedMeshRenderer.initialize();
+}
+
+void pie_ReleaseMeshBatchMemory()
+{
+	instancedMeshRenderer.releaseBatchMemory();
 }
 
 void pie_CleanUp()
@@ -1444,6 +1502,11 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	for (const auto& mesh : instanceMeshes)
 	{
 		const auto& meshInstances = mesh.second;
+		if (meshInstances.empty())
+		{
+			// A batch retained from an earlier frame that nothing drew into this time
+			continue;
+		}
 		size_t startingIdxInInstancesBuffer = instancesData.size();
 		for (const auto& instance : meshInstances)
 		{

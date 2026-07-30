@@ -62,6 +62,9 @@ void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 glm::vec4 pie_GetLighting0(LIGHTING_TYPE entry);
 
 void pie_InitializeInstancedRenderer();
+/// Frees the mesh batch storage the renderer keeps across frames. For ending a match, so a finished
+/// game's peak batch memory is not held for the rest of the session. Leaves the GPU buffers alone.
+void pie_ReleaseMeshBatchMemory();
 void pie_CleanUp();
 
 enum class ShadowMode

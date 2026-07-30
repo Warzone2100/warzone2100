@@ -1459,6 +1459,10 @@ void shutdown3DView()
 	droidText = WzText();
 
 	batchedObjectStatusRenderer.clear(); // NOTE: *NOT* reset() - see shutdown3DView_FullReset below for why
+
+	// Drop the mesh batches the instanced renderer keeps across frames. Safe here (unlike the GPU
+	// buffers noted below) because it is plain CPU-side storage that just regrows on the next match.
+	pie_ReleaseMeshBatchMemory();
 }
 
 void shutdown3DView_FullReset()
