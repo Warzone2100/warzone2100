@@ -34,6 +34,17 @@
 	************************************************************
 	* STILL NEED TO REMOVE SOME MAGIC NUMBERS INTO #DEFINES!!! *
 	************************************************************
+
+	Effects are DISPLAY-ONLY and must stay that way:
+	- Nothing here may read or write game simulation state, or consume the synchronised RNG
+	  (gameRand / gameRandU32). Use plain rand() for visual variation.
+	- The active effect list is only advanced by processEffects(), which runs from the 3D draw
+	  path. It never runs in headless mode, so addEffect() / addMultiEffect() bail out there
+	  rather than accumulate effects that would never be processed.
+	- Sound is fine (it is presentation, not simulation).
+
+	The one exception is readFXData(), which sets burning tiles when loading a classic savegame,
+	because that format persists tile fire nowhere else.
 */
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -72,6 +83,7 @@
 #include "component.h"
 #include "profiling.h"
 #include "game_world.h"
+#include "wrappers.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -257,7 +269,7 @@ void effectSetSize(UDWORD size)
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
                     EFFECT_TYPE type, bool specified, const iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
 {
-	if (number == 0)
+	if (number == 0 || headlessGameMode())
 	{
 		return;
 	}
@@ -358,7 +370,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
 {
-	if (gamePaused())
+	if (gamePaused() || headlessGameMode())
 	{
 		return;
 	}
