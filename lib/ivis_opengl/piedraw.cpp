@@ -996,6 +996,12 @@ public:
 		usedCount = 0;
 		keyToValuesIdxMap.clear();
 	}
+	// Drops slots retained beyond what the last frame actually used. Must run before
+	// clearRetainingCapacity(), which is what resets usedCount.
+	void compact()
+	{
+		values.erase(values.begin() + usedCount, values.end());
+	}
 	// Drops the retained slots as well. For teardown, not for per-frame use.
 	void releaseMemory() noexcept
 	{
@@ -1086,6 +1092,13 @@ private:
 	size_t translucentInstancesCount = 0;
 	size_t additiveInstancesCount = 0;
 
+	// Batches are retained across frames, so without a sweep a long match accumulates one for every
+	// mesh it has ever drawn, each holding its capacity and a shape pointer, and FinalizeInstances
+	// walks the dead ones every frame to skip them. Long enough that a batch drawn even rarely is
+	// unlikely to be dropped and re-inserted repeatedly.
+	static constexpr uint32_t batchCompactionIntervalFrames = 600;
+	uint32_t framesSinceBatchCompaction = 0;
+
 	ShapeVector tshapes;
 	ShapeVector shapes;
 
@@ -1151,10 +1164,47 @@ void InstancedMeshRenderer::clear()
 	// Empty the batches but keep them, along with the capacity of each batch's vector. Consecutive
 	// frames draw a near-identical set of meshes, so destroying the batches here only means regrowing
 	// every one of them from zero next frame. Batches left empty are skipped in FinalizeInstances().
-	for (auto& mesh : instanceMeshes)
+	//
+	// Every so often, drop the ones that went unused instead of keeping them forever. A batch that is
+	// still empty here was not drawn into during the previous frame, since this runs at the start of
+	// one. Re-inserting it later costs a single insert, which is what first use would have cost anyway.
+	if (++framesSinceBatchCompaction >= batchCompactionIntervalFrames)
 	{
-		mesh.second.clear();
+		framesSinceBatchCompaction = 0;
+
+		bool erasedAny = false;
+		for (auto it = instanceMeshes.begin(); it != instanceMeshes.end(); )
+		{
+			if (it->second.empty())
+			{
+				it = instanceMeshes.erase(it);
+				erasedAny = true;
+			}
+			else
+			{
+				it->second.clear();
+				++it;
+			}
+		}
+		if (erasedAny)
+		{
+			// Give back the bucket array the dropped batches were sized for
+			instanceMeshes.rehash(0);
+		}
+
+		// Runs before clearRetainingCapacity(), which resets the used-slot count these read
+		instanceTranslucentMeshes.compact();
+		instanceTranslucentMeshesNoDepthWrite.compact();
+		instanceAdditiveMeshes.compact();
 	}
+	else
+	{
+		for (auto& mesh : instanceMeshes)
+		{
+			mesh.second.clear();
+		}
+	}
+
 	instanceTranslucentMeshes.clearRetainingCapacity();
 	instanceTranslucentMeshesNoDepthWrite.clearRetainingCapacity();
 	instanceAdditiveMeshes.clearRetainingCapacity();
@@ -1177,6 +1227,7 @@ void InstancedMeshRenderer::releaseBatchMemory()
 	instancesCount = 0;
 	translucentInstancesCount = 0;
 	additiveInstancesCount = 0;
+	framesSinceBatchCompaction = 0;
 	ShapeVector(poolAllocator).swap(tshapes);
 	ShapeVector(poolAllocator).swap(shapes);
 	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData>().swap(instancesData);
