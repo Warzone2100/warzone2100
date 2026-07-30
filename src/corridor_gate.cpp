@@ -79,9 +79,11 @@ struct Query
 // off the wall and clearly on its own side. About a unit radius.
 const int32_t LANE_MARGIN = TILE_UNITS / 2;
 
-// Only a corridor too narrow for a lane each way needs turn-taking. A wider one
-// runs both directions at once in lanes.
-const int32_t METER_MAX_WIDTH = 2 * TILE_UNITS;
+// Two opposing bodies thread a pinch when it can separate their centres by the
+// sum of their radii plus this control slack, terrain collision being centre
+// based. Calibrated between the observed bounds: a cyborg and a medium tank do
+// pass each other in a one tile passage, two medium tanks wedge.
+const int32_t PASS_MARGIN = 40;
 
 // On a turn-taking corridor the waiting direction queues from this far back, so
 // the mouth stays clear for the flow coming out of it.
@@ -149,7 +151,6 @@ std::vector<int> g_chainId;          ///< per corridor, chain representative
 std::vector<int8_t> g_chainSign;     ///< +1 oriented with the chain, -1 flipped
 std::vector<uint8_t> g_mouthAOuter;  ///< per corridor, mouthA adjoins no other corridor
 std::vector<uint8_t> g_mouthBOuter;
-std::vector<int32_t> g_chainMinWidth;   ///< per corridor, narrowest point of its whole chain
 
 // Mouths within this of each other adjoin, chaining their corridors. A queue
 // can park up to APPROACH_RADIUS behind a mouth, so any mouth within that span
@@ -175,12 +176,6 @@ void chainEnsure(const CorridorMap *cmap)
 	g_chainSign.assign(n, 1);
 	g_mouthAOuter.assign(n, 1);
 	g_mouthBOuter.assign(n, 1);
-	g_chainMinWidth.assign(n, 0);
-	for (size_t i = 0; i < n; ++i)
-	{
-		g_chainMinWidth[i] = cmap->corridors[i].minWidth;
-	}
-
 	// Collect every mouth adjacency. Adjacency alone decides inner mouths, so
 	// no queue ever parks in a junction pocket, whatever the orientation below.
 	struct Link
@@ -300,15 +295,6 @@ void chainEnsure(const CorridorMap *cmap)
 	{
 		g_chainId[i] = find(static_cast<int>(i));
 		g_chainSign[i] = signToRoot(static_cast<int>(i));
-	}
-	for (size_t i = 0; i < n; ++i)
-	{
-		const size_t root = static_cast<size_t>(g_chainId[i]);
-		g_chainMinWidth[root] = std::min(g_chainMinWidth[root], cmap->corridors[i].minWidth);
-	}
-	for (size_t i = 0; i < n; ++i)
-	{
-		g_chainMinWidth[i] = g_chainMinWidth[static_cast<size_t>(g_chainId[i])];
 	}
 }
 
@@ -673,8 +659,12 @@ bool routeEntersMouth(const DROID *psDroid, const Corridor &c, int dir)
 Query classifyDroid(const DROID *psDroid)
 {
 	// A droid going nowhere creates no flow, imposes no lanes and joins no
-	// queue, however close to a corridor it sits.
-	if (psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.asPath.empty())
+	// queue, however close to a corridor it sits. Neither does one fighting on
+	// the move, whose movement is combat micro, not route following - its
+	// direction through a corridor flaps with every retarget, and one such
+	// droid steering by lanes circles in place and pollutes the flow votes.
+	if (psDroid->sMove.Status == MOVEINACTIVE || psDroid->sMove.asPath.empty()
+	    || psDroid->action == DACTION_MOVEFIRE)
 	{
 		return Query();
 	}
@@ -833,6 +823,10 @@ void corridorGateUpdate()
 	std::vector<int8_t> lowestInsideDir(n, 0);
 	std::vector<uint8_t> hasFwd(n, 0);
 	std::vector<uint8_t> hasBwd(n, 0);
+	std::vector<int32_t> occWidthFwd(n, INT32_MAX);   ///< per chain, narrowest member this direction occupies
+	std::vector<int32_t> occWidthBwd(n, INT32_MAX);
+	std::vector<int32_t> maxRadFwd(n, 0);             ///< per chain, largest body of this direction's traffic
+	std::vector<int32_t> maxRadBwd(n, 0);
 
 	struct Approacher
 	{
@@ -879,7 +873,11 @@ void corridorGateUpdate()
 			if (q.relation == INSIDE)
 			{
 				(chainDir > 0 ? insideFwd[chain] : insideBwd[chain]) += 1;
+				int32_t &occ = chainDir > 0 ? occWidthFwd[chain] : occWidthBwd[chain];
+				occ = std::min(occ, cmap->corridors[c].minWidth);
 			}
+			int32_t &rad = chainDir > 0 ? maxRadFwd[chain] : maxRadBwd[chain];
+			rad = std::max(rad, moveObjRadius(psDroid));
 			if (psDroid->id < lowestId[chain])
 			{
 				lowestId[chain] = psDroid->id;
@@ -1025,8 +1023,21 @@ void corridorGateUpdate()
 		const size_t c = static_cast<size_t>(corridor);
 		const Corridor &cor = cmap->corridors[c];
 		const bool entryOuter = dir > 0 ? g_mouthAOuter[c] : g_mouthBOuter[c];
-		const bool waiting = g_chainMinWidth[c] < METER_MAX_WIDTH
-		                     && g_activeDir[c] != 0 && g_activeDir[c] != dir;
+		// A pinch only meters a pair of flows that cannot thread it: too narrow
+		// to separate the two largest bodies' centres with control slack. Wait
+		// while the opposing flow actually occupies such a member, rather than
+		// because one exists, so a wide entrance streams in lanes whenever the
+		// pinches are clear, and a cyborg flow passes an opposing tank flow
+		// through a passage that fits the pair. Entering an unthreadable
+		// corridor directly still uses the flow direction, or two flows racing
+		// into an empty one would meet head-on inside it.
+		const size_t chain = static_cast<size_t>(g_chainId[c]);
+		const bool fwdSide = dir * g_chainSign[c] > 0;
+		const int32_t fitNeed = maxRadFwd[chain] + maxRadBwd[chain] + PASS_MARGIN;
+		const int32_t oppOccWidth = (fwdSide ? occWidthBwd : occWidthFwd)[chain];
+		const bool waiting = oppOccWidth < fitNeed
+		                     || (cor.minWidth < fitNeed
+		                         && g_activeDir[c] != 0 && g_activeDir[c] != dir);
 		const int32_t base = waiting ? -HOLD_STANDOFF : 0;
 		std::unordered_map<int, int32_t> laneDepth;
 		for (; i < approachers.size()
