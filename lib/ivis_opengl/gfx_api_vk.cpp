@@ -5372,6 +5372,8 @@ void VkRoot::bind_vertex_buffers(const std::size_t& first, const std::vector<std
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	std::vector<vk::Buffer> buffers;
 	std::vector<VkDeviceSize> offsets;
+	buffers.reserve(vertex_buffers_offset.size());
+	offsets.reserve(vertex_buffers_offset.size());
 	for (const auto &input : vertex_buffers_offset)
 	{
 		// null vertex buffers are not supported
@@ -5639,6 +5641,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 
 	uint32_t i = 0;
 	auto image_descriptor = std::vector<vk::DescriptorImageInfo>{};
+	image_descriptor.reserve(textures.size());
 	for (auto* texture : textures)
 	{
 		vk::ImageView imageView;
@@ -5713,7 +5716,9 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		i++;
 	}
 	i = 0;
+	// Sized up front: the entries below point into image_descriptor, which must not grow again
 	auto write_info = std::vector<vk::WriteDescriptorSet>{};
+	write_info.reserve(textures.size());
 	for (auto* texture : textures)
 	{
 		(void)texture; // silence unused variable warning
