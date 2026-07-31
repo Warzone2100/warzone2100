@@ -89,6 +89,12 @@ const int32_t PASS_MARGIN = 40;
 // the mouth stays clear for the flow coming out of it.
 const int32_t HOLD_STANDOFF = 2 * TILE_UNITS;
 
+// An inside droid bumped against something for longer than this is stalled,
+// not just nudging past neighbours in a moving stream. Well under the give-up
+// time in moveBlocked, so entrants stop being fed in before the stuck droid
+// abandons its move.
+const uint32_t STALL_TIME = 1000;
+
 // Gap between queued droids on top of their bodies, so the file has room to
 // stop and start without shoving.
 const int32_t QUEUE_GAP = TILE_UNITS / 4;
@@ -458,41 +464,53 @@ ApproachFrame approachFrame(const Corridor &c, int dir, const Vector2i &pos)
 // projection alone would let a leg of the route that runs through some other
 // passage nearby project onto this corridor's far end and reverse the answer,
 // flapping the direction as the droid moves.
-int routeDir(const DROID *psDroid, const Corridor &c)
+int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr)
 {
 	const std::vector<Vector2i> &path = psDroid->sMove.asPath;
 	const int last = static_cast<int>(c.centerline.size()) - 1;
 	const int startIdx = static_cast<int>(nearestCenterlineIdx(c, psDroid->pos.xy()));
 	const int start = std::max(psDroid->sMove.pathIndex, 0);
 	const int stop = std::min(static_cast<int>(path.size()), start + 6);
+	if (strongOut != nullptr)
+	{
+		*strongOut = false;
+	}
 	int weak = 0;
 	for (int i = start; i < stop; ++i)
 	{
 		const int idx = static_cast<int>(nearestCenterlineIdx(c, path[i]));
 		const int wIdx = std::clamp(idx, std::min(MOUTH_MARGIN, last), std::max(last - MOUTH_MARGIN, 0));
-		const int32_t nearRadius = c.widthProfile[wIdx] / 2 + TILE_UNITS;
+		// Capped where the profile balloons, ex. a bowl opening onto open
+		// ground mid-line. There the footprint overlaps other passages and
+		// their legs of the route would read as this corridor's evidence,
+		// and a lane claim in a section that wide says nothing anyway.
+		const int32_t nearRadius = std::min(c.widthProfile[wIdx] / 2, TILE_UNITS) + TILE_UNITS;
 		bool counts = distSqTo(path[i], c.centerline[static_cast<size_t>(idx)]) <= static_cast<int64_t>(nearRadius) * nearRadius;
 		if (!counts && (idx == 0 || idx == last))
 		{
-			// Past this end, on the corridor's own line out of the mouth.
+			// Past this end, on the corridor's own line out of the mouth, and
+			// within the approach zone. Unbounded, the extension of a curved
+			// corridor's end can run across distant legs of the route that
+			// have nothing to do with this passage, and whether they fall in
+			// the scan window flips the answer repath by repath.
 			const ApproachFrame f = approachFrame(c, idx == 0 ? 1 : -1, path[i]);
 			const Vector2i rel = path[i] - f.mouth;
 			const int32_t lat = static_cast<int32_t>((static_cast<int64_t>(rel.x) * f.pVec.x
 			                                          + static_cast<int64_t>(rel.y) * f.pVec.y) / DIR_UNIT);
-			counts = f.along < 0 && lat > -nearRadius && lat < nearRadius;
+			counts = f.along < 0 && f.along > -APPROACH_RADIUS && lat > -nearRadius && lat < nearRadius;
 		}
 		if (!counts)
 		{
 			continue;
 		}
 		const int diff = idx - startIdx;
-		if (diff >= 2)
+		if (diff >= 2 || diff <= -2)
 		{
-			return 1;
-		}
-		if (diff <= -2)
-		{
-			return -1;
+			if (strongOut != nullptr)
+			{
+				*strongOut = true;
+			}
+			return diff > 0 ? 1 : -1;
 		}
 		if ((diff == 1 || diff == -1) && (idx == 0 || idx == last))
 		{
@@ -675,11 +693,14 @@ Query classifyDroid(const DROID *psDroid)
 	if (q.relation == APPROACHING)
 	{
 		// Passing the entry cross-section is not enough. A droid that just left
-		// through this mouth, or skirts past it, has the mouth on its route too.
-		// Only a route that demonstrably progresses inward, in this direction, is
-		// an approach.
+		// through this mouth, or skirts past it, has the mouth on its route too,
+		// and one whose route merely ENDS beside the mouth leaves only terminal
+		// evidence, which slotted droids into an intake they never meant to use.
+		// Only a route that demonstrably penetrates inward, in this
+		// direction, is an approach.
 		const Corridor &c = gameWorld.map.corridors->corridors[static_cast<size_t>(q.corridorId)];
-		if (!routeEntersMouth(psDroid, c, q.dir) || routeDir(psDroid, c) != q.dir)
+		bool strong = false;
+		if (!routeEntersMouth(psDroid, c, q.dir) || routeDir(psDroid, c, &strong) != q.dir || !strong)
 		{
 			return Query();
 		}
@@ -826,6 +847,19 @@ void corridorGateUpdate()
 	std::vector<int32_t> occWidthBwd(n, INT32_MAX);
 	std::vector<int32_t> maxRadFwd(n, 0);             ///< per chain, largest body of this direction's traffic
 	std::vector<int32_t> maxRadBwd(n, 0);
+	std::vector<uint8_t> stalledFwd(n, 0);            ///< per chain, this direction's flow is stuck, not draining
+	std::vector<uint8_t> stalledBwd(n, 0);
+
+	// Only the head of a direction's column can stall a corridor. Followers bump
+	// the file ahead of them constantly in a healthy compressing stream, so their
+	// bumps say nothing, while the front droid stuck against something it cannot
+	// pass means the flow is not draining.
+	struct ColumnHead
+	{
+		int32_t prog = INT32_MIN;   ///< centerline index signed by direction, larger is further along
+		uint8_t stalled = 0;
+	};
+	std::vector<ColumnHead> headFwd(n), headBwd(n);   ///< per corridor and direction
 
 	struct Approacher
 	{
@@ -877,6 +911,20 @@ void corridorGateUpdate()
 				(chainDir > 0 ? insideFwd[chain] : insideBwd[chain]) += 1;
 				int32_t &occ = chainDir > 0 ? occWidthFwd[chain] : occWidthBwd[chain];
 				occ = std::min(occ, cmap->corridors[c].minWidth);
+				const bool bumped = psDroid->sMove.bumpTime != 0
+				                    && psDroid->sMove.bumpTime <= gameTime
+				                    && gameTime - psDroid->sMove.bumpTime > STALL_TIME;
+				ColumnHead &head = q.dir > 0 ? headFwd[c] : headBwd[c];
+				const int32_t prog = q.dir * static_cast<int32_t>(q.nearest);
+				if (prog > head.prog)
+				{
+					head.prog = prog;
+					head.stalled = bumped ? 1 : 0;
+				}
+				else if (prog == head.prog && bumped)
+				{
+					head.stalled = 1;
+				}
 			}
 			int32_t &rad = chainDir > 0 ? maxRadFwd[chain] : maxRadBwd[chain];
 			rad = std::max(rad, moveObjRadius(psDroid));
@@ -914,6 +962,19 @@ void corridorGateUpdate()
 				}
 				approachers.push_back({psDroid, q.corridorId, q.dir, f.along});
 			}
+		}
+	}
+
+	for (size_t c = 0; c < n; ++c)
+	{
+		const size_t chain = static_cast<size_t>(g_chainId[c]);
+		if (headFwd[c].stalled)
+		{
+			(g_chainSign[c] > 0 ? stalledFwd : stalledBwd)[chain] = 1;
+		}
+		if (headBwd[c].stalled)
+		{
+			(g_chainSign[c] > 0 ? stalledBwd : stalledFwd)[chain] = 1;
 		}
 	}
 
@@ -980,15 +1041,16 @@ void corridorGateUpdate()
 			{
 				continue;   // one line per chain, at its root
 			}
-			const int16_t flow = static_cast<int16_t>(g_contested[c] * 100 + (g_activeDir[c] + 1) * 10
+			const int16_t flow = static_cast<int16_t>((stalledFwd[c] * 2 + stalledBwd[c]) * 1000
+			                                          + g_contested[c] * 100 + (g_activeDir[c] + 1) * 10
 			                                          + (insideFwd[c] > 9 ? 9 : insideFwd[c]));
 			if (prevFlow[c] == flow)
 			{
 				continue;
 			}
 			prevFlow[c] = flow;
-			debug(LOG_MOVEMENT, "corridor t=%u chain %zu contested=%d active=%d insideFwd=%d insideBwd=%d",
-			      gameTime, c, g_contested[c], g_activeDir[c], insideFwd[c], insideBwd[c]);
+			debug(LOG_MOVEMENT, "corridor t=%u chain %zu contested=%d active=%d insideFwd=%d insideBwd=%d stalledFwd=%d stalledBwd=%d",
+			      gameTime, c, g_contested[c], g_activeDir[c], insideFwd[c], insideBwd[c], stalledFwd[c], stalledBwd[c]);
 		}
 	}
 
@@ -1032,12 +1094,16 @@ void corridorGateUpdate()
 		// pinches are clear, and a cyborg flow passes an opposing tank flow
 		// through a passage that fits the pair. Entering an unthreadable
 		// corridor directly still uses the flow direction, or two flows racing
-		// into an empty one would meet head-on inside it.
+		// into an empty one would meet head-on inside it. A flow that fits on
+		// paper but has a member stuck against something is not draining, so
+		// entrants also wait while the opposing flow has a stalled droid
+		// inside, rather than feeding a column against it.
 		const size_t chain = static_cast<size_t>(g_chainId[c]);
 		const bool fwdSide = dir * g_chainSign[c] > 0;
 		const int32_t fitNeed = maxRadFwd[chain] + maxRadBwd[chain] + PASS_MARGIN;
 		const int32_t oppOccWidth = (fwdSide ? occWidthBwd : occWidthFwd)[chain];
 		const bool waiting = oppOccWidth < fitNeed
+		                     || (fwdSide ? stalledBwd : stalledFwd)[chain]
 		                     || (cor.minWidth < fitNeed
 		                         && g_activeDir[c] != 0 && g_activeDir[c] != dir);
 		const int32_t base = waiting ? -HOLD_STANDOFF : 0;
