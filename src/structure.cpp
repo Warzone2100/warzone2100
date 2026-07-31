@@ -1197,7 +1197,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 		if (psStruct->player != selectedPlayer)
 		{
 			//set quantity to produce
-			psFact->productionLoops = 1;
+			psFact->productionLoops = 0;
 		}
 
 		psFact->timeStarted = ACTION_START_TIME;//gameTime;
@@ -2246,6 +2246,9 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 	case REF_VTOL_FACTORY:
 		{
 			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
+
+			psFactory->productionLoops = 0;
+			psFactory->loopsPerformed = 0;
 
 			// Reset factoryNumFlag for prior player
 			auto psAssemblyPoint = psFactory->psAssemblyPoint;
