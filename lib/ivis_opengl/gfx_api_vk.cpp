@@ -3149,6 +3149,10 @@ void VkRoot::PipelineSurfaceAllocator::destroy(gfx_api::PipelineSurfaceId id, gf
 	ASSERT_OR_RETURN(, id != gfx_api::PipelineSurfaceId::Count, "Invalid pipeline surface id");
 	VkSurfaceGpu& gpu = root._surfaceGpu[static_cast<size_t>(id)];
 
+	// the layout tracker is keyed by texture address, so drop the destroyed
+	// image before a replacement at the same address inherits a stale layout
+	root._frameLayoutTracker.eraseTexture(gpu.texture.get());
+
 	if (buffering_mechanism::isInitialized())
 	{
 		auto& frameResources = buffering_mechanism::get_current_resources();

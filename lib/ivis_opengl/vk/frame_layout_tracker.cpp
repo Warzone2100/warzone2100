@@ -75,6 +75,25 @@ void FrameLayoutTracker::erase(const gfx_api::LayoutSubresourceKey& subresource)
 	}
 }
 
+void FrameLayoutTracker::eraseTexture(gfx_api::abstract_texture* texture)
+{
+	if (texture == nullptr)
+	{
+		return;
+	}
+	for (auto it = _layouts.begin(); it != _layouts.end();)
+	{
+		if (it->first.texture == texture)
+		{
+			it = _layouts.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
 ::vk::ImageLayout FrameLayoutTracker::get(gfx_api::abstract_texture* texture) const
 {
 	return get(gfx_api::layoutSubresourceKey(texture));
