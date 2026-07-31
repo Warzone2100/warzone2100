@@ -1318,15 +1318,20 @@ static void updateLightMap(WorldMapState& mapState, const LightMap& lightmap)
 
 static void cullTerrain(WorldMapState& mapState)
 {
+	const float maxDistance = static_cast<float>(world_coord(terrainDistance));
+	const float maxDistanceSquared = maxDistance * maxDistance;
+
 	for (int x = 0; x < xSectors; x++)
 	{
 		for (int y = 0; y < ySectors; y++)
 		{
 			float xPos = world_coord(x * sectorSize + sectorSize / 2);
 			float yPos = world_coord(y * sectorSize + sectorSize / 2);
-			float distance = pow(playerPos.p.x - xPos, 2) + pow(playerPos.p.z - yPos, 2);
+			float xDelta = playerPos.p.x - xPos;
+			float yDelta = playerPos.p.z - yPos;
+			float distance = xDelta * xDelta + yDelta * yDelta;
 
-			if (distance > pow((double)world_coord(terrainDistance), 2))
+			if (distance > maxDistanceSquared)
 			{
 				sectors[x * ySectors + y].draw = false;
 			}
