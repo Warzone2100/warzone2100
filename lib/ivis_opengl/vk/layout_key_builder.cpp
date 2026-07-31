@@ -59,9 +59,12 @@ void clearPassLayoutKey(PassLayoutKey& layoutKey)
 
 ::vk::ImageLayout initialColorAttachmentLayout(AttachmentLoadOp loadOp)
 {
-	return (loadOp == AttachmentLoadOp::Clear)
-		? ::vk::ImageLayout::eUndefined
-		: ::vk::ImageLayout::eColorAttachmentOptimal;
+	// Clear and DontCare discard the previous contents, so Undefined is always
+	// valid and never requires the image to already hold a particular layout.
+	// Load preserves contents and must name the layout the producer left.
+	return (loadOp == AttachmentLoadOp::Load)
+		? ::vk::ImageLayout::eColorAttachmentOptimal
+		: ::vk::ImageLayout::eUndefined;
 }
 
 ::vk::ImageLayout initialResolveAttachmentLayout(AttachmentLoadOp loadOp)
@@ -73,9 +76,9 @@ void clearPassLayoutKey(PassLayoutKey& layoutKey)
 
 ::vk::ImageLayout initialDepthAttachmentLayout(AttachmentLoadOp loadOp)
 {
-	return (loadOp == AttachmentLoadOp::Clear)
-		? ::vk::ImageLayout::eUndefined
-		: ::vk::ImageLayout::eDepthStencilAttachmentOptimal;
+	return (loadOp == AttachmentLoadOp::Load)
+		? ::vk::ImageLayout::eDepthStencilAttachmentOptimal
+		: ::vk::ImageLayout::eUndefined;
 }
 
 ::vk::ImageLayout depthFinalLayoutFromStoreOp(AttachmentStoreOp storeOp)
