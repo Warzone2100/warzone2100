@@ -30,6 +30,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// Neighborhood blending mixes in approximate linear light instead of the
+// stored gamma encoded values, keeping blends across high contrast edges
+// from losing perceived brightness. Comment out for reference behavior.
+#define WZ_SMAA_GAMMA2_BLEND
+
 uniform sampler2D colorTex;
 uniform sampler2D blendTex;
 
@@ -96,13 +101,30 @@ void main()
 	// is the dominant blending direction horizontal?
 	bool h = max(a.x, a.z) > max(a.y, a.w);
 
-	// blending offsets and weights along that direction
-	vec4 blendingOffset = vec4(0.0, a.y, 0.0, a.w);
-	vec2 blendingWeight = a.yw;
-	movc4(bvec4(h), blendingOffset, vec4(a.x, 0.0, a.z, 0.0));
-	movc2(bvec2(h), blendingWeight, a.xz);
-	blendingWeight /= dot(blendingWeight, vec2(1.0));
+	// blending fractions and normalized weights along that direction
+	vec2 f = a.yw;
+	movc2(bvec2(h), f, a.xz);
+	vec2 blendingWeight = f / dot(f, vec2(1.0));
 
+#ifdef WZ_SMAA_GAMMA2_BLEND
+	// the reference implementation mixes each pixel with its neighbor through
+	// the hardware bilinear filter, which operates on the stored gamma encoded
+	// values and darkens blends across high contrast edges, so fetch the
+	// texels directly and mix in approximate linear light instead
+	vec2 dir = h ? vec2(rtMetrics.x, 0.0) : vec2(0.0, rtMetrics.y);
+	vec3 c0 = sampleColor(uv);
+	vec3 c1 = sampleColor(uv + dir);
+	vec3 c2 = sampleColor(uv - dir);
+	c0 *= c0;
+	c1 *= c1;
+	c2 *= c2;
+	vec3 color = blendingWeight.x * mix(c0, c1, f.x);
+	color += blendingWeight.y * mix(c0, c2, f.y);
+
+	FragColor = vec4(sqrt(color), 1.0);
+#else
+	vec4 blendingOffset = vec4(0.0, a.y, 0.0, a.w);
+	movc4(bvec4(h), blendingOffset, vec4(a.x, 0.0, a.z, 0.0));
 	vec4 blendingCoord = blendingOffset * vec4(rtMetrics.xy, -rtMetrics.xy) + uv.xyxy;
 
 	// bilinear filtering mixes the current pixel with the chosen neighbor
@@ -110,4 +132,5 @@ void main()
 	color += blendingWeight.y * sampleColor(blendingCoord.zw);
 
 	FragColor = vec4(color, 1.0);
+#endif
 }
