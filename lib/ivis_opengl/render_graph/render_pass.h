@@ -129,14 +129,22 @@ struct RenderPassDesc
 
 /// <summary>
 /// Per-pass data passed to `RecordFunc` callbacks after reads are compile-resolved.
+///
+/// ScenePass contract: when shadow cascades > 0, `reads[i]` is cascade `i` Depth
+/// (`PassOutput`); all share the same ShadowMap array texture - bind once via
+/// `getRead(0)`. When cascades == 0, `readCount() == 0`.
 /// </summary>
 class RenderPassContext
 {
 public:
 	RenderPassContext(const RenderPassDesc& desc, std::vector<ResolvedRead> resolvedReads);
 
+	/// Number of compile-resolved reads (matches `RenderPassDesc::reads` size on success).
+	size_t readCount() const { return _resolvedReads.size(); }
 	/// Resolved input texture for `reads[index]` (barriers already emitted).
 	abstract_texture* getRead(size_t index) const;
+	/// Full resolved read metadata (texture + layer/mip/depth flag).
+	const ResolvedRead& resolvedRead(size_t index) const;
 	/// Stable id from `RenderPassDesc::passId`.
 	PassId passId() const { return _desc.passId; }
 

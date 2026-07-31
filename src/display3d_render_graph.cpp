@@ -78,7 +78,24 @@ static Vector3f toVector3f(const glm::vec3& v)
 	return Vector3f(v.x, v.y, v.z);
 }
 
-static void recordScenePass(const gfx_api::RenderPassContext&)
+/// ScenePass reads are exclusively ordered ShadowCascade Depth outputs; all share one array texture.
+static gfx_api::abstract_texture* shadowMapFromScenePassReads(const gfx_api::RenderPassContext& ctx)
+{
+	if (ctx.readCount() == 0)
+	{
+		return nullptr;
+	}
+	gfx_api::abstract_texture* shadowMap = ctx.getRead(0);
+	for (size_t i = 0; i < ctx.readCount(); ++i)
+	{
+		const auto& read = ctx.resolvedRead(i);
+		ASSERT(read.isDepth, "ScenePass read %zu must be Depth (cascade)", i);
+		ASSERT(read.texture == shadowMap, "ScenePass cascade reads must share ShadowMap texture");
+	}
+	return shadowMap;
+}
+
+static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 {
 	if (!pie_IsInGame3DFrameContextReady())
 	{
@@ -87,10 +104,11 @@ static void recordScenePass(const gfx_api::RenderPassContext&)
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos = toVector3f(fc.cameraPos);
 	const Vector3f sunPos = toVector3f(-getTheSun());
+	gfx_api::abstract_texture* shadowMap = shadowMapFromScenePassReads(passCtx);
 
 	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
-	drawTerrain(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo);
+	drawTerrain(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, shadowMap);
 	wzPerfEnd(PERF_TERRAIN);
 
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
@@ -99,13 +117,13 @@ static void recordScenePass(const gfx_api::RenderPassContext&)
 
 	wzPerfBegin(PERF_WATER, "3D scene - water");
 	pie_SetFogStatus(true);
-	drawWater(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo);
+	drawWater(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, shadowMap);
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos, fc.shadowCascadesInfo, false);
+		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos, fc.shadowCascadesInfo, shadowMap, false);
 	}
 	wzPerfEnd(PERF_MODELS);
 
@@ -135,7 +153,7 @@ static void recordShadowCascade(const gfx_api::RenderPassContext& passCtx)
 		drawTerrainDepthOnly(fc.cascadeProj[cascadeIndex] * fc.cascadeView[cascadeIndex]);
 	}
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.cascadeProj[cascadeIndex], fc.cascadeView[cascadeIndex],
-		cameraPos, fc.shadowCascadesInfo, true);
+		cameraPos, fc.shadowCascadesInfo, nullptr, true);
 }
 
 static void recordSceneBlit(const gfx_api::RenderPassContext& passCtx)

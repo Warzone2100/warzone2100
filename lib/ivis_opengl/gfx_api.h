@@ -455,7 +455,6 @@ namespace gfx_api
 		virtual gfx_api::abstract_texture* getPipelineSurface(PipelineSurfaceId id) { return nullptr; }
 		virtual PipelineSurfaceUsage pipelineSurfaceUsage(PipelineSurfaceId id) const;
 		virtual const ResolvedSurfaceSpec& resolvedPipelineSurface(PipelineSurfaceId id) const;
-		virtual nonstd::optional<PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const { return nonstd::nullopt; }
 		bool isPipelineSurfaceDepthRole(PipelineSurfaceId id) const
 		{
 			return isDepthUsage(pipelineSurfaceUsage(id));

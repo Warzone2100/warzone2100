@@ -41,15 +41,18 @@ void loadTerrainTexturesBlocking(MAP_TILESET mapTileset);
 bool initTerrain(WorldMapState& mapState);
 void shutdownTerrain();
 
-void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightData);
-void drawTerrainDepthOnly(const glm::mat4 &mvp);
-void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowMVPMatrix);
-void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades);
-
 namespace gfx_api
 {
+	struct abstract_texture; // forward-declare
 	struct texture; // forward-declare
 }
+
+void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightData);
+void drawTerrainDepthOnly(const glm::mat4 &mvp);
+void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
+	const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap);
+void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
+	const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap);
 
 gfx_api::texture* getTerrainLightmapTexture();
 const glm::mat4& getModelUVLightmapMatrix();

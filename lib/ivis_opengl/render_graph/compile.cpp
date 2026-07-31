@@ -200,4 +200,11 @@ abstract_texture* RenderPassContext::getRead(size_t index) const
 	return _resolvedReads[index].texture;
 }
 
+const ResolvedRead& RenderPassContext::resolvedRead(size_t index) const
+{
+	ASSERT(index < _resolvedReads.size(), "Resolved read index %zu out of range (%zu)",
+		index, _resolvedReads.size());
+	return _resolvedReads[index];
+}
+
 } // namespace gfx_api

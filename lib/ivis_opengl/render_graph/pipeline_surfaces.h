@@ -31,7 +31,7 @@
  * 5. LifetimePolicy=Persistent only if it must survive swapchain recreate.
  *
  * Swapchain MSAA: enabled only when sync inputs report swapchainMsaaSamples > 1.
- * GL currently forces samples=1 / isSwapchainMSAAEnabled()==false — catalog row stays
+ * GL currently forces samples=1 / isSwapchainMSAAEnabled()==false - catalog row stays
  * for VK parity; surface remains disabled on GL via EnablePolicy::SwapchainMsaaActive.
  */
 
@@ -272,7 +272,7 @@ struct SurfaceAllocator
 	virtual void destroy(PipelineSurfaceId id, abstract_texture* texture) = 0;
 	/// Called once before any destroy in reset*/ensure mutate paths.
 	/// Must clear pass-resource caches and *defer* framebuffer deletes (VK).
-	/// Do not flush here — runtime ensure() is not GPU-idle. Hard-reset paths
+	/// Do not flush here - runtime ensure() is not GPU-idle. Hard-reset paths
 	/// flush deferred FBs after idle (reset wrappers / swapchain teardown).
 	virtual void prepareForSurfaceDestroy() = 0;
 	/// Called once if any slot changed (create/destroy). Clear FBO/FB caches + bump epoch.
@@ -295,7 +295,6 @@ public:
 	abstract_texture* get(PipelineSurfaceId id) const;
 	const ResolvedSurfaceSpec& spec(PipelineSurfaceId id) const;
 	bool has(PipelineSurfaceId id) const;
-	nonstd::optional<PipelineSurfaceId> find(abstract_texture* texture) const;
 	PipelineSurfaceUsage usage(PipelineSurfaceId id) const;
 
 	bool ensure(const ResolvedSurfaceTable& resolved, SurfaceAllocator& alloc);

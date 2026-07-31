@@ -123,7 +123,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::WsiPresentColor,
 		SurfaceStorageKind::None,
 		SurfaceLifetimePolicy::SwapchainBound),
-	// SwapchainMSAAColor — see header note: GL keeps this disabled via sync inputs / EnablePolicy.
+	// SwapchainMSAAColor - see header note: GL keeps this disabled via sync inputs / EnablePolicy.
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorMSAA,
 		SurfaceExtentPolicy::MatchDrawable,
@@ -428,22 +428,6 @@ const ResolvedSurfaceSpec& PipelineSurfaceStore::spec(PipelineSurfaceId id) cons
 bool PipelineSurfaceStore::has(PipelineSurfaceId id) const
 {
 	return get(id) != nullptr;
-}
-
-nonstd::optional<PipelineSurfaceId> PipelineSurfaceStore::find(abstract_texture* texture) const
-{
-	if (texture == nullptr)
-	{
-		return nonstd::nullopt;
-	}
-	for (size_t i = 0; i < PIPELINE_SURFACE_COUNT; ++i)
-	{
-		if (_slots[i].texture == texture)
-		{
-			return static_cast<PipelineSurfaceId>(i);
-		}
-	}
-	return nonstd::nullopt;
 }
 
 PipelineSurfaceUsage PipelineSurfaceStore::usage(PipelineSurfaceId id) const
