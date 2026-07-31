@@ -384,7 +384,6 @@ struct gl_context final : public gfx_api::context
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
 	virtual gfx_api::PipelineSurfaceUsage pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const override;
 	virtual const gfx_api::ResolvedSurfaceSpec& resolvedPipelineSurface(gfx_api::PipelineSurfaceId id) const override;
-	virtual nonstd::optional<gfx_api::PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const override;
 	virtual bool isSceneMSAAEnabled() const override;
 	virtual bool isSwapchainMSAAEnabled() const override;
 	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;

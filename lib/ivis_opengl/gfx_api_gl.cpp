@@ -4231,11 +4231,6 @@ const gfx_api::ResolvedSurfaceSpec& gl_context::resolvedPipelineSurface(gfx_api:
 	return _pipelineSurfaces.spec(id);
 }
 
-nonstd::optional<gfx_api::PipelineSurfaceId> gl_context::findPipelineSurfaceId(gfx_api::abstract_texture* texture) const
-{
-	return _pipelineSurfaces.find(texture);
-}
-
 bool gl_context::isSceneMSAAEnabled() const
 {
 	return multisamples > 0 && _pipelineSurfaces.has(gfx_api::PipelineSurfaceId::SceneMSAAColor);

@@ -45,15 +45,9 @@ bool attachmentIsResolved(const AttachmentDesc& attachment)
 
 std::optional<PipelineSurfaceId> attachmentPipelineSurfaceId(const AttachmentDesc& attachment)
 {
-	if (attachment.pipelineSurfaceId.has_value())
-	{
-		return attachment.pipelineSurfaceId;
-	}
-	if (attachment.texture == nullptr)
-	{
-		return std::nullopt;
-	}
-	return gfx_api::context::get().findPipelineSurfaceId(attachment.texture);
+	// Authoritative: materializer always sets this for pipeline surfaces. Unset means
+	// the attachment is not a pipeline surface (no texture->id reverse lookup).
+	return attachment.pipelineSurfaceId;
 }
 
 bool passHasResolvedAttachments(const RenderPassDesc& pass)
@@ -80,12 +74,26 @@ void tryInferPassDimensions(RenderPassDesc& pass, gfx_api::context& ctx, uint32_
 		}
 	}
 
-	auto tryFromTexture = [&](gfx_api::abstract_texture* texture) {
-		if ((width > 0 && height > 0) || texture == nullptr)
+	auto tryFromAttachment = [&](const AttachmentDesc& attachment) {
+		if (width > 0 && height > 0)
 		{
 			return;
 		}
-		const auto dims = ctx.getRenderTargetDimensions(texture);
+		if (attachment.pipelineSurfaceId.has_value())
+		{
+			const auto dims = ctx.getPipelineSurfaceDimensions(attachment.pipelineSurfaceId.value());
+			if (dims.has_value())
+			{
+				width = dims->first;
+				height = dims->second;
+				return;
+			}
+		}
+		if (attachment.texture == nullptr)
+		{
+			return;
+		}
+		const auto dims = ctx.getRenderTargetDimensions(attachment.texture);
 		if (dims.has_value())
 		{
 			width = dims->first;
@@ -95,15 +103,15 @@ void tryInferPassDimensions(RenderPassDesc& pass, gfx_api::context& ctx, uint32_
 
 	for (const auto& colorAttachment : pass.colorAttachments)
 	{
-		tryFromTexture(colorAttachment.texture);
+		tryFromAttachment(colorAttachment);
 	}
 	if (pass.depthAttachment.has_value())
 	{
-		tryFromTexture(pass.depthAttachment->texture);
+		tryFromAttachment(pass.depthAttachment.value());
 	}
 	if (pass.resolveAttachment.has_value())
 	{
-		tryFromTexture(pass.resolveAttachment->texture);
+		tryFromAttachment(pass.resolveAttachment.value());
 	}
 
 	if (width == 0 || height == 0)
@@ -618,17 +626,6 @@ std::optional<PassOutputView> getPassOutputAttachment(
 		return std::nullopt;
 	}
 	return view;
-}
-
-bool isSwapchainPresentableColorSurface(abstract_texture* texture)
-{
-	if (texture == nullptr)
-	{
-		return false;
-	}
-	auto& ctx = gfx_api::context::get();
-	const auto surfaceId = ctx.findPipelineSurfaceId(texture);
-	return surfaceId.has_value() && surfaceId.value() == PipelineSurfaceId::SwapchainColor;
 }
 
 bool isSwapchainPresentableColorSurface(const AttachmentDesc& attachment)

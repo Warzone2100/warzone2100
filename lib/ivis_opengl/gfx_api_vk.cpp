@@ -5922,11 +5922,6 @@ const gfx_api::ResolvedSurfaceSpec& VkRoot::resolvedPipelineSurface(gfx_api::Pip
 	return _pipelineSurfaces.spec(id);
 }
 
-nonstd::optional<gfx_api::PipelineSurfaceId> VkRoot::findPipelineSurfaceId(gfx_api::abstract_texture* texture) const
-{
-	return _pipelineSurfaces.find(texture);
-}
-
 bool VkRoot::isSceneMSAAEnabled() const
 {
 	return msaaSamples != vk::SampleCountFlagBits::e1;
@@ -6270,11 +6265,11 @@ vk::ImageView VkRoot::getAttachmentImageView(const gfx_api::AttachmentDesc& atta
 	}
 	if (auto* depthImage = dynamic_cast<VkDepthMapImage*>(attachment.texture))
 	{
-		const auto surfaceId = _pipelineSurfaces.find(attachment.texture);
-		if (surfaceId.has_value()
-			&& _pipelineSurfaces.spec(surfaceId.value()).storageKind == gfx_api::SurfaceStorageKind::SampledDepthArray)
+		if (attachment.pipelineSurfaceId.has_value()
+			&& attachment.pipelineSurfaceId.value() == gfx_api::PipelineSurfaceId::ShadowMap)
 		{
-			const auto& cascadeViews = _surfaceGpu[static_cast<size_t>(surfaceId.value())].cascadeViews;
+			const auto& cascadeViews =
+				_surfaceGpu[static_cast<size_t>(gfx_api::PipelineSurfaceId::ShadowMap)].cascadeViews;
 			ASSERT_OR_RETURN(vk::ImageView(), attachment.arrayLayer < cascadeViews.size(),
 				"Shadow cascade arrayLayer %u out of range (%zu)", attachment.arrayLayer, cascadeViews.size());
 			return cascadeViews[attachment.arrayLayer].get();
