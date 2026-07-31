@@ -39,7 +39,6 @@ ReadProducerScope classifyReadProducerScope(const ReadDesc& read,
 	switch (read.source)
 	{
 	case ReadSource::ExplicitTexture:
-	case ReadSource::PipelineSurface:
 		return ReadProducerScope::External;
 	case ReadSource::PassOutput:
 		if (read.producerPass >= consumerIndex || read.producerPass >= descs.size())

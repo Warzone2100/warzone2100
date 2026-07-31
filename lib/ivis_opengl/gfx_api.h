@@ -453,12 +453,28 @@ namespace gfx_api
 
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
 		virtual gfx_api::abstract_texture* getPipelineSurface(PipelineSurfaceId id) { return nullptr; }
-		virtual PipelineSurfaceMeta pipelineSurfaceMeta(PipelineSurfaceId id) const { return getPipelineSurfaceMeta(id); }
+		virtual PipelineSurfaceUsage pipelineSurfaceUsage(PipelineSurfaceId id) const;
+		virtual const ResolvedSurfaceSpec& resolvedPipelineSurface(PipelineSurfaceId id) const;
 		virtual nonstd::optional<PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const { return nonstd::nullopt; }
+		bool isPipelineSurfaceDepthRole(PipelineSurfaceId id) const
+		{
+			return isDepthUsage(pipelineSurfaceUsage(id));
+		}
+		/// Dimensions from the live resolved surface spec (nullopt if disabled / zero extent).
+		virtual optional<std::pair<uint32_t, uint32_t>> getPipelineSurfaceDimensions(PipelineSurfaceId id) const;
 		virtual bool isSceneMSAAEnabled() const { return false; }
 		virtual bool isSwapchainMSAAEnabled() const { return false; }
 		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
 		virtual pixel_format getDepthStencilFormat() const { return pixel_format::invalid; }
+
+		/// Per-sync sizes / MSAA / cascades / present format from backend state.
+		virtual PipelineSurfaceSyncInputs pipelineSurfaceSyncInputs() const { return {}; }
+		/// Backend HW-negotiated formats for catalog format classes.
+		virtual SurfaceCapabilityHints surfaceCapabilities() const { return {}; }
+		/// Create / update / destroy pipeline surfaces from resolved specs (store + allocator).
+		virtual bool ensurePipelineSurfaces(const ResolvedSurfaceTable& specs) = 0;
+		/// Resolve catalog against sync inputs + capabilities, then ensure surfaces.
+		bool syncPipelineSurfaces();
 
 		/// Purge unused pooled framebuffers/FBOs after the frame accumulation window.
 		/// Backends call releaseAll() at beginScreenFrame() and purgeFrameResources() at finish.

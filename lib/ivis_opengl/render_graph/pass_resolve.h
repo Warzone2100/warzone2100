@@ -87,6 +87,8 @@ bool attachmentDepthHasStencil(const AttachmentDesc& attachment);
 
 /// True when the texture is the swapchain presentable color surface.
 bool isSwapchainPresentableColorSurface(abstract_texture* texture);
+/// True when the attachment is the swapchain presentable color surface.
+bool isSwapchainPresentableColorSurface(const AttachmentDesc& attachment);
 
 /// Resolve which texture/subresource a producer pass exposes for a given `AttachmentRole`.
 std::optional<PassOutputView> getPassOutputAttachment(

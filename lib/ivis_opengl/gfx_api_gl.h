@@ -190,6 +190,14 @@ struct gl_pipeline_surface_proxy final : public gfx_api::abstract_texture
 	size_t backend_internal_value() const override;
 };
 
+struct gl_context;
+
+/// Backend-owned GPU objects for one pipeline surface (store holds non-owning texture*).
+struct GlSurfaceGpu
+{
+	std::unique_ptr<gfx_api::abstract_texture> texture;
+};
+
 struct gl_buffer final : public gfx_api::buffer
 {
 	gfx_api::buffer::usage usage;
@@ -374,12 +382,16 @@ struct gl_context final : public gfx_api::context
 	virtual void finishScreenFrame() override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
-	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;
+	virtual gfx_api::PipelineSurfaceUsage pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const override;
+	virtual const gfx_api::ResolvedSurfaceSpec& resolvedPipelineSurface(gfx_api::PipelineSurfaceId id) const override;
 	virtual nonstd::optional<gfx_api::PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const override;
 	virtual bool isSceneMSAAEnabled() const override;
 	virtual bool isSwapchainMSAAEnabled() const override;
 	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;
 	virtual gfx_api::pixel_format getDepthStencilFormat() const override;
+	virtual gfx_api::PipelineSurfaceSyncInputs pipelineSurfaceSyncInputs() const override;
+	virtual gfx_api::SurfaceCapabilityHints surfaceCapabilities() const override;
+	virtual bool ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs) override;
 	virtual void purgeFrameResources() override;
 	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
@@ -422,18 +434,27 @@ private:
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
 	bool initCheckBorderClampSupport();
-	size_t initDepthPasses(size_t resolution);
 	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_gpurendered_texture_array(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
 	gl_gpurendered_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
+	/// Create a color or depth/stencil renderbuffer.
+	/// Pass samples == 0 for non-multisampled storage; samples > 1 selects glRenderbufferStorageMultisample.
 	std::unique_ptr<gl_gpurendered_renderbuffer> create_framebuffer_renderbuffer(GLenum internalFormat, GLsizei samples,
 		uint32_t width, uint32_t height, const std::string& filename);
 	bool createDefaultTextures();
-	bool createSceneRenderpass();
-	void registerSwapchainPipelineSurfaces();
-	void destroySwapchainPipelineSurfaces();
-	void deleteSceneRenderpass();
+	void resetAllPipelineSurfaceSlots();
+
+	struct PipelineSurfaceAllocator final : gfx_api::SurfaceAllocator
+	{
+		gl_context& root;
+		explicit PipelineSurfaceAllocator(gl_context& r) : root(r) {}
+		bool create(gfx_api::PipelineSurfaceId id, const gfx_api::ResolvedSurfaceSpec& spec,
+			gfx_api::abstract_texture*& outTexture) override;
+		void destroy(gfx_api::PipelineSurfaceId id, gfx_api::abstract_texture* texture) override;
+		void prepareForSurfaceDestroy() override;
+		void onChanged() override;
+	};
 
 protected:
 	friend struct gl_pipeline_state_object;
@@ -488,7 +509,6 @@ private:
 	gl_texture_array *pDefaultArrayTexture = nullptr;
 	gl_gpurendered_texture *pDefaultDepthTexture = nullptr;
 
-	gl_gpurendered_texture* depthTexture = nullptr;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 
@@ -498,13 +518,9 @@ private:
 	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
 	GLint maxMultiSampleBufferFormatSamples = 0;
 	uint32_t multisamples = 0;
-	gl_gpurendered_texture* sceneTexture = nullptr;
-	std::unique_ptr<gl_gpurendered_renderbuffer> _sceneMsaaSurface;
-	std::unique_ptr<gl_gpurendered_renderbuffer> _sceneDepthStencilSurface;
-	std::unique_ptr<gl_pipeline_surface_proxy> _swapchainColorSurface;
-	std::unique_ptr<gl_pipeline_surface_proxy> _swapchainDepthSurface;
 
-	gfx_api::PipelineSurfaceRegistry _pipelineSurfaces;
+	std::array<GlSurfaceGpu, gfx_api::PIPELINE_SURFACE_COUNT> _surfaceGpu {};
+	gfx_api::PipelineSurfaceStore _pipelineSurfaces;
 	gfx_api::DynamicFBOCache _dynamicFBOCache;
 
 	GLuint _dynamicPassFBO = 0;

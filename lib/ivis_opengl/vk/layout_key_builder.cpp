@@ -167,7 +167,7 @@ void ensurePassLayoutFinalLayouts(PassLayoutKey& layoutKey, const gfx_api::Rende
 			? layoutKey.colorStoreOps[i]
 			: AttachmentStoreOp::Store;
 		if (i < pass.colorAttachments.size()
-			&& gfx_api::isSwapchainPresentableColorSurface(pass.colorAttachments[i].texture))
+			&& gfx_api::isSwapchainPresentableColorSurface(pass.colorAttachments[i]))
 		{
 			layoutKey.colorFinalLayouts.push_back(::vk::ImageLayout::eColorAttachmentOptimal);
 		}
@@ -180,7 +180,7 @@ void ensurePassLayoutFinalLayouts(PassLayoutKey& layoutKey, const gfx_api::Rende
 	if (layoutKey.resolveFormat.has_value() && !layoutKey.resolveFinalLayout.has_value())
 	{
 		if (pass.resolveAttachment.has_value()
-			&& gfx_api::isSwapchainPresentableColorSurface(pass.resolveAttachment->texture))
+			&& gfx_api::isSwapchainPresentableColorSurface(pass.resolveAttachment.value()))
 		{
 			layoutKey.resolveFinalLayout = ::vk::ImageLayout::eColorAttachmentOptimal;
 		}

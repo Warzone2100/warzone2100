@@ -448,6 +448,11 @@ void null_context::beginScreenFrame()
 	purgeFrameResources();
 }
 
+bool null_context::ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& /*specs*/)
+{
+	return true;
+}
+
 void null_context::finishScreenFrame()
 {
 	if (frameHasDrawCommands)
