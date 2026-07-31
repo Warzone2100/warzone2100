@@ -62,6 +62,8 @@ public:
 	void set(const gfx_api::LayoutSubresourceKey& subresource, ::vk::ImageLayout layout);
 	void erase(gfx_api::abstract_texture* texture);
 	void erase(const gfx_api::LayoutSubresourceKey& subresource);
+	/// Drops every tracked subresource of the texture (all layers and mips).
+	void eraseTexture(gfx_api::abstract_texture* texture);
 	/// Returns tracked layout for the subresource, or eUndefined when not in the map.
 	::vk::ImageLayout get(gfx_api::abstract_texture* texture) const;
 	::vk::ImageLayout get(const gfx_api::LayoutSubresourceKey& subresource) const;
