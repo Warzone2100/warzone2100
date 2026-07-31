@@ -29,6 +29,8 @@
 
 #include <optional>
 
+#include "pipeline_surfaces.h"
+
 namespace gfx_api
 {
 
@@ -92,6 +94,8 @@ struct AttachmentDesc
 	ClearValue clearValue;
 	uint32_t mipLevel = 0;
 	uint32_t arrayLayer = 0;
+	/// Set by BlueprintMaterializer when the attachment is a pipeline surface.
+	std::optional<PipelineSurfaceId> pipelineSurfaceId;
 
 	bool shouldClear() const
 	{

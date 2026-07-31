@@ -91,9 +91,8 @@ public:
 
 	std::pair<uint32_t, uint32_t> sceneColorDimensions() const override
 	{
-		gfx_api::abstract_texture* sceneColor = gfx_api::context::get().getPipelineSurface(
+		const auto dims = gfx_api::context::get().getPipelineSurfaceDimensions(
 			gfx_api::PipelineSurfaceId::SceneColor);
-		const auto dims = gfx_api::context::get().getRenderTargetDimensions(sceneColor);
 		if (dims.has_value())
 		{
 			return dims.value();

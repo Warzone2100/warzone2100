@@ -132,6 +132,7 @@ public:
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;
 	virtual void finishScreenFrame() override;
+	virtual bool ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs) override;
 	virtual void purgeFrameResources() override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
 		gfx_api::PassGraphCompileResult& compileResult) override;

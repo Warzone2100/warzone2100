@@ -617,6 +617,9 @@ const char* gfx_api::format_to_str(gfx_api::pixel_format format)
 		case gfx_api::pixel_format::FORMAT_RG8_UNORM: return "RG8_UNORM";
 		case gfx_api::pixel_format::FORMAT_R8_UNORM: return "R8_UNORM";
 		case gfx_api::pixel_format::FORMAT_D24_UNORM_S8: return "D24_UNORM_S8";
+		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32: return "A2B10G10R10_UNORM_PACK32";
+		case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT: return "D32_SFLOAT_S8_UINT";
+		case gfx_api::pixel_format::FORMAT_D32_SFLOAT: return "D32_SFLOAT";
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM: return "RGB_BC1_UNORM";
 		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM: return "RGBA_BC2_UNORM";
@@ -654,7 +657,11 @@ unsigned int gfx_api::format_channels(gfx_api::pixel_format format)
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			return 1;
 		case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+		case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+		case gfx_api::pixel_format::FORMAT_D32_SFLOAT:
 			return 0;
+		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+			return 4;
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			return 3;
@@ -707,6 +714,13 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			return width * height;
 		case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+			return width * height * 4;
+		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+			return width * height * 4;
+		case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+			// Vulkan packs D32F+S8 as 64-bit texels (32-bit depth + 8-bit stencil + padding).
+			return width * height * 8;
+		case gfx_api::pixel_format::FORMAT_D32_SFLOAT:
 			return width * height * 4;
 		// [COMPRESSED FORMATS]
 		// BC / DXT formats

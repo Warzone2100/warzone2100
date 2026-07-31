@@ -70,8 +70,6 @@ enum class ReadSource : uint8_t
 {
 	/// Direct `abstract_texture*` on the read descriptor.
 	ExplicitTexture,
-	/// Named `PipelineSurfaceId` surface.
-	PipelineSurface,
 	/// Output of a prior pass in the same graph (`producerPass` + `AttachmentRole`).
 	PassOutput,
 };
@@ -84,8 +82,6 @@ struct ReadDesc
 	ReadSource source = ReadSource::ExplicitTexture;
 	/// Used when `source == ExplicitTexture`.
 	abstract_texture* texture = nullptr;
-	/// Used when `source == PipelineSurface`.
-	PipelineSurfaceId pipelineSurface = PipelineSurfaceId::SceneColor;
 	/// Used when `source == PassOutput` (materializer maps from `PassId` to this handle).
 	PassHandle producerPass = INVALID_PASS_HANDLE;
 	AttachmentRole producerRole = AttachmentRole::PrimaryColor;

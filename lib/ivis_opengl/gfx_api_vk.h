@@ -79,6 +79,11 @@ using nonstd::optional;
 
 namespace gfx_api
 {
+	/// Map a Vulkan format to gfx_api::pixel_format (surface / capability reporting).
+	pixel_format vkFormatToPixelFormat(::vk::Format format);
+	/// Map gfx_api::pixel_format to a Vulkan format (textures + pipeline surfaces).
+	::vk::Format pixelFormatToVkFormat(pixel_format format);
+
 	class backend_Vulkan_Impl
 	{
 	public:
@@ -646,20 +651,6 @@ struct VkSwapchainColorSurface final : public gfx_api::abstract_texture
 	virtual size_t backend_internal_value() const override;
 };
 
-/// Non-owning wrapper for the swapchain MSAA color intermediate (when enabled).
-struct VkSwapchainMsaaColorSurface final : public gfx_api::abstract_texture
-{
-	const VkRoot& root;
-	vk::Format imageFormat = vk::Format::eUndefined;
-	vk::SampleCountFlagBits samples = vk::SampleCountFlagBits::e1;
-
-	VkSwapchainMsaaColorSurface(const VkRoot& rootRef, vk::Format format, vk::SampleCountFlagBits sampleCount);
-	virtual ~VkSwapchainMsaaColorSurface() override;
-	virtual void bind() override;
-	virtual bool isArray() const override { return false; }
-	virtual size_t backend_internal_value() const override;
-};
-
 /// Non-owning wrapper for the shared swapchain depth/stencil image.
 struct VkSwapchainDepthSurface final : public gfx_api::abstract_texture
 {
@@ -690,6 +681,21 @@ struct SwapChainSupportDetails
 	vk::SurfaceCapabilitiesKHR capabilities;
 	std::vector<vk::SurfaceFormatKHR> formats;
 	std::vector<vk::PresentModeKHR> presentModes;
+};
+
+struct VkRoot;
+
+/// Backend-owned GPU objects for one pipeline surface (store holds non-owning texture*).
+struct VkSurfaceGpu
+{
+	std::unique_ptr<gfx_api::abstract_texture> texture;
+	std::vector<WZ_vk::UniqueImageView> cascadeViews; // ShadowMap only
+
+	// Owned GPU resources for attachment-style allocates (MSAA color / depth).
+	// Unused when texture owns VMA resources (SceneColor / ShadowMap) or WsiPresentColor.
+	vk::Image image {};
+	vk::DeviceMemory memory {};
+	vk::ImageView view {};
 };
 
 struct VkRoot final : gfx_api::context
@@ -749,13 +755,6 @@ struct VkRoot final : gfx_api::context
 
 	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1; // msaaSamples used for scene
 	vk::SampleCountFlagBits msaaSamplesSwapchain = vk::SampleCountFlagBits::e1; // msaaSamples used for swapchain assets (should generally be 1)
-	vk::Image colorImage;
-	vk::DeviceMemory colorImageMemory;
-	vk::ImageView colorImageView;
-
-	vk::Image depthStencilImage;
-	vk::DeviceMemory depthStencilMemory;
-	vk::ImageView depthStencilView;
 
 	// render passes
 	static constexpr size_t INVALID_RENDER_PASS_ID = std::numeric_limits<size_t>::max();
@@ -775,21 +774,11 @@ struct VkRoot final : gfx_api::context
 	// render passes
 	std::vector<RenderPassDetails> renderPasses;
 
-	// depth render passes
+	// depth render passes / scene formats (cached for sync inputs + capabilities)
 	vk::Format depthBufferFormat = vk::Format::eUndefined;
+	vk::Format depthStencilAttachmentFormat = vk::Format::eUndefined;
+	vk::Format sceneColorVkFormat = vk::Format::eUndefined;
 	uint32_t depthMapSize = 4096;
-	VkDepthMapImage* pDepthMapImage = nullptr;
-	std::vector<WZ_vk::UniqueImageView> depthMapCascadeView;
-
-	// scene render pass
-	vk::Format sceneImageFormat = vk::Format::eUndefined;
-	VkRenderedImage* pSceneImage = nullptr;
-	vk::Image sceneMSAAImage;
-	vk::DeviceMemory sceneMSAAMemory;
-	vk::ImageView sceneMSAAView;
-	vk::Image sceneDepthStencilImage;
-	vk::DeviceMemory sceneDepthStencilMemory;
-	vk::ImageView sceneDepthStencilView;
 
 	// default textures
 	VkTexture* pDefaultTexture = nullptr;
@@ -883,12 +872,21 @@ private:
 	void createSwapchain(bool allowHandleSurfaceLost = true); // Throws on failure
 	void rebuildPipelinesIfNecessary();
 
-	void registerSwapchainPipelineSurfaces(vk::Format colorFormat, vk::Format depthFormat);
-	void destroySwapchainPipelineSurfaces();
-	void createDepthPassImages(vk::Format depthFormat);
-	void createSceneRenderpass(vk::Format sceneFormat, vk::Format depthFormat);
-	void destroySceneRenderpass();
 	void setupSwapchainImages();
+	void resetAllPipelineSurfaceSlots();
+	/// Reset scene + swapchain surfaces; keeps ShadowMap across swapchain recreate.
+	void resetSwapchainPipelineSurfaceSlots();
+
+	struct PipelineSurfaceAllocator final : gfx_api::SurfaceAllocator
+	{
+		VkRoot& root;
+		explicit PipelineSurfaceAllocator(VkRoot& r) : root(r) {}
+		bool create(gfx_api::PipelineSurfaceId id, const gfx_api::ResolvedSurfaceSpec& spec,
+			gfx_api::abstract_texture*& outTexture) override;
+		void destroy(gfx_api::PipelineSurfaceId id, gfx_api::abstract_texture* texture) override;
+		void prepareForSurfaceDestroy() override;
+		void onChanged() override;
+	};
 
 public:
 	vk::Format get_format(const gfx_api::pixel_format& format) const;
@@ -923,12 +921,16 @@ public:
 	gfx_api::vk::TransferRecorder transferRecorder() const;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
-	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;
+	virtual gfx_api::PipelineSurfaceUsage pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const override;
+	virtual const gfx_api::ResolvedSurfaceSpec& resolvedPipelineSurface(gfx_api::PipelineSurfaceId id) const override;
 	virtual nonstd::optional<gfx_api::PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const override;
 	virtual bool isSceneMSAAEnabled() const override;
 	virtual bool isSwapchainMSAAEnabled() const override;
 	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;
 	virtual gfx_api::pixel_format getDepthStencilFormat() const override;
+	virtual gfx_api::PipelineSurfaceSyncInputs pipelineSurfaceSyncInputs() const override;
+	virtual gfx_api::SurfaceCapabilityHints surfaceCapabilities() const override;
+	virtual bool ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs) override;
 	virtual void purgeFrameResources() override;
 	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
@@ -1044,6 +1046,8 @@ private:
 	void applyCompiledPostPassLayouts(const gfx_api::CompiledPass& pass);
 	void applyViewport(vk::CommandBuffer cmdBuffer, uint32_t width, uint32_t height, float minDepth, float maxDepth);
 	void deferDestroyFramebuffer(vk::Framebuffer framebuffer);
+	/// Destroy all framebuffers queued in per-frame `fbo_to_delete` lists (requires GPU idle).
+	void flushDeferredFramebufferDeletes();
 	void clearFramebufferCache();
 	bool buildPassLayoutKey(gfx_api::vk::PassLayoutKey& out, const gfx_api::RenderPassDesc& pass,
 		const gfx_api::CompiledPass* compiledPass);
@@ -1083,12 +1087,8 @@ private:
 	};
 	optional<QueuedSwapModeChange> queuedSwapModeChange = nullopt;
 
-	std::unique_ptr<VkAttachmentImage> _sceneDepthSurface;
-	std::unique_ptr<VkAttachmentImage> _sceneMsaaSurface;
-	std::unique_ptr<VkSwapchainColorSurface> _swapchainColorSurface;
-	std::unique_ptr<VkSwapchainMsaaColorSurface> _swapchainMsaaColorSurface;
-	std::unique_ptr<VkSwapchainDepthSurface> _swapchainDepthSurface;
-	gfx_api::PipelineSurfaceRegistry _pipelineSurfaces;
+	std::array<VkSurfaceGpu, gfx_api::PIPELINE_SURFACE_COUNT> _surfaceGpu {};
+	gfx_api::PipelineSurfaceStore _pipelineSurfaces;
 	gfx_api::FramebufferResourceCache _framebufferCache;
 
 	/// Reusable `PassLayoutKey` buffer for `buildPassLayoutKey` / cache lookup at call sites.

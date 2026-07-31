@@ -43,6 +43,19 @@ bool attachmentIsResolved(const AttachmentDesc& attachment)
 	return attachment.texture != nullptr;
 }
 
+std::optional<PipelineSurfaceId> attachmentPipelineSurfaceId(const AttachmentDesc& attachment)
+{
+	if (attachment.pipelineSurfaceId.has_value())
+	{
+		return attachment.pipelineSurfaceId;
+	}
+	if (attachment.texture == nullptr)
+	{
+		return std::nullopt;
+	}
+	return gfx_api::context::get().findPipelineSurfaceId(attachment.texture);
+}
+
 bool passHasResolvedAttachments(const RenderPassDesc& pass)
 {
 	for (const auto& colorAttachment : pass.colorAttachments)
@@ -120,16 +133,12 @@ void setDefaultStoreOpIfUnset(AttachmentDesc& attachment, AttachmentStoreOp stor
 std::optional<PipelineSurfaceUsage> getAttachmentSurfaceUsage(gfx_api::context& ctx,
 	const AttachmentDesc& attachment)
 {
-	if (attachment.texture == nullptr)
-	{
-		return std::nullopt;
-	}
-	const auto surfaceId = ctx.findPipelineSurfaceId(attachment.texture);
+	const auto surfaceId = attachmentPipelineSurfaceId(attachment);
 	if (!surfaceId.has_value())
 	{
 		return std::nullopt;
 	}
-	return ctx.pipelineSurfaceMeta(surfaceId.value()).usage;
+	return ctx.pipelineSurfaceUsage(surfaceId.value());
 }
 
 AttachmentStoreOp defaultDepthStoreOp(gfx_api::context& ctx, const RenderPassDesc& pass,
@@ -530,17 +539,13 @@ bool passNeedsMsaaResolve(const RenderPassDesc& pass)
 
 bool attachmentDepthHasStencil(const AttachmentDesc& attachment)
 {
-	if (attachment.texture == nullptr)
+	const auto surfaceId = attachmentPipelineSurfaceId(attachment);
+	if (!surfaceId.has_value())
 	{
 		return false;
 	}
-	auto& ctx = gfx_api::context::get();
-	const auto surfaceId = ctx.findPipelineSurfaceId(attachment.texture);
-	if (surfaceId.has_value())
-	{
-		return ctx.pipelineSurfaceMeta(surfaceId.value()).usage == PipelineSurfaceUsage::DepthStencil;
-	}
-	return false;
+	return gfx_api::context::get().pipelineSurfaceUsage(surfaceId.value())
+		== PipelineSurfaceUsage::DepthStencil;
 }
 
 std::optional<PassOutputView> getPassOutputAttachment(
@@ -626,25 +631,27 @@ bool isSwapchainPresentableColorSurface(abstract_texture* texture)
 	return surfaceId.has_value() && surfaceId.value() == PipelineSurfaceId::SwapchainColor;
 }
 
+bool isSwapchainPresentableColorSurface(const AttachmentDesc& attachment)
+{
+	const auto surfaceId = attachmentPipelineSurfaceId(attachment);
+	return surfaceId.has_value() && surfaceId.value() == PipelineSurfaceId::SwapchainColor;
+}
+
 bool passTargetsSwapchainColor(const RenderPassDesc& pass)
 {
-	auto& ctx = gfx_api::context::get();
 	for (const auto& attachment : pass.colorAttachments)
 	{
-		if (attachment.texture != nullptr)
+		const auto surfaceId = attachmentPipelineSurfaceId(attachment);
+		if (surfaceId.has_value()
+			&& (surfaceId.value() == PipelineSurfaceId::SwapchainColor
+				|| surfaceId.value() == PipelineSurfaceId::SwapchainMSAAColor))
 		{
-			const auto surfaceId = ctx.findPipelineSurfaceId(attachment.texture);
-			if (surfaceId.has_value()
-				&& (surfaceId.value() == PipelineSurfaceId::SwapchainColor
-					|| surfaceId.value() == PipelineSurfaceId::SwapchainMSAAColor))
-			{
-				return true;
-			}
+			return true;
 		}
 	}
-	if (pass.resolveAttachment.has_value() && pass.resolveAttachment->texture != nullptr)
+	if (pass.resolveAttachment.has_value())
 	{
-		const auto surfaceId = ctx.findPipelineSurfaceId(pass.resolveAttachment->texture);
+		const auto surfaceId = attachmentPipelineSurfaceId(pass.resolveAttachment.value());
 		if (surfaceId.has_value() && surfaceId.value() == PipelineSurfaceId::SwapchainColor)
 		{
 			return true;

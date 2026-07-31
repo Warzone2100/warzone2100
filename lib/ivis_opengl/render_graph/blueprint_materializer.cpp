@@ -45,9 +45,7 @@ AttachmentDesc BlueprintMaterializer::resolveAttachment(const BlueprintAttachmen
 		"BlueprintMaterializer: only PipelineSurface attachments are supported");
 	auto& ctx = gfx_api::context::get();
 	abstract_texture* texture = ctx.getPipelineSurface(attachment.surfaceId);
-	const PipelineSurfaceMeta meta = ctx.pipelineSurfaceMeta(attachment.surfaceId);
-	const bool isDepth = meta.usage == PipelineSurfaceUsage::DepthStencil
-		|| meta.usage == PipelineSurfaceUsage::DepthOnly;
+	const bool isDepth = isDepthUsage(ctx.pipelineSurfaceUsage(attachment.surfaceId));
 	AttachmentDesc desc = isDepth
 		? AttachmentDesc::depth(texture, attachment.loadOp, attachment.clearValue)
 		: AttachmentDesc::color(texture, attachment.loadOp, attachment.clearValue);
@@ -56,6 +54,7 @@ AttachmentDesc BlueprintMaterializer::resolveAttachment(const BlueprintAttachmen
 	{
 		desc.arrayLayer = attachment.arrayLayer.value();
 	}
+	desc.pipelineSurfaceId = attachment.surfaceId;
 	return desc;
 }
 

@@ -43,7 +43,6 @@ std::optional<ResolvedRead> resolveSingleRead(const ReadDesc& read,
 	const std::vector<RenderPassDesc>& descs, size_t consumerIndex,
 	const std::vector<CompiledPass>& compiledPasses)
 {
-	auto& ctx = gfx_api::context::get();
 	ResolvedRead resolved;
 
 	switch (read.source)
@@ -53,17 +52,6 @@ std::optional<ResolvedRead> resolveSingleRead(const ReadDesc& read,
 			"Pass \"%s\" read[%zu]: explicit texture is null",
 			descs[consumerIndex].debugName.c_str(), consumerIndex);
 		resolved.texture = read.texture;
-		break;
-	case ReadSource::PipelineSurface:
-		resolved.texture = ctx.getPipelineSurface(read.pipelineSurface);
-		ASSERT_OR_RETURN(std::nullopt, resolved.texture != nullptr,
-			"Pass \"%s\": pipeline surface %u is not registered",
-			descs[consumerIndex].debugName.c_str(), static_cast<unsigned>(read.pipelineSurface));
-		{
-			const PipelineSurfaceUsage usage = ctx.pipelineSurfaceMeta(read.pipelineSurface).usage;
-			resolved.isDepth = usage == PipelineSurfaceUsage::DepthOnly
-				|| usage == PipelineSurfaceUsage::DepthStencil;
-		}
 		break;
 	case ReadSource::PassOutput:
 		ASSERT_OR_RETURN(std::nullopt, read.producerPass != INVALID_PASS_HANDLE,

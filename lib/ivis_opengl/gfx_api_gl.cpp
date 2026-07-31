@@ -3596,15 +3596,13 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		depthBufferResolution = getSuggestedDefaultDepthBufferResolution();
 	}
 
-	if (!createSceneRenderpass())
+	if (!syncPipelineSurfaces())
 	{
-		// Treat failure to create the scene render pass as a fatal error
+		// Treat failure to sync pipeline surfaces as a fatal error
 		shutdown();
 		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
 		return false;
 	}
-	registerSwapchainPipelineSurfaces();
-	initDepthPasses(depthBufferResolution);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -4199,22 +4197,18 @@ size_t gl_context::numDepthPasses()
 
 bool gl_context::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
 {
-	if (depthPassCount == _numDepthPasses
+	const size_t clampedDepthPasses = std::min<size_t>(_numDepthPasses, WZ_MAX_SHADOW_CASCADES);
+	if (depthPassCount == clampedDepthPasses
 		&& depthBufferResolution == _depthBufferResolution)
 	{
 		// nothing to do
 		return true;
 	}
 
-	depthPassCount = _numDepthPasses;
+	depthPassCount = clampedDepthPasses;
 	depthBufferResolution = _depthBufferResolution;
 
-	bumpRenderGraphEpoch();
-
-	// reinitialize depth passes
-	initDepthPasses(depthBufferResolution);
-
-	return true;
+	return syncPipelineSurfaces();
 }
 
 size_t gl_context::getDepthPassDimensions(size_t idx)
@@ -4227,19 +4221,24 @@ gfx_api::abstract_texture* gl_context::getPipelineSurface(gfx_api::PipelineSurfa
 	return _pipelineSurfaces.get(id);
 }
 
-gfx_api::PipelineSurfaceMeta gl_context::pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const
+gfx_api::PipelineSurfaceUsage gl_context::pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const
 {
-	return _pipelineSurfaces.meta(id);
+	return _pipelineSurfaces.usage(id);
+}
+
+const gfx_api::ResolvedSurfaceSpec& gl_context::resolvedPipelineSurface(gfx_api::PipelineSurfaceId id) const
+{
+	return _pipelineSurfaces.spec(id);
 }
 
 nonstd::optional<gfx_api::PipelineSurfaceId> gl_context::findPipelineSurfaceId(gfx_api::abstract_texture* texture) const
 {
-	return _pipelineSurfaces.findSurfaceId(texture);
+	return _pipelineSurfaces.find(texture);
 }
 
 bool gl_context::isSceneMSAAEnabled() const
 {
-	return multisamples > 0 && _sceneMsaaSurface != nullptr;
+	return multisamples > 0 && _pipelineSurfaces.has(gfx_api::PipelineSurfaceId::SceneMSAAColor);
 }
 
 bool gl_context::isSwapchainMSAAEnabled() const
@@ -4259,6 +4258,47 @@ bool gl_context::isMultisampledColorAttachment(gfx_api::abstract_texture* textur
 gfx_api::pixel_format gl_context::getDepthStencilFormat() const
 {
 	return gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
+}
+
+gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
+{
+	gfx_api::PipelineSurfaceSyncInputs inputs;
+	// Drawable may be 0x0 when minimized; scene dims stay floored (>=2) from the last sensible size.
+	inputs.drawableW = viewportWidth;
+	inputs.drawableH = viewportHeight;
+	inputs.sceneW = sceneFramebufferWidth;
+	inputs.sceneH = sceneFramebufferHeight;
+	inputs.shadowMapSize = static_cast<uint32_t>(depthBufferResolution);
+	inputs.numShadowCascades = static_cast<uint32_t>(std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES));
+	const uint32_t clampedMsaa = (multisamples > 0 && maxMultiSampleBufferFormatSamples > 0)
+		? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
+		: 0u;
+	inputs.sceneMsaaSamples = (clampedMsaa > 0) ? clampedMsaa : 1u;
+	inputs.swapchainMsaaSamples = 1;
+	inputs.presentColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	return inputs;
+}
+
+gfx_api::SurfaceCapabilityHints gl_context::surfaceCapabilities() const
+{
+	gfx_api::SurfaceCapabilityHints caps;
+	const uint32_t clampedMsaa = (multisamples > 0 && maxMultiSampleBufferFormatSamples > 0)
+		? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
+		: 0u;
+	// When MSAA is active, scene color must match the MSAA renderbuffer format (RGBA8)
+	// on both desktop GL and GLES.
+	caps.sceneColorFormat = (clampedMsaa > 1)
+		? gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
+		: gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
+	caps.depthStencilFormat = gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
+	caps.depthSampledFormat = gfx_api::pixel_format::FORMAT_D32_SFLOAT;
+	return caps;
+}
+
+bool gl_context::ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs)
+{
+	PipelineSurfaceAllocator alloc(*this);
+	return _pipelineSurfaces.ensure(specs, alloc);
 }
 
 [[noreturn]] static void glContextHandleOOMError()
@@ -4602,7 +4642,7 @@ void gl_context::applyAttachmentStoreOps(const gfx_api::RenderPassDesc& pass, ui
 	// Performance optimization:
 	//
 	// Before switching the draw framebuffer, call glInvalidateFramebuffer on any parts of the scene framebuffer(s) that we can
-	// NOTE: The only one we need to keep around by the end is sceneTexture, which is bound as GL_COLOR_ATTACHMENT0 on one of the FBOs
+	// NOTE: SceneColor remains the resolved color target used by later passes / blits.
 	// However: If using the sceneMsaaRBO, we have to keep that around initially, and only invalidate it after resolving with glBlitFramebuffer
 	//
 	// Support:
@@ -5242,7 +5282,10 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 		{
 			sceneFramebufferWidth = newSceneFramebufferWidth;
 			sceneFramebufferHeight = newSceneFramebufferHeight;
-			createSceneRenderpass();
+			if (!syncPipelineSurfaces())
+			{
+				debug(LOG_ERROR, "syncPipelineSurfaces failed after window size change");
+			}
 		}
 	}
 	else
@@ -5265,8 +5308,6 @@ bool gl_context::shouldDraw()
 
 void gl_context::shutdown()
 {
-	clearDynamicFBOCache();
-
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glClear)
 #endif
@@ -5274,14 +5315,7 @@ void gl_context::shutdown()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
-	deleteSceneRenderpass();
-	destroySwapchainPipelineSurfaces();
-
-	if (depthTexture)
-	{
-		delete depthTexture;
-		depthTexture = nullptr;
-	}
+	resetAllPipelineSurfaceSlots();
 
 	if (pDefaultTexture)
 	{
@@ -5512,168 +5546,151 @@ void gl_context::clearDynamicFBOCache()
 	});
 }
 
-size_t gl_context::initDepthPasses(size_t resolution)
+void gl_context::PipelineSurfaceAllocator::destroy(gfx_api::PipelineSurfaceId id, gfx_api::abstract_texture* /*texture*/)
 {
-	clearDynamicFBOCache();
+	ASSERT_OR_RETURN(, id != gfx_api::PipelineSurfaceId::Count, "Invalid pipeline surface id");
+	root._surfaceGpu[static_cast<size_t>(id)].texture.reset();
+}
 
-	depthPassCount = std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES);
+bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id, const gfx_api::ResolvedSurfaceSpec& createSpec,
+	gfx_api::abstract_texture*& outTexture)
+{
+	outTexture = nullptr;
+	ASSERT_OR_RETURN(false, id != gfx_api::PipelineSurfaceId::Count, "Invalid pipeline surface id");
+	GlSurfaceGpu& gpu = root._surfaceGpu[static_cast<size_t>(id)];
 
-#if !defined(__EMSCRIPTEN__)
-	if (depthPassCount > 1)
+	wzGLClearErrors();
+
+	const GLsizei glSamples = (createSpec.samples > 1) ? static_cast<GLsizei>(createSpec.samples) : 0;
+
+	switch (createSpec.provisionMode)
 	{
-		if ((!gles && !GLAD_GL_VERSION_3_0) || (gles && !GLAD_GL_ES_VERSION_3_0))
+	case gfx_api::SurfaceProvisionMode::WsiPresentColor:
+		gpu.texture = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainColor);
+		break;
+
+	case gfx_api::SurfaceProvisionMode::WsiPresentDepth:
+		gpu.texture = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainDepth);
+		break;
+
+	case gfx_api::SurfaceProvisionMode::Allocate:
+		switch (createSpec.storageKind)
 		{
-			// glFramebufferTextureLayer requires OpenGL 3.0+ / ES 3.0+
-			debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+ - this will fail");
+		case gfx_api::SurfaceStorageKind::SampledColor2D:
+		{
+			const bool useRgba = (createSpec.format == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
+			const GLenum colorInternalFormat = useRgba ? root.multiSampledBufferInternalFormat : GL_RGB8;
+			const GLenum colorBaseFormat = useRgba ? root.multiSampledBufferBaseFormat : GL_RGB;
+			auto* sceneTex = root.create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE,
+				createSpec.width, createSpec.height, "<scene texture>");
+			if (!sceneTex)
+			{
+				debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", createSpec.width, createSpec.height);
+				return false;
+			}
+			// Own immediately so any later ASSERT_GL early-return frees the texture.
+			gpu.texture.reset(sceneTex);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			sceneTex->bind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			sceneTex->unbind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			break;
 		}
-	}
-#endif
-
-	// delete prior depth texture (if present)
-	if (depthTexture)
-	{
-		_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::ShadowMap);
-		delete depthTexture;
-		depthTexture = nullptr;
-	}
-
-	if (depthPassCount == 0)
-	{
-		return 0;
-	}
-
-	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<depth map>");
-	if (!pNewDepthTexture)
-	{
-		debug(LOG_ERROR, "Failed to create depth texture");
-		return 0;
-	}
-	depthTexture = pNewDepthTexture;
-	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::ShadowMap, depthTexture);
-
-	GLenum target = depthTexture->target();
-	depthTexture->bind();
-	glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	depthTexture->unbind();
-
-	return depthPassCount;
-}
-
-void gl_context::deleteSceneRenderpass()
-{
-	clearDynamicFBOCache();
-
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneColor);
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneMSAAColor);
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneDepth);
-
-	// delete prior scene texture & FBOs (if present)
-#if !defined(WZ_STATIC_GL_BINDINGS)
-	if (glDeleteFramebuffers)
-#endif
-	{
-	}
-	_sceneMsaaSurface.reset();
-	if (sceneTexture)
-	{
-		delete sceneTexture;
-		sceneTexture = nullptr;
-	}
-	_sceneDepthStencilSurface.reset();
-}
-
-void gl_context::destroySwapchainPipelineSurfaces()
-{
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainColor);
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainMSAAColor);
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainDepth);
-	_swapchainColorSurface.reset();
-	_swapchainDepthSurface.reset();
-}
-
-void gl_context::registerSwapchainPipelineSurfaces()
-{
-	destroySwapchainPipelineSurfaces();
-
-	_swapchainColorSurface = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainColor);
-	_swapchainDepthSurface = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainDepth);
-	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SwapchainColor, _swapchainColorSurface.get());
-	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SwapchainDepth, _swapchainDepthSurface.get());
-	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainMSAAColor);
-}
-
-bool gl_context::createSceneRenderpass()
-{
-	deleteSceneRenderpass();
-
+		case gfx_api::SurfaceStorageKind::MsaaColorAttachment:
+		{
+			const GLenum msaaFormat = (createSpec.format == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+				? root.multiSampledBufferInternalFormat
+				: GL_RGB8;
+			auto msaa = root.create_framebuffer_renderbuffer(msaaFormat, glSamples,
+				createSpec.width, createSpec.height, "<scene msaa color>");
+			ASSERT_OR_RETURN(false, msaa != nullptr, "Failed to create MSAA color renderbuffer");
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			gpu.texture = std::move(msaa);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::DepthStencilAttachment:
+		{
+			GLenum depthInternalFormat = GL_DEPTH24_STENCIL8;
+			switch (createSpec.format)
+			{
+			case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+				depthInternalFormat = GL_DEPTH24_STENCIL8;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+				depthInternalFormat = GL_DEPTH32F_STENCIL8;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT:
+				depthInternalFormat = GL_DEPTH_COMPONENT32F;
+				break;
+			default:
+				debug(LOG_WARNING, "Unsupported depth/stencil format for GL renderbuffer; using DEPTH24_STENCIL8");
+				depthInternalFormat = GL_DEPTH24_STENCIL8;
+				break;
+			}
+			auto depthRb = root.create_framebuffer_renderbuffer(depthInternalFormat, glSamples,
+				createSpec.width, createSpec.height, "<scene depth stencil>");
+			ASSERT_OR_RETURN(false, depthRb != nullptr, "Failed to create depth/stencil renderbuffer");
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			gpu.texture = std::move(depthRb);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::SampledDepthArray:
+		{
 #if !defined(__EMSCRIPTEN__)
-	if ( ! ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0)) )
-	{
-		// The following requires OpenGL 3.0+ or OpenGL ES 3.0+
-		debug(LOG_ERROR, "Unsupported version of OpenGL / OpenGL ES.");
-		return false;
-	}
+			if (createSpec.arrayLayers > 1)
+			{
+				if ((!root.gles && !GLAD_GL_VERSION_3_0) || (root.gles && !GLAD_GL_ES_VERSION_3_0))
+				{
+					// glFramebufferTextureLayer requires OpenGL 3.0+ / ES 3.0+
+					debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+ - this will fail");
+				}
+			}
 #endif
-
-	wzGLClearErrors(); // clear OpenGL error states
-
-	bool encounteredError = false;
-	GLsizei samples = std::min<GLsizei>(multisamples, maxMultiSampleBufferFormatSamples);
-
-	if (samples > 0)
-	{
-		_sceneMsaaSurface = create_framebuffer_renderbuffer(multiSampledBufferInternalFormat, samples,
-			sceneFramebufferWidth, sceneFramebufferHeight, "<scene msaa color>");
-		ASSERT_OR_RETURN(false, _sceneMsaaSurface != nullptr, "Failed to create scene MSAA renderbuffer");
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
+			auto* depthMap = root.create_depthmap_texture(createSpec.arrayLayers, createSpec.width, createSpec.height, "<depth map>");
+			if (!depthMap)
+			{
+				debug(LOG_ERROR, "Failed to create depth texture");
+				return false;
+			}
+			GLenum target = depthMap->target();
+			depthMap->bind();
+			glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+			glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+			depthMap->unbind();
+			gpu.texture.reset(depthMap);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::None:
+			debug(LOG_ERROR, "Allocate surface %u has storageKind None", static_cast<unsigned>(id));
+			return false;
+		}
+		break;
 	}
 
-	// Always create a standard color texture (for the resolved color values)
-	// NOTE:
-	// - OpenGL ES: color texture format must *MATCH* the format used for the multisampled color render buffer
-	GLenum colorInternalFormat = (samples > 0 && gles) ? multiSampledBufferInternalFormat : GL_RGB8;
-	GLenum colorBaseFormat = (samples > 0 && gles) ? multiSampledBufferBaseFormat : GL_RGB;
-	auto pNewSceneTexture = create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE, sceneFramebufferWidth, sceneFramebufferHeight, "<scene texture>");
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	if (!pNewSceneTexture)
-	{
-		debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", sceneFramebufferWidth, sceneFramebufferHeight);
-		return false;
-	}
-	sceneTexture = pNewSceneTexture;
-	sceneTexture->bind();
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	sceneTexture->unbind();
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	outTexture = gpu.texture.get();
+	return outTexture != nullptr;
+}
 
-	_sceneDepthStencilSurface = create_framebuffer_renderbuffer(GL_DEPTH24_STENCIL8, samples,
-		sceneFramebufferWidth, sceneFramebufferHeight, "<scene depth stencil>");
-	ASSERT_OR_RETURN(false, _sceneDepthStencilSurface != nullptr, "Failed to create scene depth/stencil renderbuffer");
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
+void gl_context::PipelineSurfaceAllocator::prepareForSurfaceDestroy()
+{
+	root.clearDynamicFBOCache();
+}
 
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
+void gl_context::PipelineSurfaceAllocator::onChanged()
+{
+	root.clearDynamicFBOCache();
+	root.bumpRenderGraphEpoch();
+}
 
-	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SceneColor, sceneTexture);
-	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SceneDepth, _sceneDepthStencilSurface.get());
-	const uint32_t sceneSamples = (samples > 0) ? static_cast<uint32_t>(samples) : 1u;
-	_pipelineSurfaces.setSurfaceSamples(gfx_api::PipelineSurfaceId::SceneDepth, sceneSamples);
-	if (_sceneMsaaSurface != nullptr)
-	{
-		_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SceneMSAAColor, _sceneMsaaSurface.get());
-		_pipelineSurfaces.setSurfaceSamples(gfx_api::PipelineSurfaceId::SceneMSAAColor, sceneSamples);
-	}
-	else
-	{
-		_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneMSAAColor);
-	}
-
-	bumpRenderGraphEpoch();
-	return !encounteredError;
+void gl_context::resetAllPipelineSurfaceSlots()
+{
+	PipelineSurfaceAllocator alloc(*this);
+	_pipelineSurfaces.resetAll(alloc);
 }
 
 void gl_context::purgeFrameResources()
@@ -5715,7 +5732,8 @@ optional<std::pair<uint32_t, uint32_t>> gl_context::getRenderTargetDimensions(gf
 			return std::make_pair(viewportWidth, viewportHeight);
 		}
 	}
-	if (texture == sceneTexture && sceneFramebufferWidth > 0 && sceneFramebufferHeight > 0)
+	if (texture == getPipelineSurface(gfx_api::PipelineSurfaceId::SceneColor)
+		&& sceneFramebufferWidth > 0 && sceneFramebufferHeight > 0)
 	{
 		return std::make_pair(sceneFramebufferWidth, sceneFramebufferHeight);
 	}

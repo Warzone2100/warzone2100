@@ -57,8 +57,13 @@ namespace gfx_api
 
 		// ASTC (LDR) - requires an extension
 		FORMAT_ASTC_4x4_UNORM,
+
+		// Additional uncompressed / depth formats (appended to preserve prior enumerant values)
+		FORMAT_A2B10G10R10_UNORM_PACK32, // 10-bit RGB + 2-bit A (e.g. VK scene color)
+		FORMAT_D32_SFLOAT_S8_UINT,       // depth/stencil attachment
+		FORMAT_D32_SFLOAT,               // depth-only (e.g. shadow maps)
 	};
-	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_ASTC_4x4_UNORM;
+	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_D32_SFLOAT;
 
 	static inline bool is_uncompressed_format(const pixel_format& format)
 	{
@@ -70,6 +75,7 @@ namespace gfx_api
 			case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
 				return true;
 			default:
 				return false;
