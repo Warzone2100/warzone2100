@@ -864,5 +864,34 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 		}
 	}
 
+	// The claim mask: ground the corridor layer owns or influences, one bit
+	// per tile so other mechanisms exclude it with a single lookup. Claimed
+	// means within 3 tiles of any centerline or within the approach reach
+	// (8 tiles, matching APPROACH_RADIUS) of any mouth.
+	result->tileClaimed.assign(cells, 0);
+	result->tileInterior.assign(cells, 0);
+	auto stamp = [&](std::vector<uint8_t> &mask, Vector2i world, int radius)
+	{
+		const int cx = map_coord(world.x);
+		const int cy = map_coord(world.y);
+		for (int y = std::max(0, cy - radius); y <= std::min(g.h - 1, cy + radius); ++y)
+		{
+			for (int x = std::max(0, cx - radius); x <= std::min(g.w - 1, cx + radius); ++x)
+			{
+				mask[g.idx(x, y)] = 1;
+			}
+		}
+	};
+	for (const Corridor &c : result->corridors)
+	{
+		for (const Vector2i &p : c.centerline)
+		{
+			stamp(result->tileClaimed, p, 3);
+			stamp(result->tileInterior, p, 3);
+		}
+		stamp(result->tileClaimed, c.mouthA, 8);
+		stamp(result->tileClaimed, c.mouthB, 8);
+	}
+
 	return result;
 }
