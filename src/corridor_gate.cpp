@@ -79,6 +79,19 @@ struct Query
 // off the wall and clearly on its own side. About a unit radius.
 const int32_t LANE_MARGIN = TILE_UNITS / 2;
 
+// Within this many centerline points of a mouth an entering droid may be
+// pre-sorted across the opposing lane onto its own side, provided the opposing
+// flow's routes stay clear of the zone. Inner mouths have no funnel, so a
+// droid arrives on whatever side it came from, and one entering on the wrong
+// side of a contested neck fights the oncoming stream for the crossing it
+// could have made in the open pocket outside.
+const int MOUTH_CROSS_ZONE = 3;
+
+// A zone only reads clear when the opposing flow's covered stretch stays this
+// many points short of it, so traffic bound for the zone re-occupies it a few
+// tiles ahead of arriving and crossers are out of the way before it comes.
+const int SPAN_BUFFER = 3;
+
 // Two opposing bodies thread a pinch when it can separate their centres by the
 // sum of their radii plus this control slack, terrain collision being centre
 // based. Calibrated between the observed bounds: a cyborg and a medium tank do
@@ -144,6 +157,20 @@ std::vector<uint8_t> g_contested;
 // file in one behind another instead of arriving abreast at a mouth that fits
 // one or two. Rebuilt each tick from synced droid state, so it is never saved.
 std::unordered_map<uint32_t, int32_t> g_slotAlong;
+
+// Per corridor and direction, the span of centerline indices the direction's
+// routes actually cover this tick, read as far as the route scan window sees.
+// Gates the mouth crossing zones: an entry zone the opposing flow's coverage
+// stays clear of is free to pre-sort across, ex. merging through the unused
+// half of a junction neck, instead of honouring a reservation nothing will
+// claim there. Rebuilt each tick, never saved.
+std::vector<int> g_useLoFwd, g_useHiFwd, g_useLoBwd, g_useHiBwd;
+
+// Per corridor and direction, how many droids are inside it this tick.
+// The pre-sort only engages against a stream physically in the passage, so it
+// sorts a merger against real oncoming traffic and never reshapes a column
+// entering ahead of traffic that is still far away. Rebuilt each tick.
+std::vector<int> g_cInsideFwd, g_cInsideBwd;
 
 // Per-corridor lane handedness for this tick: +1 keeps each direction to its
 // right, -1 to its left. Keeping right is an arbitrary convention, and the
@@ -470,7 +497,8 @@ ApproachFrame approachFrame(const Corridor &c, int dir, const Vector2i &pos)
 // projection alone would let a leg of the route that runs through some other
 // passage nearby project onto this corridor's far end and reverse the answer,
 // flapping the direction as the droid moves.
-int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr)
+int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr,
+             int *coverLoOut = nullptr, int *coverHiOut = nullptr)
 {
 	const std::vector<Vector2i> &path = psDroid->sMove.asPath;
 	const int last = static_cast<int>(c.centerline.size()) - 1;
@@ -481,7 +509,14 @@ int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr)
 	{
 		*strongOut = false;
 	}
+	// The stretch of the corridor this droid's route actually covers, from its
+	// position to where the accepted waypoints run out, ex. where the route
+	// turns off. Reads only as far as the scan window, so a distant droid's
+	// coverage grows as it closes, a few tiles of anticipation.
+	int coverLo = startIdx;
+	int coverHi = startIdx;
 	int weak = 0;
+	int strong = 0;
 	for (int i = start; i < stop; ++i)
 	{
 		const int idx = static_cast<int>(nearestCenterlineIdx(c, path[i]));
@@ -509,14 +544,16 @@ int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr)
 		{
 			continue;
 		}
+		coverLo = std::min(coverLo, idx);
+		coverHi = std::max(coverHi, idx);
 		const int diff = idx - startIdx;
-		if (diff >= 2 || diff <= -2)
+		if ((diff >= 2 || diff <= -2) && strong == 0)
 		{
 			if (strongOut != nullptr)
 			{
 				*strongOut = true;
 			}
-			return diff > 0 ? 1 : -1;
+			strong = diff > 0 ? 1 : -1;
 		}
 		if ((diff == 1 || diff == -1) && (idx == 0 || idx == last))
 		{
@@ -528,7 +565,15 @@ int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr)
 			weak = diff;
 		}
 	}
-	return weak;
+	if (coverLoOut != nullptr)
+	{
+		*coverLoOut = coverLo;
+	}
+	if (coverHiOut != nullptr)
+	{
+		*coverHiOut = coverHi;
+	}
+	return strong != 0 ? strong : weak;
 }
 
 // Which side the droid's route next turns toward: -1 left, +1 right, 0 none.
@@ -855,6 +900,12 @@ void corridorGateUpdate()
 	std::vector<int32_t> maxRadBwd(n, 0);
 	std::vector<uint8_t> stalledFwd(n, 0);            ///< per chain, this direction's flow is stuck, not draining
 	std::vector<uint8_t> stalledBwd(n, 0);
+	g_useLoFwd.assign(n, INT32_MAX);
+	g_useHiFwd.assign(n, INT32_MIN);
+	g_useLoBwd.assign(n, INT32_MAX);
+	g_useHiBwd.assign(n, INT32_MIN);
+	g_cInsideFwd.assign(n, 0);
+	g_cInsideBwd.assign(n, 0);
 
 	// Only the head of a direction's column can stall a corridor. Followers bump
 	// the file ahead of them constantly in a healthy compressing stream, so their
@@ -912,9 +963,18 @@ void corridorGateUpdate()
 			const size_t chain = static_cast<size_t>(g_chainId[c]);
 			const int chainDir = q.dir * g_chainSign[c];
 			(chainDir > 0 ? hasFwd[chain] : hasBwd[chain]) = 1;
+			{
+				int coverLo, coverHi;
+				routeDir(psDroid, cmap->corridors[c], nullptr, &coverLo, &coverHi);
+				int &lo = (q.dir > 0 ? g_useLoFwd : g_useLoBwd)[c];
+				int &hi = (q.dir > 0 ? g_useHiFwd : g_useHiBwd)[c];
+				lo = std::min(lo, coverLo);
+				hi = std::max(hi, coverHi);
+			}
 			if (q.relation == INSIDE)
 			{
 				(chainDir > 0 ? insideFwd[chain] : insideBwd[chain]) += 1;
+				(q.dir > 0 ? g_cInsideFwd : g_cInsideBwd)[c] += 1;
 				int32_t &occ = chainDir > 0 ? occWidthFwd[chain] : occWidthBwd[chain];
 				occ = std::min(occ, cmap->corridors[c].minWidth);
 				const bool bumped = psDroid->sMove.bumpTime != 0
@@ -1233,12 +1293,49 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 		// no room for its flared aim, which fights the previous corridor's lane
 		// and the droid's own route in the handoff, arcing the droid in circles
 		// as the nearest-corridor classification alternates. The junction is
-		// driven on the route alone.
+		// mostly driven on the route alone, with one exception: a droid whose
+		// arrival side is the opposing lane would otherwise enter unsorted and
+		// fight the oncoming stream inside a neck for a crossing it can make
+		// here in the pocket, where there is room. When the opposing flow's
+		// route coverage stays clear of the entry zone, aim it through the
+		// mouth on its own lane side, a single sorted entry point, none of the
+		// funnel's flare or slot machinery.
 		const bool entryOuter = q.dir > 0 ? (cid < g_mouthAOuter.size() && g_mouthAOuter[cid])
 		                                  : (cid < g_mouthBOuter.size() && g_mouthBOuter[cid]);
 		if (!entryOuter)
 		{
-			return false;
+			// Sorting is only worth the steering when there is a stream to be
+			// sorted against: opposing droids physically inside this passage
+			// whose route coverage stays clear of the entry zone. With no
+			// oncoming traffic in the passage there is nothing here to avoid,
+			// and reshaping a whole entering column's natural surge for
+			// traffic that is still far away is the same perturbation-for-
+			// nothing the lane spans kept paying.
+			const int oppInside = (q.dir > 0 ? g_cInsideBwd : g_cInsideFwd)[cid];
+			const int oppLo = (q.dir > 0 ? g_useLoBwd : g_useLoFwd)[cid];
+			const int oppHi = (q.dir > 0 ? g_useHiBwd : g_useHiFwd)[cid];
+			const bool zoneClear = q.dir > 0 ? oppLo > MOUTH_CROSS_ZONE + SPAN_BUFFER
+			                                 : oppHi < last - MOUTH_CROSS_ZONE - SPAN_BUFFER;
+			if (oppInside == 0 || !zoneClear)
+			{
+				return false;
+			}
+			const ApproachFrame f = approachFrame(c, q.dir, pos);
+			// Only a droid arriving clearly on the opposing side needs the
+			// sorted entry. One already on its own side keeps its route-driven
+			// entry, steering it anyway would perturb for no benefit.
+			const Vector2i rel = pos - f.mouth;
+			const int32_t arriveLat = static_cast<int32_t>((static_cast<int64_t>(rel.x) * f.pVec.x
+			                                                + static_cast<int64_t>(rel.y) * f.pVec.y) / DIR_UNIT);
+			if (sideSign > 0 ? arriveLat >= -LANE_MARGIN : arriveLat <= LANE_MARGIN)
+			{
+				return false;
+			}
+			laneTarget.x = f.mouth.x + static_cast<int32_t>((static_cast<int64_t>(f.pVec.x) * lateral
+			                                                 + static_cast<int64_t>(f.gVec.x) * APPROACH_LEAD) / DIR_UNIT);
+			laneTarget.y = f.mouth.y + static_cast<int32_t>((static_cast<int64_t>(f.pVec.y) * lateral
+			                                                 + static_cast<int64_t>(f.gVec.y) * APPROACH_LEAD) / DIR_UNIT);
+			return true;
 		}
 		// Drive to this droid's queue slot on the lane extended out past the
 		// mouth, so a blob approaches as files that fit the passage, each droid
