@@ -806,6 +806,73 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 }
 
 
+// How far apart two clicks may land and still count as the same rally point,
+// how much beyond body contact a settled neighbour still counts as touching,
+// and how far from the destination a droid may settle at all.
+#define SETTLE_DEST_MATCH	(TILE_UNITS * 2)
+#define SETTLE_CONTACT_SLACK	(TILE_UNITS / 2)
+#define SETTLE_MAX_RADIUS	(TILE_UNITS * 5)
+
+// A droid blocked against a neighbour that has already given up on the same
+// destination will not find a way through however often it repaths - the crowd
+// is the destination now. Contact with such a neighbour standing no farther
+// from the shared goal counts as arrival, so a pack grows outward ring by ring
+// instead of its last entrants rerouting forever. The radius cap keeps a
+// blocked single file from parking itself all the way back up a corridor.
+static bool moveSettledPackAtDestination(const DROID *psDroid)
+{
+	if (!pathfindingCorridorLanesEnabled())
+	{
+		return false;
+	}
+	const Vector2i dest = psDroid->sMove.destination;
+	const int32_t myDist = iHypot(dest - psDroid->pos.xy());
+	if (myDist > SETTLE_MAX_RADIUS)
+	{
+		return false;
+	}
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, TILE_UNITS * 2);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		const DROID *psOther = castDroid(*gi);
+		if (psOther == nullptr || psOther == psDroid || psOther->died
+		    || psOther->player != psDroid->player
+		    || psOther->sMove.Status != MOVEINACTIVE
+		    || psOther->action != DACTION_NONE)
+		{
+			continue;
+		}
+		if (iHypot(psOther->sMove.destination - dest) > SETTLE_DEST_MATCH)
+		{
+			continue;
+		}
+		const int32_t contact = moveObjRadius(psDroid) + moveObjRadius(psOther) + SETTLE_CONTACT_SLACK;
+		if (iHypot(psOther->pos.xy() - psDroid->pos.xy()) > contact)
+		{
+			continue;
+		}
+		if (iHypot(dest - psOther->pos.xy()) <= myDist)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+// Clear the blocked watchdog clock. Both pause exits need a running clock, so
+// a paused droid losing its clock would be stranded in the pause for good, it
+// resumes moving instead.
+static void moveClearBump(DROID *psDroid)
+{
+	psDroid->sMove.bumpTime = 0;
+	psDroid->sMove.lastBump = 0;
+	if (pathfindingCorridorLanesEnabled() && psDroid->sMove.Status == MOVEPAUSE)
+	{
+		psDroid->sMove.Status = MOVEPOINTTOPOINT;
+	}
+}
+
 // See if the droid has been stopped long enough to give up on the move
 bool moveBlocked(DROID *psDroid)
 {
@@ -818,13 +885,13 @@ bool moveBlocked(DROID *psDroid)
 		return false;
 	}
 
-	// A droid queued or laned at a corridor with opposing flows is waiting or
-	// filing by design, not stuck, so don't reroute it or give up its move. The
-	// watchdog resumes once the corridor clears.
-	if (pathfindingCorridorLanesEnabled() && corridorManaged(psDroid))
+	// A droid held by the corridor layer, queued at an outer mouth or waiting
+	// into an inner junction, is waiting by design, not stuck, so don't reroute
+	// it or give up its move. The watch merely pauses, its clock keeps running,
+	// so a droid still pinned when its grace runs out gets recovered by the
+	// normal machinery.
+	if (pathfindingCorridorLanesEnabled() && corridorHold(psDroid) != CORRIDOR_HOLD_NONE)
 	{
-		psDroid->sMove.bumpTime = 0;
-		psDroid->sMove.lastBump = 0;
 		return false;
 	}
 
@@ -832,8 +899,7 @@ bool moveBlocked(DROID *psDroid)
 	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))
 	{
 		// Move on, clear the bump
-		psDroid->sMove.bumpTime = 0;
-		psDroid->sMove.lastBump = 0;
+		moveClearBump(psDroid);
 		return false;
 	}
 	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->sMove.bumpPos.x;
@@ -842,8 +908,7 @@ bool moveBlocked(DROID *psDroid)
 	if (diffSq > BLOCK_DIST * BLOCK_DIST)
 	{
 		// Move on, clear the bump
-		psDroid->sMove.bumpTime = 0;
-		psDroid->sMove.lastBump = 0;
+		moveClearBump(psDroid);
 		return false;
 	}
 
@@ -870,9 +935,12 @@ bool moveBlocked(DROID *psDroid)
 		{
 			objTrace(psDroid->id, "BLOCKED");
 		}
-		// if the unit cannot see the next way point - reroute it's got stuck
+		// if the unit cannot see the next way point - reroute it's got stuck,
+		// unless it is stuck against the settled crowd at its own destination,
+		// then it parks with the crowd instead
 		if ((bMultiPlayer || psDroid->player == selectedPlayer || psDroid->lastFrustratedTime == gameTime)
-		    && psDroid->sMove.pathIndex != (int)psDroid->sMove.asPath.size())
+		    && psDroid->sMove.pathIndex != (int)psDroid->sMove.asPath.size()
+		    && !moveSettledPackAtDestination(psDroid))
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
@@ -2389,7 +2457,18 @@ void moveUpdateDroid(DROID *psDroid)
 		moveDir = moveGetDirection(psDroid);
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
-		if ((psDroid->sMove.bumpTime != 0) &&
+		// A droid held by the corridor layer keeps its bump clock running for
+		// the watchdog grace, but must not pause-shuffle off it, that would
+		// stop-start the whole waiting queue or pocket in lockstep.
+		if (psDroid->sMove.bumpTime != 0 && pathfindingCorridorLanesEnabled()
+		    && corridorHold(psDroid) != CORRIDOR_HOLD_NONE)
+		{
+			if (psDroid->sMove.Status == MOVEPAUSE)
+			{
+				psDroid->sMove.Status = MOVEPOINTTOPOINT;
+			}
+		}
+		else if ((psDroid->sMove.bumpTime != 0) &&
 		    (psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + BLOCK_PAUSETIME < gameTime))
 		{
 			if (psDroid->sMove.Status == MOVEPOINTTOPOINT)

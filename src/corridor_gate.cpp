@@ -95,6 +95,12 @@ const int32_t HOLD_STANDOFF = 2 * TILE_UNITS;
 // abandons its move.
 const uint32_t STALL_TIME = 1000;
 
+// A column head stalled beyond this is wedged, not draining. Holding entrants
+// for it assumes the stall clears, and when what wedged it is the waiting flow
+// itself the hold sustains the wedge, so a stall this old stops metering and
+// the entrants shuffle through instead.
+const uint32_t STALL_WEDGED = 20000;
+
 // Gap between queued droids on top of their bodies, so the file has room to
 // stop and start without shoving.
 const int32_t QUEUE_GAP = TILE_UNITS / 4;
@@ -913,7 +919,8 @@ void corridorGateUpdate()
 				occ = std::min(occ, cmap->corridors[c].minWidth);
 				const bool bumped = psDroid->sMove.bumpTime != 0
 				                    && psDroid->sMove.bumpTime <= gameTime
-				                    && gameTime - psDroid->sMove.bumpTime > STALL_TIME;
+				                    && gameTime - psDroid->sMove.bumpTime > STALL_TIME
+				                    && gameTime - psDroid->sMove.bumpTime <= STALL_WEDGED;
 				ColumnHead &head = q.dir > 0 ? headFwd[c] : headBwd[c];
 				const int32_t prog = q.dir * static_cast<int32_t>(q.nearest);
 				if (prog > head.prog)
@@ -1389,16 +1396,49 @@ void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy)
 	*pdy -= static_cast<int32_t>(sideSign * q.axis.x * latMove / axisSq);
 }
 
-bool corridorManaged(const DROID *psDroid)
+// An approacher waiting into an inner junction is left in peace this long, then
+// the watchdog resumes. Waiting there is usually right, the pocket is briefly
+// full of merging or exiting traffic and churning through reroutes only adds
+// shoving, but nothing of ours is holding the droid and nothing guarantees its
+// spot ever clears, ex. pinned against a corner by a crossing exit stream. Long
+// enough to sit out a normal merge or drain, short enough to recover a pinned
+// droid while the traffic that pinned it still flows.
+const uint32_t JUNCTION_GRACE = 15000;
+
+// A queued droid waits far longer before the watchdog resumes. Queues are the
+// layer's own doing and a draining one deserves patience, but a queue can also
+// stop draining for good, ex. the queued column standing across an opposing
+// flow's only crossing, each side holding the other forever. An advancing
+// queue never ages the clock, the slot-by-slot creep resets it through the
+// moved-on check, so only a stagnant wait runs out the grace and reroutes.
+const uint32_t QUEUE_GRACE = 40000;
+
+CorridorHold corridorHold(const DROID *psDroid)
 {
-	// Only a droid queued outside counts as managed. One inside that stops moving
-	// long enough to trip the watchdog is genuinely wedged, and the watchdog's
-	// reroute is what recovers it, so it keeps its normal watch.
+	// Only a droid approaching a queue-forming mouth is stopped by the layer
+	// itself, the speed hold walks it slot by slot, so the watchdog must not
+	// read that stop as being wedged while the queue drains. At an inner
+	// junction no queue forms, so the watch merely pauses, and a droid still
+	// pinned when the grace runs out gets the normal reroute. A droid inside
+	// that stops long enough to trip the watchdog is genuinely wedged, and the
+	// watchdog's reroute is what recovers it, so it keeps its normal watch.
 	const Query q = classifyDroid(psDroid);
 	if (q.relation != APPROACHING)
 	{
-		return false;
+		return CORRIDOR_HOLD_NONE;
 	}
 	const size_t c = static_cast<size_t>(q.corridorId);
-	return c < g_contested.size() && g_contested[c];
+	if (c >= g_contested.size() || !g_contested[c])
+	{
+		return CORRIDOR_HOLD_NONE;
+	}
+	const bool entryOuter = q.dir > 0 ? (c < g_mouthAOuter.size() && g_mouthAOuter[c])
+	                                  : (c < g_mouthBOuter.size() && g_mouthBOuter[c]);
+	const uint32_t grace = entryOuter ? QUEUE_GRACE : JUNCTION_GRACE;
+	if (psDroid->sMove.bumpTime != 0 && psDroid->sMove.bumpTime <= gameTime
+	    && gameTime - psDroid->sMove.bumpTime > grace)
+	{
+		return CORRIDOR_HOLD_NONE;
+	}
+	return entryOuter ? CORRIDOR_HOLD_QUEUED : CORRIDOR_HOLD_JUNCTION;
 }

@@ -55,7 +55,11 @@ int corridorQueueSpeed(const DROID *psDroid, int moveSpeed);
 /// Cuts only the crossing component of the given velocity, in place.
 void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy);
 
-/// True while the droid is queued or laned at a corridor with opposing flows.
-/// Waiting there is deliberate, so the blocked watchdog should not read it as
-/// stuck and abandon the move.
-bool corridorManaged(const DROID *psDroid);
+/// How the corridor layer wants the blocked watchdog to treat this droid.
+enum CorridorHold
+{
+	CORRIDOR_HOLD_NONE,     ///< not held by the layer, normal watch
+	CORRIDOR_HOLD_QUEUED,   ///< queued at an outer mouth, the speed hold stops it, reset the watch
+	CORRIDOR_HOLD_JUNCTION, ///< waiting into an inner junction, pause the watch but keep it running
+};
+CorridorHold corridorHold(const DROID *psDroid);
