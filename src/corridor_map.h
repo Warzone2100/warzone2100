@@ -70,6 +70,8 @@ struct CorridorMap
 	int height = 0;
 	std::vector<Corridor> corridors;
 	std::vector<int16_t> tileCorridor;  ///< width*height, corridor id per centerline tile, -1 otherwise
+	std::vector<uint8_t> tileClaimed;   ///< width*height, 1 where the corridor layer claims the ground, see corridorMapBuild
+	std::vector<uint8_t> tileInterior;  ///< width*height, 1 near a centerline only, mouth approach zones excluded
 	std::vector<uint8_t> debugSkel;     ///< full one-tile skeleton, for the dump overlay
 	std::vector<uint8_t> debugNarrow;   ///< skeleton restricted to narrow tiles, for the dump overlay
 
@@ -80,6 +82,29 @@ struct CorridorMap
 			return -1;
 		}
 		return tileCorridor[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)];
+	}
+
+	/// True where corridor coordination owns or influences the ground, so
+	/// other mechanisms can keep off it with one lookup. Out of bounds and
+	/// corridor-free maps read as unclaimed.
+	bool claimed(int x, int y) const
+	{
+		if (x < 0 || y < 0 || x >= width || y >= height || tileClaimed.empty())
+		{
+			return false;
+		}
+		return tileClaimed[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)] != 0;
+	}
+
+	/// True only near a corridor centerline, the passage body itself.
+	/// The mouth approach zones outside it are claimed but not interior.
+	bool interior(int x, int y) const
+	{
+		if (x < 0 || y < 0 || x >= width || y >= height || tileInterior.empty())
+		{
+			return false;
+		}
+		return tileInterior[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)] != 0;
 	}
 };
 
