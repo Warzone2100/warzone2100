@@ -1510,6 +1510,12 @@ const uint32_t JUNCTION_GRACE = 15000;
 // moved-on check, so only a stagnant wait runs out the grace and reroutes.
 const uint32_t QUEUE_GRACE = 40000;
 
+// With flow costs in the planner a reroute is productive rather than churn:
+// a long-queued droid's replan sees the corridor full of opposing traffic
+// and either diverts or confirms the wait, so the queue re-evaluates on a
+// much shorter clock than the plain grace.
+const uint32_t QUEUE_REEVAL = 15000;
+
 CorridorHold corridorHold(const DROID *psDroid)
 {
 	// Only a droid approaching a queue-forming mouth is stopped by the layer
@@ -1531,7 +1537,8 @@ CorridorHold corridorHold(const DROID *psDroid)
 	}
 	const bool entryOuter = q.dir > 0 ? (c < g_mouthAOuter.size() && g_mouthAOuter[c])
 	                                  : (c < g_mouthBOuter.size() && g_mouthBOuter[c]);
-	const uint32_t grace = entryOuter ? QUEUE_GRACE : JUNCTION_GRACE;
+	const uint32_t queueGrace = pathfindingFlowCostEnabled() ? QUEUE_REEVAL : QUEUE_GRACE;
+	const uint32_t grace = entryOuter ? queueGrace : JUNCTION_GRACE;
 	if (psDroid->sMove.bumpTime != 0 && psDroid->sMove.bumpTime <= gameTime
 	    && gameTime - psDroid->sMove.bumpTime > grace)
 	{

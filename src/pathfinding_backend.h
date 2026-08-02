@@ -49,8 +49,10 @@
 #include "fpath.h"
 
 #include <cstdint>
+#include <memory>
 
 struct WorldMapState;
+struct DynamicCostOverlay;
 
 /// Congestion features a game has turned on, held as a bitmask in the synced
 /// game.pathfindingBackend setting. Each is independent so a run can enable one
@@ -60,14 +62,19 @@ struct WorldMapState;
 /// valid list in clparse.cpp.
 enum PathfindingFeature : uint8_t
 {
-	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping in the planner (not built yet)
+	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping after the search
 	PF_CORRIDOR_LANES    = 1 << 1,   ///< steer into lanes through detected corridors
+	PF_FLOW_COST         = 1 << 2,   ///< price tiles held by opposing-facing traffic in the search
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
 bool pathfindingOverlayEnabled();
 /// True if the movement layer should steer droids into corridor lanes.
 bool pathfindingCorridorLanesEnabled();
+/// True if the planner should shape route bends after the search.
+bool pathfindingDirectionalBiasEnabled();
+/// True if the search should price tiles held by opposing-facing traffic.
+bool pathfindingFlowCostEnabled();
 
 class IPathfindingBackend
 {
@@ -100,6 +107,11 @@ public:
 
 	/// Drops any queued job and pending result for one droid.
 	virtual void removeDroidData(int droidID) = 0;
+
+	/// The soft-cost overlay a search for this player should read, or null to
+	/// search with no overlay. Built once per tick in updateTick, so it is valid
+	/// for the rest of the tick. Legacy has none.
+	virtual std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const { return nullptr; }
 };
 
 /// The backend this game is running. All clients must be running the same one.
