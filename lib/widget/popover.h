@@ -39,7 +39,11 @@ public:
 
 	enum class Style
 	{
-		Interactive,
+		Interactive,	// covers the whole screen: everything beneath stops receiving mouse and keyboard events
+		// Accepts events on its own contents, ex. buttons, while everything
+		// outside it falls through to whatever is underneath. Nothing dismisses it
+		// on a click elsewhere or on Esc, so whoever opened it has to close it.
+		MouseInteractive,
 		NonInteractive	// akin to a tooltip (accepts no mouse-over or other events, expects that something else will call close() on it at some point)
 	};
 
