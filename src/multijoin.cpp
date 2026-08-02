@@ -26,6 +26,8 @@
  */
 
 #include <physfs.h>
+#include <map>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -197,6 +199,112 @@ static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE 
 	return destroyedAnyStructs;
 }
 
+// Return a recipient's (specified by `idx`) share of a `total` quantity that is
+// divided among `numShares` recipients. Any remainder is dealt out one apiece
+// to the lowest indices first, so the shares add back up to exactly `total`.
+static int64_t shareOf(int64_t total, size_t numShares, size_t idx)
+{
+	ASSERT_OR_RETURN(0, idx < numShares, "Share %zu out of range (%zu shares)", idx, numShares);
+	ASSERT_OR_RETURN(0, total >= 0, "Tried to share a negative total of %" PRId64 "", total);
+
+	const int64_t n = static_cast<int64_t>(numShares);
+	const int64_t remainder = total % n;
+	const bool receiveRemainder = static_cast<int64_t>(idx) < remainder;
+
+	return total / n + (receiveRemainder ? 1 : 0);
+}
+
+// Should teammates inherit a structure (and its limit) when its owner leaves?
+static bool teamInherits(STRUCTURE_TYPE type, bool sharedResearch)
+{
+	if (!sharedResearch && type == REF_RESEARCH)
+	{
+		return false;
+	}
+	if (type == REF_HQ)
+	{
+		// Inheriting HQ may cause potentially subtle issues due to the implicit
+		// assumptions all over that there's only 1 HQ per player on a map
+		return false;
+	}
+	return true;
+}
+
+// Give the player's structures and limits to the team. This is done fairly so
+// that the team's total allowance for each structure ends up what it would have
+// been had the player never left, and nothing handed over becomes unbuildable
+// once destroyed.
+static void distributeStructuresAndLimits(UDWORD player, const std::vector<uint32_t>& possibleTargets)
+{
+	const bool sharedResearch = alliancesSharedResearch(game.alliance);
+	const size_t numTargets = possibleTargets.size();
+	ASSERT_OR_RETURN(, numTargets > 0, "No targets to distribute to");
+
+	// Bucketed up front by stat, because gifting moves structures out of this player's list
+	std::map<UDWORD, std::vector<STRUCTURE *>> giftableByStat;
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
+	{
+		if (psStruct && teamInherits(psStruct->pStructureType->type, sharedResearch))
+		{
+			giftableByStat[psStruct->pStructureType - asStructureStats].push_back(psStruct);
+		}
+	}
+
+	// Increment each time to rotate the recipient order (reduce bias)
+	size_t cursor = 0;
+
+	for (UDWORD stat = 0; stat < numStructureStats; ++stat)
+	{
+		auto& upgrade = asStructureStats[stat].upgrade;
+
+		// If the structure is not inheritable, do not gift it and
+		// do not increase its limit for teammates
+		if (!teamInherits(asStructureStats[stat].type, sharedResearch))
+		{
+			continue;
+		}
+
+		// An unlimited leaver has no pool to divide, so a capped recipient can end up over its
+		// cap once the structures arrive. That only blocks building more until the count drops.
+		const unsigned pool = upgrade[player].limit;
+		const bool sharePool = (pool != LOTS_OF);
+
+		auto giftable = giftableByStat.find(stat);
+		const std::vector<STRUCTURE *> *structs = (giftable != giftableByStat.end()) ? &giftable->second : nullptr;
+
+		if (!sharePool && !structs)
+		{
+			continue;	// the common case: nothing capped, and none of it built
+		}
+
+		size_t next = 0;
+		for (size_t i = 0; i < numTargets; ++i)
+		{
+			const auto to = possibleTargets[(cursor + i) % numTargets];
+
+			// An unlimited recipient discards its share - the team total is unbounded anyway
+			if (sharePool && upgrade[to].limit != LOTS_OF)
+			{
+				// Held below LOTS_OF, which would otherwise read as "no limit at all"
+				const unsigned share = static_cast<unsigned>(shareOf(pool, numTargets, i));
+				upgrade[to].limit += std::min(share, LOTS_OF - 1 - upgrade[to].limit);
+			}
+
+			if (structs)
+			{
+				const auto share = static_cast<size_t>(shareOf(static_cast<int64_t>(structs->size()), numTargets, i));
+				for (size_t n = 0; n < share; ++n)
+				{
+					giftSingleStructure((*structs)[next++], static_cast<UBYTE>(to), false);
+				}
+			}
+		}
+		ASSERT(!structs || next == structs->size(), "Distributed %zu of %zu structures", next, structs ? structs->size() : 0);
+
+		cursor = (cursor + 1) % numTargets;
+	}
+}
+
 bool splitResourcesAmongTeam(UDWORD player)
 {
 	auto team = NetPlay.players[player].team;
@@ -224,23 +332,26 @@ bool splitResourcesAmongTeam(UDWORD player)
 		return false;
 	}
 
+	const size_t numTargets = possibleTargets.size();
+
 	// Distribute power evenly
-	auto powerPerTarget = getPower(player) / static_cast<int32_t>(possibleTargets.size());
-	for (auto to : possibleTargets)
+	const int32_t power = getPower(player);
+	for (size_t i = 0; i < numTargets; ++i)
 	{
-		addPower(to, powerPerTarget);
+		addPower(possibleTargets[i], static_cast<int32_t>(shareOf(power, numTargets, i)));
 	}
 	setPower(player, 0);
 
 	// Distribute the player's additional unit limits
-	auto additionalDroidsLimitPerTarget = getMaxDroids(player) / static_cast<int>(possibleTargets.size());
-	auto additionalCommandersLimitPerTarget = getMaxCommanders(player) / static_cast<int>(possibleTargets.size());
-	auto additionalConstructorsLimitPerTarget = getMaxConstructors(player) / static_cast<int>(possibleTargets.size());
-	for (auto to : possibleTargets)
+	const int maxDroids = getMaxDroids(player);
+	const int maxCommanders = getMaxCommanders(player);
+	const int maxConstructors = getMaxConstructors(player);
+	for (size_t i = 0; i < numTargets; ++i)
 	{
-		setMaxDroids(to, getMaxDroids(to) + additionalDroidsLimitPerTarget);
-		setMaxCommanders(to, getMaxCommanders(to) + additionalCommandersLimitPerTarget);
-		setMaxConstructors(to, getMaxConstructors(to) + additionalConstructorsLimitPerTarget);
+		const auto to = possibleTargets[i];
+		setMaxDroids(to, getMaxDroids(to) + static_cast<int>(shareOf(maxDroids, numTargets, i)));
+		setMaxCommanders(to, getMaxCommanders(to) + static_cast<int>(shareOf(maxCommanders, numTargets, i)));
+		setMaxConstructors(to, getMaxConstructors(to) + static_cast<int>(shareOf(maxConstructors, numTargets, i)));
 	}
 
 	// Distribute droids between targets as evenly as possible
@@ -284,45 +395,14 @@ bool splitResourcesAmongTeam(UDWORD player)
 		return IterationResult::CONTINUE_ITERATION;
 	});
 
-	auto distributeMatchingStructs = [&](std::function<bool (STRUCTURE *)> cmp)
-	{
-		std::vector<PlayerItemsReceived> structsGiftedPerTarget;
-		for (auto to : possibleTargets)
-		{
-			structsGiftedPerTarget.push_back(PlayerItemsReceived{to, 0});
-		}
-		auto incrRecvStruct = [&](size_t idx) {
-			structsGiftedPerTarget[idx].itemsRecv += 1;
-			std::stable_sort(structsGiftedPerTarget.begin(), structsGiftedPerTarget.end(), [](const PlayerItemsReceived& a, const PlayerItemsReceived& b) -> bool {
-				return a.itemsRecv < b.itemsRecv;
-			});
-		};
+	distributeStructuresAndLimits(player, possibleTargets);
 
-		mutating_list_iterate(gameWorld.objects.structures[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
-		{
-			if (psStruct && cmp(psStruct))
-			{
-				giftSingleStructure(psStruct, structsGiftedPerTarget.front().player, false);
-				incrRecvStruct(0);
-			}
-			return IterationResult::CONTINUE_ITERATION;
-		});
-	};
-
-	// Distribute key structures
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR; });
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_POWER_GEN; });
-	if (alliancesSharedResearch(game.alliance))
+	if (!alliancesSharedResearch(game.alliance))
 	{
-		distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; });
-	}
-	else
-	{
-		// destroy the research centers in unshared research mode
+		// research centers are not gifted in unshared research mode, so destroy
+		// them. Don't let the leaving player's labs keep researching
 		destroyMatchingStructs(player, [](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; }, false);
 	}
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_COMMAND_CONTROL; });
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->isFactory(); });
 
 	return true;
 }
