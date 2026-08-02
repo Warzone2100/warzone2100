@@ -157,6 +157,8 @@ public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 125);
 	std::function<void ()> onClickedFunc;
 	std::function<void ()> onCancelPressed;
+	// Whether run() clears the input buffer every frame
+	bool swallowsInput = true;
 protected:
 	std::weak_ptr<WIDGET> cutoutWidget;
 };
