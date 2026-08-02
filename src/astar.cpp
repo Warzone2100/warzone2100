@@ -56,6 +56,7 @@
 
 #include "lib/netplay/sync_debug.h"
 #include "game_world.h"
+#include "congestion_overlay.h"
 
 #if WZ_PATHFINDING_INSTRUMENTATION
 uint64_t *g_pathNodesExpanded = nullptr;
@@ -161,6 +162,12 @@ struct PathNonblockingArea
 	int16_t y2 = 0;
 };
 
+// Flow-cost scale: with facing vectors summed at 64 per body and edge deltas
+// at 64 per axis, one opposing body met head-on prices about one tile step.
+constexpr int32_t FLOW_COST_SHIFT = 5;
+constexpr int32_t FLOW_COST_CAP = 1120;   // at most eight steps of cost from one tile's flow
+constexpr int32_t FLOW_DEST_EXEMPT = 840; // no flow pricing within ~6 tiles of the search's own goal
+
 // Data structures used for pathfinding, can contain cached results.
 struct PathfindContext
 {
@@ -178,14 +185,16 @@ struct PathfindContext
 	{
 		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * gameWorld.map.width];
 	}
-	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
+	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
-		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
+		// The overlay pointer is part of the key too, so a context built for one cohort's traffic is never reused for another's.
+		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && overlay == overlay_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
+	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
+		overlay = overlay_;
 		tileS = tileS_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
@@ -214,6 +223,7 @@ struct PathfindContext
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
 	std::shared_ptr<const PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
+	std::shared_ptr<const DynamicCostOverlay> overlay;  ///< Flow soft cost consumed by fpathNewNode, null for the legacy backend.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
@@ -280,12 +290,38 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 	// Create the node.
 	PathNode node;
 	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
-	node.p = pos;
-	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor;
-	node.est = node.dist + fpathGoodEstimate(pos, dest);
-
 	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y) * 64;
 	bool isDiagonal = delta.x && delta.y;
+	// Soft cost for arriving at this tile, added on top of the step. Flow
+	// prices arriving AGAINST the facing of the units holding the tile, so it
+	// depends on the arrival direction, and any tile carrying flow must also
+	// skip the interpolation below, whose arithmetic assumes
+	// direction-independent step costs.
+	unsigned overlayCost = 0;
+	bool tileHasFlow = false;
+	if (context.overlay)
+	{
+		const size_t tileIdx = static_cast<size_t>(pos.x) + static_cast<size_t>(pos.y) * gameWorld.map.width;
+		if (!context.overlay->flowX.empty())
+		{
+			const int32_t fx = context.overlay->flowX[tileIdx];
+			const int32_t fy = context.overlay->flowY[tileIdx];
+			tileHasFlow = fx != 0 || fy != 0;
+			const int32_t dot = delta.x * fx + delta.y * fy;
+			// No flow pricing close to this search's own destination: a goal
+			// crowd faces outward, and charging arrivals for their own crowd
+			// sends them circling it instead of parking. Note the cached
+			// context can run the search reversed, in which case this exempts
+			// the origin side instead - measured better than exempting both.
+			if (dot < 0 && fpathGoodEstimate(pos, dest) > FLOW_DEST_EXEMPT)
+			{
+				overlayCost += std::min<int32_t>(FLOW_COST_CAP, -dot >> FLOW_COST_SHIFT);
+			}
+		}
+	}
+	node.p = pos;
+	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor + overlayCost;
+	node.est = node.dist + fpathGoodEstimate(pos, dest);
 
 	PathExploredTile &expl = context.map[pos.x + pos.y * gameWorld.map.width];
 	if (expl.iteration == context.iteration)
@@ -297,7 +333,11 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 		Vector2i deltaA = delta;
 		Vector2i deltaB = Vector2i(expl.dx, expl.dy);
 		Vector2i deltaDelta = deltaA - deltaB;  // Vector pointing from current considered source tile leading to pos, to the previously considered source tile leading to pos.
-		if (abs(deltaDelta.x) + abs(deltaDelta.y) == 64)
+		// Skip the interpolation when this tile carries overlay cost. It smooths a
+		// path by backing the step cost out of the distance, which the extra
+		// overlay term would throw off. The overlay cost is the same from either
+		// source tile, so both visits skip together and the search stays exact.
+		if (overlayCost == 0 && !tileHasFlow && abs(deltaDelta.x) + abs(deltaDelta.y) == 64)
 		{
 			// prevPos is tile A or B, and pos is tile P. We were previously called with prevPos being tile B or A, and pos tile P.
 			// We want to find the distance to tile P, taking into account that the actual shortest path involves coming from somewhere between tile A and tile B.
@@ -442,9 +482,9 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, const std::shared_ptr<const DynamicCostOverlay> &overlay, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
 {
-	context.assign(blockingMap, tileS, dstIgnore);
+	context.assign(blockingMap, overlay, tileS, dstIgnore);
 
 	// Add the start point to the open list
 	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
@@ -607,7 +647,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	auto contextIterator = fpathContexts.begin();
 	for (; contextIterator != fpathContexts.end(); ++contextIterator)
 	{
-		if (!contextIterator->matches(psJob->blockingMap, tileDest, dstIgnore))
+		if (!contextIterator->matches(psJob->blockingMap, psJob->overlay, tileDest, dstIgnore))
 		{
 			// This context is not for the same droid type and same destination.
 			continue;
@@ -645,7 +685,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
+		fpathInitContext(*contextIterator, psJob->blockingMap, psJob->overlay, tileOrig, tileOrig, tileDest, dstIgnore);
 		endCoord = fpathAStarExplore(*contextIterator, tileDest);
 		contextIterator->nearestCoord = endCoord;
 	}
@@ -724,7 +764,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, dstIgnore);
+			fpathInitContext(context, psJob->blockingMap, psJob->overlay, tileDest, context.nearestCoord, tileOrig, dstIgnore);
 		}
 	}
 	else

@@ -41,6 +41,7 @@
 
 #include "fpath.h"
 #include "pathfinding_backend.h"
+#include "congestion_overlay.h"
 #include "profiling.h"
 #include "game_world.h"
 
@@ -542,6 +543,14 @@ queuePathfinding:
 	job.acceptNearest = acceptNearest;
 	job.deleted = false;
 	fpathSetBlockingMap(&job);
+	// Attach the active backend's soft-cost overlay for this player, built on the
+	// main thread this tick, so the worker reads immutable data. Null for legacy.
+	// Overlays reach a search only under the flags that consume them.
+	// An overlay built solely for the flow census must stay off the jobs, since
+	// even an inert attachment changes context-cache reuse and cache reuse
+	// changes which of the equal-length paths comes back.
+	job.overlay = (game.pathfindingBackend & PF_FLOW_COST) != 0
+	              ? fpathActiveBackend().overlayForOwner(owner) : nullptr;
 
 	debug(LOG_NEVER, "starting new job for droid %d 0x%x", id, id);
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one
@@ -650,22 +659,68 @@ public:
 	void removeDroidData(int droidID) override { fpathRemoveDroidData(droidID); }
 };
 
-/// Congestion-aware planner. It reuses the legacy A* and prices routing
-/// against a per-tick flow field, so friendly traffic swings around opposing
-/// columns. The field is not built yet, so for now it behaves exactly like
-/// the legacy backend.
+/// Congestion-aware planner. It reuses the legacy A* and adds a per-tick flow
+/// field on top, so a search can price routing against opposing traffic.
 class CongestionAStarBackend final : public LegacyAStarBackend
 {
+public:
+	void updateTick(const WorldMapState& mapState) override
+	{
+		LegacyAStarBackend::updateTick(mapState);
+		// Flow cost has its own flag. The directional bias flag also selects
+		// this backend but shapes routes after the search instead, so it must
+		// not switch soft costs on as a side effect. It does build the
+		// flow field for the census logging, which stays unattached and
+		// cannot reach a search.
+		const bool flow = (game.pathfindingBackend & (PF_FLOW_COST | PF_DIRECTIONAL_BIAS)) != 0;
+		if (!flow)
+		{
+			overlays.clear();
+			return;
+		}
+		overlays = buildCongestionOverlays(gameTime);
+		for (const auto& overlay : overlays)
+		{
+			if (overlay)
+			{
+				syncDebug("congestionOverlay(%u,%d) = %08X", overlay->gameTime, overlay->cohortPlayer, overlay->checksum);
+			}
+		}
+	}
+
+	std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const override
+	{
+		if (owner < 0 || static_cast<size_t>(owner) >= overlays.size())
+		{
+			return nullptr;
+		}
+		return overlays[owner];
+	}
+
+private:
+	// Indexed by player, rebuilt each tick, read-only once built. The search
+	// reads the owner's overlay through overlayForOwner.
+	std::vector<std::shared_ptr<const DynamicCostOverlay>> overlays;
 };
 
 bool pathfindingOverlayEnabled()
 {
-	return (game.pathfindingBackend & PF_DIRECTIONAL_BIAS) != 0;
+	return (game.pathfindingBackend & (PF_DIRECTIONAL_BIAS | PF_FLOW_COST)) != 0;
 }
 
 bool pathfindingCorridorLanesEnabled()
 {
 	return (game.pathfindingBackend & PF_CORRIDOR_LANES) != 0;
+}
+
+bool pathfindingDirectionalBiasEnabled()
+{
+	return (game.pathfindingBackend & PF_DIRECTIONAL_BIAS) != 0;
+}
+
+bool pathfindingFlowCostEnabled()
+{
+	return (game.pathfindingBackend & PF_FLOW_COST) != 0;
 }
 
 IPathfindingBackend& fpathActiveBackend()
