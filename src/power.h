@@ -46,7 +46,7 @@ int32_t checkPowerRequest(const STRUCTURE *psStruct);
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount);
 bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);
 
-void addPower(int player, int32_t quantity);
+int32_t addPower(int player, int32_t quantity);
 
 void usePower(int player, uint32_t quantity);
 

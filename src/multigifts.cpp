@@ -421,14 +421,14 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 		else if (amount == 0) // the GUI option
 		{
 			value = getPower(from) / 3;
+			value = addPower(to, value);
 			usePower(from, value);
-			addPower(to, value);
 		}
 		else // for scripts etc that can give precise amounts
 		{
 			value = MIN(getPower(from), amount);
+			value = addPower(to, value);
 			usePower(from, value);
-			addPower(to, value);
 		}
 		if (from != ANYPLAYER && to == selectedPlayer)
 		{
