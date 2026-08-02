@@ -32,6 +32,7 @@
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "research.h"
+#include "researchprereq.h"
 #include "message.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -253,131 +254,99 @@ public:
 	}
 };
 
-// Transitive prerequisite closure over asResearch, as one bit row per topic.
-//
-// isPrereq(i, j) is true when research i is a direct or indirect prerequisite of
-// research j.
-//
-// Built once per loadResearch() in O(V*E/64) time and O(V^2/8) memory, so the
-// O(n^2) prerequisite queries the category pass makes are all just bit tests.
-class ResearchPrereqClosure
+void ResearchPrereqClosure::setBit(size_t row, size_t bit)
 {
-public:
-	explicit ResearchPrereqClosure(const std::vector<RESEARCH>& research)
-		: m_count(research.size())
-		, m_words((research.size() + 63) / 64)
-		, m_bits(research.size() * ((research.size() + 63) / 64), uint64_t(0))
+	m_bits[row * m_words + (bit >> 6)] |= (uint64_t(1) << (bit & 63));
+}
+
+void ResearchPrereqClosure::orRowInto(size_t dstRow, size_t srcRow)
+{
+	const uint64_t* src = &m_bits[srcRow * m_words];
+	uint64_t* dst = &m_bits[dstRow * m_words];
+	for (size_t w = 0; w < m_words; ++w)
 	{
-		// Iterative post-order depth-first walk. asResearch is known to be acyclic
-		// at this point because loadResearch() runs CycleDetection::detectCycle()
-		// before calling us, so a child is never encountered mid-expansion.
-		enum class Mark : uint8_t { White, Grey, Black };
-		std::vector<Mark> mark(m_count, Mark::White);
-		std::vector<std::pair<size_t, size_t>> stack;	// (index, next child slot)
-		stack.reserve(m_count);
+		dst[w] |= src[w];
+	}
+}
 
-		for (size_t root = 0; root < m_count; ++root)
+ResearchPrereqClosure::ResearchPrereqClosure(const std::vector<RESEARCH>& research)
+	: m_count(research.size())
+	, m_words((research.size() + 63) / 64)
+	, m_bits(research.size() * ((research.size() + 63) / 64), uint64_t(0))
+{
+	// Iterative post-order depth-first walk. The research list is known to be
+	// acyclic here because loadResearch() runs CycleDetection::detectCycle()
+	// before anything constructs one of these, so a child is never encountered
+	// mid-expansion.
+	enum class Mark : uint8_t { White, Grey, Black };
+	std::vector<Mark> mark(m_count, Mark::White);
+	std::vector<std::pair<size_t, size_t>> stack;	// (index, next child slot)
+	stack.reserve(m_count);
+
+	for (size_t root = 0; root < m_count; ++root)
+	{
+		if (mark[root] != Mark::White)
 		{
-			if (mark[root] != Mark::White)
-			{
-				continue;
-			}
-			mark[root] = Mark::Grey;
-			stack.push_back({root, 0});
+			continue;
+		}
+		mark[root] = Mark::Grey;
+		stack.push_back({root, 0});
 
-			while (!stack.empty())
-			{
-				const size_t idx = stack.back().first;
-				const std::vector<UWORD>& prereqs = research[idx].pPRList;
+		while (!stack.empty())
+		{
+			const size_t idx = stack.back().first;
+			const std::vector<UWORD>& prereqs = research[idx].pPRList;
 
-				if (stack.back().second < prereqs.size())
+			if (stack.back().second < prereqs.size())
+			{
+				const size_t child = prereqs[stack.back().second++];
+				if (child >= m_count)
 				{
-					const size_t child = prereqs[stack.back().second++];
-					if (child >= m_count)
-					{
-						ASSERT(false, "Prerequisite index %zu out of range (max %zu)", child, m_count);
-						continue;
-					}
-					if (mark[child] == Mark::White)
-					{
-						mark[child] = Mark::Grey;
-						stack.push_back({child, 0});
-					}
+					ASSERT(false, "Prerequisite index %zu out of range (max %zu)", child, m_count);
 					continue;
 				}
-
-				// Children are all finished, so closure(idx) is the union over each
-				// prerequisite p of closure(p) plus p itself.
-				for (const auto prereqIndex : prereqs)
+				if (mark[child] == Mark::White)
 				{
-					if (prereqIndex >= m_count)
-					{
-						continue;
-					}
-					orRowInto(idx, prereqIndex);
-					setBit(idx, prereqIndex);
+					mark[child] = Mark::Grey;
+					stack.push_back({child, 0});
 				}
-				mark[idx] = Mark::Black;
-				stack.pop_back();
+				continue;
 			}
+
+			// Children are all finished, so closure(idx) is the union over each
+			// prerequisite p of closure(p) plus p itself.
+			for (const auto prereqIndex : prereqs)
+			{
+				if (prereqIndex >= m_count)
+				{
+					continue;
+				}
+				orRowInto(idx, prereqIndex);
+				setBit(idx, prereqIndex);
+			}
+			mark[idx] = Mark::Black;
+			stack.pop_back();
 		}
 	}
+}
 
-	bool isPrereq(size_t maybePrereq, size_t of) const
-	{
-		if (maybePrereq >= m_count || of >= m_count || maybePrereq == of)
-		{
-			return false;
-		}
-		return ((m_bits[of * m_words + (maybePrereq >> 6)] >> (maybePrereq & 63)) & 1u) != 0;
-	}
+const std::unordered_map<WzString, std::vector<size_t>>& getResearchCategories()
+{
+	return resCategories;
+}
 
-private:
-	void setBit(size_t row, size_t bit)
-	{
-		m_bits[row * m_words + (bit >> 6)] |= (uint64_t(1) << (bit & 63));
-	}
-	void orRowInto(size_t dstRow, size_t srcRow)
-	{
-		const uint64_t* src = &m_bits[srcRow * m_words];
-		uint64_t* dst = &m_bits[dstRow * m_words];
-		for (size_t w = 0; w < m_words; ++w)
-		{
-			dst[w] |= src[w];
-		}
-	}
-
-	size_t m_count;
-	size_t m_words;
-	std::vector<uint64_t> m_bits;
-};
-
-// Validate that a research category's members form a single linear chain under
-// the transitive prerequisite order and, if so, produce them in chain order.
-//
-// For each member m, count how many other members of the same category are
-// transitive prerequisites of m (its "down-count").
-//
-//   - For a chain x0 < x1 < ... < x(n-1), downCount(xk) is exactly k.
-//   - Conversely, if the down-counts are a permutation of 0..n-1 the members must
-//     form a chain: y < x implies down(y) is a proper subset of down(x) which also
-//     contains y, hence downCount(y) < downCount(x). So the member with count k
-//     has exactly the members with counts 0..k-1 below it, which by induction
-//     gives x0 < x1 < ... < x(n-1).
-//
-// The down-counts therefore decide validity and give each member's position at
-// the same time, which is why the order is written out directly rather than
-// sorted. Note that the prerequisite relation is only a partial order, so it must
-// never be used as a comparator for std::sort or std::stable_sort. Those require
-// a strict weak ordering, meaning incomparability has to be transitive, and it is
-// not. Ex. given {A < C, B < D, C < D}, A and B are incomparable and B and C are
-// incomparable, yet A < C.
-static bool computeCategoryChainOrder(const WzString& categoryName, const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut)
+// See researchprereq.h for the down-count method and why the order is produced
+// directly rather than sorted.
+bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut)
 {
 	const size_t n = members.size();
+	orderedOut.clear();
+	if (downCountsOut)
+	{
+		downCountsOut->clear();
+	}
 	if (n == 0)
 	{
-		debug(LOG_ERROR, "Research category \"%s\" has no members", categoryName.toUtf8().c_str());
 		return false;
 	}
 
@@ -392,33 +361,48 @@ static bool computeCategoryChainOrder(const WzString& categoryName, const std::v
 			}
 		}
 	}
+	if (downCountsOut)
+	{
+		*downCountsOut = downCount;
+	}
 
 	orderedOut.assign(n, SIZE_MAX);
-	bool valid = true;
 	for (size_t a = 0; a < n; ++a)
 	{
 		const size_t slot = downCount[a];
 		if (slot >= n || orderedOut[slot] != SIZE_MAX)
 		{
 			// A duplicate or out-of-range position means this is not a linear chain
-			valid = false;
-			break;
+			orderedOut.clear();
+			return false;
 		}
 		orderedOut[slot] = members[a];
 	}
 
-	if (!valid)
+	return true;
+}
+
+// Chain-order a category's members, reporting what is wrong when they are not a chain
+static bool computeCategoryChainOrder(const WzString& categoryName, const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut)
+{
+	if (members.empty())
 	{
-		debug(LOG_ERROR, "Research category \"%s\" is not a single linear progression. Its %zu topics must form an unbranched prerequisite chain. Position of each topic within the category (duplicates indicate the branch):", categoryName.toUtf8().c_str(), n);
-		for (size_t a = 0; a < n; ++a)
-		{
-			debug(LOG_ERROR, "\t[%zu] %s", downCount[a], asResearch[members[a]].id.toUtf8().c_str());
-		}
-		orderedOut.clear();
+		debug(LOG_ERROR, "Research category \"%s\" has no members", categoryName.toUtf8().c_str());
 		return false;
 	}
 
-	return true;
+	std::vector<size_t> downCount;
+	if (computeResearchChainOrder(members, closure, orderedOut, &downCount))
+	{
+		return true;
+	}
+
+	debug(LOG_ERROR, "Research category \"%s\" is not a single linear progression. Its %zu topics must form an unbranched prerequisite chain. Position of each topic within the category (duplicates indicate the branch):", categoryName.toUtf8().c_str(), members.size());
+	for (size_t a = 0; a < members.size(); ++a)
+	{
+		debug(LOG_ERROR, "\t[%zu] %s", downCount[a], asResearch[members[a]].id.toUtf8().c_str());
+	}
+	return false;
 }
 
 static optional<ResearchUpgradeCalculationMode> resCalcModeStringToValue(const WzString& calcModeStr)
