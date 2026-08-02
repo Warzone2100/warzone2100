@@ -135,6 +135,21 @@ void PopoverWidget::open(const std::shared_ptr<WIDGET>& parent)
 			newRootFrm->setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
 				return false; // effectively: make this (and all of its children) unclickable
 			});
+			// It takes no events of its own, so it has no business taking the
+			// keyboard from the screens it is floating over either
+			newRootFrm->swallowsInput = false;
+		}
+		else if (popoverWidget->style == Style::MouseInteractive)
+		{
+			// findMouseTargetRecursive tries the children before it looks at the
+			// form itself, so the contents stay clickable while a click anywhere
+			// else falls through to the screen underneath
+			newRootFrm->setTransparentToMouse(true);
+			newRootFrm->swallowsInput = false;
+			// Nothing outside can be clicked here, and Esc belongs to whoever
+			// opened this rather than to a form covering the whole screen
+			newRootFrm->onClickedFunc = nullptr;
+			newRootFrm->onCancelPressed = nullptr;
 		}
 		psOverlayScreen->psForm->attach(newRootFrm);
 
