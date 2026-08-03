@@ -110,6 +110,10 @@ void PopoverWidget::open(const std::shared_ptr<WIDGET>& parent)
 
 		auto lockedScreen = (strongParent) ? strongParent->screenPointer.lock() : nullptr;
 		ASSERT(lockedScreen != nullptr, "The parent does not have an associated screen pointer?");
+		if (lockedScreen == nullptr)
+		{
+			return;
+		}
 
 		auto psOverlayScreen = W_SCREEN::make();
 		psOverlayScreen->psForm->hide();
