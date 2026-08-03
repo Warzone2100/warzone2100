@@ -1282,6 +1282,21 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 }
 
 
+// True when two droids in plain transit are headed the same way, so they may
+// brush past each other on a reduced footprint. Both must be mid-move on a
+// bare move action - anything stopped, targeting or firing keeps the full
+// radius, so softened collision cannot pack units into shared space.
+static bool moveSoftPass(const DROID *self, const DROID *other)
+{
+	if (self->action != DACTION_MOVE || other->action != DACTION_MOVE
+	    || self->sMove.Status == MOVEINACTIVE || other->sMove.Status == MOVEINACTIVE)
+	{
+		return false;
+	}
+	const int32_t diff = static_cast<int16_t>(other->sMove.moveDir - self->sMove.moveDir);
+	return abs(diff) < DEG(60);
+}
+
 // see if a droid has run into another droid
 // Only consider stationery droids
 static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
@@ -1347,6 +1362,14 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 
 		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
+		if (pathfindingSoftCollisionEnabled())
+		{
+			const bool allied = psObj->player == psDroid->player || aiCheckAlliances(psObj->player, psDroid->player);
+			if (allied && moveSoftPass(psDroid, static_cast<const DROID *>(psObj)))
+			{
+				rad /= 2;
+			}
+		}
 		radSq = rad * rad;
 
 		xdiff = psDroid->pos.x + spmx - psObj->pos.x;
@@ -1403,7 +1426,9 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				{
 					DROID *psShuffleDroid = (DROID *)psObst;
 
-					if (aiCheckAlliances(psObst->player, psDroid->player)
+					const bool sameSide = psObst->player == psDroid->player || aiCheckAlliances(psObst->player, psDroid->player);
+
+					if (sameSide
 					    && psShuffleDroid->action != DACTION_WAITDURINGREARM
 					    && psShuffleDroid->sMove.Status == MOVEINACTIVE)
 					{
