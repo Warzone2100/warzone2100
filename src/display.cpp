@@ -1830,7 +1830,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		for (DROID* psCurr : gameWorld.objects.droids[selectedPlayer])
 		{
 			//must be indirect weapon droid or VTOL weapon droid
-			if ((psCurr->droidType == DROID_WEAPON) &&
+			if ((psCurr->droidType == DROID_WEAPON || psCurr->droidType == DROID_CYBORG || psCurr->droidType == DROID_CYBORG_SUPER) &&
 			    (psCurr->selected) &&
 			    (psCurr->asWeaps[0].nStat > 0) &&
 			    ((!proj_Direct(psCurr->getWeaponStats(0))) ||
@@ -2719,6 +2719,8 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 		switch (psDominant->droidType)
 		{
 		case DROID_WEAPON:
+		case DROID_CYBORG:
+		case DROID_CYBORG_SUPER:
 			if (proj_Direct(psDominant->getWeaponStats(0)))
 			{
 				selectionClass = SC_DROID_DIRECT;
@@ -2730,10 +2732,6 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 			break;
 
 		case DROID_PERSON:
-			selectionClass = SC_DROID_DIRECT;
-			break;
-		case DROID_CYBORG:
-		case DROID_CYBORG_SUPER:
 			selectionClass = SC_DROID_DIRECT;
 			break;
 		case DROID_TRANSPORTER:
