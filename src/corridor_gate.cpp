@@ -900,6 +900,20 @@ void corridorGateUpdate()
 	std::vector<int32_t> maxRadBwd(n, 0);
 	std::vector<uint8_t> stalledFwd(n, 0);            ///< per chain, this direction's flow is stuck, not draining
 	std::vector<uint8_t> stalledBwd(n, 0);
+	// Corridor-local claims for the route-shaping configuration: contest and
+	// direction scoped to the one passage a droid actually transits, so a
+	// queue at one corridor of a chain does not hold entrants of another
+	// across open ground. Presence propagates physically instead, opposing
+	// units near a shared pocket sit in both corridors' capture zones, so
+	// pocket chains still meter, while disjoint corridors flow concurrently.
+	std::vector<uint8_t> cHasFwd(n, 0);
+	std::vector<uint8_t> cHasBwd(n, 0);
+	std::vector<int32_t> cMaxRadFwd(n, 0);
+	std::vector<int32_t> cMaxRadBwd(n, 0);
+	std::vector<uint32_t> cLowestId(n, UINT32_MAX);
+	std::vector<int8_t>  cLowestIdDir(n, 0);
+	std::vector<uint32_t> cLowestInsideId(n, UINT32_MAX);
+	std::vector<int8_t>  cLowestInsideDir(n, 0);
 	g_useLoFwd.assign(n, INT32_MAX);
 	g_useHiFwd.assign(n, INT32_MIN);
 	g_useLoBwd.assign(n, INT32_MAX);
@@ -963,6 +977,43 @@ void corridorGateUpdate()
 			const size_t chain = static_cast<size_t>(g_chainId[c]);
 			const int chainDir = q.dir * g_chainSign[c];
 			(chainDir > 0 ? hasFwd[chain] : hasBwd[chain]) = 1;
+			(q.dir > 0 ? cHasFwd : cHasBwd)[c] = 1;
+			{
+				int32_t &crad = (q.dir > 0 ? cMaxRadFwd : cMaxRadBwd)[c];
+				crad = std::max(crad, moveObjRadius(psDroid));
+				if (psDroid->id < cLowestId[c])
+				{
+					cLowestId[c] = psDroid->id;
+					cLowestIdDir[c] = static_cast<int8_t>(q.dir);
+				}
+				if (q.relation == INSIDE && psDroid->id < cLowestInsideId[c])
+				{
+					cLowestInsideId[c] = psDroid->id;
+					cLowestInsideDir[c] = static_cast<int8_t>(q.dir);
+				}
+			}
+			// The claim also reaches chain siblings the droid physically
+			// stands near, so opposing traffic just across a shared pocket
+			// still meters the next member, while members separated by real
+			// ground stay independent until the traffic actually closes in.
+			for (size_t c2 = 0; c2 < n; ++c2)
+			{
+				if (c2 == c || g_chainId[c2] != g_chainId[c])
+				{
+					continue;
+				}
+				const Corridor &sib = cmap->corridors[c2];
+				const int64_t reach = static_cast<int64_t>(APPROACH_RADIUS) * APPROACH_RADIUS;
+				if (distSqToFwd(psDroid->pos.xy(), sib.mouthA) > reach
+				    && distSqToFwd(psDroid->pos.xy(), sib.mouthB) > reach)
+				{
+					continue;
+				}
+				const int8_t sibDir = static_cast<int8_t>(chainDir * g_chainSign[c2]);
+				(sibDir > 0 ? cHasFwd : cHasBwd)[c2] = 1;
+				int32_t &srad = (sibDir > 0 ? cMaxRadFwd : cMaxRadBwd)[c2];
+				srad = std::max(srad, moveObjRadius(psDroid));
+			}
 			{
 				int coverLo, coverHi;
 				routeDir(psDroid, cmap->corridors[c], nullptr, &coverLo, &coverHi);
@@ -1057,10 +1108,19 @@ void corridorGateUpdate()
 	for (size_t c = 0; c < n; ++c)
 	{
 		const size_t chain = static_cast<size_t>(g_chainId[c]);
-		g_contested[c] = (hasFwd[chain] && hasBwd[chain]) ? 1 : 0;
-		const int8_t chainActive = lowestInsideId[chain] != UINT32_MAX
-		                           ? lowestInsideDir[chain] : lowestIdDir[chain];
-		g_activeDir[c] = static_cast<int8_t>(chainActive * g_chainSign[c]);
+		if (pathfindingDirectionalBiasEnabled())
+		{
+			g_contested[c] = (cHasFwd[c] && cHasBwd[c]) ? 1 : 0;
+			g_activeDir[c] = cLowestInsideId[c] != UINT32_MAX
+			                 ? cLowestInsideDir[c] : cLowestIdDir[c];
+		}
+		else
+		{
+			g_contested[c] = (hasFwd[chain] && hasBwd[chain]) ? 1 : 0;
+			const int8_t chainActive = lowestInsideId[chain] != UINT32_MAX
+			                           ? lowestInsideDir[chain] : lowestIdDir[chain];
+			g_activeDir[c] = static_cast<int8_t>(chainActive * g_chainSign[c]);
+		}
 	}
 
 	// Lane handedness per corridor: keep left only when at least one direction
@@ -1167,10 +1227,18 @@ void corridorGateUpdate()
 		// inside, rather than feeding a column against it.
 		const size_t chain = static_cast<size_t>(g_chainId[c]);
 		const bool fwdSide = dir * g_chainSign[c] > 0;
-		const int32_t fitNeed = maxRadFwd[chain] + maxRadBwd[chain] + PASS_MARGIN;
-		const int32_t oppOccWidth = (fwdSide ? occWidthBwd : occWidthFwd)[chain];
+		int32_t fitNeed = maxRadFwd[chain] + maxRadBwd[chain] + PASS_MARGIN;
+		int32_t oppOccWidth = (fwdSide ? occWidthBwd : occWidthFwd)[chain];
+		bool oppStalled = (fwdSide ? stalledBwd : stalledFwd)[chain] != 0;
+		if (pathfindingDirectionalBiasEnabled())
+		{
+			fitNeed = cMaxRadFwd[c] + cMaxRadBwd[c] + PASS_MARGIN;
+			const bool oppInside = (dir > 0 ? g_cInsideBwd : g_cInsideFwd)[c] > 0;
+			oppOccWidth = oppInside ? cor.minWidth : INT32_MAX;
+			oppStalled = (dir > 0 ? headBwd : headFwd)[c].stalled != 0;
+		}
 		const bool waiting = oppOccWidth < fitNeed
-		                     || (fwdSide ? stalledBwd : stalledFwd)[chain]
+		                     || oppStalled
 		                     || (cor.minWidth < fitNeed
 		                         && g_activeDir[c] != 0 && g_activeDir[c] != dir);
 		const int32_t base = waiting ? -HOLD_STANDOFF : 0;
