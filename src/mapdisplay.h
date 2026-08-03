@@ -21,6 +21,15 @@
 #ifndef __INCLUDED_SRC_MAPDISPLAY_H__
 #define __INCLUDED_SRC_MAPDISPLAY_H__
 
+// Draw a research topic's model centered on the given point, at the fixed scales
+// the intelligence screen's 238x168 view is built around.
 void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY, bool rotate = true);
+
+// The same, fitted to a square of the given size by normalizing on the model's
+// own radius. Those fixed scales do not survive being shrunk uniformly, since
+// they are per type rather than per model: a propulsion model overflows a small
+// box while an engine upgrade nearly disappears in it. A model is drawn in its
+// own projection and cannot be clipped, so overflow spills out of the caller.
+void renderResearchFittedToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY, UDWORD boxSize, bool rotate = true);
 
 #endif // __INCLUDED_SRC_MAPDISPLAY_H__
