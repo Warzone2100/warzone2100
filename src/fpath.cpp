@@ -723,6 +723,11 @@ bool pathfindingFlowCostEnabled()
 	return (game.pathfindingBackend & PF_FLOW_COST) != 0;
 }
 
+bool pathfindingSoftCollisionEnabled()
+{
+	return (game.pathfindingBackend & PF_SOFT_COLLISION) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;

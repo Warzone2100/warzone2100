@@ -65,6 +65,7 @@ enum PathfindingFeature : uint8_t
 	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping after the search
 	PF_CORRIDOR_LANES    = 1 << 1,   ///< steer into lanes through detected corridors
 	PF_FLOW_COST         = 1 << 2,   ///< price tiles held by opposing-facing traffic in the search
+	PF_SOFT_COLLISION    = 1 << 3,   ///< same-heading transiting allies collide on a smaller footprint
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -75,6 +76,8 @@ bool pathfindingCorridorLanesEnabled();
 bool pathfindingDirectionalBiasEnabled();
 /// True if the search should price tiles held by opposing-facing traffic.
 bool pathfindingFlowCostEnabled();
+/// True if same-heading transiting allies should collide on a smaller footprint.
+bool pathfindingSoftCollisionEnabled();
 
 class IPathfindingBackend
 {
