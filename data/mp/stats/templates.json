@@ -289,7 +289,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "ASPOTTER",
 		"name": "*SPOTTER*",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-HPV"
@@ -739,7 +739,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-A-T",
 		"name": "Super Scourge Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-A-T"
@@ -750,7 +750,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-Acannon",
 		"name": "Super Auto-Cannon Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-Acannon"
@@ -761,7 +761,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-HPV",
 		"name": "Super HVC Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-HPV"
@@ -772,7 +772,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-Mcannon",
 		"name": "Super Heavy-Gunner Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-Mcannon"
@@ -783,7 +783,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-PulseLsr",
 		"name": "Super Pulse Laser Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-PulseLsr"
@@ -794,7 +794,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-RailGunner",
 		"name": "Super Rail-Gunner Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-RailGunner"
@@ -805,7 +805,7 @@
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-TK",
 		"name": "Super Tank-Killer Cyborg",
-		"propulsion": "CyborgLegs",
+		"propulsion": "CyborgLegsSuper",
 		"type": "CYBORG_SUPER",
 		"weapons": [
 			"Cyb-Hvywpn-TK"
