@@ -666,7 +666,7 @@ unsigned int selDroidSelection(WorldObjectState& objState, unsigned int player, 
 			retVal = selSelectUnitsIf(objState, player, selCombatLandMildlyOrNotDamaged, bOnScreen);
 			break;
 		case DST_CYBORG_SUPER:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LEGGED_SUPER, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_LEGGED_SUPER, bOnScreen);
 			break;
 		default:
 			ASSERT(false, "Invalid selection type");
