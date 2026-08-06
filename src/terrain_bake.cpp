@@ -166,9 +166,9 @@ namespace
 		float maxErr = 0.f;
 		float maxErrExpected = 0.f, maxErrDecoded = 0.f;
 		int maxErrGx = 0, maxErrGy = 0;
-		for (int gy = 0; gy < bakedTexHeight; gy += 37)
+		for (int gy = 0; gy < bakedTexHeight; gy += 37) // prime stride, avoids resonating with any periodic structure in the bake
 		{
-			for (int gx = 0; gx < bakedTexWidth; gx += 41)
+			for (int gx = 0; gx < bakedTexWidth; gx += 41) // a different prime, so sampled columns never line up with the rows
 			{
 				const float decoded = texels[static_cast<size_t>(gy) * bakedTexWidth + gx] / HEIGHT_SCALE - HEIGHT_BIAS;
 				const float expected = terrainSurface::heightAt(mapState, gx * BAKE_STEP, gy * BAKE_STEP, terrainSurface::HeightMode::Ground);

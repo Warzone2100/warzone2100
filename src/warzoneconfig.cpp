@@ -36,6 +36,8 @@
 #include "radar.h"
 #include "activity.h"
 
+#include <algorithm>
+
 #define MAX_REPLAY_FILES 36
 constexpr int MAX_OLD_LOGS = 50;
 
@@ -895,7 +897,7 @@ void war_setRenderResolutionPercent(uint32_t percent)
 	if (percent != 0 && (percent < 10 || percent > 100))
 	{
 		debug(LOG_INFO, "Render resolution %" PRIu32 "%% is out of range (10-100), clamping", percent);
-		percent = std::min<uint32_t>(std::max<uint32_t>(percent, 10), 100);
+		percent = std::clamp<uint32_t>(percent, 10, 100);
 	}
 	warGlobs.renderResolutionPercent = percent;
 }
@@ -917,7 +919,7 @@ int war_getUpscalingSharpness()
 
 void war_setUpscalingSharpness(int hundredthsOfStops)
 {
-	warGlobs.upscalingSharpness = std::min(std::max(hundredthsOfStops, 0), 200);
+	warGlobs.upscalingSharpness = std::clamp(hundredthsOfStops, 0, 200);
 }
 
 SMAA_MODE war_getSmaaMode()

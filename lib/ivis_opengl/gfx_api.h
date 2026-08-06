@@ -506,7 +506,7 @@ namespace gfx_api
 		/// and then rebuild their scene targets to match.
 		virtual bool setSceneRenderScale(uint32_t scalePercent)
 		{
-			_sceneRenderScalePercent = std::min(std::max(scalePercent, minSceneRenderScalePercent), maxSceneRenderScalePercent);
+			_sceneRenderScalePercent = std::clamp(scalePercent, minSceneRenderScalePercent, maxSceneRenderScalePercent);
 			return true;
 		}
 		static constexpr float minSceneRenderFraction = 0.5f;
@@ -517,7 +517,7 @@ namespace gfx_api
 		float getSceneRenderFraction() const { return _sceneRenderFraction; }
 		void setSceneRenderFraction(float fraction)
 		{
-			_sceneRenderFraction = std::min(std::max(fraction, minSceneRenderFraction), 1.f);
+			_sceneRenderFraction = std::clamp(fraction, minSceneRenderFraction, 1.f);
 		}
 		/// Marks dynamic resolution active. Backend overrides keep the FSR1 upscale
 		/// chain and its intermediate surface alive even while the scene targets
