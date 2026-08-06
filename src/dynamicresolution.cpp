@@ -160,7 +160,7 @@ void dynamicResolutionUpdate()
 		{
 			newFraction += DRS_FRACTION_STEP;
 		}
-		newFraction = std::min(std::max(newFraction, gfx_api::context::minSceneRenderFraction), 1.f);
+		newFraction = std::clamp(newFraction, gfx_api::context::minSceneRenderFraction, 1.f);
 		if (newFraction != drsState.fraction)
 		{
 			drsState.fraction = newFraction;

@@ -114,20 +114,17 @@ void CachedRenderGraph::ensureBuilt(const RenderTopologySnapshot& snapshot)
 	_cachedMaterializeHash = materializeHash;
 }
 
-void CachedRenderGraph::execute()
+// Dynamic resolution: the viewports of the scene pass and the scene-sized
+// SMAA passes track the per frame render fraction at execute time, so
+// fraction changes never rematerialize the graph (the rewrite is idempotent
+// at a fraction of 1). Execution reads the compiled pass description copies,
+// not the materialized descriptions, so the rewrite must reach both.
+static void applySceneFractionViewports(std::vector<RenderPassDesc>& passes, PassGraphCompileResult& compileResult)
 {
-	if (_passes.empty())
-	{
-		return;
-	}
 	auto& ctx = gfx_api::context::get();
-	// Dynamic resolution: the viewports of the scene pass and the scene-sized
-	// SMAA passes track the per frame render fraction here, at execute time,
-	// so fraction changes never rematerialize the graph (the value is
-	// idempotent at a fraction of 1).
 	const auto sceneDims = ctx.getSceneRenderTargetDimensions();
 	const bool smaaIntermediate = ctx.getPipelineSurface(PipelineSurfaceId::SmaaColor) != nullptr;
-	auto applySceneFractionViewport = [&](RenderPassDesc& pass) {
+	auto applyToPass = [&](RenderPassDesc& pass) {
 		switch (pass.passId)
 		{
 		case PassId::ScenePass:
@@ -147,17 +144,24 @@ void CachedRenderGraph::execute()
 			break;
 		}
 	};
-	for (auto& pass : _passes)
+	for (auto& pass : passes)
 	{
-		applySceneFractionViewport(pass);
+		applyToPass(pass);
 	}
-	// execution reads the compiled pass description copies, not the
-	// materialized descriptions, so the rewrite must reach both
-	for (auto& compiled : _compileResult.passes)
+	for (auto& compiled : compileResult.passes)
 	{
-		applySceneFractionViewport(compiled.desc);
+		applyToPass(compiled.desc);
 	}
-	ctx.executeCompiledRenderGraph(_passes, _compileResult);
+}
+
+void CachedRenderGraph::execute()
+{
+	if (_passes.empty())
+	{
+		return;
+	}
+	applySceneFractionViewports(_passes, _compileResult);
+	gfx_api::context::get().executeCompiledRenderGraph(_passes, _compileResult);
 }
 
 } // namespace gfx_api

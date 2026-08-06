@@ -89,7 +89,7 @@ static float computeCornerSharpness(const WorldMapState& mapState, int x, int y)
 	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x, y + 1, HeightMode::Surface) - h));
 
 	float s = (maxDelta - SHARPNESS_DELTA_SMOOTH) / (SHARPNESS_DELTA_SHARP - SHARPNESS_DELTA_SMOOTH);
-	s = std::min(1.f, std::max(0.f, s));
+	s = std::clamp(s, 0.f, 1.f);
 	return s * s * (3.f - 2.f * s); // smoothstep
 }
 
@@ -252,7 +252,7 @@ static float cliffFilletRadius()
 		float r = CLIFF_FILLET_RADIUS;
 		if (const char* env = getenv("WZ_TERRAIN_CLIFF_FILLET"))
 		{
-			r = std::min(64.f, std::max(0.f, static_cast<float>(atof(env))));
+			r = std::clamp(static_cast<float>(atof(env)), 0.f, 64.f);
 		}
 		return r;
 	}();
@@ -359,7 +359,7 @@ static float shoreFilletBand()
 		float r = SHORE_FILLET_BAND;
 		if (const char* env = getenv("WZ_TERRAIN_SHORE_FILLET"))
 		{
-			r = std::min(64.f, std::max(0.f, static_cast<float>(atof(env))));
+			r = std::clamp(static_cast<float>(atof(env)), 0.f, 64.f);
 		}
 		return r;
 	}();
@@ -514,7 +514,7 @@ static float cliffOutlineRoundingWorld()
 		float tiles = CLIFF_OUTLINE_ROUNDING_TILES;
 		if (const char* env = getenv("WZ_TERRAIN_CLIFF_ROUND"))
 		{
-			tiles = std::min(0.45f, std::max(0.f, static_cast<float>(atof(env))));
+			tiles = std::clamp(static_cast<float>(atof(env)), 0.f, 0.45f);
 		}
 		return tiles * static_cast<float>(TILE_UNITS);
 	}();
@@ -542,12 +542,15 @@ static float shoreOutlineRoundingWorld()
 		float tiles = SHORE_OUTLINE_ROUNDING_TILES;
 		if (const char* env = getenv("WZ_TERRAIN_SHORE_ROUND"))
 		{
-			tiles = std::min(0.45f, std::max(0.f, static_cast<float>(atof(env))));
+			tiles = std::clamp(static_cast<float>(atof(env)), 0.f, 0.45f);
 		}
 		return tiles * static_cast<float>(TILE_UNITS);
 	}();
 	return value;
 }
+
+/// 1 / sqrt(2), scales a unit-component diagonal down to unit length
+static constexpr float INV_SQRT2 = 0.70710678f;
 
 /// The minority-diagonal corner cut shared by cliff and shoreline outline
 /// rounding: at a corner where exactly 1 (convex) or 3 (concave) of the 4
@@ -565,7 +568,7 @@ static Vector2f outlineCornerCut(bool c00, bool c10, bool c01, bool c11, float m
 	else if (c10 == minority) { dir = Vector2f( 1.f, -1.f); }
 	else if (c01 == minority) { dir = Vector2f(-1.f,  1.f); }
 	else                      { dir = Vector2f( 1.f,  1.f); }
-	return dir * (magnitudeWorld * 0.70710678f); // normalize the diagonal
+	return dir * (magnitudeWorld * INV_SQRT2);
 }
 
 Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y)
