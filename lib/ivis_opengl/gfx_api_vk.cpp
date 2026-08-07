@@ -4850,7 +4850,11 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	// Setup dynamic Vulkan loader
+#if VK_HEADER_VERSION >= 357
+	vkDynLoader.init(static_cast<VkInstance>(inst), _vkGetInstanceProcAddr);
+#else
 	vkDynLoader.init(static_cast<VkInstance>(inst), _vkGetInstanceProcAddr, VK_NULL_HANDLE, nullptr);
+#endif
 
 	// NOTE: From this point on, vkDynLoader *must* be initialized!
 	ASSERT(vkDynLoader.vkGetInstanceProcAddr != nullptr, "vkDynLoader does not appear to be initialized");
