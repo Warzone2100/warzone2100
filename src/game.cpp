@@ -2248,6 +2248,10 @@ static bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json>
 static LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<nlohmann::json>&);
 static bool loadMainFile(const std::string &fileName);
 static bool loadMainFileFinal(const std::string &fileName);
+
+// 'time toggle' cheat state read from old saves, carried here until
+// loadMainFileFinal converts it into a paused mission timer
+static UDWORD legacyMissionCheatTime = 0;
 static bool writeMainFile(const std::string &fileName, SDWORD saveType);
 static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName, const WorldMapState& mapState);
@@ -2885,7 +2889,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 		if (saveGameVersion >= VERSION_31)
 		{
 			//mission data
-			mission.cheatTime = saveGameData.missionCheatTime;
+			legacyMissionCheatTime = saveGameData.missionCheatTime;
 		}
 
 		// skirmish saves.
@@ -4645,7 +4649,7 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 
 	if (saveGameVersion >= VERSION_31)
 	{
-		mission.cheatTime = saveGameData.missionCheatTime;
+		legacyMissionCheatTime = saveGameData.missionCheatTime;
 	}
 
 	droidInit();
@@ -4723,6 +4727,8 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 static bool loadMainFile(const std::string &fileName)
 {
 	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
+
+	legacyMissionCheatTime = 0;	// only nonzero if the .gam data loads a legacy value
 
 	if (save.contains("gameType"))
 	{
@@ -4854,6 +4860,48 @@ static bool loadMainFileFinal(const std::string &fileName)
 		game.techLevel = save.value("techLevel").toInt();
 	}
 
+	// note: applied here (and not in loadMainFile) because the level load resets the mission data
+	if (save.contains("missionTimerMode"))
+	{
+		int timerMode = save.value("missionTimerMode").toInt();
+		// a save from a newer version may hold a mode this build doesn't know; fall back to a countdown
+		mission.timerMode = (timerMode >= TIMER_COUNTDOWN && timerMode <= TIMER_NONE) ? (MISSION_TIMER_MODE)timerMode : TIMER_COUNTDOWN;
+	}
+	else
+	{
+		// older saves did not store the timer mode; challenges used a count-up (elapsed time) timer
+		mission.timerMode = challengeActive ? TIMER_COUNTUP : TIMER_COUNTDOWN;
+	}
+	// saves that predate TIMER_NONE encoded "no timer" as a countdown with a negative time
+	if (mission.timerMode == TIMER_COUNTDOWN && mission.time < 0)
+	{
+		mission.timerMode = TIMER_NONE;
+	}
+
+	// old saves stored the 'time toggle' cheat as a separate frozen clock;
+	// convert it into a paused timer holding the remaining time
+	if (legacyMissionCheatTime != 0)
+	{
+		// the cheat froze the clock by treating the cheat time as "now", so the
+		// frozen value is whatever the timer displayed at that instant
+		SDWORD elapsedAtFreeze = (SDWORD)(legacyMissionCheatTime - mission.startTime);
+		switch (mission.timerMode)
+		{
+		case TIMER_COUNTDOWN:
+			mission.time = MAX(mission.time - elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		case TIMER_COUNTUP:
+			mission.time = MAX(elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		default:
+			// TIMER_PAUSE / TIMER_NONE: nothing to convert
+			break;
+		}
+		legacyMissionCheatTime = 0;
+	}
+
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
 	{
@@ -4926,8 +4974,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("radarPermitted", radarPermitted);
 	save.setValue("allowDesign", allowDesign);
 	save.setValue("missionOffTime", mission.time);
+	save.setValue("missionTimerMode", (int)mission.timerMode);
 	save.setValue("missionETA", mission.ETA);
-	save.setValue("missionCheatTime", mission.cheatTime);
 	save.setVector2i("missionHomeLZ", Vector2i(mission.homeLZ_X, mission.homeLZ_Y));
 	save.setVector2i("missionPlayerPos", Vector2i(mission.playerX, mission.playerY));
 	save.setVector2i("missionScrollMin", Vector2i(mission.gameWorld.map.scroll.minX, mission.gameWorld.map.scroll.minY));
@@ -5121,7 +5169,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	//mission data
 	saveGame.missionOffTime =		mission.time;
 	saveGame.missionETA =			mission.ETA;
-	saveGame.missionCheatTime =		mission.cheatTime;
+	saveGame.missionCheatTime =		0;	// deprecated 'time toggle' cheat clock; field kept for format compatibility
 	saveGame.missionHomeLZ_X =		mission.homeLZ_X;
 	saveGame.missionHomeLZ_Y =		mission.homeLZ_Y;
 	saveGame.missionPlayerX =		mission.playerX;

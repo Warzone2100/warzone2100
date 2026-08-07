@@ -77,7 +77,6 @@
 #include "lib/sound/cdaudio.h"
 
 #include "clparse.h"
-#include "challenge.h"
 #include "configuration.h"
 #include "display.h"
 #include "display3d.h"
@@ -869,10 +868,6 @@ bool startGameAfterLevelLoad()
 	// set a flag for the trigger/event system to indicate initialisation is complete
 	gameInitialised = true;
 
-	if (challengeActive)
-	{
-		addMissionTimerInterface();
-	}
 	executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_START_LEVEL); });
 	screen_disableMapPreview();
 
@@ -1057,10 +1052,7 @@ static bool saveGameLoadAfter()
 	{
 		wzGrabMouse();
 	}
-	if (challengeActive)
-	{
-		addMissionTimerInterface();
-	}
+	addMissionTimerInterface();
 
 	// set a flag for the trigger/event system to indicate initialisation is complete
 	gameInitialised = true;
