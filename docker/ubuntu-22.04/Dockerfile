@@ -15,13 +15,13 @@ RUN apt-get -u update \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Vulkan SDK
-ENV VULKANSDK_SHA256 241e75b56c91c0d210ed07a7c638ec05a3e5b0e4c66ba9f0ba0f102d823ad6bf
-ADD "https://sdk.lunarg.com/sdk/download/1.4.328.1/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz?Human=true" "/tmp"
-RUN echo "$VULKANSDK_SHA256 /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz" | sha256sum -c \
+ENV VULKANSDK_SHA256 4b41e3b30e8aedaa5dac7c136561ab463eb316a25a54e2c6245f2c299ea1fb85
+ADD "https://sdk.lunarg.com/sdk/download/1.4.357.1/linux/vulkansdk-linux-x86_64-1.4.357.1.tar.xz?Human=true" "/tmp"
+RUN echo "$VULKANSDK_SHA256 /tmp/vulkansdk-linux-x86_64-1.4.357.1.tar.xz" | sha256sum -c \
  && mkdir /vulkan \
- && tar -C /vulkan -xf /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz \
- && rm /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz
-ENV VULKAN_SDK="/vulkan/1.4.328.1/x86_64"
+ && tar -C /vulkan -xf /tmp/vulkansdk-linux-x86_64-1.4.357.1.tar.xz \
+ && rm /tmp/vulkansdk-linux-x86_64-1.4.357.1.tar.xz
+ENV VULKAN_SDK="/vulkan/1.4.357.1/x86_64"
 ENV PATH="$PATH:$VULKAN_SDK/bin"
 
 # Download, build, & install SDL3 from source

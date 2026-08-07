@@ -78,21 +78,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/google/shaderc.git
-        tag: v2025.4
-        commit: 73743588fe9c39f2f1c780a087d94afac691a189
+        tag: v2026.3
+        commit: 2c8cae778eec0283b44acbe7ed1a386865d78799
       # Replicate the needed functionality of utils/git-sync-deps
       # To avoid having to break the build sandbox to download files
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        commit: 01e0577914a75a2569c846778c2f93aa8e6feddd # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 29981f65241605e08b0ede4cfeb999fe3b723c6a # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-headers
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        commit: 19042c8921f35f7bec56b9e5c96c5f5691588ca8 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: b707790a898e44038547df54580022fc1cf89c3d # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-tools
       - type: git
         url: https://github.com/KhronosGroup/glslang.git
-        commit: d213562e35573012b6348b2d584457c3704ac09b # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 168d452a4f460d24b588fed08477a81c44ee27a1 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/glslang
 
   - name: physfs
