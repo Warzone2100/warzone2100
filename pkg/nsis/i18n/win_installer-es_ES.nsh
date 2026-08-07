@@ -1,4 +1,4 @@
-${LangFileString} WZWelcomeText "Bienvenido al instalador de Warzon 2100!\r\n\r\nEste asistente le guiará a través de la instalación de Warzone 2100.\r\n\r\nSe recomienda que cierre todas las demás aplicaciones anted de continuar con esta instalación. Esto hará posible actualizar los archivos de sistema relevantes sin tener que reiniciar el equipo.\r\n\r\nWarzone 2100 es 100% gratis, programa completamente de código abierto\r\n\r\nHaga clic en Siguiente para continuar."
+${LangFileString} WZWelcomeText "Bienvenido al instalador de Warzone 2100!\r\n\r\nEste asistente le guiará a través de la instalación de Warzone 2100.\r\n\r\nSe recomienda que cierre todas las demás aplicaciones antes de continuar con esta instalación. Esto hará posible actualizar los archivos de sistema relevantes sin tener que reiniciar el equipo.\r\n\r\nWarzone 2100 es 100% gratis, programa completamente de código abierto\r\n\r\nHaga clic en Siguiente para continuar."
 
 ${LangFileString} WZWelcomeText_Portable "Bienvenido al instalador portátil de Warzone 2100! \r\n\r\nEste asistente le guiará a través de la instalación de la versión portátil de Warzone 2100.\r\n\r\nEsta instalación es totalmente independiente y puede desinstalar el programa en cualquier momento eliminado el directorio.\r\n\r\nWarzone 2100 es 100% gratis, programa de código abierto! \r\n\r\nHaga clic en Siguiente para continuar."
 
@@ -8,7 +8,7 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Hay una versión de 64-bit de Warzone 2100
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Esta es la versión de 64-bit de Warzone 2100.$\r$\nPor favor descargue la versión de 32-bit desde https://wz2100. et/ $\r$\nHaga clic en OK para salir de la instalación."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Esta es la versión ARM64 de Warzone 2100, y este dispositivo no tiene un procesador ARM64.$\r$\nPor favor visita https://wz2100.net/ para descargar la versión apropiada para su sistema (ejemplo: x64).$\r$\n¿Proceder con la instalación de ARM64 de todos modos?"
 
 ${LangFileString} WZ_GPL_NEXT "Siguiente"
 

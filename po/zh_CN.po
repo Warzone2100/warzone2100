@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-06-30 03:12\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1776,7 +1776,7 @@ msgid "Locate and rescue your units from the shot down transporter"
 msgstr "找到被击落的运输舰并从中营救你的部队"
 
 msgid "Destroy all enemy bases"
-msgstr ""
+msgstr "摧毁所有敌方基地"
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "在太多人被俘之前，从“集体”营救平民。"
@@ -2951,26 +2951,26 @@ msgid "System locale"
 msgstr "系统语系"
 
 msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
-msgstr ""
+msgstr "此主机已不允许加入某些主机提供商，VPN或代理。"
 
 msgid "Please try another room or disable any proxies / VPNs and try again."
-msgstr ""
+msgstr "请尝试另一个房间或禁用任何代理 / VPN，然后重试。"
 
 msgid "Game not found in lobby."
-msgstr ""
+msgstr "在大厅中找不到游戏。"
 
 msgid "The game may have already started, or the host may have disbanded the game lobby."
 msgstr "游戏可能已经开始，或者主机已经解散游戏大厅。"
 
 msgid "Error hosting game in lobby server"
-msgstr ""
+msgstr "在大厅服务器上托管游戏时出错"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
-msgstr ""
+msgstr "请确保端口 %d 可以接收传入连接。"
 
 msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
-msgstr ""
+msgstr "如果您正在使用路由器，配置它以启用 UPnP/NAT-PMP/PCP 或将端口转发到您的系统。"
 
 msgid "Failed to create port mapping"
 msgstr "创建端口映射失败"
@@ -2998,31 +2998,31 @@ msgid "Client failed to ack player index swap"
 msgstr "客户端未能确认玩家索引交换。"
 
 msgid "Game is listed in the lobby"
-msgstr ""
+msgstr "游戏在大厅中列出"
 
 msgid "Lobby GameId"
-msgstr ""
+msgstr "大厅游戏ID"
 
 msgid "Game not listed in the lobby."
-msgstr ""
+msgstr "游戏未在大厅中列出。"
 
 msgid "Error connecting to the lobby server."
-msgstr ""
+msgstr "连接到大厅服务器时出错。"
 
 msgid "Please check your internet connection, or wait a short while and try hosting again."
-msgstr ""
+msgstr "请检查您的互联网连接，或者稍后再尝试托管。"
 
 msgid "Your game will only be accessible via direct connection (or local LAN)."
-msgstr ""
+msgstr "您的游戏只能通过直接连接 (或本地LAN)。"
 
 msgid "Multiplayer lobby support unavailable. Please update your client."
-msgstr ""
+msgstr "多人大厅支持不可用。请更新您的客户端。"
 
 msgid "Game not listed in the lobby:"
-msgstr ""
+msgstr "游戏未在大厅中列出："
 
 msgid "Failed to create game listing. Check WZ logs."
-msgstr ""
+msgstr "创建游戏列表失败，检查日志。"
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "回放文件格式比此版本的 Warzone 2100 能够支持的更新。"
@@ -3105,16 +3105,16 @@ msgid "Tab Scroll right"
 msgstr "选项卡向右滚动"
 
 msgid "Please enter the text below"
-msgstr ""
+msgstr "请在下方输入文本"
 
 msgid "Enter the text"
-msgstr ""
+msgstr "输入文本"
 
 msgid "Please drag the slider to verify"
-msgstr ""
+msgstr "请拖动滑块以验证"
 
 msgid "Please drag the tile to verify"
-msgstr ""
+msgstr "请拖动磁贴以验证"
 
 msgid ".50-calibre heavy machinegun"
 msgstr "点 50 口径重机枪"
@@ -3300,7 +3300,7 @@ msgid "All rail guns upgraded automatically"
 msgstr "自动升级所有轨道炮"
 
 msgid "All Ripple Rockets upgraded automatically"
-msgstr ""
+msgstr "所有多管火箭已自动升级"
 
 msgid "All sensors upgraded automatically"
 msgstr "自动升级所有雷达"
@@ -3449,7 +3449,7 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "尾翼稳定脱壳穿甲弹"
 
 msgid "Armored bunker with Assault Gun"
-msgstr ""
+msgstr "装甲突击枪碉堡"
 
 msgid "Armored bunker with Flamer"
 msgstr "装甲火焰喷射器碉堡"
@@ -4834,22 +4834,22 @@ msgid "Hero and Special rank units are protected"
 msgstr "英雄和特种兵等级单位受保护"
 
 msgid "HESC Mortar Shells Mk2"
-msgstr ""
+msgstr "薄壳高爆迫击炮弹二型"
 
 msgid "HESC Mortar Shells Mk3"
-msgstr ""
+msgstr "薄壳高爆迫击炮弹三型"
 
 msgid "HESC Mortar Shells"
-msgstr ""
+msgstr "薄壳高爆迫击炮弹"
 
 msgid "HESCHC Mortar Shells Mk2"
-msgstr ""
+msgstr "大容量薄壳高爆迫击炮弹二型"
 
 msgid "HESCHC Mortar Shells Mk3"
-msgstr ""
+msgstr "大容量薄壳高爆迫击炮弹三型"
 
 msgid "HESCHC Mortar Shells"
-msgstr ""
+msgstr "大容量薄壳高爆迫击炮弹"
 
 msgid "HESH Rocket Warhead Mk2"
 msgstr "碎甲火箭弹头二型"
@@ -4900,10 +4900,10 @@ msgid "High explosive shaped charge missile"
 msgstr "高爆聚能装药导弹"
 
 msgid "High Explosive Soft Casing High Capacity Shells"
-msgstr ""
+msgstr "大容量薄壳高爆弹"
 
 msgid "High Explosive Soft Casing Shells"
-msgstr ""
+msgstr "薄壳高爆弹"
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "高强度热能装甲二型"
@@ -5200,7 +5200,7 @@ msgid "Increases Rail Gun ROF"
 msgstr "增加轨道炮系武器射速"
 
 msgid "Increases Ripple Rocket ROF"
-msgstr ""
+msgstr "增加多管火箭射速"
 
 msgid "Increases Rocket accuracy"
 msgstr "增加火箭命中率"
@@ -5648,10 +5648,10 @@ msgid "Mortar Damage"
 msgstr "迫击炮攻击力"
 
 msgid "Mortar Fast Loader Mk2"
-msgstr ""
+msgstr "迫击炮快速装载系统二型"
 
 msgid "Mortar Fast Loader Mk3"
-msgstr ""
+msgstr "迫击炮快速装载系统三型"
 
 msgid "Mortar Fast Loader"
 msgstr "迫击炮快速装载系统"
@@ -6744,7 +6744,7 @@ msgid "Target Acquisition Artillery Shells"
 msgstr "目标追踪炮弹"
 
 msgid "Target Acquisition Mortar Shells Mk2"
-msgstr ""
+msgstr "目标追踪迫击炮弹二型"
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "目标追踪迫击炮弹"
@@ -7488,13 +7488,13 @@ msgid "Connect directly to IP/hostname as a spectator"
 msgstr "直接连接到 IP /主机名作为旁观者"
 
 msgid "Connect to lobby game"
-msgstr ""
+msgstr "连接到大厅游戏"
 
 msgid "lobbyGameId"
-msgstr ""
+msgstr "大厅游戏ID"
 
 msgid "Connect to lobby game as a spectator"
-msgstr ""
+msgstr "作为旁观者连接到大厅游戏"
 
 msgid "Go directly to host screen"
 msgstr "直接转到主持游戏屏幕"
@@ -10585,7 +10585,7 @@ msgid "Error:"
 msgstr "错误："
 
 msgid "Message from Lobby:"
-msgstr ""
+msgstr "来自大厅的消息："
 
 msgid "Join Attempt Rejected"
 msgstr "加入尝试被拒绝"
@@ -10612,22 +10612,22 @@ msgid "Connection Error"
 msgstr "连接错误"
 
 msgid "Gathering connection details"
-msgstr ""
+msgstr "收集连接详情"
 
 msgid "Could Not Connect"
-msgstr ""
+msgstr "无法连接"
 
 msgid "Timeout"
-msgstr ""
+msgstr "超时"
 
 msgid "Error"
-msgstr ""
+msgstr "错误"
 
 msgid "The host has requested additional verification"
-msgstr ""
+msgstr "主机已请求额外验证"
 
 msgid "No supported connection details"
-msgstr ""
+msgstr "不支持的连接详细信息"
 
 msgid "No connections available"
 msgstr "无可用连接"
@@ -10636,10 +10636,10 @@ msgid "Synchronizing data with host ..."
 msgstr "正在与主机同步数据..."
 
 msgid "Waiting for lobby error resolution"
-msgstr ""
+msgstr "正在等待大厅错误解析"
 
 msgid "Waiting for join info"
-msgstr ""
+msgstr "等待加入信息"
 
 msgid "Waiting for correct join password"
 msgstr "等待正确的加入密码"
@@ -11062,34 +11062,34 @@ msgid "\"Classic\" campaign balance"
 msgstr "“经典”战役平衡"
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "南瓜"
 
 msgid "\"Pumpkin\" campaign balance"
-msgstr ""
+msgstr "“南瓜”战役平衡"
 
 msgid "About Balance Options"
-msgstr ""
+msgstr "关于平衡选项"
 
 msgid "Balance"
-msgstr ""
+msgstr "平衡"
 
 msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
-msgstr ""
+msgstr "《战地 2100》为原版战役提供了多套平衡性方案，以此还原该游戏漫长更新历程中截然不同的游玩体验。"
 
 msgid "The remastered campaign experience"
 msgstr "重制版战役体验"
 
 msgid "Increases the viability of weaponry and designs on a per mission basis."
-msgstr ""
+msgstr "按单场任务提升各类武器与设计的实用价值。"
 
 msgid "Stats of game versions ~2.x - 3.x."
-msgstr ""
+msgstr "采用 2.x 至 3.x 旧版游戏数值体系。"
 
 msgid "Unintentionally affected by game patches over the years."
-msgstr ""
+msgstr "多年来的游戏补丁对其产生了非预期改动。"
 
 msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
-msgstr ""
+msgstr "该套数值对应游戏 1.10 版本，最接近原作开发团队（南瓜工作室）当初设计的原始属性设定。"
 
 msgid "Remastered"
 msgstr "重制版"
@@ -11236,7 +11236,7 @@ msgid "Reset Keys to: Defaults"
 msgstr "重置按键为默认值"
 
 msgid "Only useful if Enable IPv6 is On."
-msgstr ""
+msgstr "只有在启用 IPv6 时才有用。"
 
 #, c-format
 msgid "%u minutes"
@@ -11260,25 +11260,25 @@ msgid "Default AI"
 msgstr "默认 AI"
 
 msgid "Lobby Options"
-msgstr ""
+msgstr "大厅选项"
 
 msgid "Enable IPv6"
-msgstr ""
+msgstr "启用 IPv6"
 
 msgid "Whether to list and try connecting via IPv6 (if available)."
-msgstr ""
+msgstr "是否列出并尝试通过 IPv6 连接(如果可用)。"
 
 msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
-msgstr ""
+msgstr "禁用 IPv6 连接与仅支持 IPv6 的对局列表。仅当你的设备存在 IPv6 网络连接故障时推荐开启此选项。"
 
 msgid "Enable IPv6. If your system supports it, this is the recommended option."
-msgstr ""
+msgstr "启用IPv6。如果您的系统支持它，这是推荐的选项。"
 
 msgid "Prefer IPv6 over IPv4"
-msgstr ""
+msgstr "IPv6 优先于 IPv4"
 
 msgid "Prefer connecting via IPv6 over IPv4 when a game is available via both."
-msgstr ""
+msgstr "当游戏可以通过IPv4连接时，请先通过 IPv6 连接。"
 
 msgid "Hosting Options"
 msgstr "主机选项"
@@ -11368,10 +11368,10 @@ msgid "Draw Shadows"
 msgstr "绘制阴影"
 
 msgid "Terrain Shadows"
-msgstr ""
+msgstr "地形阴影"
 
 msgid "Whether terrain casts shadows."
-msgstr ""
+msgstr "地形是否投影。"
 
 msgid "Shadow Resolution"
 msgstr "阴影分辨率"
@@ -11654,15 +11654,15 @@ msgid "Waiting Room"
 msgstr "等候室"
 
 msgid "Reset Lobby Address to Default"
-msgstr ""
+msgstr "重置大厅地址为默认"
 
 #, c-format
 msgid "Host Name: %s"
-msgstr ""
+msgstr "主机名: %s"
 
 #, c-format
 msgid "ID: %s"
-msgstr ""
+msgstr "ID： %s"
 
 msgid "FFA"
 msgstr "混战"
@@ -11698,35 +11698,35 @@ msgid "Spectate Game"
 msgstr "观看战局"
 
 msgid "Join as Player"
-msgstr ""
+msgstr "作为玩家加入"
 
 msgid "Join as Spectator"
-msgstr ""
+msgstr "作为旁观者加入"
 
 #, c-format
 msgid "Last IP: %s"
-msgstr ""
+msgstr "最后的 IP： %s"
 
 msgid "Clear Last IP"
-msgstr ""
+msgstr "清除最后一个IP"
 
 msgid "GameID or IP:port"
-msgstr ""
+msgstr "GameID 或 IP:端口"
 
 msgid "Join"
-msgstr ""
+msgstr "加入"
 
 msgid "There appears to be a game update available!"
 msgstr "有新更新可用"
 
 msgid "Error dispatching request"
-msgstr ""
+msgstr "发送请求出错"
 
 msgid "Failed to connect to lobby server"
 msgstr "无法连接到大厅服务器"
 
 msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
-msgstr ""
+msgstr "这个游戏仅限于IPv6，您已经在选项 > 默认值中禁用“启用 IPv6”选项。"
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "你的 Warzone 版本与这个游戏不兼容。"
@@ -11777,103 +11777,103 @@ msgid "Hide Modded Games"
 msgstr "隐藏加载模组的游戏"
 
 msgid "Hide IPv6-Only"
-msgstr ""
+msgstr "隐藏仅IPv6的游戏"
 
 msgid "Host Lobby Options"
-msgstr ""
+msgstr "主机大厅选项"
 
 msgid "Game must be listed in lobby to support this option."
-msgstr ""
+msgstr "游戏必须在大厅中列出才能支持此选项。"
 
 msgid "This option is not supported by the current lobby."
-msgstr ""
+msgstr "当前大厅不支持此选项。"
 
 msgid "Awaiting lobby information..."
-msgstr ""
+msgstr "等待大厅信息……"
 
 msgid "Slot Options"
-msgstr ""
+msgstr "槽位选项"
 
 msgid "Spectator Join"
-msgstr ""
+msgstr "旁观者加入"
 
 msgid "Locked"
-msgstr ""
+msgstr "已锁定"
 
 msgid "Allow Change"
-msgstr ""
+msgstr "允许更改"
 
 msgid "Position"
-msgstr ""
+msgstr "位置"
 
 msgid "Game Options"
-msgstr ""
+msgstr "游戏选项"
 
 msgid "Lobby Join Options"
-msgstr ""
+msgstr "大厅加入选项"
 
 msgid "Bot Protection"
-msgstr ""
+msgstr "机器人防护"
 
 msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
-msgstr ""
+msgstr "自动机器人或工具是否可以加入或收集主机连接信息(包括您的IP地址)。 如果您遇到不好的结点，垃圾邮件或其他滥用，您可能希望启用此选项。"
 
 msgid "Block Known Bots"
-msgstr ""
+msgstr "屏蔽已知机器人"
 
 msgid "Block known bots or automated tools."
-msgstr ""
+msgstr "屏蔽已知的机器人或自动工具。"
 
 msgid "Proxy / VPN Connections"
-msgstr ""
+msgstr "代理/VPN 连接"
 
 msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
-msgstr ""
+msgstr "代理服务器/虚拟网络隐藏了真正的连接源。可能会被玩家用来逃避禁令或隐藏他们的身份。"
 
 msgid "Block suspicious connections from proxies / VPNs."
-msgstr ""
+msgstr "屏蔽来自代理服务器/VPN的可疑连接。"
 
 msgid "(Recommended)"
-msgstr ""
+msgstr "(推荐)"
 
 msgid "Block All"
-msgstr ""
+msgstr "屏蔽全部"
 
 msgid "Block all connections from proxies / VPNs."
-msgstr ""
+msgstr "屏蔽所有来自代理/ VPN 的连接。"
 
 msgid "Block Suspicious"
-msgstr ""
+msgstr "屏蔽可疑连接"
 
 msgid "Hosting Provider IPs"
-msgstr ""
+msgstr "主机提供商 IP"
 
 msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
-msgstr ""
+msgstr "服务器托管提供商。可以通过自动工具、端口扫描仪或试图逃避禁令的玩家使用。"
 
 msgid "Block all connections from hosting provider IPs."
-msgstr ""
+msgstr "屏蔽所有来自主机服务提供商IP的连接。"
 
 msgid "Block suspicious connections from hosting provider IPs."
-msgstr ""
+msgstr "屏蔽来自主机提供商的可疑连接。"
 
 msgid "Lobby Join Bypass"
-msgstr ""
+msgstr "大厅加入旁路"
 
 msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
-msgstr ""
+msgstr "允许客户端绕过大厅，通过“IP:端口”直连的方式加入对局。（该功能可能让恶意玩家绕开大厅的反骚扰防护机制。）"
 
 msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
-msgstr ""
+msgstr "允许任意 IP 直连加入对局，此选项会绕开联机大厅的反恶意行为防护机制。"
 
 msgid "(Not Recommended)"
-msgstr ""
+msgstr "(不推荐)"
 
 msgid "Do not allow direct joins. Require joining through the lobby."
-msgstr ""
+msgstr "不允许直接加入，需要通过大厅加入。"
 
 msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
-msgstr ""
+msgstr "允许本地/局域网直接加入，需要其他人通过大厅加入。"
 
 msgid "Joined:"
 msgstr "已加入："

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-08-06 03:06\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1776,7 +1776,7 @@ msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Individua e salva le unità del trasportatore abbattuto"
 
 msgid "Destroy all enemy bases"
-msgstr ""
+msgstr "Distruggi tutte le basi nemiche"
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Salva i civili dal Collettivo prima che ne vengano catturati troppi"
@@ -2949,26 +2949,26 @@ msgid "System locale"
 msgstr "Lingua di sistema"
 
 msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
-msgstr ""
+msgstr "Questo host non consente l'accesso se si usano determinati servizi di hosting, VPN e/o server proxy."
 
 msgid "Please try another room or disable any proxies / VPNs and try again."
-msgstr ""
+msgstr "Prova da un'altra stanza o disattiva eventuali proxy / VPN e riprova."
 
 msgid "Game not found in lobby."
-msgstr ""
+msgstr "Partita non trovata nella lobby."
 
 msgid "The game may have already started, or the host may have disbanded the game lobby."
 msgstr "Il gioco potrebbe già essere stato avviato, oppure l'host potrebbe aver sciolto la lobby del gioco."
 
 msgid "Error hosting game in lobby server"
-msgstr ""
+msgstr "Errore durante la creazione della partita sul server della lobby"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
-msgstr ""
+msgstr "Assicurati che la porta %d possa ricevere connessioni in ingresso."
 
 msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
-msgstr ""
+msgstr "Se stai usando un router, configuralo per abilitare UPnP/NAT-PMP/PCP o per inoltrare la porta al tuo sistema."
 
 msgid "Failed to create port mapping"
 msgstr "Impossibile creare la mappatura porte"
@@ -2979,7 +2979,7 @@ msgstr "Configura manualmente il router/firewall per aprire la porta %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "La mappatura della porta ha aperto la porta esterna: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2996,31 +2996,31 @@ msgid "Client failed to ack player index swap"
 msgstr "Il client non ha potuto riconoscere il cambio d'indice del giocatore"
 
 msgid "Game is listed in the lobby"
-msgstr ""
+msgstr "La partita è elencata nella lobby"
 
 msgid "Lobby GameId"
-msgstr ""
+msgstr "ID partita nella lobby"
 
 msgid "Game not listed in the lobby."
-msgstr ""
+msgstr "Partita non elencata nella lobby."
 
 msgid "Error connecting to the lobby server."
-msgstr ""
+msgstr "Errore di connessione al server della lobby."
 
 msgid "Please check your internet connection, or wait a short while and try hosting again."
-msgstr ""
+msgstr "Verifica la tua connessione internet o attendi un momento e prova a creare nuovamente la partita."
 
 msgid "Your game will only be accessible via direct connection (or local LAN)."
-msgstr ""
+msgstr "La tua partita sarà accessibile solo tramite connessione diretta (o rete LAN locale)."
 
 msgid "Multiplayer lobby support unavailable. Please update your client."
-msgstr ""
+msgstr "Il supporto per la lobby multiplayer non è disponibile. Aggiorna il tuo client."
 
 msgid "Game not listed in the lobby:"
-msgstr ""
+msgstr "Partita non elencata nella lobby:"
 
 msgid "Failed to create game listing. Check WZ logs."
-msgstr ""
+msgstr "Impossibile creare l'elenco della partita. Controlla i log di WZ."
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Il formato del file del replay è più recente di quanto questa versione di Warzone 2100 possa supportare."
@@ -3103,16 +3103,16 @@ msgid "Tab Scroll right"
 msgstr "Scorri tabella a Destra"
 
 msgid "Please enter the text below"
-msgstr ""
+msgstr "Inserisci il testo in basso"
 
 msgid "Enter the text"
-msgstr ""
+msgstr "Inserisci il testo"
 
 msgid "Please drag the slider to verify"
-msgstr ""
+msgstr "Trascina il cursore per verificare"
 
 msgid "Please drag the tile to verify"
-msgstr ""
+msgstr "Trascina il riquadro per verificare"
 
 msgid ".50-calibre heavy machinegun"
 msgstr "Mitragliatrice pesante calibro .50"
@@ -3298,7 +3298,7 @@ msgid "All rail guns upgraded automatically"
 msgstr "Tutti i cannoni a rotaia sono stati aggiornati automaticamente"
 
 msgid "All Ripple Rockets upgraded automatically"
-msgstr ""
+msgstr "Tutti i Lanciarazzi a raffica sono stati automaticamente potenziati"
 
 msgid "All sensors upgraded automatically"
 msgstr "Tutti i sensori sono stati aggiornati automaticamente"
@@ -3447,7 +3447,7 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Proiettile perforante ad abbandono d'involucro con pinne stabilizzanti"
 
 msgid "Armored bunker with Assault Gun"
-msgstr ""
+msgstr "Bunker blindato con Cannone d'assalto"
 
 msgid "Armored bunker with Flamer"
 msgstr "Bunker corazzato con Lanciafiamme"
@@ -3537,7 +3537,7 @@ msgid "Armored strongpoint with Heavy Laser"
 msgstr "Posizione corazzato con Laser Pesante"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr ""
+msgstr "Postazione fortificata con Cannone a particelle"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Postazione corazzata con Lanciafiamme alla Plasmite"
@@ -3768,7 +3768,7 @@ msgid "Bomb damage +25%"
 msgstr "Danno delle Bombe +25%"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Danni da bomba"
 
 msgid "Bomb Upgrade"
 msgstr "Miglioramento delle bombe"
@@ -3795,7 +3795,7 @@ msgid "Buggy"
 msgstr "Buggy"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Strutture"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Diagnostica e sistemi di riparazione integrati"
@@ -3990,10 +3990,10 @@ msgid "Complete battlefield visibility"
 msgstr "Visibilità completa del campo di battaglia"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Miglioramento delle leghe composite AI Mk2"
 
 msgid "Composite Alloys Buff AI"
-msgstr ""
+msgstr "Miglioramento delle leghe composite AI"
 
 msgid "Composite Alloys Mk2"
 msgstr "Leghe composite Mk2"
