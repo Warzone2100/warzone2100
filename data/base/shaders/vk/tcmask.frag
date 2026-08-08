@@ -67,13 +67,23 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		// Complete replace normal with new value
-		N = normalFromMap.xzy * 2.0 - 1.0;
-		N.y = -N.y; // FIXME - to match WZ's light
-
-		// For object-space normal map
-		if (hasTangents == 0)
+		if (hasTangents != 0)
 		{
+			// Tangent-space normal map, in the conventional (T, B, N) basis.
+			// The compensating negation has to follow the basis: the normal
+			// component was index 1 under the old mat3(t, n, b) + .xzy pair,
+			// and is index 2 now.
+			N = normalFromMap.rgb * 2.0 - 1.0;
+			N.z = -N.z; // FIXME - to match WZ's light
+		}
+		else
+		{
+			// Object-space normal map. This path goes through NormalMatrix and
+			// never touches TangentSpaceMatrix, so the (T, N, B) -> (T, B, N)
+			// reorder does not cancel the .xzy swizzle here the way it does
+			// above - it has to stay, as it does in tcmask_instanced.frag.
+			N = normalFromMap.xzy * 2.0 - 1.0;
+			N.y = -N.y; // FIXME - to match WZ's light
 			N = (NormalMatrix * vec4(N, 0.0)).xyz;
 		}
 	}
