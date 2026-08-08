@@ -137,34 +137,38 @@ void ResearchController::clearData()
 	stats.clear();
 }
 
-void ResearchController::startResearch(RESEARCH &research)
+bool startResearchAt(STRUCTURE *facility, RESEARCH &research, uint32_t player)
 {
-	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
-
-	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid player: %" PRIu32 "", selectedPlayer);
-
-	auto facility = getHighlightedObject();
-
-	ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, facility);
+	ASSERT_OR_RETURN(false, facility->pStructureType->type == REF_RESEARCH, "Not a research facility");
 	auto psResFacilty = &facility->pFunctionality->researchFacility;
 
 	if (psResFacilty->psSubject)
 	{
-		cancelResearch(facility);
+		::cancelResearch(facility, ModeQueue);
 	}
 
-	STRUCTURE *psLab = findResearchingFacilityByResearchIndex(selectedPlayer, research.ref - STAT_RESEARCH);
+	STRUCTURE *psLab = findResearchingFacilityByResearchIndex(player, research.ref - STAT_RESEARCH);
 	if (psLab != nullptr)
 	{
-		cancelResearch(psLab); //Clear it out of this lab as we are now researching it in another.
+		::cancelResearch(psLab, ModeQueue); //Clear it out of this lab as we are now researching it in another.
 	}
 
 	// Say that we want to do research [sic].
-	sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
+	sendResearchStatus(facility, research.ref - STAT_RESEARCH, player, true);
 	setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
 
 	//stop the button from flashing once a topic has been chosen
 	stopReticuleButtonFlash(IDRET_RESEARCH);
+	return true;
+}
+
+void ResearchController::startResearch(RESEARCH &research)
+{
+	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
+
+	startResearchAt(getHighlightedObject(), research, selectedPlayer);
 }
 
 void ResearchController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
