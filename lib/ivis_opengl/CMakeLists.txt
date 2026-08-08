@@ -114,6 +114,7 @@ file(GLOB SRC
 )
 
 add_subdirectory(3rdparty/etcpak)
+add_subdirectory(3rdparty/mikktspace)
 
 if(WZ_USE_SPNG)
 	find_package(SPNG CONFIG REQUIRED)
@@ -148,6 +149,7 @@ if(WZ_USE_SPNG)
 else()
 	target_link_libraries(ivis-opengl PRIVATE PNG::PNG)
 endif()
+target_link_libraries(ivis-opengl PRIVATE mikktspace)
 target_link_libraries(ivis-opengl PUBLIC glad)
 target_link_libraries(ivis-opengl PUBLIC optional-lite)
 if (WZ_DEBUG_GFX_API_LEAKS)
