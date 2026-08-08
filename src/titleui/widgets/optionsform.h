@@ -216,6 +216,7 @@ class WzOptionsDropdownWidget : public DropdownWidget
 public:
 	WzOptionsDropdownWidget();
 	void setTextAlignment(WzTextAlignment align);
+	void setCurrentChoicePadding(int horizontal, int vertical);
 
 	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void display(int xOffset, int yOffset) override;
@@ -235,6 +236,8 @@ private:
 	int calculateCurrentUsedWidth() const;
 private:
 	std::shared_ptr<WzOptionsChoiceWidget> currentOptionChoiceDisplayWidg;
+	int currentChoicePaddingX = 10;
+	int currentChoicePaddingY = 8;
 	int32_t paddingLeft = 4;
 	bool isHighlighted = false;
 };
