@@ -390,7 +390,7 @@ void WzOptionsDropdownWidget::onSelectedItemChanged()
 	if (!currentOptionChoiceDisplayWidg)
 	{
 		currentOptionChoiceDisplayWidg = WzOptionsChoiceWidget::make(font_regular_bold);
-		currentOptionChoiceDisplayWidg->setPadding(10, 8);
+		currentOptionChoiceDisplayWidg->setPadding(currentChoicePaddingX, currentChoicePaddingY);
 		currentOptionChoiceDisplayWidg->setTransparentToMouse(true);
 		currentOptionChoiceDisplayWidg->setHighlightBackgroundColor(pal_RGBA(0,0,0,0));
 		attach(currentOptionChoiceDisplayWidg);
@@ -399,6 +399,17 @@ void WzOptionsDropdownWidget::onSelectedItemChanged()
 	updateCurrentChoiceDisplayWidgetGeometry();
 
 	DropdownWidget::onSelectedItemChanged();
+}
+
+void WzOptionsDropdownWidget::setCurrentChoicePadding(int horizontal, int vertical)
+{
+	currentChoicePaddingX = horizontal;
+	currentChoicePaddingY = vertical;
+	if (currentOptionChoiceDisplayWidg)
+	{
+		currentOptionChoiceDisplayWidg->setPadding(currentChoicePaddingX, currentChoicePaddingY);
+		updateCurrentChoiceDisplayWidgetGeometry();
+	}
 }
 
 void WzOptionsDropdownWidget::updateCurrentChoiceDisplayWidgetGeometry()
