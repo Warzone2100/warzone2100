@@ -1200,17 +1200,20 @@ void processGestureInput()
 	{
 		if (bPanTouchGesture)
 		{
-			const double panZoomFactor = 1.0 + ((getViewDistance() - MINDISTANCE) / static_cast<double>(MAXDISTANCE - MINDISTANCE));
+			if (panDeltaUpdate.value().deltaX != 0.f || panDeltaUpdate.value().deltaY != 0.f)
+			{
+				const double panZoomFactor = 1.0 + ((getViewDistance() - MINDISTANCE) / static_cast<double>(MAXDISTANCE - MINDISTANCE));
 
-			const double worldDeltaX = panDeltaUpdate.value().deltaX * panZoomFactor;
-			const double worldDeltaY = panDeltaUpdate.value().deltaY * panZoomFactor;
+				const double worldDeltaX = panDeltaUpdate.value().deltaX * panZoomFactor;
+				const double worldDeltaY = panDeltaUpdate.value().deltaY * panZoomFactor;
 
-			const double rot = static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0);
-			playerPos.p.x -= static_cast<int>(cos(rot) * worldDeltaX - sin(rot) * worldDeltaY);
-			playerPos.p.z -= static_cast<int>(sin(rot) * worldDeltaX + cos(rot) * worldDeltaY);
+				const double rot = static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0);
+				playerPos.p.x -= static_cast<int>(cos(rot) * worldDeltaX - sin(rot) * worldDeltaY);
+				playerPos.p.z -= static_cast<int>(sin(rot) * worldDeltaX + cos(rot) * worldDeltaY);
 
-			setWarCamActive(false); // Don't let this thing override the user trying to scroll.
-			CheckScrollLimits(gameWorld.map);
+				setWarCamActive(false); // Don't let this thing override the user trying to scroll.
+				CheckScrollLimits(gameWorld.map);
+			}
 
 			processedGesture = true;
 		}
