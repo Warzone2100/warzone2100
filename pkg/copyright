@@ -67,6 +67,10 @@ Files: lib/ivis_opengl/3rdparty/etcpak/*
 Copyright: 2013-2021 Bartosz Taudul <wolf@nereid.pl>
 License: BSD-3-clause-etcpak
 
+Files: lib/ivis_opengl/3rdparty/mikktspace/mikktspace.*
+Copyright: 2011 by Morten S. Mikkelsen
+License: Zlib
+
 Files: lib/ivis_opengl/3rdparty/ska_sort.hpp
 Copyright: 2016 Malte Skarupke
 License: BSL-1.0
