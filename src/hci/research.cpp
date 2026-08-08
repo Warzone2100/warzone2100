@@ -148,6 +148,14 @@ bool startResearchAt(STRUCTURE *facility, RESEARCH &research, uint32_t player)
 	{
 		::cancelResearch(facility, ModeQueue);
 	}
+	else if (psResFacilty->psSubjectPending != nullptr)
+	{
+		// Displacing work that has not started yet. There is nothing to cancel,
+		// since the order that would have started it is still queued and the one
+		// sent below displaces it there, but the topic is still *marked* as pending
+		// and now nothing is going to take care of it.
+		ResetPendingResearchStatus(&asPlayerResList[player][psResFacilty->psSubjectPending->index]);
+	}
 
 	STRUCTURE *psLab = findResearchingFacilityByResearchIndex(player, research.ref - STAT_RESEARCH);
 	if (psLab != nullptr)
