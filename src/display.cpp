@@ -1224,7 +1224,7 @@ static const float GAMEPAD_CAMERA_PAN_SPEED = 1200.f;
 
 void processGamepadCameraInput()
 {
-	if (InGameOpUp || bDisplayMultiJoiningStatus)
+	if (InGameOpUp || bDisplayMultiJoiningStatus || !gamepadCanDriveGame())
 	{
 		return;
 	}
