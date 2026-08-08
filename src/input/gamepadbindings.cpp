@@ -26,7 +26,9 @@
 #include "lib/framework/gamepad_input.h"
 #include "lib/framework/wzapp.h"
 #include "../console.h"
+#include "../display.h"		// for gInputManager
 #include "../hci.h"
+#include "context.h"
 #include "../keybind.h"
 #include "../levels.h"
 #include "../multimenu.h"
@@ -75,8 +77,18 @@ static void updateGroupButton(GAMEPAD_INPUT button, unsigned int baseGroup, Grou
 	}
 }
 
+bool gamepadCanDriveGame()
+{
+	return gInputManager.contexts().isActive(InputContext::GAMEPLAY);
+}
+
 void gamepadProcessBindings()
 {
+	if (!gamepadCanDriveGame())
+	{
+		return;
+	}
+
 	// point at the new options page the first time a controller shows up
 	static bool announcedGamepad = false;
 	if (!announcedGamepad && gamepadIsConnected())
