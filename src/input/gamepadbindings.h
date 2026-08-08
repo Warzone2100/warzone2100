@@ -25,6 +25,11 @@
 
 // Dispatches in-game actions bound to gamepad buttons. Called once per frame
 // from the game input processing
+// False while something modal has taken input away from the game. Such a view
+// switches off every key context, and the pad has to follow or its buttons go
+// on driving the game behind whatever is on screen.
+bool gamepadCanDriveGame();
+
 void gamepadProcessBindings();
 
 // The slice of the dispatch that must keep working while the game update is
