@@ -86,7 +86,7 @@ void main()
 		normal = normalize(NormalMatrix * vertexNormal);
 		vec3 t = normalize(NormalMatrix * vertexTangent.xyz);
 		vec3 b = cross (normal, t) * vertexTangent.w;
-		TangentSpaceMatrix = mat3(t, normal, b);
+		TangentSpaceMatrix = mat3(t, b, normal); // conventional (T, B, N)
 	}
 
 	// Lighting

@@ -74,7 +74,7 @@ void main()
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
 		// Complete replace normal with new value
-		N = normalFromMap.xzy * 2.0 - 1.0;
+		N = normalFromMap.rgb * 2.0 - 1.0;
 		N.y = -N.y; // FIXME - to match WZ's light
 
 		// For object-space normal map
