@@ -256,9 +256,15 @@ WzOptionsDropdownWidget::WzOptionsDropdownWidget()
 	{
 		setDropdownCaretImage(AtlasImage(FrontImages, IMAGE_CARET_DOWN_FILL), WzSize(12, 12), Padding{0, 8, 0, 0});
 	}
+	else if (IntImages != nullptr && IMAGE_INTFAC_CARET_DOWN_FILL < IntImages->numImages())
+	{
+		// In game, where the frontend's images have been released. A mod carrying
+		// an older intfac.img has no caret in it, hence the count check.
+		setDropdownCaretImage(AtlasImage(IntImages, IMAGE_INTFAC_CARET_DOWN_FILL), WzSize(12, 12), Padding{0, 8, 0, 0});
+	}
 	else
 	{
-		// FUTURE TODO: Different image for in-game options? (For now, no image)
+		// Neither set of images is loaded, so no caret
 	}
 	setStyle(DropdownWidget::DropdownMenuStyle::Separate);
 	setListBackgroundColor(pal_RGBA(20,20,20,255));
