@@ -39,6 +39,8 @@
 #include "lib/framework/loading_task.h"
 #include "lib/framework/resource_loading_controller.h"
 #include "lib/framework/debug.h"
+
+#include "mikktspace.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -1396,7 +1398,6 @@ static std::vector<gfx_api::gfxFloat> vertices;
 static std::vector<gfx_api::gfxFloat> normals;
 static std::vector<gfx_api::gfxFloat> texcoords; // texcoords + texAnim
 static std::vector<gfx_api::gfxFloat> tangents;
-static std::vector<gfx_api::gfxFloat> bitangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
 static uint16_t vertexCount = 0;
 
@@ -1497,77 +1498,112 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, size
 	return vertexCount - 1;
 }
 
-void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const uint16_t ic)
+// MikkTSpace tangent generation
+//
+// MikkTSpace is the reference implementation used by Blender, Substance, xNormal,
+// and Marmoset, so tangent frames now agree between the tools that bake normal
+// maps and the engine that renders them.
+//
+// WZ texture coordinates have V pointing DOWN the image (PNGs are uploaded
+// without a vertical flip - see png_util_*.cpp), while MikkTSpace assumes the
+// standard convention. We therefore hand it V-flipped coordinates below. T is
+// unaffected by that flip, and B = dP/dv changes sign, which reproduces exactly
+// the -dP/dv bitangent the shaders need for ordinary OpenGL-convention
+// ("green up") normal maps. Doing it this way keeps the standard convention
+// end-to-end and lets the shader use the plain
+//     bitangent = w * cross(normal, tangent)
+// reconstruction, with w taken straight from MikkTSpace's fSign.
+
+static inline size_t mikkVertexIndex(int iFace, int iVert)
 {
-   // This will work as long as vecs are packed (which is default in glm)
-   const Vector3f* verticesAsVec3 = reinterpret_cast<const Vector3f*>(vertices.data());
-   const Vector4f* texcoordsAsVec4 = reinterpret_cast<const Vector4f*>(texcoords.data());
-   Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
-   Vector3f* bitangentsAsVec3 = reinterpret_cast<Vector3f*>(bitangents.data());
-
-   // Shortcuts for vertices
-   const Vector3f& va(verticesAsVec3[ia]);
-   const Vector3f& vb(verticesAsVec3[ib]);
-   const Vector3f& vc(verticesAsVec3[ic]);
-
-   // Shortcuts for UVs
-   const Vector2f uva(texcoordsAsVec4[ia].xy());
-   const Vector2f uvb(texcoordsAsVec4[ib].xy());
-   const Vector2f uvc(texcoordsAsVec4[ic].xy());
-
-   // Edges of the triangle : postion delta
-   const Vector3f deltaPos1 = vb - va;
-   const Vector3f deltaPos2 = vc - va;
-
-   // UV delta
-   const Vector2f deltaUV1 = uvb - uva;
-   const Vector2f deltaUV2 = uvc - uva;
-
-   // check for nan
-   float r = deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x;
-   if (r != 0.f)
-	   r = 1.f / r;
-
-   const Vector4f tangent(Vector3f(deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r, 0.f);
-   const Vector3f bitangent(Vector3f(deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r);
-
-   tangentsAsVec4[ia] += tangent;
-   tangentsAsVec4[ib] += tangent;
-   tangentsAsVec4[ic] += tangent;
-
-   bitangentsAsVec3[ia] += bitangent;
-   bitangentsAsVec3[ib] += bitangent;
-   bitangentsAsVec3[ic] += bitangent;
+	return static_cast<size_t>(indices[static_cast<size_t>(iFace) * 3 + static_cast<size_t>(iVert)]);
 }
 
-void finishTangentsGeneration()
+static int mikkGetNumFaces(const SMikkTSpaceContext *)
 {
-   // This will work as long as vecs are packed (which is default in glm)
-   const Vector3f* normalsAsVec3 = reinterpret_cast<const Vector3f*>(normals.data());
-   Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
-   const Vector3f* bitangentsAsVec3 = reinterpret_cast<const Vector3f*>(bitangents.data());
+	return static_cast<int>(indices.size() / 3);
+}
 
-   Vector3f t;
+static int mikkGetNumVerticesOfFace(const SMikkTSpaceContext *, const int)
+{
+	return 3; // the loader triangulates on read
+}
 
-   for (auto i = 0; i < vertexCount; ++i)
-   {
-	   const Vector3f& n = normalsAsVec3[i];
-	   const Vector3f& b = bitangentsAsVec3[i];
-	   t = tangentsAsVec4[i].xyz();
+static void mikkGetPosition(const SMikkTSpaceContext *, float fvPosOut[], const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	fvPosOut[0] = vertices[i * 3 + 0];
+	fvPosOut[1] = vertices[i * 3 + 1];
+	fvPosOut[2] = vertices[i * 3 + 2];
+}
 
-	   // Gram-Schmidt orthogonalize
-	   t = glm::normalize(t - n * glm::dot(n, t));
+static void mikkGetNormal(const SMikkTSpaceContext *, float fvNormOut[], const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	fvNormOut[0] = normals[i * 3 + 0];
+	fvNormOut[1] = normals[i * 3 + 1];
+	fvNormOut[2] = normals[i * 3 + 2];
+}
 
-	   // Calculate handedness
-	   if (glm::dot(glm::cross(n, t), b) < 0.f)
-	   {
-		   tangentsAsVec4[i] = Vector4f(t, 1.f);
-	   }
-	   else
-	   {
-		   tangentsAsVec4[i] = Vector4f(t, -1.f);
-	   }
-   }
+static void mikkGetTexCoord(const SMikkTSpaceContext *, float fvTexcOut[], const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	fvTexcOut[0] = texcoords[i * 4 + 0];
+	fvTexcOut[1] = 1.f - texcoords[i * 4 + 1]; // V flip - see the note above
+}
+
+static void mikkSetTSpaceBasic(const SMikkTSpaceContext *, const float fvTangent[], const float fSign, const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	tangents[i * 4 + 0] = fvTangent[0];
+	tangents[i * 4 + 1] = fvTangent[1];
+	tangents[i * 4 + 2] = fvTangent[2];
+	tangents[i * 4 + 3] = fSign;
+}
+
+// Returns false if tangents could not be generated, in which case the caller
+// should not upload a tangent buffer (the model then renders without them)
+static bool generateTangents()
+{
+	if (indices.empty() || vertexCount == 0)
+	{
+		return false;
+	}
+
+	// MikkTSpace returns its results UNINDEXED, and explicitly warns that
+	// writing them through a pre-existing index list is wrong when that list
+	// merges vertices. It is safe here only because addVertex() disables
+	// welding whenever file normals are present, which is exactly the condition
+	// under which tangents are generated - so `indices` is the identity
+	// permutation and each (face, corner) maps to its own unique vertex.
+	// Check it rather than trust it, so that enabling welding later fails
+	// loudly (instead of producing quietly wrong tangent frames).
+	ASSERT_OR_RETURN(false, indices.size() == static_cast<size_t>(vertexCount),
+	                 "Tangent generation requires unwelded vertices (%zu indices, %u vertices)",
+	                 indices.size(), static_cast<unsigned>(vertexCount));
+
+	SMikkTSpaceInterface mikkInterface = {};
+	mikkInterface.m_getNumFaces = mikkGetNumFaces;
+	mikkInterface.m_getNumVerticesOfFace = mikkGetNumVerticesOfFace;
+	mikkInterface.m_getPosition = mikkGetPosition;
+	mikkInterface.m_getNormal = mikkGetNormal;
+	mikkInterface.m_getTexCoord = mikkGetTexCoord;
+	mikkInterface.m_setTSpaceBasic = mikkSetTSpaceBasic;
+
+	SMikkTSpaceContext mikkContext = {};
+	mikkContext.m_pInterface = &mikkInterface;
+	mikkContext.m_pUserData = nullptr;
+
+	// Degenerate triangles (zero area, or collapsed UVs) are handled internally:
+	// their vertices inherit the tangent space of neighbouring good triangles.
+	// (This is why no explicit guard against a zero UV determinant is needed here.)
+	if (!genTangSpaceDefault(&mikkContext))
+	{
+		debug(LOG_WARNING, "MikkTSpace tangent generation failed");
+		return false;
+	}
+
+	return true;
 }
 
 /*!
@@ -1873,14 +1909,12 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		// Tangents are optional, only if normals were loaded and passed sanity check above
 		if (!pie_level_normals.empty())
 		{
-			tangents.resize(vertexCount * 4);
-			bitangents.resize(vertexCount * 3);
+			tangents.clear();
+			tangents.resize(static_cast<size_t>(vertexCount) * 4, 0.f);
 
-			for (size_t i = 0; i < indices.size(); i += 3)
-				calculateTangentsForTriangle(indices[i], indices[i+1], indices[i+2]);
-			finishTangentsGeneration();
+			const bool haveTangents = generateTangents();
 
-			if (!tangents.empty())
+			if (haveTangents && !tangents.empty())
 			{
 				if (!s.buffers[VBO_TANGENT])
 					s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "tangent buffer");
@@ -1926,7 +1960,6 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 	texcoords.resize(0);
 	normals.resize(0);
 	tangents.resize(0);
-	bitangents.resize(0);
 
 	*ppFileData = pFileData;
 
