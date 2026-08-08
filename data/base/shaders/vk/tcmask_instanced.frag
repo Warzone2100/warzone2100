@@ -72,15 +72,16 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		// transform tangent-space normal map into world space
-		N = normalFromMap.xzy * 2.0 - 1.0;
-		N = TangentSpaceMatrix * N;
-
-		if (hasTangents == 0)
+		if (hasTangents != 0)
 		{
-			// transform object-space normal map into world space
-			N = normalFromMap.xzy * 2.0 - 1.0;
-			N = NormalMatrix * vec3(-N.x, N.y, -N.z);
+			// tangent-space normal map -> world space
+			N = TangentSpaceMatrix * (normalFromMap.rgb * 2.0 - 1.0);
+		}
+		else
+		{
+			// object-space normal map -> world space
+			vec3 nObjectSpace = normalFromMap.xzy * 2.0 - 1.0;
+			N = NormalMatrix * vec3(-nObjectSpace.x, nObjectSpace.y, -nObjectSpace.z);
 		}
 	}
 	N = normalize(N);

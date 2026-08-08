@@ -72,7 +72,7 @@ void main()
 		// Building the matrix Eye Space -> Tangent Space with handness
 		vec3 t = normalize((NormalMatrix * vertexTangent).xyz);
 		vec3 b = cross (n, t) * vertexTangent.w;
-		mat3 TangentSpaceMatrix = mat3(t, n, b);
+		mat3 TangentSpaceMatrix = mat3(t, b, n); // conventional (T, B, N)
 
 		// Transform light and eye direction vectors by tangent basis
 		lightDir *= TangentSpaceMatrix;
