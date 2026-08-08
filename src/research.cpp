@@ -445,18 +445,6 @@ bool loadResearch(WzConfig &ini)
 			research.excludeFromCheats = 0;
 		}
 
-		//set tech code
-		UBYTE techCode = ini.value("techCode", 0).toUInt();
-		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getStatsName(&research));
-		if (techCode == 0)
-		{
-			research.techCode = TC_MAJOR;
-		}
-		else
-		{
-			research.techCode = TC_MINOR;
-		}
-
 		//get flags when to disable tech
 		UBYTE disabledWhen = ini.value("disabledWhen", 0).toUInt();
 		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getStatsName(&research));
@@ -497,14 +485,43 @@ bool loadResearch(WzConfig &ini)
 			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getStatsName(&research));
 		}
 
-		WzString msgName = ini.value("msgName", "").toWzString();
-		if (msgName.compare("") != 0)
-		{
-			//check its a major tech code
-			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getStatsName(&research));
-			if (research.techCode == TC_MAJOR)
-			{
+		// Check for new intelAudio and intelText properties
+		if (ini.contains("intelAudio") && ini.contains("intelText")) {
+			// Create VIEWDATA inline for new system
+			VIEWDATA *psViewData = new VIEWDATA;
+			psViewData->type = VIEW_RES;
+			psViewData->name = research.id;
+			psViewData->fileName = ini.fileName();
+			// Load textMsg from intelText array
+			std::vector<WzString> textList = ini.value("intelText").toWzStringList();
+			for (const auto& text : textList) {
+				psViewData->textMsg.push_back(text);
+			}
+			VIEW_RESEARCH *psViewRes = new VIEW_RESEARCH;
+			psViewRes->sequenceName = ini.value("intelAudio", "").toWzString();
+			psViewRes->audio = "";
+			// Icon: Use research.pIMD (from imdName), default to "MICAPSUL.pie"
+			if (research.pIMD) {
+				psViewRes->pIMD = research.pIMD;
+			} else {
+				psViewRes->pIMD = modelGet("MICAPSUL.pie");
+			}
+			psViewRes->pIMD2 = nullptr;
+			psViewData->pData = psViewRes;
+			// Store in global map
+			apsViewData[research.id] = psViewData;
+			// Set for research
+			research.pViewData = psViewData;
+			research.isMajor = true;
+		} else {
+			// Old system: Check for msgName
+			WzString msgName = ini.value("msgName", "").toWzString();
+			if (msgName.compare("") != 0) {
 				research.pViewData = getViewData(msgName);
+				research.isMajor = true;
+			} else {
+				research.pViewData = nullptr;
+				research.isMajor = false;
 			}
 		}
 
@@ -1244,7 +1261,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 
 	//Add message to player's list if Major Topic
-	if ((pResearch->techCode == TC_MAJOR) && bDisplay)
+	if (pResearch->isMajor && bDisplay)
 	{
 		//only play sound if major topic
 		if (player == selectedPlayer)

@@ -41,7 +41,7 @@
 #include "qtscript.h"
 #include "wzjsonhelpers.h"
 
-static std::map<WzString, VIEWDATA *> apsViewData;
+std::map<WzString, VIEWDATA *> apsViewData;
 
 /* The id number for the next message allocated
  * Each message will have a unique id number irrespective of type
