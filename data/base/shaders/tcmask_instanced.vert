@@ -16,7 +16,7 @@ uniform mat4 ViewMatrix;
 uniform mat4 ModelUVLightmapMatrix;
 
 uniform int hasTangents; // whether tangents were calculated for model
-uniform vec4 lightPosition; // in view space
+uniform vec4 lightPosition; // in world space
 uniform vec4 cameraPos; // in model space
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
@@ -93,7 +93,7 @@ void main()
 	posViewSpace = vec3(ModelVeiwMatrix * vertex);
 	posModelSpace = vec3(instanceModelMatrix * vertex);
 	vec3 cameraVec = normalize(cameraPos.xyz - posModelSpace.xyz);
-	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz); //to-do: pass Sun pos in world space
+	lightDir = -normalize(lightPosition.xyz);
 	halfVec = lightDir + cameraVec;
 
 	vec3 localPosition = vertex.xyz;

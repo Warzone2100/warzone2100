@@ -1244,8 +1244,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	actualCameraPosition.y -= -player->p.y;
 
 	// this also determines the length of the shadows
-	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz();
-	pie_BeginLighting(theSun);
+	// NOTE: the sun in world space
+	pie_BeginLighting(getTheSun());
 
 	// Reset all lighting data
 	lightData.lights.clear();

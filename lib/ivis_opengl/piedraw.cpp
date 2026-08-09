@@ -233,7 +233,7 @@ uint32_t pie_getShadowCascades()
 	return numShadowCascades;
 }
 
-static Vector3f currentSunPosition(0.f, 0.f, 0.f);
+static Vector3f currentSunPosition(0.f, 0.f, 0.f); // world space
 
 void pie_BeginLighting(const Vector3f &light)
 {
@@ -1365,8 +1365,9 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 			if (distance < SHADOW_END_DISTANCE)
 			{
 				// Calculate the light position relative to the object
+				// (currentSunPosition is world space, so this is inverse of the Model matrix)
 				glm::vec4 pos_light0 = glm::vec4(currentSunPosition, 0.f);
-				glm::mat4 invmat = glm::inverse(scshape.modelViewMatrix);
+				glm::mat4 invmat = glm::inverse(modelMatrix);
 
 				scshape.light = invmat * pos_light0;
 				scshape.shape = shape;

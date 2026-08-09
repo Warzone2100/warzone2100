@@ -7,7 +7,7 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	mat4 ViewMatrix;
 	mat4 ShadowMapMVPMatrix;
 	vec4 cameraPos;
-	vec4 lightPosition;
+	vec4 lightPosition; // in world space
 	vec4 sceneColor;
 	vec4 ambient;
 	vec4 diffuse;
@@ -73,7 +73,7 @@ void main()
 	// Classic models are lit with the normal negated, which cancels against the
 	// negated light below.
 	normal = -normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz);
+	lightDir = -normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{

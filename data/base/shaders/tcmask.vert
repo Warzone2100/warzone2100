@@ -17,7 +17,7 @@ uniform mat4 ModelMatrix;
 uniform mat4 NormalMatrix;
 uniform vec4 cameraPos; // in world space
 uniform int hasTangents; // whether tangents were calculated for model
-uniform vec4 lightPosition;
+uniform vec4 lightPosition; // in world space
 uniform float stretch;
 uniform float animFrameNumber;
 
@@ -72,7 +72,7 @@ void main()
 	// Classic models are lit with the normal negated, which cancels against the
 	// negated light below.
 	normal = -normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz);
+	lightDir = -normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
