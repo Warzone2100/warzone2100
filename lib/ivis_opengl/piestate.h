@@ -52,6 +52,8 @@ struct RENDER_STATE
 {
 	bool				fogEnabled;
 	bool				fog;
+	/// When false, terrain/mesh/water skip distance fog (compose applies it after AO).
+	bool				forwardDistanceFog;
 	PIELIGHT			fogColour;
 	float				fogBegin;
 	float				fogEnd;
@@ -76,6 +78,9 @@ bool pie_GetFogStatus();
 void pie_SetFogColour(PIELIGHT colour);
 PIELIGHT pie_GetFogColour() WZ_DECL_PURE;
 void pie_UpdateFogDistance(float begin, float end);
+void pie_SetForwardDistanceFogEnabled(bool val);
+/// 1 when global fog is on and forward distance fog is allowed (ScenePass).
+int pie_GetShaderDistanceFogEnabled();
 //render states
 RENDER_STATE getCurrentRenderState();
 const Vector3f& getDefaultSunPosition();

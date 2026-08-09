@@ -1447,6 +1447,8 @@ bool init3DView()
 		pScreenTriangleVBO->upload(sizeof(screenTriangleVertices), screenTriangleVertices);
 	}
 
+	ssao::init();
+
 	return true;
 }
 
@@ -1479,6 +1481,8 @@ void shutdown3DView_FullReset()
 	// Only call "reset" (which also resets BatchedMultiRectRenderer and actually frees GPU buffers)
 	// in this function, which is called from stageTwoShutdown (as opposed to stageThreeShutdown, which is called from levReleaseMissionData)...
 	batchedObjectStatusRenderer.reset();
+
+	ssao::shutdown();
 
 	delete pScreenTriangleVBO;
 	pScreenTriangleVBO = nullptr;
@@ -4663,6 +4667,11 @@ void display3d_locateMouse()
 void display3d_drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
 {
 	drawWorldToScreenBlit(sourceTexture);
+}
+
+gfx_api::buffer* display3d_getScreenTriangleVBO()
+{
+	return pScreenTriangleVBO;
 }
 
 void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)

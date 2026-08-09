@@ -5,6 +5,7 @@
 namespace gfx_api
 {
 struct abstract_texture;
+struct buffer;
 }
 
 void display3d_renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4& skyboxViewMatrix);
@@ -18,3 +19,5 @@ void display3d_drawSmaaWeights(gfx_api::abstract_texture* edgesTexture);
 void display3d_drawSmaaBlend(gfx_api::abstract_texture* colorTexture, gfx_api::abstract_texture* weightsTexture);
 void display3d_processSensorTarget();
 void display3d_processDestinationTarget();
+/// Fullscreen triangle VBO used by post-processing passes (null before init3DView).
+gfx_api::buffer* display3d_getScreenTriangleVBO();

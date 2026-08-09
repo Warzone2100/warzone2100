@@ -67,6 +67,7 @@ void pie_SetDefaultStates()//Sets all states
 	//fog off
 	rendStates.fogEnabled = false;// enable fog before renderer
 	rendStates.fog = false;//to force reset to false
+	rendStates.forwardDistanceFog = true;
 	pie_SetFogStatus(false);
 	pie_SetFogColour(black);
 
@@ -171,6 +172,16 @@ void pie_UpdateFogDistance(float begin, float end)
 {
 	rendStates.fogBegin = begin;
 	rendStates.fogEnd = end;
+}
+
+void pie_SetForwardDistanceFogEnabled(bool val)
+{
+	rendStates.forwardDistanceFog = val;
+}
+
+int pie_GetShaderDistanceFogEnabled()
+{
+	return (rendStates.fogEnabled && rendStates.forwardDistanceFog) ? 1 : 0;
 }
 
 void pie_SetFogStatus(bool val)

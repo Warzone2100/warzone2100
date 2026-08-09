@@ -24,10 +24,20 @@
 
 #pragma once
 
+#include "lib/ivis_opengl/gfx_api.h"
+
 namespace ssao
 {
 
+void init();
+void shutdown();
+
 /// Push war_getSSAO() into the gfx context and sync pipeline surfaces.
 void applyConfigToGfx();
+
+void recordGenerate(const gfx_api::RenderPassContext& passCtx);
+void recordBlurH(const gfx_api::RenderPassContext& passCtx);
+void recordBlurV(const gfx_api::RenderPassContext& passCtx);
+void recordCompose(const gfx_api::RenderPassContext& passCtx);
 
 } // namespace ssao
