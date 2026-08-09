@@ -64,7 +64,7 @@ void main()
 		groundLightDir = ModelTangentMatrix * sunPos.xyz; // already normalized
 		groundHalfVec = groundLightDir + eyeVec;
 
-		vec3 bitangentDecal = -cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
+		vec3 bitangentDecal = cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
 		// transformation matrix from decal tangent space to ground tangent space for normals xy
 		decal2groundMat2 = mat2(
 			dot(vertexTangent.xyz, tangent), dot(bitangentDecal, tangent),

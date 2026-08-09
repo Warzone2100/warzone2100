@@ -517,7 +517,14 @@ static TileDecalInfo getTileDecalInfo(WorldMapState& mapState, int i, int j)
 
 /// Calc decal tangents: accumulate the per-triangle tangents at each vertex
 /// (vertices shared between triangles get the average of their triangles'), then
-/// orthonormalize against each vertex normal and store with the mirror handedness
+/// orthonormalize against each vertex normal and store with the mirror handedness.
+///
+/// The handedness w is defined so that
+///     bitangent = cross(normal, tangent) * w
+/// reproduces -dP/dv, which is the bitangent "green up" normal maps need where v
+/// runs DOWN the image. That is the same meaning w has for models
+/// (lib/ivis_opengl/imdload.cpp feeds MikkTSpace V-flipped coordinates to get it),
+/// so the one expression above is correct everywhere in the engine.
 static void calcDecalTangents(gfx_api::TerrainDecalVertex *vs, int numVerts, const int (*tris)[3], int numTris)
 {
 	constexpr int maxVerts = (MAX_TERRAIN_MESH_SUBDIVISION + 1) * (MAX_TERRAIN_MESH_SUBDIVISION + 1);
@@ -547,8 +554,9 @@ static void calcDecalTangents(gfx_api::TerrainDecalVertex *vs, int numVerts, con
 		const auto &n = vs[k].normal;
 		const auto tangent = glm::normalize(tangentSum[k]);
 		const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
+		// Compared against -dP/dv, not +dP/dv - see the note above.
 		float w = 1.0f; // not mirrored
-		if (glm::dot(glm::cross(n, t), glm::normalize(bitangentSum[k])) < 0.0f) {
+		if (glm::dot(glm::cross(n, t), -glm::normalize(bitangentSum[k])) < 0.0f) {
 			w = -1.0f; // we're mirrored
 		}
 		vs[k].decalTangent = glm::vec4(t, w);
