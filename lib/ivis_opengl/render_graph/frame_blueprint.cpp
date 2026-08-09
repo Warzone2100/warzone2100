@@ -70,7 +70,47 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::DepthCascade, i);
 	}
 
+	const bool ssaoActive = (snapshot.features & RenderFeatures::SSAO) != 0;
+	if (ssaoActive)
+	{
+		builder.beginPass(PassId::ScenePrepass, "ScenePrepass")
+			.color(PipelineSurfaceId::ScenePrepassNormals, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+			.depth(PipelineSurfaceId::ScenePrepassDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget);
+	}
+
 	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
+
+	if (ssaoActive)
+	{
+		builder.beginPass(PassId::SSAOGenerate, "SSAOGenerate")
+			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
+
+		builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
+			.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+
+		builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
+			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+
+		builder.beginPass(PassId::SSAOCompose, "SSAOCompose")
+			.color(PipelineSurfaceId::SSAOComposedColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::SSAOBlurV, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+	}
+
+	const PassId aaColorSource = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;
 
 	const bool smaaActive = (snapshot.features & RenderFeatures::Smaa) != 0;
 	const bool smaaIntermediate = (snapshot.features & RenderFeatures::SmaaIntermediate) != 0;
@@ -82,7 +122,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		builder.beginPass(PassId::SmaaEdges, std::string("SmaaEdges"));
 		builder.color(PipelineSurfaceId::SmaaEdges, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
+			.readFrom(aaColorSource, AttachmentRole::PrimaryColor);
 
 		builder.beginPass(PassId::SmaaWeights, std::string("SmaaWeights"));
 		builder.color(PipelineSurfaceId::SmaaWeights, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
@@ -108,12 +148,13 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
 				.viewport(ViewportRule::Drawable);
 		}
-		builder.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor)
+		builder.readFrom(aaColorSource, AttachmentRole::PrimaryColor)
 			.readFrom(PassId::SmaaWeights, AttachmentRole::PrimaryColor);
 	}
 
-	// the blit or upscale chain consumes the anti-aliased intermediate when present
-	const PassId sceneOutputSource = smaaIntermediate ? PassId::SmaaBlend : PassId::ScenePass;
+	// the blit or upscale chain consumes the anti-aliased intermediate when present,
+	// otherwise the SSAO-composed (or raw) scene color
+	const PassId sceneOutputSource = smaaIntermediate ? PassId::SmaaBlend : aaColorSource;
 
 	if (snapshot.features & RenderFeatures::SceneUpscale)
 	{

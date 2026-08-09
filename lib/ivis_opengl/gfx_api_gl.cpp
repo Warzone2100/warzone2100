@@ -4671,6 +4671,7 @@ gfx_api::DynamicFBOKey buildDynamicFBOKey(const gfx_api::RenderPassDesc& pass, u
 	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
 	{
 		key.depthSlot = dynamicFBOKeySlotFromAttachment(pass.depthAttachment.value());
+		key.depthUsesStencilAttachment = gfx_api::attachmentDepthHasStencil(pass.depthAttachment.value());
 	}
 	return key;
 }

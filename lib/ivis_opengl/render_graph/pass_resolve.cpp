@@ -552,8 +552,22 @@ bool attachmentDepthHasStencil(const AttachmentDesc& attachment)
 	{
 		return false;
 	}
-	return gfx_api::context::get().pipelineSurfaceUsage(surfaceId.value())
-		== PipelineSurfaceUsage::DepthStencil;
+	auto& ctx = gfx_api::context::get();
+	if (ctx.pipelineSurfaceUsage(surfaceId.value()) == PipelineSurfaceUsage::DepthOnly)
+	{
+		return false;
+	}
+	const auto& spec = ctx.resolvedPipelineSurface(surfaceId.value());
+	switch (spec.format)
+	{
+	case pixel_format::FORMAT_D32_SFLOAT:
+		return false;
+	case pixel_format::FORMAT_D24_UNORM_S8:
+	case pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+		return true;
+	default:
+		return false;
+	}
 }
 
 std::optional<PassOutputView> getPassOutputAttachment(

@@ -1646,7 +1646,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor = renderState.fogEnabled ? pielightToRGBAVec4(renderState.fogColour) : glm::vec4(0.f);
+	const glm::vec4 fogColor = pie_GetShaderDistanceFogEnabled() ? pielightToRGBAVec4(renderState.fogColour) : glm::vec4(0.f);
 
 
 	if (useInstancedRendering)
@@ -1659,7 +1659,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
 			sceneColor, ambient, diffuse, specular, fogColor,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(), bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), pie_GetShaderDistanceFogEnabled(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(), bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, shadowMap, drawParts, depthPassMode);
 	}
@@ -1669,7 +1669,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
 			glm::vec4(cameraPos, 0.f),
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled,
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), pie_GetShaderDistanceFogEnabled(),
 			gfx_api::context::get().getSceneMipLodBias()
 		};
 		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts);
