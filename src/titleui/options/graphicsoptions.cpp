@@ -29,6 +29,7 @@
 #include "../../atmos.h"
 #include "../../display.h"
 #include "../../display3d.h"
+#include "../../ssao.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -357,6 +358,26 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				{
 					pie_EnableFog(true);
 				}
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.ssao", N_("SSAO"), N_("Screen-space ambient occlusion. Darkens creases and contact areas for stronger depth cues. May impact performance."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_getSSAO());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setSSAO(newValue);
+				ssao::applyConfigToGfx();
 				return true;
 			}, false
 		);

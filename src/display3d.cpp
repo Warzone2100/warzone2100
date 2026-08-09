@@ -88,6 +88,7 @@
 #include "terrain.h"
 #include "profiling.h"
 #include "warzoneconfig.h"
+#include "ssao.h"
 #include "multistat.h"
 #include "animation.h"
 #include "faction.h"
@@ -1415,6 +1416,9 @@ bool init3DView()
 	updateFogDistance(distance);
 
 	setDefaultFogColour();
+
+	// Allocate / free SSAO pipeline surfaces to match persisted config.
+	ssao::applyConfigToGfx();
 
 	playerPos.r.z = 0; // roll
 	playerPos.r.y = 0; // rotation
