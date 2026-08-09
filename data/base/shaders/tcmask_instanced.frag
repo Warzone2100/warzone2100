@@ -118,17 +118,7 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		if (hasTangents != 0)
-		{
-			// tangent-space normal map -> world space
-			N = TangentSpaceMatrix * (normalFromMap.rgb * 2.0 - 1.0);
-		}
-		else
-		{
-			// object-space normal map -> world space
-			vec3 nObjectSpace = normalFromMap.xzy * 2.0 - 1.0;
-			N = NormalMatrix * vec3(-nObjectSpace.x, nObjectSpace.y, -nObjectSpace.z);
-		}
+		N = wzDecodeNormalMap(normalFromMap, hasTangents, TangentSpaceMatrix, NormalMatrix);
 	}
 	N = normalize(N);
 

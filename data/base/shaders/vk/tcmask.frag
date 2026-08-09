@@ -52,6 +52,8 @@ layout(location = 4) in vec2 texCoord;
 
 layout(location = 0) out vec4 FragColor;
 
+#include "tangentspace.glsl"
+
 void main()
 {
 	vec4 diffuseMap = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
@@ -67,24 +69,11 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		if (hasTangents != 0)
-		{
-			// Tangent-space normal map, in the conventional (T, B, N) basis.
-			// No compensating negation: the vertex shader now negates the light
-			// exactly as tcmask_instanced.vert does, so this is identical to
-			// that shader's "TangentSpaceMatrix * (normalFromMap.rgb * 2 - 1)",
-			// expressed in tangent space rather than world space.
-			N = normalFromMap.rgb * 2.0 - 1.0;
-		}
-		else
-		{
-			// Object-space normal map. This path goes through NormalMatrix and
-			// never touches TangentSpaceMatrix, so the (T, N, B) -> (T, B, N)
-			// reorder does not cancel the .xzy swizzle here the way it does
-			// above - it has to stay, as it does in tcmask_instanced.frag.
-			vec3 nObjectSpace = normalFromMap.xzy * 2.0 - 1.0;
-			N = (NormalMatrix * vec4(-nObjectSpace.x, nObjectSpace.y, -nObjectSpace.z, 0.0)).xyz;
-		}
+		// This shader lights in TANGENT space (the vertex shader rotates lightDir
+		// into the basis), so the tangent branch wants the decoded map as-is -
+		// hence the identity basis. The object-space branch is unaffected by that
+		// and goes through NormalMatrix exactly as in tcmask_instanced.frag.
+		N = wzDecodeNormalMap(normalFromMap, hasTangents, mat3(1.0), mat3(NormalMatrix));
 	}
 	N = normalize(N);
 
