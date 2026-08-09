@@ -152,20 +152,22 @@ void ScrollableListWidget::updateLayout()
 	}
 	auto listViewHeight = calculateListViewHeight();
 
-	resizeChildren(listViewWidthWithScrollBar);
-
-	scrollBar->show(scrollableHeight > listViewHeight);
-
-	if (scrollBar->visible() || !expandWidthWhenScrollbarInvisible)
+	bool needsScrollbar = true;
+	if (expandWidthWhenScrollbarInvisible)
 	{
-		listView->setGeometry(padding.left, padding.top, listViewWidthWithScrollBar, listViewHeight);
-	} else {
-		if (listViewWidthWithScrollBar != listViewWidthWithoutScrollBar)
-		{
-			resizeChildren(listViewWidthWithoutScrollBar);
-		}
-		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
+		resizeChildren(listViewWidthWithoutScrollBar);
+		needsScrollbar = scrollableHeight > listViewHeight;
 	}
+	if (needsScrollbar)
+	{
+		resizeChildren(listViewWidthWithScrollBar);
+		needsScrollbar = scrollableHeight > listViewHeight;
+	}
+	scrollBar->show(needsScrollbar);
+
+	const uint32_t listViewWidth = (needsScrollbar || !expandWidthWhenScrollbarInvisible)
+		? listViewWidthWithScrollBar : listViewWidthWithoutScrollBar;
+	listView->setGeometry(padding.left, padding.top, listViewWidth, listViewHeight);
 
 	scrollBar->setScrollableSize(scrollableHeight + padding.top + padding.bottom);
 }
