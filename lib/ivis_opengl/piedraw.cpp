@@ -401,8 +401,17 @@ private:
 };
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
-static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & modelViewMatrix, const iIMDShape * shape, int pieFlag, int frame)
+static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & modelMatrix, const iIMDShape * shape, int pieFlag, int frame)
 {
+	// NOTE: takes the MODEL matrix, not the ModelView matrix. NormalMatrix has to
+	// be derived from the model matrix alone so that it maps into the same space
+	// as lightPosition (which is currentSunPosition, in world space). Deriving it
+	// from the ModelView matrix instead yields eye-space normals lit by a
+	// world-space sun, i.e. lighting that rotates with the camera.
+	//
+	// pie_Draw3DButton has always done it this way; this brings the other caller
+	// of these shaders into line. See also tcmask.vert.
+	const glm::mat4 modelViewMatrix = globalUniforms.ViewMatrix * modelMatrix;
 	templatedState currentState = templatedState(shader, shape, pieFlag);
 
 	const auto& textures = shape->getTextures();
@@ -416,7 +425,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelViewMatrix,
-		glm::transpose(glm::inverse(modelViewMatrix)),
+		glm::transpose(glm::inverse(modelMatrix)),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		stretch, float(frame), ecmState, !(pieFlag & pie_PREMULTIPLIED)
 	};
@@ -594,11 +603,11 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 	if (light)
 	{
-		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapeAlphaNoDepthWRT, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, globalUniforms.ViewMatrix * modelMatrix, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapeAlphaNoDepthWRT, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, modelMatrix, shape, pieFlag, frame);
 	}
 	else
 	{
-		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, globalUniforms.ViewMatrix * modelMatrix, shape, pieFlag, frame);
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, modelMatrix, shape, pieFlag, frame);
 	}
 
 	polyCount += shape->polys.size();
