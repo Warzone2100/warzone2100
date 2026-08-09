@@ -31,7 +31,15 @@ namespace gfx_api
 	struct texture; // forward-declare
 }
 
+/// How pie_DrawAllMeshes interprets the opaque bucket / depth-only PSO selection.
+enum class MeshDepthPassMode
+{
+	None,         ///< Normal lit scene draw
+	ShadowMap,    ///< Shadow-casting shapes only, shadow depth PSO
+	ScenePrepass, ///< All opaque shapes, depth+normal prepass PSO
+};
+
 void pie_StartMeshes();
 void pie_UpdateLightmap(gfx_api::texture* lightmapTexture, const glm::mat4& modelUVLightmapMatrix);
 void pie_FinalizeMeshes(uint64_t currentGameFrame);
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, bool depthPass);
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None);

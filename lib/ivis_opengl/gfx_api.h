@@ -1165,8 +1165,16 @@ namespace gfx_api
 		int texture1;
 	};
 
-	using TerrainVertexVBODescription = vertex_buffer_description<sizeof(glm::vec3) /*+ sizeof(glm::vec3)*/, gfx_api::vertex_attribute_input_rate::vertex,
-		vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>
+	/// Terrain geometry vertex used by the depth-normal prepass.
+	struct TerrainGeometryVertex
+	{
+		Vector3f pos = Vector3f(0.f, 0.f, 0.f);
+		Vector3f normal = Vector3f(0.f, 1.f, 0.f);
+	};
+
+	/// Position-only view of TerrainGeometryVertex used by depth-only PSOs.
+	using TerrainVertexVBODescription = vertex_buffer_description<sizeof(TerrainGeometryVertex), gfx_api::vertex_attribute_input_rate::vertex,
+		vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, offsetof(TerrainGeometryVertex, pos)>
 	>;
 
 	using TerrainDepth = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1189,13 +1197,6 @@ namespace gfx_api
 	std::tuple<
 		TerrainVertexVBODescription
 	>, std::tuple<texture_description<0, sampler_type::bilinear_repeat>>, SHADER_TERRAIN_DEPTHMAP>;
-
-	/// Terrain geometry vertex used by the depth-normal prepass.
-	struct TerrainGeometryVertex
-	{
-		Vector3f pos = Vector3f(0.f, 0.f, 0.f);
-		Vector3f normal = Vector3f(0.f, 1.f, 0.f);
-	};
 
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>

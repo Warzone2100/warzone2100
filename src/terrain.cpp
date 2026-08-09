@@ -116,11 +116,15 @@ struct Sector
 	bool dirty;              ///< Do we need to update the geometry for this sector?
 };
 
-// VBO for gfx_api::TerrainLayer and TerrainDepth
+// VBO for gfx_api::TerrainDepth / TerrainDepthPrepass (must match TerrainGeometryVertex layout).
 struct TerrainVertex
 {
 	Vector3f pos = Vector3f(0.f, 0.f, 0.f);
+	Vector3f normal = Vector3f(0.f, 1.f, 0.f);
 };
+static_assert(sizeof(TerrainVertex) == sizeof(gfx_api::TerrainGeometryVertex), "TerrainVertex layout must match gfx_api::TerrainGeometryVertex");
+static_assert(offsetof(TerrainVertex, pos) == offsetof(gfx_api::TerrainGeometryVertex, pos), "TerrainVertex.pos offset mismatch");
+static_assert(offsetof(TerrainVertex, normal) == offsetof(gfx_api::TerrainGeometryVertex, normal), "TerrainVertex.normal offset mismatch");
 
 /// A vertex with a position and texture coordinates
 struct DecalVertex
@@ -456,6 +460,7 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 				// offset warps the drawn field, rounding cliff and shoreline outlines
 				const Vector2f off = terrainSurface::outlineOffsetAt(mapState, wx, wy);
 				geometry[(*geometrySize)++].pos = Vector3f(wx + off.x, groundY, -(wy + off.y));
+				geometry[*geometrySize - 1].normal = terrainSurface::worldNormalAt(mapState, wx, wy, hMode);
 				water[(*waterSize)++] = glm::vec4(wx + off.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterY : groundY, -(wy + off.y), waterY - groundY);
 			}
 		}
@@ -469,6 +474,7 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 			// set up geometry
 			auto pos = getGridPosf(mapState, x, y, false, false);
 			geometry[*geometrySize].pos = pos;
+			geometry[*geometrySize].normal = getGridNormal(mapState, x, y, false);
 			(*geometrySize)++;
 
 			float waterHeight = map_WaterHeight(mapState, x, y);
@@ -477,6 +483,7 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 
 			pos = getGridPosf(mapState, x, y, true, false);
 			geometry[*geometrySize].pos = pos;
+			geometry[*geometrySize].normal = getGridNormal(mapState, x, y, true);
 			(*geometrySize)++;
 
 			water[*waterSize] = glm::vec4(pos.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterHeight : pos.y, pos.z, waterHeight - pos.y);
@@ -2195,6 +2202,68 @@ const glm::mat4& getModelUVLightmapMatrix()
 void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP)
 {
 	drawDepthOnlyForDepthMap(mvp, tessCameraMVP, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
+}
+
+void drawTerrainDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view)
+{
+	const glm::mat4 mvp = projection * view;
+	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
+	{
+		if (!terrainDecalVBO || !terrainPatchIndexVBO)
+		{
+			return;
+		}
+
+		gfx_api::TerrainDepthPrepassTess::get().bind();
+		gfx_api::TerrainDepthPrepassTess::get().bind_textures(
+			terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
+		gfx_api::TerrainDepthPrepassTess::get().bind_vertex_buffers(terrainDecalVBO);
+		gfx_api::TerrainDepthPrepassTess::get().bind_constants({ mvp, view, mvp, terrainTessParams() });
+		gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
+
+		for (int x = 0; x < xSectors; x++)
+		{
+			for (int y = 0; y < ySectors; y++)
+			{
+				if (sectors[x * ySectors + y].draw)
+				{
+					batchDrawElements<gfx_api::TerrainDepthPrepassTess>(
+						sectors[x * ySectors + y].patchIndexSize,
+						sectors[x * ySectors + y].patchIndexOffset);
+				}
+			}
+		}
+		flushDrawElementsBatch<gfx_api::TerrainDepthPrepassTess>();
+		gfx_api::TerrainDepthPrepassTess::get().unbind_vertex_buffers(terrainDecalVBO);
+		gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
+		return;
+	}
+
+	if (!geometryVBO || !geometryIndexVBO)
+	{
+		return;
+	}
+
+	gfx_api::TerrainDepthPrepass::get().bind();
+	gfx_api::TerrainDepthPrepass::get().bind_vertex_buffers(geometryVBO);
+	gfx_api::TerrainDepthPrepass::get().bind_constants({ projection, view });
+	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
+
+	for (int x = 0; x < xSectors; x++)
+	{
+		for (int y = 0; y < ySectors; y++)
+		{
+			if (sectors[x * ySectors + y].draw)
+			{
+				batchDrawElements<gfx_api::TerrainDepthPrepass>(
+					sectors[x * ySectors + y].geometryIndexSize,
+					sectors[x * ySectors + y].geometryIndexOffset);
+			}
+		}
+	}
+	flushDrawElementsBatch<gfx_api::TerrainDepthPrepass>();
+	gfx_api::TerrainDepthPrepass::get().unbind_vertex_buffers(geometryVBO);
+	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
 /**
