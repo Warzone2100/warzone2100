@@ -33,6 +33,7 @@ layout(location = 0) out vec4 FragColor;
 #include "pointlights.glsl"
 #include "shadow_mapping.glsl"
 #include "light.glsl"
+#include "tangentspace.glsl"
 
 float random(vec2 uv)
 {
