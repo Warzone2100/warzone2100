@@ -64,7 +64,7 @@ void main()
 	posViewSpace = vec3(ModelVeiwMatrix * vertex);
 	posModelSpace = vec3(instanceModelMatrix * vertex);
 	vec3 cameraVec = normalize(cameraPos.xyz - posModelSpace.xyz);
-	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz); //to-do: pass Sun pos in world space
+	lightDir = -normalize(lightPosition.xyz);
 	halfVec = lightDir + cameraVec;
 
 	vec3 localPosition = vertex.xyz;

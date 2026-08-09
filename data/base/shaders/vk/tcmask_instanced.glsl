@@ -13,7 +13,7 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	mat4 ModelUVLightmapMatrix;
 	mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 	vec4 cameraPos; // in model space
-	vec4 lightPosition; // in view space
+	vec4 lightPosition; // in world space
 	vec4 sceneColor;
 	vec4 ambient;
 	vec4 diffuse;
