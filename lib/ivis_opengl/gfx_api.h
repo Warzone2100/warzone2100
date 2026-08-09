@@ -1108,6 +1108,25 @@ namespace gfx_api
 		>
 	>, notexture, SHADER_COMPONENT_DEPTH_INSTANCED>;
 
+	/// Mesh scene depth+normals prepass (view-space normals encoded to color RT0).
+	using Draw3DShapeDepthPrepass_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
+	std::tuple<
+	Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	>,
+	std::tuple<
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
+	vertex_buffer_description<sizeof(Draw3DShapePerInstanceInterleavedData), gfx_api::vertex_attribute_input_rate::instance,
+		vertex_attribute_description<instance_modelMatrix, gfx_api::vertex_attribute_type::float4, 0>,
+		vertex_attribute_description<instance_modelMatrix + 1, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)>,
+		vertex_attribute_description<instance_modelMatrix + 2, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*2>,
+		vertex_attribute_description<instance_modelMatrix + 3, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*3>,
+		vertex_attribute_description<instance_packedValues, gfx_api::vertex_attribute_type::float4, offsetof(Draw3DShapePerInstanceInterleavedData, shaderStretch_ecmState_alphaTest_animFrameNumber)>,
+		vertex_attribute_description<instance_Colour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, colour)>,
+		vertex_attribute_description<instance_TeamColour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, teamcolour)>
+		>
+	>, notexture, SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED>;
+
 	template<>
 	struct constant_buffer_type<SHADER_GENERIC_COLOR>
 	{
@@ -1170,6 +1189,31 @@ namespace gfx_api
 	std::tuple<
 		TerrainVertexVBODescription
 	>, std::tuple<texture_description<0, sampler_type::bilinear_repeat>>, SHADER_TERRAIN_DEPTHMAP>;
+
+	/// Terrain geometry vertex used by the depth-normal prepass.
+	struct TerrainGeometryVertex
+	{
+		Vector3f pos = Vector3f(0.f, 0.f, 0.f);
+		Vector3f normal = Vector3f(0.f, 1.f, 0.f);
+	};
+
+	template<>
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>
+	{
+		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
+	};
+
+	using TerrainDepthPrepassVertexVBODescription = vertex_buffer_description<sizeof(TerrainGeometryVertex), gfx_api::vertex_attribute_input_rate::vertex,
+		vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, offsetof(TerrainGeometryVertex, pos)>,
+		vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, offsetof(TerrainGeometryVertex, normal)>
+	>;
+
+	using TerrainDepthPrepass = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>>,
+	std::tuple<
+		TerrainDepthPrepassVertexVBODescription
+	>, notexture, SHADER_TERRAIN_DEPTH_PREPASS>;
 
 
 	struct TerrainDecalVertex
@@ -1317,6 +1361,27 @@ namespace gfx_api
 		texture_description<2, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
 		texture_description<3, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
 	>, SHADER_TERRAIN_DEPTHMAP_TESS>;
+
+	template<>
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS_TESS>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
+		glm::mat4 tessCameraMVP; // tessellation factors must match the color pass
+		glm::vec4 tessParams; // x = max tess level, y = viewport height (pixels)
+	};
+
+	using TerrainDepthPrepassTessUniforms = constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS_TESS>;
+
+	using TerrainDepthPrepassTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
+	std::tuple<TerrainDepthPrepassTessUniforms>,
+	std::tuple<
+		TerrainPatchCornerVBODescription
+	>, std::tuple<
+		texture_description<0, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
+		texture_description<1, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
+		texture_description<2, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+	>, SHADER_TERRAIN_DEPTH_PREPASS_TESS>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER>
@@ -1759,6 +1824,80 @@ namespace gfx_api
 		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
 		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>
 	>, SHADER_SMAA_BLEND>;
+
+	static constexpr size_t SSAO_KERNEL_SIZE = 16;
+
+	template<>
+	struct constant_buffer_type<SHADER_SSAO_GENERATE>
+	{
+		glm::mat4 invProjectionMatrix;
+		glm::mat4 projectionMatrix;
+		glm::vec4 params; // radius, biasFactor, minBias, rangeScale
+		glm::vec2 noiseScale;
+		glm::vec2 padding;
+		glm::vec4 kernel[SSAO_KERNEL_SIZE];
+		glm::vec4 uvScaleClamp;
+	};
+
+	using SSAOGeneratePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SSAO_GENERATE>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::nearest_clamped, pixel_format_target::texture_2d>, // depth
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>, // normals
+		texture_description<2, sampler_type::bilinear_repeat, pixel_format_target::texture_2d> // noise
+	>, SHADER_SSAO_GENERATE>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SSAO_BLUR>
+	{
+		glm::vec2 blurDirection;
+		float depthSigma;
+		float padding;
+		glm::vec4 uvScaleClamp;
+	};
+
+	using SSAOBlurPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SSAO_BLUR>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // occlusion
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // depth
+	>, SHADER_SSAO_BLUR>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>
+	{
+		float ssaoIntensity;
+		float fogStart;
+		float fogEnd;
+		int fogEnabled;
+		glm::vec4 fogColor;
+		glm::mat4 invProjectionMatrix;
+		glm::vec4 uvScaleClamp;
+	};
+
+	using SceneComposeSSAOPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // scene
+		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>, // ao
+		texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d>, // prepassNormals
+		texture_description<3, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // prepassDepth
+	>, SHADER_SCENE_COMPOSE_SSAO>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)

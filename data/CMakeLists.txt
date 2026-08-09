@@ -104,6 +104,9 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_instanced.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_instanced.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/postprocess_fullscreen.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect_instanced.frag"
@@ -123,6 +126,11 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_instanced.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_instanced.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_generate.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_blur.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_compose_ssao.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2d.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2d.frag"
@@ -148,6 +156,10 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.tesc"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depthmap_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.frag"
 )
 
 # A shader stage file that exists on disk but is missing from VK_SHADERS would not be
