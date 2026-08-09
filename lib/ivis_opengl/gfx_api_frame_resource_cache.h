@@ -270,11 +270,13 @@ struct DynamicFBOKey
 	uint32_t height = 0;
 	std::vector<Slot> colorSlots;
 	nonstd::optional<Slot> depthSlot;
+	/// GL FBO depth attachment point: DEPTH vs DEPTH_STENCIL (must match cached FBO wiring).
+	bool depthUsesStencilAttachment = false;
 
 	bool operator<(const DynamicFBOKey& other) const
 	{
-		return std::tie(width, height, colorSlots, depthSlot)
-			< std::tie(other.width, other.height, other.colorSlots, other.depthSlot);
+		return std::tie(width, height, colorSlots, depthSlot, depthUsesStencilAttachment)
+			< std::tie(other.width, other.height, other.colorSlots, other.depthSlot, other.depthUsesStencilAttachment);
 	}
 
 	bool operator==(const DynamicFBOKey& other) const
@@ -282,7 +284,8 @@ struct DynamicFBOKey
 		return width == other.width
 			&& height == other.height
 			&& colorSlots == other.colorSlots
-			&& depthSlot == other.depthSlot;
+			&& depthSlot == other.depthSlot
+			&& depthUsesStencilAttachment == other.depthUsesStencilAttachment;
 	}
 };
 

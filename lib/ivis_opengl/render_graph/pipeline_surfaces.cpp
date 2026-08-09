@@ -589,7 +589,8 @@ bool PipelineSurfaceStore::matches(const PipelineSurfaceSlotView& slot, const Re
 		|| slot.spec.arrayLayers != spec.arrayLayers
 		|| slot.spec.gpuUsage != spec.gpuUsage
 		|| slot.spec.provisionMode != spec.provisionMode
-		|| slot.spec.storageKind != spec.storageKind)
+		|| slot.spec.storageKind != spec.storageKind
+		|| slot.spec.usage != spec.usage)
 	{
 		return false;
 	}

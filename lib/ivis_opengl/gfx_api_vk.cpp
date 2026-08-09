@@ -5776,9 +5776,25 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 					imageView = static_cast<VkRenderedImage*>(texture)->view.get();
 					break;
 				case VulkanBackendInternalTextureType::AttachmentImage:
+				{
 					ASSERT(target_type == gfx_api::pixel_format_target::texture_2d, "Unexpected target type: (%d)", static_cast<int>(target_type));
-					imageView = static_cast<VkAttachmentImage*>(texture)->view;
+					const auto* attachmentImage = static_cast<VkAttachmentImage*>(texture);
+					imageView = attachmentImage->view;
+					switch (attachmentImage->imageFormat)
+					{
+					case vk::Format::eD16Unorm:
+					case vk::Format::eX8D24UnormPack32:
+					case vk::Format::eD32Sfloat:
+					case vk::Format::eD16UnormS8Uint:
+					case vk::Format::eD24UnormS8Uint:
+					case vk::Format::eD32SfloatS8Uint:
+						imageLayout = vk::ImageLayout::eDepthStencilReadOnlyOptimal;
+						break;
+					default:
+						break;
+					}
 					break;
+				}
 				case VulkanBackendInternalTextureType::SwapchainColorSurface:
 				case VulkanBackendInternalTextureType::SwapchainDepthSurface:
 					debug(LOG_FATAL, "Swapchain pipeline surfaces are not shader-sampled");
@@ -6176,32 +6192,41 @@ vk::Image VkRoot::getVkImageHandle(gfx_api::abstract_texture* texture) const
 	return vk::Image();
 }
 
+static vk::ImageAspectFlags vkImageAspectForFormat(vk::Format format)
+{
+	switch (format)
+	{
+	case vk::Format::eD16Unorm:
+	case vk::Format::eX8D24UnormPack32:
+	case vk::Format::eD32Sfloat:
+		return vk::ImageAspectFlagBits::eDepth;
+	case vk::Format::eS8Uint:
+		return vk::ImageAspectFlagBits::eStencil;
+	case vk::Format::eD16UnormS8Uint:
+	case vk::Format::eD24UnormS8Uint:
+	case vk::Format::eD32SfloatS8Uint:
+		return vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
+	default:
+		return vk::ImageAspectFlagBits::eColor;
+	}
+}
+
 vk::ImageAspectFlags VkRoot::getVkImageAspect(gfx_api::abstract_texture* texture) const
 {
 	if (dynamic_cast<VkDepthMapImage*>(texture) != nullptr)
 	{
-		return vk::ImageAspectFlagBits::eDepth;
+		return vkImageAspectForFormat(depthBufferFormat);
 	}
-	if (dynamic_cast<VkSwapchainDepthSurface*>(texture) != nullptr)
+	if (auto* swapchainDepth = dynamic_cast<VkSwapchainDepthSurface*>(texture))
 	{
-		return vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
+		return vkImageAspectForFormat(swapchainDepth->imageFormat);
 	}
 	if (auto* attachmentImage = dynamic_cast<VkAttachmentImage*>(texture))
 	{
-		switch (attachmentImage->imageFormat)
+		const vk::ImageAspectFlags aspect = vkImageAspectForFormat(attachmentImage->imageFormat);
+		if (aspect != vk::ImageAspectFlagBits::eColor)
 		{
-		case vk::Format::eD16Unorm:
-		case vk::Format::eX8D24UnormPack32:
-		case vk::Format::eD32Sfloat:
-			return vk::ImageAspectFlagBits::eDepth;
-		case vk::Format::eS8Uint:
-			return vk::ImageAspectFlagBits::eStencil;
-		case vk::Format::eD16UnormS8Uint:
-		case vk::Format::eD24UnormS8Uint:
-		case vk::Format::eD32SfloatS8Uint:
-			return vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
-		default:
-			break;
+			return aspect;
 		}
 	}
 	return vk::ImageAspectFlagBits::eColor;

@@ -25,6 +25,7 @@
 #include "loop.h"
 #include "main.h"
 #include "wrappers.h"
+#include "warzoneconfig.h"
 
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piedef.h"
@@ -113,6 +114,11 @@ public:
 	bool smaaIntermediateActive() const override
 	{
 		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::SmaaColor) != nullptr;
+	}
+
+	bool ssaoEnabled() const override
+	{
+		return war_getSSAO();
 	}
 
 	uint32_t shadowMapSize() const override

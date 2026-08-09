@@ -67,6 +67,8 @@ struct RenderFeatures
 		/// The SMAA blend writes a scene-sized intermediate consumed by the
 		/// blit or upscale chain (otherwise it writes the swapchain directly).
 		SmaaIntermediate   = 1u << 6,
+		/// Include SSAO prepass / generate / blur / compose passes (in-game, not frozen).
+		SSAO               = 1u << 7,
 	};
 };
 
@@ -141,6 +143,8 @@ public:
 	/// True when the backend has a scene-sized SMAA blend output surface for a
 	/// following scaling pass to consume.
 	virtual bool smaaIntermediateActive() const = 0;
+	/// True when SSAO is enabled in config (surfaces may still be syncing).
+	virtual bool ssaoEnabled() const = 0;
 	virtual uint32_t shadowMapSize() const = 0;
 	/// True when the in-game debug overlay pass slot should exist (persistent toggles only).
 	virtual bool debugOverlaysEnabled() const = 0;

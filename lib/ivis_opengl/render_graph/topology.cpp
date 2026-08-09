@@ -62,6 +62,10 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 		// it feeds an intermediate instead of replacing the swapchain output
 		count += (snapshot.features & RenderFeatures::SmaaIntermediate) ? 3 : 2;
 	}
+	if (snapshot.features & RenderFeatures::SSAO)
+	{
+		count += 5; // ScenePrepass, SSAOGenerate, SSAOBlurH, SSAOBlurV, SSAOCompose
+	}
 	if (snapshot.features & RenderFeatures::DebugOverlays)
 	{
 		++count;
@@ -180,6 +184,10 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 			{
 				snapshot.features |= RenderFeatures::SmaaIntermediate;
 			}
+		}
+		if (query.ssaoEnabled())
+		{
+			snapshot.features |= RenderFeatures::SSAO;
 		}
 	}
 
