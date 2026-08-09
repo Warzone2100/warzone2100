@@ -11,6 +11,7 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;
 	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
 	vec4 lightPosition;
 	vec4 sceneColor;
 	vec4 ambient;
@@ -34,7 +35,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 
 layout(std140, set = 2, binding = 0) uniform instanceuniforms
 {
-	mat4 ModelViewMatrix;
+	mat4 ModelMatrix;
 	mat4 NormalMatrix;
 	vec4 colour;
 	vec4 teamcolour;
@@ -49,6 +50,7 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec3 lightDir;
 layout(location = 3) in vec3 halfVec;
 layout(location = 4) in vec2 texCoord;
+layout(location = 5) in mat3 TangentSpaceMatrix; // occupies locations 5, 6, 7
 
 layout(location = 0) out vec4 FragColor;
 
@@ -69,11 +71,7 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		// This shader lights in TANGENT space (the vertex shader rotates lightDir
-		// into the basis), so the tangent branch wants the decoded map as-is -
-		// hence the identity basis. The object-space branch is unaffected by that
-		// and goes through NormalMatrix exactly as in tcmask_instanced.frag.
-		N = wzDecodeNormalMap(normalFromMap, hasTangents, mat3(1.0), mat3(NormalMatrix));
+		N = wzDecodeNormalMap(normalFromMap, hasTangents, TangentSpaceMatrix, mat3(NormalMatrix));
 	}
 	N = normalize(N);
 

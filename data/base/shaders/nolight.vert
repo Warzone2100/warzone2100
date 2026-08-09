@@ -12,7 +12,8 @@
 #endif
 
 uniform mat4 ProjectionMatrix;
-uniform mat4 ModelViewMatrix;
+uniform mat4 ViewMatrix;
+uniform mat4 ModelMatrix;
 uniform float animFrameNumber;
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
@@ -48,7 +49,7 @@ void main()
 	texCoord = vec2(texCoord.x + uFrame, texCoord.y + vFrame);
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * vertex;
 	gl_Position = gposition;
 
