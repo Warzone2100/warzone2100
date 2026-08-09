@@ -936,6 +936,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix"
 		} }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, program_data{ "Component depth prepass program", "shaders/tcmask_depth_prepass_instanced.vert", "shaders/tcmask_depth_prepass_instanced.frag",
+		{ "ProjectionMatrix", "ViewMatrix" } }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{
 			// per-frame global uniforms
@@ -963,6 +965,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, program_data{ "terrain_depth_prepass program", "shaders/terrain_depth_prepass.vert", "shaders/terrain_depth_prepass.frag",
+		{ "ProjectionMatrix", "ViewMatrix" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
@@ -988,6 +992,10 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "ModelViewProjectionMatrix", "tessCameraMVP", "paramx2", "paramy2", "textureMatrix2", "tessParams", "fogEnabled", "fogEnd", "fogStart" },
 		{ {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
 		"shaders/terrain_depth_tess.tesc", "shaders/terrain_depthmap_tess.tese" }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, program_data{ "terrain_depth_prepass tess program", "shaders/terrain_depth_prepass_tess.vert", "shaders/terrain_depth_prepass_tess.frag",
+		{ "ModelViewProjectionMatrix", "ViewMatrix", "tessCameraMVP", "tessParams" },
+		{ {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
+		"shaders/terrain_depth_prepass_tess.tesc", "shaders/terrain_depth_prepass_tess.tese" }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, program_data{ "terrain decals tess program", "shaders/terrain_combined_tess.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
@@ -1064,7 +1072,16 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ {"edgesTex", 0}, {"areaTex", 1}, {"searchTex", 2} } }),
 	std::make_pair(SHADER_SMAA_BLEND, program_data{ "SMAA neighborhood blending program", "shaders/smaa_blend.vert", "shaders/smaa_blend.frag",
 		{ "rtMetrics", "uvScaleClamp" },
-		{ {"colorTex", 0}, {"blendTex", 1} } })
+		{ {"colorTex", 0}, {"blendTex", 1} } }),
+	std::make_pair(SHADER_SSAO_GENERATE, program_data{ "SSAO generate program", "shaders/postprocess_fullscreen.vert", "shaders/ssao_generate.frag",
+		{ "invProjectionMatrix", "projectionMatrix", "params", "noiseScale", "kernel", "uvScaleClamp" },
+		{ {"depthTexture", 0}, {"normalsTexture", 1}, {"noiseTexture", 2} } }),
+	std::make_pair(SHADER_SSAO_BLUR, program_data{ "SSAO blur program", "shaders/postprocess_fullscreen.vert", "shaders/ssao_blur.frag",
+		{ "blurDirection", "depthSigma", "uvScaleClamp" },
+		{ {"occlusionTexture", 0}, {"depthTexture", 1} } }),
+	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ "Scene compose SSAO program", "shaders/postprocess_fullscreen.vert", "shaders/scene_compose_ssao.frag",
+		{ "ssaoIntensity", "fogColor", "fogStart", "fogEnd", "fogEnabled", "invProjectionMatrix", "uvScaleClamp" },
+		{ {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2}, {"prepassDepth", 3} } })
 };
 
 enum SHADER_VERSION
@@ -1367,7 +1384,9 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
+		uniform_binding_entry<SHADER_TERRAIN_DEPTH_PREPASS>(),
 		uniform_setting_func<gfx_api::TerrainDepthMapTessUniforms>(),
+		uniform_setting_func<gfx_api::TerrainDepthPrepassTessUniforms>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
 		uniform_binding_entry<SHADER_WATER_HIGH>(),
@@ -1389,7 +1408,10 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_binding_entry<SHADER_FSR1_RCAS>(),
 		uniform_binding_entry<SHADER_SMAA_EDGES>(),
 		uniform_binding_entry<SHADER_SMAA_WEIGHTS>(),
-		uniform_binding_entry<SHADER_SMAA_BLEND>()
+		uniform_binding_entry<SHADER_SMAA_BLEND>(),
+		uniform_binding_entry<SHADER_SSAO_GENERATE>(),
+		uniform_binding_entry<SHADER_SSAO_BLUR>(),
+		uniform_binding_entry<SHADER_SCENE_COMPOSE_SSAO>()
 	};
 
 	for (auto& uniform_block : createInfo.uniform_blocks)
@@ -2554,6 +2576,14 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthMapTessU
 	setUniforms(8, cbuf.fog_end);
 }
 
+void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthPrepassTessUniforms& cbuf)
+{
+	setUniforms(0, cbuf.ModelViewProjectionMatrix);
+	setUniforms(1, cbuf.ViewMatrix);
+	setUniforms(2, cbuf.tessCameraMVP);
+	setUniforms(3, cbuf.tessParams);
+}
+
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
@@ -2599,6 +2629,40 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	setUniforms(0, cbuf.rtMetrics);
 	setUniforms(1, cbuf.uvScaleClamp);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>& cbuf)
+{
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.ViewMatrix);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_GENERATE>& cbuf)
+{
+	setUniforms(0, cbuf.invProjectionMatrix);
+	setUniforms(1, cbuf.projectionMatrix);
+	setUniforms(2, cbuf.params);
+	setUniforms(3, cbuf.noiseScale);
+	setUniforms(4, cbuf.kernel, gfx_api::SSAO_KERNEL_SIZE);
+	setUniforms(5, cbuf.uvScaleClamp);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_BLUR>& cbuf)
+{
+	setUniforms(0, cbuf.blurDirection);
+	setUniforms(1, cbuf.depthSigma);
+	setUniforms(2, cbuf.uvScaleClamp);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>& cbuf)
+{
+	setUniforms(0, cbuf.ssaoIntensity);
+	setUniforms(1, cbuf.fogColor);
+	setUniforms(2, cbuf.fogStart);
+	setUniforms(3, cbuf.fogEnd);
+	setUniforms(4, cbuf.fogEnabled);
+	setUniforms(5, cbuf.invProjectionMatrix);
+	setUniforms(6, cbuf.uvScaleClamp);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)

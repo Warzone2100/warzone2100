@@ -319,6 +319,7 @@ private:
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>& cbuf);
 	void set_constants(const gfx_api::TerrainCombinedUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf);
@@ -334,6 +335,7 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf);
 	void set_constants(const gfx_api::TerrainDepthMapTessUniforms& cbuf);
+	void set_constants(const gfx_api::TerrainDepthPrepassTessUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf);
@@ -342,6 +344,9 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_EDGES>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_WEIGHTS>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_BLEND>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_GENERATE>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_BLUR>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context
