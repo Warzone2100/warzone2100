@@ -12,6 +12,7 @@
 #endif
 
 uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
 uniform mat4 ModelViewMatrix;
 uniform mat4 NormalMatrix;
 uniform int hasTangents; // whether tangents were calculated for model
@@ -64,12 +65,19 @@ void main()
 	// Lighting we pass to the fragment shader
 	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
 	vec3 eyeVec = normalize(-viewVertex.xyz);
-	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	lightDir = normalize(lightPosition.xyz);
+	// Classic models are lit with the normal negated, which cancels against the
+	// negated light below. Both halves are taken verbatim from
+	// tcmask_instanced.vert so that the two paths agree by construction rather
+	// than by each carrying its own compensation.
+	vec3 n = -normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
+	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
-		// Building the matrix Eye Space -> Tangent Space with handness
+		// ...but NOT negated when it is the shading normal of a tangent basis.
+		n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
+
+		// Building the matrix World Space -> Tangent Space with handness
 		vec3 t = normalize((NormalMatrix * vertexTangent).xyz);
 		vec3 b = cross (n, t) * vertexTangent.w;
 		mat3 TangentSpaceMatrix = mat3(t, b, n); // conventional (T, B, N)
@@ -80,11 +88,16 @@ void main()
 
 		// ...and the geometric normal with them. The fragment shader starts
 		// from "N = normal" and only replaces it when a normal map is bound,
-		// so leaving this in eye space lights any model that has a NORMALS
-		// block but no usable normal map against a tangent-space lightDir.
+		// so leaving it outside this basis would light any model that has a
+		// NORMALS block but no normal map against a tangent-space lightDir.
 		// In this basis it becomes (0, 0, 1), which is exactly what a flat
 		// tangent-space normal map decodes to - the mapped and unmapped cases
 		// have to agree.
+		//
+		// NOTE: eyeVec above is still in eye space, so halfVec mixes spaces
+		// when ViewMatrix is not identity. Harmless on the button path (which
+		// passes identity) and unreachable elsewhere; fixed properly when this
+		// shader moves to a world-space cameraVec.
 		n = n * TangentSpaceMatrix;
 	}
 
