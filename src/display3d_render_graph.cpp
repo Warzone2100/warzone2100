@@ -123,7 +123,7 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos, fc.shadowCascadesInfo, shadowMap, false);
+		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos, fc.shadowCascadesInfo, shadowMap, MeshDepthPassMode::None);
 	}
 	wzPerfEnd(PERF_MODELS);
 
@@ -153,7 +153,7 @@ static void recordShadowCascade(const gfx_api::RenderPassContext& passCtx)
 		drawTerrainDepthOnly(fc.cascadeProj[cascadeIndex] * fc.cascadeView[cascadeIndex], fc.perspectiveViewMatrix);
 	}
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.cascadeProj[cascadeIndex], fc.cascadeView[cascadeIndex],
-		cameraPos, fc.shadowCascadesInfo, nullptr, true);
+		cameraPos, fc.shadowCascadesInfo, nullptr, MeshDepthPassMode::ShadowMap);
 }
 
 static void recordSceneBlit(const gfx_api::RenderPassContext& passCtx)
