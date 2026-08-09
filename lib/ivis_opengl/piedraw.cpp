@@ -322,7 +322,7 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelMatrix,
-		glm::transpose(glm::inverse(modelMatrix)),
+		glm::mat4(glm::transpose(glm::inverse(glm::mat3(modelMatrix)))),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		0.f, 0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
 	};
@@ -424,7 +424,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelMatrix,
-		glm::transpose(glm::inverse(modelMatrix)),
+		glm::mat4(glm::transpose(glm::inverse(glm::mat3(modelMatrix)))),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		stretch, float(frame), ecmState, !(pieFlag & pie_PREMULTIPLIED)
 	};
