@@ -257,6 +257,9 @@ void war_setSmaaMode(SMAA_MODE mode);
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
+bool war_getSSAO();
+void war_setSSAO(bool enabled);
+
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
 uint8_t war_getOptionsButtonVisibility();

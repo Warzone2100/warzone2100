@@ -121,6 +121,7 @@ struct WARZONE_GLOBALS
 	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
 	SMAA_MODE smaaMode = SMAA_MODE::OFF;
+	bool ssao = false; // screen-space ambient occlusion (default off)
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -940,6 +941,16 @@ bool war_getPointLightPerPixelLighting()
 void war_setPointLightPerPixelLighting(bool perPixelEnabled)
 {
 	warGlobs.pointLightLighting = perPixelEnabled;
+}
+
+bool war_getSSAO()
+{
+	return warGlobs.ssao;
+}
+
+void war_setSSAO(bool enabled)
+{
+	warGlobs.ssao = enabled;
 }
 
 bool war_getGroupsMenuEnabled()

@@ -823,6 +823,7 @@ bool loadConfig()
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
+	war_setSSAO(iniGetBool("ssao", false).value());
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
@@ -1062,6 +1063,7 @@ bool saveConfig()
 		case SMAA_MODE::ULTRA: iniSetString("smaa", "ultra"); break;
 	}
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetBool("ssao", war_getSSAO());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 
