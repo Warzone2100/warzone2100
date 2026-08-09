@@ -77,6 +77,15 @@ void main()
 		// Transform light and eye direction vectors by tangent basis
 		lightDir *= TangentSpaceMatrix;
 		eyeVec *= TangentSpaceMatrix;
+
+		// ...and the geometric normal with them. The fragment shader starts
+		// from "N = normal" and only replaces it when a normal map is bound,
+		// so leaving this in eye space lights any model that has a NORMALS
+		// block but no usable normal map against a tangent-space lightDir.
+		// In this basis it becomes (0, 0, 1), which is exactly what a flat
+		// tangent-space normal map decodes to - the mapped and unmapped cases
+		// have to agree.
+		n = n * TangentSpaceMatrix;
 	}
 
 	normal = n;
