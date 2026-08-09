@@ -78,6 +78,7 @@ out vec4 FragColor;
 #endif
 #include "shadow_mapping.glsl"
 #include "light.glsl"
+#include "tangentspace.glsl"
 
 float random(vec2 uv)
 {
