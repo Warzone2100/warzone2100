@@ -910,11 +910,11 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
+			"ModelMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
 			// appended per-frame global uniforms
 			"WZ_MIP_LOAD_BIAS"
 		} }),
@@ -939,11 +939,11 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
+			"ModelMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
 			// appended per-frame global uniforms
 			"WZ_MIP_LOAD_BIAS"
 		} }),
@@ -2244,38 +2244,39 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUni
 	setUniforms(0, cbuf.ProjectionMatrix);
 	setUniforms(1, cbuf.ViewMatrix);
 	setUniforms(2, cbuf.ShadowMapMVPMatrix);
-	setUniforms(3, cbuf.sunPos);
-	setUniforms(4, cbuf.sceneColor);
-	setUniforms(5, cbuf.ambient);
-	setUniforms(6, cbuf.diffuse);
-	setUniforms(7, cbuf.specular);
-	setUniforms(8, cbuf.fogColour);
-	setUniforms(9, cbuf.fogEnd);
-	setUniforms(10, cbuf.fogBegin);
-	setUniforms(11, cbuf.timeState);
-	setUniforms(12, cbuf.fogEnabled);
-	// index 25 is the appended name after the per mesh and per instance uniforms
-	setUniforms(25, cbuf.mipLoadBias);
+	setUniforms(3, cbuf.cameraPos);
+	setUniforms(4, cbuf.sunPos);
+	setUniforms(5, cbuf.sceneColor);
+	setUniforms(6, cbuf.ambient);
+	setUniforms(7, cbuf.diffuse);
+	setUniforms(8, cbuf.specular);
+	setUniforms(9, cbuf.fogColour);
+	setUniforms(10, cbuf.fogEnd);
+	setUniforms(11, cbuf.fogBegin);
+	setUniforms(12, cbuf.timeState);
+	setUniforms(13, cbuf.fogEnabled);
+	// index 26 is the appended name after the per mesh and per instance uniforms
+	setUniforms(26, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf)
 {
-	setUniforms(13, cbuf.tcmask);
-	setUniforms(14, cbuf.normalMap);
-	setUniforms(15, cbuf.specularMap);
-	setUniforms(16, cbuf.hasTangents);
+	setUniforms(14, cbuf.tcmask);
+	setUniforms(15, cbuf.normalMap);
+	setUniforms(16, cbuf.specularMap);
+	setUniforms(17, cbuf.hasTangents);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf)
 {
-	setUniforms(17, cbuf.ModelViewMatrix);
-	setUniforms(18, cbuf.NormalMatrix);
-	setUniforms(19, cbuf.colour);
-	setUniforms(20, cbuf.teamcolour);
-	setUniforms(21, cbuf.shaderStretch);
-	setUniforms(22, cbuf.animFrameNumber);
-	setUniforms(23, cbuf.ecmState);
-	setUniforms(24, cbuf.alphaTest);
+	setUniforms(18, cbuf.ModelMatrix);
+	setUniforms(19, cbuf.NormalMatrix);
+	setUniforms(20, cbuf.colour);
+	setUniforms(21, cbuf.teamcolour);
+	setUniforms(22, cbuf.shaderStretch);
+	setUniforms(23, cbuf.animFrameNumber);
+	setUniforms(24, cbuf.ecmState);
+	setUniforms(25, cbuf.alphaTest);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf)

@@ -44,12 +44,14 @@ in vec3 normal;
 in vec3 lightDir;
 in vec3 halfVec;
 in vec2 texCoord;
+in mat3 TangentSpaceMatrix;
 #else
 varying float vertexDistance;
 varying vec3 normal;
 varying vec3 lightDir;
 varying vec3 halfVec;
 varying vec2 texCoord;
+varying mat3 TangentSpaceMatrix;
 #endif
 
 #ifdef NEWGL
@@ -75,11 +77,7 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		// This shader lights in TANGENT space (the vertex shader rotates lightDir
-		// into the basis), so the tangent branch wants the decoded map as-is -
-		// hence the identity basis. The object-space branch is unaffected by that
-		// and goes through NormalMatrix exactly as in tcmask_instanced.frag.
-		N = wzDecodeNormalMap(normalFromMap, hasTangents, mat3(1.0), mat3(NormalMatrix));
+		N = wzDecodeNormalMap(normalFromMap, hasTangents, TangentSpaceMatrix, mat3(NormalMatrix));
 	}
 	N = normalize(N);
 

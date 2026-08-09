@@ -13,8 +13,9 @@
 
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
-uniform mat4 ModelViewMatrix;
+uniform mat4 ModelMatrix;
 uniform mat4 NormalMatrix;
+uniform vec4 cameraPos; // in world space
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
 uniform float stretch;
@@ -42,10 +43,12 @@ attribute vec4 vertexTangent;
 out float vertexDistance;
 out vec3 normal, lightDir, halfVec;
 out vec2 texCoord;
+out mat3 TangentSpaceMatrix;
 #else
 varying float vertexDistance;
 varying vec3 normal, lightDir, halfVec;
 varying vec2 texCoord;
+varying mat3 TangentSpaceMatrix;
 #endif
 
 float when_gt(float x, float y) {
@@ -62,47 +65,28 @@ void main()
 	float vFrame = float(frame / framesPerLine) * vertexTexCoordAndTexAnim.w; // texAnim.y
 	texCoord = vec2(texCoord.x + uFrame, texCoord.y + vFrame);
 
-	// Lighting we pass to the fragment shader
-	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
-	vec3 eyeVec = normalize(-viewVertex.xyz);
+	// Lighting, all in WORLD space
+	vec3 posWorld = (ModelMatrix * vertex).xyz;
+	vec3 cameraVec = normalize(cameraPos.xyz - posWorld);
+
 	// Classic models are lit with the normal negated, which cancels against the
-	// negated light below. Both halves are taken verbatim from
-	// tcmask_instanced.vert so that the two paths agree by construction rather
-	// than by each carrying its own compensation.
-	vec3 n = -normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
+	// negated light below.
+	normal = -normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
 	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
 		// ...but NOT negated when it is the shading normal of a tangent basis.
-		n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
+		normal = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
 
-		// Building the matrix World Space -> Tangent Space with handness
+		// Building the World Space -> Tangent Space matrix with handness w to
+		// support uv mirroring. The fragment shader applies it.
 		vec3 t = normalize((NormalMatrix * vertexTangent).xyz);
-		vec3 b = cross (n, t) * vertexTangent.w;
-		mat3 TangentSpaceMatrix = mat3(t, b, n); // conventional (T, B, N)
-
-		// Transform light and eye direction vectors by tangent basis
-		lightDir *= TangentSpaceMatrix;
-		eyeVec *= TangentSpaceMatrix;
-
-		// ...and the geometric normal with them. The fragment shader starts
-		// from "N = normal" and only replaces it when a normal map is bound,
-		// so leaving it outside this basis would light any model that has a
-		// NORMALS block but no normal map against a tangent-space lightDir.
-		// In this basis it becomes (0, 0, 1), which is exactly what a flat
-		// tangent-space normal map decodes to - the mapped and unmapped cases
-		// have to agree.
-		//
-		// NOTE: eyeVec above is still in eye space, so halfVec mixes spaces
-		// when ViewMatrix is not identity. Harmless on the button path (which
-		// passes identity) and unreachable elsewhere; fixed properly when this
-		// shader moves to a world-space cameraVec.
-		n = n * TangentSpaceMatrix;
+		vec3 b = cross (normal, t) * vertexTangent.w;
+		TangentSpaceMatrix = mat3(t, b, normal); // conventional (T, B, N)
 	}
 
-	normal = n;
-	halfVec = lightDir + eyeVec;
+	halfVec = lightDir + cameraVec;
 
 	// Implement building stretching to accommodate terrain
 	vec4 position = vertex;
@@ -115,7 +99,7 @@ void main()
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * position;
 	gl_Position = gposition;
 

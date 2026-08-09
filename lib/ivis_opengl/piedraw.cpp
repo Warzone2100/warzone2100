@@ -307,6 +307,9 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 		pie_UIPerspectiveGet(), viewMatrix, glm::mat4(1.f),
+		// The button "camera" sits at the origin looking down -Z
+		// Callers pass an identity view matrix, so world space and eye space coincide here
+		glm::vec4(0.f, 0.f, 0.f, 0.f),
 		glm::vec4(getDefaultSunPosition(), 0.f),
 		sceneColor, ambient, diffuse, specular, glm::vec4(0.f),
 		0.f, 0.f, 0.f, 0,
@@ -318,7 +321,7 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
-		viewMatrix * modelMatrix,
+		modelMatrix,
 		glm::transpose(glm::inverse(modelMatrix)),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		0.f, 0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
@@ -403,15 +406,11 @@ private:
 template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
 static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & modelMatrix, const iIMDShape * shape, int pieFlag, int frame)
 {
-	// NOTE: takes the MODEL matrix, not the ModelView matrix. NormalMatrix has to
-	// be derived from the model matrix alone so that it maps into the same space
-	// as lightPosition (which is currentSunPosition, in world space). Deriving it
-	// from the ModelView matrix instead yields eye-space normals lit by a
-	// world-space sun, i.e. lighting that rotates with the camera.
-	//
-	// pie_Draw3DButton has always done it this way; this brings the other caller
-	// of these shaders into line. See also tcmask.vert.
-	const glm::mat4 modelViewMatrix = globalUniforms.ViewMatrix * modelMatrix;
+	// NOTE: takes the MODEL matrix, not the ModelView matrix. Everything the
+	// shaders derive from it - NormalMatrix, world-space positions - has to land
+	// in the same space as lightPosition (currentSunPosition) and cameraPos,
+	// both of which are world space. The shaders form ModelView themselves from
+	// the global ViewMatrix, exactly as the instanced path does.
 	templatedState currentState = templatedState(shader, shape, pieFlag);
 
 	const auto& textures = shape->getTextures();
@@ -424,7 +423,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
-		modelViewMatrix,
+		modelMatrix,
 		glm::transpose(glm::inverse(modelMatrix)),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		stretch, float(frame), ecmState, !(pieFlag & pie_PREMULTIPLIED)
@@ -1662,6 +1661,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	{
 		gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
+			glm::vec4(cameraPos, 0.f),
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
 			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled,
 			gfx_api::context::get().getSceneMipLodBias()
