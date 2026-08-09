@@ -72,6 +72,16 @@ enum class PipelineSurfaceId : uint8_t
 	/// Scene-sized SMAA neighborhood blend output, present only when a scaling
 	/// pass consumes it (otherwise the blend writes the swapchain directly).
 	SmaaColor,
+	/// Scene-sized sampleable depth for the SSAO depth-normal prepass.
+	ScenePrepassDepth,
+	/// Scene-sized view-space normals (RGB) + SSAO application weight (A).
+	ScenePrepassNormals,
+	/// SSAO generate output / final blurred AO (ping-pong with SSAOBlurH).
+	SSAORaw,
+	/// Horizontal SSAO blur intermediate.
+	SSAOBlurH,
+	/// Scene-sized lit scene with AO (and deferred fog) applied; feeds SMAA/blit/FSR.
+	SSAOComposedColor,
 	ShadowMap,
 	SwapchainColor,
 	SwapchainMSAAColor,
@@ -127,6 +137,8 @@ enum class SurfaceFormatClass : uint8_t
 	FixedRG8,
 	/// Fixed four channel color, independent of the negotiated scene format.
 	FixedRGBA8,
+	/// Fixed FORMAT_R8_UNORM (e.g. SSAO occlusion buffers).
+	SingleChannelR8,
 };
 
 /// Abstract GPU usage flags the backend must honor when allocating.
@@ -173,6 +185,8 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaActive,
 	/// SMAA enabled and its blend output feeds a scaling pass instead of the swapchain.
 	SmaaIntermediateActive,
+	/// SSAO intermediate surfaces requested via context::setSSAOSurfacesEnabled.
+	SsaoActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).
@@ -191,6 +205,7 @@ enum class SurfaceStorageKind : uint8_t
 	MsaaColorAttachment,     // Vk MSAA color image / GL MSAA color renderbuffer
 	DepthStencilAttachment,  // Vk depth image / GL depth-stencil renderbuffer
 	SampledDepthArray,       // VkDepthMapImage + cascade views / GL depth array + compare
+	SampledDepth2D,          // 1x sampleable depth texture (attachment + sampled)
 };
 
 /// Whether a surface survives swapchain teardown/recreate.
@@ -249,6 +264,8 @@ struct PipelineSurfaceSyncInputs
 	/// Dynamic resolution keeps scene-sized intermediates alive even at a 1:1 scene size.
 	bool sceneDynamicResolution = false;
 	bool smaa = false;
+	/// When true, SsaoActive catalog surfaces are enabled (set via context::setSSAOSurfacesEnabled).
+	bool ssaoEnabled = false;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.

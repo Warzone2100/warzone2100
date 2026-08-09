@@ -148,6 +148,66 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
+	// ScenePrepassDepth - 1x sampleable depth for SSAO (and future forward use)
+	makeCatalogEntry(
+		PipelineSurfaceUsage::DepthOnly,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::DepthSampled,
+		SurfaceGpuUsage::DepthStencilAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SsaoActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledDepth2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// ScenePrepassNormals - view-space normals (RGB) + SSAO application weight (A)
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::FixedRGBA8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SsaoActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// SSAORaw - generate output / final blurred AO
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SingleChannelR8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SsaoActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// SSAOBlurH - horizontal-blur ping-pong
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SingleChannelR8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SsaoActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// SSAOComposedColor - lit scene with AO (+ deferred fog) applied
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SsaoActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
 	// ShadowMap
 	makeCatalogEntry(
 		PipelineSurfaceUsage::DepthOnly,
@@ -231,6 +291,9 @@ void validatePipelineSurfaceCatalog()
 		case SurfaceStorageKind::SampledDepthArray:
 			expected = SurfaceGpuUsage::DepthStencilAttachment | SurfaceGpuUsage::Sampled;
 			break;
+		case SurfaceStorageKind::SampledDepth2D:
+			expected = SurfaceGpuUsage::DepthStencilAttachment | SurfaceGpuUsage::Sampled;
+			break;
 		case SurfaceStorageKind::None:
 			expected = (cat.provisionMode == SurfaceProvisionMode::WsiPresentDepth)
 				? SurfaceGpuUsage::DepthStencilAttachment
@@ -289,6 +352,8 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 		return inputs.smaa
 			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH
 				|| inputs.sceneDynamicResolution);
+	case SurfaceEnablePolicy::SsaoActive:
+		return inputs.ssaoEnabled;
 	}
 	return false;
 }
@@ -362,6 +427,8 @@ pixel_format resolveFormat(SurfaceFormatClass formatClass, PipelineSurfaceId for
 		return pixel_format::FORMAT_RG8_UNORM;
 	case SurfaceFormatClass::FixedRGBA8:
 		return pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	case SurfaceFormatClass::SingleChannelR8:
+		return pixel_format::FORMAT_R8_UNORM;
 	}
 	return pixel_format::invalid;
 }
