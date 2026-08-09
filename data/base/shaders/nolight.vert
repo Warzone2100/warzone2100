@@ -26,7 +26,7 @@ in vec4 vertex;
 in vec4 vertexTexCoordAndTexAnim;
 #else
 attribute vec4 vertex;
-attribute vec2 vertexTexCoordAndTexAnim;
+attribute vec4 vertexTexCoordAndTexAnim;
 #endif
 
 #ifdef NEWGL
