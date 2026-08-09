@@ -528,7 +528,7 @@ vk::Format findDepthStencilFormat(const vk::PhysicalDevice& physicalDevice, cons
 
 vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
-	std::vector<vk::Format> depthFormats = { vk::Format::eD32SfloatS8Uint, vk::Format::eD32Sfloat, vk::Format::eD24UnormS8Uint };
+	std::vector<vk::Format> depthFormats = { vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint };
 	return findSupportedFormat(
 		physicalDevice,
 		depthFormats,
