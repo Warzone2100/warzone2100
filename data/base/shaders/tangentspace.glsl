@@ -50,4 +50,34 @@ vec2 wzParallaxOffset(mat3 tbn, vec3 viewVec, float height, float scale)
 	return wzTangentDirToUV(v.xy / denom) * (height * scale);
 }
 
+// Decode a sampled normal map into the space the caller lights in.
+//
+//   sampled      - the raw texture sample (.xyz, 0..1)
+//   hasTangents  - non-zero when the model carries a tangent basis
+//   tbn          - the (T, B, N) matrix; pass mat3(1.0) if already lighting in
+//                  tangent space, in which case the tangent branch is a no-op
+//   normalMatrix - model -> world, used only by the object-space branch
+//
+// The two branches are NOT symmetric and neither swizzle is redundant:
+//
+//  - tangent space: the basis is (T, B, N) and the map is (R, G, B) along
+//    exactly those axes, so the sample is used unswizzled. See
+//    tangentspace.glsl for why no v-flip correction is needed - the tangent
+//    generator already accounts for it.
+//
+//  - object space: the map is in the model's own axes, which WZ stores with y
+//    and z exchanged relative to the shader, hence .xzy; and with x and z
+//    running the other way, hence the two negations. This path never touches
+//    the tangent basis, so nothing here cancels against it.
+vec3 wzDecodeNormalMap(vec3 sampled, int hasTangents, mat3 tbn, mat3 normalMatrix)
+{
+	if (hasTangents != 0)
+	{
+		return tbn * (sampled.rgb * 2.0 - 1.0);
+	}
+
+	vec3 nObjectSpace = sampled.xzy * 2.0 - 1.0;
+	return normalMatrix * vec3(-nObjectSpace.x, nObjectSpace.y, -nObjectSpace.z);
+}
+
 #endif // WZ_TANGENTSPACE_GLSL
