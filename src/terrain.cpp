@@ -33,6 +33,8 @@
 
 #include <string.h>
 
+#include "mikktspace.h"
+
 #include "lib/framework/frame.h"
 #include "lib/framework/loading_task.h"
 #include "lib/framework/opengl.h"
@@ -339,6 +341,12 @@ static void getGridPos(const WorldMapState& mapState, Vector3i *result, int x, i
 		averagePos(result, &a, &b, &c, &d);
 		return;
 	}
+	// NOTE: z is NEGATED - map space and world space differ by a z flip. Anything
+	// comparing a direction or a winding across the two has to account for it:
+	// theSun_ForTileIllumination (lighting.cpp) is the shaders' light direction with
+	// z flipped for exactly this reason, and a tile's triangles are wound
+	// consistently with their +Y normals only once the negation is applied, which
+	// MikkTSpace relies on in calcDecalTangents below.
 	result->x = world_coord(x);
 	result->z = world_coord(-y);
 
@@ -515,51 +523,109 @@ static TileDecalInfo getTileDecalInfo(WorldMapState& mapState, int i, int j)
 	return info;
 }
 
-/// Calc decal tangents: accumulate the per-triangle tangents at each vertex
-/// (vertices shared between triangles get the average of their triangles'), then
-/// orthonormalize against each vertex normal and store with the mirror handedness.
+// MikkTSpace tangent generation for terrain decals
+//
+// The same reference implementation the models use (lib/ivis_opengl/imdload.cpp),
+// and the same one every tool that bakes normal maps uses (Blender, Substance,
+// xNormal, Marmoset, etc) so a decal normal map is rendered against the tangent
+// frame it was baked against.
+//
+// V handling matches imdload.cpp: WZ texture coordinates have v running DOWN
+// the image, while MikkTSpace assumes the standard convention, so it is handed
+// V-flipped coordinates. T is unaffected and B = dP/dv changes sign, which
+// reproduces the -dP/dv bitangent that "green up" normal maps need - i.e. exactly
+// the meaning vertexTangent.w already has here.
+
+namespace {
+
+struct MikkDecalMesh
+{
+	gfx_api::TerrainDecalVertex *vs;
+	const int (*tris)[3];
+	int numTris;
+};
+
+inline int mikkDecalIndex(const MikkDecalMesh *m, int iFace, int iVert)
+{
+	return m->tris[iFace][iVert];
+}
+
+int mikkDecalGetNumFaces(const SMikkTSpaceContext *pContext)
+{
+	return static_cast<const MikkDecalMesh *>(pContext->m_pUserData)->numTris;
+}
+
+int mikkDecalGetNumVerticesOfFace(const SMikkTSpaceContext *, const int)
+{
+	return 3;
+}
+
+void mikkDecalGetPosition(const SMikkTSpaceContext *pContext, float fvPosOut[], const int iFace, const int iVert)
+{
+	const auto *m = static_cast<const MikkDecalMesh *>(pContext->m_pUserData);
+	const Vector3f &p = m->vs[mikkDecalIndex(m, iFace, iVert)].pos;
+	fvPosOut[0] = p.x; fvPosOut[1] = p.y; fvPosOut[2] = p.z;
+}
+
+void mikkDecalGetNormal(const SMikkTSpaceContext *pContext, float fvNormOut[], const int iFace, const int iVert)
+{
+	const auto *m = static_cast<const MikkDecalMesh *>(pContext->m_pUserData);
+	const Vector3f &n = m->vs[mikkDecalIndex(m, iFace, iVert)].normal;
+	fvNormOut[0] = n.x; fvNormOut[1] = n.y; fvNormOut[2] = n.z;
+}
+
+void mikkDecalGetTexCoord(const SMikkTSpaceContext *pContext, float fvTexcOut[], const int iFace, const int iVert)
+{
+	const auto *m = static_cast<const MikkDecalMesh *>(pContext->m_pUserData);
+	const Vector2f &uv = m->vs[mikkDecalIndex(m, iFace, iVert)].decalUv;
+	fvTexcOut[0] = uv.x;
+	fvTexcOut[1] = 1.f - uv.y; // V flip - see the note above
+}
+
+void mikkDecalSetTSpaceBasic(const SMikkTSpaceContext *pContext, const float fvTangent[], const float fSign, const int iFace, const int iVert)
+{
+	auto *m = static_cast<MikkDecalMesh *>(pContext->m_pUserData);
+	m->vs[mikkDecalIndex(m, iFace, iVert)].decalTangent = glm::vec4(fvTangent[0], fvTangent[1], fvTangent[2], fSign);
+}
+
+} // anonymous namespace
+
+/// Calc decal tangents for one tile's vertices, over the same triangulation as the index buffer.
 ///
-/// The handedness w is defined so that
+/// The handedness w is stored so that
 ///     bitangent = cross(normal, tangent) * w
-/// reproduces -dP/dv, which is the bitangent "green up" normal maps need where v
-/// runs DOWN the image. That is the same meaning w has for models
-/// (lib/ivis_opengl/imdload.cpp feeds MikkTSpace V-flipped coordinates to get it),
-/// so the one expression above is correct everywhere in the engine.
+/// reproduces -dP/dv, the bitangent "green up" normal maps need where v runs down the image.
+/// That is the meaning w has for models too, so the one expression above is correct everywhere in the engine.
+///
+/// NOTE: MikkTSpace returns its results unindexed and warns against writing them
+/// through an index list that merges vertices. That is safe here because these
+/// indices only ever refer back to the *same* vertex - a tile's shared corner and
+/// centre vertices carry one position, one decal UV and one normal each - which is
+/// the criterion MikkTSpace welds on internally, so every corner sharing an index
+/// receives the same tangent anyway.
 static void calcDecalTangents(gfx_api::TerrainDecalVertex *vs, int numVerts, const int (*tris)[3], int numTris)
 {
 	constexpr int maxVerts = (MAX_TERRAIN_MESH_SUBDIVISION + 1) * (MAX_TERRAIN_MESH_SUBDIVISION + 1);
 	ASSERT_OR_RETURN(, numVerts <= maxVerts, "too many vertices (%d)", numVerts);
-	Vector3f tangentSum[maxVerts] = {};
-	Vector3f bitangentSum[maxVerts] = {};
-	for (int t = 0; t < numTris; t++) {
-		const auto &p0 = vs[tris[t][0]];
-		const auto &p1 = vs[tris[t][1]];
-		const auto &p2 = vs[tris[t][2]];
-		auto e1 = p1.pos - p0.pos;
-		auto e2 = p2.pos - p0.pos;
-		auto uv1 = p1.decalUv - p0.decalUv;
-		auto uv2 = p2.decalUv - p0.decalUv;
-		float r = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
-		Vector3f tangent = glm::normalize(r * (uv2.y * e1 - uv1.y * e2));
-		Vector3f bitangent = glm::normalize(r * (-uv2.x * e1 + uv1.x * e2));
-		if (glm::any(glm::isnan(tangent)) || glm::any(glm::isnan(bitangent))) {
-			continue; // degenerate decal UVs
-		}
-		for (int k = 0; k < 3; k++) {
-			tangentSum[tris[t][k]] += tangent;
-			bitangentSum[tris[t][k]] += bitangent;
-		}
-	}
-	for (int k = 0; k < numVerts; k++) {
-		const auto &n = vs[k].normal;
-		const auto tangent = glm::normalize(tangentSum[k]);
-		const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
-		// Compared against -dP/dv, not +dP/dv - see the note above.
-		float w = 1.0f; // not mirrored
-		if (glm::dot(glm::cross(n, t), -glm::normalize(bitangentSum[k])) < 0.0f) {
-			w = -1.0f; // we're mirrored
-		}
-		vs[k].decalTangent = glm::vec4(t, w);
+
+	MikkDecalMesh mesh { vs, tris, numTris };
+
+	SMikkTSpaceInterface mikkInterface = {};
+	mikkInterface.m_getNumFaces = mikkDecalGetNumFaces;
+	mikkInterface.m_getNumVerticesOfFace = mikkDecalGetNumVerticesOfFace;
+	mikkInterface.m_getPosition = mikkDecalGetPosition;
+	mikkInterface.m_getNormal = mikkDecalGetNormal;
+	mikkInterface.m_getTexCoord = mikkDecalGetTexCoord;
+	mikkInterface.m_setTSpaceBasic = mikkDecalSetTSpaceBasic;
+
+	SMikkTSpaceContext mikkContext = {};
+	mikkContext.m_pInterface = &mikkInterface;
+	mikkContext.m_pUserData = &mesh;
+
+	if (!genTangSpaceDefault(&mikkContext))
+	{
+		// leave the defaults in place rather than half-written tangents
+		debug(LOG_ERROR, "MikkTSpace tangent generation failed for a terrain decal tile");
 	}
 }
 

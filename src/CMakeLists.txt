@@ -130,6 +130,7 @@ endif()
 
 target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ZipIOProvider ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
+target_link_libraries(warzone2100 mikktspace) # terrain decal tangents - see calcDecalTangents
 target_link_libraries(warzone2100 fmt::fmt)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 ${Intl_LIBRARIES})
