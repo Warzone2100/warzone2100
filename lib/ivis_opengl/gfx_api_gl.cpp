@@ -4533,6 +4533,7 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
+	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
 	return inputs;
 }
 
@@ -6255,6 +6256,58 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 			glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 			depthMap->unbind();
 			gpu.texture.reset(depthMap);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::SampledDepth2D:
+		{
+			GLenum depthInternalFormat = GL_DEPTH_COMPONENT32F;
+			GLenum depthBaseFormat = GL_DEPTH_COMPONENT;
+			GLenum depthType = GL_FLOAT;
+			switch (createSpec.format)
+			{
+			case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+				depthInternalFormat = GL_DEPTH24_STENCIL8;
+				depthBaseFormat = GL_DEPTH_STENCIL;
+				depthType = GL_UNSIGNED_INT_24_8;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+				depthInternalFormat = GL_DEPTH32F_STENCIL8;
+				depthBaseFormat = GL_DEPTH_STENCIL;
+				depthType = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT:
+				depthInternalFormat = GL_DEPTH_COMPONENT32F;
+				depthBaseFormat = GL_DEPTH_COMPONENT;
+				depthType = GL_FLOAT;
+				break;
+			default:
+				debug(LOG_WARNING, "Unsupported sampled depth format for GL texture; using DEPTH_COMPONENT32F");
+				depthInternalFormat = GL_DEPTH_COMPONENT32F;
+				depthBaseFormat = GL_DEPTH_COMPONENT;
+				depthType = GL_FLOAT;
+				break;
+			}
+			auto* depthTex = root.create_gpurendered_texture(depthInternalFormat, depthBaseFormat, depthType,
+				createSpec.width, createSpec.height, "<scene prepass depth>");
+			if (!depthTex)
+			{
+				debug(LOG_ERROR, "Failed to create sampled depth texture (%" PRIu32 " x %" PRIu32 ")", createSpec.width, createSpec.height);
+				return false;
+			}
+			gpu.texture.reset(depthTex);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			depthTex->bind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			depthTex->unbind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 			break;
 		}
 		case gfx_api::SurfaceStorageKind::None:

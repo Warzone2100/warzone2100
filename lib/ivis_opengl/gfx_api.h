@@ -586,6 +586,11 @@ namespace gfx_api
 			return true;
 		}
 
+		/// Request SSAO intermediate surfaces (ScenePrepassDepth/Normals, SSAO*, SSAOComposedColor).
+		/// Game code sets this from war_getSSAO(); backends read it in pipelineSurfaceSyncInputs().
+		void setSSAOSurfacesEnabled(bool enabled) { _ssaoSurfacesEnabled = enabled; }
+		bool getSSAOSurfacesEnabled() const { return _ssaoSurfacesEnabled; }
+
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
 		/// afterward for GPU commit.
@@ -670,6 +675,7 @@ namespace gfx_api
 		uint32_t _sceneRenderScalePercent = 100;
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
+		bool _ssaoSurfacesEnabled = false;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;

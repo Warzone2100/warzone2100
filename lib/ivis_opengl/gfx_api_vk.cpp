@@ -3256,6 +3256,17 @@ bool VkRoot::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id, con
 				}
 				break;
 			}
+			case gfx_api::SurfaceStorageKind::SampledDepth2D:
+			{
+				// Sample with depth-only aspect (matches ShadowMap cascade views).
+				createGPUImageAndViewInternal(root.physicalDevice, root.memprops, root.dev, extent, vkSamples, vkFormat,
+					vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eSampled,
+					vk::ImageAspectFlagBits::eDepth,
+					gpu.image, gpu.memory, gpu.view, root.vkDynLoader, pipelineSurfaceImageKey(id));
+				gpu.texture = std::make_unique<VkAttachmentImage>(gpu.image, gpu.view, vkFormat, createSpec.width, createSpec.height, vkSamples,
+					pipelineSurfaceDebugName(id));
+				break;
+			}
 			case gfx_api::SurfaceStorageKind::None:
 				debug(LOG_ERROR, "Allocate surface %u has storageKind None", static_cast<unsigned>(id));
 				return false;
@@ -6047,6 +6058,7 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
+	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
 	return inputs;
 }
 
