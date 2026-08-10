@@ -36,6 +36,7 @@
 #include "display3d.h"
 #include "edit3d.h"
 #include "keybind.h"
+#include "screens/researchtreescreen.h"
 #include "mechanics.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -567,6 +568,59 @@ void	kf_ToggleConsoleDrop()
 		setHistoryMode(false);
 		toggleConsoleDrop();
 	}
+}
+
+void	kf_ToggleResearchTree()
+{
+	toggleResearchTreeScreen();
+}
+
+// The rest of these are only bound while the research tree is open, since the
+// context holding them is only live then
+
+void	kf_ResearchTreeBack()
+{
+	researchTreeScreenBack();
+}
+
+void	kf_ResearchTreeClose()
+{
+	closeResearchTreeScreen();
+}
+
+void	kf_ResearchTreeTracePath()
+{
+	researchTreeScreenTracePath();
+}
+
+void	kf_ResearchTreeSearch()
+{
+	researchTreeScreenFocusSearch();
+}
+
+void	kf_ResearchTreeToggleNames()
+{
+	researchTreeScreenToggleNames();
+}
+
+void	kf_ResearchTreeSelectNext()
+{
+	researchTreeScreenStepSelection(1);
+}
+
+void	kf_ResearchTreeNextPerspective()
+{
+	researchTreeScreenCyclePerspective(1);
+}
+
+void	kf_ResearchTreePreviousPerspective()
+{
+	researchTreeScreenCyclePerspective(-1);
+}
+
+void	kf_ResearchTreeSelectPrevious()
+{
+	researchTreeScreenStepSelection(-1);
 }
 
 void kf_ToggleTeamChat()

@@ -34,6 +34,7 @@
 class ScrollableTableWidget;
 class ScrollableListWidget;
 class W_LABEL;
+class W_BUTTON;
 
 struct ResearchLogColumnDef
 {
@@ -62,12 +63,15 @@ public:
 
 private:
 	void initialize(const ResearchLogColumnDef& def);
+	int32_t titleRowIdealWidth() const;
 
 private:
 	std::shared_ptr<W_LABEL> titleLabel;
+	std::shared_ptr<W_BUTTON> treeButton;			// opens the research tree from this player's side
 	std::shared_ptr<ScrollableTableWidget> table;	// null if there are no entries
 	std::shared_ptr<W_LABEL> noEntriesLabel;		// shown instead of the table when there are no entries
 	int32_t cachedIdealWidth = 0;
+	int treeButtonWidth = 0;
 	int badgeColumnWidth = 0;
 	int nameColumnIdealWidth = 0;
 };

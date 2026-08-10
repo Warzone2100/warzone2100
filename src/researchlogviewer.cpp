@@ -34,6 +34,8 @@
 #include "scores.h"
 #include "ai.h"
 #include "multiplay.h"
+#include "frontend.h"		// for displayTextOption / DisplayTextOptionCache
+#include "screens/researchtreescreen.h"
 
 #include <algorithm>
 #include <map>
@@ -48,6 +50,7 @@ constexpr int RESEARCHLOG_NAME_MAX_IDEAL_WIDTH = 200;
 constexpr int RESEARCHLOG_PANEL_MIN_IDEAL_WIDTH = 160;
 constexpr int RESEARCHLOG_PANEL_IDEAL_HEIGHT = 180;
 constexpr int RESEARCHLOG_GRID_GAP = 10;
+constexpr int RESEARCHLOG_TREE_BUTTON_PADDING = 6;
 constexpr int RESEARCHLOG_IDEAL_MAX_PER_LINE = 3;
 
 // MARK: - Column defs
@@ -159,6 +162,13 @@ std::shared_ptr<PlayerResearchLog> PlayerResearchLog::make(const ResearchLogColu
 	return result;
 }
 
+// The title and the button share a row, so the panel has to be wide enough for
+// both of them side by side
+int32_t PlayerResearchLog::titleRowIdealWidth() const
+{
+	return titleLabel->getMaxLineWidth() + RESEARCHLOG_COLUMN_PADDING_X + treeButtonWidth + RESEARCHLOG_PADDING * 2;
+}
+
 void PlayerResearchLog::initialize(const ResearchLogColumnDef& def)
 {
 	titleLabel = std::make_shared<W_LABEL>();
@@ -170,6 +180,37 @@ void PlayerResearchLog::initialize(const ResearchLogColumnDef& def)
 	{
 		titleLabel->setTip(def.tooltip.toUtf8());
 	}
+
+	// A timeline says what was researched and when. What it cannot say is where
+	// any of it sits, so hand the whole tree over from this side of the game.
+	const char *treeButtonText = _("Tree");
+	treeButton = std::make_shared<W_BUTTON>();
+	attach(treeButton);
+	treeButton->setString(treeButtonText);
+	treeButton->FontID = font_small;
+	treeButton->style |= WBUT_TXTCENTRE;
+	treeButton->setTip(_("Show the research tree from this side"));
+	treeButton->displayFunction = displayTextOption;
+	treeButton->pUserData = new DisplayTextOptionCache();
+	treeButton->setOnDelete([](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	});
+	treeButtonWidth = iV_GetTextWidth(treeButtonText, font_small) + RESEARCHLOG_TREE_BUTTON_PADDING * 2;
+	const size_t sourcePlayerIdx = def.sourcePlayerIdx;
+	treeButton->addOnClickHandler([sourcePlayerIdx](W_BUTTON& button) {
+		// The tree opens above whichever screen the log is on, which is the
+		// regular screen after a mission and an overlay for a spectator
+		auto hostScreen = button.screenPointer.lock();
+		widgScheduleTask([sourcePlayerIdx, hostScreen]() {
+			ResearchTreeContext context;
+			context.source = ResearchTreeContext::Source::GameLog;
+			context.player = static_cast<uint32_t>(sourcePlayerIdx);
+			context.viewer = selectedPlayer;
+			showResearchTreeScreen(context, hostScreen);
+		});
+	});
 
 	struct RowData
 	{
@@ -217,7 +258,7 @@ void PlayerResearchLog::initialize(const ResearchLogColumnDef& def)
 		noEntriesLabel->setFont(font_small, WZCOL_TEXT_MEDIUM);
 		noEntriesLabel->setString(_("(no research)"));
 		cachedIdealWidth = std::max({RESEARCHLOG_PANEL_MIN_IDEAL_WIDTH,
-		                             titleLabel->getMaxLineWidth() + RESEARCHLOG_PADDING * 2,
+		                             titleRowIdealWidth(),
 		                             noEntriesLabel->getMaxLineWidth() + RESEARCHLOG_PADDING * 2});
 		return;
 	}
@@ -246,8 +287,9 @@ void PlayerResearchLog::initialize(const ResearchLogColumnDef& def)
 	}
 
 	size_t neededContentWidth = static_cast<size_t>(maxBadgeWidth + std::min(maxNameWidth, RESEARCHLOG_NAME_MAX_IDEAL_WIDTH));
-	cachedIdealWidth = std::max<int32_t>(RESEARCHLOG_PANEL_MIN_IDEAL_WIDTH,
-	                                     static_cast<int32_t>(table->getTableWidthNeededForTotalColumnWidth(2, neededContentWidth)) + RESEARCHLOG_PADDING * 2);
+	cachedIdealWidth = std::max({RESEARCHLOG_PANEL_MIN_IDEAL_WIDTH,
+	                             titleRowIdealWidth(),
+	                             static_cast<int32_t>(table->getTableWidthNeededForTotalColumnWidth(2, neededContentWidth)) + RESEARCHLOG_PADDING * 2});
 }
 
 void PlayerResearchLog::display(int xOffset, int yOffset)
@@ -261,9 +303,18 @@ void PlayerResearchLog::display(int xOffset, int yOffset)
 void PlayerResearchLog::geometryChanged()
 {
 	int innerWidth = std::max(width() - RESEARCHLOG_PADDING * 2, 1);
+	// The button shares the title row, taking its width off the title's
+	int titleWidth = innerWidth;
+	if (treeButton)
+	{
+		const int buttonWidth = std::min(treeButtonWidth, innerWidth);
+		treeButton->setGeometry(RESEARCHLOG_PADDING + innerWidth - buttonWidth, RESEARCHLOG_PADDING,
+		                        buttonWidth, RESEARCHLOG_TITLE_HEIGHT);
+		titleWidth = std::max(innerWidth - buttonWidth - RESEARCHLOG_COLUMN_PADDING_X, 1);
+	}
 	if (titleLabel)
 	{
-		titleLabel->setGeometry(RESEARCHLOG_PADDING, RESEARCHLOG_PADDING, innerWidth, RESEARCHLOG_TITLE_HEIGHT);
+		titleLabel->setGeometry(RESEARCHLOG_PADDING, RESEARCHLOG_PADDING, titleWidth, RESEARCHLOG_TITLE_HEIGHT);
 	}
 	int contentY = RESEARCHLOG_PADDING + RESEARCHLOG_TITLE_HEIGHT + RESEARCHLOG_TITLE_GAP;
 	int contentHeight = std::max(height() - contentY - RESEARCHLOG_PADDING, 1);

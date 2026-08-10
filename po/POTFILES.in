@@ -521,6 +521,11 @@ src/radar.cpp
 src/random.cpp
 src/raycast.cpp
 src/research.cpp
+src/researchtree/researchdetailpopover.cpp
+src/researchtree/researchtracks.cpp
+src/researchtree/researcheffecttext.cpp
+src/researchtree/researchtreecanvas.cpp
+src/researchtree/researchtreeview.cpp
 src/scores.cpp
 src/screens/chatscreen.cpp
 src/screens/guidescreen.cpp
@@ -528,6 +533,7 @@ src/screens/helpscreen.cpp
 src/screens/ingameopscreen.cpp
 src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
+src/screens/researchtreescreen.cpp
 src/selection.cpp
 src/seqdisp.cpp
 src/shadowcascades.cpp
