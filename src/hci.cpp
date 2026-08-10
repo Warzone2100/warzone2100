@@ -84,6 +84,7 @@
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
+#include "screens/researchtreescreen.h"
 #include "screens/spectatorgameoverscreen.h"
 #include "hci/quickchat.h"
 #include "warzoneconfig.h"
@@ -1034,6 +1035,7 @@ void interfaceShutDown()
 	}
 
 	shutdownChatScreen();
+	closeResearchTreeScreen();
 	closeGuideScreen();
 	closeSpectatorGameOverScreen();
 	ChatDialogUp = false;

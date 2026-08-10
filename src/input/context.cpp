@@ -38,6 +38,7 @@ const ContextId InputContext::ALWAYS_ACTIVE         = "ALWAYS_ACTIVE";
 const ContextId InputContext::BACKGROUND            = "BACKGROUND";
 const ContextId InputContext::GAMEPLAY              = "GAMEPLAY";
 const ContextId InputContext::RADAR                 = "RADAR";
+const ContextId InputContext::RESEARCH_TREE         = "RESEARCH_TREE";
 const ContextId InputContext::DEBUG_MISC            = "DEBUG_MISC";
 const ContextId InputContext::DEBUG_LEVEL_EDITOR    = "DEBUG_LEVEL_EDITOR";
 const ContextId InputContext::DEBUG_HAS_SELECTION   = "DEBUG_HAS_SELECTION";
@@ -55,6 +56,7 @@ void registerDefaultContexts(ContextManager& contextManager, DebugInputManager& 
 	const InputContext background     = { InputContext::BACKGROUND,             false, 0,                             InputContext::State::ACTIVE,    N_("Other Keys")           };
 	const InputContext gameplay       = { InputContext::GAMEPLAY,               false, 1,                             InputContext::State::ACTIVE,    N_("Gameplay Keys")           };
 	const InputContext radar          = { InputContext::RADAR,                  false, { 2, 0 },                      InputContext::State::ACTIVE,    N_("Radar Keys"),             []() { return isMouseOverRadar() && !isInDesignScreen(); } };
+	const InputContext researchTree   = { InputContext::RESEARCH_TREE,          false, { 3, 3 },                      InputContext::State::INACTIVE,  N_("Research Tree Keys")   };
 	const InputContext debug          = { InputContext::DEBUG_MISC,             false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug Keys"),             [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
 	const InputContext debugLvlEditor = { InputContext::DEBUG_LEVEL_EDITOR,     false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug (level editor)"),   [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
 	const InputContext debugSelection = { InputContext::DEBUG_HAS_SELECTION,    false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug (selection)"),      [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
@@ -64,6 +66,7 @@ void registerDefaultContexts(ContextManager& contextManager, DebugInputManager& 
 	contextManager.registerContext(background);
 	contextManager.registerContext(gameplay);
 	contextManager.registerContext(radar);
+	contextManager.registerContext(researchTree);
 	contextManager.registerContext(debug);
 	contextManager.registerContext(debugLvlEditor);
 	contextManager.registerContext(debugSelection);

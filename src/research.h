@@ -146,7 +146,20 @@ void CancelAllResearch(UDWORD pl);
 
 bool researchInitVars();
 
+uint32_t researchDisplayedPlayersMask();
+void clearResearchDisplayedPlayers();
+uint32_t researchDisplayAllowedMask(uint32_t viewer);
+
 bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode);
+
+/** Whether a player has discovered a topic at all: it is available, being
+ *  researched, already done, or its prerequisites are met.
+ *
+ *  Campaign gates every topic behind an artifact or a mission script, so one
+ *  that fails this is something the player has no way to know exists yet. The
+ *  Guide screen and the research tree both hide those, and both come here so
+ *  that the two agree about what the player is allowed to know. */
+bool researchDiscovered(size_t researchIndex, uint32_t player);
 
 struct AllyResearch
 {
