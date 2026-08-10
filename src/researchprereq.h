@@ -31,6 +31,7 @@
 #include "researchdef.h"
 
 #include <cstdint>
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -93,6 +94,12 @@ private:
 // downCountsOut, when given, receives the per-member counts in the order the
 // members were passed in, which is what diagnostics want: a repeated count names
 // the branch.
+//
+// The precedes form takes any strict partial order over research indices, so a
+// progression ordered by something other than prerequisites can be tested by the
+// same rule. It must be transitive, or the down-counts mean nothing.
+using ResearchPrecedes = std::function<bool(size_t below, size_t above)>;
+bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrecedes& precedes, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut = nullptr);
 bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut = nullptr);
 
 // Read-only view of the research categories built by the last loadResearch(),

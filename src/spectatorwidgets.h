@@ -30,3 +30,6 @@ bool specLayerInit(bool showButton = true);
 void specToggleOverlays();
 bool specStatsViewShutdown();
 void specStatsViewCreate();
+// The overlay the spectator widgets live on, so anything opened over them can say
+// which screen to sit above. Null when there is none.
+std::shared_ptr<W_SCREEN> specOverlayScreen();

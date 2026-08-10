@@ -139,6 +139,16 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected = false);
 MappableFunction kf_SelectNextResearch(const bool bJumpToSelected = false);
 void kf_ToggleConsoleDrop();
+void kf_ToggleResearchTree();
+void kf_ResearchTreeBack();
+void kf_ResearchTreeClose();
+void kf_ResearchTreeTracePath();
+void kf_ResearchTreeSearch();
+void kf_ResearchTreeToggleNames();
+void kf_ResearchTreeSelectNext();
+void kf_ResearchTreeSelectPrevious();
+void kf_ResearchTreeNextPerspective();
+void kf_ResearchTreePreviousPerspective();
 void kf_ToggleShakeStatus();
 void kf_ToggleMouseInvert();
 void kf_BifferBaker();

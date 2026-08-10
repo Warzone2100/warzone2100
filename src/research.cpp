@@ -110,6 +110,7 @@ bool researchInitVars()
 	psCBLastResearch = nullptr;
 	psCBLastResStructure = nullptr;
 	CBResFacilityOwner = -1;
+	clearResearchDisplayedPlayers();
 	asResearch.clear();
 	researchUpgradeCalcMode = nullopt;
 	resCategories.clear();
@@ -278,7 +279,7 @@ ResearchPrereqClosure::ResearchPrereqClosure(const std::vector<RESEARCH>& resear
 	// acyclic here because loadResearch() runs CycleDetection::detectCycle()
 	// before anything constructs one of these, so a child is never encountered
 	// mid-expansion.
-	enum class Mark : uint8_t { White, Grey, Black };
+	enum class Mark : uint8_t { White, Gray, Black };
 	std::vector<Mark> mark(m_count, Mark::White);
 	std::vector<std::pair<size_t, size_t>> stack;	// (index, next child slot)
 	stack.reserve(m_count);
@@ -289,7 +290,7 @@ ResearchPrereqClosure::ResearchPrereqClosure(const std::vector<RESEARCH>& resear
 		{
 			continue;
 		}
-		mark[root] = Mark::Grey;
+		mark[root] = Mark::Gray;
 		stack.push_back({root, 0});
 
 		while (!stack.empty())
@@ -307,7 +308,7 @@ ResearchPrereqClosure::ResearchPrereqClosure(const std::vector<RESEARCH>& resear
 				}
 				if (mark[child] == Mark::White)
 				{
-					mark[child] = Mark::Grey;
+					mark[child] = Mark::Gray;
 					stack.push_back({child, 0});
 				}
 				continue;
@@ -337,7 +338,7 @@ const std::unordered_map<WzString, std::vector<size_t>>& getResearchCategories()
 
 // See researchprereq.h for the down-count method and why the order is produced
 // directly rather than sorted.
-bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut)
+bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrecedes& precedes, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut)
 {
 	const size_t n = members.size();
 	orderedOut.clear();
@@ -355,7 +356,7 @@ bool computeResearchChainOrder(const std::vector<size_t>& members, const Researc
 	{
 		for (size_t b = 0; b < n; ++b)
 		{
-			if (a != b && closure.isPrereq(members[b], members[a]))
+			if (a != b && precedes(members[b], members[a]))
 			{
 				downCount[a]++;
 			}
@@ -380,6 +381,14 @@ bool computeResearchChainOrder(const std::vector<size_t>& members, const Researc
 	}
 
 	return true;
+}
+
+bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut)
+{
+	const ResearchPrecedes precedes = [&closure](size_t below, size_t above) {
+		return closure.isPrereq(below, above);
+	};
+	return computeResearchChainOrder(members, precedes, orderedOut, downCountsOut);
 }
 
 // Chain-order a category's members, reporting what is wrong when they are not a chain
@@ -802,6 +811,15 @@ bool loadResearch(WzConfig &ini)
 	}
 
 	return true;
+}
+
+bool researchDiscovered(size_t researchIndex, uint32_t player)
+{
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	ASSERT_OR_RETURN(false, researchIndex < asPlayerResList[player].size(),
+	                 "Invalid research index: %zu", researchIndex);
+	const PLAYER_RESEARCH *psRes = &asPlayerResList[player][researchIndex];
+	return (psRes->ResearchStatus & RESBITS_ALL) != 0 || IsResearchPossible(psRes);
 }
 
 bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode)
