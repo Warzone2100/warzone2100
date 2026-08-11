@@ -1023,6 +1023,20 @@ static void recvSyncRequest(NETQUEUE queue)
 	triggerEventSyncRequest(queue.index, req_id, x, y, psObj, psObj2);
 }
 
+static void recvSyncString(NETQUEUE queue)
+{
+	int32_t req_id;
+	WzString str;
+
+	auto r = NETbeginDecode(queue, GAME_SYNC_STRING);
+	NETint32_t(r, req_id);
+	NETwzstring(r, str);
+	NETend(r);
+
+	syncDebug("sync string request received from %d req_id %d str '%s'", queue.index, req_id, str.toUtf8().c_str());
+	triggerEventSyncString(queue.index, req_id, str);
+}
+
 static void sendObj(MessageWriter& w, const BASE_OBJECT *psObj)
 {
 	if (psObj)
@@ -1048,6 +1062,14 @@ void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *ps
 	NETint32_t(w, y);
 	sendObj(w, psObj);
 	sendObj(w, psObj2);
+	NETend(w);
+}
+
+void sendSyncString(int32_t req_id, const WzString& str)
+{
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_SYNC_STRING);
+	NETint32_t(w, req_id);
+	NETwzstring(w, str);
 	NETend(w);
 }
 
@@ -1367,6 +1389,7 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 				// always allowed
 				return HandleMessageAction::Process_Message;
 			case GAME_SYNC_REQUEST:
+			case GAME_SYNC_STRING:
 				if (senderIsSpectator)
 				{
 					return HandleMessageAction::Silently_Ignore;
@@ -1489,6 +1512,9 @@ bool recvMessage()
 				break;
 			case GAME_SYNC_REQUEST:
 				recvSyncRequest(queue);
+				break;
+			case GAME_SYNC_STRING:
+				recvSyncString(queue);
 				break;
 			case GAME_DROIDDISEMBARK:
 				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
