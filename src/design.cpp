@@ -3513,12 +3513,7 @@ void intProcessDesign(UDWORD id)
 			}
 			else
 			{
-				desSetupDesignTemplates();
-				widgDelete(psWScreen, IDDES_TEMPLBASE);
-				intAddTemplateForm(templateFromButtonId(droidTemplID));
-				intSetDesignMode(desCompMode, true);
-				droidTemplID = IDDES_TEMPLSTART;
-				widgSetButtonState(psWScreen, droidTemplID, WBUT_LOCK);
+				intRefreshDesign();
 			}
 			break;
 		}
@@ -3703,6 +3698,21 @@ void intRunDesign()
 		intResetScreen(false);
 		// clear key press so we don't enter in-game options
 		inputLoseFocus();
+	}
+}
+
+void intRefreshDesign()
+{
+	auto designForm = widgGetFromID(psWScreen, IDDES_FORM);
+
+	if (designForm && designForm->visible())
+	{
+		desSetupDesignTemplates();
+		widgDelete(psWScreen, IDDES_TEMPLBASE);
+		intAddTemplateForm(templateFromButtonId(droidTemplID));
+		intSetDesignMode(desCompMode, true);
+		droidTemplID = IDDES_TEMPLSTART;
+		widgSetButtonState(psWScreen, droidTemplID, WBUT_LOCK);
 	}
 }
 
