@@ -398,7 +398,7 @@ function addToConsole()
 
 			if (camDef(tutPhase.audio))
 			{
-				playSound(tutPhase.audio, CAM_HUMAN_PLAYER);
+				playSound(tutPhase.audio);
 			}
 
 			if (camDef(tutPhase.clear) && tutPhase.clear)
