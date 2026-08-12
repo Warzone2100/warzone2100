@@ -2207,6 +2207,13 @@ void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP)
 void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view)
 {
 	const glm::mat4& mvp = modelViewProjection;
+
+	// Match the bias the other terrain depth writers apply, so structure baseplates do not
+	// z-fight. Without it the prepass surface sits nearer than the terrain everything else
+	// sees. Set after the buffer guards so an early return cannot leave the state applied.
+	constexpr float depthBiasFactor = 0.1f;
+	constexpr float depthBiasUnits = 1.f;
+
 	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
 	{
 		if (!terrainDecalVBO || !terrainPatchIndexVBO)
@@ -2214,6 +2221,7 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 			return;
 		}
 
+		gfx_api::context::get().set_polygon_offset(depthBiasFactor, depthBiasUnits);
 		gfx_api::TerrainDepthPrepassTess::get().bind();
 		gfx_api::TerrainDepthPrepassTess::get().bind_textures(
 			terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
@@ -2236,6 +2244,7 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 		flushDrawElementsBatch<gfx_api::TerrainDepthPrepassTess>();
 		gfx_api::TerrainDepthPrepassTess::get().unbind_vertex_buffers(terrainDecalVBO);
 		gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
+		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 		return;
 	}
 
@@ -2244,6 +2253,7 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 		return;
 	}
 
+	gfx_api::context::get().set_polygon_offset(depthBiasFactor, depthBiasUnits);
 	gfx_api::TerrainDepthPrepass::get().bind();
 	gfx_api::TerrainDepthPrepass::get().bind_vertex_buffers(geometryVBO);
 	gfx_api::TerrainDepthPrepass::get().bind_constants({ mvp, view });
@@ -2264,6 +2274,7 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 	flushDrawElementsBatch<gfx_api::TerrainDepthPrepass>();
 	gfx_api::TerrainDepthPrepass::get().unbind_vertex_buffers(geometryVBO);
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
+	gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 }
 
 /**

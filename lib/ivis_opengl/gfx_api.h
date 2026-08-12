@@ -1210,7 +1210,7 @@ namespace gfx_api
 		vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, offsetof(TerrainGeometryVertex, normal)>
 	>;
 
-	using TerrainDepthPrepass = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	using TerrainDepthPrepass = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>>,
 	std::tuple<
 		TerrainDepthPrepassVertexVBODescription
@@ -1374,7 +1374,7 @@ namespace gfx_api
 
 	using TerrainDepthPrepassTessUniforms = constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS_TESS>;
 
-	using TerrainDepthPrepassTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
+	using TerrainDepthPrepassTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
 	std::tuple<TerrainDepthPrepassTessUniforms>,
 	std::tuple<
 		TerrainPatchCornerVBODescription
