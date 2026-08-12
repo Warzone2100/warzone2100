@@ -38,6 +38,7 @@
 #include "lib/ivis_opengl/gfx_api.h"
 
 #include <algorithm>
+#include <cmath>
 
 namespace
 {
@@ -62,6 +63,9 @@ struct DynamicResolutionState
 };
 
 DynamicResolutionState drsState;
+
+optional<float> fractionOverride;
+bool loggedFractionOverride = false;
 
 double targetFrameTimeNs()
 {
@@ -92,9 +96,42 @@ void deactivateDynamicResolution(gfx_api::context& ctx)
 
 } // anonymous namespace
 
+void dynamicResolutionSetFractionOverride(optional<float> fraction)
+{
+	if (fraction.has_value())
+	{
+		fractionOverride = std::clamp(fraction.value(), gfx_api::context::minSceneRenderFraction, 1.f);
+	}
+	else
+	{
+		fractionOverride = nullopt;
+	}
+	loggedFractionOverride = false;
+}
+
 void dynamicResolutionUpdate()
 {
 	auto& ctx = gfx_api::context::get();
+
+	if (fractionOverride.has_value())
+	{
+		if (drsState.active)
+		{
+			deactivateDynamicResolution(ctx);
+		}
+		const float fraction = fractionOverride.value();
+		if (!loggedFractionOverride)
+		{
+			loggedFractionOverride = true;
+			debug(LOG_INFO, "Dynamic resolution pinned to %d%% for testing, GPU timing feedback disabled",
+				static_cast<int>(std::lround(fraction * 100.f)));
+		}
+		// Keep the targets at full size and render a sub-rect of them (just as the automatic controller does)
+		ctx.setSceneDynamicResolution(true);
+		ctx.setSceneRenderFraction(fraction);
+		return;
+	}
+
 	const bool wantDynamic = (war_getRenderResolutionPercent() == 0);
 	if (!wantDynamic)
 	{

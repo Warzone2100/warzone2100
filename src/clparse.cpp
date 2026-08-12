@@ -35,6 +35,7 @@
 #include "levels.h"
 #include "clparse.h"
 #include "display3d.h"
+#include "dynamicresolution.h"
 #include "frontend.h"
 #include "gamestate_serialize.h"
 #include "gamestate_savegame.h"
@@ -328,6 +329,7 @@ typedef enum
 	CLI_GAMESTATE_CRCDETAIL,
 	CLI_GAMESTATE_CRCDETAIL_ONSAVE,
 	CLI_TMP_PREFER_OLD_SAVE,
+	CLI_DRS_FRACTION,
 	CLI_RESOLUTION,
 	CLI_SHADOWS,
 	CLI_NOSHADOWS,
@@ -421,6 +423,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-crc-detail-tick", POPT_ARG_STRING, CLI_GAMESTATE_CRCDETAIL, N_("At this game tick, dump the full sync-debug log to <crc-trace-file>.detail.txt (diff original vs loaded run to pinpoint a divergence)"), N_("game tick") },
 		{ "gamestate-crc-detail-on-save", POPT_ARG_NONE, CLI_GAMESTATE_CRCDETAIL_ONSAVE, N_("Auto-dump a window of full sync-debug logs to <crc-trace-file>.detail.txt around each GameState save/load (no need to know the save tick)"), nullptr },
 		{ "tmp-prefer-old-save", POPT_ARG_NONE, CLI_TMP_PREFER_OLD_SAVE, N_("Prefer the legacy load path for a save folder that has both the old and new-format data (temporary)"), nullptr },
+		{ "drs-fraction", POPT_ARG_STRING, CLI_DRS_FRACTION, N_("Pin the dynamic resolution scene render fraction for testing, bypassing GPU timing feedback"), N_("fraction 0.5 - 1.0") },
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
 		{ "shadows", POPT_ARG_NONE, CLI_SHADOWS,    N_("Enable shadows"),                    nullptr },
 		{ "noshadows", POPT_ARG_NONE, CLI_NOSHADOWS,  N_("Disable shadows"),                   nullptr },
@@ -951,6 +954,21 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				multiplay_mods.push_back(token);
 				break;
 			}
+		case CLI_DRS_FRACTION:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Missing value for --drs-fraction");
+				}
+				const double fraction = atof(token);
+				if (!(fraction > 0.0) || fraction > 1.0)
+				{
+					qFatal("Invalid --drs-fraction value (expected a fraction above 0 and at most 1.0)");
+				}
+				dynamicResolutionSetFractionOverride(static_cast<float>(fraction));
+			}
+			break;
 		case CLI_RESOLUTION:
 			{
 				unsigned int width, height;

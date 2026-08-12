@@ -24,6 +24,14 @@
 
 #pragma once
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+
 /// Run the dynamic resolution controller for this frame.
 /// Call once per rendered 3D frame, before the frame's draw commands are recorded.
 void dynamicResolutionUpdate();
+
+/// Pin the scene render fraction to a fixed value for testing, bypassing the GPU timing feedback - or pass no value to restore normal control.
+/// A pinned fraction keeps the scene targets at full size and renders a sub-rect of them, which is the state the automatic controller reaches
+/// when the GPU misses its frame budget.
+void dynamicResolutionSetFractionOverride(optional<float> fraction);
