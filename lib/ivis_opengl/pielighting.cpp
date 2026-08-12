@@ -153,7 +153,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 			break;
 		}
 		const ClipSpaceBounds clipSpaceBounds =
-			boundsOfBoundingBox(transformBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light)));
+			clipSpaceBoundsOfBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light));
 		if (!boundsOverlapClipRegion(clipSpaceBounds, -1.f, 1.f, -1.f, 1.f))
 		{
 			continue;

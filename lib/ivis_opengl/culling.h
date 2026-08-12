@@ -26,9 +26,6 @@
 
 using BoundingBox = std::array<glm::vec3, 8>;
 
-/// Project a bounding box in clip space
-BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox);
-
 /// Axis aligned extent of a clip space bounding box
 struct ClipSpaceBounds
 {
@@ -36,8 +33,11 @@ struct ClipSpaceBounds
 	glm::vec3 maximum = glm::vec3(0.f);
 };
 
-/// Collapse the eight corners of a clip space bounding box to its axis aligned extent
-ClipSpaceBounds boundsOfBoundingBox(const BoundingBox& points);
+/// Project a world space bounding box and return its axis aligned clip space extent.
+/// A corner at or behind the eye plane has no meaningful projection, so such a box is
+/// reported as covering everything, which is conservative and true of a box around the eye.
+ClipSpaceBounds clipSpaceBoundsOfBoundingBox(const glm::mat4& worldViewProjectionMatrix,
+	const BoundingBox& worldSpaceBoundingBox);
 
 /// True unless the bounds lie wholly outside the clip space region
 /// [x0, x1] x [y0, y1] x [0, 1]. Culling regions are axis aligned, so comparing
