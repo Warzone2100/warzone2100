@@ -47,12 +47,35 @@ namespace ssao
 namespace
 {
 
-constexpr float SSAO_RADIUS = 0.07f;
-constexpr float SSAO_BIAS_FACTOR = 0.00002f;
-constexpr float SSAO_MIN_BIAS = 0.025f;
-constexpr float SSAO_RANGE_SCALE = 0.5f;
-constexpr float SSAO_BLUR_DEPTH_SIGMA = 0.0015f;
-constexpr float SSAO_INTENSITY = 1.3f;
+/// Tunable SSAO parameters (grouped so a quality tier can swap the whole set at once)
+struct Tuning
+{
+	/// Hemisphere sample radius, scaled by view depth in the generate shader
+	float radius;
+	/// Depth-proportional term of the self-occlusion bias
+	float biasFactor;
+	/// Lower bound on the self-occlusion bias, which dominates close to the camera
+	float minBias;
+	/// Occluder depth difference at which a sample stops contributing, as a fraction of radius
+	float rangeScale;
+	/// Sigma of the blur's depth falloff, in normalized depth units
+	float blurDepthSigma;
+	/// Strength of the occlusion multiply applied by the compose
+	float intensity;
+};
+
+constexpr Tuning DEFAULT_TUNING = {
+	.radius = 0.07f,
+	.biasFactor = 0.00002f,
+	.minBias = 0.025f,
+	.rangeScale = 0.5f,
+	.blurDepthSigma = 0.0015f,
+	.intensity = 1.3f,
+};
+
+Tuning s_tuning = DEFAULT_TUNING;
+
+/// Edge length of the tiling noise texture. Structural rather than tunable (it sets both the texture allocation and the tile count the blur is sized to remove).
 constexpr int NOISE_TEXTURE_SIZE = 4;
 
 gfx_api::texture* s_noiseTexture = nullptr;
@@ -145,7 +168,7 @@ void drawSSAOGenerate(
 	gfx_api::constant_buffer_type<SHADER_SSAO_GENERATE> constants {};
 	constants.invProjectionMatrix = invProjectionMatrix;
 	constants.projectionMatrix = projectionMatrix;
-	constants.params = glm::vec4(SSAO_RADIUS, SSAO_BIAS_FACTOR, SSAO_MIN_BIAS, SSAO_RANGE_SCALE);
+	constants.params = glm::vec4(s_tuning.radius, s_tuning.biasFactor, s_tuning.minBias, s_tuning.rangeScale);
 	// Noise UVs are scaled from texture-space UVs, so the tile count follows the texture
 	// size. The rendered region is smaller than the texture when render scaling is active.
 	constants.noiseScale = ssaoSourceTextureSize(depthTexture) / static_cast<float>(NOISE_TEXTURE_SIZE);
@@ -168,7 +191,7 @@ void drawSSAOBlur(
 {
 	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
 	constants.blurDirection = blurDirection;
-	constants.depthSigma = SSAO_BLUR_DEPTH_SIGMA;
+	constants.depthSigma = s_tuning.blurDepthSigma;
 	ssaoFillUvScaleClamp(occlusionTexture, constants.uvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
@@ -278,7 +301,7 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 	const auto& fc = pie_GetInGame3DFrameContext();
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO> constants {};
-	constants.ssaoIntensity = SSAO_INTENSITY;
+	constants.ssaoIntensity = s_tuning.intensity;
 	constants.fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
 	// Match scene-pass fog uniform binding (terrain / meshes):
 	// shader fogEnd <- fogBegin, shader fogStart <- fogEnd.
