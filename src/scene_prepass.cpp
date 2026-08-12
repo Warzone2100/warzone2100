@@ -30,7 +30,7 @@ void recordScenePrepass(const gfx_api::RenderPassContext& /*passCtx*/)
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos{fc.cameraPos.x, fc.cameraPos.y, fc.cameraPos.z};
 
-	drawTerrainDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix);
+	drawTerrainDepthNormalPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix,
 		cameraPos, fc.shadowCascadesInfo, nullptr, MeshDepthPassMode::ScenePrepass);
 }

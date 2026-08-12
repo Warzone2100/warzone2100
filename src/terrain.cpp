@@ -2204,9 +2204,9 @@ void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP)
 	drawDepthOnlyForDepthMap(mvp, tessCameraMVP, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
 }
 
-void drawTerrainDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view)
+void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view)
 {
-	const glm::mat4 mvp = projection * view;
+	const glm::mat4& mvp = modelViewProjection;
 	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
 	{
 		if (!terrainDecalVBO || !terrainPatchIndexVBO)
@@ -2246,7 +2246,7 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& projection, const glm::mat4&
 
 	gfx_api::TerrainDepthPrepass::get().bind();
 	gfx_api::TerrainDepthPrepass::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepthPrepass::get().bind_constants({ projection, view });
+	gfx_api::TerrainDepthPrepass::get().bind_constants({ mvp, view });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 	for (int x = 0; x < xSectors; x++)

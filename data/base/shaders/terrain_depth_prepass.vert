@@ -1,7 +1,7 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform mat4 ProjectionMatrix;
+uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ViewMatrix;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -16,7 +16,7 @@ varying vec3 viewNormal;
 
 void main()
 {
-	vec4 position = ProjectionMatrix * ViewMatrix * vertex;
+	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;
 	viewNormal = mat3(ViewMatrix) * vertexNormal;
 }
