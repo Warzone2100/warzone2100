@@ -114,11 +114,13 @@ void CachedRenderGraph::ensureBuilt(const RenderTopologySnapshot& snapshot)
 	_cachedMaterializeHash = materializeHash;
 }
 
-// Dynamic resolution: the viewports of the scene pass and the scene-sized
-// SMAA passes track the per frame render fraction at execute time, so
-// fraction changes never rematerialize the graph (the rewrite is idempotent
-// at a fraction of 1). Execution reads the compiled pass description copies,
-// not the materialized descriptions, so the rewrite must reach both.
+// Track the per frame render fraction in the viewport of every scene-sized pass, so
+// fraction changes never rematerialize the graph. Execution reads the compiled pass
+// description copies, not the materialized descriptions, so the rewrite must reach both.
+//
+// Every pass writing a MatchScene surface belongs here.
+// (Any omitted pass will cover its whole target while the rest of the chain reads only the
+// sub-rect, so it is sampled as - in effect - a magnified crop.)
 static void applySceneFractionViewports(std::vector<RenderPassDesc>& passes, PassGraphCompileResult& compileResult)
 {
 	auto& ctx = gfx_api::context::get();
@@ -128,6 +130,11 @@ static void applySceneFractionViewports(std::vector<RenderPassDesc>& passes, Pas
 		switch (pass.passId)
 		{
 		case PassId::ScenePass:
+		case PassId::ScenePrepass:
+		case PassId::SSAOGenerate:
+		case PassId::SSAOBlurH:
+		case PassId::SSAOBlurV:
+		case PassId::SSAOCompose:
 		case PassId::SmaaEdges:
 		case PassId::SmaaWeights:
 			pass.viewportSize = sceneDims;
