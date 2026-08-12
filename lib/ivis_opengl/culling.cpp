@@ -21,7 +21,6 @@
 #include <array>
 #include <glm/glm.hpp>
 #include <algorithm>
-#include <functional>
 
 BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox)
 {
@@ -36,19 +35,32 @@ BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, con
 }
 
 
-bool isBBoxInClipSpace(const IntersectionOfHalfSpace& intersectionOfHalfSpace, const BoundingBox& points)
+ClipSpaceBounds boundsOfBoundingBox(const BoundingBox& points)
 {
-	// We test against the complement of the half space
-	// If all points lies in the complement a half space, it can't be part of the intersection
-	auto CheckAllPointsInSpace = [&points](const HalfSpaceCheck& predicate)
-		{
-			return std::all_of(points.begin(), points.end(), [&predicate](const auto& v) { return !predicate(v); });
-		};
-
-	for (const auto& predicate : intersectionOfHalfSpace)
+	ClipSpaceBounds bounds;
+	bounds.minimum = points[0];
+	bounds.maximum = points[0];
+	for (size_t i = 1, end = points.size(); i < end; i++)
 	{
-		if (CheckAllPointsInSpace(predicate))
-			return false;
+		bounds.minimum = glm::min(bounds.minimum, points[i]);
+		bounds.maximum = glm::max(bounds.maximum, points[i]);
+	}
+	return bounds;
+}
+
+bool boundsOverlapClipRegion(const ClipSpaceBounds& bounds, float x0, float x1, float y0, float y1)
+{
+	if (bounds.maximum.x < x0 || bounds.minimum.x > x1)
+	{
+		return false;
+	}
+	if (bounds.maximum.y < y0 || bounds.minimum.y > y1)
+	{
+		return false;
+	}
+	if (bounds.maximum.z < 0.f || bounds.minimum.z > 1.f)
+	{
+		return false;
 	}
 	return true;
 }

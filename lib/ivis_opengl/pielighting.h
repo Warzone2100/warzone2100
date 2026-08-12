@@ -123,7 +123,7 @@ namespace renderingNew
 		struct CulledLightInfo
 		{
 			CalculatedPointLight light;
-			BoundingBox clipSpaceBoundingBox;
+			ClipSpaceBounds clipSpaceBounds;
 		};
 		std::vector<CulledLightInfo> culledLights;
 		//! tile coordinates to indices into culledLights, rebuilt per frame

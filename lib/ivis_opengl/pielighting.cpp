@@ -135,26 +135,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	const bool yAxisInverted = gfx_api::context::get().isYAxisInverted();
 
 	// Pick the first lights inside the view frustum
-	auto viewFrustum = IntersectionOfHalfSpace{
-		[](const glm::vec3& in) { return in.x >= -1.f; },
-		[](const glm::vec3& in) { return in.x <= 1.f; },
-		[yAxisInverted](const glm::vec3& in) {
-			if (yAxisInverted)
-			{
-				return -in.y >= -1.f;
-			}
-			return in.y >= -1.f;
-		},
-		[yAxisInverted](const glm::vec3& in) {
-			if (yAxisInverted)
-			{
-				return -in.y <= 1.f;
-			}
-			return in.y <= 1.f;
-		},
-		[](const glm::vec3& in) { return in.z >= 0; },
-		[](const glm::vec3& in) { return in.z <= 1; }
-	};
+	// the frustum is [-1, 1] on x and y, which mirrors onto itself when y is inverted
 
 	constexpr size_t maxRangedLightsPerTile = 16;
 	constexpr size_t minLightRange = 5;
@@ -171,8 +152,9 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		{
 			break;
 		}
-		auto clipSpaceBoundingBox = transformBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light));
-		if (!isBBoxInClipSpace(viewFrustum, clipSpaceBoundingBox))
+		const ClipSpaceBounds clipSpaceBounds =
+			boundsOfBoundingBox(transformBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light)));
+		if (!boundsOverlapClipRegion(clipSpaceBounds, -1.f, 1.f, -1.f, 1.f))
 		{
 			continue;
 		}
@@ -208,7 +190,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 							calcLight.colour.z += (existingLight.light.colour.z) * weight;
 
 							existingLight.light = calcLight;
-							existingLight.clipSpaceBoundingBox = clipSpaceBoundingBox;
+							existingLight.clipSpaceBounds = clipSpaceBounds;
 						}
 						else
 						{
@@ -250,7 +232,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
 		calcLight.range = light.range;
 
-		culledLights.push_back({std::move(calcLight), std::move(clipSpaceBoundingBox)});
+		culledLights.push_back({std::move(calcLight), clipSpaceBounds});
 	}
 
 	if (lightsSkipped > 0 || lightsCombined > 0 || tinyLightsSkipped > 0)
@@ -296,22 +278,9 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 				auto bucketFrustumY0 = -1.f + 2 * static_cast<float>(j) / bucketDimension;
 				auto bucketFrustumY1 = -1.f + 2 * static_cast<float>(j + 1) / bucketDimension;
 
-				auto frustum = IntersectionOfHalfSpace{
-					[bucketFrustumX0](const glm::vec3& in) { return in.x >= bucketFrustumX0; },
-					[bucketFrustumX1](const glm::vec3& in) { return in.x <= bucketFrustumX1; },
-					[bucketFrustumY0, yAxisInverted](const glm::vec3& in) {
-						if (yAxisInverted)
-							return -in.y >= bucketFrustumY0;
-						return in.y >= bucketFrustumY0;
-					},
-					[bucketFrustumY1, yAxisInverted](const glm::vec3& in) {
-						if (yAxisInverted)
-							return -in.y <= bucketFrustumY1;
-						return in.y <= bucketFrustumY1;
-					},
-					[](const glm::vec3& in) { return in.z >= 0; },
-					[](const glm::vec3& in) { return in.z <= 1; }
-				};
+				// mirror the bucket's y span so it matches the stored bounds
+				const float regionY0 = yAxisInverted ? -bucketFrustumY1 : bucketFrustumY0;
+				const float regionY1 = yAxisInverted ? -bucketFrustumY0 : bucketFrustumY1;
 
 				size_t bucketSize = 0;
 				for (size_t lightIndex = 0; lightIndex < culledLights.size(); lightIndex++)
@@ -322,9 +291,8 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 						reduceNumberOfBucketsNeeded = true;
 						break;
 					}
-					const BoundingBox& clipSpaceBoundingBox = culledLights[lightIndex].clipSpaceBoundingBox;
-
-					if (isBBoxInClipSpace(frustum, clipSpaceBoundingBox))
+					if (boundsOverlapClipRegion(culledLights[lightIndex].clipSpaceBounds,
+							bucketFrustumX0, bucketFrustumX1, regionY0, regionY1))
 					{
 						lightList[overallId + bucketSize] = lightIndex;
 
