@@ -23,16 +23,23 @@
 #include <array>
 #include <glm/glm.hpp>
 #include <algorithm>
-#include <functional>
 
 using BoundingBox = std::array<glm::vec3, 8>;
 
 /// Project a bounding box in clip space
 BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox);
 
-/// Define a half space
-using HalfSpaceCheck = std::function<bool(const glm::vec3&)>;
-/// Define a view frustum (as an intersection of half space
-using IntersectionOfHalfSpace = std::array< HalfSpaceCheck, 6>;
+/// Axis aligned extent of a clip space bounding box
+struct ClipSpaceBounds
+{
+	glm::vec3 minimum = glm::vec3(0.f);
+	glm::vec3 maximum = glm::vec3(0.f);
+};
 
-bool isBBoxInClipSpace(const IntersectionOfHalfSpace& intersectionOfHalfSpace, const BoundingBox& points);
+/// Collapse the eight corners of a clip space bounding box to its axis aligned extent
+ClipSpaceBounds boundsOfBoundingBox(const BoundingBox& points);
+
+/// True unless the bounds lie wholly outside the clip space region
+/// [x0, x1] x [y0, y1] x [0, 1]. Culling regions are axis aligned, so comparing
+/// extents answers this exactly.
+bool boundsOverlapClipRegion(const ClipSpaceBounds& bounds, float x0, float x1, float y0, float y1);
