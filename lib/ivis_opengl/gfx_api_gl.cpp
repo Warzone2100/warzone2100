@@ -966,7 +966,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, program_data{ "terrain_depth_prepass program", "shaders/terrain_depth_prepass.vert", "shaders/terrain_depth_prepass.frag",
-		{ "ProjectionMatrix", "ViewMatrix" } }),
+		{ "ModelViewProjectionMatrix", "ViewMatrix" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
@@ -2633,7 +2633,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>& cbuf)
 {
-	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(0, cbuf.ModelViewProjectionMatrix);
 	setUniforms(1, cbuf.ViewMatrix);
 }
 

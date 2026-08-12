@@ -1201,7 +1201,7 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>
 	{
-		glm::mat4 ProjectionMatrix;
+		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ViewMatrix;
 	};
 
