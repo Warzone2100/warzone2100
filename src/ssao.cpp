@@ -110,15 +110,23 @@ bool initNoiseTexture()
 	return s_noiseTexture != nullptr && s_noiseTexture->upload(0, noiseImage);
 }
 
-void ssaoFillUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+/// Size of the texture backing a pass read, falling back to the rendered scene extent.
+glm::vec2 ssaoSourceTextureSize(gfx_api::abstract_texture* sourceTex)
 {
 	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
 	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTex).value_or(renderedDims);
-	const float texW = static_cast<float>(std::max<uint32_t>(textureDims.first, 1));
-	const float texH = static_cast<float>(std::max<uint32_t>(textureDims.second, 1));
+	return glm::vec2(
+		static_cast<float>(std::max<uint32_t>(textureDims.first, 1)),
+		static_cast<float>(std::max<uint32_t>(textureDims.second, 1)));
+}
+
+void ssaoFillUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+{
+	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
+	const glm::vec2 texSize = ssaoSourceTextureSize(sourceTex);
 	uvScaleClamp = glm::vec4(
-		renderedDims.first / texW, renderedDims.second / texH,
-		(renderedDims.first - 0.5f) / texW, (renderedDims.second - 0.5f) / texH);
+		renderedDims.first / texSize.x, renderedDims.second / texSize.y,
+		(renderedDims.first - 0.5f) / texSize.x, (renderedDims.second - 0.5f) / texSize.y);
 }
 
 void drawSSAOGenerate(
@@ -138,9 +146,9 @@ void drawSSAOGenerate(
 	constants.invProjectionMatrix = invProjectionMatrix;
 	constants.projectionMatrix = projectionMatrix;
 	constants.params = glm::vec4(SSAO_RADIUS, SSAO_BIAS_FACTOR, SSAO_MIN_BIAS, SSAO_RANGE_SCALE);
-	constants.noiseScale = glm::vec2(
-		static_cast<float>(renderedDims.first) / static_cast<float>(NOISE_TEXTURE_SIZE),
-		static_cast<float>(renderedDims.second) / static_cast<float>(NOISE_TEXTURE_SIZE));
+	// Noise UVs are scaled from texture-space UVs, so the tile count follows the texture
+	// size. The rendered region is smaller than the texture when render scaling is active.
+	constants.noiseScale = ssaoSourceTextureSize(depthTexture) / static_cast<float>(NOISE_TEXTURE_SIZE);
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
 	ssaoFillUvScaleClamp(depthTexture, constants.uvScaleClamp);
 
@@ -171,7 +179,13 @@ void drawSSAOBlur(
 	gfx_api::SSAOBlurPSO::get().unbind_vertex_buffers(fullscreenTriVBO);
 }
 
-void recordBlur(const gfx_api::RenderPassContext& passCtx, const glm::vec2& blurDirection)
+enum class BlurAxis
+{
+	Horizontal,
+	Vertical,
+};
+
+void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 {
 	ASSERT(passCtx.readCount() == 2, "SSAO blur: occlusion + depth");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
@@ -179,6 +193,12 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, const glm::vec2& blur
 	{
 		return;
 	}
+	// The shader steps taps in texture-space UVs, so one tap is one texel of the occlusion
+	// texture, which stays wider than the rendered region when render scaling is active.
+	const glm::vec2 texSize = ssaoSourceTextureSize(passCtx.getRead(0));
+	const glm::vec2 blurDirection = (axis == BlurAxis::Horizontal)
+		? glm::vec2(1.0f / texSize.x, 0.0f)
+		: glm::vec2(0.0f, 1.0f / texSize.y);
 	drawSSAOBlur(passCtx.getRead(0), passCtx.getRead(1), blurDirection, vbo);
 }
 
@@ -232,20 +252,12 @@ void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
 {
-	const auto dims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	if (dims.first != 0)
-	{
-		recordBlur(passCtx, glm::vec2(1.0f / static_cast<float>(dims.first), 0.0f));
-	}
+	recordBlur(passCtx, BlurAxis::Horizontal);
 }
 
 void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 {
-	const auto dims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	if (dims.second != 0)
-	{
-		recordBlur(passCtx, glm::vec2(0.0f, 1.0f / static_cast<float>(dims.second)));
-	}
+	recordBlur(passCtx, BlurAxis::Vertical);
 }
 
 void recordCompose(const gfx_api::RenderPassContext& passCtx)
