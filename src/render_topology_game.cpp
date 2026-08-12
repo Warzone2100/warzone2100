@@ -25,7 +25,6 @@
 #include "loop.h"
 #include "main.h"
 #include "wrappers.h"
-#include "warzoneconfig.h"
 
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piedef.h"
@@ -118,7 +117,10 @@ public:
 
 	bool ssaoEnabled() const override
 	{
-		return war_getSSAO();
+		// Follow the allocated surfaces rather than the config value. The config is applied to
+		// the context by init3DView, so before that the two disagree and every SSAO pass
+		// resolves without attachments, which fails the graph compile.
+		return gfx_api::context::get().getSSAOSurfacesEnabled();
 	}
 
 	uint32_t shadowMapSize() const override
