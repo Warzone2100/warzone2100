@@ -487,6 +487,16 @@ private:
 	bool initGLContext();
 	bool initTessellationSupport();
 	bool initTextureGatherSupport();
+	/// MSAA sample count actually in use, the requested count clamped to what the
+	/// multisampled renderbuffer format accepts, or zero when MSAA is off.
+	uint32_t clampedMultiSampleCount() const
+	{
+		return (multisamples > 0 && maxMultiSampleBufferFormatSamples > 0)
+			? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
+			: 0u;
+	}
+	bool initTenBitSceneColorSupport();
+	bool initTenBitMsaaSupport(GLsizei samples);
 	bool initGpuTimestampSupport();
 	void createGpuTimingQueries();
 	void destroyGpuTimingQueries();
@@ -519,6 +529,9 @@ private:
 	bool hasBorderClampSupport = false;
 	bool hasTessellationSupport = false;
 	bool hasTextureGatherSupport = false;
+	// whether a 10 bit per channel scene colour target is renderable on this driver
+	bool hasTenBitMsaaSupport = false; // and whether it is renderable multisampled
+	bool hasTenBitSceneColorSupport = false;
 
 	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
 	bool hasGpuTimestampSupport = false;

@@ -3877,6 +3877,15 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	debug(LOG_INFO, "  * Texture gather support %s detected", hasTextureGatherSupport ? "was" : "was NOT");
 	hasGpuTimestampSupport = initGpuTimestampSupport();
 	debug(LOG_INFO, "  * GPU timestamp query support %s detected", hasGpuTimestampSupport ? "was" : "was NOT");
+	hasTenBitSceneColorSupport = initTenBitSceneColorSupport();
+	debug(LOG_INFO, "  * 10 bit scene color support %s detected", hasTenBitSceneColorSupport ? "was" : "was NOT");
+	const GLsizei requestedMsaaSamples = static_cast<GLsizei>(clampedMultiSampleCount());
+	if (hasTenBitSceneColorSupport && requestedMsaaSamples > 1)
+	{
+		hasTenBitMsaaSupport = initTenBitMsaaSupport(requestedMsaaSamples);
+		debug(LOG_INFO, "  * 10 bit scene color at %dx MSAA %s supported", requestedMsaaSamples,
+			hasTenBitMsaaSupport ? "is" : "is NOT");
+	}
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -4588,9 +4597,7 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.sceneH = sceneFramebufferHeight;
 	inputs.shadowMapSize = static_cast<uint32_t>(depthBufferResolution);
 	inputs.numShadowCascades = static_cast<uint32_t>(std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES));
-	const uint32_t clampedMsaa = (multisamples > 0 && maxMultiSampleBufferFormatSamples > 0)
-		? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
-		: 0u;
+	const uint32_t clampedMsaa = clampedMultiSampleCount();
 	inputs.sceneMsaaSamples = (clampedMsaa > 0) ? clampedMsaa : 1u;
 	inputs.swapchainMsaaSamples = 1;
 	inputs.presentColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
@@ -4604,14 +4611,24 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 gfx_api::SurfaceCapabilityHints gl_context::surfaceCapabilities() const
 {
 	gfx_api::SurfaceCapabilityHints caps;
-	const uint32_t clampedMsaa = (multisamples > 0 && maxMultiSampleBufferFormatSamples > 0)
-		? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
-		: 0u;
-	// When MSAA is active, scene color must match the MSAA renderbuffer format (RGBA8)
-	// on both desktop GL and GLES.
-	caps.sceneColorFormat = (clampedMsaa > 1)
-		? gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
-		: gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
+	const uint32_t clampedMsaa = clampedMultiSampleCount();
+	// Prefer 10 bits per channel where the driver can render to it.
+	// (The extra precision shows as less banding across the gradients terrain and sky produce.)
+	// With MSAA: the format must also back a multisampled renderbuffer at the sample count in use -
+	// if it can't, the sample count wins (since MSAA is the setting the player chose).
+	const bool useTenBit = hasTenBitSceneColorSupport && (clampedMsaa <= 1 || hasTenBitMsaaSupport);
+	if (useTenBit)
+	{
+		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32;
+	}
+	else if (clampedMsaa > 1)
+	{
+		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	}
+	else
+	{
+		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
+	}
 	caps.depthStencilFormat = gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
 	caps.depthSampledFormat = gfx_api::pixel_format::FORMAT_D32_SFLOAT;
 	return caps;
@@ -5607,6 +5624,79 @@ bool gl_context::initTextureGatherSupport()
 #endif
 }
 
+// Ask the driver whether a 10 bit scene color target is renderable rather than assuming,
+// by building one and checking the framebuffer is complete with it attached.
+bool gl_context::initTenBitSceneColorSupport()
+{
+	wzGLClearErrors();
+
+	GLuint probeTexture = 0;
+	glGenTextures(1, &probeTexture);
+	glBindTexture(GL_TEXTURE_2D, probeTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB10_A2, 4, 4, 0, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, nullptr);
+	bool supported = (glGetError() == GL_NO_ERROR);
+
+	GLuint probeFbo = 0;
+	if (supported)
+	{
+		GLint previousFbo = 0;
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFbo);
+		glGenFramebuffers(1, &probeFbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, probeFbo);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, probeTexture, 0);
+		supported = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && (glGetError() == GL_NO_ERROR);
+		glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(previousFbo));
+	}
+
+	if (probeFbo != 0)
+	{
+		glDeleteFramebuffers(1, &probeFbo);
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &probeTexture);
+	wzGLClearErrors();
+	return supported;
+}
+
+// RGB10_A2 is a required color renderable renderbuffer format in both desktop GL and
+// OpenGL ES 3.0, but the sample counts it accepts are not guaranteed to match RGBA8's.
+// Build one at the count we would actually ask for and see whether it is complete, which
+// answers that without needing the per format query that only newer desktop GL has.
+bool gl_context::initTenBitMsaaSupport(GLsizei samples)
+{
+	wzGLClearErrors();
+
+	GLint previousFbo = 0;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFbo);
+
+	GLuint probeRenderbuffer = 0;
+	glGenRenderbuffers(1, &probeRenderbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, probeRenderbuffer);
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_RGB10_A2, 4, 4);
+	bool supported = (glGetError() == GL_NO_ERROR);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	GLuint probeFbo = 0;
+	if (supported)
+	{
+		glGenFramebuffers(1, &probeFbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, probeFbo);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, probeRenderbuffer);
+		supported = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && (glGetError() == GL_NO_ERROR);
+		glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(previousFbo));
+	}
+
+	if (probeFbo != 0)
+	{
+		glDeleteFramebuffers(1, &probeFbo);
+	}
+	glDeleteRenderbuffers(1, &probeRenderbuffer);
+	wzGLClearErrors();
+	return supported;
+}
+
 bool gl_context::initGpuTimestampSupport()
 {
 #if !defined(WZ_GL_TIMER_QUERY_SUPPORTED) || defined(WZ_STATIC_GL_BINDINGS)
@@ -6221,8 +6311,14 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 		{
 			GLenum colorInternalFormat = GL_RGB8;
 			GLenum colorBaseFormat = GL_RGB;
+			GLenum colorType = GL_UNSIGNED_BYTE;
 			switch (createSpec.format)
 			{
+			case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+				colorInternalFormat = GL_RGB10_A2;
+				colorBaseFormat = GL_RGBA;
+				colorType = GL_UNSIGNED_INT_2_10_10_10_REV;
+				break;
 			case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
 				colorInternalFormat = root.multiSampledBufferInternalFormat;
 				colorBaseFormat = root.multiSampledBufferBaseFormat;
@@ -6239,7 +6335,7 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 			default:
 				break;
 			}
-			auto* sceneTex = root.create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE,
+			auto* sceneTex = root.create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, colorType,
 				createSpec.width, createSpec.height, "<scene texture>");
 			if (!sceneTex)
 			{
@@ -6261,9 +6357,15 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 		}
 		case gfx_api::SurfaceStorageKind::MsaaColorAttachment:
 		{
-			const GLenum msaaFormat = (createSpec.format == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
-				? root.multiSampledBufferInternalFormat
-				: GL_RGB8;
+			GLenum msaaFormat = GL_RGB8;
+			if (createSpec.format == gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32)
+			{
+				msaaFormat = GL_RGB10_A2;
+			}
+			else if (createSpec.format == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+			{
+				msaaFormat = root.multiSampledBufferInternalFormat;
+			}
 			auto msaa = root.create_framebuffer_renderbuffer(msaaFormat, glSamples,
 				createSpec.width, createSpec.height, "<scene msaa color>");
 			ASSERT_OR_RETURN(false, msaa != nullptr, "Failed to create MSAA color renderbuffer");
