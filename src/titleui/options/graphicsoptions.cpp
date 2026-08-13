@@ -72,6 +72,12 @@ OptionInfo::AvailabilityResult SupportsShadowMapping(const OptionInfo&)
 OptionInfo::AvailabilityResult PerPixelLightingAvailable(const OptionInfo&)
 {
 	OptionInfo::AvailabilityResult result;
+	if (pie_PointLightPerPixelShaderUnavailable())
+	{
+		result.available = false;
+		result.localizedUnavailabilityReason = _("Advanced lighting is not supported by this graphics driver");
+		return result;
+	}
 	result.available = (getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING);
 	result.localizedUnavailabilityReason = _("Advanced lighting is only available when using terrain appearance: Remastered (HQ)");
 	return result;

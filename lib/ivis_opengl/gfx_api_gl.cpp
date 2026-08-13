@@ -6215,17 +6215,37 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 		return true;
 	}
 
+	const gfx_api::lighting_constants previousConstants = shadowConstants;
 	shadowConstants = newValues;
 
 	// Must recompile any shaders that used this value
-	for (auto& pipelineInfo : createdPipelines)
-	{
-		if (pipelineInfo.pso &&
-			(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
+	const auto recompileAffectedPipelines = [this]() {
+		bool anyBroken = false;
+		for (auto& pipelineInfo : createdPipelines)
 		{
-			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, pipelineInfo.createInfo, shadowConstants);
+			if (pipelineInfo.pso &&
+				(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
+			{
+				delete pipelineInfo.pso;
+				pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, pipelineInfo.createInfo, shadowConstants);
+				anyBroken = anyBroken || pipelineInfo.pso->broken;
+			}
 		}
+		return !anyBroken;
+	};
+
+	if (!recompileAffectedPipelines())
+	{
+		// A program failed to link, most likely the point light arrays overrunning the
+		// fragment uniform budget. Put the previous constants back rather than leave the
+		// renderer running on broken programs.
+		debug(LOG_ERROR, "Failed to compile shaders for the requested lighting constants, reverting");
+		shadowConstants = previousConstants;
+		if (!recompileAffectedPipelines())
+		{
+			debug(LOG_FATAL, "Failed to restore the previous lighting constants");
+		}
+		return false;
 	}
 
 	return true;
