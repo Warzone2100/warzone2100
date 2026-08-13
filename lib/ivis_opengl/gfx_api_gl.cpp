@@ -1305,8 +1305,8 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	if (!ctx.gles)
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL context
-		// (The built-in shaders support (and have been tested with) VERSION_120, VERSION_150_CORE, VERSION_330_CORE)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_330_CORE));
+		// (The built-in shaders support (and have been tested with) VERSION_140, VERSION_150_CORE, VERSION_330_CORE)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_140, VERSION_330_CORE));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
@@ -1339,7 +1339,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		// Determine the shader version directive we should use by examining the current OpenGL ES context
 		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300,
 		// individual programs can opt in to higher versions via program_data::maxShaderVersionES)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_100, programInfo.maxShaderVersionES));
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_300, programInfo.maxShaderVersionES));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
@@ -4348,19 +4348,10 @@ bool gl_context::initGLContext()
 #endif
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
-	if (!GLAD_GL_VERSION_3_0 && !GLAD_GL_ES_VERSION_3_0)
+	if ((!gles && !GLAD_GL_VERSION_3_1) || (gles && !GLAD_GL_ES_VERSION_3_0))
 	{
-		debug(LOG_POPUP, "OpenGL 3.0+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers.");
+		debug(LOG_POPUP, "OpenGL 3.1+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers or try a different graphics backend.");
 		return false;
-	}
-
-	if (!gles)
-	{
-		if (!GLAD_GL_VERSION_3_1)
-		{
-			// non-fatal pop-up, to warn about OpenGL < 3.1 (we may require 3.1+ in the future)
-			debug(LOG_POPUP, "OpenGL 3.1+ is not supported - Please upgrade your drivers or try a different graphics backend.");
-		}
 	}
 
 #else
