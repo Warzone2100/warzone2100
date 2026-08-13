@@ -1,10 +1,6 @@
 // common parts of tcmask/nolight_instanced.vert and .frag shaders
 
-#define WZ_MAX_SHADOW_CASCADES 3
-
-#define WZ_MAX_POINT_LIGHTS 128
-#define WZ_MAX_INDEXED_POINT_LIGHTS 512
-#define WZ_BUCKET_DIMENSION 8
+#include "wz_shader_constants.glsl"
 
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {

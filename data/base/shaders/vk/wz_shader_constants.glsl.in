@@ -1,0 +1,17 @@
+// Generated at configure time from the C++ definitions. Do not edit.
+//
+// The GL backend patches these into its shaders when it loads them, so its copies
+// cannot drift. glslc compiles the Vulkan shaders ahead of time, so they need the
+// values substituted here instead, from the same source.
+//
+// Source: lib/ivis_opengl/gfx_api.h, lib/ivis_opengl/shadows.h
+
+#ifndef WZ_SHADER_CONSTANTS_GLSL
+#define WZ_SHADER_CONSTANTS_GLSL
+
+#define WZ_MAX_POINT_LIGHTS @WZ_MAX_POINT_LIGHTS@
+#define WZ_MAX_INDEXED_POINT_LIGHTS @WZ_MAX_INDEXED_POINT_LIGHTS@
+#define WZ_BUCKET_DIMENSION @WZ_BUCKET_DIMENSION@
+#define WZ_MAX_SHADOW_CASCADES @WZ_MAX_SHADOW_CASCADES@
+
+#endif

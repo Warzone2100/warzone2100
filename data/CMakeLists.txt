@@ -176,6 +176,46 @@ foreach(_vk_shader_file ${_vk_shader_stage_files})
 	endif()
 endforeach()
 
+# Vulkan shaders are compiled ahead of time, so unlike the GL path there is no runtime
+# patching to keep their point light and shadow limits in step with the C++ definitions.
+# Read the values straight out of the headers that define them and generate the include
+# the shaders use, so the two cannot silently disagree.
+set(_wz_gfx_api_header "${CMAKE_SOURCE_DIR}/lib/ivis_opengl/gfx_api.h")
+set(_wz_shadows_header "${CMAKE_SOURCE_DIR}/lib/ivis_opengl/shadows.h")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+	"${_wz_gfx_api_header}" "${_wz_shadows_header}")
+
+function(_wz_extract_constant OUT_VAR FILE_PATH PATTERN DESCRIPTION)
+	file(STRINGS "${FILE_PATH}" _matched_lines REGEX "${PATTERN}")
+	if(NOT _matched_lines)
+		message(FATAL_ERROR "Could not find ${DESCRIPTION} in ${FILE_PATH}")
+	endif()
+	list(GET _matched_lines 0 _first_line)
+	if(NOT _first_line MATCHES "([0-9]+)")
+		message(FATAL_ERROR "Could not read a value for ${DESCRIPTION} from: ${_first_line}")
+	endif()
+	set(${OUT_VAR} "${CMAKE_MATCH_1}" PARENT_SCOPE)
+endfunction()
+
+_wz_extract_constant(WZ_MAX_POINT_LIGHTS "${_wz_gfx_api_header}"
+	"constexpr[ \t]+size_t[ \t]+max_lights[ \t]*=" "max_lights")
+_wz_extract_constant(WZ_MAX_INDEXED_POINT_LIGHTS "${_wz_gfx_api_header}"
+	"constexpr[ \t]+size_t[ \t]+max_indexed_lights[ \t]*=" "max_indexed_lights")
+_wz_extract_constant(WZ_BUCKET_DIMENSION "${_wz_gfx_api_header}"
+	"constexpr[ \t]+size_t[ \t]+bucket_dimension[ \t]*=" "bucket_dimension")
+_wz_extract_constant(WZ_MAX_SHADOW_CASCADES "${_wz_shadows_header}"
+	"#define[ \t]+WZ_MAX_SHADOW_CASCADES" "WZ_MAX_SHADOW_CASCADES")
+
+set(_vk_generated_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk_generated")
+file(MAKE_DIRECTORY "${_vk_generated_dir}")
+set(_vk_generated_constants "${_vk_generated_dir}/wz_shader_constants.glsl")
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/wz_shader_constants.glsl.in"
+	"${_vk_generated_constants}"
+	@ONLY
+)
+message(STATUS "Vulkan shader constants: point lights ${WZ_MAX_POINT_LIGHTS}, indexed ${WZ_MAX_INDEXED_POINT_LIGHTS}, buckets ${WZ_BUCKET_DIMENSION}, cascades ${WZ_MAX_SHADOW_CASCADES}")
+
 set(SHADER_LIST "")
 if(GLSLC)
 	message(STATUS "Found glslc: ${GLSLC}")
@@ -187,9 +227,9 @@ if(GLSLC)
 		set(_output_name "${SHADER_FILE}.spv")
 		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
 			COMMAND "${GLSLC}"
-			ARGS "-c" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
+			ARGS "-c" "-I" "${_vk_generated_dir}" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
-			DEPENDS "${SHADER}"
+			DEPENDS "${SHADER}" "${_vk_generated_constants}"
 			VERBATIM
 		)
 		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
