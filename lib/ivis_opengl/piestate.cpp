@@ -119,6 +119,14 @@ void pie_FreeShaders()
 //static float fogEnd;
 
 // Run from screen.c on init.
+// set when the driver could not compile the per pixel point lighting shaders
+static bool pointLightPerPixelShaderUnavailable = false;
+
+bool pie_PointLightPerPixelShaderUnavailable()
+{
+	return pointLightPerPixelShaderUnavailable;
+}
+
 bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled)
 {
 	// note: actual loading of shaders now occurs in gfx_api
@@ -128,7 +136,23 @@ bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled)
 	auto shadowConstants = gfx_api::context::get().getShadowConstants();
 	shadowConstants.shadowFilterSize = shadowFilterSize;
 	shadowConstants.isPointLightPerPixelEnabled = pointLightEnabled;
-	gfx_api::context::get().setShadowConstants(shadowConstants);
+	if (!gfx_api::context::get().setShadowConstants(shadowConstants))
+	{
+		// Per pixel point lighting needs far more fragment uniforms than the lightmap
+		// path, so a driver near its limit can fail to compile it. Fall back rather than
+		// refusing to start, since the lightmap path produces a complete picture.
+		if (!pointLightEnabled)
+		{
+			return false;
+		}
+		debug(LOG_ERROR, "Could not compile shaders for per pixel point lighting, falling back to the lightmap");
+		pointLightPerPixelShaderUnavailable = true;
+		shadowConstants.isPointLightPerPixelEnabled = false;
+		if (!gfx_api::context::get().setShadowConstants(shadowConstants))
+		{
+			return false;
+		}
+	}
 
 	if (!pie_supportsShadowMapping().value_or(false))
 	{
