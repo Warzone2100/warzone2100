@@ -27,6 +27,7 @@
 #include "gfx_api.h"
 #include "blueprint_materializer.h"
 #include "topology.h"
+#include "pipeline_surfaces.h"
 
 #include "lib/framework/wzapp.h"
 
@@ -114,54 +115,48 @@ void CachedRenderGraph::ensureBuilt(const RenderTopologySnapshot& snapshot)
 	_cachedMaterializeHash = materializeHash;
 }
 
-static std::pair<uint32_t, uint32_t> divideDims(std::pair<uint32_t, uint32_t> dims, uint32_t divisor)
+static bool tracksUsedSceneExtent(SurfaceExtentPolicy policy)
 {
-	return {divideSurfaceExtent(dims.first, divisor), divideSurfaceExtent(dims.second, divisor)};
+	return policy == SurfaceExtentPolicy::MatchScene
+		|| policy == SurfaceExtentPolicy::MatchSceneDivided;
 }
 
-// Track the per frame render fraction in the viewport of every scene-sized pass, so
-// fraction changes never rematerialize the graph. Execution reads the compiled pass
-// description copies, not the materialized descriptions, so the rewrite must reach both.
+static optional<PipelineSurfaceId> passExtentSurface(const RenderPassDesc& pass)
+{
+	if (!pass.colorAttachments.empty() && pass.colorAttachments[0].pipelineSurfaceId.has_value())
+	{
+		return pass.colorAttachments[0].pipelineSurfaceId;
+	}
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->pipelineSurfaceId.has_value())
+	{
+		return pass.depthAttachment->pipelineSurfaceId;
+	}
+	return nullopt;
+}
+
+// Track the per-frame used scene size in every MatchScene / MatchSceneDivided writer so
+// dyn-res fraction changes never rematerialize the graph. Execution reads the compiled
+// pass description copies, not the materialized descriptions, so the rewrite must reach both.
 //
-// Every pass writing a MatchScene surface belongs here. SSAO generate/blur/downsample
-// write MatchSceneDivided targets, so their used viewport is used-scene / divisor.
-// (Any omitted pass will cover its whole target while the rest of the chain reads only the
-// sub-rect, so it is sampled as - in effect - a magnified crop.)
-static void applySceneFractionViewports(std::vector<RenderPassDesc>& passes, PassGraphCompileResult& compileResult)
+// Viewport = resolveExtent(catalog[color-or-depth], used sceneW/H) - the same policy that
+// allocated the image. MatchDrawable / ShadowMapSquare / DepthCascade stay materialized.
+// (Any omitted MatchScene writer would cover its whole target while the rest of the chain
+// reads only the sub-rect, so it is sampled as - in effect - a magnified crop.)
+static void applyUsedCatalogViewports(std::vector<RenderPassDesc>& passes, PassGraphCompileResult& compileResult)
 {
 	auto& ctx = gfx_api::context::get();
-	const auto sceneDims = ctx.getSceneRenderTargetDimensions();
-	const bool smaaIntermediate = ctx.getPipelineSurface(PipelineSurfaceId::SmaaColor) != nullptr;
 	auto applyToPass = [&](RenderPassDesc& pass) {
-		switch (pass.passId)
+		const optional<PipelineSurfaceId> surfaceId = passExtentSurface(pass);
+		if (!surfaceId.has_value())
 		{
-		case PassId::ScenePass:
-		case PassId::ScenePrepass:
-		case PassId::SSAOCompose:
-		case PassId::FogApply:
-		case PassId::SmaaEdges:
-		case PassId::SmaaWeights:
-			pass.viewportSize = sceneDims;
-			break;
-		case PassId::SmaaBlend:
-			// only when the blend writes the scene-sized intermediate, the
-			// direct swapchain variant must keep covering the full drawable
-			if (smaaIntermediate)
-			{
-				pass.viewportSize = sceneDims;
-			}
-			break;
-		case PassId::SSAOGenerate:
-			pass.viewportSize = divideDims(sceneDims, ctx.getSSAOGenerateDivisor());
-			break;
-		case PassId::SSAODownsample:
-		case PassId::SSAOBlurH:
-		case PassId::SSAOBlurV:
-			pass.viewportSize = divideDims(sceneDims, ctx.getSSAOBlurDivisor());
-			break;
-		default:
-			break;
+			return;
 		}
+		const PipelineSurfaceCatalogEntry& cat = pipelineSurfaceCatalogEntry(surfaceId.value());
+		if (!tracksUsedSceneExtent(cat.extentPolicy))
+		{
+			return;
+		}
+		pass.viewportSize = ctx.usedPipelineSurfaceExtent(surfaceId.value());
 	};
 	for (auto& pass : passes)
 	{
@@ -179,7 +174,7 @@ void CachedRenderGraph::execute()
 	{
 		return;
 	}
-	applySceneFractionViewports(_passes, _compileResult);
+	applyUsedCatalogViewports(_passes, _compileResult);
 	gfx_api::context::get().executeCompiledRenderGraph(_passes, _compileResult);
 }
 

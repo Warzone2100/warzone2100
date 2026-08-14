@@ -397,41 +397,6 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 	return false;
 }
 
-void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurfaceSyncInputs& inputs,
-	uint32_t& width, uint32_t& height)
-{
-	switch (cat.extentPolicy)
-	{
-	case SurfaceExtentPolicy::MatchDrawable:
-		width = inputs.drawableW;
-		height = inputs.drawableH;
-		break;
-	case SurfaceExtentPolicy::MatchScene:
-		width = inputs.sceneW;
-		height = inputs.sceneH;
-		break;
-	case SurfaceExtentPolicy::MatchSceneDivided:
-	{
-		uint32_t divisor = 1;
-		if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoGenerate)
-		{
-			divisor = inputs.ssaoGenerateDivisor;
-		}
-		else if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoBlur)
-		{
-			divisor = inputs.ssaoBlurDivisor;
-		}
-		width = divideSurfaceExtent(inputs.sceneW, divisor);
-		height = divideSurfaceExtent(inputs.sceneH, divisor);
-		break;
-	}
-	case SurfaceExtentPolicy::ShadowMapSquare:
-		width = inputs.shadowMapSize;
-		height = inputs.shadowMapSize;
-		break;
-	}
-}
-
 uint32_t resolveSamples(SurfaceSamplePolicy policy, const PipelineSurfaceSyncInputs& inputs)
 {
 	switch (policy)
@@ -489,6 +454,41 @@ pixel_format resolveFormat(SurfaceFormatClass formatClass, PipelineSurfaceId for
 
 } // namespace
 
+void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurfaceSyncInputs& inputs,
+	uint32_t& width, uint32_t& height)
+{
+	switch (cat.extentPolicy)
+	{
+	case SurfaceExtentPolicy::MatchDrawable:
+		width = inputs.drawableW;
+		height = inputs.drawableH;
+		break;
+	case SurfaceExtentPolicy::MatchScene:
+		width = inputs.sceneW;
+		height = inputs.sceneH;
+		break;
+	case SurfaceExtentPolicy::MatchSceneDivided:
+	{
+		uint32_t divisor = 1;
+		if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoGenerate)
+		{
+			divisor = inputs.ssaoGenerateDivisor;
+		}
+		else if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoBlur)
+		{
+			divisor = inputs.ssaoBlurDivisor;
+		}
+		width = divideSurfaceExtent(inputs.sceneW, divisor);
+		height = divideSurfaceExtent(inputs.sceneH, divisor);
+		break;
+	}
+	case SurfaceExtentPolicy::ShadowMapSquare:
+		width = inputs.shadowMapSize;
+		height = inputs.shadowMapSize;
+		break;
+	}
+}
+
 const PipelineSurfaceCatalogTable& pipelineSurfaceCatalog()
 {
 	return PIPELINE_SURFACE_CATALOG;
@@ -524,6 +524,28 @@ bool context::syncPipelineSurfaces()
 		debug(LOG_3D, "Creating scene targets: %" PRIu32 " x %" PRIu32 " (drawable: %" PRIu32 " x %" PRIu32 ")", scene.width, scene.height, inputs.drawableW, inputs.drawableH);
 	}
 	return ensurePipelineSurfaces(specs);
+}
+
+PipelineSurfaceSyncInputs context::usedSceneSyncInputs()
+{
+	PipelineSurfaceSyncInputs inputs = pipelineSurfaceSyncInputs();
+	const auto usedScene = getSceneRenderTargetDimensions();
+	inputs.sceneW = usedScene.first;
+	inputs.sceneH = usedScene.second;
+	return inputs;
+}
+
+std::pair<uint32_t, uint32_t> context::usedPipelineSurfaceExtent(PipelineSurfaceId id)
+{
+	const std::pair<uint32_t, uint32_t> used = resolveCatalogExtent(id, usedSceneSyncInputs());
+	const ResolvedSurfaceSpec& spec = resolvedPipelineSurface(id);
+	if (spec.enabled && spec.width > 0 && spec.height > 0)
+	{
+		ASSERT(used.first <= spec.width && used.second <= spec.height,
+			"usedPipelineSurfaceExtent: used (%" PRIu32 " x %" PRIu32 ") exceeds allocated (%" PRIu32 " x %" PRIu32 ") for surface %u",
+			used.first, used.second, spec.width, spec.height, static_cast<unsigned>(id));
+	}
+	return used;
 }
 
 PipelineSurfaceUsage context::pipelineSurfaceUsage(PipelineSurfaceId id) const

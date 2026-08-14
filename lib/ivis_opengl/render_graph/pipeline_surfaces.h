@@ -42,6 +42,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>
+#include <utility>
 #include <vector>
 
 #include "../gfx_api_formats_def.h"
@@ -336,6 +337,20 @@ using ResolvedSurfaceTable = std::array<ResolvedSurfaceSpec, PIPELINE_SURFACE_CO
 const PipelineSurfaceCatalogEntry& pipelineSurfaceCatalogEntry(PipelineSurfaceId id);
 /// Full static catalog table.
 const PipelineSurfaceCatalogTable& pipelineSurfaceCatalog();
+
+/// Derive width/height from catalog extent policy and sync inputs.
+/// Pass allocated sceneW/H for GPU image size, or used sceneW/H (dyn-res) for the execute viewport.
+void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurfaceSyncInputs& inputs,
+	uint32_t& width, uint32_t& height);
+
+inline std::pair<uint32_t, uint32_t> resolveCatalogExtent(PipelineSurfaceId id,
+	const PipelineSurfaceSyncInputs& inputs)
+{
+	uint32_t w = 0;
+	uint32_t h = 0;
+	resolveExtent(pipelineSurfaceCatalogEntry(id), inputs, w, h);
+	return {w, h};
+}
 
 /// Resolve catalog policies against sync inputs and HW capability hints.
 ResolvedSurfaceTable resolvePipelineSurfaces(const PipelineSurfaceSyncInputs& inputs,
