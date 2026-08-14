@@ -515,6 +515,25 @@ vk::SampleCountFlagBits getMaxUsableSampleCount(const vk::PhysicalDeviceProperti
 	return vk::SampleCountFlagBits::e1;
 }
 
+static vk::ImageAspectFlags vkImageAspectForFormat(vk::Format format)
+{
+	switch (format)
+	{
+	case vk::Format::eD16Unorm:
+	case vk::Format::eX8D24UnormPack32:
+	case vk::Format::eD32Sfloat:
+		return vk::ImageAspectFlagBits::eDepth;
+	case vk::Format::eS8Uint:
+		return vk::ImageAspectFlagBits::eStencil;
+	case vk::Format::eD16UnormS8Uint:
+	case vk::Format::eD24UnormS8Uint:
+	case vk::Format::eD32SfloatS8Uint:
+		return vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
+	default:
+		return vk::ImageAspectFlagBits::eColor;
+	}
+}
+
 vk::Format findDepthStencilFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	return findSupportedFormat(
@@ -3053,7 +3072,7 @@ static void createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, co
 										 swapchainSize, msaaSamples, depthFormat,
 										 // FUTURE TODO: Add vk::ImageUsageFlagBits::eTransientAttachment once we get rid of stencil shadows entirely
 										 usage,
-										 vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil,
+										 vkImageAspectForFormat(depthFormat),
 										 depthStencilImage, depthStencilMemory, depthStencilView,
 										 vkDynLoader, loggingKey);
 }
@@ -5039,7 +5058,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	const auto imageMemoryBarriers_TransitionDefaultDepthImage = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(pDefaultDepthMapTexture->object)
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1))
+			.setSubresourceRange(vk::ImageSubresourceRange(vkImageAspectForFormat(depthBufferFormat), 0, 1, 0, 1))
 			.setOldLayout(vk::ImageLayout::eUndefined)
 			.setNewLayout(vk::ImageLayout::eDepthStencilReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
@@ -5506,7 +5525,7 @@ void VkRoot::setupSwapchainImages()
 				.setOldLayout(vk::ImageLayout::eUndefined)
 				.setNewLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 				.setImage(swapchainDepthImage)
-				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1))
+				.setSubresourceRange(vk::ImageSubresourceRange(vkImageAspectForFormat(depthStencilAttachmentFormat), 0, 1, 0, 1))
 				.setDstAccessMask(vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite)
 		};
 		internalCommandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eAllCommands, vk::PipelineStageFlagBits::eAllCommands,
@@ -6190,25 +6209,6 @@ vk::Image VkRoot::getVkImageHandle(gfx_api::abstract_texture* texture) const
 	}
 	debug(LOG_FATAL, "Unsupported texture type for layout transition");
 	return vk::Image();
-}
-
-static vk::ImageAspectFlags vkImageAspectForFormat(vk::Format format)
-{
-	switch (format)
-	{
-	case vk::Format::eD16Unorm:
-	case vk::Format::eX8D24UnormPack32:
-	case vk::Format::eD32Sfloat:
-		return vk::ImageAspectFlagBits::eDepth;
-	case vk::Format::eS8Uint:
-		return vk::ImageAspectFlagBits::eStencil;
-	case vk::Format::eD16UnormS8Uint:
-	case vk::Format::eD24UnormS8Uint:
-	case vk::Format::eD32SfloatS8Uint:
-		return vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
-	default:
-		return vk::ImageAspectFlagBits::eColor;
-	}
 }
 
 vk::ImageAspectFlags VkRoot::getVkImageAspect(gfx_api::abstract_texture* texture) const
