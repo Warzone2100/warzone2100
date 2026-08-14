@@ -114,7 +114,9 @@ uint64_t RenderTopologySnapshot::materializeHash() const
 		drawableH,
 		sceneW,
 		sceneH,
-		shadowMapSize);
+		shadowMapSize,
+		ssaoGenerateDivisor,
+		ssaoBlurDivisor);
 	return static_cast<uint64_t>(h);
 }
 
@@ -218,6 +220,9 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 	const auto sceneColor = query.sceneColorDimensions();
 	snapshot.sceneW = sceneColor.first;
 	snapshot.sceneH = sceneColor.second;
+
+	snapshot.ssaoGenerateDivisor = query.ssaoGenerateDivisor();
+	snapshot.ssaoBlurDivisor = query.ssaoBlurDivisor();
 
 	return snapshot;
 }

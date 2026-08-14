@@ -151,7 +151,7 @@ struct BlueprintPass
 /// Contains no lambdas, viewport pixel sizes, or backend handles. Built from
 /// `RenderTopologySnapshot` (see `fromSnapshot`) or `BlueprintBuilder`, then cached
 /// by `topologyHash` in `CachedRenderGraph`. Rematerialized separately when
-/// `materializeHash` changes (resize, backend epoch).
+/// `materializeHash` changes (resize, SSAO divisors, backend epoch).
 /// </summary>
 class PassGraphTopologyBlueprint
 {
