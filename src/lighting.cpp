@@ -250,7 +250,7 @@ static void colourTile(LightMap& lightmap, SDWORD xIndex, SDWORD yIndex, PIELIGH
 	lightmap(xIndex, yIndex) = colour;
 }
 
-void rendering1999::LightingManager::ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix)
+void rendering1999::LightingManager::ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo&)
 {
 	for (const auto& light : data.lights)
 	{

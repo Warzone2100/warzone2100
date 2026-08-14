@@ -63,6 +63,16 @@ LightMap& getCurrentLightmapData();
 
 
 
+/// Scene facts the lighting managers need beyond the lights themselves.
+struct LightingSceneInfo
+{
+	//! camera position in world space (z negated, matching getLightBoundingBox)
+	glm::vec3 cameraPosition = glm::vec3(0.f);
+	//! terrain height under a world XY, in raw light coordinates. Consulted once per
+	//! candidate light, so the indirection here costs nothing measurable.
+	std::function<int32_t(int32_t, int32_t)> groundHeightAt;
+};
+
 struct ILightingManager
 {
 	struct PointLightBuckets
@@ -85,7 +95,7 @@ struct ILightingManager
 		currentPointLightBuckets = {};
 	}
 
-	virtual void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) = 0;
+	virtual void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) = 0;
 
 	const PointLightBuckets& getPointLightBuckets() const
 	{
@@ -110,7 +120,7 @@ namespace renderingNew
 	//! This lighting manager generate a proper PointLightBuckets for per pixel point lights
 	struct LightingManager final : ILightingManager
 	{
-		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) override;
 
 		struct CalculatedPointLight
 		{
@@ -118,16 +128,25 @@ namespace renderingNew
 			glm::vec3 colour;
 			float range;
 		};
-	private:
-		// cached containers to avoid frequent reallocations
+
 		struct CulledLightInfo
 		{
 			CalculatedPointLight light;
 			ClipSpaceBounds clipSpaceBounds;
+			float importance = 0.f;
 		};
+	private:
+		// cached containers to avoid frequent reallocations
 		std::vector<CulledLightInfo> culledLights;
 		//! tile coordinates to indices into culledLights, rebuilt per frame
 		std::unordered_map<std::pair<int32_t, int32_t>, std::vector<size_t>, TileCoordsHasher> tileRangeLights;
+		//! per screen bucket candidate lists, reused across frames
+		std::vector<std::vector<size_t>> bucketCandidates;
+		//! scratch for ordering one bucket's candidates, reused across frames
+		std::vector<std::pair<float, size_t>> scoredCandidates;
+		//! selection bookkeeping, reused across frames
+		std::vector<bool> selectedLights;
+		std::vector<size_t> nextCandidate;
 	};
 }
 

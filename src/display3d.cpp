@@ -1334,7 +1334,12 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	// The lightmap need to be ready at this point
 	{
 		WZ_PROFILE_SCOPE(LightingManager_ComputeFrameData);
-		lightManager.ComputeFrameData(lightData, lightmap, perspectiveViewMatrix);
+		LightingSceneInfo lightScene;
+		lightScene.cameraPosition = cameraPos;
+		lightScene.groundHeightAt = [](int32_t worldX, int32_t worldY) {
+			return map_Height(gameWorld.map, worldX, worldY);
+		};
+		lightManager.ComputeFrameData(lightData, lightmap, perspectiveViewMatrix, lightScene);
 	}
 
 	// prepare terrain for drawing
