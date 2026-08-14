@@ -26,12 +26,11 @@
 
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
+#include "fog_pass.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piestate.h"
-
-#include "warzoneconfig.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
@@ -143,15 +142,6 @@ glm::vec2 ssaoSourceTextureSize(gfx_api::abstract_texture* sourceTex)
 		static_cast<float>(std::max<uint32_t>(textureDims.second, 1)));
 }
 
-void ssaoFillUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
-{
-	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	const glm::vec2 texSize = ssaoSourceTextureSize(sourceTex);
-	uvScaleClamp = glm::vec4(
-		renderedDims.first / texSize.x, renderedDims.second / texSize.y,
-		(renderedDims.first - 0.5f) / texSize.x, (renderedDims.second - 0.5f) / texSize.y);
-}
-
 void drawSSAOGenerate(
 	gfx_api::abstract_texture* depthTexture,
 	gfx_api::abstract_texture* normalsTexture,
@@ -173,7 +163,7 @@ void drawSSAOGenerate(
 	// size. The rendered region is smaller than the texture when render scaling is active.
 	constants.noiseScale = ssaoSourceTextureSize(depthTexture) / static_cast<float>(NOISE_TEXTURE_SIZE);
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
-	ssaoFillUvScaleClamp(depthTexture, constants.uvScaleClamp);
+	display3d_fillSceneUvScaleClamp(depthTexture, constants.uvScaleClamp);
 
 	gfx_api::SSAOGeneratePSO::get().bind();
 	gfx_api::SSAOGeneratePSO::get().bind_constants(constants);
@@ -192,7 +182,7 @@ void drawSSAOBlur(
 	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
 	constants.blurDirection = blurDirection;
 	constants.depthSigma = s_tuning.blurDepthSigma;
-	ssaoFillUvScaleClamp(occlusionTexture, constants.uvScaleClamp);
+	display3d_fillSceneUvScaleClamp(occlusionTexture, constants.uvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
 	gfx_api::SSAOBlurPSO::get().bind_constants(constants);
@@ -229,17 +219,7 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 
 void applyConfigToGfx()
 {
-	auto& ctx = gfx_api::context::get();
-	const bool ssao = war_getSSAO();
-	const bool fog = pie_GetFogEnabled();
-	ctx.setSSAOSurfacesEnabled(ssao);
-	ctx.setScenePrepassSurfacesEnabled(ssao || fog);
-	ctx.setFogSurfacesEnabled(fog);
-	if (!ctx.syncPipelineSurfaces())
-	{
-		debug(LOG_ERROR, "Failed to sync pipeline surfaces after SSAO/fog config change (ssao=%d fog=%d)",
-			static_cast<int>(ssao), static_cast<int>(fog));
-	}
+	fog_pass::applyConfigToGfx();
 }
 
 void init()
@@ -289,36 +269,25 @@ void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 
 void recordCompose(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 4, "SSAO compose: scene + AO + normals + depth");
+	ASSERT(passCtx.readCount() == 3, "SSAO compose: scene + AO + normals");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* scene = passCtx.getRead(0);
 	gfx_api::abstract_texture* ao = passCtx.getRead(1);
 	gfx_api::abstract_texture* prepassNormals = passCtx.getRead(2);
-	gfx_api::abstract_texture* prepassDepth = passCtx.getRead(3);
-	if (vbo == nullptr || scene == nullptr || ao == nullptr || prepassNormals == nullptr || prepassDepth == nullptr
+	if (vbo == nullptr || scene == nullptr || ao == nullptr || prepassNormals == nullptr
 		|| !pie_IsInGame3DFrameContextReady())
 	{
 		return;
 	}
 
-	const RENDER_STATE renderState = getCurrentRenderState();
-	const auto& fc = pie_GetInGame3DFrameContext();
-
 	gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO> constants {};
 	constants.ssaoIntensity = s_tuning.intensity;
-	constants.fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
-	// Match scene-pass fog uniform binding (terrain / meshes):
-	// shader fogEnd <- fogBegin, shader fogStart <- fogEnd.
-	constants.fogStart = renderState.fogEnd;
-	constants.fogEnd = renderState.fogBegin;
-	constants.fogEnabled = renderState.fogEnabled ? 1 : 0;
-	constants.invProjectionMatrix = glm::inverse(fc.perspectiveMatrix);
-	ssaoFillUvScaleClamp(scene, constants.uvScaleClamp);
+	display3d_fillSceneUvScaleClamp(scene, constants.uvScaleClamp);
 
 	gfx_api::SceneComposeSSAOPSO::get().bind();
 	gfx_api::SceneComposeSSAOPSO::get().bind_constants(constants);
 	gfx_api::SceneComposeSSAOPSO::get().bind_vertex_buffers(vbo);
-	gfx_api::SceneComposeSSAOPSO::get().bind_textures(scene, ao, prepassNormals, prepassDepth);
+	gfx_api::SceneComposeSSAOPSO::get().bind_textures(scene, ao, prepassNormals);
 	gfx_api::SceneComposeSSAOPSO::get().draw(3, 0);
 	gfx_api::SceneComposeSSAOPSO::get().unbind_vertex_buffers(vbo);
 }

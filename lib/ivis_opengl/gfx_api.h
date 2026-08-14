@@ -1887,11 +1887,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>
 	{
 		float ssaoIntensity;
-		float fogStart;
-		float fogEnd;
-		int fogEnabled;
-		glm::vec4 fogColor;
-		glm::mat4 invProjectionMatrix;
+		float padding0;
+		float padding1;
+		float padding2;
 		glm::vec4 uvScaleClamp;
 	};
 
@@ -1905,9 +1903,32 @@ namespace gfx_api
 	std::tuple<
 		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // scene
 		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>, // ao
-		texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d>, // prepassNormals
-		texture_description<3, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // prepassDepth
+		texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d>  // prepassNormals
 	>, SHADER_SCENE_COMPOSE_SSAO>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SCENE_FOG>
+	{
+		glm::vec4 fogColor;
+		glm::mat4 invProjectionMatrix;
+		glm::vec4 uvScaleClamp;
+		float fogBegin;
+		float fogEnd;
+		float padding0;
+		float padding1;
+	};
+
+	using SceneFogPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SCENE_FOG>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // scene
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // prepassDepth
+	>, SHADER_SCENE_FOG>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)

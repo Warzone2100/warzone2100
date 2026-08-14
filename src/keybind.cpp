@@ -45,6 +45,7 @@
 #include "oprint.h"
 #include "ingameop.h"
 #include "effects.h"
+#include "fog_pass.h"
 #include "component.h"
 #include "radar.h"
 #include "structure.h"
@@ -876,6 +877,7 @@ void	kf_ToggleFog()
 	{
 		pie_EnableFog(true);
 	}
+	fog_pass::applyConfigToGfx();
 	std::string cmsg = pie_GetFogEnabled() ? _("Fog on") : _("Fog off");
 	sendInGameSystemMessage(cmsg.c_str());
 }

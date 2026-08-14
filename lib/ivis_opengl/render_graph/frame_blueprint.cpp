@@ -107,8 +107,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::SceneColorTarget)
 			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor)
 			.readFrom(PassId::SSAOBlurV, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
 	}
 
 	if (fogActive)
