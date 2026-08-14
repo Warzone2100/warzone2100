@@ -2283,6 +2283,36 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 	gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 }
 
+void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view)
+{
+	if (!waterVBO || !waterIndexVBO)
+	{
+		return;
+	}
+
+	const glm::mat4 mvp = projection * view;
+	gfx_api::WaterDepthPrepass::get().bind();
+	gfx_api::WaterDepthPrepass::get().bind_vertex_buffers(waterVBO);
+	gfx_api::WaterDepthPrepass::get().bind_constants({ mvp, view });
+	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
+
+	for (int x = 0; x < xSectors; x++)
+	{
+		for (int y = 0; y < ySectors; y++)
+		{
+			if (sectors[x * ySectors + y].draw)
+			{
+				batchDrawElements<gfx_api::WaterDepthPrepass>(
+					sectors[x * ySectors + y].waterIndexSize,
+					sectors[x * ySectors + y].waterIndexOffset);
+			}
+		}
+	}
+	flushDrawElementsBatch<gfx_api::WaterDepthPrepass>();
+	gfx_api::WaterDepthPrepass::get().unbind_vertex_buffers(waterVBO);
+	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
+}
+
 /**
  * Update the lightmap and draw the terrain and decals.
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers

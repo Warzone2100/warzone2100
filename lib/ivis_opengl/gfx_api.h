@@ -1230,6 +1230,20 @@ namespace gfx_api
 		TerrainDepthPrepassVertexVBODescription
 	>, notexture, SHADER_TERRAIN_DEPTH_PREPASS>;
 
+	template<>
+	struct constant_buffer_type<SHADER_WATER_DEPTH_PREPASS>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
+	};
+
+	using WaterDepthPrepass = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_WATER_DEPTH_PREPASS>>,
+	std::tuple<
+		vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
+	>, notexture, SHADER_WATER_DEPTH_PREPASS>;
+
 
 	struct TerrainDecalVertex
 	{

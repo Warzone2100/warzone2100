@@ -10,7 +10,7 @@
 	(at your option) any later version.
 */
 /** @file scene_prepass.cpp
- * Combined scene depth + view-space normals prepass for SSAO.
+ * Combined scene depth + view-space normals prepass for SSAO and deferred fog.
  */
 
 #include "scene_prepass.h"
@@ -31,6 +31,7 @@ void recordScenePrepass(const gfx_api::RenderPassContext& /*passCtx*/)
 	const Vector3f cameraPos{fc.cameraPos.x, fc.cameraPos.y, fc.cameraPos.z};
 
 	drawTerrainDepthNormalPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
+	drawWaterDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix);
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix,
 		cameraPos, fc.shadowCascadesInfo, nullptr, MeshDepthPassMode::ScenePrepass);
 }
