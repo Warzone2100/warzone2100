@@ -135,6 +135,16 @@ public:
 			ctx.getSSAOGenerateDivisor(), ctx.getSSAOBlurDivisor());
 	}
 
+	uint32_t ssaoGenerateDivisor() const override
+	{
+		return gfx_api::context::get().getSSAOGenerateDivisor();
+	}
+
+	uint32_t ssaoBlurDivisor() const override
+	{
+		return gfx_api::context::get().getSSAOBlurDivisor();
+	}
+
 	bool fogEnabled() const override
 	{
 		return gfx_api::context::get().getFogSurfacesEnabled();

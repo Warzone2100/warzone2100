@@ -40,8 +40,8 @@ namespace gfx_api
 /// Frame render-graph cache: blueprint, materialized passes, and compile result.
 ///
 /// Owned by piemode (`pie_GetCachedFrameRenderGraph`). `ensureBuilt` rebuilds when
-/// `RenderTopologySnapshot::materializeHash` changes (includes topology, sizes, and
-/// `backendEpoch`). `execute` records via `executeCompiledRenderGraph`; GPU submit and
+/// `RenderTopologySnapshot::materializeHash` changes (includes topology, allocated sizes,
+/// SSAO divisors, and `backendEpoch`). `execute` records via `executeCompiledRenderGraph`; GPU submit and
 /// present are handled by `finishScreenFrame()` in piemode.
 /// </summary>
 class CachedRenderGraph
