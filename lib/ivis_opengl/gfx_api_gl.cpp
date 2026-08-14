@@ -1728,6 +1728,12 @@ void gl_pipeline_state_object::printProgramInfoLog(code_part part, GLuint progra
 // (the chaining path exists to ensure correctness)
 static constexpr GLsizeiptr WZ_UNIFORM_BLOCK_MIN_SIZE = 256 * 1024;
 
+// Whether to write constants through a mapped range instead of glBufferSubData (if available).
+// How much this matters depends entirely on the driver: writing a range of a buffer that draws
+// recorded earlier in the frame are still reading leaves the driver free to stall.
+// Mapping is therefore the default wherever it exists, which excludes WebGL 2.
+static constexpr bool WZ_UNIFORM_BLOCK_USE_MAPPING = true;
+
 void gl_context::bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
 {
 	if (index >= boundUniformRanges.size())
@@ -1887,7 +1893,33 @@ void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffe
 	ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
 
 	glBindBuffer(GL_UNIFORM_BUFFER, allocation.buffer);
-	glBufferSubData(GL_UNIFORM_BUFFER, allocation.offset, dataSize, buffer);
+	bool written = false;
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (owningContext->hasBufferMapping)
+	{
+		// bump allocation and the per frame rotation together handle what the
+		// unsynchronized bit makes the caller responsible for
+		void* mapped = glMapBufferRange(GL_UNIFORM_BUFFER, allocation.offset, dataSize,
+			GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+		if (mapped != nullptr)
+		{
+			memcpy(mapped, buffer, static_cast<size_t>(dataSize));
+			if (glUnmapBuffer(GL_UNIFORM_BUFFER) == GL_TRUE)
+			{
+				written = true;
+			}
+			else
+			{
+				// the whole store is lost, not just this range, so rewrite what we can
+				debug(LOG_ERROR, "glUnmapBuffer reported lost uniform buffer contents");
+			}
+		}
+	}
+#endif
+	if (!written)
+	{
+		glBufferSubData(GL_UNIFORM_BUFFER, allocation.offset, dataSize, buffer);
+	}
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
 	uniformBlockRanges[slot] = {allocation, rangeSize};
@@ -5751,6 +5783,14 @@ void gl_context::initUniformBufferLimits()
 	maxVertexUniformBlocks = wz_GetGLIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, 0);
 	maxFragmentUniformBlocks = wz_GetGLIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, 0);
 	uniformBufferOffsetAlignment = std::max<GLint>(wz_GetGLIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, 1), 1);
+
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// WebGL 2 has no buffer mapping at all
+	hasBufferMapping = false;
+#else
+	hasBufferMapping = WZ_UNIFORM_BLOCK_USE_MAPPING && (glMapBufferRange != nullptr) && (glUnmapBuffer != nullptr);
+#endif
+	debug(LOG_3D, "Uniform block writes use %s", hasBufferMapping ? "mapped ranges" : "glBufferSubData");
 
 	debug(LOG_3D, "Uniform blocks: max size %d bytes, %d vertex / %d fragment blocks, offset alignment %d",
 		maxUniformBlockSize, maxVertexUniformBlocks, maxFragmentUniformBlocks, uniformBufferOffsetAlignment);
