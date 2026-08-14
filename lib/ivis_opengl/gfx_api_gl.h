@@ -423,6 +423,9 @@ struct gl_context final : public gfx_api::context
 	GLint maxVertexUniformBlocks = 0;
 	GLint maxFragmentUniformBlocks = 0;
 	GLint uniformBufferOffsetAlignment = 1;
+	// Whether constants can be written through a mapped range rather than glBufferSubData.
+	// Mapping is core in OpenGL 3.0+ and OpenGL ES 3.0+, but absent from WebGL 2.
+	bool hasBufferMapping = false;
 
 	// One per (frames in flight + 1), so blocks written this frame were last read by
 	// the GPU a full frame ago and need no synchronization.
