@@ -72,7 +72,7 @@ enum class PipelineSurfaceId : uint8_t
 	/// Scene-sized SMAA neighborhood blend output, present only when a scaling
 	/// pass consumes it (otherwise the blend writes the swapchain directly).
 	SmaaColor,
-	/// Scene-sized sampleable depth for the SSAO depth-normal prepass.
+	/// Scene-sized sampleable depth for SSAO and deferred fog.
 	ScenePrepassDepth,
 	/// Scene-sized view-space normals (RGB) + SSAO application weight (A).
 	ScenePrepassNormals,
@@ -80,8 +80,10 @@ enum class PipelineSurfaceId : uint8_t
 	SSAORaw,
 	/// Horizontal SSAO blur intermediate.
 	SSAOBlurH,
-	/// Scene-sized lit scene with AO (and deferred fog) applied; feeds SMAA/blit/FSR.
+	/// Scene-sized lit scene with AO applied; feeds fog / SMAA / blit / FSR.
 	SSAOComposedColor,
+	/// Scene-sized lit(+AO) scene with distance fog applied; feeds SMAA/blit/FSR.
+	FogColor,
 	ShadowMap,
 	SwapchainColor,
 	SwapchainMSAAColor,
@@ -187,6 +189,10 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaIntermediateActive,
 	/// SSAO intermediate surfaces requested via context::setSSAOSurfacesEnabled.
 	SsaoActive,
+	/// Scene prepass depth/normals requested via context::setScenePrepassSurfacesEnabled.
+	ScenePrepassActive,
+	/// FogColor requested via context::setFogSurfacesEnabled.
+	FogApplyActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).
@@ -266,6 +272,10 @@ struct PipelineSurfaceSyncInputs
 	bool smaa = false;
 	/// When true, SsaoActive catalog surfaces are enabled (set via context::setSSAOSurfacesEnabled).
 	bool ssaoEnabled = false;
+	/// When true, ScenePrepassActive catalog surfaces are enabled.
+	bool scenePrepassEnabled = false;
+	/// When true, FogApplyActive catalog surfaces are enabled.
+	bool fogApplyEnabled = false;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.

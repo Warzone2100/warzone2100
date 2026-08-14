@@ -64,7 +64,15 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 	}
 	if (snapshot.features & RenderFeatures::SSAO)
 	{
-		count += 5; // ScenePrepass, SSAOGenerate, SSAOBlurH, SSAOBlurV, SSAOCompose
+		count += 4; // SSAOGenerate, SSAOBlurH, SSAOBlurV, SSAOCompose
+	}
+	if ((snapshot.features & RenderFeatures::SSAO) || (snapshot.features & RenderFeatures::FogApply))
+	{
+		++count; // ScenePrepass
+	}
+	if (snapshot.features & RenderFeatures::FogApply)
+	{
+		++count; // FogApply
 	}
 	if (snapshot.features & RenderFeatures::DebugOverlays)
 	{
@@ -188,6 +196,10 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 		if (query.ssaoEnabled())
 		{
 			snapshot.features |= RenderFeatures::SSAO;
+		}
+		if (query.fogEnabled())
+		{
+			snapshot.features |= RenderFeatures::FogApply;
 		}
 	}
 

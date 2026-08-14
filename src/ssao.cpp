@@ -230,11 +230,15 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 void applyConfigToGfx()
 {
 	auto& ctx = gfx_api::context::get();
-	ctx.setSSAOSurfacesEnabled(war_getSSAO());
+	const bool ssao = war_getSSAO();
+	const bool fog = pie_GetFogEnabled();
+	ctx.setSSAOSurfacesEnabled(ssao);
+	ctx.setScenePrepassSurfacesEnabled(ssao || fog);
+	ctx.setFogSurfacesEnabled(fog);
 	if (!ctx.syncPipelineSurfaces())
 	{
-		debug(LOG_ERROR, "Failed to sync pipeline surfaces after SSAO config change (enabled=%d)",
-			static_cast<int>(war_getSSAO()));
+		debug(LOG_ERROR, "Failed to sync pipeline surfaces after SSAO/fog config change (ssao=%d fog=%d)",
+			static_cast<int>(ssao), static_cast<int>(fog));
 	}
 }
 

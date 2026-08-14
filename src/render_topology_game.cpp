@@ -123,6 +123,11 @@ public:
 		return gfx_api::context::get().getSSAOSurfacesEnabled();
 	}
 
+	bool fogEnabled() const override
+	{
+		return gfx_api::context::get().getFogSurfacesEnabled();
+	}
+
 	uint32_t shadowMapSize() const override
 	{
 		return static_cast<uint32_t>(gfx_api::context::get().getDepthPassDimensions(0));

@@ -586,10 +586,16 @@ namespace gfx_api
 			return true;
 		}
 
-		/// Request SSAO intermediate surfaces (ScenePrepassDepth/Normals, SSAO*, SSAOComposedColor).
+		/// Request SSAO intermediate surfaces (SSAORaw, SSAOBlurH, SSAOComposedColor).
 		/// Game code sets this from war_getSSAO(); backends read it in pipelineSurfaceSyncInputs().
 		void setSSAOSurfacesEnabled(bool enabled) { _ssaoSurfacesEnabled = enabled; }
 		bool getSSAOSurfacesEnabled() const { return _ssaoSurfacesEnabled; }
+		/// Request ScenePrepassDepth / ScenePrepassNormals (SSAO and/or deferred fog).
+		void setScenePrepassSurfacesEnabled(bool enabled) { _scenePrepassSurfacesEnabled = enabled; }
+		bool getScenePrepassSurfacesEnabled() const { return _scenePrepassSurfacesEnabled; }
+		/// Request FogColor for the deferred fog pass.
+		void setFogSurfacesEnabled(bool enabled) { _fogSurfacesEnabled = enabled; }
+		bool getFogSurfacesEnabled() const { return _fogSurfacesEnabled; }
 
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
@@ -676,6 +682,8 @@ namespace gfx_api
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
 		bool _ssaoSurfacesEnabled = false;
+		bool _scenePrepassSurfacesEnabled = false;
+		bool _fogSurfacesEnabled = false;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
