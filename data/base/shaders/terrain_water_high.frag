@@ -2,13 +2,12 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
+#include "terrain_water_high.glsl"
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 //
 
-#define WZ_MAX_SHADOW_CASCADES 3
 
 uniform sampler2DArray tex;
 uniform sampler2DArray tex_nm;
@@ -18,23 +17,10 @@ uniform sampler2D lightmap_tex;
 // shadow map
 uniform sampler2DArrayShadow shadowMap;
 
-uniform mat4 ViewMatrix;
-uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
-uniform vec4 ShadowMapCascadeSplits;
-uniform int ShadowMapSize;
 
 // light colors/intensity:
-uniform vec4 emissiveLight;
-uniform vec4 ambientLight;
-uniform vec4 diffuseLight;
-uniform vec4 specularLight;
 
-uniform vec4 fogColor;
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
 
-uniform float timeSec;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

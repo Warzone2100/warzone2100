@@ -907,183 +907,149 @@ struct program_data
 	std::vector<std::string> uniform_block_names = {};
 };
 
+static const std::vector<std::tuple<std::string, GLint>> terrainCombinedSamplers = {
+	{"lightmap_tex", 0},
+	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
+	{"decalTex", 5}, {"decalNormal", 6}, {"decalSpecular", 7}, {"decalHeight", 8},
+	{"shadowMap", 9}
+};
+
+static const std::vector<std::tuple<std::string, GLint>> terrainCombinedTessSamplers = {
+	{"lightmap_tex", 0},
+	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
+	{"decalTex", 5}, {"decalNormal", 6}, {"decalSpecular", 7}, {"decalHeight", 8},
+	{"shadowMap", 9},
+	{"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12}
+};
+
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 {
-	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
-			// per-instance uniforms
-			"ModelMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
-			// appended per-frame global uniforms
-			"WZ_MIP_LOAD_BIAS"
-		} }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
-			// appended per-frame global uniforms
-			"WZ_MIP_LOAD_BIAS"
-		},
-		{
-			{"shadowMap", 4},
-			{"lightmap_tex", 5}
-		} }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ "Component program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix"
-		} }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, program_data{ "Component depth prepass program", "shaders/tcmask_depth_prepass_instanced.vert", "shaders/tcmask_depth_prepass_instanced.frag",
-		{ "ProjectionMatrix", "ViewMatrix" } }),
-	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
-			// per-instance uniforms
-			"ModelMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
-			// appended per-frame global uniforms
-			"WZ_MIP_LOAD_BIAS"
-		} }),
-	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
-			// appended per-frame global uniforms
-			"WZ_MIP_LOAD_BIAS"
-		},
-		{
-			{"shadowMap", 4}
-		} }),
-	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
-		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
-		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, program_data{ "terrain_depth_prepass program", "shaders/terrain_depth_prepass.vert", "shaders/terrain_depth_prepass.frag",
-		{ "ModelViewProjectionMatrix", "ViewMatrix" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ "terrain_depthmap tess program", "shaders/terrain_depth_tess.vert", "shaders/terrain_depth_only.frag",
-		{ "ModelViewProjectionMatrix", "tessCameraMVP", "paramx2", "paramy2", "textureMatrix2", "tessParams", "fogEnabled", "fogEnd", "fogStart" },
-		{ {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
-		"shaders/terrain_depth_tess.tesc", "shaders/terrain_depthmap_tess.tese" }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, program_data{ "terrain_depth_prepass tess program", "shaders/terrain_depth_prepass_tess.vert", "shaders/terrain_depth_prepass_tess.frag",
-		{ "ModelViewProjectionMatrix", "ViewMatrix", "tessCameraMVP", "tessParams" },
-		{ {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
-		"shaders/terrain_depth_prepass_tess.tesc", "shaders/terrain_depth_prepass_tess.tese" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, program_data{ "terrain decals tess program", "shaders/terrain_combined_tess.vert", "shaders/terrain_combined_medium.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" },
-			{ {"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12} },
-			"shaders/terrain_combined_tess.tesc", "shaders/terrain_combined_tess.tese" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, program_data{ "terrain decals tess program", "shaders/terrain_combined_tess.vert", "shaders/terrain_combined_high.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" },
-			{ {"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12} },
-			"shaders/terrain_combined_tess.tesc", "shaders/terrain_combined_tess.tese" }),
-	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
-			"cameraPos", "sunPos",
-			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex1", "tex2", "lightmap_tex", "WZ_MIP_LOAD_BIAS" } }),
-	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
-		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
-			"cameraPos", "sunPos",
-			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex", "tex_nm", "tex_sm", "lightmap_tex", "WZ_MIP_LOAD_BIAS"
-		},
-		{
-			{"shadowMap", 4}
-		} }),
-	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
-			"cameraPos", "sunPos",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"lightmap_tex", "tex2", "WZ_MIP_LOAD_BIAS"} }),
-	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
-		{ "transformationMatrix", "color" } }),
-	std::make_pair(SHADER_RECT_INSTANCED, program_data{ "Rect program", "shaders/rect_instanced.vert", "shaders/rect_instanced.frag",
-		{ "ProjectionMatrix" } }),
-	std::make_pair(SHADER_TEXRECT, program_data{ "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
-	std::make_pair(SHADER_GFX_COLOUR, program_data{ "gfx_color program", "shaders/gfx_color.vert", "shaders/gfx.frag",
-		{ "posMatrix" } }),
-	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx_text.vert", "shaders/texturedrect.frag",
-		{ "posMatrix", "color" } }),
-	std::make_pair(SHADER_SKYBOX, program_data{ "skybox program", "shaders/skybox.vert", "shaders/skybox.frag",
-		{ "posMatrix", "color", "fog_color", "fog_enabled" } }),
-	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
-	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
-	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ "Debug texture quad program", "shaders/quad_texture2d.vert", "shaders/quad_texture2d.frag",
-		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
-		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
-	std::make_pair(SHADER_DEBUG_TESS_QUAD, program_data{ "Debug tessellated quad program", "shaders/tess_quad.vert", "shaders/tess_quad.frag",
-		{ "transformationMatrix", "color", "tessLevel" }, {},
-		"shaders/tess_quad.tesc", "shaders/tess_quad.tese" }),
-	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
-		{ "uvScaleClamp" } }),
-	std::make_pair(SHADER_FSR1_EASU, program_data{ "FSR1 EASU program", "shaders/world_to_screen.vert", "shaders/fsr1_easu.frag",
-		{ "con0", "con1", "con2", "con3", "con4" }, {}, "", "", VERSION_ES_310 }),
-	std::make_pair(SHADER_FSR1_RCAS, program_data{ "FSR1 RCAS program", "shaders/world_to_screen.vert", "shaders/fsr1_rcas.frag",
-		{ "con0", "con1" } }),
-	std::make_pair(SHADER_SMAA_EDGES, program_data{ "SMAA edge detection program", "shaders/smaa_edges.vert", "shaders/smaa_edges.frag",
-		{ "rtMetrics", "uvScaleClamp", "params" },
-		{ {"colorTex", 0} } }),
-	std::make_pair(SHADER_SMAA_WEIGHTS, program_data{ "SMAA blending weights program", "shaders/smaa_weights.vert", "shaders/smaa_weights.frag",
-		{ "rtMetrics", "uvScaleClamp", "params" },
-		{ {"edgesTex", 0}, {"areaTex", 1}, {"searchTex", 2} } }),
-	std::make_pair(SHADER_SMAA_BLEND, program_data{ "SMAA neighborhood blending program", "shaders/smaa_blend.vert", "shaders/smaa_blend.frag",
-		{ "rtMetrics", "uvScaleClamp" },
-		{ {"colorTex", 0}, {"blendTex", 1} } }),
-	std::make_pair(SHADER_SSAO_GENERATE, program_data{ "SSAO generate program", "shaders/postprocess_fullscreen.vert", "shaders/ssao_generate.frag",
-		{ "invProjectionMatrix", "projectionMatrix", "params", "noiseScale", "kernel", "uvScaleClamp" },
-		{ {"depthTexture", 0}, {"normalsTexture", 1}, {"noiseTexture", 2} } }),
-	std::make_pair(SHADER_SSAO_BLUR, program_data{ "SSAO blur program", "shaders/postprocess_fullscreen.vert", "shaders/ssao_blur.frag",
-		{ "blurDirection", "depthSigma", "uvScaleClamp" },
-		{ {"occlusionTexture", 0}, {"depthTexture", 1} } }),
-	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ "Scene compose SSAO program", "shaders/postprocess_fullscreen.vert", "shaders/scene_compose_ssao.frag",
-		{ "ssaoIntensity", "fogColor", "fogStart", "fogEnd", "fogEnabled", "invProjectionMatrix", "uvScaleClamp" },
-		{ {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2}, {"prepassDepth", 3} } })
+	std::make_pair(SHADER_COMPONENT, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask.vert", .fragment_file = "shaders/tcmask.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "instanceuniforms" } }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask_instanced.vert", .fragment_file = "shaders/tcmask_instanced.frag",
+		.uniform_names = {}, .additional_samplers = { {"shadowMap", 4}, {"lightmap_tex", 5} },
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "pointlights" } }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask_depth_instanced.vert", .fragment_file = "shaders/tcmask_depth_instanced.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms" } }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, program_data{ .friendly_name = "Component depth prepass program", .vertex_file = "shaders/tcmask_depth_prepass_instanced.vert", .fragment_file = "shaders/tcmask_depth_prepass_instanced.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms" } }),
+	std::make_pair(SHADER_NOLIGHT, program_data{ .friendly_name = "Plain program", .vertex_file = "shaders/nolight.vert", .fragment_file = "shaders/nolight.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "instanceuniforms" } }),
+	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ .friendly_name = "Plain program", .vertex_file = "shaders/nolight_instanced.vert", .fragment_file = "shaders/nolight_instanced.frag",
+		.uniform_names = {}, .additional_samplers = { {"shadowMap", 4} },
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ .friendly_name = "terrain_depth program", .vertex_file = "shaders/terrain_depth.vert", .fragment_file = "shaders/terraindepth.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"lightmap_tex", 0} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ .friendly_name = "terrain_depthmap program", .vertex_file = "shaders/terrain_depth_only.vert", .fragment_file = "shaders/terrain_depth_only.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, program_data{ .friendly_name = "terrain_depth_prepass program", .vertex_file = "shaders/terrain_depth_prepass.vert", .fragment_file = "shaders/terrain_depth_prepass.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_classic.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_medium.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_high.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ .friendly_name = "terrain_depthmap tess program", .vertex_file = "shaders/terrain_depth_tess.vert", .fragment_file = "shaders/terrain_depth_only.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
+		.tess_control_file = "shaders/terrain_depth_tess.tesc", .tess_evaluation_file = "shaders/terrain_depthmap_tess.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, program_data{ .friendly_name = "terrain_depth_prepass tess program", .vertex_file = "shaders/terrain_depth_prepass_tess.vert", .fragment_file = "shaders/terrain_depth_prepass_tess.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
+		.tess_control_file = "shaders/terrain_depth_prepass_tess.tesc", .tess_evaluation_file = "shaders/terrain_depth_prepass_tess.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, program_data{ .friendly_name = "terrain decals tess program", .vertex_file = "shaders/terrain_combined_tess.vert", .fragment_file = "shaders/terrain_combined_medium.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedTessSamplers,
+		.tess_control_file = "shaders/terrain_combined_tess.tesc", .tess_evaluation_file = "shaders/terrain_combined_tess.tese",
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, program_data{ .friendly_name = "terrain decals tess program", .vertex_file = "shaders/terrain_combined_tess.vert", .fragment_file = "shaders/terrain_combined_high.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedTessSamplers,
+		.tess_control_file = "shaders/terrain_combined_tess.tesc", .tess_evaluation_file = "shaders/terrain_combined_tess.tese",
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_WATER, program_data{ .friendly_name = "water program", .vertex_file = "shaders/terrain_water.vert", .fragment_file = "shaders/water.frag",
+		.uniform_names = {}, .additional_samplers = { {"tex1", 0}, {"tex2", 1}, {"lightmap_tex", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WATER_HIGH, program_data{ .friendly_name = "high water program", .vertex_file = "shaders/terrain_water_high.vert", .fragment_file = "shaders/terrain_water_high.frag",
+		.uniform_names = {}, .additional_samplers = { {"tex", 0}, {"tex_nm", 1}, {"tex_sm", 2}, {"lightmap_tex", 3}, {"shadowMap", 4} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WATER_CLASSIC, program_data{ .friendly_name = "classic water program", .vertex_file = "shaders/terrain_water_classic.vert", .fragment_file = "shaders/terrain_water_classic.frag",
+		.uniform_names = {}, .additional_samplers = { {"lightmap_tex", 0}, {"tex2", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RECT, program_data{ .friendly_name = "Rect program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/rect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RECT_INSTANCED, program_data{ .friendly_name = "Rect instanced program", .vertex_file = "shaders/rect_instanced.vert", .fragment_file = "shaders/rect_instanced.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TEXRECT, program_data{ .friendly_name = "Textured rect program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/texturedrect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_GFX_COLOUR, program_data{ .friendly_name = "gfx_color program", .vertex_file = "shaders/gfx_color.vert", .fragment_file = "shaders/gfx.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_GFX_TEXT, program_data{ .friendly_name = "gfx_text program", .vertex_file = "shaders/gfx_text.vert", .fragment_file = "shaders/texturedrect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SKYBOX, program_data{ .friendly_name = "skybox program", .vertex_file = "shaders/skybox.vert", .fragment_file = "shaders/skybox.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_GENERIC_COLOR, program_data{ .friendly_name = "generic color program", .vertex_file = "shaders/generic.vert", .fragment_file = "shaders/rect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_LINE, program_data{ .friendly_name = "line program", .vertex_file = "shaders/line.vert", .fragment_file = "shaders/rect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TEXT, program_data{ .friendly_name = "Text program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/text.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ .friendly_name = "Debug texture quad program", .vertex_file = "shaders/quad_texture2d.vert", .fragment_file = "shaders/quad_texture2d.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ .friendly_name = "Debug texture array quad program", .vertex_file = "shaders/quad_texture2darray.vert", .fragment_file = "shaders/quad_texture2darray.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_DEBUG_TESS_QUAD, program_data{ .friendly_name = "Debug tessellated quad program", .vertex_file = "shaders/tess_quad.vert", .fragment_file = "shaders/tess_quad.frag",
+		.uniform_names = {},
+		.tess_control_file = "shaders/tess_quad.tesc", .tess_evaluation_file = "shaders/tess_quad.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ .friendly_name = "World to screen quad program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/world_to_screen.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_FSR1_EASU, program_data{ .friendly_name = "FSR1 EASU program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/fsr1_easu.frag",
+		.uniform_names = {},
+		.maxShaderVersionES = VERSION_ES_310,
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_FSR1_RCAS, program_data{ .friendly_name = "FSR1 RCAS program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/fsr1_rcas.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SMAA_EDGES, program_data{ .friendly_name = "SMAA edge detection program", .vertex_file = "shaders/smaa_edges.vert", .fragment_file = "shaders/smaa_edges.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"colorTex", 0} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SMAA_WEIGHTS, program_data{ .friendly_name = "SMAA blending weights program", .vertex_file = "shaders/smaa_weights.vert", .fragment_file = "shaders/smaa_weights.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"edgesTex", 0}, {"areaTex", 1}, {"searchTex", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SMAA_BLEND, program_data{ .friendly_name = "SMAA neighborhood blending program", .vertex_file = "shaders/smaa_blend.vert", .fragment_file = "shaders/smaa_blend.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"colorTex", 0}, {"blendTex", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SSAO_GENERATE, program_data{ .friendly_name = "SSAO generate program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_generate.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"depthTexture", 0}, {"normalsTexture", 1}, {"noiseTexture", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SSAO_BLUR, program_data{ .friendly_name = "SSAO blur program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_blur.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"occlusionTexture", 0}, {"depthTexture", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ .friendly_name = "Scene compose SSAO program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_compose_ssao.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2}, {"prepassDepth", 3} },
+		.uniform_block_names = { "cbuffer" } })
 };
 
 enum SHADER_VERSION
@@ -1395,42 +1361,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
-		uniform_setting_func<gfx_api::Draw3DShapeGlobalUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapePerMeshUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapePerInstanceUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapeInstancedGlobalUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapeInstancedPerMeshUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTH_PREPASS>(),
-		uniform_setting_func<gfx_api::TerrainDepthMapTessUniforms>(),
-		uniform_setting_func<gfx_api::TerrainDepthPrepassTessUniforms>(),
-		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
-		uniform_binding_entry<SHADER_WATER>(),
-		uniform_binding_entry<SHADER_WATER_HIGH>(),
-		uniform_binding_entry<SHADER_WATER_CLASSIC>(),
-		uniform_binding_entry<SHADER_RECT>(),
-		uniform_binding_entry<SHADER_TEXRECT>(),
-		uniform_binding_entry<SHADER_GFX_COLOUR>(),
-		uniform_binding_entry<SHADER_GFX_TEXT>(),
 		uniform_binding_entry<SHADER_SKYBOX>(),
-		uniform_binding_entry<SHADER_GENERIC_COLOR>(),
-		uniform_binding_entry<SHADER_RECT_INSTANCED>(),
-		uniform_binding_entry<SHADER_LINE>(),
-		uniform_binding_entry<SHADER_TEXT>(),
-		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
-		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>(),
-		uniform_binding_entry<SHADER_DEBUG_TESS_QUAD>(),
-		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>(),
-		uniform_binding_entry<SHADER_FSR1_EASU>(),
-		uniform_binding_entry<SHADER_FSR1_RCAS>(),
-		uniform_binding_entry<SHADER_SMAA_EDGES>(),
-		uniform_binding_entry<SHADER_SMAA_WEIGHTS>(),
-		uniform_binding_entry<SHADER_SMAA_BLEND>(),
-		uniform_binding_entry<SHADER_SSAO_GENERATE>(),
-		uniform_binding_entry<SHADER_SSAO_BLUR>(),
-		uniform_binding_entry<SHADER_SCENE_COMPOSE_SSAO>()
 	};
 
 	for (auto& uniform_block : createInfo.uniform_blocks)
@@ -1853,8 +1784,8 @@ bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::ve
 		const GLuint blockIndex = glGetUniformBlockIndex(program, blockNames[slot].c_str());
 		if (blockIndex == GL_INVALID_INDEX)
 		{
-			debug(LOG_ERROR, "%s: uniform block \"%s\" is missing from the linked program", programName.c_str(), blockNames[slot].c_str());
-			success = false;
+			// the linker drops a block no stage reads, so leave the slot empty
+			debug(LOG_3D, "%s: uniform block \"%s\" is unused, skipping", programName.c_str(), blockNames[slot].c_str());
 			continue;
 		}
 
@@ -2067,7 +1998,7 @@ static void patchFragmentShaderTextureGather(std::string& fragmentShaderStr, boo
 	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_FSR_EASU_GATHER %d", hasTextureGatherSupport ? 1 : 0));
 }
 
-static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
+static bool patchShaderPointLightsDefines(std::string& shaderStr, const gfx_api::lighting_constants& lightingConstants)
 {
 	const auto defines = {
 		std::make_pair("WZ_MAX_POINT_LIGHTS", gfx_api::max_lights),
@@ -2076,9 +2007,9 @@ static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr
 		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
 	};
 
-	const auto& replacer = [&fragmentShaderStr](const std::string& define, const auto& value) -> bool {
+	const auto& replacer = [&shaderStr](const std::string& define, const auto& value) -> bool {
 		const auto re_1 = std::regex(fmt::format("#define {} .*", define), std::regex_constants::ECMAScript);
-		return regex_replace_wrapper(fragmentShaderStr, re_1, fmt::format("#define {} {}", define, value));
+		return regex_replace_wrapper(shaderStr, re_1, fmt::format("#define {} {}", define, value));
 	};
 	bool foundAndReplaced_PointLightsDefine = false;
 	for (const auto& p : defines)
@@ -2160,6 +2091,8 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 		vertexShaderContents = readShaderBuf(vertexPath);
 		if (!vertexShaderContents.empty())
 		{
+			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(vertexShaderContents, lightingConstants);
+
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 			vertexShader = shader;
 
@@ -2196,6 +2129,8 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 			debug(LOG_ERROR, "Failed to read %s shader [%s]", stageTypeName, stagePath.c_str());
 			return false;
 		}
+		hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(stageContents, lightingConstants);
+
 		GLuint shader = glCreateShader(stageType);
 		outShader = shader;
 
@@ -2275,7 +2210,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 
 			patchFragmentShaderTextureGather(fragmentShaderStr, ctx.hasTextureGatherSupport);
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
-			hasSpecializationConstants_PointLights = patchFragmentShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
+			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -2493,408 +2428,12 @@ gl_pipeline_state_object::~gl_pipeline_state_object()
 	glDeleteProgram(this->program);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-	setUniforms(2, cbuf.ShadowMapMVPMatrix);
-	setUniforms(3, cbuf.cameraPos);
-	setUniforms(4, cbuf.sunPos);
-	setUniforms(5, cbuf.sceneColor);
-	setUniforms(6, cbuf.ambient);
-	setUniforms(7, cbuf.diffuse);
-	setUniforms(8, cbuf.specular);
-	setUniforms(9, cbuf.fogColour);
-	setUniforms(10, cbuf.fogEnd);
-	setUniforms(11, cbuf.fogBegin);
-	setUniforms(12, cbuf.timeState);
-	setUniforms(13, cbuf.fogEnabled);
-	// index 26 is the appended name after the per mesh and per instance uniforms
-	setUniforms(26, cbuf.mipLoadBias);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf)
-{
-	setUniforms(14, cbuf.tcmask);
-	setUniforms(15, cbuf.normalMap);
-	setUniforms(16, cbuf.specularMap);
-	setUniforms(17, cbuf.hasTangents);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf)
-{
-	setUniforms(18, cbuf.ModelMatrix);
-	setUniforms(19, cbuf.NormalMatrix);
-	setUniforms(20, cbuf.colour);
-	setUniforms(21, cbuf.teamcolour);
-	setUniforms(22, cbuf.shaderStretch);
-	setUniforms(23, cbuf.animFrameNumber);
-	setUniforms(24, cbuf.ecmState);
-	setUniforms(25, cbuf.alphaTest);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-	setUniforms(2, cbuf.ModelUVLightmapMatrix);
-	setUniforms(3, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(4, cbuf.cameraPos);
-	setUniforms(5, cbuf.sunPos);
-	setUniforms(6, cbuf.sceneColor);
-	setUniforms(7, cbuf.ambient);
-	setUniforms(8, cbuf.diffuse);
-	setUniforms(9, cbuf.specular);
-	setUniforms(10, cbuf.fogColour);
-	setUniforms(11, cbuf.ShadowMapCascadeSplits);
-	setUniforms(12, cbuf.ShadowMapSize);
-	setUniforms(13, cbuf.fogEnd);
-	setUniforms(14, cbuf.fogBegin);
-	setUniforms(15, cbuf.timeState);
-	setUniforms(16, cbuf.fogEnabled);
-	setUniforms(17, cbuf.PointLightsPosition);
-	setUniforms(18, cbuf.PointLightsColorAndEnergy);
-	setUniforms(19, cbuf.bucketOffsetAndSize);
-	setUniforms(20, cbuf.indexed_lights);
-	setUniforms(21, cbuf.bucketDimensionUsed);
-	setUniforms(22, cbuf.viewportWidth);
-	setUniforms(23, cbuf.viewportheight);
-	// index 29 is the appended name after the per mesh uniforms
-	setUniforms(29, cbuf.mipLoadBias);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
-{
-	// IMPORTANT: uniformIdx continues incrementing from Draw3DShapeInstancedGlobalUniforms above
-	setUniforms(24, cbuf.tcmask);
-	setUniforms(25, cbuf.normalMap);
-	setUniforms(26, cbuf.specularMap);
-	setUniforms(27, cbuf.hasTangents);
-	setUniforms(28, cbuf.shieldEffect);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.paramX);
-	setUniforms(2, cbuf.paramY);
-	setUniforms(3, cbuf.texture0);
-	setUniforms(4, cbuf.paramXLight);
-	setUniforms(5, cbuf.paramYLight);
-	setUniforms(6, cbuf.fog_enabled);
-	setUniforms(7, cbuf.fog_begin);
-	setUniforms(8, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.fog_enabled);
-	setUniforms(2, cbuf.fog_begin);
-	setUniforms(3, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUniforms& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ViewMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(i++, cbuf.groundScale);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.emissiveLight);
-	setUniforms(i++, cbuf.ambientLight);
-	setUniforms(i++, cbuf.diffuseLight);
-	setUniforms(i++, cbuf.specularLight);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
-	setUniforms(i++, cbuf.ShadowMapSize);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.quality);
-	setUniforms(i++, cbuf.PointLightsPosition);
-	setUniforms(i++, cbuf.PointLightsColorAndEnergy);
-	setUniforms(i++, cbuf.bucketOffsetAndSize);
-	setUniforms(i++, cbuf.indexed_lights);
-	setUniforms(i++, cbuf.bucketDimensionUsed);
-	setUniforms(i++, cbuf.viewportWidth);
-	setUniforms(i++, cbuf.viewportheight);
-	setUniforms(i++, cbuf.tessMaxLevel);
-	setUniforms(i++, 0); // lightmap_tex
-	setUniforms(i++, 1); // ground
-	setUniforms(i++, 2); // groundNormal
-	setUniforms(i++, 3); // groundSpecular
-	setUniforms(i++, 4); // groundHeight
-	setUniforms(i++, 5); // decal
-	setUniforms(i++, 6); // decalNormal
-	setUniforms(i++, 7); // decalSpecular
-	setUniforms(i++, 8); // decalHeight
-	setUniforms(i++, 9); // shadowMap
-	setUniforms(i++, cbuf.mipLoadBias);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.emissiveLight);
-	setUniforms(i++, cbuf.ambientLight);
-	setUniforms(i++, cbuf.diffuseLight);
-	setUniforms(i++, cbuf.specularLight);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.timeSec);
-	 // textures:
-	setUniforms(i++, 0);
-	setUniforms(i++, 1);
-	setUniforms(i++, 2); // lightmap_tex
-	setUniforms(i++, cbuf.mipLoadBias);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ViewMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.emissiveLight);
-	setUniforms(i++, cbuf.ambientLight);
-	setUniforms(i++, cbuf.diffuseLight);
-	setUniforms(i++, cbuf.specularLight);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
-	setUniforms(i++, cbuf.ShadowMapSize);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.timeSec);
-	 // textures:
-	setUniforms(i++, 0);
-	setUniforms(i++, 1);
-	setUniforms(i++, 2);
-	setUniforms(i++, 3); // lightmap_tex
-	setUniforms(i++, cbuf.mipLoadBias);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.timeSec);
-	 // textures:
-	setUniforms(i++, 0);
-	setUniforms(i++, 1);
-	setUniforms(i++, cbuf.mipLoadBias);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.colour);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.offset);
-	setUniforms(2, cbuf.size);
-	setUniforms(3, cbuf.color);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_TEXT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.color);
-}
-
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
 	setUniforms(1, cbuf.color);
 	setUniforms(2, cbuf.fog_color);
 	setUniforms(3, cbuf.fog_enabled);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.colour);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT_INSTANCED>& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf)
-{
-	setUniforms(0, cbuf.p0);
-	setUniforms(1, cbuf.p1);
-	setUniforms(2, cbuf.colour);
-	setUniforms(3, cbuf.mat);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.offset);
-	setUniforms(2, cbuf.size);
-	setUniforms(3, cbuf.color);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.uv_transform_matrix);
-	setUniforms(2, cbuf.swizzle);
-	setUniforms(3, cbuf.color);
-	setUniforms(4, cbuf.texture);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.uv_transform_matrix);
-	setUniforms(2, cbuf.swizzle);
-	setUniforms(3, cbuf.color);
-	setUniforms(4, cbuf.layer);
-	setUniforms(5, cbuf.texture);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthMapTessUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ModelViewProjectionMatrix);
-	setUniforms(1, cbuf.tessCameraMVP);
-	setUniforms(2, cbuf.paramX);
-	setUniforms(3, cbuf.paramY);
-	setUniforms(4, cbuf.texture_matrix);
-	setUniforms(5, cbuf.tessParams);
-	setUniforms(6, cbuf.fog_enabled);
-	setUniforms(7, cbuf.fog_begin);
-	setUniforms(8, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthPrepassTessUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ModelViewProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-	setUniforms(2, cbuf.tessCameraMVP);
-	setUniforms(3, cbuf.tessParams);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.color);
-	setUniforms(2, cbuf.tessLevel);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
-{
-	setUniforms(0, cbuf.uvScaleClamp);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_EASU>& cbuf)
-{
-	setUniforms(0, cbuf.con0);
-	setUniforms(1, cbuf.con1);
-	setUniforms(2, cbuf.con2);
-	setUniforms(3, cbuf.con3);
-	setUniforms(4, cbuf.con4);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_RCAS>& cbuf)
-{
-	setUniforms(0, cbuf.con0);
-	setUniforms(1, cbuf.con1);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_EDGES>& cbuf)
-{
-	setUniforms(0, cbuf.rtMetrics);
-	setUniforms(1, cbuf.uvScaleClamp);
-	setUniforms(2, cbuf.params);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_WEIGHTS>& cbuf)
-{
-	setUniforms(0, cbuf.rtMetrics);
-	setUniforms(1, cbuf.uvScaleClamp);
-	setUniforms(2, cbuf.params);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_BLEND>& cbuf)
-{
-	setUniforms(0, cbuf.rtMetrics);
-	setUniforms(1, cbuf.uvScaleClamp);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>& cbuf)
-{
-	setUniforms(0, cbuf.ModelViewProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_GENERATE>& cbuf)
-{
-	setUniforms(0, cbuf.invProjectionMatrix);
-	setUniforms(1, cbuf.projectionMatrix);
-	setUniforms(2, cbuf.params);
-	setUniforms(3, cbuf.noiseScale);
-	setUniforms(4, cbuf.kernel, gfx_api::SSAO_KERNEL_SIZE);
-	setUniforms(5, cbuf.uvScaleClamp);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_BLUR>& cbuf)
-{
-	setUniforms(0, cbuf.blurDirection);
-	setUniforms(1, cbuf.depthSigma);
-	setUniforms(2, cbuf.uvScaleClamp);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>& cbuf)
-{
-	setUniforms(0, cbuf.ssaoIntensity);
-	setUniforms(1, cbuf.fogColor);
-	setUniforms(2, cbuf.fogStart);
-	setUniforms(3, cbuf.fogEnd);
-	setUniforms(4, cbuf.fogEnabled);
-	setUniforms(5, cbuf.invProjectionMatrix);
-	setUniforms(6, cbuf.uvScaleClamp);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)

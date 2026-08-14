@@ -1,8 +1,11 @@
 // Version directive is set by Warzone when loading the shader
 // (Dev-only tessellation smoke test - requires GLSL 4.00 core, or 3.30 core + GL_ARB_tessellation_shader)
 
-uniform vec4 color;
-uniform float tessLevel;
+layout(std140) uniform cbuffer {
+	mat4 transformationMatrix;
+	vec4 color;
+	float tessLevel;
+};
 
 in vec2 tessUV;
 

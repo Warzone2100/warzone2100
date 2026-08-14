@@ -1652,14 +1652,13 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	if (useInstancedRendering)
 	{
 
-		const auto& bucketLight = getCurrentLightingManager().getPointLightBuckets();
 		auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
 			sceneColor, ambient, diffuse, specular, fogColor,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), pie_GetShaderDistanceFogEnabled(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(), bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), pie_GetShaderDistanceFogEnabled(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias()
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, shadowMap, drawParts, depthPassMode);
 	}
@@ -1696,6 +1695,11 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 	globalsOnce.perform_once<Draw3DInstancedPSO>([&globalUniforms]{
 		Draw3DInstancedPSO::get().set_uniforms_at(0, globalUniforms);
+		const auto& bucketLight = getCurrentLightingManager().getPointLightBuckets();
+		gfx_api::PointLightsUniforms pointLightUniforms = {
+			bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+		};
+		Draw3DInstancedPSO::get().set_uniforms_at(2, pointLightUniforms);
 	});
 
 	Draw3DInstancedPSO::get().set_uniforms_at(1, meshUniforms);

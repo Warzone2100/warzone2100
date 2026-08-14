@@ -364,43 +364,8 @@ private:
 	void setUniforms(size_t uniformIdx, const float *v, size_t count);
 
 	// Wish there was static reflection in C++...
-	void set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf);
 
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>& cbuf);
-	void set_constants(const gfx_api::TerrainCombinedUniforms& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_TEXT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT_INSTANCED>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf);
-	void set_constants(const gfx_api::TerrainDepthMapTessUniforms& cbuf);
-	void set_constants(const gfx_api::TerrainDepthPrepassTessUniforms& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_EASU>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_RCAS>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_EDGES>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_WEIGHTS>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_BLEND>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_GENERATE>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SSAO_BLUR>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context

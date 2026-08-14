@@ -1,12 +1,15 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform mat4 invProjectionMatrix;
-uniform mat4 projectionMatrix;
-uniform vec4 params;
-uniform vec2 noiseScale;
-uniform vec4 kernel[16];
-uniform vec4 uvScaleClamp;
+layout(std140) uniform cbuffer {
+	mat4 invProjectionMatrix;
+	mat4 projectionMatrix;
+	vec4 params;
+	vec2 noiseScale;
+	vec2 padding;
+	vec4 kernel[16];
+	vec4 uvScaleClamp;
+};
 
 uniform sampler2D depthTexture;
 uniform sampler2D normalsTexture;

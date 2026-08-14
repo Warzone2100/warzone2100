@@ -1,10 +1,15 @@
 // Version directive is set by Warzone when loading the shader
-// (This shader supports GLSL 1.20 - 1.50 core.)
+// (This shader supports GLSL 1.40 - 1.50 core.)
 
-uniform vec4 color;
+layout(std140) uniform cbuffer
+{
+	mat4 posMatrix;
+	vec4 color;
+	vec4 fog_color;
+	int fog_enabled;
+};
+
 uniform sampler2D theTexture;
-
-uniform int fog_enabled;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec2 uv;

@@ -14,9 +14,9 @@
 // Y-flipped vertex-buffer geometry, so the domain winding must be cw here.
 layout(quads, fractional_odd_spacing, cw) in;
 
-layout(set = 1, binding = 10) uniform sampler2D terrainBakedHeight;
-layout(set = 1, binding = 11) uniform sampler2D terrainBakedOffset;
-layout(set = 1, binding = 12) uniform sampler2D terrainBakedNormal;
+layout(set = 2, binding = 10) uniform sampler2D terrainBakedHeight;
+layout(set = 2, binding = 11) uniform sampler2D terrainBakedOffset;
+layout(set = 2, binding = 12) uniform sampler2D terrainBakedNormal;
 
 layout(location = 0) in vec2 teTexCoord[];
 layout(location = 1) in vec4 teTangent[];

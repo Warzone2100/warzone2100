@@ -9,8 +9,10 @@
 #extension GL_EXT_gpu_shader4 : enable
 #endif
 
-uniform mat4 ProjectionMatrix;
-uniform mat4 ViewMatrix;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+};
 
 #ifdef NEWGL
 #define VERTEX_INPUT in

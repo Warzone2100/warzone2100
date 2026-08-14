@@ -3,15 +3,15 @@
 
 //#pragma debug(on)
 
+#include "tcmask_instanced.glsl"
+
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 #define WZ_POINT_LIGHT_ENABLED 0
 //
 
-#define WZ_MAX_SHADOW_CASCADES 3
 
 uniform sampler2D Texture; // diffuse map
 uniform sampler2D TextureTcmask; // tcmask
@@ -20,30 +20,11 @@ uniform sampler2D TextureSpecular; // specular map
 uniform sampler2DArrayShadow shadowMap; // shadow map
 uniform sampler2D lightmap_tex;
 
-uniform mat4 ViewMatrix;
 
-uniform int tcmask; // whether a tcmask texture exists for the model
-uniform int normalmap; // whether a normal map exists for the model
-uniform int specularmap; // whether a specular map exists for the model
-uniform int hasTangents; // whether tangents were calculated for model
-uniform int shieldEffect;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform vec4 cameraPos; // in modelSpace
 
-uniform vec4 sceneColor; //emissive light
-uniform vec4 ambient;
-uniform vec4 diffuse;
-uniform vec4 specular;
 
-uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
-uniform vec4 ShadowMapCascadeSplits;
-uniform int ShadowMapSize;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

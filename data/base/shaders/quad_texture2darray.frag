@@ -11,9 +11,13 @@
 #error Unsupported version of GLES
 #endif
 
-uniform ivec4 swizzle;
-uniform vec4 color;
-uniform int layer;
+layout(std140) uniform cbuffer {
+	mat4 transformationMatrix;
+	mat4 uvTransformMatrix;
+	ivec4 swizzle;
+	vec4 color;
+	int layer;
+};
 uniform sampler2DArray theTexture;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))

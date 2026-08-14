@@ -3,6 +3,8 @@
 
 //#pragma debug(on)
 
+#include "tcmask_instanced.glsl"
+
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
 #endif
@@ -11,13 +13,7 @@
 #extension GL_EXT_gpu_shader4 : enable
 #endif
 
-uniform mat4 ProjectionMatrix;
-uniform mat4 ViewMatrix;
-uniform mat4 ModelUVLightmapMatrix;
 
-uniform int hasTangents; // whether tangents were calculated for model
-uniform vec4 lightPosition; // in world space
-uniform vec4 cameraPos; // in model space
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b

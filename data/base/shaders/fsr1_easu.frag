@@ -36,14 +36,16 @@ uniform sampler2D Texture;
 // standard FsrEasuCon constants
 // con0.xy = input viewport size / output size, con0.zw = 0.5 * con0.xy - 0.5
 // con1.xy = input texel size, con1.zw / con2 / con3 position the gather path's quad fetches
-uniform vec4 con0;
-uniform vec4 con1;
-uniform vec4 con2;
-uniform vec4 con3;
+layout(std140) uniform cbuffer {
+	vec4 con0;
+	vec4 con1;
+	vec4 con2;
+	vec4 con3;
+	vec4 con4;
+};
 // keeps edge taps inside the rendered input viewport, which may be a sub-rect
 // of the input texture under dynamic resolution
 // con4.xy clamps plain tap UVs, con4.zw clamps gather quad centers
-uniform vec4 con4;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

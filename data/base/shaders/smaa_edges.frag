@@ -34,9 +34,12 @@ uniform sampler2D colorTex;
 
 // xy scales viewport spanning texcoords down to the rendered sub-rect of the
 // input, zw clamps taps just inside its edge (both are identity-like at full size)
-uniform vec4 uvScaleClamp;
+layout(std140) uniform cbuffer {
+	vec4 rtMetrics;
+	vec4 uvScaleClamp;
+	vec4 params;
+};
 // x = luma contrast threshold
-uniform vec4 params;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

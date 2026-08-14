@@ -38,13 +38,15 @@ uniform sampler2D areaTex;
 uniform sampler2D searchTex;
 
 // xy = 1 / input size, zw = input size (in physical texels)
-uniform vec4 rtMetrics;
+layout(std140) uniform cbuffer {
+	vec4 rtMetrics;
+	vec4 uvScaleClamp;
+	vec4 params;
+};
 // xy scales viewport spanning texcoords down to the rendered sub-rect of the
 // input, zw clamps taps just inside its edge (both are identity-like at full size)
-uniform vec4 uvScaleClamp;
 // x = max orthogonal search steps, y = max diagonal search steps (0 disables
 // diagonal processing), z = corner rounding [0..1] (1 disables corner processing)
-uniform vec4 params;
 
 #define SMAA_AREATEX_MAX_DISTANCE 16.0
 #define SMAA_AREATEX_MAX_DISTANCE_DIAG 20.0

@@ -11,15 +11,41 @@
 #extension GL_EXT_gpu_shader4 : enable
 #endif
 
-uniform mat4 ProjectionMatrix;
-uniform mat4 ViewMatrix;
-uniform mat4 ModelMatrix;
-uniform mat4 NormalMatrix;
-uniform vec4 cameraPos; // in world space
-uniform int hasTangents; // whether tangents were calculated for model
-uniform vec4 lightPosition; // in world space
-uniform float stretch;
-uniform float animFrameNumber;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
+	vec4 lightPosition;
+	vec4 sceneColor;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 fogColor;
+	float fogEnd;
+	float fogStart;
+	float graphicsCycle;
+	int fogEnabled;
+	float WZ_MIP_LOAD_BIAS;
+};
+
+layout(std140) uniform meshuniforms {
+	int tcmask;
+	int normalmap;
+	int specularmap;
+	int hasTangents;
+};
+
+layout(std140) uniform instanceuniforms {
+	mat4 ModelMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	float animFrameNumber;
+	int ecmEffect;
+	int alphaTest;
+};
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b

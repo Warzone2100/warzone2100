@@ -4,18 +4,45 @@
 //#pragma debug(on)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
+	vec4 lightPosition;
+	vec4 sceneColor;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 fogColor;
+	float fogEnd;
+	float fogStart;
+	float graphicsCycle;
+	int fogEnabled;
+	float WZ_MIP_LOAD_BIAS;
+};
+
+layout(std140) uniform meshuniforms {
+	int tcmask;
+	int normalmap;
+	int specularmap;
+	int hasTangents;
+};
+
+layout(std140) uniform instanceuniforms {
+	mat4 ModelMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	float animFrameNumber;
+	int ecmEffect;
+	int alphaTest;
+};
 //
 
 uniform sampler2D Texture;
-uniform vec4 colour;
-uniform bool alphaTest;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -43,7 +70,7 @@ void main()
 
 	vec4 fragColour = texColour * colour;
 
-	if (alphaTest && (fragColour.a <= 0.001))
+	if (alphaTest > 0 && (fragColour.a <= 0.001))
 	{
 		discard;
 	}

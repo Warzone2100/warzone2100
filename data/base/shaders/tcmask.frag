@@ -4,33 +4,49 @@
 //#pragma debug(on)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
+	vec4 lightPosition;
+	vec4 sceneColor;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 fogColor;
+	float fogEnd;
+	float fogStart;
+	float graphicsCycle;
+	int fogEnabled;
+	float WZ_MIP_LOAD_BIAS;
+};
+
+layout(std140) uniform meshuniforms {
+	int tcmask;
+	int normalmap;
+	int specularmap;
+	int hasTangents;
+};
+
+layout(std140) uniform instanceuniforms {
+	mat4 ModelMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	float animFrameNumber;
+	int ecmEffect;
+	int alphaTest;
+};
 //
 
 uniform sampler2D Texture; // diffuse map
 uniform sampler2D TextureTcmask; // tcmask
 uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
-uniform vec4 colour; // ?
-uniform vec4 teamcolour; // the team colour of the model
-uniform int tcmask; // whether a tcmask texture exists for the model
-uniform int normalmap; // whether a normal map exists for the model
-uniform int specularmap; // whether a specular map exists for the model
-uniform int hasTangents; // whether tangents were calculated for model
-uniform mat4 NormalMatrix;
-uniform bool ecmEffect; // whether ECM special effect is enabled
-uniform bool alphaTest;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform vec4 sceneColor; //emissive light
-uniform vec4 ambient;
-uniform vec4 diffuse;
-uniform vec4 specular;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -66,7 +82,7 @@ void main()
 {
 	vec4 diffuseMap = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
-	if (alphaTest && (diffuseMap.a <= 0.5))
+	if ((alphaTest != 0) && (diffuseMap.a <= 0.5))
 	{
 		discard;
 	}
@@ -124,7 +140,7 @@ void main()
 		fragColour = light * colour;
 	}
 
-	if (ecmEffect)
+	if (ecmEffect > 0)
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}

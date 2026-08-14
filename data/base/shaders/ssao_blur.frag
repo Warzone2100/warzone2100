@@ -1,9 +1,12 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform vec2 blurDirection;
-uniform float depthSigma;
-uniform vec4 uvScaleClamp;
+layout(std140) uniform cbuffer {
+	vec2 blurDirection;
+	float depthSigma;
+	float padding;
+	vec4 uvScaleClamp;
+};
 uniform sampler2D occlusionTexture;
 uniform sampler2D depthTexture;
 

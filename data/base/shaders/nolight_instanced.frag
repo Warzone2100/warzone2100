@@ -3,17 +3,13 @@
 
 //#pragma debug(on)
 
+#include "tcmask_instanced.glsl"
+
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
 //
 
 uniform sampler2D Texture;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

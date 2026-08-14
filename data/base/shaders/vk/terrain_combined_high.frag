@@ -7,22 +7,22 @@ layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
 
-layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
+layout(set = 2, binding = 0) uniform sampler2D lightmap_tex;
 
 // ground texture arrays. layer = ground type
-layout(set = 1, binding = 1) uniform sampler2DArray groundTex;
-layout(set = 1, binding = 2) uniform sampler2DArray groundNormal;
-layout(set = 1, binding = 3) uniform sampler2DArray groundSpecular;
-layout(set = 1, binding = 4) uniform sampler2DArray groundHeight;
+layout(set = 2, binding = 1) uniform sampler2DArray groundTex;
+layout(set = 2, binding = 2) uniform sampler2DArray groundNormal;
+layout(set = 2, binding = 3) uniform sampler2DArray groundSpecular;
+layout(set = 2, binding = 4) uniform sampler2DArray groundHeight;
 
 // decal texture arrays. layer = decal tile
-layout(set = 1, binding = 5) uniform sampler2DArray decalTex;
-layout(set = 1, binding = 6) uniform sampler2DArray decalNormal;
-layout(set = 1, binding = 7) uniform sampler2DArray decalSpecular;
-layout(set = 1, binding = 8) uniform sampler2DArray decalHeight;
+layout(set = 2, binding = 5) uniform sampler2DArray decalTex;
+layout(set = 2, binding = 6) uniform sampler2DArray decalNormal;
+layout(set = 2, binding = 7) uniform sampler2DArray decalSpecular;
+layout(set = 2, binding = 8) uniform sampler2DArray decalHeight;
 
 // depth map
-layout(set = 1, binding = 9) uniform sampler2DArrayShadow shadowMap;
+layout(set = 2, binding = 9) uniform sampler2DArrayShadow shadowMap;
 
 layout(location = 0) in FragData frag;
 layout(location = 10) flat in FragFlatData fragf;

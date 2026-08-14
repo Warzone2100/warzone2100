@@ -1,15 +1,21 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform mat4 ModelViewProjectionMatrix;
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	vec4 paramx1;
+	vec4 paramy1;
+	vec4 paramx2;
+	vec4 paramy2;
+	mat4 textureMatrix1;
+	mat4 textureMatrix2;
+	vec4 fogColor;
+	int fogEnabled;
+	float fogEnd;
+	float fogStart;
+};
 
-uniform vec4 paramx1;
-uniform vec4 paramy1;
-uniform vec4 paramx2;
-uniform vec4 paramy2;
 
-uniform mat4 textureMatrix1;
-uniform mat4 textureMatrix2;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;

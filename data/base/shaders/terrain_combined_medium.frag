@@ -11,14 +11,14 @@
 #error Unsupported version of GLES
 #endif
 
+#include "terrain_combined.glsl"
+
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 //
 
-#define WZ_MAX_SHADOW_CASCADES 3
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -36,7 +36,6 @@ uniform sampler2DArray groundSpecular;
 uniform sampler2DArray groundHeight;
 
 // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
-uniform mat4 groundScale;
 
 // decal texture arrays. layer = decal tile
 uniform sampler2DArray decalTex;
@@ -47,24 +46,11 @@ uniform sampler2DArray decalHeight;
 // shadow map
 uniform sampler2DArrayShadow shadowMap;
 
-uniform mat4 ViewMatrix;
-uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
-uniform vec4 ShadowMapCascadeSplits;
-uniform int ShadowMapSize;
 
 // sun light colors/intensity:
-uniform vec4 emissiveLight;
-uniform vec4 ambientLight;
-uniform vec4 diffuseLight;
-uniform vec4 specularLight;
 
-uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 in vec2 uvLightmap;
 in vec2 uvDecal;
