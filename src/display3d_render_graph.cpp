@@ -38,6 +38,7 @@
 #include "profiling.h"
 #include "scene_prepass.h"
 #include "ssao.h"
+#include "fog_pass.h"
 #include "terrain.h"
 #include "warzoneconfig.h"
 
@@ -244,6 +245,7 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSAOBlurH, ssao::recordBlurH);
 	table.set(gfx_api::PassId::SSAOBlurV, ssao::recordBlurV);
 	table.set(gfx_api::PassId::SSAOCompose, ssao::recordCompose);
+	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
 	table.set(gfx_api::PassId::SceneBlit, recordSceneBlit);
 	table.set(gfx_api::PassId::SceneUpscaleEASU, recordSceneUpscaleEASU);
 	table.set(gfx_api::PassId::SceneUpscaleRCAS, recordSceneUpscaleRCAS);

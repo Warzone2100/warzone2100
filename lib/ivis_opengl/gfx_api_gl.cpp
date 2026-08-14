@@ -1048,7 +1048,11 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		.uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ .friendly_name = "Scene compose SSAO program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_compose_ssao.frag",
 		.uniform_names = {},
-		.additional_samplers = { {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2}, {"prepassDepth", 3} },
+		.additional_samplers = { {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SCENE_FOG, program_data{ .friendly_name = "Scene fog program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_fog.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1} },
 		.uniform_block_names = { "cbuffer" } })
 };
 

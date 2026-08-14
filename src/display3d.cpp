@@ -4695,6 +4695,17 @@ gfx_api::buffer* display3d_getScreenTriangleVBO()
 	return pScreenTriangleVBO;
 }
 
+void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+{
+	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
+	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTex).value_or(renderedDims);
+	const float texW = static_cast<float>(std::max<uint32_t>(textureDims.first, 1));
+	const float texH = static_cast<float>(std::max<uint32_t>(textureDims.second, 1));
+	uvScaleClamp = glm::vec4(
+		renderedDims.first / texW, renderedDims.second / texH,
+		(renderedDims.first - 0.5f) / texW, (renderedDims.second - 0.5f) / texH);
+}
+
 void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)
 {
 	drawFsr1Easu(sourceTexture);

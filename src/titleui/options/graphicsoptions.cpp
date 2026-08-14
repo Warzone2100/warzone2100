@@ -30,6 +30,7 @@
 #include "../../display.h"
 #include "../../display3d.h"
 #include "../../ssao.h"
+#include "../../fog_pass.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -364,6 +365,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				{
 					pie_EnableFog(true);
 				}
+				fog_pass::applyConfigToGfx();
 				return true;
 			}, false
 		);
