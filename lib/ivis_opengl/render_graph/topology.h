@@ -72,6 +72,8 @@ struct RenderFeatures
 		/// Include the deferred FogApply pass (in-game, not frozen). ScenePrepass
 		/// is also included when this or SSAO is set.
 		FogApply           = 1u << 8,
+		/// Downsample generate AO into the blur target when blur is coarser.
+		SSAODownsample     = 1u << 9,
 	};
 };
 
@@ -148,6 +150,8 @@ public:
 	virtual bool smaaIntermediateActive() const = 0;
 	/// True when SSAO is enabled in config (surfaces may still be syncing).
 	virtual bool ssaoEnabled() const = 0;
+	/// True when blur is coarser than generate, so the downsample pass is in the graph.
+	virtual bool ssaoDownsampleActive() const = 0;
 	/// True when deferred fog surfaces are enabled (surfaces may still be syncing).
 	virtual bool fogEnabled() const = 0;
 	virtual uint32_t shadowMapSize() const = 0;

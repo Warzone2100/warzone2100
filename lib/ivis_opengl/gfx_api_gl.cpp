@@ -1049,6 +1049,10 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		.uniform_names = {},
 		.additional_samplers = { {"occlusionTexture", 0}, {"depthTexture", 1} },
 		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SSAO_DOWNSAMPLE, program_data{ .friendly_name = "SSAO downsample program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_downsample.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"occlusionTexture", 0} },
+		.uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ .friendly_name = "Scene compose SSAO program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_compose_ssao.frag",
 		.uniform_names = {},
 		.additional_samplers = { {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2} },
@@ -4094,6 +4098,8 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
+	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
+	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
 	inputs.scenePrepassEnabled = getScenePrepassSurfacesEnabled();
 	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;

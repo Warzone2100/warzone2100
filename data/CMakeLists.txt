@@ -132,6 +132,7 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/water_depth_prepass.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_generate.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_blur.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_downsample.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_compose_ssao.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_fog.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.frag"

@@ -4695,15 +4695,21 @@ gfx_api::buffer* display3d_getScreenTriangleVBO()
 	return pScreenTriangleVBO;
 }
 
-void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+void display3d_fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
 {
-	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTex).value_or(renderedDims);
+	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTex)
+		.value_or(std::pair<uint32_t, uint32_t>{usedW, usedH});
 	const float texW = static_cast<float>(std::max<uint32_t>(textureDims.first, 1));
 	const float texH = static_cast<float>(std::max<uint32_t>(textureDims.second, 1));
 	uvScaleClamp = glm::vec4(
-		renderedDims.first / texW, renderedDims.second / texH,
-		(renderedDims.first - 0.5f) / texW, (renderedDims.second - 0.5f) / texH);
+		usedW / texW, usedH / texH,
+		(usedW - 0.5f) / texW, (usedH - 0.5f) / texH);
+}
+
+void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+{
+	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
+	display3d_fillUvScaleClamp(renderedDims.first, renderedDims.second, sourceTex, uvScaleClamp);
 }
 
 void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)

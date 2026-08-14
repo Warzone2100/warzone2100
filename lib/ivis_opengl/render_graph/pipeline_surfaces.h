@@ -37,6 +37,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -76,10 +77,12 @@ enum class PipelineSurfaceId : uint8_t
 	ScenePrepassDepth,
 	/// Scene-sized view-space normals (RGB) + SSAO application weight (A).
 	ScenePrepassNormals,
-	/// SSAO generate output / final blurred AO (ping-pong with SSAOBlurH).
+	/// SSAO generate output / final blurred AO when generate and blur share a size.
 	SSAORaw,
 	/// Horizontal SSAO blur intermediate.
 	SSAOBlurH,
+	/// Blur-resolution dest when blur is coarser than generate (downsample + blurV).
+	SSAOBlurred,
 	/// Scene-sized lit scene with AO applied; feeds fog / SMAA / blit / FSR.
 	SSAOComposedColor,
 	/// Scene-sized lit(+AO) scene with distance fog applied; feeds SMAA/blit/FSR.
@@ -116,8 +119,39 @@ enum class SurfaceExtentPolicy : uint8_t
 {
 	MatchDrawable,
 	MatchScene,
+	/// sceneW/H divided by `PipelineSurfaceCatalogEntry::extentDivisorSource`.
+	MatchSceneDivided,
 	ShadowMapSquare,
 };
+
+/// Which sync-input divisor `MatchSceneDivided` uses.
+enum class SurfaceExtentDivisorSource : uint8_t
+{
+	None,
+	SsaoGenerate,
+	SsaoBlur,
+};
+
+inline uint32_t divideSurfaceExtent(uint32_t size, uint32_t divisor)
+{
+	if (size == 0u)
+	{
+		return 0u;
+	}
+	if (divisor <= 1u)
+	{
+		return size; // identical to MatchScene - required for full-res SSAO
+	}
+	return std::max(size / divisor, 2u);
+}
+
+/// True when the resolved blur RT is strictly smaller than the generate RT.
+/// Compare extents, not raw divisors: tiny scenes can clamp both to 2.
+inline bool ssaoBlurIsCoarser(uint32_t sceneW, uint32_t sceneH, uint32_t generateDivisor, uint32_t blurDivisor)
+{
+	return divideSurfaceExtent(sceneW, generateDivisor) > divideSurfaceExtent(sceneW, blurDivisor)
+		|| divideSurfaceExtent(sceneH, generateDivisor) > divideSurfaceExtent(sceneH, blurDivisor);
+}
 
 /// How resolve derives MSAA sample count from sync inputs.
 enum class SurfaceSamplePolicy : uint8_t
@@ -189,6 +223,8 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaIntermediateActive,
 	/// SSAO intermediate surfaces requested via context::setSSAOSurfacesEnabled.
 	SsaoActive,
+	/// Extra blur-resolution buffer when blur is coarser than generate.
+	SsaoSeparateBlurBuffers,
 	/// Scene prepass depth/normals requested via context::setScenePrepassSurfacesEnabled.
 	ScenePrepassActive,
 	/// FogColor requested via context::setFogSurfacesEnabled.
@@ -235,6 +271,7 @@ struct PipelineSurfaceCatalogEntry
 	SurfaceStorageKind storageKind = SurfaceStorageKind::None;
 	SurfaceLifetimePolicy lifetimePolicy = SurfaceLifetimePolicy::SwapchainBound;
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count; // MatchCompanion only
+	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None;
 };
 
 /// Runtime identity produced by resolve; consumed by ensure / matches.
@@ -276,6 +313,10 @@ struct PipelineSurfaceSyncInputs
 	bool scenePrepassEnabled = false;
 	/// When true, FogApplyActive catalog surfaces are enabled.
 	bool fogApplyEnabled = false;
+	/// Scene extent divisor for SSAO generate (1 = full scene).
+	uint32_t ssaoGenerateDivisor = 1;
+	/// Scene extent divisor for SSAO blur buffers (1 = full scene).
+	uint32_t ssaoBlurDivisor = 1;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.

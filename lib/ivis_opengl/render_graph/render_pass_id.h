@@ -46,6 +46,7 @@ enum class PassId : uint16_t
 	ScenePrepass,
 	ScenePass,
 	SSAOGenerate,
+	SSAODownsample,
 	SSAOBlurH,
 	SSAOBlurV,
 	SSAOCompose,

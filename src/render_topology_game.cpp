@@ -123,6 +123,18 @@ public:
 		return gfx_api::context::get().getSSAOSurfacesEnabled();
 	}
 
+	bool ssaoDownsampleActive() const override
+	{
+		auto& ctx = gfx_api::context::get();
+		if (!ctx.getSSAOSurfacesEnabled())
+		{
+			return false;
+		}
+		const auto scene = sceneColorDimensions();
+		return gfx_api::ssaoBlurIsCoarser(scene.first, scene.second,
+			ctx.getSSAOGenerateDivisor(), ctx.getSSAOBlurDivisor());
+	}
+
 	bool fogEnabled() const override
 	{
 		return gfx_api::context::get().getFogSurfacesEnabled();

@@ -586,10 +586,14 @@ namespace gfx_api
 			return true;
 		}
 
-		/// Request SSAO intermediate surfaces (SSAORaw, SSAOBlurH, SSAOComposedColor).
-		/// Game code sets this from war_getSSAO(); backends read it in pipelineSurfaceSyncInputs().
+		/// Request SSAO intermediate surfaces (SSAORaw, SSAOBlurH, SSAOBlurred, SSAOComposedColor).
+		/// Game code sets this from the SSAO preset; backends read it in pipelineSurfaceSyncInputs().
 		void setSSAOSurfacesEnabled(bool enabled) { _ssaoSurfacesEnabled = enabled; }
 		bool getSSAOSurfacesEnabled() const { return _ssaoSurfacesEnabled; }
+		void setSSAOGenerateDivisor(uint32_t d) { _ssaoGenerateDivisor = std::max(d, 1u); }
+		void setSSAOBlurDivisor(uint32_t d) { _ssaoBlurDivisor = std::max(d, 1u); }
+		uint32_t getSSAOGenerateDivisor() const { return _ssaoGenerateDivisor; }
+		uint32_t getSSAOBlurDivisor() const { return _ssaoBlurDivisor; }
 		/// Request ScenePrepassDepth / ScenePrepassNormals (SSAO and/or deferred fog).
 		void setScenePrepassSurfacesEnabled(bool enabled) { _scenePrepassSurfacesEnabled = enabled; }
 		bool getScenePrepassSurfacesEnabled() const { return _scenePrepassSurfacesEnabled; }
@@ -682,6 +686,8 @@ namespace gfx_api
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
 		bool _ssaoSurfacesEnabled = false;
+		uint32_t _ssaoGenerateDivisor = 1;
+		uint32_t _ssaoBlurDivisor = 1;
 		bool _scenePrepassSurfacesEnabled = false;
 		bool _fogSurfacesEnabled = false;
 		float _sceneRenderFraction = 1.f;
@@ -1874,6 +1880,23 @@ namespace gfx_api
 		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // occlusion
 		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // depth
 	>, SHADER_SSAO_BLUR>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SSAO_DOWNSAMPLE>
+	{
+		glm::vec4 uvScaleClamp;
+	};
+
+	using SSAODownsamplePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SSAO_DOWNSAMPLE>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d> // occlusion
+	>, SHADER_SSAO_DOWNSAMPLE>;
 
 	template<>
 	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>
