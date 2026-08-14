@@ -49,6 +49,7 @@ enum class PassId : uint16_t
 	SSAOBlurH,
 	SSAOBlurV,
 	SSAOCompose,
+	FogApply,
 	SceneBlit,
 	SceneUpscaleEASU,
 	SceneUpscaleRCAS,

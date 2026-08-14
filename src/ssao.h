@@ -32,7 +32,7 @@ namespace ssao
 void init();
 void shutdown();
 
-/// Push war_getSSAO() into the gfx context and sync pipeline surfaces.
+/// Push SSAO/fog/prepass surface flags into the gfx context and sync pipeline surfaces.
 void applyConfigToGfx();
 
 void recordGenerate(const gfx_api::RenderPassContext& passCtx);

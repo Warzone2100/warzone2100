@@ -71,7 +71,8 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 	}
 
 	const bool ssaoActive = (snapshot.features & RenderFeatures::SSAO) != 0;
-	if (ssaoActive)
+	const bool fogActive = (snapshot.features & RenderFeatures::FogApply) != 0;
+	if (ssaoActive || fogActive)
 	{
 		builder.beginPass(PassId::ScenePrepass, "ScenePrepass")
 			.color(PipelineSurfaceId::ScenePrepassNormals, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
@@ -110,7 +111,18 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
 	}
 
-	const PassId aaColorSource = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;
+	if (fogActive)
+	{
+		const PassId fogColorSrc = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;
+		builder.beginPass(PassId::FogApply, "FogApply")
+			.color(PipelineSurfaceId::FogColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(fogColorSrc, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+	}
+
+	const PassId lightingColor = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;
+	const PassId aaColorSource = fogActive ? PassId::FogApply : lightingColor;
 
 	const bool smaaActive = (snapshot.features & RenderFeatures::Smaa) != 0;
 	const bool smaaIntermediate = (snapshot.features & RenderFeatures::SmaaIntermediate) != 0;

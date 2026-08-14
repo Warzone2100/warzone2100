@@ -4087,6 +4087,8 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
+	inputs.scenePrepassEnabled = getScenePrepassSurfacesEnabled();
+	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;
 }
 

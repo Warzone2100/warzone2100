@@ -148,7 +148,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
-	// ScenePrepassDepth - 1x sampleable depth for SSAO (and future forward use)
+	// ScenePrepassDepth - 1x sampleable depth for SSAO and deferred fog
 	makeCatalogEntry(
 		PipelineSurfaceUsage::DepthOnly,
 		SurfaceExtentPolicy::MatchScene,
@@ -156,7 +156,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::DepthSampled,
 		SurfaceGpuUsage::DepthStencilAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::SsaoActive,
+		SurfaceEnablePolicy::ScenePrepassActive,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledDepth2D,
 		SurfaceLifetimePolicy::SwapchainBound),
@@ -168,7 +168,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::FixedRGBA8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::SsaoActive,
+		SurfaceEnablePolicy::ScenePrepassActive,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
@@ -196,7 +196,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
-	// SSAOComposedColor - lit scene with AO (+ deferred fog) applied
+	// SSAOComposedColor - lit scene with AO applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchScene,
@@ -205,6 +205,18 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
 		SurfaceEnablePolicy::SsaoActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
+	// FogColor - lit(+AO) scene with distance fog applied
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::FogApplyActive,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
@@ -354,6 +366,10 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 				|| inputs.sceneDynamicResolution);
 	case SurfaceEnablePolicy::SsaoActive:
 		return inputs.ssaoEnabled;
+	case SurfaceEnablePolicy::ScenePrepassActive:
+		return inputs.scenePrepassEnabled;
+	case SurfaceEnablePolicy::FogApplyActive:
+		return inputs.fogApplyEnabled;
 	}
 	return false;
 }
