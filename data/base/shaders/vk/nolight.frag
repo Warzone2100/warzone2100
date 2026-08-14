@@ -14,12 +14,10 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
-	vec4 fogColor;
-	float fogEnd;
-	float fogStart;
 	float graphicsCycle;
-	int fogEnabled;
 	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
 };
 
 layout(std140, set = 1, binding = 0) uniform meshuniforms

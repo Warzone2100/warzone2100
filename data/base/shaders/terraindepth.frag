@@ -14,10 +14,6 @@ layout(std140) uniform cbuffer {
 	vec4 paramy2;
 	mat4 textureMatrix1;
 	mat4 textureMatrix2;
-	vec4 fogColor;
-	int fogEnabled;
-	float fogEnd;
-	float fogStart;
 };
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -43,20 +39,6 @@ out vec4 FragColor;
 void main()
 {
 	vec4 fragColor = texture(lightmap_tex, uv2, 0.f);
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if(fogFactor > 1.f)
-		{
-			discard;
-		}
-
-		// Return fragment color
-		fragColor = fragColor;
-	}
 
 	#ifdef NEWGL
 	FragColor = fragColor;

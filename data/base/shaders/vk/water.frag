@@ -15,12 +15,10 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 ambientLight;
 	vec4 diffuseLight;
 	vec4 specularLight;
-	vec4 fogColor;
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
 	float timeSec;
 	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
 };
 
 layout(location = 1) in vec4 uv1_uv2;
@@ -50,21 +48,6 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 void main()
 {
 	vec4 fragColor = main_medium();
-
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if (fogFactor >= 1.f)
-		{
-			discard;
-		}
-
-		fogFactor = 1.0 - clamp(fogFactor, 0.0, 1.0);
-		fragColor.rgb *= fogFactor; // premultiply by fogFactor as alpha
-		fragColor.a = fogFactor;
-	}
 
 	FragColor = fragColor;
 }

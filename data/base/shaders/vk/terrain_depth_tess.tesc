@@ -11,9 +11,6 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 paramy2;
 	mat4 textureMatrix2;
 	vec4 tessParams; // x = max tess level, y = viewport height (pixels)
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
 };
 
 void main()

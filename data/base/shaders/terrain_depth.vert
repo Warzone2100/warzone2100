@@ -9,10 +9,6 @@ layout(std140) uniform cbuffer {
 	vec4 paramy2;
 	mat4 textureMatrix1;
 	mat4 textureMatrix2;
-	vec4 fogColor;
-	int fogEnabled;
-	float fogEnd;
-	float fogStart;
 };
 
 

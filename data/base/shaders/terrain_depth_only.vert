@@ -3,9 +3,6 @@
 
 layout(std140) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
-	int fogEnabled;
-	float fogEnd;
-	float fogStart;
 };
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))

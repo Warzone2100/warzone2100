@@ -14,17 +14,15 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 ambientLight;
 	vec4 diffuseLight;
 	vec4 specularLight;
-	vec4 fogColor;
 	vec4 ShadowMapCascadeSplits;
 	int ShadowMapSize;
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
 	int quality;
 	int viewportWidth;
 	int viewportHeight;
 	float tessMaxLevel;
 	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
 };
 
 layout(std140, set = 1, binding = 0) uniform pointlights {

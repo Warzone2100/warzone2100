@@ -13,14 +13,11 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 ambientLight;
 	vec4 diffuseLight;
 	vec4 specularLight;
-	vec4 fogColor;
 	vec4 ShadowMapCascadeSplits;
 	int ShadowMapSize;
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
 	float timeSec;
 	float WZ_MIP_LOAD_BIAS;
+	float pad0;
 };
 
 // interpolated data. location count = 2

@@ -1906,14 +1906,12 @@ static glm::vec4 terrainTessParams()
 
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
-	const auto &renderState = getCurrentRenderState();
-
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
 	gfx_api::TerrainDepth::get().bind_textures(lightmap_texture);
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
 	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
-	glm::vec4(0.f), pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, 0, 0 });
+	0, 0 });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 	if (withOffset)
@@ -1950,14 +1948,13 @@ static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection, c
 	{
 		return;
 	}
-	const auto &renderState = getCurrentRenderState();
 
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind();
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_textures(lightmap_texture, terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_vertex_buffers(terrainDecalVBO);
 	// this pass renders from the light, but the tessellation factors must come from the main camera so the shadow geometry matches the color pass
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_constants({ ModelViewProjection, tessCameraMVP, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f),
-	terrainTessParams(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0.f });
+	terrainTessParams() });
 	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
 
 	for (int x = 0; x < xSectors; x++)
@@ -1984,14 +1981,12 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 		drawDepthOnlyForDepthMapTess(ModelViewProjection, tessCameraMVP);
 		return;
 	}
-	const auto &renderState = getCurrentRenderState();
 
 	// bind the vertex buffer
 	gfx_api::TerrainDepthOnlyForDepthMap::get().bind();
 	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_textures(lightmap_texture);
 	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_constants({ ModelViewProjection, /*paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
-	glm::vec4(0.f), */ pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, /*0, 0*/ });
+	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_constants({ ModelViewProjection });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 //	if (withOffset)
@@ -2022,12 +2017,6 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
-glm::vec4 getFogColorVec4()
-{
-	const auto &renderState = getCurrentRenderState();
-	return pielightToRGBAVec4(renderState.fogColour);
-}
-
 template<typename PSO>
 static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
 {
@@ -2035,7 +2024,6 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	{
 		return; // no terrain+decal geometry (empty map)
 	}
-	const auto &renderState = getCurrentRenderState();
 	PSO::get().bind();
 	PSO::get().bind_textures(
 		lightmap_texture,
@@ -2055,8 +2043,8 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias()
+		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
+		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias()
 	};
 	gfx_api::PointLightsUniforms pointLightUniforms = {
 		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
@@ -2087,7 +2075,6 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 	{
 		return; // no terrain+decal geometry (empty map)
 	}
-	const auto &renderState = getCurrentRenderState();
 	PSO::get().bind();
 	PSO::get().bind_textures(
 		lightmap_texture,
@@ -2108,8 +2095,8 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias()
+		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
+		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias()
 	};
 	gfx_api::PointLightsUniforms pointLightUniforms = {
 		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
@@ -2363,7 +2350,6 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
 	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
-	const auto &renderState = getCurrentRenderState();
 
 	ASSERT_OR_RETURN(, waterTexturesNormal.tex1 && waterTexturesNormal.tex2, "Failed to load water texture");
 	PSO::get().bind();
@@ -2376,7 +2362,6 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 		ModelViewProjection, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd,
 		waterOffset*10, gfx_api::context::get().getSceneMipLodBias()
 	});
 
@@ -2417,7 +2402,6 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
-	const auto &renderState = getCurrentRenderState();
 
 	ASSERT_OR_RETURN(, waterTexturesHigh.tex, "Failed to load water textures");
 	PSO::get().bind();
@@ -2433,7 +2417,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		ModelViewProjection, viewMatrix, lightmapValues.ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize, pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd,
+		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		waterOffset*10, gfx_api::context::get().getSceneMipLodBias()
 	});
 
@@ -2475,7 +2459,6 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
 	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
-	const auto &renderState = getCurrentRenderState();
 
 	auto pWaterTexture = getWaterClassicTexture();
 	ASSERT(pWaterTexture != nullptr, "Failed to load water legacy texture?");
@@ -2487,7 +2470,6 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 	gfx_api::WaterClassicPSO::get().set_uniforms(gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>{
 		ModelViewProjection, ModelUVLightmap, glm::mat4(1.f) /* TODO */, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
-		getFogColorVec4(), pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd,
 		waterOffset*10, gfx_api::context::get().getSceneMipLodBias()
 	});
 

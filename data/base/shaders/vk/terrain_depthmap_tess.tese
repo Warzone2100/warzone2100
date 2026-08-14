@@ -15,9 +15,6 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 paramy2;
 	mat4 textureMatrix2;
 	vec4 tessParams;
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
 };
 
 layout(set = 1, binding = 1) uniform sampler2D terrainBakedHeight;

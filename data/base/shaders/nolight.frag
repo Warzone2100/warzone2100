@@ -14,12 +14,10 @@ layout(std140) uniform globaluniforms {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
-	vec4 fogColor;
-	float fogEnd;
-	float fogStart;
 	float graphicsCycle;
-	int fogEnabled;
 	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
 };
 
 layout(std140) uniform meshuniforms {
@@ -73,20 +71,6 @@ void main()
 	if (alphaTest > 0 && (fragColour.a <= 0.001))
 	{
 		discard;
-	}
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if(fogFactor > 1.f)
-		{
-			discard;
-		}
-
-		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
 	}
 
 	#ifdef NEWGL

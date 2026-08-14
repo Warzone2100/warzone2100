@@ -46,15 +46,5 @@ void main()
 {
 	vec4 fragColor = main_legacy();
 
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
-
-		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
-	}
-
 	FragColor = fragColor;
 }
