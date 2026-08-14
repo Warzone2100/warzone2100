@@ -66,6 +66,15 @@ std::pair<uint32_t, uint32_t> BlueprintMaterializer::resolveViewport(const Bluep
 		return {_snapshot.drawableW, _snapshot.drawableH};
 	case ViewportRule::SceneColorTarget:
 		return {_snapshot.sceneW, _snapshot.sceneH};
+	case ViewportRule::ColorTarget:
+	{
+		if (pass.colorAttachments.empty())
+		{
+			return {0, 0};
+		}
+		const auto dims = gfx_api::context::get().getPipelineSurfaceDimensions(pass.colorAttachments[0].surfaceId);
+		return dims.value_or(std::pair<uint32_t, uint32_t>{0, 0});
+	}
 	case ViewportRule::DepthCascade:
 	{
 		const size_t dim = gfx_api::context::get().getDepthPassDimensions(pass.viewportCascadeIndex);

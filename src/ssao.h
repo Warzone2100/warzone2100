@@ -51,6 +51,7 @@ void shutdown();
 void applyConfigToGfx();
 
 void recordGenerate(const gfx_api::RenderPassContext& passCtx);
+void recordDownsample(const gfx_api::RenderPassContext& passCtx);
 void recordBlurH(const gfx_api::RenderPassContext& passCtx);
 void recordBlurV(const gfx_api::RenderPassContext& passCtx);
 void recordCompose(const gfx_api::RenderPassContext& passCtx);

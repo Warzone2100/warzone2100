@@ -235,6 +235,7 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::ScenePrepass, recordScenePrepass);
 	table.set(gfx_api::PassId::ScenePass, recordScenePass);
 	table.set(gfx_api::PassId::SSAOGenerate, ssao::recordGenerate);
+	table.set(gfx_api::PassId::SSAODownsample, ssao::recordDownsample);
 	table.set(gfx_api::PassId::SSAOBlurH, ssao::recordBlurH);
 	table.set(gfx_api::PassId::SSAOBlurV, ssao::recordBlurV);
 	table.set(gfx_api::PassId::SSAOCompose, ssao::recordCompose);

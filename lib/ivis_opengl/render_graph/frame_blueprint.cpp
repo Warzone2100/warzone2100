@@ -84,23 +84,47 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 
 	if (ssaoActive)
 	{
+		const bool ssaoDownsample = (snapshot.features & RenderFeatures::SSAODownsample) != 0;
+
 		builder.beginPass(PassId::SSAOGenerate, "SSAOGenerate")
 			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
+			.viewport(ViewportRule::ColorTarget)
 			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth)
 			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
 
-		builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
-			.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+		if (ssaoDownsample)
+		{
+			builder.beginPass(PassId::SSAODownsample, "SSAODownsample")
+				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::ColorTarget)
+				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor);
 
-		builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
-			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
+				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::ColorTarget)
+				.readFrom(PassId::SSAODownsample, AttachmentRole::PrimaryColor)
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+
+			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
+				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::ColorTarget)
+				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+		}
+		else
+		{
+			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
+				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::ColorTarget)
+				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor)
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+
+			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
+				.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::ColorTarget)
+				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+		}
 
 		builder.beginPass(PassId::SSAOCompose, "SSAOCompose")
 			.color(PipelineSurfaceId::SSAOComposedColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)

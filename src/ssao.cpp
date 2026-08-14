@@ -185,8 +185,9 @@ void drawSSAOGenerate(
 	const glm::mat4& invProjectionMatrix,
 	gfx_api::buffer* fullscreenTriVBO)
 {
-	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	if (renderedDims.first == 0 || renderedDims.second == 0)
+	const auto genDims = gfx_api::context::get().getPipelineSurfaceDimensions(gfx_api::PipelineSurfaceId::SSAORaw)
+		.value_or(std::pair<uint32_t, uint32_t>{0, 0});
+	if (genDims.first == 0 || genDims.second == 0)
 	{
 		return;
 	}
@@ -195,9 +196,11 @@ void drawSSAOGenerate(
 	constants.invProjectionMatrix = invProjectionMatrix;
 	constants.projectionMatrix = projectionMatrix;
 	constants.params = glm::vec4(s_tuning.radius, s_tuning.biasFactor, s_tuning.minBias, s_tuning.rangeScale);
-	// Noise UVs are scaled from texture-space UVs, so the tile count follows the texture
-	// size. The rendered region is smaller than the texture when render scaling is active.
-	constants.noiseScale = ssaoSourceTextureSize(depthTexture) / static_cast<float>(NOISE_TEXTURE_SIZE);
+	// Noise UVs are scaled from the generate target's allocated size so the tile count
+	// matches the AO buffer, not the scene-sized depth texture.
+	constants.noiseScale = glm::vec2(
+		static_cast<float>(genDims.first) / static_cast<float>(NOISE_TEXTURE_SIZE),
+		static_cast<float>(genDims.second) / static_cast<float>(NOISE_TEXTURE_SIZE));
 	constants.sampleCount = static_cast<float>(activeSettings().sampleCount);
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
 	display3d_fillSceneUvScaleClamp(depthTexture, constants.uvScaleClamp);
@@ -220,7 +223,7 @@ void drawSSAOBlur(
 	constants.blurDirection = blurDirection;
 	constants.depthSigma = s_tuning.blurDepthSigma;
 	constants.tapPairs = static_cast<float>(activeSettings().blurTapPairs);
-	display3d_fillSceneUvScaleClamp(occlusionTexture, constants.uvScaleClamp);
+	display3d_fillSceneUvScaleClamp(depthTexture, constants.uvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
 	gfx_api::SSAOBlurPSO::get().bind_constants(constants);
@@ -293,6 +296,33 @@ void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 
 	const auto& fc = pie_GetInGame3DFrameContext();
 	drawSSAOGenerate(depth, normals, fc.perspectiveMatrix, glm::inverse(fc.perspectiveMatrix), vbo);
+}
+
+void recordDownsample(const gfx_api::RenderPassContext& passCtx)
+{
+	ASSERT(passCtx.readCount() == 1, "SSAO downsample: generate AO");
+	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
+	gfx_api::abstract_texture* ao = passCtx.getRead(0);
+	if (vbo == nullptr || ao == nullptr)
+	{
+		return;
+	}
+
+	auto& ctx = gfx_api::context::get();
+	const auto sceneDims = ctx.getSceneRenderTargetDimensions();
+	const uint32_t genDiv = ctx.getSSAOGenerateDivisor();
+	const uint32_t usedW = gfx_api::divideSurfaceExtent(sceneDims.first, genDiv);
+	const uint32_t usedH = gfx_api::divideSurfaceExtent(sceneDims.second, genDiv);
+
+	gfx_api::constant_buffer_type<SHADER_SSAO_DOWNSAMPLE> constants {};
+	display3d_fillUvScaleClamp(usedW, usedH, ao, constants.uvScaleClamp);
+
+	gfx_api::SSAODownsamplePSO::get().bind();
+	gfx_api::SSAODownsamplePSO::get().bind_constants(constants);
+	gfx_api::SSAODownsamplePSO::get().bind_vertex_buffers(vbo);
+	gfx_api::SSAODownsamplePSO::get().bind_textures(ao);
+	gfx_api::SSAODownsamplePSO::get().draw(3, 0);
+	gfx_api::SSAODownsamplePSO::get().unbind_vertex_buffers(vbo);
 }
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)

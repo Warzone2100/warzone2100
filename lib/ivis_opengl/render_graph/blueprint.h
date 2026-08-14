@@ -109,7 +109,8 @@ struct BlueprintReadEdge
 /// Rule for choosing pass viewport width/height at materialize time.
 ///
 /// Blueprint stores the rule only; pixel sizes come from `RenderTopologySnapshot`
-/// (`drawableW`/`drawableH`, `sceneW`/`sceneH`, or shadow-map dimensions).
+/// (`drawableW`/`drawableH`, `sceneW`/`sceneH`, or shadow-map dimensions), except
+/// `ColorTarget` which uses the primary color attachment's allocated size.
 /// </summary>
 enum class ViewportRule : uint8_t
 {
@@ -117,6 +118,8 @@ enum class ViewportRule : uint8_t
 	Drawable,
 	/// Offscreen scene color target size (`sceneW` x `sceneH`).
 	SceneColorTarget,
+	/// Primary color attachment's resolved size (SSAO generate/blur at scene / divisor).
+	ColorTarget,
 	/// Shadow cascade map size; use `BlueprintPass::viewportCascadeIndex` to pick the cascade.
 	DepthCascade,
 };

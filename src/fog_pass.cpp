@@ -26,6 +26,7 @@
 
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
+#include "ssao.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
@@ -41,15 +42,17 @@ namespace fog_pass
 void applyConfigToGfx()
 {
 	auto& ctx = gfx_api::context::get();
-	const bool ssao = war_getSSAO();
+	const ssao::SsaoSettings ssaoSettings = ssao::activeSettings();
 	const bool fog = pie_GetFogEnabled();
-	ctx.setSSAOSurfacesEnabled(ssao);
-	ctx.setScenePrepassSurfacesEnabled(ssao || fog);
+	ctx.setSSAOSurfacesEnabled(ssaoSettings.enabled);
+	ctx.setSSAOGenerateDivisor(ssaoSettings.generateDivisor);
+	ctx.setSSAOBlurDivisor(ssaoSettings.blurDivisor);
+	ctx.setScenePrepassSurfacesEnabled(ssaoSettings.enabled || fog);
 	ctx.setFogSurfacesEnabled(fog);
 	if (!ctx.syncPipelineSurfaces())
 	{
 		debug(LOG_ERROR, "Failed to sync pipeline surfaces after SSAO/fog config change (ssao=%d fog=%d)",
-			static_cast<int>(ssao), static_cast<int>(fog));
+			static_cast<int>(ssaoSettings.enabled), static_cast<int>(fog));
 	}
 }
 

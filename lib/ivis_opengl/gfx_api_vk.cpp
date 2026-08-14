@@ -1297,6 +1297,7 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_SMAA_BLEND, shader_infos{ "shaders/vk/smaa_blend.vert.spv", "shaders/vk/smaa_blend.frag.spv" }),
 	std::make_pair(SHADER_SSAO_GENERATE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_generate.frag.spv" }),
 	std::make_pair(SHADER_SSAO_BLUR, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_blur.frag.spv" }),
+	std::make_pair(SHADER_SSAO_DOWNSAMPLE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_downsample.frag.spv" }),
 	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/scene_compose_ssao.frag.spv" }),
 	std::make_pair(SHADER_SCENE_FOG, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/scene_fog.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
@@ -6102,6 +6103,8 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
+	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
+	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
 	inputs.scenePrepassEnabled = getScenePrepassSurfacesEnabled();
 	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;

@@ -44,7 +44,8 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	SurfaceProvisionMode provisionMode,
 	SurfaceStorageKind storageKind,
 	SurfaceLifetimePolicy lifetimePolicy,
-	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count)
+	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count,
+	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None)
 {
 	PipelineSurfaceCatalogEntry entry;
 	entry.usage = usage;
@@ -58,6 +59,7 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	entry.storageKind = storageKind;
 	entry.lifetimePolicy = lifetimePolicy;
 	entry.formatCompanion = formatCompanion;
+	entry.extentDivisorSource = extentDivisorSource;
 	return entry;
 }
 
@@ -175,7 +177,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 	// SSAORaw - generate output / final blurred AO
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
-		SurfaceExtentPolicy::MatchScene,
+		SurfaceExtentPolicy::MatchSceneDivided,
 		SurfaceSamplePolicy::One,
 		SurfaceFormatClass::SingleChannelR8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
@@ -183,11 +185,13 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceEnablePolicy::SsaoActive,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
-		SurfaceLifetimePolicy::SwapchainBound),
-	// SSAOBlurH - horizontal-blur ping-pong
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		SurfaceExtentDivisorSource::SsaoGenerate),
+	// SSAOBlurH - horizontal-blur ping-pong at blur resolution
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
-		SurfaceExtentPolicy::MatchScene,
+		SurfaceExtentPolicy::MatchSceneDivided,
 		SurfaceSamplePolicy::One,
 		SurfaceFormatClass::SingleChannelR8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
@@ -195,7 +199,23 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceEnablePolicy::SsaoActive,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
-		SurfaceLifetimePolicy::SwapchainBound),
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		SurfaceExtentDivisorSource::SsaoBlur),
+	// SSAOBlurred - blur-res dest when blur is coarser than generate
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SingleChannelR8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SsaoSeparateBlurBuffers,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		SurfaceExtentDivisorSource::SsaoBlur),
 	// SSAOComposedColor - lit scene with AO applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -366,6 +386,9 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 				|| inputs.sceneDynamicResolution);
 	case SurfaceEnablePolicy::SsaoActive:
 		return inputs.ssaoEnabled;
+	case SurfaceEnablePolicy::SsaoSeparateBlurBuffers:
+		return inputs.ssaoEnabled
+			&& ssaoBlurIsCoarser(inputs.sceneW, inputs.sceneH, inputs.ssaoGenerateDivisor, inputs.ssaoBlurDivisor);
 	case SurfaceEnablePolicy::ScenePrepassActive:
 		return inputs.scenePrepassEnabled;
 	case SurfaceEnablePolicy::FogApplyActive:
@@ -374,10 +397,10 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 	return false;
 }
 
-void resolveExtent(SurfaceExtentPolicy policy, const PipelineSurfaceSyncInputs& inputs,
+void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurfaceSyncInputs& inputs,
 	uint32_t& width, uint32_t& height)
 {
-	switch (policy)
+	switch (cat.extentPolicy)
 	{
 	case SurfaceExtentPolicy::MatchDrawable:
 		width = inputs.drawableW;
@@ -387,6 +410,21 @@ void resolveExtent(SurfaceExtentPolicy policy, const PipelineSurfaceSyncInputs& 
 		width = inputs.sceneW;
 		height = inputs.sceneH;
 		break;
+	case SurfaceExtentPolicy::MatchSceneDivided:
+	{
+		uint32_t divisor = 1;
+		if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoGenerate)
+		{
+			divisor = inputs.ssaoGenerateDivisor;
+		}
+		else if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoBlur)
+		{
+			divisor = inputs.ssaoBlurDivisor;
+		}
+		width = divideSurfaceExtent(inputs.sceneW, divisor);
+		height = divideSurfaceExtent(inputs.sceneH, divisor);
+		break;
+	}
 	case SurfaceExtentPolicy::ShadowMapSquare:
 		width = inputs.shadowMapSize;
 		height = inputs.shadowMapSize;
@@ -538,7 +576,7 @@ ResolvedSurfaceTable resolvePipelineSurfaces(const PipelineSurfaceSyncInputs& in
 
 		uint32_t width = 0;
 		uint32_t height = 0;
-		resolveExtent(cat.extentPolicy, inputs, width, height);
+		resolveExtent(cat, inputs, width, height);
 
 		if (cat.extentPolicy == SurfaceExtentPolicy::ShadowMapSquare && inputs.shadowMapSize == 0u)
 		{
@@ -549,7 +587,8 @@ ResolvedSurfaceTable resolvePipelineSurfaces(const PipelineSurfaceSyncInputs& in
 		}
 		else if (spec.enabled
 			&& (cat.extentPolicy == SurfaceExtentPolicy::MatchDrawable
-				|| cat.extentPolicy == SurfaceExtentPolicy::MatchScene)
+				|| cat.extentPolicy == SurfaceExtentPolicy::MatchScene
+				|| cat.extentPolicy == SurfaceExtentPolicy::MatchSceneDivided)
 			&& (width == 0u || height == 0u))
 		{
 			spec.enabled = false;

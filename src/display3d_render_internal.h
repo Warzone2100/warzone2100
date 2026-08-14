@@ -2,6 +2,7 @@
 
 #include <glm/fwd.hpp>
 #include <glm/vec4.hpp>
+#include <cstdint>
 
 namespace gfx_api
 {
@@ -22,5 +23,7 @@ void display3d_processSensorTarget();
 void display3d_processDestinationTarget();
 /// Fullscreen triangle VBO used by post-processing passes (null before init3DView).
 gfx_api::buffer* display3d_getScreenTriangleVBO();
+/// Scale/clamp UVs from `sourceTex` onto a used sub-rect of size usedW x usedH.
+void display3d_fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp);
 /// Scale/clamp UVs from a scene-sized source texture onto the rendered scene sub-rect.
 void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp);
