@@ -85,9 +85,10 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 	if (ssaoActive)
 	{
 		const bool ssaoDownsample = (snapshot.features & RenderFeatures::SSAODownsample) != 0;
+		const ClearValue ssaoUnoccludedClear = ClearValue::colorClear(1.f, 1.f, 1.f, 1.f);
 
 		builder.beginPass(PassId::SSAOGenerate, "SSAOGenerate")
-			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 			.viewport(ViewportRule::ColorTarget)
 			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth)
 			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
@@ -95,18 +96,18 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		if (ssaoDownsample)
 		{
 			builder.beginPass(PassId::SSAODownsample, "SSAODownsample")
-				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
 				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor);
 
 			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
-				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
 				.readFrom(PassId::SSAODownsample, AttachmentRole::PrimaryColor)
 				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
 
 			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
-				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
 				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
 				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
@@ -114,13 +115,13 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		else
 		{
 			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
-				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
 				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor)
 				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
 
 			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
-				.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+				.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
 				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
 				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
