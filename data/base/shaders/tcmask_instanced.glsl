@@ -15,16 +15,15 @@ layout(std140) uniform globaluniforms {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
-	vec4 fogColor;
 	vec4 ShadowMapCascadeSplits;
 	int ShadowMapSize;
-	float fogEnd;
-	float fogStart;
 	float graphicsCycle;
-	int fogEnabled;
 	int viewportWidth;
 	int viewportHeight;
 	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
+	float pad2;
 };
 
 layout(std140) uniform meshuniforms {

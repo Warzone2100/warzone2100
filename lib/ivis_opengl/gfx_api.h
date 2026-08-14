@@ -920,12 +920,10 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
-		glm::vec4 fogColour;
-		float fogEnd;
-		float fogBegin;
 		float timeState; // graphicsCycle
-		int fogEnabled;
 		float mipLoadBias;
+		float pad0 = 0.f;
+		float pad1 = 0.f;
 	};
 
 	// Only change per mesh
@@ -1009,16 +1007,15 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
-		glm::vec4 fogColour;
 		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
 		int ShadowMapSize;
-		float fogEnd;
-		float fogBegin;
 		float timeState; // graphicsCycle
-		int fogEnabled;
 		int viewportWidth;
 		int viewportheight;
 		float mipLoadBias;
+		float pad0 = 0.f;
+		float pad1 = 0.f;
+		float pad2 = 0.f;
 	};
 
 	// Only change per mesh
@@ -1171,10 +1168,6 @@ namespace gfx_api
 		glm::vec4 paramYLight;
 		glm::mat4 unused;
 		glm::mat4 texture_matrix;
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
 		int texture0;
 		int texture1;
 	};
@@ -1201,9 +1194,6 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>
 	{
 		glm::mat4 transform_matrix;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
 	};
 
 	using TerrainDepthOnlyForDepthMap = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u32,
@@ -1272,17 +1262,15 @@ namespace gfx_api
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
-		glm::vec4 fog_colour;
 		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
 		int ShadowMapSize;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
 		int quality;
 		int viewportWidth;
 		int viewportheight;
 		float tessMaxLevel; // hardware-tessellated terrain only
 		float mipLoadBias;
+		float pad0 = 0.f;
+		float pad1 = 0.f;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>
@@ -1368,10 +1356,6 @@ namespace gfx_api
 		glm::vec4 paramY;
 		glm::mat4 texture_matrix;
 		glm::vec4 tessParams; // x = max tess level, y = viewport height (pixels)
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
-		float unused;
 	};
 	using TerrainDepthMapTessUniforms = constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS>;
 
@@ -1420,12 +1404,10 @@ namespace gfx_api
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
 		float timeSec;
 		float mipLoadBias;
+		float pad0 = 0.f;
+		float pad1 = 0.f;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1451,14 +1433,11 @@ namespace gfx_api
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
-		glm::vec4 fog_colour;
 		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
 		int ShadowMapSize;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
 		float timeSec;
 		float mipLoadBias;
+		float pad0 = 0.f;
 	};
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1483,12 +1462,10 @@ namespace gfx_api
 		glm::mat4 ModelUV2Matrix;
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
 		float timeSec;
 		float mipLoadBias;
+		float pad0 = 0.f;
+		float pad1 = 0.f;
 	};
 
 	using WaterClassicPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,

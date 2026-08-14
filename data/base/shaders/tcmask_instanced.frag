@@ -167,15 +167,6 @@ void main()
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
-
-		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
-	}
 
 	if (shieldEffect != 0)
 	{

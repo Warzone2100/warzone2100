@@ -40,7 +40,6 @@
 #include "ssao.h"
 #include "fog_pass.h"
 #include "terrain.h"
-#include "warzoneconfig.h"
 
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/piedraw.h"
@@ -106,10 +105,6 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 		return;
 	}
 
-	// SSAO path: lit scene without distance fog, then AO+fog in SSAOCompose.
-	const bool deferDistanceFog = war_getSSAO() && pie_GetFogEnabled();
-	pie_SetForwardDistanceFogEnabled(!deferDistanceFog);
-
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos = toVector3f(fc.cameraPos);
 	const Vector3f sunPos = toVector3f(-getTheSun());
@@ -135,8 +130,6 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos, fc.shadowCascadesInfo, shadowMap, MeshDepthPassMode::None);
 	}
 	wzPerfEnd(PERF_MODELS);
-
-	pie_SetForwardDistanceFogEnabled(true);
 
 	if (!gamePaused())
 	{

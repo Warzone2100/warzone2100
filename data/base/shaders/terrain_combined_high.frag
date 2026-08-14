@@ -178,13 +178,6 @@ void main()
 {
 	vec4 fragColor = main_bumpMapping();
 
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
-		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), clamp(fogFactor, 0.0, 1.0));
-	}
-
 	#ifdef NEWGL
 	FragColor = fragColor;
 	#else

@@ -55,10 +55,5 @@ void main()
 {
 	vec4 fragColor = main_classic();
 
-	if (fogEnabled > 0)
-	{
-		float fogFactor = (fogEnd - length(frag.posViewSpace)) / (fogEnd - fogStart);
-		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), clamp(fogFactor, 0.0, 1.0));
-	}
 	FragColor = fragColor;
 }

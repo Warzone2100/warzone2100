@@ -311,9 +311,8 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 		// Callers pass an identity view matrix, so world space and eye space coincide here
 		glm::vec4(0.f, 0.f, 0.f, 0.f),
 		glm::vec4(getDefaultSunPosition(), 0.f),
-		sceneColor, ambient, diffuse, specular, glm::vec4(0.f),
-		0.f, 0.f, 0.f, 0,
-		gfx_api::context::get().getMipLodBias()
+		sceneColor, ambient, diffuse, specular,
+		0.f, gfx_api::context::get().getMipLodBias()
 	};
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
@@ -1645,10 +1644,6 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
-	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor = pie_GetShaderDistanceFogEnabled() ? pielightToRGBAVec4(renderState.fogColour) : glm::vec4(0.f);
-
-
 	if (useInstancedRendering)
 	{
 
@@ -1656,9 +1651,9 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
-			sceneColor, ambient, diffuse, specular, fogColor,
+			sceneColor, ambient, diffuse, specular,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), pie_GetShaderDistanceFogEnabled(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias()
+			pie_GetShaderTime(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias()
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, shadowMap, drawParts, depthPassMode);
 	}
@@ -1667,9 +1662,8 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
 			glm::vec4(cameraPos, 0.f),
-			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), pie_GetShaderDistanceFogEnabled(),
-			gfx_api::context::get().getSceneMipLodBias()
+			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular,
+			pie_GetShaderTime(), gfx_api::context::get().getSceneMipLodBias()
 		};
 		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts);
 	}
