@@ -2,7 +2,11 @@
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float ssaoIntensity;
-	vec4 uvScaleClamp;
+	float padding0;
+	float padding1;
+	float padding2;
+	vec4 sceneUvScaleClamp;
+	vec4 aoUvScaleClamp;
 };
 
 layout(set = 1, binding = 0) uniform sampler2D sceneTexture;
@@ -14,10 +18,11 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec2 uv = clamp(texCoords * uvScaleClamp.xy, vec2(0.0), uvScaleClamp.zw);
-	vec3 scene = texture(sceneTexture, uv).rgb;
-	float ao = texture(ssaoTexture, uv).r;
-	float weight = texture(prepassNormals, uv).a;
+	vec2 sceneUv = clamp(texCoords * sceneUvScaleClamp.xy, vec2(0.0), sceneUvScaleClamp.zw);
+	vec2 aoUv = clamp(texCoords * aoUvScaleClamp.xy, vec2(0.0), aoUvScaleClamp.zw);
+	vec3 scene = texture(sceneTexture, sceneUv).rgb;
+	float ao = texture(ssaoTexture, aoUv).r;
+	float weight = texture(prepassNormals, sceneUv).a;
 	vec3 litAo = scene * mix(1.0, ao, ssaoIntensity * weight);
 	FragColor = vec4(litAo, 1.0);
 }

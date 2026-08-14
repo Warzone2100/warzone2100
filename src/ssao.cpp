@@ -222,13 +222,15 @@ void drawSSAOBlur(
 	gfx_api::abstract_texture* occlusionTexture,
 	gfx_api::abstract_texture* depthTexture,
 	const glm::vec2& blurDirection,
+	gfx_api::PipelineSurfaceId occlusionSurface,
 	gfx_api::buffer* fullscreenTriVBO)
 {
 	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
 	constants.blurDirection = blurDirection;
 	constants.depthSigma = s_tuning.blurDepthSigma;
 	constants.tapPairs = static_cast<float>(activeSettings().blurTapPairs);
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(occlusionSurface, constants.occlusionUvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.depthUvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
 	gfx_api::SSAOBlurPSO::get().bind_constants(constants);
@@ -260,7 +262,7 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis,
 	const glm::vec2 blurDirection = (axis == BlurAxis::Horizontal)
 		? glm::vec2(1.0f / usedW, 0.0f)
 		: glm::vec2(0.0f, 1.0f / usedH);
-	drawSSAOBlur(passCtx.getRead(0), passCtx.getRead(1), blurDirection, vbo);
+	drawSSAOBlur(passCtx.getRead(0), passCtx.getRead(1), blurDirection, writeSurface, vbo);
 }
 
 } // namespace
@@ -351,7 +353,8 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO> constants {};
 	constants.ssaoIntensity = s_tuning.intensity;
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SceneColor, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SceneColor, constants.sceneUvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(ssaoFinalAoSurface(), constants.aoUvScaleClamp);
 
 	gfx_api::SceneComposeSSAOPSO::get().bind();
 	gfx_api::SceneComposeSSAOPSO::get().bind_constants(constants);
