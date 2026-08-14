@@ -373,18 +373,21 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	}
 	{
 		auto optionInfo = OptionInfo("gfx.ssao", N_("SSAO"), N_("Screen-space ambient occlusion. Darkens creases and contact areas for stronger depth cues. May impact performance."));
-		auto valueChanger = OptionsDropdown<bool>::make(
+		auto valueChanger = OptionsDropdown<SSAO_MODE>::make(
 			[]() {
-				OptionChoices<bool> result;
+				OptionChoices<SSAO_MODE> result;
 				result.choices = {
-					{ _("Off"), "", false },
-					{ _("On"), "", true },
+					{ _("Off"), "", SSAO_MODE::OFF },
+					{ _("Low"), "", SSAO_MODE::LOW },
+					{ _("Normal"), "", SSAO_MODE::NORMAL },
+					{ _("High"), "", SSAO_MODE::HIGH },
+					{ _("Ultra"), "", SSAO_MODE::ULTRA },
 				};
-				result.setCurrentIdxForValue(war_getSSAO());
+				result.setCurrentIdxForValue(war_getSsaoMode());
 				return result;
 			},
 			[](const auto& newValue) -> bool {
-				war_setSSAO(newValue);
+				war_setSsaoMode(newValue);
 				ssao::applyConfigToGfx();
 				return true;
 			}, false

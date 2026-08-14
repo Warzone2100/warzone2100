@@ -1835,7 +1835,8 @@ namespace gfx_api
 		glm::mat4 projectionMatrix;
 		glm::vec4 params; // radius, biasFactor, minBias, rangeScale
 		glm::vec2 noiseScale;
-		glm::vec2 padding;
+		float sampleCount;
+		float padding;
 		glm::vec4 kernel[SSAO_KERNEL_SIZE];
 		glm::vec4 uvScaleClamp;
 	};
@@ -1858,7 +1859,7 @@ namespace gfx_api
 	{
 		glm::vec2 blurDirection;
 		float depthSigma;
-		float padding;
+		float tapPairs;
 		glm::vec4 uvScaleClamp;
 	};
 

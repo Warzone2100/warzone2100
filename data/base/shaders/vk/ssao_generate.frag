@@ -5,7 +5,8 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 projectionMatrix;
 	vec4 params;
 	vec2 noiseScale;
-	vec2 padding;
+	float sampleCount;
+	float padding;
 	vec4 kernel[16];
 	vec4 uvScaleClamp;
 };
@@ -57,8 +58,14 @@ void main()
 	float bias = max(params.y * abs(origin.z), params.z);
 	float maxDepthDiff = radius * params.w;
 	float occlusion = 0.0;
+	int sc = int(sampleCount + 0.5);
+	sc = max(sc, 1);
 	for (int i = 0; i < KERNEL_SIZE; ++i)
 	{
+		if (i >= sc)
+		{
+			continue;
+		}
 		vec3 samplePos = origin + (tbn * kernel[i].xyz) * radius;
 
 		vec4 offset = projectionMatrix * vec4(samplePos, 1.0);
@@ -83,7 +90,7 @@ void main()
 
 		// Attenuate each hit by N*occDir (actual occluder direction, not kernel offset).
 		// Occluders below the tangent plane contribute less, reducing false self-occlusion
-		// on flat mesh hulls. Still normalize by KERNEL_SIZE (LearnOpenGL-style) so sparse
+		// on flat mesh hulls. Still normalize by sampleCount (LearnOpenGL-style) so sparse
 		// hits cannot drive occlusion to zero and blow up contact shadows after blur.
 		vec3 occDelta = sampleViewPos - origin;
 		float occDistSq = dot(occDelta, occDelta);
@@ -96,6 +103,6 @@ void main()
 		occlusion += hit * rangeCheck * angleWeight;
 	}
 
-	occlusion = 1.0 - (occlusion / float(KERNEL_SIZE));
+	occlusion = 1.0 - (occlusion / float(sc));
 	FragColor = vec4(vec3(occlusion), 1.0);
 }

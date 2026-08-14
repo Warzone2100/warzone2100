@@ -823,7 +823,33 @@ bool loadConfig()
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
-	war_setSSAO(iniGetBool("ssao", false).value());
+	{
+		std::string ssaoValue = iniGetString("ssao", "off").value();
+		if (ssaoValue == "low")
+		{
+			war_setSsaoMode(SSAO_MODE::LOW);
+		}
+		else if (ssaoValue == "normal")
+		{
+			war_setSsaoMode(SSAO_MODE::NORMAL);
+		}
+		else if (ssaoValue == "high")
+		{
+			war_setSsaoMode(SSAO_MODE::HIGH);
+		}
+		else if (ssaoValue == "ultra")
+		{
+			war_setSsaoMode(SSAO_MODE::ULTRA);
+		}
+		else
+		{
+			if (ssaoValue != "off")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid ssao value: \"%s\"; using \"off\"", ssaoValue.c_str());
+			}
+			war_setSsaoMode(SSAO_MODE::OFF);
+		}
+	}
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
@@ -1063,7 +1089,14 @@ bool saveConfig()
 		case SMAA_MODE::ULTRA: iniSetString("smaa", "ultra"); break;
 	}
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
-	iniSetBool("ssao", war_getSSAO());
+	switch (war_getSsaoMode())
+	{
+		case SSAO_MODE::OFF: iniSetString("ssao", "off"); break;
+		case SSAO_MODE::LOW: iniSetString("ssao", "low"); break;
+		case SSAO_MODE::NORMAL: iniSetString("ssao", "normal"); break;
+		case SSAO_MODE::HIGH: iniSetString("ssao", "high"); break;
+		case SSAO_MODE::ULTRA: iniSetString("ssao", "ultra"); break;
+	}
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 

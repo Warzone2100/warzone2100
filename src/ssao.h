@@ -25,9 +25,24 @@
 #pragma once
 
 #include "lib/ivis_opengl/gfx_api.h"
+#include "warzoneconfig.h"
 
 namespace ssao
 {
+
+/// Discrete quality preset: on/off, sample/blur cost, and target-size divisors.
+/// Analog look (radius, bias, intensity) stays in Tuning inside ssao.cpp.
+struct SsaoSettings
+{
+	bool enabled = false;
+	uint32_t generateDivisor = 1; // 1 = full res; 2 = half; 4 = quarter
+	uint32_t blurDivisor = 1;     // >= generateDivisor (never upsample before blur)
+	int sampleCount = 16;         // 8 or 16, <= gfx_api::SSAO_KERNEL_SIZE
+	int blurTapPairs = 4;         // 2 → 5-tap, 4 → 9-tap
+};
+
+SsaoSettings settingsFor(SSAO_MODE mode);
+SsaoSettings activeSettings();
 
 void init();
 void shutdown();
