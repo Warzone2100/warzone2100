@@ -4706,10 +4706,17 @@ void display3d_fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstrac
 		(usedW - 0.5f) / texW, (usedH - 0.5f) / texH);
 }
 
+void display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId id, glm::vec4& uvScaleClamp)
+{
+	auto& ctx = gfx_api::context::get();
+	const auto used = ctx.usedPipelineSurfaceExtent(id);
+	display3d_fillUvScaleClamp(used.first, used.second, ctx.getPipelineSurface(id), uvScaleClamp);
+}
+
 void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
 {
-	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	display3d_fillUvScaleClamp(renderedDims.first, renderedDims.second, sourceTex, uvScaleClamp);
+	(void)sourceTex;
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SceneColor, uvScaleClamp);
 }
 
 void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)

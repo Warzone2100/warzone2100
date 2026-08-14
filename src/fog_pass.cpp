@@ -74,7 +74,7 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	gfx_api::constant_buffer_type<SHADER_SCENE_FOG> constants {};
 	constants.fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
 	constants.invProjectionMatrix = glm::inverse(fc.perspectiveMatrix);
-	display3d_fillSceneUvScaleClamp(scene, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.uvScaleClamp);
 	constants.fogBegin = renderState.fogBegin;
 	constants.fogEnd = renderState.fogEnd;
 

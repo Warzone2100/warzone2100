@@ -203,7 +203,7 @@ void drawSSAOGenerate(
 		static_cast<float>(genDims.second) / static_cast<float>(NOISE_TEXTURE_SIZE));
 	constants.sampleCount = static_cast<float>(activeSettings().sampleCount);
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
-	display3d_fillSceneUvScaleClamp(depthTexture, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.uvScaleClamp);
 
 	gfx_api::SSAOGeneratePSO::get().bind();
 	gfx_api::SSAOGeneratePSO::get().bind_constants(constants);
@@ -223,7 +223,7 @@ void drawSSAOBlur(
 	constants.blurDirection = blurDirection;
 	constants.depthSigma = s_tuning.blurDepthSigma;
 	constants.tapPairs = static_cast<float>(activeSettings().blurTapPairs);
-	display3d_fillSceneUvScaleClamp(depthTexture, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.uvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
 	gfx_api::SSAOBlurPSO::get().bind_constants(constants);
@@ -308,14 +308,8 @@ void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 		return;
 	}
 
-	auto& ctx = gfx_api::context::get();
-	const auto sceneDims = ctx.getSceneRenderTargetDimensions();
-	const uint32_t genDiv = ctx.getSSAOGenerateDivisor();
-	const uint32_t usedW = gfx_api::divideSurfaceExtent(sceneDims.first, genDiv);
-	const uint32_t usedH = gfx_api::divideSurfaceExtent(sceneDims.second, genDiv);
-
 	gfx_api::constant_buffer_type<SHADER_SSAO_DOWNSAMPLE> constants {};
-	display3d_fillUvScaleClamp(usedW, usedH, ao, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SSAORaw, constants.uvScaleClamp);
 
 	gfx_api::SSAODownsamplePSO::get().bind();
 	gfx_api::SSAODownsamplePSO::get().bind_constants(constants);
