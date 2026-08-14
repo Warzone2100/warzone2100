@@ -168,14 +168,19 @@ bool initNoiseTexture()
 	return s_noiseTexture != nullptr && s_noiseTexture->upload(0, noiseImage);
 }
 
-/// Size of the texture backing a pass read, falling back to the rendered scene extent.
-glm::vec2 ssaoSourceTextureSize(gfx_api::abstract_texture* sourceTex)
+/// Final AO buffer compose/blurV write: SSAOBlurred when downsample is in the graph, else SSAORaw.
+/// Uses allocated scene size so it matches topology, not dyn-res used extents.
+gfx_api::PipelineSurfaceId ssaoFinalAoSurface()
 {
-	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
-	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTex).value_or(renderedDims);
-	return glm::vec2(
-		static_cast<float>(std::max<uint32_t>(textureDims.first, 1)),
-		static_cast<float>(std::max<uint32_t>(textureDims.second, 1)));
+	auto& ctx = gfx_api::context::get();
+	const auto scene = ctx.getPipelineSurfaceDimensions(gfx_api::PipelineSurfaceId::SceneColor)
+		.value_or(std::pair<uint32_t, uint32_t>{0, 0});
+	if (gfx_api::ssaoBlurIsCoarser(scene.first, scene.second,
+		ctx.getSSAOGenerateDivisor(), ctx.getSSAOBlurDivisor()))
+	{
+		return gfx_api::PipelineSurfaceId::SSAOBlurred;
+	}
+	return gfx_api::PipelineSurfaceId::SSAORaw;
 }
 
 void drawSSAOGenerate(
@@ -239,7 +244,8 @@ enum class BlurAxis
 	Vertical,
 };
 
-void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
+void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis,
+	gfx_api::PipelineSurfaceId writeSurface)
 {
 	ASSERT(passCtx.readCount() == 2, "SSAO blur: occlusion + depth");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
@@ -247,12 +253,13 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 	{
 		return;
 	}
-	// The shader steps taps in texture-space UVs, so one tap is one texel of the occlusion
-	// texture, which stays wider than the rendered region when render scaling is active.
-	const glm::vec2 texSize = ssaoSourceTextureSize(passCtx.getRead(0));
+	// Taps are in pass texCoord space (0-1 over the used occlusion viewport).
+	const auto used = gfx_api::context::get().usedPipelineSurfaceExtent(writeSurface);
+	const float usedW = static_cast<float>(std::max(used.first, 1u));
+	const float usedH = static_cast<float>(std::max(used.second, 1u));
 	const glm::vec2 blurDirection = (axis == BlurAxis::Horizontal)
-		? glm::vec2(1.0f / texSize.x, 0.0f)
-		: glm::vec2(0.0f, 1.0f / texSize.y);
+		? glm::vec2(1.0f / usedW, 0.0f)
+		: glm::vec2(0.0f, 1.0f / usedH);
 	drawSSAOBlur(passCtx.getRead(0), passCtx.getRead(1), blurDirection, vbo);
 }
 
@@ -321,12 +328,12 @@ void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
 {
-	recordBlur(passCtx, BlurAxis::Horizontal);
+	recordBlur(passCtx, BlurAxis::Horizontal, gfx_api::PipelineSurfaceId::SSAOBlurH);
 }
 
 void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 {
-	recordBlur(passCtx, BlurAxis::Vertical);
+	recordBlur(passCtx, BlurAxis::Vertical, ssaoFinalAoSurface());
 }
 
 void recordCompose(const gfx_api::RenderPassContext& passCtx)
@@ -344,7 +351,7 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO> constants {};
 	constants.ssaoIntensity = s_tuning.intensity;
-	display3d_fillSceneUvScaleClamp(scene, constants.uvScaleClamp);
+	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SceneColor, constants.uvScaleClamp);
 
 	gfx_api::SceneComposeSSAOPSO::get().bind();
 	gfx_api::SceneComposeSSAOPSO::get().bind_constants(constants);
