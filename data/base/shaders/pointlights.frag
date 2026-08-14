@@ -1,14 +1,5 @@
-#define WZ_MAX_POINT_LIGHTS 0
-#define WZ_MAX_INDEXED_POINT_LIGHTS 0
-#define WZ_BUCKET_DIMENSION 0
-
-uniform vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
-uniform vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
-uniform ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
-uniform ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
-uniform int bucketDimensionUsed;
-uniform int viewportWidth;
-uniform int viewportHeight;
+// The light arrays, the bucket grid and the viewport dimensions all arrive in the
+// including stage's uniform block, which must be declared before this file.
 
 // See https://lisyarus.github.io/blog/graphics/2022/07/30/point-light-attenuation.html for explanation
 // we want something that looks somewhat physically correct, but must absolutely be 0 past range

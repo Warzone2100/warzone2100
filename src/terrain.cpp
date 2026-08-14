@@ -2056,9 +2056,12 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed), gfx_api::context::get().getSceneMipLodBias()
+		pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias()
 	};
-	PSO::get().set_uniforms(uniforms);
+	gfx_api::PointLightsUniforms pointLightUniforms = {
+		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+	};
+	PSO::get().set_uniforms(uniforms, pointLightUniforms);
 
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -2106,9 +2109,12 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed), gfx_api::context::get().getSceneMipLodBias()
+		pie_GetShaderDistanceFogEnabled(), renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias()
 	};
-	PSO::get().set_uniforms(uniforms);
+	gfx_api::PointLightsUniforms pointLightUniforms = {
+		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+	};
+	PSO::get().set_uniforms(uniforms, pointLightUniforms);
 
 	// This pass also writes terrain depth (there is no separate depth prepass under
 	// hardware tessellation, avoiding a second tessellated pass). Keep the prepass's

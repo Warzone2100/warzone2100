@@ -26,8 +26,10 @@
 uniform sampler2D Texture;
 
 // con0.x = exp2(-sharpness) per FsrRcasCon, con1.xy = input texel size
-uniform vec4 con0;
-uniform vec4 con1;
+layout(std140) uniform cbuffer {
+	vec4 con0;
+	vec4 con1;
+};
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

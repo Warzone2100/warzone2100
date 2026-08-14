@@ -1,8 +1,9 @@
-// common parts of terrainDecails.vert and .frag shaders
+// Constants shared by the terrain decals vertex, tessellation and fragment stages.
+// Member order must match gfx_api::TerrainCombinedUniforms exactly.
 
 #include "wz_shader_constants.glsl"
 
-layout(std140, set = 0, binding = 0) uniform cbuffer {
+layout(std140) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
 	mat4 ViewMatrix;
 	mat4 ModelUVLightmapMatrix;
@@ -27,32 +28,10 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float WZ_MIP_LOAD_BIAS;
 };
 
-layout(std140, set = 1, binding = 0) uniform pointlights {
+layout(std140) uniform pointlights {
 	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
 	int bucketDimensionUsed;
-};
-
-
-// interpolated data. location count = 10
-struct FragData {
-	vec2 uvLightmap;
-	vec2 uvGround;
-	vec2 uvDecal;
-	vec4 groundWeights;
-	// In tangent space
-	vec3 groundLightDir;
-	vec3 groundHalfVec;
-	mat2 decal2groundMat2;
-	// for Shadows
-	vec3 posModelSpace;
-	vec3 posViewSpace;
-};
-
-// non-interpolated data
-struct FragFlatData {
-	int tileNo;
-	uvec4 grounds;
 };

@@ -6,9 +6,19 @@
 
 uniform sampler2D lightmap_tex;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	vec4 paramx1;
+	vec4 paramy1;
+	vec4 paramx2;
+	vec4 paramy2;
+	mat4 textureMatrix1;
+	mat4 textureMatrix2;
+	vec4 fogColor;
+	int fogEnabled;
+	float fogEnd;
+	float fogStart;
+};
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

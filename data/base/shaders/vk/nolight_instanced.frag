@@ -3,7 +3,7 @@
 
 #include "tcmask_instanced.glsl"
 
-layout(set = 2, binding = 0) uniform sampler2D Texture;
+layout(set = 3, binding = 0) uniform sampler2D Texture;
 
 layout(location = 0) in vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 layout(location = 1) in vec4 colour;

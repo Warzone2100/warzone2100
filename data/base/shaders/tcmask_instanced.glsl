@@ -1,9 +1,10 @@
-// common parts of tcmask/nolight_instanced.vert and .frag shaders
+// Constants shared by the instanced model vertex and fragment stages.
+// Member order must match gfx_api::Draw3DShapeInstancedGlobalUniforms and
+// gfx_api::Draw3DShapeInstancedPerMeshUniforms exactly.
 
 #include "wz_shader_constants.glsl"
 
-layout(std140, set = 0, binding = 0) uniform globaluniforms
-{
+layout(std140) uniform globaluniforms {
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;
 	mat4 ModelUVLightmapMatrix;
@@ -24,11 +25,9 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	int viewportWidth;
 	int viewportHeight;
 	float WZ_MIP_LOAD_BIAS;
-
 };
 
-layout(std140, set = 1, binding = 0) uniform meshuniforms
-{
+layout(std140) uniform meshuniforms {
 	int tcmask;
 	int normalmap;
 	int specularmap;
@@ -36,7 +35,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int shieldEffect;
 };
 
-layout(std140, set = 2, binding = 0) uniform pointlights {
+layout(std140) uniform pointlights {
 	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];

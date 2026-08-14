@@ -9,9 +9,7 @@
 // a vertex buffer binding and thus
 // simplifies C++ code.
 
-uniform mat4 transformationMatrix;
-uniform vec2 tuv_offset;
-uniform vec2 tuv_scale;
+#include "rect_common.glsl"
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;

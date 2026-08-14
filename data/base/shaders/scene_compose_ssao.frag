@@ -3,13 +3,15 @@
 
 #include "ssao_view_common.glsl"
 
-uniform float ssaoIntensity;
-uniform vec4 fogColor;
-uniform float fogStart;
-uniform float fogEnd;
-uniform int fogEnabled;
-uniform mat4 invProjectionMatrix;
-uniform vec4 uvScaleClamp;
+layout(std140) uniform cbuffer {
+	float ssaoIntensity;
+	float fogStart;
+	float fogEnd;
+	int fogEnabled;
+	vec4 fogColor;
+	mat4 invProjectionMatrix;
+	vec4 uvScaleClamp;
+};
 uniform sampler2D sceneTexture;
 uniform sampler2D ssaoTexture;
 uniform sampler2D prepassNormals;

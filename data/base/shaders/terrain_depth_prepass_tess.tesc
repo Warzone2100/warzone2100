@@ -5,9 +5,12 @@
 
 layout(vertices = 4) out;
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 tessCameraMVP;
-uniform vec4 tessParams;
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 tessCameraMVP;
+	vec4 tessParams;
+};
 
 void main()
 {

@@ -979,6 +979,16 @@ namespace gfx_api
 	constexpr size_t bucket_dimension = 8;
 
 	// Only change once per frame
+	struct PointLightsUniforms
+	{
+		std::array<glm::vec4, max_lights> PointLightsPosition;
+		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
+		int bucketDimensionUsed;
+	};
+
+	// Only change once per frame
 	struct Draw3DShapeInstancedGlobalUniforms
 	{
 		glm::mat4 ProjectionMatrix;
@@ -1001,11 +1011,6 @@ namespace gfx_api
 		int viewportWidth;
 		int viewportheight;
 		float mipLoadBias;
-		std::array<glm::vec4, max_lights> PointLightsPosition;
-		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
-		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
-		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
-		int bucketDimensionUsed;
 	};
 
 	// Only change per mesh
@@ -1038,7 +1043,8 @@ namespace gfx_api
 	using Draw3DShapeInstanced = typename gfx_api::pipeline_state_helper<rasterizer_state<render_mode, depth_mode, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<
 	Draw3DShapeInstancedGlobalUniforms,
-	Draw3DShapeInstancedPerMeshUniforms
+	Draw3DShapeInstancedPerMeshUniforms,
+	PointLightsUniforms
 	>,
 	std::tuple<
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
@@ -1254,17 +1260,12 @@ namespace gfx_api
 		int viewportWidth;
 		int viewportheight;
 		float tessMaxLevel; // hardware-tessellated terrain only
-		std::array<glm::vec4, max_lights> PointLightsPosition;
-		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
-		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
-		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
-		int bucketDimensionUsed;
 		float mipLoadBias;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>
 	using TerrainCombinedTemplate = typename gfx_api::pipeline_state_helper<rasterizer_state<render_mode, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
-	std::tuple<TerrainCombinedUniforms>,
+	std::tuple<TerrainCombinedUniforms, PointLightsUniforms>,
 	std::tuple<
 	vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex, // TerrainDecalVertex struct
 	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
@@ -1302,7 +1303,7 @@ namespace gfx_api
 	// biases depth only, not the rasterized position.
 	template<SHADER_MODE shader>
 	using TerrainCombinedTessTemplate = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
-	std::tuple<TerrainCombinedUniforms>,
+	std::tuple<TerrainCombinedUniforms, PointLightsUniforms>,
 	std::tuple<
 	vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex, // TerrainDecalVertex struct
 	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,

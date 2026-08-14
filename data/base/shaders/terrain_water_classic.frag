@@ -2,16 +2,12 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-uniform float WZ_MIP_LOAD_BIAS;
+#include "terrain_water_classic.glsl"
 //
 
 uniform sampler2D lightmap_tex;
 uniform sampler2D tex2;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

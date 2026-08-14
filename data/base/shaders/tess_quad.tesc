@@ -3,7 +3,11 @@
 
 layout(vertices = 4) out;
 
-uniform float tessLevel;
+layout(std140) uniform cbuffer {
+	mat4 transformationMatrix;
+	vec4 color;
+	float tessLevel;
+};
 
 void main()
 {

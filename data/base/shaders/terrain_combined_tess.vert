@@ -4,6 +4,8 @@
 // Passthrough of the tile-corner control points to the tessellation stages.
 // All real work happens in terrain_combined_tess.tese.
 
+#include "terrain_combined.glsl"
+
 in vec4 vertex;
 in vec2 vertexTexCoord;
 in vec4 vertexTangent;

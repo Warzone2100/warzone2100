@@ -9,7 +9,17 @@
 
 layout(quads, fractional_odd_spacing, ccw) in;
 
-uniform mat4 ModelViewProjectionMatrix;
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	mat4 tessCameraMVP;
+	vec4 paramx2;
+	vec4 paramy2;
+	mat4 textureMatrix2;
+	vec4 tessParams;
+	int fogEnabled;
+	float fogEnd;
+	float fogStart;
+};
 
 uniform sampler2D terrainBakedHeight;
 uniform sampler2D terrainBakedOffset;

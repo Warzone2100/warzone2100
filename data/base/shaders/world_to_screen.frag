@@ -6,7 +6,9 @@ uniform sampler2D Texture;
 // xy scales full-texture UVs down to the rendered sub-rect of the source,
 // zw clamps just inside its edge so bilinear filtering cannot bleed in
 // texels from the unrendered region (both are identity-like at full size)
-uniform vec4 uvScaleClamp;
+layout(std140) uniform cbuffer {
+	vec4 uvScaleClamp;
+};
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL

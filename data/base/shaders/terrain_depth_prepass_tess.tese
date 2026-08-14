@@ -5,8 +5,12 @@
 
 layout(quads, fractional_odd_spacing, ccw) in;
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 ViewMatrix;
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 tessCameraMVP;
+	vec4 tessParams;
+};
 uniform sampler2D terrainBakedHeight;
 uniform sampler2D terrainBakedOffset;
 uniform sampler2D terrainBakedNormal;

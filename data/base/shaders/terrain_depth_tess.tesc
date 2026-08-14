@@ -5,9 +5,17 @@
 
 layout(vertices = 4) out;
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 tessCameraMVP; // the MAIN camera's MVP: tessellation factors must match the color pass
-uniform vec4 tessParams; // x = max tess level, y = viewport height (pixels)
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	mat4 tessCameraMVP;
+	vec4 paramx2;
+	vec4 paramy2;
+	mat4 textureMatrix2;
+	vec4 tessParams;
+	int fogEnabled;
+	float fogEnd;
+	float fogStart;
+};
 
 void main()
 {

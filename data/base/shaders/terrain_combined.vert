@@ -3,16 +3,13 @@
 
 // Aspects of shader limiting GLSL compat:
 // - "flat" interpolation_qualifier (Desktop GLSL 130+, or GLES 300+)
+#include "terrain_combined.glsl"
+
 #if (!defined(GL_ES) && (__VERSION__ < 130)) || (defined(GL_ES) && (__VERSION__ < 300))
 #error Unsupported version of GLSL
 #endif
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 ModelUVLightmapMatrix;
-uniform mat4 ViewMatrix;
 
-uniform vec4 cameraPos; // in modelSpace
-uniform vec4 sunPos; // in modelSpace, normalized
 
 in vec4 vertex;
 in vec2 vertexTexCoord;

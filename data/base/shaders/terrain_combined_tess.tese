@@ -5,16 +5,13 @@
 // terrain_combined.vert, so the existing terrain fragment shaders are reused
 // unchanged.
 
+#include "terrain_combined.glsl"
+
 #include "terrain_tess.glsl"
 
 layout(quads, fractional_odd_spacing, ccw) in;
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 ModelUVLightmapMatrix;
-uniform mat4 ViewMatrix;
 
-uniform vec4 cameraPos; // in modelSpace
-uniform vec4 sunPos; // in modelSpace, normalized
 
 uniform sampler2D terrainBakedHeight;
 uniform sampler2D terrainBakedOffset;

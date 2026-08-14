@@ -3,7 +3,11 @@
 
 layout(quads, equal_spacing, ccw) in;
 
-uniform mat4 transformationMatrix;
+layout(std140) uniform cbuffer {
+	mat4 transformationMatrix;
+	vec4 color;
+	float tessLevel;
+};
 
 out vec2 tessUV;
 

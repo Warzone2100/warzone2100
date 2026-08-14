@@ -1,13 +1,12 @@
 // Version directive is set by Warzone when loading the shader
 // (Hardware-tessellated terrain - requires GLSL 4.00 core, or 3.30 core + GL_ARB_tessellation_shader)
 
+#include "terrain_combined.glsl"
+
 #include "terrain_tess.glsl"
 
 layout(vertices = 4) out;
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform float tessMaxLevel;
-uniform int viewportHeight;
 
 in vec2 tcTexCoord[];
 in vec4 tcTangent[];
