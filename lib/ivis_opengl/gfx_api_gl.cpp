@@ -1241,7 +1241,7 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 	return version;
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants) :
+gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
@@ -1311,7 +1311,6 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	}
 
 	build_program(ctx,
-				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable,
 				  programInfo.friendly_name,
 				  vertexShaderHeader.c_str(),
 				  programInfo.vertex_file,
@@ -1855,75 +1854,6 @@ void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string,
 
 }
 
-static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
-{
-	if (shaderContents == nullptr)
-	{
-		debug(LOG_INFO, "shaderContents is null");
-		return {};
-	}
-
-	std::unordered_set<std::string> uniformNames;
-
-	// White space: the space character, horizontal tab, vertical tab, form feed, carriage-return, and line-feed.
-	const char glsl_whitespace_chars[] = " \t\v\f\r\n";
-
-	const auto re = std::regex("uniform.*(?![^\\{]*\\})(?=[=\\[;])", std::regex_constants::ECMAScript);
-
-	std::cregex_iterator next(shaderContents, shaderContents + strlen(shaderContents), re);
-	std::cregex_iterator end;
-	while (next != end)
-	{
-		std::cmatch uniformLineMatch = *next;
-		std::string uniformLineStr = uniformLineMatch.str();
-
-		// trim glsl whitespace chars from beginning / end
-		uniformLineStr = uniformLineStr.substr(uniformLineStr.find_first_not_of(glsl_whitespace_chars));
-		uniformLineStr.erase(uniformLineStr.find_last_not_of(glsl_whitespace_chars)+1);
-
-		size_t lastWhitespaceIdx = uniformLineStr.find_last_of(glsl_whitespace_chars);
-		if (lastWhitespaceIdx != std::string::npos)
-		{
-			std::string uniformName = uniformLineMatch.str().substr(lastWhitespaceIdx + 1);
-			if (!uniformName.empty())
-			{
-				uniformNames.insert(uniformName);
-			}
-		}
-		next++;
-	}
-
-	return uniformNames;
-}
-
-static std::tuple<std::string, std::unordered_map<std::string, std::string>> renameDuplicateFragmentShaderUniforms(const std::string& vertexShaderContents, const std::string& fragmentShaderContents)
-{
-	std::unordered_map<std::string, std::string> duplicateFragmentUniformNameMap;
-
-	const auto vertexUniformNames = getUniformNamesFromSource(vertexShaderContents.c_str());
-	const auto fragmentUniformNames = getUniformNamesFromSource(fragmentShaderContents.c_str());
-
-	std::string modifiedFragmentShaderSource = fragmentShaderContents;
-	for (const auto& fragmentUniform : fragmentUniformNames)
-	{
-		if (vertexUniformNames.count(fragmentUniform) > 0)
-		{
-			// duplicate uniform name found - rename it!
-			const std::string replacementUniformName = std::string("wzfix_frag_") + fragmentUniform;
-			duplicateFragmentUniformNameMap[fragmentUniform] = replacementUniformName;
-
-			// and replace it in the fragment shader source
-			modifiedFragmentShaderSource = std::regex_replace(
-				modifiedFragmentShaderSource,
-				std::regex(std::string("\\b") + fragmentUniform + "\\b", std::regex_constants::ECMAScript),
-				replacementUniformName
-			);
-		}
-	}
-
-	return std::tuple<std::string, std::unordered_map<std::string, std::string>>(modifiedFragmentShaderSource, duplicateFragmentUniformNameMap);
-}
-
 static bool regex_replace_wrapper(std::string& input, const std::regex& re, const std::string& replace, std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
 {
 	std::string result;
@@ -2000,7 +1930,7 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
 }
 
-void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+void gl_pipeline_state_object::build_program(gl_context& ctx,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
@@ -2142,19 +2072,6 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 			fragmentShader = shader;
-
-			if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
-			{
-				// rename duplicate uniforms
-				// to avoid conflicting uniform precision issues
-				std::unordered_map<std::string, std::string> fragmentUniformNameChanges;
-				std::tie(fragmentShaderStr, fragmentUniformNameChanges) = renameDuplicateFragmentShaderUniforms(vertexShaderContents, fragmentShaderStr);
-
-				for (const auto& it : fragmentUniformNameChanges)
-				{
-					debug(LOG_3D, " - Renamed duplicate uniform in fragment shader: %s -> %s", it.first.c_str(), it.second.c_str());
-				}
-			}
 
 			patchFragmentShaderTextureGather(fragmentShaderStr, ctx.hasTextureGatherSupport);
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
@@ -2489,7 +2406,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 		psoID = existingPSOId->psoID;
 	}
 
-	auto pipeline = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, createInfo, shadowConstants);
+	auto pipeline = new gl_pipeline_state_object(*this, createInfo, shadowConstants);
 	if (!psoID.has_value())
 	{
 		createdPipelines.emplace_back(createInfo);
@@ -3972,8 +3889,6 @@ bool gl_context::initGLContext()
 
 #endif
 
-	fragmentHighpFloatAvailable = true;
-	fragmentHighpIntAvailable = true;
 	if (gles)
 	{
 		GLboolean bShaderCompilerSupported = GL_FALSE;
@@ -3984,21 +3899,16 @@ bool gl_context::initGLContext()
 			return false;
 		}
 
+		// OpenGL ES 3.0 requires fragment shaders to support high precision,
+		// so only a non-conforming / broken driver should report otherwise.
 		int highpFloatRange[2] = {0}, highpFloatPrecision = 0;
 		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, highpFloatRange, &highpFloatPrecision);
-		fragmentHighpFloatAvailable = highpFloatPrecision != 0;
-
 		int highpIntRange[2] = {0}, highpIntPrecision = 0;
 		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_INT, highpIntRange, &highpIntPrecision);
-		fragmentHighpIntAvailable = highpFloatRange[1] != 0;
 
-		if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
+		if (highpFloatPrecision == 0 || highpIntRange[1] == 0)
 		{
-			// This can lead to a uniform precision mismatch between the vertex and fragment shaders
-			// (if there are duplicate uniform names).
-			//
-			// This is now handled with a workaround when processing shaders, so just log it.
-			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", highpFloatPrecision, highpIntRange[1]);
 			// FUTURE TODO: return false;
 		}
 	}
@@ -5838,7 +5748,7 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 				(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
 			{
 				delete pipelineInfo.pso;
-				pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, pipelineInfo.createInfo, shadowConstants);
+				pipelineInfo.pso = new gl_pipeline_state_object(*this, pipelineInfo.createInfo, shadowConstants);
 				anyBroken = anyBroken || pipelineInfo.pso->broken;
 			}
 		}
@@ -5869,7 +5779,7 @@ bool gl_context::debugRecompileAllPipelines()
 		if (pipelineInfo.pso)
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, pipelineInfo.createInfo, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, pipelineInfo.createInfo, shadowConstants);
 		}
 	}
 	return true;

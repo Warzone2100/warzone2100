@@ -292,7 +292,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	std::vector<std::pair<gl_uniform_block_allocator::Allocation, GLsizeiptr>> uniformBlockRanges;
 	gl_context* owningContext = nullptr;
 
-	gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants);
+	gl_pipeline_state_object(gl_context& ctx, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -321,7 +321,6 @@ private:
 	void uploadUniformBlock(size_t slot, const void* buffer, size_t size);
 
 	void build_program(gl_context& ctx,
-					   bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
@@ -343,8 +342,6 @@ struct gl_context final : public gfx_api::context
 	gfx_api::lighting_constants shadowConstants;
 
 	bool gles = false;
-	bool fragmentHighpFloatAvailable = true;
-	bool fragmentHighpIntAvailable = true;
 
 	// Uniform block limits, queried once at initialization. Uniform buffer objects are
 	// core in both OpenGL 3.1 and OpenGL ES 3.0, so only the limits vary.
