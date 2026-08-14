@@ -247,6 +247,13 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 
+	/// One buffer per uniform block slot, for programs that transport their constants
+	/// as std140 uniform blocks instead of loose uniforms. Empty for the rest.
+	std::vector<GLuint> uniformBlockBuffers;
+	/// The size the driver reports for each block, which is the struct rounded up to a
+	/// multiple of 16. A bound buffer has to cover it in full.
+	std::vector<GLint> uniformBlockSizes;
+
 	template<SHADER_MODE shader>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_binding_entry();
 
@@ -273,6 +280,13 @@ private:
 	static void printProgramInfoLog(code_part part, GLuint program);
 
 	void getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind);
+
+	/// Point each named block at the binding index matching its slot. Returns false if a
+	/// block exceeds what the driver accepts.
+	bool setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName);
+
+	/// Replace the contents of a uniform block slot.
+	void uploadUniformBlock(size_t slot, const void* buffer, size_t size);
 
 	void build_program(gl_context& ctx,
 					   bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
@@ -363,6 +377,13 @@ struct gl_context final : public gfx_api::context
 	bool fragmentHighpFloatAvailable = true;
 	bool fragmentHighpIntAvailable = true;
 
+	// Uniform block limits, queried once at initialization. Uniform buffer objects are
+	// core in both OpenGL 3.1 and OpenGL ES 3.0, so only the limits vary.
+	GLint maxUniformBlockSize = 0;
+	GLint maxVertexUniformBlocks = 0;
+	GLint maxFragmentUniformBlocks = 0;
+	GLint uniformBufferOffsetAlignment = 1;
+
 	gl_context(bool _debug) : khr_debug(_debug) {}
 	~gl_context();
 
@@ -452,6 +473,7 @@ struct gl_context final : public gfx_api::context
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
+	void initUniformBufferLimits();
 	bool initInstancedFunctions();
 	bool initCheckBorderClampSupport();
 	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
