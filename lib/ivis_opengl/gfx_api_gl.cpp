@@ -903,6 +903,8 @@ struct program_data
 	std::string tess_evaluation_file = {};
 	// the highest GLSL ES version this program may target (most shaders are only tested up to 300 es)
 	SHADER_VERSION_ES maxShaderVersionES = VERSION_ES_300;
+	// std140 uniform block names, in the order the pipeline supplies its constant buffers
+	std::vector<std::string> uniform_block_names = {};
 };
 
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
@@ -1374,6 +1376,23 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 				  programInfo.additional_samplers,
 				  shadowConstants);
 
+	if (!programInfo.uniform_block_names.empty())
+	{
+		// Constants travel as std140 uniform blocks: slot order matches the pipeline's
+		// constant buffer order, so no per type binding table is involved.
+		if (!setupUniformBlocks(ctx, programInfo.uniform_block_names, programInfo.friendly_name))
+		{
+			broken = true;
+		}
+		for (size_t slot = 0; slot < programInfo.uniform_block_names.size(); ++slot)
+		{
+			uniform_bind_functions.push_back([this, slot](const void* buffer, size_t size) {
+				this->uploadUniformBlock(slot, buffer, size);
+			});
+		}
+		return;
+	}
+
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
 		uniform_setting_func<gfx_api::Draw3DShapeGlobalUniforms>(),
@@ -1691,6 +1710,67 @@ void gl_pipeline_state_object::printProgramInfoLog(code_part part, GLuint progra
 		debug(part, "Program info log: %s", infoLog);
 		free(infoLog);
 	}
+}
+
+bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName)
+{
+	uniformBlockBuffers.resize(blockNames.size(), 0);
+	uniformBlockSizes.resize(blockNames.size(), 0);
+	glGenBuffers(static_cast<GLsizei>(uniformBlockBuffers.size()), uniformBlockBuffers.data());
+
+	bool success = true;
+	for (size_t slot = 0; slot < blockNames.size(); ++slot)
+	{
+		const GLuint blockIndex = glGetUniformBlockIndex(program, blockNames[slot].c_str());
+		if (blockIndex == GL_INVALID_INDEX)
+		{
+			debug(LOG_ERROR, "%s: uniform block \"%s\" is missing from the linked program", programName.c_str(), blockNames[slot].c_str());
+			success = false;
+			continue;
+		}
+
+		GLint blockSize = 0;
+		glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+		if (blockSize > ctx.maxUniformBlockSize)
+		{
+			debug(LOG_ERROR, "%s: uniform block \"%s\" needs %d bytes, more than the %d the driver allows",
+				programName.c_str(), blockNames[slot].c_str(), blockSize, ctx.maxUniformBlockSize);
+			success = false;
+			continue;
+		}
+
+		uniformBlockSizes[slot] = blockSize;
+		glUniformBlockBinding(program, blockIndex, static_cast<GLuint>(slot));
+	}
+
+	return success;
+}
+
+void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffer, size_t size)
+{
+	ASSERT_OR_RETURN(, slot < uniformBlockBuffers.size(), "Uniform block slot %zu is out of range (have %zu)", slot, uniformBlockBuffers.size());
+
+	// std140 rounds a block up to a multiple of 16, so it can be larger than the struct
+	// that fills it. A buffer bound to a block has to cover the whole block, so allocate
+	// the larger of the two and leave the tail padding uninitialized, since no member
+	// reads from it.
+	const GLsizeiptr dataSize = static_cast<GLsizeiptr>(size);
+	const GLsizeiptr storeSize = std::max<GLsizeiptr>(dataSize, uniformBlockSizes[slot]);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, uniformBlockBuffers[slot]);
+	// Respecifying the whole store lets the driver hand back fresh memory rather than
+	// stall waiting for a draw that is still reading the previous contents.
+	if (storeSize > dataSize)
+	{
+		glBufferData(GL_UNIFORM_BUFFER, storeSize, nullptr, GL_STREAM_DRAW);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, dataSize, buffer);
+	}
+	else
+	{
+		glBufferData(GL_UNIFORM_BUFFER, storeSize, buffer, GL_STREAM_DRAW);
+	}
+	glBindBufferBase(GL_UNIFORM_BUFFER, static_cast<GLuint>(slot), uniformBlockBuffers[slot]);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind)
@@ -2259,6 +2339,10 @@ gl_pipeline_state_object::~gl_pipeline_state_object()
 	if (this->tessEvalShader) glDeleteShader(this->tessEvalShader);
 	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
 	glDeleteProgram(this->program);
+	if (!uniformBlockBuffers.empty())
+	{
+		glDeleteBuffers(static_cast<GLsizei>(uniformBlockBuffers.size()), uniformBlockBuffers.data());
+	}
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
@@ -3868,6 +3952,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	multisamples = (antialiasing > 0) ? static_cast<uint32_t>(antialiasing) : 0;
 
 	initPixelFormatsSupport();
+	initUniformBufferLimits();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
 	hasBorderClampSupport = initCheckBorderClampSupport();
@@ -5536,6 +5621,17 @@ void gl_context::initPixelFormatsSupport()
 }
 
 #endif
+
+void gl_context::initUniformBufferLimits()
+{
+	maxUniformBlockSize = wz_GetGLIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, 0);
+	maxVertexUniformBlocks = wz_GetGLIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, 0);
+	maxFragmentUniformBlocks = wz_GetGLIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, 0);
+	uniformBufferOffsetAlignment = std::max<GLint>(wz_GetGLIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, 1), 1);
+
+	debug(LOG_3D, "Uniform blocks: max size %d bytes, %d vertex / %d fragment blocks, offset alignment %d",
+		maxUniformBlockSize, maxVertexUniformBlocks, maxFragmentUniformBlocks, uniformBufferOffsetAlignment);
+}
 
 bool gl_context::initInstancedFunctions()
 {
