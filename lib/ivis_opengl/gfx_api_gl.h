@@ -231,6 +231,45 @@ public:
 
 struct gl_context;
 
+
+/// Linear allocator over a chain of uniform buffer objects (like the Vulkan backend's BlockBufferAllocator).
+///
+/// Callers must rotate between one allocator per frame in flight, so the blocks being written were last read by the GPU enough frames ago.
+/// (Nothing else should write to its buffers, since multiple programs may share one buffer object.)
+struct gl_uniform_block_allocator
+{
+public:
+	struct Allocation
+	{
+		GLuint buffer = 0;
+		GLintptr offset = 0;
+		bool valid() const { return buffer != 0; }
+	};
+
+	void init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_);
+	// Reserve an aligned range (growing the chain if the current block is full)
+	Allocation alloc(GLsizeiptr amount);
+	// Rewind for a new frame (consolidating or shrinking as needed)
+	void recycle();
+	void destroy();
+
+private:
+	struct Block
+	{
+		GLuint buffer = 0;
+		GLsizeiptr size = 0;
+	};
+	void allocateNewBlock(GLsizeiptr minimumSize);
+	void freeAllBlocks();
+
+	std::vector<Block> blocks;
+	GLsizeiptr currentWritePosInLastBlock = 0;
+	GLsizeiptr totalCapacity = 0;
+	GLsizeiptr minimumBlockSize = 0;
+	GLsizeiptr minimumFirstBlockSize = 0;
+	GLint alignment = 1;
+};
+
 struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 {
 	gfx_api::state_description desc;
@@ -247,12 +286,13 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 
-	/// One buffer per uniform block slot, for programs that transport their constants
-	/// as std140 uniform blocks instead of loose uniforms. Empty for the rest.
-	std::vector<GLuint> uniformBlockBuffers;
-	/// The size the driver reports for each block, which is the struct rounded up to a
-	/// multiple of 16. A bound buffer has to cover it in full.
+	// One buffer per uniform block slot.
+	// Driver reported size of each block, which a bound range must cover in full.
+	// (Zero means the linked program does not read that block.)
 	std::vector<GLint> uniformBlockSizes;
+	// The range each slot was last given, restored by bind().
+	std::vector<std::pair<gl_uniform_block_allocator::Allocation, GLsizeiptr>> uniformBlockRanges;
+	gl_context* owningContext = nullptr;
 
 	template<SHADER_MODE shader>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_binding_entry();
@@ -281,11 +321,11 @@ private:
 
 	void getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind);
 
-	/// Point each named block at the binding index matching its slot. Returns false if a
-	/// block exceeds what the driver accepts.
+	// Point each named block at the binding index matching its slot.
+	// Returns false if a block exceeds what the driver accepts.
 	bool setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName);
 
-	/// Replace the contents of a uniform block slot.
+	// Replace the contents of a uniform block slot.
 	void uploadUniformBlock(size_t slot, const void* buffer, size_t size);
 
 	void build_program(gl_context& ctx,
@@ -383,6 +423,18 @@ struct gl_context final : public gfx_api::context
 	GLint maxVertexUniformBlocks = 0;
 	GLint maxFragmentUniformBlocks = 0;
 	GLint uniformBufferOffsetAlignment = 1;
+
+	// One per (frames in flight + 1), so blocks written this frame were last read by
+	// the GPU a full frame ago and need no synchronization.
+	std::vector<gl_uniform_block_allocator> uniformBlockAllocators;
+	size_t currentUniformBlockAllocator = 0;
+	gl_uniform_block_allocator& activeUniformBlockAllocator() { return uniformBlockAllocators[currentUniformBlockAllocator]; }
+
+	// Bind a range, skipping when that index already holds it.
+	// (Pipelines restore their own ranges on every bind, so most restores ask for what is already bound.)
+	void bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
+	struct BoundUniformRange { GLuint buffer = 0; GLintptr offset = 0; GLsizeiptr size = 0; };
+	std::vector<BoundUniformRange> boundUniformRanges;
 
 	gl_context(bool _debug) : khr_debug(_debug) {}
 	~gl_context();
