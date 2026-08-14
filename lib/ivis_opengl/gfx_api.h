@@ -466,6 +466,11 @@ namespace gfx_api
 		}
 		/// Dimensions from the live resolved surface spec (nullopt if disabled / zero extent).
 		virtual optional<std::pair<uint32_t, uint32_t>> getPipelineSurfaceDimensions(PipelineSurfaceId id) const;
+		/// Sync inputs with sceneW/H replaced by this frame's used scene size (dyn-res fraction).
+		/// Drawable, shadow, enable flags, and SSAO divisors stay as last sync / allocation.
+		PipelineSurfaceSyncInputs usedSceneSyncInputs();
+		/// Catalog used extent for `id` (`MatchScene` / `MatchSceneDivided` track dyn-res).
+		std::pair<uint32_t, uint32_t> usedPipelineSurfaceExtent(PipelineSurfaceId id);
 		virtual bool isSceneMSAAEnabled() const { return false; }
 		virtual bool isSwapchainMSAAEnabled() const { return false; }
 		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
