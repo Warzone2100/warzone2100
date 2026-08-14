@@ -2049,7 +2049,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 
-	auto bucketLight = getCurrentLightingManager().getPointLightBuckets();
+	const auto& bucketLight = getCurrentLightingManager().getPointLightBuckets();
 	auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
@@ -2099,7 +2099,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 
-	auto bucketLight = getCurrentLightingManager().getPointLightBuckets();
+	const auto& bucketLight = getCurrentLightingManager().getPointLightBuckets();
 	auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,

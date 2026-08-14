@@ -122,14 +122,6 @@ static inline int32_t pielight_maptile_coord(int32_t worldCoord)
 	return worldCoord >> TILE_SHIFT;
 }
 
-struct TileCoordsHasher
-{
-	std::size_t operator()(const std::pair<int32_t, int32_t>& p) const
-	{
-		return std::hash<long long>()(static_cast<long long>(p.first) * (static_cast<long long>(INT_MAX) + 1) + p.second);
-	}
-};
-
 static float pointLightDistanceCalc(const renderingNew::LightingManager::CalculatedPointLight& a, const LIGHT& b)
 {
 	glm::vec3 pointLightVector = a.position - glm::vec3(b.position);
@@ -164,7 +156,6 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		[](const glm::vec3& in) { return in.z <= 1; }
 	};
 
-	std::unordered_map<std::pair<int32_t, int32_t>, std::vector<size_t>, TileCoordsHasher> tileRangeLights; // map tile coordinates to vector of culledLight indexes
 	constexpr size_t maxRangedLightsPerTile = 16;
 	constexpr size_t minLightRange = 5;
 	constexpr float distanceCalcCombineThreshold = 32.f;
@@ -173,6 +164,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	size_t tinyLightsSkipped = 0;
 
 	culledLights.clear();
+	tileRangeLights.clear();
 	for (const auto& light : data.lights)
 	{
 		if (culledLights.size() >= gfx_api::max_lights)
@@ -384,11 +376,11 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	currentPointLightBuckets = std::move(result);
 }
 
-static std::unique_ptr<ILightingManager> lightingManager;
+static ILightingManager* lightingManager = nullptr;
 
-void setLightingManager(std::unique_ptr<ILightingManager> manager)
+void setLightingManager(ILightingManager* manager)
 {
-	lightingManager = std::move(manager);
+	lightingManager = manager;
 }
 
 ILightingManager& getCurrentLightingManager()

@@ -156,6 +156,9 @@ static WzText txtShowOrders;
 static WzText droidText;
 
 static gfx_api::buffer* pScreenTriangleVBO = nullptr;
+/// Lighting managers, owned here and kept across frames (see the selection in drawTiles' caller)
+static std::unique_ptr<renderingNew::LightingManager> perPixelLightingManager;
+static std::unique_ptr<rendering1999::LightingManager> lightmapLightingManager;
 
 
 /********************  Variables  ********************/
@@ -1047,15 +1050,24 @@ void draw3DScene()
 
 	updateFogDistance(distance);
 
-	// Set light manager
+	// Set light manager. Both are kept alive across frames so the containers they cache
+	// internally keep their capacity instead of being rebuilt from empty every frame.
 	{
 		if (war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING)
 		{
-			setLightingManager(std::make_unique<renderingNew::LightingManager>());
+			if (!perPixelLightingManager)
+			{
+				perPixelLightingManager = std::make_unique<renderingNew::LightingManager>();
+			}
+			setLightingManager(perPixelLightingManager.get());
 		}
 		else
 		{
-			setLightingManager(std::make_unique<rendering1999::LightingManager>());
+			if (!lightmapLightingManager)
+			{
+				lightmapLightingManager = std::make_unique<rendering1999::LightingManager>();
+			}
+			setLightingManager(lightmapLightingManager.get());
 		}
 	}
 
@@ -1483,6 +1495,10 @@ void shutdown3DView_FullReset()
 	batchedObjectStatusRenderer.reset();
 
 	ssao::shutdown();
+
+	setLightingManager(nullptr);
+	perPixelLightingManager.reset();
+	lightmapLightingManager.reset();
 
 	delete pScreenTriangleVBO;
 	pScreenTriangleVBO = nullptr;
