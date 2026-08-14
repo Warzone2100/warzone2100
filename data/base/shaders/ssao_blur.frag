@@ -1,10 +1,10 @@
 // Version directive is set by Warzone when loading the shader
-// (This shader supports GLSL 1.20 - 1.50 core.)
+// (This shader supports GLSL 1.40 - 1.50 core.)
 
 layout(std140) uniform cbuffer {
 	vec2 blurDirection;
 	float depthSigma;
-	float padding;
+	float tapPairs;
 	vec4 uvScaleClamp;
 };
 uniform sampler2D occlusionTexture;
@@ -77,14 +77,27 @@ void main()
 	float result = texture(occlusionTexture, uv).r * WEIGHT0;
 	float weightSum = WEIGHT0;
 
-	accumulateTap(result, weightSum, uv + blurDirection * 1.0, centerDepth, WEIGHT1);
-	accumulateTap(result, weightSum, uv - blurDirection * 1.0, centerDepth, WEIGHT1);
-	accumulateTap(result, weightSum, uv + blurDirection * 2.0, centerDepth, WEIGHT2);
-	accumulateTap(result, weightSum, uv - blurDirection * 2.0, centerDepth, WEIGHT2);
-	accumulateTap(result, weightSum, uv + blurDirection * 3.0, centerDepth, WEIGHT3);
-	accumulateTap(result, weightSum, uv - blurDirection * 3.0, centerDepth, WEIGHT3);
-	accumulateTap(result, weightSum, uv + blurDirection * 4.0, centerDepth, WEIGHT4);
-	accumulateTap(result, weightSum, uv - blurDirection * 4.0, centerDepth, WEIGHT4);
+	int pairs = int(tapPairs + 0.5);
+	if (pairs >= 1)
+	{
+		accumulateTap(result, weightSum, uv + blurDirection * 1.0, centerDepth, WEIGHT1);
+		accumulateTap(result, weightSum, uv - blurDirection * 1.0, centerDepth, WEIGHT1);
+	}
+	if (pairs >= 2)
+	{
+		accumulateTap(result, weightSum, uv + blurDirection * 2.0, centerDepth, WEIGHT2);
+		accumulateTap(result, weightSum, uv - blurDirection * 2.0, centerDepth, WEIGHT2);
+	}
+	if (pairs >= 3)
+	{
+		accumulateTap(result, weightSum, uv + blurDirection * 3.0, centerDepth, WEIGHT3);
+		accumulateTap(result, weightSum, uv - blurDirection * 3.0, centerDepth, WEIGHT3);
+	}
+	if (pairs >= 4)
+	{
+		accumulateTap(result, weightSum, uv + blurDirection * 4.0, centerDepth, WEIGHT4);
+		accumulateTap(result, weightSum, uv - blurDirection * 4.0, centerDepth, WEIGHT4);
+	}
 
 	result /= max(weightSum, 1e-6);
 

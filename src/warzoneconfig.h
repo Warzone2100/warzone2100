@@ -257,8 +257,18 @@ void war_setSmaaMode(SMAA_MODE mode);
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
+enum class SSAO_MODE : uint8_t
+{
+	OFF,
+	LOW,
+	NORMAL,
+	HIGH,
+	ULTRA,
+};
+SSAO_MODE war_getSsaoMode();
+void war_setSsaoMode(SSAO_MODE mode);
+/// True when SSAO is not Off.
 bool war_getSSAO();
-void war_setSSAO(bool enabled);
 
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);

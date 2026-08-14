@@ -43,10 +43,46 @@
 namespace ssao
 {
 
+static constexpr uint32_t kSsaoFullRes = 1;
+static constexpr uint32_t kSsaoHalfRes = 2;
+static constexpr uint32_t kSsaoQuarterRes = 4;
+
+static constexpr SsaoSettings kSsaoPresets[] = {
+	/* OFF    */ {},
+	/* LOW    */ {true, kSsaoQuarterRes, kSsaoQuarterRes, 8, 2},
+	/* NORMAL */ {true, kSsaoHalfRes,    kSsaoQuarterRes, 8, 2},
+	/* HIGH   */ {true, kSsaoHalfRes,    kSsaoHalfRes,   16, 4},
+	/* ULTRA  */ {true, kSsaoFullRes,    kSsaoFullRes,   16, 4},
+};
+static_assert(sizeof(kSsaoPresets) / sizeof(kSsaoPresets[0]) == static_cast<size_t>(SSAO_MODE::ULTRA) + 1,
+	"SSAO_MODE and kSsaoPresets must stay in sync");
+
+SsaoSettings settingsFor(SSAO_MODE mode)
+{
+	const size_t i = static_cast<size_t>(mode);
+	ASSERT_OR_RETURN(SsaoSettings{}, i < sizeof(kSsaoPresets) / sizeof(kSsaoPresets[0]), "bad SSAO_MODE");
+	const SsaoSettings s = kSsaoPresets[i];
+	if (s.enabled)
+	{
+		ASSERT(s.generateDivisor >= 1, "bad generateDivisor");
+		ASSERT(s.blurDivisor >= s.generateDivisor, "blur finer than generate");
+		ASSERT(s.sampleCount > 0 && s.sampleCount <= static_cast<int>(gfx_api::SSAO_KERNEL_SIZE), "bad sampleCount");
+		ASSERT(s.blurTapPairs >= 1 && s.blurTapPairs <= 4, "bad tapPairs");
+	}
+	return s;
+}
+
+SsaoSettings activeSettings()
+{
+	return settingsFor(war_getSsaoMode());
+}
+
 namespace
 {
 
-/// Tunable SSAO parameters (grouped so a quality tier can swap the whole set at once)
+/// Analog SSAO look (radius, bias, intensity, blur sigma). Shared by every quality
+/// preset; SsaoSettings only varies sample count, blur width, and resolution divisors.
+/// Grouped so a later table can still swap this whole set at once.
 struct Tuning
 {
 	/// Hemisphere sample radius, scaled by view depth in the generate shader
@@ -162,6 +198,7 @@ void drawSSAOGenerate(
 	// Noise UVs are scaled from texture-space UVs, so the tile count follows the texture
 	// size. The rendered region is smaller than the texture when render scaling is active.
 	constants.noiseScale = ssaoSourceTextureSize(depthTexture) / static_cast<float>(NOISE_TEXTURE_SIZE);
+	constants.sampleCount = static_cast<float>(activeSettings().sampleCount);
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
 	display3d_fillSceneUvScaleClamp(depthTexture, constants.uvScaleClamp);
 
@@ -182,6 +219,7 @@ void drawSSAOBlur(
 	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
 	constants.blurDirection = blurDirection;
 	constants.depthSigma = s_tuning.blurDepthSigma;
+	constants.tapPairs = static_cast<float>(activeSettings().blurTapPairs);
 	display3d_fillSceneUvScaleClamp(occlusionTexture, constants.uvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
