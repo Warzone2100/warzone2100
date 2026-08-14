@@ -1871,7 +1871,8 @@ namespace gfx_api
 		glm::vec2 blurDirection;
 		float depthSigma;
 		float tapPairs;
-		glm::vec4 uvScaleClamp;
+		glm::vec4 occlusionUvScaleClamp;
+		glm::vec4 depthUvScaleClamp;
 	};
 
 	using SSAOBlurPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
@@ -1910,7 +1911,8 @@ namespace gfx_api
 		float padding0;
 		float padding1;
 		float padding2;
-		glm::vec4 uvScaleClamp;
+		glm::vec4 sceneUvScaleClamp;
+		glm::vec4 aoUvScaleClamp;
 	};
 
 	using SceneComposeSSAOPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,

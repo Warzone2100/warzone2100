@@ -5,7 +5,8 @@ layout(std140) uniform cbuffer {
 	vec2 blurDirection;
 	float depthSigma;
 	float tapPairs;
-	vec4 uvScaleClamp;
+	vec4 occlusionUvScaleClamp;
+	vec4 depthUvScaleClamp;
 };
 uniform sampler2D occlusionTexture;
 uniform sampler2D depthTexture;
@@ -43,10 +44,10 @@ float depthWeight(float centerDepth, float sampleDepth, float sigma)
 	return exp(-(d * d) / (2.0 * s * s));
 }
 
-void accumulateTap(inout float result, inout float weightSum, vec2 sampleUV, float centerDepth, float spatialWeight)
+void accumulateTap(inout float result, inout float weightSum, vec2 tapTexCoords, float centerDepth, float spatialWeight)
 {
-	sampleUV = clamp(sampleUV, vec2(0.0), uvScaleClamp.zw);
-	float sampleDepth = texture(depthTexture, sampleUV).r;
+	vec2 sampleDepthUV = clamp(tapTexCoords * depthUvScaleClamp.xy, vec2(0.0), depthUvScaleClamp.zw);
+	float sampleDepth = texture(depthTexture, sampleDepthUV).r;
 	if (sampleDepth >= SKY_DEPTH_THRESHOLD)
 	{
 		return;
@@ -56,14 +57,15 @@ void accumulateTap(inout float result, inout float weightSum, vec2 sampleUV, flo
 	{
 		return;
 	}
-	result += texture(occlusionTexture, sampleUV).r * w;
+	vec2 sampleAoUV = clamp(tapTexCoords * occlusionUvScaleClamp.xy, vec2(0.0), occlusionUvScaleClamp.zw);
+	result += texture(occlusionTexture, sampleAoUV).r * w;
 	weightSum += w;
 }
 
 void main()
 {
-	vec2 uv = clamp(texCoords * uvScaleClamp.xy, vec2(0.0), uvScaleClamp.zw);
-	float centerDepth = texture(depthTexture, uv).r;
+	vec2 depthUv = clamp(texCoords * depthUvScaleClamp.xy, vec2(0.0), depthUvScaleClamp.zw);
+	float centerDepth = texture(depthTexture, depthUv).r;
 	if (centerDepth >= SKY_DEPTH_THRESHOLD)
 	{
 		#ifdef NEWGL
@@ -74,29 +76,30 @@ void main()
 		return;
 	}
 
-	float result = texture(occlusionTexture, uv).r * WEIGHT0;
+	vec2 aoUv = clamp(texCoords * occlusionUvScaleClamp.xy, vec2(0.0), occlusionUvScaleClamp.zw);
+	float result = texture(occlusionTexture, aoUv).r * WEIGHT0;
 	float weightSum = WEIGHT0;
 
 	int pairs = int(tapPairs + 0.5);
 	if (pairs >= 1)
 	{
-		accumulateTap(result, weightSum, uv + blurDirection * 1.0, centerDepth, WEIGHT1);
-		accumulateTap(result, weightSum, uv - blurDirection * 1.0, centerDepth, WEIGHT1);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 1.0, centerDepth, WEIGHT1);
+		accumulateTap(result, weightSum, texCoords - blurDirection * 1.0, centerDepth, WEIGHT1);
 	}
 	if (pairs >= 2)
 	{
-		accumulateTap(result, weightSum, uv + blurDirection * 2.0, centerDepth, WEIGHT2);
-		accumulateTap(result, weightSum, uv - blurDirection * 2.0, centerDepth, WEIGHT2);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 2.0, centerDepth, WEIGHT2);
+		accumulateTap(result, weightSum, texCoords - blurDirection * 2.0, centerDepth, WEIGHT2);
 	}
 	if (pairs >= 3)
 	{
-		accumulateTap(result, weightSum, uv + blurDirection * 3.0, centerDepth, WEIGHT3);
-		accumulateTap(result, weightSum, uv - blurDirection * 3.0, centerDepth, WEIGHT3);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 3.0, centerDepth, WEIGHT3);
+		accumulateTap(result, weightSum, texCoords - blurDirection * 3.0, centerDepth, WEIGHT3);
 	}
 	if (pairs >= 4)
 	{
-		accumulateTap(result, weightSum, uv + blurDirection * 4.0, centerDepth, WEIGHT4);
-		accumulateTap(result, weightSum, uv - blurDirection * 4.0, centerDepth, WEIGHT4);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 4.0, centerDepth, WEIGHT4);
+		accumulateTap(result, weightSum, texCoords - blurDirection * 4.0, centerDepth, WEIGHT4);
 	}
 
 	result /= max(weightSum, 1e-6);
