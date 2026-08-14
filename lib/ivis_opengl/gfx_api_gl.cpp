@@ -1469,6 +1469,18 @@ void gl_pipeline_state_object::set_uniforms(const size_t& first, const std::vect
 void gl_pipeline_state_object::bind()
 {
 	glUseProgram(program);
+
+	// Restore this pipeline's own ranges, in case another pipeline has bound something
+	// else to the same binding indices since this pipeline last did.
+	for (size_t slot = 0; slot < uniformBlockRanges.size(); ++slot)
+	{
+		const auto& range = uniformBlockRanges[slot];
+		if (range.first.valid() && owningContext != nullptr)
+		{
+			owningContext->bindUniformRange(static_cast<GLuint>(slot), range.first.buffer, range.first.offset, range.second);
+		}
+	}
+
 	switch (desc.blend_state)
 	{
 		case REND_OPAQUE:
@@ -1712,11 +1724,122 @@ void gl_pipeline_state_object::printProgramInfoLog(code_part part, GLuint progra
 	}
 }
 
+// Blocks start at a size that covers a typical frame's constants
+// (the chaining path exists to ensure correctness)
+static constexpr GLsizeiptr WZ_UNIFORM_BLOCK_MIN_SIZE = 256 * 1024;
+
+void gl_context::bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
+{
+	if (index >= boundUniformRanges.size())
+	{
+		boundUniformRanges.resize(index + 1);
+	}
+	auto& current = boundUniformRanges[index];
+	if (current.buffer == buffer && current.offset == offset && current.size == size)
+	{
+		return;
+	}
+	glBindBufferRange(GL_UNIFORM_BUFFER, index, buffer, offset, size);
+	current = BoundUniformRange{buffer, offset, size};
+}
+
+void gl_uniform_block_allocator::init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_)
+{
+	alignment = std::max<GLint>(offsetAlignment, 1);
+	minimumBlockSize = minimumBlockSize_;
+	minimumFirstBlockSize = minimumBlockSize_;
+}
+
+void gl_uniform_block_allocator::allocateNewBlock(GLsizeiptr minimumSize)
+{
+	// Each new block covers everything allocated so far, so an overrun settles quickly
+	GLsizeiptr newBlockSize = std::max({minimumSize, blocks.empty() ? minimumFirstBlockSize : GLsizeiptr(0), minimumBlockSize, totalCapacity});
+
+	Block newBlock;
+	newBlock.size = newBlockSize;
+	glGenBuffers(1, &newBlock.buffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, newBlock.buffer);
+	glBufferData(GL_UNIFORM_BUFFER, newBlockSize, nullptr, GL_STREAM_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	totalCapacity += newBlockSize;
+	blocks.push_back(newBlock);
+	currentWritePosInLastBlock = 0;
+}
+
+gl_uniform_block_allocator::Allocation gl_uniform_block_allocator::alloc(GLsizeiptr amount)
+{
+	if (!blocks.empty())
+	{
+		const GLsizeiptr lastBlockSize = blocks.back().size;
+		const GLsizeiptr newWritePos = ((currentWritePosInLastBlock + alignment - 1) / alignment) * alignment;
+		if (newWritePos + amount <= lastBlockSize)
+		{
+			currentWritePosInLastBlock = newWritePos + amount;
+			return Allocation{blocks.back().buffer, static_cast<GLintptr>(newWritePos)};
+		}
+	}
+
+	// appending leaves earlier blocks untouched, so ranges already bound stay valid
+	allocateNewBlock(amount);
+	if (blocks.empty() || blocks.back().buffer == 0)
+	{
+		return Allocation{};
+	}
+	currentWritePosInLastBlock = amount;
+	return Allocation{blocks.back().buffer, 0};
+}
+
+void gl_uniform_block_allocator::freeAllBlocks()
+{
+	for (auto& block : blocks)
+	{
+		if (block.buffer) { glDeleteBuffers(1, &block.buffer); }
+	}
+	blocks.clear();
+}
+
+void gl_uniform_block_allocator::recycle()
+{
+	GLsizeiptr totalAllocated = 0;
+	for (const auto& block : blocks) { totalAllocated += block.size; }
+	GLsizeiptr totalUsed = blocks.empty() ? 0 : totalAllocated - (blocks.back().size - currentWritePosInLastBlock);
+
+	const GLsizeiptr previousFirstBlockSize = minimumFirstBlockSize;
+	if (blocks.size() > 1)
+	{
+		// The frame needed more than one block, so ask for the whole allocation as one next time
+		minimumFirstBlockSize = totalAllocated;
+	}
+	else if (totalUsed < (minimumFirstBlockSize / 4))
+	{
+		minimumFirstBlockSize = minimumFirstBlockSize / 2;
+	}
+	minimumFirstBlockSize = std::max(minimumFirstBlockSize, minimumBlockSize);
+
+	if (previousFirstBlockSize != minimumFirstBlockSize)
+	{
+		// Drop current so the next allocation is one correctly sized block
+		freeAllBlocks();
+		totalCapacity = 0;
+	}
+
+	currentWritePosInLastBlock = 0;
+	if (!blocks.empty()) { totalCapacity = blocks.back().size; }
+}
+
+void gl_uniform_block_allocator::destroy()
+{
+	freeAllBlocks();
+	currentWritePosInLastBlock = 0;
+	totalCapacity = 0;
+}
+
 bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName)
 {
-	uniformBlockBuffers.resize(blockNames.size(), 0);
+	owningContext = &ctx;
 	uniformBlockSizes.resize(blockNames.size(), 0);
-	glGenBuffers(static_cast<GLsizei>(uniformBlockBuffers.size()), uniformBlockBuffers.data());
+	uniformBlockRanges.resize(blockNames.size(), {gl_uniform_block_allocator::Allocation{}, 0});
 
 	bool success = true;
 	for (size_t slot = 0; slot < blockNames.size(); ++slot)
@@ -1748,29 +1871,26 @@ bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::ve
 
 void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffer, size_t size)
 {
-	ASSERT_OR_RETURN(, slot < uniformBlockBuffers.size(), "Uniform block slot %zu is out of range (have %zu)", slot, uniformBlockBuffers.size());
+	ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range (have %zu)", slot, uniformBlockSizes.size());
+	ASSERT_OR_RETURN(, owningContext != nullptr, "No owning context");
+	if (uniformBlockSizes[slot] == 0)
+	{
+		return; // the linked program does not read this block
+	}
 
-	// std140 rounds a block up to a multiple of 16, so it can be larger than the struct
-	// that fills it. A buffer bound to a block has to cover the whole block, so allocate
-	// the larger of the two and leave the tail padding uninitialized, since no member
-	// reads from it.
+	// std140 rounds a block up to a multiple of 16, so it can exceed the struct that fills
+	// it, and a bound range has to cover all of it. (The tail padding is never read.)
 	const GLsizeiptr dataSize = static_cast<GLsizeiptr>(size);
-	const GLsizeiptr storeSize = std::max<GLsizeiptr>(dataSize, uniformBlockSizes[slot]);
+	const GLsizeiptr rangeSize = std::max<GLsizeiptr>(dataSize, uniformBlockSizes[slot]);
 
-	glBindBuffer(GL_UNIFORM_BUFFER, uniformBlockBuffers[slot]);
-	// Respecifying the whole store lets the driver hand back fresh memory rather than
-	// stall waiting for a draw that is still reading the previous contents.
-	if (storeSize > dataSize)
-	{
-		glBufferData(GL_UNIFORM_BUFFER, storeSize, nullptr, GL_STREAM_DRAW);
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, dataSize, buffer);
-	}
-	else
-	{
-		glBufferData(GL_UNIFORM_BUFFER, storeSize, buffer, GL_STREAM_DRAW);
-	}
-	glBindBufferBase(GL_UNIFORM_BUFFER, static_cast<GLuint>(slot), uniformBlockBuffers[slot]);
+	auto allocation = owningContext->activeUniformBlockAllocator().alloc(rangeSize);
+	ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
+
+	glBindBuffer(GL_UNIFORM_BUFFER, allocation.buffer);
+	glBufferSubData(GL_UNIFORM_BUFFER, allocation.offset, dataSize, buffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
+	uniformBlockRanges[slot] = {allocation, rangeSize};
 }
 
 void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind)
@@ -2339,10 +2459,6 @@ gl_pipeline_state_object::~gl_pipeline_state_object()
 	if (this->tessEvalShader) glDeleteShader(this->tessEvalShader);
 	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
 	glDeleteProgram(this->program);
-	if (!uniformBlockBuffers.empty())
-	{
-		glDeleteBuffers(static_cast<GLsizei>(uniformBlockBuffers.size()), uniformBlockBuffers.data());
-	}
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
@@ -4855,6 +4971,13 @@ void configureDynamicPassDrawBuffers(const gfx_api::RenderPassDesc& pass)
 
 void gl_context::beginScreenFrame()
 {
+	if (!uniformBlockAllocators.empty())
+	{
+		currentUniformBlockAllocator = (currentUniformBlockAllocator + 1) % uniformBlockAllocators.size();
+		uniformBlockAllocators[currentUniformBlockAllocator].recycle();
+		boundUniformRanges.clear();
+	}
+
 	frameHasDrawCommands = false;
 	_dynamicFBOCache.releaseAll();
 
@@ -5631,6 +5754,13 @@ void gl_context::initUniformBufferLimits()
 
 	debug(LOG_3D, "Uniform blocks: max size %d bytes, %d vertex / %d fragment blocks, offset alignment %d",
 		maxUniformBlockSize, maxVertexUniformBlocks, maxFragmentUniformBlocks, uniformBufferOffsetAlignment);
+
+	uniformBlockAllocators.resize(maxFramesInFlight() + 1);
+	for (auto& allocator : uniformBlockAllocators)
+	{
+		allocator.init(uniformBufferOffsetAlignment, WZ_UNIFORM_BLOCK_MIN_SIZE);
+	}
+	currentUniformBlockAllocator = 0;
 }
 
 bool gl_context::initInstancedFunctions()
@@ -6125,6 +6255,12 @@ bool gl_context::shouldDraw()
 
 void gl_context::shutdown()
 {
+	for (auto& allocator : uniformBlockAllocators)
+	{
+		allocator.destroy();
+	}
+	uniformBlockAllocators.clear();
+
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glClear)
 #endif
