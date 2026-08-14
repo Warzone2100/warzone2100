@@ -279,8 +279,6 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	GLuint tessEvalShader = 0;
 	GLuint fragmentShader = 0;
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
-	std::vector<GLint> locations;
-	std::vector<GLint> duplicateFragmentUniformLocations;
 	bool hasSpecializationConstant_ShadowConstants = false;
 	bool hasSpecializationConstants_PointLights = false;
 
@@ -293,12 +291,6 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	// The range each slot was last given, restored by bind().
 	std::vector<std::pair<gl_uniform_block_allocator::Allocation, GLsizeiptr>> uniformBlockRanges;
 	gl_context* owningContext = nullptr;
-
-	template<SHADER_MODE shader>
-	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_binding_entry();
-
-	template<typename T>
-	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
 	gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
@@ -338,34 +330,6 @@ private:
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
 					   const gfx_api::lighting_constants& shadowConstants);
 
-	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
-
-	/**
-	 * setUniforms is an overloaded wrapper around glUniform* functions
-	 * accepting glm structures.
-	 * Please do not use directly, use pie_ActivateShader below.
-	 */
-	void setUniforms(size_t uniformIdx, const ::glm::vec4 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::mat4 &m);
-	void setUniforms(size_t uniformIdx, const ::glm::ivec4 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::ivec2 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::vec2 &v);
-	void setUniforms(size_t uniformIdx, const int32_t &v);
-	void setUniforms(size_t uniformIdx, const float &v);
-
-	void setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count);
-	void setUniforms(size_t uniformIdx, const ::glm::vec4* m, size_t count);
-	template<typename T, size_t count>
-	void setUniforms(size_t uniformIdx, const std::array<T, count>& m)
-	{
-		setUniforms(uniformIdx, m.data(), count);
-	}
-	void setUniforms(size_t uniformIdx, const ::glm::ivec4* m, size_t count);
-	void setUniforms(size_t uniformIdx, const float *v, size_t count);
-
-	// Wish there was static reflection in C++...
-
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context

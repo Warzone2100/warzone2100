@@ -1241,24 +1241,6 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 	return version;
 }
 
-template<SHADER_MODE shader>
-typename std::pair<std::type_index, std::function<void(const void*, size_t)>> gl_pipeline_state_object::uniform_binding_entry()
-{
-	return std::make_pair(std::type_index(typeid(gfx_api::constant_buffer_type<shader>)), [this](const void* buffer, size_t buflen) {
-		ASSERT_OR_RETURN(, buflen == sizeof(const gfx_api::constant_buffer_type<shader>), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const gfx_api::constant_buffer_type<shader>));
-		this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer));
-	});
-}
-
-template<typename T>
-typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_pipeline_state_object::uniform_setting_func()
-{
-	return std::make_pair(std::type_index(typeid(T)), [this](const void* buffer, size_t buflen) {
-		ASSERT_OR_RETURN(, buflen == sizeof(const T), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const T));
-		this->set_constants(*reinterpret_cast<const T*>(buffer));
-	});
-}
-
 gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
@@ -1342,38 +1324,20 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 				  programInfo.additional_samplers,
 				  shadowConstants);
 
-	if (!programInfo.uniform_block_names.empty())
+	// Constants travel as std140 uniform blocks: slot order matches the pipeline's
+	// constant buffer order, so no per type binding table is involved.
+	ASSERT(programInfo.uniform_block_names.size() == createInfo.uniform_blocks.size(),
+		"%s declares %zu uniform blocks but the pipeline supplies %zu constant buffers",
+		programInfo.friendly_name.c_str(), programInfo.uniform_block_names.size(), createInfo.uniform_blocks.size());
+	if (!setupUniformBlocks(ctx, programInfo.uniform_block_names, programInfo.friendly_name))
 	{
-		// Constants travel as std140 uniform blocks: slot order matches the pipeline's
-		// constant buffer order, so no per type binding table is involved.
-		if (!setupUniformBlocks(ctx, programInfo.uniform_block_names, programInfo.friendly_name))
-		{
-			broken = true;
-		}
-		for (size_t slot = 0; slot < programInfo.uniform_block_names.size(); ++slot)
-		{
-			uniform_bind_functions.push_back([this, slot](const void* buffer, size_t size) {
-				this->uploadUniformBlock(slot, buffer, size);
-			});
-		}
-		return;
+		broken = true;
 	}
-
-	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
+	for (size_t slot = 0; slot < programInfo.uniform_block_names.size(); ++slot)
 	{
-		uniform_binding_entry<SHADER_SKYBOX>(),
-	};
-
-	for (auto& uniform_block : createInfo.uniform_blocks)
-	{
-		auto it = uniforms_bind_table.find(uniform_block);
-		if (it == uniforms_bind_table.end())
-		{
-			ASSERT(false, "Missing mapping for uniform block type: %s", uniform_block.name());
-			uniform_bind_functions.push_back(nullptr);
-			continue;
-		}
-		uniform_bind_functions.push_back(it->second);
+		uniform_bind_functions.push_back([this, slot](const void* buffer, size_t size) {
+			this->uploadUniformBlock(slot, buffer, size);
+		});
 	}
 }
 
@@ -2169,8 +2133,6 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 	ASSERT(tessControlPath.empty() && tessEvalPath.empty(), "Tessellation shaders are unavailable with static GLES bindings");
 #endif
 
-	std::vector<std::string> duplicateFragmentUniformNames;
-
 	if (success && !fragmentPath.empty())
 	{
 		success = false; // Assume failure before reading shader file
@@ -2188,23 +2150,9 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 				std::unordered_map<std::string, std::string> fragmentUniformNameChanges;
 				std::tie(fragmentShaderStr, fragmentUniformNameChanges) = renameDuplicateFragmentShaderUniforms(vertexShaderContents, fragmentShaderStr);
 
-				duplicateFragmentUniformNames.resize(uniformNames.size());
 				for (const auto& it : fragmentUniformNameChanges)
 				{
-					const auto& originalUniformName = it.first;
-					const auto& replacementUniformName = it.second;
-
-					debug(LOG_3D, " - Found duplicate uniform name in fragment shader: %s", originalUniformName.c_str());
-
-					// find uniform index in global uniforms array
-					const auto itr = std::find(uniformNames.begin(), uniformNames.end(), originalUniformName);
-					if (itr != uniformNames.end())
-					{
-						size_t uniformIdx = std::distance(uniformNames.begin(), itr);
-						duplicateFragmentUniformNames[uniformIdx] = replacementUniformName;
-
-						debug(LOG_3D, "  - Renaming \"%s\" -> \"%s\" in fragment shader", originalUniformName.c_str(), replacementUniformName.c_str());
-					}
+					debug(LOG_3D, " - Renamed duplicate uniform in fragment shader: %s -> %s", it.first.c_str(), it.second.c_str());
 				}
 			}
 
@@ -2256,139 +2204,8 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 		ctx.wzGLObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 #endif
 	}
-	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
 	getLocs(samplersToBind);
 	broken |= !success;
-}
-
-void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniformNames, const std::string& programName)
-{
-	std::transform(uniformNames.begin(), uniformNames.end(),
-				   std::back_inserter(locations),
-				   [&](const std::string& name)
-	{
-		GLint result = glGetUniformLocation(program, name.data());
-		if (result == -1)
-		{
-			debug(LOG_3D, "[%s]: Did not find uniform: %s", programName.c_str(), name.c_str());
-		}
-		return result;
-	});
-	if (!duplicateFragmentUniformNames.empty())
-	{
-		std::transform(duplicateFragmentUniformNames.begin(), duplicateFragmentUniformNames.end(),
-					   std::back_inserter(duplicateFragmentUniformLocations),
-					   [&](const std::string& name) {
-			if (name.empty())
-			{
-				return -1;
-			}
-			return glGetUniformLocation(program, name.data());
-		});
-	}
-	else
-	{
-		duplicateFragmentUniformLocations.resize(uniformNames.size(), -1);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 &v)
-{
-	glUniform4f(locations[uniformIdx], v.x, v.y, v.z, v.w);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 &m)
-{
-	glUniformMatrix4fv(locations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count)
-{
-	glUniformMatrix4fv(locations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 *m, size_t count)
-{
-	glUniform4fv(locations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 *m, size_t count)
-{
-	glUniform4iv(locations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4iv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float *v, size_t count)
-{
-	glUniform1fv(locations[uniformIdx], static_cast<GLsizei>(count), v);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform1fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), v);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 &v)
-{
-	glUniform4i(locations[uniformIdx], v.x, v.y, v.z, v.w);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4i(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec2 &v)
-{
-	glUniform2i(locations[uniformIdx], v.x, v.y);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform2i(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec2 &v)
-{
-	glUniform2f(locations[uniformIdx], v.x, v.y);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform2f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const int32_t &v)
-{
-	glUniform1i(locations[uniformIdx], v);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform1i(duplicateFragmentUniformLocations[uniformIdx], v);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
-{
-	glUniform1f(locations[uniformIdx], v);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform1f(duplicateFragmentUniformLocations[uniformIdx], v);
-	}
 }
 
 // MARK: -
@@ -2426,14 +2243,6 @@ gl_pipeline_state_object::~gl_pipeline_state_object()
 	if (this->tessEvalShader) glDeleteShader(this->tessEvalShader);
 	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
 	glDeleteProgram(this->program);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.color);
-	setUniforms(2, cbuf.fog_color);
-	setUniforms(3, cbuf.fog_enabled);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)
