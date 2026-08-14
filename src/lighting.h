@@ -31,7 +31,7 @@ namespace rendering1999
 	//! This lighting manager relies on lightmap to handle point lights
 	struct LightingManager final : ILightingManager {
 
-		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) override;
 	};
 }
 
