@@ -26,7 +26,6 @@
 
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
-#include "fog_pass.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
@@ -266,11 +265,6 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis,
 }
 
 } // namespace
-
-void applyConfigToGfx()
-{
-	fog_pass::applyConfigToGfx();
-}
 
 void init()
 {

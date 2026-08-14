@@ -18,17 +18,31 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file fog_pass.h
- * Deferred distance-fog fullscreen pass.
+/** @file scene_effect_surfaces.cpp
+ * Commit current SSAO/fog settings into the gfx pipeline-surface catalog.
  */
 
-#pragma once
+#include "scene_effect_surfaces.h"
 
+#include "ssao.h"
+
+#include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/piestate.h"
 
-namespace fog_pass
+bool applySceneEffectSurfaces()
 {
-
-void recordApply(const gfx_api::RenderPassContext& passCtx);
-
-} // namespace fog_pass
+	const ssao::SsaoSettings ssaoSettings = ssao::activeSettings();
+	gfx_api::SceneEffectSurfaces cfg;
+	cfg.ssao = ssaoSettings.enabled;
+	cfg.ssaoGenerateDivisor = ssaoSettings.generateDivisor;
+	cfg.ssaoBlurDivisor = ssaoSettings.blurDivisor;
+	cfg.fog = pie_GetFogEnabled();
+	if (!gfx_api::context::get().setSceneEffectSurfaces(cfg))
+	{
+		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d fog=%d)",
+			static_cast<int>(cfg.ssao), static_cast<int>(cfg.fog));
+		return false;
+	}
+	return true;
+}

@@ -4100,7 +4100,7 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
 	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
 	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
-	inputs.scenePrepassEnabled = getScenePrepassSurfacesEnabled();
+	inputs.scenePrepassEnabled = getSSAOSurfacesEnabled() || getFogSurfacesEnabled();
 	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;
 }
@@ -5506,6 +5506,21 @@ bool gl_context::setSmaaEnabled(bool enabled)
 	if (viewportWidth == 0 || viewportHeight == 0)
 	{
 		// no usable drawable right now, the setting applies when the scene framebuffer is next created
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
+bool gl_context::setSceneEffectSurfaces(gfx_api::SceneEffectSurfaces cfg)
+{
+	cfg = normalizeSceneEffectSurfaces(cfg);
+	if (storedSceneEffectSurfaces() == cfg)
+	{
+		return true;
+	}
+	storeSceneEffectSurfaces(cfg);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
 		return true;
 	}
 	return syncPipelineSurfaces();

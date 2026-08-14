@@ -6105,7 +6105,7 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
 	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
 	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
-	inputs.scenePrepassEnabled = getScenePrepassSurfacesEnabled();
+	inputs.scenePrepassEnabled = getSSAOSurfacesEnabled() || getFogSurfacesEnabled();
 	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;
 }
@@ -7266,6 +7266,22 @@ bool VkRoot::setSmaaEnabled(bool enabled)
 	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
 	{
 		// no surfaces exist yet, the setting applies when they are created
+		return true;
+	}
+	invalidateWarmEntries();
+	return syncPipelineSurfaces();
+}
+
+bool VkRoot::setSceneEffectSurfaces(gfx_api::SceneEffectSurfaces cfg)
+{
+	cfg = normalizeSceneEffectSurfaces(cfg);
+	if (storedSceneEffectSurfaces() == cfg)
+	{
+		return true;
+	}
+	storeSceneEffectSurfaces(cfg);
+	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
 		return true;
 	}
 	invalidateWarmEntries();

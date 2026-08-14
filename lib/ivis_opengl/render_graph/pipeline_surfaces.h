@@ -222,13 +222,13 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaActive,
 	/// SMAA enabled and its blend output feeds a scaling pass instead of the swapchain.
 	SmaaIntermediateActive,
-	/// SSAO intermediate surfaces requested via context::setSSAOSurfacesEnabled.
+	/// SSAO intermediate surfaces requested via context::setSceneEffectSurfaces.
 	SsaoActive,
 	/// Extra blur-resolution buffer when blur is coarser than generate.
 	SsaoSeparateBlurBuffers,
-	/// Scene prepass depth/normals requested via context::setScenePrepassSurfacesEnabled.
+	/// Scene prepass depth/normals when SSAO and/or deferred fog is requested.
 	ScenePrepassActive,
-	/// FogColor requested via context::setFogSurfacesEnabled.
+	/// FogColor requested via context::setSceneEffectSurfaces.
 	FogApplyActive,
 };
 
@@ -308,11 +308,11 @@ struct PipelineSurfaceSyncInputs
 	/// Dynamic resolution keeps scene-sized intermediates alive even at a 1:1 scene size.
 	bool sceneDynamicResolution = false;
 	bool smaa = false;
-	/// When true, SsaoActive catalog surfaces are enabled (set via context::setSSAOSurfacesEnabled).
+	/// When true, SsaoActive catalog surfaces are enabled (set via context::setSceneEffectSurfaces).
 	bool ssaoEnabled = false;
-	/// When true, ScenePrepassActive catalog surfaces are enabled.
+	/// When true, ScenePrepassActive catalog surfaces are enabled (ssao || fog).
 	bool scenePrepassEnabled = false;
-	/// When true, FogApplyActive catalog surfaces are enabled.
+	/// When true, FogApplyActive catalog surfaces are enabled (set via context::setSceneEffectSurfaces).
 	bool fogApplyEnabled = false;
 	/// Scene extent divisor for SSAO generate (1 = full scene).
 	uint32_t ssaoGenerateDivisor = 1;
