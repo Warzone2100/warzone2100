@@ -27,6 +27,10 @@
 #include <memory>
 #include <array>
 #include <vector>
+#include <functional>
+#include <utility>
+#include <climits>
+#include <unordered_map>
 
 struct LIGHT
 {
@@ -95,6 +99,14 @@ struct ILightingManager
 
 namespace renderingNew
 {
+	struct TileCoordsHasher
+	{
+		std::size_t operator()(const std::pair<int32_t, int32_t>& p) const
+		{
+			return std::hash<long long>()(static_cast<long long>(p.first) * (static_cast<long long>(INT_MAX) + 1) + p.second);
+		}
+	};
+
 	//! This lighting manager generate a proper PointLightBuckets for per pixel point lights
 	struct LightingManager final : ILightingManager
 	{
@@ -114,9 +126,13 @@ namespace renderingNew
 			BoundingBox clipSpaceBoundingBox;
 		};
 		std::vector<CulledLightInfo> culledLights;
+		//! tile coordinates to indices into culledLights, rebuilt per frame
+		std::unordered_map<std::pair<int32_t, int32_t>, std::vector<size_t>, TileCoordsHasher> tileRangeLights;
 	};
 }
 
-void setLightingManager(std::unique_ptr<ILightingManager> manager);
+/// Set the active lighting manager. Ownership stays with the caller, so the manager
+/// (and its cached containers) can persist across frames.
+void setLightingManager(ILightingManager* manager);
 
 ILightingManager& getCurrentLightingManager();
