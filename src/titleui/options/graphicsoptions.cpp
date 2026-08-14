@@ -29,8 +29,7 @@
 #include "../../atmos.h"
 #include "../../display.h"
 #include "../../display3d.h"
-#include "../../ssao.h"
-#include "../../fog_pass.h"
+#include "../../scene_effect_surfaces.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -365,7 +364,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				{
 					pie_EnableFog(true);
 				}
-				fog_pass::applyConfigToGfx();
+				applySceneEffectSurfaces();
 				return true;
 			}, false
 		);
@@ -388,7 +387,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			},
 			[](const auto& newValue) -> bool {
 				war_setSsaoMode(newValue);
-				ssao::applyConfigToGfx();
+				applySceneEffectSurfaces();
 				return true;
 			}, false
 		);

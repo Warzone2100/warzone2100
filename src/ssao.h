@@ -47,9 +47,6 @@ SsaoSettings activeSettings();
 void init();
 void shutdown();
 
-/// Push SSAO/fog/prepass surface flags into the gfx context and sync pipeline surfaces.
-void applyConfigToGfx();
-
 void recordGenerate(const gfx_api::RenderPassContext& passCtx);
 void recordDownsample(const gfx_api::RenderPassContext& passCtx);
 void recordBlurH(const gfx_api::RenderPassContext& passCtx);

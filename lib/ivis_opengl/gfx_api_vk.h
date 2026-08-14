@@ -930,6 +930,7 @@ public:
 	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
 	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
 	virtual bool setSmaaEnabled(bool enabled) override;
+	virtual bool setSceneEffectSurfaces(gfx_api::SceneEffectSurfaces cfg) override;
 	virtual bool setSceneDynamicResolution(bool enabled) override;
 	virtual bool supportsGpuFrameTiming() const override;
 	virtual bool setGpuFrameTimingEnabled(bool enabled) override;

@@ -354,6 +354,23 @@ namespace gfx_api
 		}
 	};
 
+	/// Independent SSAO/fog catalog requests. Scene prepass is derived as ssao || fog.
+	struct SceneEffectSurfaces
+	{
+		bool ssao = false;
+		uint32_t ssaoGenerateDivisor = 1;
+		uint32_t ssaoBlurDivisor = 1;
+		bool fog = false;
+
+		bool operator==(const SceneEffectSurfaces& other) const
+		{
+			return ssao == other.ssao
+				&& ssaoGenerateDivisor == other.ssaoGenerateDivisor
+				&& ssaoBlurDivisor == other.ssaoBlurDivisor
+				&& fog == other.fog;
+		}
+	};
+
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -591,19 +608,16 @@ namespace gfx_api
 			return true;
 		}
 
-		/// Request SSAO intermediate surfaces (SSAORaw, SSAOBlurH, SSAOBlurred, SSAOComposedColor).
-		/// Game code sets this from the SSAO preset; backends read it in pipelineSurfaceSyncInputs().
-		void setSSAOSurfacesEnabled(bool enabled) { _ssaoSurfacesEnabled = enabled; }
+		/// Commit SSAO/fog catalog requests in one store. Backends rebuild surfaces.
+		/// Scene prepass follows as ssao || fog in pipelineSurfaceSyncInputs().
+		virtual bool setSceneEffectSurfaces(SceneEffectSurfaces cfg)
+		{
+			storeSceneEffectSurfaces(cfg);
+			return true;
+		}
 		bool getSSAOSurfacesEnabled() const { return _ssaoSurfacesEnabled; }
-		void setSSAOGenerateDivisor(uint32_t d) { _ssaoGenerateDivisor = std::max(d, 1u); }
-		void setSSAOBlurDivisor(uint32_t d) { _ssaoBlurDivisor = std::max(d, 1u); }
 		uint32_t getSSAOGenerateDivisor() const { return _ssaoGenerateDivisor; }
 		uint32_t getSSAOBlurDivisor() const { return _ssaoBlurDivisor; }
-		/// Request ScenePrepassDepth / ScenePrepassNormals (SSAO and/or deferred fog).
-		void setScenePrepassSurfacesEnabled(bool enabled) { _scenePrepassSurfacesEnabled = enabled; }
-		bool getScenePrepassSurfacesEnabled() const { return _scenePrepassSurfacesEnabled; }
-		/// Request FogColor for the deferred fog pass.
-		void setFogSurfacesEnabled(bool enabled) { _fogSurfacesEnabled = enabled; }
 		bool getFogSurfacesEnabled() const { return _fogSurfacesEnabled; }
 
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
@@ -678,6 +692,30 @@ namespace gfx_api
 		void setRenderGraphExecuting(bool executing) { _renderGraphExecuting = executing; }
 		void bumpRenderGraphEpoch() { ++_renderGraphEpoch; }
 
+		static SceneEffectSurfaces normalizeSceneEffectSurfaces(SceneEffectSurfaces cfg)
+		{
+			cfg.ssaoGenerateDivisor = std::max(cfg.ssaoGenerateDivisor, 1u);
+			cfg.ssaoBlurDivisor = std::max(cfg.ssaoBlurDivisor, 1u);
+			return cfg;
+		}
+		void storeSceneEffectSurfaces(SceneEffectSurfaces cfg)
+		{
+			cfg = normalizeSceneEffectSurfaces(cfg);
+			_ssaoSurfacesEnabled = cfg.ssao;
+			_ssaoGenerateDivisor = cfg.ssaoGenerateDivisor;
+			_ssaoBlurDivisor = cfg.ssaoBlurDivisor;
+			_fogSurfacesEnabled = cfg.fog;
+		}
+		SceneEffectSurfaces storedSceneEffectSurfaces() const
+		{
+			SceneEffectSurfaces cfg;
+			cfg.ssao = _ssaoSurfacesEnabled;
+			cfg.ssaoGenerateDivisor = _ssaoGenerateDivisor;
+			cfg.ssaoBlurDivisor = _ssaoBlurDivisor;
+			cfg.fog = _fogSurfacesEnabled;
+			return cfg;
+		}
+
 		// GPU frame timing state maintained by the backends
 		bool _gpuFrameTimingEnabled = false;
 		optional<GpuFrameTiming> _lastGpuFrameTiming;
@@ -693,7 +731,6 @@ namespace gfx_api
 		bool _ssaoSurfacesEnabled = false;
 		uint32_t _ssaoGenerateDivisor = 1;
 		uint32_t _ssaoBlurDivisor = 1;
-		bool _scenePrepassSurfacesEnabled = false;
 		bool _fogSurfacesEnabled = false;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;

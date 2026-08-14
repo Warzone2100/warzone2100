@@ -89,6 +89,7 @@
 #include "profiling.h"
 #include "warzoneconfig.h"
 #include "ssao.h"
+#include "scene_effect_surfaces.h"
 #include "multistat.h"
 #include "animation.h"
 #include "faction.h"
@@ -1434,8 +1435,8 @@ bool init3DView()
 
 	setDefaultFogColour();
 
-	// Allocate / free SSAO pipeline surfaces to match persisted config.
-	ssao::applyConfigToGfx();
+	// Allocate / free SSAO and fog pipeline surfaces to match persisted config.
+	applySceneEffectSurfaces();
 
 	playerPos.r.z = 0; // roll
 	playerPos.r.y = 0; // rotation
