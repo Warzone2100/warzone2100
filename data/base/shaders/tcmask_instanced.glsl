@@ -34,10 +34,16 @@ layout(std140) uniform meshuniforms {
 	int shieldEffect;
 };
 
+// Which transport carries the light arrays: 0 uniform block, 1 buffer texture, 2 storage buffer.
+// Patched at load on OpenGL, fixed at build time on Vulkan.
+#define WZ_LIGHT_TRANSPORT 0
+
 layout(std140) uniform pointlights {
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 	int bucketDimensionUsed;
+#if WZ_LIGHT_TRANSPORT == 0
 	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
 	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
+#endif
 };

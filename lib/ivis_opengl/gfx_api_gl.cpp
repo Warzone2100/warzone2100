@@ -911,6 +911,14 @@ struct program_data
 	std::vector<std::string> uniform_block_names = {};
 };
 
+// Terrain claims units 0 to 12, so the light data samplers sit above that and still inside the required 16 minimum.
+constexpr GLint lightDataTextureUnit = 13;
+constexpr GLint lightIndexTextureUnit = 14;
+
+static const std::vector<std::tuple<std::string, GLint>> lightDataSamplers = {
+	{"lightDataBuffer", lightDataTextureUnit}, {"lightIndexBuffer", lightIndexTextureUnit}
+};
+
 static const std::vector<std::tuple<std::string, GLint>> terrainCombinedSamplers = {
 	{"lightmap_tex", 0},
 	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
@@ -1332,6 +1340,13 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
 	}
 
+	// The light data samplers only exist in a program built for the buffer texture transport.
+	std::vector<std::tuple<std::string, GLint>> samplersToBind = programInfo.additional_samplers;
+	if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::texel_buffer)
+	{
+		samplersToBind.insert(samplersToBind.end(), lightDataSamplers.begin(), lightDataSamplers.end());
+	}
+
 	build_program(ctx,
 				  programInfo.friendly_name,
 				  vertexShaderHeader.c_str(),
@@ -1342,7 +1357,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 				  fragmentShaderHeader.c_str(),
 				  programInfo.fragment_file,
 				  programInfo.uniform_names,
-				  programInfo.additional_samplers,
+				  samplersToBind,
 				  shadowConstants);
 
 	// Constants travel as std140 uniform blocks: slot order matches the pipeline's
@@ -2050,13 +2065,14 @@ static void patchFragmentShaderTextureGather(std::string& fragmentShaderStr, boo
 	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_FSR_EASU_GATHER %d", hasTextureGatherSupport ? 1 : 0));
 }
 
-static bool patchShaderPointLightsDefines(std::string& shaderStr, const gfx_api::lighting_constants& lightingConstants)
+static bool patchShaderPointLightsDefines(std::string& shaderStr, const gfx_api::lighting_constants& lightingConstants, gfx_api::data_buffer_transport lightTransport)
 {
 	const auto defines = {
 		std::make_pair("WZ_MAX_POINT_LIGHTS", gfx_api::max_lights),
 		std::make_pair("WZ_MAX_INDEXED_POINT_LIGHTS", gfx_api::max_indexed_lights),
 		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::bucket_dimension),
 		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
+		std::make_pair("WZ_LIGHT_TRANSPORT", static_cast<size_t>(lightTransport)),
 	};
 
 	const auto& replacer = [&shaderStr](const std::string& define, const auto& value) -> bool {
@@ -2143,7 +2159,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx,
 		vertexShaderContents = readShaderBuf(vertexPath);
 		if (!vertexShaderContents.empty())
 		{
-			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(vertexShaderContents, lightingConstants);
+			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(vertexShaderContents, lightingConstants, ctx.lightDataTransport());
 
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 			vertexShader = shader;
@@ -2181,7 +2197,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx,
 			debug(LOG_ERROR, "Failed to read %s shader [%s]", stageTypeName, stagePath.c_str());
 			return false;
 		}
-		hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(stageContents, lightingConstants);
+		hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(stageContents, lightingConstants, ctx.lightDataTransport());
 
 		GLuint shader = glCreateShader(stageType);
 		outShader = shader;
@@ -2233,7 +2249,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx,
 
 			patchFragmentShaderTextureGather(fragmentShaderStr, ctx.hasTextureGatherSupport);
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
-			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
+			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(fragmentShaderStr, lightingConstants, ctx.lightDataTransport());
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -5358,6 +5374,59 @@ void gl_context::initUniformBufferLimits()
 #endif
 }
 
+void gl_context::upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes)
+{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (lightTransport != gfx_api::data_buffer_transport::texel_buffer)
+	{
+		return;
+	}
+	if (lightDataBuffer == 0)
+	{
+		glGenBuffers(1, &lightDataBuffer);
+		glGenBuffers(1, &lightIndexBuffer);
+		glGenTextures(1, &lightDataTexture);
+		glGenTextures(1, &lightIndexTexture);
+
+		// Size the stores once and attach them once.
+		// Reallocating a store that a buffer texture is already attached to leaves what the texture reads undefined, so every
+		// later frame writes into the existing store.
+		glBindBuffer(GL_TEXTURE_BUFFER, lightDataBuffer);
+		glBufferData(GL_TEXTURE_BUFFER, static_cast<GLsizeiptr>(lightBytes), nullptr, GL_STREAM_DRAW);
+		glBindBuffer(GL_TEXTURE_BUFFER, lightIndexBuffer);
+		glBufferData(GL_TEXTURE_BUFFER, static_cast<GLsizeiptr>(indexBytes), nullptr, GL_STREAM_DRAW);
+		glBindBuffer(GL_TEXTURE_BUFFER, 0);
+
+		glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, lightDataBuffer);
+		glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
+		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32I, lightIndexBuffer);
+		glBindTexture(GL_TEXTURE_BUFFER, 0);
+
+		lightDataBufferSize = lightBytes;
+		lightIndexBufferSize = indexBytes;
+	}
+
+	ASSERT(lightBytes <= lightDataBufferSize && indexBytes <= lightIndexBufferSize,
+		"Light data grew after the buffer textures were sized");
+
+	glBindBuffer(GL_TEXTURE_BUFFER, lightDataBuffer);
+	glBufferSubData(GL_TEXTURE_BUFFER, 0, static_cast<GLsizeiptr>(lightBytes), lights);
+	glBindBuffer(GL_TEXTURE_BUFFER, lightIndexBuffer);
+	glBufferSubData(GL_TEXTURE_BUFFER, 0, static_cast<GLsizeiptr>(indexBytes), indices);
+	glBindBuffer(GL_TEXTURE_BUFFER, 0);
+
+	// Nothing else claims these units, so one binding per frame holds for every draw.
+	glActiveTexture(GL_TEXTURE0 + lightDataTextureUnit);
+	glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
+	glActiveTexture(GL_TEXTURE0 + lightIndexTextureUnit);
+	glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
+	glActiveTexture(GL_TEXTURE0);
+#else
+	(void)lights; (void)lightBytes; (void)indices; (void)indexBytes;
+#endif
+}
+
 void gl_context::initLightDataTransport()
 {
 #if defined(WZ_STATIC_GL_BINDINGS)
@@ -5371,14 +5440,10 @@ void gl_context::initLightDataTransport()
 	const bool hasStorageBuffers = (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr);
 
 	// Preference order:
-	// 1. storage buffer (no sampler spent, and the index can be scalarized)
-	// 2. texel buffer (wider support, including macOS which stops at OpenGL 4.1)
-	// 3. uniform block
-	if (hasStorageBuffers)
-	{
-		lightTransport = gfx_api::data_buffer_transport::storage_buffer;
-	}
-	else if (hasTexelBuffers)
+	// 1. texel buffer (wider support, including macOS which stops at OpenGL 4.1)
+	// 2. uniform block
+	// Storage buffers are probed and reported, but aren't used (yet).
+	if (hasTexelBuffers)
 	{
 		lightTransport = gfx_api::data_buffer_transport::texel_buffer;
 	}
@@ -5408,14 +5473,7 @@ void gl_context::initLightDataTransport()
 		}
 		else if (strcmp(transportOverride, "storage") == 0)
 		{
-			if (hasStorageBuffers)
-			{
-				lightTransport = gfx_api::data_buffer_transport::storage_buffer;
-			}
-			else
-			{
-				debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=storage requested, but storage buffers are unavailable on this context - ignoring");
-			}
+			debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=storage requested, but no path carries light data over a storage buffer yet - ignoring");
 		}
 		else
 		{

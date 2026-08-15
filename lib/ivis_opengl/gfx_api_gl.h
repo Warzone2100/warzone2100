@@ -530,6 +530,7 @@ protected:
 
 public:
 	gfx_api::data_buffer_transport lightDataTransport() const override { return lightTransport; }
+	void upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes) override;
 
 private:
 	bool initGLContext();
@@ -585,6 +586,12 @@ private:
 	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
 	bool hasGpuTimestampSupport = false;
 	gfx_api::data_buffer_transport lightTransport = gfx_api::data_buffer_transport::uniform_block;
+	GLuint lightDataBuffer = 0;
+	GLuint lightIndexBuffer = 0;
+	GLuint lightDataTexture = 0;
+	GLuint lightIndexTexture = 0;
+	size_t lightDataBufferSize = 0;
+	size_t lightIndexBufferSize = 0;
 	struct GpuTimingSlot
 	{
 		GLuint beginQuery = 0;

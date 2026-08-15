@@ -465,6 +465,12 @@ namespace gfx_api
 		uint32_t frameUniformGeneration() const { return _frameUniformGeneration; }
 		/// Which transport carries the point light arrays.
 		virtual data_buffer_transport lightDataTransport() const { return data_buffer_transport::uniform_block; }
+		/// Replace this frame's point light data.
+		virtual void upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes)
+		{
+			// Does nothing on the uniform block transport, where the same data travels in the block instead.
+			(void)lights; (void)lightBytes; (void)indices; (void)indexBytes;
+		}
 		virtual void draw(const std::size_t& offset, const std::size_t&, const primitive_type&) = 0;
 		virtual void draw_elements(const std::size_t& offset, const std::size_t&, const primitive_type&, const index_type&) = 0;
 		// Depth-only polygon offset with glPolygonOffset(factor, units) semantics:
