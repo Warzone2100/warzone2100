@@ -40,7 +40,24 @@ void display3d_drawSmaaWeights(gfx_api::abstract_texture* edgesTexture);
 void display3d_drawSmaaBlend(gfx_api::abstract_texture* colorTexture, gfx_api::abstract_texture* weightsTexture);
 void display3d_processSensorTarget();
 void display3d_processDestinationTarget();
-/// Fullscreen triangle VBO used by post-processing passes (null before init3DView).
+/// Fullscreen triangle VBO used by `display3d_drawFullscreenTriangle` (null before init3DView).
 gfx_api::buffer* display3d_getScreenTriangleVBO();
+/// Bind PSO + constants + textures and draw the shared fullscreen triangle.
+template<typename PsoHelper, typename Constants, typename... Textures>
+void display3d_drawFullscreenTriangle(const Constants& constants, Textures*... textures)
+{
+	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
+	if (vbo == nullptr)
+	{
+		return;
+	}
+	auto& pso = PsoHelper::get();
+	pso.bind();
+	pso.bind_constants(constants);
+	pso.bind_vertex_buffers(vbo);
+	pso.bind_textures(textures...);
+	pso.draw(3, 0);
+	pso.unbind_vertex_buffers(vbo);
+}
 /// Scale/clamp UVs from graph read `readIndex`'s producer pipeline surface.
 void display3d_fillPassReadUvScaleClamp(const gfx_api::RenderPassContext& passCtx, size_t readIndex, glm::vec4& uvScaleClamp);
