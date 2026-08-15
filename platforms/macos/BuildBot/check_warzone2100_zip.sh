@@ -11,7 +11,7 @@ if [ ! -f "${BUILT_WARZONE_ZIP}" ]; then
   exit 1
 fi
 TMP_PKG_EXTRACT_DIR="build/tmp/_wzextract"
-if [ ! -n "$2" ]; then
+if [ -n "$2" ]; then
   TMP_PKG_EXTRACT_DIR="$2/_wzextract"
 fi
 
