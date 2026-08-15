@@ -127,6 +127,7 @@
 #endif
 #include "wzcrashhandlingproviders.h"
 #include "wzpropertyproviders.h"
+#include "buildprovenance/wzbindetails.h"
 #include "3rdparty/gsl_finally.h"
 #include "wzapi.h"
 
@@ -1887,6 +1888,7 @@ void mainShutdown()
 	perf::close();
 	setSyncCrcTraceFile("");
 	cleanupOldLogFiles();
+	selfExeDetailsShutdown();
 	// NOTE: urlRequestShutdown is called inside systemShutdown, as it must happen after certain other calls
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
@@ -1968,6 +1970,9 @@ int realmain(int argc, char *argv[])
 
 	/*** Initialize URL Request library ***/
 	urlRequestInit();
+
+	// Start hashing our own executable in the background
+	selfExeDetailsInit();
 
 	// find early boot info
 	ParseCLIEarlyResult earlyCommandLineParsingResult = ParseCommandLineEarly(utfargc, utfargv);
