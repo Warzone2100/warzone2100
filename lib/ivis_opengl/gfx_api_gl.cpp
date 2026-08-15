@@ -967,7 +967,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		.uniform_block_names = { "cbuffer", "pointlights" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ .friendly_name = "terrain_depthmap tess program", .vertex_file = "shaders/terrain_depth_tess.vert", .fragment_file = "shaders/terrain_depth_only.frag",
 		.uniform_names = {},
-		.additional_samplers = { {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
+		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
 		.tess_control_file = "shaders/terrain_depth_tess.tesc", .tess_evaluation_file = "shaders/terrain_depthmap_tess.tese",
 		.uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, program_data{ .friendly_name = "terrain_depth_prepass tess program", .vertex_file = "shaders/terrain_depth_prepass_tess.vert", .fragment_file = "shaders/terrain_depth_prepass_tess.frag",
