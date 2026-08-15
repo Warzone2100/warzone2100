@@ -18,6 +18,7 @@
 */
 
 #include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "lib/widget/button.h"
@@ -27,6 +28,9 @@
 #include "../qtscript.h"
 #include "../component.h"
 #include "../mission.h"
+#include "../screens/researchtreescreen.h"
+
+#include <algorithm>
 
 STRUCTURE *ResearchController::highlightedFacility = nullptr;
 
@@ -655,6 +659,93 @@ private:
 	AllyResearchsIcons allyResearchIcons;
 };
 
+// The stats form already leaves STAT_TABFORMY clear above its list, which is where
+// its close button sits, so the button below shares that row.
+static constexpr int32_t RESEARCH_HEADER_PAD = 3;
+static constexpr int32_t RESEARCH_HEADER_BUTTON_HEIGHT = 14;
+static const PIELIGHT RESEARCH_HEADER_FILL = pal_RGBA(47, 51, 87, 255);
+static const PIELIGHT RESEARCH_HEADER_FILL_OVER = pal_RGBA(72, 78, 125, 255);
+static const PIELIGHT RESEARCH_HEADER_BORDER = pal_RGBA(89, 90, 144, 255);
+
+class WzResearchHeaderButton: public W_BUTTON
+{
+public:
+	static std::shared_ptr<WzResearchHeaderButton> make(const WzString& text, const std::string& tip)
+	{
+		class make_shared_enabler: public WzResearchHeaderButton {};
+		auto button = std::make_shared<make_shared_enabler>();
+		button->m_string = text;
+		button->m_text.setText(text, FONT);
+		button->setTip(tip);
+		return button;
+	}
+
+	void display(int xOffset, int yOffset) override
+	{
+		const float x0 = static_cast<float>(xOffset + x());
+		const float y0 = static_cast<float>(yOffset + y());
+		const bool down = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
+		const bool over = (getState() & WBUT_HIGHLIGHT) != 0;
+
+		const PIELIGHT fill = down ? WZCOL_MENU_SCORE_BUILT
+			: (over ? RESEARCH_HEADER_FILL_OVER : RESEARCH_HEADER_FILL);
+		const PIELIGHT border = (down || over) ? WZCOL_TEXT_BRIGHT : RESEARCH_HEADER_BORDER;
+		const PIELIGHT ink = (down || over) ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT;
+		pie_DrawRoundedBox(x0, y0, x0 + static_cast<float>(width()), y0 + static_cast<float>(height()),
+		                   fill, 2.f, border, 1.f);
+
+		fitTo(width() - PAD_X * 2);
+		const float baseline = y0 + (static_cast<float>(height()) - m_text.lineSize()) / 2.f - m_text.aboveBase();
+		if (!m_cut)
+		{
+			// Centered when it fits
+			m_text.render(x0 + (static_cast<float>(width()) - static_cast<float>(m_text.width())) / 2.f, baseline, ink);
+			return;
+		}
+		const float left = x0 + PAD_X;
+		const int shown = width() - PAD_X * 2 - iV_GetEllipsisWidth(m_text.getFontID()) - 2;
+		if (shown <= 0)
+		{
+			return;
+		}
+		m_text.renderClipped(Vector2f(left, baseline), ink,
+		                     WzRect(static_cast<int>(left), yOffset + y(), shown, height()), shown);
+		iV_DrawEllipsis(m_text.getFontID(), Vector2f(left + static_cast<float>(shown) + 2.f, baseline), ink);
+	}
+
+private:
+	// Smaller until it fits, then cut
+	void fitTo(int room)
+	{
+		if (m_fittedTo == room)
+		{
+			return;
+		}
+		m_fittedTo = room;
+		iV_fonts font = FONT;
+		m_text.setText(m_string, font);
+		while (m_text.width() > room)
+		{
+			const auto smaller = iV_ShrinkFont(font);
+			if (!smaller.has_value())
+			{
+				break;
+			}
+			font = smaller.value();
+			m_text.setText(m_string, font);
+		}
+		m_cut = m_text.width() > room;
+	}
+
+	static constexpr iV_fonts FONT = font_small;
+	static constexpr int PAD_X = 4;
+
+	WzString m_string;
+	WzText m_text;
+	int m_fittedTo = -1;
+	bool m_cut = false;
+};
+
 class ResearchObjectsForm: public ObjectsForm
 {
 private:
@@ -718,7 +809,29 @@ protected:
 		return *controller.get();
 	}
 
+	void initialize() override
+	{
+		BaseWidget::initialize();
+		addViewTreeButton();
+	}
+
 private:
+	// Across the top, up to the close button in the corner
+	void addViewTreeButton()
+	{
+		auto button = WzResearchHeaderButton::make(WzString::fromUtf8(_("View Tree")),
+		                                           _("Open the research tree"));
+		attach(button);
+		const int right = STAT_WIDTH - CLOSE_WIDTH - RESEARCH_HEADER_PAD;
+		button->setGeometry(RESEARCH_HEADER_PAD, (STAT_TABFORMY - RESEARCH_HEADER_BUTTON_HEIGHT) / 2,
+		                    std::max(10, right - RESEARCH_HEADER_PAD), RESEARCH_HEADER_BUTTON_HEIGHT);
+		button->addOnClickHandler([](W_BUTTON&) {
+			widgScheduleTask([]() {
+				toggleResearchTreeScreen();
+			});
+		});
+	}
+
 	std::shared_ptr<ResearchController> controller;
 };
 
