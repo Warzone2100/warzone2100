@@ -233,12 +233,14 @@ jobs:
   macos_universal_combine:
     name: 'Package Universal Binary'
     permissions:
-      contents: write # Needed to upload to releases
+      contents: read
       # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
       id-token: write
       attestations: write
     needs: macos-build
     runs-on: macos-latest
+    outputs:
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -329,16 +331,6 @@ jobs:
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
-      - name: Upload "universal" to release
-        if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
-        run: |
-          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
-          echo "Uploading: ${WZ_FULL_OUTPUT_ZIP_PATH}"
-          gh release upload "${SOURCE_TAG}" "${WZ_FULL_OUTPUT_ZIP_PATH}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
       - name: Clear OUTPUT_DIR
         run: |
           echo "OUTPUT_DIR=${OUTPUT_DIR}"
@@ -394,16 +386,39 @@ jobs:
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
-      - name: Upload "universal_novideos" to release
-        if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+
+  macos_upload_release:
+    name: 'Upload Release Assets'
+    permissions:
+      contents: write # Needed to upload to releases
+    runs-on: ubuntu-latest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    needs: macos_universal_combine
+    env:
+      WZ_GITHUB_REF: ${{ needs.macos_universal_combine.outputs.WZ_GITHUB_REF }}
+    steps:
+      - name: Prep Environment
+        run: mkdir upload-assets
+      - name: Download Release Artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'warzone2100_macOS_universal*'
+          path: ./upload-assets
+          merge-multiple: true
+      - name: List Assets
+        run: ls -LRl ./upload-assets
+      - name: Upload Release Assets
+        working-directory: '${{ github.workspace }}/upload-assets/'
         run: |
           SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
-          echo "Uploading: ${WZ_FULL_OUTPUT_ZIP_PATH}"
-          gh release upload "${SOURCE_TAG}" "${WZ_FULL_OUTPUT_ZIP_PATH}"
+          for file in ./warzone2100_macOS_*; do
+            echo "Uploading: $file"
+            gh release upload "${SOURCE_TAG}" "$file"
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   upload-debug-symbols:
     name: 'Upload Debug Symbols'
