@@ -328,6 +328,13 @@ protected:
 
 std::shared_ptr<LobbyServerHostingHandlerProtocol> MakeLobbyHostListingHandler(const std::string& lobbyAddress, LobbyServerHostingHandlerProtocol::EventCallbacks callbacks);
 
+// MARK: - Build info
+
+// Sets a provider for the client's BuildInfo blob.
+// The provider must invoke the completion function asynchronously on the main thread.
+typedef std::function<void(optional<nlohmann::ordered_json>)> BuildInfoCompletionFunc;
+void setBuildInfoProvider(std::function<void(BuildInfoCompletionFunc)> provider);
+
 // MARK: - Enumerating game listings
 
 struct GameListing

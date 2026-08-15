@@ -1070,6 +1070,15 @@ void to_json(nlohmann::ordered_json& j, const RequestAttestation& v)
 	j["sig"] = v.signature;
 }
 
+// MARK: BuildInfo
+
+static std::function<void(BuildInfoCompletionFunc)> buildInfoProvider;
+
+void setBuildInfoProvider(std::function<void(BuildInfoCompletionFunc)> provider)
+{
+	buildInfoProvider = std::move(provider);
+}
+
 // MARK: LobbyConnectCheckRequest
 
 struct LobbyConnectCheckRequest
@@ -1167,6 +1176,8 @@ private:
 
 	void initializeGameListingCreationData(const GameDetails& gameDetails, const HostJoinOptions& joinOptions, const std::vector<ConnectionInfo>& connections);
 
+	bool submitCreateGameListing(const EcKey& hostIdentity, const GameDetails& gameDetails, const HostJoinOptions& joinOptions, const std::vector<ConnectionInfo>& connections, optional<nlohmann::ordered_json> buildInfo);
+
 	void addConnectionsToGame(const std::vector<ConnectionInfo>& connections);
 
 	void sendListingUpdateImpl();
@@ -1192,6 +1203,7 @@ private:
 	enum class LobbyListingState
 	{
 		None,
+		BuildingCreateRequest,
 		PendingCreate,
 		PendingPublish,
 		Listed
@@ -1446,6 +1458,35 @@ bool LobbyServerHostingHandlerImpl::createGameListing(const EcKey& hostIdentity,
 
 	initializeGameListingCreationData(gameDetails, joinOptions, connections);
 
+	if (trustedLobbyServerAddress && buildInfoProvider)
+	{
+		state = LobbyListingState::BuildingCreateRequest;
+		std::weak_ptr<LobbyServerHostingHandlerImpl> weakSelf = std::static_pointer_cast<LobbyServerHostingHandlerImpl>(shared_from_this());
+		buildInfoProvider([weakSelf, hostIdentity, gameDetails, joinOptions, connections](optional<nlohmann::ordered_json> buildInfo) {
+			auto strongSelf = weakSelf.lock();
+			if (strongSelf == nullptr)
+			{
+				debug(LOG_LOBBY, "LobbyServerHostingHandler instance is gone");
+				return;
+			}
+			if (strongSelf->state != LobbyListingState::BuildingCreateRequest)
+			{
+				debug(LOG_LOBBY, "Game listing creation no longer pending (state: %d)", static_cast<int>(strongSelf->state));
+				return;
+			}
+			if (!strongSelf->submitCreateGameListing(hostIdentity, gameDetails, joinOptions, connections, std::move(buildInfo)))
+			{
+				strongSelf->eventGameListingGone(nullopt, false);
+			}
+		});
+		return true;
+	}
+
+	return submitCreateGameListing(hostIdentity, gameDetails, joinOptions, connections, nullopt);
+}
+
+bool LobbyServerHostingHandlerImpl::submitCreateGameListing(const EcKey& hostIdentity, const GameDetails& gameDetails, const HostJoinOptions& joinOptions, const std::vector<ConnectionInfo>& connections, optional<nlohmann::ordered_json> buildInfo)
+{
 	auto request = buildBaseHostingURLDataRequest();
 	request.url = buildLobbyRequestBaseUrl(lobbyServerAddress) + "/api/v1/game";
 	request.protocol = InternetProtocol::IPv4;
@@ -1458,6 +1499,10 @@ bool LobbyServerHostingHandlerImpl::createGameListing(const EcKey& hostIdentity,
 	{
 		auto attestation = nlohmann::ordered_json(RequestAttestation(gameDetails.host.name, hostIdentity, lobbyServerAddress, nullopt));
 		hostCreateGameInfo["attest"] = attestation;
+		if (buildInfo.has_value())
+		{
+			hostCreateGameInfo["build"] = std::move(buildInfo.value());
+		}
 	}
 
 	request.setPost(hostCreateGameInfo.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace));
@@ -2477,7 +2522,7 @@ void PendingJoinRequestData::DispatchResultsIfReady()
 	}
 }
 
-bool RequestJoinDetails(const std::string& lobbyServerAddress, const std::string& lobbyGameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, RequestJoinResultHandlerFunc resultHandler, optional<IPVersion> optIpVersion, std::shared_ptr<LobbyErrorResolutionData> errorResolution)
+static bool RequestJoinDetailsImpl(const std::string& lobbyServerAddress, const std::string& lobbyGameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, RequestJoinResultHandlerFunc resultHandler, optional<IPVersion> optIpVersion, std::shared_ptr<LobbyErrorResolutionData> errorResolution, optional<nlohmann::ordered_json> buildInfo)
 {
 	URLDataRequest baseRequest;
 
@@ -2507,6 +2552,10 @@ bool RequestJoinDetails(const std::string& lobbyServerAddress, const std::string
 		auto attestation = nlohmann::ordered_json(RequestAttestation(playerName, playerIdentity, lobbyServerAddress, lobbyGameId));
 		ASSERT_OR_RETURN(false, attestation.is_object(), "Not an object?");
 		requestBody["attest"] = attestation;
+		if (buildInfo.has_value())
+		{
+			requestBody["build"] = std::move(buildInfo.value());
+		}
 	}
 	if (errorResolution != nullptr)
 	{
@@ -2589,6 +2638,18 @@ bool RequestJoinDetails(const std::string& lobbyServerAddress, const std::string
 	}
 
 	return requestInitFailures < requestIPVersions.size();
+}
+
+bool RequestJoinDetails(const std::string& lobbyServerAddress, const std::string& lobbyGameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, RequestJoinResultHandlerFunc resultHandler, optional<IPVersion> optIpVersion, std::shared_ptr<LobbyErrorResolutionData> errorResolution)
+{
+	if (isTrustedLobbyAddress(lobbyServerAddress) && buildInfoProvider)
+	{
+		buildInfoProvider([lobbyServerAddress, lobbyGameId, playerName, playerIdentity, asSpectator, resultHandler, optIpVersion, errorResolution](optional<nlohmann::ordered_json> buildInfo) {
+			RequestJoinDetailsImpl(lobbyServerAddress, lobbyGameId, playerName, playerIdentity, asSpectator, resultHandler, optIpVersion, errorResolution, std::move(buildInfo));
+		});
+		return true;
+	}
+	return RequestJoinDetailsImpl(lobbyServerAddress, lobbyGameId, playerName, playerIdentity, asSpectator, resultHandler, optIpVersion, errorResolution, nullopt);
 }
 
 } // namespace netlobby

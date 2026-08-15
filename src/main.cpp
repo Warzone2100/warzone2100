@@ -74,6 +74,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/netreplay.h"
 #include "lib/netplay/sync_debug.h"
+#include "lib/netplay/netlobby.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 
@@ -1976,6 +1977,11 @@ int realmain(int argc, char *argv[])
 	selfExeDetailsInit();
 	getBuildInfo([](const nlohmann::ordered_json& buildInfo) {
 		debug(LOG_WZ, "BuildInfo: %s", buildInfo.dump().c_str());
+	});
+	netlobby::setBuildInfoProvider([](netlobby::BuildInfoCompletionFunc completion) {
+		getBuildInfo([completion](const nlohmann::ordered_json& buildInfo) {
+			completion(buildInfo);
+		});
 	});
 
 	// find early boot info
