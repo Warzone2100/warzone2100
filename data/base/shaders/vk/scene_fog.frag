@@ -1,6 +1,6 @@
 #version 450
 
-#include "ssao_view_common.glsl"
+#include "view_position.glsl"
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 fogColor;

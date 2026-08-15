@@ -1,7 +1,7 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.40 - 1.50 core.)
 
-#include "ssao_view_common.glsl"
+#include "view_position.glsl"
 
 layout(std140) uniform cbuffer {
 	vec4 fogColor;

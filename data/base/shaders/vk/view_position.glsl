@@ -1,5 +1,5 @@
-#ifndef WZ_SSAO_VIEW_COMMON_GLSL
-#define WZ_SSAO_VIEW_COMMON_GLSL
+#ifndef WZ_VIEW_POSITION_GLSL
+#define WZ_VIEW_POSITION_GLSL
 
 vec3 wzGetViewPosition(vec2 uv, float depth, mat4 invProjectionMatrix)
 {

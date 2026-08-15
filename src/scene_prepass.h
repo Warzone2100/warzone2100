@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file scene_prepass.h
- * Combined scene depth + view-space normals prepass for SSAO.
+ * Combined scene depth + view-space normals prepass for SSAO and deferred fog.
  */
 
 #pragma once
