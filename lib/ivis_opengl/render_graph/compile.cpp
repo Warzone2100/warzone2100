@@ -91,6 +91,7 @@ std::optional<ResolvedRead> resolveSingleRead(const ReadDesc& read,
 			resolved.arrayLayer = read.arrayLayer.has_value() ? read.arrayLayer.value() : output->arrayLayer;
 			resolved.mipLevel = read.mipLevel.has_value() ? read.mipLevel.value() : output->mipLevel;
 			resolved.isDepth = output->isDepth;
+			resolved.pipelineSurfaceId = output->pipelineSurfaceId;
 		}
 		break;
 	}
@@ -205,6 +206,22 @@ const ResolvedRead& RenderPassContext::resolvedRead(size_t index) const
 	ASSERT(index < _resolvedReads.size(), "Resolved read index %zu out of range (%zu)",
 		index, _resolvedReads.size());
 	return _resolvedReads[index];
+}
+
+abstract_texture* RenderPassContext::getWrite(size_t index) const
+{
+	if (index >= _desc.colorAttachments.size())
+	{
+		return nullptr;
+	}
+	return _desc.colorAttachments[index].texture;
+}
+
+const AttachmentDesc& RenderPassContext::writeAttachment(size_t index) const
+{
+	ASSERT(index < _desc.colorAttachments.size(), "Write attachment index %zu out of range (%zu)",
+		index, _desc.colorAttachments.size());
+	return _desc.colorAttachments[index];
 }
 
 } // namespace gfx_api

@@ -590,6 +590,7 @@ std::optional<PassOutputView> getPassOutputAttachment(
 			view.texture = producer.resolveAttachment->texture;
 			view.mipLevel = producer.resolveAttachment->mipLevel;
 			view.arrayLayer = producer.resolveAttachment->arrayLayer;
+			view.pipelineSurfaceId = producer.resolveAttachment->pipelineSurfaceId;
 		}
 		else if (!producer.colorAttachments.empty() && producer.colorAttachments[0].texture != nullptr)
 		{
@@ -597,6 +598,7 @@ std::optional<PassOutputView> getPassOutputAttachment(
 			view.mipLevel = producer.colorAttachments[0].mipLevel;
 			view.arrayLayer = producer.colorAttachments[0].arrayLayer;
 			view.isMultisampled = ctx.isMultisampledColorAttachment(view.texture);
+			view.pipelineSurfaceId = producer.colorAttachments[0].pipelineSurfaceId;
 		}
 		else
 		{
@@ -611,6 +613,7 @@ std::optional<PassOutputView> getPassOutputAttachment(
 		view.texture = producer.resolveAttachment->texture;
 		view.mipLevel = producer.resolveAttachment->mipLevel;
 		view.arrayLayer = producer.resolveAttachment->arrayLayer;
+		view.pipelineSurfaceId = producer.resolveAttachment->pipelineSurfaceId;
 		break;
 	case AttachmentRole::Color:
 		if (colorIndex >= producer.colorAttachments.size()
@@ -622,6 +625,7 @@ std::optional<PassOutputView> getPassOutputAttachment(
 		view.mipLevel = producer.colorAttachments[colorIndex].mipLevel;
 		view.arrayLayer = producer.colorAttachments[colorIndex].arrayLayer;
 		view.isMultisampled = ctx.isMultisampledColorAttachment(view.texture);
+		view.pipelineSurfaceId = producer.colorAttachments[colorIndex].pipelineSurfaceId;
 		break;
 	case AttachmentRole::Depth:
 		if (!producer.depthAttachment.has_value() || producer.depthAttachment->texture == nullptr)
@@ -632,6 +636,7 @@ std::optional<PassOutputView> getPassOutputAttachment(
 		view.mipLevel = producer.depthAttachment->mipLevel;
 		view.arrayLayer = producer.depthAttachment->arrayLayer;
 		view.isDepth = true;
+		view.pipelineSurfaceId = producer.depthAttachment->pipelineSurfaceId;
 		break;
 	}
 

@@ -49,6 +49,7 @@ struct PassOutputView
 	uint32_t mipLevel = 0;
 	bool isDepth = false;
 	bool isMultisampled = false;
+	std::optional<PipelineSurfaceId> pipelineSurfaceId;
 };
 
 /// <summary>
