@@ -1084,14 +1084,26 @@ namespace gfx_api
 	constexpr size_t bucket_dimension = 8;
 
 	// Only change once per frame
+	// The bucket table leads so that it forms a prefix of the block.
+	// A shader that fetches the light arrays from elsewhere can then declare and bind just that prefix.
+	// std140 aligns the arrays that follow bucketDimensionUsed to 16 while C++ does not, hence the explicit padding.
 	struct PointLightsUniforms
 	{
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
+		int bucketDimensionUsed;
+		int pad[3];
 		std::array<glm::vec4, max_lights> PointLightsPosition;
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
-		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
-		int bucketDimensionUsed;
 	};
+
+	// std140 puts every one of these arrays on a 16 byte boundary and rounds the block up to
+	// a multiple of 16, neither of which C++ does on its own here.
+	static_assert(offsetof(PointLightsUniforms, bucketOffsetAndSize) % 16 == 0, "std140 requires 16 byte alignment");
+	static_assert(offsetof(PointLightsUniforms, PointLightsPosition) % 16 == 0, "std140 requires 16 byte alignment");
+	static_assert(offsetof(PointLightsUniforms, PointLightsColorAndEnergy) % 16 == 0, "std140 requires 16 byte alignment");
+	static_assert(offsetof(PointLightsUniforms, indexed_lights) % 16 == 0, "std140 requires 16 byte alignment");
+	static_assert(sizeof(PointLightsUniforms) % 16 == 0, "std140 rounds the block up to a multiple of 16");
 
 	// Only change once per frame
 	struct Draw3DShapeInstancedGlobalUniforms

@@ -36,9 +36,9 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 };
 
 layout(std140, set = 2, binding = 0) uniform pointlights {
+	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
+	int bucketDimensionUsed;
 	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
-	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
-	int bucketDimensionUsed;
 };

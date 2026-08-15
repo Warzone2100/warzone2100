@@ -1352,7 +1352,12 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	// Every pass that lights reads the same point lights, so upload them once here and hand the reference to the consumers
 	const auto& bucketLight = lightManager.getPointLightBuckets();
 	const gfx_api::PointLightsUniforms pointLightUniforms = {
-		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+		.bucketOffsetAndSize = bucketLight.bucketOffsetAndSize,
+		.bucketDimensionUsed = static_cast<int>(bucketLight.bucketDimensionUsed),
+		.pad = {},
+		.PointLightsPosition = bucketLight.positions,
+		.PointLightsColorAndEnergy = bucketLight.colorAndEnergy,
+		.indexed_lights = bucketLight.light_index
 	};
 	const auto pointLightsRef = gfx_api::context::get().upload_frame_uniform(pointLightUniforms);
 
