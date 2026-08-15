@@ -23,10 +23,26 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4
 	return lightColor * (pointLightLambert * albedo + pointLightBlinn * gloss);
 }
 
+// Accessors for the light arrays. The loop below reads light data only through these.
+vec4 wzLightPosition(int lightIndex)
+{
+	return PointLightsPosition[lightIndex];
+}
+
+vec4 wzLightColorAndEnergy(int lightIndex)
+{
+	return PointLightsColorAndEnergy[lightIndex];
+}
+
+int wzLightIndex(int entryInLightList)
+{
+	return PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
+}
+
 // This function expects that we have :
-// - a uniforms named bucketOffsetAndSize of ivec4[]
-// - a uniforms named PointLightsPosition of vec4[]
-// - a uniforms named colorAndEnergy of vec4[]
+// - a uniform named bucketOffsetAndSize of ivec4[]
+// - a uniform named bucketDimensionUsed of int
+// - the light accessors declared above
 // fragNormal and view vector are expected to be in the spaceMatrix space
 // spaceMatrix is used to move from world space to necessary space
 vec4 iterateOverAllPointLights(
@@ -45,9 +61,9 @@ vec4 iterateOverAllPointLights(
 	for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
 	{
 		int entryInLightList = bucketOffsetAndSize[bucketId].x + i;
-		int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
-		vec4 position = PointLightsPosition[lightIndex];
-		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
+		int lightIndex = wzLightIndex(entryInLightList);
+		vec4 position = wzLightPosition(lightIndex);
+		vec4 colorAndEnergy = wzLightColorAndEnergy(lightIndex);
 		vec3 tmp = position.xyz * vec3(1., 1., -1.);
 		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, spaceMatrix);
 	}
