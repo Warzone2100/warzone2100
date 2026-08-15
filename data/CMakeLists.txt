@@ -183,6 +183,11 @@ foreach(_vk_shader_file ${_vk_shader_stage_files})
 	endif()
 endforeach()
 
+# Stage files include these.
+file(GLOB VK_SHADER_INCLUDES CONFIGURE_DEPENDS
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.glsl"
+)
+
 # Vulkan shaders are compiled ahead of time, so unlike the GL path there is no runtime
 # patching to keep their point light and shadow limits in step with the C++ definitions.
 # Read the values straight out of the headers that define them and generate the include
@@ -236,7 +241,7 @@ if(GLSLC)
 			COMMAND "${GLSLC}"
 			ARGS "-c" "-I" "${_vk_generated_dir}" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
-			DEPENDS "${SHADER}" "${_vk_generated_constants}"
+			DEPENDS "${SHADER}" "${_vk_generated_constants}" ${VK_SHADER_INCLUDES}
 			VERBATIM
 		)
 		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
