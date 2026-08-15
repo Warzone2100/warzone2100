@@ -914,6 +914,10 @@ struct program_data
 // Terrain claims units 0 to 12, so the light data samplers sit above that and still inside the required 16 minimum.
 constexpr GLint lightDataTextureUnit = 13;
 constexpr GLint lightIndexTextureUnit = 14;
+// 16 per stage is the minimum every target guarantees
+static_assert(lightDataTextureUnit < 16 && lightIndexTextureUnit < 16,
+	"Light data samplers must stay inside the 16 texture image units the spec minimum guarantees");
+static_assert(lightDataTextureUnit != lightIndexTextureUnit, "Light data samplers need distinct units");
 
 static const std::vector<std::tuple<std::string, GLint>> lightDataSamplers = {
 	{"lightDataBuffer", lightDataTextureUnit}, {"lightIndexBuffer", lightIndexTextureUnit}
@@ -1338,6 +1342,13 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 #endif
 		fragmentShaderHeader += "#if __VERSION__ >= 300 || defined(GL_EXT_texture_array)\nprecision lowp sampler2DArray;\n#endif\n";
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
+	}
+
+	for (const auto& sampler : programInfo.additional_samplers)
+	{
+		ASSERT(std::get<1>(sampler) != lightDataTextureUnit && std::get<1>(sampler) != lightIndexTextureUnit,
+			"%s binds %s to texture unit %d, which the light data samplers reserve",
+			programInfo.friendly_name.c_str(), std::get<0>(sampler).c_str(), static_cast<int>(std::get<1>(sampler)));
 	}
 
 	// The light data samplers only exist in a program built for the buffer texture transport.
@@ -5433,10 +5444,15 @@ void gl_context::initLightDataTransport()
 	// WebGL has neither of these
 	const bool hasTexelBuffers = false;
 	const bool hasStorageBuffers = false;
+	const bool hasUnitsForLightSamplers = true;
 #else
 	// texelFetch on a samplerBuffer is core in desktop OpenGL 3.1 but absent from OpenGLES and WebGL,
 	// (where the uniform block stays the only option)
-	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr);
+	// NOTE: The two samplers need units of their own, so a context that cannot reach them falls back
+	GLint maxTextureImageUnits = 0;
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
+	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
+	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
 	const bool hasStorageBuffers = (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr);
 
 	// Preference order:
@@ -5479,6 +5495,11 @@ void gl_context::initLightDataTransport()
 		{
 			debug(LOG_INFO, "Unrecognized WZ_LIGHT_TRANSPORT value \"%s\" (expected uniform | texel | storage) - ignoring", transportOverride);
 		}
+	}
+
+	if (!hasUnitsForLightSamplers)
+	{
+		debug(LOG_INFO, "  * Only %d texture image units, too few to spare two for light data samplers", static_cast<int>(maxTextureImageUnits));
 	}
 #endif
 
