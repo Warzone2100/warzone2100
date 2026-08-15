@@ -39,10 +39,9 @@ namespace fog_pass
 void recordApply(const gfx_api::RenderPassContext& passCtx)
 {
 	ASSERT(passCtx.readCount() == 2, "FogApply: 0 color, 1 prepass depth");
-	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* scene = passCtx.getRead(0);
 	gfx_api::abstract_texture* depth = passCtx.getRead(1);
-	if (vbo == nullptr || scene == nullptr || depth == nullptr
+	if (scene == nullptr || depth == nullptr
 		|| !pie_IsInGame3DFrameContextReady())
 	{
 		return;
@@ -57,13 +56,7 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.uvScaleClamp);
 	constants.fogBegin = renderState.fogBegin;
 	constants.fogEnd = renderState.fogEnd;
-
-	gfx_api::SceneFogPSO::get().bind();
-	gfx_api::SceneFogPSO::get().bind_constants(constants);
-	gfx_api::SceneFogPSO::get().bind_vertex_buffers(vbo);
-	gfx_api::SceneFogPSO::get().bind_textures(scene, depth);
-	gfx_api::SceneFogPSO::get().draw(3, 0);
-	gfx_api::SceneFogPSO::get().unbind_vertex_buffers(vbo);
+	display3d_drawFullscreenTriangle<gfx_api::SceneFogPSO>(constants, scene, depth);
 }
 
 } // namespace fog_pass

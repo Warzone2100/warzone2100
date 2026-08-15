@@ -4503,12 +4503,7 @@ static void drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
 		renderedDims.first / texW, renderedDims.second / texH,
 		(renderedDims.first - 0.5f) / texW, (renderedDims.second - 0.5f) / texH);
 
-	gfx_api::WorldToScreenPSO::get().bind();
-	gfx_api::WorldToScreenPSO::get().bind_constants(cbuf);
-	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::WorldToScreenPSO::get().bind_textures(sourceTexture);
-	gfx_api::WorldToScreenPSO::get().draw(3, 0);
-	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	display3d_drawFullscreenTriangle<gfx_api::WorldToScreenPSO>(cbuf, sourceTexture);
 }
 
 // RCAS sharpness in stops (0 is sharpest, 2 is the least sharp)
@@ -4547,12 +4542,7 @@ static void drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)
 	cbuf.con3 = glm::vec4(0.f, 4.f / inH, 0.f, 0.f);
 	cbuf.con4 = glm::vec4((vpW - 0.5f) / inW, (vpH - 0.5f) / inH, (vpW - 1.5f) / inW, (vpH - 1.5f) / inH);
 
-	gfx_api::Fsr1EasuPSO::get().bind();
-	gfx_api::Fsr1EasuPSO::get().bind_constants(cbuf);
-	gfx_api::Fsr1EasuPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::Fsr1EasuPSO::get().bind_textures(sourceTexture);
-	gfx_api::Fsr1EasuPSO::get().draw(3, 0);
-	gfx_api::Fsr1EasuPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	display3d_drawFullscreenTriangle<gfx_api::Fsr1EasuPSO>(cbuf, sourceTexture);
 }
 
 static void drawFsr1Rcas(gfx_api::abstract_texture* sourceTexture)
@@ -4565,12 +4555,7 @@ static void drawFsr1Rcas(gfx_api::abstract_texture* sourceTexture)
 	cbuf.con0 = glm::vec4(exp2f(-upscalingSharpnessStops), 0.f, 0.f, 0.f);
 	cbuf.con1 = glm::vec4(1.f / static_cast<float>(inputDims->first), 1.f / static_cast<float>(inputDims->second), 0.f, 0.f);
 
-	gfx_api::Fsr1RcasPSO::get().bind();
-	gfx_api::Fsr1RcasPSO::get().bind_constants(cbuf);
-	gfx_api::Fsr1RcasPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::Fsr1RcasPSO::get().bind_textures(sourceTexture);
-	gfx_api::Fsr1RcasPSO::get().draw(3, 0);
-	gfx_api::Fsr1RcasPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	display3d_drawFullscreenTriangle<gfx_api::Fsr1RcasPSO>(cbuf, sourceTexture);
 }
 
 // SMAA quality parameters, defaults matching the reference high preset
@@ -4632,12 +4617,7 @@ static void drawSmaaEdges(gfx_api::abstract_texture* sourceTexture)
 	smaaCommonConstants(sourceTexture, cbuf.rtMetrics, cbuf.uvScaleClamp);
 	cbuf.params = glm::vec4(smaaThreshold, 0.f, 0.f, 0.f);
 
-	gfx_api::SmaaEdgesPSO::get().bind();
-	gfx_api::SmaaEdgesPSO::get().bind_constants(cbuf);
-	gfx_api::SmaaEdgesPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::SmaaEdgesPSO::get().bind_textures(sourceTexture);
-	gfx_api::SmaaEdgesPSO::get().draw(3, 0);
-	gfx_api::SmaaEdgesPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	display3d_drawFullscreenTriangle<gfx_api::SmaaEdgesPSO>(cbuf, sourceTexture);
 }
 
 static void drawSmaaWeights(gfx_api::abstract_texture* edgesTexture)
@@ -4650,12 +4630,7 @@ static void drawSmaaWeights(gfx_api::abstract_texture* edgesTexture)
 	smaaCommonConstants(edgesTexture, cbuf.rtMetrics, cbuf.uvScaleClamp);
 	cbuf.params = glm::vec4(smaaMaxSearchSteps, smaaMaxSearchStepsDiag, smaaCornerRounding, 0.f);
 
-	gfx_api::SmaaWeightsPSO::get().bind();
-	gfx_api::SmaaWeightsPSO::get().bind_constants(cbuf);
-	gfx_api::SmaaWeightsPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::SmaaWeightsPSO::get().bind_textures(edgesTexture, areaTexture, searchTexture);
-	gfx_api::SmaaWeightsPSO::get().draw(3, 0);
-	gfx_api::SmaaWeightsPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	display3d_drawFullscreenTriangle<gfx_api::SmaaWeightsPSO>(cbuf, edgesTexture, areaTexture, searchTexture);
 }
 
 static void drawSmaaBlend(gfx_api::abstract_texture* colorTexture, gfx_api::abstract_texture* weightsTexture)
@@ -4663,12 +4638,7 @@ static void drawSmaaBlend(gfx_api::abstract_texture* colorTexture, gfx_api::abst
 	gfx_api::constant_buffer_type<SHADER_SMAA_BLEND> cbuf;
 	smaaCommonConstants(colorTexture, cbuf.rtMetrics, cbuf.uvScaleClamp);
 
-	gfx_api::SmaaBlendPSO::get().bind();
-	gfx_api::SmaaBlendPSO::get().bind_constants(cbuf);
-	gfx_api::SmaaBlendPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::SmaaBlendPSO::get().bind_textures(colorTexture, weightsTexture);
-	gfx_api::SmaaBlendPSO::get().draw(3, 0);
-	gfx_api::SmaaBlendPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	display3d_drawFullscreenTriangle<gfx_api::SmaaBlendPSO>(cbuf, colorTexture, weightsTexture);
 }
 
 void display3d_renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4& skyboxViewMatrix)

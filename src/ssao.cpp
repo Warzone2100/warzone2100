@@ -172,8 +172,7 @@ void drawSSAOGenerate(
 	gfx_api::abstract_texture* depthTexture,
 	gfx_api::abstract_texture* normalsTexture,
 	const glm::mat4& projectionMatrix,
-	const glm::mat4& invProjectionMatrix,
-	gfx_api::buffer* fullscreenTriVBO)
+	const glm::mat4& invProjectionMatrix)
 {
 	const auto writeId = passCtx.writeSurfaceId(0);
 	if (!writeId.has_value())
@@ -200,20 +199,14 @@ void drawSSAOGenerate(
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
 
-	gfx_api::SSAOGeneratePSO::get().bind();
-	gfx_api::SSAOGeneratePSO::get().bind_constants(constants);
-	gfx_api::SSAOGeneratePSO::get().bind_vertex_buffers(fullscreenTriVBO);
-	gfx_api::SSAOGeneratePSO::get().bind_textures(depthTexture, normalsTexture, s_noiseTexture);
-	gfx_api::SSAOGeneratePSO::get().draw(3, 0);
-	gfx_api::SSAOGeneratePSO::get().unbind_vertex_buffers(fullscreenTriVBO);
+	display3d_drawFullscreenTriangle<gfx_api::SSAOGeneratePSO>(constants, depthTexture, normalsTexture, s_noiseTexture);
 }
 
 void drawSSAOBlur(
 	const gfx_api::RenderPassContext& passCtx,
 	gfx_api::abstract_texture* occlusionTexture,
 	gfx_api::abstract_texture* depthTexture,
-	const glm::vec2& blurDirection,
-	gfx_api::buffer* fullscreenTriVBO)
+	const glm::vec2& blurDirection)
 {
 	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
 	constants.blurDirection = blurDirection;
@@ -222,12 +215,7 @@ void drawSSAOBlur(
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.occlusionUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.depthUvScaleClamp);
 
-	gfx_api::SSAOBlurPSO::get().bind();
-	gfx_api::SSAOBlurPSO::get().bind_constants(constants);
-	gfx_api::SSAOBlurPSO::get().bind_vertex_buffers(fullscreenTriVBO);
-	gfx_api::SSAOBlurPSO::get().bind_textures(occlusionTexture, depthTexture);
-	gfx_api::SSAOBlurPSO::get().draw(3, 0);
-	gfx_api::SSAOBlurPSO::get().unbind_vertex_buffers(fullscreenTriVBO);
+	display3d_drawFullscreenTriangle<gfx_api::SSAOBlurPSO>(constants, occlusionTexture, depthTexture);
 }
 
 enum class BlurAxis
@@ -239,8 +227,7 @@ enum class BlurAxis
 void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 {
 	ASSERT(passCtx.readCount() == 2, "SSAO blur: occlusion + depth");
-	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
-	if (vbo == nullptr || passCtx.getRead(0) == nullptr || passCtx.getRead(1) == nullptr)
+	if (passCtx.getRead(0) == nullptr || passCtx.getRead(1) == nullptr)
 	{
 		return;
 	}
@@ -251,7 +238,7 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 	const glm::vec2 blurDirection = (axis == BlurAxis::Horizontal)
 		? glm::vec2(1.0f / usedW, 0.0f)
 		: glm::vec2(0.0f, 1.0f / usedH);
-	drawSSAOBlur(passCtx, passCtx.getRead(0), passCtx.getRead(1), blurDirection, vbo);
+	drawSSAOBlur(passCtx, passCtx.getRead(0), passCtx.getRead(1), blurDirection);
 }
 
 } // namespace
@@ -279,37 +266,29 @@ void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 		return;
 	}
 
-	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* depth = passCtx.getRead(0);
 	gfx_api::abstract_texture* normals = passCtx.getRead(1);
-	if (vbo == nullptr || depth == nullptr || normals == nullptr)
+	if (depth == nullptr || normals == nullptr)
 	{
 		return;
 	}
 
 	const auto& fc = pie_GetInGame3DFrameContext();
-	drawSSAOGenerate(passCtx, depth, normals, fc.perspectiveMatrix, glm::inverse(fc.perspectiveMatrix), vbo);
+	drawSSAOGenerate(passCtx, depth, normals, fc.perspectiveMatrix, glm::inverse(fc.perspectiveMatrix));
 }
 
 void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 {
 	ASSERT(passCtx.readCount() == 1, "SSAO downsample: 0 generate AO");
-	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* ao = passCtx.getRead(0);
-	if (vbo == nullptr || ao == nullptr)
+	if (ao == nullptr)
 	{
 		return;
 	}
 
 	gfx_api::constant_buffer_type<SHADER_SSAO_DOWNSAMPLE> constants {};
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
-
-	gfx_api::SSAODownsamplePSO::get().bind();
-	gfx_api::SSAODownsamplePSO::get().bind_constants(constants);
-	gfx_api::SSAODownsamplePSO::get().bind_vertex_buffers(vbo);
-	gfx_api::SSAODownsamplePSO::get().bind_textures(ao);
-	gfx_api::SSAODownsamplePSO::get().draw(3, 0);
-	gfx_api::SSAODownsamplePSO::get().unbind_vertex_buffers(vbo);
+	display3d_drawFullscreenTriangle<gfx_api::SSAODownsamplePSO>(constants, ao);
 }
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
@@ -325,11 +304,10 @@ void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 void recordCompose(const gfx_api::RenderPassContext& passCtx)
 {
 	ASSERT(passCtx.readCount() == 3, "SSAO compose: 0 scene, 1 AO, 2 normals");
-	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* scene = passCtx.getRead(0);
 	gfx_api::abstract_texture* ao = passCtx.getRead(1);
 	gfx_api::abstract_texture* prepassNormals = passCtx.getRead(2);
-	if (vbo == nullptr || scene == nullptr || ao == nullptr || prepassNormals == nullptr
+	if (scene == nullptr || ao == nullptr || prepassNormals == nullptr
 		|| !pie_IsInGame3DFrameContextReady())
 	{
 		return;
@@ -339,13 +317,7 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 	constants.ssaoIntensity = s_tuning.intensity;
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.sceneUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.aoUvScaleClamp);
-
-	gfx_api::SceneComposeSSAOPSO::get().bind();
-	gfx_api::SceneComposeSSAOPSO::get().bind_constants(constants);
-	gfx_api::SceneComposeSSAOPSO::get().bind_vertex_buffers(vbo);
-	gfx_api::SceneComposeSSAOPSO::get().bind_textures(scene, ao, prepassNormals);
-	gfx_api::SceneComposeSSAOPSO::get().draw(3, 0);
-	gfx_api::SceneComposeSSAOPSO::get().unbind_vertex_buffers(vbo);
+	display3d_drawFullscreenTriangle<gfx_api::SceneComposeSSAOPSO>(constants, scene, ao, prepassNormals);
 }
 
 } // namespace ssao
