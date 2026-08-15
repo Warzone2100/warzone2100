@@ -70,6 +70,10 @@ ExeDetails computeExeDetails()
 // NOTE: Main thread only.
 void deliverResult(ExeDetails details)
 {
+	if (state == ComputeState::Done)
+	{
+		return;
+	}
 	computedDetails = std::move(details);
 	state = ComputeState::Done;
 	if (computedDetails.rawHash.has_value())

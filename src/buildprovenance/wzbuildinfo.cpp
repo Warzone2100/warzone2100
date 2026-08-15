@@ -85,12 +85,29 @@ nlohmann::ordered_json assembleBuildInfo(const ExeDetails& exeDetails)
 	return info;
 }
 
+// NOTE: Main thread only.
+optional<nlohmann::ordered_json>& buildInfoCache()
+{
+	static optional<nlohmann::ordered_json> cache;
+	return cache;
+}
+
 } // anonymous namespace
 
 void getBuildInfo(std::function<void(const nlohmann::ordered_json&)> resultFunc)
 {
 	ASSERT_OR_RETURN(, resultFunc != nullptr, "Null resultFunc");
 	getSelfExecutableDetails([resultFunc](const ExeDetails& exeDetails) {
-		resultFunc(assembleBuildInfo(exeDetails));
+		auto& cache = buildInfoCache();
+		if (!cache.has_value())
+		{
+			cache = assembleBuildInfo(exeDetails);
+		}
+		resultFunc(cache.value());
 	});
+}
+
+optional<nlohmann::ordered_json> getBuildInfoCached()
+{
+	return buildInfoCache();
 }

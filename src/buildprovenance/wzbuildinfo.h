@@ -23,6 +23,9 @@
 
 #include <functional>
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+
 #include <nlohmann/json_fwd.hpp>
 
 // Assembles the structured BuildInfo blob: self-reported build metadata plus the self-measured executable hash.
@@ -49,3 +52,7 @@
 // `resultFunc` is always invoked asynchronously on the main thread.
 // NOTE: Main thread only.
 void getBuildInfo(std::function<void(const nlohmann::ordered_json&)> resultFunc);
+
+// Returns the BuildInfo blob if already computed, nullopt otherwise.
+// NOTE: Main thread only.
+optional<nlohmann::ordered_json> getBuildInfoCached();
