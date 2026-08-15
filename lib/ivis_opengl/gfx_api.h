@@ -395,6 +395,16 @@ namespace gfx_api
 		frame_uniform_allocation allocation_;
 	};
 
+	/// How per frame point light data reaches the shaders
+	enum class data_buffer_transport
+	{
+		uniform_block,   ///< std140 arrays in the point lights block, available everywhere
+		texel_buffer,    ///< samplerBuffer read with texelFetch, desktop GL 3.1 and Vulkan
+		storage_buffer,  ///< readonly std430 buffer block, desktop GL 4.3 and Vulkan
+	};
+
+	const char* to_string(data_buffer_transport transport);
+
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -453,6 +463,8 @@ namespace gfx_api
 		/// Bind a frame uniform to a slot of the bound pipeline.
 		virtual void set_frame_uniform_at(size_t slot, const frame_uniform_allocation& allocation, std::type_index type) = 0;
 		uint32_t frameUniformGeneration() const { return _frameUniformGeneration; }
+		/// Which transport carries the point light arrays.
+		virtual data_buffer_transport lightDataTransport() const { return data_buffer_transport::uniform_block; }
 		virtual void draw(const std::size_t& offset, const std::size_t&, const primitive_type&) = 0;
 		virtual void draw_elements(const std::size_t& offset, const std::size_t&, const primitive_type&, const index_type&) = 0;
 		// Depth-only polygon offset with glPolygonOffset(factor, units) semantics:

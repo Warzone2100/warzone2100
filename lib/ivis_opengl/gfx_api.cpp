@@ -35,6 +35,7 @@ static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
 static gfx_api::context* current_backend_context = nullptr;
 
+namespace gfx_api {
 static const char* to_string(gfx_api::backend_type backendType)
 {
 	switch (backendType)
@@ -42,6 +43,18 @@ static const char* to_string(gfx_api::backend_type backendType)
 		case gfx_api::backend_type::null_backend: return "Null backend";
 		case gfx_api::backend_type::opengl_backend: return "GL backend";
 		case gfx_api::backend_type::vulkan_backend: return "Vulkan backend";
+	}
+	return "";
+}
+} // namespace gfx_api
+
+const char* gfx_api::to_string(gfx_api::data_buffer_transport transport)
+{
+	switch (transport)
+	{
+		case gfx_api::data_buffer_transport::uniform_block: return "uniform block";
+		case gfx_api::data_buffer_transport::texel_buffer: return "texel buffer";
+		case gfx_api::data_buffer_transport::storage_buffer: return "storage buffer";
 	}
 	return "";
 }

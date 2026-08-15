@@ -3549,6 +3549,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	initPixelFormatsSupport();
 	initUniformBufferLimits();
 	benchmarkUniformBlockWriteMethods();
+	initLightDataTransport();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
 	hasBorderClampSupport = initCheckBorderClampSupport();
@@ -5355,6 +5356,78 @@ void gl_context::initUniformBufferLimits()
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	uniformBlockAllocatorFences.assign(uniformBlockAllocators.size(), nullptr);
 #endif
+}
+
+void gl_context::initLightDataTransport()
+{
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// WebGL has neither of these
+	const bool hasTexelBuffers = false;
+	const bool hasStorageBuffers = false;
+#else
+	// texelFetch on a samplerBuffer is core in desktop OpenGL 3.1 but absent from OpenGLES and WebGL,
+	// (where the uniform block stays the only option)
+	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr);
+	const bool hasStorageBuffers = (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr);
+
+	// Preference order:
+	// 1. storage buffer (no sampler spent, and the index can be scalarized)
+	// 2. texel buffer (wider support, including macOS which stops at OpenGL 4.1)
+	// 3. uniform block
+	if (hasStorageBuffers)
+	{
+		lightTransport = gfx_api::data_buffer_transport::storage_buffer;
+	}
+	else if (hasTexelBuffers)
+	{
+		lightTransport = gfx_api::data_buffer_transport::texel_buffer;
+	}
+	else
+	{
+		lightTransport = gfx_api::data_buffer_transport::uniform_block;
+	}
+
+	// Runtime override for testing:
+	//   WZ_LIGHT_TRANSPORT = uniform | texel | storage
+	if (const char* transportOverride = getenv("WZ_LIGHT_TRANSPORT"))
+	{
+		if (strcmp(transportOverride, "uniform") == 0)
+		{
+			lightTransport = gfx_api::data_buffer_transport::uniform_block;
+		}
+		else if (strcmp(transportOverride, "texel") == 0)
+		{
+			if (hasTexelBuffers)
+			{
+				lightTransport = gfx_api::data_buffer_transport::texel_buffer;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=texel requested, but buffer textures are unavailable on this context - ignoring");
+			}
+		}
+		else if (strcmp(transportOverride, "storage") == 0)
+		{
+			if (hasStorageBuffers)
+			{
+				lightTransport = gfx_api::data_buffer_transport::storage_buffer;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=storage requested, but storage buffers are unavailable on this context - ignoring");
+			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Unrecognized WZ_LIGHT_TRANSPORT value \"%s\" (expected uniform | texel | storage) - ignoring", transportOverride);
+		}
+	}
+#endif
+
+	debug(LOG_INFO, "  * Point light data uses the %s (texel buffers %s, storage buffers %s)",
+		gfx_api::to_string(lightTransport),
+		hasTexelBuffers ? "available" : "unavailable",
+		hasStorageBuffers ? "available" : "unavailable");
 }
 
 // Startup micro-benchmark of the available uniform block write methods.

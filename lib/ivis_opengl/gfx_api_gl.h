@@ -528,8 +528,12 @@ protected:
 	void wzGLPopDebugGroup();
 	bool useKHRSuffixedDebugFuncs();
 
+public:
+	gfx_api::data_buffer_transport lightDataTransport() const override { return lightTransport; }
+
 private:
 	bool initGLContext();
+	void initLightDataTransport();
 	bool initTessellationSupport();
 	bool initTextureGatherSupport();
 	/// MSAA sample count actually in use, the requested count clamped to what the
@@ -580,6 +584,7 @@ private:
 
 	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
 	bool hasGpuTimestampSupport = false;
+	gfx_api::data_buffer_transport lightTransport = gfx_api::data_buffer_transport::uniform_block;
 	struct GpuTimingSlot
 	{
 		GLuint beginQuery = 0;
