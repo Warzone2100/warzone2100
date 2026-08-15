@@ -524,6 +524,26 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	currentPointLightBuckets = std::move(result);
 }
 
+const ILightingManager::FlatPointLightData& ILightingManager::getFlatPointLightData()
+{
+	const auto& buckets = currentPointLightBuckets;
+	for (size_t i = 0; i < gfx_api::max_lights; ++i)
+	{
+		currentFlatPointLightData.lights[i * 2] = buckets.positions[i];
+		currentFlatPointLightData.lights[i * 2 + 1] = buckets.colorAndEnergy[i];
+	}
+	for (size_t i = 0; i < gfx_api::max_indexed_lights; ++i)
+	{
+		const glm::ivec4& packed = buckets.light_index[i];
+		currentFlatPointLightData.indices[i * 4] = packed.x;
+		currentFlatPointLightData.indices[i * 4 + 1] = packed.y;
+		currentFlatPointLightData.indices[i * 4 + 2] = packed.z;
+		currentFlatPointLightData.indices[i * 4 + 3] = packed.w;
+	}
+	return currentFlatPointLightData;
+}
+
+
 static ILightingManager* lightingManager = nullptr;
 
 void setLightingManager(ILightingManager* manager)

@@ -24,6 +24,27 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4
 }
 
 // Accessors for the light arrays. The loop below reads light data only through these.
+#if WZ_LIGHT_TRANSPORT == 1
+// A buffer texture carries one format, so the two light vec4s share a float buffer at a
+// stride of two texels and the index list gets an integer buffer of its own.
+uniform samplerBuffer lightDataBuffer;
+uniform isamplerBuffer lightIndexBuffer;
+
+vec4 wzLightPosition(int lightIndex)
+{
+	return texelFetch(lightDataBuffer, lightIndex * 2);
+}
+
+vec4 wzLightColorAndEnergy(int lightIndex)
+{
+	return texelFetch(lightDataBuffer, lightIndex * 2 + 1);
+}
+
+int wzLightIndex(int entryInLightList)
+{
+	return texelFetch(lightIndexBuffer, entryInLightList).r;
+}
+#else
 vec4 wzLightPosition(int lightIndex)
 {
 	return PointLightsPosition[lightIndex];
@@ -38,6 +59,7 @@ int wzLightIndex(int entryInLightList)
 {
 	return PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
 }
+#endif
 
 // This function expects that we have :
 // - a uniform named bucketOffsetAndSize of ivec4[]

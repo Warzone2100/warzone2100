@@ -1361,6 +1361,15 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	};
 	const auto pointLightsRef = gfx_api::context::get().upload_frame_uniform(pointLightUniforms);
 
+	// On a buffer transport the arrays are not in the block at all - they travel separately
+	if (gfx_api::context::get().lightDataTransport() != gfx_api::data_buffer_transport::uniform_block)
+	{
+		const auto& flatLights = lightManager.getFlatPointLightData();
+		gfx_api::context::get().upload_light_data(
+			flatLights.lights.data(), flatLights.lights.size() * sizeof(glm::vec4),
+			flatLights.indices.data(), flatLights.indices.size() * sizeof(int32_t));
+	}
+
 	// prepare terrain for drawing
 	perFrameTerrainUpdates(gameWorld.map, lightmap);
 

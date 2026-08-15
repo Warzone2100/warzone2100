@@ -88,6 +88,15 @@ struct ILightingManager
 		size_t bucketDimensionUsed = gfx_api::bucket_dimension;
 	};
 
+	//! The same light data laid out for a buffer transport:
+	//! - two vec4 per light, position then colour and energy
+	//! - the index list (without the ivec4 packing)
+	struct FlatPointLightData
+	{
+		std::array<glm::vec4, gfx_api::max_lights * 2> lights = {};
+		std::array<int32_t, gfx_api::max_indexed_lights * 4> indices = {};
+	};
+
 	virtual ~ILightingManager() = default;
 
 	void SetFrameStart()
@@ -102,8 +111,12 @@ struct ILightingManager
 		return currentPointLightBuckets;
 	}
 
+	//! Rebuilt from the buckets on demand (so zero cost while the uniform block transport is in use).
+	const FlatPointLightData& getFlatPointLightData();
+
 	protected:
 		PointLightBuckets currentPointLightBuckets;
+		FlatPointLightData currentFlatPointLightData;
 };
 
 
