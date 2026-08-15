@@ -99,6 +99,8 @@ struct ResolvedRead
 	uint32_t arrayLayer = 0;
 	uint32_t mipLevel = 0;
 	bool isDepth = false;
+	/// Producer pipeline surface when `source == PassOutput`; unset for `ExplicitTexture`.
+	optional<PipelineSurfaceId> pipelineSurfaceId;
 };
 
 class RenderPassContext;
@@ -145,6 +147,30 @@ public:
 	abstract_texture* getRead(size_t index) const;
 	/// Full resolved read metadata (texture + layer/mip/depth flag).
 	const ResolvedRead& resolvedRead(size_t index) const;
+
+	/// Number of tracked color writes (`RenderPassDesc::colorAttachments`).
+	size_t writeCount() const { return _desc.colorAttachments.size(); }
+	/// Color write texture (null if unresolved or out of range). Parallel to `getRead`.
+	abstract_texture* getWrite(size_t index = 0) const;
+	/// Full tracked color-write attachment (texture + load/store + `pipelineSurfaceId`).
+	const AttachmentDesc& writeAttachment(size_t index = 0) const;
+	/// Catalog id of the tracked color write; unset if the write is not a pipeline surface.
+	optional<PipelineSurfaceId> writeSurfaceId(size_t index = 0) const
+	{
+		return writeAttachment(index).pipelineSurfaceId;
+	}
+	/// Tracked depth write, or null if this pass has no depth attachment.
+	const AttachmentDesc* writeDepthAttachment() const
+	{
+		return _desc.depthAttachment ? &*_desc.depthAttachment : nullptr;
+	}
+	/// Used extent of the primary color write (dyn-res viewport rewritten in
+	/// `applyUsedCatalogViewports`). Not the allocated image size.
+	optional<std::pair<uint32_t, uint32_t>> writeViewportSize() const
+	{
+		return _desc.viewportSize;
+	}
+
 	/// Stable id from `RenderPassDesc::passId`.
 	PassId passId() const { return _desc.passId; }
 

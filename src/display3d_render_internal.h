@@ -28,7 +28,6 @@
 
 #include <glm/fwd.hpp>
 #include <glm/vec4.hpp>
-#include <cstdint>
 
 void display3d_renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4& skyboxViewMatrix);
 void display3d_doConstructionLines(const glm::mat4& viewMatrix);
@@ -43,9 +42,5 @@ void display3d_processSensorTarget();
 void display3d_processDestinationTarget();
 /// Fullscreen triangle VBO used by post-processing passes (null before init3DView).
 gfx_api::buffer* display3d_getScreenTriangleVBO();
-/// Scale/clamp UVs from `sourceTex` onto a used sub-rect of size usedW x usedH.
-void display3d_fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp);
-/// Scale/clamp UVs from pipeline surface `id` onto that surface's used (dyn-res) extent.
-void display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId id, glm::vec4& uvScaleClamp);
-/// Scale/clamp UVs from a scene-sized source texture onto the rendered scene sub-rect.
-void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp);
+/// Scale/clamp UVs from graph read `readIndex`'s producer pipeline surface.
+void display3d_fillPassReadUvScaleClamp(const gfx_api::RenderPassContext& passCtx, size_t readIndex, glm::vec4& uvScaleClamp);

@@ -90,49 +90,49 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		builder.beginPass(PassId::SSAOGenerate, "SSAOGenerate")
 			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 			.viewport(ViewportRule::ColorTarget)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth) // 0: prepass depth
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0); // 1: prepass normals
 
 		if (ssaoDownsample)
 		{
 			builder.beginPass(PassId::SSAODownsample, "SSAODownsample")
 				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor);
+				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor); // 0: generate AO
 
 			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
 				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAODownsample, AttachmentRole::PrimaryColor)
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+				.readFrom(PassId::SSAODownsample, AttachmentRole::PrimaryColor) // 0: occlusion
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
 
 			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
 				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor) // 0: occlusion
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
 		}
 		else
 		{
 			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
 				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor)
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor) // 0: occlusion
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
 
 			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
 				.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
 				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor)
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor) // 0: occlusion
+				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
 		}
 
 		builder.beginPass(PassId::SSAOCompose, "SSAOCompose")
 			.color(PipelineSurfaceId::SSAOComposedColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::SSAOBlurV, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
+			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor) // 0: scene color
+			.readFrom(PassId::SSAOBlurV, AttachmentRole::PrimaryColor) // 1: blurred AO
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0); // 2: prepass normals
 	}
 
 	if (fogActive)
@@ -141,8 +141,8 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		builder.beginPass(PassId::FogApply, "FogApply")
 			.color(PipelineSurfaceId::FogColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(fogColorSrc, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
+			.readFrom(fogColorSrc, AttachmentRole::PrimaryColor) // 0: lit color
+			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
 	}
 
 	const PassId lightingColor = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;

@@ -4696,7 +4696,7 @@ gfx_api::buffer* display3d_getScreenTriangleVBO()
 	return pScreenTriangleVBO;
 }
 
-void display3d_fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+static void fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
 {
 	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTex)
 		.value_or(std::pair<uint32_t, uint32_t>{usedW, usedH});
@@ -4707,17 +4707,18 @@ void display3d_fillUvScaleClamp(uint32_t usedW, uint32_t usedH, gfx_api::abstrac
 		(usedW - 0.5f) / texW, (usedH - 0.5f) / texH);
 }
 
-void display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId id, glm::vec4& uvScaleClamp)
+static void fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId id, glm::vec4& uvScaleClamp)
 {
 	auto& ctx = gfx_api::context::get();
 	const auto used = ctx.usedPipelineSurfaceExtent(id);
-	display3d_fillUvScaleClamp(used.first, used.second, ctx.getPipelineSurface(id), uvScaleClamp);
+	fillUvScaleClamp(used.first, used.second, ctx.getPipelineSurface(id), uvScaleClamp);
 }
 
-void display3d_fillSceneUvScaleClamp(gfx_api::abstract_texture* sourceTex, glm::vec4& uvScaleClamp)
+void display3d_fillPassReadUvScaleClamp(const gfx_api::RenderPassContext& passCtx, size_t readIndex, glm::vec4& uvScaleClamp)
 {
-	(void)sourceTex;
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SceneColor, uvScaleClamp);
+	const auto& read = passCtx.resolvedRead(readIndex);
+	ASSERT(read.pipelineSurfaceId.has_value(), "read %zu has no pipeline surface", readIndex);
+	fillSurfaceUvScaleClamp(*read.pipelineSurfaceId, uvScaleClamp);
 }
 
 void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)

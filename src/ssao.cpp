@@ -167,29 +167,20 @@ bool initNoiseTexture()
 	return s_noiseTexture != nullptr && s_noiseTexture->upload(0, noiseImage);
 }
 
-/// Final AO buffer compose/blurV write: SSAOBlurred when downsample is in the graph, else SSAORaw.
-/// Uses allocated scene size so it matches topology, not dyn-res used extents.
-gfx_api::PipelineSurfaceId ssaoFinalAoSurface()
-{
-	auto& ctx = gfx_api::context::get();
-	const auto scene = ctx.getPipelineSurfaceDimensions(gfx_api::PipelineSurfaceId::SceneColor)
-		.value_or(std::pair<uint32_t, uint32_t>{0, 0});
-	if (gfx_api::ssaoBlurIsCoarser(scene.first, scene.second,
-		ctx.getSSAOGenerateDivisor(), ctx.getSSAOBlurDivisor()))
-	{
-		return gfx_api::PipelineSurfaceId::SSAOBlurred;
-	}
-	return gfx_api::PipelineSurfaceId::SSAORaw;
-}
-
 void drawSSAOGenerate(
+	const gfx_api::RenderPassContext& passCtx,
 	gfx_api::abstract_texture* depthTexture,
 	gfx_api::abstract_texture* normalsTexture,
 	const glm::mat4& projectionMatrix,
 	const glm::mat4& invProjectionMatrix,
 	gfx_api::buffer* fullscreenTriVBO)
 {
-	const auto genDims = gfx_api::context::get().getPipelineSurfaceDimensions(gfx_api::PipelineSurfaceId::SSAORaw)
+	const auto writeId = passCtx.writeSurfaceId(0);
+	if (!writeId.has_value())
+	{
+		return;
+	}
+	const auto genDims = gfx_api::context::get().getPipelineSurfaceDimensions(*writeId)
 		.value_or(std::pair<uint32_t, uint32_t>{0, 0});
 	if (genDims.first == 0 || genDims.second == 0)
 	{
@@ -207,7 +198,7 @@ void drawSSAOGenerate(
 		static_cast<float>(genDims.second) / static_cast<float>(NOISE_TEXTURE_SIZE));
 	constants.sampleCount = static_cast<float>(activeSettings().sampleCount);
 	std::memcpy(constants.kernel, s_kernel, sizeof(s_kernel));
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.uvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
 
 	gfx_api::SSAOGeneratePSO::get().bind();
 	gfx_api::SSAOGeneratePSO::get().bind_constants(constants);
@@ -218,18 +209,18 @@ void drawSSAOGenerate(
 }
 
 void drawSSAOBlur(
+	const gfx_api::RenderPassContext& passCtx,
 	gfx_api::abstract_texture* occlusionTexture,
 	gfx_api::abstract_texture* depthTexture,
 	const glm::vec2& blurDirection,
-	gfx_api::PipelineSurfaceId occlusionSurface,
 	gfx_api::buffer* fullscreenTriVBO)
 {
 	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
 	constants.blurDirection = blurDirection;
 	constants.depthSigma = s_tuning.blurDepthSigma;
 	constants.tapPairs = static_cast<float>(activeSettings().blurTapPairs);
-	display3d_fillSurfaceUvScaleClamp(occlusionSurface, constants.occlusionUvScaleClamp);
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.depthUvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.occlusionUvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.depthUvScaleClamp);
 
 	gfx_api::SSAOBlurPSO::get().bind();
 	gfx_api::SSAOBlurPSO::get().bind_constants(constants);
@@ -245,8 +236,7 @@ enum class BlurAxis
 	Vertical,
 };
 
-void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis,
-	gfx_api::PipelineSurfaceId writeSurface)
+void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
 {
 	ASSERT(passCtx.readCount() == 2, "SSAO blur: occlusion + depth");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
@@ -254,14 +244,14 @@ void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis,
 	{
 		return;
 	}
-	// Taps are in pass texCoord space (0-1 over the used occlusion viewport).
-	const auto used = gfx_api::context::get().usedPipelineSurfaceExtent(writeSurface);
+	// Taps are in pass texCoord space (0-1 over the used write viewport).
+	const auto used = passCtx.writeViewportSize().value_or(std::pair<uint32_t, uint32_t>{1, 1});
 	const float usedW = static_cast<float>(std::max(used.first, 1u));
 	const float usedH = static_cast<float>(std::max(used.second, 1u));
 	const glm::vec2 blurDirection = (axis == BlurAxis::Horizontal)
 		? glm::vec2(1.0f / usedW, 0.0f)
 		: glm::vec2(0.0f, 1.0f / usedH);
-	drawSSAOBlur(passCtx.getRead(0), passCtx.getRead(1), blurDirection, writeSurface, vbo);
+	drawSSAOBlur(passCtx, passCtx.getRead(0), passCtx.getRead(1), blurDirection, vbo);
 }
 
 } // namespace
@@ -283,7 +273,7 @@ void shutdown()
 
 void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 2, "SSAO generate: depth + normals");
+	ASSERT(passCtx.readCount() == 2, "SSAO generate: 0 depth, 1 normals");
 	if (s_noiseTexture == nullptr || !pie_IsInGame3DFrameContextReady())
 	{
 		return;
@@ -298,12 +288,12 @@ void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 	}
 
 	const auto& fc = pie_GetInGame3DFrameContext();
-	drawSSAOGenerate(depth, normals, fc.perspectiveMatrix, glm::inverse(fc.perspectiveMatrix), vbo);
+	drawSSAOGenerate(passCtx, depth, normals, fc.perspectiveMatrix, glm::inverse(fc.perspectiveMatrix), vbo);
 }
 
 void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 1, "SSAO downsample: generate AO");
+	ASSERT(passCtx.readCount() == 1, "SSAO downsample: 0 generate AO");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* ao = passCtx.getRead(0);
 	if (vbo == nullptr || ao == nullptr)
@@ -312,7 +302,7 @@ void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 	}
 
 	gfx_api::constant_buffer_type<SHADER_SSAO_DOWNSAMPLE> constants {};
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SSAORaw, constants.uvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
 
 	gfx_api::SSAODownsamplePSO::get().bind();
 	gfx_api::SSAODownsamplePSO::get().bind_constants(constants);
@@ -324,17 +314,17 @@ void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
 {
-	recordBlur(passCtx, BlurAxis::Horizontal, gfx_api::PipelineSurfaceId::SSAOBlurH);
+	recordBlur(passCtx, BlurAxis::Horizontal);
 }
 
 void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 {
-	recordBlur(passCtx, BlurAxis::Vertical, ssaoFinalAoSurface());
+	recordBlur(passCtx, BlurAxis::Vertical);
 }
 
 void recordCompose(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 3, "SSAO compose: scene + AO + normals");
+	ASSERT(passCtx.readCount() == 3, "SSAO compose: 0 scene, 1 AO, 2 normals");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* scene = passCtx.getRead(0);
 	gfx_api::abstract_texture* ao = passCtx.getRead(1);
@@ -347,8 +337,8 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO> constants {};
 	constants.ssaoIntensity = s_tuning.intensity;
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::SceneColor, constants.sceneUvScaleClamp);
-	display3d_fillSurfaceUvScaleClamp(ssaoFinalAoSurface(), constants.aoUvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.sceneUvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.aoUvScaleClamp);
 
 	gfx_api::SceneComposeSSAOPSO::get().bind();
 	gfx_api::SceneComposeSSAOPSO::get().bind_constants(constants);

@@ -38,7 +38,7 @@ namespace fog_pass
 
 void recordApply(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 2, "FogApply: color + prepass depth");
+	ASSERT(passCtx.readCount() == 2, "FogApply: 0 color, 1 prepass depth");
 	gfx_api::buffer* vbo = display3d_getScreenTriangleVBO();
 	gfx_api::abstract_texture* scene = passCtx.getRead(0);
 	gfx_api::abstract_texture* depth = passCtx.getRead(1);
@@ -54,7 +54,7 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	gfx_api::constant_buffer_type<SHADER_SCENE_FOG> constants {};
 	constants.fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
 	constants.invProjectionMatrix = glm::inverse(fc.perspectiveMatrix);
-	display3d_fillSurfaceUvScaleClamp(gfx_api::PipelineSurfaceId::ScenePrepassDepth, constants.uvScaleClamp);
+	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.uvScaleClamp);
 	constants.fogBegin = renderState.fogBegin;
 	constants.fogEnd = renderState.fogEnd;
 
