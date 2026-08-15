@@ -173,13 +173,13 @@ bool startResearchAt(STRUCTURE *facility, RESEARCH &research, uint32_t player)
 
 	//stop the button from flashing once a topic has been chosen
 	stopReticuleButtonFlash(IDRET_RESEARCH);
+
+	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
 	return true;
 }
 
 void ResearchController::startResearch(RESEARCH &research)
 {
-	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
-
 	startResearchAt(getHighlightedObject(), research, selectedPlayer);
 }
 
