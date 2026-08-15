@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2022  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1796,8 +1796,15 @@ VkPSO::VkPSO(vk::Device _dev,
 		layout_desc.push_back(set_layout);
 	}
 
-	// Tessellation pipelines may sample textures from the tessellation stages too
-	const auto textureStageFlags = (hasTessStages) ? vk::ShaderStageFlagBits::eAllGraphics : vk::ShaderStageFlagBits::eFragment;
+	// Build the minimal texture stage flags, so the texture only counts against the maxPerStageDescriptorSampledImages for required stages
+	const auto textureStageFlags = [](gfx_api::shader_stage stage) {
+		switch (stage)
+		{
+			case gfx_api::shader_stage::tessellation_evaluation: return vk::ShaderStageFlagBits::eTessellationEvaluation;
+			case gfx_api::shader_stage::fragment: break;
+		}
+		return vk::ShaderStageFlagBits::eFragment;
+	};
 
 	auto textures_layout_desc = std::vector<vk::DescriptorSetLayoutBinding>();
 	samplers.reserve(texture_desc.size());
@@ -1811,7 +1818,7 @@ VkPSO::VkPSO(vk::Device _dev,
 				.setDescriptorCount(1)
 				.setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
 				.setPImmutableSamplers(&samplers.back())
-				.setStageFlags(textureStageFlags)
+				.setStageFlags(textureStageFlags(texture.stage))
 		);
 	}
 	textures_set_layout = dev.createDescriptorSetLayout(

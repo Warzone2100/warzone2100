@@ -300,15 +300,23 @@ namespace gfx_api
 		opaque_white
 	};
 
+	/// Which stage samples a texture
+	enum class shader_stage : uint8_t
+	{
+		fragment,
+		tessellation_evaluation,
+	};
+
 	struct texture_input
 	{
 		const std::size_t id;
 		const sampler_type sampler;
 		const pixel_format_target target;
 		const border_color border;
+		const shader_stage stage;
 
-		constexpr texture_input(std::size_t _id, sampler_type _sampler, pixel_format_target _target, border_color _border)
-		: id(_id), sampler(_sampler), target(_target), border(_border)
+		constexpr texture_input(std::size_t _id, sampler_type _sampler, pixel_format_target _target, border_color _border, shader_stage _stage = shader_stage::fragment)
+		: id(_id), sampler(_sampler), target(_target), border(_border), stage(_stage)
 		{}
 	};
 
@@ -785,14 +793,18 @@ namespace gfx_api
 		}
 	};
 
-	template<std::size_t texture_unit, sampler_type sampler, pixel_format_target target = pixel_format_target::texture_2d, border_color border = border_color::none>
+	template<std::size_t texture_unit, sampler_type sampler, pixel_format_target target = pixel_format_target::texture_2d, border_color border = border_color::none, shader_stage stage = shader_stage::fragment>
 	struct texture_description
 	{
 		static texture_input get_desc()
 		{
-			return texture_input{ texture_unit, sampler, target, border };
+			return texture_input{ texture_unit, sampler, target, border, stage };
 		}
 	};
+
+	/// A texture sampled by the tessellation evaluation stage
+	template<std::size_t texture_unit, sampler_type sampler, pixel_format_target target = pixel_format_target::texture_2d, border_color border = border_color::none>
+	using tess_texture_description = texture_description<texture_unit, sampler, target, border, shader_stage::tessellation_evaluation>;
 
 	template<REND_MODE render_mode, DEPTH_MODE depth_mode, uint8_t output_mask, polygon_offset offset, stencil_mode stencil, cull_mode cull>
 	struct rasterizer_state
@@ -1415,9 +1427,9 @@ namespace gfx_api
 	texture_description<7, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal specular
 	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>,  // decal height
 	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
-	texture_description<10, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
-	texture_description<11, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
-	texture_description<12, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+	tess_texture_description<10, sampler_type::bilinear>, // baked terrain height
+	tess_texture_description<11, sampler_type::bilinear>, // baked terrain outline offset
+	tess_texture_description<12, sampler_type::bilinear>  // baked terrain normal
 	>, shader>;
 
 	using TerrainCombinedTess_Medium = TerrainCombinedTessTemplate<SHADER_TERRAIN_COMBINED_MEDIUM_TESS>;
@@ -1446,9 +1458,9 @@ namespace gfx_api
 		TerrainPatchCornerVBODescription
 	>, std::tuple<
 		texture_description<0, sampler_type::bilinear_repeat>,
-		texture_description<1, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
-		texture_description<2, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
-		texture_description<3, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+		tess_texture_description<1, sampler_type::bilinear>, // baked terrain height
+		tess_texture_description<2, sampler_type::bilinear>, // baked terrain outline offset
+		tess_texture_description<3, sampler_type::bilinear>  // baked terrain normal
 	>, SHADER_TERRAIN_DEPTHMAP_TESS>;
 
 	template<>
@@ -1467,9 +1479,9 @@ namespace gfx_api
 	std::tuple<
 		TerrainPatchCornerVBODescription
 	>, std::tuple<
-		texture_description<0, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
-		texture_description<1, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
-		texture_description<2, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+		tess_texture_description<0, sampler_type::bilinear>, // baked terrain height
+		tess_texture_description<1, sampler_type::bilinear>, // baked terrain outline offset
+		tess_texture_description<2, sampler_type::bilinear>  // baked terrain normal
 	>, SHADER_TERRAIN_DEPTH_PREPASS_TESS>;
 
 	template<>
