@@ -128,6 +128,7 @@
 #include "wzcrashhandlingproviders.h"
 #include "wzpropertyproviders.h"
 #include "buildprovenance/wzbindetails.h"
+#include "buildprovenance/wzbuildinfo.h"
 #include "3rdparty/gsl_finally.h"
 #include "wzapi.h"
 
@@ -1973,6 +1974,9 @@ int realmain(int argc, char *argv[])
 
 	// Start hashing our own executable in the background
 	selfExeDetailsInit();
+	getBuildInfo([](const nlohmann::ordered_json& buildInfo) {
+		debug(LOG_WZ, "BuildInfo: %s", buildInfo.dump().c_str());
+	});
 
 	// find early boot info
 	ParseCLIEarlyResult earlyCommandLineParsingResult = ParseCommandLineEarly(utfargc, utfargv);
