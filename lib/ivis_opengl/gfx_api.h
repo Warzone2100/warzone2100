@@ -345,7 +345,13 @@ namespace gfx_api
 		, uniform_blocks(uniform_blocks)
 		, texture_desc(texture_desc)
 		, attribute_descriptions(attribute_descriptions)
-		{}
+		{
+			// Vulkan binds these by position and OpenGL by declared unit, which agree only while ids run 0, 1, 2 in order
+			for (size_t i = 0; i < texture_desc.size(); ++i)
+			{
+				ASSERT(texture_desc[i].id == i, "Texture %zu declares unit %zu", i, texture_desc[i].id);
+			}
+		}
 	};
 
 	struct lighting_constants
