@@ -1457,10 +1457,9 @@ namespace gfx_api
 	std::tuple<
 		TerrainPatchCornerVBODescription
 	>, std::tuple<
-		texture_description<0, sampler_type::bilinear_repeat>,
-		tess_texture_description<1, sampler_type::bilinear>, // baked terrain height
-		tess_texture_description<2, sampler_type::bilinear>, // baked terrain outline offset
-		tess_texture_description<3, sampler_type::bilinear>  // baked terrain normal
+		tess_texture_description<0, sampler_type::bilinear>, // baked terrain height
+		tess_texture_description<1, sampler_type::bilinear>, // baked terrain outline offset
+		tess_texture_description<2, sampler_type::bilinear>  // baked terrain normal
 	>, SHADER_TERRAIN_DEPTHMAP_TESS>;
 
 	template<>

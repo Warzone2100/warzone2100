@@ -1950,7 +1950,7 @@ static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection, c
 	}
 
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind();
-	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_textures(lightmap_texture, terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
+	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_textures(terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_vertex_buffers(terrainDecalVBO);
 	// this pass renders from the light, but the tessellation factors must come from the main camera so the shadow geometry matches the color pass
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_constants({ ModelViewProjection, tessCameraMVP, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f),
