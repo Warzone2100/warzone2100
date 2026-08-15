@@ -42,5 +42,5 @@ void recordScenePrepass(const gfx_api::RenderPassContext& /*passCtx*/)
 	drawTerrainDepthNormalPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
 	drawWaterDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix);
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix,
-		cameraPos, fc.shadowCascadesInfo, nullptr, MeshDepthPassMode::ScenePrepass);
+		cameraPos, fc.shadowCascadesInfo, nullptr, fc.pointLights, MeshDepthPassMode::ScenePrepass);
 }
