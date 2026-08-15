@@ -18,6 +18,7 @@
         GL_ARB_internalformat_query,
         GL_ARB_internalformat_query2,
         GL_ARB_invalidate_subdata,
+        GL_ARB_program_interface_query,
         GL_ARB_shader_storage_buffer_object,
         GL_ARB_tessellation_shader,
         GL_ARB_texture_compression,
@@ -61,9 +62,9 @@
     Reproducible: False
 
     Commandline:
-        --profile="core" --api="gl=4.0,gles2=3.2" --generator="c" --spec="gl" --extensions="GL_ANGLE_instanced_arrays,GL_ANGLE_texture_compression_dxt3,GL_ANGLE_texture_compression_dxt5,GL_ARB_ES3_compatibility,GL_ARB_buffer_storage,GL_ARB_draw_instanced,GL_ARB_gpu_shader5,GL_ARB_instanced_arrays,GL_ARB_internalformat_query,GL_ARB_internalformat_query2,GL_ARB_invalidate_subdata,GL_ARB_shader_storage_buffer_object,GL_ARB_tessellation_shader,GL_ARB_texture_compression,GL_ARB_texture_compression_bptc,GL_ARB_texture_compression_rgtc,GL_ARB_texture_cube_map,GL_ARB_texture_non_power_of_two,GL_ARB_texture_rectangle,GL_ARB_texture_rg,GL_ARB_timer_query,GL_ARB_vertex_buffer_object,GL_ATI_meminfo,GL_ATI_separate_stencil,GL_EXT_buffer_storage,GL_EXT_discard_framebuffer,GL_EXT_disjoint_timer_query,GL_EXT_framebuffer_object,GL_EXT_gpu_shader5,GL_EXT_instanced_arrays,GL_EXT_multisampled_render_to_texture,GL_EXT_stencil_two_side,GL_EXT_stencil_wrap,GL_EXT_texture_array,GL_EXT_texture_border_clamp,GL_EXT_texture_compression_bptc,GL_EXT_texture_compression_dxt1,GL_EXT_texture_compression_s3tc,GL_EXT_texture_filter_anisotropic,GL_EXT_texture_rg,GL_GREMEDY_string_marker,GL_KHR_debug,GL_KHR_texture_compression_astc_ldr,GL_NVX_gpu_memory_info,GL_NV_instanced_arrays,GL_NV_texture_border_clamp,GL_OES_compressed_ETC1_RGB8_texture,GL_OES_texture_border_clamp"
+        --profile="core" --api="gl=4.0,gles2=3.2" --generator="c" --spec="gl" --extensions="GL_ANGLE_instanced_arrays,GL_ANGLE_texture_compression_dxt3,GL_ANGLE_texture_compression_dxt5,GL_ARB_ES3_compatibility,GL_ARB_buffer_storage,GL_ARB_draw_instanced,GL_ARB_gpu_shader5,GL_ARB_instanced_arrays,GL_ARB_internalformat_query,GL_ARB_internalformat_query2,GL_ARB_invalidate_subdata,GL_ARB_program_interface_query,GL_ARB_shader_storage_buffer_object,GL_ARB_tessellation_shader,GL_ARB_texture_compression,GL_ARB_texture_compression_bptc,GL_ARB_texture_compression_rgtc,GL_ARB_texture_cube_map,GL_ARB_texture_non_power_of_two,GL_ARB_texture_rectangle,GL_ARB_texture_rg,GL_ARB_timer_query,GL_ARB_vertex_buffer_object,GL_ATI_meminfo,GL_ATI_separate_stencil,GL_EXT_buffer_storage,GL_EXT_discard_framebuffer,GL_EXT_disjoint_timer_query,GL_EXT_framebuffer_object,GL_EXT_gpu_shader5,GL_EXT_instanced_arrays,GL_EXT_multisampled_render_to_texture,GL_EXT_stencil_two_side,GL_EXT_stencil_wrap,GL_EXT_texture_array,GL_EXT_texture_border_clamp,GL_EXT_texture_compression_bptc,GL_EXT_texture_compression_dxt1,GL_EXT_texture_compression_s3tc,GL_EXT_texture_filter_anisotropic,GL_EXT_texture_rg,GL_GREMEDY_string_marker,GL_KHR_debug,GL_KHR_texture_compression_astc_ldr,GL_NVX_gpu_memory_info,GL_NV_instanced_arrays,GL_NV_texture_border_clamp,GL_OES_compressed_ETC1_RGB8_texture,GL_OES_texture_border_clamp"
     Online:
-        https://glad.dav1d.de/#profile=core&language=c&specification=gl&loader=on&api=gl%3D4.0&api=gles2%3D3.2&extensions=GL_ANGLE_instanced_arrays&extensions=GL_ANGLE_texture_compression_dxt3&extensions=GL_ANGLE_texture_compression_dxt5&extensions=GL_ARB_ES3_compatibility&extensions=GL_ARB_buffer_storage&extensions=GL_ARB_draw_instanced&extensions=GL_ARB_gpu_shader5&extensions=GL_ARB_instanced_arrays&extensions=GL_ARB_internalformat_query&extensions=GL_ARB_internalformat_query2&extensions=GL_ARB_invalidate_subdata&extensions=GL_ARB_shader_storage_buffer_object&extensions=GL_ARB_tessellation_shader&extensions=GL_ARB_texture_compression&extensions=GL_ARB_texture_compression_bptc&extensions=GL_ARB_texture_compression_rgtc&extensions=GL_ARB_texture_cube_map&extensions=GL_ARB_texture_non_power_of_two&extensions=GL_ARB_texture_rectangle&extensions=GL_ARB_texture_rg&extensions=GL_ARB_timer_query&extensions=GL_ARB_vertex_buffer_object&extensions=GL_ATI_meminfo&extensions=GL_ATI_separate_stencil&extensions=GL_EXT_buffer_storage&extensions=GL_EXT_discard_framebuffer&extensions=GL_EXT_disjoint_timer_query&extensions=GL_EXT_framebuffer_object&extensions=GL_EXT_gpu_shader5&extensions=GL_EXT_instanced_arrays&extensions=GL_EXT_multisampled_render_to_texture&extensions=GL_EXT_stencil_two_side&extensions=GL_EXT_stencil_wrap&extensions=GL_EXT_texture_array&extensions=GL_EXT_texture_border_clamp&extensions=GL_EXT_texture_compression_bptc&extensions=GL_EXT_texture_compression_dxt1&extensions=GL_EXT_texture_compression_s3tc&extensions=GL_EXT_texture_filter_anisotropic&extensions=GL_EXT_texture_rg&extensions=GL_GREMEDY_string_marker&extensions=GL_KHR_debug&extensions=GL_KHR_texture_compression_astc_ldr&extensions=GL_NVX_gpu_memory_info&extensions=GL_NV_instanced_arrays&extensions=GL_NV_texture_border_clamp&extensions=GL_OES_compressed_ETC1_RGB8_texture&extensions=GL_OES_texture_border_clamp
+        https://glad.dav1d.de/#profile=core&language=c&specification=gl&loader=on&api=gl%3D4.0&api=gles2%3D3.2&extensions=GL_ANGLE_instanced_arrays&extensions=GL_ANGLE_texture_compression_dxt3&extensions=GL_ANGLE_texture_compression_dxt5&extensions=GL_ARB_ES3_compatibility&extensions=GL_ARB_buffer_storage&extensions=GL_ARB_draw_instanced&extensions=GL_ARB_gpu_shader5&extensions=GL_ARB_instanced_arrays&extensions=GL_ARB_internalformat_query&extensions=GL_ARB_internalformat_query2&extensions=GL_ARB_invalidate_subdata&extensions=GL_ARB_program_interface_query&extensions=GL_ARB_shader_storage_buffer_object&extensions=GL_ARB_tessellation_shader&extensions=GL_ARB_texture_compression&extensions=GL_ARB_texture_compression_bptc&extensions=GL_ARB_texture_compression_rgtc&extensions=GL_ARB_texture_cube_map&extensions=GL_ARB_texture_non_power_of_two&extensions=GL_ARB_texture_rectangle&extensions=GL_ARB_texture_rg&extensions=GL_ARB_timer_query&extensions=GL_ARB_vertex_buffer_object&extensions=GL_ATI_meminfo&extensions=GL_ATI_separate_stencil&extensions=GL_EXT_buffer_storage&extensions=GL_EXT_discard_framebuffer&extensions=GL_EXT_disjoint_timer_query&extensions=GL_EXT_framebuffer_object&extensions=GL_EXT_gpu_shader5&extensions=GL_EXT_instanced_arrays&extensions=GL_EXT_multisampled_render_to_texture&extensions=GL_EXT_stencil_two_side&extensions=GL_EXT_stencil_wrap&extensions=GL_EXT_texture_array&extensions=GL_EXT_texture_border_clamp&extensions=GL_EXT_texture_compression_bptc&extensions=GL_EXT_texture_compression_dxt1&extensions=GL_EXT_texture_compression_s3tc&extensions=GL_EXT_texture_filter_anisotropic&extensions=GL_EXT_texture_rg&extensions=GL_GREMEDY_string_marker&extensions=GL_KHR_debug&extensions=GL_KHR_texture_compression_astc_ldr&extensions=GL_NVX_gpu_memory_info&extensions=GL_NV_instanced_arrays&extensions=GL_NV_texture_border_clamp&extensions=GL_OES_compressed_ETC1_RGB8_texture&extensions=GL_OES_texture_border_clamp
 */
 
 #include <stdio.h>
@@ -845,6 +846,7 @@ int GLAD_GL_ARB_instanced_arrays = 0;
 int GLAD_GL_ARB_internalformat_query = 0;
 int GLAD_GL_ARB_internalformat_query2 = 0;
 int GLAD_GL_ARB_invalidate_subdata = 0;
+int GLAD_GL_ARB_program_interface_query = 0;
 int GLAD_GL_ARB_shader_storage_buffer_object = 0;
 int GLAD_GL_ARB_tessellation_shader = 0;
 int GLAD_GL_ARB_texture_compression = 0;
@@ -891,6 +893,7 @@ PFNGLINVALIDATETEXSUBIMAGEPROC glad_glInvalidateTexSubImage = NULL;
 PFNGLINVALIDATETEXIMAGEPROC glad_glInvalidateTexImage = NULL;
 PFNGLINVALIDATEBUFFERSUBDATAPROC glad_glInvalidateBufferSubData = NULL;
 PFNGLINVALIDATEBUFFERDATAPROC glad_glInvalidateBufferData = NULL;
+PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC glad_glGetProgramResourceLocationIndex = NULL;
 PFNGLSHADERSTORAGEBLOCKBINDINGPROC glad_glShaderStorageBlockBinding = NULL;
 PFNGLCOMPRESSEDTEXIMAGE3DARBPROC glad_glCompressedTexImage3DARB = NULL;
 PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glad_glCompressedTexImage2DARB = NULL;
@@ -1474,6 +1477,15 @@ static void load_GL_ARB_invalidate_subdata(GLADloadproc load) {
 	glad_glInvalidateFramebuffer = (PFNGLINVALIDATEFRAMEBUFFERPROC)load("glInvalidateFramebuffer");
 	glad_glInvalidateSubFramebuffer = (PFNGLINVALIDATESUBFRAMEBUFFERPROC)load("glInvalidateSubFramebuffer");
 }
+static void load_GL_ARB_program_interface_query(GLADloadproc load) {
+	if(!GLAD_GL_ARB_program_interface_query) return;
+	glad_glGetProgramInterfaceiv = (PFNGLGETPROGRAMINTERFACEIVPROC)load("glGetProgramInterfaceiv");
+	glad_glGetProgramResourceIndex = (PFNGLGETPROGRAMRESOURCEINDEXPROC)load("glGetProgramResourceIndex");
+	glad_glGetProgramResourceName = (PFNGLGETPROGRAMRESOURCENAMEPROC)load("glGetProgramResourceName");
+	glad_glGetProgramResourceiv = (PFNGLGETPROGRAMRESOURCEIVPROC)load("glGetProgramResourceiv");
+	glad_glGetProgramResourceLocation = (PFNGLGETPROGRAMRESOURCELOCATIONPROC)load("glGetProgramResourceLocation");
+	glad_glGetProgramResourceLocationIndex = (PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC)load("glGetProgramResourceLocationIndex");
+}
 static void load_GL_ARB_shader_storage_buffer_object(GLADloadproc load) {
 	if(!GLAD_GL_ARB_shader_storage_buffer_object) return;
 	glad_glShaderStorageBlockBinding = (PFNGLSHADERSTORAGEBLOCKBINDINGPROC)load("glShaderStorageBlockBinding");
@@ -1585,6 +1597,7 @@ static int find_extensionsGL(void) {
 	GLAD_GL_ARB_internalformat_query = has_ext("GL_ARB_internalformat_query");
 	GLAD_GL_ARB_internalformat_query2 = has_ext("GL_ARB_internalformat_query2");
 	GLAD_GL_ARB_invalidate_subdata = has_ext("GL_ARB_invalidate_subdata");
+	GLAD_GL_ARB_program_interface_query = has_ext("GL_ARB_program_interface_query");
 	GLAD_GL_ARB_shader_storage_buffer_object = has_ext("GL_ARB_shader_storage_buffer_object");
 	GLAD_GL_ARB_tessellation_shader = has_ext("GL_ARB_tessellation_shader");
 	GLAD_GL_ARB_texture_compression = has_ext("GL_ARB_texture_compression");
@@ -1694,6 +1707,7 @@ int gladLoadGLLoader(GLADloadproc load) {
 	load_GL_ARB_internalformat_query(load);
 	load_GL_ARB_internalformat_query2(load);
 	load_GL_ARB_invalidate_subdata(load);
+	load_GL_ARB_program_interface_query(load);
 	load_GL_ARB_shader_storage_buffer_object(load);
 	load_GL_ARB_tessellation_shader(load);
 	load_GL_ARB_texture_compression(load);
