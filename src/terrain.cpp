@@ -2018,7 +2018,7 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 }
 
 template<typename PSO>
-static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
+static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (!terrainDecalVBO || !terrainDecalIndexVBO)
 	{
@@ -2037,7 +2037,6 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 
-	const auto& bucketLight = getCurrentLightingManager().getPointLightBuckets();
 	auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
@@ -2046,10 +2045,8 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias()
 	};
-	gfx_api::PointLightsUniforms pointLightUniforms = {
-		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
-	};
-	PSO::get().set_uniforms(uniforms, pointLightUniforms);
+	PSO::get().template set_uniforms_at<0>(uniforms);
+	PSO::get().template set_uniforms_at<1>(pointLights);
 
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -2069,7 +2066,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 }
 
 template<typename PSO>
-static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
+static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (!terrainDecalVBO || !terrainPatchIndexVBO)
 	{
@@ -2089,7 +2086,6 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 
-	const auto& bucketLight = getCurrentLightingManager().getPointLightBuckets();
 	auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
@@ -2098,10 +2094,8 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias()
 	};
-	gfx_api::PointLightsUniforms pointLightUniforms = {
-		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
-	};
-	PSO::get().set_uniforms(uniforms, pointLightUniforms);
+	PSO::get().template set_uniforms_at<0>(uniforms);
+	PSO::get().template set_uniforms_at<1>(pointLights);
 
 	// This pass also writes terrain depth (there is no separate depth prepass under
 	// hardware tessellation, avoiding a second tessellated pass). Keep the prepass's
@@ -2128,17 +2122,17 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 	gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
 }
 
-static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
+static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
 	{
 		switch (terrainShaderQuality)
 		{
 			case TerrainShaderQuality::MEDIUM:
-				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap);
+				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
 				return;
 			case TerrainShaderQuality::NORMAL_MAPPING:
-				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap);
+				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
 				return;
 			default:
 				break; // Classic never uses HardwareTess - fall through to the CPU path
@@ -2147,13 +2141,13 @@ static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm:
 	switch (terrainShaderQuality)
 	{
 		case TerrainShaderQuality::CLASSIC:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
 			break;
 		case TerrainShaderQuality::MEDIUM:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
 			break;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
 			break;
 		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
 			// should not happen
@@ -2305,7 +2299,7 @@ void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& v
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
  * on it one by one. Finally the decals are drawn.
  */
-void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
+void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	WZ_PROFILE_SCOPE(drawTerrain);
 	const glm::vec4& paramsXLight = lightmapValues.paramsXLight;
@@ -2329,7 +2323,7 @@ void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector
 
 	///////////////////////////////////
 	// terrain + decals
-	drawTerrainCombined(mvp, viewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap);
+	drawTerrainCombined(mvp, viewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
 }
 
 /**

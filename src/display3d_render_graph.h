@@ -28,6 +28,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 
+#include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/render_graph/blueprint.h"
 #include "lib/ivis_opengl/shadows.h"
 
@@ -48,6 +49,8 @@ struct InGame3DFrameContext
 	std::array<glm::mat4, WZ_MAX_SHADOW_CASCADES> cascadeProj{};
 	std::array<glm::mat4, WZ_MAX_SHADOW_CASCADES> cascadeView{};
 	uint32_t currentGameFrame = 0;
+	// Point lights for this frame, uploaded once and bound by every pass that lights
+	gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms> pointLights{};
 };
 
 InGame3DFrameContext& pie_GetInGame3DFrameContext();

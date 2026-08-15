@@ -1349,6 +1349,13 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		lightManager.ComputeFrameData(lightData, lightmap, perspectiveViewMatrix, lightScene);
 	}
 
+	// Every pass that lights reads the same point lights, so upload them once here and hand the reference to the consumers
+	const auto& bucketLight = lightManager.getPointLightBuckets();
+	const gfx_api::PointLightsUniforms pointLightUniforms = {
+		bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+	};
+	const auto pointLightsRef = gfx_api::context::get().upload_frame_uniform(pointLightUniforms);
+
 	// prepare terrain for drawing
 	perFrameTerrainUpdates(gameWorld.map, lightmap);
 
@@ -1401,6 +1408,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	ctx.perspectiveMatrix = perspectiveMatrix;
 	ctx.cameraPos = cameraPos;
 	ctx.currentGameFrame = currentGameFrame;
+	ctx.pointLights = pointLightsRef;
 	ctx.shadowCascadesInfo = shadowCascadesInfo;
 	for (size_t i = 0; i < shadowCascades.size() && i < WZ_MAX_SHADOW_CASCADES; ++i)
 	{
