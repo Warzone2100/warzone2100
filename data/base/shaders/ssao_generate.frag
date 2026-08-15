@@ -34,7 +34,7 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
-#include "ssao_view_common.glsl"
+#include "view_position.glsl"
 
 const int KERNEL_SIZE = 16;
 const float SKY_DEPTH_THRESHOLD = 0.9999;

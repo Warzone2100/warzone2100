@@ -18,7 +18,7 @@ layout(set = 1, binding = 2) uniform sampler2D noiseTexture;
 layout(location = 0) in vec2 texCoords;
 layout(location = 0) out vec4 FragColor;
 
-#include "ssao_view_common.glsl"
+#include "view_position.glsl"
 
 const int KERNEL_SIZE = 16;
 const float SKY_DEPTH_THRESHOLD = 0.9999;
