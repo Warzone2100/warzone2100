@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2022  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -387,6 +387,8 @@ struct VkPSO final
 {
 	vk::Pipeline object;
 	std::vector<vk::DescriptorSetLayout> cbuffer_set_layout;
+	// Block type each uniform set expects (so a frame uniform reaching the wrong set is caught)
+	std::vector<std::type_index> uniformBlockTypes;
 	uint32_t textures_first_set = 0;
 	vk::DescriptorSetLayout textures_set_layout;
 	vk::PipelineLayout layout;
@@ -922,6 +924,8 @@ public:
 public:
 	virtual void set_constants(const void* buffer, const std::size_t& size) override;
 	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
+	virtual gfx_api::frame_uniform_allocation upload_frame_uniform_raw(const void* data, size_t size) override;
+	virtual void set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type) override;
 
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 
@@ -1034,6 +1038,17 @@ private:
 	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
+	// Point a uniform set at a range already written this frame, without copying it again
+	void bindUniformBufferRange(const size_t& set_idx, vk::Buffer buffer, uint32_t offset, size_t bufferSize);
+
+	// Blocks uploaded once for the current frame, referenced by index, and dropped when the frame ends
+	struct FrameUniform
+	{
+		vk::Buffer buffer;
+		uint32_t offset = 0;
+		uint32_t size = 0;
+	};
+	std::vector<FrameUniform> frameUniforms;
 	const RenderPassDetails& currentRenderPass();
 	bool recreateSwapchain(const vk::Result& reason);
 	void sealActivePassForFrameFinish();

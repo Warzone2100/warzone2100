@@ -284,6 +284,22 @@ void null_context::set_uniforms(const size_t& first, const std::vector<std::tupl
 	// no-op
 }
 
+gfx_api::frame_uniform_allocation null_context::upload_frame_uniform_raw(const void* data, size_t size)
+{
+	// Nothing is uploaded, but the reference still has to pass the checks its consumers make
+	gfx_api::frame_uniform_allocation result;
+	result.handle = 1;
+	result.size = static_cast<uint32_t>(size);
+	result.generation = frameUniformGeneration();
+	return result;
+}
+
+void null_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	// no-op
+}
+
 void null_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
 	// no-op
@@ -444,6 +460,7 @@ void null_context::beginScreenFrame()
 {
 	frameHasDrawCommands = false;
 	purgeFrameResources();
+	advanceFrameUniformGeneration();
 }
 
 bool null_context::ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& /*specs*/)

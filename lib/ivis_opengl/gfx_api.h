@@ -31,6 +31,7 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
+#include <type_traits>
 #include <array>
 
 #include "lib/framework/frame.h"
@@ -355,6 +356,31 @@ namespace gfx_api
 		}
 	};
 
+	/// A constant block uploaded once for the current frame and bound by every pipeline that reads it
+	struct frame_uniform_allocation
+	{
+		uint64_t handle = 0; // OpenGL: buffer name. Vulkan: 1-based index into the frame's uploaded blocks
+		uint32_t offset = 0;
+		uint32_t size = 0;
+		uint32_t generation = 0;
+		bool valid() const { return generation != 0; }
+	};
+
+	/// Typed handle to a frame uniform block - only context::upload_frame_uniform can produce a valid one
+	/// (The type is what set_uniforms_at validates the pipeline slot against)
+	template<typename T>
+	class frame_uniform_block_ref
+	{
+	public:
+		frame_uniform_block_ref() = default;
+		bool valid() const { return allocation_.valid(); }
+		const frame_uniform_allocation& allocation() const { return allocation_; }
+	private:
+		friend struct context;
+		explicit frame_uniform_block_ref(const frame_uniform_allocation& allocation) : allocation_(allocation) {}
+		frame_uniform_allocation allocation_;
+	};
+
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -399,6 +425,20 @@ namespace gfx_api
 		virtual void bind_textures(const std::vector<texture_input>& attribute_descriptions, const std::vector<abstract_texture*>& textures) = 0;
 		virtual void set_constants(const void* buffer, const std::size_t& size) = 0;
 		virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) = 0;
+		/// Upload a constant block once for the current frame.
+		/// The returned reference stays usable until the next frame begins, and may be bound by any number of pipelines.
+		template<typename T>
+		frame_uniform_block_ref<T> upload_frame_uniform(const T& data)
+		{
+			// Vulkan: many platforms have a maxUniformBufferRange of 64k
+			// - see: https://vulkan.gpuinfo.org/displaydevicelimit.php?name=maxUniformBufferRange
+			static_assert(sizeof(T) <= 65536, "Uniform block size exceeds 64k");
+			return frame_uniform_block_ref<T>(upload_frame_uniform_raw(&data, sizeof(T)));
+		}
+		virtual frame_uniform_allocation upload_frame_uniform_raw(const void* data, size_t size) = 0;
+		/// Bind a frame uniform to a slot of the bound pipeline.
+		virtual void set_frame_uniform_at(size_t slot, const frame_uniform_allocation& allocation, std::type_index type) = 0;
+		uint32_t frameUniformGeneration() const { return _frameUniformGeneration; }
 		virtual void draw(const std::size_t& offset, const std::size_t&, const primitive_type&) = 0;
 		virtual void draw_elements(const std::size_t& offset, const std::size_t&, const primitive_type&, const index_type&) = 0;
 		// Depth-only polygon offset with glPolygonOffset(factor, units) semantics:
@@ -689,7 +729,16 @@ namespace gfx_api
 		bool _gpuFrameTimingEnabled = false;
 		optional<GpuFrameTiming> _lastGpuFrameTiming;
 
+	protected:
+		/// Called by backends where the per-frame uniform storage rotates
+		/// (This is what makes every reference from the previous frame stale)
+		void advanceFrameUniformGeneration()
+		{
+			if (++_frameUniformGeneration == 0) { _frameUniformGeneration = 1; } // zero means invalid
+		}
+
 	private:
+		uint32_t _frameUniformGeneration = 0;
 		bool _renderGraphExecuting = false;
 		uint64_t _renderGraphEpoch = 1;
 		bool _screenGeometryDirty = true;
@@ -820,6 +869,24 @@ namespace gfx_api
 		void set_uniforms_at(const size_t& first, Args&&... args)
 		{
 			gfx_api::context::get().set_uniforms(first, { std::make_tuple(static_cast<const void*>(&args), sizeof(args))... });
+		}
+
+		/// Set one block by value
+		template<size_t slot, typename T>
+		void set_uniforms_at(const T& data)
+		{
+			static_assert(slot < std::tuple_size<uniform_inputs>::value, "Uniform slot is out of range for this pipeline");
+			static_assert(std::is_same<typename std::tuple_element<slot, uniform_inputs>::type, T>::value, "Wrong uniform block type for this slot");
+			gfx_api::context::get().set_uniforms(slot, { std::make_tuple(static_cast<const void*>(&data), sizeof(T)) });
+		}
+
+		/// Bind a block already uploaded for this frame
+		template<size_t slot, typename T>
+		void set_uniforms_at(const frame_uniform_block_ref<T>& ref)
+		{
+			static_assert(slot < std::tuple_size<uniform_inputs>::value, "Uniform slot is out of range for this pipeline");
+			static_assert(std::is_same<typename std::tuple_element<slot, uniform_inputs>::type, T>::value, "Wrong uniform block type for this slot");
+			gfx_api::context::get().set_frame_uniform_at(slot, ref.allocation(), std::type_index(typeid(T)));
 		}
 
 		void draw(const std::size_t& count, const std::size_t& offset)

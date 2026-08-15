@@ -122,6 +122,8 @@ public:
 	virtual void bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures) override;
 	virtual void set_constants(const void* buffer, const size_t& size) override;
 	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
+	virtual gfx_api::frame_uniform_allocation upload_frame_uniform_raw(const void* data, size_t size) override;
+	virtual void set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type) override;
 	virtual void draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive) override;
 	virtual void draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index) override;
 	virtual void set_polygon_offset(const float& factor, const float& units) override;

@@ -1776,6 +1776,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	ASSERT((primitive == gfx_api::primitive_type::patch_list_4) == hasTessStages, "patch_list_4 topology and tessellation stages must be used together (SHADER_MODE: %d)", (int)shader_mode);
 
 	auto layout_desc = std::vector<vk::DescriptorSetLayout>();
+	uniformBlockTypes = uniform_blocks;
 
 	for (size_t i = 0; i < uniform_blocks.size(); i++)
 	{
@@ -5902,7 +5903,13 @@ void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, siz
 	void * pDynamicUniformBufferMapped = buffering_mechanism::get_current_resources().uniformBufferAllocator.mapMemory(stagingMemory);
 	memcpy(reinterpret_cast<uint8_t*>(pDynamicUniformBufferMapped), buffer, size);
 
-	const auto bufferInfo = vk::DescriptorBufferInfo(stagingMemory.buffer, 0, size);
+	bindUniformBufferRange(uniform_set, stagingMemory.buffer, stagingMemory.offset, size);
+}
+
+void VkRoot::bindUniformBufferRange(const size_t& uniform_set, vk::Buffer buffer, uint32_t offset, size_t size)
+{
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
+	const auto bufferInfo = vk::DescriptorBufferInfo(buffer, 0, size);
 
 	vk::DescriptorSet descSet;
 	auto perFrame_perPSO_dynamicUniformDescriptorSets = buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.find(currentPSO);
@@ -5937,8 +5944,48 @@ void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, siz
 		perFrame_perPSO_dynamicUniformDescriptorSets->second.resize(currentPSO->cbuffer_set_layout.size());
 		perFrame_perPSO_dynamicUniformDescriptorSets->second[uniform_set] = perFrameResources_t::DynamicUniformBufferDescriptorSets( bufferInfo, descSet);
 	}
-	const auto dynamicOffsets = std::array<uint32_t, 1> { stagingMemory.offset };
+	const auto dynamicOffsets = std::array<uint32_t, 1> { offset };
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, static_cast<uint32_t>(uniform_set), descSet, dynamicOffsets, vkDynLoader);
+}
+
+gfx_api::frame_uniform_allocation VkRoot::upload_frame_uniform_raw(const void* data, size_t size)
+{
+	ASSERT_OR_RETURN({}, buffering_mechanism::isInitialized(), "Buffering mechanism is not initialized");
+	ASSERT_OR_RETURN({}, size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
+	const auto stagingMemory = buffering_mechanism::get_current_resources().uniformBufferAllocator.alloc(static_cast<uint32_t>(size), physDeviceProps.limits.minUniformBufferOffsetAlignment);
+	void * pDynamicUniformBufferMapped = buffering_mechanism::get_current_resources().uniformBufferAllocator.mapMemory(stagingMemory);
+	memcpy(reinterpret_cast<uint8_t*>(pDynamicUniformBufferMapped), data, size);
+
+	frameUniforms.push_back(FrameUniform{stagingMemory.buffer, stagingMemory.offset, static_cast<uint32_t>(size)});
+
+	gfx_api::frame_uniform_allocation result;
+	result.handle = frameUniforms.size(); // one based, so a zero handle stays invalid
+	result.offset = stagingMemory.offset;
+	result.size = static_cast<uint32_t>(size);
+	result.generation = frameUniformGeneration();
+	return result;
+}
+
+void VkRoot::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
+{
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
+	ASSERT_OR_RETURN(, slot < currentPSO->cbuffer_set_layout.size(), "Uniform set %zu is out of range (have %zu)", slot, currentPSO->cbuffer_set_layout.size());
+	ASSERT(slot >= currentPSO->uniformBlockTypes.size() || currentPSO->uniformBlockTypes[slot] == type,
+		"Uniform set %zu holds %s, not %s", slot, currentPSO->uniformBlockTypes[slot].name(), type.name());
+
+	// A reference from an earlier frame points into storage the frame rotation has since reused.
+	if (!allocation.valid() || allocation.generation != frameUniformGeneration()
+		|| allocation.handle == 0 || allocation.handle > frameUniforms.size())
+	{
+		// Deliberately bind nothing: leaving the previous descriptor in place would draw whatever
+		// another pipeline last put on this set (which might still look plausible)
+		ASSERT(false, "Uniform set %zu was given a frame uniform from generation %" PRIu32 " (current is %" PRIu32 ")",
+			slot, allocation.generation, frameUniformGeneration());
+		return;
+	}
+
+	const auto& uploaded = frameUniforms[static_cast<size_t>(allocation.handle) - 1];
+	bindUniformBufferRange(slot, uploaded.buffer, uploaded.offset, uploaded.size);
 }
 
 void VkRoot::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
@@ -6808,6 +6855,10 @@ void VkRoot::beginScreenFrame()
 	auto& frameResources = buffering_mechanism::get_current_resources();
 	frameHasDrawCommands = false;
 	ASSERT(!hasActivePass, "Active pass at screen frame open");
+
+	// The per frame uniform allocator has rotated, so every reference handed out last frame is stale
+	frameUniforms.clear();
+	advanceFrameUniformGeneration();
 
 	frameResources.ensureTransferRecordingBegun(vkDynLoader);
 	_framebufferCache.releaseAll();
