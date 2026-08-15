@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2020  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1354,6 +1354,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	{
 		broken = true;
 	}
+	uniformBlockTypes = createInfo.uniform_blocks;
 	for (size_t slot = 0; slot < programInfo.uniform_block_names.size(); ++slot)
 	{
 		uniform_bind_functions.push_back([this, slot](const void* buffer, size_t size) {
@@ -1686,7 +1687,15 @@ void gl_context::bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, 
 	{
 		return;
 	}
-	glBindBufferRange(GL_UNIFORM_BUFFER, index, buffer, offset, size);
+	if (buffer == 0)
+	{
+		// glBindBufferRange rejects a zero buffer with a zero size, so unbind through glBindBufferBase
+		glBindBufferBase(GL_UNIFORM_BUFFER, index, 0);
+	}
+	else
+	{
+		glBindBufferRange(GL_UNIFORM_BUFFER, index, buffer, offset, size);
+	}
 	current = BoundUniformRange{buffer, offset, size};
 }
 
@@ -1883,6 +1892,47 @@ void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffe
 	auto allocation = owningContext->activeUniformBlockAllocator().alloc(rangeSize);
 	ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
 
+	owningContext->writeUniformRange(allocation, buffer, dataSize);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
+	uniformBlockRanges[slot] = {allocation, rangeSize};
+}
+
+void gl_pipeline_state_object::set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration)
+{
+	ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range (have %zu)", slot, uniformBlockSizes.size());
+	ASSERT_OR_RETURN(, owningContext != nullptr, "No owning context");
+	if (uniformBlockSizes[slot] == 0)
+	{
+		return; // the linked program does not read this block
+	}
+	ASSERT(slot >= uniformBlockTypes.size() || uniformBlockTypes[slot] == type,
+		"Uniform block slot %zu holds %s, not %s", slot, uniformBlockTypes[slot].name(), type.name());
+
+	// A reference from an earlier frame points at storage the rotation has since handed back out,
+	// and a range shorter than the block would read past what was written.
+	const bool usable = allocation.valid()
+		&& allocation.generation == currentGeneration
+		&& static_cast<GLsizeiptr>(allocation.size) >= uniformBlockSizes[slot];
+	if (!usable)
+	{
+		// Unbind rather than leave the last range in place
+		ASSERT(false, "Uniform block slot %zu was given a frame uniform from generation %" PRIu32 " (current is %" PRIu32 "), covering %" PRIu32 " of %d bytes",
+			slot, allocation.generation, currentGeneration, allocation.size, uniformBlockSizes[slot]);
+		owningContext->bindUniformRange(static_cast<GLuint>(slot), 0, 0, 0);
+		uniformBlockRanges[slot] = {gl_uniform_block_allocator::Allocation{}, 0};
+		return;
+	}
+
+	const gl_uniform_block_allocator::Allocation range{static_cast<GLuint>(allocation.handle), static_cast<GLintptr>(allocation.offset), nullptr};
+	const GLsizeiptr rangeSize = static_cast<GLsizeiptr>(allocation.size);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), range.buffer, range.offset, rangeSize);
+	// Recorded like any other range so bind() restores it, since the binding index is context state
+	// that another pipeline may have taken over in the meantime.
+	uniformBlockRanges[slot] = {range, rangeSize};
+}
+
+void gl_context::writeUniformRange(const gl_uniform_block_allocator::Allocation& allocation, const void* data, GLsizeiptr size)
+{
 	if (allocation.mappedWrite != nullptr)
 	{
 		// Persistently-mapped coherent storage:
@@ -1892,24 +1942,22 @@ void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffe
 		// The allocator rotation (plus its fences) guarantees the GPU has finished reading this range.
 		// Keep this strictly write-only: the mapping may be write-combined memory, where CPU reads can
 		// be pathologically slow.
-		memcpy(allocation.mappedWrite, buffer, static_cast<size_t>(dataSize));
-		owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
-		uniformBlockRanges[slot] = {allocation, rangeSize};
+		memcpy(allocation.mappedWrite, data, static_cast<size_t>(size));
 		return;
 	}
 
 	glBindBuffer(GL_UNIFORM_BUFFER, allocation.buffer);
 	bool written = false;
 #if !defined(WZ_STATIC_GL_BINDINGS)
-	if (owningContext->hasBufferMapping)
+	if (hasBufferMapping)
 	{
 		// bump allocation and the per frame rotation together handle what the
 		// unsynchronized bit makes the caller responsible for
-		void* mapped = glMapBufferRange(GL_UNIFORM_BUFFER, allocation.offset, dataSize,
+		void* mapped = glMapBufferRange(GL_UNIFORM_BUFFER, allocation.offset, size,
 			GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
 		if (mapped != nullptr)
 		{
-			memcpy(mapped, buffer, static_cast<size_t>(dataSize));
+			memcpy(mapped, data, static_cast<size_t>(size));
 			if (glUnmapBuffer(GL_UNIFORM_BUFFER) == GL_TRUE)
 			{
 				written = true;
@@ -1924,11 +1972,9 @@ void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffe
 #endif
 	if (!written)
 	{
-		glBufferSubData(GL_UNIFORM_BUFFER, allocation.offset, dataSize, buffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, allocation.offset, size, data);
 	}
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
-	uniformBlockRanges[slot] = {allocation, rangeSize};
 }
 
 void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind)
@@ -2822,6 +2868,30 @@ void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_uniforms(first, uniform_blocks);
+}
+
+gfx_api::frame_uniform_allocation gl_context::upload_frame_uniform_raw(const void* data, size_t size)
+{
+	// The consumers are not known here, so reserve the std140 size of the block (rounded up to a multiple of 16)
+	// since a bound range must cover it all
+	const GLsizeiptr rangeSize = static_cast<GLsizeiptr>((size + 15) & ~static_cast<size_t>(15));
+	auto allocation = activeUniformBlockAllocator().alloc(rangeSize);
+	ASSERT_OR_RETURN({}, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
+
+	writeUniformRange(allocation, data, static_cast<GLsizeiptr>(size));
+
+	gfx_api::frame_uniform_allocation result;
+	result.handle = allocation.buffer;
+	result.offset = static_cast<uint32_t>(allocation.offset);
+	result.size = static_cast<uint32_t>(rangeSize);
+	result.generation = frameUniformGeneration();
+	return result;
+}
+
+void gl_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	current_program->set_frame_uniform(slot, allocation, type, frameUniformGeneration());
 }
 
 bool gl_context::ensurePatchVertices4()
@@ -4411,6 +4481,7 @@ void gl_context::beginScreenFrame()
 		currentUniformBlockAllocator = (currentUniformBlockAllocator + 1) % uniformBlockAllocators.size();
 		uniformBlockAllocators[currentUniformBlockAllocator].recycle();
 		boundUniformRanges.clear();
+		advanceFrameUniformGeneration();
 	}
 
 	frameHasDrawCommands = false;

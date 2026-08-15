@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2020  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -303,12 +303,16 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	std::vector<GLint> uniformBlockSizes;
 	// The range each slot was last given, restored by bind().
 	std::vector<std::pair<gl_uniform_block_allocator::Allocation, GLsizeiptr>> uniformBlockRanges;
+	// Block type each slot expects - so a frame uniform reaching the wrong slot can be caught
+	std::vector<std::type_index> uniformBlockTypes;
 	gl_context* owningContext = nullptr;
 
 	gl_pipeline_state_object(gl_context& ctx, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
+	// Bind a range already written for this frame, instead of writing this slot's own copy.
+	void set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration);
 
 	void bind();
 
@@ -392,7 +396,10 @@ struct gl_context final : public gfx_api::context
 
 	// Bind a range, skipping when that index already holds it.
 	// (Pipelines restore their own ranges on every bind, so most restores ask for what is already bound.)
+	// NOTE: A zero buffer unbinds the index.
 	void bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
+	// Fill a reserved range.
+	void writeUniformRange(const gl_uniform_block_allocator::Allocation& allocation, const void* data, GLsizeiptr size);
 	struct BoundUniformRange { GLuint buffer = 0; GLintptr offset = 0; GLsizeiptr size = 0; };
 	std::vector<BoundUniformRange> boundUniformRanges;
 
@@ -414,6 +421,8 @@ struct gl_context final : public gfx_api::context
 	virtual void bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures) override;
 	virtual void set_constants(const void* buffer, const size_t& size) override;
 	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
+	virtual gfx_api::frame_uniform_allocation upload_frame_uniform_raw(const void* data, size_t size) override;
+	virtual void set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type) override;
 	virtual void draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive) override;
 	virtual void draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index) override;
 	virtual void set_polygon_offset(const float& factor, const float& units) override;
