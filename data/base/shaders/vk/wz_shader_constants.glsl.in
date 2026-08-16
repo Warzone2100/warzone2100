@@ -14,4 +14,9 @@
 #define WZ_BUCKET_DIMENSION @WZ_BUCKET_DIMENSION@
 #define WZ_MAX_SHADOW_CASCADES @WZ_MAX_SHADOW_CASCADES@
 
+// Which transport carries the light arrays: 0 uniform block, 1 buffer texture, 2 storage buffer.
+// Vulkan guarantees storage buffers everywhere, so it compiles one variant rather than choosing
+// at runtime the way the GL backend does.
+#define WZ_LIGHT_TRANSPORT @WZ_LIGHT_TRANSPORT@
+
 #endif

@@ -46,8 +46,9 @@ int wzLightIndex(int entryInLightList)
 }
 #elif WZ_LIGHT_TRANSPORT == 2
 // std430 packs both of these exactly as the buffer texture path lays them out
-layout(std430) readonly buffer lightData { vec4 lights[]; };
-layout(std430) readonly buffer lightIndexData { int lightIndices[]; };
+// Bindings sit above the texture ids in the same set, and must match the values in gfx_api_vk.cpp
+layout(std430, set = WZ_LIGHT_DATA_SET, binding = 14) readonly buffer lightData { vec4 lights[]; };
+layout(std430, set = WZ_LIGHT_DATA_SET, binding = 15) readonly buffer lightIndexData { int lightIndices[]; };
 
 vec4 wzLightPosition(int lightIndex)
 {
