@@ -332,7 +332,7 @@ std::shared_ptr<LobbyServerHostingHandlerProtocol> MakeLobbyHostListingHandler(c
 
 // Sets a provider for the client's BuildInfo blob.
 // The provider must invoke the completion function asynchronously on the main thread.
-typedef std::function<void(optional<nlohmann::ordered_json>)> BuildInfoCompletionFunc;
+typedef std::function<void(optional<nlohmann::ordered_json> buildInfo, optional<std::string> buildManifest)> BuildInfoCompletionFunc;
 void setBuildInfoProvider(std::function<void(BuildInfoCompletionFunc)> provider);
 
 // MARK: - Enumerating game listings
