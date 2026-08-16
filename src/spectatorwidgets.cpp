@@ -39,6 +39,7 @@
 #include "notifications.h"
 #include "component.h"
 #include "loop.h" // for getNumDroids
+#include "screens/researchtreescreen.h"
 
 #include <unordered_set>
 #include <unordered_map>
@@ -49,6 +50,8 @@
 #define SPEC_STATS_WINDOW_BOTTOM_PADDING 5
 #define MAX_PLAYER_NAME_COLUMN_WIDTH 120
 #define PLAYER_COLOR_COL_SIZE 8
+#define RESEARCH_TREE_COL_WIDTH 34
+#define RESEARCH_TREE_COL_HEIGHT 12
 #define INFO_UPDATE_INTERVAL_TICKS GAME_TICKS_PER_SEC
 
 class WzWeaponGradesColumnManager;
@@ -140,6 +143,11 @@ bool specLayerInit(bool showButton /*= true*/)
 	}
 
 	return false;
+}
+
+std::shared_ptr<W_SCREEN> specOverlayScreen()
+{
+	return statsOverlay;
 }
 
 void specStatsViewClose()
@@ -647,6 +655,49 @@ private:
 	uint32_t playerIdx;
 };
 
+class WzSpectatorTableButton: public W_BUTTON
+{
+public:
+	void display(int xOffset, int yOffset) override
+	{
+		const float x0 = static_cast<float>(xOffset + x());
+		const float y0 = static_cast<float>(yOffset + y());
+		const bool down = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
+		const bool over = (getState() & WBUT_HIGHLIGHT) != 0;
+
+		const PIELIGHT border = down ? WZCOL_TEXT_BRIGHT : (over ? WZCOL_FORM_TEXT : WZCOL_TEXT_MEDIUM);
+		const PIELIGHT ink = (down || over) ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT;
+		pie_DrawRoundedBox(x0, y0, x0 + static_cast<float>(width()), y0 + static_cast<float>(height()),
+		                   WZCOL_TRANSPARENT_BOX, 2.f, border, 1.f);
+
+		const int fx = xOffset + x() + (width() - iV_GetTextWidth(pText, FontID)) / 2;
+		const int fy = yOffset + y() + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
+		iV_SetTextColour(ink);
+		iV_DrawText(pText.toUtf8().c_str(), static_cast<float>(fx), static_cast<float>(fy), FontID);
+	}
+};
+
+static std::shared_ptr<W_BUTTON> makeResearchTreeColumnButton(uint32_t playerIdx)
+{
+	auto button = std::make_shared<WzSpectatorTableButton>();
+	button->setString(_("Tree"));
+	button->FontID = font_small;
+	button->setTip(_("Show this player's research tree"));
+	button->setGeometry(0, 0, RESEARCH_TREE_COL_WIDTH, RESEARCH_TREE_COL_HEIGHT);
+	button->addOnClickHandler([playerIdx](W_BUTTON& but) {
+		auto screen = but.screenPointer.lock();
+		widgScheduleTask([playerIdx, screen]() {
+			ResearchTreeContext context;
+			context.source = ResearchTreeContext::Source::LivePlayerState;
+			context.player = playerIdx;
+			context.viewer = selectedPlayer;
+			context.allowAssignment = false;
+			showResearchTreeScreen(context, screen);
+		});
+	});
+	return button;
+}
+
 std::shared_ptr<TableRow> SpectatorStatsView::newPlayerStatsRow(uint32_t playerIdx, int rowHeight /*= 0*/)
 {
 	   std::vector<std::shared_ptr<WIDGET>> columnWidgets;
@@ -722,6 +773,8 @@ if ((!NetPlay.players[playerIdx].allocated && NetPlay.players[playerIdx].ai < 0)
 		weapGradesCol->setGeometry(0, 0, weaponGradesManager->idealWidth(), weaponGradesManager->getIdealHeightForEachRow());
 		columnWidgets.push_back(weapGradesCol);
 
+		columnWidgets.push_back(makeResearchTreeColumnButton(playerIdx));
+
 		return TableRow::make(columnWidgets, rowHeight);
    }
 
@@ -793,6 +846,7 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	armorLabel->setTip(std::string(_("Kinetic Armor")) + "\n" + _("(Tanks / Cyborgs)"));
 	auto thermalArmorLabel = createArmorColWidget(true);
 	thermalArmorLabel->setTip(std::string(_("Thermal Armor")) + "\n" + _("(Tanks / Cyborgs)"));
+	auto researchTreeLabel = createColHeaderLabel("");
 	result->weaponGradesManager = WzWeaponGradesColumnManager::make();
 	std::vector<TableColumn> columns {
 		{colorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
@@ -806,14 +860,16 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 		{armorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 		{thermalArmorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 		{result->weaponGradesManager, TableColumn::ResizeBehavior::FIXED_WIDTH},
+		{researchTreeLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 	};
-	const size_t weaponGradesManagerColIdx = columns.size() - 1;
+	const size_t weaponGradesManagerColIdx = columns.size() - 2;
 	std::vector<size_t> minimumColumnWidths;
 	for (auto& column : columns)
 	{
 		minimumColumnWidths.push_back(static_cast<size_t>(std::max<int>(column.columnWidget->idealWidth(), 0)));
 	}
 	minimumColumnWidths[0] = PLAYER_COLOR_COL_SIZE;
+	minimumColumnWidths.back() = RESEARCH_TREE_COL_WIDTH;
 	auto psWeakMain = std::weak_ptr<SpectatorStatsView>(result);
 	result->weaponGradesManager->addOnIdealWidthChangeFunc([psWeakMain, weaponGradesManagerColIdx](WzWeaponGradesColumnManager& manager) {
 		auto psStrongMain = psWeakMain.lock();

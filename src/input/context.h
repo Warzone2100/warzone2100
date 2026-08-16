@@ -56,6 +56,8 @@ struct InputContext
 	static const ContextId GAMEPLAY;
 	/* Active while player hovers over the radar. */
 	static const ContextId RADAR;
+	/* Active only while the research tree is open, where nothing else is. */
+	static const ContextId RESEARCH_TREE;
 
 	/* Debug only, "level editor" mappings */
 	static const ContextId DEBUG_LEVEL_EDITOR;

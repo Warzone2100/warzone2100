@@ -30,6 +30,8 @@
 #include "lib/framework/wzstring.h"
 #include <nlohmann/json_fwd.hpp>
 
+enum class WzResearchTreeVisibility;
+
 uint32_t getCampaignNumber();
 void setCampaignNumber(uint32_t number);
 
@@ -61,5 +63,8 @@ bool getCamTweakOption_PS1Modifiers();
 bool getCamTweakOption_FastExp();
 bool getCamTweakOption_NoExp();
 bool getCamTweakOption_heavilyDamagedPenalty();
+
+WzResearchTreeVisibility getCampaignResearchTreeVisibility();
+void clearCampaignResearchTreeVisibility();
 
 #endif // __INCLUDED_SRC_CAMPAIGNINFO_H__

@@ -4484,7 +4484,6 @@ void ChatBoxWidget::initializeMessages(bool preserveOldChat)
 void ChatBoxWidget::displayMessage(RoomMessage const &message)
 {
 	auto paragraph = std::make_shared<Paragraph>();
-	paragraph->setGeometry(0, 0, messages->calculateListViewWidth(), 0);
 
 	switch (message.type)
 	{
@@ -4532,6 +4531,9 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		// display contextual menu
 		psChatBoxWidget->displayParagraphContextualMenu(msgText, senderCopy);
 	});
+
+	// Sized once it has its text, so it settles on the height that text wraps to
+	paragraph->setGeometry(0, 0, messages->calculateListViewWidth(), 0);
 
 	messages->addItem(paragraph);
 }

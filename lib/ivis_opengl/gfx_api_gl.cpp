@@ -1043,6 +1043,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
 		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
+	std::make_pair(SHADER_UI_BOX, program_data{ "UI box program", "shaders/uibox.vert", "shaders/uibox.frag",
+		{ "transformationMatrix", "size", "gradientDir", "colorA", "colorB", "borderColor", "gradientExponent", "cornerRadii", "clipRect", "borderWidth", "edgeSoftness" } }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ "Debug texture quad program", "shaders/quad_texture2d.vert", "shaders/quad_texture2d.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
@@ -1381,6 +1383,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_binding_entry<SHADER_RECT_INSTANCED>(),
 		uniform_binding_entry<SHADER_LINE>(),
 		uniform_binding_entry<SHADER_TEXT>(),
+		uniform_binding_entry<SHADER_UI_BOX>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>(),
 		uniform_binding_entry<SHADER_DEBUG_TESS_QUAD>(),
@@ -2520,6 +2523,21 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(1, cbuf.offset);
 	setUniforms(2, cbuf.size);
 	setUniforms(3, cbuf.color);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_UI_BOX>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.size);
+	setUniforms(2, cbuf.gradient_dir);
+	setUniforms(3, cbuf.colour_a);
+	setUniforms(4, cbuf.colour_b);
+	setUniforms(5, cbuf.border_colour);
+	setUniforms(6, cbuf.gradient_exponent);
+	setUniforms(7, cbuf.corner_radii);
+	setUniforms(8, cbuf.clip_rect);
+	setUniforms(9, cbuf.border_width);
+	setUniforms(10, cbuf.edge_softness);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf)

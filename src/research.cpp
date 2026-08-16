@@ -32,6 +32,7 @@
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "research.h"
+#include "researchprereq.h"
 #include "message.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -109,6 +110,7 @@ bool researchInitVars()
 	psCBLastResearch = nullptr;
 	psCBLastResStructure = nullptr;
 	CBResFacilityOwner = -1;
+	clearResearchDisplayedPlayers();
 	asResearch.clear();
 	researchUpgradeCalcMode = nullopt;
 	resCategories.clear();
@@ -253,67 +255,163 @@ public:
 	}
 };
 
-static bool isResAPrereqForResB(size_t resAIndex, size_t resBIndex)
+void ResearchPrereqClosure::setBit(size_t row, size_t bit)
 {
-	if (resAIndex == resBIndex)
-	{
-		return false;
-	}
-	const RESEARCH *resB = &asResearch[resBIndex];
-	std::deque<const RESEARCH *> stack = {resB};
-	while (!stack.empty())
-	{
-		const RESEARCH *pCurr = stack.back();
-		stack.pop_back();
-		for (auto prereqIndex: pCurr->pPRList)
-		{
-			if (prereqIndex == resAIndex)
-			{
-				return true;
-			}
-			auto prereq = &asResearch[prereqIndex];
-			stack.push_back(prereq);
-		}
-	}
-	return false;
+	m_bits[row * m_words + (bit >> 6)] |= (uint64_t(1) << (bit & 63));
 }
 
-static bool isResearchListValidConnectedDependencyGraph(const std::vector<size_t>& researchIndexes)
+void ResearchPrereqClosure::orRowInto(size_t dstRow, size_t srcRow)
 {
-	if (researchIndexes.size() == 0)
+	const uint64_t* src = &m_bits[srcRow * m_words];
+	uint64_t* dst = &m_bits[dstRow * m_words];
+	for (size_t w = 0; w < m_words; ++w)
+	{
+		dst[w] |= src[w];
+	}
+}
+
+ResearchPrereqClosure::ResearchPrereqClosure(const std::vector<RESEARCH>& research)
+	: m_count(research.size())
+	, m_words((research.size() + 63) / 64)
+	, m_bits(research.size() * ((research.size() + 63) / 64), uint64_t(0))
+{
+	// Iterative post-order depth-first walk. The research list is known to be
+	// acyclic here because loadResearch() runs CycleDetection::detectCycle()
+	// before anything constructs one of these, so a child is never encountered
+	// mid-expansion.
+	enum class Mark : uint8_t { White, Gray, Black };
+	std::vector<Mark> mark(m_count, Mark::White);
+	std::vector<std::pair<size_t, size_t>> stack;	// (index, next child slot)
+	stack.reserve(m_count);
+
+	for (size_t root = 0; root < m_count; ++root)
+	{
+		if (mark[root] != Mark::White)
+		{
+			continue;
+		}
+		mark[root] = Mark::Gray;
+		stack.push_back({root, 0});
+
+		while (!stack.empty())
+		{
+			const size_t idx = stack.back().first;
+			const std::vector<UWORD>& prereqs = research[idx].pPRList;
+
+			if (stack.back().second < prereqs.size())
+			{
+				const size_t child = prereqs[stack.back().second++];
+				if (child >= m_count)
+				{
+					ASSERT(false, "Prerequisite index %zu out of range (max %zu)", child, m_count);
+					continue;
+				}
+				if (mark[child] == Mark::White)
+				{
+					mark[child] = Mark::Gray;
+					stack.push_back({child, 0});
+				}
+				continue;
+			}
+
+			// Children are all finished, so closure(idx) is the union over each
+			// prerequisite p of closure(p) plus p itself.
+			for (const auto prereqIndex : prereqs)
+			{
+				if (prereqIndex >= m_count)
+				{
+					continue;
+				}
+				orRowInto(idx, prereqIndex);
+				setBit(idx, prereqIndex);
+			}
+			mark[idx] = Mark::Black;
+			stack.pop_back();
+		}
+	}
+}
+
+const std::unordered_map<WzString, std::vector<size_t>>& getResearchCategories()
+{
+	return resCategories;
+}
+
+// See researchprereq.h for the down-count method and why the order is produced
+// directly rather than sorted.
+bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrecedes& precedes, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut)
+{
+	const size_t n = members.size();
+	orderedOut.clear();
+	if (downCountsOut)
+	{
+		downCountsOut->clear();
+	}
+	if (n == 0)
 	{
 		return false;
 	}
 
-	std::unordered_map<size_t, size_t> in_degree;
-	std::vector<size_t> source_nodes;
-
-	for (const auto resIdxA : researchIndexes)
+	std::vector<size_t> downCount(n, 0);
+	for (size_t a = 0; a < n; ++a)
 	{
-		for (const auto resIdxB : researchIndexes)
+		for (size_t b = 0; b < n; ++b)
 		{
-			if (isResAPrereqForResB(resIdxA, resIdxB))
+			if (a != b && precedes(members[b], members[a]))
 			{
-				in_degree[resIdxA]++;
+				downCount[a]++;
 			}
 		}
 	}
-
-	for (const auto resIdx : researchIndexes)
+	if (downCountsOut)
 	{
-		if (in_degree.count(resIdx) == 0)
-		{
-			source_nodes.push_back(resIdx);
-		}
+		*downCountsOut = downCount;
 	}
 
-	if (source_nodes.size() != 1)
+	orderedOut.assign(n, SIZE_MAX);
+	for (size_t a = 0; a < n; ++a)
 	{
-		debug(LOG_WZ, "Category graph has %zu potential source / edge nodes.", source_nodes.size());
-		return false;
+		const size_t slot = downCount[a];
+		if (slot >= n || orderedOut[slot] != SIZE_MAX)
+		{
+			// A duplicate or out-of-range position means this is not a linear chain
+			orderedOut.clear();
+			return false;
+		}
+		orderedOut[slot] = members[a];
 	}
 
 	return true;
+}
+
+bool computeResearchChainOrder(const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut, std::vector<size_t>* downCountsOut)
+{
+	const ResearchPrecedes precedes = [&closure](size_t below, size_t above) {
+		return closure.isPrereq(below, above);
+	};
+	return computeResearchChainOrder(members, precedes, orderedOut, downCountsOut);
+}
+
+// Chain-order a category's members, reporting what is wrong when they are not a chain
+static bool computeCategoryChainOrder(const WzString& categoryName, const std::vector<size_t>& members, const ResearchPrereqClosure& closure, std::vector<size_t>& orderedOut)
+{
+	if (members.empty())
+	{
+		debug(LOG_ERROR, "Research category \"%s\" has no members", categoryName.toUtf8().c_str());
+		return false;
+	}
+
+	std::vector<size_t> downCount;
+	if (computeResearchChainOrder(members, closure, orderedOut, &downCount))
+	{
+		return true;
+	}
+
+	debug(LOG_ERROR, "Research category \"%s\" is not a single linear progression. Its %zu topics must form an unbranched prerequisite chain. Position of each topic within the category (duplicates indicate the branch):", categoryName.toUtf8().c_str(), members.size());
+	for (size_t a = 0; a < members.size(); ++a)
+	{
+		debug(LOG_ERROR, "\t[%zu] %s", downCount[a], asResearch[members[a]].id.toUtf8().c_str());
+	}
+	return false;
 }
 
 static optional<ResearchUpgradeCalculationMode> resCalcModeStringToValue(const WzString& calcModeStr)
@@ -664,13 +762,16 @@ bool loadResearch(WzConfig &ini)
 		}
 		resCategories[cat].push_back(inc);
 	}
+	const ResearchPrereqClosure prereqClosure(asResearch);
+
 	for (auto it = resCategories.begin(); it != resCategories.end(); /* no increment here */)
 	{
 		auto& membersOfCategory = it->second;
+		std::vector<size_t> ordered;
 
-		if (!isResearchListValidConnectedDependencyGraph(membersOfCategory))
+		if (!computeCategoryChainOrder(it->first, membersOfCategory, prereqClosure, ordered))
 		{
-			debug(LOG_ERROR, "Research category items do not exist on a valid connected dependency graph: \"%s\"", it->first.toUtf8().c_str());
+			debug(LOG_ERROR, "Discarding research category \"%s\"", it->first.toUtf8().c_str());
 			for (const auto& inc : membersOfCategory)
 			{
 				asResearch[inc].category.clear();
@@ -679,16 +780,25 @@ bool loadResearch(WzConfig &ini)
 			continue;
 		}
 
-		std::stable_sort(membersOfCategory.begin(), membersOfCategory.end(), [](size_t idxA, size_t idxB) -> bool {
-			return isResAPrereqForResB(idxA, idxB);
-		});
+		membersOfCategory = std::move(ordered);	// already in chain order
+
 		uint16_t prog = 1;
 		size_t categorySize = membersOfCategory.size();
 		for (const auto& inc : membersOfCategory)
 		{
 			asResearch[inc].categoryProgress = prog;
-			asResearch[inc].categoryMax = categorySize;
+			asResearch[inc].categoryMax = static_cast<uint16_t>(categorySize);
 			prog++;
+		}
+
+		// The chain property is what the down-counts prove, so re-check it against
+		// the closure to catch a regression in either of them
+		for (size_t k = 0; k + 1 < categorySize; ++k)
+		{
+			ASSERT(prereqClosure.isPrereq(membersOfCategory[k], membersOfCategory[k + 1]),
+			       "Research category \"%s\": %s does not precede %s", it->first.toUtf8().c_str(),
+			       asResearch[membersOfCategory[k]].id.toUtf8().c_str(),
+			       asResearch[membersOfCategory[k + 1]].id.toUtf8().c_str());
 		}
 
 		++it;
@@ -701,6 +811,15 @@ bool loadResearch(WzConfig &ini)
 	}
 
 	return true;
+}
+
+bool researchDiscovered(size_t researchIndex, uint32_t player)
+{
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	ASSERT_OR_RETURN(false, researchIndex < asPlayerResList[player].size(),
+	                 "Invalid research index: %zu", researchIndex);
+	const PLAYER_RESEARCH *psRes = &asPlayerResList[player][researchIndex];
+	return (psRes->ResearchStatus & RESBITS_ALL) != 0 || IsResearchPossible(psRes);
 }
 
 bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode)

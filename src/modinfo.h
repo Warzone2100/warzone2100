@@ -74,6 +74,13 @@ enum class WzCampaignUniverse
 	Unique
 };
 
+// How much of the undiscovered research tree a campaign lets the player see
+enum class WzResearchTreeVisibility
+{
+	Hidden,		// undiscovered topics are not in the tree at all
+	Greyed		// they are placed and drawn, with nothing said about them
+};
+
 struct WzCampaignTweakOption
 {
 	enum class Type
@@ -97,6 +104,8 @@ public:
 	std::vector<WzCampaignTweakOption> camTweakOptions;
 	std::vector<WzCampaignTweakOption> customTweakOptions;
 	WzCampaignUniverse universe = WzCampaignUniverse::WZ2100Extended;
+	// Optional - defaults to hiding undiscovered topics
+	WzResearchTreeVisibility researchTreeVisibility = WzResearchTreeVisibility::Hidden;
 };
 
 optional<WzCampaignModInfo> loadCampaignModInfoFromFile(const std::string& filePath, const std::string& baseDir);

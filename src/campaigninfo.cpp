@@ -23,6 +23,7 @@
  */
 
 #include "campaigninfo.h"
+#include "modinfo.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/physfs_ext.h"
 #include "multiplay.h"
@@ -39,6 +40,9 @@ static optional<std::string> campaignName = nullopt;
 
 /* cam tweak options */
 static std::unordered_map<std::string, nlohmann::json> camTweakOptions;
+
+/* what the campaign being played says about its research tree */
+static optional<WzResearchTreeVisibility> researchTreeVisibility = nullopt;
 
 void setCampaignNumber(uint32_t number)
 {
@@ -155,6 +159,26 @@ void setCamTweakOptions(std::unordered_map<std::string, nlohmann::json> options)
 void clearCamTweakOptions()
 {
 	camTweakOptions.clear();
+}
+
+WzResearchTreeVisibility getCampaignResearchTreeVisibility()
+{
+	if (researchTreeVisibility.has_value())
+	{
+		return researchTreeVisibility.value();
+	}
+	researchTreeVisibility = WzResearchTreeVisibility::Hidden;
+	const auto modInfo = loadCampaignModInfoFromFile("mod-info.json", "");
+	if (modInfo.has_value() && modInfo.value().type == WzModType::AlternateCampaign)
+	{
+		researchTreeVisibility = modInfo.value().researchTreeVisibility;
+	}
+	return researchTreeVisibility.value();
+}
+
+void clearCampaignResearchTreeVisibility()
+{
+	researchTreeVisibility = nullopt;
 }
 
 const std::unordered_map<std::string, nlohmann::json>& getCamTweakOptions()

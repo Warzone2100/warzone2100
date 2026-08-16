@@ -42,6 +42,10 @@ public:
 
 	std::vector<WzUniCodepoint> caseFolded() const;
 
+	// Unicode uppercase mapping (1:1 only - codepoints without a single-codepoint
+	// uppercase equivalent are returned unchanged)
+	WzUniCodepoint toUpper() const;
+
 public:
 	bool operator==(const WzUniCodepoint& ch) const { return _codepoint == ch._codepoint; }
 
@@ -123,6 +127,10 @@ public:
 	void clear();
 
 	WzString toLower() const;
+	// Returns an uppercase copy of the string, using per-codepoint Unicode
+	// uppercasing (see WzUniCodepoint::toUpper). Useful as a fallback when a
+	// translation doesn't provide an uppercase variant of a string.
+	WzString toUpper() const;
 	WzString trimmed(const std::locale &loc = std::locale::classic()) const;
 
 	std::vector<WzString> split(const WzString &delimiter) const;
