@@ -8,12 +8,31 @@ float pointLightEnergyAtPosition(vec3 pointLightVector, float range)
 	return numerator * numerator / ( 1 + 2 * sqNormDist);
 }
 
-vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 spaceMatrix)
+// How much of the cone a fragment sits in.
+// A cosOuter of -1 means the light has no cone (which is what every light without a direction carries), so this returns 1 and nothing changes.
+// The inner edge is derived from the outer rather than stored, which keeps the transport to one vec4 per light and costs a constant.
+float pointLightConeFactor(vec3 pointLightVector, vec4 directionAndCos)
+{
+	if (directionAndCos.w <= -1.f)
+	{
+		return 1.f;
+	}
+	// A wide falloff, because a hard rim on the ground makes a cone read as a hard beam rather than as something glowing.
+	// (At 0.5 a 60 degree cone fades from about 40 degrees.)
+	const float coneSoftness = 0.5f;
+	float cosOuter = directionAndCos.w;
+	float cosInner = mix(cosOuter, 1.f, coneSoftness);
+	float alignment = dot(normalize(-pointLightVector), directionAndCos.xyz);
+	return smoothstep(cosOuter, cosInner, alignment);
+}
+
+vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, float pointLightIntensity, vec4 pointLightDirectionAndCos, mat3 spaceMatrix)
 {
 	vec3 pointLightVector = pointLightWorldPosition - WorldFragPos;
 	vec3 pointLightDir = spaceMatrix * normalize(pointLightVector);
 
 	float energy = pointLightEnergyAtPosition(pointLightVector, pointLightEnergy);
+	energy *= pointLightIntensity * pointLightConeFactor(pointLightVector, pointLightDirectionAndCos);
 	vec4 lightColor = vec4(pointLightColor * energy, 1.f); //to-do: pick average color from effect's texture
 	//lightColor.rgb = mix(lightColor.rgb, (lightColor.rgb + 1.5)*energy*2, energy);
 
@@ -32,12 +51,17 @@ uniform isamplerBuffer lightIndexBuffer;
 
 vec4 wzLightPosition(int lightIndex)
 {
-	return texelFetch(lightDataBuffer, lightIndex * 2);
+	return texelFetch(lightDataBuffer, lightIndex * 3);
 }
 
 vec4 wzLightColorAndEnergy(int lightIndex)
 {
-	return texelFetch(lightDataBuffer, lightIndex * 2 + 1);
+	return texelFetch(lightDataBuffer, lightIndex * 3 + 1);
+}
+
+vec4 wzLightDirectionAndCos(int lightIndex)
+{
+	return texelFetch(lightDataBuffer, lightIndex * 3 + 2);
 }
 
 int wzLightIndex(int entryInLightList)
@@ -52,12 +76,17 @@ layout(std430, set = WZ_LIGHT_DATA_SET, binding = 15) readonly buffer lightIndex
 
 vec4 wzLightPosition(int lightIndex)
 {
-	return lights[lightIndex * 2];
+	return lights[lightIndex * 3];
 }
 
 vec4 wzLightColorAndEnergy(int lightIndex)
 {
-	return lights[lightIndex * 2 + 1];
+	return lights[lightIndex * 3 + 1];
+}
+
+vec4 wzLightDirectionAndCos(int lightIndex)
+{
+	return lights[lightIndex * 3 + 2];
 }
 
 int wzLightIndex(int entryInLightList)
@@ -73,6 +102,11 @@ vec4 wzLightPosition(int lightIndex)
 vec4 wzLightColorAndEnergy(int lightIndex)
 {
 	return PointLightsColorAndEnergy[lightIndex];
+}
+
+vec4 wzLightDirectionAndCos(int lightIndex)
+{
+	return PointLightsDirectionAndCos[lightIndex];
 }
 
 int wzLightIndex(int entryInLightList)
@@ -106,8 +140,11 @@ vec4 iterateOverAllPointLights(
 		int lightIndex = wzLightIndex(entryInLightList);
 		vec4 position = wzLightPosition(lightIndex);
 		vec4 colorAndEnergy = wzLightColorAndEnergy(lightIndex);
+		vec4 directionAndCos = wzLightDirectionAndCos(lightIndex);
+		// The cone direction arrives in the same space as the position, so it gets the same flip
+		directionAndCos.xyz *= vec3(1.f, 1.f, -1.f);
 		vec3 tmp = position.xyz * vec3(1., 1., -1.);
-		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, spaceMatrix);
+		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, position.w, directionAndCos, spaceMatrix);
 	}
 	return light;
 }

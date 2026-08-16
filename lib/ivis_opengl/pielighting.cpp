@@ -238,7 +238,11 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 					auto& existingLight = culledLights[o];
 					auto newLightRange = static_cast<float>(light.range);
 					auto distanceCalc = pointLightDistanceCalc(existingLight.light, light);
-					if ((distanceCalc < distanceCalcCombineThreshold)
+					// Merging blends two colors into one light - which only makes sense when neither carries a cone
+					const bool bothOmnidirectional = existingLight.light.omnidirectional()
+						&& (light.cosOuter <= LIGHT_OMNIDIRECTIONAL);
+					if (bothOmnidirectional
+						&& (distanceCalc < distanceCalcCombineThreshold)
 						&& (distanceCalc < (existingLight.light.range + newLightRange)))
 					{
 						// Found two lights close to each other - combine them
@@ -249,6 +253,9 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 							calcLight.position = glm::vec3(light.position.x,  light.position.y, light.position.z);
 							calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
 							calcLight.range = light.range;
+							calcLight.intensity = light.intensity;
+							calcLight.direction = glm::vec3(light.direction.x, light.direction.y, light.direction.z);
+							calcLight.cosOuter = light.cosOuter;
 
 							float weight = existingLight.light.range / calcLight.range;
 							calcLight.colour.x += (existingLight.light.colour.x) * weight;
@@ -298,6 +305,9 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		calcLight.position = glm::vec3(light.position.x,  light.position.y, light.position.z);
 		calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
 		calcLight.range = light.range;
+		calcLight.intensity = light.intensity;
+		calcLight.direction = glm::vec3(light.direction.x, light.direction.y, light.direction.z);
+		calcLight.cosOuter = light.cosOuter;
 
 		const float importance = pointLightImportance(calcLight, scene);
 		culledLights.push_back({std::move(calcLight), clipSpaceBounds, importance});
@@ -459,6 +469,8 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		result.colorAndEnergy[lightIndex].y = light.colour.y;
 		result.colorAndEnergy[lightIndex].z = light.colour.z;
 		result.colorAndEnergy[lightIndex].w = light.range;
+		result.positions[lightIndex].w = light.intensity;
+		result.directionAndCos[lightIndex] = glm::vec4(light.direction, light.cosOuter);
 	}
 
 	// Iterate over all buckets
@@ -530,12 +542,13 @@ const ILightingManager::FlatPointLightData& ILightingManager::getFlatPointLightD
 {
 	const auto& buckets = currentPointLightBuckets;
 	const auto& capacity = gfx_api::activeLightCapacity();
-	currentFlatPointLightData.lights.resize(capacity.maxLights * 2);
+	currentFlatPointLightData.lights.resize(capacity.maxLights * 3);
 	currentFlatPointLightData.indices.resize(capacity.maxIndexedLights * 4);
 	for (size_t i = 0; i < capacity.maxLights; ++i)
 	{
-		currentFlatPointLightData.lights[i * 2] = buckets.positions[i];
-		currentFlatPointLightData.lights[i * 2 + 1] = buckets.colorAndEnergy[i];
+		currentFlatPointLightData.lights[i * 3] = buckets.positions[i];
+		currentFlatPointLightData.lights[i * 3 + 1] = buckets.colorAndEnergy[i];
+		currentFlatPointLightData.lights[i * 3 + 2] = buckets.directionAndCos[i];
 	}
 	for (size_t i = 0; i < capacity.maxIndexedLights; ++i)
 	{

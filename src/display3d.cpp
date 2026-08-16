@@ -1365,6 +1365,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 			bucketLight.positions.size(), bucketLight.light_index.size());
 		std::copy_n(bucketLight.positions.begin(), gfx_api::max_lights, pointLightUniforms.PointLightsPosition.begin());
 		std::copy_n(bucketLight.colorAndEnergy.begin(), gfx_api::max_lights, pointLightUniforms.PointLightsColorAndEnergy.begin());
+		std::copy_n(bucketLight.directionAndCos.begin(), gfx_api::max_lights, pointLightUniforms.PointLightsDirectionAndCos.begin());
 		std::copy_n(bucketLight.light_index.begin(), gfx_api::max_indexed_lights, pointLightUniforms.indexed_lights.begin());
 		pointLightsRef = gfx_api::context::get().upload_frame_uniform(pointLightUniforms);
 	}
