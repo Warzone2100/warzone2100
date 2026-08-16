@@ -1268,7 +1268,6 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	pie_BeginLighting(getTheSun());
 
 	// Reset all lighting data
-	lightData.lights.clear();
 	lightManager.SetFrameStart();
 
 	// update the fog of war... FIXME: Remove this
@@ -1347,6 +1346,12 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 			return map_Height(gameWorld.map, worldX, worldY);
 		};
 		lightManager.ComputeFrameData(lightData, lightmap, perspectiveViewMatrix, lightScene);
+
+		// Cleared here rather than at the top of the frame, so we can handle lights emitted while
+		// drawing (currently: muzzle flashes) which arrive after this point and would otherwise
+		// be dropped.
+		// Instead, they are carried into the next frame, one frame behind whatever cast them.
+		lightData.lights.clear();
 	}
 
 	// Every pass that lights reads the same point lights, so upload them once here and hand the reference to the consumers
