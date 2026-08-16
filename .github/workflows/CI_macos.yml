@@ -254,12 +254,27 @@ jobs:
           WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           . .ci/githubactions/checkout_config.sh
+      - name: Prepare Git Repo for autorevision
+        working-directory: '${{ github.workspace }}/src'
+        run: cmake -P .ci/githubactions/prepare_git_repo.cmake
       - name: Prep Environment
         run: |
           mkdir dl-artifacts
           mkdir build
           mkdir output
           echo "OUTPUT_DIR=output" >> $GITHUB_ENV
+      - name: Build wzbuildmanifest tool
+        run: |
+          brew install libsodium
+          cmake -S "${{ github.workspace }}/src/tools/buildmanifest" -B "${{ github.workspace }}/buildmanifest" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$(brew --prefix libsodium)"
+          cmake --build "${{ github.workspace }}/buildmanifest"
+          echo "WZ_BUILDMANIFEST_TOOL=${{ github.workspace }}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
+          WZ_BUILDMANIFEST_PUBLISHER=""
+          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+            WZ_BUILDMANIFEST_PUBLISHER="wz2100-project"
+          fi
+          echo "WZ_BUILDMANIFEST_PUBLISHER=${WZ_BUILDMANIFEST_PUBLISHER}"
+          echo "WZ_BUILDMANIFEST_PUBLISHER=${WZ_BUILDMANIFEST_PUBLISHER}" >> $GITHUB_ENV
       - name: Download Artifacts
         uses: actions/download-artifact@v8
         with:
@@ -290,6 +305,8 @@ jobs:
           mv "warzone2100_macOS_arm64" "warzone2100_macOS_universal"
           echo "Re-code-sign"
           codesign --force --options runtime --entitlements "entitlements.plist" -s - "warzone2100_macOS_universal/Warzone 2100.app"
+          echo "Generate build manifest"
+          cmake -DWZBM_TOOL="${WZ_BUILDMANIFEST_TOOL}" -DWZBM_APP_BUNDLE="warzone2100_macOS_universal/Warzone 2100.app" -DWZBM_REPO_DIR="${{ github.workspace }}/src" -DWZBM_PLATFORM="macos-universal" -DWZBM_PUBLISHER="${WZ_BUILDMANIFEST_PUBLISHER}" -DWZBM_ENTITLEMENTS="${PWD}/entitlements.plist" -P "${{ github.workspace }}/src/pkg/buildmanifest_bundle.cmake"
           # Zip and copy to build dir
           echo "Compress .zip"
           cd "warzone2100_macOS_universal"
@@ -341,9 +358,19 @@ jobs:
         run: |
           # Remove the videos from the universal app bundle
           rm "warzone2100_macOS_universal/Warzone 2100.app/Contents/Resources/data/sequences.wz"
+          # The manifest written for the full package is reused as-is:
+          # sequences.wz is not among the hashed artifacts, and the canonical executable hash is signature invariant.
+          WZ_UNIVERSAL_EXE="warzone2100_macOS_universal/Warzone 2100.app/Contents/MacOS/Warzone 2100"
+          CANONICAL_BEFORE="$("${WZ_BUILDMANIFEST_TOOL}" hash-exe "${WZ_UNIVERSAL_EXE}" --canonical)"
           # Re-code-sign
           echo "Re-code-sign no-videos package"
           codesign --force --options runtime --entitlements "entitlements.plist" -s - "warzone2100_macOS_universal/Warzone 2100.app"
+          CANONICAL_AFTER="$("${WZ_BUILDMANIFEST_TOOL}" hash-exe "${WZ_UNIVERSAL_EXE}" --canonical)"
+          if [ "${CANONICAL_BEFORE}" != "${CANONICAL_AFTER}" ]; then
+            echo "::error ::Canonical executable hash changed across the no-videos re-signing - the build manifest no longer matches"
+            exit 1
+          fi
+          echo "Canonical executable hash unchanged across the no-videos re-signing"
           # Zip and copy to build dir
           echo "Compress no videos .zip"
           cd "warzone2100_macOS_universal"

@@ -249,8 +249,10 @@ jobs:
         # Distributor
 
         $WZ_DISTRIBUTOR = "UNKNOWN"
+        $WZ_BUILDMANIFEST_PUBLISHER = ""
         if (${env:GITHUB_REPOSITORY} -eq "Warzone2100/warzone2100") {
           $WZ_DISTRIBUTOR = "wz2100.net"
+          $WZ_BUILDMANIFEST_PUBLISHER = "wz2100-project"
         }
 
         # ----------------
@@ -289,6 +291,7 @@ jobs:
         echo "WZ_VISUAL_STUDIO_INSTALL_VERSION=${WZ_VISUAL_STUDIO_INSTALL_VERSION}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "VCPKG_VISUAL_STUDIO_PATH=${VCPKG_VISUAL_STUDIO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "WZ_BUILDMANIFEST_PUBLISHER=${WZ_BUILDMANIFEST_PUBLISHER}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_BINARYCACHE_DIR=${VCPKG_BINARYCACHE_DIR}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
@@ -504,7 +507,7 @@ jobs:
 
         # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
-        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" ${ADDITIONAL_CMAKE_PARAMS} -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
+        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" ${ADDITIONAL_CMAKE_PARAMS} -DWZ_BUILDMANIFEST:BOOL=ON -DWZ_BUILDMANIFEST_PUBLISHER:STRING="${env:WZ_BUILDMANIFEST_PUBLISHER}" -DWZ_BUILDMANIFEST_PLATFORM:STRING="windows-${env:WZ_TARGET_ARCH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Configure (MINGW)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
@@ -534,7 +537,7 @@ jobs:
         }
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
-        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -DWZ_BUILDMANIFEST:BOOL=ON -DWZ_BUILDMANIFEST_PUBLISHER:STRING="${env:WZ_BUILDMANIFEST_PUBLISHER}" -DWZ_BUILDMANIFEST_PLATFORM:STRING="windows-${env:WZ_TARGET_ARCH}" -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
       uses: actions/upload-artifact@v7
