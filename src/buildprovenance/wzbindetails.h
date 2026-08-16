@@ -38,6 +38,7 @@ struct ExeDetails
 	HashableFile::PathConfidence pathConfidence = HashableFile::PathConfidence::KernelAuthoritative;
 	optional<uint64_t> fileSize;
 	optional<Sha256> rawHash;						// whole-file SHA-256 of the on-disk executable
+	std::vector<wzmachohash::SliceCanonicalHash> machoCanonicalSlices;	// macOS only, empty elsewhere
 	std::string errorDetails;						// populated when rawHash is empty
 };
 

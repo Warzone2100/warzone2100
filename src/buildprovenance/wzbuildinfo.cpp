@@ -73,7 +73,16 @@ nlohmann::ordered_json assembleBuildInfo(const ExeDetails& exeDetails)
 		exe["p"] = (exeDetails.pathConfidence == HashableFile::PathConfidence::KernelAuthoritative) ? "k" : "h";
 		exe["size"] = exeDetails.fileSize.value_or(0);
 		nlohmann::ordered_json hashes = nlohmann::ordered_json::object();
-		hashes["raw_sha256"] = exeDetails.rawHash.value().toString();
+		hashes["sha256"] = exeDetails.rawHash.value().toString();
+		if (!exeDetails.machoCanonicalSlices.empty())
+		{
+			nlohmann::ordered_json slices = nlohmann::ordered_json::object();
+			for (const auto& slice : exeDetails.machoCanonicalSlices)
+			{
+				slices[slice.arch] = slice.sha256Hex;
+			}
+			hashes["macho-canonical"] = std::move(slices);
+		}
 		exe["hashes"] = std::move(hashes);
 	}
 	else

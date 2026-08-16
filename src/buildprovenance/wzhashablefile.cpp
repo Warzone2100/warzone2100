@@ -27,6 +27,7 @@
 #include <LaunchInfo.h>
 #include <sodium.h>
 
+#include <cstring>
 #include <vector>
 
 #if defined(WZ_OS_WIN)
@@ -108,6 +109,45 @@ public:
 			return nullopt;
 		}
 		return static_cast<size_t>(bytesRead);
+#endif
+	}
+
+	// Reads exactly len bytes at offset (without disturbing the sequential read position on POSIX)
+	bool readAt(uint64_t offset, void* buffer, size_t len)
+	{
+#if defined(WZ_OS_WIN)
+		OVERLAPPED overlapped;
+		memset(&overlapped, 0, sizeof(overlapped));
+		size_t totalRead = 0;
+		while (totalRead < len)
+		{
+			uint64_t currOffset = offset + totalRead;
+			overlapped.Offset = static_cast<DWORD>(currOffset & 0xFFFFFFFFull);
+			overlapped.OffsetHigh = static_cast<DWORD>(currOffset >> 32);
+			DWORD bytesRead = 0;
+			if (!ReadFile(handle, static_cast<char*>(buffer) + totalRead, static_cast<DWORD>(len - totalRead), &bytesRead, &overlapped) || bytesRead == 0)
+			{
+				return false;
+			}
+			totalRead += bytesRead;
+		}
+		return true;
+#else
+		size_t totalRead = 0;
+		while (totalRead < len)
+		{
+			ssize_t bytesRead = ::pread(fd, static_cast<char*>(buffer) + totalRead, len - totalRead, static_cast<off_t>(offset + totalRead));
+			if (bytesRead == -1 && errno == EINTR)
+			{
+				continue;
+			}
+			if (bytesRead <= 0)
+			{
+				return false;
+			}
+			totalRead += static_cast<size_t>(bytesRead);
+		}
+		return true;
 #endif
 	}
 
@@ -197,5 +237,33 @@ optional<HashableFile::WholeFileHash> HashableFile::hashWholeFile(const std::ato
 	static_assert(Sha256::Bytes == crypto_hash_sha256_BYTES, "Size mismatch");
 	crypto_hash_sha256_final(&state, result.hash.bytes);
 	result.fileSize = totalBytes;
+	return result;
+}
+
+optional<std::vector<wzmachohash::SliceCanonicalHash>> HashableFile::machoCanonicalHashes(const std::atomic<bool>* stopFlag) const
+{
+	ReadOnlyFile file;
+	if (!file.open(m_openViaProcSelfExe ? "/proc/self/exe" : m_displayPath))
+	{
+		return nullopt;
+	}
+	optional<uint64_t> fileSize = file.size();
+	if (!fileSize.has_value())
+	{
+		return nullopt;
+	}
+	auto readAt = [&file, stopFlag](uint64_t offset, void* buffer, size_t len) -> bool {
+		if (stopFlag && stopFlag->load(std::memory_order_relaxed))
+		{
+			return false;
+		}
+		return file.readAt(offset, buffer, len);
+	};
+	std::string errorDetails;
+	auto result = wzmachohash::computeCanonicalHashes(readAt, fileSize.value(), errorDetails);
+	if (!result.has_value())
+	{
+		return nullopt;
+	}
 	return result;
 }

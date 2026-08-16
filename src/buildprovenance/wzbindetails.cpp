@@ -64,6 +64,13 @@ ExeDetails computeExeDetails()
 	}
 	details.fileSize = hashResult.value().fileSize;
 	details.rawHash = hashResult.value().hash;
+#if defined(WZ_OS_MAC)
+	auto canonicalSlices = exeFile.value().machoCanonicalHashes(&stopRequested);
+	if (canonicalSlices.has_value())
+	{
+		details.machoCanonicalSlices = std::move(canonicalSlices.value());
+	}
+#endif
 	return details;
 }
 

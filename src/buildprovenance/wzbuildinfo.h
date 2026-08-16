@@ -40,7 +40,10 @@ using nonstd::optional;
 //   "exe": {
 //     "p": "k" | "h",
 //     "size": <bytes>,
-//     "hashes": { "raw_sha256": "<hex>" }
+//     "hashes": {
+//       "sha256": "<hex>",
+//       "macho-canonical": { "<arch>": "<hex>", ... }  (macOS only)
+//     }
 //   }
 // }
 //
