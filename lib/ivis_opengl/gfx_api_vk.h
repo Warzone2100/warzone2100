@@ -260,6 +260,7 @@ struct perFrameResources_t
 	BlockBufferAllocator stagingBufferAllocator;
 	BlockBufferAllocator streamedVertexBufferAllocator;
 	BlockBufferAllocator uniformBufferAllocator;
+	BlockBufferAllocator lightDataBufferAllocator;
 
 	typedef std::pair<vk::DescriptorBufferInfo, vk::DescriptorSet> DynamicUniformBufferDescriptorSets;
 	typedef std::unordered_map<VkPSO *, std::vector<optional<DynamicUniformBufferDescriptorSets>>> PerPSODynamicUniformBufferDescriptorSets;
@@ -390,6 +391,7 @@ struct VkPSO final
 	// Block type each uniform set expects (so a frame uniform reaching the wrong set is caught)
 	std::vector<std::type_index> uniformBlockTypes;
 	uint32_t textures_first_set = 0;
+	bool hasLightDataBindings = false;
 	vk::DescriptorSetLayout textures_set_layout;
 	vk::PipelineLayout layout;
 	vk::ShaderModule vertexShader;
@@ -925,6 +927,8 @@ public:
 	virtual void set_constants(const void* buffer, const std::size_t& size) override;
 	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
 	virtual gfx_api::frame_uniform_allocation upload_frame_uniform_raw(const void* data, size_t size) override;
+	gfx_api::data_buffer_transport lightDataTransport() const override { return gfx_api::data_buffer_transport::storage_buffer; }
+	void upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes) override;
 	virtual void set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type) override;
 
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
@@ -1049,6 +1053,19 @@ private:
 		uint32_t size = 0;
 	};
 	std::vector<FrameUniform> frameUniforms;
+
+	// This frame's point light data, written once and read by every lit pipeline.
+	struct LightDataBuffers
+	{
+		vk::Buffer lightsBuffer;
+		uint32_t lightsOffset = 0;
+		uint32_t lightsRange = 0;
+		vk::Buffer indicesBuffer;
+		uint32_t indicesOffset = 0;
+		uint32_t indicesRange = 0;
+		bool valid() const { return lightsRange != 0 && indicesRange != 0; }
+	};
+	LightDataBuffers lightDataBuffers;
 	const RenderPassDetails& currentRenderPass();
 	bool recreateSwapchain(const vk::Result& reason);
 	void sealActivePassForFrameFinish();

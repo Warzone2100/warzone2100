@@ -142,6 +142,12 @@ const std::vector<const char*> debugAdditionalExtensions = {
 const uint32_t minRequired_DescriptorSetUniformBuffers = 1;
 const uint32_t minRequired_DescriptorSetUniformBuffersDynamic = 1;
 const uint32_t minRequired_BoundDescriptorSets = 4;
+
+// Light data storage buffers share the texture set rather than taking one of their own, because
+// the instanced mesh pipeline already uses the four sets Vulkan guarantees. These must match the
+// binding numbers in vk/pointlights.glsl.
+constexpr uint32_t lightDataStorageBinding = 14;
+constexpr uint32_t lightIndexStorageBinding = 15;
 const uint32_t minRequired_Viewports = 1;
 const uint32_t minRequired_ColorAttachments = 1;
 
@@ -847,6 +853,7 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 	, stagingBufferAllocator(allocator, 1024 * 1024, vk::BufferUsageFlagBits::eTransferSrc, VMA_MEMORY_USAGE_CPU_ONLY)
 	, streamedVertexBufferAllocator(allocator, 128 * 1024, vk::BufferUsageFlagBits::eVertexBuffer, VMA_MEMORY_USAGE_CPU_TO_GPU, true)
 	, uniformBufferAllocator(allocator, 1024 * 1024, vk::BufferUsageFlagBits::eUniformBuffer, VMA_MEMORY_USAGE_CPU_TO_GPU, true)
+	, lightDataBufferAllocator(allocator, 128 * 1024, vk::BufferUsageFlagBits::eStorageBuffer, VMA_MEMORY_USAGE_CPU_TO_GPU, true)
 	, pVkDynLoader(&vkDynLoader)
 {
 	combinedImageSamplerDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eCombinedImageSampler, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
@@ -879,10 +886,19 @@ perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescrip
 {
 	vk::DescriptorPoolSize poolSize(type, descriptorCount);
 
+	// A texture set also carries the two light data storage buffers on pipelines that read point
+	// lights, and a set is allocated from one pool, so that pool has to supply both types.
+	// Sized at two per set, which the set count already caps, so it needs no accounting of its own.
+	auto poolSizes = std::vector<vk::DescriptorPoolSize>{poolSize};
+	if (type == vk::DescriptorType::eCombinedImageSampler)
+	{
+		poolSizes.emplace_back(vk::DescriptorType::eStorageBuffer, maxSets * 2);
+	}
+
 	return DescriptorPoolDetails(dev.createDescriptorPool(vk::DescriptorPoolCreateInfo()
 			.setMaxSets(maxSets)
-			.setPPoolSizes(&poolSize)
-			.setPoolSizeCount(1)
+			.setPPoolSizes(poolSizes.data())
+			.setPoolSizeCount(static_cast<uint32_t>(poolSizes.size()))
 			, nullptr, *pVkDynLoader
 		), poolSize, maxSets);
 }
@@ -974,6 +990,8 @@ void perFrameResources_t::clean()
 	streamedVertexBufferAllocator.clean();
 	uniformBufferAllocator.unmapAutomappedMemory();
 	uniformBufferAllocator.clean();
+	lightDataBufferAllocator.unmapAutomappedMemory();
+	lightDataBufferAllocator.clean();
 
 	for (auto fbo : fbo_to_delete)
 	{
@@ -1821,6 +1839,29 @@ VkPSO::VkPSO(vk::Device _dev,
 				.setStageFlags(textureStageFlags(texture.stage))
 		);
 	}
+	// A pipeline that carries the point light block reads the light arrays out of these, so its texture set needs them declared.
+	// NOLIGHT pipelines carry the block without reading it, which simply costs two descriptors they never sample.
+	hasLightDataBindings = std::find(uniformBlockTypes.begin(), uniformBlockTypes.end(),
+		std::type_index(typeid(gfx_api::PointLightsUniforms))) != uniformBlockTypes.end();
+	if (hasLightDataBindings)
+	{
+		for (const auto& texture : texture_desc)
+		{
+			ASSERT(texture.id != lightDataStorageBinding && texture.id != lightIndexStorageBinding,
+				"Texture id %zu collides with a light data binding", texture.id);
+		}
+		for (const uint32_t binding : {lightDataStorageBinding, lightIndexStorageBinding})
+		{
+			textures_layout_desc.emplace_back(
+				vk::DescriptorSetLayoutBinding()
+					.setBinding(binding)
+					.setDescriptorCount(1)
+					.setDescriptorType(vk::DescriptorType::eStorageBuffer)
+					.setStageFlags(vk::ShaderStageFlagBits::eFragment)
+			);
+		}
+	}
+
 	textures_set_layout = dev.createDescriptorSetLayout(
 		vk::DescriptorSetLayoutCreateInfo()
 			.setBindingCount(static_cast<uint32_t>(textures_layout_desc.size()))
@@ -5877,9 +5918,20 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		i++;
 	}
 	i = 0;
+	const bool writeLightData = currentPSO->hasLightDataBindings && lightDataBuffers.valid();
+	const auto lightBufferInfo = std::array<vk::DescriptorBufferInfo, 2>{
+		vk::DescriptorBufferInfo()
+			.setBuffer(lightDataBuffers.lightsBuffer)
+			.setOffset(lightDataBuffers.lightsOffset)
+			.setRange(lightDataBuffers.lightsRange),
+		vk::DescriptorBufferInfo()
+			.setBuffer(lightDataBuffers.indicesBuffer)
+			.setOffset(lightDataBuffers.indicesOffset)
+			.setRange(lightDataBuffers.indicesRange)
+	};
 	// Sized up front: the entries below point into image_descriptor, which must not grow again
 	auto write_info = std::vector<vk::WriteDescriptorSet>{};
-	write_info.reserve(textures.size());
+	write_info.reserve(textures.size() + (writeLightData ? lightBufferInfo.size() : 0));
 	for (auto* texture : textures)
 	{
 		(void)texture; // silence unused variable warning
@@ -5892,6 +5944,21 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 				.setDstBinding(i)
 		);
 		i++;
+	}
+	if (writeLightData)
+	{
+		const uint32_t lightBindings[] = {lightDataStorageBinding, lightIndexStorageBinding};
+		for (size_t b = 0; b < lightBufferInfo.size(); ++b)
+		{
+			write_info.emplace_back(
+				vk::WriteDescriptorSet()
+					.setDescriptorCount(1)
+					.setDescriptorType(vk::DescriptorType::eStorageBuffer)
+					.setDstSet(set[0])
+					.setPBufferInfo(&lightBufferInfo[b])
+					.setDstBinding(lightBindings[b])
+			);
+		}
 	}
 	dev.updateDescriptorSets(write_info, nullptr, vkDynLoader);
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set, set, nullptr, vkDynLoader);
@@ -5953,6 +6020,26 @@ void VkRoot::bindUniformBufferRange(const size_t& uniform_set, vk::Buffer buffer
 	}
 	const auto dynamicOffsets = std::array<uint32_t, 1> { offset };
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, static_cast<uint32_t>(uniform_set), descSet, dynamicOffsets, vkDynLoader);
+}
+
+void VkRoot::upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes)
+{
+	ASSERT_OR_RETURN(, buffering_mechanism::isInitialized(), "Buffering mechanism is not initialized");
+	ASSERT_OR_RETURN(, lightBytes <= static_cast<size_t>(std::numeric_limits<uint32_t>::max())
+		&& indexBytes <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "light data exceeds uint32_t max");
+
+	auto& lightAllocator = buffering_mechanism::get_current_resources().lightDataBufferAllocator;
+	const auto alignment = physDeviceProps.limits.minStorageBufferOffsetAlignment;
+
+	const auto lightsMemory = lightAllocator.alloc(static_cast<uint32_t>(lightBytes), alignment);
+	memcpy(lightAllocator.mapMemory(lightsMemory), lights, lightBytes);
+	const auto indicesMemory = lightAllocator.alloc(static_cast<uint32_t>(indexBytes), alignment);
+	memcpy(lightAllocator.mapMemory(indicesMemory), indices, indexBytes);
+
+	lightDataBuffers = LightDataBuffers{
+		lightsMemory.buffer, lightsMemory.offset, static_cast<uint32_t>(lightBytes),
+		indicesMemory.buffer, indicesMemory.offset, static_cast<uint32_t>(indexBytes)
+	};
 }
 
 gfx_api::frame_uniform_allocation VkRoot::upload_frame_uniform_raw(const void* data, size_t size)
@@ -6865,6 +6952,7 @@ void VkRoot::beginScreenFrame()
 
 	// The per frame uniform allocator has rotated, so every reference handed out last frame is stale
 	frameUniforms.clear();
+	lightDataBuffers = {};
 	advanceFrameUniformGeneration();
 
 	frameResources.ensureTransferRecordingBegun(vkDynLoader);
