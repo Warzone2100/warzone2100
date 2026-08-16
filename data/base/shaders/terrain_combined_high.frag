@@ -171,6 +171,8 @@ vec4 main_bumpMapping() {
 		bump.N = (1.f - a)*bump.N + a*n;
 		bump.gloss = (1.f - a)*bump.gloss + a*texture2DArray(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
+	// Every lighting term below assumes unit length - but a weighted sum of unit normals is shorter than unit when they disagree (so normalize)
+	bump.N = normalize(bump.N);
 	return doBumpMapping(bump, groundLightDir, groundHalfVec);
 }
 
