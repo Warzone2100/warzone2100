@@ -29,6 +29,8 @@
 #include <unordered_map>
 #include <variant>
 #include <tuple>
+#include <atomic>
+#include <future>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -294,13 +296,20 @@ public:
 	// Requests a game listing
 	virtual bool createGameListing(const EcKey& hostIdentity, const GameDetails& gameDetails, const HostJoinOptions& joinOptions, const std::vector<ConnectionInfo>& connections) = 0;
 
-	// Writes a response to a lobby connection check request
 	enum class LobbyConnectionCheckRequestError
 	{
 		GameNotListed,
 		InvalidRequest,
 	};
-	typedef ::tl::expected<std::string, LobbyConnectionCheckRequestError> LobbyConnectionCheckResult;
+	struct PendingConnectionCheckResponse
+	{
+		std::future<std::string> futureResponse;
+		std::shared_ptr<std::atomic<bool>> cancelFlag;
+	};
+	typedef ::tl::expected<PendingConnectionCheckResponse, LobbyConnectionCheckRequestError> LobbyConnectionCheckResult;
+	// Builds a response to a lobby connection check request.
+	// On success, the response string is delivered via a future (which may already be ready).
+	// Setting cancelFlag (when non-null) abandons any background response work.
 	virtual LobbyConnectionCheckResult respondToLobbyConnectionCheckRequest(const std::string& jsonRequest, const WzString& playerName, const EcKey& playerIdentity) = 0;
 
 	// Queues a game listing update
@@ -334,6 +343,11 @@ std::shared_ptr<LobbyServerHostingHandlerProtocol> MakeLobbyHostListingHandler(c
 // The provider must invoke the completion function asynchronously on the main thread.
 typedef std::function<void(optional<nlohmann::ordered_json> buildInfo, optional<std::string> buildManifest)> BuildInfoCompletionFunc;
 void setBuildInfoProvider(std::function<void(BuildInfoCompletionFunc)> provider);
+
+// Sets a handler for hash requests received via the lobby connection check.
+// The handler must invoke the completion function asynchronously on the main thread.
+typedef std::function<void(nlohmann::ordered_json hashResponse)> HashResponseFunc;
+void setHashRequestHandler(std::function<void(const nlohmann::json& hashRequest, std::shared_ptr<std::atomic<bool>> cancelFlag, HashResponseFunc completion)> handler);
 
 // MARK: - Enumerating game listings
 

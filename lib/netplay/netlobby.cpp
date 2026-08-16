@@ -1079,18 +1079,31 @@ void setBuildInfoProvider(std::function<void(BuildInfoCompletionFunc)> provider)
 	buildInfoProvider = std::move(provider);
 }
 
+static std::function<void(const nlohmann::json&, std::shared_ptr<std::atomic<bool>>, HashResponseFunc)> hashRequestHandler;
+
+void setHashRequestHandler(std::function<void(const nlohmann::json& hashRequest, std::shared_ptr<std::atomic<bool>> cancelFlag, HashResponseFunc completion)> handler)
+{
+	hashRequestHandler = std::move(handler);
+}
+
 // MARK: LobbyConnectCheckRequest
 
 struct LobbyConnectCheckRequest
 {
 	std::string lobbyConnectToken;
 	std::string challenge;
+	optional<nlohmann::json> hashRequest;
 };
 
 void from_json(const nlohmann::json& j, LobbyConnectCheckRequest& v)
 {
 	v.lobbyConnectToken = j.at("lobbyToken").get<std::string>();
 	v.challenge = j.at("challenge").get<std::string>();
+	auto hashRequestIt = j.find("hashReq");
+	if (hashRequestIt != j.end())
+	{
+		v.hashRequest = *hashRequestIt;
+	}
 }
 
 // MARK: LobbyConnectCheckResponse
@@ -1577,25 +1590,42 @@ LobbyServerHostingHandlerImpl::LobbyConnectionCheckResult LobbyServerHostingHand
 		return ::tl::make_unexpected(LobbyConnectionCheckRequestError::InvalidRequest);
 	}
 
-	std::string responseString;
+	nlohmann::ordered_json responseJson;
 
 	if (trustedLobbyServerAddress)
 	{
 		// Construct LobbyConnectCheckResponse
-		auto response = LobbyConnectCheckResponse(hostGameCtx.gameId, playerName, playerIdentity, request);
-
-		responseString = nlohmann::ordered_json(response).dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace);
+		responseJson = nlohmann::ordered_json(LobbyConnectCheckResponse(hostGameCtx.gameId, playerName, playerIdentity, request));
 	}
 	else
 	{
 		// Send just the gameId
-		nlohmann::ordered_json simpleResponse;
-		simpleResponse["gid"] = getCurrentGameId().value_or(std::string());
-
-		responseString = simpleResponse.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace);
+		responseJson["gid"] = getCurrentGameId().value_or(std::string());
 	}
 
-	return responseString;
+	auto dumpResponse = [](const nlohmann::ordered_json& j) {
+		return j.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace);
+	};
+
+	auto responsePromise = std::make_shared<std::promise<std::string>>();
+	PendingConnectionCheckResponse result;
+	result.futureResponse = responsePromise->get_future();
+
+	if (trustedLobbyServerAddress && request.hashRequest.has_value() && hashRequestHandler)
+	{
+		result.cancelFlag = std::make_shared<std::atomic<bool>>(false);
+		hashRequestHandler(request.hashRequest.value(), result.cancelFlag,
+			[responsePromise, responseJson = std::move(responseJson), dumpResponse](nlohmann::ordered_json hashResponse) mutable {
+				responseJson["hashReq"] = std::move(hashResponse);
+				responsePromise->set_value(dumpResponse(responseJson));
+			});
+	}
+	else
+	{
+		responsePromise->set_value(dumpResponse(responseJson));
+	}
+
+	return result;
 }
 
 // Queues a game listing update

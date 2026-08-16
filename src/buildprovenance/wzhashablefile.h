@@ -32,6 +32,7 @@ using nonstd::nullopt;
 #include "lib/framework/crc.h"
 
 #include "wzmachohash.h"
+#include "wzkeyedhash.h"
 
 // Digest-only hashing over a closed set of files.
 //
@@ -71,6 +72,12 @@ public:
 
 	// Per-slice signature-invariant canonical hashes (Mach-O executables only)
 	optional<std::vector<wzmachohash::SliceCanonicalHash>> machoCanonicalHashes(const std::atomic<bool>* stopFlag = nullptr) const;
+
+	// Keyed hash over ranges of this file (construction in wzkeyedhash.h).
+	optional<std::array<uint8_t, wzkeyedhash::HASH_BYTES>> keyedHash(
+		const std::vector<uint8_t>& nonce, const std::string& requestId, uint32_t targetIndex,
+		const std::string& targetKind, const std::vector<wzkeyedhash::Range>& ranges,
+		const std::atomic<bool>* stopFlag = nullptr) const;
 
 private:
 	HashableFile(std::string displayPath, bool openViaProcSelfExe, PathConfidence confidence)
