@@ -825,6 +825,10 @@ bool loadConfig()
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
 	{
+		auto value = iniGetBoolOpt("muzzleFlashLights");
+		war_setMuzzleFlashLighting(value.value_or(true));
+	}
+	{
 		std::string ssaoValue = iniGetString("ssao", "off").value();
 		if (ssaoValue == "low")
 		{
@@ -1091,6 +1095,7 @@ bool saveConfig()
 		case SMAA_MODE::ULTRA: iniSetString("smaa", "ultra"); break;
 	}
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetBool("muzzleFlashLights", war_getMuzzleFlashLighting());
 	switch (war_getSsaoMode())
 	{
 		case SSAO_MODE::OFF: iniSetString("ssao", "off"); break;

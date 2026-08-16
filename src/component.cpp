@@ -30,6 +30,8 @@
 #include "action.h"
 #include "component.h"
 #include "display3d.h"
+#include "lib/ivis_opengl/pielighting.h"
+#include "warzoneconfig.h"
 #include "effects.h"
 #include "intdisplay.h"
 #include "loop.h"
@@ -376,6 +378,62 @@ static inline const iIMDBaseShape *getRightPropulsionIMD(const DROID *psDroid)
 	return asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + RIGHT_PROP];
 }
 
+//! Whether a weapon's muzzle graphic stands for a single shot, which is what the light below
+//! reads as. The commander and NEXUS link turrets aim a continuous beam and fire again every
+//! few frames, so a light for each shot would sit there flickering rather than punch out once.
+//! Their graphic stays, as it always has, since only the light is distracting at that rate.
+static bool muzzleFlashIsAnImpulse(WEAPON_SUBCLASS weaponSubClass)
+{
+	return weaponSubClass != WSC_COMMAND && weaponSubClass != WSC_ELECTRONIC;
+}
+
+//! A muzzle flash throws light forward down the barrel.
+//! Requires directional point lights (the lightmap has no notion of a cone, and would just do an even spread).
+static void addMuzzleFlashLight(const glm::mat4& muzzleModelMatrix, const iIMDShape *flashImd, WEAPON_SUBCLASS weaponSubClass, float age)
+{
+	if (!war_getMuzzleFlashLighting() || !war_getPointLightPerPixelLighting() || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		return;
+	}
+
+	if (!muzzleFlashIsAnImpulse(weaponSubClass))
+	{
+		return;
+	}
+
+	// A flash is an impulse, brightest at ignition and gone almost at once, so it finishes well before the graphic does.
+	constexpr float lightLifeFraction = 0.4f;
+	const float lightAge = age / lightLifeFraction;
+	if (lightAge >= 1.f)
+	{
+		return;
+	}
+
+	// The matrix places the barrel in render space, where z runs opposite to the game's y, so both
+	// the position and the direction go back through that flip.
+	const glm::vec3 renderPosition = glm::vec3(muzzleModelMatrix * glm::vec4(0.f, 0.f, 0.f, 1.f));
+	// Recoil translates along +z to rock the weapon backwards, so the barrel points down -z
+	const glm::vec3 renderDirection = glm::normalize(glm::mat3(muzzleModelMatrix) * glm::vec3(0.f, 0.f, -1.f));
+
+	LIGHT light;
+	light.position = Vector3i(static_cast<int>(renderPosition.x), static_cast<int>(renderPosition.y), static_cast<int>(-renderPosition.z));
+	light.direction = Vector3f(renderDirection.x, renderDirection.y, -renderDirection.z);
+	// The gases expand as they cool, so the cone opens out while it dies.
+	// Only the last, much darker frames are wide - which resembles a burst spreading (instead of a wide beam).
+	light.cosOuter = glm::mix(0.5f, 0.25f, lightAge); // approx 60 degrees opening to 75
+	// The flash graphic already says how big the flash is, so take the light's reach and brightness from it.
+	// A light machinegun's flash model is about a quarter the size of a cannon's and should light about that much less.
+	// (Clamped so an unusual model cannot produce something too absurd, hopefully.)
+	constexpr float referenceFlashRadius = 32.f; // a cannon, where the values here were set
+	const float flashScale = glm::clamp(static_cast<float>(flashImd->radius) / referenceFlashRadius, 0.25f, 2.5f);
+	light.range = static_cast<UDWORD>(512.f * flashScale);
+	light.colour = pal_Colour(255, 198, 128);
+	const float remaining = 1.f - lightAge;
+	const float remainingSq = remaining * remaining;
+	light.intensity = 4.f * flashScale * remainingSq * remainingSq;
+	getCurrentLightingData().lights.push_back(light);
+}
+
 void drawMuzzleFlash(WEAPON sWeap, const iIMDShape *weaponImd, const iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, glm::mat4 modelMatrix, const glm::mat4 &viewMatrix, float heightAboveTerrain, UBYTE colour)
 {
 	if (!weaponImd || !flashImd || weaponImd->connectors.empty() || sWeap.lastFired == 0 || graphicsTime < sWeap.lastFired)
@@ -403,6 +461,7 @@ void drawMuzzleFlash(WEAPON sWeap, const iIMDShape *weaponImd, const iIMDShape *
 		if (graphicsTime >= sWeap.lastFired && graphicsTime < sWeap.lastFired + BASE_MUZZLE_FLASH_DURATION)
 		{
 			pie_Draw3DShape(flashImd, 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, modelMatrix, viewMatrix, -heightAboveTerrain);
+			addMuzzleFlashLight(modelMatrix, flashImd, asWeaponStats[sWeap.nStat].weaponSubClass, static_cast<float>(graphicsTime - sWeap.lastFired) / static_cast<float>(BASE_MUZZLE_FLASH_DURATION));
 		}
 	}
 	else if (graphicsTime >= sWeap.lastFired)
@@ -414,6 +473,7 @@ void drawMuzzleFlash(WEAPON sWeap, const iIMDShape *weaponImd, const iIMDShape *
 		if (frame < flashImd->numFrames)
 		{
 			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, modelMatrix, viewMatrix, -heightAboveTerrain);
+			addMuzzleFlashLight(modelMatrix, flashImd, asWeaponStats[sWeap.nStat].weaponSubClass, static_cast<float>(graphicsTime - sWeap.lastFired) / static_cast<float>(flashImd->numFrames * animRate));
 		}
 	}
 }

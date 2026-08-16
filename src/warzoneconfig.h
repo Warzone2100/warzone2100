@@ -257,6 +257,9 @@ void war_setSmaaMode(SMAA_MODE mode);
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
+bool war_getMuzzleFlashLighting();
+void war_setMuzzleFlashLighting(bool muzzleFlashesEnabled);
+
 enum class SSAO_MODE : uint8_t
 {
 	OFF,

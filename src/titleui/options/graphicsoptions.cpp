@@ -83,6 +83,18 @@ OptionInfo::AvailabilityResult PerPixelLightingAvailable(const OptionInfo&)
 	return result;
 }
 
+OptionInfo::AvailabilityResult PerPixelLightingEnabled(const OptionInfo& optionInfo)
+{
+	OptionInfo::AvailabilityResult result = PerPixelLightingAvailable(optionInfo);
+	if (!result.available)
+	{
+		return result;
+	}
+	result.available = war_getPointLightPerPixelLighting();
+	result.localizedUnavailabilityReason = _("Point Lights are set to Lightmap.");
+	return result;
+}
+
 OptionInfo::AvailabilityResult UpscalingSharpnessAvailable(const OptionInfo&)
 {
 	OptionInfo::AvailabilityResult result;
@@ -338,6 +350,26 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			}, true
 		);
 		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.muzzleFlashLights", N_("Muzzle Flash Lights"), N_("Whether firing weapons light up their surroundings. Rapid fire makes these flicker, which some may prefer to turn off."));
+		optionInfo.addAvailabilityCondition(PerPixelLightingEnabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_getMuzzleFlashLighting());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setMuzzleFlashLighting(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
 	}
 
 	// Effects:

@@ -117,6 +117,7 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
+	bool muzzleFlashLighting = true;
 	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
 	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
@@ -941,6 +942,16 @@ bool war_getPointLightPerPixelLighting()
 void war_setPointLightPerPixelLighting(bool perPixelEnabled)
 {
 	warGlobs.pointLightLighting = perPixelEnabled;
+}
+
+bool war_getMuzzleFlashLighting()
+{
+	return warGlobs.muzzleFlashLighting;
+}
+
+void war_setMuzzleFlashLighting(bool muzzleFlashesEnabled)
+{
+	warGlobs.muzzleFlashLighting = muzzleFlashesEnabled;
 }
 
 SSAO_MODE war_getSsaoMode()
