@@ -130,6 +130,7 @@
 #include "wzpropertyproviders.h"
 #include "buildprovenance/wzbindetails.h"
 #include "buildprovenance/wzbuildinfo.h"
+#include "buildprovenance/wzmanifest.h"
 #include "3rdparty/gsl_finally.h"
 #include "wzapi.h"
 
@@ -1978,9 +1979,13 @@ int realmain(int argc, char *argv[])
 	getBuildInfo([](const nlohmann::ordered_json& buildInfo) {
 		debug(LOG_WZ, "BuildInfo: %s", buildInfo.dump().c_str());
 	});
+	// Warm the manifest self-check cache (logs its result)
+	getValidatedManifestBytes([](const optional<std::string>&) { });
 	netlobby::setBuildInfoProvider([](netlobby::BuildInfoCompletionFunc completion) {
 		getBuildInfo([completion](const nlohmann::ordered_json& buildInfo) {
-			completion(buildInfo);
+			getValidatedManifestBytes([completion, buildInfo](const optional<std::string>& buildManifest) {
+				completion(buildInfo, buildManifest);
+			});
 		});
 	});
 
