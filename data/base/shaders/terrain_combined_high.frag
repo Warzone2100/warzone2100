@@ -131,7 +131,7 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 #if WZ_POINT_LIGHT_ENABLED == 1
 	// point lights
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, b.N, normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
+	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, b.N, vec3(0.f, 0.f, 1.f), normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
 #endif
 
 	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/
