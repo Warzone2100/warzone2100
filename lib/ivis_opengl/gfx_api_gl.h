@@ -487,6 +487,7 @@ private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
 	void initUniformBufferLimits();
+	void benchmarkUniformBlockWriteMethods();
 	bool initInstancedFunctions();
 	bool initCheckBorderClampSupport();
 	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);

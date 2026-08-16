@@ -32,6 +32,7 @@
 #include <string>
 #include <algorithm>
 #include <cstdlib>
+#include <chrono>
 #include <cstring>
 #include <unordered_set>
 #include <unordered_map>
@@ -3457,6 +3458,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 
 	initPixelFormatsSupport();
 	initUniformBufferLimits();
+	benchmarkUniformBlockWriteMethods();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
 	hasBorderClampSupport = initCheckBorderClampSupport();
@@ -5264,6 +5266,190 @@ void gl_context::initUniformBufferLimits()
 	currentUniformBlockAllocator = 0;
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	uniformBlockAllocatorFences.assign(uniformBlockAllocators.size(), nullptr);
+#endif
+}
+
+// Startup micro-benchmark of the available uniform block write methods.
+//
+// Attempts to mimic the shape of typical per-draw traffic: many small writes
+// at rotating aligned offsets into a streaming uniform buffer, including the
+// per-write glBindBuffer(buffer)/glBindBuffer(0) that the SubData and MapRange
+// paths pay in uploadUniformBlock (the PersistentMap path pays neither).
+//
+// A trailing glFinish is included in each measurement to try to ensure that
+// work a driver defers out of the submission calls is still accounted for.
+//
+void gl_context::benchmarkUniformBlockWriteMethods()
+{
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// Only one method exists (glBufferSubData) - nothing to compare
+	return;
+#else
+	if (glGenBuffers == nullptr || glBufferData == nullptr || glBufferSubData == nullptr || glFinish == nullptr)
+	{
+		return;
+	}
+
+	// Typical uniform block payload, written at ring offsets like the real allocator
+	constexpr GLsizeiptr kUploadBytes = 256;
+	constexpr size_t kRingSlots = 256;
+	constexpr size_t kWarmupWrites = 128;
+	constexpr size_t kTimedWrites = 2000;
+
+	const GLsizeiptr stride = ((kUploadBytes + uniformBufferOffsetAlignment - 1) / uniformBufferOffsetAlignment) * uniformBufferOffsetAlignment;
+	const GLsizeiptr bufferSize = stride * static_cast<GLsizeiptr>(kRingSlots);
+
+	std::vector<unsigned char> src(static_cast<size_t>(kUploadBytes));
+	for (size_t i = 0; i < src.size(); ++i)
+	{
+		src[i] = static_cast<unsigned char>(i * 31u + 7u);
+	}
+
+	struct MethodResult
+	{
+		UniformBlockWriteMethod method = UniformBlockWriteMethod::BufferSubData;
+		double totalUs = 0.0;
+	};
+	std::vector<MethodResult> results;
+
+	// Runs one method: creates its buffer flavor, does warmup + timed writes, cleans up.
+	// Returns false if setup failed (result then excluded from the report).
+	const auto runMethod = [&](UniformBlockWriteMethod method, MethodResult& out) -> bool
+	{
+		wzGLClearErrors();
+		GLuint buffer = 0;
+		glGenBuffers(1, &buffer);
+		if (buffer == 0)
+		{
+			return false;
+		}
+		glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+
+		void* persistentPtr = nullptr;
+		if (method == UniformBlockWriteMethod::PersistentMap)
+		{
+			if (wz_glBufferStorageUnified == nullptr)
+			{
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+				glDeleteBuffers(1, &buffer);
+				return false;
+			}
+			wz_glBufferStorageUnified(GL_UNIFORM_BUFFER, bufferSize, nullptr, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+			if (glGetError() == GL_NO_ERROR)
+			{
+				persistentPtr = glMapBufferRange(GL_UNIFORM_BUFFER, 0, bufferSize, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+			}
+			if (persistentPtr == nullptr)
+			{
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+				glDeleteBuffers(1, &buffer);
+				wzGLClearErrors();
+				return false;
+			}
+		}
+		else
+		{
+			glBufferData(GL_UNIFORM_BUFFER, bufferSize, nullptr, GL_STREAM_DRAW);
+		}
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		// One write at a ring offset, matching uploadUniformBlock's call pattern for this method
+		const auto writeOnce = [&](size_t i)
+		{
+			const GLintptr offset = static_cast<GLintptr>((i % kRingSlots) * static_cast<size_t>(stride));
+			switch (method)
+			{
+				case UniformBlockWriteMethod::PersistentMap:
+					memcpy(static_cast<char*>(persistentPtr) + offset, src.data(), src.size());
+					break;
+				case UniformBlockWriteMethod::MapRange:
+				{
+					glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+					void* mapped = glMapBufferRange(GL_UNIFORM_BUFFER, offset, kUploadBytes,
+						GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+					if (mapped != nullptr)
+					{
+						memcpy(mapped, src.data(), src.size());
+						glUnmapBuffer(GL_UNIFORM_BUFFER);
+					}
+					glBindBuffer(GL_UNIFORM_BUFFER, 0);
+					break;
+				}
+				case UniformBlockWriteMethod::BufferSubData:
+					glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+					glBufferSubData(GL_UNIFORM_BUFFER, offset, kUploadBytes, src.data());
+					glBindBuffer(GL_UNIFORM_BUFFER, 0);
+					break;
+			}
+		};
+
+		for (size_t i = 0; i < kWarmupWrites; ++i)
+		{
+			writeOnce(i);
+		}
+		glFinish();
+
+		const auto start = std::chrono::steady_clock::now();
+		for (size_t i = 0; i < kTimedWrites; ++i)
+		{
+			writeOnce(i);
+		}
+		glFinish();
+		const auto end = std::chrono::steady_clock::now();
+
+		if (persistentPtr != nullptr && glUnmapBuffer != nullptr)
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+			glUnmapBuffer(GL_UNIFORM_BUFFER);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+		glDeleteBuffers(1, &buffer);
+		wzGLClearErrors();
+
+		out.method = method;
+		out.totalUs = std::chrono::duration<double, std::micro>(end - start).count();
+		return true;
+	};
+
+	std::vector<UniformBlockWriteMethod> candidates;
+	candidates.push_back(UniformBlockWriteMethod::BufferSubData);
+	if ((glMapBufferRange != nullptr) && (glUnmapBuffer != nullptr))
+	{
+		candidates.push_back(UniformBlockWriteMethod::MapRange);
+	}
+	if (hasPersistentBufferStorage)
+	{
+		candidates.push_back(UniformBlockWriteMethod::PersistentMap);
+	}
+
+	for (const auto method : candidates)
+	{
+		MethodResult result;
+		if (runMethod(method, result))
+		{
+			results.push_back(result);
+		}
+	}
+
+	if (results.empty())
+	{
+		return;
+	}
+
+	debug(LOG_INFO, "UBO write micro-benchmark (%zu x %ld-byte writes at %ld-byte ring offsets):",
+		kTimedWrites, static_cast<long>(kUploadBytes), static_cast<long>(stride));
+	const MethodResult* fastest = nullptr;
+	for (const auto& result : results)
+	{
+		debug(LOG_INFO, "  * %-28s %9.1f us total, %7.1f ns/write",
+			uniformBlockWriteMethodName(result.method), result.totalUs, (result.totalUs * 1000.0) / static_cast<double>(kTimedWrites));
+		if (fastest == nullptr || result.totalUs < fastest->totalUs)
+		{
+			fastest = &result;
+		}
+	}
+	debug(LOG_INFO, "  * fastest: %s (informational only; writes currently use %s)",
+		uniformBlockWriteMethodName(fastest->method), uniformBlockWriteMethodName(uniformBlockWriteMethod));
 #endif
 }
 
