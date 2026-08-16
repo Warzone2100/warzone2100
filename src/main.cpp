@@ -131,6 +131,7 @@
 #include "buildprovenance/wzbindetails.h"
 #include "buildprovenance/wzbuildinfo.h"
 #include "buildprovenance/wzmanifest.h"
+#include "buildprovenance/wzdatacheck.h"
 #include "3rdparty/gsl_finally.h"
 #include "wzapi.h"
 
@@ -1891,6 +1892,7 @@ void mainShutdown()
 	perf::close();
 	setSyncCrcTraceFile("");
 	cleanupOldLogFiles();
+	coreDataCheckShutdown();
 	selfExeDetailsShutdown();
 	// NOTE: urlRequestShutdown is called inside systemShutdown, as it must happen after certain other calls
 	systemShutdown();

@@ -23,21 +23,22 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
-#include <nonstd/optional.hpp>
-using nonstd::optional;
+// Checks the mounted core data archives (base.wz, mp.wz) against the validated manifest.
+// The result is diagnostic only.
 
-#include <nlohmann/json_fwd.hpp>
+struct CoreDataCheckResult
+{
+	bool checkPerformed = false;					// manifest + mounted archives were available
+	std::vector<std::string> modifiedArchives;		// archive names that do not match the manifest
+};
 
-// Loads the build manifest (`<exe basename>.buildmanifest`) and self-checks it:
-// the manifest is valid only if its `artifacts.exe` entry matches the self-measured executable hash.
-
-// Obtain the validated manifest's exact bytes, or nullopt.
-// `resultFunc` is always invoked asynchronously on the main thread.
-// The result is computed once and cached for the session.
+// Obtain the core data check result. Hashing runs on a background thread on the first call,
+// and the result is cached for the session. `resultFunc` is always invoked asynchronously on the main thread.
 // NOTE: Main thread only.
-void getValidatedManifestBytes(std::function<void(const optional<std::string>&)> resultFunc);
+void getCoreDataModifiedCheck(std::function<void(const CoreDataCheckResult&)> resultFunc);
 
-// Obtain the validated manifest, parsed, or nullopt.
+// Request cancellation and join the background thread. Safe to call in any state.
 // NOTE: Main thread only.
-void getValidatedManifest(std::function<void(const optional<nlohmann::json>&)> resultFunc);
+void coreDataCheckShutdown();
