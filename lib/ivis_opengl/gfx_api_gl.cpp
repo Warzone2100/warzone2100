@@ -1802,7 +1802,18 @@ void gl_uniform_block_allocator::recycle()
 	}
 
 	currentWritePosInLastBlock = 0;
-	if (!blocks.empty()) { totalCapacity = blocks.back().size; }
+	if (blocks.empty())
+	{
+		// Create the correctly-sized block now, at the frame boundary, rather than
+		// leaving it to the first alloc() of the frame.
+		//
+		// Buffer creation (and, in persistent mode, storage allocation + mapping) is
+		// heavy driver-level work that should ideally not run mid-draw-submission.
+		//
+		// After this, alloc() only creates a block mid-frame on genuine overflow.
+		allocateNewBlock(minimumFirstBlockSize);
+	}
+	totalCapacity = blocks.empty() ? 0 : blocks.back().size;
 }
 
 void gl_uniform_block_allocator::destroy()
