@@ -422,6 +422,45 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/GameNetworkingSockets/src/exte
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/SQLiteCpp/googletest/")
 
 ######################
+# Build manifest
+
+if(WZ_BUILDMANIFEST)
+	set(WZ_BUILDMANIFEST_TOOL "" CACHE FILEPATH "Path to the wzbuildmanifest tool, needed only to sign or for the Mach-O canonical hash (see tools/buildmanifest)")
+	set(WZ_BUILDMANIFEST_PUBLISHER "" CACHE STRING "Build manifest publisher id (empty: self-built)")
+	set(WZ_BUILDMANIFEST_PLATFORM "" CACHE STRING "Build manifest platform artifact identifier (empty: derive from target system)")
+	get_target_property(_wzbm_output_name warzone2100 OUTPUT_NAME)
+	if(NOT _wzbm_output_name)
+		set(_wzbm_output_name "warzone2100")
+	endif()
+	set(WZBM_EXE_BASENAME "${_wzbm_output_name}")
+	if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+		set(WZBM_EXE_FILENAME "${_wzbm_output_name}.exe")
+	else()
+		set(WZBM_EXE_FILENAME "${_wzbm_output_name}")
+	endif()
+	if(WZ_BUILDMANIFEST_PLATFORM)
+		set(WZBM_PLATFORM "${WZ_BUILDMANIFEST_PLATFORM}")
+	else()
+		string(TOLOWER "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}" WZBM_PLATFORM)
+	endif()
+	set(WZBM_TOOL "${WZ_BUILDMANIFEST_TOOL}")
+	set(WZBM_PUBLISHER "${WZ_BUILDMANIFEST_PUBLISHER}")
+	set(WZBM_MANIFEST_DIR "${WZ_BUILDMANIFEST_DIR}")
+	set(WZBM_BINDIR "${CMAKE_INSTALL_BINDIR}")
+	set(WZBM_DATA_ARCHIVES "${WZ_BUILDMANIFEST_DATA_ARCHIVES}")
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/buildmanifest_stage.cmake.in
+				   ${CMAKE_BINARY_DIR}/buildmanifest_stage.cmake
+				   @ONLY)
+	# Runs last, after the executable and the data archives are in place
+	install(CODE "include(\"${CMAKE_BINARY_DIR}/buildmanifest_stage.cmake\")" COMPONENT Core)
+	if(CMAKE_VERSION VERSION_LESS 3.19)
+		message(STATUS "CPACK_PRE_BUILD_SCRIPTS needs CMake 3.19+ - packaged manifests may be incomplete")
+	else()
+		list(APPEND CPACK_PRE_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/buildmanifest_stage.cmake")
+	endif()
+endif()
+
+######################
 # Configure Installer Version-info at Package Build-Time
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CPackConfigVersion.cmake.in

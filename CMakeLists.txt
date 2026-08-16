@@ -37,6 +37,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR 
 endif()
 
 set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	# App bundles get theirs via pkg/buildmanifest_bundle.cmake
+	set(WZ_BUILDMANIFEST OFF)
+else()
+	OPTION(WZ_BUILDMANIFEST "Generate a build manifest when installing or packaging" ON)
+	OPTION(WZ_BUILDMANIFEST_DATA_ARCHIVES "Include the core data archives (base.wz, mp.wz) in the build manifest (turn off when they ship in a separately built package)" ON)
+endif()
 
 if (DEFINED ENV{WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES})
 	# NOTE: Do *NOT* set this when building packages to distribute / install - only intended for select CI runs
@@ -105,6 +112,10 @@ if(NOT DEFINED WZ_LOCALEDIR)
 		set(WZ_LOCALEDIR "/share/locale")
 	endif()
 endif()
+if(NOT DEFINED WZ_BUILDMANIFEST_DIR AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows|Darwin|Emscripten")
+	# Architecture-specific, so kept out of WZ_DATADIR
+	set(WZ_BUILDMANIFEST_DIR "${CMAKE_INSTALL_LIBDIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
+endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	if(NOT CMAKE_INSTALL_BINDIR STREQUAL "bin")
 		# Windows builds expect a non-empty BINDIR
@@ -115,13 +126,16 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 if(IS_ABSOLUTE "${CMAKE_INSTALL_BINDIR}")
 	# Since the main executable install location is used to determine the install prefix,
-	# an absolute bindir requires an absolute CMAKE_INSTALL_LOCALEDIR + WZ_DATADIR (or locales + data won't be found)
+	# an absolute bindir requires absolute CMAKE_INSTALL_LOCALEDIR, WZ_DATADIR and WZ_BUILDMANIFEST_DIR (or they won't be found)
 	set(_nonAbsolutePaths)
 	if(NOT IS_ABSOLUTE "${CMAKE_INSTALL_LOCALEDIR}")
 		list(APPEND _nonAbsolutePaths "CMAKE_INSTALL_LOCALEDIR")
 	endif()
 	if(NOT IS_ABSOLUTE "${WZ_DATADIR}")
 		list(APPEND _nonAbsolutePaths "WZ_DATADIR")
+	endif()
+	if(DEFINED WZ_BUILDMANIFEST_DIR AND NOT IS_ABSOLUTE "${WZ_BUILDMANIFEST_DIR}")
+		list(APPEND _nonAbsolutePaths "WZ_BUILDMANIFEST_DIR")
 	endif()
 	if(_nonAbsolutePaths)
 		message( FATAL_ERROR "An absolute CMAKE_INSTALL_BINDIR path cannot be used if the following are not also absolute paths: ${_nonAbsolutePaths}\nRECOMMENDED SOLUTION:\nMake all of these *relative* paths, and use CMAKE_INSTALL_DIR and/or CPACK_PACKAGING_INSTALL_PREFIX to affect the install prefix / location (which can be absolute)." )
@@ -875,6 +889,7 @@ function(CHECK_IS_ABSOLUTE_PATH _var _output)
 endfunction()
 CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
 CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
+CHECK_IS_ABSOLUTE_PATH(WZ_BUILDMANIFEST_DIR WZ_BUILDMANIFEST_DIR_ISABSOLUTE)
 
 add_subdirectory(3rdparty)
 

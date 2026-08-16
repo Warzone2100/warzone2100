@@ -1,0 +1,115 @@
+# Generates the build manifest into an installed or staged tree.
+#
+# Runs from two places: install(CODE), where the tree is DESTDIR + CMAKE_INSTALL_PREFIX,
+# and CPACK_PRE_BUILD_SCRIPTS, where it is the CPack staging area and everything has been staged.
+# CPack installs one component at a time, so an install-time run may find only part of the tree -
+# it skips quietly in that case and the pre-build run writes the real manifest.
+
+if(DEFINED CPACK_TEMPORARY_INSTALL_DIRECTORY)
+	set(_wzbm_dest "${CPACK_TEMPORARY_INSTALL_DIRECTORY}")
+	set(_wzbm_root "${CPACK_TEMPORARY_INSTALL_DIRECTORY}")
+else()
+	set(_wzbm_dest "$ENV{DESTDIR}")
+	set(_wzbm_root "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}")
+endif()
+
+# Locate the staged executable (layout varies by generator and component staging)
+file(GLOB_RECURSE _staged_exes LIST_DIRECTORIES false "${_wzbm_root}/@WZBM_EXE_FILENAME@")
+if(NOT _staged_exes)
+	message(STATUS "No executable under ${_wzbm_root} - skipping the build manifest")
+	return()
+endif()
+list(LENGTH _staged_exes _num_staged_exes)
+if(_num_staged_exes GREATER 1)
+	message(FATAL_ERROR "Multiple staged executables found: ${_staged_exes}")
+endif()
+list(GET _staged_exes 0 _staged_exe)
+
+if(@WZBM_DATA_ARCHIVES@)
+	# Locate the staged data archives
+	file(GLOB_RECURSE _staged_basewz LIST_DIRECTORIES false "${_wzbm_root}/base.wz")
+	list(LENGTH _staged_basewz _num_staged_basewz)
+	if(_num_staged_basewz EQUAL 0)
+		message(STATUS "No data archives under ${_wzbm_root} - skipping the build manifest")
+		return()
+	endif()
+	if(_num_staged_basewz GREATER 1)
+		message(FATAL_ERROR "Expected exactly one base.wz, found: ${_staged_basewz}")
+	endif()
+	list(GET _staged_basewz 0 _staged_basewz)
+	get_filename_component(_staged_data_dir "${_staged_basewz}" DIRECTORY)
+	set(_wzbm_data_arg "-DWZBM_DATA_DIR=${_staged_data_dir}")
+else()
+	set(_wzbm_data_arg "-DWZBM_DATA_ARCHIVES=OFF")
+endif()
+
+# Version info from the current build's autorevision cache
+set(CACHEFILE "@CMAKE_BINARY_DIR@/build_tools/autorevision.cache")
+execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DSKIPUPDATECACHE="1" -DCACHEFORCE="1" -DVAROUT=1 -P "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cmake"
+	WORKING_DIRECTORY "@PROJECT_SOURCE_DIR@"
+	OUTPUT_VARIABLE autorevision_info
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+include("@PROJECT_SOURCE_DIR@/build_tools/autorevision_helpers.cmake")
+cmakeSetAutorevisionValues("${autorevision_info}")
+if(NOT VCS_FULL_HASH)
+	message(FATAL_ERROR "Unable to obtain revision info from: ${CACHEFILE}")
+endif()
+if(VCS_TAG)
+	set(_wzbm_version "${VCS_TAG}")
+else()
+	set(_wzbm_version "${VCS_BRANCH} ${VCS_SHORT_HASH}")
+endif()
+
+get_filename_component(_staged_exe_dir "${_staged_exe}" DIRECTORY)
+set(_wzbm_manifest_dir "@WZBM_MANIFEST_DIR@")
+if(_wzbm_manifest_dir STREQUAL "")
+	set(_wzbm_output_dir "${_staged_exe_dir}")
+elseif(IS_ABSOLUTE "${_wzbm_manifest_dir}")
+	set(_wzbm_output_dir "${_wzbm_dest}${_wzbm_manifest_dir}")
+else()
+	# The install prefix is the executable's directory, less the bindir
+	set(_wzbm_prefix "${_staged_exe_dir}")
+	string(REGEX MATCHALL "[^/]+" _wzbm_bindir_parts "@WZBM_BINDIR@")
+	list(REMOVE_ITEM _wzbm_bindir_parts ".")
+	foreach(_part IN LISTS _wzbm_bindir_parts)
+		get_filename_component(_wzbm_prefix "${_wzbm_prefix}" DIRECTORY)
+	endforeach()
+	set(_wzbm_output_dir "${_wzbm_prefix}/${_wzbm_manifest_dir}")
+endif()
+set(_wzbm_output "${_wzbm_output_dir}/@WZBM_EXE_BASENAME@.buildmanifest")
+
+set(_wzbm_args
+	"-DWZBM_EXE=${_staged_exe}"
+	"${_wzbm_data_arg}"
+	"-DWZBM_OUTPUT=${_wzbm_output}"
+	"-DWZBM_VERSION=${_wzbm_version}"
+	"-DWZBM_COMMIT=${VCS_FULL_HASH}"
+	"-DWZBM_ORIGIN=${VCS_ORIGIN}"
+	"-DWZBM_COPYRIGHT_YEAR=${VCS_MOST_RECENT_COMMIT_YEAR}"
+	"-DWZBM_PLATFORM=@WZBM_PLATFORM@"
+)
+if(NOT "@WZBM_TOOL@" STREQUAL "")
+	list(APPEND _wzbm_args "-DWZBM_TOOL=@WZBM_TOOL@")
+endif()
+if(NOT "@WZBM_PUBLISHER@" STREQUAL "")
+	list(APPEND _wzbm_args "-DWZBM_PUBLISHER=@WZBM_PUBLISHER@")
+endif()
+# Signing key (from the packaging environment, ex. CI secrets)
+if(NOT "$ENV{WZ_BUILDMANIFEST_KEY_ID}" STREQUAL "")
+	if(NOT "$ENV{WZ_BUILDMANIFEST_KEY}" STREQUAL "")
+		list(APPEND _wzbm_args "-DWZBM_KEY_ENV=WZ_BUILDMANIFEST_KEY")
+		list(APPEND _wzbm_args "-DWZBM_KEY_ID=$ENV{WZ_BUILDMANIFEST_KEY_ID}")
+	elseif(NOT "$ENV{WZ_BUILDMANIFEST_KEY_FILE}" STREQUAL "")
+		list(APPEND _wzbm_args "-DWZBM_KEY_FILE=$ENV{WZ_BUILDMANIFEST_KEY_FILE}")
+		list(APPEND _wzbm_args "-DWZBM_KEY_ID=$ENV{WZ_BUILDMANIFEST_KEY_ID}")
+	endif()
+endif()
+
+execute_process(
+	COMMAND ${CMAKE_COMMAND} ${_wzbm_args} -P "@PROJECT_SOURCE_DIR@/pkg/buildmanifest_generate.cmake"
+	RESULT_VARIABLE _wzbm_result
+)
+if(NOT _wzbm_result EQUAL 0)
+	message(FATAL_ERROR "Build manifest generation failed")
+endif()
