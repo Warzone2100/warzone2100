@@ -857,6 +857,21 @@ if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# Executable
 	install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 
+	if(WZ_BUILDMANIFEST)
+		# Placeholder, rewritten by pkg/buildmanifest_stage.cmake.in (archive generators only package files tracked at component-install time)
+		get_target_property(_wzbm_exe_output_name warzone2100 OUTPUT_NAME)
+		if(NOT _wzbm_exe_output_name)
+			set(_wzbm_exe_output_name "warzone2100")
+		endif()
+		file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/buildmanifest_placeholder" "")
+		if(DEFINED WZ_BUILDMANIFEST_DIR)
+			set(_wzbm_manifest_dest "${WZ_BUILDMANIFEST_DIR}")
+		else()
+			set(_wzbm_manifest_dest "${WZ_APP_INSTALL_DEST}")
+		endif()
+		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/buildmanifest_placeholder" COMPONENT Core DESTINATION "${_wzbm_manifest_dest}" RENAME "${_wzbm_exe_output_name}.buildmanifest")
+	endif()
+
 	# For Portable packages only, copy the ".portable" file that triggers portable mode (Windows-only)
 	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT PortableConfig DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable" EXCLUDE_FROM_ALL)
 

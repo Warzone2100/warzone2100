@@ -176,6 +176,12 @@
 #cmakedefine WZ_LOCALEDIR "@WZ_LOCALEDIR@"
 #cmakedefine WZ_LOCALEDIR_ISABSOLUTE
 
+/* The build manifest directory (unset: beside the executable)
+ - It will be treated as a relative path, and appended to the install PREFIX,
+   unless WZ_BUILDMANIFEST_DIR_ISABSOLUTE is defined. */
+#cmakedefine WZ_BUILDMANIFEST_DIR "@WZ_BUILDMANIFEST_DIR@"
+#cmakedefine WZ_BUILDMANIFEST_DIR_ISABSOLUTE
+
 /* Enables profiling instrumentation. */
 #cmakedefine WZ_PROFILING_INSTRUMENTATION
 /* Enables usage of NVTX-based instrumentation backend. */
