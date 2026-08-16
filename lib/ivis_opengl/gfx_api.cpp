@@ -69,7 +69,7 @@ const gfx_api::light_capacity& gfx_api::activeLightCapacity()
 void gfx_api::setActiveLightCapacity(const gfx_api::light_capacity& capacity)
 {
 	activeCapacity = capacity;
-	debug(LOG_3D, "Point light capacity: %zu lights, %zu indexed", capacity.maxLights, capacity.maxIndexedLights);
+	debug(LOG_3D, "Point light capacity: %zu lights, %zu indexed, %zux%zu buckets", capacity.maxLights, capacity.maxIndexedLights, capacity.bucketDimension, capacity.bucketDimension);
 }
 
 bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
@@ -123,6 +123,7 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 		{
 			capacity.maxLights = 512;
 			capacity.maxIndexedLights = 2048;
+			capacity.bucketDimension = max_bucket_dimension;
 		}
 		gfx_api::setActiveLightCapacity(capacity);
 	}

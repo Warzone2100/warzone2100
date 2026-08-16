@@ -213,8 +213,9 @@ _wz_extract_constant(WZ_MAX_POINT_LIGHTS "${_wz_gfx_api_header}"
 	"constexpr[ \t]+size_t[ \t]+max_lights[ \t]*=" "max_lights")
 _wz_extract_constant(WZ_MAX_INDEXED_POINT_LIGHTS "${_wz_gfx_api_header}"
 	"constexpr[ \t]+size_t[ \t]+max_indexed_lights[ \t]*=" "max_indexed_lights")
+# Vulkan always carries light data over a storage buffer, so it always gets the raised grid
 _wz_extract_constant(WZ_BUCKET_DIMENSION "${_wz_gfx_api_header}"
-	"constexpr[ \t]+size_t[ \t]+bucket_dimension[ \t]*=" "bucket_dimension")
+	"constexpr[ \t]+size_t[ \t]+max_bucket_dimension[ \t]*=" "max_bucket_dimension")
 _wz_extract_constant(WZ_MAX_SHADOW_CASCADES "${_wz_shadows_header}"
 	"#define[ \t]+WZ_MAX_SHADOW_CASCADES" "WZ_MAX_SHADOW_CASCADES")
 

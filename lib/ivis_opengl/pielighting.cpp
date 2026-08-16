@@ -318,7 +318,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		// so instead deal each region its best remaining light in turn, ranked by what
 		// each contributes there. Lights stay whole, so no edge appears at a bucket
 		// boundary.
-		const size_t selectionDimension = gfx_api::bucket_dimension;
+		const size_t selectionDimension = lightCapacity.bucketDimension;
 		constexpr size_t maxDealtPerBucket = 16;
 		// clear rather than reassign, to keep the per bucket capacity
 		bucketCandidates.resize(selectionDimension * selectionDimension);
@@ -417,7 +417,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	// by binning and starting over. Coarsening drops no light, it just spends fewer
 	// entries on each. Lights are admitted whole, since dropping one from a single bucket
 	// would leave an edge along that boundary.
-	size_t bucketDimension = gfx_api::bucket_dimension;
+	size_t bucketDimension = lightCapacity.bucketDimension;
 	{
 		constexpr size_t minBucketDimension = 4;
 		const size_t indexBudget = lightCapacity.maxIndexedLights * 4;

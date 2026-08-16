@@ -907,6 +907,16 @@ namespace gfx_api
 			gfx_api::context::get().set_uniforms(first, { std::make_tuple(static_cast<const void*>(&args), sizeof(args))... });
 		}
 
+		/// Set the leading `size` bytes of one block, (for a block whose trailing array the shader declares shorter than the reservation)
+		template<size_t slot, typename T>
+		void set_uniforms_at(const T& data, size_t size)
+		{
+			static_assert(slot < std::tuple_size<uniform_inputs>::value, "Uniform slot is out of range for this pipeline");
+			static_assert(std::is_same<typename std::tuple_element<slot, uniform_inputs>::type, T>::value, "Wrong uniform block type for this slot");
+			ASSERT(size <= sizeof(T), "size (%zu) exceeds the block (%zu)", size, sizeof(T));
+			gfx_api::context::get().set_uniforms(slot, { std::make_tuple(static_cast<const void*>(&data), size) });
+		}
+
 		/// Set one block by value
 		template<size_t slot, typename T>
 		void set_uniforms_at(const T& data)
@@ -1102,6 +1112,9 @@ namespace gfx_api
 	constexpr size_t max_lights = 128;
 	constexpr size_t max_indexed_lights = 512;
 	constexpr size_t bucket_dimension = 8;
+	// The largest grid any transport uses, and thus the length the C++ side reserves.
+	// The shader declares only the active dimension, and the upload is trimmed to match.
+	constexpr size_t max_bucket_dimension = 16;
 
 	/// How many lights the active transport can carry.
 	/// On the uniform block transport, this is equal to the constants above.
@@ -1110,9 +1123,19 @@ namespace gfx_api
 	{
 		size_t maxLights = max_lights;
 		size_t maxIndexedLights = max_indexed_lights;
+		size_t bucketDimension = bucket_dimension;
 	};
 	const light_capacity& activeLightCapacity();
 	void setActiveLightCapacity(const light_capacity& capacity);
+
+	/// Bytes of a globals block that are actually in use.
+	/// Only the active part of the trailing bucket table counts, which is what lets the reservation be the largest grid.
+	template<typename T>
+	size_t globals_block_active_size()
+	{
+		const size_t dimension = activeLightCapacity().bucketDimension;
+		return offsetof(T, bucketOffsetAndSize) + dimension * dimension * sizeof(glm::ivec4);
+	}
 
 	// Only change once per frame
 	// Declared and bound only on the uniform block transport - the other transports fetch these from a buffer.
@@ -1155,7 +1178,7 @@ namespace gfx_api
 		float pad2 = 0.f;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
-		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
 
 	// Only change per mesh
@@ -1413,7 +1436,7 @@ namespace gfx_api
 		float pad1 = 0.f;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
-		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>

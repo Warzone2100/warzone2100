@@ -1690,7 +1690,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 	Draw3DInstancedPSO::get().bind();
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 	globalsOnce.template perform_once<Draw3DInstancedPSO>([&globalUniforms, &pointLights]{
-		Draw3DInstancedPSO::get().template set_uniforms_at<0>(globalUniforms);
+		Draw3DInstancedPSO::get().template set_uniforms_at<0>(globalUniforms, gfx_api::globals_block_active_size<gfx_api::Draw3DShapeInstancedGlobalUniforms>());
 		Draw3DInstancedPSO::get().template set_uniforms_at<2>(pointLights);
 	});
 
