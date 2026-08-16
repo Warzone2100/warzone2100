@@ -6067,6 +6067,13 @@ void VkRoot::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allo
 	ASSERT(slot >= currentPSO->uniformBlockTypes.size() || currentPSO->uniformBlockTypes[slot] == type,
 		"Uniform set %zu holds %s, not %s", slot, currentPSO->uniformBlockTypes[slot].name(), type.name());
 
+	// Nothing was uploaded for this block this frame, which is the ordinary case for a transport that does not declare it.
+	// (Generations start at one, so this cannot be a stale reference.)
+	if (allocation.generation == 0)
+	{
+		return;
+	}
+
 	// A reference from an earlier frame points into storage the frame rotation has since reused.
 	if (!allocation.valid() || allocation.generation != frameUniformGeneration()
 		|| allocation.handle == 0 || allocation.handle > frameUniforms.size())
