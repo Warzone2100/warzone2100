@@ -38,6 +38,7 @@ layout(std140) uniform cbuffer {
 layout(std140) uniform pointlights {
 	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
+	vec4 PointLightsDirectionAndCos[WZ_MAX_POINT_LIGHTS];
 	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
 };
 #endif

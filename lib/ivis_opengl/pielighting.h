@@ -32,11 +32,20 @@
 #include <climits>
 #include <unordered_map>
 
+//! A light with no direction (encoded as cosOuter of -1)
+constexpr float LIGHT_OMNIDIRECTIONAL = -1.f;
+
 struct LIGHT
 {
 	Vector3i position = Vector3i(0, 0, 0);
 	UDWORD range;
 	PIELIGHT colour;
+	//! Brightness, separate from range, which only says how far the light reaches
+	float intensity = 1.f;
+	//! Direction the cone points, normalized - Ignored if cosOuter is LIGHT_OMNIDIRECTIONAL
+	Vector3f direction = Vector3f(0.f, 0.f, 0.f);
+	//! Cosine of the half angle at which the cone has fallen off entirely
+	float cosOuter = LIGHT_OMNIDIRECTIONAL;
 };
 
 
@@ -79,6 +88,8 @@ struct ILightingManager
 	{
 		std::vector<glm::vec4> positions;
 		std::vector<glm::vec4> colorAndEnergy;
+		// xyz is the cone direction, w the cosine of its outer half angle, or -1 for no cone
+		std::vector<glm::vec4> directionAndCos;
 
 		// z and y components are used for padding, keep ivec4 !
 		std::array<glm::ivec4, gfx_api::max_bucket_dimension * gfx_api::max_bucket_dimension> bucketOffsetAndSize = {};
@@ -93,6 +104,7 @@ struct ILightingManager
 			const auto& capacity = gfx_api::activeLightCapacity();
 			positions.assign(capacity.maxLights, glm::vec4(0.f));
 			colorAndEnergy.assign(capacity.maxLights, glm::vec4(0.f));
+			directionAndCos.assign(capacity.maxLights, glm::vec4(0.f, 0.f, 0.f, LIGHT_OMNIDIRECTIONAL));
 			bucketOffsetAndSize = {};
 			light_index.assign(capacity.maxIndexedLights, glm::ivec4(0));
 			bucketDimensionUsed = capacity.bucketDimension;
@@ -100,7 +112,7 @@ struct ILightingManager
 	};
 
 	//! The same light data laid out for a buffer transport:
-	//! - two vec4 per light, position then colour and energy
+	//! - three vec4 per light: position, color + energy, direction + cone
 	//! - the index list (without the ivec4 packing)
 	struct FlatPointLightData
 	{
@@ -151,6 +163,10 @@ namespace renderingNew
 			glm::vec3 position = glm::vec3(0, 0, 0);
 			glm::vec3 colour;
 			float range;
+			float intensity = 1.f;
+			glm::vec3 direction = glm::vec3(0, 0, 0);
+			float cosOuter = LIGHT_OMNIDIRECTIONAL;
+			bool omnidirectional() const { return cosOuter <= LIGHT_OMNIDIRECTIONAL; }
 		};
 
 		struct CulledLightInfo
