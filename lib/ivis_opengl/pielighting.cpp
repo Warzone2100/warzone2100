@@ -200,6 +200,8 @@ static float pointLightDistanceCalc(const renderingNew::LightingManager::Calcula
 void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, LightMap&, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene)
 {
 	PointLightBuckets result;
+	result.reset();
+	const auto& lightCapacity = gfx_api::activeLightCapacity();
 	const bool yAxisInverted = gfx_api::context::get().isYAxisInverted();
 
 	// Pick the first lights inside the view frustum
@@ -309,7 +311,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	// order by significance so any later truncation drops the least noticeable lights
 	std::sort(culledLights.begin(), culledLights.end(),
 		[](const CulledLightInfo& a, const CulledLightInfo& b) { return a.importance > b.importance; });
-	if (culledLights.size() > gfx_api::max_lights)
+	if (culledLights.size() > lightCapacity.maxLights)
 	{
 		// More lights survived culling than can be uploaded. Keeping the globally highest
 		// scoring bunches the winners near the camera and darkens the rest of the screen,
@@ -364,12 +366,12 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		auto& selected = selectedLights;
 		size_t selectedCount = 0;
 		bool dealtThisRound = true;
-		while (selectedCount < gfx_api::max_lights && dealtThisRound)
+		while (selectedCount < lightCapacity.maxLights && dealtThisRound)
 		{
 			dealtThisRound = false;
 			for (size_t bucket = 0; bucket < bucketCandidates.size(); bucket++)
 			{
-				if (selectedCount >= gfx_api::max_lights)
+				if (selectedCount >= lightCapacity.maxLights)
 				{
 					break;
 				}
@@ -390,7 +392,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		}
 
 		// dealing can run out early if the lights crowd into few buckets, so top up
-		for (size_t i = 0; i < culledLights.size() && selectedCount < gfx_api::max_lights; i++)
+		for (size_t i = 0; i < culledLights.size() && selectedCount < lightCapacity.maxLights; i++)
 		{
 			if (!selected[i])
 			{
@@ -418,7 +420,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	size_t bucketDimension = gfx_api::bucket_dimension;
 	{
 		constexpr size_t minBucketDimension = 4;
-		constexpr size_t indexBudget = gfx_api::max_indexed_lights * 4;
+		const size_t indexBudget = lightCapacity.maxIndexedLights * 4;
 		const auto totalFootprint = [this](size_t dimension) {
 			size_t total = 0;
 			for (const auto& culled : culledLights)
@@ -468,7 +470,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	// GLSL std layout 140 force us to store array of int with the same stride as
 	// an array of ivec4, wasting 3/4 of the storage.
 	// To circumvent this, we pack 4 consecutives index in a ivec4 here, and unpack the value in the shader.
-	std::array<size_t, gfx_api::max_indexed_lights * 4> lightList;
+	std::vector<size_t> lightList(lightCapacity.maxIndexedLights * 4);
 	// Give every bucket an equal share of the index list, which cannot overflow. Filling
 	// greedily and halving the grid on overflow cost repeated binning passes and zeroed
 	// the remaining buckets once the grid hit its floor, leaving parts of the screen
@@ -527,12 +529,15 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 const ILightingManager::FlatPointLightData& ILightingManager::getFlatPointLightData()
 {
 	const auto& buckets = currentPointLightBuckets;
-	for (size_t i = 0; i < gfx_api::max_lights; ++i)
+	const auto& capacity = gfx_api::activeLightCapacity();
+	currentFlatPointLightData.lights.resize(capacity.maxLights * 2);
+	currentFlatPointLightData.indices.resize(capacity.maxIndexedLights * 4);
+	for (size_t i = 0; i < capacity.maxLights; ++i)
 	{
 		currentFlatPointLightData.lights[i * 2] = buckets.positions[i];
 		currentFlatPointLightData.lights[i * 2 + 1] = buckets.colorAndEnergy[i];
 	}
-	for (size_t i = 0; i < gfx_api::max_indexed_lights; ++i)
+	for (size_t i = 0; i < capacity.maxIndexedLights; ++i)
 	{
 		const glm::ivec4& packed = buckets.light_index[i];
 		currentFlatPointLightData.indices[i * 4] = packed.x;

@@ -77,15 +77,26 @@ struct ILightingManager
 {
 	struct PointLightBuckets
 	{
-		std::array<glm::vec4, gfx_api::max_lights> positions = {};
-		std::array<glm::vec4, gfx_api::max_lights> colorAndEnergy = {};
+		std::vector<glm::vec4> positions;
+		std::vector<glm::vec4> colorAndEnergy;
 
 		// z and y components are used for padding, keep ivec4 !
 		std::array<glm::ivec4, gfx_api::bucket_dimension * gfx_api::bucket_dimension> bucketOffsetAndSize = {};
 		// Unfortunately due to std140 constraint, we pack indexes in glm::ivec4 and unpack them in shader later
-		std::array<glm::ivec4, gfx_api::max_indexed_lights> light_index = {};
+		std::vector<glm::ivec4> light_index;
 
 		size_t bucketDimensionUsed = gfx_api::bucket_dimension;
+
+		//! Size the arrays to the active capacity and clear them
+		void reset()
+		{
+			const auto& capacity = gfx_api::activeLightCapacity();
+			positions.assign(capacity.maxLights, glm::vec4(0.f));
+			colorAndEnergy.assign(capacity.maxLights, glm::vec4(0.f));
+			bucketOffsetAndSize = {};
+			light_index.assign(capacity.maxIndexedLights, glm::ivec4(0));
+			bucketDimensionUsed = gfx_api::bucket_dimension;
+		}
 	};
 
 	//! The same light data laid out for a buffer transport:
@@ -93,15 +104,15 @@ struct ILightingManager
 	//! - the index list (without the ivec4 packing)
 	struct FlatPointLightData
 	{
-		std::array<glm::vec4, gfx_api::max_lights * 2> lights = {};
-		std::array<int32_t, gfx_api::max_indexed_lights * 4> indices = {};
+		std::vector<glm::vec4> lights;
+		std::vector<int32_t> indices;
 	};
 
 	virtual ~ILightingManager() = default;
 
 	void SetFrameStart()
 	{
-		currentPointLightBuckets = {};
+		currentPointLightBuckets.reset();
 	}
 
 	virtual void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) = 0;
