@@ -378,7 +378,7 @@ static inline const iIMDBaseShape *getRightPropulsionIMD(const DROID *psDroid)
 
 void drawMuzzleFlash(WEAPON sWeap, const iIMDShape *weaponImd, const iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, glm::mat4 modelMatrix, const glm::mat4 &viewMatrix, float heightAboveTerrain, UBYTE colour)
 {
-	if (!weaponImd || !flashImd || weaponImd->connectors.empty() || graphicsTime < sWeap.lastFired)
+	if (!weaponImd || !flashImd || weaponImd->connectors.empty() || sWeap.lastFired == 0 || graphicsTime < sWeap.lastFired)
 	{
 		return;
 	}
