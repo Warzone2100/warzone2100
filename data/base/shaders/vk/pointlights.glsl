@@ -38,7 +38,7 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4
 
 	float pointLightLambert = max(dot(fragNormal, pointLightDir), 0.0);
 	vec3 pointLightHalfVec = normalize(pointLightDir + viewVector);
-	float pointLightBlinn = clamp(pow(dot(fragNormal, pointLightHalfVec), 16.f), 0.f, 1.f);
+	float pointLightBlinn = clamp(pow(max(dot(fragNormal, pointLightHalfVec), 0.f), 16.f), 0.f, 1.f);
 	return lightColor * (pointLightLambert * albedo + pointLightBlinn * gloss);
 }
 

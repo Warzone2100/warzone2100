@@ -6,7 +6,7 @@ float lambertTerm(vec3 normal, vec3 lightVec) {
 // specular component of light by Blinn-Phong BRDF
 float blinnTerm(vec3 normal, vec3 halfVector, float specularMap, float reflectionValue)
 {
-	float blinnTerm = dot(normal, halfVector);
+	float blinnTerm = max(dot(normal, halfVector), 0.0f);
 	float specularReflection = reflectionValue * (1.0f - specularMap * specularMap);
 	return clamp(pow(blinnTerm, specularReflection), 0.0f, 1.0f);
 }
