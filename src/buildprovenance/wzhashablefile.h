@@ -31,6 +31,8 @@ using nonstd::nullopt;
 
 #include "lib/framework/crc.h"
 
+#include "wzmachohash.h"
+
 // Digest-only hashing over a closed set of files.
 //
 // No function returns file contents, and a HashableFile is constructible only through the factories below.
@@ -62,6 +64,9 @@ public:
 	// Chunked whole-file SHA-256.
 	// Returns nullopt on open/read failure, or if *stopFlag became true.
 	optional<WholeFileHash> hashWholeFile(const std::atomic<bool>* stopFlag = nullptr) const;
+
+	// Per-slice signature-invariant canonical hashes (Mach-O executables only)
+	optional<std::vector<wzmachohash::SliceCanonicalHash>> machoCanonicalHashes(const std::atomic<bool>* stopFlag = nullptr) const;
 
 private:
 	HashableFile(std::string displayPath, bool openViaProcSelfExe, PathConfidence confidence)

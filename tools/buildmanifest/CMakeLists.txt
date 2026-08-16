@@ -12,6 +12,7 @@ find_package(Sodium REQUIRED)
 add_executable(wzbuildmanifest
 	src/main.cpp
 	"${WZ_REPO_ROOT}/src/buildprovenance/wzbuildcert.cpp"
+	"${WZ_REPO_ROOT}/src/buildprovenance/wzmachohash.cpp"
 )
 target_include_directories(wzbuildmanifest PRIVATE
 	"${WZ_REPO_ROOT}/src/buildprovenance"

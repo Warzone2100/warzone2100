@@ -22,6 +22,7 @@
 // wzbuildmanifest - generates, signs, and verifies build manifests
 
 #include "wzbuildcert.h"
+#include "wzmachohash.h"
 
 #include <sodium.h>
 #include <nlohmann/json.hpp>
@@ -57,7 +58,7 @@ int usage()
 		"                   --key-id <id> --out <file>\n"
 		"                   (--artifacts-dir <dir> [--exe <path>] | --allow-unverified-artifacts)\n"
 		"  wzbuildmanifest verify --envelope <file> --public-key <base64 | @file> [--print-payload]\n"
-		"  wzbuildmanifest hash-exe <file>\n");
+		"  wzbuildmanifest hash-exe <file> [--canonical]\n");
 	return 2;
 }
 
@@ -157,6 +158,25 @@ optional<FileHash> hashFileSha256(const std::string& path)
 	return result;
 }
 
+optional<std::vector<wzmachohash::SliceCanonicalHash>> canonicalHashesForFile(const std::string& path, std::string& errorDetails)
+{
+	std::ifstream file(path, std::ios::binary);
+	if (!file)
+	{
+		errorDetails = "failed to open the file";
+		return nullopt;
+	}
+	file.seekg(0, std::ios::end);
+	uint64_t fileSize = static_cast<uint64_t>(file.tellg());
+	auto readAt = [&file](uint64_t offset, void* buffer, size_t len) -> bool {
+		file.clear();
+		file.seekg(static_cast<std::streamoff>(offset));
+		file.read(static_cast<char*>(buffer), static_cast<std::streamsize>(len));
+		return file.gcount() == static_cast<std::streamsize>(len);
+	};
+	return wzmachohash::computeCanonicalHashes(readAt, fileSize, errorDetails);
+}
+
 // Simple flag parser: --name value
 optional<std::string> getArg(int argc, char** argv, const char* name)
 {
@@ -218,6 +238,39 @@ std::string trimmed(const std::string& str)
 	return str.substr(begin, end - begin + 1);
 }
 
+bool verifyCanonicalSlices(const nlohmann::json& artifact, const std::string& path)
+{
+	auto slicesIt = artifact.find("slices");
+	if (slicesIt == artifact.end() || !slicesIt->is_object() || slicesIt->empty())
+	{
+		fprintf(stderr, "Artifact declares hash_mode macho-canonical but has no slices: %s\n", path.c_str());
+		return false;
+	}
+	std::string errorDetails;
+	auto measured = canonicalHashesForFile(path, errorDetails);
+	if (!measured)
+	{
+		fprintf(stderr, "Canonical hash failed for %s: %s\n", path.c_str(), errorDetails.c_str());
+		return false;
+	}
+	if (measured.value().size() != slicesIt->size())
+	{
+		fprintf(stderr, "Artifact mismatch: expected %zu slices, measured %zu (%s)\n",
+			slicesIt->size(), measured.value().size(), path.c_str());
+		return false;
+	}
+	for (const auto& slice : measured.value())
+	{
+		auto archIt = slicesIt->find(slice.arch);
+		if (archIt == slicesIt->end() || archIt->get<std::string>() != slice.sha256Hex)
+		{
+			fprintf(stderr, "Artifact mismatch: %s slice (%s)\n", slice.arch.c_str(), path.c_str());
+			return false;
+		}
+	}
+	return true;
+}
+
 // Verifies the manifest's artifact hashes against the files on disk
 bool verifyManifestArtifacts(const nlohmann::json& manifest, const std::string& artifactsDir, const optional<std::string>& exePath)
 {
@@ -238,6 +291,15 @@ bool verifyManifestArtifacts(const nlohmann::json& manifest, const std::string& 
 		else
 		{
 			path = artifactsDir + "/" + entry.key();
+		}
+		auto hashModeIt = artifact.find("hash_mode");
+		if (hashModeIt != artifact.end() && hashModeIt->get<std::string>() == "macho-canonical")
+		{
+			if (!verifyCanonicalSlices(artifact, path))
+			{
+				return false;
+			}
+			continue;
 		}
 		if (!artifact.contains("sha256"))
 		{
@@ -405,6 +467,21 @@ int cmdHashExe(int argc, char** argv)
 	if (argc < 3)
 	{
 		return usage();
+	}
+	if (hasFlag(argc, argv, "--canonical"))
+	{
+		std::string errorDetails;
+		auto slices = canonicalHashesForFile(argv[2], errorDetails);
+		if (!slices)
+		{
+			fprintf(stderr, "Canonical hash failed: %s\n", errorDetails.c_str());
+			return 1;
+		}
+		for (const auto& slice : slices.value())
+		{
+			printf("%s  %s\n", slice.arch.c_str(), slice.sha256Hex.c_str());
+		}
+		return 0;
 	}
 	auto result = hashFileSha256(argv[2]);
 	if (!result)
