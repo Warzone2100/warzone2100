@@ -919,6 +919,14 @@ static_assert(lightDataTextureUnit < 16 && lightIndexTextureUnit < 16,
 	"Light data samplers must stay inside the 16 texture image units the spec minimum guarantees");
 static_assert(lightDataTextureUnit != lightIndexTextureUnit, "Light data samplers need distinct units");
 
+// Storage buffer bindings are a namespace of their own, so these do not compete with the
+// texture units above or with any uniform block binding.
+// Bound from here rather than declared in the shader.
+constexpr GLuint lightDataStorageBinding = 0;
+constexpr GLuint lightIndexStorageBinding = 1;
+static const std::vector<std::pair<const char*, GLuint>> lightStorageBlocks = {
+	{"lightData", lightDataStorageBinding}, {"lightIndexData", lightIndexStorageBinding}
+};
 static const std::vector<std::tuple<std::string, GLint>> lightDataSamplers = {
 	{"lightDataBuffer", lightDataTextureUnit}, {"lightIndexBuffer", lightIndexTextureUnit}
 };
@@ -1294,6 +1302,13 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
+
+		// Storage buffers are core only from GLSL 430, so the extension has to be requested.
+		// It must follow the version directive and precede everything else, which is why it goes in the header (instead of the shader).
+		if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::storage_buffer)
+		{
+			fragmentShaderHeader += "#extension GL_ARB_shader_storage_buffer_object : require\n";
+		}
 
 		if (hasTessStages)
 		{
@@ -2306,6 +2321,26 @@ void gl_pipeline_state_object::build_program(gl_context& ctx,
 		ctx.wzGLObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 #endif
 	}
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	// A storage block gets no binding without this.
+	// Declaring one in the shader instead would need GLSL 420 (above what we ask for).
+	if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::storage_buffer)
+	{
+		for (const auto& storageBlock : lightStorageBlocks)
+		{
+			const GLuint blockIndex = glGetProgramResourceIndex(program, GL_SHADER_STORAGE_BLOCK, storageBlock.first);
+			if (blockIndex != GL_INVALID_INDEX)
+			{
+				glShaderStorageBlockBinding(program, blockIndex, storageBlock.second);
+			}
+			else
+			{
+				debug(LOG_3D, "%s does not declare storage block: %s", programName.c_str(), storageBlock.first);
+			}
+		}
+	}
+#endif
+
 	getLocs(samplersToBind);
 	broken |= !success;
 }
@@ -5388,51 +5423,67 @@ void gl_context::initUniformBufferLimits()
 void gl_context::upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes)
 {
 #if !defined(WZ_STATIC_GL_BINDINGS)
-	if (lightTransport != gfx_api::data_buffer_transport::texel_buffer)
+	const bool useTexelBuffer = (lightTransport == gfx_api::data_buffer_transport::texel_buffer);
+	const bool useStorageBuffer = (lightTransport == gfx_api::data_buffer_transport::storage_buffer);
+	if (!useTexelBuffer && !useStorageBuffer)
 	{
 		return;
 	}
+	const GLenum target = useTexelBuffer ? GL_TEXTURE_BUFFER : GL_SHADER_STORAGE_BUFFER;
 	if (lightDataBuffer == 0)
 	{
 		glGenBuffers(1, &lightDataBuffer);
 		glGenBuffers(1, &lightIndexBuffer);
-		glGenTextures(1, &lightDataTexture);
-		glGenTextures(1, &lightIndexTexture);
 
-		// Size the stores once and attach them once.
+		// Size the stores once.
 		// Reallocating a store that a buffer texture is already attached to leaves what the texture reads undefined, so every
 		// later frame writes into the existing store.
-		glBindBuffer(GL_TEXTURE_BUFFER, lightDataBuffer);
-		glBufferData(GL_TEXTURE_BUFFER, static_cast<GLsizeiptr>(lightBytes), nullptr, GL_STREAM_DRAW);
-		glBindBuffer(GL_TEXTURE_BUFFER, lightIndexBuffer);
-		glBufferData(GL_TEXTURE_BUFFER, static_cast<GLsizeiptr>(indexBytes), nullptr, GL_STREAM_DRAW);
-		glBindBuffer(GL_TEXTURE_BUFFER, 0);
+		glBindBuffer(target, lightDataBuffer);
+		glBufferData(target, static_cast<GLsizeiptr>(lightBytes), nullptr, GL_STREAM_DRAW);
+		glBindBuffer(target, lightIndexBuffer);
+		glBufferData(target, static_cast<GLsizeiptr>(indexBytes), nullptr, GL_STREAM_DRAW);
+		glBindBuffer(target, 0);
 
-		glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
-		glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, lightDataBuffer);
-		glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
-		glTexBuffer(GL_TEXTURE_BUFFER, GL_R32I, lightIndexBuffer);
-		glBindTexture(GL_TEXTURE_BUFFER, 0);
+		if (useTexelBuffer)
+		{
+			glGenTextures(1, &lightDataTexture);
+			glGenTextures(1, &lightIndexTexture);
+			glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
+			glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, lightDataBuffer);
+			glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
+			glTexBuffer(GL_TEXTURE_BUFFER, GL_R32I, lightIndexBuffer);
+			glBindTexture(GL_TEXTURE_BUFFER, 0);
+		}
+		else
+		{
+			// Binding points are program state rather than per draw state,
+			// so like the texture units these are claimed once and held for every draw.
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightDataStorageBinding, lightDataBuffer);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightIndexStorageBinding, lightIndexBuffer);
+		}
 
 		lightDataBufferSize = lightBytes;
 		lightIndexBufferSize = indexBytes;
 	}
 
 	ASSERT(lightBytes <= lightDataBufferSize && indexBytes <= lightIndexBufferSize,
-		"Light data grew after the buffer textures were sized");
+		"Light data grew after the buffers were sized");
 
-	glBindBuffer(GL_TEXTURE_BUFFER, lightDataBuffer);
-	glBufferSubData(GL_TEXTURE_BUFFER, 0, static_cast<GLsizeiptr>(lightBytes), lights);
-	glBindBuffer(GL_TEXTURE_BUFFER, lightIndexBuffer);
-	glBufferSubData(GL_TEXTURE_BUFFER, 0, static_cast<GLsizeiptr>(indexBytes), indices);
-	glBindBuffer(GL_TEXTURE_BUFFER, 0);
+	glBindBuffer(target, lightDataBuffer);
+	glBufferSubData(target, 0, static_cast<GLsizeiptr>(lightBytes), lights);
+	glBindBuffer(target, lightIndexBuffer);
+	glBufferSubData(target, 0, static_cast<GLsizeiptr>(indexBytes), indices);
+	glBindBuffer(target, 0);
 
-	// Nothing else claims these units, so one binding per frame holds for every draw.
-	glActiveTexture(GL_TEXTURE0 + lightDataTextureUnit);
-	glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
-	glActiveTexture(GL_TEXTURE0 + lightIndexTextureUnit);
-	glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
-	glActiveTexture(GL_TEXTURE0);
+	if (useTexelBuffer)
+	{
+		// Nothing else claims these units, so one binding per frame holds for every draw.
+		glActiveTexture(GL_TEXTURE0 + lightDataTextureUnit);
+		glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
+		glActiveTexture(GL_TEXTURE0 + lightIndexTextureUnit);
+		glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
+		glActiveTexture(GL_TEXTURE0);
+	}
 #else
 	(void)lights; (void)lightBytes; (void)indices; (void)indexBytes;
 #endif
@@ -5453,13 +5504,18 @@ void gl_context::initLightDataTransport()
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
 	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
 	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
-	const bool hasStorageBuffers = (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr);
+	const bool hasStorageBuffers = (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr)
+		&& (GLAD_GL_ARB_program_interface_query != 0) && (glGetProgramResourceIndex != nullptr);
 
 	// Preference order:
-	// 1. texel buffer (wider support, including macOS which stops at OpenGL 4.1)
-	// 2. uniform block
-	// Storage buffers are probed and reported, but aren't used (yet).
-	if (hasTexelBuffers)
+	// 1. storage buffer (spends no sampler, and the index can be scalarized)
+	// 2. texel buffer (wider support, including macOS which stops at OpenGL 4.1)
+	// 3. uniform block
+	if (hasStorageBuffers)
+	{
+		lightTransport = gfx_api::data_buffer_transport::storage_buffer;
+	}
+	else if (hasTexelBuffers)
 	{
 		lightTransport = gfx_api::data_buffer_transport::texel_buffer;
 	}
@@ -5489,7 +5545,14 @@ void gl_context::initLightDataTransport()
 		}
 		else if (strcmp(transportOverride, "storage") == 0)
 		{
-			debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=storage requested, but no path carries light data over a storage buffer yet - ignoring");
+			if (hasStorageBuffers)
+			{
+				lightTransport = gfx_api::data_buffer_transport::storage_buffer;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=storage requested, but storage buffers are unavailable on this context - ignoring");
+			}
 		}
 		else
 		{

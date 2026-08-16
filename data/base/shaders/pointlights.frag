@@ -47,6 +47,25 @@ int wzLightIndex(int entryInLightList)
 {
 	return texelFetch(lightIndexBuffer, entryInLightList).r;
 }
+#elif WZ_LIGHT_TRANSPORT == 2
+// std430 packs both of these exactly as the buffer texture path lays them out
+layout(std430) readonly buffer lightData { vec4 lights[]; };
+layout(std430) readonly buffer lightIndexData { int lightIndices[]; };
+
+vec4 wzLightPosition(int lightIndex)
+{
+	return lights[lightIndex * 2];
+}
+
+vec4 wzLightColorAndEnergy(int lightIndex)
+{
+	return lights[lightIndex * 2 + 1];
+}
+
+int wzLightIndex(int entryInLightList)
+{
+	return lightIndices[entryInLightList];
+}
 #else
 vec4 wzLightPosition(int lightIndex)
 {
