@@ -427,7 +427,13 @@ static void addMuzzleFlashLight(const glm::mat4& muzzleModelMatrix, const iIMDSh
 	constexpr float referenceFlashRadius = 32.f; // a cannon, where the values here were set
 	const float flashScale = glm::clamp(static_cast<float>(flashImd->radius) / referenceFlashRadius, 0.25f, 2.5f);
 	light.range = static_cast<UDWORD>(512.f * flashScale);
-	light.colour = pal_Colour(255, 198, 128);
+	// Burning gas cools as it expands, so the flash runs from a warm white at ignition down through orange as it dies.
+	// The cooling finishes at four tenths of the light's life because brightness falls as the fourth power of what
+	// remains, which leaves the tail too dark to carry a color.
+	constexpr float coolingFraction = 0.4f;
+	const float cooling = glm::min(lightAge / coolingFraction, 1.f);
+	const glm::vec3 flashColor = glm::mix(glm::vec3(255.f, 224.f, 176.f), glm::vec3(255.f, 150.f, 64.f), cooling);
+	light.colour = pal_Colour(static_cast<UBYTE>(flashColor.r), static_cast<UBYTE>(flashColor.g), static_cast<UBYTE>(flashColor.b));
 	const float remaining = 1.f - lightAge;
 	const float remainingSq = remaining * remaining;
 	light.intensity = 4.f * flashScale * remainingSq * remainingSq;

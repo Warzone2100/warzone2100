@@ -34,9 +34,15 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, v
 	vec3 pointLightVector = pointLightWorldPosition - WorldFragPos;
 	vec3 pointLightDir = spaceMatrix * normalize(pointLightVector);
 
-	float energy = pointLightEnergyAtPosition(pointLightVector, pointLightEnergy);
-	energy *= pointLightIntensity * pointLightConeFactor(pointLightVector, pointLightDirectionAndCos);
-	vec4 lightColor = vec4(pointLightColor * energy, 1.f); //to-do: pick average color from effect's texture
+	float distanceFalloff = pointLightEnergyAtPosition(pointLightVector, pointLightEnergy);
+	float coneFalloff = pointLightConeFactor(pointLightVector, pointLightDirectionAndCos);
+	float energy = distanceFalloff * coneFalloff * pointLightIntensity;
+
+	// For cone lights, have the spread lose its blue and then its green toward the rim and toward the edge of the cone.
+	const vec3 coolestTint = vec3(1.f, 0.78f, 0.5f);
+	float hasCone = (pointLightDirectionAndCos.w > -1.f) ? 1.f : 0.f;
+	float coolness = hasCone * (1.f - distanceFalloff * coneFalloff);
+	vec4 lightColor = vec4(pointLightColor * mix(vec3(1.f), coolestTint, coolness) * energy, 1.f); //to-do: pick average color from effect's texture
 	//lightColor.rgb = mix(lightColor.rgb, (lightColor.rgb + 1.5)*energy*2, energy);
 
 	// Normal mapped detail swings either side of unlit from one texel to the next once the light
