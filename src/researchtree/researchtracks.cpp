@@ -193,6 +193,70 @@ static bool supersedes(const RESEARCH& newer, const RESEARCH& older)
 	return false;
 }
 
+// The weapon classes a topic puts on the field: what it grants outright, plus what the structures it grants mount.
+// Zero for a topic that grants nothing which shoots.
+static uint32_t weaponClassesOf(const RESEARCH& research)
+{
+	static_assert(WSC_NUM_WEAPON_SUBCLASSES <= 32, "one bit per weapon subclass");
+	uint32_t classes = 0;
+	const auto note = [&classes](const WEAPON_STATS *weapon) {
+		if (weapon != nullptr && weapon->weaponSubClass < WSC_NUM_WEAPON_SUBCLASSES)
+		{
+			classes |= (1u << weapon->weaponSubClass);
+		}
+	};
+	for (const auto *component : research.componentResults)
+	{
+		if (component != nullptr && component->compType == COMP_WEAPON)
+		{
+			note(static_cast<const WEAPON_STATS *>(component));
+		}
+	}
+	for (const auto granted : research.pStructureResults)
+	{
+		if (granted >= numStructureStats)
+		{
+			continue;
+		}
+		const STRUCTURE_STATS& structure = asStructureStats[granted];
+		for (UDWORD slot = 0; slot < structure.numWeaps && slot < MAX_WEAPONS; ++slot)
+		{
+			note(structure.psWeapStat[slot]);
+		}
+	}
+	return classes;
+}
+
+// The longest prerequisite path to each topic (which is what decides the column it is laid out in)
+static std::vector<uint32_t> researchPrereqDepths()
+{
+	const size_t topicCount = asResearch.size();
+	std::vector<uint32_t> depth(topicCount, 0);
+	std::vector<bool> resolved(topicCount, false);
+	std::function<uint32_t(size_t)> depthOf = [&depth, &resolved, &depthOf, topicCount](size_t topic) -> uint32_t {
+		if (!resolved[topic])
+		{
+			// Marked before descending, so anything claiming a cycle stops here
+			resolved[topic] = true;
+			uint32_t deepest = 0;
+			for (const auto prereq : asResearch[topic].pPRList)
+			{
+				if (prereq < topicCount)
+				{
+					deepest = std::max(deepest, depthOf(prereq) + 1);
+				}
+			}
+			depth[topic] = deepest;
+		}
+		return depth[topic];
+	};
+	for (size_t topic = 0; topic < topicCount; ++topic)
+	{
+		depthOf(topic);
+	}
+	return depth;
+}
+
 // ---------------------------------------------------------------------------
 // MARK: - Naming a group that nobody named
 // ---------------------------------------------------------------------------
@@ -377,6 +441,20 @@ std::vector<ResearchTrack> deriveResearchTracks(const ResearchPrereqClosure& clo
 		while (n < a.size() && n < b.size() && a[n] == b[n]) { ++n; }
 		return n;
 	};
+
+	// Making something redundant is not the same as continuing its line: a link between topics mounting
+	// weapons of unrelated classes reads as a progression only when the two sit near each other in the tree
+	constexpr uint32_t UNRELATED_TIER_GAP = 7;
+	const std::vector<uint32_t> depths = researchPrereqDepths();
+	const auto continuesTheLine = [&depths](size_t newer, size_t older) {
+		const uint32_t newerClasses = weaponClassesOf(asResearch[newer]);
+		const uint32_t olderClasses = weaponClassesOf(asResearch[older]);
+		if (newerClasses == 0 || olderClasses == 0 || (newerClasses & olderClasses) != 0)
+		{
+			return true;
+		}
+		return depths[newer] < depths[older] + UNRELATED_TIER_GAP;
+	};
 	bool anyObsolescence = false;
 	for (size_t a = 0; a < topicCount; ++a)
 	{
@@ -398,7 +476,9 @@ std::vector<ResearchTrack> deriveResearchTracks(const ResearchPrereqClosure& clo
 				bestShared = shared;
 			}
 		}
-		if (closest != topicCount)
+		// Tested after the closest match is chosen rather than while choosing, so a topic whose nearest line
+		// is not its own is left standing alone (instead of falling through to a further one)
+		if (closest != topicCount && continuesTheLine(a, closest))
 		{
 			anyObsolescence = true;
 			parent[findRoot(a)] = findRoot(closest);
