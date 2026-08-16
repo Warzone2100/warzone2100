@@ -108,6 +108,7 @@
 #include "multiplay.h"
 #include "multiint.h"
 #include "multijoin.h"
+#include "buildprovenance/wzdatacheck.h"
 #include "multistat.h"
 #include "multirecv.h"
 #include "multimenu.h"
@@ -6983,6 +6984,31 @@ void WzMultiplayerOptionsTitleUI::start()
 		});
 
 		ingame.localOptionsReceived = false;
+
+		if (NetPlay.bComms && ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
+		{
+			getCoreDataModifiedCheck([](const CoreDataCheckResult& result) {
+				if (!result.checkPerformed || result.modifiedArchives.empty())
+				{
+					return;
+				}
+				std::string archiveNames;
+				for (const auto& name : result.modifiedArchives)
+				{
+					if (!archiveNames.empty())
+					{
+						archiveNames += ", ";
+					}
+					archiveNames += name;
+				}
+				std::string message = astringf(_("WARNING: Your core data files are modified (%s)."), archiveNames.c_str());
+				message += "\n";
+				message += _("These changes are not distributed to other players, and will likely cause desyncs.");
+				message += "\n";
+				message += _("Package changes as a mod instead.");
+				displayRoomSystemMessage(message.c_str());
+			});
+		}
 
 		PLAYERSTATS	playerStats;
 

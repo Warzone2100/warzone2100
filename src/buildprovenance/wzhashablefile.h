@@ -57,6 +57,10 @@ public:
 	// Returns nullopt when the platform provides no way to locate it.
 	static optional<HashableFile> ownExecutable();
 
+	// A data archive currently mounted in the PhysFS search path.
+	// Returns nullopt if realPath is not a mounted search path entry.
+	static optional<HashableFile> mountedDataArchive(const std::string& realPath);
+
 	// The resolved path (for display and diagnostics only).
 	const std::string& displayPath() const { return m_displayPath; }
 	PathConfidence pathConfidence() const { return m_confidence; }

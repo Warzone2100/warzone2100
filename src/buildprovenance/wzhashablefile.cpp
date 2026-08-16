@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzstring.h"
+#include "lib/framework/physfs_ext.h"
 
 #include <LaunchInfo.h>
 #include <sodium.h>
@@ -199,6 +200,26 @@ optional<HashableFile> HashableFile::ownExecutable()
 	// launchinfo (whereami) only reports OS-provided paths, failing rather than guessing
 	return HashableFile(haveResolvedPath ? std::move(resolvedPath) : std::string("/proc/self/exe"),
 						useProcSelfExe, PathConfidence::KernelAuthoritative);
+}
+
+optional<HashableFile> HashableFile::mountedDataArchive(const std::string& realPath)
+{
+	bool isMounted = false;
+	char** searchPath = PHYSFS_getSearchPath();
+	for (char** i = searchPath; *i != nullptr; ++i)
+	{
+		if (realPath == *i)
+		{
+			isMounted = true;
+			break;
+		}
+	}
+	PHYSFS_freeList(searchPath);
+	if (!isMounted)
+	{
+		return nullopt;
+	}
+	return HashableFile(realPath, false, PathConfidence::KernelAuthoritative);
 }
 
 optional<HashableFile::WholeFileHash> HashableFile::hashWholeFile(const std::atomic<bool>* stopFlag) const
