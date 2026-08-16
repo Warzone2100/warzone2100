@@ -2047,7 +2047,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
-	PSO::get().template set_uniforms_at<0>(uniforms);
+	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
 	PSO::get().template set_uniforms_at<1>(pointLights);
 
 	for (int x = 0; x < xSectors; x++)
@@ -2098,7 +2098,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
-	PSO::get().template set_uniforms_at<0>(uniforms);
+	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
 	PSO::get().template set_uniforms_at<1>(pointLights);
 
 	// This pass also writes terrain depth (there is no separate depth prepass under

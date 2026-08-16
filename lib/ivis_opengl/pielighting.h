@@ -81,7 +81,7 @@ struct ILightingManager
 		std::vector<glm::vec4> colorAndEnergy;
 
 		// z and y components are used for padding, keep ivec4 !
-		std::array<glm::ivec4, gfx_api::bucket_dimension * gfx_api::bucket_dimension> bucketOffsetAndSize = {};
+		std::array<glm::ivec4, gfx_api::max_bucket_dimension * gfx_api::max_bucket_dimension> bucketOffsetAndSize = {};
 		// Unfortunately due to std140 constraint, we pack indexes in glm::ivec4 and unpack them in shader later
 		std::vector<glm::ivec4> light_index;
 
@@ -95,7 +95,7 @@ struct ILightingManager
 			colorAndEnergy.assign(capacity.maxLights, glm::vec4(0.f));
 			bucketOffsetAndSize = {};
 			light_index.assign(capacity.maxIndexedLights, glm::ivec4(0));
-			bucketDimensionUsed = gfx_api::bucket_dimension;
+			bucketDimensionUsed = capacity.bucketDimension;
 		}
 	};
 

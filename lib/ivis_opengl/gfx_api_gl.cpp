@@ -2096,7 +2096,7 @@ static bool patchShaderPointLightsDefines(std::string& shaderStr, const gfx_api:
 	const auto defines = {
 		std::make_pair("WZ_MAX_POINT_LIGHTS", gfx_api::max_lights),
 		std::make_pair("WZ_MAX_INDEXED_POINT_LIGHTS", gfx_api::max_indexed_lights),
-		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::bucket_dimension),
+		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::activeLightCapacity().bucketDimension),
 		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
 		std::make_pair("WZ_LIGHT_TRANSPORT", static_cast<size_t>(lightTransport)),
 	};
