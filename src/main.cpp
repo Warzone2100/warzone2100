@@ -132,6 +132,7 @@
 #include "buildprovenance/wzbuildinfo.h"
 #include "buildprovenance/wzmanifest.h"
 #include "buildprovenance/wzdatacheck.h"
+#include "buildprovenance/wzhashrequest.h"
 #include "3rdparty/gsl_finally.h"
 #include "wzapi.h"
 
@@ -1892,6 +1893,7 @@ void mainShutdown()
 	perf::close();
 	setSyncCrcTraceFile("");
 	cleanupOldLogFiles();
+	hashRequestShutdown();
 	coreDataCheckShutdown();
 	selfExeDetailsShutdown();
 	// NOTE: urlRequestShutdown is called inside systemShutdown, as it must happen after certain other calls
@@ -1984,12 +1986,14 @@ int realmain(int argc, char *argv[])
 	// Warm the manifest self-check cache (logs its result)
 	getValidatedManifestBytes([](const optional<std::string>&) { });
 	netlobby::setBuildInfoProvider([](netlobby::BuildInfoCompletionFunc completion) {
+		hashRequestRateLimitStartEvent();
 		getBuildInfo([completion](const nlohmann::ordered_json& buildInfo) {
 			getValidatedManifestBytes([completion, buildInfo](const optional<std::string>& buildManifest) {
 				completion(buildInfo, buildManifest);
 			});
 		});
 	});
+	netlobby::setHashRequestHandler(answerHashRequest);
 
 	// find early boot info
 	ParseCLIEarlyResult earlyCommandLineParsingResult = ParseCommandLineEarly(utfargc, utfargv);

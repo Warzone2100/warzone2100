@@ -261,6 +261,33 @@ optional<HashableFile::WholeFileHash> HashableFile::hashWholeFile(const std::ato
 	return result;
 }
 
+optional<std::array<uint8_t, wzkeyedhash::HASH_BYTES>> HashableFile::keyedHash(
+	const std::vector<uint8_t>& nonce, const std::string& requestId, uint32_t targetIndex,
+	const std::string& targetKind, const std::vector<wzkeyedhash::Range>& ranges,
+	const std::atomic<bool>* stopFlag) const
+{
+	ReadOnlyFile file;
+	if (!file.open(m_openViaProcSelfExe ? "/proc/self/exe" : m_displayPath))
+	{
+		return nullopt;
+	}
+	optional<uint64_t> fileSize = file.size();
+	if (!fileSize.has_value())
+	{
+		return nullopt;
+	}
+	auto readAt = [&file, stopFlag](uint64_t offset, void* buffer, size_t len) -> bool {
+		if (stopFlag && stopFlag->load(std::memory_order_relaxed))
+		{
+			return false;
+		}
+		return file.readAt(offset, buffer, len);
+	};
+	return wzkeyedhash::computeKeyedHash(nonce, requestId, targetIndex,
+										 wzkeyedhash::targetDescriptor(targetKind, ranges),
+										 ranges, fileSize.value(), readAt);
+}
+
 optional<std::vector<wzmachohash::SliceCanonicalHash>> HashableFile::machoCanonicalHashes(const std::atomic<bool>* stopFlag) const
 {
 	ReadOnlyFile file;

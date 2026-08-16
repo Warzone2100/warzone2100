@@ -252,12 +252,15 @@ struct TmpSocketInfo
 		None,
 		PendingInitialConnect,
 		PendingLobbyConnectCheckRequest, // used by the lobby server to check connection
+		PendingLobbyConnectCheckResponse, // waiting for the connection check response to be ready to send
 		PendingJoinRequest,
 		PendingLobbyJoinCheckResult,
 		PendingAsyncApproval,
 		ProcessJoin
 	};
 	TmpConnectState connectState;
+
+	netlobby::LobbyServerHostingHandlerProtocol::PendingConnectionCheckResponse pendingConnectCheckResponse;
 
 	struct ReceivedJoinInfo
 	{
@@ -294,6 +297,11 @@ struct TmpSocketInfo
 		usedBuffer = 0;
 		connectChallenge.clear();
 		connectState = TmpConnectState::None;
+		if (pendingConnectCheckResponse.cancelFlag)
+		{
+			pendingConnectCheckResponse.cancelFlag->store(true);
+		}
+		pendingConnectCheckResponse = {};
 		receivedJoinInfo.reset();
 		uniqueJoinID.clear();
 		asyncJoinApprovalResult = nullopt;
@@ -3801,6 +3809,44 @@ static optional<size_t> firstAvailableTempSocketIdx()
 	return nullopt;
 }
 
+static void NETsendLobbyConnectCheckResponse(unsigned int i, const std::string& response)
+{
+	// output response to lobby connection check
+	ASSERT(response.size() <= UINT16_MAX, "response length is too long! (%zu)", response.size());
+	size_t responseLength = std::min<size_t>(response.size(), UINT16_MAX);
+
+	const char ResponseStart[] = "WZLR";
+	std::vector<char> buf;
+	buf.resize((sizeof(char) * 4) + sizeof(uint32_t) + sizeof(uint32_t) + responseLength);
+	char *pLobbyRespBuffer = buf.data();
+	auto push32 = [&pLobbyRespBuffer](uint32_t value) {
+		uint32_t swapped = wz_htonl(value);
+		memcpy(pLobbyRespBuffer, &swapped, sizeof(swapped));
+		pLobbyRespBuffer += sizeof(swapped);
+	};
+
+	// Copy response prefix chars ("WZLR")
+	memcpy(pLobbyRespBuffer, ResponseStart, sizeof(char) * strlen(ResponseStart));
+	pLobbyRespBuffer += sizeof(char) * strlen(ResponseStart);
+
+	// Copy version of response
+	const uint32_t response_version = 2;
+	push32(response_version);
+
+	// Copy length of response (as uint32)
+	push32(static_cast<uint32_t>(responseLength));
+
+	// Copy response
+	memcpy(pLobbyRespBuffer, response.data(), responseLength);
+
+	ASSERT(!tmp_socket[i]->isCompressed(), "Socket should not be compressed!");
+	const auto writeResult = tmp_socket[i]->writeAll(buf.data(), buf.size(), nullptr);
+	if (!writeResult.has_value())
+	{
+		debug(LOG_NET, "writeAll to tmpSocket[%u] failed with error?: %d", i, writeResult.error().value());
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining()
@@ -4030,40 +4076,11 @@ static void NETallowJoining()
 
 						if (response.has_value())
 						{
-							// output response to lobby connection check
-							ASSERT(response.value().size() <= UINT16_MAX, "response length is too long! (%zu)", response.value().size());
-							size_t responseLength = std::min<size_t>(response.value().size(), UINT16_MAX);
-
-							const char ResponseStart[] = "WZLR";
-							std::vector<char> buf;
-							buf.resize((sizeof(char) * 4) + sizeof(uint32_t) + sizeof(uint32_t) + responseLength);
-							char *pLobbyRespBuffer = buf.data();
-							auto push32 = [&pLobbyRespBuffer](uint32_t value) {
-								uint32_t swapped = wz_htonl(value);
-								memcpy(pLobbyRespBuffer, &swapped, sizeof(swapped));
-								pLobbyRespBuffer += sizeof(swapped);
-							};
-
-							// Copy response prefix chars ("WZLR")
-							memcpy(pLobbyRespBuffer, ResponseStart, sizeof(char) * strlen(ResponseStart));
-							pLobbyRespBuffer += sizeof(char) * strlen(ResponseStart);
-
-							// Copy version of response
-							const uint32_t response_version = 2;
-							push32(response_version);
-
-							// Copy length of response (as uint32)
-							push32(static_cast<uint32_t>(responseLength));
-
-							// Copy response
-							memcpy(pLobbyRespBuffer, response.value().data(), responseLength);
-
-							ASSERT(!tmp_socket[i]->isCompressed(), "Socket should not be compressed!");
-							const auto writeResult = tmp_socket[i]->writeAll(buf.data(), buf.size(), nullptr);
-							if (!writeResult.has_value())
-							{
-								debug(LOG_NET, "writeAll to tmpSocket[%u] failed with error?: %d", i, writeResult.error().value());
-							}
+							// wait for the response to be ready to send
+							tmp_connectState[i].pendingConnectCheckResponse = std::move(response.value());
+							tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingLobbyConnectCheckResponse;
+							tmp_connectState[i].connectTime = std::chrono::steady_clock::now(); // reset connect time
+							continue;
 						}
 						else
 						{
@@ -4326,6 +4343,18 @@ static void NETallowJoining()
 			continue;
 		}
 
+		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingLobbyConnectCheckResponse)
+		{
+			auto& futureResponse = tmp_connectState[i].pendingConnectCheckResponse.futureResponse;
+			if (futureResponse.valid() && futureResponse.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				NETsendLobbyConnectCheckResponse(i, futureResponse.get());
+				debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
+				NETcloseTempSocket(i);
+				continue;
+			}
+		}
+
 		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingAsyncApproval)
 		{
 			// check if async approval result has been set
@@ -4558,6 +4587,10 @@ static void NETallowJoining()
 		{
 			timeout = (firstAvailableTempSocketIdx().has_value()) ? 10000 : std::max<std::chrono::milliseconds::rep>(timeout, 6000);
 		}
+		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingLobbyConnectCheckResponse)
+		{
+			timeout = 10000;
+		}
 
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectState[i].connectTime).count() > timeout)
 		{
@@ -4577,7 +4610,8 @@ static void NETallowJoining()
 			}
 
 			std::string rIP = tmp_socket[i]->textAddress();
-			if (tmp_connectState[i].connectState != TmpSocketInfo::TmpConnectState::PendingLobbyJoinCheckResult)
+			if (tmp_connectState[i].connectState != TmpSocketInfo::TmpConnectState::PendingLobbyJoinCheckResult
+				&& tmp_connectState[i].connectState != TmpSocketInfo::TmpConnectState::PendingLobbyConnectCheckResponse)
 			{
 				NETaddSessionBanBadIP(rIP);
 			}
