@@ -1097,9 +1097,22 @@ namespace gfx_api
 	using Draw3DShapeAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_NOLIGHT, DEPTH_CMP_LEQ_WRT_OFF>;
 
+	// The minimum, and the std140 layout of the block below.
+	// (A uniform block is guaranteed only 16 KB, which these very nearly fill.)
 	constexpr size_t max_lights = 128;
 	constexpr size_t max_indexed_lights = 512;
 	constexpr size_t bucket_dimension = 8;
+
+	/// How many lights the active transport can carry.
+	/// On the uniform block transport, this is equal to the constants above.
+	/// On buffer transports these are larger.
+	struct light_capacity
+	{
+		size_t maxLights = max_lights;
+		size_t maxIndexedLights = max_indexed_lights;
+	};
+	const light_capacity& activeLightCapacity();
+	void setActiveLightCapacity(const light_capacity& capacity);
 
 	// Only change once per frame
 	// The bucket table leads so that it forms a prefix of the block.

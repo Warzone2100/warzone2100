@@ -59,6 +59,19 @@ const char* gfx_api::to_string(gfx_api::data_buffer_transport transport)
 	return "";
 }
 
+static gfx_api::light_capacity activeCapacity;
+
+const gfx_api::light_capacity& gfx_api::activeLightCapacity()
+{
+	return activeCapacity;
+}
+
+void gfx_api::setActiveLightCapacity(const gfx_api::light_capacity& capacity)
+{
+	activeCapacity = capacity;
+	debug(LOG_3D, "Point light capacity: %zu lights, %zu indexed", capacity.maxLights, capacity.maxIndexedLights);
+}
+
 bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
 	if (current_backend_context != nullptr && backend == backendType)
@@ -100,6 +113,18 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 		delete current_backend_context;
 		current_backend_context = nullptr;
 		return false;
+	}
+
+	// The transport is settled once the context is up, and the context is what decides whether the light
+	// arrays are still bound by the uniform block size limits.
+	{
+		gfx_api::light_capacity capacity;
+		if (current_backend_context->lightDataTransport() != gfx_api::data_buffer_transport::uniform_block)
+		{
+			capacity.maxLights = 512;
+			capacity.maxIndexedLights = 2048;
+		}
+		gfx_api::setActiveLightCapacity(capacity);
 	}
 
 	// Calculate the best available run-time compression formats

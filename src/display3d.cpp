@@ -1351,18 +1351,29 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 	// Every pass that lights reads the same point lights, so upload them once here and hand the reference to the consumers
 	const auto& bucketLight = lightManager.getPointLightBuckets();
-	const gfx_api::PointLightsUniforms pointLightUniforms = {
-		.bucketOffsetAndSize = bucketLight.bucketOffsetAndSize,
-		.bucketDimensionUsed = static_cast<int>(bucketLight.bucketDimensionUsed),
-		.pad = {},
-		.PointLightsPosition = bucketLight.positions,
-		.PointLightsColorAndEnergy = bucketLight.colorAndEnergy,
-		.indexed_lights = bucketLight.light_index
-	};
+	// The block still carries the bucket table on every transport, but the arrays only matter
+	// where the shader reads them from it.
+	const bool lightArraysInBlock = gfx_api::context::get().lightDataTransport() == gfx_api::data_buffer_transport::uniform_block;
+
+	gfx_api::PointLightsUniforms pointLightUniforms = {};
+	pointLightUniforms.bucketOffsetAndSize = bucketLight.bucketOffsetAndSize;
+	pointLightUniforms.bucketDimensionUsed = static_cast<int>(bucketLight.bucketDimensionUsed);
+	if (lightArraysInBlock)
+	{
+		// The block only holds the floor's worth, which is exactly the capacity on this transport,
+		// so the copy is a whole one rather than a truncation.
+		ASSERT(bucketLight.positions.size() == gfx_api::max_lights
+			&& bucketLight.light_index.size() == gfx_api::max_indexed_lights,
+			"Light capacity (%zu, %zu) does not match the block on the uniform block transport",
+			bucketLight.positions.size(), bucketLight.light_index.size());
+		std::copy_n(bucketLight.positions.begin(), gfx_api::max_lights, pointLightUniforms.PointLightsPosition.begin());
+		std::copy_n(bucketLight.colorAndEnergy.begin(), gfx_api::max_lights, pointLightUniforms.PointLightsColorAndEnergy.begin());
+		std::copy_n(bucketLight.light_index.begin(), gfx_api::max_indexed_lights, pointLightUniforms.indexed_lights.begin());
+	}
 	const auto pointLightsRef = gfx_api::context::get().upload_frame_uniform(pointLightUniforms);
 
 	// On a buffer transport the arrays are not in the block at all - they travel separately
-	if (gfx_api::context::get().lightDataTransport() != gfx_api::data_buffer_transport::uniform_block)
+	if (!lightArraysInBlock)
 	{
 		const auto& flatLights = lightManager.getFlatPointLightData();
 		gfx_api::context::get().upload_light_data(
