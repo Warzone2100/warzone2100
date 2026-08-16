@@ -220,8 +220,8 @@ _wz_extract_constant(WZ_MAX_SHADOW_CASCADES "${_wz_shadows_header}"
 
 set(_vk_generated_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk_generated")
 file(MAKE_DIRECTORY "${_vk_generated_dir}")
-# Vulkan keeps the uniform block until the backend carries light data over a storage buffer.
-set(WZ_LIGHT_TRANSPORT 0)
+# Vulkan guarantees storage buffers on every device, so it carries light data over one.
+set(WZ_LIGHT_TRANSPORT 2)
 
 set(_vk_generated_constants "${_vk_generated_dir}/wz_shader_constants.glsl")
 configure_file(
