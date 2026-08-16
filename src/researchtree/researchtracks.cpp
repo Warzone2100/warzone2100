@@ -446,23 +446,38 @@ std::vector<ResearchTrack> deriveResearchTracks(const ResearchPrereqClosure& clo
 	// weapons of unrelated classes reads as a progression only when the two sit near each other in the tree
 	constexpr uint32_t UNRELATED_TIER_GAP = 7;
 	const std::vector<uint32_t> depths = researchPrereqDepths();
-	const auto continuesTheLine = [&depths](size_t newer, size_t older) {
-		const uint32_t newerClasses = weaponClassesOf(asResearch[newer]);
-		const uint32_t olderClasses = weaponClassesOf(asResearch[older]);
-		if (newerClasses == 0 || olderClasses == 0 || (newerClasses & olderClasses) != 0)
+	std::vector<uint32_t> weaponClasses(topicCount, 0);
+	for (size_t i = 0; i < topicCount; ++i)
+	{
+		weaponClasses[i] = weaponClassesOf(asResearch[i]);
+	}
+	const auto continuesTheLine = [&depths, &weaponClasses](size_t newer, size_t older) {
+		if (weaponClasses[newer] == 0 || weaponClasses[older] == 0
+		    || (weaponClasses[newer] & weaponClasses[older]) != 0)
 		{
 			return true;
 		}
 		return depths[newer] < depths[older] + UNRELATED_TIER_GAP;
 	};
+
+	// A topic arming several classes at once is a hub rather than a step, so it takes no place in a line
+	// in either role (ex. the campaign's hardcrete research, which hardens two guard towers together)
+	const auto isLineStep = [&weaponClasses](size_t topic) {
+		const uint32_t classes = weaponClasses[topic];
+		return (classes & (classes - 1)) == 0;	// one class at most, counting the unarmed as none
+	};
 	bool anyObsolescence = false;
 	for (size_t a = 0; a < topicCount; ++a)
 	{
+		if (!isLineStep(a))
+		{
+			continue;
+		}
 		size_t closest = topicCount;
 		size_t bestShared = 0;
 		for (size_t b = 0; b < topicCount; ++b)
 		{
-			if (a == b || !supersedes(asResearch[a], asResearch[b]))
+			if (a == b || !isLineStep(b) || !supersedes(asResearch[a], asResearch[b]))
 			{
 				continue;
 			}
