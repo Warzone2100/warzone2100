@@ -1115,14 +1115,10 @@ namespace gfx_api
 	void setActiveLightCapacity(const light_capacity& capacity);
 
 	// Only change once per frame
-	// The bucket table leads so that it forms a prefix of the block.
-	// A shader that fetches the light arrays from elsewhere can then declare and bind just that prefix.
-	// std140 aligns the arrays that follow bucketDimensionUsed to 16 while C++ does not, hence the explicit padding.
+	// Declared and bound only on the uniform block transport - the other transports fetch these from a buffer.
+	// The bucket table they share lives in the per-pipeline globals.
 	struct PointLightsUniforms
 	{
-		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
-		int bucketDimensionUsed;
-		int pad[3];
 		std::array<glm::vec4, max_lights> PointLightsPosition;
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
@@ -1130,7 +1126,6 @@ namespace gfx_api
 
 	// std140 puts every one of these arrays on a 16 byte boundary and rounds the block up to
 	// a multiple of 16, neither of which C++ does on its own here.
-	static_assert(offsetof(PointLightsUniforms, bucketOffsetAndSize) % 16 == 0, "std140 requires 16 byte alignment");
 	static_assert(offsetof(PointLightsUniforms, PointLightsPosition) % 16 == 0, "std140 requires 16 byte alignment");
 	static_assert(offsetof(PointLightsUniforms, PointLightsColorAndEnergy) % 16 == 0, "std140 requires 16 byte alignment");
 	static_assert(offsetof(PointLightsUniforms, indexed_lights) % 16 == 0, "std140 requires 16 byte alignment");
@@ -1155,9 +1150,12 @@ namespace gfx_api
 		int viewportWidth;
 		int viewportheight;
 		float mipLoadBias;
-		float pad0 = 0.f;
+		int bucketDimensionUsed;
 		float pad1 = 0.f;
 		float pad2 = 0.f;
+		// The bucket table is last because its length follows the grid dimension, which may become variable.
+		// (Anything placed after it would shift whenever that changed.)
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 	};
 
 	// Only change per mesh
@@ -1411,8 +1409,11 @@ namespace gfx_api
 		int viewportheight;
 		float tessMaxLevel; // hardware-tessellated terrain only
 		float mipLoadBias;
-		float pad0 = 0.f;
+		int bucketDimensionUsed;
 		float pad1 = 0.f;
+		// The bucket table is last because its length follows the grid dimension, which may become variable.
+		// (Anything placed after it would shift whenever that changed.)
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>
