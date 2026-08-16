@@ -29,7 +29,7 @@ float pointLightConeFactor(vec3 pointLightVector, vec4 directionAndCos)
 	return smoothstep(cosOuter, cosInner, alignment);
 }
 
-vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, float pointLightIntensity, vec4 pointLightDirectionAndCos, mat3 spaceMatrix)
+vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, float pointLightIntensity, vec4 pointLightDirectionAndCos, mat3 spaceMatrix)
 {
 	vec3 pointLightVector = pointLightWorldPosition - WorldFragPos;
 	vec3 pointLightDir = spaceMatrix * normalize(pointLightVector);
@@ -39,9 +39,24 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4
 	vec4 lightColor = vec4(pointLightColor * energy, 1.f); //to-do: pick average color from effect's texture
 	//lightColor.rgb = mix(lightColor.rgb, (lightColor.rgb + 1.5)*energy*2, energy);
 
-	float pointLightLambert = max(dot(fragNormal, pointLightDir), 0.f);
+	// Normal mapped detail swings either side of unlit from one texel to the next once the light
+	// comes in near parallel to the surface, because dot with the light is passing through zero.
+	// A rough surface would shadow itself at that angle and read smoother instead of harsher,
+	// so lean the shading normal back to the surface as the light flattens out. Nothing changes
+	// above 30 degrees.
+	float lightElevation = dot(surfaceNormal, pointLightDir);
+	float grazing = 1.f - smoothstep(0.f, 0.5f, lightElevation);
+	vec3 shadingNormal = normalize(mix(fragNormal, surfaceNormal, grazing));
+
+	// Flattening alone would take most of the light with it, because at this angle the only reason the ground
+	// was lit at all is texels tilting toward the light.
+	// So: Wrap the flattened result slightly to put that brightness back (without the swing that came with it).
+	const float grazingWrap = 0.15f;
+	float flatLambert = dot(shadingNormal, pointLightDir);
+	float softenedLambert = max((flatLambert + grazingWrap) / (1.f + grazingWrap), 0.f);
+	float pointLightLambert = mix(max(dot(fragNormal, pointLightDir), 0.f), softenedLambert, grazing);
 	vec3 pointLightHalfVec = normalize(pointLightDir + viewVector);
-	float pointLightBlinn = clamp(pow(max(dot(fragNormal, pointLightHalfVec), 0.f), 16.f), 0.f, 1.f);
+	float pointLightBlinn = clamp(pow(max(dot(shadingNormal, pointLightHalfVec), 0.f), 16.f), 0.f, 1.f);
 	return lightColor * (pointLightLambert * albedo + pointLightBlinn * gloss);
 }
 
@@ -127,6 +142,7 @@ vec4 iterateOverAllPointLights(
 	vec2 clipSpaceCoord,
 	vec3 WorldFragPos,
 	vec3 fragNormal,
+	vec3 surfaceNormal,
 	vec3 viewVector,
 	vec4 albedo,
 	float gloss,
@@ -146,7 +162,7 @@ vec4 iterateOverAllPointLights(
 		// The cone direction arrives in the same space as the position, so it gets the same flip
 		directionAndCos.xyz *= vec3(1.f, 1.f, -1.f);
 		vec3 tmp = position.xyz * vec3(1.f, 1.f, -1.f);
-		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, position.w, directionAndCos, spaceMatrix);
+		light += processPointLight(WorldFragPos, fragNormal, surfaceNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, position.w, directionAndCos, spaceMatrix);
 	}
 	return light;
 }
