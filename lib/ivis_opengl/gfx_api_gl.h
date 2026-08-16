@@ -236,6 +236,12 @@ struct gl_context;
 ///
 /// Callers must rotate between one allocator per frame in flight, so the blocks being written were last read by the GPU enough frames ago.
 /// (Nothing else should write to its buffers, since multiple programs may share one buffer object.)
+///
+/// When initialized with `persistentMapped_ = true` (requires `ARB_buffer_storage` or `EXT_buffer_storage`),
+/// each block is immutable storage kept persistently mapped (write-only, coherent) for its whole lifetime, and allocations carry a direct
+/// write pointer - so filling a range is a plain memcpy with no map/unmap or glBufferSubData per write.
+/// CPU-side access to that pointer must stay write-only and forward-moving: the mapping may be write-combined memory on some drivers,
+/// where reads (including compiler-generated read-modify-write) are extremely slow.
 struct gl_uniform_block_allocator
 {
 public:
@@ -243,10 +249,14 @@ public:
 	{
 		GLuint buffer = 0;
 		GLintptr offset = 0;
+		// Direct write pointer for this range when the block is persistently mapped, nullptr otherwise.
+		// WRITE-ONLY - *never* read through it.
+		void* mappedWrite = nullptr;
 		bool valid() const { return buffer != 0; }
 	};
 
-	void init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_);
+	void init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_, bool persistentMapped_ = false);
+	bool persistentMapped() const { return persistentMappedMode; }
 	// Reserve an aligned range (growing the chain if the current block is full)
 	Allocation alloc(GLsizeiptr amount);
 	// Rewind for a new frame (consolidating or shrinking as needed)
@@ -258,6 +268,8 @@ private:
 	{
 		GLuint buffer = 0;
 		GLsizeiptr size = 0;
+		// Persistent mapping of the whole block (nullptr when not persistently mapped)
+		void* mapped = nullptr;
 	};
 	void allocateNewBlock(GLsizeiptr minimumSize);
 	void freeAllBlocks();
@@ -268,6 +280,7 @@ private:
 	GLsizeiptr minimumBlockSize = 0;
 	GLsizeiptr minimumFirstBlockSize = 0;
 	GLint alignment = 1;
+	bool persistentMappedMode = false;
 };
 
 struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
@@ -353,10 +366,28 @@ struct gl_context final : public gfx_api::context
 	// Mapping is core in OpenGL 3.0+ and OpenGL ES 3.0+, but absent from WebGL 2.
 	bool hasBufferMapping = false;
 
+	// How uniform block contents get from the CPU to the buffer.
+	enum class UniformBlockWriteMethod
+	{
+		BufferSubData,	// glBufferSubData per write
+		MapRange,		// glMapBufferRange(UNSYNCHRONIZED) + memcpy + glUnmapBuffer per write
+		PersistentMap	// memcpy into a persistently-mapped coherent buffer (ARB/EXT_buffer_storage)
+	};
+	UniformBlockWriteMethod uniformBlockWriteMethod = UniformBlockWriteMethod::BufferSubData;
+	// Whether immutable + persistently mappable buffer storage is usable on this context
+	// (desktop: ARB_buffer_storage, GLES 3.1+: EXT_buffer_storage), including the sync
+	// objects the ring rotation relies on in that mode.
+	bool hasPersistentBufferStorage = false;
+
 	// One per (frames in flight + 1), so blocks written this frame were last read by
 	// the GPU a full frame ago and need no synchronization.
 	std::vector<gl_uniform_block_allocator> uniformBlockAllocators;
 	size_t currentUniformBlockAllocator = 0;
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	// PersistentMap only: fence inserted when an allocator's frame is finished, waited
+	// on before that allocator is rewritten.
+	std::vector<GLsync> uniformBlockAllocatorFences;
+#endif
 	gl_uniform_block_allocator& activeUniformBlockAllocator() { return uniformBlockAllocators[currentUniformBlockAllocator]; }
 
 	// Bind a range, skipping when that index already holds it.

@@ -31,6 +31,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <unordered_set>
 #include <unordered_map>
 // On Fedora 40, GCC 14 produces false-positive warnings for -Walloc-zero
@@ -1639,6 +1641,30 @@ static constexpr GLsizeiptr WZ_UNIFORM_BLOCK_MIN_SIZE = 256 * 1024;
 // Mapping is therefore the default wherever it exists, which excludes WebGL 2.
 static constexpr bool WZ_UNIFORM_BLOCK_USE_MAPPING = true;
 
+#if !defined(WZ_STATIC_GL_BINDINGS)
+// Unified glBufferStorage entry point:
+// ARB_buffer_storage (desktop GL) and EXT_buffer_storage (OpenGL ES 3.1+) share the same signature,
+// and the *_EXT map-flag values alias the core ones.
+static PFNGLBUFFERSTORAGEPROC wz_glBufferStorageUnified = nullptr;
+
+// Storage and map flags for the persistently mapped uniform ring:
+// - write-only streaming
+// - coherent, so writes issued before a draw are visible to it without explicit flushes
+static constexpr GLbitfield WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS =
+	GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
+#endif
+
+static const char* uniformBlockWriteMethodName(gl_context::UniformBlockWriteMethod method)
+{
+	switch (method)
+	{
+		case gl_context::UniformBlockWriteMethod::BufferSubData: return "glBufferSubData";
+		case gl_context::UniformBlockWriteMethod::MapRange: return "mapped ranges";
+		case gl_context::UniformBlockWriteMethod::PersistentMap: return "persistently-mapped storage";
+	}
+	return "unknown";
+}
+
 void gl_context::bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
 {
 	if (index >= boundUniformRanges.size())
@@ -1654,11 +1680,12 @@ void gl_context::bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, 
 	current = BoundUniformRange{buffer, offset, size};
 }
 
-void gl_uniform_block_allocator::init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_)
+void gl_uniform_block_allocator::init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_, bool persistentMapped_)
 {
 	alignment = std::max<GLint>(offsetAlignment, 1);
 	minimumBlockSize = minimumBlockSize_;
 	minimumFirstBlockSize = minimumBlockSize_;
+	persistentMappedMode = persistentMapped_;
 }
 
 void gl_uniform_block_allocator::allocateNewBlock(GLsizeiptr minimumSize)
@@ -1670,7 +1697,32 @@ void gl_uniform_block_allocator::allocateNewBlock(GLsizeiptr minimumSize)
 	newBlock.size = newBlockSize;
 	glGenBuffers(1, &newBlock.buffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, newBlock.buffer);
-	glBufferData(GL_UNIFORM_BUFFER, newBlockSize, nullptr, GL_STREAM_DRAW);
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (persistentMappedMode && wz_glBufferStorageUnified != nullptr)
+	{
+		// Immutable storage, mapped once for the block's whole lifetime
+		wz_glBufferStorageUnified(GL_UNIFORM_BUFFER, newBlockSize, nullptr, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+		newBlock.mapped = glMapBufferRange(GL_UNIFORM_BUFFER, 0, newBlockSize, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+		// NOTE: A failed glBufferStorage leaves the buffer with no data store, so glMapBufferRange returning nullptr
+		// covers both failure modes.
+		if (newBlock.mapped == nullptr)
+		{
+			// Storage or mapping failed - recreate this block as ordinary mutable storage.
+			// uploadUniformBlock falls back per-allocation, so a partial failure degrades
+			// gracefully instead of losing uniforms.
+			debug(LOG_ERROR, "Persistent uniform block storage failed for a %ld byte block, falling back to mutable storage for it", static_cast<long>(newBlockSize));
+			wzGLClearErrors();
+			glDeleteBuffers(1, &newBlock.buffer);
+			glGenBuffers(1, &newBlock.buffer);
+			glBindBuffer(GL_UNIFORM_BUFFER, newBlock.buffer);
+			glBufferData(GL_UNIFORM_BUFFER, newBlockSize, nullptr, GL_STREAM_DRAW);
+		}
+	}
+	else
+#endif
+	{
+		glBufferData(GL_UNIFORM_BUFFER, newBlockSize, nullptr, GL_STREAM_DRAW);
+	}
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	totalCapacity += newBlockSize;
@@ -1687,7 +1739,8 @@ gl_uniform_block_allocator::Allocation gl_uniform_block_allocator::alloc(GLsizei
 		if (newWritePos + amount <= lastBlockSize)
 		{
 			currentWritePosInLastBlock = newWritePos + amount;
-			return Allocation{blocks.back().buffer, static_cast<GLintptr>(newWritePos)};
+			void* writePtr = (blocks.back().mapped != nullptr) ? static_cast<char*>(blocks.back().mapped) + newWritePos : nullptr;
+			return Allocation{blocks.back().buffer, static_cast<GLintptr>(newWritePos), writePtr};
 		}
 	}
 
@@ -1698,14 +1751,26 @@ gl_uniform_block_allocator::Allocation gl_uniform_block_allocator::alloc(GLsizei
 		return Allocation{};
 	}
 	currentWritePosInLastBlock = amount;
-	return Allocation{blocks.back().buffer, 0};
+	return Allocation{blocks.back().buffer, 0, blocks.back().mapped};
 }
 
 void gl_uniform_block_allocator::freeAllBlocks()
 {
 	for (auto& block : blocks)
 	{
-		if (block.buffer) { glDeleteBuffers(1, &block.buffer); }
+		if (block.buffer)
+		{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (block.mapped != nullptr && glUnmapBuffer != nullptr)
+			{
+				// (glDeleteBuffers would implicitly unmap, but be explicit)
+				glBindBuffer(GL_UNIFORM_BUFFER, block.buffer);
+				glUnmapBuffer(GL_UNIFORM_BUFFER);
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			}
+#endif
+			glDeleteBuffers(1, &block.buffer);
+		}
 	}
 	blocks.clear();
 }
@@ -1796,6 +1861,21 @@ void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffe
 
 	auto allocation = owningContext->activeUniformBlockAllocator().alloc(rangeSize);
 	ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
+
+	if (allocation.mappedWrite != nullptr)
+	{
+		// Persistently-mapped coherent storage:
+		// - a single forward memcpy, no bind, no map/unmap, no glBufferSubData
+		//
+		// Coherent mapping guarantees the write is visible to any command issued after this point.
+		// The allocator rotation (plus its fences) guarantees the GPU has finished reading this range.
+		// Keep this strictly write-only: the mapping may be write-combined memory, where CPU reads can
+		// be pathologically slow.
+		memcpy(allocation.mappedWrite, buffer, static_cast<size_t>(dataSize));
+		owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
+		uniformBlockRanges[slot] = {allocation, rangeSize};
+		return;
+	}
 
 	glBindBuffer(GL_UNIFORM_BUFFER, allocation.buffer);
 	bool written = false;
@@ -4278,6 +4358,37 @@ void gl_context::beginScreenFrame()
 {
 	if (!uniformBlockAllocators.empty())
 	{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+		if (uniformBlockWriteMethod == UniformBlockWriteMethod::PersistentMap)
+		{
+			// The persistently mapped ring has no per-write synchronization at all, so
+			// the rotation itself must guarantee the GPU is done with a slot before it
+			// is rewritten.
+			//
+			// Fence the slot whose frame just ended, and wait on the incoming slot's
+			// fence (inserted a full rotation ago) before reuse.
+			if (uniformBlockAllocatorFences[currentUniformBlockAllocator] != nullptr)
+			{
+				glDeleteSync(uniformBlockAllocatorFences[currentUniformBlockAllocator]);
+			}
+			uniformBlockAllocatorFences[currentUniformBlockAllocator] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+			const size_t incoming = (currentUniformBlockAllocator + 1) % uniformBlockAllocators.size();
+			GLsync& incomingFence = uniformBlockAllocatorFences[incoming];
+			if (incomingFence != nullptr)
+			{
+				// With (frames in flight + 1) slots this should already be signaled -
+				// a wait here means the GPU is more than a full rotation behind
+				const GLenum waitResult = glClientWaitSync(incomingFence, GL_SYNC_FLUSH_COMMANDS_BIT, 100 * 1000 * 1000ULL); // 100ms
+				if (waitResult == GL_TIMEOUT_EXPIRED || waitResult == GL_WAIT_FAILED)
+				{
+					debug(LOG_ERROR, "Timed out waiting for the GPU to release a uniform ring slot (result: 0x%x)", waitResult);
+				}
+				glDeleteSync(incomingFence);
+				incomingFence = nullptr;
+			}
+		}
+#endif
 		currentUniformBlockAllocator = (currentUniformBlockAllocator + 1) % uniformBlockAllocators.size();
 		uniformBlockAllocators[currentUniformBlockAllocator].recycle();
 		boundUniformRanges.clear();
@@ -5058,22 +5169,102 @@ void gl_context::initUniformBufferLimits()
 	uniformBufferOffsetAlignment = std::max<GLint>(wz_GetGLIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, 1), 1);
 
 #if defined(WZ_STATIC_GL_BINDINGS)
-	// WebGL 2 has no buffer mapping at all
+	// WebGL 2 has no buffer mapping / buffer storage at all
 	hasBufferMapping = false;
+	hasPersistentBufferStorage = false;
 #else
 	hasBufferMapping = WZ_UNIFORM_BLOCK_USE_MAPPING && (glMapBufferRange != nullptr) && (glUnmapBuffer != nullptr);
+
+	// Immutable + persistently mappable buffer storage:
+	// - Desktop GL: ARB_buffer_storage (Core in 4.4, and a common extension)
+	// - OpenGL ES: EXT_buffer_storage (written against ES 3.1, so also require a 3.1+ context)
+	// The persistent ring also relies on sync objects (core GL 3.2 / GLES 3.0) to
+	// fence the per-frame rotation, so require those too.
+	wz_glBufferStorageUnified = nullptr;
+	if (!gles && GLAD_GL_ARB_buffer_storage && (glBufferStorage != nullptr))
+	{
+		wz_glBufferStorageUnified = glBufferStorage;
+	}
+	else if (gles && GLAD_GL_ES_VERSION_3_1 && GLAD_GL_EXT_buffer_storage && (glBufferStorageEXT != nullptr))
+	{
+		wz_glBufferStorageUnified = reinterpret_cast<PFNGLBUFFERSTORAGEPROC>(glBufferStorageEXT);
+	}
+	const bool hasSyncObjects = (glFenceSync != nullptr) && (glClientWaitSync != nullptr) && (glDeleteSync != nullptr);
+	hasPersistentBufferStorage = (wz_glBufferStorageUnified != nullptr) && hasBufferMapping && hasSyncObjects;
 #endif
-	debug(LOG_3D, "Uniform block writes use %s", hasBufferMapping ? "mapped ranges" : "glBufferSubData");
+
+	// Preference order:
+	// 1. persistent mapping (no per-write driver calls at all)
+	// 2. transient unsynchronized mapping
+	// 3. glBufferSubData
+	if (hasPersistentBufferStorage)
+	{
+		uniformBlockWriteMethod = UniformBlockWriteMethod::PersistentMap;
+	}
+	else if (hasBufferMapping)
+	{
+		uniformBlockWriteMethod = UniformBlockWriteMethod::MapRange;
+	}
+	else
+	{
+		uniformBlockWriteMethod = UniformBlockWriteMethod::BufferSubData;
+	}
+
+	// Runtime override for testing / driver workarounds, without a rebuild:
+	//   WZ_GL_UBO_WRITE = persistent | map | subdata
+	if (const char* methodOverride = getenv("WZ_GL_UBO_WRITE"))
+	{
+		if (strcmp(methodOverride, "persistent") == 0)
+		{
+			if (hasPersistentBufferStorage)
+			{
+				uniformBlockWriteMethod = UniformBlockWriteMethod::PersistentMap;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_GL_UBO_WRITE=persistent requested, but buffer storage is unavailable on this context - ignoring");
+			}
+		}
+		else if (strcmp(methodOverride, "map") == 0)
+		{
+			if (hasBufferMapping)
+			{
+				uniformBlockWriteMethod = UniformBlockWriteMethod::MapRange;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_GL_UBO_WRITE=map requested, but buffer mapping is unavailable on this context - ignoring");
+			}
+		}
+		else if (strcmp(methodOverride, "subdata") == 0)
+		{
+			uniformBlockWriteMethod = UniformBlockWriteMethod::BufferSubData;
+		}
+		else
+		{
+			debug(LOG_INFO, "Unrecognized WZ_GL_UBO_WRITE value \"%s\" (expected persistent | map | subdata) - ignoring", methodOverride);
+		}
+	}
+
+	// uploadUniformBlock's non-persistent path keys off hasBufferMapping, so make the
+	// flag reflect the selected method.
+	hasBufferMapping = hasBufferMapping && (uniformBlockWriteMethod == UniformBlockWriteMethod::MapRange);
+
+	debug(LOG_INFO, "Uniform block writes use %s", uniformBlockWriteMethodName(uniformBlockWriteMethod));
 
 	debug(LOG_3D, "Uniform blocks: max size %d bytes, %d vertex / %d fragment blocks, offset alignment %d",
 		maxUniformBlockSize, maxVertexUniformBlocks, maxFragmentUniformBlocks, uniformBufferOffsetAlignment);
 
+	const bool persistentAllocators = (uniformBlockWriteMethod == UniformBlockWriteMethod::PersistentMap);
 	uniformBlockAllocators.resize(maxFramesInFlight() + 1);
 	for (auto& allocator : uniformBlockAllocators)
 	{
-		allocator.init(uniformBufferOffsetAlignment, WZ_UNIFORM_BLOCK_MIN_SIZE);
+		allocator.init(uniformBufferOffsetAlignment, WZ_UNIFORM_BLOCK_MIN_SIZE, persistentAllocators);
 	}
 	currentUniformBlockAllocator = 0;
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	uniformBlockAllocatorFences.assign(uniformBlockAllocators.size(), nullptr);
+#endif
 }
 
 bool gl_context::initInstancedFunctions()
@@ -5588,6 +5779,16 @@ void gl_context::shutdown()
 		allocator.destroy();
 	}
 	uniformBlockAllocators.clear();
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (glDeleteSync != nullptr)
+	{
+		for (auto& fence : uniformBlockAllocatorFences)
+		{
+			if (fence != nullptr) { glDeleteSync(fence); }
+		}
+	}
+	uniformBlockAllocatorFences.clear();
+#endif
 
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glClear)
