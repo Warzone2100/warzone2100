@@ -35,9 +35,10 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int shieldEffect;
 };
 
-// Which transport carries the light arrays: 0 uniform block, 1 buffer texture, 2 storage buffer.
-// Patched at load on OpenGL, fixed at build time on Vulkan.
-#define WZ_LIGHT_TRANSPORT 0
+// Light data shares the texture set rather than taking one of its own, because the instanced
+// mesh pipeline already sits on the four bound sets Vulkan guarantees. The two consumers do not
+// agree on which set that is, so each names its own.
+#define WZ_LIGHT_DATA_SET 3
 
 layout(std140, set = 2, binding = 0) uniform pointlights {
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
