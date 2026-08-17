@@ -230,6 +230,7 @@ namespace gfx_api
 	{
 		const REND_MODE blend_state;
 		const DEPTH_MODE depth_mode;
+		/// Color write mask: bit 0 = R, 1 = G, 2 = B, 3 = A. 0 writes nothing; 255 writes RGBA.
 		const uint8_t output_mask;
 		const bool offset;
 		const stencil_mode stencil;
