@@ -24,6 +24,7 @@
 
 #include "range_rings.h"
 
+#include "baseobject.h"
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
 #include "droid.h"
@@ -36,6 +37,7 @@
 #include "visibility.h"
 
 #include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piestate.h"
 
@@ -277,7 +279,8 @@ void push(std::vector<gfx_api::RangeRingInstance>& dst, const BASE_OBJECT* psObj
 	{
 		return;
 	}
-	push(dst, static_cast<float>(psObj->pos.x), static_cast<float>(psObj->pos.y), radius);
+	const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
+	push(dst, static_cast<float>(st.pos.x), static_cast<float>(st.pos.y), radius);
 }
 
 void pushWeaponAndMin(const BASE_OBJECT* psObj)
