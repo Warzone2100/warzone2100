@@ -63,6 +63,7 @@ constexpr size_t CONE_INDEX_COUNT = static_cast<size_t>(CONE_SIDES) * 3;
 constexpr float ORTHO_PAD = static_cast<float>(TILE_UNITS);
 constexpr float CAMERA_HEIGHT_SLACK = 64.f;
 constexpr float SDF_BAND_TEXELS = 8.f;
+constexpr float FILL_ALPHA = 0.06f; // inner disk tint
 
 gfx_api::buffer* s_coneVBO = nullptr;
 gfx_api::buffer* s_coneIBO = nullptr;
@@ -510,7 +511,7 @@ void recordComposite(const gfx_api::RenderPassContext& passCtx)
 	constants.sensorColor = glm::vec4(0.20f, 0.85f, 1.00f, 1.f);
 	constants.weaponColor = glm::vec4(1.00f, 0.45f, 0.15f, 1.f);
 	constants.minRangeColor = glm::vec4(0.75f, 0.35f, 1.00f, 1.f);
-	constants.fillAlpha = 0.12f;
+	constants.fillAlpha = FILL_ALPHA;
 	constants.sdfBand = s_sdfCamera.sdfBand;
 	display3d_drawFullscreenTriangle<gfx_api::RangeRingCompositePSO>(constants, scene, depth, sdf);
 }
