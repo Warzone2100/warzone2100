@@ -260,6 +260,9 @@ void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 bool war_getMuzzleFlashLighting();
 void war_setMuzzleFlashLighting(bool muzzleFlashesEnabled);
 
+bool war_getProjectileLighting();
+void war_setProjectileLighting(bool projectilesEnabled);
+
 enum class SSAO_MODE : uint8_t
 {
 	OFF,

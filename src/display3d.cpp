@@ -1775,6 +1775,26 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	}
 }	/* end of function display3DProjectiles */
 
+/// A projectile drawn additively is burning or glowing rather than merely lit, so it throws light on what it passes.
+/// (That comes from the model rather than the weapon.)
+static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD)
+{
+	if (!war_getProjectileLighting() || !war_getPointLightPerPixelLighting() || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		return;
+	}
+
+	LIGHT light;
+	light.position = lightPosition;
+	// The graphic already says how big the glow is, so calculate reach and brightness from it.
+	constexpr float referencePlumeRadius = 32.f; // the medium rocket plume, where the values here were set
+	const float plumeScale = glm::clamp(static_cast<float>(pIMD->radius) / referencePlumeRadius, 0.5f, 2.f);
+	light.range = static_cast<UDWORD>(320.f * plumeScale);
+	light.colour = (psStats->weaponClass == WC_HEAT) ? pal_Colour(150, 205, 255) : pal_Colour(255, 170, 90);
+	light.intensity = 1.25f * plumeScale;
+	getCurrentLightingData().lights.push_back(light);
+}
+
 /// Draw a projectile to the screen
 void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -1837,6 +1857,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
+	bool alreadyLitTheWorld = false;
 	for (; pIMD != nullptr; pIMD = pIMD->next.get())
 	{
 		bool rollToCamera = false;
@@ -1865,6 +1886,14 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		{
 			additive = false;
 			premultiplied = true;
+		}
+
+		// One light for the projectile (not one per part), since the parts are the same glow
+		if ((additive || premultiplied) && !alreadyLitTheWorld)
+		{
+			// A light is positioned by game coordinates, where the height is the middle component
+			addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pIMD);
+			alreadyLitTheWorld = true;
 		}
 
 		Vector3i camera = camera_base;
