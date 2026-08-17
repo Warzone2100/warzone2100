@@ -1064,6 +1064,13 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_SCENE_FOG, program_data{ .friendly_name = "Scene fog program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_fog.frag",
 		.uniform_names = {},
 		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RANGE_RING_SDF, program_data{ .friendly_name = "Range ring SDF program", .vertex_file = "shaders/range_ring_sdf.vert", .fragment_file = "shaders/range_ring_sdf.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RANGE_RING_COMPOSITE, program_data{ .friendly_name = "Range ring composite program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/range_ring_composite.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1}, {"rangeRingSdf", 2} },
 		.uniform_block_names = { "cbuffer" } })
 };
 

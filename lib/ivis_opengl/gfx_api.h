@@ -1954,6 +1954,72 @@ namespace gfx_api
 		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // scene
 		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // prepassDepth
 	>, SHADER_SCENE_FOG>;
+
+	template<>
+	struct constant_buffer_type<SHADER_RANGE_RING_SDF>
+	{
+		glm::mat4 orthoViewProj;
+	};
+	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_SDF>) == 64, "Range ring SDF cbuffer std140 size");
+
+	struct RangeRingInstance
+	{
+		glm::vec4 centerRadius; // x, z, R, pad
+	};
+	static_assert(sizeof(RangeRingInstance) == 16, "RangeRingInstance stride");
+
+	template<uint8_t ColorMask>
+	using RangeRingSdfMaskedPSO = typename gfx_api::pipeline_state_helper<
+		rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, ColorMask,
+			polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>,
+		primitive_type::triangles, index_type::u16,
+		std::tuple<constant_buffer_type<SHADER_RANGE_RING_SDF>>,
+		std::tuple<
+			vertex_buffer_description<sizeof(glm::vec4), vertex_attribute_input_rate::vertex,
+				vertex_attribute_description<position, vertex_attribute_type::float4, 0>>,
+			vertex_buffer_description<sizeof(RangeRingInstance), vertex_attribute_input_rate::instance,
+				vertex_attribute_description<instance_packedValues, vertex_attribute_type::float4, 0>>
+		>,
+		notexture,
+		SHADER_RANGE_RING_SDF>;
+
+	using RangeRingSdfSensorPSO = RangeRingSdfMaskedPSO<0x01>;
+	using RangeRingSdfWeaponPSO = RangeRingSdfMaskedPSO<0x02>;
+	using RangeRingSdfMinPSO = RangeRingSdfMaskedPSO<0x04>;
+
+	template<>
+	struct constant_buffer_type<SHADER_RANGE_RING_COMPOSITE>
+	{
+		glm::mat4 invProjectionMatrix;
+		glm::mat4 invViewMatrix;
+		glm::vec4 uvScaleClamp;
+		glm::vec4 sdfOriginExtent;
+		glm::vec4 sdfUvScaleClamp;
+		glm::vec4 sensorColor;
+		glm::vec4 weaponColor;
+		glm::vec4 minRangeColor;
+		float fillAlpha;
+		float padding0;
+		float padding1;
+		float padding2;
+	};
+	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_COMPOSITE>) == 240, "Range ring composite cbuffer std140 size");
+
+	using RangeRingCompositePSO = typename gfx_api::pipeline_state_helper<
+		rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255,
+			polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>,
+		primitive_type::triangles, index_type::u16,
+		std::tuple<constant_buffer_type<SHADER_RANGE_RING_COMPOSITE>>,
+		std::tuple<
+			vertex_buffer_description<2 * sizeof(gfxFloat), vertex_attribute_input_rate::vertex,
+				vertex_attribute_description<position, vertex_attribute_type::float2, 0>>
+		>,
+		std::tuple<
+			texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>, // scene
+			texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>, // prepassDepth
+			texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d> // rangeRingSdf
+		>,
+		SHADER_RANGE_RING_COMPOSITE>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)
