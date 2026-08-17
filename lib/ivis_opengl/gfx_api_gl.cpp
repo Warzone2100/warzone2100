@@ -1011,7 +1011,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		.uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_WATER_HIGH, program_data{ .friendly_name = "high water program", .vertex_file = "shaders/terrain_water_high.vert", .fragment_file = "shaders/terrain_water_high.frag",
 		.uniform_names = {}, .additional_samplers = { {"tex", 0}, {"tex_nm", 1}, {"tex_sm", 2}, {"lightmap_tex", 3}, {"shadowMap", 4} },
-		.uniform_block_names = { "cbuffer" } }),
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
 	std::make_pair(SHADER_WATER_CLASSIC, program_data{ .friendly_name = "classic water program", .vertex_file = "shaders/terrain_water_classic.vert", .fragment_file = "shaders/terrain_water_classic.frag",
 		.uniform_names = {}, .additional_samplers = { {"lightmap_tex", 0}, {"tex2", 1} },
 		.uniform_block_names = { "cbuffer" } }),

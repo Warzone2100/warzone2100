@@ -1605,10 +1605,17 @@ namespace gfx_api
 		float timeSec;
 		float mipLoadBias;
 		float pad0 = 0.f;
+		int viewportWidth;
+		int viewportHeight;
+		int bucketDimensionUsed;
+		float pad1 = 0.f;
+		// The bucket table is last because its length follows the grid dimension, which may become variable.
+		// (Anything placed after it would shift whenever that changed.)
+		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_WATER_HIGH>>,
+	std::tuple<constant_buffer_type<SHADER_WATER_HIGH>, PointLightsUniforms>,
 	std::tuple<
 	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, std::tuple<
