@@ -3,6 +3,7 @@
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 orthoViewProj;
 	vec4 mapOriginExtent; // xy origin.xz, zw size.xz
+	vec4 sdfParams; // x = sdfBand
 };
 
 layout(location = 0) in vec3 worldPos;
@@ -26,10 +27,11 @@ void main()
 	{
 		sdf = max(diskSdf, sdBox(worldPos.xz, mapOriginExtent.xy, mapOriginExtent.zw));
 	}
-	if (sdf > 0.25 * R)
+	if (sdf > sdfParams.x)
 	{
 		discard;
 	}
-	float encoded = 0.5 + 0.5 * clamp(sdf / R, -1.0, 1.0);
+	float band = max(sdfParams.x, 1e-3);
+	float encoded = 0.5 + 0.5 * clamp(sdf / band, -1.0, 1.0);
 	FragColor = vec4(encoded, encoded, encoded, 1.0);
 }

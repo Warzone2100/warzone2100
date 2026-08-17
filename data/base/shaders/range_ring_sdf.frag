@@ -8,6 +8,7 @@
 layout(std140) uniform cbuffer {
 	mat4 orthoViewProj;
 	vec4 mapOriginExtent; // xy origin.xz, zw size.xz
+	vec4 sdfParams; // x = sdfBand
 };
 
 #ifdef NEWGL
@@ -37,11 +38,12 @@ void main()
 		// Boundary of the intersection of the disk and the map, so the isocontour follows the map edge when range is clipped.
 		sdf = max(diskSdf, sdBox(worldPos.xz, mapOriginExtent.xy, mapOriginExtent.zw));
 	}
-	if (sdf > 0.25 * R)
+	if (sdf > sdfParams.x)
 	{
 		discard;
 	}
-	float encoded = 0.5 + 0.5 * clamp(sdf / R, -1.0, 1.0);
+	float band = max(sdfParams.x, 1e-3);
+	float encoded = 0.5 + 0.5 * clamp(sdf / band, -1.0, 1.0);
 	#ifdef NEWGL
 	FragColor = vec4(encoded, encoded, encoded, 1.0);
 	#else

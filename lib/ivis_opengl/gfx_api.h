@@ -1960,8 +1960,9 @@ namespace gfx_api
 	{
 		glm::mat4 orthoViewProj;
 		glm::vec4 mapOriginExtent; // xy origin.xz, zw size.xz (0 size = no clip)
+		glm::vec4 sdfParams; // x = sdfBand in world units (8-bit encode range)
 	};
-	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_SDF>) == 80, "Range ring SDF cbuffer std140 size");
+	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_SDF>) == 96, "Range ring SDF cbuffer std140 size");
 
 	struct RangeRingInstance
 	{
@@ -2000,7 +2001,7 @@ namespace gfx_api
 		glm::vec4 weaponColor;
 		glm::vec4 minRangeColor;
 		float fillAlpha;
-		float padding0;
+		float sdfBand;
 		float padding1;
 		float padding2;
 	};

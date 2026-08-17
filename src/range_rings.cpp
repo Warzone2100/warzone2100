@@ -62,6 +62,7 @@ constexpr size_t CONE_VERTEX_COUNT = static_cast<size_t>(CONE_SIDES) + 1;
 constexpr size_t CONE_INDEX_COUNT = static_cast<size_t>(CONE_SIDES) * 3;
 constexpr float ORTHO_PAD = static_cast<float>(TILE_UNITS);
 constexpr float CAMERA_HEIGHT_SLACK = 64.f;
+constexpr float SDF_BAND_TEXELS = 8.f;
 
 gfx_api::buffer* s_coneVBO = nullptr;
 gfx_api::buffer* s_coneIBO = nullptr;
@@ -86,6 +87,7 @@ struct SdfCamera
 	glm::vec4 originExtent{0.f, 0.f, 1.f, 1.f};
 	glm::vec4 mapOriginExtent{0.f}; // 0 size = do not clip to map
 	float maxR = 1.f;
+	float sdfBand = 1.f;
 };
 
 SdfCamera s_sdfCamera;
@@ -116,23 +118,20 @@ void includeXZ(float x, float z, float& minX, float& maxX, float& minZ, float& m
 	maxZ = std::max(maxZ, z);
 }
 
-void includeDisk(float x, float z, float r, float& minX, float& maxX, float& minZ, float& maxZ, bool& any)
-{
-	includeXZ(x - r, z, minX, maxX, minZ, maxZ, any);
-	includeXZ(x + r, z, minX, maxX, minZ, maxZ, any);
-	includeXZ(x, z - r, minX, maxX, minZ, maxZ, any);
-	includeXZ(x, z + r, minX, maxX, minZ, maxZ, any);
-}
-
-void includeInstanceAabbs(const std::vector<gfx_api::RangeRingInstance>& list,
-	float& minX, float& maxX, float& minZ, float& maxZ, bool& any, float& maxR)
+void scanMaxR(const std::vector<gfx_api::RangeRingInstance>& list, float& maxR)
 {
 	for (const gfx_api::RangeRingInstance& inst : list)
 	{
-		const float r = inst.centerRadius.z * CONE_RIM_RADIUS;
-		includeDisk(inst.centerRadius.x, inst.centerRadius.y, r, minX, maxX, minZ, maxZ, any);
 		maxR = std::max(maxR, inst.centerRadius.z);
 	}
+}
+
+float sdfBandForExtent(float extentX, float extentZ)
+{
+	std::pair<uint32_t, uint32_t> rt = gfx_api::context::get().usedPipelineSurfaceExtent(gfx_api::PipelineSurfaceId::RangeRingSdf);
+	const float w = std::max(static_cast<float>(rt.first), 1.f);
+	const float h = std::max(static_cast<float>(rt.second), 1.f);
+	return SDF_BAND_TEXELS * std::max(extentX / w, extentZ / h);
 }
 
 SdfCamera fitOrtho(const InGame3DFrameContext& fc)
@@ -143,10 +142,9 @@ SdfCamera fitOrtho(const InGame3DFrameContext& fc)
 	float maxZ = 0.f;
 	bool any = false;
 	float maxR = 1.f;
-
-	includeInstanceAabbs(s_sensor, minX, maxX, minZ, maxZ, any, maxR);
-	includeInstanceAabbs(s_weapon, minX, maxX, minZ, maxZ, any, maxR);
-	includeInstanceAabbs(s_minRange, minX, maxX, minZ, maxZ, any, maxR);
+	scanMaxR(s_sensor, maxR);
+	scanMaxR(s_weapon, maxR);
+	scanMaxR(s_minRange, maxR);
 
 	const glm::mat4 inv = glm::inverse(fc.perspectiveViewMatrix);
 	std::array<glm::vec3, 8> corners {};
@@ -231,6 +229,7 @@ SdfCamera fitOrtho(const InGame3DFrameContext& fc)
 		degenerate.originExtent = glm::vec4(0.f, 0.f, 1.f, 1.f);
 		degenerate.mapOriginExtent = mapWorldOriginExtent();
 		degenerate.maxR = 1.f;
+		degenerate.sdfBand = 1.f;
 		return degenerate;
 	}
 
@@ -261,6 +260,7 @@ SdfCamera fitOrtho(const InGame3DFrameContext& fc)
 	cam.originExtent = glm::vec4(minX, minZ, maxX - minX, maxZ - minZ);
 	cam.mapOriginExtent = mapWorldOriginExtent();
 	cam.maxR = maxR;
+	cam.sdfBand = sdfBandForExtent(cam.originExtent.z, cam.originExtent.w);
 	return cam;
 }
 
@@ -378,6 +378,7 @@ void recordSdf(const std::vector<gfx_api::RangeRingInstance>& instances, gfx_api
 	gfx_api::constant_buffer_type<SHADER_RANGE_RING_SDF> constants {};
 	constants.orthoViewProj = s_sdfCamera.viewProj;
 	constants.mapOriginExtent = s_sdfCamera.mapOriginExtent;
+	constants.sdfParams = glm::vec4(s_sdfCamera.sdfBand, 0.f, 0.f, 0.f);
 	auto& pso = Pso::get();
 	pso.bind();
 	pso.bind_constants(constants);
@@ -510,6 +511,7 @@ void recordComposite(const gfx_api::RenderPassContext& passCtx)
 	constants.weaponColor = glm::vec4(1.00f, 0.45f, 0.15f, 1.f);
 	constants.minRangeColor = glm::vec4(0.75f, 0.35f, 1.00f, 1.f);
 	constants.fillAlpha = 0.12f;
+	constants.sdfBand = s_sdfCamera.sdfBand;
 	display3d_drawFullscreenTriangle<gfx_api::RangeRingCompositePSO>(constants, scene, depth, sdf);
 }
 
