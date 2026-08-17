@@ -60,12 +60,14 @@ jobs:
       fail-fast: false
     name: '${{ matrix.name }}'
     permissions:
-      contents: write # Needed to upload to releases
+      contents: read
       # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
       id-token: write
       attestations: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    # Release runs tolerate failures from non-published builds
+    continue-on-error: ${{ !matrix.deploy_release && github.event_name == 'workflow_run' }}
     outputs:
       # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
@@ -233,16 +235,190 @@ jobs:
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH }}'
-      - name: Upload artifacts to release
-        if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
+      - name: List Release Assets
+        if: success() && (matrix.deploy_release == true) && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
+        run: |
+          mkdir -p "${GITHUB_WORKSPACE}/output"
+          RELEASE_ASSETS_LIST="${GITHUB_WORKSPACE}/output/release_assets_${{ matrix.output-suffix }}_${{ matrix.arch }}.txt"
+          basename "${WZ_FULL_OUTPUT_DEB_PATH}" > "${RELEASE_ASSETS_LIST}"
+          basename "${WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH}" >> "${RELEASE_ASSETS_LIST}"
+          echo "RELEASE_ASSETS_LIST=${RELEASE_ASSETS_LIST}" >> $GITHUB_ENV
+      - name: 'Upload Artifact - (Release Assets List)'
+        if: success() && (matrix.deploy_release == true) && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.RELEASE_ASSETS_LIST }}
+          archive: false
+          if-no-files-found: 'error'
+
+  sign-build-manifest:
+    name: 'Sign Build Manifests'
+    permissions:
+      contents: read
+      # Signing rewrites the packages, so they need an attestation for their new digest
+      id-token: write
+      attestations: write
+    needs: ubuntu-build
+    runs-on: ubuntu-latest
+    # For this job to work, the following must be set in the 'sign_buildmanifest' environment:
+    # WZ_BUILDMANIFEST_KEY (secret), WZ_BUILDMANIFEST_KEY_ID (variable)
+    environment: sign_buildmanifest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    outputs:
+      signedfiles: ${{ steps.output-result.outputs.signedfiles }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          path: 'src'
+      - name: Build wzbuildmanifest tool
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        run: |
+          # Built from source here rather than taken from the build jobs,
+          # so that the signing key is never handed to a binary those jobs produced
+          sudo apt-get update
+          sudo apt-get install -y libsodium-dev ninja-build
+          cmake -S "${GITHUB_WORKSPACE}/src/tools/buildmanifest" -B "${GITHUB_WORKSPACE}/buildmanifest" -DCMAKE_BUILD_TYPE=Release -G"Ninja"
+          cmake --build "${GITHUB_WORKSPACE}/buildmanifest"
+          echo "WZ_BUILDMANIFEST_TOOL=${GITHUB_WORKSPACE}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
+      - name: Download Release Assets Lists
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'release_assets_*.txt'
+          path: ./dl-lists
+          merge-multiple: true
+      - name: Download .DEB Packages
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'warzone2100_*.deb'
+          path: ./dl-debs
+          merge-multiple: true
+      - name: Sign Manifests
+        id: sign
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        env:
+          WZ_BUILDMANIFEST_KEY: ${{ secrets.WZ_BUILDMANIFEST_KEY }}
+          WZ_BUILDMANIFEST_KEY_ID: ${{ vars.WZ_BUILDMANIFEST_KEY_ID }}
+        run: |
+          if [ -z "${WZ_BUILDMANIFEST_KEY}" ]; then
+            echo "::error ::WZ_BUILDMANIFEST_KEY_ID is set but the WZ_BUILDMANIFEST_KEY secret is not"
+            exit 1
+          fi
+          mkdir -p "${GITHUB_WORKSPACE}/signed-debs"
+          for name in $(cat ./dl-lists/*.txt | grep '\.deb$'); do
+            deb="./dl-debs/${name}"
+            echo "::group::${name}"
+            work="$(mktemp -d)/pkg"
+            dpkg-deb -R "${deb}" "${work}"
+            cmake -DWZBM_TOOL="${WZ_BUILDMANIFEST_TOOL}" -DWZBM_PACKAGE_DIR="${work}" -DWZBM_KEY_ID="${WZ_BUILDMANIFEST_KEY_ID}" -P "${GITHUB_WORKSPACE}/src/pkg/buildmanifest_sign_package.cmake"
+            # Keep the package's md5sums in step with the re-signed manifest
+            manifest="$(cd "${work}" && find . -name '*.buildmanifest' -printf '%P\n')"
+            grep -q "  ${manifest}\$" "${work}/DEBIAN/md5sums"
+            sed -i "s|^[0-9a-f]*  ${manifest}\$|$(cd "${work}" && md5sum "${manifest}")|" "${work}/DEBIAN/md5sums"
+            # Repack with the original data compression
+            case "$(ar t "${deb}" | sed -n 's/^data\.tar\.//p')" in
+              gz) compression="gzip" ;;
+              xz) compression="xz" ;;
+              zst) compression="zstd" ;;
+              *) compression="none" ;;
+            esac
+            dpkg-deb --root-owner-group -Z"${compression}" -b "${work}" "${GITHUB_WORKSPACE}/signed-debs/${name}"
+            rm -rf "$(dirname "${work}")"
+            echo "::endgroup::"
+          done
+          ls -l "${GITHUB_WORKSPACE}/signed-debs"
+      - name: 'Generate artifact attestations - (Manifest-Signed Packages)'
+        if: (steps.sign.outcome == 'success')
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}/signed-debs/*'
+      - name: 'Upload Artifact - Manifest-Signed Packages'
+        if: (steps.sign.outcome == 'success')
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'wz_ubuntu_manifest_signed'
+          path: '${{ github.workspace }}/signed-debs/*'
+          if-no-files-found: 'error'
+      - name: Output Result
+        id: output-result
+        env:
+          SIGN_STEP_OUTCOME: ${{ steps.sign.outcome }}
+        run: |
+          signedfiles="false"
+          if [ "${SIGN_STEP_OUTCOME}" == "success" ]; then
+            signedfiles="true"
+          fi
+          echo "signedfiles=${signedfiles}"
+          echo "signedfiles=${signedfiles}" >> $GITHUB_OUTPUT
+
+  upload-release:
+    name: 'Upload Release Assets'
+    permissions:
+      contents: write # Needed to upload to releases
+    runs-on: ubuntu-latest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    needs: [ubuntu-build, sign-build-manifest]
+    env:
+      WZ_GITHUB_REF: ${{ needs.ubuntu-build.outputs.WZ_GITHUB_REF }}
+    steps:
+      - name: Prep Environment
+        run: mkdir upload-assets && mkdir upload-assets-signed
+      - name: Download Release Assets Lists
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'release_assets_*.txt'
+          path: ./release-lists
+          merge-multiple: true
+      - name: Download .DEB Packages
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'warzone2100_*.deb'
+          path: ./upload-assets
+          merge-multiple: true
+      - name: Download Debug Symbols
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'warzone2100_*.DEBUGSYMBOLS.7z'
+          path: ./upload-assets
+          merge-multiple: true
+      - name: List Assets
+        run: ls -LRl ./upload-assets
+      - name: Download Manifest-Signed Packages
+        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v8
+        with:
+          name: 'wz_ubuntu_manifest_signed'
+          path: ./upload-assets-signed
+          merge-multiple: true
+      - name: Replace Unsigned with Manifest-Signed Packages
+        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
+        run: |
+          for file in ./upload-assets-signed/*; do
+            filename="${file##*/}"
+            dest="./upload-assets/${filename}"
+            if [ ! -f "${dest}" ]; then
+              echo "::warning ::Missing original (unsigned) file - ${filename} ?"
+            fi
+            echo "Replacing with manifest-signed: ${filename}"
+            mv -f "${file}" "${dest}"
+          done
+          ls -LRl ./upload-assets
+      - name: Upload Release Assets
+        working-directory: '${{ github.workspace }}/upload-assets/'
         run: |
           SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
-          gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_DEB_PATH }}"
-          gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH }}"
+          for file in $(cat ../release-lists/*.txt); do
+            echo "Uploading: $file"
+            gh release upload "${SOURCE_TAG}" "./$file"
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   package-source:
     name: Package Source (Ubuntu 24.04) [GCC]
