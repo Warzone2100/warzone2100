@@ -199,7 +199,8 @@ static float pointLightDistanceCalc(const renderingNew::LightingManager::Calcula
 
 void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, LightMap&, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene)
 {
-	PointLightBuckets result;
+	// Reuse last frame's storage rather than allocating a fresh set every frame
+	PointLightBuckets result = std::move(currentPointLightBuckets);
 	result.reset();
 	const auto& lightCapacity = gfx_api::activeLightCapacity();
 	const bool yAxisInverted = gfx_api::context::get().isYAxisInverted();
@@ -527,13 +528,15 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		}
 	}
 
-	// pack the index
-	for (size_t i = 0; i < lightList.size(); i++)
+	// pack the index (only as far as the buckets filled)
+	for (size_t i = 0; i < overallId; i++)
 	{
 		result.light_index[i / 4][i % 4] = static_cast<int>(lightList[i]);
 	}
 
 	result.bucketDimensionUsed = bucketDimension;
+	result.lightsUsed = culledLights.size();
+	result.indexEntriesUsed = overallId;
 
 	currentPointLightBuckets = std::move(result);
 }
@@ -542,15 +545,19 @@ const ILightingManager::FlatPointLightData& ILightingManager::getFlatPointLightD
 {
 	const auto& buckets = currentPointLightBuckets;
 	const auto& capacity = gfx_api::activeLightCapacity();
+	// Held at capacity so the buffers behind them are sized once - but only the live part is rewritten.
+	// What lies past it is from a prior frame, which nothing indexes.
 	currentFlatPointLightData.lights.resize(capacity.maxLights * 3);
 	currentFlatPointLightData.indices.resize(capacity.maxIndexedLights * 4);
-	for (size_t i = 0; i < capacity.maxLights; ++i)
+	const size_t lightsUsed = std::min(buckets.lightsUsed, capacity.maxLights);
+	for (size_t i = 0; i < lightsUsed; ++i)
 	{
 		currentFlatPointLightData.lights[i * 3] = buckets.positions[i];
 		currentFlatPointLightData.lights[i * 3 + 1] = buckets.colorAndEnergy[i];
 		currentFlatPointLightData.lights[i * 3 + 2] = buckets.directionAndCos[i];
 	}
-	for (size_t i = 0; i < capacity.maxIndexedLights; ++i)
+	const size_t packedUsed = std::min((buckets.indexEntriesUsed + 3) / 4, capacity.maxIndexedLights);
+	for (size_t i = 0; i < packedUsed; ++i)
 	{
 		const glm::ivec4& packed = buckets.light_index[i];
 		currentFlatPointLightData.indices[i * 4] = packed.x;
