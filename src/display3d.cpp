@@ -125,9 +125,6 @@ static void	processSensorTarget();
 static void	processDestinationTarget();
 static bool	eitherSelected(DROID *psDroid);
 static void	structureEffects();
-static void	showDroidSensorRanges();
-static void	showSensorRange2(BASE_OBJECT *psObj);
-static void	drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
 static void	doConstructionLines(const glm::mat4 &viewMatrix);
 static void	drawDroidCmndNo(DROID *psDroid);
@@ -171,8 +168,6 @@ static std::unique_ptr<rendering1999::LightingManager> lightmapLightingManager;
 // To get the real camera position, still need to add Vector3i(player.p.x, 0, player.p.z).
 static Vector3i actualCameraPosition;
 
-static bool	bRangeDisplay = false;
-static SDWORD	rangeCenterX, rangeCenterY, rangeRadius;
 static bool	bDrawProximitys = true;
 bool	godMode;
 bool	showGateways = false;
@@ -4195,115 +4190,14 @@ static void structureEffects()
 	}
 }
 
-/// Show the sensor ranges of selected droids and buildings
-static void	showDroidSensorRanges()
-{
-	static uint32_t lastRangeUpdateTime = 0;
-
-	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
-
-	if (rangeOnScreen
-		&& (graphicsTime - lastRangeUpdateTime) >= 50)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
-	{
-		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
-		{
-			if (psDroid->selected)
-			{
-				showSensorRange2((BASE_OBJECT *)psDroid);
-			}
-		}
-
-		for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
-		{
-			if (psStruct->selected)
-			{
-				showSensorRange2((BASE_OBJECT *)psStruct);
-			}
-		}
-
-		lastRangeUpdateTime = graphicsTime;
-	}//end if we want to display...
-}
-
-static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, EFFECT_GROUP group, EFFECT_TYPE type)
-{
-	const int32_t circumference = radius * 2 * 355 / 113 / TILE_UNITS; // 2πr in tiles.
-	for (int i = 0; i < circumference; ++i)
-	{
-		Vector3i pos;
-		pos.x = centre.x - iSinSR(i, circumference, radius);
-		pos.z = centre.y - iCosSR(i, circumference, radius);  // [sic] y -> z
-
-		// Check if it's actually on map
-		if (worldOnMap(gameWorld.map, pos.x, pos.z))
-		{
-			pos.y = map_Height(gameWorld.map, pos.x, pos.z) + 16;
-			effectGiveAuxVar(auxVar);
-			addEffect(&pos, group, type, false, nullptr, 0);
-		}
-	}
-}
-
-// Shows the weapon (long) range of the object in question.
-// Note, it only does it for the first weapon slot!
-static void showWeaponRange(BASE_OBJECT *psObj)
-{
-	WEAPON_STATS *psStats;
-
-	if (psObj->type == OBJ_DROID)
-	{
-		DROID *psDroid = (DROID *)psObj;
-		const int compIndex = psDroid->asWeaps[0].nStat;	// weapon_slot
-		ASSERT_OR_RETURN(, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", compIndex, asWeaponStats.size());
-		psStats = &asWeaponStats[compIndex];
-	}
-	else
-	{
-		STRUCTURE *psStruct = (STRUCTURE *)psObj;
-		if (psStruct->pStructureType->numWeaps == 0)
-		{
-			return;
-		}
-		psStats = psStruct->pStructureType->psWeapStat[0];
-	}
-	const unsigned weaponRange = proj_GetLongRange(*psStats, psObj->player);
-	const unsigned minRange = proj_GetMinRange(*psStats, psObj->player);
-	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
-	if (minRange > 0)
-	{
-		showEffectCircle(psObj->pos, minRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA);
-	}
-}
-
-static void showSensorRange2(BASE_OBJECT *psObj)
-{
-	showEffectCircle(psObj->pos, objSensorRange(psObj), 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
-	showWeaponRange(psObj);
-}
-
-/// Draw a circle on the map (to show the range of something)
-static void drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
-{
-	Position pos(centerX, centerY, 0);  // .z ignored.
-	showEffectCircle(pos, radius, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
-}
-
-/** Turn on drawing some effects at certain position to visualize the radius.
- * \note Pass a negative radius to turn this off
+/** Turn on drawing a range ring at a position to visualize the radius.
+ * \note Pass a non-positive radius to turn this off
  */
 void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
-	rangeCenterX = centerX;
-	rangeCenterY = centerY;
-	rangeRadius = radius;
-
-	bRangeDisplay = true;
-
-	if (radius <= 0)
-	{
-		bRangeDisplay = false;
-	}
+	range_rings::setDebugRange(static_cast<float>(centerX), static_cast<float>(centerY), static_cast<float>(radius));
 }
+
 UDWORD  getDroidRankGraphicFromLevel(unsigned int level)
 {
 	UDWORD gfxId = UDWORD_MAX;
@@ -4853,7 +4747,6 @@ void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext&)
 	{
 		return;
 	}
-	showDroidSensorRanges();
 	if (CauseCrash)
 	{
 		char *crash = nullptr;
@@ -4879,11 +4772,6 @@ void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext&)
 #endif
 		exit(-1);
 	}
-	if (bRangeDisplay)
-	{
-		drawRangeAtPos(rangeCenterX, rangeCenterY, rangeRadius);
-	}
-
 	if (showPath)
 	{
 		showDroidPaths(gameWorld);
