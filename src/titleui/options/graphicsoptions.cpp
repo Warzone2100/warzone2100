@@ -371,6 +371,26 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true, 1);
 	}
+	{
+		auto optionInfo = OptionInfo("gfx.projectileLights", N_("Projectile Lights"), N_("Whether burning and glowing projectiles light what they pass. (May impact performance. Requires a more powerful GPU.)"));
+		optionInfo.addAvailabilityCondition(PerPixelLightingEnabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_getProjectileLighting());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setProjectileLighting(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
 
 	// Effects:
 	result->addSection(OptionsSection(N_("Effects"), ""), true);
