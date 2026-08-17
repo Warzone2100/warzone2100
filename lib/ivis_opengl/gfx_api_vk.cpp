@@ -1301,6 +1301,8 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_SSAO_DOWNSAMPLE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_downsample.frag.spv" }),
 	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/scene_compose_ssao.frag.spv" }),
 	std::make_pair(SHADER_SCENE_FOG, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/scene_fog.frag.spv" }),
+	std::make_pair(SHADER_RANGE_RING_SDF, shader_infos{ "shaders/vk/range_ring_sdf.vert.spv", "shaders/vk/range_ring_sdf.frag.spv" }),
+	std::make_pair(SHADER_RANGE_RING_COMPOSITE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/range_ring_composite.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
