@@ -3,10 +3,9 @@
 
 // See https://lisyarus.github.io/blog/graphics/2022/07/30/point-light-attenuation.html for explanation
 // we want something that looks somewhat physically correct, but must absolutely be 0 past range
-float pointLightEnergyAtPosition(vec3 pointLightVector, float range)
+float pointLightEnergyAtPosition(float distanceSq, float rangeSq)
 {
-	float normalizedDistance = length(pointLightVector) / range; //to-do: make range based on effect size
-	float sqNormDist = normalizedDistance * normalizedDistance;
+	float sqNormDist = distanceSq / rangeSq;
 	float numerator = max(1.f - sqNormDist, 0.f);
 	return numerator * numerator / ( 1.f + 2.f * sqNormDist);
 }
@@ -14,7 +13,7 @@ float pointLightEnergyAtPosition(vec3 pointLightVector, float range)
 // How much of the cone a fragment sits in.
 // A cosOuter of -1 means the light has no cone (which is what every light without a direction carries), so this returns 1 and nothing changes.
 // The inner edge is derived from the outer rather than stored, which keeps the transport to one vec4 per light and costs a constant.
-float pointLightConeFactor(vec3 pointLightVector, vec4 directionAndCos)
+float pointLightConeFactor(vec3 toFragment, vec4 directionAndCos)
 {
 	if (directionAndCos.w <= -1.f)
 	{
@@ -25,17 +24,29 @@ float pointLightConeFactor(vec3 pointLightVector, vec4 directionAndCos)
 	const float coneSoftness = 0.5f;
 	float cosOuter = directionAndCos.w;
 	float cosInner = mix(cosOuter, 1.f, coneSoftness);
-	float alignment = dot(normalize(-pointLightVector), directionAndCos.xyz);
+	float alignment = dot(toFragment, directionAndCos.xyz);
 	return smoothstep(cosOuter, cosInner, alignment);
 }
 
 vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, float pointLightIntensity, vec4 pointLightDirectionAndCos, mat3 spaceMatrix)
 {
 	vec3 pointLightVector = pointLightWorldPosition - WorldFragPos;
-	vec3 pointLightDir = spaceMatrix * normalize(pointLightVector);
 
-	float distanceFalloff = pointLightEnergyAtPosition(pointLightVector, pointLightEnergy);
-	float coneFalloff = pointLightConeFactor(pointLightVector, pointLightDirectionAndCos);
+	// Past the light's reach the attenuation below is zero, so return early before paying the cost for the calculations.
+	// Every caller takes only the color from this, so leaving with a zero alpha costs nothing.
+	float distanceSq = dot(pointLightVector, pointLightVector);
+	float rangeSq = pointLightEnergy * pointLightEnergy;
+	if (distanceSq >= rangeSq)
+	{
+		return vec4(0.f);
+	}
+
+	float inverseDistance = inversesqrt(max(distanceSq, 1e-8f));
+	vec3 lightToFragment = -pointLightVector * inverseDistance;
+	vec3 pointLightDir = spaceMatrix * (pointLightVector * inverseDistance);
+
+	float distanceFalloff = pointLightEnergyAtPosition(distanceSq, rangeSq);
+	float coneFalloff = pointLightConeFactor(lightToFragment, pointLightDirectionAndCos);
 	float energy = distanceFalloff * coneFalloff * pointLightIntensity;
 
 	// For cone lights, have the spread lose its blue and then its green toward the rim and toward the edge of the cone.
@@ -62,7 +73,12 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, v
 	float softenedLambert = max((flatLambert + grazingWrap) / (1.f + grazingWrap), 0.f);
 	float pointLightLambert = mix(max(dot(fragNormal, pointLightDir), 0.f), softenedLambert, grazing);
 	vec3 pointLightHalfVec = normalize(pointLightDir + viewVector);
-	float pointLightBlinn = clamp(pow(max(dot(shadingNormal, pointLightHalfVec), 0.f), 16.f), 0.f, 1.f);
+	// pow(..., 16.f) is four multiplies, and the base is already clamped into range
+	float specBase = max(dot(shadingNormal, pointLightHalfVec), 0.f);
+	float spec2 = specBase * specBase;
+	float spec4 = spec2 * spec2;
+	float spec8 = spec4 * spec4;
+	float pointLightBlinn = min(spec8 * spec8, 1.f);
 	return lightColor * (pointLightLambert * albedo + pointLightBlinn * gloss);
 }
 
