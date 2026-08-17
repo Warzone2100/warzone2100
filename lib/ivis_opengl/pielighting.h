@@ -98,16 +98,24 @@ struct ILightingManager
 
 		size_t bucketDimensionUsed = gfx_api::bucket_dimension;
 
-		//! Size the arrays to the active capacity and clear them
+		//! How many entries of the arrays above a frame actually filled. (Everything past these is stale instead of cleared.)
+		size_t lightsUsed = 0;
+		size_t indexEntriesUsed = 0;
+
+		//! Size the arrays to the active capacity.
+		//! Sizing instead of clearing is safe because the bucket table is cleared in full, and bounds every read to the part the frame wrote, so anything
+		//! remaining past that (from a prior frame) can never be indexed.
 		void reset()
 		{
 			const auto& capacity = gfx_api::activeLightCapacity();
-			positions.assign(capacity.maxLights, glm::vec4(0.f));
-			colorAndEnergy.assign(capacity.maxLights, glm::vec4(0.f));
-			directionAndCos.assign(capacity.maxLights, glm::vec4(0.f, 0.f, 0.f, LIGHT_OMNIDIRECTIONAL));
+			positions.resize(capacity.maxLights);
+			colorAndEnergy.resize(capacity.maxLights);
+			directionAndCos.resize(capacity.maxLights);
+			light_index.resize(capacity.maxIndexedLights);
 			bucketOffsetAndSize = {};
-			light_index.assign(capacity.maxIndexedLights, glm::ivec4(0));
 			bucketDimensionUsed = capacity.bucketDimension;
+			lightsUsed = 0;
+			indexEntriesUsed = 0;
 		}
 	};
 
