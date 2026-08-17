@@ -6,6 +6,7 @@
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
+#define WZ_POINT_LIGHT_ENABLED 0
 //
 
 
@@ -53,6 +54,7 @@ out vec4 FragColor;
 
 #include "shadow_mapping.glsl"
 #include "light.glsl"
+#include "pointlights.frag"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
@@ -82,6 +84,9 @@ vec4 main_bumpMapping()
 	foam = (foam+pow(length(N.xz),2.5)*1000.0)*d*d ;
 	foam = clamp(foam, 0.0, 0.2);
 	vec3 waterColor = vec3(0.18,0.33,0.42);
+	// Water is a mirror rather than a rough surface, so a point light on it should be mostly highlight.
+	// (But capped to keep the broader shape from washing out.)
+	const float waterGloss = 0.5f;
 
 	// Light
 	float diffuseFactor = lambertTerm(N, lightDir);
@@ -104,6 +109,13 @@ vec4 main_bumpMapping()
 	vec4 lightmap = texture(lightmap_tex, uvLightmap, 0.0);
 	finalColor.rgb = blendAddEffectLighting(finalColor.rgb, (lightmap.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	finalColor.rgb *= lightmap.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+
+#if WZ_POINT_LIGHT_ENABLED == 1
+	// Water needs no tangent frame: its normal is already in model space and the surface it sits on is flat,
+	// so the geometric normal is just up.
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
+	finalColor.rgb += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, vec3(0.f, 1.f, 0.f), normalize(eyeVec), vec4(waterColor, 1.f), waterGloss, mat3(1.f)).rgb;
+#endif
 	return finalColor;
 }
 

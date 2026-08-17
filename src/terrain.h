@@ -61,7 +61,8 @@ void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector
 	const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap,
 	const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights);
 void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
-	const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap);
+	const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap,
+	const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights);
 
 gfx_api::texture* getTerrainLightmapTexture();
 const glm::mat4& getModelUVLightmapMatrix();
