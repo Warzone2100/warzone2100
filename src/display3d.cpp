@@ -89,6 +89,7 @@
 #include "profiling.h"
 #include "warzoneconfig.h"
 #include "ssao.h"
+#include "range_rings.h"
 #include "scene_effect_surfaces.h"
 #include "multistat.h"
 #include "animation.h"
@@ -1466,6 +1467,10 @@ bool init3DView()
 	}
 
 	ssao::init();
+	if (!range_rings::init())
+	{
+		debug(LOG_ERROR, "Failed to initialize range-ring buffers");
+	}
 
 	return true;
 }
@@ -1501,6 +1506,7 @@ void shutdown3DView_FullReset()
 	batchedObjectStatusRenderer.reset();
 
 	ssao::shutdown();
+	range_rings::shutdown();
 
 	setLightingManager(nullptr);
 	perPixelLightingManager.reset();
