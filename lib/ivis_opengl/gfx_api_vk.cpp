@@ -1370,8 +1370,11 @@ std::vector<vk::PipelineShaderStageCreateInfo> VkPSO::get_stages(const vk::Shade
 
 std::array<vk::PipelineColorBlendAttachmentState, 1> VkPSO::to_vk(const REND_MODE& blend_state, const uint8_t& color_mask)
 {
-	const auto full_color_output = vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB;
-	const auto vk_color_mask = color_mask == 0 ? vk::ColorComponentFlags() : full_color_output;
+	vk::ColorComponentFlags vk_color_mask{};
+	if (color_mask & 0x01) { vk_color_mask |= vk::ColorComponentFlagBits::eR; }
+	if (color_mask & 0x02) { vk_color_mask |= vk::ColorComponentFlagBits::eG; }
+	if (color_mask & 0x04) { vk_color_mask |= vk::ColorComponentFlagBits::eB; }
+	if (color_mask & 0x08) { vk_color_mask |= vk::ColorComponentFlagBits::eA; }
 
 	switch (blend_state)
 	{

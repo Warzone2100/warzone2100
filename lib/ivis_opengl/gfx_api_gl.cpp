@@ -1445,10 +1445,11 @@ void gl_pipeline_state_object::bind()
 			break;
 	}
 
-	if (desc.output_mask == 0)
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	else
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glColorMask(
+		(desc.output_mask & 0x01) ? GL_TRUE : GL_FALSE,
+		(desc.output_mask & 0x02) ? GL_TRUE : GL_FALSE,
+		(desc.output_mask & 0x04) ? GL_TRUE : GL_FALSE,
+		(desc.output_mask & 0x08) ? GL_TRUE : GL_FALSE);
 
 	if (desc.offset)
 		glEnable(GL_POLYGON_OFFSET_FILL);
