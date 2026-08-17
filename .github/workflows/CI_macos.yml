@@ -414,6 +414,112 @@ jobs:
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
 
+  macos_sign_manifest:
+    name: 'Sign Build Manifests'
+    permissions:
+      contents: read
+      # Signing rewrites the packages, so they need an attestation for their new digest
+      id-token: write
+      attestations: write
+    needs: macos_universal_combine
+    runs-on: macos-latest
+    # For this job to work, the following must be set in the 'sign_buildmanifest' environment:
+    # WZ_BUILDMANIFEST_KEY (secret), WZ_BUILDMANIFEST_KEY_ID (variable)
+    environment: sign_buildmanifest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    outputs:
+      signedfiles: ${{ steps.output-result.outputs.signedfiles }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          path: 'src'
+      - name: Configure Repo Checkout
+        id: checkout-config
+        working-directory: ./src
+        env:
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          . .ci/githubactions/checkout_config.sh
+      - name: Prepare Git Repo for autorevision
+        working-directory: '${{ github.workspace }}/src'
+        run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+      - name: Build wzbuildmanifest tool
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        run: |
+          # Built from source here rather than taken from the packaging job,
+          # so that the signing key is never handed to a binary that job produced
+          brew install libsodium
+          cmake -S "${{ github.workspace }}/src/tools/buildmanifest" -B "${{ github.workspace }}/buildmanifest" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$(brew --prefix libsodium)"
+          cmake --build "${{ github.workspace }}/buildmanifest"
+          echo "WZ_BUILDMANIFEST_TOOL=${{ github.workspace }}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
+          WZ_BUILDMANIFEST_PUBLISHER=""
+          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+            WZ_BUILDMANIFEST_PUBLISHER="wz2100-project"
+          fi
+          echo "WZ_BUILDMANIFEST_PUBLISHER=${WZ_BUILDMANIFEST_PUBLISHER}" >> $GITHUB_ENV
+      - name: Download Universal Packages
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'warzone2100_macOS_universal*'
+          path: ./dl-packages
+          merge-multiple: true
+      - name: Sign Manifests
+        id: sign
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        env:
+          WZ_BUILDMANIFEST_KEY: ${{ secrets.WZ_BUILDMANIFEST_KEY }}
+          WZ_BUILDMANIFEST_KEY_ID: ${{ vars.WZ_BUILDMANIFEST_KEY_ID }}
+        run: |
+          if [ -z "${WZ_BUILDMANIFEST_KEY}" ]; then
+            echo "::error ::WZ_BUILDMANIFEST_KEY_ID is set but the WZ_BUILDMANIFEST_KEY secret is not"
+            exit 1
+          fi
+          mkdir -p "${GITHUB_WORKSPACE}/signed-packages"
+          for zip in ./dl-packages/*.zip; do
+            name="$(basename "${zip}")"
+            echo "::group::${name}"
+            work="$(mktemp -d)"
+            ent="$(mktemp -d)"
+            chk="$(mktemp -d)"
+            unzip -q "${zip}" -d "${work}"
+            BUNDLE="${work}/Warzone 2100.app"
+            codesign -d --entitlements :- "${BUNDLE}/Contents/MacOS/Warzone 2100" > "${ent}/entitlements.plist"
+            cmake -DWZBM_TOOL="${WZ_BUILDMANIFEST_TOOL}" -DWZBM_APP_BUNDLE="${BUNDLE}" -DWZBM_REPO_DIR="${GITHUB_WORKSPACE}/src" -DWZBM_PLATFORM="macos-universal" -DWZBM_PUBLISHER="${WZ_BUILDMANIFEST_PUBLISHER}" -DWZBM_ENTITLEMENTS="${ent}/entitlements.plist" -P "${GITHUB_WORKSPACE}/src/pkg/buildmanifest_bundle.cmake"
+            (cd "${work}" && zip -qr --symlinks "${GITHUB_WORKSPACE}/signed-packages/${name}" "Warzone 2100.app/")
+            "${GITHUB_WORKSPACE}/src/platforms/macos/BuildBot/check_warzone2100_zip.sh" "${GITHUB_WORKSPACE}/signed-packages/${name}" "${chk}"
+            rm -rf "${work}" "${ent}" "${chk}"
+            echo "::endgroup::"
+          done
+          ls -l "${GITHUB_WORKSPACE}/signed-packages"
+      - name: 'Generate artifact attestations - (Manifest-Signed Packages)'
+        if: (steps.sign.outcome == 'success')
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}/signed-packages/*'
+      - name: 'Upload Artifact - Manifest-Signed Packages'
+        if: (steps.sign.outcome == 'success')
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'wz_macos_manifest_signed'
+          path: '${{ github.workspace }}/signed-packages/*'
+          if-no-files-found: 'error'
+      - name: Output Result
+        id: output-result
+        env:
+          SIGN_STEP_OUTCOME: ${{ steps.sign.outcome }}
+        run: |
+          signedfiles="false"
+          if [ "${SIGN_STEP_OUTCOME}" == "success" ]; then
+            signedfiles="true"
+          fi
+          echo "signedfiles=${signedfiles}"
+          echo "signedfiles=${signedfiles}" >> $GITHUB_OUTPUT
+
   macos_upload_release:
     name: 'Upload Release Assets'
     permissions:
@@ -421,12 +527,12 @@ jobs:
     runs-on: ubuntu-latest
     # Run on tag release automation build
     if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
-    needs: macos_universal_combine
+    needs: [macos_universal_combine, macos_sign_manifest]
     env:
       WZ_GITHUB_REF: ${{ needs.macos_universal_combine.outputs.WZ_GITHUB_REF }}
     steps:
       - name: Prep Environment
-        run: mkdir upload-assets
+        run: mkdir upload-assets && mkdir upload-assets-signed
       - name: Download Release Artifacts
         uses: actions/download-artifact@v8
         with:
@@ -435,6 +541,26 @@ jobs:
           merge-multiple: true
       - name: List Assets
         run: ls -LRl ./upload-assets
+      - name: Download Manifest-Signed Packages
+        if: success() && (needs.macos_sign_manifest.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v8
+        with:
+          name: 'wz_macos_manifest_signed'
+          path: ./upload-assets-signed
+          merge-multiple: true
+      - name: Replace Unsigned with Manifest-Signed Packages
+        if: success() && (needs.macos_sign_manifest.outputs.signedfiles == 'true')
+        run: |
+          for file in ./upload-assets-signed/*; do
+            filename="${file##*/}"
+            dest="./upload-assets/${filename}"
+            if [ ! -f "${dest}" ]; then
+              echo "::warning ::Missing original (unsigned) file - ${filename} ?"
+            fi
+            echo "Replacing with manifest-signed: ${filename}"
+            mv -f "${file}" "${dest}"
+          done
+          ls -LRl ./upload-assets
       - name: Upload Release Assets
         working-directory: '${{ github.workspace }}/upload-assets/'
         run: |

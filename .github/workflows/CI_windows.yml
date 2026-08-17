@@ -671,6 +671,130 @@ jobs:
         path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
         retention-days: 1
         if-no-files-found: 'warn'
+  sign-build-manifest:
+    name: 'Sign Build Manifests'
+    permissions:
+      contents: read
+      # Signing rewrites the archives, so they need an attestation for their new digest
+      id-token: write
+      attestations: write
+    needs: windows-build
+    runs-on: ubuntu-latest
+    # For this job to work, the following must be set in the 'sign_buildmanifest' environment:
+    # WZ_BUILDMANIFEST_KEY (secret), WZ_BUILDMANIFEST_KEY_ID (variable)
+    environment: sign_buildmanifest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    outputs:
+      signedfiles: ${{ steps.output-result.outputs.signedfiles }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          path: 'src'
+      - name: Build wzbuildmanifest tool
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        run: |
+          # Built from source here rather than taken from the build jobs,
+          # so that the signing key is never handed to a binary those jobs produced
+          sudo apt-get update
+          sudo apt-get install -y libsodium-dev ninja-build
+          cmake -S "${GITHUB_WORKSPACE}/src/tools/buildmanifest" -B "${GITHUB_WORKSPACE}/buildmanifest" -DCMAKE_BUILD_TYPE=Release -G"Ninja"
+          cmake --build "${GITHUB_WORKSPACE}/buildmanifest"
+          echo "WZ_BUILDMANIFEST_TOOL=${GITHUB_WORKSPACE}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
+      - name: Download Architecture Archives
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        uses: actions/download-artifact@v8
+        with:
+          pattern: 'warzone2100_win_*_archive'
+          path: ./dl-archives
+          merge-multiple: true
+      - name: Sign Manifests
+        id: sign
+        if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
+        env:
+          WZ_BUILDMANIFEST_KEY: ${{ secrets.WZ_BUILDMANIFEST_KEY }}
+          WZ_BUILDMANIFEST_KEY_ID: ${{ vars.WZ_BUILDMANIFEST_KEY_ID }}
+        run: |
+          if [ -z "${WZ_BUILDMANIFEST_KEY}" ]; then
+            echo "::error ::WZ_BUILDMANIFEST_KEY_ID is set but the WZ_BUILDMANIFEST_KEY secret is not"
+            exit 1
+          fi
+          mkdir -p "${GITHUB_WORKSPACE}/signed-archives"
+          for zip in ./dl-archives/*.zip; do
+            name="$(basename "${zip}")"
+            echo "::group::${name}"
+            extract_dir="$(mktemp -d)"
+            unzip -q "${zip}" -d "${extract_dir}"
+            cmake -DWZBM_TOOL="${WZ_BUILDMANIFEST_TOOL}" -DWZBM_PACKAGE_DIR="${extract_dir}" -DWZBM_KEY_ID="${WZ_BUILDMANIFEST_KEY_ID}" -P "${GITHUB_WORKSPACE}/src/pkg/buildmanifest_sign_package.cmake"
+            # Replace just the manifest entry
+            manifest="$(cd "${extract_dir}" && find . -name '*.buildmanifest' -printf '%P\n')"
+            cp "${zip}" "${GITHUB_WORKSPACE}/signed-archives/${name}"
+            (cd "${extract_dir}" && zip -q "${GITHUB_WORKSPACE}/signed-archives/${name}" "${manifest}")
+            rm -rf "${extract_dir}"
+            echo "::endgroup::"
+          done
+          ls -l "${GITHUB_WORKSPACE}/signed-archives"
+      - name: Sign Installer Manifests
+        id: sign-installer
+        if: (steps.sign.outcome == 'success')
+        env:
+          WZ_BUILDMANIFEST_KEY: ${{ secrets.WZ_BUILDMANIFEST_KEY }}
+          WZ_BUILDMANIFEST_KEY_ID: ${{ vars.WZ_BUILDMANIFEST_KEY_ID }}
+        run: |
+          # The installer pairs every architecture's executable with the x64 data archives
+          # (see pkg/win_combined_archive/build_win_combined_arch.ps1)
+          data_dir="$(mktemp -d)"
+          unzip -q ./dl-archives/warzone2100_win_x64_archive.zip 'data/*' -d "${data_dir}"
+          for zip in ./dl-archives/warzone2100_win_*_archive.zip; do
+            arch="$(basename "${zip}" _archive.zip)"
+            arch="${arch#warzone2100_win_}"
+            if [ "${arch}" == "x64" ]; then
+              continue
+            fi
+            echo "::group::${arch}"
+            bin_dir="$(mktemp -d)"
+            unzip -q "${zip}" 'bin/*' -d "${bin_dir}"
+            manifest="$(ls "${bin_dir}"/bin/*.buildmanifest)"
+            mkdir -p "${GITHUB_WORKSPACE}/installer-manifests/${arch}"
+            cmake -DWZBM_TOOL="${WZ_BUILDMANIFEST_TOOL}" -DWZBM_SOURCE_MANIFEST="${manifest}" -DWZBM_EXE="${manifest%.buildmanifest}.exe" -DWZBM_DATA_DIR="${data_dir}/data" -DWZBM_OUTPUT="${GITHUB_WORKSPACE}/installer-manifests/${arch}/$(basename "${manifest}")" -DWZBM_KEY_ENV=WZ_BUILDMANIFEST_KEY -DWZBM_KEY_ID="${WZ_BUILDMANIFEST_KEY_ID}" -P "${GITHUB_WORKSPACE}/src/pkg/buildmanifest_rebase.cmake"
+            rm -rf "${bin_dir}"
+            echo "::endgroup::"
+          done
+          rm -rf "${data_dir}"
+          find "${GITHUB_WORKSPACE}/installer-manifests" -type f
+      - name: 'Upload Artifact - Installer Manifests'
+        if: (steps.sign-installer.outcome == 'success')
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'wz_installer_manifests'
+          path: '${{ github.workspace }}/installer-manifests/'
+          if-no-files-found: 'error'
+      - name: 'Generate artifact attestations - (Manifest-Signed Archives)'
+        if: (steps.sign.outcome == 'success')
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}/signed-archives/*'
+      - name: 'Upload Artifact - Manifest-Signed Archives'
+        if: (steps.sign.outcome == 'success')
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'wz_manifest_signed_archives'
+          path: '${{ github.workspace }}/signed-archives/*'
+          if-no-files-found: 'error'
+      - name: Output Result
+        id: output-result
+        env:
+          SIGN_STEP_OUTCOME: ${{ steps.sign.outcome }}
+        run: |
+          signedfiles="false"
+          if [ "${SIGN_STEP_OUTCOME}" == "success" ]; then
+            signedfiles="true"
+          fi
+          echo "signedfiles=${signedfiles}"
+          echo "signedfiles=${signedfiles}" >> $GITHUB_OUTPUT
+
   combined-installer-build:
     name: 'Build Installer'
     permissions:
@@ -679,7 +803,10 @@ jobs:
       id-token: write
       attestations: write
     runs-on: windows-latest
-    needs: windows-build
+    needs: [windows-build, sign-build-manifest]
+    # sign-build-manifest only runs for release builds, so tolerate it being skipped -
+    # but do not build an installer from archives whose signing failed
+    if: ${{ !cancelled() && needs.windows-build.result == 'success' && (needs.sign-build-manifest.result == 'success' || needs.sign-build-manifest.result == 'skipped') }}
     outputs:
       combined-installer-artifact-id: ${{ steps.upload-combined-installer-artifact.outputs.artifact-id }}
     steps:
@@ -785,6 +912,24 @@ jobs:
           pattern: 'warzone2100_win_*_archive'
           path: .\built-archives
           merge-multiple: true
+      - name: Download Manifest-Signed Archives
+        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v8
+        with:
+          name: 'wz_manifest_signed_archives'
+          path: .\signed-archives
+          merge-multiple: true
+      - name: Replace Archives with Manifest-Signed Archives
+        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
+        run: |
+          Get-ChildItem -Path ".\signed-archives" -Filter *.zip | ForEach-Object {
+            $dest = ".\built-archives\$($_.Name)"
+            if (!(Test-Path "$dest")) {
+              Write-Host "::warning ::Missing original (unsigned) archive - $($_.Name) ?"
+            }
+            Write-Host "Replacing with manifest-signed: $($_.Name)"
+            Copy-Item -Path "$($_.FullName)" -Destination "$dest" -Force -ErrorAction Stop
+          }
       - name: Log Archive Details
         working-directory: '${{ github.workspace }}\built-archives'
         run: |
@@ -803,6 +948,36 @@ jobs:
           . "src\pkg\win_combined_archive\build_win_combined_arch.ps1"
           Build-WinCombinedArchDir -InputArchivesDir "${env:BASE_WORKING_PATH}\built-archives" -TmpExtractDir "${env:BASE_WORKING_PATH}\tmp" -BuildDir "${env:BASE_WORKING_PATH}\combined-staging"
           Get-ChildItem -Path "${env:BASE_WORKING_PATH}\combined-staging" -Recurse -File
+      - name: Download Installer Manifests
+        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v8
+        with:
+          name: 'wz_installer_manifests'
+          path: .\installer-manifests
+      - name: Match Build Manifests to the Installer Data
+        env:
+          BASE_WORKING_PATH: '${{ github.workspace }}'
+          SIGNED_FILES: ${{ needs.sign-build-manifest.outputs.signedfiles }}
+        run: |
+          # Every architecture's executable ships with the x64 data archives, which only the x64 manifest describes
+          $StagingDir = "${env:BASE_WORKING_PATH}\combined-staging"
+          Get-ChildItem -Path "$StagingDir\bin" -Directory | Where-Object { $_.Name -ne "x64" } | ForEach-Object {
+            $Arch = $_.Name
+            $Manifest = Get-ChildItem -Path $_.FullName -Filter *.buildmanifest | Select-Object -First 1
+            if (-not $Manifest) {
+              return
+            }
+            if ("${env:SIGNED_FILES}" -eq "true") {
+              Write-Host "Using the signed installer manifest for: $Arch"
+              Copy-Item -Path "${env:BASE_WORKING_PATH}\installer-manifests\$Arch\$($Manifest.Name)" -Destination $Manifest.FullName -Force -ErrorAction Stop
+            }
+            else {
+              Write-Host "Regenerating the manifest for: $Arch"
+              $Exe = [IO.Path]::ChangeExtension($Manifest.FullName, ".exe")
+              & cmake "-DWZBM_SOURCE_MANIFEST=$($Manifest.FullName)" "-DWZBM_EXE=$Exe" "-DWZBM_DATA_DIR=$StagingDir\data" "-DWZBM_OUTPUT=$($Manifest.FullName)" -P "src\pkg\buildmanifest_rebase.cmake"
+              if ($LastExitCode -ne 0) { throw "Failed to regenerate the build manifest for: $Arch" }
+            }
+          }
       - name: Build Combined Installer
         id: build-installer
         env:
@@ -955,7 +1130,7 @@ jobs:
     runs-on: ubuntu-latest
     # Run on tag release automation build
     if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
-    needs: [windows-build, combined-installer-build, sign-release-installers]
+    needs: [windows-build, combined-installer-build, sign-release-installers, sign-build-manifest]
     env:
       WZ_GITHUB_REF: ${{needs.windows-build.outputs.WZ_GITHUB_REF}}
     steps:
@@ -978,8 +1153,15 @@ jobs:
           name: 'warzone2100_installers_signed'
           path: ./upload-assets-signed
           merge-multiple: true
+      - name: Download Manifest-Signed Archives
+        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v8
+        with:
+          name: 'wz_manifest_signed_archives'
+          path: ./upload-assets-signed
+          merge-multiple: true
       - name: Replace Unsigned with Signed Release Artifacts
-        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        if: success() && ((env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && needs.sign-release-installers.outputs.signedfiles == 'true') || (needs.sign-build-manifest.outputs.signedfiles == 'true'))
         run: |
           for file in ./upload-assets-signed/*; do
             filename="${file##*/}"
