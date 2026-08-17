@@ -31,4 +31,8 @@ void main()
 	worldPos = wp;
 	centerRadius = vec3(center, R);
 	gl_Position = orthoViewProj * vec4(wp, 1.0);
+	// OpenGL FBOs have UV origin at the bottom-left. Negate clip Y so world minZ
+	// lands at V=0, matching the composite's (world.xz - origin) / extent map
+	// (Vulkan already gets this from its NDC Y flip).
+	gl_Position.y *= -1.0;
 }
