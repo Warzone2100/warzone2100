@@ -5,6 +5,11 @@
 #define NEWGL
 #endif
 
+layout(std140) uniform cbuffer {
+	mat4 orthoViewProj;
+	vec4 mapOriginExtent; // xy origin.xz, zw size.xz
+};
+
 #ifdef NEWGL
 in vec3 worldPos;
 in vec3 centerRadius;
@@ -14,11 +19,24 @@ varying vec3 worldPos;
 varying vec3 centerRadius;
 #endif
 
+// SDF of AABB [origin, origin+extent], negative inside.
+float sdBox(vec2 p, vec2 origin, vec2 extent)
+{
+	vec2 halfExt = 0.5 * extent;
+	vec2 q = abs(p - (origin + halfExt)) - halfExt;
+	return length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0);
+}
+
 void main()
 {
 	float R = max(centerRadius.z, 1e-3);
-	float d = length(worldPos.xz - centerRadius.xy);
-	float sdf = d - R;
+	float diskSdf = length(worldPos.xz - centerRadius.xy) - R;
+	float sdf = diskSdf;
+	if (mapOriginExtent.z > 0.0 && mapOriginExtent.w > 0.0)
+	{
+		// Boundary of the intersection of the disk and the map, so the isocontour follows the map edge when range is clipped.
+		sdf = max(diskSdf, sdBox(worldPos.xz, mapOriginExtent.xy, mapOriginExtent.zw));
+	}
 	if (sdf > 0.25 * R)
 	{
 		discard;
