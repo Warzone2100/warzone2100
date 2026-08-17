@@ -28,7 +28,7 @@ float pointLightConeFactor(vec3 toFragment, vec4 directionAndCos)
 	return smoothstep(cosOuter, cosInner, alignment);
 }
 
-vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, float pointLightIntensity, vec4 pointLightDirectionAndCos, mat3 spaceMatrix)
+vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, float pointLightIntensity, vec4 pointLightDirectionAndCos)
 {
 	vec3 pointLightVector = pointLightWorldPosition - WorldFragPos;
 
@@ -43,7 +43,7 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, v
 
 	float inverseDistance = inversesqrt(max(distanceSq, 1e-8f));
 	vec3 lightToFragment = -pointLightVector * inverseDistance;
-	vec3 pointLightDir = spaceMatrix * (pointLightVector * inverseDistance);
+	vec3 pointLightDir = pointLightVector * inverseDistance;
 
 	float distanceFalloff = pointLightEnergyAtPosition(distanceSq, rangeSq);
 	float coneFalloff = pointLightConeFactor(lightToFragment, pointLightDirectionAndCos);
@@ -158,8 +158,7 @@ int wzLightIndex(int entryInLightList)
 // - a uniform named bucketOffsetAndSize of ivec4[]
 // - a uniform named bucketDimensionUsed of int
 // - the light accessors declared above
-// fragNormal and view vector are expected to be in the spaceMatrix space
-// spaceMatrix is used to move from world space to necessary space
+// Everything here is in world space.
 vec4 iterateOverAllPointLights(
 	vec2 clipSpaceCoord,
 	vec3 WorldFragPos,
@@ -167,8 +166,7 @@ vec4 iterateOverAllPointLights(
 	vec3 surfaceNormal,
 	vec3 viewVector,
 	vec4 albedo,
-	float gloss,
-	mat3 spaceMatrix
+	float gloss
 ) {
 	vec4 light = vec4(0.f);
 	ivec2 bucket = ivec2(float(bucketDimensionUsed) * clipSpaceCoord);
@@ -184,7 +182,7 @@ vec4 iterateOverAllPointLights(
 		// The cone direction arrives in the same space as the position, so it gets the same flip
 		directionAndCos.xyz *= vec3(1.f, 1.f, -1.f);
 		vec3 tmp = position.xyz * vec3(1.f, 1.f, -1.f);
-		light += processPointLight(WorldFragPos, fragNormal, surfaceNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, position.w, directionAndCos, spaceMatrix);
+		light += processPointLight(WorldFragPos, fragNormal, surfaceNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, position.w, directionAndCos);
 	}
 	return light;
 }

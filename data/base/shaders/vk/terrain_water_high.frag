@@ -90,7 +90,7 @@ vec4 main_bumpMapping()
 		// Water needs no tangent frame: its normal is already in model space and the surface it sits on is flat,
 		// so the geometric normal is just up.
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-		finalColor.rgb += iterateOverAllPointLights(clipSpaceCoord, frag.posModelSpace, N, vec3(0.f, 1.f, 0.f), normalize(eyeVec), vec4(waterColor, 1.f), waterGloss, mat3(1.f)).rgb;
+		finalColor.rgb += iterateOverAllPointLights(clipSpaceCoord, frag.posModelSpace, N, vec3(0.f, 1.f, 0.f), normalize(eyeVec), vec4(waterColor, 1.f), waterGloss).rgb;
 	}
 
 	return finalColor;
