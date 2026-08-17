@@ -85,7 +85,10 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	{
 		// point lights
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-		res += iterateOverAllPointLights(clipSpaceCoord, frag.posModelSpace, b.N, vec3(0.f, 0.f, 1.f), normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
+		// The light loop works in world space, so the tangent frame is inverted once here.
+		// The frame is built orthonormal, so its transpose stands in for its inverse, and the third column of that is the vertex normal.
+		mat3 tangentToWorld = transpose(ModelTangentMatrix);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.posModelSpace, tangentToWorld * b.N, tangentToWorld[2], tangentToWorld * normalize(groundHalfVec - groundLightDir), b.color, b.gloss);
 	}
 
 	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/

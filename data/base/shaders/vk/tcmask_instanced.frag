@@ -118,7 +118,7 @@ void main()
 	if (WZ_POINT_LIGHT_ENABLED == 1)
 	{
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-		light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(normal), normalize(halfVec - lightDir), diffuseMap, specularMapValue, mat3(1.f));
+		light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(normal), normalize(halfVec - lightDir), diffuseMap, specularMapValue);
 	}
 
 	light.a = 1.0f;
