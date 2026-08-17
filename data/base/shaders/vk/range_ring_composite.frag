@@ -12,7 +12,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 weaponColor;
 	vec4 minRangeColor;
 	float fillAlpha;
-	float padding0;
+	float sdfBand;
 	float padding1;
 	float padding2;
 };
@@ -25,29 +25,25 @@ layout(location = 0) in vec2 texCoords;
 layout(location = 0) out vec4 FragColor;
 
 const float SKY_DEPTH_THRESHOLD = 0.9999;
-// Max AA width in sdf/R. Uncapped fwidth(sd) explodes at depth silhouettes
-// (cliffs, bump edges) because reconstructed world XZ jumps between neighbors.
-const float SDF_AA_MAX = 0.04;
-const float SDF_AA_SILHOUETTE = 0.008;
+const float RING_HALF_PX = 2.0;
 
-float overlayAaLimit(vec2 worldXZ)
+float overlayAaLimit(vec2 worldXZ, float band)
 {
 	float spanX = length(dFdx(worldXZ));
 	float spanY = length(dFdy(worldXZ));
 	float spanMax = max(spanX, spanY);
 	float spanMin = min(spanX, spanY) + 1e-3;
-	return (spanMax > 4.0 * spanMin) ? SDF_AA_SILHOUETTE : SDF_AA_MAX;
+	return (spanMax > 4.0 * spanMin) ? (band * 0.2) : band;
 }
 
-float channelOverlay(float field, float maxW)
+float channelOverlay(float field, float band, float maxW)
 {
-	// encoded = 0.5 + 0.5 * clamp(sdf/R, -1, 1); cone stores at most sdf/R = 0.25.
-	float sd = field * 2.0 - 1.0;
+	float sd = (field * 2.0 - 1.0) * band;
 	float uncovered = step(0.999, field);
 	float covered = 1.0 - uncovered;
-	float w = min(max(fwidth(min(sd, 0.25)), 1e-4), maxW);
-	float ring = (1.0 - smoothstep(0.0, w, abs(sd))) * covered;
-	float fill = (1.0 - smoothstep(0.0, w, max(sd, 0.0))) * fillAlpha * covered;
+	float w = min(max(fwidth(min(sd, band)), 1e-4), maxW);
+	float ring = (1.0 - smoothstep(0.0, RING_HALF_PX, abs(sd) / w)) * covered;
+	float fill = (1.0 - smoothstep(0.0, RING_HALF_PX, max(sd, 0.0) / w)) * fillAlpha * covered;
 	return max(ring, fill);
 }
 
@@ -66,10 +62,11 @@ void main()
 		{
 			sdfUv = clamp(sdfUv * sdfUvScaleClamp.xy, vec2(0.0), sdfUvScaleClamp.zw);
 			vec3 field = texture(rangeRingSdf, sdfUv).rgb;
-			float maxW = overlayAaLimit(worldPos.xz);
-			float sensor = channelOverlay(field.r, maxW);
-			float weapon = channelOverlay(field.g, maxW);
-			float minRange = channelOverlay(field.b, maxW);
+			float band = max(sdfBand, 1e-3);
+			float maxW = overlayAaLimit(worldPos.xz, band);
+			float sensor = channelOverlay(field.r, band, maxW);
+			float weapon = channelOverlay(field.g, band, maxW);
+			float minRange = channelOverlay(field.b, band, maxW);
 			vec3 overlay = sensorColor.rgb * sensor + weaponColor.rgb * weapon + minRangeColor.rgb * minRange;
 			float a = clamp(max(max(sensor, weapon), minRange), 0.0, 1.0);
 			result = lit * (1.0 - a) + overlay;

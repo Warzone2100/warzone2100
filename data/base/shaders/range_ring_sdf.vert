@@ -8,6 +8,7 @@
 layout(std140) uniform cbuffer {
 	mat4 orthoViewProj;
 	vec4 mapOriginExtent; // xy origin.xz, zw size.xz
+	vec4 sdfParams; // x = sdfBand
 };
 
 #ifdef NEWGL
