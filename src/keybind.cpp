@@ -300,17 +300,8 @@ void	kf_TraceObject()
 //===================================================
 void kf_ToggleSensorDisplay()
 {
-
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
 	rangeOnScreen = !rangeOnScreen;
+	applySceneEffectSurfaces();
 
 	if (rangeOnScreen)
 	{
