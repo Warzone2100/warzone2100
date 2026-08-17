@@ -1959,8 +1959,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_RANGE_RING_SDF>
 	{
 		glm::mat4 orthoViewProj;
+		glm::vec4 mapOriginExtent; // xy origin.xz, zw size.xz (0 size = no clip)
 	};
-	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_SDF>) == 64, "Range ring SDF cbuffer std140 size");
+	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_SDF>) == 80, "Range ring SDF cbuffer std140 size");
 
 	struct RangeRingInstance
 	{

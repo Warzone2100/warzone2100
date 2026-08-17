@@ -7,6 +7,7 @@
 
 layout(std140) uniform cbuffer {
 	mat4 orthoViewProj;
+	vec4 mapOriginExtent; // xy origin.xz, zw size.xz
 };
 
 #ifdef NEWGL

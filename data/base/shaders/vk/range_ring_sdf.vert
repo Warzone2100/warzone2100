@@ -2,6 +2,7 @@
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 orthoViewProj;
+	vec4 mapOriginExtent; // xy origin.xz, zw size.xz
 };
 
 layout(location = 0) in vec4 vertex;

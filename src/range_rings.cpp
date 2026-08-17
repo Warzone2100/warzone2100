@@ -82,10 +82,22 @@ struct SdfCamera
 {
 	glm::mat4 viewProj{1.f};
 	glm::vec4 originExtent{0.f, 0.f, 1.f, 1.f};
+	glm::vec4 mapOriginExtent{0.f}; // 0 size = do not clip to map
 	float maxR = 1.f;
 };
 
 SdfCamera s_sdfCamera;
+
+glm::vec4 mapWorldOriginExtent()
+{
+	if (gameWorld.map.width <= 0 || gameWorld.map.height <= 0)
+	{
+		return glm::vec4(0.f);
+	}
+	const float w = static_cast<float>(world_coord(gameWorld.map.width));
+	const float h = static_cast<float>(world_coord(gameWorld.map.height));
+	return glm::vec4(0.f, -h, w, h);
+}
 
 void includeXZ(float x, float z, float& minX, float& maxX, float& minZ, float& maxZ, bool& any)
 {
@@ -215,6 +227,7 @@ SdfCamera fitOrtho(const InGame3DFrameContext& fc)
 		SdfCamera degenerate;
 		degenerate.viewProj = glm::mat4(1.f);
 		degenerate.originExtent = glm::vec4(0.f, 0.f, 1.f, 1.f);
+		degenerate.mapOriginExtent = mapWorldOriginExtent();
 		degenerate.maxR = 1.f;
 		return degenerate;
 	}
@@ -244,6 +257,7 @@ SdfCamera fitOrtho(const InGame3DFrameContext& fc)
 	SdfCamera cam;
 	cam.viewProj = proj * view;
 	cam.originExtent = glm::vec4(minX, minZ, maxX - minX, maxZ - minZ);
+	cam.mapOriginExtent = mapWorldOriginExtent();
 	cam.maxR = maxR;
 	return cam;
 }
@@ -360,6 +374,7 @@ void recordSdf(const std::vector<gfx_api::RangeRingInstance>& instances, gfx_api
 
 	gfx_api::constant_buffer_type<SHADER_RANGE_RING_SDF> constants {};
 	constants.orthoViewProj = s_sdfCamera.viewProj;
+	constants.mapOriginExtent = s_sdfCamera.mapOriginExtent;
 	auto& pso = Pso::get();
 	pso.bind();
 	pso.bind_constants(constants);
