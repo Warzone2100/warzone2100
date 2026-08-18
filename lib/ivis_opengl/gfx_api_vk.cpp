@@ -6103,11 +6103,8 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
-	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
-	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
-	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
-	inputs.scenePrepassEnabled = gfx_api::prepassNeeds(storedSceneEffectSurfaces()) != gfx_api::PrepassNeed::None;
-	inputs.fogApplyEnabled = getFogSurfacesEnabled();
+	inputs.effects = storedSceneEffectSurfaces();
+	inputs.prepassNeeds = gfx_api::prepassNeeds(inputs.effects);
 	return inputs;
 }
 

@@ -62,7 +62,7 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 		// it feeds an intermediate instead of replacing the swapchain output
 		count += (snapshot.features & RenderFeatures::SmaaIntermediate) ? 3 : 2;
 	}
-	if (snapshot.features & RenderFeatures::SSAO)
+	if (snapshot.sceneEffects.enabled(ScenePostEffectId::Ssao))
 	{
 		count += 4; // SSAOGenerate, SSAOBlurH, SSAOBlurV, SSAOCompose
 	}
@@ -74,7 +74,7 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 	{
 		++count; // ScenePrepass
 	}
-	if (snapshot.features & RenderFeatures::FogApply)
+	if (snapshot.sceneEffects.enabled(ScenePostEffectId::Fog))
 	{
 		++count; // FogApply
 	}
@@ -101,7 +101,9 @@ uint64_t RenderTopologySnapshot::topologyHash() const
 		numShadowCascades,
 		sceneMsaa ? 1u : 0u,
 		swapchainMsaa ? 1u : 0u,
-		static_cast<std::size_t>(sceneBlitColorLoad));
+		static_cast<std::size_t>(sceneBlitColorLoad),
+		sceneEffects.ssao ? 1u : 0u,
+		sceneEffects.fog ? 1u : 0u);
 	return static_cast<uint64_t>(h);
 }
 
@@ -115,8 +117,8 @@ uint64_t RenderTopologySnapshot::materializeHash() const
 		sceneW,
 		sceneH,
 		shadowMapSize,
-		ssaoGenerateDivisor,
-		ssaoBlurDivisor);
+		sceneEffects.ssaoGenerateDivisor,
+		sceneEffects.ssaoBlurDivisor);
 	return static_cast<uint64_t>(h);
 }
 
@@ -199,18 +201,6 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 				snapshot.features |= RenderFeatures::SmaaIntermediate;
 			}
 		}
-		if (query.ssaoEnabled())
-		{
-			snapshot.features |= RenderFeatures::SSAO;
-			if (query.ssaoDownsampleActive())
-			{
-				snapshot.features |= RenderFeatures::SSAODownsample;
-			}
-		}
-		if (query.fogEnabled())
-		{
-			snapshot.features |= RenderFeatures::FogApply;
-		}
 	}
 
 	const auto drawable = query.drawableDimensions();
@@ -221,8 +211,14 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 	snapshot.sceneW = sceneColor.first;
 	snapshot.sceneH = sceneColor.second;
 
-	snapshot.ssaoGenerateDivisor = query.ssaoGenerateDivisor();
-	snapshot.ssaoBlurDivisor = query.ssaoBlurDivisor();
+	snapshot.sceneEffects = query.sceneEffectSurfaces();
+	if (snapshot.screenKind == RenderScreenKind::InGame
+		&& snapshot.sceneEffects.ssao
+		&& ssaoBlurIsCoarser(snapshot.sceneW, snapshot.sceneH,
+			snapshot.sceneEffects.ssaoGenerateDivisor, snapshot.sceneEffects.ssaoBlurDivisor))
+	{
+		snapshot.features |= RenderFeatures::SSAODownsample;
+	}
 
 	return snapshot;
 }

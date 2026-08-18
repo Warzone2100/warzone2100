@@ -25,10 +25,10 @@
 #pragma once
 
 #include "attachment.h"
+#include "pipeline_surfaces.h"
 #include "../piedef.h"
 
 #include <cstdint>
-#include <tuple>
 #include <utility>
 
 namespace gfx_api
@@ -67,13 +67,8 @@ struct RenderFeatures
 		/// The SMAA blend writes a scene-sized intermediate consumed by the
 		/// blit or upscale chain (otherwise it writes the swapchain directly).
 		SmaaIntermediate   = 1u << 6,
-		/// Include SSAO generate / blur / compose passes (in-game, not frozen).
-		/// ScenePrepass is inserted when `prepassNeeds()` is not None.
-		SSAO               = 1u << 7,
-		/// Include the deferred FogApply pass (in-game, not frozen).
-		FogApply           = 1u << 8,
 		/// Downsample generate AO into the blur target when blur is coarser.
-		SSAODownsample     = 1u << 9,
+		SSAODownsample     = 1u << 7,
 	};
 };
 
@@ -102,23 +97,28 @@ struct RenderTopologySnapshot
 	uint32_t sceneW = 0;
 	uint32_t sceneH = 0;
 	uint32_t shadowMapSize = 0;
-	/// Allocated SSAO generate extent divisor (1 = full scene). Part of `materializeHash` only.
-	uint32_t ssaoGenerateDivisor = 1;
-	/// Allocated SSAO blur extent divisor (1 = full scene). Part of `materializeHash` only.
-	uint32_t ssaoBlurDivisor = 1;
+	/// Allocated scene-effect enable flags and SSAO divisors. Enable flags are part of
+	/// `topologyHash`; divisors are part of `materializeHash` only.
+	SceneEffectSurfaces sceneEffects;
 
 	bool operator==(const RenderTopologySnapshot& other) const
 	{
-		return std::tie(screenKind, features, numShadowCascades, sceneMsaa, swapchainMsaa,
-			sceneBlitColorLoad, backendEpoch, drawableW, drawableH, sceneW, sceneH, shadowMapSize,
-			ssaoGenerateDivisor, ssaoBlurDivisor)
-			== std::tie(other.screenKind, other.features, other.numShadowCascades, other.sceneMsaa,
-				other.swapchainMsaa, other.sceneBlitColorLoad, other.backendEpoch, other.drawableW,
-				other.drawableH, other.sceneW, other.sceneH, other.shadowMapSize,
-				other.ssaoGenerateDivisor, other.ssaoBlurDivisor);
+		return screenKind == other.screenKind
+			&& features == other.features
+			&& numShadowCascades == other.numShadowCascades
+			&& sceneMsaa == other.sceneMsaa
+			&& swapchainMsaa == other.swapchainMsaa
+			&& sceneBlitColorLoad == other.sceneBlitColorLoad
+			&& backendEpoch == other.backendEpoch
+			&& drawableW == other.drawableW
+			&& drawableH == other.drawableH
+			&& sceneW == other.sceneW
+			&& sceneH == other.sceneH
+			&& shadowMapSize == other.shadowMapSize
+			&& sceneEffects == other.sceneEffects;
 	}
 
-	/// Hash of screen kind, features, cascade count, MSAA flags, and scene blit load op.
+	/// Hash of screen kind, features (including SSAO downsample), cascade count, MSAA flags, scene blit load op, and effect enables.
 	uint64_t topologyHash() const;
 	/// `topologyHash` plus allocated dimensions, `backendEpoch`, `shadowMapSize`, and SSAO divisors.
 	uint64_t materializeHash() const;
@@ -154,16 +154,8 @@ public:
 	/// True when the backend has a scene-sized SMAA blend output surface for a
 	/// following scaling pass to consume.
 	virtual bool smaaIntermediateActive() const = 0;
-	/// True when SSAO is enabled in config (surfaces may still be syncing).
-	virtual bool ssaoEnabled() const = 0;
-	/// True when blur is coarser than generate, so the downsample pass is in the graph.
-	virtual bool ssaoDownsampleActive() const = 0;
-	/// SSAO generate target divisor used for `MatchSceneDivided` allocation (1 = full scene).
-	virtual uint32_t ssaoGenerateDivisor() const = 0;
-	/// SSAO blur target divisor used for `MatchSceneDivided` allocation (1 = full scene).
-	virtual uint32_t ssaoBlurDivisor() const = 0;
-	/// True when deferred fog surfaces are enabled (surfaces may still be syncing).
-	virtual bool fogEnabled() const = 0;
+	/// Allocated scene-effect surfaces (not raw gameplay config).
+	virtual SceneEffectSurfaces sceneEffectSurfaces() const = 0;
 	virtual uint32_t shadowMapSize() const = 0;
 	/// True when the in-game debug overlay pass slot should exist (persistent toggles only).
 	virtual bool debugOverlaysEnabled() const = 0;
