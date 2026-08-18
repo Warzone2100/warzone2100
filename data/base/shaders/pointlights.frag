@@ -47,6 +47,12 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, v
 
 	float distanceFalloff = pointLightEnergyAtPosition(distanceSq, rangeSq);
 	float coneFalloff = pointLightConeFactor(lightToFragment, pointLightDirectionAndCos);
+	// A cone reaches as far as its range in every direction but lights only the part of that it points at,
+	// so a fragment inside the range is often outside the cone. The falloff is exactly zero there.
+	if (coneFalloff <= 0.f)
+	{
+		return vec4(0.f);
+	}
 	float energy = distanceFalloff * coneFalloff * pointLightIntensity;
 
 	// For cone lights, have the spread lose its blue and then its green toward the rim and toward the edge of the cone.
