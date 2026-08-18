@@ -27,6 +27,10 @@ VERTEX_OUTPUT vec3 centerRadius; // xy center, z R
 
 void main()
 {
+	// Unit cone (apex y=1, rim y=0 at radius 1.25) scaled by R. Under the
+	// top-down ortho, side triangles fill a 1.25R disk: conservative coverage
+	// of texels that might be near the ring (true isocontour is at distance R).
+	// Interpolated Y is the depth; overlapping instances resolve via GPU LEQ.
 	vec2 center = instancePackedValues.xy;
 	float R = instancePackedValues.z;
 	vec3 wp = vec3(center.x, 0.0, center.y) + vec3(vertex.x * R, vertex.y * R, vertex.z * R);

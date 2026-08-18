@@ -57,7 +57,7 @@ namespace
 {
 
 constexpr int CONE_SIDES = 32;
-constexpr float CONE_RIM_RADIUS = 1.25f;
+constexpr float CONE_RIM_RADIUS = 1.25f; // coverage skirt past the true disk (SDF=0 at 1.0)
 constexpr size_t CONE_VERTEX_COUNT = static_cast<size_t>(CONE_SIDES) + 1;
 constexpr size_t CONE_INDEX_COUNT = static_cast<size_t>(CONE_SIDES) * 3;
 constexpr float ORTHO_PAD = static_cast<float>(TILE_UNITS);
@@ -400,7 +400,7 @@ bool init()
 	}
 
 	std::array<glm::vec4, CONE_VERTEX_COUNT> vertices {};
-	vertices[0] = glm::vec4(0.f, 1.f, 0.f, 1.f);
+	vertices[0] = glm::vec4(0.f, 1.f, 0.f, 1.f); // apex; rim is y=0 at CONE_RIM_RADIUS
 	for (int i = 0; i < CONE_SIDES; ++i)
 	{
 		const float a = glm::two_pi<float>() * static_cast<float>(i) / static_cast<float>(CONE_SIDES);

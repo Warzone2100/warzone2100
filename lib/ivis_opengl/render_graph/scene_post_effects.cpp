@@ -82,6 +82,7 @@ void emitRangeRingPreparePasses(BlueprintBuilder& builder, const RenderTopologyS
 {
 	static constexpr ClearValue SDF_UNCOVERED = ClearValue::colorClear(1.f, 1.f, 1.f, 1.f);
 
+	// Scratch depth is cleared per pass so sensor/weapon/min do not occlude each other.
 	builder.beginPass(PassId::RangeRingSdfSensor, "RangeRingSdfSensor")
 		.color(PipelineSurfaceId::RangeRingSdf, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, SDF_UNCOVERED)
 		.depth(PipelineSurfaceId::RangeRingSdfDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::DontCare)
