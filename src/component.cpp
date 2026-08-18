@@ -425,8 +425,11 @@ static void addMuzzleFlashLight(const glm::mat4& muzzleModelMatrix, const iIMDSh
 	// A light machinegun's flash model is about a quarter the size of a cannon's and should light about that much less.
 	// (Clamped so an unusual model cannot produce something too absurd, hopefully.)
 	constexpr float referenceFlashRadius = 32.f; // a cannon, where the values here were set
-	const float flashScale = glm::clamp(static_cast<float>(flashImd->radius) / referenceFlashRadius, 0.25f, 2.5f);
-	light.range = static_cast<UDWORD>(512.f * flashScale);
+	const float rawScale = glm::clamp(static_cast<float>(flashImd->radius) / referenceFlashRadius, 0.25f, 2.5f);
+	// Above the reference the flash models grow far faster than the light they should throw, so
+	// only a fraction of the excess counts
+	const float flashScale = std::min(rawScale, 1.f + (rawScale - 1.f) * 0.35f);
+	light.range = static_cast<UDWORD>(440.f * flashScale);
 	// Burning gas cools as it expands, so the flash runs from a warm white at ignition down through orange as it dies.
 	// The cooling finishes at four tenths of the light's life because brightness falls as the fourth power of what
 	// remains, which leaves the tail too dark to carry a color.
@@ -436,7 +439,7 @@ static void addMuzzleFlashLight(const glm::mat4& muzzleModelMatrix, const iIMDSh
 	light.colour = pal_Colour(static_cast<UBYTE>(flashColor.r), static_cast<UBYTE>(flashColor.g), static_cast<UBYTE>(flashColor.b));
 	const float remaining = 1.f - lightAge;
 	const float remainingSq = remaining * remaining;
-	light.intensity = 4.f * flashScale * remainingSq * remainingSq;
+	light.intensity = 3.2f * flashScale * remainingSq * remainingSq;
 	getCurrentLightingData().lights.push_back(light);
 }
 
