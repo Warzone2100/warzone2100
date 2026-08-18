@@ -222,6 +222,16 @@ bool radarVisible()
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
 
+void setRangeOnScreen(bool enabled)
+{
+	if (rangeOnScreen == enabled)
+	{
+		return;
+	}
+	rangeOnScreen = enabled;
+	applySceneEffectSurfaces();
+}
+
 /// Tactical UI: show/hide target origin icon
 bool tuiTargetOrigin = false;
 

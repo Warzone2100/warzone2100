@@ -300,16 +300,15 @@ void	kf_TraceObject()
 //===================================================
 void kf_ToggleSensorDisplay()
 {
-	rangeOnScreen = !rangeOnScreen;
-	applySceneEffectSurfaces();
+	setRangeOnScreen(!rangeOnScreen);
 
 	if (rangeOnScreen)
 	{
-		addConsoleMessage(_("Lets us see what you see!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);    //added this message... Yeah, its lame. :)
+		addConsoleMessage(_("Unit range rings display enabled"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
 	{
-		addConsoleMessage(_("Fine, weapon & sensor display is off!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);    //added this message... Yeah, its lame. :)
+		addConsoleMessage(_("Unit range rings display disabled"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 //===================================================

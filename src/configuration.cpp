@@ -428,6 +428,7 @@ bool loadConfig()
 	wz_texture_compression = iniGetBool("textureCompression", true).value();
 	showFPS = iniGetBool("showFPS", false).value();
 	showUNITCOUNT = iniGetBool("showUNITCOUNT", false).value();
+	rangeOnScreen = iniGetBool("showUnitRangeRings", false).value();
 	if (auto value = iniGetIntegerOpt("cameraSpeed"))
 	{
 		int v = value.value();
@@ -967,6 +968,7 @@ bool saveConfig()
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
 	iniSetInteger("showFPS", (int)showFPS);
 	iniSetInteger("showUNITCOUNT", (int)showUNITCOUNT);
+	iniSetInteger("showUnitRangeRings", (int)rangeOnScreen);
 	iniSetInteger("shadows", (int)(getDrawShadows()));	// shadows
 	iniSetInteger("sound", (int)war_getSoundEnabled());
 	iniSetInteger("FMVmode", (int)(war_GetFMVmode()));		// sequences
