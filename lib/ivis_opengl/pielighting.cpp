@@ -123,14 +123,30 @@ static inline int32_t pielight_maptile_coord(int32_t worldCoord)
 	return worldCoord >> TILE_SHIFT;
 }
 
+// Folding one light into another has to keep two things apart: the hue, and how much light there is.
+// The energy goes into the intensity (which is what the shader multiplies by) and the color becomes
+// the energy-weighted average of the two, so the hue survives in a reasonable manner.
+static void foldLightInto(renderingNew::LightingManager::CalculatedPointLight& base,
+	const glm::vec3& color, float intensity, float weight)
+{
+	const float addedEnergy = intensity * weight;
+	const float totalEnergy = base.intensity + addedEnergy;
+	if (totalEnergy > 0.f)
+	{
+		base.colour = (base.colour * base.intensity + color * addedEnergy) / totalEnergy;
+	}
+	base.intensity = totalEnergy;
+}
+
 // Rough measure of how much a light matters this frame: reach against distance, then
 // discounted for lights hanging further above the terrain than their own range.
 // Screen coverage is deliberately not used, as it just rewards proximity to the camera.
 static float pointLightImportance(const renderingNew::LightingManager::CalculatedPointLight& light,
 	const LightingSceneInfo& scene)
 {
-	// strongest channel rather than luminance, which would score red lights far too low
-	const float intensity = std::max({light.colour.x, light.colour.y, light.colour.z});
+	// strongest channel rather than luminance, which would score red lights far too low, multiplied by
+	// the intensity (which is where a light's brightness actually lives)
+	const float intensity = std::max({light.colour.x, light.colour.y, light.colour.z}) * std::max(light.intensity, 0.f);
 	const float range = std::max(light.range, 1.f);
 
 	// light positions keep the raw coordinates, world space negates z
@@ -259,9 +275,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 							calcLight.cosOuter = light.cosOuter;
 
 							float weight = existingLight.light.range / calcLight.range;
-							calcLight.colour.x += (existingLight.light.colour.x) * weight;
-							calcLight.colour.y += (existingLight.light.colour.y) * weight;
-							calcLight.colour.z += (existingLight.light.colour.z) * weight;
+							foldLightInto(calcLight, existingLight.light.colour, existingLight.light.intensity, weight);
 
 							existingLight.light = calcLight;
 							existingLight.clipSpaceBounds = clipSpaceBounds;
@@ -270,9 +284,10 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 						else
 						{
 							float weight = light.range / existingLight.light.range;
-							existingLight.light.colour.x += (light.colour.byte.r / 255.f) * weight;
-							existingLight.light.colour.y += (light.colour.byte.g / 255.f) * weight;
-							existingLight.light.colour.z += (light.colour.byte.b / 255.f) * weight;
+							foldLightInto(existingLight.light,
+								glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f),
+								light.intensity, weight);
+							existingLight.importance = pointLightImportance(existingLight.light, scene);
 						}
 						combinedLight = true;
 						break;
