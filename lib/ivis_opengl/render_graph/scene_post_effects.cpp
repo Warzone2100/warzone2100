@@ -24,6 +24,7 @@
 
 #include "scene_post_effects.h"
 
+#include "gfx_api.h"
 #include "lib/framework/wzapp.h"
 
 namespace gfx_api
@@ -94,17 +95,33 @@ bool effectEnabled(const RenderTopologySnapshot& snapshot, ScenePostEffectId id)
 	return false;
 }
 
-PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot)
+namespace
+{
+
+template <typename Enabled>
+PrepassNeed unionPrepassNeeds(Enabled&& enabled)
 {
 	PrepassNeed needs = PrepassNeed::None;
 	for (const ScenePostEffectDesc& effect : kScenePostEffects)
 	{
-		if (effectEnabled(snapshot, effect.id))
+		if (enabled(effect.id))
 		{
 			needs = needs | effect.prepassNeed;
 		}
 	}
 	return needs;
+}
+
+} // anonymous namespace
+
+PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot)
+{
+	return unionPrepassNeeds([&](ScenePostEffectId id) { return effectEnabled(snapshot, id); });
+}
+
+PrepassNeed prepassNeeds(const SceneEffectSurfaces& cfg)
+{
+	return unionPrepassNeeds([&](ScenePostEffectId id) { return cfg.enabled(id); });
 }
 
 void emitApplyPass(BlueprintBuilder& builder, const ScenePostEffectDesc& effect, PassId incomingColor)

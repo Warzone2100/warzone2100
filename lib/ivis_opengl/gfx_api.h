@@ -354,7 +354,7 @@ namespace gfx_api
 		}
 	};
 
-	/// Independent SSAO/fog catalog requests. Scene prepass is derived as ssao || fog.
+	/// Independent SSAO/fog catalog requests. Scene prepass follows `prepassNeeds(cfg)`.
 	struct SceneEffectSurfaces
 	{
 		bool ssao = false;
@@ -368,6 +368,20 @@ namespace gfx_api
 				&& ssaoGenerateDivisor == other.ssaoGenerateDivisor
 				&& ssaoBlurDivisor == other.ssaoBlurDivisor
 				&& fog == other.fog;
+		}
+
+		bool enabled(ScenePostEffectId id) const
+		{
+			switch (id)
+			{
+			case ScenePostEffectId::Ssao:
+				return ssao;
+			case ScenePostEffectId::Fog:
+				return fog;
+			case ScenePostEffectId::Count:
+				break;
+			}
+			return false;
 		}
 	};
 
@@ -609,7 +623,7 @@ namespace gfx_api
 		}
 
 		/// Commit SSAO/fog catalog requests in one store. Backends rebuild surfaces.
-		/// Scene prepass follows as ssao || fog in pipelineSurfaceSyncInputs().
+		/// Scene prepass follows `prepassNeeds(cfg)` in pipelineSurfaceSyncInputs().
 		virtual bool setSceneEffectSurfaces(SceneEffectSurfaces cfg)
 		{
 			storeSceneEffectSurfaces(cfg);

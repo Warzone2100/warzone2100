@@ -35,6 +35,8 @@
 namespace gfx_api
 {
 
+struct SceneEffectSurfaces;
+
 /// One post-lighting screen-space effect: after ScenePass, before SMAA/blit.
 /// Table order of `applyPass` is the apply chain (SSAO compose -> fog).
 ///
@@ -70,6 +72,7 @@ struct ScenePostEffectDesc
 
 bool effectEnabled(const RenderTopologySnapshot& snapshot, ScenePostEffectId id);
 PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot);
+PrepassNeed prepassNeeds(const SceneEffectSurfaces& cfg);
 
 void emitApplyPass(BlueprintBuilder& builder, const ScenePostEffectDesc& effect, PassId incomingColor);
 

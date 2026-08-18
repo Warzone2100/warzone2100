@@ -68,9 +68,9 @@ struct RenderFeatures
 		/// blit or upscale chain (otherwise it writes the swapchain directly).
 		SmaaIntermediate   = 1u << 6,
 		/// Include SSAO generate / blur / compose passes (in-game, not frozen).
+		/// ScenePrepass is inserted when `prepassNeeds()` is not None.
 		SSAO               = 1u << 7,
-		/// Include the deferred FogApply pass (in-game, not frozen). ScenePrepass
-		/// is also included when this or SSAO is set.
+		/// Include the deferred FogApply pass (in-game, not frozen).
 		FogApply           = 1u << 8,
 		/// Downsample generate AO into the blur target when blur is coarser.
 		SSAODownsample     = 1u << 9,
