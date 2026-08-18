@@ -23,6 +23,7 @@
  */
 
 #include "blueprint.h"
+#include "scene_post_effects.h"
 #include "topology.h"
 
 #include "lib/framework/wzapp.h"
@@ -34,6 +35,93 @@ namespace gfx_api
 
 namespace
 {
+
+void appendPresentation(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot, PassId incomingColor)
+{
+	const bool smaaActive = (snapshot.features & RenderFeatures::Smaa) != 0;
+	const bool smaaIntermediate = (snapshot.features & RenderFeatures::SmaaIntermediate) != 0;
+	if (smaaActive)
+	{
+		// SMAA: edge detection and blending weights at scene resolution, then
+		// the neighborhood blend either into a scene-sized intermediate for a
+		// following scaling pass or straight into the swapchain
+		builder.beginPass(PassId::SmaaEdges, std::string("SmaaEdges"));
+		builder.color(PipelineSurfaceId::SmaaEdges, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(incomingColor, AttachmentRole::PrimaryColor);
+
+		builder.beginPass(PassId::SmaaWeights, std::string("SmaaWeights"));
+		builder.color(PipelineSurfaceId::SmaaWeights, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(PassId::SmaaEdges, AttachmentRole::PrimaryColor);
+
+		builder.beginPass(PassId::SmaaBlend, std::string("SmaaBlend"));
+		if (smaaIntermediate)
+		{
+			builder.color(PipelineSurfaceId::SmaaColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+				.viewport(ViewportRule::SceneColorTarget);
+		}
+		else if (snapshot.swapchainMsaa)
+		{
+			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
+				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+				.viewport(ViewportRule::Drawable);
+		}
+		else
+		{
+			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store)
+				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+				.viewport(ViewportRule::Drawable);
+		}
+		builder.readFrom(incomingColor, AttachmentRole::PrimaryColor)
+			.readFrom(PassId::SmaaWeights, AttachmentRole::PrimaryColor);
+	}
+
+	// the blit or upscale chain consumes the anti-aliased intermediate when present,
+	// otherwise the last apply output (or raw) scene color
+	const PassId sceneOutputSource = smaaIntermediate ? PassId::SmaaBlend : incomingColor;
+
+	if (snapshot.features & RenderFeatures::SceneUpscale)
+	{
+		// FSR1: edge adaptive upscale into a drawable-sized intermediate,
+		// then sharpen from the intermediate into the swapchain
+		builder.beginPass(PassId::SceneUpscaleEASU, std::string("SceneUpscaleEASU"));
+		builder.color(PipelineSurfaceId::UpscaledColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::Drawable)
+			.readFrom(sceneOutputSource, AttachmentRole::PrimaryColor);
+
+		builder.beginPass(PassId::SceneUpscaleRCAS, std::string("SceneUpscaleRCAS"));
+		if (snapshot.swapchainMsaa)
+		{
+			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
+				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
+		}
+		else
+		{
+			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
+		}
+		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+			.viewport(ViewportRule::Drawable)
+			.readFrom(PassId::SceneUpscaleEASU, AttachmentRole::PrimaryColor);
+	}
+	else if (!smaaActive || smaaIntermediate)
+	{
+		builder.beginPass(PassId::SceneBlit, std::string("SceneBlit"));
+		if (snapshot.swapchainMsaa)
+		{
+			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
+				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
+		}
+		else
+		{
+			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
+		}
+		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+			.viewport(ViewportRule::Drawable)
+			.readFrom(sceneOutputSource, AttachmentRole::PrimaryColor);
+	}
+}
 
 PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& snapshot)
 {
@@ -82,155 +170,25 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 
 	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
 
-	if (ssaoActive)
+	PassId incomingColor = PassId::ScenePass;
+	for (const ScenePostEffectDesc& effect : kScenePostEffects)
 	{
-		const bool ssaoDownsample = (snapshot.features & RenderFeatures::SSAODownsample) != 0;
-		const ClearValue ssaoUnoccludedClear = ClearValue::colorClear(1.f, 1.f, 1.f, 1.f);
-
-		builder.beginPass(PassId::SSAOGenerate, "SSAOGenerate")
-			.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
-			.viewport(ViewportRule::ColorTarget)
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth) // 0: prepass depth
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0); // 1: prepass normals
-
-		if (ssaoDownsample)
+		if (!effectEnabled(snapshot, effect.id))
 		{
-			builder.beginPass(PassId::SSAODownsample, "SSAODownsample")
-				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
-				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor); // 0: generate AO
-
-			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
-				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
-				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAODownsample, AttachmentRole::PrimaryColor) // 0: occlusion
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
-
-			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
-				.color(PipelineSurfaceId::SSAOBlurred, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
-				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor) // 0: occlusion
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
+			continue;
 		}
-		else
+		if (effect.emitPreparePasses)
 		{
-			builder.beginPass(PassId::SSAOBlurH, "SSAOBlurH")
-				.color(PipelineSurfaceId::SSAOBlurH, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
-				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOGenerate, AttachmentRole::PrimaryColor) // 0: occlusion
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
-
-			builder.beginPass(PassId::SSAOBlurV, "SSAOBlurV")
-				.color(PipelineSurfaceId::SSAORaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, ssaoUnoccludedClear)
-				.viewport(ViewportRule::ColorTarget)
-				.readFrom(PassId::SSAOBlurH, AttachmentRole::PrimaryColor) // 0: occlusion
-				.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
+			effect.emitPreparePasses(builder, snapshot);
 		}
-
-		builder.beginPass(PassId::SSAOCompose, "SSAOCompose")
-			.color(PipelineSurfaceId::SSAOComposedColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor) // 0: scene color
-			.readFrom(PassId::SSAOBlurV, AttachmentRole::PrimaryColor) // 1: blurred AO
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0); // 2: prepass normals
+		if (effect.applyPass != PassId::Count)
+		{
+			emitApplyPass(builder, effect, incomingColor);
+			incomingColor = effect.applyPass;
+		}
 	}
 
-	if (fogActive)
-	{
-		const PassId fogColorSrc = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;
-		builder.beginPass(PassId::FogApply, "FogApply")
-			.color(PipelineSurfaceId::FogColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(fogColorSrc, AttachmentRole::PrimaryColor) // 0: lit color
-			.readFrom(PassId::ScenePrepass, AttachmentRole::Depth); // 1: prepass depth
-	}
-
-	const PassId lightingColor = ssaoActive ? PassId::SSAOCompose : PassId::ScenePass;
-	const PassId aaColorSource = fogActive ? PassId::FogApply : lightingColor;
-
-	const bool smaaActive = (snapshot.features & RenderFeatures::Smaa) != 0;
-	const bool smaaIntermediate = (snapshot.features & RenderFeatures::SmaaIntermediate) != 0;
-	if (smaaActive)
-	{
-		// SMAA: edge detection and blending weights at scene resolution, then
-		// the neighborhood blend either into a scene-sized intermediate for a
-		// following scaling pass or straight into the swapchain
-		builder.beginPass(PassId::SmaaEdges, std::string("SmaaEdges"));
-		builder.color(PipelineSurfaceId::SmaaEdges, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(aaColorSource, AttachmentRole::PrimaryColor);
-
-		builder.beginPass(PassId::SmaaWeights, std::string("SmaaWeights"));
-		builder.color(PipelineSurfaceId::SmaaWeights, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::SceneColorTarget)
-			.readFrom(PassId::SmaaEdges, AttachmentRole::PrimaryColor);
-
-		builder.beginPass(PassId::SmaaBlend, std::string("SmaaBlend"));
-		if (smaaIntermediate)
-		{
-			builder.color(PipelineSurfaceId::SmaaColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-				.viewport(ViewportRule::SceneColorTarget);
-		}
-		else if (snapshot.swapchainMsaa)
-		{
-			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
-				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
-				.viewport(ViewportRule::Drawable);
-		}
-		else
-		{
-			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store)
-				.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
-				.viewport(ViewportRule::Drawable);
-		}
-		builder.readFrom(aaColorSource, AttachmentRole::PrimaryColor)
-			.readFrom(PassId::SmaaWeights, AttachmentRole::PrimaryColor);
-	}
-
-	// the blit or upscale chain consumes the anti-aliased intermediate when present,
-	// otherwise the SSAO-composed (or raw) scene color
-	const PassId sceneOutputSource = smaaIntermediate ? PassId::SmaaBlend : aaColorSource;
-
-	if (snapshot.features & RenderFeatures::SceneUpscale)
-	{
-		// FSR1: edge adaptive upscale into a drawable-sized intermediate,
-		// then sharpen from the intermediate into the swapchain
-		builder.beginPass(PassId::SceneUpscaleEASU, std::string("SceneUpscaleEASU"));
-		builder.color(PipelineSurfaceId::UpscaledColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
-			.viewport(ViewportRule::Drawable)
-			.readFrom(sceneOutputSource, AttachmentRole::PrimaryColor);
-
-		builder.beginPass(PassId::SceneUpscaleRCAS, std::string("SceneUpscaleRCAS"));
-		if (snapshot.swapchainMsaa)
-		{
-			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
-				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
-		}
-		else
-		{
-			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
-		}
-		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
-			.viewport(ViewportRule::Drawable)
-			.readFrom(PassId::SceneUpscaleEASU, AttachmentRole::PrimaryColor);
-	}
-	else if (!smaaActive || smaaIntermediate)
-	{
-		builder.beginPass(PassId::SceneBlit, std::string("SceneBlit"));
-		if (snapshot.swapchainMsaa)
-		{
-			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
-				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
-		}
-		else
-		{
-			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
-		}
-		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
-			.viewport(ViewportRule::Drawable)
-			.readFrom(sceneOutputSource, AttachmentRole::PrimaryColor);
-	}
+	appendPresentation(builder, snapshot, incomingColor);
 
 	addSwapchainPassToBuilder(builder, PassId::TargettingEffects, "TargettingEffects", snapshot.swapchainMsaa,
 		AttachmentLoadOp::Load, AttachmentLoadOp::Clear);
