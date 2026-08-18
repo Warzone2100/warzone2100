@@ -45,7 +45,8 @@ uint64_t RenderTopologySnapshot::topologyHash() const
 		swapchainMsaa ? 1u : 0u,
 		static_cast<std::size_t>(sceneBlitColorLoad),
 		sceneEffects.ssao ? 1u : 0u,
-		sceneEffects.fog ? 1u : 0u);
+		sceneEffects.fog ? 1u : 0u,
+		sceneEffects.rangeRings ? 1u : 0u);
 	return static_cast<uint64_t>(h);
 }
 

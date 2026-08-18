@@ -592,7 +592,7 @@ namespace gfx_api
 			return true;
 		}
 
-		/// Commit SSAO/fog catalog requests in one store. Backends rebuild surfaces.
+		/// Commit SSAO/fog/range-ring catalog requests in one store. Backends rebuild surfaces.
 		/// Scene prepass follows `prepassNeeds(cfg)` in pipelineSurfaceSyncInputs().
 		virtual bool setSceneEffectSurfaces(SceneEffectSurfaces cfg)
 		{

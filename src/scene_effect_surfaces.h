@@ -19,11 +19,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file scene_effect_surfaces.h
- * Commit current SSAO/fog settings into the gfx pipeline-surface catalog.
+ * Commit current SSAO/fog/range-ring settings into the gfx pipeline-surface catalog.
  */
 
 #pragma once
 
-/// Push current SSAO + fog settings into the gfx catalog and sync once.
+/// Push current SSAO + fog + range-ring settings into the gfx catalog and sync once.
 /// Call after any contributing setting changes (options, keybind, init3DView).
 bool applySceneEffectSurfaces();

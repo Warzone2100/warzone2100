@@ -56,20 +56,22 @@ namespace gfx_api
 
 struct abstract_texture;
 
-/// Independent SSAO/fog catalog requests. Scene prepass follows `prepassNeeds(cfg)`.
+/// Independent SSAO/fog/range-ring catalog requests. Scene prepass follows `prepassNeeds(cfg)`.
 struct SceneEffectSurfaces
 {
 	bool ssao = false;
 	uint32_t ssaoGenerateDivisor = 1;
 	uint32_t ssaoBlurDivisor = 1;
 	bool fog = false;
+	bool rangeRings = false;
 
 	bool operator==(const SceneEffectSurfaces& other) const
 	{
 		return ssao == other.ssao
 			&& ssaoGenerateDivisor == other.ssaoGenerateDivisor
 			&& ssaoBlurDivisor == other.ssaoBlurDivisor
-			&& fog == other.fog;
+			&& fog == other.fog
+			&& rangeRings == other.rangeRings;
 	}
 
 	bool enabled(ScenePostEffectId id) const
@@ -80,6 +82,8 @@ struct SceneEffectSurfaces
 			return ssao;
 		case ScenePostEffectId::Fog:
 			return fog;
+		case ScenePostEffectId::RangeRings:
+			return rangeRings;
 		case ScenePostEffectId::Count:
 			break;
 		}
@@ -121,6 +125,12 @@ enum class PipelineSurfaceId : uint8_t
 	SSAOComposedColor,
 	/// Scene-sized lit(+AO) scene with distance fog applied; feeds SMAA/blit/FSR.
 	FogColor,
+	/// Packed per-type range-ring union field (RGB = sensor / weapon / min-range).
+	RangeRingSdf,
+	/// Scratch depth for the range-ring cone Z-test (not sampled).
+	RangeRingSdfDepth,
+	/// Scene-sized lit scene with range-ring overlay applied; feeds SMAA/blit/FSR.
+	RangeRingColor,
 	ShadowMap,
 	SwapchainColor,
 	SwapchainMSAAColor,

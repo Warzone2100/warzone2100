@@ -78,6 +78,26 @@ void emitSsaoPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapsh
 	}
 }
 
+void emitRangeRingPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapshot&)
+{
+	static constexpr ClearValue SDF_UNCOVERED = ClearValue::colorClear(1.f, 1.f, 1.f, 1.f);
+
+	builder.beginPass(PassId::RangeRingSdfSensor, "RangeRingSdfSensor")
+		.color(PipelineSurfaceId::RangeRingSdf, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, SDF_UNCOVERED)
+		.depth(PipelineSurfaceId::RangeRingSdfDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::DontCare)
+		.viewport(ViewportRule::SceneColorTarget);
+
+	builder.beginPass(PassId::RangeRingSdfWeapon, "RangeRingSdfWeapon")
+		.color(PipelineSurfaceId::RangeRingSdf, AttachmentLoadOp::Load, AttachmentStoreOp::Store)
+		.depth(PipelineSurfaceId::RangeRingSdfDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::DontCare)
+		.viewport(ViewportRule::SceneColorTarget);
+
+	builder.beginPass(PassId::RangeRingSdfMin, "RangeRingSdfMin")
+		.color(PipelineSurfaceId::RangeRingSdf, AttachmentLoadOp::Load, AttachmentStoreOp::Store)
+		.depth(PipelineSurfaceId::RangeRingSdfDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::DontCare)
+		.viewport(ViewportRule::SceneColorTarget);
+}
+
 } // anonymous namespace
 
 bool effectEnabled(const RenderTopologySnapshot& snapshot, ScenePostEffectId id)
@@ -166,6 +186,17 @@ const std::array<ScenePostEffectDesc, static_cast<size_t>(ScenePostEffectId::Cou
 		.applyOutput = PipelineSurfaceId::FogColor,
 		.applyInputs = { ApplyInput::IncomingColor, ApplyInput::PrepassDepth },
 		.applyInputCount = 2,
+	},
+	{
+		.id = ScenePostEffectId::RangeRings,
+		.prepassNeed = PrepassNeed::Depth,
+		.emitPreparePasses = emitRangeRingPreparePasses,
+		.applyPass = PassId::RangeRingComposite,
+		.applyDebugName = "RangeRingComposite",
+		.applyOutput = PipelineSurfaceId::RangeRingColor,
+		.applyInputs = { ApplyInput::IncomingColor, ApplyInput::PrepassDepth, ApplyInput::PreparedOutput },
+		.applyInputCount = 3,
+		.preparedColorPass = PassId::RangeRingSdfMin,
 	},
 }};
 

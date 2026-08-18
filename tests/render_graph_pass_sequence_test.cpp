@@ -74,6 +74,10 @@ static const char* passIdName(PassId id)
 	case PassId::SSAOBlurV: return "SSAOBlurV";
 	case PassId::SSAOCompose: return "SSAOCompose";
 	case PassId::FogApply: return "FogApply";
+	case PassId::RangeRingSdfSensor: return "RangeRingSdfSensor";
+	case PassId::RangeRingSdfWeapon: return "RangeRingSdfWeapon";
+	case PassId::RangeRingSdfMin: return "RangeRingSdfMin";
+	case PassId::RangeRingComposite: return "RangeRingComposite";
 	case PassId::SceneBlit: return "SceneBlit";
 	case PassId::SceneUpscaleEASU: return "SceneUpscaleEASU";
 	case PassId::SceneUpscaleRCAS: return "SceneUpscaleRCAS";
@@ -172,6 +176,15 @@ int main()
 
 	{
 		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.rangeRings = true;
+		expectInGame("rings-only", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass,
+			PassId::RangeRingSdfSensor, PassId::RangeRingSdfWeapon, PassId::RangeRingSdfMin,
+			PassId::RangeRingComposite, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
 		snapshot.sceneEffects.ssao = true;
 		expectInGame("ssao", snapshot, {
 			PassId::ScenePrepass, PassId::ScenePass,
@@ -187,6 +200,19 @@ int main()
 			PassId::ScenePrepass, PassId::ScenePass,
 			PassId::SSAOGenerate, PassId::SSAODownsample, PassId::SSAOBlurH, PassId::SSAOBlurV,
 			PassId::SSAOCompose, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.ssao = true;
+		snapshot.sceneEffects.fog = true;
+		snapshot.sceneEffects.rangeRings = true;
+		expectInGame("ssao-fog-rings", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass,
+			PassId::SSAOGenerate, PassId::SSAOBlurH, PassId::SSAOBlurV, PassId::SSAOCompose,
+			PassId::FogApply,
+			PassId::RangeRingSdfSensor, PassId::RangeRingSdfWeapon, PassId::RangeRingSdfMin,
+			PassId::RangeRingComposite, PassId::SceneBlit});
 	}
 
 	{
