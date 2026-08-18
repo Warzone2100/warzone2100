@@ -236,4 +236,15 @@ std::string dumpBlueprint(const PassGraphTopologyBlueprint& blueprint)
 	return out.str();
 }
 
+std::vector<PassId> blueprintPassIds(const PassGraphTopologyBlueprint& blueprint)
+{
+	std::vector<PassId> ids;
+	ids.reserve(blueprint.passes().size());
+	for (const BlueprintPass& pass : blueprint.passes())
+	{
+		ids.push_back(pass.id);
+	}
+	return ids;
+}
+
 } // namespace gfx_api

@@ -171,9 +171,6 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query);
 
 } // namespace render_topology
 
-/// Expected pass count for validation after blueprint materialize (per screen kind / features).
-size_t expectedPassCount(const RenderTopologySnapshot& snapshot);
-
 /// Global query instance used during normal gameplay frame setup.
 IRenderTopologyQuery& getGameRenderTopologyQuery();
 

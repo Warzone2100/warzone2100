@@ -907,6 +907,14 @@ if(WZ_BUILD_TERRAIN_SURFACE_TEST)
 	target_include_directories(terrain_surface_test PRIVATE "${PROJECT_SOURCE_DIR}/src")
 endif()
 
+# In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
+option(WZ_BUILD_RENDER_GRAPH_TEST "Build the render-graph pass sequence unit test (tests/render_graph_pass_sequence_test.cpp)" OFF)
+if(WZ_BUILD_RENDER_GRAPH_TEST)
+	add_executable(render_graph_pass_sequence_test "${PROJECT_SOURCE_DIR}/tests/render_graph_pass_sequence_test.cpp")
+	target_include_directories(render_graph_pass_sequence_test PRIVATE "${PROJECT_SOURCE_DIR}")
+	target_link_libraries(render_graph_pass_sequence_test PRIVATE ivis-opengl framework)
+endif()
+
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Target system is Windows
