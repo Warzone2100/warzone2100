@@ -230,6 +230,25 @@ static void recordTargettingEffects(const gfx_api::RenderPassContext&)
 	display3d_processDestinationTarget();
 }
 
+static void recordRangeRingSdfNoop(const gfx_api::RenderPassContext&)
+{
+	// Cone rasterization lands in a later step; beginPass still clears / loads the packed SDF target.
+}
+
+static void recordRangeRingCompositeCopy(const gfx_api::RenderPassContext& passCtx)
+{
+	ASSERT(passCtx.readCount() >= 1, "RangeRingComposite: 0 lit color");
+	gfx_api::abstract_texture* scene = passCtx.getRead(0);
+	if (scene == nullptr || !pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+
+	gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN> cbuf {};
+	display3d_fillPassReadUvScaleClamp(passCtx, 0, cbuf.uvScaleClamp);
+	display3d_drawFullscreenTriangle<gfx_api::WorldToScreenPSO>(cbuf, scene);
+}
+
 void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 {
 	table.set(gfx_api::PassId::ScenePrepass, recordScenePrepass);
@@ -240,6 +259,10 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSAOBlurV, ssao::recordBlurV);
 	table.set(gfx_api::PassId::SSAOCompose, ssao::recordCompose);
 	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
+	table.set(gfx_api::PassId::RangeRingSdfSensor, recordRangeRingSdfNoop);
+	table.set(gfx_api::PassId::RangeRingSdfWeapon, recordRangeRingSdfNoop);
+	table.set(gfx_api::PassId::RangeRingSdfMin, recordRangeRingSdfNoop);
+	table.set(gfx_api::PassId::RangeRingComposite, recordRangeRingCompositeCopy);
 	table.set(gfx_api::PassId::SceneBlit, recordSceneBlit);
 	table.set(gfx_api::PassId::SceneUpscaleEASU, recordSceneUpscaleEASU);
 	table.set(gfx_api::PassId::SceneUpscaleRCAS, recordSceneUpscaleRCAS);

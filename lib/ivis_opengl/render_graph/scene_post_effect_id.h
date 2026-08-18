@@ -37,6 +37,7 @@ enum class ScenePostEffectId : uint8_t
 {
 	Ssao,
 	Fog,
+	RangeRings,
 	Count
 };
 
@@ -70,7 +71,7 @@ enum class ApplyInput : uint8_t
 	IncomingColor,
 	PrepassDepth,
 	PrepassNormals,
-	/// Primary color of `ScenePostEffectDesc::preparedColorPass` (for example, blurred AO).
+	/// Primary color of `ScenePostEffectDesc::preparedColorPass` (blurred AO, packed SDF).
 	PreparedOutput,
 };
 

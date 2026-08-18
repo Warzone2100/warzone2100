@@ -36,10 +36,10 @@ namespace gfx_api
 {
 
 /// One post-lighting screen-space effect: after ScenePass, before SMAA/blit.
-/// Table order of `applyPass` is the apply chain (SSAO compose -> fog).
+/// Table order of `applyPass` is the apply chain (SSAO compose -> fog -> rings).
 ///
 /// Two phases, both optional:
-/// - emitPreparePasses: offscreen subgraph that writes intermediates (AO).
+/// - emitPreparePasses: offscreen subgraph that writes intermediates (AO, packed SDF).
 ///   Does not write scene color. Fog leaves this null.
 /// - applyPass: fullscreen pass that samples IncomingColor plus extras.
 struct ScenePostEffectDesc

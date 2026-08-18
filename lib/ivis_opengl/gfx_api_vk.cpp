@@ -3159,6 +3159,9 @@ const char* pipelineSurfaceDebugName(gfx_api::PipelineSurfaceId id)
 	case gfx_api::PipelineSurfaceId::SceneDepth: return "<scene depth stencil>";
 	case gfx_api::PipelineSurfaceId::ShadowMap: return "<depth map>";
 	case gfx_api::PipelineSurfaceId::SwapchainMSAAColor: return "<swapchain msaa color>";
+	case gfx_api::PipelineSurfaceId::RangeRingSdf: return "<range ring sdf>";
+	case gfx_api::PipelineSurfaceId::RangeRingSdfDepth: return "<range ring sdf depth>";
+	case gfx_api::PipelineSurfaceId::RangeRingColor: return "<range ring color>";
 	default: return "<pipeline surface>";
 	}
 }

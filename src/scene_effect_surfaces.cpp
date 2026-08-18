@@ -19,11 +19,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file scene_effect_surfaces.cpp
- * Commit current SSAO/fog settings into the gfx pipeline-surface catalog.
+ * Commit current SSAO/fog/range-ring settings into the gfx pipeline-surface catalog.
  */
 
 #include "scene_effect_surfaces.h"
 
+#include "display3d.h"
 #include "ssao.h"
 
 #include "lib/framework/frame.h"
@@ -38,10 +39,11 @@ bool applySceneEffectSurfaces()
 	cfg.ssaoGenerateDivisor = ssaoSettings.generateDivisor;
 	cfg.ssaoBlurDivisor = ssaoSettings.blurDivisor;
 	cfg.fog = pie_GetFogEnabled();
+	cfg.rangeRings = rangeOnScreen;
 	if (!gfx_api::context::get().setSceneEffectSurfaces(cfg))
 	{
-		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d fog=%d)",
-			static_cast<int>(cfg.ssao), static_cast<int>(cfg.fog));
+		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d fog=%d rangeRings=%d)",
+			static_cast<int>(cfg.ssao), static_cast<int>(cfg.fog), static_cast<int>(cfg.rangeRings));
 		return false;
 	}
 	return true;

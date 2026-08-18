@@ -66,14 +66,14 @@ struct ClearValue
 	float depth = 1.f;
 	uint32_t stencil = 0;
 
-	static ClearValue colorClear(float r = 0.f, float g = 0.f, float b = 0.f, float a = 1.f)
+	static constexpr ClearValue colorClear(float r = 0.f, float g = 0.f, float b = 0.f, float a = 1.f)
 	{
 		ClearValue v;
 		v.color = {r, g, b, a};
 		return v;
 	}
 
-	static ClearValue depthStencilClear(float depthValue = 1.f, uint32_t stencilValue = 0)
+	static constexpr ClearValue depthStencilClear(float depthValue = 1.f, uint32_t stencilValue = 0)
 	{
 		ClearValue v;
 		v.depth = depthValue;
