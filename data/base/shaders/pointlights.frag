@@ -184,5 +184,11 @@ vec4 iterateOverAllPointLights(
 		vec3 tmp = position.xyz * vec3(1.f, 1.f, -1.f);
 		light += processPointLight(WorldFragPos, fragNormal, surfaceNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, position.w, directionAndCos);
 	}
+	// Instead of clipping, scale the whole sum back by its strongest channel - which caps the brightness and leaves the color in a more reasonable place.
+	float peak = max(max(light.r, light.g), light.b);
+	if (peak > 1.f)
+	{
+		light.rgb /= peak;
+	}
 	return light;
 }
