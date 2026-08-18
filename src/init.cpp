@@ -1815,7 +1815,6 @@ static bool stageThreeInitialiseSync()
 	{
 		bInTutorial = false;
 	}
-	rangeOnScreen = false;
 
 	if (fromSave && ActivityManager::instance().getCurrentGameMode() == ActivitySink::GameMode::CHALLENGE)
 	{

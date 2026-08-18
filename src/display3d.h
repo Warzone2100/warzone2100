@@ -74,6 +74,7 @@ extern bool	radarPermitted;
 bool radarVisible();
 
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
+void setRangeOnScreen(bool enabled);
 void setViewPos(UDWORD x, UDWORD y, bool Pan);
 Vector2i    getPlayerPos();
 void setPlayerPos(const WorldMapState& mapState, SDWORD x, SDWORD y);
