@@ -191,6 +191,10 @@ struct iIMDShape
 	int sradius = 0;
 	int radius = 0;
 
+	// Geometric mean of the two largest spans, which measures how big a model looks rather than how far it reaches
+	// Not safe for any game state calculations - display only
+	int crossSection = 0;
+
 	Vector3f ocen = Vector3f(0.f, 0.f, 0.f);
 
 	std::vector<Vector3i> connectors;

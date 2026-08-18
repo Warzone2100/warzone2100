@@ -102,6 +102,7 @@ iIMDShape& iIMDShape::operator=(iIMDShape&& other) noexcept
 		std::swap(max, other.max);
 		std::swap(sradius, other.sradius);
 		std::swap(radius, other.radius);
+		std::swap(crossSection, other.crossSection);
 		std::swap(ocen, other.ocen);
 		std::swap(connectors, other.connectors);
 		std::swap(flags, other.flags);
@@ -1044,6 +1045,15 @@ static void _imd_calc_bounds(iIMDShape &s, bool allLevels = false)
 
 	s.radius = MAX(xmax, MAX(ymax, zmax));
 	s.sradius = static_cast<int>(sqrtf(xmax * xmax + ymax * ymax + zmax * zmax));
+
+	// the two largest spans
+	const int spanX = s.max.x - s.min.x;
+	const int spanY = s.max.y - s.min.y;
+	const int spanZ = s.max.z - s.min.z;
+	const int longestSpan = MAX(spanX, MAX(spanY, spanZ));
+	const int shortestSpan = MIN(spanX, MIN(spanY, spanZ));
+	const int middleSpan = spanX + spanY + spanZ - longestSpan - shortestSpan;
+	s.crossSection = static_cast<int>(sqrtf(static_cast<float>(longestSpan) * static_cast<float>(MAX(middleSpan, 1))));
 
 // START: tight bounding sphere
 

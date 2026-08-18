@@ -1787,11 +1787,12 @@ static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &ligh
 	LIGHT light;
 	light.position = lightPosition;
 	// The graphic already says how big the glow is, so calculate reach and brightness from it.
-	constexpr float referencePlumeRadius = 32.f; // the medium rocket plume, where the values here were set
-	const float plumeScale = glm::clamp(static_cast<float>(pIMD->radius) / referencePlumeRadius, 0.5f, 2.f);
-	light.range = static_cast<UDWORD>(320.f * plumeScale);
+	// Its cross section rather than its radius, because some models are drawn as streaks.
+	constexpr float referenceGlowSize = 32.f; // the medium rocket plume, where the values here were set
+	const float plumeScale = glm::clamp(static_cast<float>(pIMD->crossSection) / referenceGlowSize, 0.5f, 1.5f);
+	light.range = static_cast<UDWORD>(260.f * plumeScale);
 	light.colour = (psStats->weaponClass == WC_HEAT) ? pal_Colour(150, 205, 255) : pal_Colour(255, 170, 90);
-	light.intensity = 1.25f * plumeScale;
+	light.intensity = 1.1f * plumeScale;
 	getCurrentLightingData().lights.push_back(light);
 }
 
