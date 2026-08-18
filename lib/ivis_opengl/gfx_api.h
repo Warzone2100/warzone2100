@@ -1970,6 +1970,8 @@ namespace gfx_api
 	};
 	static_assert(sizeof(RangeRingInstance) == 16, "RangeRingInstance stride");
 
+	// LEQ depth write: overlapping cones in one channel keep the nearer fragment
+	// (cheap union). ColorMask selects R/G/B of the packed SDF target.
 	template<uint8_t ColorMask>
 	using RangeRingSdfMaskedPSO = typename gfx_api::pipeline_state_helper<
 		rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, ColorMask,
