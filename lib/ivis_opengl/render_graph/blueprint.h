@@ -52,7 +52,8 @@ namespace gfx_api
 /// </summary>
 struct RecordFuncTable
 {
-	/// Per `PassId` record callbacks; empty slots are skipped at execute time.
+	/// Per `PassId` record callbacks. `BlueprintMaterializer` asserts if a blueprint
+	/// pass has an empty slot; execute still skips empty funcs as a last resort.
 	std::array<RenderPassDesc::RecordFunc, static_cast<size_t>(PassId::Count)> funcs{};
 
 	/// Register the draw callback for a pass slot.
@@ -171,6 +172,9 @@ private:
 
 /// Human-readable dump of pass order, attachments, and read edges (debug logging).
 std::string dumpBlueprint(const PassGraphTopologyBlueprint& blueprint);
+
+/// Ordered `PassId` sequence of `blueprint` (stable identity, not debug names).
+std::vector<PassId> blueprintPassIds(const PassGraphTopologyBlueprint& blueprint);
 
 /// <summary>
 /// Fluent builder for `PassGraphTopologyBlueprint` (structure only).

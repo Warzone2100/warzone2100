@@ -19,78 +19,20 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file topology.cpp
- * Topology snapshot construction, pass-count validation, and topology/materialize hashing.
+ * Topology snapshot construction and topology/materialize hashing.
  */
 
 #include "topology.h"
 
 #include "pipeline_surfaces.h"
-#include "scene_post_effects.h"
 #include "shadows.h"
 
 #include "lib/framework/hash_combine.h"
-#include "lib/framework/wzapp.h"
 
 #include <algorithm>
 
 namespace gfx_api
 {
-
-namespace
-{
-
-size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
-{
-	ASSERT(snapshot.screenKind == RenderScreenKind::InGame, "expectedInGamePassCount: wrong screen kind");
-	if (snapshot.features & RenderFeatures::FrozenWorldOverlay)
-	{
-		size_t count = 1; // InGameUI
-		if (snapshot.features & RenderFeatures::Backdrop)
-		{
-			++count;
-		}
-		return count;
-	}
-	size_t count = 6; // Scene, SceneBlit, Targetting, overlays, fade slot, UI
-	if (snapshot.features & RenderFeatures::SceneUpscale)
-	{
-		++count; // SceneBlit becomes the EASU and RCAS pass pair
-	}
-	if (snapshot.features & RenderFeatures::Smaa)
-	{
-		// edge detection and blending weights, plus a separate blend pass when
-		// it feeds an intermediate instead of replacing the swapchain output
-		count += (snapshot.features & RenderFeatures::SmaaIntermediate) ? 3 : 2;
-	}
-	if (snapshot.sceneEffects.enabled(ScenePostEffectId::Ssao))
-	{
-		count += 4; // SSAOGenerate, SSAOBlurH, SSAOBlurV, SSAOCompose
-	}
-	if (snapshot.features & RenderFeatures::SSAODownsample)
-	{
-		++count;
-	}
-	if (prepassNeeds(snapshot) != PrepassNeed::None)
-	{
-		++count; // ScenePrepass
-	}
-	if (snapshot.sceneEffects.enabled(ScenePostEffectId::Fog))
-	{
-		++count; // FogApply
-	}
-	if (snapshot.features & RenderFeatures::DebugOverlays)
-	{
-		++count;
-	}
-	if (snapshot.features & RenderFeatures::Backdrop)
-	{
-		++count;
-	}
-	count += snapshot.numShadowCascades;
-	return count;
-}
-
-} // anonymous namespace
 
 uint64_t RenderTopologySnapshot::topologyHash() const
 {
@@ -120,22 +62,6 @@ uint64_t RenderTopologySnapshot::materializeHash() const
 		sceneEffects.ssaoGenerateDivisor,
 		sceneEffects.ssaoBlurDivisor);
 	return static_cast<uint64_t>(h);
-}
-
-size_t expectedPassCount(const RenderTopologySnapshot& snapshot)
-{
-	switch (snapshot.screenKind)
-	{
-	case RenderScreenKind::InGame:
-		return expectedInGamePassCount(snapshot);
-	case RenderScreenKind::Title:
-		return (snapshot.features & RenderFeatures::Backdrop) ? 2u : 1u;
-	case RenderScreenKind::Loading:
-		return (snapshot.features & RenderFeatures::Backdrop) ? 2u : 1u;
-	case RenderScreenKind::Video:
-		return 1u;
-	}
-	return 0;
 }
 
 namespace render_topology
