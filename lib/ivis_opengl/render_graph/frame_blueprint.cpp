@@ -158,9 +158,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::DepthCascade, i);
 	}
 
-	const bool ssaoActive = (snapshot.features & RenderFeatures::SSAO) != 0;
-	const bool fogActive = (snapshot.features & RenderFeatures::FogApply) != 0;
-	if (ssaoActive || fogActive)
+	if (prepassNeeds(snapshot) != PrepassNeed::None)
 	{
 		builder.beginPass(PassId::ScenePrepass, "ScenePrepass")
 			.color(PipelineSurfaceId::ScenePrepassNormals, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)

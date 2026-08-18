@@ -46,6 +46,7 @@
 #include <vector>
 
 #include "../gfx_api_formats_def.h"
+#include "scene_post_effect_id.h"
 
 #include <nonstd/optional.hpp>
 
@@ -310,7 +311,7 @@ struct PipelineSurfaceSyncInputs
 	bool smaa = false;
 	/// When true, SsaoActive catalog surfaces are enabled (set via context::setSceneEffectSurfaces).
 	bool ssaoEnabled = false;
-	/// When true, ScenePrepassActive catalog surfaces are enabled (ssao || fog).
+	/// When true, ScenePrepassActive catalog surfaces are enabled (`prepassNeeds(cfg) != None`).
 	bool scenePrepassEnabled = false;
 	/// When true, FogApplyActive catalog surfaces are enabled (set via context::setSceneEffectSurfaces).
 	bool fogApplyEnabled = false;

@@ -56,6 +56,7 @@
 #include "gfx_api_vk.h"
 #include "render_graph/layout_subresource.h"
 #include "render_graph/pass_resolve.h"
+#include "render_graph/scene_post_effects.h"
 #include "vk/handle_storage.h"
 #include "vk/layout_key_builder.h"
 #include "vk/layout_sync.h"
@@ -6105,7 +6106,7 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
 	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
 	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
-	inputs.scenePrepassEnabled = getSSAOSurfacesEnabled() || getFogSurfacesEnabled();
+	inputs.scenePrepassEnabled = gfx_api::prepassNeeds(storedSceneEffectSurfaces()) != gfx_api::PrepassNeed::None;
 	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;
 }

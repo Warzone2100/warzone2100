@@ -24,8 +24,8 @@
 
 #include "topology.h"
 
-#include "gfx_api.h"
 #include "pipeline_surfaces.h"
+#include "scene_post_effects.h"
 #include "shadows.h"
 
 #include "lib/framework/hash_combine.h"
@@ -70,7 +70,7 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 	{
 		++count;
 	}
-	if ((snapshot.features & RenderFeatures::SSAO) || (snapshot.features & RenderFeatures::FogApply))
+	if (prepassNeeds(snapshot) != PrepassNeed::None)
 	{
 		++count; // ScenePrepass
 	}

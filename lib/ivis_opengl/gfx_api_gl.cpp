@@ -22,6 +22,7 @@
 #include "screen.h"
 #include "gfx_api_gl.h"
 #include "render_graph/pass_resolve.h"
+#include "render_graph/scene_post_effects.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
@@ -4193,7 +4194,7 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.ssaoEnabled = getSSAOSurfacesEnabled();
 	inputs.ssaoGenerateDivisor = getSSAOGenerateDivisor();
 	inputs.ssaoBlurDivisor = getSSAOBlurDivisor();
-	inputs.scenePrepassEnabled = getSSAOSurfacesEnabled() || getFogSurfacesEnabled();
+	inputs.scenePrepassEnabled = gfx_api::prepassNeeds(storedSceneEffectSurfaces()) != gfx_api::PrepassNeed::None;
 	inputs.fogApplyEnabled = getFogSurfacesEnabled();
 	return inputs;
 }
