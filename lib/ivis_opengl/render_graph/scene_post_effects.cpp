@@ -24,7 +24,6 @@
 
 #include "scene_post_effects.h"
 
-#include "gfx_api.h"
 #include "lib/framework/wzapp.h"
 
 namespace gfx_api
@@ -83,16 +82,7 @@ void emitSsaoPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapsh
 
 bool effectEnabled(const RenderTopologySnapshot& snapshot, ScenePostEffectId id)
 {
-	switch (id)
-	{
-	case ScenePostEffectId::Ssao:
-		return (snapshot.features & RenderFeatures::SSAO) != 0;
-	case ScenePostEffectId::Fog:
-		return (snapshot.features & RenderFeatures::FogApply) != 0;
-	case ScenePostEffectId::Count:
-		break;
-	}
-	return false;
+	return snapshot.sceneEffects.enabled(id);
 }
 
 namespace

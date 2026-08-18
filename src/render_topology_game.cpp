@@ -115,39 +115,12 @@ public:
 		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::SmaaColor) != nullptr;
 	}
 
-	bool ssaoEnabled() const override
+	gfx_api::SceneEffectSurfaces sceneEffectSurfaces() const override
 	{
-		// Follow the allocated surfaces rather than the config value. The config is applied to
-		// the context by init3DView, so before that the two disagree and every SSAO pass
-		// resolves without attachments, which fails the graph compile.
-		return gfx_api::context::get().getSSAOSurfacesEnabled();
-	}
-
-	bool ssaoDownsampleActive() const override
-	{
-		auto& ctx = gfx_api::context::get();
-		if (!ctx.getSSAOSurfacesEnabled())
-		{
-			return false;
-		}
-		const auto scene = sceneColorDimensions();
-		return gfx_api::ssaoBlurIsCoarser(scene.first, scene.second,
-			ctx.getSSAOGenerateDivisor(), ctx.getSSAOBlurDivisor());
-	}
-
-	uint32_t ssaoGenerateDivisor() const override
-	{
-		return gfx_api::context::get().getSSAOGenerateDivisor();
-	}
-
-	uint32_t ssaoBlurDivisor() const override
-	{
-		return gfx_api::context::get().getSSAOBlurDivisor();
-	}
-
-	bool fogEnabled() const override
-	{
-		return gfx_api::context::get().getFogSurfacesEnabled();
+		// Follow allocated surfaces rather than raw config. Config is applied in
+		// init3DView; before that the two disagree and post-effect passes compile
+		// without attachments.
+		return gfx_api::context::get().storedSceneEffectSurfaces();
 	}
 
 	uint32_t shadowMapSize() const override

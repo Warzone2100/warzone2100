@@ -35,8 +35,6 @@
 namespace gfx_api
 {
 
-struct SceneEffectSurfaces;
-
 /// One post-lighting screen-space effect: after ScenePass, before SMAA/blit.
 /// Table order of `applyPass` is the apply chain (SSAO compose -> fog).
 ///

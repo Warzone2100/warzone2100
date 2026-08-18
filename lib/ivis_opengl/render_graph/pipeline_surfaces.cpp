@@ -45,7 +45,8 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	SurfaceStorageKind storageKind,
 	SurfaceLifetimePolicy lifetimePolicy,
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count,
-	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None)
+	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None,
+	ScenePostEffectId enableEffect = ScenePostEffectId::Count)
 {
 	PipelineSurfaceCatalogEntry entry;
 	entry.usage = usage;
@@ -60,6 +61,7 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	entry.lifetimePolicy = lifetimePolicy;
 	entry.formatCompanion = formatCompanion;
 	entry.extentDivisorSource = extentDivisorSource;
+	entry.enableEffect = enableEffect;
 	return entry;
 }
 
@@ -182,12 +184,13 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::SingleChannelR8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::SsaoActive,
+		SurfaceEnablePolicy::ScenePostEffect,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::SsaoGenerate),
+		SurfaceExtentDivisorSource::SsaoGenerate,
+		ScenePostEffectId::Ssao),
 	// SSAOBlurH - horizontal-blur ping-pong at blur resolution
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -196,12 +199,13 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::SingleChannelR8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::SsaoActive,
+		SurfaceEnablePolicy::ScenePostEffect,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::SsaoBlur),
+		SurfaceExtentDivisorSource::SsaoBlur,
+		ScenePostEffectId::Ssao),
 	// SSAOBlurred - blur-res dest when blur is coarser than generate
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -224,10 +228,13 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::SceneColor,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::SsaoActive,
+		SurfaceEnablePolicy::ScenePostEffect,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
-		SurfaceLifetimePolicy::SwapchainBound),
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		SurfaceExtentDivisorSource::None,
+		ScenePostEffectId::Ssao),
 	// FogColor - lit(+AO) scene with distance fog applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -236,10 +243,13 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::SceneColor,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::FogApplyActive,
+		SurfaceEnablePolicy::ScenePostEffect,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
-		SurfaceLifetimePolicy::SwapchainBound),
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		SurfaceExtentDivisorSource::None,
+		ScenePostEffectId::Fog),
 	// ShadowMap
 	makeCatalogEntry(
 		PipelineSurfaceUsage::DepthOnly,
@@ -349,6 +359,17 @@ void validatePipelineSurfaceCatalog()
 			ASSERT(static_cast<size_t>(cat.formatCompanion) < i,
 				"MatchCompanion companion index must precede dependent (row %zu)", i);
 		}
+
+		if (cat.enablePolicy == SurfaceEnablePolicy::ScenePostEffect)
+		{
+			ASSERT(cat.enableEffect != ScenePostEffectId::Count,
+				"ScenePostEffect catalog row %zu requires enableEffect", i);
+		}
+		else
+		{
+			ASSERT(cat.enableEffect == ScenePostEffectId::Count,
+				"enableEffect is only valid for ScenePostEffect (row %zu)", i);
+		}
 	}
 	ASSERT(persistentCount == 1, "Expected exactly one Persistent catalog surface, got %zu", persistentCount);
 }
@@ -362,9 +383,9 @@ struct CatalogValidator
 };
 const CatalogValidator kCatalogValidator {};
 
-bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInputs& inputs)
+bool evalEnablePolicy(const PipelineSurfaceCatalogEntry& cat, const PipelineSurfaceSyncInputs& inputs)
 {
-	switch (policy)
+	switch (cat.enablePolicy)
 	{
 	case SurfaceEnablePolicy::Always:
 		return true;
@@ -384,16 +405,16 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 		return inputs.smaa
 			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH
 				|| inputs.sceneDynamicResolution);
-	case SurfaceEnablePolicy::SsaoActive:
-		return inputs.ssaoEnabled;
+	case SurfaceEnablePolicy::ScenePostEffect:
+		return inputs.effects.enabled(cat.enableEffect);
 	case SurfaceEnablePolicy::SsaoSeparateBlurBuffers:
-		return inputs.ssaoEnabled
-			&& ssaoBlurIsCoarser(inputs.sceneW, inputs.sceneH, inputs.ssaoGenerateDivisor, inputs.ssaoBlurDivisor);
+		return inputs.effects.ssao
+			&& ssaoBlurIsCoarser(inputs.sceneW, inputs.sceneH,
+				inputs.effects.ssaoGenerateDivisor, inputs.effects.ssaoBlurDivisor);
 	case SurfaceEnablePolicy::ScenePrepassActive:
-		return inputs.scenePrepassEnabled;
-	case SurfaceEnablePolicy::FogApplyActive:
-		return inputs.fogApplyEnabled;
+		return inputs.prepassNeeds != PrepassNeed::None;
 	}
+	ASSERT(false, "Unknown SurfaceEnablePolicy");
 	return false;
 }
 
@@ -472,11 +493,11 @@ void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurface
 		uint32_t divisor = 1;
 		if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoGenerate)
 		{
-			divisor = inputs.ssaoGenerateDivisor;
+			divisor = inputs.effects.ssaoGenerateDivisor;
 		}
 		else if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoBlur)
 		{
-			divisor = inputs.ssaoBlurDivisor;
+			divisor = inputs.effects.ssaoBlurDivisor;
 		}
 		width = divideSurfaceExtent(inputs.sceneW, divisor);
 		height = divideSurfaceExtent(inputs.sceneH, divisor);
@@ -593,7 +614,7 @@ ResolvedSurfaceTable resolvePipelineSurfaces(const PipelineSurfaceSyncInputs& in
 		spec.provisionMode = cat.provisionMode;
 		spec.storageKind = cat.storageKind;
 		spec.gpuUsage = cat.gpuUsage;
-		spec.enabled = evalEnablePolicy(cat.enablePolicy, inputs);
+		spec.enabled = evalEnablePolicy(cat, inputs);
 		spec.preserveIfDisabled = false;
 
 		uint32_t width = 0;

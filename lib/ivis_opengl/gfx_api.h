@@ -354,37 +354,6 @@ namespace gfx_api
 		}
 	};
 
-	/// Independent SSAO/fog catalog requests. Scene prepass follows `prepassNeeds(cfg)`.
-	struct SceneEffectSurfaces
-	{
-		bool ssao = false;
-		uint32_t ssaoGenerateDivisor = 1;
-		uint32_t ssaoBlurDivisor = 1;
-		bool fog = false;
-
-		bool operator==(const SceneEffectSurfaces& other) const
-		{
-			return ssao == other.ssao
-				&& ssaoGenerateDivisor == other.ssaoGenerateDivisor
-				&& ssaoBlurDivisor == other.ssaoBlurDivisor
-				&& fog == other.fog;
-		}
-
-		bool enabled(ScenePostEffectId id) const
-		{
-			switch (id)
-			{
-			case ScenePostEffectId::Ssao:
-				return ssao;
-			case ScenePostEffectId::Fog:
-				return fog;
-			case ScenePostEffectId::Count:
-				break;
-			}
-			return false;
-		}
-	};
-
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -629,10 +598,8 @@ namespace gfx_api
 			storeSceneEffectSurfaces(cfg);
 			return true;
 		}
-		bool getSSAOSurfacesEnabled() const { return _ssaoSurfacesEnabled; }
-		uint32_t getSSAOGenerateDivisor() const { return _ssaoGenerateDivisor; }
-		uint32_t getSSAOBlurDivisor() const { return _ssaoBlurDivisor; }
-		bool getFogSurfacesEnabled() const { return _fogSurfacesEnabled; }
+		/// Last committed catalog request (allocated surfaces, not raw gameplay config).
+		SceneEffectSurfaces storedSceneEffectSurfaces() const { return _sceneEffectSurfaces; }
 
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
@@ -714,20 +681,7 @@ namespace gfx_api
 		}
 		void storeSceneEffectSurfaces(SceneEffectSurfaces cfg)
 		{
-			cfg = normalizeSceneEffectSurfaces(cfg);
-			_ssaoSurfacesEnabled = cfg.ssao;
-			_ssaoGenerateDivisor = cfg.ssaoGenerateDivisor;
-			_ssaoBlurDivisor = cfg.ssaoBlurDivisor;
-			_fogSurfacesEnabled = cfg.fog;
-		}
-		SceneEffectSurfaces storedSceneEffectSurfaces() const
-		{
-			SceneEffectSurfaces cfg;
-			cfg.ssao = _ssaoSurfacesEnabled;
-			cfg.ssaoGenerateDivisor = _ssaoGenerateDivisor;
-			cfg.ssaoBlurDivisor = _ssaoBlurDivisor;
-			cfg.fog = _fogSurfacesEnabled;
-			return cfg;
+			_sceneEffectSurfaces = normalizeSceneEffectSurfaces(cfg);
 		}
 
 		// GPU frame timing state maintained by the backends
@@ -742,10 +696,7 @@ namespace gfx_api
 		uint32_t _sceneRenderScalePercent = 100;
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
-		bool _ssaoSurfacesEnabled = false;
-		uint32_t _ssaoGenerateDivisor = 1;
-		uint32_t _ssaoBlurDivisor = 1;
-		bool _fogSurfacesEnabled = false;
+		SceneEffectSurfaces _sceneEffectSurfaces;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;

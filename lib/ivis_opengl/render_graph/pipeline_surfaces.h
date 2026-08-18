@@ -25,6 +25,7 @@
  *
  * Adding a PipelineSurfaceId:
  * 1. Append enum value (before Count) and catalog row (policies + lifetime).
+ *    Post-effect rows use EnablePolicy::ScenePostEffect and `enableEffect`.
  * 2. Implement create/destroy for storageKind in VK and GL PipelineSurfaceAllocator.
  * 3. Wire blueprint attachments / topology if the surface is graph-visible.
  * 4. beginPass attachment binding if new cascade/view rules are needed.
@@ -54,6 +55,37 @@ namespace gfx_api
 {
 
 struct abstract_texture;
+
+/// Independent SSAO/fog catalog requests. Scene prepass follows `prepassNeeds(cfg)`.
+struct SceneEffectSurfaces
+{
+	bool ssao = false;
+	uint32_t ssaoGenerateDivisor = 1;
+	uint32_t ssaoBlurDivisor = 1;
+	bool fog = false;
+
+	bool operator==(const SceneEffectSurfaces& other) const
+	{
+		return ssao == other.ssao
+			&& ssaoGenerateDivisor == other.ssaoGenerateDivisor
+			&& ssaoBlurDivisor == other.ssaoBlurDivisor
+			&& fog == other.fog;
+	}
+
+	bool enabled(ScenePostEffectId id) const
+	{
+		switch (id)
+		{
+		case ScenePostEffectId::Ssao:
+			return ssao;
+		case ScenePostEffectId::Fog:
+			return fog;
+		case ScenePostEffectId::Count:
+			break;
+		}
+		return false;
+	}
+};
 
 /// <summary>
 /// Named persistent render targets shared across passes (scene, swapchain, shadow map).
@@ -223,14 +255,12 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaActive,
 	/// SMAA enabled and its blend output feeds a scaling pass instead of the swapchain.
 	SmaaIntermediateActive,
-	/// SSAO intermediate surfaces requested via context::setSceneEffectSurfaces.
-	SsaoActive,
+	/// Catalog row owned by a `ScenePostEffectId` (`enableEffect`).
+	ScenePostEffect,
 	/// Extra blur-resolution buffer when blur is coarser than generate.
 	SsaoSeparateBlurBuffers,
-	/// Scene prepass depth/normals when SSAO and/or deferred fog is requested.
+	/// Scene prepass depth/normals when `prepassNeeds` is not None.
 	ScenePrepassActive,
-	/// FogColor requested via context::setSceneEffectSurfaces.
-	FogApplyActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).
@@ -274,6 +304,8 @@ struct PipelineSurfaceCatalogEntry
 	SurfaceLifetimePolicy lifetimePolicy = SurfaceLifetimePolicy::SwapchainBound;
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count; // MatchCompanion only
 	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None;
+	/// Used when `enablePolicy == ScenePostEffect`.
+	ScenePostEffectId enableEffect = ScenePostEffectId::Count;
 };
 
 /// Runtime identity produced by resolve; consumed by ensure / matches.
@@ -309,16 +341,10 @@ struct PipelineSurfaceSyncInputs
 	/// Dynamic resolution keeps scene-sized intermediates alive even at a 1:1 scene size.
 	bool sceneDynamicResolution = false;
 	bool smaa = false;
-	/// When true, SsaoActive catalog surfaces are enabled (set via context::setSceneEffectSurfaces).
-	bool ssaoEnabled = false;
-	/// When true, ScenePrepassActive catalog surfaces are enabled (`prepassNeeds(cfg) != None`).
-	bool scenePrepassEnabled = false;
-	/// When true, FogApplyActive catalog surfaces are enabled (set via context::setSceneEffectSurfaces).
-	bool fogApplyEnabled = false;
-	/// Scene extent divisor for SSAO generate (1 = full scene).
-	uint32_t ssaoGenerateDivisor = 1;
-	/// Scene extent divisor for SSAO blur buffers (1 = full scene).
-	uint32_t ssaoBlurDivisor = 1;
+	/// Allocated scene-effect catalog request (enable flags + SSAO divisors).
+	SceneEffectSurfaces effects;
+	/// Union of enabled post-effect prepass capabilities (`prepassNeeds(effects)`).
+	PrepassNeed prepassNeeds = PrepassNeed::None;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.
