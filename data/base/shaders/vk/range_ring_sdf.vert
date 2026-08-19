@@ -14,10 +14,12 @@ layout(location = 1) out vec3 centerRadius; // xy center, z R
 
 void main()
 {
-	// Unit cone (apex y=1, rim y=0 at radius 1.25) scaled by R. Under the
+	// Unit cone (apex y=0.8, rim y=-0.2 at radius 1.25) scaled by R. Under the
 	// top-down ortho, side triangles fill a 1.25R disk: conservative coverage
 	// of texels that might be near the ring (true isocontour is at distance R).
-	// Interpolated Y is the depth; overlapping instances resolve via GPU LEQ.
+	// Y falls 0.8 per unit of planar distance for every instance, so the
+	// interpolated depth is 0.8 * (r - R) plus a shared offset and the GPU LEQ
+	// union keeps the instance with the smallest true signed distance.
 	vec2 center = instancePackedValues.xy;
 	float R = instancePackedValues.z;
 	vec3 wp = vec3(center.x, 0.0, center.y) + vec3(vertex.x * R, vertex.y * R, vertex.z * R);
