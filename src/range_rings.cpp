@@ -58,6 +58,13 @@ namespace
 
 constexpr int CONE_SIDES = 32;
 constexpr float CONE_RIM_RADIUS = 1.25f; // coverage skirt past the true disk (SDF=0 at 1.0)
+// Cone slope: drop in y per unit of planar distance, constant across instances.
+// The apex sits at CONE_SLOPE * R, so the rasterized depth is an affine function
+// of (r - R) with an instance-independent offset, and the LEQ depth union keeps
+// the instance with the smallest true signed distance. (An apex at y = R would
+// bias the winner by (1 - CONE_SLOPE) * (R1 - R2) wherever rings of different
+// radii overlap, cutting gaps into the merged contour near ring junctions.)
+constexpr float CONE_SLOPE = 1.f / CONE_RIM_RADIUS;
 constexpr size_t CONE_VERTEX_COUNT = static_cast<size_t>(CONE_SIDES) + 1;
 constexpr size_t CONE_INDEX_COUNT = static_cast<size_t>(CONE_SIDES) * 3;
 constexpr float ORTHO_PAD = static_cast<float>(TILE_UNITS);
@@ -254,7 +261,10 @@ SdfCamera fitOrtho(const InGame3DFrameContext& fc)
 	const glm::vec3 eye(cx, maxR + CAMERA_HEIGHT_SLACK, cz);
 	const glm::vec3 at(cx, 0.f, cz);
 	const glm::mat4 view = glm::lookAt(eye, at, glm::vec3(0.f, 0.f, -1.f));
-	const glm::mat4 proj = glm::ortho(-halfW, halfW, -halfH, halfH, 1.f, eye.y + 1.f);
+	// Rim vertices sit below y=0 (down to -CONE_SLOPE * (CONE_RIM_RADIUS - 1) * R)
+	// Extend the far plane so the skirt is not clipped
+	const float rimDrop = CONE_SLOPE * (CONE_RIM_RADIUS - 1.f) * maxR;
+	const glm::mat4 proj = glm::ortho(-halfW, halfW, -halfH, halfH, 1.f, eye.y + rimDrop + 1.f);
 
 	SdfCamera cam;
 	cam.viewProj = proj * view;
@@ -400,11 +410,12 @@ bool init()
 	}
 
 	std::array<glm::vec4, CONE_VERTEX_COUNT> vertices {};
-	vertices[0] = glm::vec4(0.f, 1.f, 0.f, 1.f); // apex; rim is y=0 at CONE_RIM_RADIUS
+	vertices[0] = glm::vec4(0.f, CONE_SLOPE, 0.f, 1.f); // apex over the ring center
+	const float rimY = CONE_SLOPE * (1.f - CONE_RIM_RADIUS); // below 0: keeps the slope constant out to the skirt
 	for (int i = 0; i < CONE_SIDES; ++i)
 	{
 		const float a = glm::two_pi<float>() * static_cast<float>(i) / static_cast<float>(CONE_SIDES);
-		vertices[static_cast<size_t>(i + 1)] = glm::vec4(CONE_RIM_RADIUS * std::cos(a), 0.f, CONE_RIM_RADIUS * std::sin(a), 1.f);
+		vertices[static_cast<size_t>(i + 1)] = glm::vec4(CONE_RIM_RADIUS * std::cos(a), rimY, CONE_RIM_RADIUS * std::sin(a), 1.f);
 	}
 
 	std::array<uint16_t, CONE_INDEX_COUNT> indices {};
