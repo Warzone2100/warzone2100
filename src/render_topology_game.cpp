@@ -24,6 +24,7 @@
 
 #include "loop.h"
 #include "main.h"
+#include "range_rings.h"
 #include "wrappers.h"
 
 #include "lib/ivis_opengl/gfx_api.h"
@@ -120,7 +121,13 @@ public:
 		// Follow allocated surfaces rather than raw config. Config is applied in
 		// init3DView; before that the two disagree and post-effect passes compile
 		// without attachments.
-		return gfx_api::context::get().storedSceneEffectSurfaces();
+		gfx_api::SceneEffectSurfaces cfg = gfx_api::context::get().storedSceneEffectSurfaces();
+		// Keep the range-ring surfaces allocated while the option is on, but drop
+		// the passes from this frame's topology when there is nothing to draw:
+		// idle frames then skip several scene-sized clears, the fullscreen composite,
+		// and (when SSAO and fog - etc - are off) the scene prepass.
+		cfg.rangeRings = cfg.rangeRings && range_rings::gatherForFrameAndHasRings();
+		return cfg;
 	}
 
 	uint32_t shadowMapSize() const override

@@ -402,6 +402,16 @@ void recordSdf(const std::vector<gfx_api::RangeRingInstance>& instances, gfx_api
 
 } // namespace
 
+bool gatherForFrameAndHasRings()
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return false;
+	}
+	gatherIfNeeded();
+	return !s_sensor.empty() || !s_weapon.empty() || !s_minRange.empty();
+}
+
 bool init()
 {
 	if (s_coneVBO != nullptr)
