@@ -32,6 +32,11 @@ namespace range_rings
 bool init();
 void shutdown();
 
+/// Gather this frame's ring instances (when the in-game 3D frame context is ready), and return true when at least one instance exists.
+/// Called from the render-topology query so that frames with nothing to draw can drop the range-ring passes (and their scene-prepass requirement)
+/// from the pass graph entirely.
+bool gatherForFrameAndHasRings();
+
 void recordSdfSensor(const gfx_api::RenderPassContext& passCtx);
 void recordSdfWeapon(const gfx_api::RenderPassContext& passCtx);
 void recordSdfMin(const gfx_api::RenderPassContext& passCtx);
