@@ -32,10 +32,12 @@
 
 #include "src/droid.h"
 #include "src/droiddef.h"
+#include "src/stats.h"
 #include "src/mapgrid.h"
 #include "src/map.h"
 #include "src/fpath.h"
 #include "src/move.h"
+#include "src/transporter.h"
 #include "src/objects.h"
 #include "src/game_world.h"
 
@@ -43,6 +45,18 @@
 
 namespace steering
 {
+
+static bool isAirPropulsion(const DROID* psDroid)
+{
+	return asPropulsionTypes[psDroid->getPropulsionStats()->propulsionType].travel == AIR;
+}
+
+// Whether droids can currently embark on / disembark from this transporter.
+static bool isBoardableTransporter(const DROID* psDroid)
+{
+	return psDroid->isTransporter()
+	       && (!psDroid->isFlightBasedTransporter() || !transporterFlying(psDroid));
+}
 
 SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 {
@@ -166,8 +180,8 @@ bool CollisionAvoidanceBehavior::isEnabled(const SteeringContext& ctx) const
 	{
 		return false;
 	}
-	// Transporters have their own movement logic
-	return !ctx.droid->isTransporter();
+	// Every droid steers; which obstacles matter is decided by isValidObstacle().
+	return true;
 }
 
 Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(DROID* obstacle)
@@ -212,14 +226,14 @@ bool CollisionAvoidanceBehavior::isValidObstacle(const BASE_OBJECT* obj, const D
 		return false;
 	}
 
-	// VTOL droids only avoid each other and don't affect ground droids
-	if (ourDroid->isVtol() != obstacle->isVtol())
+	// A transporter that can currently be boarded must allow collision
+	if (isBoardableTransporter(ourDroid) || isBoardableTransporter(obstacle))
 	{
 		return false;
 	}
 
-	// Don't avoid transporters
-	if (obstacle->isTransporter())
+	// Air droids only avoid each other and don't affect ground droids
+	if (isAirPropulsion(ourDroid) != isAirPropulsion(obstacle))
 	{
 		return false;
 	}
