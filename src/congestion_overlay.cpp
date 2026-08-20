@@ -49,6 +49,12 @@ const int FOOTPRINT_RADIUS = 1;
 // where it is pushing, which is what an opposing search needs to see.
 const int32_t FLOW_UNIT = 64;
 
+// One droid's contribution to the mass channel, per stamped tile. Equal to
+// FLOW_UNIT so a tile's mass and the L1 length of its summed flow compare
+// directly: aligned occupants keep the flow near or above the mass, idle or
+// canceled occupants leave it far below.
+const int32_t MASS_UNIT = 64;
+
 uint32_t foldChecksum(const DynamicCostOverlay &overlay)
 {
 	uint32_t checksum = 0, factor = 0;
@@ -56,6 +62,10 @@ uint32_t foldChecksum(const DynamicCostOverlay &overlay)
 	{
 		checksum ^= static_cast<uint16_t>(overlay.flowX[i]) * (factor = 3 * factor + 1);
 		checksum ^= static_cast<uint16_t>(overlay.flowY[i]) * (factor = 3 * factor + 1);
+	}
+	for (size_t i = 0; i < overlay.mass.size(); ++i)
+	{
+		checksum ^= overlay.mass[i] * (factor = 3 * factor + 1);
 	}
 	return checksum;
 }
@@ -84,6 +94,7 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 		overlay->height = height;
 		overlay->flowX.assign(cells, 0);
 		overlay->flowY.assign(cells, 0);
+		overlay->mass.assign(cells, 0);
 		building[player] = std::move(overlay);
 	}
 
@@ -129,6 +140,7 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 						{
 							overlay->flowX[idx] = static_cast<int16_t>(std::clamp<int32_t>(overlay->flowX[idx] + fx, INT16_MIN, INT16_MAX));
 							overlay->flowY[idx] = static_cast<int16_t>(std::clamp<int32_t>(overlay->flowY[idx] + fy, INT16_MIN, INT16_MAX));
+							overlay->mass[idx] = static_cast<uint16_t>(std::min<int32_t>(overlay->mass[idx] + MASS_UNIT, UINT16_MAX));
 						}
 					}
 				}

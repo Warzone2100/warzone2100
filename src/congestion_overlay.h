@@ -51,6 +51,7 @@ struct DynamicCostOverlay
 	int      height = 0;
 	std::vector<int16_t> flowX;    ///< summed facing vectors of occupants, per tile, row-major
 	std::vector<int16_t> flowY;
+	std::vector<uint16_t> mass;    ///< summed occupant mass, MASS_UNIT per stamped body, per tile
 	uint32_t checksum = 0;         ///< fold of the flow field, emitted to syncDebug
 };
 
