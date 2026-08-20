@@ -63,6 +63,7 @@
 #include "messagedef.h"
 #include "miscimd.h"
 #include "effects.h"
+#include "densityflow.h"
 #include "edit3d.h"
 #include "feature.h"
 #include "hci.h"
@@ -858,6 +859,81 @@ static void showDroidPaths(const GameWorld& world)
 				effectGiveAuxVar(80);
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 			}
+		}
+	}
+}
+
+/// Debug overlay (shares the "Toggle display of droid path" hotkey, Ctrl+M) showing the local
+/// player's density/flow pathfinding grid as arrows over each tile that carries traffic.
+/// Reuses the same arrow as the waypoint route markers, oriented along each tile's flow vector, but
+/// tagged with its own EFFECT_TYPE (DENSITYFLOW_ARROW_TYPE, not WAYPOINT_TYPE) so it can be told
+/// apart from real route markers.
+/// Explicitly cleared and respawned every frame while showPath is enabled
+/// (see effectsClearGroupType() call below and in kf_ToggleShowPath, keybind.cpp)
+/// Read-only: never mutates the density/flow grid itself.
+static void showDensityFlowOverlay(const GameWorld& world)
+{
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return; // no-op for now (... and later??)
+	}
+
+	auto densityFlowMap = densityFlowGetOrBuildMap(selectedPlayer);
+	if (!densityFlowMap)
+	{
+		return;
+	}
+
+	// pProximityMsgIMD (message.h/.cpp) is what effectSetupWayPoint() uses to give a new
+	// EFFECT_WAYPOINT effect its imd. It's only populated by initMessage() and is reset
+	// to nullptr by initMessages() (mission cleanup/reset).
+	// While debugging I thought this was relevant. It wasn't. It stays here for posterity.
+	if (pProximityMsgIMD == nullptr)
+	{
+		return;
+	}
+
+	// Clear last frame's arrows before spawning this frame's set.
+	effectsClearGroupType(EFFECT_WAYPOINT, DENSITYFLOW_ARROW_TYPE);
+
+	// Bound the sweep to the currently visible camera window instead of the whole map.
+	//
+	// playerXTile/playerZTile (camera-centered tile) and visibleTiles are the same as in terrain rendering and processEffects()'s clipXY()
+	const int minX = std::max(0, playerXTile - visibleTiles.x / 2);
+	const int maxX = std::min(densityFlowMap->width - 1, playerXTile + visibleTiles.x / 2);
+	const int minY = std::max(0, playerZTile - visibleTiles.y / 2);
+	const int maxY = std::min(densityFlowMap->height - 1, playerZTile + visibleTiles.y / 2);
+
+	for (int y = minY; y <= maxY; ++y)
+	{
+		for (int x = minX; x <= maxX; ++x)
+		{
+			const DensityFlowCell &cell = densityFlowMap->at(x, y);
+			// Only orient the arrow when there is actual mass and flow; a tile with mass
+			// but (0,0) flow (e.g. only idle/orderless droids nearby) gets no arrow, since
+			// there is no direction to show.
+			if (cell.mass <= 0 || (cell.flowX <= 0 && cell.flowY <= 0))
+			{
+				continue;
+			}
+
+			Vector3i pos;
+			pos.x = world_coord(x) + TILE_UNITS / 2;
+			pos.z = world_coord(y) + TILE_UNITS / 2;
+			pos.y = map_Height(world.map, pos.x, pos.z) + 16;
+
+			// The waypoint marker's baked orientation points straight down
+			// To show a horizontal flow direction we first tip it onto its side
+			// then yaw it to the tile's actual flow heading.
+			Vector3i rot(DEG(90), (uint16_t)(iAtan2(-cell.flowX, cell.flowY)), 0);
+
+			// Scale (Clamped) with tile mass so heavier traffic reads as a bigger arrow
+			// rough visual indicator not tied to A* cost
+			int32_t sizePercent = 80 + (cell.mass >> 4);
+			sizePercent = std::min<int32_t>(std::max<int32_t>(sizePercent, 60), 220);
+			effectSetSize((UDWORD)sizePercent);
+
+			addEffect(&pos, EFFECT_WAYPOINT, DENSITYFLOW_ARROW_TYPE, true, nullptr, 0, graphicsTime, &rot);
 		}
 	}
 }
@@ -4785,6 +4861,7 @@ void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext&)
 	if (showPath)
 	{
 		showDroidPaths(gameWorld);
+		showDensityFlowOverlay(gameWorld);
 	}
 
 	pie_DebugDrawTessellationTestPatch(); // dev-only (no-op unless WZ_DEBUG_TESS_TEST=1)

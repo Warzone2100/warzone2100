@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -190,6 +190,12 @@ void	kf_ToggleShowPath()
 {
 	addConsoleMessage(_("Path display toggled."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	showPath = !showPath;
+	if (!showPath)
+	{
+		// showDensityFlowOverlay (display3d.cpp) only clears+respawns arrows while
+		// showPath is true, so clear them here when set to false
+		effectsClearGroupType(EFFECT_WAYPOINT, DENSITYFLOW_ARROW_TYPE);
+	}
 }
 
 void kf_PerformanceSample()

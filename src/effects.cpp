@@ -512,6 +512,19 @@ void processEffects(const glm::mat4 &perspectiveViewMatrix, LightingData& lightD
 	effectStructureUpdates();
 }
 
+/* Clear the entire set of effects that match (group and type) */
+void effectsClearGroupType(EFFECT_GROUP group, EFFECT_TYPE type)
+{
+	// Same idiom as processEffects() above
+	for (auto it = gActiveEffects.begin(); it != gActiveEffects.end(); ++it)
+	{
+		if (it->group == group && it->type == type)
+		{
+			gActiveEffects.erase(it);
+		}
+	}
+}
+
 /* The general update function for all effects - calls a specific one for each. Returns false if effect should be deleted. */
 static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 {
@@ -589,6 +602,13 @@ static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 /** Update the waypoint effects.*/
 static bool updateWaypoint(EFFECT *psEffect)
 {
+	// This dispatch is by group (EFFECT_WAYPOINT), not type, so it would otherwise also apply
+	// this check to any unrelated type sharing that group such as DENSITYFLOW_ARROW_TYPE
+	if (psEffect->type != WAYPOINT_TYPE)
+	{
+		return true;
+	}
+
 	if (!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
 	{
 		return false;
@@ -1458,7 +1478,23 @@ void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 /** drawing func for wapypoints */
 static void renderWaypointEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, positionEffect(psEffect), viewMatrix);
+	if (psEffect->imd == nullptr)
+	{
+		return;
+	}
+
+	// Still works with callers that leave rotation at {0,0,0}
+	glm::mat4 modelMatrix = positionEffect(psEffect);
+	modelMatrix *=
+		glm::rotate(UNDEG(psEffect->rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.z), glm::vec3(0.f, 0.f, 1.f));
+	if (psEffect->size != 0)
+	{
+		modelMatrix *= glm::scale(glm::vec3(psEffect->size / 100.f));
+	}
+
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
 }
 
 static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)

@@ -76,4 +76,17 @@ int moveObjRadius(const BASE_OBJECT *psObj);
 // Check if a droid is blocked
 bool moveBlocked(DROID *psDroid);
 
+/// Runtime-tunable local steering/avoidance/shuffle constants.
+/// Editable from the debug menu's "Pathfinding" tab (see wzscriptdebug.cpp)
+/// NOT SYNCED OVER THE NETWORK - for single-player debug use only
+extern int moveTuning_MOVE_SHUFFLETIME;      ///< How long a shuffle can propagate before they all stop.
+extern int moveTuning_BLOCK_TIME;            ///< Length of time a droid has to be stationary to be considered blocked.
+extern int moveTuning_SHUFFLE_BLOCK_TIME;    ///< As BLOCK_TIME, but while shuffling out of the way.
+extern int moveTuning_BLOCK_PAUSETIME;       ///< How long a droid has to be stationary before it stops trying to move.
+extern int moveTuning_BLOCK_PAUSERELEASE;    ///< How long since the last bump before a droid is released from the block pause.
+extern int moveTuning_BLOCK_DIST;            ///< How far a droid has to move before it is no longer considered 'stationary'.
+extern int moveTuning_BLOCK_DIR;             ///< How far a droid has to rotate (degrees) before it is no longer considered 'stationary'.
+extern int moveTuning_SHUFFLE_DIST;          ///< Distance to consider other droids for a shuffle.
+extern int moveTuning_SHUFFLE_MOVE;          ///< How far to move for a shuffle.
+
 #endif // __INCLUDED_SRC_MOVE_H__
