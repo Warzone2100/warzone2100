@@ -52,11 +52,14 @@ struct DynamicCostOverlay
 	std::vector<int16_t> flowX;    ///< summed facing vectors of occupants, per tile, row-major
 	std::vector<int16_t> flowY;
 	std::vector<uint16_t> mass;    ///< summed occupant mass, MASS_UNIT per stamped body, per tile
+	bool consumeFlow = false;      ///< the search prices opposing flow from this overlay
+	bool consumeMass = false;      ///< the search prices incoherent crowd mass from this overlay
 	uint32_t checksum = 0;         ///< fold of the flow field, emitted to syncDebug
 };
 
 /// Builds one overlay per player that has droids. Each holds that player's
 /// own and allied flow. The returned vector is indexed by player, null
 /// where a player has no droids. Iterates in a fixed order so the result
-/// is deterministic.
-std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(uint32_t buildTime);
+/// is deterministic. The consume flags snapshot the synced setting at build
+/// time, so a worker reading the overlay never reads settings.
+std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(uint32_t buildTime, bool consumeFlow, bool consumeMass);
