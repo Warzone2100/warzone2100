@@ -68,16 +68,22 @@ ACCEPTANCE=0
 HAVE_AGAINST=0
 AGAINST=""
 CONCURRENT=1
-while [ $# -gt 0 ]; do
-	case "$1" in
-		--baseline|--check|--score) SUB="$1" ;;
+# Mode flags are recognized anywhere on the line. Anything unrecognized is
+# collected, in order, as pass-through for the game binary, so a flag under
+# test can sit before or after --against without being handed to the game.
+REMAINING=$#
+while [ $REMAINING -gt 0 ]; do
+	arg="$1"
+	shift
+	case "$arg" in
+		--baseline|--check|--score) SUB="$arg" ;;
 		--markdown) MARKDOWN=1 ;;
 		--acceptance) ACCEPTANCE=1 ;;
-		--against=*) AGAINST="${1#--against=}"; HAVE_AGAINST=1 ;;
-		--concurrent=*) CONCURRENT="${1#--concurrent=}" ;;
-		*) break ;;
+		--against=*) AGAINST="${arg#--against=}"; HAVE_AGAINST=1 ;;
+		--concurrent=*) CONCURRENT="${arg#--concurrent=}" ;;
+		*) set -- "$@" "$arg" ;;
 	esac
-	shift
+	REMAINING=$((REMAINING - 1))
 done
 
 if [ "$SUB" = "--check" ]; then

@@ -142,6 +142,9 @@ against that stack instead:
     tests/movebench/run.sh --acceptance --score --markdown \
         --pathfindingbackend=<stack>,<flag> --against='--pathfindingbackend=<stack>'
 
+The reference sweep runs with only the arguments named inside --against, so
+anything the main sweep also needs, ex. a --configdir, is named again there.
+
 Quote both tables. The synthetic cells respond to different mechanisms than the
 real maps do, and a change that helps one repeatedly turns out to tax the
 other.
