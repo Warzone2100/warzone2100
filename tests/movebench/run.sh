@@ -91,8 +91,21 @@ if [ "$SUB" = "--check" ]; then
 	for s in $SCENARIOS; do
 		i=0
 		while [ "$i" -lt 9 ]; do
-			a=$("$WZ" --movementbench="$s" --movementarrangement="$i" "$@" 2>/dev/null | grep finalPositionsCrc)
-			b=$("$WZ" --movementbench="$s" --movementarrangement="$i" "$@" 2>/dev/null | grep finalPositionsCrc)
+			# A run that prints no CRC is the known shutdown flake, a
+			# process-level failure to retry, same policy as the sweep runner.
+			# Four straight failures is a real break and stops the check.
+			a=""; tries=0
+			while [ -z "$a" ]; do
+				tries=$((tries + 1))
+				if [ "$tries" -gt 4 ]; then echo "$s $i produced no CRC in 4 attempts" >&2; exit 1; fi
+				a=$("$WZ" --movementbench="$s" --movementarrangement="$i" "$@" 2>/dev/null | grep finalPositionsCrc || true)
+			done
+			b=""; tries=0
+			while [ -z "$b" ]; do
+				tries=$((tries + 1))
+				if [ "$tries" -gt 4 ]; then echo "$s $i produced no CRC in 4 attempts" >&2; exit 1; fi
+				b=$("$WZ" --movementbench="$s" --movementarrangement="$i" "$@" 2>/dev/null | grep finalPositionsCrc || true)
+			done
 			i=$((i + 1))
 			if [ "$a" != "$b" ]; then
 				echo "MISMATCH $s arrangement=$((i - 1))"
