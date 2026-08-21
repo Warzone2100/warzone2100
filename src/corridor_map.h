@@ -72,6 +72,7 @@ struct CorridorMap
 	std::vector<int16_t> tileCorridor;  ///< width*height, corridor id per centerline tile, -1 otherwise
 	std::vector<uint8_t> tileClaimed;   ///< width*height, 1 where the corridor layer claims the ground, see corridorMapBuild
 	std::vector<uint8_t> tileInterior;  ///< width*height, 1 near a centerline only, mouth approach zones excluded
+	std::vector<int16_t> tileInteriorCorridor; ///< width*height, corridor id per interior tile, -1 otherwise, junction overlaps keep the later corridor
 	std::vector<uint8_t> debugSkel;     ///< full one-tile skeleton, for the dump overlay
 	std::vector<uint8_t> debugNarrow;   ///< skeleton restricted to narrow tiles, for the dump overlay
 
@@ -94,6 +95,18 @@ struct CorridorMap
 			return false;
 		}
 		return tileClaimed[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)] != 0;
+	}
+
+	/// The corridor whose passage body covers this tile, or -1 outside every
+	/// interior. Junction tiles shared by chained corridors carry one of them,
+	/// which chain-level contest state makes equivalent.
+	int16_t interiorCorridor(int x, int y) const
+	{
+		if (x < 0 || y < 0 || x >= width || y >= height || tileInteriorCorridor.empty())
+		{
+			return -1;
+		}
+		return tileInteriorCorridor[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)];
 	}
 
 	/// True only near a corridor centerline, the passage body itself.

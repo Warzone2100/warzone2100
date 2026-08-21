@@ -33,6 +33,9 @@
 #include "droid.h"
 
 #include "lib/framework/trig.h"
+#include "corridor_map.h"
+#include "corridor_gate.h"
+#include "pathfinding_backend.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -100,6 +103,18 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 		building[player] = std::move(overlay);
 	}
 
+	// Mass keeps off the passage interiors of corridors the gate currently
+	// holds contested: metering and lane handling govern that traffic, and
+	// pricing the canceled head-on core of a managed pass pushes routes onto
+	// worse alternates the machinery would have threaded. An uncontested
+	// interior keeps its mass, a parked crowd there is exactly the signal the
+	// term exists for, and so do mouth zones and open ground. The gate
+	// updates earlier in the same tick, so the contest state read here is the
+	// tick's own and a loaded game reconstructs it from synced state.
+	// Without the corridor features there is no manager, so mass applies
+	// everywhere.
+	const CorridorMap *interiorMask = pathfindingCorridorLanesEnabled() ? gameWorld.map.corridors.get() : nullptr;
+
 	// Stamp every droid into the overlays that treat it as own or allied. Owners
 	// ascending, then each list in its stored order, so the sum is deterministic.
 	for (int owner = 0; owner < MAX_PLAYERS; ++owner)
@@ -142,7 +157,11 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 						{
 							overlay->flowX[idx] = static_cast<int16_t>(std::clamp<int32_t>(overlay->flowX[idx] + fx, INT16_MIN, INT16_MAX));
 							overlay->flowY[idx] = static_cast<int16_t>(std::clamp<int32_t>(overlay->flowY[idx] + fy, INT16_MIN, INT16_MAX));
-							overlay->mass[idx] = static_cast<uint16_t>(std::min<int32_t>(overlay->mass[idx] + MASS_UNIT, UINT16_MAX));
+							const int16_t interiorCorridor = interiorMask != nullptr ? interiorMask->interiorCorridor(x, y) : -1;
+							if (interiorCorridor < 0 || !corridorContested(interiorCorridor))
+							{
+								overlay->mass[idx] = static_cast<uint16_t>(std::min<int32_t>(overlay->mass[idx] + MASS_UNIT, UINT16_MAX));
+							}
 						}
 					}
 				}

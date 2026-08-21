@@ -55,6 +55,12 @@ int corridorQueueSpeed(const DROID *psDroid, int moveSpeed);
 /// Cuts only the crossing component of the given velocity, in place.
 void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy);
 
+/// Whether this corridor carries opposing flows this tick. The gate updates
+/// before the overlay build and before any droid moves, so every reader sees
+/// the tick's own state, derived from synced state alone. False for
+/// out-of-range ids.
+bool corridorContested(int corridorId);
+
 /// How the corridor layer wants the blocked watchdog to treat this droid.
 enum CorridorHold
 {
