@@ -72,7 +72,7 @@ uint32_t foldChecksum(const DynamicCostOverlay &overlay)
 
 } // anonymous namespace
 
-std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(uint32_t buildTime)
+std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(uint32_t buildTime, bool consumeFlow, bool consumeMass)
 {
 	const int width = gameWorld.map.width;
 	const int height = gameWorld.map.height;
@@ -90,6 +90,8 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 		auto overlay = std::make_shared<DynamicCostOverlay>();
 		overlay->gameTime = buildTime;
 		overlay->cohortPlayer = player;
+		overlay->consumeFlow = consumeFlow;
+		overlay->consumeMass = consumeMass;
 		overlay->width = width;
 		overlay->height = height;
 		overlay->flowX.assign(cells, 0);

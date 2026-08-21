@@ -284,6 +284,8 @@ static inline unsigned WZ_DECL_PURE fpathGoodEstimate(PathCoord s, PathCoord f)
 constexpr int32_t FLOW_COST_SHIFT = 5;
 constexpr int32_t FLOW_COST_CAP = 1120;   // at most eight steps of cost from one tile's flow
 constexpr int32_t FLOW_DEST_EXEMPT = 840; // no flow pricing within ~6 tiles of the search's own goal
+constexpr int32_t MASS_COST_CAP = 1120;   // parity with the flow cap, at most eight steps from one tile's crowd
+constexpr int32_t MASS_START_EXEMPT = 420; // no mass pricing within ~3 tiles of the search's start
 
 static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
 {
@@ -308,16 +310,46 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 		{
 			const int32_t fx = context.overlay->flowX[tileIdx];
 			const int32_t fy = context.overlay->flowY[tileIdx];
-			tileHasFlow = fx != 0 || fy != 0;
-			const int32_t dot = delta.x * fx + delta.y * fy;
-			// No flow pricing close to this search's own destination: a goal
-			// crowd faces outward, and charging arrivals for their own crowd
-			// sends them circling it instead of parking. Note the cached
-			// context can run the search reversed, in which case this exempts
-			// the origin side instead - measured better than exempting both.
-			if (dot < 0 && fpathGoodEstimate(pos, dest) > FLOW_DEST_EXEMPT)
+			if (context.overlay->consumeFlow)
 			{
-				overlayCost += std::min<int32_t>(FLOW_COST_CAP, -dot >> FLOW_COST_SHIFT);
+				tileHasFlow = fx != 0 || fy != 0;
+				const int32_t dot = delta.x * fx + delta.y * fy;
+				// No flow pricing close to this search's own destination: a goal
+				// crowd faces outward, and charging arrivals for their own crowd
+				// sends them circling it instead of parking. Note the cached
+				// context can run the search reversed, in which case this exempts
+				// the origin side instead - measured better than exempting both.
+				if (dot < 0 && fpathGoodEstimate(pos, dest) > FLOW_DEST_EXEMPT)
+				{
+					overlayCost += std::min<int32_t>(FLOW_COST_CAP, -dot >> FLOW_COST_SHIFT);
+				}
+			}
+			if (context.overlay->consumeMass && !context.overlay->mass.empty())
+			{
+				// Mass prices only tiles whose occupants are not moving
+				// coherently. An aligned column's summed facing keeps its L1
+				// length near or above the tile's mass, a parked or canceled
+				// crowd's falls far below, so single bodies and columns stay
+				// free and only real crowds pay. The cost is the same from
+				// every arrival direction, so context sharing stays exact.
+				// Not destination-exempted: symmetric cost spreads approaches
+				// around a goal crowd, the circling risk is specific to
+				// directional cost.
+				// A droid standing inside a parked crowd must plan out through
+				// its neighbors: with those tiles priced, every escape route
+				// detours around bodies it could shove past, the first
+				// waypoints never clear, and the blocked watchdog cycles it
+				// against its own crowd for the rest of the run. The radius
+				// keys on the context's start tile, so shared contexts stay
+				// valid, and a reversed context exempts the goal side instead,
+				// which measured harmless: the crowd tiles beyond the radius
+				// still price every approach.
+				const int32_t m = context.overlay->mass[tileIdx];
+				if (m > 0 && (abs(fx) + abs(fy)) * 2 < m
+				    && fpathGoodEstimate(pos, context.tileS) > MASS_START_EXEMPT)
+				{
+					overlayCost += std::min<int32_t>(MASS_COST_CAP, m);
+				}
 			}
 		}
 	}

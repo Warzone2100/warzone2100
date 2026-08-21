@@ -549,7 +549,7 @@ queuePathfinding:
 	// An overlay built solely for the flow census must stay off the jobs, since
 	// even an inert attachment changes context-cache reuse and cache reuse
 	// changes which of the equal-length paths comes back.
-	job.overlay = (game.pathfindingBackend & PF_FLOW_COST) != 0
+	job.overlay = (game.pathfindingBackend & (PF_FLOW_COST | PF_CROWD_MASS)) != 0
 	              ? fpathActiveBackend().overlayForOwner(owner) : nullptr;
 
 	debug(LOG_NEVER, "starting new job for droid %d 0x%x", id, id);
@@ -672,13 +672,13 @@ public:
 		// not switch soft costs on as a side effect. It does build the
 		// flow field for the census logging, which stays unattached and
 		// cannot reach a search.
-		const bool flow = (game.pathfindingBackend & (PF_FLOW_COST | PF_DIRECTIONAL_BIAS)) != 0;
-		if (!flow)
+		const bool buildField = (game.pathfindingBackend & (PF_FLOW_COST | PF_DIRECTIONAL_BIAS | PF_CROWD_MASS)) != 0;
+		if (!buildField)
 		{
 			overlays.clear();
 			return;
 		}
-		overlays = buildCongestionOverlays(gameTime);
+		overlays = buildCongestionOverlays(gameTime, pathfindingFlowCostEnabled(), pathfindingCrowdMassEnabled());
 		for (const auto& overlay : overlays)
 		{
 			if (overlay)
@@ -705,7 +705,7 @@ private:
 
 bool pathfindingOverlayEnabled()
 {
-	return (game.pathfindingBackend & (PF_DIRECTIONAL_BIAS | PF_FLOW_COST)) != 0;
+	return (game.pathfindingBackend & (PF_DIRECTIONAL_BIAS | PF_FLOW_COST | PF_CROWD_MASS)) != 0;
 }
 
 bool pathfindingCorridorLanesEnabled()
@@ -721,6 +721,11 @@ bool pathfindingDirectionalBiasEnabled()
 bool pathfindingFlowCostEnabled()
 {
 	return (game.pathfindingBackend & PF_FLOW_COST) != 0;
+}
+
+bool pathfindingCrowdMassEnabled()
+{
+	return (game.pathfindingBackend & PF_CROWD_MASS) != 0;
 }
 
 bool pathfindingSoftCollisionEnabled()
