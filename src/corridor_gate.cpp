@@ -1584,6 +1584,12 @@ const uint32_t QUEUE_GRACE = 40000;
 // much shorter clock than the plain grace.
 const uint32_t QUEUE_REEVAL = 15000;
 
+bool corridorContested(int corridorId)
+{
+	return corridorId >= 0 && static_cast<size_t>(corridorId) < g_contested.size()
+	       && g_contested[static_cast<size_t>(corridorId)] != 0;
+}
+
 CorridorHold corridorHold(const DROID *psDroid)
 {
 	// Only a droid approaching a queue-forming mouth is stopped by the layer

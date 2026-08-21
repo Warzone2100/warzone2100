@@ -557,15 +557,18 @@ static void gameStateUpdate()
 	// Update the map.
 	mapUpdate(gameWorld);
 
+	// Snapshot each corridor's flow direction before any droid moves, so every
+	// droid this tick decides against the same picture. Runs before the
+	// backend update, whose overlay build reads the contest state: computed
+	// and consumed in the same tick, a loaded game reconstructs it from
+	// synced state alone.
+	corridorGateUpdate();
+
 	//update the findpath system
 	fpathActiveBackend().updateTick(gameWorld.map);
 
 	// update the command droids
 	cmdDroidUpdate();
-
-	// Snapshot each corridor's flow direction before any droid moves, so every
-	// droid this tick decides against the same picture.
-	corridorGateUpdate();
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{

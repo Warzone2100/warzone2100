@@ -870,6 +870,7 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 	// (8 tiles, matching APPROACH_RADIUS) of any mouth.
 	result->tileClaimed.assign(cells, 0);
 	result->tileInterior.assign(cells, 0);
+	result->tileInteriorCorridor.assign(cells, -1);
 	auto stamp = [&](std::vector<uint8_t> &mask, Vector2i world, int radius)
 	{
 		const int cx = map_coord(world.x);
@@ -888,6 +889,15 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 		{
 			stamp(result->tileClaimed, p, 3);
 			stamp(result->tileInterior, p, 3);
+			const int cx = map_coord(p.x);
+			const int cy = map_coord(p.y);
+			for (int y = std::max(0, cy - 3); y <= std::min(g.h - 1, cy + 3); ++y)
+			{
+				for (int x = std::max(0, cx - 3); x <= std::min(g.w - 1, cx + 3); ++x)
+				{
+					result->tileInteriorCorridor[g.idx(x, y)] = static_cast<int16_t>(c.id);
+				}
+			}
 		}
 		stamp(result->tileClaimed, c.mouthA, 8);
 		stamp(result->tileClaimed, c.mouthB, 8);
