@@ -10,26 +10,31 @@
   "scenarios": {
     "mountain_chain": {
       "hardStops": 636429,
+      "hardStopsTopSharePct": 7,
       "repaths": 10744,
       "unitsArrived": 121
     },
     "mountain_chain_cross": {
       "hardStops": 660055,
+      "hardStopsTopSharePct": 7,
       "repaths": 11759,
       "unitsArrived": 120
     },
     "open_corner": {
       "hardStops": 4487878,
+      "hardStopsTopSharePct": 0,
       "repaths": 77626,
       "unitsArrived": 99
     },
     "rush_corner": {
       "hardStops": 4721283,
+      "hardStopsTopSharePct": 0,
       "repaths": 79695,
       "unitsArrived": 47
     },
     "rush_turn": {
       "hardStops": 103043,
+      "hardStopsTopSharePct": 25,
       "repaths": 1301,
       "unitsArrived": 157
     }
