@@ -189,6 +189,7 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type);
 // ----------------------------------------------------------------------------------------
 // ---- Update functions - every group type of effect has one of these */
 static bool updateWaypoint(EFFECT *psEffect);
+static bool updateDensityFlowArrow(EFFECT *psEffect);
 static bool updateExplosion(EFFECT *psEffect, LightingData& lightData);
 static bool updatePolySmoke(EFFECT *psEffect);
 static bool updateGraviton(EFFECT *psEffect, LightingData& lightData);
@@ -221,6 +222,7 @@ static void effectSetupGraviton(EFFECT& effect);
 static void effectSetupExplosion(EFFECT& effect);
 static void effectSetupConstruction(EFFECT& effect);
 static void effectSetupWayPoint(EFFECT& effect);
+static void effectSetupDensityFlowArrow(EFFECT& effect);
 static void effectSetupBlood(EFFECT& effect);
 static void effectSetupDestruction(EFFECT& effect);
 static void effectSetupFire(EFFECT& effect);
@@ -451,6 +453,9 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	case EFFECT_WAYPOINT:
 		effectSetupWayPoint(effect);
 		break;
+	case EFFECT_DENSITYFLOW_ARROW:
+		effectSetupDensityFlowArrow(effect);
+		break;
 	case EFFECT_BLOOD:
 		effectSetupBlood(effect);
 		break;
@@ -512,19 +517,6 @@ void processEffects(const glm::mat4 &perspectiveViewMatrix, LightingData& lightD
 	effectStructureUpdates();
 }
 
-/* Clear the entire set of effects that match (group and type) */
-void effectsClearGroupType(EFFECT_GROUP group, EFFECT_TYPE type)
-{
-	// Same idiom as processEffects() above
-	for (auto it = gActiveEffects.begin(); it != gActiveEffects.end(); ++it)
-	{
-		if (it->group == group && it->type == type)
-		{
-			gActiveEffects.erase(it);
-		}
-	}
-}
-
 /* The general update function for all effects - calls a specific one for each. Returns false if effect should be deleted. */
 static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 {
@@ -537,6 +529,12 @@ static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 		if (!gamePaused())
 		{
 			return updateWaypoint(psEffect);
+		}
+		return true;
+	case EFFECT_DENSITYFLOW_ARROW:
+		if (!gamePaused())
+		{
+			return updateDensityFlowArrow(psEffect);
 		}
 		return true;
 	case EFFECT_CONSTRUCTION:
@@ -602,18 +600,17 @@ static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 /** Update the waypoint effects.*/
 static bool updateWaypoint(EFFECT *psEffect)
 {
-	// This dispatch is by group (EFFECT_WAYPOINT), not type, so it would otherwise also apply
-	// this check to any unrelated type sharing that group such as DENSITYFLOW_ARROW_TYPE
-	if (psEffect->type != WAYPOINT_TYPE)
-	{
-		return true;
-	}
-
 	if (!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
 	{
 		return false;
 	}
 	return true;
+}
+
+/** Update the density/flow debug overlay arrows: expire once lifeSpan has elapsed. */
+static bool updateDensityFlowArrow(EFFECT *psEffect)
+{
+	return graphicsTime - psEffect->birthTime <= psEffect->lifeSpan;
 }
 
 static bool updateFirework(EFFECT *psEffect)
@@ -1425,6 +1422,11 @@ void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 		renderWaypointEffect(psEffect, viewMatrix);
 		return;
 
+	case EFFECT_DENSITYFLOW_ARROW:
+		// Generic imd-drawing function; nothing in it is waypoint-specific.
+		renderWaypointEffect(psEffect, viewMatrix);
+		return;
+
 	case EFFECT_EXPLOSION:
 		renderExplosionEffect(psEffect, viewMatrix);
 		return;
@@ -2141,6 +2143,15 @@ void	effectSetupWayPoint(EFFECT& effect)
 
 	/* These effects musnt make way for others */
 	SET_ESSENTIAL(effect);
+}
+
+static void effectSetupDensityFlowArrow(EFFECT& effect)
+{
+	// Since we can only set lifeSpan in ms, it's hard to get it to last exactly one frame.
+	// Just a rough debug visual so it's not super important.
+	// This lasts one 60fps frame. Will overdraw on faster fps, will flicker on lower fps.
+	effect.imd = (pProximityMsgIMD) ? pProximityMsgIMD->displayModel() : nullptr;
+	effect.lifeSpan = 1000/60;
 }
 
 

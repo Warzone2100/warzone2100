@@ -53,7 +53,8 @@ enum EFFECT_GROUP
 	EFFECT_FIRE,
 	EFFECT_FIREWORK,
 	EFFECT_DROID_ANIMEVENT_DYING,
-
+	EFFECT_DENSITYFLOW_ARROW,
+	
 	EFFECT_FREED,
 };
 
@@ -110,8 +111,7 @@ enum EFFECT_TYPE
 	SAT_LASER_STANDARD,
 
 	WAYPOINT_TYPE,
-	DENSITYFLOW_ARROW_TYPE,   // Density/flow debug overlay arrows (display3d.cpp's showDensityFlowOverlay).
-	                          // Same EFFECT_WAYPOINT group as WAYPOINT_TYPE, different TYPE so it can be cleared separately
+	DENSITYFLOW_ARROW_TYPE,
 	FIREWORK_TYPE_STARBURST,
 	FIREWORK_TYPE_LAUNCHER,
 
@@ -161,10 +161,6 @@ void	processEffects(const glm::mat4 &perspectiveViewMatrix, struct LightingData&
 void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit);
 void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot = nullptr, Vector3f *velocity = nullptr);
 void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);
-
-/// Removes every currently active effect matching both group and type. 
-/// Intended for debug visuals that are refreshed every frame.
-void	effectsClearGroupType(EFFECT_GROUP group, EFFECT_TYPE type);
 
 void	renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
 void	effectResetUpdates();

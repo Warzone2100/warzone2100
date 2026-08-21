@@ -865,12 +865,9 @@ static void showDroidPaths(const GameWorld& world)
 
 /// Debug overlay (shares the "Toggle display of droid path" hotkey, Ctrl+M) showing the local
 /// player's density/flow pathfinding grid as arrows over each tile that carries traffic.
-/// Reuses the same arrow as the waypoint route markers, oriented along each tile's flow vector, but
-/// tagged with its own EFFECT_TYPE (DENSITYFLOW_ARROW_TYPE, not WAYPOINT_TYPE) so it can be told
-/// apart from real route markers.
-/// Explicitly cleared and respawned every frame while showPath is enabled
-/// (see effectsClearGroupType() call below and in kf_ToggleShowPath, keybind.cpp)
-/// Read-only: never mutates the density/flow grid itself.
+/// Reuses waypoint marker's arrow model, but is its own effect group (EFFECT_DENSITYFLOW_ARROW)
+/// Respawned fresh every frame while showPath is enabled; each arrow carries a one-frame lifeSpan
+/// set in (effectSetupDensityFlowArrow, effects.cpp) so last frame's set expires on its own.
 static void showDensityFlowOverlay(const GameWorld& world)
 {
 	if (selectedPlayer >= MAX_PLAYERS)
@@ -884,17 +881,13 @@ static void showDensityFlowOverlay(const GameWorld& world)
 		return;
 	}
 
-	// pProximityMsgIMD (message.h/.cpp) is what effectSetupWayPoint() uses to give a new
-	// EFFECT_WAYPOINT effect its imd. It's only populated by initMessage() and is reset
-	// to nullptr by initMessages() (mission cleanup/reset).
-	// While debugging I thought this was relevant. It wasn't. It stays here for posterity.
+	// pProximityMsgIMD (message.h/.cpp) is what effectSetupDensityFlowArrow() uses to give
+	// a new EFFECT_DENSITYFLOW_ARROW effect its imd. It's only populated by initMessage()
+	// and is reset to nullptr by initMessages() (mission cleanup/reset).
 	if (pProximityMsgIMD == nullptr)
 	{
 		return;
 	}
-
-	// Clear last frame's arrows before spawning this frame's set.
-	effectsClearGroupType(EFFECT_WAYPOINT, DENSITYFLOW_ARROW_TYPE);
 
 	// Bound the sweep to the currently visible camera window instead of the whole map.
 	//
@@ -933,7 +926,7 @@ static void showDensityFlowOverlay(const GameWorld& world)
 			sizePercent = std::min<int32_t>(std::max<int32_t>(sizePercent, 60), 220);
 			effectSetSize((UDWORD)sizePercent);
 
-			addEffect(&pos, EFFECT_WAYPOINT, DENSITYFLOW_ARROW_TYPE, true, nullptr, 0, graphicsTime, &rot);
+			addEffect(&pos, EFFECT_DENSITYFLOW_ARROW, DENSITYFLOW_ARROW_TYPE, true, nullptr, 0, graphicsTime, &rot);
 		}
 	}
 }
