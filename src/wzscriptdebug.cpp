@@ -1116,9 +1116,7 @@ static bool debugReloadSelectedObjectDisplayModels()
 // MARK: - WzTunableRow / WzPathfindingPanel
 
 /// One row in the Pathfinding debug tab: a label, a numeric edit field, and a "Set" button
-/// that parses the field and calls the row's setter. Used for every tunable exposed there
-/// (density/flow grid constants and move.cpp's local steering/avoidance constants) - see
-/// WZScriptDebugger::createPathfindingPanel() below for the full list.
+/// that parses the field and calls the row's setter.
 class WzTunableRow : public W_FORM
 {
 public:
@@ -1219,12 +1217,10 @@ private:
 };
 
 /// The debug menu's "Pathfinding" tab: a scrollable list of WzTunableRow entries for every
-/// live-tunable routing/steering/avoidance constant - the density/flow grid's class weights
+/// tunable routing/steering/avoidance constantL the density/flow grid's class weights
 /// and reroute-trigger thresholds (densityflow.h), plus move.cpp's local shuffle/block
-/// constants (move.h). Editing a value here takes effect immediately (next tick's map
-/// build, or next call into the affected move.cpp logic) - there is no separate "Apply"/
-/// save step, and nothing here is saved to a config file or synced over the network (see
-/// the thread-safety/MP note on the tunables themselves in densityflow.h/move.h).
+/// constants (move.h). Setting a value takes effect immediately (next tick's map
+/// build, or next call into the affected move.cpp logic), and may or may not trigger reroutes.
 class WzPathfindingPanel : public W_FORM
 {
 public:

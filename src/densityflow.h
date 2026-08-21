@@ -48,8 +48,7 @@
 
 struct PATHJOB;
 
-/// One propulsion "weight class" row for the weight table, 
-/// In order of campaign unlock.
+/// Propulsion "weight classes" for the weight table
 enum DFLOW_WEIGHT_CLASS
 {
 	DFLOW_WHEELED,
@@ -57,15 +56,13 @@ enum DFLOW_WEIGHT_CLASS
 	DFLOW_TRACKED,
 	DFLOW_HOVER,
 	DFLOW_LEGGED,
-	DFLOW_LANDED_VTOL,   ///< isVtol() && sMove.Status == MOVEINACTIVE. Real hitbox splat like any droid; no auto-takeoff-to-yield mechanic exists.
-	DFLOW_PROPELLOR,     ///< Naval. No shipped content uses it, but the engine's water handling is functional, so it's handled correctly for free.
+	DFLOW_LANDED_VTOL, // isVtol() && sMove.Status == MOVEINACTIVE. Hitbox splat like any droid, can shuffle like other droids
+	DFLOW_PROPELLOR,
 	DFLOW_WEIGHT_CLASS_COUNT,
 };
 
-/// Per-tile accumulator: total splatted mass, plus the sum of contributing droids'
-/// waypoint-delta flow vectors (asPath[pathIndex] - pos, NOT instantaneous velocity -
-/// stable across ticks, avoids steering jitter). (0,0) contribution for idle/orderless
-/// droids. Both mass and flow accumulate via plain integer add, so the result is
+/// Tile accumulator: total splatted mass, plus the sum of contributing droids' flow vectors.
+/// Both mass and flow accumulate via plain integer add, so the result is
 /// associative/commutative regardless of droid iteration order.
 struct DensityFlowCell
 {
@@ -75,9 +72,8 @@ struct DensityFlowCell
 };
 
 /// One player's frozen-for-the-tick density/flow grid. Workers only ever consume an
-/// already-frozen shared_ptr<const DensityFlowMap> snapshot; the grid is built
-/// synchronously on the main thread, same place/pattern as fpathSetBlockingMap builds
-/// dangerMap.
+/// already frozen shared_ptr<const DensityFlowMap> snapshot; the grid is built
+/// synchronously on the main thread, same way fpathSetBlockingMap builds dangerMap.
 struct DensityFlowMap
 {
 	uint32_t gameTime = 0;
@@ -85,7 +81,7 @@ struct DensityFlowMap
 	int width = 0;
 	int height = 0;
 	std::vector<DensityFlowCell> cells;   ///< Indexed by x + y * width.
-	uint32_t checksum = 0;                ///< syncDebug companion, mirrors checksumDangerMap.
+	uint32_t checksum = 0;                ///< for syncDebug, mirrors checksumDangerMap.
 
 	const DensityFlowCell &at(int x, int y) const
 	{
@@ -98,16 +94,14 @@ struct DensityFlowMap
 	}
 };
 
-/// per-propulsion-class weight table (see densityflow.cpp for the
-/// defaults). Mutable: the debug menu's "Pathfinding" tab (see
-/// wzscriptdebug.cpp) edits these live for tuning. Only ever read on the main thread,
-/// while building a tick's map (densityFlowGetOrBuildMap) - worker threads only ever
-/// see an already-frozen DensityFlowMap snapshot, so live edits are thread-safe.
+/// per propulsion weight table (see densityflow.cpp for defaults).
+/// Mutable: debug menu's "Pathfinding" tab (see wzscriptdebug.cpp) edits these live for tuning.
+/// Is only read on the main thread, while building a tick's map (densityFlowGetOrBuildMap).
 extern int32_t densityFlowClassWeight[DFLOW_WEIGHT_CLASS_COUNT];
 const char *densityFlowClassWeightName(DFLOW_WEIGHT_CLASS wclass);
 
-/// Reroute-trigger tunables (see densityflow.cpp for defaults and meaning). Same
-/// main-thread-only, debug-menu-editable contract as densityFlowClassWeight above.
+/// Reroute-trigger tunables (see densityflow.cpp for defaults and meaning). 
+/// Same main-thread-only, debug-menu-editable contract as densityFlowClassWeight above.
 extern int32_t densityFlowPctThreshold;
 extern int32_t densityFlowNoiseFloor;
 extern int32_t densityFlowGlobalGateThreshold;
@@ -122,9 +116,9 @@ void fpathSetDensityFlowMap(PATHJOB *psJob);
 /// (fpathDensityFlowUpdate, see fpath.cpp / move.cpp).
 std::shared_ptr<const DensityFlowMap> densityFlowGetOrBuildMap(int owner);
 
-/// Per-tick maintenance: for every player with at least one moving ground/water droid,
+/// Maintenance every tick: for every player with at least one moving ground/water droid,
 /// ensures this tick's map is built, compares it against last tick's map for that
-/// owner using the percentage-change + flow-dot-product gate, and reroutes at most one
+/// owner using the percentage change + flow dot product gate, and reroutes at most one
 /// droid per significantly-changed tile it is still travelling towards. Call once per
 /// tick from fpathUpdate().
 void fpathDensityFlowUpdate();
