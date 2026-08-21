@@ -47,6 +47,12 @@ one droid, stop dead" branch), grind is arrival seconds per tile against the
 free-travel floor from the open-field scenario in the same run, and peak
 density is the largest cluster of tracked droids within a tile and a half.
 
+Each scorecard also reports hard-stop concentration: the distinct droids that
+hard-stopped, the worst droid's count, and that count's share of the total.
+hardStops flat while the share collapses means fewer stuck units, not less
+congestion, and a high share fingers a single wedged unit inflating the count.
+The acceptance tables print the worst arrangement's share beside the sums.
+
 Five cells read inverted. enemyblock and enemyblock_press park units to deny a
 chokepoint and measure that the denial holds, so a low RESOLVED count is the
 pass condition. blob and strafe cannot reach the resolved threshold by

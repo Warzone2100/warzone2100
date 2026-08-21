@@ -377,6 +377,18 @@ void writeScorecard(bool completed)
 	card["bumps"] = metrics.bumps;
 	card["bumpsRepeat"] = metrics.bumpsRepeat;
 	card["hardStops"] = metrics.hardStops;
+	// Concentration of the hard stops. A healthy congestion profile spreads
+	// them across the crowd, one wedged unit grinding against its neighbors
+	// concentrates them. hardStops flat while the share collapses means fewer
+	// stuck units, not less congestion, and a rising share fingers a grinder.
+	uint32_t topStops = 0;
+	for (const auto &kv : metrics.hardStopsByDroid)
+	{
+		topStops = std::max<uint32_t>(topStops, kv.second);
+	}
+	card["hardStopDroids"] = metrics.hardStopsByDroid.size();
+	card["hardStopsTop"] = topStops;
+	card["hardStopsTopSharePct"] = metrics.hardStops > 0 ? static_cast<uint64_t>(topStops) * 100 / metrics.hardStops : 0;
 	card["giveUps"] = metrics.giveUps;
 	card["repaths"] = metrics.repaths;
 	card["finalPositionsCrc"] = finalPositionsCrc();

@@ -1392,6 +1392,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				if (g_moveMetrics)
 				{
 					g_moveMetrics->hardStops++;
+					g_moveMetrics->hardStopsByDroid[psDroid->id]++;
 				}
 				break;
 			}
