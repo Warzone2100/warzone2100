@@ -9,33 +9,48 @@
   ],
   "scenarios": {
     "mountain_chain": {
+      "detourPct_p95": 180,
       "hardStops": 636429,
       "hardStopsTopSharePct": 7,
       "repaths": 10744,
+      "settle_p95_s": 400.0,
+      "stallSharePct_p50": 93,
       "unitsArrived": 121
     },
     "mountain_chain_cross": {
+      "detourPct_p95": 214,
       "hardStops": 660055,
       "hardStopsTopSharePct": 7,
       "repaths": 11759,
+      "settle_p95_s": 400.0,
+      "stallSharePct_p50": 92,
       "unitsArrived": 120
     },
     "open_corner": {
+      "detourPct_p95": 137,
       "hardStops": 4487878,
       "hardStopsTopSharePct": 0,
       "repaths": 77626,
+      "settle_p95_s": 400.0,
+      "stallSharePct_p50": 96,
       "unitsArrived": 99
     },
     "rush_corner": {
+      "detourPct_p95": 133,
       "hardStops": 4721283,
       "hardStopsTopSharePct": 0,
       "repaths": 79695,
+      "settle_p95_s": 400.0,
+      "stallSharePct_p50": 95,
       "unitsArrived": 47
     },
     "rush_turn": {
+      "detourPct_p95": 321,
       "hardStops": 103043,
       "hardStopsTopSharePct": 25,
       "repaths": 1301,
+      "settle_p95_s": 164.3,
+      "stallSharePct_p50": 55,
       "unitsArrived": 157
     }
   }
