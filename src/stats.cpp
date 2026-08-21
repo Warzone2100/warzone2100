@@ -1652,6 +1652,7 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 	{"MACHINEGUN",             WE_MACHINEGUN              },
 	{"ASSAULT MACHINEGUN",     WE_ASSAULT_MACHINEGUN      },
 	{"CANNON",                 WE_CANNON                  },
+	{"HYPER CANNON",           WE_HYPER_CANNON            },
 	{"SLOW CANNON",            WE_SLOW_CANNON             },
 	{"ASSAULT CANNON",         WE_ASSAULT_CANNON          },
 	{"PLASMA CANNON",          WE_PLASMA_CANNON           },
@@ -1663,6 +1664,7 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 	{"SLOW MISSILE",           WE_SLOW_MISSILE            },
 	{"LASER",                  WE_LASER                   },
 	{"SLOW LASER",             WE_SLOW_LASER              },
+	{"PARTICLE LASER",         WE_PARTICLE_LASER          },
 	{"MORTAR",                 WE_MORTAR_ARTILLERY        },
 	{"FIRE MORTAR",            WE_FIRE_MORTAR_ARTILLERY   },
 	{"HOWITZER",               WE_HOWITZER_ARTILLERY      },
@@ -1681,6 +1683,7 @@ const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 	{"EMP ARTILLERY",          WE_EMP_ARTILLERY           },
 	{"SLOW EMP ARTILLERY",     WE_SLOW_EMP_ARTILLERY      },
 	{"LASSAT",                 WE_LASSAT                  },
+	{"ANTI AIR GENERIC",       WE_ANTI_AIR_GENERIC        },
 };
 const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
 
