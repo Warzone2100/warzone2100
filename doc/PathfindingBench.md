@@ -47,6 +47,33 @@ one droid, stop dead" branch), grind is arrival seconds per tile against the
 free-travel floor from the open-field scenario in the same run, and peak
 density is the largest cluster of tracked droids within a tile and a half.
 
+Two fields read as the feel of a run rather than its totals. Settle time is
+when each share of the force came within six tiles of its goal for the last
+time, so it tracks the visual moment a crowd looks "mostly there" where the
+strict arrival tolerance does not, and `unitsNear` counts who ended inside
+that radius. Stall share is the fraction of each unit's far-from-goal time
+spent effectively stationary: hard stops count collisions, stall share counts
+waiting, and a force can post few hard stops while spending most of its
+journey standing in a queue. Time parked in the crowd around the destination
+does not count. Time on a longer route counts as moving, so a
+detour scores by its travel and the two together separate "slower but flowing"
+from "faster but standing in line".
+
+Detour compares the distance each unit drove against the straight line of its
+leg, as a percentage, with `unitsDetoured` counting units half again over it.
+Near-geodesic travel reads around 100 no matter how long it took, so the pair
+of detour and stall share fingerprints how a config resolved contention:
+coordinated threading is high stall with detour near the map's route floor,
+rerouting around the problem is high detour with low stall, and churning
+wander is high on both. A hard jam also reads high stall with low detour,
+since a wedged unit barely drives, so settle time is what separates a queue
+that drains from a jam that never does. Every route on a map carries that
+map's winding floor over the straight line, so compare detour within a map
+rather than against 100. Whether a high detour is a win depends on the map -
+a spare route put to use is the point of tworoute, while a force splitting
+onto a long loop to dodge a corner may read as pathfinding taking the scenic
+route.
+
 Each scorecard also reports hard-stop concentration: the distinct droids that
 hard-stopped, the worst droid's count, and that count's share of the total.
 hardStops flat while the share collapses means fewer stuck units, not less

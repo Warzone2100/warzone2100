@@ -70,6 +70,10 @@ struct TrackedDroid
 	uint32_t startTick = 0;
 	uint32_t startDistTiles = 0;   ///< straight-line distance to the goal when this leg began, in tiles
 	uint32_t arrivalTick = 0;
+	uint32_t lastFarTick = 0;      ///< last tick this droid sat outside NEAR_RADIUS of its goal
+	uint32_t stallTicks = 0;       ///< far-from-goal ticks spent effectively stationary
+	uint32_t activeTicks = 0;      ///< far-from-goal ticks observed
+	uint32_t travelWorld = 0;      ///< world units driven while far from the goal, this leg
 	bool     arrived = false;
 };
 
@@ -156,6 +160,20 @@ const int32_t DENSITY_RADIUS = 3 * TILE_UNITS / 2;
 /// deciding a droid is near enough to its destination.
 const int32_t ARRIVE_TOLERANCE = 3 * TILE_UNITS / 2;
 
+/// A droid counts as near its destination within this. Where ARRIVE_TOLERANCE
+/// asks whether a unit parked on its goal, this asks whether it joined the
+/// crowd massed around it: a packed cluster the size of the mass scenarios'
+/// blocks fills a disc of about this radius, so a unit inside it reads to the
+/// eye as having gotten there even when the goal tile itself is taken.
+const int32_t NEAR_RADIUS = 6 * TILE_UNITS;
+
+/// Below this per-update displacement a droid reads as waiting rather than
+/// driving. The slowest cohorts cruise near seven world units per update, at
+/// the open-field floor of just under two seconds per tile, so the cut sits
+/// far beneath that: only a unit whose motion is zeroed, or all but zeroed,
+/// falls under it.
+const int32_t STALL_STEP = TILE_UNITS / 64;
+
 const BenchScenario *findScenario(const std::string &name)
 {
 	for (const auto &s : scenarios)
@@ -193,6 +211,7 @@ void sampleDroids()
 			}
 
 			TrackedDroid &t = it->second;
+			const Vector2i step = psDroid->pos.xy() - t.lastPos;
 			t.lastPos = psDroid->pos.xy();
 
 			// A fresh move order to somewhere else starts a new leg, so the
@@ -203,9 +222,29 @@ void sampleDroids()
 				t.goal = psDroid->order.pos;
 				t.startTick = tickCount;
 				t.startDistTiles = static_cast<uint32_t>(iHypot(psDroid->order.pos - psDroid->pos.xy()) / TILE_UNITS);
+				t.travelWorld = 0;
 				t.arrived = false;
 			}
 
+			// The stall clock only runs while the droid is still far from its
+			// goal: a unit held at its spawn or wedged in a scrum is waiting,
+			// a unit parked in the crowd around its destination is done. Tying
+			// it to the strict arrival tolerance instead would book a settled
+			// unit's parked time as stalling whenever its goal tile is taken.
+			const Vector2i delta = psDroid->pos.xy() - t.goal;
+			if (dot(delta, delta) > NEAR_RADIUS * NEAR_RADIUS)
+			{
+				t.lastFarTick = tickCount;
+				++t.activeTicks;
+				if (dot(step, step) < STALL_STEP * STALL_STEP)
+				{
+					++t.stallTicks;
+				}
+				else
+				{
+					t.travelWorld += static_cast<uint32_t>(iHypot(step));
+				}
+			}
 			if (t.arrived)
 			{
 				continue;
@@ -213,7 +252,6 @@ void sampleDroids()
 			// Verify by position rather than by movement state: arrival and the
 			// blocked give-up both funnel through MOVETURN into MOVEINACTIVE, so
 			// the movement state alone cannot tell them apart.
-			const Vector2i delta = psDroid->pos.xy() - t.goal;
 			if (dot(delta, delta) <= ARRIVE_TOLERANCE * ARRIVE_TOLERANCE)
 			{
 				t.arrived = true;
@@ -374,6 +412,74 @@ void writeScorecard(bool completed)
 	// "jammed at the pass" from "never left the start".
 	card["stuckRemainingTiles_p50"] = percentile(remaining, 50);
 	card["stuckRemainingTiles_p95"] = percentile(remaining, 95);
+	// When the run settled to the eye. Each droid's value is the last time it
+	// sat outside NEAR_RADIUS of its goal, so a unit shoved back out re-arms
+	// its clock and transient pass-throughs do not count. The percentile over
+	// units is the moment that share of the force was massed around its
+	// destination for good, which tracks the visual impression of "mostly
+	// there" where the strict arrival tolerance above does not.
+	std::vector<uint32_t> settle;
+	std::vector<uint32_t> stallShare;
+	uint32_t nearNow = 0;
+	for (const auto &entry : tracked)
+	{
+		settle.push_back(entry.second.lastFarTick);
+		if (entry.second.activeTicks > 0)
+		{
+			stallShare.push_back(entry.second.stallTicks * 100 / entry.second.activeTicks);
+		}
+		const Vector2i delta = entry.second.lastPos - entry.second.goal;
+		if (dot(delta, delta) <= NEAR_RADIUS * NEAR_RADIUS)
+		{
+			++nearNow;
+		}
+	}
+	std::sort(settle.begin(), settle.end());
+	std::sort(stallShare.begin(), stallShare.end());
+	card["unitsNear"] = nearNow;
+	card["settle_p50_s"] = percentile(settle, 50) / static_cast<double>(GAME_UPDATES_PER_SEC);
+	card["settle_p95_s"] = percentile(settle, 95) / static_cast<double>(GAME_UPDATES_PER_SEC);
+	// Share of each droid's far-from-goal time spent effectively stationary.
+	// Hard stops count collisions, this counts waiting: a force can post few
+	// hard stops and still spend most of its journey standing in a queue, and
+	// the difference between steady flow along a chosen route and a blob that
+	// only slowly drains is exactly this number. Time on a longer route counts
+	// as moving, so a detour scores by its travel, not by its distance.
+	card["stallSharePct_p50"] = percentile(stallShare, 50);
+	card["stallSharePct_p95"] = percentile(stallShare, 95);
+	// Distance driven against the crow flies, per droid, as a percentage of
+	// the far phase of its current leg. Near-geodesic travel reads around 100
+	// however long it took, a route that swings around the far side of the map
+	// reads by how much farther it drove, and aimless wandering inflates it the
+	// same way. With stall share this splits coordination from avoidance: a
+	// managed queue is high stall with detour near the map's route floor, a
+	// divergent reroute is low stall and high detour, churning wander is high
+	// on both, and settle time separates a queue that drains from a jam that
+	// never does, since a wedged unit barely drives at all. unitsDetoured
+	// counts droids half again over the straight line, so a whole group taking
+	// the long way reads as roughly that group's size. Legs too short to judge
+	// are excluded.
+	std::vector<uint32_t> detour;
+	uint32_t detoured = 0;
+	const uint32_t nearTiles = NEAR_RADIUS / TILE_UNITS;
+	for (const auto &entry : tracked)
+	{
+		if (entry.second.startDistTiles < 2 * nearTiles)
+		{
+			continue;
+		}
+		const uint32_t farTiles = entry.second.startDistTiles - nearTiles;
+		const uint32_t pct = entry.second.travelWorld * 100 / (farTiles * TILE_UNITS);
+		detour.push_back(pct);
+		if (pct >= 150)
+		{
+			++detoured;
+		}
+	}
+	std::sort(detour.begin(), detour.end());
+	card["detourPct_p50"] = percentile(detour, 50);
+	card["detourPct_p95"] = percentile(detour, 95);
+	card["unitsDetoured"] = detoured;
 	card["bumps"] = metrics.bumps;
 	card["bumpsRepeat"] = metrics.bumpsRepeat;
 	card["hardStops"] = metrics.hardStops;

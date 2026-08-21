@@ -156,9 +156,10 @@ ACCEPTANCE_SCENARIOS = ["mountain_chain", "mountain_chain_cross", "rush_turn",
                         "rush_corner", "open_corner"]
 ACCEPTANCE_INDICES = [0, 1, 2, 3, 4]
 ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "repaths"]
-# Aggregated as the max across arrangements, not a sum: the field is a
-# concentration signal, and the worst arrangement is the diagnostic one.
-ACCEPTANCE_MAX_FIELDS = ["hardStopsTopSharePct"]
+# Aggregated as the max across arrangements, not a sum: these are shape
+# signals rather than volumes, and the worst arrangement is the diagnostic one.
+ACCEPTANCE_MAX_FIELDS = ["hardStopsTopSharePct", "settle_p95_s", "stallSharePct_p50",
+                         "detourPct_p95"]
 
 def run(scenario, index, extra):
     # A run that prints no scorecard is a process-level failure, not a sim
@@ -223,24 +224,29 @@ if acceptance:
 
     def cell(s, field):
         v = results[s][field]
+        num = "%g" % v if isinstance(v, float) else "%d" % v
         r = ref[s].get(field) if ref is not None else None
         if r is None:
             # A baseline recorded before the field existed scores without it.
-            return "%d" % v
-        return "%d %s" % (v, delta(v, r))
+            return num
+        return "%s %s" % (num, delta(v, r))
 
     if markdown:
-        print("| scenario | hard stops (sum) | top share % (max) | arrived | repaths |")
-        print("|---|---|---|---|---|")
+        print("| scenario | hard stops (sum) | top share % (max) | settle p95 s (max) | stall p50 % (max) | detour p95 % (max) | arrived | repaths |")
+        print("|---|---|---|---|---|---|---|---|")
         for s in ACCEPTANCE_SCENARIOS:
-            print("| %s | %s | %s | %s | %s |" % (s, cell(s, "hardStops"),
+            print("| %s | %s | %s | %s | %s | %s | %s | %s |" % (s, cell(s, "hardStops"),
                                                   cell(s, "hardStopsTopSharePct"),
+                                                  cell(s, "settle_p95_s"), cell(s, "stallSharePct_p50"),
+                                                  cell(s, "detourPct_p95"),
                                                   cell(s, "unitsArrived"), cell(s, "repaths")))
     else:
-        print("%-22s %22s %18s %14s %16s" % ("SCENARIO", "hardStops (sum)", "topShare% (max)", "arrived", "repaths"))
+        print("%-22s %22s %18s %20s %18s %18s %14s %16s" % ("SCENARIO", "hardStops (sum)", "topShare% (max)", "settleP95s (max)", "stallP50% (max)", "detourP95% (max)", "arrived", "repaths"))
         for s in ACCEPTANCE_SCENARIOS:
-            print("%-22s %22s %18s %14s %16s" % (s, cell(s, "hardStops"),
+            print("%-22s %22s %18s %20s %18s %18s %14s %16s" % (s, cell(s, "hardStops"),
                                                  cell(s, "hardStopsTopSharePct"),
+                                                 cell(s, "settle_p95_s"), cell(s, "stallSharePct_p50"),
+                                                 cell(s, "detourPct_p95"),
                                                  cell(s, "unitsArrived"), cell(s, "repaths")))
     sys.exit(0)
 
