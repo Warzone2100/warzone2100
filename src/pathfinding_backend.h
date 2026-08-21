@@ -67,6 +67,8 @@ enum PathfindingFeature : uint8_t
 	PF_FLOW_COST         = 1 << 2,   ///< price tiles held by opposing-facing traffic in the search
 	PF_SOFT_COLLISION    = 1 << 3,   ///< same-heading transiting allies collide on a smaller footprint
 	PF_CROWD_MASS        = 1 << 4,   ///< price idle or canceled crowd mass in the search
+	// 1 << 5 and 1 << 6 are reserved.
+	PF_WIDE_LANES        = 1 << 7,   ///< scale the keep-right shift to the room the ground offers
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -81,6 +83,9 @@ bool pathfindingFlowCostEnabled();
 bool pathfindingCrowdMassEnabled();
 /// True if same-heading transiting allies should collide on a smaller footprint.
 bool pathfindingSoftCollisionEnabled();
+/// True if the keep-right shift should scale with the room beside the route
+/// instead of being one fixed lane width everywhere.
+bool pathfindingWideLanesEnabled();
 
 class IPathfindingBackend
 {
