@@ -705,8 +705,30 @@ static int32_t bendAllowedOffset(const PATHJOB *psJob, Vector2i p, Vector2i outw
 	return 0;
 }
 
+// How far the lane pass looks for room beside the route, and the widest shift
+// it will ask for. A fixed lane-width nudge does nothing in a wide channel, so
+// the shift follows the room instead.
+constexpr int32_t LANE_PROBE_FAR = 8 * TILE_UNITS;
+constexpr int32_t KEEP_RIGHT_MAX = 640;
+
 constexpr int32_t WALL_PROBE_STEP = 64;
 constexpr int32_t WALL_KEEP = 320;                  // lane offsets stop this far from a wall face
+
+/// Room beside a point on one side, a tile at a time out to LANE_PROBE_FAR.
+/// Coarser and longer-reaching than wallDistance, which only needs to resolve
+/// the near wall the clearance floor is measured against.
+static int32_t laneRoom(const PATHJOB *psJob, Vector2i p, Vector2i stepT)
+{
+	for (int32_t d = TILE_UNITS; d <= LANE_PROBE_FAR; d += TILE_UNITS)
+	{
+		Vector2i t = map_coord(Vector2i(p.x + stepT.x * d / TILE_UNITS, p.y + stepT.y * d / TILE_UNITS));
+		if (bendBlockedTile(psJob, t.x, t.y))
+		{
+			return d - TILE_UNITS;
+		}
+	}
+	return LANE_PROBE_FAR;
+}
 
 /// Distance from a point to the first blocking tile along a one-tile
 /// perpendicular step, probed coarsely, capped just past WALL_CLEAR.
@@ -857,7 +879,8 @@ static void fpathKeepRightOffset(const PATHJOB *psJob, MOVE_CONTROL *psMove)
 	// Mixed before the modulus: synchronised ids are generated with a stride,
 	// and a raw modulus collapses every droid into one sub-lane whenever the
 	// stride shares a factor with the lane count.
-	const int32_t laneHalf = KEEP_RIGHT_HALF + (static_cast<int32_t>(((psJob->droidID * 2654435761u) >> 16) % 3u) - 1) * SUBLANE_STEP;
+	const int32_t subLane = (static_cast<int32_t>(((psJob->droidID * 2654435761u) >> 16) % 3u) - 1) * SUBLANE_STEP;
+	const int32_t laneHalf = KEEP_RIGHT_HALF + subLane;
 	const CorridorMap *cmap = gameWorld.map.corridors.get();
 
 	static thread_local std::vector<int32_t> arcFwd;
@@ -895,9 +918,18 @@ static void fpathKeepRightOffset(const PATHJOB *psJob, MOVE_CONTROL *psMove)
 		{
 			continue;
 		}
-		int32_t w = laneHalf;
-		w = std::min(w, laneHalf * arcFwd[k] / KEEP_RIGHT_RAMP);
-		w = std::min(w, laneHalf * (total - arcFwd[k]) / KEEP_RIGHT_DEST_RAMP);
+		// Half the room to this side, so the two directions settle on the
+		// quarter points of whatever width the ground offers and each keeps a
+		// full half to itself, instead of both riding the middle.
+		int32_t target = laneHalf;
+		if (pathfindingWideLanesEnabled())
+		{
+			const int32_t half = laneRoom(psJob, path[k], right) / 2;
+			target = std::clamp(half, KEEP_RIGHT_HALF, KEEP_RIGHT_MAX) + subLane;
+		}
+		int32_t w = target;
+		w = std::min(w, target * arcFwd[k] / KEEP_RIGHT_RAMP);
+		w = std::min(w, target * (total - arcFwd[k]) / KEEP_RIGHT_DEST_RAMP);
 		// The lane offset never presses a route within the keep floor of a
 		// wall. The spine's clearance, the lane shift and the follower's
 		// chord cutting all spend from one budget, and without a floor the

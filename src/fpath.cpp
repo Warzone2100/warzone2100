@@ -733,6 +733,11 @@ bool pathfindingSoftCollisionEnabled()
 	return (game.pathfindingBackend & PF_SOFT_COLLISION) != 0;
 }
 
+bool pathfindingWideLanesEnabled()
+{
+	return (game.pathfindingBackend & PF_WIDE_LANES) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
