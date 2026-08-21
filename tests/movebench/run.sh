@@ -143,6 +143,9 @@ ACCEPTANCE_SCENARIOS = ["mountain_chain", "mountain_chain_cross", "rush_turn",
                         "rush_corner", "open_corner"]
 ACCEPTANCE_INDICES = [0, 1, 2, 3, 4]
 ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "repaths"]
+# Aggregated as the max across arrangements, not a sum: the field is a
+# concentration signal, and the worst arrangement is the diagnostic one.
+ACCEPTANCE_MAX_FIELDS = ["hardStopsTopSharePct"]
 
 def run(scenario, index, extra):
     # A run that prints no scorecard is a process-level failure, not a sim
@@ -184,6 +187,7 @@ if acceptance:
         for s in ACCEPTANCE_SCENARIOS:
             cards = run_all(s, ACCEPTANCE_INDICES, extra)
             out[s] = {f: sum(c[f] for c in cards) for f in ACCEPTANCE_FIELDS}
+            out[s].update({f: max(c.get(f, 0) for c in cards) for f in ACCEPTANCE_MAX_FIELDS})
         return out
 
     results = sweep(passthrough)
@@ -206,21 +210,25 @@ if acceptance:
 
     def cell(s, field):
         v = results[s][field]
-        if ref is None:
+        r = ref[s].get(field) if ref is not None else None
+        if r is None:
+            # A baseline recorded before the field existed scores without it.
             return "%d" % v
-        return "%d %s" % (v, delta(v, ref[s][field]))
+        return "%d %s" % (v, delta(v, r))
 
     if markdown:
-        print("| scenario | hard stops (sum) | arrived | repaths |")
-        print("|---|---|---|---|")
+        print("| scenario | hard stops (sum) | top share % (max) | arrived | repaths |")
+        print("|---|---|---|---|---|")
         for s in ACCEPTANCE_SCENARIOS:
-            print("| %s | %s | %s | %s |" % (s, cell(s, "hardStops"),
-                                             cell(s, "unitsArrived"), cell(s, "repaths")))
+            print("| %s | %s | %s | %s | %s |" % (s, cell(s, "hardStops"),
+                                                  cell(s, "hardStopsTopSharePct"),
+                                                  cell(s, "unitsArrived"), cell(s, "repaths")))
     else:
-        print("%-22s %22s %14s %16s" % ("SCENARIO", "hardStops (sum)", "arrived", "repaths"))
+        print("%-22s %22s %18s %14s %16s" % ("SCENARIO", "hardStops (sum)", "topShare% (max)", "arrived", "repaths"))
         for s in ACCEPTANCE_SCENARIOS:
-            print("%-22s %22s %14s %16s" % (s, cell(s, "hardStops"),
-                                            cell(s, "unitsArrived"), cell(s, "repaths")))
+            print("%-22s %22s %18s %14s %16s" % (s, cell(s, "hardStops"),
+                                                 cell(s, "hardStopsTopSharePct"),
+                                                 cell(s, "unitsArrived"), cell(s, "repaths")))
     sys.exit(0)
 
 def sweep(extra):

@@ -36,6 +36,7 @@
 #include "lib/framework/frame.h"
 
 #include <cstdint>
+#include <map>
 #include <string>
 
 /**
@@ -51,6 +52,7 @@ struct MovementMetrics
 	uint64_t hardStops = 0;     ///< second contact in one scan zeroed the move vector
 	uint64_t giveUps = 0;       ///< moveBlocked gave up on the move entirely
 	uint64_t repaths = 0;       ///< moveBlocked rerouted to the same destination
+	std::map<uint32_t, uint32_t> hardStopsByDroid; ///< per-droid hard stops, feeds the concentration fields
 };
 
 /// Non-null only while a bench scenario is running.
