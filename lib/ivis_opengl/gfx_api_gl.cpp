@@ -1029,6 +1029,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ .friendly_name = "generic color program", .vertex_file = "shaders/generic.vert", .fragment_file = "shaders/rect.frag",
 		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_CONSTRUCTION_LINE, program_data{ .friendly_name = "construction line program", .vertex_file = "shaders/construction_line.vert", .fragment_file = "shaders/construction_line.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_LINE, program_data{ .friendly_name = "line program", .vertex_file = "shaders/line.vert", .fragment_file = "shaders/rect.frag",
 		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
 	std::make_pair(SHADER_TEXT, program_data{ .friendly_name = "Text program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/text.frag",

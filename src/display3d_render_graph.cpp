@@ -129,7 +129,8 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
 		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
-			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None, MeshDrawParts::Opaque);
+			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None,
+			MeshDrawParts::Opaque, MeshFogMode::Disabled);
 	}
 	wzPerfEnd(PERF_MODELS);
 
@@ -149,9 +150,12 @@ static void recordSceneTransparent(const gfx_api::RenderPassContext& passCtx)
 
 	{
 		WZ_PROFILE_SCOPE(pie_DrawTransparentMeshes);
+		// ScenePrepassDepth describes only the opaque background. Fogging the
+		// composited result with it would assign that unrelated depth to every
+		// transparent layer, so forward transparents fog from fragment distance.
 		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
 			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None,
-			MeshDrawParts::Translucent | MeshDrawParts::Additive);
+			MeshDrawParts::Translucent | MeshDrawParts::Additive, MeshFogMode::ForwardDistance);
 	}
 
 	if (!gamePaused())

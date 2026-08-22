@@ -21,6 +21,8 @@ layout(std140) uniform globaluniforms {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	float graphicsCycle;
 	float WZ_MIP_LOAD_BIAS;
 	float pad0;
@@ -32,6 +34,7 @@ layout(std140) uniform meshuniforms {
 	int normalmap;
 	int specularmap;
 	int hasTangents;
+	int fogOutput;
 };
 
 layout(std140) uniform instanceuniforms {
@@ -61,10 +64,10 @@ attribute vec4 vertexTexCoordAndTexAnim;
 
 #ifdef NEWGL
 out vec2 texCoord;
-out float vertexDistance;
+out vec3 posViewSpace;
 #else
 varying vec2 texCoord;
-varying float vertexDistance;
+varying vec3 posViewSpace;
 #endif
 
 void main()
@@ -82,6 +85,5 @@ void main()
 	vec4 gposition = ModelViewProjectionMatrix * vertex;
 	gl_Position = gposition;
 
-	// Remember vertex distance
-	vertexDistance = gposition.z;
+	posViewSpace = (ViewMatrix * ModelMatrix * vertex).xyz;
 }

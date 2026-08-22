@@ -51,7 +51,7 @@ using nonstd::nullopt;
 #define pie_ECM                 0x1
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
-#define pie_FORCE_FOG           0x8
+#define pie_FORCE_FOG           0x8 // Retained for draw-call compatibility; transparent fog is now pass-owned.
 #define pie_HEIGHT_SCALED       0x10
 #define pie_RAISE               0x20
 #define pie_BUTTON              0x40
@@ -119,6 +119,7 @@ enum SHADER_MODE
 	SHADER_GFX_TEXT,
 	SHADER_SKYBOX,
 	SHADER_GENERIC_COLOR,
+	SHADER_CONSTRUCTION_LINE,
 	SHADER_LINE,
 	SHADER_TEXT,
 	SHADER_TERRAIN_COMBINED_CLASSIC,

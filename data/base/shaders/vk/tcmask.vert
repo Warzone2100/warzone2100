@@ -12,6 +12,8 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	float graphicsCycle;
 	float WZ_MIP_LOAD_BIAS;
 	float pad0;
@@ -24,6 +26,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int normalmap;
 	int specularmap;
 	int hasTangents;
+	int fogOutput;
 };
 
 layout(std140, set = 2, binding = 0) uniform instanceuniforms
@@ -43,7 +46,7 @@ layout(location = 3) in vec3 vertexNormal;
 layout(location = 1) in vec4 vertexTexCoordAndTexAnim;
 layout(location = 4) in vec4 vertexTangent;
 
-layout(location = 0) out float vertexDistance;
+layout(location = 0) out vec3 posViewSpace;
 layout(location = 1) out vec3 normal;
 layout(location = 2) out vec3 lightDir;
 layout(location = 3) out vec3 halfVec;
@@ -102,8 +105,7 @@ void main()
 	vec4 gposition = ModelViewProjectionMatrix * position;
 	gl_Position = gposition;
 
-	// Remember vertex distance
-	vertexDistance = gposition.z;
+	posViewSpace = (ViewMatrix * ModelMatrix * position).xyz;
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 }

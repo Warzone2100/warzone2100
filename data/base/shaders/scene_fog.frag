@@ -2,6 +2,7 @@
 // (This shader supports GLSL 1.40 - 1.50 core.)
 
 #include "view_position.glsl"
+#include "distance_fog.glsl"
 
 layout(std140) uniform cbuffer {
 	vec4 fogColor;
@@ -43,13 +44,8 @@ void main()
 	float depth = texture(prepassDepth, uv).r;
 	if (depth < SKY_DEPTH_THRESHOLD)
 	{
-		float fogRange = fogEnd - fogBegin;
-		if (abs(fogRange) > 1e-3)
-		{
-			float viewDist = length(wzGetViewPosition(uv, depth, invProjectionMatrix));
-			float f = clamp((viewDist - fogBegin) / fogRange, 0.0, 1.0);
-			result = mix(lit, fogColor.rgb, f);
-		}
+		float viewDist = length(wzGetViewPosition(uv, depth, invProjectionMatrix));
+		result = mix(lit, fogColor.rgb, wzDistanceFogAmount(viewDist, fogBegin, fogEnd));
 	}
 	// Sky / no prepass geometry: skybox already applied its own fog in ScenePass.
 

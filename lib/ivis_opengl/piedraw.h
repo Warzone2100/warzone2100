@@ -54,7 +54,16 @@ constexpr MeshDrawParts operator|(MeshDrawParts a, MeshDrawParts b)
 	return static_cast<MeshDrawParts>(static_cast<uint8_t>(a) | static_cast<uint8_t>(b));
 }
 
+/// Fog ownership for a mesh draw phase.
+/// Opaque meshes are fogged later from prepass depth; transparent meshes must
+/// fog each fragment before blending because that depth is not in the prepass.
+enum class MeshFogMode : uint8_t
+{
+	Disabled,
+	ForwardDistance,
+};
+
 void pie_StartMeshes();
 void pie_UpdateLightmap(gfx_api::texture* lightmapTexture, const glm::mat4& modelUVLightmapMatrix);
 void pie_FinalizeMeshes(uint64_t currentGameFrame);
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None, MeshDrawParts drawFilter = MeshDrawParts::All);
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None, MeshDrawParts drawFilter = MeshDrawParts::All, MeshFogMode fogMode = MeshFogMode::Disabled);

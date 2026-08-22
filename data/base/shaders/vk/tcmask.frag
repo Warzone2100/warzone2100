@@ -17,6 +17,8 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	float graphicsCycle;
 	float WZ_MIP_LOAD_BIAS;
 	float pad0;
@@ -29,6 +31,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int normalmap;
 	int specularmap;
 	int hasTangents;
+	int fogOutput;
 };
 
 layout(std140, set = 2, binding = 0) uniform instanceuniforms
@@ -43,7 +46,7 @@ layout(std140, set = 2, binding = 0) uniform instanceuniforms
 	int alphaTest;
 };
 
-layout(location  = 0) in float vertexDistance;
+layout(location = 0) in vec3 posViewSpace;
 layout(location = 1) in vec3 normal;
 layout(location = 2) in vec3 lightDir;
 layout(location = 3) in vec3 halfVec;
@@ -53,6 +56,7 @@ layout(location = 5) in mat3 TangentSpaceMatrix; // occupies locations 5, 6, 7
 layout(location = 0) out vec4 FragColor;
 
 #include "tangentspace.glsl"
+#include "distance_fog.glsl"
 
 void main()
 {
@@ -119,6 +123,11 @@ void main()
 	if (ecmEffect > 0)
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
+	}
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
 	}
 
 	FragColor = fragColour;

@@ -88,6 +88,7 @@ find_program( GLSLC "glslc"
 
 file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/generic.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/construction_line.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx_text.vert"
@@ -110,6 +111,7 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/postprocess_fullscreen.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/construction_line.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/texturedrect.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx.frag"

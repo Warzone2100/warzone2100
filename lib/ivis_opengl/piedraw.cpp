@@ -312,11 +312,13 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 		glm::vec4(0.f, 0.f, 0.f, 0.f),
 		glm::vec4(getDefaultSunPosition(), 0.f),
 		sceneColor, ambient, diffuse, specular,
+		glm::vec4(0.f), glm::vec4(0.f),
 		0.f, gfx_api::context::get().getMipLodBias()
 	};
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
-		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
+		static_cast<int>(gfx_api::ForwardFogOutput::Disabled)
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
@@ -402,6 +404,23 @@ private:
 	std::unordered_set<std::type_index> performed_once;
 };
 
+static gfx_api::ForwardFogOutput forwardFogOutputForFlags(int pieFlag)
+{
+	if (pieFlag & pie_ADDITIVE)
+	{
+		return gfx_api::ForwardFogOutput::Additive;
+	}
+	if (pieFlag & pie_PREMULTIPLIED)
+	{
+		return gfx_api::ForwardFogOutput::Premultiplied;
+	}
+	if (pieFlag & pie_TRANSLUCENT)
+	{
+		return gfx_api::ForwardFogOutput::StraightAlpha;
+	}
+	return gfx_api::ForwardFogOutput::Disabled;
+}
+
 template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
 static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const glm::mat4 & modelMatrix, const iIMDShape * shape, int pieFlag, int frame)
 {
@@ -418,7 +437,8 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
-		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
+		static_cast<int>(forwardFogOutputForFlags(pieFlag))
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
@@ -562,16 +582,6 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 	int ecmState = 0;
 
 	++drawCallsCount;
-
-	/* Set fog status */
-	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
-	{
-		pie_SetFogStatus(false);
-	}
-	else
-	{
-		pie_SetFogStatus(true);
-	}
 
 	/* Set translucency */
 	if (pieFlag & pie_ADDITIVE)
@@ -1053,7 +1063,7 @@ public:
 	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes | DrawParts::AdditiveShapes;
 
 	// Draws all queued meshes, given a projection + view matrix
-	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, int drawParts = DrawParts_All, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None);
+	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, int drawParts = DrawParts_All, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None, MeshFogMode fogMode = MeshFogMode::Disabled);
 public:
 	// New, instanced rendering
 	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, gfx_api::abstract_texture* shadowMap, int drawParts = DrawParts_All, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None);
@@ -1532,7 +1542,7 @@ void pie_FinalizeMeshes(uint64_t currentGameFrame)
 	instancedMeshRenderer.FinalizeInstances();
 }
 
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter)
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter, MeshFogMode fogMode)
 {
 	int drawParts = static_cast<int>(drawFilter);
 	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows
@@ -1558,7 +1568,7 @@ void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMat
 	{
 		return;
 	}
-	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix, cameraPos, shadowMVPMatrix, shadowMap, pointLights, drawParts, depthPassMode);
+	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix, cameraPos, shadowMVPMatrix, shadowMap, pointLights, drawParts, depthPassMode, fogMode);
 }
 
 bool InstancedMeshRenderer::FinalizeInstances()
@@ -1635,7 +1645,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	return true;
 }
 
-bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, int drawParts, MeshDepthPassMode depthPassMode)
+bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, int drawParts, MeshDepthPassMode depthPassMode, MeshFogMode fogMode)
 {
 	perFrameUniformsShaderOnce.reset();
 
@@ -1644,6 +1654,10 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
 	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
+	const auto& renderState = getCurrentRenderState();
+	const bool forwardFogEnabled = fogMode == MeshFogMode::ForwardDistance && pie_GetFogEnabled();
+	const glm::vec4 fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
+	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, forwardFogEnabled ? 1.f : 0.f, 0.f);
 
 	if (useInstancedRendering)
 	{
@@ -1652,7 +1666,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
-			sceneColor, ambient, diffuse, specular,
+			sceneColor, ambient, diffuse, specular, fogColor, fogRange,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 			pie_GetShaderTime(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(),
 			static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f, 0.f,
@@ -1665,7 +1679,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
 			glm::vec4(cameraPos, 0.f),
-			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular,
+			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor, fogRange,
 			pie_GetShaderTime(), gfx_api::context::get().getSceneMipLodBias()
 		};
 		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts);
@@ -1675,7 +1689,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 }
 
 template<SHADER_MODE shader, typename Draw3DInstancedPSO>
-static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::abstract_texture* shadowMap, gfx_api::texture* lightmapTexture, bool shieldEffect)
+static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::abstract_texture* shadowMap, gfx_api::texture* lightmapTexture, bool shieldEffect, gfx_api::ForwardFogOutput fogOutput)
 {
 	const auto& textures = shape->getTextures();
 	auto* tcmask = textures.tcmaskpage != iV_TEX_INVALID ? &pie_Texture(textures.tcmaskpage) : nullptr;
@@ -1683,7 +1697,8 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::Draw3DShapeInstancedPerMeshUniforms meshUniforms {
-		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr, shieldEffect ? 1 : 0
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
+		shieldEffect ? 1 : 0, static_cast<int>(fogOutput)
 	};
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
@@ -1761,44 +1776,45 @@ template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPS
 static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::abstract_texture* shadowMap, gfx_api::texture* lightmapTexture)
 {
 	bool shieldEffect = pieFlag & pie_SHIELD;
+	const gfx_api::ForwardFogOutput fogOutput = forwardFogOutputForFlags(pieFlag);
 
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 		}
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 		}
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedNoDepthWRTPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedNoDepthWRTPSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 		}
 	}
 	else
 	{
-		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect);
+		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, pointLights, shape, instanceDataBuffer, instanceBufferOffset, instance_count, shadowMap, lightmapTexture, shieldEffect, fogOutput);
 	}
 }
 
@@ -1807,16 +1823,6 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 	bool light = true;
 
 	++drawCallsCount;
-
-	/* Set fog status */
-	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
-	{
-		pie_SetFogStatus(false);
-	}
-	else
-	{
-		pie_SetFogStatus(true);
-	}
 
 	/* Set translucency */
 	if (pieFlag & pie_ADDITIVE)

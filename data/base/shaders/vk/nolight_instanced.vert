@@ -13,6 +13,7 @@ layout(location = 11) in vec4 instanceTeamColour;
 layout(location = 0) out vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 layout(location = 1) out vec4 colour;
 layout(location = 2) out vec4 packed_ecmState_alphaTest;
+layout(location = 3) out vec3 posViewSpace;
 
 void main()
 {
@@ -34,13 +35,12 @@ void main()
 	vec4 gposition = ModelViewProjectionMatrix * vertex;
 	gl_Position = gposition;
 
-	// Remember vertex distance
-	float vertexDistance = gposition.z;
+	posViewSpace = (ModelViewMatrix * vertex).xyz;
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 
 	// pack outputs for fragment shader
 	colour = instanceColour;
-	texCoord_vertexDistance = vec4(texCoord.x, texCoord.y, vertexDistance, 0.f);
+	texCoord_vertexDistance = vec4(texCoord.x, texCoord.y, 0.f, 0.f);
 	packed_ecmState_alphaTest = vec4(0.f, alphaTest, 0.f, 0.f);
 }

@@ -14,6 +14,8 @@ layout(std140) uniform globaluniforms {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	float graphicsCycle;
 	float WZ_MIP_LOAD_BIAS;
 	float pad0;
@@ -25,6 +27,7 @@ layout(std140) uniform meshuniforms {
 	int normalmap;
 	int specularmap;
 	int hasTangents;
+	int fogOutput;
 };
 
 layout(std140) uniform instanceuniforms {
@@ -53,14 +56,14 @@ uniform sampler2D TextureSpecular; // specular map
 #endif
 
 #ifdef NEWGL
-in float vertexDistance;
+in vec3 posViewSpace;
 in vec3 normal;
 in vec3 lightDir;
 in vec3 halfVec;
 in vec2 texCoord;
 in mat3 TangentSpaceMatrix;
 #else
-varying float vertexDistance;
+varying vec3 posViewSpace;
 varying vec3 normal;
 varying vec3 lightDir;
 varying vec3 halfVec;
@@ -75,6 +78,7 @@ out vec4 FragColor;
 #endif
 
 #include "tangentspace.glsl"
+#include "distance_fog.glsl"
 
 void main()
 {
@@ -141,6 +145,11 @@ void main()
 	if (ecmEffect > 0)
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
+	}
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
 	}
 
 	#ifdef NEWGL
