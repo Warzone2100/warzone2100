@@ -32,6 +32,13 @@
 # hard stops over their arrangements rather than medians, against
 # tests/movebench/acceptance-baseline.json. These are heavy runs.
 #
+# The acceptance table's two arrival counts answer different questions. `near`
+# allows six tiles and says whether a unit got to its destination. `parked`
+# allows a tile and a half, the movement code's own slack, so it measures how
+# tightly a block settled around a goal tile it cannot all fit on - a change in
+# it is packing, not transit. Neither is a time, so arrival p50 and p95 sit
+# beside them.
+#
 # --concurrent=N keeps up to N game processes running at once. Every run is an
 # independent deterministic process whose scorecard comes back on its own
 # stdout, so concurrency changes wall-clock and nothing else.
@@ -155,11 +162,15 @@ RESOLVED_SHARE = 0.75
 ACCEPTANCE_SCENARIOS = ["mountain_chain", "mountain_chain_cross", "rush_turn",
                         "rush_corner", "open_corner"]
 ACCEPTANCE_INDICES = [0, 1, 2, 3, 4]
-ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "repaths"]
+ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "unitsNear", "repaths"]
 # Aggregated as the max across arrangements, not a sum: these are shape
 # signals rather than volumes, and the worst arrangement is the diagnostic one.
 ACCEPTANCE_MAX_FIELDS = ["hardStopsTopSharePct", "settle_p95_s", "stallSharePct_p50",
-                         "detourPct_p95"]
+                         "detourPct_p95", "arrival_p95_s"]
+# A central measure, so neither summed nor maxed: the median arrangement's
+# median arrival is what a run typically costs.
+ACCEPTANCE_MEDIAN_FIELDS = ["arrival_p50_s"]
+
 
 def run(scenario, index, extra):
     # A run that prints no scorecard is a process-level failure, not a sim
@@ -202,6 +213,8 @@ if acceptance:
             cards = run_all(s, ACCEPTANCE_INDICES, extra)
             out[s] = {f: sum(c[f] for c in cards) for f in ACCEPTANCE_FIELDS}
             out[s].update({f: max(c.get(f, 0) for c in cards) for f in ACCEPTANCE_MAX_FIELDS})
+            out[s].update({f: statistics.median(c[f] for c in cards)
+                           for f in ACCEPTANCE_MEDIAN_FIELDS})
         return out
 
     results = sweep(passthrough)
@@ -231,23 +244,27 @@ if acceptance:
             return num
         return "%s %s" % (num, delta(v, r))
 
+    ACCEPTANCE_COLUMNS = [
+        ("hard stops (sum)", "hardStops"),
+        ("top share % (max)", "hardStopsTopSharePct"),
+        ("arrival p50 s (med)", "arrival_p50_s"),
+        ("arrival p95 s (max)", "arrival_p95_s"),
+        ("settle p95 s (max)", "settle_p95_s"),
+        ("stall p50 % (max)", "stallSharePct_p50"),
+        ("detour p95 % (max)", "detourPct_p95"),
+        ("near 6t (sum)", "unitsNear"),
+        ("parked 1.5t (sum)", "unitsArrived"),
+        ("repaths", "repaths"),
+    ]
     if markdown:
-        print("| scenario | hard stops (sum) | top share % (max) | settle p95 s (max) | stall p50 % (max) | detour p95 % (max) | arrived | repaths |")
-        print("|---|---|---|---|---|---|---|---|")
+        print("| scenario | %s |" % " | ".join(h for h, _ in ACCEPTANCE_COLUMNS))
+        print("|---%s" % ("|---" * len(ACCEPTANCE_COLUMNS) + "|"))
         for s in ACCEPTANCE_SCENARIOS:
-            print("| %s | %s | %s | %s | %s | %s | %s | %s |" % (s, cell(s, "hardStops"),
-                                                  cell(s, "hardStopsTopSharePct"),
-                                                  cell(s, "settle_p95_s"), cell(s, "stallSharePct_p50"),
-                                                  cell(s, "detourPct_p95"),
-                                                  cell(s, "unitsArrived"), cell(s, "repaths")))
+            print("| %s | %s |" % (s, " | ".join(cell(s, f) for _, f in ACCEPTANCE_COLUMNS)))
     else:
-        print("%-22s %22s %18s %20s %18s %18s %14s %16s" % ("SCENARIO", "hardStops (sum)", "topShare% (max)", "settleP95s (max)", "stallP50% (max)", "detourP95% (max)", "arrived", "repaths"))
+        print("%-22s%s" % ("SCENARIO", "".join("%20s" % h for h, _ in ACCEPTANCE_COLUMNS)))
         for s in ACCEPTANCE_SCENARIOS:
-            print("%-22s %22s %18s %20s %18s %18s %14s %16s" % (s, cell(s, "hardStops"),
-                                                 cell(s, "hardStopsTopSharePct"),
-                                                 cell(s, "settle_p95_s"), cell(s, "stallSharePct_p50"),
-                                                 cell(s, "detourPct_p95"),
-                                                 cell(s, "unitsArrived"), cell(s, "repaths")))
+            print("%-22s%s" % (s, "".join("%20s" % cell(s, f) for _, f in ACCEPTANCE_COLUMNS)))
     sys.exit(0)
 
 def sweep(extra):
