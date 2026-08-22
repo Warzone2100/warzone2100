@@ -738,6 +738,11 @@ bool pathfindingWideLanesEnabled()
 	return (game.pathfindingBackend & PF_WIDE_LANES) != 0;
 }
 
+bool pathfindingBendHoldEnabled()
+{
+	return (game.pathfindingBackend & PF_BEND_HOLD) != 0;
+}
+
 bool pathfindingBendHandEnabled()
 {
 	return (game.pathfindingBackend & PF_BEND_HAND) != 0;
