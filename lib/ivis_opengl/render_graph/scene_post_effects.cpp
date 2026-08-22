@@ -136,6 +136,25 @@ bool anyEffectEnabled(Enabled&& enabled)
 	return false;
 }
 
+// These arrays own the storage viewed by ScenePostEffectDesc::applyReads.
+// Array order is consumed unchanged as the apply shader's texture-binding order.
+static constexpr auto kSsaoApplyReads = std::array{
+	ScenePostEffectRead::incomingColor(),
+	ScenePostEffectRead::passOutput(PassId::SSAOBlurV),
+	ScenePostEffectRead::passOutput(PassId::ScenePrepass, AttachmentRole::Color, 0),
+};
+
+static constexpr auto kFogApplyReads = std::array{
+	ScenePostEffectRead::incomingColor(),
+	ScenePostEffectRead::passOutput(PassId::ScenePrepass, AttachmentRole::Depth),
+};
+
+static constexpr auto kRangeRingApplyReads = std::array{
+	ScenePostEffectRead::incomingColor(),
+	ScenePostEffectRead::passOutput(PassId::ScenePrepass, AttachmentRole::Depth),
+	ScenePostEffectRead::passOutput(PassId::RangeRingSdfMin),
+};
+
 } // anonymous namespace
 
 bool anyScenePostEffectEnabled(const RenderTopologySnapshot& snapshot)
@@ -182,23 +201,19 @@ void emitApplyPass(BlueprintBuilder& builder, const ScenePostEffectDesc& effect,
 		.color(effect.applyOutput, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 		.viewport(ViewportRule::SceneColorTarget);
 
-	for (uint8_t i = 0; i < effect.applyInputCount; ++i)
+	for (const ScenePostEffectRead& read : effect.applyReads)
 	{
-		switch (effect.applyInputs[i])
+		switch (read.source)
 		{
-		case ApplyInput::IncomingColor:
-			builder.readFrom(incomingColor, AttachmentRole::PrimaryColor);
+		case ScenePostEffectRead::Source::IncomingColor:
+			builder.readFrom(incomingColor, AttachmentRole::PrimaryColor, 0);
 			break;
-		case ApplyInput::PrepassDepth:
-			builder.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
-			break;
-		case ApplyInput::PrepassNormals:
-			builder.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0);
-			break;
-		case ApplyInput::PreparedOutput:
-			ASSERT(effect.preparedColorPass != PassId::Count,
-				"emitApplyPass: PreparedOutput sample without preparedColorPass (%s)", debugName);
-			builder.readFrom(effect.preparedColorPass, AttachmentRole::PrimaryColor);
+		case ScenePostEffectRead::Source::PassOutput:
+			ASSERT(read.edge.producerPass != PassId::Count,
+				"emitApplyPass: fixed read has no producer (%s)", debugName);
+			ASSERT(read.edge.attachmentIndex == 0 || read.edge.producerRole == AttachmentRole::Color,
+				"emitApplyPass: attachment index is only valid for Color reads (%s)", debugName);
+			builder.readFrom(read.edge.producerPass, read.edge.producerRole, read.edge.attachmentIndex);
 			break;
 		}
 	}
@@ -212,9 +227,7 @@ const std::array<ScenePostEffectDesc, static_cast<size_t>(ScenePostEffectId::Cou
 		.applyPass = PassId::SSAOCompose,
 		.applyDebugName = "SSAOCompose",
 		.applyOutput = PipelineSurfaceId::SSAOComposedColor,
-		.applyInputs = { ApplyInput::IncomingColor, ApplyInput::PreparedOutput, ApplyInput::PrepassNormals },
-		.applyInputCount = 3,
-		.preparedColorPass = PassId::SSAOBlurV,
+		.applyReads = kSsaoApplyReads,
 	},
 	{
 		.id = ScenePostEffectId::Fog,
@@ -222,8 +235,7 @@ const std::array<ScenePostEffectDesc, static_cast<size_t>(ScenePostEffectId::Cou
 		.applyPass = PassId::FogApply,
 		.applyDebugName = "FogApply",
 		.applyOutput = PipelineSurfaceId::FogColor,
-		.applyInputs = { ApplyInput::IncomingColor, ApplyInput::PrepassDepth },
-		.applyInputCount = 2,
+		.applyReads = kFogApplyReads,
 	},
 	{
 		.id = ScenePostEffectId::RangeRings,
@@ -232,9 +244,7 @@ const std::array<ScenePostEffectDesc, static_cast<size_t>(ScenePostEffectId::Cou
 		.applyPass = PassId::RangeRingComposite,
 		.applyDebugName = "RangeRingComposite",
 		.applyOutput = PipelineSurfaceId::RangeRingColor,
-		.applyInputs = { ApplyInput::IncomingColor, ApplyInput::PrepassDepth, ApplyInput::PreparedOutput },
-		.applyInputCount = 3,
-		.preparedColorPass = PassId::RangeRingSdfMin,
+		.applyReads = kRangeRingApplyReads,
 	},
 }};
 
