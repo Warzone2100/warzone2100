@@ -117,7 +117,7 @@ void sendOptions()
 	NETuint8_t(w, static_cast<uint8_t>(game.playerLeaveMode));
 	game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(game.playerReconnectWaitSeconds);
 	NETuint16_t(w, game.playerReconnectWaitSeconds);
-	NETuint8_t(w, game.pathfindingBackend);
+	NETuint16_t(w, game.pathfindingBackend);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -231,7 +231,7 @@ bool recvOptions(NETQUEUE queue)
 		return false;
 	}
 	game.playerReconnectWaitSeconds = tempPlayerReconnectWaitSeconds;
-	NETuint8_t(r, game.pathfindingBackend);
+	NETuint16_t(r, game.pathfindingBackend);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
