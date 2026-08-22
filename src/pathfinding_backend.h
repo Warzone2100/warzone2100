@@ -70,6 +70,7 @@ enum PathfindingFeature : uint16_t
 	PF_BEND_HOLD         = 1 << 5,   ///< hold the lane side while crossing an inner junction
 	PF_BEND_HAND         = 1 << 6,   ///< do not release a droid at a mouth its route continues through
 	PF_WIDE_LANES        = 1 << 7,   ///< scale the keep-right shift to the room the ground offers
+	PF_HAND_JOINT        = 1 << 8,   ///< at a joint both flows use, wait for both before setting handedness
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -93,6 +94,9 @@ bool pathfindingBendHoldEnabled();
 /// True if the lane release near a mouth applies only at an outer mouth, not
 /// where the route continues into the next passage of the same chain.
 bool pathfindingBendHandEnabled();
+/// True if a corridor at a joint both flows use waits for both to commit a side
+/// before settling its lane handedness, instead of letting the first decide.
+bool pathfindingHandJointEnabled();
 
 class IPathfindingBackend
 {

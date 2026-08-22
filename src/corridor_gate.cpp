@@ -244,6 +244,23 @@ bool jointHolds(const MouthAdj *a)
 	       && a->gapSq >= static_cast<int64_t>(JUNCTION_GAP_MIN) * JUNCTION_GAP_MIN;
 }
 
+/// True if either mouth of this corridor opens onto a joint that both flows are
+/// using. Read by the handedness rule, which has to settle a convention the two
+/// directions share, so it cares about the corridor rather than one droid.
+bool corridorAtSharedJoint(size_t cid)
+{
+	for (int ei = 0; ei < 2; ++ei)
+	{
+		const auto &adj = ei ? g_mouthBAdj : g_mouthAAdj;
+		if (cid >= adj.size()) { continue; }
+		for (const MouthAdj &a : adj[cid])
+		{
+			if (jointHolds(&a)) { return true; }
+		}
+	}
+	return false;
+}
+
 std::vector<uint8_t> g_mouthAOuter;  ///< per corridor, mouthA adjoins no other corridor
 std::vector<uint8_t> g_mouthBOuter;
 
@@ -1305,7 +1322,14 @@ void corridorGateUpdate()
 		// handedness mid-episode.
 		const int8_t pf = prefFwd[c].firm ? prefFwd[c].side : 0;
 		const int8_t pb = prefBwd[c].firm ? prefBwd[c].side : 0;
-		if ((pf == -1 || pb == -1) && pf != 1 && pb != 1)
+		// At a joint both flows use the convention belongs to both, and one
+		// arriving first must not set it alone: the other arriving would
+		// reverse it under everyone already steering at it. At every other
+		// mouth a lone voter is all there will ever be, so it still decides.
+		const bool shared = pathfindingHandJointEnabled() && corridorAtSharedJoint(c);
+		const bool keepLeft = shared ? (pf == -1 && pb == -1)
+		                             : ((pf == -1 || pb == -1) && pf != 1 && pb != 1);
+		if (keepLeft)
 		{
 			g_handed[c] = -1;
 		}
@@ -1319,8 +1343,9 @@ void corridorGateUpdate()
 			if (prevHanded[c] != g_handed[c])
 			{
 				prevHanded[c] = g_handed[c];
-				debug(LOG_MOVEMENT, "corridor t=%u corridor %zu handed=%s prefFwd=%d(id %u firm %d) prefBwd=%d(id %u firm %d)",
+				debug(LOG_MOVEMENT, "corridor t=%u corridor %zu handed=%s sharedJoint=%d prefFwd=%d(id %u firm %d) prefBwd=%d(id %u firm %d)",
 				      gameTime, c, g_handed[c] > 0 ? "right" : "left",
+				      corridorAtSharedJoint(c) ? 1 : 0,
 				      prefFwd[c].side, prefFwd[c].id, prefFwd[c].firm,
 				      prefBwd[c].side, prefBwd[c].id, prefBwd[c].firm);
 			}

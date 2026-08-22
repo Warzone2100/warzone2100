@@ -748,6 +748,11 @@ bool pathfindingBendHandEnabled()
 	return (game.pathfindingBackend & PF_BEND_HAND) != 0;
 }
 
+bool pathfindingHandJointEnabled()
+{
+	return (game.pathfindingBackend & PF_HAND_JOINT) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
