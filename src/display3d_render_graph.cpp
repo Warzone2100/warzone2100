@@ -82,8 +82,8 @@ static Vector3f toVector3f(const glm::vec3& v)
 	return Vector3f(v.x, v.y, v.z);
 }
 
-/// ScenePass reads are exclusively ordered ShadowCascade Depth outputs; all share one array texture.
-static gfx_api::abstract_texture* shadowMapFromScenePassReads(const gfx_api::RenderPassContext& ctx)
+/// Scene draw pass reads are exclusively ordered ShadowCascade Depth outputs; all share one array texture.
+static gfx_api::abstract_texture* shadowMapFromCascadeReads(const gfx_api::RenderPassContext& ctx)
 {
 	if (ctx.readCount() == 0)
 	{
@@ -93,8 +93,8 @@ static gfx_api::abstract_texture* shadowMapFromScenePassReads(const gfx_api::Ren
 	for (size_t i = 0; i < ctx.readCount(); ++i)
 	{
 		const auto& read = ctx.resolvedRead(i);
-		ASSERT(read.isDepth, "ScenePass read %zu must be Depth (cascade)", i);
-		ASSERT(read.texture == shadowMap, "ScenePass cascade reads must share ShadowMap texture");
+		ASSERT(read.isDepth, "Scene draw read %zu must be Depth (cascade)", i);
+		ASSERT(read.texture == shadowMap, "Scene draw cascade reads must share ShadowMap texture");
 	}
 	return shadowMap;
 }
@@ -109,7 +109,7 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos = toVector3f(fc.cameraPos);
 	const Vector3f sunPos = toVector3f(-getTheSun());
-	gfx_api::abstract_texture* shadowMap = shadowMapFromScenePassReads(passCtx);
+	gfx_api::abstract_texture* shadowMap = shadowMapFromCascadeReads(passCtx);
 
 	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
@@ -128,15 +128,36 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos, fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None);
+		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
+			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None, MeshDrawParts::Opaque);
 	}
 	wzPerfEnd(PERF_MODELS);
+
+	display3d_locateMouse();
+}
+
+static void recordSceneTransparent(const gfx_api::RenderPassContext& passCtx)
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+
+	const auto& fc = pie_GetInGame3DFrameContext();
+	const Vector3f cameraPos = toVector3f(fc.cameraPos);
+	gfx_api::abstract_texture* shadowMap = shadowMapFromCascadeReads(passCtx);
+
+	{
+		WZ_PROFILE_SCOPE(pie_DrawTransparentMeshes);
+		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
+			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None,
+			MeshDrawParts::Translucent | MeshDrawParts::Additive);
+	}
 
 	if (!gamePaused())
 	{
 		display3d_doConstructionLines(fc.viewMatrix);
 	}
-	display3d_locateMouse();
 }
 
 static void recordShadowCascade(const gfx_api::RenderPassContext& passCtx)
@@ -235,6 +256,7 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 {
 	table.set(gfx_api::PassId::ScenePrepass, recordScenePrepass);
 	table.set(gfx_api::PassId::ScenePass, recordScenePass);
+	table.set(gfx_api::PassId::SceneTransparent, recordSceneTransparent);
 	table.set(gfx_api::PassId::SSAOGenerate, ssao::recordGenerate);
 	table.set(gfx_api::PassId::SSAODownsample, ssao::recordDownsample);
 	table.set(gfx_api::PassId::SSAOBlurH, ssao::recordBlurH);

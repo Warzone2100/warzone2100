@@ -32,7 +32,7 @@
 namespace gfx_api
 {
 
-/// Ordered chain of post-`ScenePass` effects (before SMAA/blit). Array index matches the id.
+/// Ordered chain after opaque `ScenePass` and before `SceneTransparent`. Array index matches the id.
 enum class ScenePostEffectId : uint8_t
 {
 	Ssao,

@@ -40,7 +40,21 @@ enum class MeshDepthPassMode
 	ScenePrepass, ///< All opaque shapes, depth+normal prepass PSO
 };
 
+/// Which lit mesh buckets a normal scene pass draws.
+enum class MeshDrawParts : uint8_t
+{
+	Opaque      = 1u << 0,
+	Translucent = 1u << 1,
+	Additive    = 1u << 2,
+	All         = (1u << 0) | (1u << 1) | (1u << 2),
+};
+
+constexpr MeshDrawParts operator|(MeshDrawParts a, MeshDrawParts b)
+{
+	return static_cast<MeshDrawParts>(static_cast<uint8_t>(a) | static_cast<uint8_t>(b));
+}
+
 void pie_StartMeshes();
 void pie_UpdateLightmap(gfx_api::texture* lightmapTexture, const glm::mat4& modelUVLightmapMatrix);
 void pie_FinalizeMeshes(uint64_t currentGameFrame);
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None);
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None, MeshDrawParts drawFilter = MeshDrawParts::All);

@@ -201,6 +201,20 @@ void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
 	}
 }
 
+void addSceneTransparentPassToBuilder(BlueprintBuilder& builder, PipelineSurfaceId incomingColor,
+	uint32_t numShadowCascades)
+{
+	builder.beginPass(PassId::SceneTransparent, "SceneTransparent")
+		.color(incomingColor, AttachmentLoadOp::Load, AttachmentStoreOp::Store)
+		.depth(PipelineSurfaceId::ScenePrepassDepth, AttachmentLoadOp::Load, AttachmentStoreOp::Invalidate)
+		.viewport(ViewportRule::SceneColorTarget);
+
+	for (uint32_t i = 0; i < numShadowCascades; ++i)
+	{
+		builder.readFrom(shadowCascadePassId(i), AttachmentRole::Depth);
+	}
+}
+
 void addSwapchainPassToBuilder(BlueprintBuilder& builder, PassId id, std::string debugName,
 	bool swapchainMsaa, AttachmentLoadOp colorLoad, optional<AttachmentLoadOp> depthLoadOverride)
 {
