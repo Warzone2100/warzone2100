@@ -758,6 +758,11 @@ bool pathfindingWideQueueEnabled()
 	return (game.pathfindingBackend & PF_WIDE_QUEUE) != 0;
 }
 
+bool pathfindingTurnVoteEnabled()
+{
+	return (game.pathfindingBackend & PF_TURN_VOTE) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
