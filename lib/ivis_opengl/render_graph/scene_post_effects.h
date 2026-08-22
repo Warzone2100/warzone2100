@@ -31,9 +31,64 @@
 #include "topology.h"
 
 #include <array>
+#include <cstddef>
 
 namespace gfx_api
 {
+
+/// One ordered shader input of a scene post-effect apply pass.
+/// Fixed pass reads reuse the render graph's canonical BlueprintReadEdge shape;
+/// IncomingColor is resolved dynamically from the previous enabled effect.
+struct ScenePostEffectRead
+{
+	enum class Source : uint8_t
+	{
+		IncomingColor,
+		PassOutput,
+	};
+
+	Source source = Source::IncomingColor;
+	BlueprintReadEdge edge {};
+
+	static constexpr ScenePostEffectRead incomingColor()
+	{
+		return {};
+	}
+
+	static constexpr ScenePostEffectRead passOutput(PassId producer,
+		AttachmentRole role = AttachmentRole::PrimaryColor, uint32_t attachmentIndex = 0)
+	{
+		ScenePostEffectRead read;
+		read.source = Source::PassOutput;
+		read.edge.producerPass = producer;
+		read.edge.producerRole = role;
+		read.edge.attachmentIndex = attachmentIndex;
+		return read;
+	}
+};
+
+/// C++17-compatible immutable view over an exact-sized read declaration.
+/// This deliberately has span semantics; ivis-opengl is not yet built as C++20,
+/// so std::span cannot be used here.
+class ScenePostEffectReadView
+{
+public:
+	constexpr ScenePostEffectReadView() = default;
+
+	template <size_t Size>
+	constexpr ScenePostEffectReadView(const std::array<ScenePostEffectRead, Size>& reads)
+		: data_(reads.data())
+		, size_(Size)
+	{}
+
+	constexpr const ScenePostEffectRead* begin() const { return data_; }
+	constexpr const ScenePostEffectRead* end() const { return size_ == 0 ? data_ : data_ + size_; }
+	constexpr size_t size() const { return size_; }
+
+private:
+	const ScenePostEffectRead* data_ = nullptr;
+	size_t size_ = 0;
+};
 
 /// One screen-space effect after opaque ScenePass and before forward transparents.
 /// Table order of `applyPass` is the apply chain (SSAO compose -> fog -> rings).
@@ -63,12 +118,9 @@ struct ScenePostEffectDesc
 	/// Color attachment the apply pass writes; becomes the next incoming scene color.
 	PipelineSurfaceId applyOutput = PipelineSurfaceId::Count;
 
-	/// Ordered samples of `applyPass`; index is the shader binding.
-	std::array<ApplyInput, 4> applyInputs {};
-	uint8_t applyInputCount = 0;
-
-	/// Pass whose primary color is sampled for `ApplyInput::PreparedOutput`.
-	PassId preparedColorPass = PassId::Count;
+	/// Ordered reads of `applyPass`; span index is the shader binding.
+	/// Non-owning: backing storage must remain valid for the descriptor's lifetime.
+	ScenePostEffectReadView applyReads {};
 };
 
 bool effectEnabled(const RenderTopologySnapshot& snapshot, ScenePostEffectId id);
