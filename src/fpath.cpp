@@ -738,6 +738,11 @@ bool pathfindingWideLanesEnabled()
 	return (game.pathfindingBackend & PF_WIDE_LANES) != 0;
 }
 
+bool pathfindingBendHandEnabled()
+{
+	return (game.pathfindingBackend & PF_BEND_HAND) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
