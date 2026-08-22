@@ -127,12 +127,16 @@ PrepassNeed unionPrepassNeeds(Enabled&& enabled)
 
 PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot)
 {
-	return unionPrepassNeeds([&](ScenePostEffectId id) { return effectEnabled(snapshot, id); });
+	// Forward transparents always depth-test against the single-sample prepass depth.
+	return PrepassNeed::Depth
+		| unionPrepassNeeds([&](ScenePostEffectId id) { return effectEnabled(snapshot, id); });
 }
 
 PrepassNeed prepassNeeds(const SceneEffectSurfaces& cfg)
 {
-	return unionPrepassNeeds([&](ScenePostEffectId id) { return cfg.enabled(id); });
+	// Keep surface allocation in lockstep with the in-game blueprint requirement above.
+	return PrepassNeed::Depth
+		| unionPrepassNeeds([&](ScenePostEffectId id) { return cfg.enabled(id); });
 }
 
 void emitApplyPass(BlueprintBuilder& builder, const ScenePostEffectDesc& effect, PassId incomingColor)

@@ -1532,10 +1532,11 @@ void pie_FinalizeMeshes(uint64_t currentGameFrame)
 	instancedMeshRenderer.FinalizeInstances();
 }
 
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode)
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter)
 {
-	int drawParts = InstancedMeshRenderer::DrawParts_All;
-	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows)
+	int drawParts = static_cast<int>(drawFilter);
+	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows
+		&& (drawParts & InstancedMeshRenderer::DrawParts::ShadowCastingShapes) != 0)
 	{
 		drawParts |= InstancedMeshRenderer::DrawParts::OldShadows;
 	}

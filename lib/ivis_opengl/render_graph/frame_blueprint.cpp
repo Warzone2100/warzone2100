@@ -169,6 +169,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
 
 	PassId incomingColor = PassId::ScenePass;
+	PipelineSurfaceId incomingColorSurface = PipelineSurfaceId::SceneColor;
 	for (const ScenePostEffectDesc& effect : kScenePostEffects)
 	{
 		if (!effectEnabled(snapshot, effect.id))
@@ -183,9 +184,12 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		{
 			emitApplyPass(builder, effect, incomingColor);
 			incomingColor = effect.applyPass;
+			incomingColorSurface = effect.applyOutput;
 		}
 	}
 
+	addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades);
+	incomingColor = PassId::SceneTransparent;
 	appendPresentation(builder, snapshot, incomingColor);
 
 	addSwapchainPassToBuilder(builder, PassId::TargettingEffects, "TargettingEffects", snapshot.swapchainMsaa,

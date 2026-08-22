@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file scene_post_effects.h
- * Descriptor table for post-lighting screen-space effects (after ScenePass, before SMAA/blit).
+ * Descriptor table for screen-space effects after opaque ScenePass and before SceneTransparent.
  */
 
 #pragma once
@@ -35,7 +35,7 @@
 namespace gfx_api
 {
 
-/// One post-lighting screen-space effect: after ScenePass, before SMAA/blit.
+/// One screen-space effect after opaque ScenePass and before forward transparents.
 /// Table order of `applyPass` is the apply chain (SSAO compose -> fog -> rings).
 ///
 /// Two phases, both optional:
@@ -49,7 +49,7 @@ struct ScenePostEffectDesc
 	/// ScenePrepass attachments this effect needs when enabled (OR'd across the table).
 	PrepassNeed prepassNeed = PrepassNeed::None;
 
-	/// Optional subgraph after ScenePass and before this effect's apply pass.
+	/// Optional subgraph after opaque ScenePass and before this effect's apply pass.
 	/// Writes intermediate surfaces the apply pass samples; does not write scene color.
 	void (*emitPreparePasses)(BlueprintBuilder&, const RenderTopologySnapshot&) = nullptr;
 
