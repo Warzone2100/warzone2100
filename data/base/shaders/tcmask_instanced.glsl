@@ -15,6 +15,8 @@ layout(std140) uniform globaluniforms {
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	vec4 ShadowMapCascadeSplits;
 	int ShadowMapSize;
 	float graphicsCycle;
@@ -34,6 +36,7 @@ layout(std140) uniform meshuniforms {
 	int specularmap;
 	int hasTangents;
 	int shieldEffect;
+	int fogOutput;
 };
 
 // Which transport carries the light arrays: 0 uniform block, 1 buffer texture, 2 storage buffer.

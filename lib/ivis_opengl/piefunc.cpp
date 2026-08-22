@@ -164,9 +164,17 @@ void pie_DebugDrawTessellationTestPatch()
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
 {
 	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
+	const auto& renderState = getCurrentRenderState();
+	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, pie_GetFogEnabled() ? 1.f : 0.f, 0.f);
 
 	gfx_api::TransColouredTrianglePSO::get().bind();
-	gfx_api::TransColouredTrianglePSO::get().bind_constants({ pie_UIPerspectiveGet() * modelViewMatrix, glm::vec2(0), glm::vec2(0), color });
+	gfx_api::TransColouredTrianglePSO::get().bind_constants({
+		pie_UIPerspectiveGet() * modelViewMatrix,
+		modelViewMatrix,
+		color,
+		pal_PIELIGHTtoVec4(pie_GetFogColour()),
+		fogRange
+	});
 	gfx_api::context::get().bind_streamed_vertex_buffers(vrt.data(), 3 * sizeof(Vector3f));
 	gfx_api::TransColouredTrianglePSO::get().draw(3, 0);
 	gfx_api::context::get().disable_all_vertex_buffers();

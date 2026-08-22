@@ -34,6 +34,7 @@ layout(location = 0) out vec4 FragColor;
 #include "shadow_mapping.glsl"
 #include "light.glsl"
 #include "tangentspace.glsl"
+#include "distance_fog.glsl"
 
 float random(vec2 uv)
 {
@@ -145,6 +146,11 @@ void main()
 	if (shieldEffect != 0)
 	{
 		fragColour = applyShieldFuzzEffect(fragColour);
+	}
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
 	}
 
 	FragColor = fragColour;

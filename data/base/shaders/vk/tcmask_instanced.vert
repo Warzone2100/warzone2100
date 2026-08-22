@@ -61,7 +61,6 @@ void main()
 	}
 
 	// Lighting
-	posViewSpace = vec3(ModelVeiwMatrix * vertex);
 	posModelSpace = vec3(instanceModelMatrix * vertex);
 	vec3 cameraVec = normalize(cameraPos.xyz - posModelSpace.xyz);
 	lightDir = -normalize(lightPosition.xyz);
@@ -82,6 +81,7 @@ void main()
 	uvLightmap = vec3((ModelUVLightmapMatrix * vec4(posModelSpace, 1.0)).xy, localPosition.y + heightAboveTerrain);
 
 	// Translate every vertex according to the Model View and Projection Matrix
+	posViewSpace = vec3(ModelVeiwMatrix * vec4(localPosition, vertex.w));
 	vec4 gposition = ProjectionMatrix * ModelVeiwMatrix * vec4(localPosition, vertex.w);
 	gl_Position = gposition;
 

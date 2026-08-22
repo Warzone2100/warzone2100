@@ -14,6 +14,8 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	vec4 ShadowMapCascadeSplits;
 	int ShadowMapSize;
 	float graphicsCycle;
@@ -34,6 +36,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int specularmap;
 	int hasTangents;
 	int shieldEffect;
+	int fogOutput;
 };
 
 // Light data shares the texture set rather than taking one of its own, because the instanced

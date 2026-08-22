@@ -38,6 +38,7 @@ VERTEX_INPUT vec4 instanceTeamColour; // not needed?
 VERTEX_OUTPUT vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 VERTEX_OUTPUT vec4 colour;
 VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
+VERTEX_OUTPUT vec3 posViewSpace;
 
 void main()
 {
@@ -59,11 +60,10 @@ void main()
 	vec4 gposition = ModelViewProjectionMatrix * vertex;
 	gl_Position = gposition;
 
-	// Remember vertex distance
-	float vertexDistance = gposition.z;
+	posViewSpace = (ModelViewMatrix * vertex).xyz;
 
 	// pack outputs for fragment shader
 	colour = instanceColour;
-	texCoord_vertexDistance = vec4(texCoord.x, texCoord.y, vertexDistance, 0.f);
+	texCoord_vertexDistance = vec4(texCoord.x, texCoord.y, 0.f, 0.f);
 	packed_ecmState_alphaTest = vec4(0.f, alphaTest, 0.f, 0.f);
 }

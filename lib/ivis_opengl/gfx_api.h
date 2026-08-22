@@ -1035,6 +1035,16 @@ namespace gfx_api
 	// NOTE: Be very careful changing these constant_buffer_type structs;
 	//		 they must match std140 layout rules (see: the Vulkan shaders)
 
+	/// How a forward transparent shader composes atmospheric fog into its source value.
+	/// Opaque draws keep this disabled because the fullscreen FogApply pass owns their fog.
+	enum class ForwardFogOutput : int32_t
+	{
+		Disabled = 0,
+		StraightAlpha = 1,
+		Premultiplied = 2,
+		Additive = 3,
+	};
+
 	// Only change once per frame
 	struct Draw3DShapeGlobalUniforms
 	{
@@ -1047,6 +1057,8 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
+		glm::vec4 fogColor;
+		glm::vec4 fogRange; // x = begin, y = end, z = forward fog enabled, w = padding
 		float timeState; // graphicsCycle
 		float mipLoadBias;
 		float pad0 = 0.f;
@@ -1060,6 +1072,7 @@ namespace gfx_api
 		int normalMap;
 		int specularMap;
 		int hasTangents;
+		int fogOutput;
 	};
 
 	// Change per instance of mesh
@@ -1169,6 +1182,8 @@ namespace gfx_api
 		glm::vec4 ambient;
 		glm::vec4 diffuse;
 		glm::vec4 specular;
+		glm::vec4 fogColor;
+		glm::vec4 fogRange; // x = begin, y = end, z = forward fog enabled, w = padding
 		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
 		int ShadowMapSize;
 		float timeState; // graphicsCycle
@@ -1191,6 +1206,7 @@ namespace gfx_api
 		int specularMap;
 		int hasTangents;
 		int shieldEffect;
+		int fogOutput;
 	};
 
 	// interleaved vertex data
@@ -1312,11 +1328,21 @@ namespace gfx_api
 		glm::vec4 colour;
 	};
 
+	template<>
+	struct constant_buffer_type<SHADER_CONSTRUCTION_LINE>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelViewMatrix;
+		glm::vec4 color;
+		glm::vec4 fogColor;
+		glm::vec4 fogRange;
+	};
+
 	using TransColouredTrianglePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ADDITIVE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangle_strip, index_type::u16,
-	std::tuple<constant_buffer_type<SHADER_GENERIC_COLOR>>,
+	std::tuple<constant_buffer_type<SHADER_CONSTRUCTION_LINE>>,
 	std::tuple<
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>
-	>, notexture, SHADER_GENERIC_COLOR>;
+	>, notexture, SHADER_CONSTRUCTION_LINE>;
 	using DrawStencilShadow = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 0, polygon_offset::disabled, stencil_mode::stencil_shadow_silhouette, cull_mode::none>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_GENERIC_COLOR>>,
 	std::tuple<

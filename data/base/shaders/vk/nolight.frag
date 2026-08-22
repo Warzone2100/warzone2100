@@ -14,6 +14,8 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
 	float graphicsCycle;
 	float WZ_MIP_LOAD_BIAS;
 	float pad0;
@@ -26,6 +28,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int normalmap;
 	int specularmap;
 	int hasTangents;
+	int fogOutput;
 };
 
 layout(std140, set = 2, binding = 0) uniform instanceuniforms
@@ -41,14 +44,22 @@ layout(std140, set = 2, binding = 0) uniform instanceuniforms
 };
 
 layout(location = 0) in vec2 texCoord;
+layout(location = 1) in vec3 posViewSpace;
 
 layout(location = 0) out vec4 FragColor;
+
+#include "distance_fog.glsl"
 
 void main()
 {
 	vec4 texColour = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	vec4 fragColour = texColour * colour;
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
+	}
 
 	if (alphaTest > 0 && (fragColour.a <= 0.001))
 	{

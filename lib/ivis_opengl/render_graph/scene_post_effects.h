@@ -37,6 +37,9 @@ namespace gfx_api
 
 /// One screen-space effect after opaque ScenePass and before forward transparents.
 /// Table order of `applyPass` is the apply chain (SSAO compose -> fog -> rings).
+/// FogApply intentionally belongs here: its sampled prepass depth identifies the
+/// visible opaque surface only. Transparent layers use their own fragment distance
+/// and must apply fog before blending; a later fullscreen pass cannot recover them.
 ///
 /// Two phases, both optional:
 /// - emitPreparePasses: offscreen subgraph that writes intermediates (AO, packed SDF).
