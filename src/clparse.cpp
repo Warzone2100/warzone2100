@@ -118,9 +118,9 @@ static int parsePathfindingBackendArg(const char *arg)
 	{
 		char *end = nullptr;
 		const long value = strtol(p, &end, 10);
-		if (end == p || (*end != '\0' && *end != ',') || value < 0 || value > 255)
+		if (end == p || (*end != '\0' && *end != ',') || value < 0 || value > 65535)
 		{
-			qFatal("Bad pathfinding backend value \"%s\": expected a mask or comma-separated feature values 0-255", arg);
+			qFatal("Bad pathfinding backend value \"%s\": expected a mask or comma-separated feature values 0-65535", arg);
 		}
 		mask |= static_cast<unsigned>(value);
 		p = (*end == ',') ? end + 1 : end;
