@@ -36,8 +36,15 @@
 # allows six tiles and says whether a unit got to its destination. `parked`
 # allows a tile and a half, the movement code's own slack, so it measures how
 # tightly a block settled around a goal tile it cannot all fit on - a change in
-# it is packing, not transit. Neither is a time, so arrival p50 and p95 sit
-# beside them.
+# it is packing, not transit.
+#
+# `settle` reads the journey: the last tick a unit sat outside six tiles of its
+# goal, blind to the endgame. `arrival` reads at a tile and a half, so it is
+# the only measure that sees the endgame - but it is computed over the units
+# that got there, so read it beside `near`: if near falls, a lower arrival may
+# be a unit abandoned rather than a tail fixed. `worst arrival` guards exactly
+# that by reporting the whole run length whenever any unit finishes outside six
+# tiles.
 #
 # --concurrent=N keeps up to N game processes running at once. Every run is an
 # independent deterministic process whose scorecard comes back on its own
@@ -166,11 +173,10 @@ ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "unitsNear", "repaths"]
 # Aggregated as the max across arrangements, not a sum: these are shape
 # signals rather than volumes, and the worst arrangement is the diagnostic one.
 ACCEPTANCE_MAX_FIELDS = ["hardStopsTopSharePct", "settle_p95_s", "stallSharePct_p50",
-                         "detourPct_p95", "arrival_p95_s"]
+                         "detourPct_p95", "arrival_p95_s", "worstArrival_s"]
 # A central measure, so neither summed nor maxed: the median arrangement's
 # median arrival is what a run typically costs.
-ACCEPTANCE_MEDIAN_FIELDS = ["arrival_p50_s"]
-
+ACCEPTANCE_MEDIAN_FIELDS = ["arrival_p50_s", "settle_p50_s"]
 
 def run(scenario, index, extra):
     # A run that prints no scorecard is a process-level failure, not a sim
@@ -249,6 +255,8 @@ if acceptance:
         ("top share % (max)", "hardStopsTopSharePct"),
         ("arrival p50 s (med)", "arrival_p50_s"),
         ("arrival p95 s (max)", "arrival_p95_s"),
+        ("worst arrival s (max)", "worstArrival_s"),
+        ("settle p50 s (med)", "settle_p50_s"),
         ("settle p95 s (max)", "settle_p95_s"),
         ("stall p50 % (max)", "stallSharePct_p50"),
         ("detour p95 % (max)", "detourPct_p95"),
