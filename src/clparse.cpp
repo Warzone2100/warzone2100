@@ -110,7 +110,8 @@ static std::string wz_lobby_game_to_connect_str;
 static int parsePathfindingBackendArg(const char *arg)
 {
 	constexpr unsigned validMask = PF_DIRECTIONAL_BIAS | PF_CORRIDOR_LANES | PF_FLOW_COST
-	                               | PF_SOFT_COLLISION | PF_CROWD_MASS | PF_WIDE_LANES;
+	                               | PF_SOFT_COLLISION | PF_CROWD_MASS | PF_BEND_HAND
+	                               | PF_WIDE_LANES;
 	unsigned mask = 0;
 	const char *p = arg;
 	while (*p != '\0')
@@ -126,7 +127,7 @@ static int parsePathfindingBackendArg(const char *arg)
 	}
 	if ((mask & ~validMask) != 0)
 	{
-		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 128 wide lanes", arg);
+		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 64 bend hand, 128 wide lanes", arg);
 	}
 	return static_cast<int>(mask);
 }
@@ -507,7 +508,7 @@ static const struct poptOption *getOptionsTable()
 		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
 		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
 		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
-		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 128 wide lanes)"), N_("features") },
+		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 64 bend hand, 128 wide lanes)"), N_("features") },
 		{ "corridordump", POPT_ARG_STRING, CLI_CORRIDORDUMP,   N_("Detect corridors on the named map, dump the geometry, and quit"), N_("map") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },

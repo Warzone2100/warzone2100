@@ -1305,7 +1305,13 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 	if (q.relation == INSIDE)
 	{
 		const int distToExit = q.dir > 0 ? last - static_cast<int>(q.nearest) : static_cast<int>(q.nearest);
-		if (distToExit <= MOUTH_MARGIN)
+		// The release assumes the droid is about to head out into open space.
+		// At an inner mouth the route continues into the next passage of the
+		// chain, and releasing would lose the side it was sorted onto upstream
+		// exactly where the two directions meet.
+		const bool exitOuter = q.dir > 0 ? (cid < g_mouthBOuter.size() && g_mouthBOuter[cid] != 0)
+		                                 : (cid < g_mouthAOuter.size() && g_mouthAOuter[cid] != 0);
+		if (distToExit <= MOUTH_MARGIN && (exitOuter || !pathfindingBendHandEnabled()))
 		{
 			return false;
 		}
