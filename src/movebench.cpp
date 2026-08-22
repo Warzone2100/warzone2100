@@ -437,6 +437,14 @@ void writeScorecard(bool completed)
 	std::sort(settle.begin(), settle.end());
 	std::sort(stallShare.begin(), stallShare.end());
 	card["unitsNear"] = nearNow;
+	// The longest any ordered unit waited, with never getting there counted as
+	// the whole run rather than left out: the arrival percentiles are taken
+	// over the units that reached tolerance, so a unit wedged for good would
+	// otherwise read as a shorter tail. A unit that stopped inside NEAR_RADIUS
+	// is not abandoned, only parked in the crowd around a taken goal tile.
+	const uint32_t worstArrival = (nearNow < tracked.size() || arrivals.empty())
+	                              ? tickCount : arrivals.back();
+	card["worstArrival_s"] = worstArrival / static_cast<double>(GAME_UPDATES_PER_SEC);
 	card["settle_p50_s"] = percentile(settle, 50) / static_cast<double>(GAME_UPDATES_PER_SEC);
 	card["settle_p95_s"] = percentile(settle, 95) / static_cast<double>(GAME_UPDATES_PER_SEC);
 	// Share of each droid's far-from-goal time spent effectively stationary.

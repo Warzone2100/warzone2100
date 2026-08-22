@@ -15,10 +15,12 @@
       "hardStops": 636429,
       "hardStopsTopSharePct": 7,
       "repaths": 10744,
+      "settle_p50_s": 400.0,
       "settle_p95_s": 400.0,
       "stallSharePct_p50": 93,
       "unitsArrived": 121,
-      "unitsNear": 247
+      "unitsNear": 247,
+      "worstArrival_s": 400.0
     },
     "mountain_chain_cross": {
       "arrival_p50_s": 49.0,
@@ -27,10 +29,12 @@
       "hardStops": 660055,
       "hardStopsTopSharePct": 7,
       "repaths": 11759,
+      "settle_p50_s": 400.0,
       "settle_p95_s": 400.0,
       "stallSharePct_p50": 92,
       "unitsArrived": 120,
-      "unitsNear": 221
+      "unitsNear": 221,
+      "worstArrival_s": 400.0
     },
     "open_corner": {
       "arrival_p50_s": 55.8,
@@ -39,10 +43,12 @@
       "hardStops": 4487878,
       "hardStopsTopSharePct": 0,
       "repaths": 77626,
+      "settle_p50_s": 400.0,
       "settle_p95_s": 400.0,
       "stallSharePct_p50": 96,
       "unitsArrived": 99,
-      "unitsNear": 110
+      "unitsNear": 110,
+      "worstArrival_s": 400.0
     },
     "rush_corner": {
       "arrival_p50_s": 115.4,
@@ -51,10 +57,12 @@
       "hardStops": 4721283,
       "hardStopsTopSharePct": 0,
       "repaths": 79695,
+      "settle_p50_s": 400.0,
       "settle_p95_s": 400.0,
       "stallSharePct_p50": 95,
       "unitsArrived": 47,
-      "unitsNear": 47
+      "unitsNear": 47,
+      "worstArrival_s": 400.0
     },
     "rush_turn": {
       "arrival_p50_s": 26.0,
@@ -63,10 +71,12 @@
       "hardStops": 103043,
       "hardStopsTopSharePct": 25,
       "repaths": 1301,
+      "settle_p50_s": 36.5,
       "settle_p95_s": 164.3,
       "stallSharePct_p50": 55,
       "unitsArrived": 157,
-      "unitsNear": 410
+      "unitsNear": 410,
+      "worstArrival_s": 185.9
     }
   }
 }
