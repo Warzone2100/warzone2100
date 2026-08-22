@@ -67,7 +67,7 @@ enum PathfindingFeature : uint8_t
 	PF_FLOW_COST         = 1 << 2,   ///< price tiles held by opposing-facing traffic in the search
 	PF_SOFT_COLLISION    = 1 << 3,   ///< same-heading transiting allies collide on a smaller footprint
 	PF_CROWD_MASS        = 1 << 4,   ///< price idle or canceled crowd mass in the search
-	// 1 << 5 is reserved.
+	PF_BEND_HOLD         = 1 << 5,   ///< hold the lane side while crossing an inner junction
 	PF_BEND_HAND         = 1 << 6,   ///< do not release a droid at a mouth its route continues through
 	PF_WIDE_LANES        = 1 << 7,   ///< scale the keep-right shift to the room the ground offers
 };
@@ -87,6 +87,9 @@ bool pathfindingSoftCollisionEnabled();
 /// True if the keep-right shift should scale with the room beside the route
 /// instead of being one fixed lane width everywhere.
 bool pathfindingWideLanesEnabled();
+/// True if a droid crossing an inner junction keeps steering at the lane it is
+/// about to occupy, instead of being handed back to its raw route in the gap.
+bool pathfindingBendHoldEnabled();
 /// True if the lane release near a mouth applies only at an outer mouth, not
 /// where the route continues into the next passage of the same chain.
 bool pathfindingBendHandEnabled();

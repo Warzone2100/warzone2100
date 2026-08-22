@@ -128,6 +128,10 @@ const int32_t APPROACH_RADIUS = 8 * TILE_UNITS;
 // leads a droid in smoothly instead of at one fixed point it would pile onto.
 const int32_t APPROACH_LEAD = 2 * TILE_UNITS;
 
+// How far ahead along a passage a droid crossing into it is aimed. Shorter than
+// the approach lead on purpose: see the use site.
+const int32_t JUNCTION_LEAD = TILE_UNITS;
+
 // Ignore a droid further than this to the side of a mouth. It is not lined up to
 // enter here, so the funnel leaves it to its own route.
 const int32_t APPROACH_SIDE_MAX = 5 * TILE_UNITS;
@@ -171,6 +175,10 @@ std::vector<int> g_useLoFwd, g_useHiFwd, g_useLoBwd, g_useHiBwd;
 // sorts a merger against real oncoming traffic and never reshapes a column
 // entering ahead of traffic that is still far away. Rebuilt each tick.
 std::vector<int> g_cInsideFwd, g_cInsideBwd;
+// Per corridor and direction, droids inside or approaching it. Counting only
+// insiders would make a joint read one-way exactly when the crossing is
+// busiest, since a droid crossing between two passages is inside neither.
+std::vector<int> g_cFlowFwd, g_cFlowBwd;
 
 // Per-corridor lane handedness for this tick: +1 keeps each direction to its
 // right, -1 to its left. Keeping right is an arbitrary convention, and the
@@ -188,6 +196,54 @@ std::vector<int8_t> g_handed;
 const CorridorMap *g_chainMap = nullptr;
 std::vector<int> g_chainId;          ///< per corridor, chain representative
 std::vector<int8_t> g_chainSign;     ///< +1 oriented with the chain, -1 flipped
+// One entry per passage adjoining this mouth, so the query can hand a droid
+// crossing the junction to the passage it is entering.
+struct MouthAdj
+{
+	int corridor = -1;
+	bool endB = false;        ///< which of the adjoining passage's mouths this meets
+	Vector2i other = Vector2i(0, 0);
+	int64_t gapSq = 0;        ///< how far apart the two mouths actually are
+	uint8_t twoWay = 0;       ///< this tick, both passages have flow heading into this joint
+};
+
+// Mouths closer than this butt together: a droid crossing is on one passage or
+// the other throughout, and handing it the next one's lane while it is still
+// departing fights the turn it is making. Only a wider gap has ground to span.
+const int32_t JUNCTION_GAP_MIN = 4 * TILE_UNITS;
+
+std::vector<std::vector<MouthAdj>> g_mouthAAdj;
+std::vector<std::vector<MouthAdj>> g_mouthBAdj;
+
+int64_t distSqTo(const Vector2i &a, const Vector2i &b);
+
+/// The adjoining passage whose mouth lies nearest the droid. Decide which joint
+/// it is first and test that one - searching past a butt joint for a gapped
+/// passage further off would hand the droid a corridor it is not entering.
+const MouthAdj *mouthNearestJoint(size_t cid, bool endB, const Vector2i &pos)
+{
+	const auto &adj = endB ? g_mouthBAdj : g_mouthAAdj;
+	if (cid >= adj.size() || adj[cid].empty()) { return nullptr; }
+	int64_t best = INT64_MAX;
+	const MouthAdj *pick = nullptr;
+	for (const MouthAdj &a : adj[cid])
+	{
+		const int64_t d = distSqTo(a.other, pos);
+		if (d < best) { best = d; pick = &a; }
+	}
+	return pick;
+}
+
+/// A joint worth holding a lane across: real ground between the two passages,
+/// and both of them carrying flow into it this tick. The second half is what
+/// separates a corner the two directions share from a junction one flow merely
+/// departs across - only the other flow's behavior tells them apart.
+bool jointHolds(const MouthAdj *a)
+{
+	return a != nullptr && a->corridor >= 0 && a->twoWay != 0
+	       && a->gapSq >= static_cast<int64_t>(JUNCTION_GAP_MIN) * JUNCTION_GAP_MIN;
+}
+
 std::vector<uint8_t> g_mouthAOuter;  ///< per corridor, mouthA adjoins no other corridor
 std::vector<uint8_t> g_mouthBOuter;
 
@@ -215,6 +271,8 @@ void chainEnsure(const CorridorMap *cmap)
 	g_chainSign.assign(n, 1);
 	g_mouthAOuter.assign(n, 1);
 	g_mouthBOuter.assign(n, 1);
+	g_mouthAAdj.assign(n, {});
+	g_mouthBAdj.assign(n, {});
 	// Collect every mouth adjacency. Adjacency alone decides inner mouths, so
 	// no queue ever parks in a junction pocket, whatever the orientation below.
 	struct Link
@@ -242,6 +300,8 @@ void chainEnsure(const CorridorMap *cmap)
 					}
 					(ei ? g_mouthBOuter : g_mouthAOuter)[i] = 0;
 					(ej ? g_mouthBOuter : g_mouthAOuter)[j] = 0;
+					(ei ? g_mouthBAdj : g_mouthAAdj)[i].push_back({static_cast<int>(j), ej != 0, mj, dSq});
+					(ej ? g_mouthBAdj : g_mouthAAdj)[j].push_back({static_cast<int>(i), ei != 0, mi, dSq});
 					// Leaving one corridor's end into the other's opposite end keeps
 					// the travel direction, same ends adjoining flips it.
 					links.push_back({dSq, static_cast<int>(i), static_cast<int>(j),
@@ -435,6 +495,56 @@ Query queryCorridor(const Vector2i &pos, const Vector2i &target)
 	         || (nearest + static_cast<size_t>(MOUTH_MARGIN) >= last && q.dir < 0))
 	{
 		q.relation = APPROACHING;   // at a mouth, heading into the corridor
+	}
+
+	// A droid that has run out of this passage's far end on its way into the
+	// next one belongs to neither: past the end so not inside, heading away so
+	// not approaching. Hand it to the passage it is entering, so it keeps its
+	// side across the junction - only the query's answer changes.
+	const bool ranOut = q.relation == NOT_IN_CORRIDOR && endpoint
+	                    && ((nearest == last && q.dir > 0) || (nearest == 0 && q.dir < 0));
+	if (ranOut && pathfindingBendHoldEnabled())
+	{
+		const auto &adj = (nearest == last) ? g_mouthBAdj : g_mouthAAdj;
+		const size_t self = static_cast<size_t>(bestId);
+		if (self < adj.size())
+		{
+			const MouthAdj *pick = nullptr;
+			int64_t best = INT64_MAX;
+			for (const MouthAdj &a : adj[self])
+			{
+				const int64_t dSq = distSqTo(a.other, pos);
+				// Ties broken by corridor id so every client picks the same one.
+				if (dSq < best || (dSq == best && pick != nullptr && a.corridor < pick->corridor))
+				{
+					best = dSq;
+					pick = &a;
+				}
+			}
+			// Only span it if the nearest joint is a real gap. If it is not, say
+			// nothing rather than reaching past it to some further passage.
+			if (jointHolds(pick))
+			{
+				const Corridor &nc = cmap->corridors[static_cast<size_t>(pick->corridor)];
+				if (nc.centerline.size() >= 3)
+				{
+					const size_t nlast = nc.centerline.size() - 1;
+					const size_t nnear = pick->endB ? nlast : 0;
+					const size_t nlo = nnear > 0 ? nnear - 1 : nnear;
+					const size_t nhi = nnear + 1 < nc.centerline.size() ? nnear + 1 : nnear;
+					const Vector2i naxis = nc.centerline[nhi] - nc.centerline[nlo];
+					if (naxis.x != 0 || naxis.y != 0)
+					{
+						q.corridorId = pick->corridor;
+						q.nearest = nnear;
+						q.axis = naxis;
+						q.dir = (static_cast<int64_t>(toTarget.x) * naxis.x
+						         + static_cast<int64_t>(toTarget.y) * naxis.y) >= 0 ? 1 : -1;
+						q.relation = APPROACHING;
+					}
+				}
+			}
+		}
 	}
 	return q;
 }
@@ -660,6 +770,42 @@ Query queryDroid(const DROID *psDroid)
 		// flow into the counts. A distance condition here just moves the flap
 		// to its boundary. With nothing reliable to say, say nothing, and the
 		// droid drives its own route.
+		//
+		// Unless the chain settles it. A route that cuts the corner never
+		// touches this passage's line, but if it runs through a passage
+		// adjoining one of the mouths, the direction is not in doubt: toward
+		// that mouth. Only when exactly one mouth answers - a droid whose
+		// route uses both keeps the silence rather than a tie-break.
+		if (pathfindingBendHoldEnabled())
+		{
+			const size_t ci = static_cast<size_t>(q.corridorId);
+			int hits = 0;
+			int chainDir = 0;
+			const MouthAdj *chainPick = nullptr;
+			for (int end = 0; end < 2; ++end)
+			{
+				const auto &adj = end ? g_mouthBAdj : g_mouthAAdj;
+				if (ci >= adj.size()) { continue; }
+				for (const MouthAdj &a : adj[ci])
+				{
+					if (a.corridor < 0) { continue; }
+					const Corridor &nc = gameWorld.map.corridors->corridors[static_cast<size_t>(a.corridor)];
+					if (nc.centerline.size() >= 3 && routeDir(psDroid, nc) != 0)
+					{
+						++hits;
+						chainDir = end ? 1 : -1;
+						chainPick = &a;
+						break;
+					}
+				}
+			}
+			// One unambiguous answer, and the joint it names has ground to span.
+			if (hits == 1 && jointHolds(chainPick))
+			{
+				q.dir = chainDir;
+				return q;
+			}
+		}
 		return Query();
 	}
 	return q;
@@ -920,6 +1066,8 @@ void corridorGateUpdate()
 	g_useHiBwd.assign(n, INT32_MIN);
 	g_cInsideFwd.assign(n, 0);
 	g_cInsideBwd.assign(n, 0);
+	g_cFlowFwd.assign(n, 0);
+	g_cFlowBwd.assign(n, 0);
 
 	// Only the head of a direction's column can stall a corridor. Followers bump
 	// the file ahead of them constantly in a healthy compressing stream, so their
@@ -1022,6 +1170,7 @@ void corridorGateUpdate()
 				lo = std::min(lo, coverLo);
 				hi = std::max(hi, coverHi);
 			}
+			(q.dir > 0 ? g_cFlowFwd : g_cFlowBwd)[c] += 1;
 			if (q.relation == INSIDE)
 			{
 				(chainDir > 0 ? insideFwd[chain] : insideBwd[chain]) += 1;
@@ -1127,6 +1276,25 @@ void corridorGateUpdate()
 	// exits to its left and neither exits to its right, so the turning flow
 	// gets the inside of its turn instead of crossing the opposing lane at it.
 	// Any conflict or ambiguity keeps the default.
+	// Which joints carry both directions this tick. Derived from the same synced
+	// per-corridor counts everything else here uses, recomputed each tick, so
+	// nothing new is persisted and every client agrees.
+	for (size_t i = 0; i < n; ++i)
+	{
+		for (int ei = 0; ei < 2; ++ei)
+		{
+			auto &adj = ei ? g_mouthBAdj[i] : g_mouthAAdj[i];
+			const int mine = ei ? g_cFlowFwd[i] : g_cFlowBwd[i];
+			for (MouthAdj &a : adj)
+			{
+				const size_t j = static_cast<size_t>(a.corridor);
+				const int theirs = (a.corridor >= 0 && j < n)
+				                   ? (a.endB ? g_cFlowFwd[j] : g_cFlowBwd[j]) : 0;
+				a.twoWay = (mine > 0 && theirs > 0) ? 1 : 0;
+			}
+		}
+	}
+
 	g_handed.assign(n, 1);
 	for (size_t c = 0; c < n; ++c)
 	{
@@ -1378,6 +1546,27 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 		                                  : (cid < g_mouthBOuter.size() && g_mouthBOuter[cid]);
 		if (!entryOuter)
 		{
+			// Crossing an inner junction a droid has no centerline under it,
+			// but it still has a side to keep: the one it is about to occupy.
+			// Steer at that lane line extended back out of the mouth. No flare
+			// or queue slots - there is no queue to form here, only a side to
+			// hold - and only where the joint has ground to span: at a butt
+			// joint aiming a departing droid at the next lane fights its turn.
+			if (pathfindingBendHoldEnabled()
+			    && jointHolds(mouthNearestJoint(cid, q.dir <= 0, pos)))
+			{
+				const ApproachFrame fr = approachFrame(c, q.dir, pos);
+				// Lead only a tile along, not the funnel's two: a long lead
+				// points across the junction and drags the droid over the
+				// ground the opposing stream is leaving by. Never behind the
+				// droid, or it doubles back instead of advancing.
+				const int32_t holdAlong = std::min(fr.along + JUNCTION_LEAD, APPROACH_LEAD);
+				laneTarget.x = fr.mouth.x + static_cast<int32_t>((static_cast<int64_t>(fr.pVec.x) * lateral
+				                                                  + static_cast<int64_t>(fr.gVec.x) * holdAlong) / DIR_UNIT);
+				laneTarget.y = fr.mouth.y + static_cast<int32_t>((static_cast<int64_t>(fr.pVec.y) * lateral
+				                                                  + static_cast<int64_t>(fr.gVec.y) * holdAlong) / DIR_UNIT);
+				return true;
+			}
 			// Sorting is only worth the steering when there is a stream to be
 			// sorted against: opposing droids physically inside this passage
 			// whose route coverage stays clear of the entry zone. With no
