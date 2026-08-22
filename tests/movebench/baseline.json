@@ -73,7 +73,7 @@
         "min": 324
       },
       "resolved": {
-        "count": 0,
+        "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
@@ -85,6 +85,11 @@
         "max": 12,
         "median": 12,
         "min": 10
+      },
+      "unitsNear": {
+        "max": 98,
+        "median": 98,
+        "min": 95
       }
     },
     "corner": {
@@ -141,6 +146,11 @@
         "max": 23,
         "median": 20,
         "min": 20
+      },
+      "unitsNear": {
+        "max": 24,
+        "median": 24,
+        "min": 23
       }
     },
     "corner_mixed": {
@@ -185,7 +195,7 @@
         "min": 30
       },
       "resolved": {
-        "count": 18,
+        "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
@@ -197,6 +207,11 @@
         "max": 20,
         "median": 19,
         "min": 13
+      },
+      "unitsNear": {
+        "max": 24,
+        "median": 23,
+        "min": 23
       }
     },
     "counterflow_cyborg": {
@@ -250,6 +265,11 @@
         "min": 2.25
       },
       "unitsArrived": {
+        "max": 48,
+        "median": 48,
+        "min": 12
+      },
+      "unitsNear": {
         "max": 48,
         "median": 48,
         "min": 12
@@ -309,6 +329,11 @@
         "max": 24,
         "median": 0,
         "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 0,
+        "min": 0
       }
     },
     "counterflow_w1": {
@@ -362,6 +387,11 @@
         "min": 0.0
       },
       "unitsArrived": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
         "max": 0,
         "median": 0,
         "min": 0
@@ -421,6 +451,11 @@
         "max": 30,
         "median": 5,
         "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 5,
+        "min": 0
       }
     },
     "counterflow_w4": {
@@ -465,7 +500,7 @@
         "min": 65
       },
       "resolved": {
-        "count": 21,
+        "count": 25,
         "of": 27
       },
       "secPerTile_p95": {
@@ -476,6 +511,11 @@
       "unitsArrived": {
         "max": 29,
         "median": 25,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
         "min": 0
       }
     },
@@ -521,7 +561,7 @@
         "min": 15
       },
       "resolved": {
-        "count": 19,
+        "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
@@ -533,6 +573,11 @@
         "max": 28,
         "median": 25,
         "min": 21
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 32
       }
     },
     "counterflow_w8": {
@@ -589,6 +634,11 @@
         "max": 30,
         "median": 28,
         "min": 25
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 32
       }
     },
     "crossing": {
@@ -645,6 +695,11 @@
         "max": 29,
         "median": 0,
         "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 0,
+        "min": 0
       }
     },
     "enemyblock": {
@@ -698,6 +753,11 @@
         "min": 0.0
       },
       "unitsArrived": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      },
+      "unitsNear": {
         "max": 2,
         "median": 1,
         "min": 0
@@ -757,6 +817,11 @@
         "max": 10,
         "median": 8,
         "min": 7
+      },
+      "unitsNear": {
+        "max": 11,
+        "median": 8,
+        "min": 7
       }
     },
     "oneway_tracked": {
@@ -801,7 +866,7 @@
         "min": 5
       },
       "resolved": {
-        "count": 9,
+        "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
@@ -813,6 +878,11 @@
         "max": 12,
         "median": 11,
         "min": 11
+      },
+      "unitsNear": {
+        "max": 16,
+        "median": 16,
+        "min": 16
       }
     },
     "openfield": {
@@ -869,6 +939,11 @@
         "max": 40,
         "median": 40,
         "min": 39
+      },
+      "unitsNear": {
+        "max": 40,
+        "median": 40,
+        "min": 40
       }
     },
     "parking": {
@@ -925,6 +1000,11 @@
         "max": 8,
         "median": 8,
         "min": 6
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 7
       }
     },
     "separating": {
@@ -981,6 +1061,11 @@
         "max": 31,
         "median": 28,
         "min": 25
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 32
       }
     },
     "strafe": {
@@ -1037,6 +1122,11 @@
         "max": 7,
         "median": 4,
         "min": 3
+      },
+      "unitsNear": {
+        "max": 26,
+        "median": 18,
+        "min": 17
       }
     },
     "tworoute": {
@@ -1092,6 +1182,11 @@
       "unitsArrived": {
         "max": 32,
         "median": 31,
+        "min": 12
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
         "min": 12
       }
     }

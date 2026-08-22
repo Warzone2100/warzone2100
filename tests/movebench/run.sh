@@ -19,8 +19,9 @@
 # jams, ex. counterflow_cyborg returning 48 seven times out of twelve and 10 to
 # 21 the rest. A median there reports whichever mode happened to win and hides
 # the thing that actually varies. RESOLVED counts the arrangements in which most
-# of the ordered units arrived, so a mechanism that helps such a cell shows up as
-# a higher fraction rather than as a shifted average.
+# of the ordered units reached their destination (unitsNear, six tiles), so a
+# mechanism that helps such a cell shows up as a higher fraction rather than as
+# a shifted average.
 #
 # --score reports each metric beside its change against the recorded baseline,
 # or against a live reference run when --against='<args>' names one, ex.
@@ -150,7 +151,7 @@ scenarios = scenarios.split()
 TOTAL_ARRANGEMENTS = 81
 n = max(1, min(int(arrangements), TOTAL_ARRANGEMENTS))
 indices = [i * TOTAL_ARRANGEMENTS // n for i in range(n)]
-FIELDS = ["unitsArrived", "arrival_p50", "arrival_p95", "hardStops",
+FIELDS = ["unitsArrived", "unitsNear", "arrival_p50", "arrival_p95", "hardStops",
           "repaths", "giveUps", "formationSpreadTiles",
           "peakDensity", "density_p95"]
 # Reported as a float, so kept out of FIELDS above, which casts its medians to
@@ -292,9 +293,12 @@ def sweep(extra):
             results[s][f] = {"min": min(c[f] for c in cards),
                              "median": statistics.median(c[f] for c in cards),
                              "max": max(c[f] for c in cards)}
+        # Counted on unitsNear, not unitsArrived: the latter's tile-and-a-half
+        # tolerance measures how tightly a block packed onto a taken goal tile,
+        # not whether the flow resolved.
         results[s]["resolved"] = {
             "count": sum(1 for c in cards
-                         if c["unitsArrived"] >= RESOLVED_SHARE * max(1, c["unitsOrdered"])),
+                         if c["unitsNear"] >= RESOLVED_SHARE * max(1, c["unitsOrdered"])),
             "of": len(cards),
         }
     return floor, results
