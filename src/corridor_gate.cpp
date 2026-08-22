@@ -717,7 +717,10 @@ int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr,
 // property of its route: the side of its next departing turn is the side it
 // wants to already be on, and members sharing the same flows then agree on
 // handedness by construction.
-int routeTurnSide(const DROID *psDroid)
+/// The side a droid's route turns, read from the first sharp bend ahead of it.
+/// With a passage given, only a bend at that passage's own mouths answers, and
+/// bends elsewhere are stepped over rather than ending the scan.
+int routeTurnSide(const DROID *psDroid, const Corridor *passage = nullptr)
 {
 	const std::vector<Vector2i> &path = psDroid->sMove.asPath;
 	const int start = std::max(psDroid->sMove.pathIndex, 0);
@@ -741,7 +744,14 @@ int routeTurnSide(const DROID *psDroid)
 				const Query after = queryCorridor(path[i], path[i]);
 				const bool winding = at.relation == INSIDE && after.relation == INSIDE
 				                     && at.corridorId == after.corridorId;
-				if (!winding)
+				bool ours = true;
+				if (passage != nullptr && pathfindingTurnVoteEnabled())
+				{
+					const int64_t reach = static_cast<int64_t>(APPROACH_RADIUS) * APPROACH_RADIUS;
+					ours = distSqTo(path[i], passage->mouthA) <= reach
+					       || distSqTo(path[i], passage->mouthB) <= reach;
+				}
+				if (!winding && ours)
 				{
 					return cross > 0 ? 1 : -1;
 				}
@@ -1148,6 +1158,16 @@ void corridorGateUpdate()
 		uint32_t id = UINT32_MAX;
 		int8_t side = 0;
 		uint8_t firm = 0;   ///< a member is inside or committed to the approach
+		int left = 0;       ///< members whose route turns that way at this passage
+		int right = 0;
+
+		/// The side this direction asks for, or none while its members disagree
+		/// evenly. Counted rather than held on one member, so no single early
+		/// voter sets the convention alone.
+		int8_t settled() const
+		{
+			return static_cast<int8_t>(left > right ? -1 : (right > left ? 1 : 0));
+		}
 	};
 	std::vector<SidePref> prefFwd(n), prefBwd(n);
 
@@ -1251,7 +1271,13 @@ void corridorGateUpdate()
 				lowestInsideDir[chain] = static_cast<int8_t>(chainDir);
 			}
 			SidePref &pref = q.dir > 0 ? prefFwd[c] : prefBwd[c];
-			if (psDroid->id < pref.id)
+			if (pathfindingTurnVoteEnabled())
+			{
+				const int side = routeTurnSide(psDroid, &cmap->corridors[c]);
+				if (side < 0) { pref.left += 1; }
+				else if (side > 0) { pref.right += 1; }
+			}
+			else if (psDroid->id < pref.id)
 			{
 				const int side = routeTurnSide(psDroid);
 				if (side != 0)
@@ -1348,8 +1374,10 @@ void corridorGateUpdate()
 		// capture boundary toggles its whole management status with sub-tile
 		// motion, and its preference appearing and vanishing flapped the
 		// handedness mid-episode.
-		const int8_t pf = prefFwd[c].firm ? prefFwd[c].side : 0;
-		const int8_t pb = prefBwd[c].firm ? prefBwd[c].side : 0;
+		const int8_t fwdSide = pathfindingTurnVoteEnabled() ? prefFwd[c].settled() : prefFwd[c].side;
+		const int8_t bwdSide = pathfindingTurnVoteEnabled() ? prefBwd[c].settled() : prefBwd[c].side;
+		const int8_t pf = prefFwd[c].firm ? fwdSide : 0;
+		const int8_t pb = prefBwd[c].firm ? bwdSide : 0;
 		// At a joint both flows use the convention belongs to both, and one
 		// arriving first must not set it alone: the other arriving would
 		// reverse it under everyone already steering at it. At every other
@@ -1371,11 +1399,13 @@ void corridorGateUpdate()
 			if (prevHanded[c] != g_handed[c])
 			{
 				prevHanded[c] = g_handed[c];
-				debug(LOG_MOVEMENT, "corridor t=%u corridor %zu handed=%s sharedJoint=%d prefFwd=%d(id %u firm %d) prefBwd=%d(id %u firm %d)",
+				debug(LOG_MOVEMENT, "corridor t=%u corridor %zu handed=%s sharedJoint=%d prefFwd=%d(L%d R%d firm %d) prefBwd=%d(L%d R%d firm %d)",
 				      gameTime, c, g_handed[c] > 0 ? "right" : "left",
 				      corridorAtSharedJoint(c) ? 1 : 0,
-				      prefFwd[c].side, prefFwd[c].id, prefFwd[c].firm,
-				      prefBwd[c].side, prefBwd[c].id, prefBwd[c].firm);
+				      pathfindingTurnVoteEnabled() ? prefFwd[c].settled() : prefFwd[c].side,
+				      prefFwd[c].left, prefFwd[c].right, prefFwd[c].firm,
+				      pathfindingTurnVoteEnabled() ? prefBwd[c].settled() : prefBwd[c].side,
+				      prefBwd[c].left, prefBwd[c].right, prefBwd[c].firm);
 			}
 		}
 	}

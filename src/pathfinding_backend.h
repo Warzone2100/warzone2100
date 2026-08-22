@@ -72,6 +72,7 @@ enum PathfindingFeature : uint16_t
 	PF_WIDE_LANES        = 1 << 7,   ///< scale the keep-right shift to the room the ground offers
 	PF_HAND_JOINT        = 1 << 8,   ///< at a joint both flows use, wait for both before setting handedness
 	PF_WIDE_QUEUE        = 1 << 9,   ///< size the entry queue by the room at the approach, not by the corridor band
+	PF_TURN_VOTE         = 1 << 10,  ///< read a passage's turn side at its own mouths, by majority
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -101,6 +102,9 @@ bool pathfindingHandJointEnabled();
 /// True if the queue outside a mouth is sized by the room the approach offers
 /// rather than by the corridor's own side band.
 bool pathfindingWideQueueEnabled();
+/// True if a corridor's turn side is read only from bends at its own mouths and
+/// settled by majority, instead of by the lowest-id member from wherever it is.
+bool pathfindingTurnVoteEnabled();
 
 class IPathfindingBackend
 {
