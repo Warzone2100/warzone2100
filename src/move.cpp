@@ -1479,6 +1479,31 @@ static uint16_t moveGetDirection(DROID *psDroid)
 }
 
 // Check if a droid has got to a way point
+// How long a droid at the end of its route may go without closing on its
+// destination before it counts as having stopped closing, how much closer it
+// has to get for that to read as progress rather than as jitter, and how much
+// ground it has to lose before its best is taken as stale.
+const uint32_t SETTLE_STALL_TIME = 3000;
+const int32_t SETTLE_STALL_SLACK = TILE_UNITS / 4;
+const int32_t SETTLE_STALL_RESET = 4 * TILE_UNITS;
+
+/// Updates the droid's progress record and reports whether it has stopped
+/// closing on its destination. Measured against the destination, not the
+/// waypoint, so a waypoint changing underneath reads as neither progress nor
+/// its absence.
+static bool moveSettleStalled(DROID *psDroid)
+{
+	const int32_t dist = iHypot(psDroid->sMove.destination - psDroid->pos.xy());
+	if (psDroid->sMove.settleBest == 0 || dist > psDroid->sMove.settleBest + SETTLE_STALL_RESET
+	    || dist + SETTLE_STALL_SLACK < psDroid->sMove.settleBest)
+	{
+		psDroid->sMove.settleBest = std::max(dist, 1);
+		psDroid->sMove.settleTime = gameTime;
+		return false;
+	}
+	return gameTime - psDroid->sMove.settleTime > SETTLE_STALL_TIME;
+}
+
 static bool moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
@@ -1487,6 +1512,20 @@ static bool moveReachedWayPoint(DROID *psDroid)
 	const bool last = psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size();
 	const unsigned int toleranceDist = 3 * (TILE_UNITS / 4);
 	unsigned int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+
+	// At the end of a route, how long a droid has been trying counts even when
+	// it is not yet close: the count below only runs within three quarters of a
+	// tile of the target, which a droid packed into a crowd at a shared
+	// destination never reaches, and the bump clock restarts on every fresh
+	// bump. Only once it has stopped closing, though - a droid still making
+	// ground has not settled for less, and widening its acceptance while it is
+	// still closing would loosen every crowd, not only the ones that cannot pack.
+	if (last && pathfindingSettleTimeEnabled()
+	    && psDroid->sMove.Status != MOVEINACTIVE
+	    && moveSettleStalled(psDroid))
+	{
+		psDroid->sMove.tolerance += 1;
+	}
 
 	// Start the process of potentially increasing the distance threshold when very close to the waypoint.
 	if (sqDist < (toleranceDist * toleranceDist))

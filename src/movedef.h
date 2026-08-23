@@ -61,6 +61,8 @@ struct MOVE_CONTROL
 	Position bumpPos = Position(0, 0, 0); ///< Position of last bump
 	unsigned tolerance = 0;               ///< Increases until unit gives up and goes to the next waypoint, if close enough
 	unsigned shuffleStart = 0;            ///< When a shuffle started
+	unsigned settleTime = 0;              ///< When this droid last closed on its destination
+	int32_t settleBest = 0;               ///< How close it has come, 0 until it has been measured
 
 	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 

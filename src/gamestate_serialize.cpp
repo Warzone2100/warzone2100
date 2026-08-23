@@ -2067,6 +2067,10 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 	// lingering droid eventually advances (moveReachedWayPoint). If reset to 0 on restore, a droid mid-
 	// accumulation would advance a different tick than the original, diverging its path progress.
 	mv["tolerance"] = d->sMove.tolerance;
+	// The record `tolerance` is grown from at the end of a route.
+	// Restoring the counter while its record started over would grow the total again from a different tick.
+	mv["settleTime"] = d->sMove.settleTime;
+	mv["settleBest"] = d->sMove.settleBest;
 	j["move"] = std::move(mv);
 
 	if (d->sMove.psFormation != nullptr)
@@ -2292,6 +2296,8 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	const Vector2i bp = readVector2i(mv.at("bumpPos"));
 	d->sMove.bumpPos = Vector3i(bp.x, bp.y, 0);
 	d->sMove.tolerance = mv.at("tolerance").get<uint32_t>();
+	d->sMove.settleTime = mv.value("settleTime", static_cast<uint32_t>(0));
+	d->sMove.settleBest = mv.value("settleBest", static_cast<int32_t>(0));
 	if (d->isVtol() && d->sMove.Status != MOVEINACTIVE)
 	{
 		d->rot.pitch = 0;

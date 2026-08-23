@@ -5947,6 +5947,8 @@ static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroi
 		}
 		psDroid->sMove.lastBump = ini.value("lastBump").toInt();
 		psDroid->sMove.pauseTime = ini.value("pauseTime").toInt();
+		psDroid->sMove.settleTime = ini.value("settleTime", 0).toInt();
+		psDroid->sMove.settleBest = ini.value("settleBest", 0).toInt();
 		Vector2i tmp = ini.vector2i("bumpPosition");
 		psDroid->sMove.bumpPos = Vector3i(tmp.x, tmp.y, 0);
 
@@ -6163,6 +6165,8 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	}
 	droidObj["lastBump"] = psCurr->sMove.lastBump;
 	droidObj["pauseTime"] = psCurr->sMove.pauseTime;
+	droidObj["settleTime"] = psCurr->sMove.settleTime;
+	droidObj["settleBest"] = psCurr->sMove.settleBest;
 	droidObj["bumpPosition"] = psCurr->sMove.bumpPos.xy();
 
 	// formation info
