@@ -112,7 +112,8 @@ static int parsePathfindingBackendArg(const char *arg)
 	constexpr unsigned validMask = PF_DIRECTIONAL_BIAS | PF_CORRIDOR_LANES | PF_FLOW_COST
 	                               | PF_SOFT_COLLISION | PF_CROWD_MASS | PF_BEND_HOLD
 	                               | PF_BEND_HAND | PF_WIDE_LANES | PF_HAND_JOINT
-	                               | PF_WIDE_QUEUE | PF_TURN_VOTE;
+	                               | PF_WIDE_QUEUE | PF_TURN_VOTE
+	                               | PF_SETTLE_TIME;
 	unsigned mask = 0;
 	const char *p = arg;
 	while (*p != '\0')
@@ -128,7 +129,7 @@ static int parsePathfindingBackendArg(const char *arg)
 	}
 	if ((mask & ~validMask) != 0)
 	{
-		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote", arg);
+		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time", arg);
 	}
 	return static_cast<int>(mask);
 }
@@ -509,7 +510,7 @@ static const struct poptOption *getOptionsTable()
 		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
 		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
 		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
-		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote)"), N_("features") },
+		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time)"), N_("features") },
 		{ "corridordump", POPT_ARG_STRING, CLI_CORRIDORDUMP,   N_("Detect corridors on the named map, dump the geometry, and quit"), N_("map") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },

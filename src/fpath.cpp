@@ -763,6 +763,11 @@ bool pathfindingTurnVoteEnabled()
 	return (game.pathfindingBackend & PF_TURN_VOTE) != 0;
 }
 
+bool pathfindingSettleTimeEnabled()
+{
+	return (game.pathfindingBackend & PF_SETTLE_TIME) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
