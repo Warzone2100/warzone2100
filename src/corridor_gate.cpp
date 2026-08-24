@@ -457,6 +457,12 @@ Query queryCorridor(const Vector2i &pos, const Vector2i &target)
 	}
 	const int tx = map_coord(pos.x);
 	const int ty = map_coord(pos.y);
+	// The claim mask reaches SEARCH_RADIUS tiles around every centerline, so ground it doesn't claim has
+	// no centerline near enough for the scan below to find.
+	if (!cmap->claimed(tx, ty))
+	{
+		return q;
+	}
 
 	int bestId = -1;
 	int bestTileDistSq = SEARCH_RADIUS * SEARCH_RADIUS + 1;
@@ -1042,6 +1048,12 @@ Query approachQuery(const Vector2i &pos, const Vector2i &target)
 	Query q;
 	const CorridorMap *cmap = gameWorld.map.corridors.get();
 	if (cmap == nullptr)
+	{
+		return q;
+	}
+	// The claim mask reaches APPROACH_RADIUS around every mouth, so a droid off it is beyond what any
+	// funnel here reaches (regardless of which mouth is nearest).
+	if (!cmap->claimed(map_coord(pos.x), map_coord(pos.y)))
 	{
 		return q;
 	}
