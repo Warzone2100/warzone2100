@@ -62,6 +62,16 @@
         "median": 67743,
         "min": 60613
       },
+      "hardStopsNear": {
+        "max": 82532,
+        "median": 59458,
+        "min": 54773
+      },
+      "hardStopsTransit": {
+        "max": 8285,
+        "median": 7394,
+        "min": 5840
+      },
       "peakDensity": {
         "max": 15,
         "median": 14,
@@ -122,6 +132,16 @@
         "max": 384,
         "median": 239,
         "min": 74
+      },
+      "hardStopsNear": {
+        "max": 190,
+        "median": 152,
+        "min": 21
+      },
+      "hardStopsTransit": {
+        "max": 194,
+        "median": 87,
+        "min": 53
       },
       "peakDensity": {
         "max": 10,
@@ -184,6 +204,16 @@
         "median": 675,
         "min": 233
       },
+      "hardStopsNear": {
+        "max": 762,
+        "median": 286,
+        "min": 13
+      },
+      "hardStopsTransit": {
+        "max": 389,
+        "median": 371,
+        "min": 220
+      },
       "peakDensity": {
         "max": 8,
         "median": 8,
@@ -241,6 +271,16 @@
         "min": 0
       },
       "hardStops": {
+        "max": 159158,
+        "median": 9858,
+        "min": 2944
+      },
+      "hardStopsNear": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
         "max": 159158,
         "median": 9858,
         "min": 2944
@@ -306,6 +346,16 @@
         "median": 80681,
         "min": 25664
       },
+      "hardStopsNear": {
+        "max": 8,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 100383,
+        "median": 80681,
+        "min": 25656
+      },
       "peakDensity": {
         "max": 17,
         "median": 15,
@@ -363,6 +413,16 @@
         "min": 0
       },
       "hardStops": {
+        "max": 100372,
+        "median": 79848,
+        "min": 67033
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
         "max": 100372,
         "median": 79848,
         "min": 67033
@@ -428,6 +488,16 @@
         "median": 73128,
         "min": 5914
       },
+      "hardStopsNear": {
+        "max": 691,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 103491,
+        "median": 73128,
+        "min": 5911
+      },
       "peakDensity": {
         "max": 15,
         "median": 14,
@@ -488,6 +558,16 @@
         "max": 98718,
         "median": 3076,
         "min": 691
+      },
+      "hardStopsNear": {
+        "max": 52,
+        "median": 11,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 98718,
+        "median": 3070,
+        "min": 679
       },
       "peakDensity": {
         "max": 14,
@@ -550,6 +630,16 @@
         "median": 367,
         "min": 91
       },
+      "hardStopsNear": {
+        "max": 68,
+        "median": 7,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 1160,
+        "median": 359,
+        "min": 89
+      },
       "peakDensity": {
         "max": 13,
         "median": 9,
@@ -611,6 +701,16 @@
         "median": 101,
         "min": 21
       },
+      "hardStopsNear": {
+        "max": 51,
+        "median": 6,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 367,
+        "median": 90,
+        "min": 14
+      },
       "peakDensity": {
         "max": 10,
         "median": 9,
@@ -668,6 +768,16 @@
         "min": 0
       },
       "hardStops": {
+        "max": 111635,
+        "median": 96731,
+        "min": 48467
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
         "max": 111635,
         "median": 96731,
         "min": 48467
@@ -733,6 +843,16 @@
         "median": 355,
         "min": 288
       },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 630,
+        "median": 355,
+        "min": 288
+      },
       "peakDensity": {
         "max": 3,
         "median": 3,
@@ -790,6 +910,16 @@
         "min": 0
       },
       "hardStops": {
+        "max": 5519,
+        "median": 5400,
+        "min": 4044
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
         "max": 5519,
         "median": 5400,
         "min": 4044
@@ -855,6 +985,16 @@
         "median": 9,
         "min": 9
       },
+      "hardStopsNear": {
+        "max": 20,
+        "median": 9,
+        "min": 5
+      },
+      "hardStopsTransit": {
+        "max": 22,
+        "median": 4,
+        "min": 0
+      },
       "peakDensity": {
         "max": 8,
         "median": 8,
@@ -912,6 +1052,16 @@
         "min": 0
       },
       "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
         "max": 0,
         "median": 0,
         "min": 0
@@ -977,6 +1127,16 @@
         "median": 3,
         "min": 0
       },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 166,
+        "median": 3,
+        "min": 0
+      },
       "peakDensity": {
         "max": 5,
         "median": 5,
@@ -1037,6 +1197,16 @@
         "max": 41615,
         "median": 4053,
         "min": 623
+      },
+      "hardStopsNear": {
+        "max": 59,
+        "median": 6,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 41613,
+        "median": 3994,
+        "min": 619
       },
       "peakDensity": {
         "max": 15,
@@ -1099,6 +1269,16 @@
         "median": 1944,
         "min": 1651
       },
+      "hardStopsNear": {
+        "max": 701,
+        "median": 474,
+        "min": 416
+      },
+      "hardStopsTransit": {
+        "max": 1528,
+        "median": 1506,
+        "min": 1177
+      },
       "peakDensity": {
         "max": 12,
         "median": 12,
@@ -1158,6 +1338,16 @@
       "hardStops": {
         "max": 61335,
         "median": 1000,
+        "min": 253
+      },
+      "hardStopsNear": {
+        "max": 22,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 61335,
+        "median": 999,
         "min": 253
       },
       "peakDensity": {
