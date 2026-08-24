@@ -264,6 +264,11 @@ bool corridorAtSharedJoint(size_t cid)
 std::vector<uint8_t> g_mouthAOuter;  ///< per corridor, mouthA adjoins no other corridor
 std::vector<uint8_t> g_mouthBOuter;
 
+// The axis length is per centerline point, the inward lengths one per mouth.
+// Derived with the chain state and cached alongside it.
+std::vector<std::vector<int32_t>> g_axisLen;
+std::vector<int32_t> g_inwardLenA, g_inwardLenB;
+
 // Mouths within this of each other adjoin, chaining their corridors. A queue
 // can park up to APPROACH_RADIUS behind a mouth, so any mouth within that span
 // could be corked by another mouth's queue, ex. across the small pocket between
@@ -290,6 +295,28 @@ void chainEnsure(const CorridorMap *cmap)
 	g_mouthBOuter.assign(n, 1);
 	g_mouthAAdj.assign(n, {});
 	g_mouthBAdj.assign(n, {});
+	g_axisLen.assign(n, {});
+	g_inwardLenA.assign(n, 0);
+	g_inwardLenB.assign(n, 0);
+	for (size_t i = 0; i < n; ++i)
+	{
+		const Corridor &c = cmap->corridors[i];
+		const size_t pts = c.centerline.size();
+		g_axisLen[i].assign(pts, 0);
+		for (size_t k = 0; k < pts; ++k)
+		{
+			const size_t lo = k > 0 ? k - 1 : k;
+			const size_t hi = k + 1 < pts ? k + 1 : k;
+			g_axisLen[i][k] = iHypot(c.centerline[hi] - c.centerline[lo]);
+		}
+		if (pts == 0)
+		{
+			continue;
+		}
+		const int last = static_cast<int>(pts) - 1;
+		g_inwardLenA[i] = iHypot(c.centerline[std::min(last, LOOKAHEAD)] - c.centerline[0]);
+		g_inwardLenB[i] = iHypot(c.centerline[std::max(0, last - LOOKAHEAD)] - c.centerline[last]);
+	}
 	// Collect every mouth adjacency. Adjacency alone decides inner mouths, so
 	// no queue ever parks in a junction pocket, whatever the orientation below.
 	struct Link
@@ -501,7 +528,7 @@ Query queryCorridor(const Vector2i &pos, const Vector2i &target)
 	// between the two limbs and the lateral against either limb's axis can read
 	// outside while the droid stands almost on the centerline itself. Plain
 	// closeness to the line also counts as inside, which no frame can dispute.
-	const bool withinWidth = lateral <= static_cast<int64_t>(sideRoom) * iHypot(axis)
+	const bool withinWidth = lateral <= static_cast<int64_t>(sideRoom) * g_axisLen[static_cast<size_t>(bestId)][nearest]
 	                         || nearestDistSq <= static_cast<int64_t>(TILE_UNITS) * TILE_UNITS;
 
 	if (!endpoint && withinWidth)
@@ -1034,7 +1061,7 @@ Query approachQuery(const Vector2i &pos, const Vector2i &target)
 			const int inIdx = end ? std::max(0, last - LOOKAHEAD) : std::min(last, LOOKAHEAD);
 			const Vector2i mouth = c.centerline[mouthIdx];
 			const Vector2i inward = c.centerline[inIdx] - mouth;   // into the corridor
-			const int64_t inwardLen = iHypot(inward);
+			const int64_t inwardLen = (end ? g_inwardLenB : g_inwardLenA)[ci];
 			if (inwardLen == 0)
 			{
 				continue;
