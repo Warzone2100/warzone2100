@@ -71,6 +71,8 @@ struct TrackedDroid
 	uint32_t startDistTiles = 0;   ///< straight-line distance to the goal when this leg began, in tiles
 	uint32_t arrivalTick = 0;
 	uint32_t lastFarTick = 0;      ///< last tick this droid sat outside NEAR_RADIUS of its goal
+	bool     everNear = false;     ///< whether it has ever come inside NEAR_RADIUS of its goal
+	uint32_t waitRouteTicks = 0;   ///< ticks spent waiting for a route it never got
 	uint32_t stallTicks = 0;       ///< far-from-goal ticks spent effectively stationary
 	uint32_t activeTicks = 0;      ///< far-from-goal ticks observed
 	uint32_t travelWorld = 0;      ///< world units driven while far from the goal, this leg
@@ -211,6 +213,10 @@ void sampleDroids()
 			}
 
 			TrackedDroid &t = it->second;
+			if (psDroid->sMove.Status == MOVEWAITROUTE)
+			{
+				++t.waitRouteTicks;
+			}
 			const Vector2i step = psDroid->pos.xy() - t.lastPos;
 			t.lastPos = psDroid->pos.xy();
 
@@ -232,6 +238,10 @@ void sampleDroids()
 			// it to the strict arrival tolerance instead would book a settled
 			// unit's parked time as stalling whenever its goal tile is taken.
 			const Vector2i delta = psDroid->pos.xy() - t.goal;
+			if (dot(delta, delta) <= NEAR_RADIUS * NEAR_RADIUS)
+			{
+				t.everNear = true;
+			}
 			if (dot(delta, delta) > NEAR_RADIUS * NEAR_RADIUS)
 			{
 				t.lastFarTick = tickCount;
@@ -421,8 +431,18 @@ void writeScorecard(bool completed)
 	std::vector<uint32_t> settle;
 	std::vector<uint32_t> stallShare;
 	uint32_t nearNow = 0;
+	uint32_t neverNear = 0;
+	uint32_t routeStarved = 0;
 	for (const auto &entry : tracked)
 	{
+		if (!entry.second.everNear)
+		{
+			++neverNear;
+		}
+		if (entry.second.waitRouteTicks * 2 > tickCount)
+		{
+			++routeStarved;
+		}
 		settle.push_back(entry.second.lastFarTick);
 		if (entry.second.activeTicks > 0)
 		{
@@ -437,6 +457,15 @@ void writeScorecard(bool completed)
 	std::sort(settle.begin(), settle.end());
 	std::sort(stallShare.begin(), stallShare.end());
 	card["unitsNear"] = nearNow;
+	// Units that never came within NEAR_RADIUS of their goal at any point in
+	// the run. `unitsNear` reads the final tick only, so this says whether a
+	// short count is drift out of the ring or a unit that never made it.
+	card["unitsNeverNear"] = neverNear;
+	// Units that spent more than half the run in MOVEWAITROUTE, asking for a
+	// route and not getting one: such a unit says nothing about the movement
+	// under test. Physical blockage does not count here - a droid boxed in by
+	// traffic still gets its route, it just cannot drive it.
+	card["unitsRouteStarved"] = routeStarved;
 	// The longest any ordered unit waited, with never getting there counted as
 	// the whole run rather than left out: the arrival percentiles are taken
 	// over the units that reached tolerance, so a unit wedged for good would
