@@ -956,15 +956,43 @@ void logClassification(const DROID *psDroid, const Query &q, int rdir)
 	      relName(q.relation), q.corridorId, q.dir, rdir);
 }
 
+// How many body-wide sub-lanes fit in a band this wide.
+int lanesForBand(int32_t bandWidth, const DROID *psDroid)
+{
+	const int32_t laneWidth = std::max(2 * moveObjRadius(psDroid), TILE_UNITS / 2);
+	return std::max(1, (bandWidth + laneWidth / 2) / laneWidth);
+}
+
 // How many body-wide sub-lanes this droid's direction can run abreast, set by
 // the narrowest the side band gets over the whole corridor. side is positive
 // for the band right of the axis.
 int laneCount(const Corridor &c, int side, const DROID *psDroid)
 {
 	const std::vector<int32_t> &sideExt = side > 0 ? c.rightExtent : c.leftExtent;
-	const int32_t globalMin = *std::min_element(sideExt.begin(), sideExt.end()) - 2 * LANE_MARGIN;
-	const int32_t laneWidth = std::max(2 * moveObjRadius(psDroid), TILE_UNITS / 2);
-	return std::max(1, (globalMin + laneWidth / 2) / laneWidth);
+	return lanesForBand(*std::min_element(sideExt.begin(), sideExt.end()) - 2 * LANE_MARGIN, psDroid);
+}
+
+// True when the queue outside this mouth has the approach to itself. Only outer
+// mouths queue, so a corridor whose far mouth is an inner junction forms exactly
+// one queue. Where both mouths are outer the two queues share a short passage,
+// and the depth of a single file is what holds them apart, not the standoff:
+// widening such a queue puts both crowds on the mouth together.
+bool queueOwnsApproach(size_t cid, int dir)
+{
+	const std::vector<uint8_t> &farOuter = dir > 0 ? g_mouthBOuter : g_mouthAOuter;
+	return cid < farOuter.size() && farOuter[cid] == 0;
+}
+
+// How many files the queue outside a mouth runs abreast. The queue stands on
+// the open ground the funnel flares across, not in the corridor, so the side
+// band does not bound it: size it by the width the funnel reaches, and let the
+// taper converge the files into the corridor's lane at the mouth. Only used
+// where queueOwnsApproach.
+int approachLaneCount(const Corridor &c, int side, const DROID *psDroid)
+{
+	const std::vector<int32_t> &sideExt = side > 0 ? c.rightExtent : c.leftExtent;
+	const int32_t band = *std::min_element(sideExt.begin(), sideExt.end()) - 2 * LANE_MARGIN;
+	return lanesForBand(band + FUNNEL_FLARE, psDroid);
 }
 
 // A droid out in the open heading into a mouth, past where the centerline search
@@ -1459,7 +1487,9 @@ void corridorGateUpdate()
 				continue;
 			}
 			const DROID *psDroid = approachers[i].droid;
-			const int lanes = laneCount(cor, dir * g_handed[c], psDroid);
+			const int lanes = (pathfindingWideQueueEnabled() && queueOwnsApproach(c, dir))
+			                  ? approachLaneCount(cor, dir * g_handed[c], psDroid)
+			                  : laneCount(cor, dir * g_handed[c], psDroid);
 			const int subLane = static_cast<int>(psDroid->id % static_cast<uint32_t>(lanes));
 			int32_t &depth = laneDepth[subLane];
 			g_slotAlong[psDroid->id] = base - depth;
@@ -1639,10 +1669,25 @@ bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget)
 		// advances or waits, not doubles back. The hold stops it at its slot.
 		const int32_t aimAlong = std::clamp(std::max(slotAlong, f.along) + APPROACH_LEAD,
 		                                    -APPROACH_RADIUS, APPROACH_LEAD);
-		int32_t aimLat = lateral;
-		if (aimAlong < -FUNNEL_MERGE)
+		const int32_t flare = aimAlong < -FUNNEL_MERGE
+		                      ? FUNNEL_FLARE * (-aimAlong - FUNNEL_MERGE) / (APPROACH_RADIUS - FUNNEL_MERGE)
+		                      : 0;
+		int32_t aimLat;
+		if (pathfindingWideQueueEnabled() && queueOwnsApproach(cid, q.dir))
 		{
-			aimLat += sideSign * FUNNEL_FLARE * (-aimAlong - FUNNEL_MERGE) / (APPROACH_RADIUS - FUNNEL_MERGE);
+			// Spread the files across the flared width instead of sliding one
+			// file sideways, so a crowd queues abreast and converges as the
+			// flare tapers. Same lane count the queue slots were built from, or
+			// a droid would aim at one file and be spaced for another.
+			const int32_t wideLo = sideSign > 0 ? bandMin : bandMin - flare;
+			const int32_t wideHi = sideSign > 0 ? bandMax + flare : bandMax;
+			const int aLanes = approachLaneCount(c, sideSign, psDroid);
+			const int aSub = static_cast<int>(psDroid->id % static_cast<uint32_t>(aLanes));
+			aimLat = wideLo + (2 * aSub + 1) * (wideHi - wideLo) / (2 * aLanes);
+		}
+		else
+		{
+			aimLat = lateral + sideSign * flare;
 		}
 		laneTarget.x = f.mouth.x + static_cast<int32_t>((static_cast<int64_t>(f.pVec.x) * aimLat + static_cast<int64_t>(f.gVec.x) * aimAlong) / DIR_UNIT);
 		laneTarget.y = f.mouth.y + static_cast<int32_t>((static_cast<int64_t>(f.pVec.y) * aimLat + static_cast<int64_t>(f.gVec.y) * aimAlong) / DIR_UNIT);

@@ -71,6 +71,7 @@ enum PathfindingFeature : uint16_t
 	PF_BEND_HAND         = 1 << 6,   ///< do not release a droid at a mouth its route continues through
 	PF_WIDE_LANES        = 1 << 7,   ///< scale the keep-right shift to the room the ground offers
 	PF_HAND_JOINT        = 1 << 8,   ///< at a joint both flows use, wait for both before setting handedness
+	PF_WIDE_QUEUE        = 1 << 9,   ///< size the entry queue by the room at the approach, not by the corridor band
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -97,6 +98,9 @@ bool pathfindingBendHandEnabled();
 /// True if a corridor at a joint both flows use waits for both to commit a side
 /// before settling its lane handedness, instead of letting the first decide.
 bool pathfindingHandJointEnabled();
+/// True if the queue outside a mouth is sized by the room the approach offers
+/// rather than by the corridor's own side band.
+bool pathfindingWideQueueEnabled();
 
 class IPathfindingBackend
 {
