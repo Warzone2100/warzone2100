@@ -903,5 +903,49 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 		stamp(result->tileClaimed, c.mouthB, 8);
 	}
 
+	// A fold over the detected geometry.
+	// Every movement decision the corridor layer makes is against this map, so clients must agree about it.
+	// (The tile masks are stamped from the geometry by fixed rules, so folding the corridors covers them.)
+	uint32_t checksum = 0;
+	uint32_t factor = 0;
+	auto fold = [&checksum, &factor](int32_t v)
+	{
+		checksum ^= static_cast<uint32_t>(v) * (factor = 3 * factor + 1);
+	};
+	fold(g.w);
+	fold(g.h);
+	fold(static_cast<int32_t>(result->corridors.size()));
+	for (const Corridor &c : result->corridors)
+	{
+		fold(c.id);
+		fold(c.mouthA.x);
+		fold(c.mouthA.y);
+		fold(c.mouthB.x);
+		fold(c.mouthB.y);
+		fold(c.minWidth);
+		fold(static_cast<int32_t>(c.centerline.size()));
+		for (const Vector2i &p : c.centerline)
+		{
+			fold(p.x);
+			fold(p.y);
+		}
+		fold(static_cast<int32_t>(c.widthProfile.size()));
+		for (int32_t w : c.widthProfile)
+		{
+			fold(w);
+		}
+		fold(static_cast<int32_t>(c.leftExtent.size()));
+		for (int32_t e : c.leftExtent)
+		{
+			fold(e);
+		}
+		fold(static_cast<int32_t>(c.rightExtent.size()));
+		for (int32_t e : c.rightExtent)
+		{
+			fold(e);
+		}
+	}
+	result->checksum = checksum;
+
 	return result;
 }
