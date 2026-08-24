@@ -991,12 +991,20 @@ private:
 	bool m_logErrors = false;
 };
 
+static bool levelListHoldsCampaignOnly = false;
+
+bool isLevelListCampaignOnly()
+{
+	return levelListHoldsCampaignOnly;
+}
+
 bool buildMapList(bool campaignOnly)
 {
 	if (!loadLevFile("gamedesc.lev", mod_campaign, false, nullptr))
 	{
 		return false;
 	}
+	levelListHoldsCampaignOnly = campaignOnly;
 	if (!campaignOnly)
 	{
 		loadLevFile("addon.lev", mod_multiplay, false, nullptr);
@@ -1513,7 +1521,11 @@ bool stageOneShutDown()
 	modelShutdown();
 	pie_TexShutDown();
 
-	bool needsLevReload = (hasOverrideMods() || hasCampaignMods()) && (game.type == LEVEL_TYPE::CAMPAIGN);
+	// Two separate reasons the level list must be rebuilt:
+	// 1. Loading a campaign save rebuilds it with only campaign levels, so the multiplayer maps are simply not present
+	// 2. Mods may supply their own levels, which aren't present after the mod is gone
+	bool needsLevReload = isLevelListCampaignOnly()
+		|| ((hasOverrideMods() || hasCampaignMods()) && (game.type == LEVEL_TYPE::CAMPAIGN));
 	clearOverrideMods();
 	clearCampaignMods();
 	clearCamTweakOptions();
