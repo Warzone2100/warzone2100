@@ -76,6 +76,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force);
 bool rebuildExistingSearchPathWithGraphicsOptionChange();
 
 bool buildMapList(bool campaignOnly = false);
+bool isLevelListCampaignOnly();
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
 bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
