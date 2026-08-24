@@ -282,6 +282,33 @@ int64_t distSqToFwd(const Vector2i &a, const Vector2i &b)
 	return static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y;
 }
 
+// A joint carries both directions when the passage on each side of it has flow heading in.
+// The tick's own update derives this from the counts it just took.
+// A load derives it from the counts that the save recorded.
+template <typename FlowFwd, typename FlowBwd>
+void applyJointTwoWay(size_t n, FlowFwd fwd, FlowBwd bwd)
+{
+	for (size_t i = 0; i < n; ++i)
+	{
+		for (int ei = 0; ei < 2; ++ei)
+		{
+			auto &adj = ei ? g_mouthBAdj[i] : g_mouthAAdj[i];
+			const bool mine = ei ? fwd(i) : bwd(i);
+			for (MouthAdj &a : adj)
+			{
+				const size_t j = static_cast<size_t>(a.corridor);
+				const bool theirs = (a.corridor >= 0 && j < n)
+				                    ? (a.endB ? fwd(j) : bwd(j)) : false;
+				a.twoWay = (mine && theirs) ? 1 : 0;
+			}
+		}
+	}
+}
+
+// A carry handed back by a load, applied on the next update once chainEnsure has rebuilt the joints it belongs to.
+// Never saved from here - only set/restored from a saveload.
+std::optional<CorridorGateCarry> g_pendingCarry;
+
 void chainEnsure(const CorridorMap *cmap)
 {
 	if (g_chainMap == cmap)
@@ -1127,6 +1154,29 @@ void corridorGateUpdate()
 	}
 	chainEnsure(cmap);
 	const size_t n = cmap->corridors.size();
+	// A load leaves the joints at zero, where a continuing game would have the flow the previous tick saw,
+	// so the first tick after a load classifies droids at a joint differently.
+	// Put the recorded flow back before the loop below reads it.
+	// NOTE: Only if it was measured against this corridor map - the flow is indexed by corridor id, so a
+	// different map would apply it to the wrong passages.
+	if (g_pendingCarry.has_value())
+	{
+		const bool sameMap = g_pendingCarry->mapChecksum == cmap->checksum
+		                     && g_pendingCarry->flow.size() == n;
+		if (sameMap)
+		{
+			const std::vector<uint8_t> &flow = g_pendingCarry->flow;
+			applyJointTwoWay(n,
+			                 [&flow](size_t i) { return (flow[i] & 1) != 0; },
+			                 [&flow](size_t i) { return (flow[i] & 2) != 0; });
+		}
+		else
+		{
+			debug(LOG_MOVEMENT, "corridor carry discarded: saved map %08X over %zu corridors, loaded %08X over %zu",
+			      g_pendingCarry->mapChecksum, g_pendingCarry->flow.size(), cmap->checksum, n);
+		}
+		g_pendingCarry.reset();
+	}
 	// Flow is aggregated over each chain, with member directions mapped into
 	// chain orientation, so a passage split at junctions still reads as the one
 	// stream of traffic it physically carries.
@@ -1390,24 +1440,10 @@ void corridorGateUpdate()
 	// exits to its left and neither exits to its right, so the turning flow
 	// gets the inside of its turn instead of crossing the opposing lane at it.
 	// Any conflict or ambiguity keeps the default.
-	// Which joints carry both directions this tick. Derived from the same synced
-	// per-corridor counts everything else here uses, recomputed each tick, so
-	// nothing new is persisted and every client agrees.
-	for (size_t i = 0; i < n; ++i)
-	{
-		for (int ei = 0; ei < 2; ++ei)
-		{
-			auto &adj = ei ? g_mouthBAdj[i] : g_mouthAAdj[i];
-			const int mine = ei ? g_cFlowFwd[i] : g_cFlowBwd[i];
-			for (MouthAdj &a : adj)
-			{
-				const size_t j = static_cast<size_t>(a.corridor);
-				const int theirs = (a.corridor >= 0 && j < n)
-				                   ? (a.endB ? g_cFlowFwd[j] : g_cFlowBwd[j]) : 0;
-				a.twoWay = (mine > 0 && theirs > 0) ? 1 : 0;
-			}
-		}
-	}
+	// Which joints carry both directions this tick.
+	applyJointTwoWay(n,
+	                 [](size_t i) { return g_cFlowFwd[i] > 0; },
+	                 [](size_t i) { return g_cFlowBwd[i] > 0; });
 
 	g_handed.assign(n, 1);
 	for (size_t c = 0; c < n; ++c)
@@ -1921,6 +1957,28 @@ const uint32_t QUEUE_GRACE = 40000;
 // and either diverts or confirms the wait, so the queue re-evaluates on a
 // much shorter clock than the plain grace.
 const uint32_t QUEUE_REEVAL = 15000;
+
+std::optional<CorridorGateCarry> corridorGateCarry()
+{
+	const CorridorMap *cmap = gameWorld.map.corridors.get();
+	if (cmap == nullptr || g_cFlowFwd.size() != cmap->corridors.size())
+	{
+		return std::nullopt;   // no map, or no update has run yet, so nothing is carried
+	}
+	CorridorGateCarry carry;
+	carry.mapChecksum = cmap->checksum;
+	carry.flow.resize(g_cFlowFwd.size(), 0);
+	for (size_t i = 0; i < g_cFlowFwd.size(); ++i)
+	{
+		carry.flow[i] = static_cast<uint8_t>((g_cFlowFwd[i] > 0 ? 1 : 0) | (g_cFlowBwd[i] > 0 ? 2 : 0));
+	}
+	return carry;
+}
+
+void corridorGateSetCarry(std::optional<CorridorGateCarry> carry)
+{
+	g_pendingCarry = std::move(carry);
+}
 
 bool corridorContested(int corridorId)
 {

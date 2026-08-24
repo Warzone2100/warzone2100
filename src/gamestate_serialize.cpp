@@ -22,6 +22,7 @@
 #include <nlohmann/json.hpp> // Must come before WZ includes
 
 #include "gamestate_serialize.h"
+#include "corridor_gate.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h" // clip (clamp restored droid positions onto the map)
@@ -92,6 +93,24 @@
 #include <unordered_set>
 #include <cstdlib>
 #include <queue>
+
+static void to_json(nlohmann::ordered_json &j, const CorridorGateCarry &carry)
+{
+	j = nlohmann::ordered_json::object();
+	j["mapChecksum"] = carry.mapChecksum;
+	j["flow"] = carry.flow;
+}
+
+static void from_json(const nlohmann::ordered_json &j, CorridorGateCarry &carry)
+{
+	carry.mapChecksum = j.at("mapChecksum").get<uint32_t>();
+	const nlohmann::ordered_json &flow = j.at("flow");
+	if (!flow.is_array())
+	{
+		throw gamestate::StateError("corridorGate flow is not an array");
+	}
+	carry.flow = flow.get<std::vector<uint8_t>>();
+}
 
 namespace gamestate
 {
@@ -302,6 +321,42 @@ void readDeterminismCore(const nlohmann::ordered_json &j, uint32_t version)
 {
 	applyDeterminismClock(j, version);
 	applyDeterminismCounters(j, version);
+}
+
+// MARK: - Section: corridorGate (per-corridor flow carry)
+
+constexpr uint32_t CORRIDOR_GATE_SECTION_VERSION = 1;
+
+// The corridor gate rebuilds its per-tick state from synced droid state before anything reads it, with one exception:
+// which directions had flow at each corridor, which the following tick reads to decide whether a junction carries both.
+// Without it the first tick after a load may classify droids at a junction differently, and the run may diverge from the one that was saved.
+static nlohmann::ordered_json writeCorridorGate()
+{
+	nlohmann::ordered_json j = nlohmann::ordered_json::object();
+	j["version"] = CORRIDOR_GATE_SECTION_VERSION;
+	const std::optional<CorridorGateCarry> carry = corridorGateCarry();
+	if (carry.has_value())
+	{
+		j["gateCarry"] = *carry;
+	}
+	return j;
+}
+
+static void readCorridorGate(const nlohmann::ordered_json &j, uint32_t version)
+{
+	if (version != CORRIDOR_GATE_SECTION_VERSION)
+	{
+		throw StateError("unsupported corridorGate section version");
+	}
+
+	std::optional<CorridorGateCarry> carry;
+	if (j.contains("gateCarry"))
+	{
+		carry = j.at("gateCarry").get<CorridorGateCarry>();
+	}
+	// The gate checks the checksum against the map it actually loaded and drops the carry if they differ,
+	// so a save from a build that detects corridors differently degrades to rebuilding the carry later.
+	corridorGateSetCarry(std::move(carry));
 }
 
 // MARK: - Section: diplomacy
@@ -4269,6 +4324,7 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	// with no separate map-file data. (Off-world terrain stays nested in the mission section.)
 	j["mapTerrain"] = writeMapTerrain(gameWorld.map, true);
 	j["determinismCore"] = writeDeterminismCore();
+	j["corridorGate"] = writeCorridorGate();
 	j["diplomacy"] = writeDiplomacy();
 	j["power"] = writePower();
 	j["research"] = writeResearch();
@@ -4354,6 +4410,12 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: determinismCore (clock)");
 		const nlohmann::ordered_json &sec = j.at("determinismCore");
 		applyDeterminismClock(sec, sec.value("version", 0u));
+	}
+	if (j.contains("corridorGate"))
+	{
+		debug(LOG_GAMESTATE_SERIAL, "restoring section: corridorGate");
+		const nlohmann::ordered_json &sec = j.at("corridorGate");
+		readCorridorGate(sec, sec.value("version", 0u));
 	}
 	if (j.contains("diplomacy"))
 	{

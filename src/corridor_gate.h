@@ -32,7 +32,27 @@
 
 #include "lib/framework/vector.h"
 
+#include <cstdint>
+#include <optional>
+#include <vector>
+
 struct DROID;
+
+/// What one tick of the gate hands to the next.
+/// Everything else the gate holds is rebuilt from synced droid state before anything reads it, so this is all a save has to carry.
+/// The checksum records which corridor map it was measured against, since the flow is indexed by corridor id.
+struct CorridorGateCarry
+{
+	uint32_t mapChecksum = 0;
+	std::vector<uint8_t> flow;   ///< per corridor, bit 0 flow toward the far mouth, bit 1 toward the near one
+};
+
+/// The carry a save should record.
+std::optional<CorridorGateCarry> corridorGateCarry();
+
+/// Restores a carry after a load.
+/// Applied on the next update, and only if it was recorded against the corridor map that is now loaded.
+void corridorGateSetCarry(std::optional<CorridorGateCarry> carry);
 
 /// Recomputes the per-corridor flow state for this tick. Call once before any
 /// droid moves, so every droid decides against the same snapshot.

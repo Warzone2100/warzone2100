@@ -560,8 +560,8 @@ static void gameStateUpdate()
 	// Snapshot each corridor's flow direction before any droid moves, so every
 	// droid this tick decides against the same picture. Runs before the
 	// backend update, whose overlay build reads the contest state: computed
-	// and consumed in the same tick, a loaded game reconstructs it from
-	// synced state alone.
+	// and consumed in the same tick, so a loaded game reconstructs it from
+	// synced state (apart from the joint flow a save restores).
 	corridorGateUpdate();
 
 	//update the findpath system
