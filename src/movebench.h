@@ -45,11 +45,17 @@
  * The instance is only allocated in bench mode, so normal play pays one
  * predictable-not-taken branch per hook site.
  */
+/// Six tiles, the radius `unitsNear` uses to answer whether a unit reached its
+/// destination. Shared so the hard-stop split reads the same boundary.
+constexpr int32_t MOVEBENCH_NEAR_RADIUS = 6 * 128;
+
 struct MovementMetrics
 {
 	uint64_t bumps = 0;         ///< moveCalcDroidSlide registered a fresh bump
 	uint64_t bumpsRepeat = 0;   ///< contact while already bumped (lastBump refresh)
 	uint64_t hardStops = 0;     ///< second contact in one scan zeroed the move vector
+	uint64_t hardStopsTransit = 0; ///< of those, the droid was outside NEAR_RADIUS of its destination
+	uint64_t hardStopsNear = 0;    ///< of those, it was already within NEAR_RADIUS of its destination
 	uint64_t giveUps = 0;       ///< moveBlocked gave up on the move entirely
 	uint64_t repaths = 0;       ///< moveBlocked rerouted to the same destination
 	std::map<uint32_t, uint32_t> hardStopsByDroid; ///< per-droid hard stops, feeds the concentration fields

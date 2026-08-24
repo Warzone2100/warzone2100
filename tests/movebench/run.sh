@@ -152,6 +152,7 @@ TOTAL_ARRANGEMENTS = 81
 n = max(1, min(int(arrangements), TOTAL_ARRANGEMENTS))
 indices = [i * TOTAL_ARRANGEMENTS // n for i in range(n)]
 FIELDS = ["unitsArrived", "unitsNear", "arrival_p50", "arrival_p95", "hardStops",
+          "hardStopsTransit", "hardStopsNear",
           "repaths", "giveUps", "formationSpreadTiles",
           "peakDensity", "density_p95"]
 # Reported as a float, so kept out of FIELDS above, which casts its medians to
@@ -170,7 +171,8 @@ RESOLVED_SHARE = 0.75
 ACCEPTANCE_SCENARIOS = ["mountain_chain", "mountain_chain_cross", "rush_turn",
                         "rush_corner", "open_corner"]
 ACCEPTANCE_INDICES = [0, 1, 2, 3, 4]
-ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "unitsNear", "repaths"]
+ACCEPTANCE_FIELDS = ["hardStops", "hardStopsTransit", "hardStopsNear",
+                     "unitsArrived", "unitsNear", "repaths"]
 # Aggregated as the max across arrangements, not a sum: these are shape
 # signals rather than volumes, and the worst arrangement is the diagnostic one.
 ACCEPTANCE_MAX_FIELDS = ["hardStopsTopSharePct", "settle_p95_s", "stallSharePct_p50",
@@ -252,6 +254,8 @@ if acceptance:
         return "%s %s" % (num, delta(v, r))
 
     ACCEPTANCE_COLUMNS = [
+        ("hard transit (sum)", "hardStopsTransit"),
+        ("hard at dest (sum)", "hardStopsNear"),
         ("hard stops (sum)", "hardStops"),
         ("top share % (max)", "hardStopsTopSharePct"),
         ("arrival p50 s (med)", "arrival_p50_s"),
@@ -321,8 +325,9 @@ def print_table():
     # free-travel floor, so a slow untangle reads as a large multiple where the
     # raw arrival time cannot tell it apart from a longer route.
     print("free-travel floor: %.2f s/tile (open field)" % floor)
-    print("%-20s %9s %14s %14s %12s %16s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95 s",
-                                             "GRIND xfloor", "peakDensity", "hardStops"))
+    print("%-20s %9s %14s %14s %12s %16s %14s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95 s",
+                                                  "GRIND xfloor", "peakDensity", "hardStops",
+                                                  "hardTransit"))
     for s in scenarios:
         def rng(field):
             v = results[s][field]
@@ -334,11 +339,12 @@ def print_table():
             v = results[s][field]
             return "%.1f [%.1f-%.1f]" % (v["median"] / floor, v["min"] / floor, v["max"] / floor)
         r = results[s]["resolved"]
-        print("%-20s %9s %14s %14s %12s %16s" % (s, "%d/%d" % (r["count"], r["of"]),
-                                                 rng_seconds("arrival_p95"),
-                                                 rng_grind("secPerTile_p95"),
-                                                 rng("peakDensity"),
-                                                 rng("hardStops")))
+        print("%-20s %9s %14s %14s %12s %16s %14s" % (s, "%d/%d" % (r["count"], r["of"]),
+                                                      rng_seconds("arrival_p95"),
+                                                      rng_grind("secPerTile_p95"),
+                                                      rng("peakDensity"),
+                                                      rng("hardStops"),
+                                                      rng("hardStopsTransit")))
 
 def print_score():
     # Scored mode trades the ranges for change columns: medians beside their
@@ -357,18 +363,21 @@ def print_score():
                      "%.1f %s" % (med("secPerTile_p95") / floor,
                                   delta(med("secPerTile_p95") / floor, rmed("secPerTile_p95") / ref_floor)),
                      "%d %s" % (med("peakDensity"), delta(med("peakDensity"), rmed("peakDensity"))),
-                     "%d %s" % (med("hardStops"), delta(med("hardStops"), rmed("hardStops")))))
+                     "%d %s" % (med("hardStops"), delta(med("hardStops"), rmed("hardStops"))),
+                     "%d %s" % (med("hardStopsTransit"),
+                                delta(med("hardStopsTransit"), rmed("hardStopsTransit")))))
     if markdown:
-        print("| scenario | resolved | arrival p95 s | grind xfloor | peak density | hard stops |")
-        print("|---|---|---|---|---|---|")
+        print("| scenario | resolved | arrival p95 s | grind xfloor | peak density | hard stops | hard transit |")
+        print("|---|---|---|---|---|---|---|")
         for row in rows:
-            print("| %s | %s | %s | %s | %s | %s |" % row)
+            print("| %s | %s | %s | %s | %s | %s | %s |" % row)
     else:
         print("free-travel floor: %.2f s/tile (reference %.2f)" % (floor, ref_floor))
-        print("%-20s %18s %16s %14s %16s %18s" % ("SCENARIO", "RESOLVED", "ARR p95 s",
-                                                  "GRIND", "peakDensity", "hardStops"))
+        print("%-20s %18s %16s %14s %16s %18s %16s" % ("SCENARIO", "RESOLVED", "ARR p95 s",
+                                                       "GRIND", "peakDensity", "hardStops",
+                                                       "hardTransit"))
         for row in rows:
-            print("%-20s %18s %16s %14s %16s %18s" % row)
+            print("%-20s %18s %16s %14s %16s %18s %16s" % row)
 
 if sub == "--baseline":
     with open(baseline_path, "w") as f:

@@ -165,7 +165,7 @@ const int32_t ARRIVE_TOLERANCE = 3 * TILE_UNITS / 2;
 /// crowd massed around it: a packed cluster the size of the mass scenarios'
 /// blocks fills a disc of about this radius, so a unit inside it reads to the
 /// eye as having gotten there even when the goal tile itself is taken.
-const int32_t NEAR_RADIUS = 6 * TILE_UNITS;
+const int32_t NEAR_RADIUS = MOVEBENCH_NEAR_RADIUS;
 
 /// Below this per-update displacement a droid reads as waiting rather than
 /// driving. The slowest cohorts cruise near seven world units per update, at
@@ -491,6 +491,10 @@ void writeScorecard(bool completed)
 	card["bumps"] = metrics.bumps;
 	card["bumpsRepeat"] = metrics.bumpsRepeat;
 	card["hardStops"] = metrics.hardStops;
+	// Hard stops split by where they happened: the total moves whenever packing
+	// at a shared goal changes, and `hardStopsTransit` is the journey.
+	card["hardStopsTransit"] = metrics.hardStopsTransit;
+	card["hardStopsNear"] = metrics.hardStopsNear;
 	// Concentration of the hard stops. A healthy congestion profile spreads
 	// them across the crowd, one wedged unit grinding against its neighbors
 	// concentrates them. hardStops flat while the share collapses means fewer

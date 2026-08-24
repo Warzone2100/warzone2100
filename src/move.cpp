@@ -1393,6 +1393,18 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				{
 					g_moveMetrics->hardStops++;
 					g_moveMetrics->hardStopsByDroid[psDroid->id]++;
+					// Split by where the stop happened, measured against the
+					// destination at the moment it stops, so a unit shoved back
+					// out of the crowd counts as transiting again.
+					const int32_t toGoal = iHypot(psDroid->sMove.destination - psDroid->pos.xy());
+					if (toGoal > MOVEBENCH_NEAR_RADIUS)
+					{
+						g_moveMetrics->hardStopsTransit++;
+					}
+					else
+					{
+						g_moveMetrics->hardStopsNear++;
+					}
 				}
 				break;
 			}
