@@ -753,6 +753,11 @@ bool pathfindingHandJointEnabled()
 	return (game.pathfindingBackend & PF_HAND_JOINT) != 0;
 }
 
+bool pathfindingWideQueueEnabled()
+{
+	return (game.pathfindingBackend & PF_WIDE_QUEUE) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
