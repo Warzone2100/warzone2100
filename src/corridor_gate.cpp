@@ -29,6 +29,7 @@
 #include "lib/framework/trig.h"
 
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/sync_debug.h"
 
 #include "corridor_map.h"
 #include "droid.h"
@@ -289,6 +290,9 @@ void chainEnsure(const CorridorMap *cmap)
 	}
 	g_chainMap = cmap;
 	const size_t n = cmap->corridors.size();
+	// The map every corridor decision is made against, into the sync stream once per map.
+	// Emitted here so it lands on a tick that every client shares.
+	syncDebug("corridorMap = %08X, %zu corridors", cmap->checksum, n);
 	g_chainId.assign(n, 0);
 	g_chainSign.assign(n, 1);
 	g_mouthAOuter.assign(n, 1);

@@ -75,6 +75,7 @@ struct CorridorMap
 	std::vector<int16_t> tileInteriorCorridor; ///< width*height, corridor id per interior tile, -1 otherwise, junction overlaps keep the later corridor
 	std::vector<uint8_t> debugSkel;     ///< full one-tile skeleton, for the dump overlay
 	std::vector<uint8_t> debugNarrow;   ///< skeleton restricted to narrow tiles, for the dump overlay
+	uint32_t checksum = 0;              ///< fold of the detected geometry, see corridorMapBuild
 
 	int16_t at(int x, int y) const
 	{
