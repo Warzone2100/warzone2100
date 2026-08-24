@@ -1303,13 +1303,6 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
 
-		// Storage buffers are core only from GLSL 430, so the extension has to be requested.
-		// It must follow the version directive and precede everything else, which is why it goes in the header (instead of the shader).
-		if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::storage_buffer)
-		{
-			fragmentShaderHeader += "#extension GL_ARB_shader_storage_buffer_object : require\n";
-		}
-
 		if (hasTessStages)
 		{
 #if !defined(WZ_STATIC_GL_BINDINGS)
@@ -1331,6 +1324,16 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 				tessShaderHeader = shaderVersionStr;
 				tessShaderHeader += "#extension GL_ARB_tessellation_shader : require\n";
 			}
+		}
+
+		// Storage buffers are core only from GLSL 430, and the readonly qualifier the shader puts on them only from GLSL 420,
+		// so both extensions have to be requested.
+		// The directives must follow the version directive and precede everything else, which is why they go in the header
+		// instead of the shader (and they go after the block above because it rebuilds the header).
+		if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::storage_buffer)
+		{
+			fragmentShaderHeader += "#extension GL_ARB_shader_storage_buffer_object : require\n";
+			fragmentShaderHeader += "#extension GL_ARB_shader_image_load_store : require\n";
 		}
 	}
 	else
@@ -5504,8 +5507,11 @@ void gl_context::initLightDataTransport()
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
 	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
 	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
-	const bool hasStorageBuffers = (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr)
-		&& (GLAD_GL_ARB_program_interface_query != 0) && (glGetProgramResourceIndex != nullptr);
+	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding to bind them, so it stays on the uniform block for now
+	const bool hasStorageBuffers = !gles && (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr)
+		&& (GLAD_GL_ARB_program_interface_query != 0) && (glGetProgramResourceIndex != nullptr)
+		// The shader declares its storage buffers readonly, which needs GLSL 420 or this extension
+		&& (GLAD_GL_ARB_shader_image_load_store != 0);
 
 	// Preference order:
 	// 1. storage buffer (spends no sampler, and the index can be scalarized)
