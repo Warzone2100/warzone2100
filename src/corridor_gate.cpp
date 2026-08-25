@@ -47,10 +47,6 @@
 namespace
 {
 
-// How far off a droid's tile to look for a corridor centerline, in tiles. Half
-// the widest corridor, since a droid can sit that far to the side of the line.
-const int SEARCH_RADIUS = 3;
-
 // How many centerline points ahead to aim the steering, so a droid follows its
 // lane smoothly rather than snapping to the nearest point.
 const int LOOKAHEAD = 3;
@@ -494,32 +490,7 @@ Query queryCorridor(const Vector2i &pos, const Vector2i &target)
 	}
 	const int tx = map_coord(pos.x);
 	const int ty = map_coord(pos.y);
-	// The claim mask reaches SEARCH_RADIUS tiles around every centerline, so ground it doesn't claim has
-	// no centerline near enough for the scan below to find.
-	if (!cmap->claimed(tx, ty))
-	{
-		return q;
-	}
-
-	int bestId = -1;
-	int bestTileDistSq = SEARCH_RADIUS * SEARCH_RADIUS + 1;
-	for (int dy = -SEARCH_RADIUS; dy <= SEARCH_RADIUS; ++dy)
-	{
-		for (int dx = -SEARCH_RADIUS; dx <= SEARCH_RADIUS; ++dx)
-		{
-			const int16_t id = cmap->at(tx + dx, ty + dy);
-			if (id < 0)
-			{
-				continue;
-			}
-			const int distSq = dx * dx + dy * dy;
-			if (distSq < bestTileDistSq)
-			{
-				bestTileDistSq = distSq;
-				bestId = id;
-			}
-		}
-	}
+	const int bestId = cmap->nearestCorridor(tx, ty);
 	if (bestId < 0)
 	{
 		return q;
