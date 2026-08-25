@@ -508,8 +508,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.src = psDroid->pos.xy();
 	psDroid->sMove.target = tar;
-	psDroid->sMove.asPath.clear();
-	psDroid->sMove.pathIndex = 0;
+	psDroid->sMove.clearRoute();
 
 	if (psDroid->sMove.psFormation != nullptr)
 	{
