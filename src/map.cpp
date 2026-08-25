@@ -1357,6 +1357,37 @@ bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState)
 	return true;
 }
 
+LoadingTask<> mapSnapshotDisplayInit(ResourceLoadingController& controller, WorldMapState& mapState)
+{
+	ASSERT(mapState.tiles != nullptr, "No tiles allocated");
+	if (mapState.tiles == nullptr)
+	{
+		co_return load_fail();
+	}
+
+	if (!mapLoadGroundTypes(false))
+	{
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+
+	if (!(co_await loadTerrainTextures(controller, currentMapTileset)))
+	{
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+
+	if (!mapSetGroundTypes(mapState))
+	{
+		co_return load_fail();
+	}
+
+	getCurrentLightmapData().reset(mapState.width, mapState.height);
+	co_return load_ok();
+}
+
 /* Save the map data */
 bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState)
 {
