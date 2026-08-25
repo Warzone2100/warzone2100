@@ -804,7 +804,7 @@ int routeTurnSide(const DROID *psDroid, const Corridor *passage = nullptr)
 	return 0;
 }
 
-Query queryDroid(const DROID *psDroid)
+Query queryDroid(const DROID *psDroid, int *coverLoOut = nullptr, int *coverHiOut = nullptr)
 {
 	Query q = queryCorridor(psDroid->pos.xy(), psDroid->sMove.target);
 	if (q.corridorId < 0)
@@ -812,7 +812,7 @@ Query queryDroid(const DROID *psDroid)
 		return q;
 	}
 	const Corridor &c = gameWorld.map.corridors->corridors[static_cast<size_t>(q.corridorId)];
-	const int rd = routeDir(psDroid, c);
+	const int rd = routeDir(psDroid, c, nullptr, coverLoOut, coverHiOut);
 	if (rd != 0 && rd != q.dir)
 	{
 		q.dir = rd;
@@ -938,7 +938,11 @@ bool routeEntersMouth(const DROID *psDroid, const Corridor &c, int dir)
 // so a corridor is known to be contested as soon as opposing flows head into it,
 // not only once they reach the mouth. An approach only counts when the droid's
 // route really enters through that mouth.
-Query classifyDroid(const DROID *psDroid)
+//
+// coverLoOut and coverHiOut report how far along the corridor the droid's route
+// reaches, filled from the scan this already runs, so a caller wanting it does
+// not have to call routeDir again. Only written when a corridor was found.
+Query classifyDroid(const DROID *psDroid, int *coverLoOut = nullptr, int *coverHiOut = nullptr)
 {
 	// A droid going nowhere creates no flow, imposes no lanes and joins no
 	// queue, however close to a corridor it sits. Neither does one fighting on
@@ -950,7 +954,7 @@ Query classifyDroid(const DROID *psDroid)
 	{
 		return Query();
 	}
-	Query q = queryDroid(psDroid);
+	Query q = queryDroid(psDroid, coverLoOut, coverHiOut);
 	if (q.corridorId < 0)
 	{
 		q = approachQuery(psDroid->pos.xy(), psDroid->sMove.target);
@@ -965,7 +969,7 @@ Query classifyDroid(const DROID *psDroid)
 		// direction, is an approach.
 		const Corridor &c = gameWorld.map.corridors->corridors[static_cast<size_t>(q.corridorId)];
 		bool strong = false;
-		if (!routeEntersMouth(psDroid, c, q.dir) || routeDir(psDroid, c, &strong) != q.dir || !strong)
+		if (!routeEntersMouth(psDroid, c, q.dir) || routeDir(psDroid, c, &strong, coverLoOut, coverHiOut) != q.dir || !strong)
 		{
 			return Query();
 		}
@@ -1244,7 +1248,9 @@ void corridorGateUpdate()
 	{
 		for (const DROID *psDroid : gameWorld.objects.droids[player])
 		{
-			const Query q = classifyDroid(psDroid);
+			int coverLo = 0;
+			int coverHi = 0;
+			const Query q = classifyDroid(psDroid, &coverLo, &coverHi);
 			if (enabled_debug[LOG_MOVEMENT])
 			{
 				const int rdir = q.corridorId >= 0
@@ -1297,8 +1303,6 @@ void corridorGateUpdate()
 				srad = std::max(srad, moveObjRadius(psDroid));
 			}
 			{
-				int coverLo, coverHi;
-				routeDir(psDroid, cmap->corridors[c], nullptr, &coverLo, &coverHi);
 				int &lo = (q.dir > 0 ? g_useLoFwd : g_useLoBwd)[c];
 				int &hi = (q.dir > 0 ? g_useHiFwd : g_useHiBwd)[c];
 				lo = std::min(lo, coverLo);
