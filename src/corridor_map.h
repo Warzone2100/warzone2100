@@ -48,6 +48,10 @@
 
 struct WorldMapState;
 
+/// How the per-tile maps below address a corridor, with -1 for none.
+/// Wide enough that the number of corridors a map can hold is never the limit.
+using CorridorTileId = int32_t;
+
 /// One narrow passage. The centerline runs mouth to mouth, and widthProfile is
 /// parallel to it, one physical width in world units per centerline point.
 struct Corridor
@@ -69,15 +73,16 @@ struct CorridorMap
 	int width = 0;
 	int height = 0;
 	std::vector<Corridor> corridors;
-	std::vector<int16_t> tileCorridor;  ///< width*height, corridor id per centerline tile, -1 otherwise
+	std::vector<CorridorTileId> tileCorridor;  ///< width*height, corridor id per centerline tile, -1 otherwise
 	std::vector<uint8_t> tileClaimed;   ///< width*height, 1 where the corridor layer claims the ground, see corridorMapBuild
 	std::vector<uint8_t> tileInterior;  ///< width*height, 1 near a centerline only, mouth approach zones excluded
-	std::vector<int16_t> tileInteriorCorridor; ///< width*height, corridor id per interior tile, -1 otherwise, junction overlaps keep the later corridor
+	std::vector<CorridorTileId> tileInteriorCorridor; ///< width*height, corridor id per interior tile, -1 otherwise, junction overlaps keep the later corridor
+	std::vector<CorridorTileId> tileNearestCorridor;  ///< width*height, corridor whose centerline is nearest within the search radius, -1 otherwise
 	std::vector<uint8_t> debugSkel;     ///< full one-tile skeleton, for the dump overlay
 	std::vector<uint8_t> debugNarrow;   ///< skeleton restricted to narrow tiles, for the dump overlay
 	uint32_t checksum = 0;              ///< fold of the detected geometry, see corridorMapBuild
 
-	int16_t at(int x, int y) const
+	CorridorTileId at(int x, int y) const
 	{
 		if (x < 0 || y < 0 || x >= width || y >= height)
 		{
@@ -101,13 +106,25 @@ struct CorridorMap
 	/// The corridor whose passage body covers this tile, or -1 outside every
 	/// interior. Junction tiles shared by chained corridors carry one of them,
 	/// which chain-level contest state makes equivalent.
-	int16_t interiorCorridor(int x, int y) const
+	CorridorTileId interiorCorridor(int x, int y) const
 	{
 		if (x < 0 || y < 0 || x >= width || y >= height || tileInteriorCorridor.empty())
 		{
 			return -1;
 		}
 		return tileInteriorCorridor[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)];
+	}
+
+	/// The corridor whose centerline runs nearest this tile, or -1 where none is
+	/// close enough to steer by. Claimed ground is a superset of where this
+	/// answers, so a tile the claim mask leaves out always reads -1.
+	CorridorTileId nearestCorridor(int x, int y) const
+	{
+		if (x < 0 || y < 0 || x >= width || y >= height || tileNearestCorridor.empty())
+		{
+			return -1;
+		}
+		return tileNearestCorridor[static_cast<size_t>(y) * static_cast<size_t>(width) + static_cast<size_t>(x)];
 	}
 
 	/// True only near a corridor centerline, the passage body itself.

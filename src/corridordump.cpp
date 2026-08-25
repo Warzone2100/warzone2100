@@ -67,7 +67,7 @@ std::string renderAscii(const CorridorMap &cmap, const WorldMapState &mapState)
 	{
 		for (int x = 0; x < cmap.width; ++x)
 		{
-			const int16_t cid = cmap.at(x, y);
+			const CorridorTileId cid = cmap.at(x, y);
 			const size_t idx = static_cast<size_t>(y) * static_cast<size_t>(cmap.width) + static_cast<size_t>(x);
 			const bool inSkel = !cmap.debugSkel.empty() && cmap.debugSkel[idx];
 			const bool inNarrow = !cmap.debugNarrow.empty() && cmap.debugNarrow[idx];

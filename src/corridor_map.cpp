@@ -56,6 +56,11 @@ const int32_t NARROW_DIST_MAX = 5;
 // measured cross-section.
 const int32_t MAX_CORRIDOR_WIDTH_WORLD = 5 * TILE_UNITS;
 
+// How far off a tile to look for a centerline, in tiles. Half the widest corridor, since a droid can
+// sit that far to the side of the line. The claim mask is stamped to this same radius around every
+// centerline, so unclaimed ground never has one within reach.
+const int CENTERLINE_SEARCH_RADIUS = 3;
+
 // Traced chains shorter than this many tiles are pruned as skeleton spurs rather
 // than kept as corridors.
 const size_t MIN_CORRIDOR_TILES = 3;
@@ -795,7 +800,7 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 		c.minWidth = minW;
 		for (size_t i = 1; i + 1 < chain.size(); ++i)
 		{
-			result->tileCorridor[g.idx(chain[i].x, chain[i].y)] = static_cast<int16_t>(c.id);
+			result->tileCorridor[g.idx(chain[i].x, chain[i].y)] = static_cast<CorridorTileId>(c.id);
 		}
 		result->corridors.push_back(std::move(c));
 	};
@@ -887,7 +892,7 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 	{
 		for (const Vector2i &p : c.centerline)
 		{
-			stamp(result->tileClaimed, p, 3);
+			stamp(result->tileClaimed, p, CENTERLINE_SEARCH_RADIUS);
 			stamp(result->tileInterior, p, 3);
 			const int cx = map_coord(p.x);
 			const int cy = map_coord(p.y);
@@ -895,13 +900,51 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 			{
 				for (int x = std::max(0, cx - 3); x <= std::min(g.w - 1, cx + 3); ++x)
 				{
-					result->tileInteriorCorridor[g.idx(x, y)] = static_cast<int16_t>(c.id);
+					result->tileInteriorCorridor[g.idx(x, y)] = static_cast<CorridorTileId>(c.id);
 				}
 			}
 		}
 		stamp(result->tileClaimed, c.mouthA, 8);
 		stamp(result->tileClaimed, c.mouthB, 8);
 	}
+
+	// The nearest centerline per tile, which movement would otherwise search for per droid per query.
+	// Only where the claim mask reaches, since it is stamped to exactly this radius around every
+	// centerline and anywhere it misses has nothing within reach to find.
+	result->tileNearestCorridor.assign(cells, -1);
+	for (int ty = 0; ty < g.h; ++ty)
+	{
+		for (int tx = 0; tx < g.w; ++tx)
+		{
+			if (!result->claimed(tx, ty))
+			{
+				continue;
+			}
+			int bestId = -1;
+			int bestDistSq = CENTERLINE_SEARCH_RADIUS * CENTERLINE_SEARCH_RADIUS + 1;
+			for (int dy = -CENTERLINE_SEARCH_RADIUS; dy <= CENTERLINE_SEARCH_RADIUS; ++dy)
+			{
+				for (int dx = -CENTERLINE_SEARCH_RADIUS; dx <= CENTERLINE_SEARCH_RADIUS; ++dx)
+				{
+					const CorridorTileId id = result->at(tx + dx, ty + dy);
+					if (id < 0)
+					{
+						continue;
+					}
+					const int distSq = dx * dx + dy * dy;
+					if (distSq < bestDistSq)
+					{
+						bestDistSq = distSq;
+						bestId = id;
+					}
+				}
+			}
+			result->tileNearestCorridor[g.idx(tx, ty)] = static_cast<CorridorTileId>(bestId);
+		}
+	}
+
+	ASSERT(result->corridors.size() <= static_cast<size_t>(std::numeric_limits<CorridorTileId>::max()),
+	       "%zu corridors detected, more than the tile maps can address", result->corridors.size());
 
 	// A fold over the detected geometry.
 	// Every movement decision the corridor layer makes is against this map, so clients must agree about it.
