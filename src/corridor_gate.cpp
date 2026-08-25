@@ -282,12 +282,17 @@ int64_t distSqToFwd(const Vector2i &a, const Vector2i &b)
 	return static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y;
 }
 
+// Bumped whenever the joints change (the only per-tick state the corridor classification reads)
+// so that any cached answer taken before a bump is not reused after it.
+uint32_t g_queryStamp = 1;
+
 // A joint carries both directions when the passage on each side of it has flow heading in.
 // The tick's own update derives this from the counts it just took.
 // A load derives it from the counts that the save recorded.
 template <typename FlowFwd, typename FlowBwd>
 void applyJointTwoWay(size_t n, FlowFwd fwd, FlowBwd bwd)
 {
+	++g_queryStamp;
 	for (size_t i = 0; i < n; ++i)
 	{
 		for (int ei = 0; ei < 2; ++ei)
@@ -326,6 +331,7 @@ void chainEnsure(const CorridorMap *cmap)
 	g_mouthBOuter.assign(n, 1);
 	g_mouthAAdj.assign(n, {});
 	g_mouthBAdj.assign(n, {});
+	++g_queryStamp;   // the joints are rebuilt below, so no earlier answer holds
 	g_axisLen.assign(n, {});
 	g_inwardLenA.assign(n, 0);
 	g_inwardLenB.assign(n, 0);
@@ -1986,7 +1992,7 @@ bool corridorContested(int corridorId)
 	       && g_contested[static_cast<size_t>(corridorId)] != 0;
 }
 
-CorridorHold corridorHold(const DROID *psDroid)
+static CorridorHold corridorHoldUncached(const DROID *psDroid)
 {
 	// Only a droid approaching a queue-forming mouth is stopped by the layer
 	// itself, the speed hold walks it slot by slot, so the watchdog must not
@@ -2015,4 +2021,32 @@ CorridorHold corridorHold(const DROID *psDroid)
 		return CORRIDOR_HOLD_NONE;
 	}
 	return entryOuter ? CORRIDOR_HOLD_QUEUED : CORRIDOR_HOLD_JUNCTION;
+}
+
+CorridorHold corridorHold(const DROID *psDroid)
+{
+	// Everything it depends on is in the key, so a hit returns exactly what a fresh call would
+	// (since there may be many duplicate calls of this per-droid, per-tick).
+	MOVE_CONTROL::HoldMemo &memo = const_cast<DROID *>(psDroid)->sMove.holdMemo;
+	const uint8_t flags = static_cast<uint8_t>((psDroid->sMove.Status == MOVEINACTIVE ? 1 : 0)
+	                                           | (psDroid->action == DACTION_MOVEFIRE ? 2 : 0));
+	if (memo.stamp == g_queryStamp && memo.gameTime == gameTime
+	    && memo.routeGeneration == psDroid->sMove.routeGeneration
+	    && memo.bumpTime == psDroid->sMove.bumpTime && memo.pos == psDroid->pos.xy()
+	    && memo.target == psDroid->sMove.target && memo.pathIndex == psDroid->sMove.pathIndex
+	    && memo.flags == flags)
+	{
+		return static_cast<CorridorHold>(memo.value);
+	}
+	const CorridorHold answer = corridorHoldUncached(psDroid);
+	memo.stamp = g_queryStamp;
+	memo.gameTime = gameTime;
+	memo.routeGeneration = psDroid->sMove.routeGeneration;
+	memo.bumpTime = psDroid->sMove.bumpTime;
+	memo.pos = psDroid->pos.xy();
+	memo.target = psDroid->sMove.target;
+	memo.pathIndex = psDroid->sMove.pathIndex;
+	memo.flags = flags;
+	memo.value = static_cast<uint8_t>(answer);
+	return answer;
 }
