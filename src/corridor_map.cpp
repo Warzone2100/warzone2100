@@ -795,6 +795,8 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 		c.widthProfile = widths;
 		c.rightExtent = rightExt;
 		c.leftExtent = leftExt;
+		c.minLeftExtent = leftExt.empty() ? 0 : *std::min_element(leftExt.begin(), leftExt.end());
+		c.minRightExtent = rightExt.empty() ? 0 : *std::min_element(rightExt.begin(), rightExt.end());
 		c.mouthA = c.centerline.front();
 		c.mouthB = c.centerline.back();
 		c.minWidth = minW;

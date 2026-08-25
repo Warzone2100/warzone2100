@@ -64,6 +64,8 @@ struct Corridor
 	Vector2i mouthA = Vector2i(0, 0);   ///< world coordinates of one end
 	Vector2i mouthB = Vector2i(0, 0);   ///< world coordinates of the other end
 	int32_t  minWidth = 0;              ///< narrowest cross-section, world units, governs lane count
+	int32_t  minLeftExtent = 0;         ///< narrowest the left band gets, over the whole corridor
+	int32_t  minRightExtent = 0;        ///< narrowest the right band gets, over the whole corridor
 };
 
 /// Every corridor on a map, plus a per-tile lookup from tile index to the

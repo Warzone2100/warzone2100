@@ -1019,8 +1019,8 @@ int lanesForBand(int32_t bandWidth, const DROID *psDroid)
 // for the band right of the axis.
 int laneCount(const Corridor &c, int side, const DROID *psDroid)
 {
-	const std::vector<int32_t> &sideExt = side > 0 ? c.rightExtent : c.leftExtent;
-	return lanesForBand(*std::min_element(sideExt.begin(), sideExt.end()) - 2 * LANE_MARGIN, psDroid);
+	const int32_t narrowest = side > 0 ? c.minRightExtent : c.minLeftExtent;
+	return lanesForBand(narrowest - 2 * LANE_MARGIN, psDroid);
 }
 
 // True when the queue outside this mouth has the approach to itself. Only outer
@@ -1041,9 +1041,8 @@ bool queueOwnsApproach(size_t cid, int dir)
 // where queueOwnsApproach.
 int approachLaneCount(const Corridor &c, int side, const DROID *psDroid)
 {
-	const std::vector<int32_t> &sideExt = side > 0 ? c.rightExtent : c.leftExtent;
-	const int32_t band = *std::min_element(sideExt.begin(), sideExt.end()) - 2 * LANE_MARGIN;
-	return lanesForBand(band + FUNNEL_FLARE, psDroid);
+	const int32_t narrowest = side > 0 ? c.minRightExtent : c.minLeftExtent;
+	return lanesForBand(narrowest - 2 * LANE_MARGIN + FUNNEL_FLARE, psDroid);
 }
 
 // A droid out in the open heading into a mouth, past where the centerline search
