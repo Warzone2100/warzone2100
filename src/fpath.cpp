@@ -390,9 +390,8 @@ static Position findNonblockingPosition(const WorldMapState& mapState, Position 
 
 static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY)
 {
-	psMoveCntl->asPath.resize(1);
 	psMoveCntl->destination = Vector2i(targetX, targetY);
-	psMoveCntl->asPath[0] = Vector2i(targetX, targetY);
+	psMoveCntl->setRoute(Vector2i(targetX, targetY));
 }
 
 
@@ -507,9 +506,8 @@ static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMo
 		// Copy over select fields - preserve others
 		psMove->destination = result.sMove.destination;
 		bool correctDestination = tX == result.originalDest.x && tY == result.originalDest.y;
-		psMove->pathIndex = 0;
 		psMove->Status = MOVENAVIGATE;
-		psMove->asPath = result.sMove.asPath;
+		psMove->setRoute(std::move(result.sMove.asPath));
 		FPATH_RETVAL retval = result.retval;
 		ASSERT(retval != FPR_OK || psMove->asPath.size() > 0, "Ok result but no path after copy");
 

@@ -2013,8 +2013,7 @@ DROID *buildDroid(GameWorld& world, DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD 
 //initialises the droid movement model
 void initDroidMovement(DROID *psDroid)
 {
-	psDroid->sMove.asPath.clear();
-	psDroid->sMove.pathIndex = 0;
+	psDroid->sMove.clearRoute();
 }
 
 // Set the asBits in a DROID structure given it's template.

@@ -2330,13 +2330,14 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	// Movement state:
 	const nlohmann::ordered_json &mv = j.at("move");
 	d->sMove.Status = static_cast<MOVE_STATUS>(mv.at("status").get<int>());
-	d->sMove.pathIndex = mv.at("pathIndex").get<int>();
+	const int savedPathIndex = mv.at("pathIndex").get<int>();
 	const nlohmann::ordered_json &path = mv.at("path");
-	d->sMove.asPath.resize(path.size());
+	std::vector<Vector2i> route(path.size());
 	for (size_t p = 0; p < path.size(); ++p)
 	{
-		d->sMove.asPath[p] = readVector2i(path[p]);
+		route[p] = readVector2i(path[p]);
 	}
+	d->sMove.setRoute(std::move(route), savedPathIndex);
 	d->sMove.destination = readVector2i(mv.at("destination"));
 	d->sMove.src = readVector2i(mv.at("src"));
 	d->sMove.target = readVector2i(mv.at("target"));

@@ -5925,13 +5925,14 @@ static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroi
 		}
 
 		psDroid->sMove.Status = (MOVE_STATUS)ini.value("moveStatus", 0).toInt();
-		psDroid->sMove.pathIndex = ini.value("pathIndex", 0).toInt();
+		const int savedPathIndex = ini.value("pathIndex", 0).toInt();
 		const int numPoints = ini.value("pathLength", 0).toInt();
-		psDroid->sMove.asPath.resize(numPoints);
+		std::vector<Vector2i> route(numPoints);
 		for (int j = 0; j < numPoints; j++)
 		{
-			psDroid->sMove.asPath[j] = ini.vector2i("pathNode/" + WzString::number(j));
+			route[j] = ini.vector2i("pathNode/" + WzString::number(j));
 		}
+		psDroid->sMove.setRoute(std::move(route), savedPathIndex);
 		psDroid->sMove.destination = ini.vector2i("moveDestination");
 		psDroid->sMove.src = ini.vector2i("moveSource");
 		psDroid->sMove.target = ini.vector2i("moveTarget");

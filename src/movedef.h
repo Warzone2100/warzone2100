@@ -48,6 +48,25 @@ struct MOVE_CONTROL
 	int pathIndex = 0;                    ///< Position in asPath
 	std::vector<Vector2i> asPath;         ///< Pointer to list of block X,Y map coordinates.
 
+	void setRoute(std::vector<Vector2i> route, int index = 0)
+	{
+		asPath = std::move(route);
+		pathIndex = index;
+	}
+
+	void setRoute(Vector2i point)
+	{
+		asPath.assign(1, point);
+		pathIndex = 0;
+		++routeGeneration;
+	}
+
+	void clearRoute()
+	{
+		asPath.clear();
+		pathIndex = 0;
+	}
+
 	Vector2i destination = Vector2i(0, 0);                 ///< World coordinates of movement destination
 	Vector2i src = Vector2i(0, 0);
 	Vector2i target = Vector2i(0, 0);
