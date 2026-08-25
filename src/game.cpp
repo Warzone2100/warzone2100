@@ -2677,6 +2677,7 @@ LoadingTask<> loadGameCleanupOnFailure(ResourceLoadingController& controller, co
 	droidTemplateShutDown();
 	gwShutDown(gameWorld.map);
 	gameWorld.map = {};
+	gameWorld.corridorFlow = {};
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -3056,6 +3057,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 		strcat(aFileName, "mission.map");
 		gwShutDown(mission.gameWorld.map);
 		mission.gameWorld.map = {};
+		mission.gameWorld.corridorFlow = {};
 		if (!(co_await mapLoad(controller, aFileName, mission.gameWorld.map)))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
@@ -3167,6 +3169,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	{
 		gwShutDown(gameWorld.map);
 		gameWorld.map = {};
+		gameWorld.corridorFlow = {};
 		// load in the map file
 		if (!data)
 		{

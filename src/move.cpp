@@ -889,7 +889,7 @@ bool moveBlocked(DROID *psDroid)
 	// it or give up its move. The watch merely pauses, its clock keeps running,
 	// so a droid still pinned when its grace runs out gets recovered by the
 	// normal machinery.
-	if (pathfindingCorridorLanesEnabled() && corridorHold(psDroid) != CORRIDOR_HOLD_NONE)
+	if (pathfindingCorridorLanesEnabled() && corridorHold(gameWorld, psDroid) != CORRIDOR_HOLD_NONE)
 	{
 		return false;
 	}
@@ -1475,7 +1475,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	// waypoint, so opposing flows split into two passing lanes. The waypoint and
 	// the route are unchanged, only where the steering points.
 	Vector2i laneTarget;
-	if (pathfindingCorridorLanesEnabled() && corridorLaneTarget(psDroid, laneTarget))
+	if (pathfindingCorridorLanesEnabled() && corridorLaneTarget(gameWorld, psDroid, laneTarget))
 	{
 		ctx.targetPos = laneTarget;
 	}
@@ -1878,7 +1878,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveCalcDroidSlide(psDroid, &dx, &dy);
 	if (pathfindingCorridorLanesEnabled())
 	{
-		corridorClampSlide(psDroid, &dx, &dy);
+		corridorClampSlide(gameWorld, psDroid, &dx, &dy);
 	}
 	bx = dx;
 	by = dy;
@@ -1943,7 +1943,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveCalcDroidSlide(psDroid, &dx, &dy);
 	if (pathfindingCorridorLanesEnabled())
 	{
-		corridorClampSlide(psDroid, &dx, &dy);
+		corridorClampSlide(gameWorld, psDroid, &dx, &dy);
 	}
 	moveCalcBlockingSlide(psDroid, &dx, &dy, direction, &slideDir);
 	moveUpdateDroidPos(psDroid, dx, dy);
@@ -2537,7 +2537,7 @@ void moveUpdateDroid(DROID *psDroid)
 		// the watchdog grace, but must not pause-shuffle off it, that would
 		// stop-start the whole waiting queue or pocket in lockstep.
 		if (psDroid->sMove.bumpTime != 0 && pathfindingCorridorLanesEnabled()
-		    && corridorHold(psDroid) != CORRIDOR_HOLD_NONE)
+		    && corridorHold(gameWorld, psDroid) != CORRIDOR_HOLD_NONE)
 		{
 			if (psDroid->sMove.Status == MOVEPAUSE)
 			{
@@ -2607,7 +2607,7 @@ void moveUpdateDroid(DROID *psDroid)
 	// facing throughout.
 	if (pathfindingCorridorLanesEnabled())
 	{
-		moveSpeed = corridorQueueSpeed(psDroid, moveSpeed);
+		moveSpeed = corridorQueueSpeed(gameWorld, psDroid, moveSpeed);
 	}
 
 	// Update the movement model for the droid

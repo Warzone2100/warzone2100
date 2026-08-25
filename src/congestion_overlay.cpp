@@ -158,7 +158,7 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 							overlay->flowX[idx] = static_cast<int16_t>(std::clamp<int32_t>(overlay->flowX[idx] + fx, INT16_MIN, INT16_MAX));
 							overlay->flowY[idx] = static_cast<int16_t>(std::clamp<int32_t>(overlay->flowY[idx] + fy, INT16_MIN, INT16_MAX));
 							const CorridorTileId interiorCorridor = interiorMask != nullptr ? interiorMask->interiorCorridor(x, y) : -1;
-							if (interiorCorridor < 0 || !corridorContested(interiorCorridor))
+							if (interiorCorridor < 0 || !corridorContested(gameWorld, interiorCorridor))
 							{
 								overlay->mass[idx] = static_cast<uint16_t>(std::min<int32_t>(overlay->mass[idx] + MASS_UNIT, UINT16_MAX));
 							}

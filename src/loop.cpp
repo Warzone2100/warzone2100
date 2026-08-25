@@ -562,7 +562,7 @@ static void gameStateUpdate()
 	// backend update, whose overlay build reads the contest state: computed
 	// and consumed in the same tick, so a loaded game reconstructs it from
 	// synced state (apart from the joint flow a save restores).
-	corridorGateUpdate();
+	corridorGateUpdate(gameWorld);
 
 	//update the findpath system
 	fpathActiveBackend().updateTick(gameWorld.map);

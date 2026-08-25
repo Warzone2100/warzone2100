@@ -34,9 +34,12 @@
 
 #include <cstdint>
 #include <optional>
+#include <unordered_map>
 #include <vector>
 
+struct CorridorMap;
 struct DROID;
+struct GameWorld;
 
 /// What one tick of the gate hands to the next.
 /// Everything else the gate holds is rebuilt from synced droid state before anything reads it, so this is all a save has to carry.
@@ -47,39 +50,102 @@ struct CorridorGateCarry
 	std::vector<uint8_t> flow;   ///< per corridor, bit 0 flow toward the far mouth, bit 1 toward the near one
 };
 
-/// The carry a save should record.
-std::optional<CorridorGateCarry> corridorGateCarry();
+/// One world's corridor flow state, derived each update from that world's droids against its
+/// corridor map. Owned by the GameWorld so it travels through world swaps with the droids and map
+/// it describes, and a save records any world's carry from the world itself. Everything here
+/// except prevFlow and pendingCarry is rebuilt by corridorGateUpdate before anything reads it.
+struct CorridorFlowState
+{
+	/// Per-corridor flow direction for this tick: +1, -1, or 0 for open. Rebuilt each
+	/// tick from synced droid state, so it is never saved.
+	std::vector<int8_t> activeDir;
+
+	/// Per-corridor, whether both directions have droids at it this tick. When only
+	/// one direction is present it fills the whole passage, when both it splits.
+	std::vector<uint8_t> contested;
+
+	/// Per-droid queue slot for this tick: the position along the approach line,
+	/// negative behind the mouth, that the droid should advance to and wait at.
+	/// The approaching droids of each direction are ranked front to back, so they
+	/// file in one behind another instead of arriving abreast at a mouth that fits
+	/// one or two. Rebuilt each tick from synced droid state, so it is never saved.
+	std::unordered_map<uint32_t, int32_t> slotAlong;
+
+	/// Per corridor and direction, the span of centerline indices the direction's
+	/// routes actually cover this tick, read as far as the route scan window sees.
+	/// Gates the mouth crossing zones: an entry zone the opposing flow's coverage
+	/// stays clear of is free to pre-sort across, ex. merging through the unused
+	/// half of a junction neck, instead of honouring a reservation nothing will
+	/// claim there. Rebuilt each tick, never saved.
+	std::vector<int> useLoFwd, useHiFwd, useLoBwd, useHiBwd;
+
+	/// Per corridor and direction, how many droids are inside it this tick.
+	/// The pre-sort only engages against a stream physically in the passage, so it
+	/// sorts a merger against real oncoming traffic and never reshapes a column
+	/// entering ahead of traffic that is still far away. Rebuilt each tick.
+	std::vector<int> cInsideFwd, cInsideBwd;
+	/// Per corridor and direction, droids inside or approaching it. Counting only
+	/// insiders would make a joint read one-way exactly when the crossing is
+	/// busiest, since a droid crossing between two passages is inside neither.
+	std::vector<int> cFlowFwd, cFlowBwd;
+
+	/// Per-corridor lane handedness for this tick: +1 keeps each direction to its
+	/// right, -1 to its left. Keeping right is an arbitrary convention, and the
+	/// right convention is dictated by where the traffic exits: a flow turning off
+	/// to one side wants the lane on the inside of its turn, or it must cross the
+	/// opposing lane exactly at the turn. Rebuilt each tick, never saved.
+	std::vector<int8_t> handed;
+
+	/// Flow at each corridor as of the last update, bit 0 toward the far mouth and bit 1 toward
+	/// the near one, the same shape the save carry records. Read one update deep: whether a joint
+	/// carries both directions is judged against this settled picture, not against counts still
+	/// being taken. Cleared when the corridors themselves change, since it is indexed by corridor id.
+	std::vector<uint8_t> prevFlow;
+
+	/// A carry handed back by a load, applied on the next update once it is known to describe the
+	/// corridor map that actually loaded. Never saved from here - only set/restored from a saveload.
+	std::optional<CorridorGateCarry> pendingCarry;
+
+	/// Which corridors instance the last update ran against. The first update against a new one
+	/// announces the map into the sync stream and clears the joint flow the previous map's ticks
+	/// left behind.
+	const CorridorMap *seenMap = nullptr;
+	uint32_t seenChecksum = 0;
+};
+
+/// The carry a save should record for this world.
+std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world);
 
 /// Restores a carry after a load.
 /// Applied on the next update, and only if it was recorded against the corridor map that is now loaded.
-void corridorGateSetCarry(std::optional<CorridorGateCarry> carry);
+void corridorGateSetCarry(GameWorld &world, std::optional<CorridorGateCarry> carry);
 
-/// Recomputes the per-corridor flow state for this tick. Call once before any
-/// droid moves, so every droid decides against the same snapshot.
-void corridorGateUpdate();
+/// Recomputes the world's per-corridor flow state for this tick. Call once
+/// before any droid moves, so every droid decides against the same snapshot.
+void corridorGateUpdate(GameWorld &world);
 
 /// If the droid is inside a detected corridor, fills laneTarget with a steering
 /// point that keeps it on its side and returns true. Returns false when the
 /// droid is not inside a corridor, so the caller steers to its own waypoint.
 /// Deterministic and integer, reads only synced state.
-bool corridorLaneTarget(const DROID *psDroid, Vector2i &laneTarget);
+bool corridorLaneTarget(const GameWorld &world, const DROID *psDroid, Vector2i &laneTarget);
 
 /// The speed a droid queued at a corridor may move at this tick, ramping down
 /// as it nears its queue slot and zero once there, so the file rolls smoothly.
 /// Returns moveSpeed unchanged for a droid that is not queued.
-int corridorQueueSpeed(const DROID *psDroid, int moveSpeed);
+int corridorQueueSpeed(const GameWorld &world, const DROID *psDroid, int moveSpeed);
 
 /// Keeps collision slides from shoving a droid across the centerline into the
 /// opposing lane. Steering keeps a droid on its side, but contact resolution
 /// knows nothing of lanes, and under crowding it is what actually moves droids.
 /// Cuts only the crossing component of the given velocity, in place.
-void corridorClampSlide(const DROID *psDroid, int32_t *pdx, int32_t *pdy);
+void corridorClampSlide(const GameWorld &world, const DROID *psDroid, int32_t *pdx, int32_t *pdy);
 
 /// Whether this corridor carries opposing flows this tick. The gate updates
 /// before the overlay build and before any droid moves, so every reader sees
 /// the tick's own state, derived from synced state alone. False for
 /// out-of-range ids.
-bool corridorContested(int corridorId);
+bool corridorContested(const GameWorld &world, int corridorId);
 
 /// How the corridor layer wants the blocked watchdog to treat this droid.
 enum CorridorHold
@@ -88,4 +154,4 @@ enum CorridorHold
 	CORRIDOR_HOLD_QUEUED,   ///< queued at an outer mouth, the speed hold stops it, reset the watch
 	CORRIDOR_HOLD_JUNCTION, ///< waiting into an inner junction, pause the watch but keep it running
 };
-CorridorHold corridorHold(const DROID *psDroid);
+CorridorHold corridorHold(const GameWorld &world, const DROID *psDroid);

@@ -312,6 +312,7 @@ void initMission()
 	{
 		i.reset();
 	}
+	mission.gameWorld.corridorFlow = {};
 
 	//init all the landing zones
 	initNoGoAreas();

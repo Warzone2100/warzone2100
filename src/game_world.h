@@ -23,6 +23,7 @@
  */
 #pragma once
 
+#include "corridor_gate.h"
 #include "world_map_state.h"
 #include "world_object_state.h"
 
@@ -35,6 +36,8 @@ struct GameWorld
 {
 	WorldMapState map;
 	WorldObjectState objects;
+	/// this world's corridor flow, derived from its droids against its map, swapped with them
+	CorridorFlowState corridorFlow;
 	std::string name;
 };
 
