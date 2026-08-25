@@ -571,6 +571,13 @@ void mapFloodFillContinents(WorldMapState& mapState);
 /// path if/when this (off-world) map is actually entered and rendered.
 bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState);
 
+/// Builds the display layer for terrain restored from a GameState snapshot, for a load with
+/// no scenario map load to have built it: the tileset's ground tables and texture pages, the
+/// texture->ground mapping, and the lightmap. The game-authoritative counterpart is
+/// mapReinitGameStateAfterTerrainRestore. The water levels and riverbed heights a map load derives
+/// are already in the restored terrain, so they are left alone.
+LoadingTask<> mapSnapshotDisplayInit(ResourceLoadingController& controller, WorldMapState& mapState);
+
 void tileSetFire(WorldMapState& mapState, int32_t x, int32_t y, uint32_t duration);
 bool fireOnLocation(WorldMapState& mapState, unsigned int x, unsigned int y); // FIXME: add const overload
 

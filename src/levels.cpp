@@ -1192,11 +1192,38 @@ static LoadingTask<> levLoadMissionBranchesBeforeMainLoop(ResourceLoadingControl
 
 		if (ctx.pSaveName == nullptr)
 		{
+			// A cold load of a save made during the between phase arrives here (a between level has no .gam,
+			// so no other branch initializes it) and starts with no world at all.
+			// The snapshot restore below provides the world, and stage two must run first just as it does
+			// before a legacy between-save load above.
+			if (ctx.reconstructFromSnapshot && psBaseData != nullptr)
+			{
+				if (!stageTwoInitialise())
+				{
+					debug(LOG_ERROR, "Failed stageTwoInitialise() [reconstruct]!");
+					co_return load_fail();
+				}
+			}
+
 			debug(LOG_NEVER, "Start mission - no .gam");
 			if (!(co_await startMission(controller, (LEVEL_TYPE)psNewLevel->type, GameLoadDetails::makeLevelFileLoad(""))))
 			{
 				debug(LOG_ERROR, "Failed startMission(%d)!", static_cast<int8_t>(psNewLevel->type));
 				co_return load_fail();
+			}
+
+			if (ctx.reconstructFromSnapshot)
+			{
+				if (!gamestate::savegame::coldLoadRestoreWorld())
+				{
+					co_return load_fail();
+				}
+				// With no scenario map load to have built the display layer, build it from the restored terrain and tileset.
+				if (!(co_await mapSnapshotDisplayInit(controller, gameWorld.map)))
+				{
+					debug(LOG_ERROR, "Failed mapSnapshotDisplayInit()!");
+					co_return load_fail();
+				}
 			}
 		}
 	}
