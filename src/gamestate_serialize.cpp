@@ -334,7 +334,7 @@ static nlohmann::ordered_json writeCorridorGate()
 {
 	nlohmann::ordered_json j = nlohmann::ordered_json::object();
 	j["version"] = CORRIDOR_GATE_SECTION_VERSION;
-	const std::optional<CorridorGateCarry> carry = corridorGateCarry();
+	const std::optional<CorridorGateCarry> carry = corridorGateCarry(gameWorld);
 	if (carry.has_value())
 	{
 		j["gateCarry"] = *carry;
@@ -356,7 +356,7 @@ static void readCorridorGate(const nlohmann::ordered_json &j, uint32_t version)
 	}
 	// The gate checks the checksum against the map it actually loaded and drops the carry if they differ,
 	// so a save from a build that detects corridors differently degrades to rebuilding the carry later.
-	corridorGateSetCarry(std::move(carry));
+	corridorGateSetCarry(gameWorld, std::move(carry));
 }
 
 // MARK: - Section: diplomacy

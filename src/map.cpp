@@ -1453,6 +1453,7 @@ bool mapShutdown()
 	free(floodbucket);
 	gwShutDown(gameWorld.map);
 	gameWorld.map = {};
+	gameWorld.corridorFlow = {};
 
 	map = nullptr;
 	floodbucket = nullptr;
