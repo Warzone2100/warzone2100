@@ -1318,7 +1318,7 @@ bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState)
 	// aux/blocking allocations below would otherwise be zero-sized (-Werror=alloc-zero under GCC 15).
 	ASSERT_OR_RETURN(false, mapState.width > 0 && mapState.height > 0, "Invalid map size (%d x %d)", mapState.width, mapState.height);
 
-	// Mirrors the game-authoritative half of afterMapLoad() (aux maps + blocking bits + continents).
+	// Mirrors the game-authoritative half of afterMapLoad() (aux maps + blocking bits + continents + corridors).
 	// Static terrain (texture/height/water) is supplied by the snapshot, so the texture->ground and
 	// riverbed/display steps are intentionally omitted here.
 	const size_t mapSize = static_cast<size_t>(mapState.width) * static_cast<size_t>(mapState.height);
@@ -1359,6 +1359,12 @@ bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState)
 	}
 
 	mapFloodFillContinents(mapState);
+
+	// The snapshot's terrain replaced whatever the base map load detected corridors from, which can be a
+	// different terrain entirely when the installed map is random, edited, or newer than the save.
+	// Objects are restored after this returns, so the geometry is still the map's own.
+	mapState.corridors = corridorMapBuild(mapState);
+
 	return true;
 }
 
