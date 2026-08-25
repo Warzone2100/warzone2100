@@ -52,6 +52,17 @@ struct WorldMapState;
 /// Wide enough that the number of corridors a map can hold is never the limit.
 using CorridorTileId = int32_t;
 
+/// Mouths within this many tiles of each other adjoin, chaining their corridors, and the claim
+/// mask is stamped this far around every mouth. Coordination's approach machinery spans the same
+/// reach (its APPROACH_RADIUS derives from this): a queue can park up to that span behind a
+/// mouth, so any mouth within it could be corked by another mouth's queue, ex. across the small
+/// pocket between two passes, and chaining them moves all queuing to the outermost mouths.
+constexpr int32_t CHAIN_LINK_TILES = 8;
+
+/// How many centerline points a mouth's inward axis spans. Coordination steers by frames aimed
+/// the same distance ahead, so the inward lengths precomputed here measure the axis it steers by.
+constexpr int CORRIDOR_LOOKAHEAD = 3;
+
 /// One narrow passage. The centerline runs mouth to mouth, and widthProfile is
 /// parallel to it, one physical width in world units per centerline point.
 struct Corridor
@@ -68,6 +79,36 @@ struct Corridor
 	int32_t  minRightExtent = 0;        ///< narrowest the right band gets, over the whole corridor
 };
 
+/// One entry per passage adjoining a mouth, so coordination can hand a droid
+/// crossing the junction to the passage it is entering.
+struct MouthAdj
+{
+	int corridor = -1;
+	bool endB = false;        ///< which of the adjoining passage's mouths this meets
+	Vector2i other = Vector2i(0, 0);   ///< the adjoining passage's mouth point
+	int64_t gapSq = 0;        ///< how far apart the two mouths actually are
+};
+
+/// How a map's corridors adjoin and chain. Corridors whose mouths adjoin form a
+/// chain, one constrained passage the detection split at junctions and openings,
+/// so coordination can treat the chain as the passage it physically is. Derived
+/// from the finished geometry as the last step of the build, so it exists
+/// exactly as long as the geometry it describes. Every vector runs parallel to
+/// CorridorMap::corridors.
+struct CorridorChains
+{
+	std::vector<int> chainId;            ///< per corridor, chain representative
+	std::vector<std::vector<int>> chainMembers;   ///< per chain representative, its corridors in id order
+	std::vector<int8_t> chainSign;       ///< +1 oriented with the chain, -1 flipped
+	std::vector<uint8_t> mouthAOuter;    ///< per corridor, mouthA adjoins no other corridor
+	std::vector<uint8_t> mouthBOuter;
+	std::vector<std::vector<MouthAdj>> mouthAAdj;   ///< per corridor, the passages adjoining mouthA
+	std::vector<std::vector<MouthAdj>> mouthBAdj;
+	std::vector<std::vector<int32_t>> axisLen;      ///< per centerline point, local axis segment length
+	std::vector<int32_t> inwardLenA;     ///< per corridor, the mouth's inward axis length over CORRIDOR_LOOKAHEAD points
+	std::vector<int32_t> inwardLenB;
+};
+
 /// Every corridor on a map, plus a per-tile lookup from tile index to the
 /// corridor whose centerline runs through it, or -1.
 struct CorridorMap
@@ -82,7 +123,8 @@ struct CorridorMap
 	std::vector<CorridorTileId> tileNearestCorridor;  ///< width*height, corridor whose centerline is nearest within the search radius, -1 otherwise
 	std::vector<uint8_t> debugSkel;     ///< full one-tile skeleton, for the dump overlay
 	std::vector<uint8_t> debugNarrow;   ///< skeleton restricted to narrow tiles, for the dump overlay
-	uint32_t checksum = 0;              ///< fold of the detected geometry, see corridorMapBuild
+	CorridorChains chains;              ///< how the corridors adjoin and chain, derived from the geometry
+	uint32_t checksum = 0;              ///< fold of the detected geometry, see corridorMapBuild; the chains derive from it, so it covers them too
 
 	CorridorTileId at(int x, int y) const
 	{

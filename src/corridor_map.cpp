@@ -25,12 +25,14 @@
 #include "corridor_map.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
 
 #include "fpath.h"
 #include "map.h"
 #include "world_map_state.h"
 
 #include <algorithm>
+#include <functional>
 #include <limits>
 #include <map>
 #include <set>
@@ -570,6 +572,170 @@ void trimSelfFold(std::vector<Vector2i> &chain)
 	}
 }
 
+/// Chains and mouth adjacency, from the finished geometry. Adjacency alone
+/// decides inner mouths, so no queue ever parks in a junction pocket, whatever
+/// the orientation grouping below settles on.
+void chainsBuild(CorridorMap &cmap)
+{
+	CorridorChains &ch = cmap.chains;
+	const size_t n = cmap.corridors.size();
+	ch.chainId.assign(n, 0);
+	ch.chainSign.assign(n, 1);
+	ch.mouthAOuter.assign(n, 1);
+	ch.mouthBOuter.assign(n, 1);
+	ch.mouthAAdj.assign(n, {});
+	ch.mouthBAdj.assign(n, {});
+	ch.axisLen.assign(n, {});
+	ch.inwardLenA.assign(n, 0);
+	ch.inwardLenB.assign(n, 0);
+	for (size_t i = 0; i < n; ++i)
+	{
+		const Corridor &c = cmap.corridors[i];
+		const size_t pts = c.centerline.size();
+		ch.axisLen[i].assign(pts, 0);
+		for (size_t k = 0; k < pts; ++k)
+		{
+			const size_t lo = k > 0 ? k - 1 : k;
+			const size_t hi = k + 1 < pts ? k + 1 : k;
+			ch.axisLen[i][k] = iHypot(c.centerline[hi] - c.centerline[lo]);
+		}
+		if (pts == 0)
+		{
+			continue;
+		}
+		const int last = static_cast<int>(pts) - 1;
+		ch.inwardLenA[i] = iHypot(c.centerline[std::min(last, CORRIDOR_LOOKAHEAD)] - c.centerline[0]);
+		ch.inwardLenB[i] = iHypot(c.centerline[std::max(0, last - CORRIDOR_LOOKAHEAD)] - c.centerline[last]);
+	}
+	struct Link
+	{
+		int64_t distSq;
+		int i;
+		int j;
+		int8_t rel;
+	};
+	const int32_t linkDist = CHAIN_LINK_TILES * TILE_UNITS;
+	std::vector<Link> links;
+	for (size_t i = 0; i < n; ++i)
+	{
+		for (size_t j = i + 1; j < n; ++j)
+		{
+			for (int ei = 0; ei < 2; ++ei)
+			{
+				for (int ej = 0; ej < 2; ++ej)
+				{
+					const Vector2i mi = ei ? cmap.corridors[i].mouthB : cmap.corridors[i].mouthA;
+					const Vector2i mj = ej ? cmap.corridors[j].mouthB : cmap.corridors[j].mouthA;
+					const Vector2i d = mi - mj;
+					const int64_t dSq = static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y;
+					if (dSq > static_cast<int64_t>(linkDist) * linkDist)
+					{
+						continue;
+					}
+					(ei ? ch.mouthBOuter : ch.mouthAOuter)[i] = 0;
+					(ej ? ch.mouthBOuter : ch.mouthAOuter)[j] = 0;
+					(ei ? ch.mouthBAdj : ch.mouthAAdj)[i].push_back({static_cast<int>(j), ej != 0, mj, dSq});
+					(ej ? ch.mouthBAdj : ch.mouthAAdj)[j].push_back({static_cast<int>(i), ei != 0, mi, dSq});
+					// Leaving one corridor's end into the other's opposite end keeps
+					// the travel direction, same ends adjoining flips it.
+					links.push_back({dSq, static_cast<int>(i), static_cast<int>(j),
+					                 static_cast<int8_t>(ei != ej ? 1 : -1)});
+				}
+			}
+		}
+	}
+
+	// A loop of passages with an odd orientation twist cannot carry one
+	// direction convention, and forcing one makes a single stream crossing the
+	// odd link read as two opposing flows. So the flow grouping drops links
+	// until a consistent orientation exists, splitting such a loop rather than
+	// degrading it. Closest adjacencies merge first, which lands the drop on
+	// the most distant one, the roomiest junction, where uncoordinated meeting
+	// costs least. Deterministic order, so every client splits identically.
+	std::sort(links.begin(), links.end(), [](const Link &a, const Link &b)
+	{
+		if (a.distSq != b.distSq)
+		{
+			return a.distSq < b.distSq;
+		}
+		if (a.i != b.i)
+		{
+			return a.i < b.i;
+		}
+		if (a.j != b.j)
+		{
+			return a.j < b.j;
+		}
+		return a.rel < b.rel;
+	});
+	std::vector<int> parent(n);
+	std::vector<int8_t> sign(n, 1);   // orientation relative to parent chain root
+	std::function<int(int)> find = [&](int x)
+	{
+		while (parent[x] != x)
+		{
+			// Path halving, folding the orientation down as we go.
+			sign[x] = static_cast<int8_t>(sign[x] * sign[parent[x]]);
+			parent[x] = parent[parent[x]];
+			x = parent[x];
+		}
+		return x;
+	};
+	auto signToRoot = [&](int x)
+	{
+		int8_t s = 1;
+		while (parent[x] != x)
+		{
+			s = static_cast<int8_t>(s * sign[x]);
+			x = parent[x];
+		}
+		return s;
+	};
+	std::vector<uint8_t> dropped(links.size(), 0);
+	for (bool retry = true; retry;)
+	{
+		retry = false;
+		for (size_t i = 0; i < n; ++i)
+		{
+			parent[i] = static_cast<int>(i);
+			sign[i] = 1;
+		}
+		for (size_t k = 0; k < links.size(); ++k)
+		{
+			if (dropped[k])
+			{
+				continue;
+			}
+			const Link &l = links[k];
+			const int ri = find(l.i);
+			const int rj = find(l.j);
+			const int8_t si = signToRoot(l.i);
+			const int8_t sj = signToRoot(l.j);
+			if (ri != rj)
+			{
+				parent[rj] = ri;
+				sign[rj] = static_cast<int8_t>(si * l.rel * sj);
+			}
+			else if (si * l.rel != sj)
+			{
+				dropped[k] = 1;
+				retry = true;
+				break;
+			}
+		}
+	}
+	for (size_t i = 0; i < n; ++i)
+	{
+		ch.chainId[i] = find(static_cast<int>(i));
+		ch.chainSign[i] = signToRoot(static_cast<int>(i));
+	}
+	ch.chainMembers.assign(n, {});
+	for (size_t i = 0; i < n; ++i)
+	{
+		ch.chainMembers[static_cast<size_t>(ch.chainId[i])].push_back(static_cast<int>(i));
+	}
+}
+
 } // anonymous namespace
 
 std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
@@ -873,8 +1039,8 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 
 	// The claim mask: ground the corridor layer owns or influences, one bit
 	// per tile so other mechanisms exclude it with a single lookup. Claimed
-	// means within 3 tiles of any centerline or within the approach reach
-	// (8 tiles, matching APPROACH_RADIUS) of any mouth.
+	// means within 3 tiles of any centerline or within CHAIN_LINK_TILES of any
+	// mouth, the reach the approach machinery and mouth chaining share.
 	result->tileClaimed.assign(cells, 0);
 	result->tileInterior.assign(cells, 0);
 	result->tileInteriorCorridor.assign(cells, -1);
@@ -906,8 +1072,8 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 				}
 			}
 		}
-		stamp(result->tileClaimed, c.mouthA, 8);
-		stamp(result->tileClaimed, c.mouthB, 8);
+		stamp(result->tileClaimed, c.mouthA, CHAIN_LINK_TILES);
+		stamp(result->tileClaimed, c.mouthB, CHAIN_LINK_TILES);
 	}
 
 	// The nearest centerline per tile, which movement would otherwise search for per droid per query.
@@ -991,6 +1157,8 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 		}
 	}
 	result->checksum = checksum;
+
+	chainsBuild(*result);
 
 	return result;
 }
