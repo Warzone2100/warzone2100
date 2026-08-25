@@ -48,10 +48,16 @@ struct MOVE_CONTROL
 	int pathIndex = 0;                    ///< Position in asPath
 	std::vector<Vector2i> asPath;         ///< Pointer to list of block X,Y map coordinates.
 
+	/// Counts route replacements, so a reader that memoized an answer about this droid's path
+	/// can tell that the path it read is gone.
+	/// Not saved: it only decides whether a memo is reused, and a miss recomputes the same answer.
+	uint32_t routeGeneration = 0;
+
 	void setRoute(std::vector<Vector2i> route, int index = 0)
 	{
 		asPath = std::move(route);
 		pathIndex = index;
+		++routeGeneration;
 	}
 
 	void setRoute(Vector2i point)
@@ -65,6 +71,7 @@ struct MOVE_CONTROL
 	{
 		asPath.clear();
 		pathIndex = 0;
+		++routeGeneration;
 	}
 
 	Vector2i destination = Vector2i(0, 0);                 ///< World coordinates of movement destination
@@ -86,6 +93,21 @@ struct MOVE_CONTROL
 	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 
 	int iVertSpeed = 0;                   ///< VTOL movement
+
+	/// The corridor layer's last answer about whether this droid is held, with the state it was taken against.
+	/// Not saved: a miss recomputes the same answer.
+	struct HoldMemo
+	{
+		uint32_t stamp = 0;            ///< zero while empty
+		uint32_t gameTime = 0;
+		uint32_t routeGeneration = 0;
+		uint32_t bumpTime = 0;
+		Vector2i pos = Vector2i(0, 0);
+		Vector2i target = Vector2i(0, 0);
+		int pathIndex = 0;
+		uint8_t flags = 0;
+		uint8_t value = 0;
+	} holdMemo;
 };
 
 #endif // __INCLUDED_MOVEDEF_H__
