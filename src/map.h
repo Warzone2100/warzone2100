@@ -59,7 +59,9 @@ struct GROUND_TYPE
 };
 
 extern float waterLevel;
-extern char *tilesetDir;
+/// The canonical texpage directory for a tileset (the inverse of mapTilesetDirToTileset)
+const char *tilesetDirectory(MAP_TILESET tileset);
+MAP_TILESET mapTilesetDirToTileset(const char *dir);
 extern MAP_TILESET currentMapTileset;
 
 const GROUND_TYPE& getGroundType(size_t idx);

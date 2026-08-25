@@ -197,7 +197,6 @@ static void init_tileNames(MAP_TILESET type);
 
 /// The different ground types
 static std::vector<GROUND_TYPE> groundTypes;
-char *tilesetDir = nullptr;
 MAP_TILESET currentMapTileset = MAP_TILESET::ARIZONA;
 static int numTile_names;
 static std::unique_ptr<char[]> Tile_names = nullptr;
@@ -344,7 +343,18 @@ static void init_tileNames(MAP_TILESET type)
 	}
 }
 
-static MAP_TILESET mapTilesetDirToTileset(const char *dir)
+const char *tilesetDirectory(MAP_TILESET tileset)
+{
+	switch (tileset)
+	{
+	case MAP_TILESET::URBAN: return "texpages/tertilesc2hw";
+	case MAP_TILESET::ROCKIES: return "texpages/tertilesc3hw";
+	case MAP_TILESET::ARIZONA: break;
+	}
+	return "texpages/tertilesc1hw";
+}
+
+MAP_TILESET mapTilesetDirToTileset(const char *dir)
 {
 	// For Arizona
 	if (strcmp(dir, "texpages/tertilesc1hw") == 0)
@@ -471,7 +481,7 @@ fallback:
 	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
-		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDir);
+		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDirectory(currentMapTileset));
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
 		goto fallback;
 	}
@@ -482,7 +492,7 @@ fallback:
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
 static bool mapLoadGroundTypes(bool preview)
 {
-	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
+	debug(LOG_TERRAIN, "tileset: %s", tilesetDirectory(currentMapTileset));
 	// For Arizona
 	if (currentMapTileset == MAP_TILESET::ARIZONA)
 	{
@@ -505,7 +515,7 @@ fallback:
 	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
-		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDir);
+		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDirectory(currentMapTileset));
 		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
 		goto fallback;
@@ -625,7 +635,7 @@ static void rotFlip(int tile, int *i, int *j)
 }
 
 /// Tries to figure out what ground type a grid point is from the surrounding tiles
-static int determineGroundType(WorldMapState& mapState, int x, int y, const char *tileset)
+static int determineGroundType(WorldMapState& mapState, int x, int y)
 {
 	int ground[2][2];
 	int votes[2][2];
@@ -785,7 +795,7 @@ static bool mapSetGroundTypes(WorldMapState& mapState)
 		{
 			MAPTILE *psTile = mapTile(mapState, i, j);
 
-			psTile->ground = determineGroundType(mapState, i, j, tilesetDir);
+			psTile->ground = determineGroundType(mapState, i, j);
 
 			if (hasDecals(mapState, i, j))
 			{
@@ -802,7 +812,7 @@ static bool mapSetGroundTypes(WorldMapState& mapState)
 
 bool mapReloadGroundTypes()
 {
-	if (!tilesetDir)
+	if (!texTilesetTexturesLoaded())
 	{
 		return false;
 	}
@@ -1161,14 +1171,6 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 	mapState.width = width;
 	mapState.height = height;
 
-	// FIXME: the map preview code loads the map without setting the tileset
-	if (!tilesetDir)
-	{
-		tilesetDir = strdup("texpages/tertilesc1hw");
-	}
-
-	currentMapTileset = mapTilesetDirToTileset(tilesetDir);
-
 	// load the ground types
 	if (!mapLoadGroundTypes(preview))
 	{
@@ -1416,11 +1418,7 @@ bool mapShutdown()
 	mapDecals = nullptr;
 	numTile_names = 0;
 	Tile_names = nullptr;
-	if (tilesetDir)
-	{
-		free(tilesetDir);
-		tilesetDir = nullptr;
-	}
+	texClearTilesetTexturesLoaded();
 	return true;
 }
 

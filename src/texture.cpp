@@ -87,6 +87,9 @@ int getMaxTileTextureSize(std::string dir)
 	return res;
 }
 
+// Set when texLoad has loaded a tileset's texture pages, cleared by map shutdown - so tileset reloads know whether there is anything to reload
+static bool tilesetTexturesLoaded = false;
+
 bool texLoad(const char *fileName)
 {
 	char fullPath[PATH_MAX], partialPath[PATH_MAX], *buffer;
@@ -95,12 +98,9 @@ bool texLoad(const char *fileName)
 
 	firstPage = pie_NumberOfPages();
 
-	// store the filename so we can later determine which tileset we are using
-	if (tilesetDir)
-	{
-		free(tilesetDir);
-	}
-	tilesetDir = strdup(fileName);
+	// The texpage set being loaded names the tileset - so this is where the map layer learns which tileset the loaded level uses
+	currentMapTileset = mapTilesetDirToTileset(fileName);
+	tilesetTexturesLoaded = true;
 
 	// reset defaults
 	const int maxTileTexSize = getMaxTileTextureSize(fileName);
@@ -330,12 +330,19 @@ bool texLoad(const char *fileName)
 
 bool reloadTileTextures()
 {
-	if (!tilesetDir)
+	if (!tilesetTexturesLoaded)
 	{
 		return false;
 	}
-	char *dir = strdup(tilesetDir);
-	bool result = texLoad(dir);
-	free(dir);
-	return result;
+	return texLoad(tilesetDirectory(currentMapTileset));
+}
+
+bool texTilesetTexturesLoaded()
+{
+	return tilesetTexturesLoaded;
+}
+
+void texClearTilesetTexturesLoaded()
+{
+	tilesetTexturesLoaded = false;
 }
