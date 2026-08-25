@@ -159,7 +159,7 @@ static size_t fpathDetermineNumberOfThreads()
 }
 
 // initialise the findpath module
-bool fpathInitialise()
+static bool fpathInitialise()
 {
 	// The path system is up
 	fpathQuit = false;
@@ -185,7 +185,7 @@ bool fpathInitialise()
 }
 
 
-void fpathShutdown()
+static void fpathShutdown()
 {
 	if (!fpathThreads.empty())
 	{
@@ -684,6 +684,12 @@ public:
 				syncDebug("congestionOverlay(%u,%d) = %08X", overlay->gameTime, overlay->cohortPlayer, overlay->checksum);
 			}
 		}
+	}
+
+	void shutdown() override
+	{
+		LegacyAStarBackend::shutdown();
+		overlays.clear();
 	}
 
 	std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const override

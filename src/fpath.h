@@ -70,14 +70,6 @@ enum FPATH_RETVAL
 	FPR_WAIT,       ///< route is being calculated by the path-finding thread
 };
 
-/** Initialise the path-finding module.
- */
-bool fpathInitialise();
-
-/** Shutdown the path-finding module.
- */
-void fpathShutdown();
-
 /** A completed pathfinding result captured for GameState serialization. A droid restored in MOVEWAITROUTE
  *  consumes this directly on its first resumed tick (fpathRoute), reproducing the exact host path without
  *  re-running the order-/context-sensitive pathfinder. */
