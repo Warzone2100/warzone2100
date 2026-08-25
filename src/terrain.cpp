@@ -1102,7 +1102,7 @@ gfx_api::texture* getWaterClassicTexture()
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
-	std::string legacyWaterDecalPath = std::string(tilesetDir) + "-" + std::to_string(getCurrentTileTextureSize()) + "/tile-17.png"; // TODO: This is currently hard-coded for legacy tileset textures...
+	std::string legacyWaterDecalPath = std::string(tilesetDirectory(currentMapTileset)) + "-" + std::to_string(getCurrentTileTextureSize()) + "/tile-17.png"; // TODO: This is currently hard-coded for legacy tileset textures...
 	waterClassicTexture = gfx_api::context::get().loadTextureFromFile(legacyWaterDecalPath.c_str(), gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize);
 	return waterClassicTexture;
 }

@@ -323,7 +323,6 @@ void updateFogDistance(float distance)
 
 void setDefaultFogColour()
 {
-	ASSERT(tilesetDir != nullptr, "Uninitialized tilesetDir");
 	switch (currentMapTileset)
 	{
 		case MAP_TILESET::ARIZONA:
