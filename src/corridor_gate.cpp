@@ -192,6 +192,7 @@ std::vector<int8_t> g_handed;
 // Derived from corridor geometry once per map and cached.
 const CorridorMap *g_chainMap = nullptr;
 std::vector<int> g_chainId;          ///< per corridor, chain representative
+std::vector<std::vector<int>> g_chainMembers;   ///< per chain representative, its corridors in id order
 std::vector<int8_t> g_chainSign;     ///< +1 oriented with the chain, -1 flipped
 // One entry per passage adjoining this mouth, so the query can hand a droid
 // crossing the junction to the passage it is entering.
@@ -471,6 +472,11 @@ void chainEnsure(const CorridorMap *cmap)
 	{
 		g_chainId[i] = find(static_cast<int>(i));
 		g_chainSign[i] = signToRoot(static_cast<int>(i));
+	}
+	g_chainMembers.assign(n, {});
+	for (size_t i = 0; i < n; ++i)
+	{
+		g_chainMembers[static_cast<size_t>(g_chainId[i])].push_back(static_cast<int>(i));
 	}
 }
 
@@ -1284,9 +1290,10 @@ void corridorGateUpdate()
 			// stands near, so opposing traffic just across a shared pocket
 			// still meters the next member, while members separated by real
 			// ground stay independent until the traffic actually closes in.
-			for (size_t c2 = 0; c2 < n; ++c2)
+			for (int member : g_chainMembers[static_cast<size_t>(g_chainId[c])])
 			{
-				if (c2 == c || g_chainId[c2] != g_chainId[c])
+				const size_t c2 = static_cast<size_t>(member);
+				if (c2 == c)
 				{
 					continue;
 				}
