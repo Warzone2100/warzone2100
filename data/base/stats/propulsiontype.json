@@ -11,6 +11,10 @@
 		"flightName": "GROUND",
 		"multiplier": 100
 	},
+	"Legged-Super": {
+		"flightName": "GROUND",
+		"multiplier": 100
+	},
 	"Lift": {
 		"flightName": "AIR",
 		"multiplier": 130
