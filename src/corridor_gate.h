@@ -53,7 +53,7 @@ struct CorridorGateCarry
 /// One world's corridor flow state, derived each update from that world's droids against its
 /// corridor map. Owned by the GameWorld so it travels through world swaps with the droids and map
 /// it describes, and a save records any world's carry from the world itself. Everything here
-/// except prevFlow and pendingCarry is rebuilt by corridorGateUpdate before anything reads it.
+/// except prevFlow is rebuilt by corridorGateUpdate before anything reads it.
 struct CorridorFlowState
 {
 	/// Per-corridor flow direction for this tick: +1, -1, or 0 for open. Rebuilt each
@@ -99,12 +99,11 @@ struct CorridorFlowState
 	/// Flow at each corridor as of the last update, bit 0 toward the far mouth and bit 1 toward
 	/// the near one, the same shape the save carry records. Read one update deep: whether a joint
 	/// carries both directions is judged against this settled picture, not against counts still
-	/// being taken. Cleared when the corridors themselves change, since it is indexed by corridor id.
+	/// being taken. prevFlowChecksum records the corridor map it was measured against, since the
+	/// flow is indexed by corridor id: flow from another map is discarded rather than applied, and
+	/// a restored carry that matches the loaded map survives the first update's reset.
 	std::vector<uint8_t> prevFlow;
-
-	/// A carry handed back by a load, applied on the next update once it is known to describe the
-	/// corridor map that actually loaded. Never saved from here - only set/restored from a saveload.
-	std::optional<CorridorGateCarry> pendingCarry;
+	uint32_t prevFlowChecksum = 0;
 
 	/// Which corridors instance the last update ran against. The first update against a new one
 	/// announces the map into the sync stream and clears the joint flow the previous map's ticks
@@ -113,12 +112,13 @@ struct CorridorFlowState
 	uint32_t seenChecksum = 0;
 };
 
-/// The carry a save should record for this world.
+/// The carry a save should record for this world, or nullopt while no update or restored carry
+/// has measured flow against the world's current corridor map.
 std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world);
 
-/// Restores a carry after a load.
-/// Applied on the next update, and only if it was recorded against the corridor map that is now loaded.
-void corridorGateSetCarry(GameWorld &world, std::optional<CorridorGateCarry> carry);
+/// Restores a saved carry into this world's flow.
+/// Applied immediately, and only if it was recorded against the corridor map the world now holds.
+void corridorGateRestoreCarry(GameWorld &world, const CorridorGateCarry &carry);
 
 /// Recomputes the world's per-corridor flow state for this tick. Call once
 /// before any droid moves, so every droid decides against the same snapshot.

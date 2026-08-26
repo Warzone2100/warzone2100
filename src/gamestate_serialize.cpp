@@ -323,42 +323,6 @@ void readDeterminismCore(const nlohmann::ordered_json &j, uint32_t version)
 	applyDeterminismCounters(j, version);
 }
 
-// MARK: - Section: corridorGate (per-corridor flow carry)
-
-constexpr uint32_t CORRIDOR_GATE_SECTION_VERSION = 1;
-
-// The corridor gate rebuilds its per-tick state from synced droid state before anything reads it, with one exception:
-// which directions had flow at each corridor, which the following tick reads to decide whether a junction carries both.
-// Without it the first tick after a load may classify droids at a junction differently, and the run may diverge from the one that was saved.
-static nlohmann::ordered_json writeCorridorGate()
-{
-	nlohmann::ordered_json j = nlohmann::ordered_json::object();
-	j["version"] = CORRIDOR_GATE_SECTION_VERSION;
-	const std::optional<CorridorGateCarry> carry = corridorGateCarry(gameWorld);
-	if (carry.has_value())
-	{
-		j["gateCarry"] = *carry;
-	}
-	return j;
-}
-
-static void readCorridorGate(const nlohmann::ordered_json &j, uint32_t version)
-{
-	if (version != CORRIDOR_GATE_SECTION_VERSION)
-	{
-		throw StateError("unsupported corridorGate section version");
-	}
-
-	std::optional<CorridorGateCarry> carry;
-	if (j.contains("gateCarry"))
-	{
-		carry = j.at("gateCarry").get<CorridorGateCarry>();
-	}
-	// The gate checks the checksum against the map it actually loaded and drops the carry if they differ,
-	// so a save from a build that detects corridors differently degrades to rebuilding the carry later.
-	corridorGateSetCarry(gameWorld, std::move(carry));
-}
-
 // MARK: - Section: diplomacy
 
 constexpr uint32_t DIPLOMACY_SECTION_VERSION = 1;
@@ -2764,6 +2728,17 @@ static nlohmann::ordered_json writeWorldObjects(const GameWorld &world, bool onM
 	j["version"] = WORLD_SECTION_VERSION;
 	j["mapDynamic"] = writeMapDynamic(world);
 
+	// The corridor gate rebuilds its flow from synced droid state before anything reads it, with
+	// one exception: which directions had flow at each corridor, which the following tick reads to
+	// decide whether a junction carries both. Without it the first tick after a load may classify
+	// droids at a junction differently, and the run may diverge from the one that was saved.
+	// Recorded per world, so the off-world half of a campaign save carries its own flow too.
+	const std::optional<CorridorGateCarry> gateCarry = corridorGateCarry(world);
+	if (gateCarry.has_value())
+	{
+		j["corridorFlow"] = *gateCarry;
+	}
+
 	nlohmann::ordered_json jfeatures = nlohmann::ordered_json::array();
 	for (const FEATURE *psFeature : world.objects.features[0])
 	{
@@ -2795,6 +2770,16 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 
 	// Clear the existing world (objects + map tile pointers) before reconstructing.
 	clearWorldObjects(world);
+
+	// The flow state describes the world being replaced, so reset it with the objects, then put
+	// back the saved carry. The world's corridors were already rebuilt from the restored terrain
+	// (main world before any other section, off-world inside readMission), so it applies directly,
+	// checked against the checksum of the map that actually loaded.
+	world.corridorFlow = CorridorFlowState();
+	if (j.contains("corridorFlow"))
+	{
+		corridorGateRestoreCarry(world, j.at("corridorFlow").get<CorridorGateCarry>());
+	}
 
 	const nlohmann::ordered_json &jfeatures = j.at("features");
 	const nlohmann::ordered_json &jstructures = j.at("structures");
@@ -4325,7 +4310,6 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	// with no separate map-file data. (Off-world terrain stays nested in the mission section.)
 	j["mapTerrain"] = writeMapTerrain(gameWorld.map, true);
 	j["determinismCore"] = writeDeterminismCore();
-	j["corridorGate"] = writeCorridorGate();
 	j["diplomacy"] = writeDiplomacy();
 	j["power"] = writePower();
 	j["research"] = writeResearch();
@@ -4411,12 +4395,6 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: determinismCore (clock)");
 		const nlohmann::ordered_json &sec = j.at("determinismCore");
 		applyDeterminismClock(sec, sec.value("version", 0u));
-	}
-	if (j.contains("corridorGate"))
-	{
-		debug(LOG_GAMESTATE_SERIAL, "restoring section: corridorGate");
-		const nlohmann::ordered_json &sec = j.at("corridorGate");
-		readCorridorGate(sec, sec.value("version", 0u));
 	}
 	if (j.contains("diplomacy"))
 	{
