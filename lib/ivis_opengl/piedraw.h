@@ -35,9 +35,10 @@ namespace gfx_api
 /// How pie_DrawAllMeshes interprets the opaque bucket / depth-only PSO selection.
 enum class MeshDepthPassMode
 {
-	None,         ///< Normal lit scene draw
-	ShadowMap,    ///< Shadow-casting shapes only, shadow depth PSO
-	ScenePrepass, ///< All opaque shapes, depth+normal prepass PSO
+	None,                  ///< Normal lit scene draw
+	ShadowMap,             ///< Shadow-casting shapes only, shadow depth PSO
+	ScenePrepass,          ///< All opaque shapes, depth+normal prepass PSO
+	ScenePrepassDepthOnly, ///< All opaque shapes, depth-only prepass PSO (no normals attachment bound)
 };
 
 /// Which lit mesh buckets a normal scene pass draws.

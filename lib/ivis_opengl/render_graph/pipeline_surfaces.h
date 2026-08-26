@@ -272,6 +272,8 @@ enum class SurfaceEnablePolicy : uint8_t
 	SsaoSeparateBlurBuffers,
 	/// Scene prepass depth/normals when `prepassNeeds` is not None.
 	ScenePrepassActive,
+	/// Scene prepass normals only when `prepassNeeds` includes Normals (example: SSAO).
+	ScenePrepassNormalsActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).

@@ -172,7 +172,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::FixedRGBA8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::ScenePrepassActive,
+		SurfaceEnablePolicy::ScenePrepassNormalsActive,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
@@ -458,6 +458,8 @@ bool evalEnablePolicy(const PipelineSurfaceCatalogEntry& cat, const PipelineSurf
 				inputs.effects.ssaoGenerateDivisor, inputs.effects.ssaoBlurDivisor);
 	case SurfaceEnablePolicy::ScenePrepassActive:
 		return inputs.prepassNeeds != PrepassNeed::None;
+	case SurfaceEnablePolicy::ScenePrepassNormalsActive:
+		return hasFlag(inputs.prepassNeeds, PrepassNeed::Normals);
 	}
 	ASSERT(false, "Unknown SurfaceEnablePolicy");
 	return false;
