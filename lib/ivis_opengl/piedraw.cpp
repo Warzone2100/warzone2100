@@ -1542,6 +1542,22 @@ void pie_FinalizeMeshes(uint64_t currentGameFrame)
 	instancedMeshRenderer.FinalizeInstances();
 }
 
+// MeshDrawParts (piedraw.h) is the pass-facing view of InstancedMeshRenderer::DrawParts,
+// and pie_DrawAllMeshes static_casts between them  - assert equality
+static_assert(static_cast<int>(MeshDrawParts::Opaque) == InstancedMeshRenderer::DrawParts::ShadowCastingShapes,
+	"MeshDrawParts::Opaque must equal DrawParts::ShadowCastingShapes");
+static_assert(static_cast<int>(MeshDrawParts::Translucent) == InstancedMeshRenderer::DrawParts::TranslucentShapes,
+	"MeshDrawParts::Translucent must equal DrawParts::TranslucentShapes");
+static_assert(static_cast<int>(MeshDrawParts::Additive) == InstancedMeshRenderer::DrawParts::AdditiveShapes,
+	"MeshDrawParts::Additive must equal DrawParts::AdditiveShapes");
+static_assert(static_cast<int>(MeshDrawParts::All)
+	== (InstancedMeshRenderer::DrawParts::ShadowCastingShapes
+		| InstancedMeshRenderer::DrawParts::TranslucentShapes
+		| InstancedMeshRenderer::DrawParts::AdditiveShapes),
+	"MeshDrawParts::All mismatch?");
+static_assert((static_cast<int>(MeshDrawParts::All) & InstancedMeshRenderer::DrawParts::OldShadows) == 0,
+	"MeshDrawParts must omit the OldShadows bit");
+
 void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter, MeshFogMode fogMode)
 {
 	int drawParts = static_cast<int>(drawFilter);
