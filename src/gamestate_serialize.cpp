@@ -3250,12 +3250,6 @@ static void readMapTerrain(WorldMapState &map, const nlohmann::ordered_json &j, 
 		std::copy(tt.begin(), tt.end(), terrainTypes);
 	}
 
-	const nlohmann::ordered_json &sc = reqArray(j.at("scroll"), 4);
-	map.scroll.minX = sc[0].get<int32_t>();
-	map.scroll.minY = sc[1].get<int32_t>();
-	map.scroll.maxX = sc[2].get<int32_t>();
-	map.scroll.maxY = sc[3].get<int32_t>();
-
 	// Gateways must be added before the aux/blocking setup (matches the map-load order).
 	if (!map.gateways.empty())
 	{
@@ -3274,6 +3268,14 @@ static void readMapTerrain(WorldMapState &map, const nlohmann::ordered_json &j, 
 	{
 		throw StateError("map terrain restore failed (invalid dimensions)");
 	}
+
+	// Scroll limits last, after the rebuild (matches the map-load order, which applies them only
+	// once the per-map state is built).
+	const nlohmann::ordered_json &sc = reqArray(j.at("scroll"), 4);
+	map.scroll.minX = sc[0].get<int32_t>();
+	map.scroll.minY = sc[1].get<int32_t>();
+	map.scroll.maxX = sc[2].get<int32_t>();
+	map.scroll.maxY = sc[3].get<int32_t>();
 }
 
 // Re-stamp the authoritative saved tile heights over the map. Object reconstruction perturbs the
