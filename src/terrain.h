@@ -55,8 +55,12 @@ void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightData);
 void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP);
 /// Opaque terrain depth + view-space normals for the SSAO / deferred-fog scene prepass.
 void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view);
+/// Opaque terrain depth alone, for a prepass with no normals attachment (PrepassNeed::Normals absent).
+void drawTerrainDepthOnlyPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view);
 /// Water surface depth + view-space normals so deferred fog samples the lake, not the lakebed.
 void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view);
+/// Water surface depth alone, for a prepass with no normals attachment (PrepassNeed::Normals absent).
+void drawWaterDepthOnlyPrepass(const glm::mat4& projection, const glm::mat4& view);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
 	const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap,
 	const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights);

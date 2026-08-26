@@ -2195,7 +2195,10 @@ void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP)
 	drawDepthOnlyForDepthMap(mvp, tessCameraMVP, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
 }
 
-void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view)
+// Shared body for the terrain scene-prepass draw.
+// `TessPSO` / `PSO` are either the depth+normal PSOs (normals attachment bound) or the depth-only PSOs (no color attachment bound).
+template <typename TessPSO, typename PSO>
+static void drawTerrainScenePrepassImpl(const glm::mat4& modelViewProjection, const glm::mat4& view)
 {
 	const glm::mat4& mvp = modelViewProjection;
 
@@ -2213,11 +2216,12 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 		}
 
 		gfx_api::context::get().set_polygon_offset(depthBiasFactor, depthBiasUnits);
-		gfx_api::TerrainDepthPrepassTess::get().bind();
-		gfx_api::TerrainDepthPrepassTess::get().bind_textures(
+		TessPSO::get().bind();
+		TessPSO::get().bind_textures(
 			terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
-		gfx_api::TerrainDepthPrepassTess::get().bind_vertex_buffers(terrainDecalVBO);
-		gfx_api::TerrainDepthPrepassTess::get().bind_constants({ mvp, view, mvp, terrainTessParams() });
+		TessPSO::get().bind_vertex_buffers(terrainDecalVBO);
+		const gfx_api::TerrainDepthPrepassTessUniforms tessUniforms { mvp, view, mvp, terrainTessParams() };
+		TessPSO::get().template set_uniforms_at<0>(tessUniforms);
 		gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
 
 		for (int x = 0; x < xSectors; x++)
@@ -2226,14 +2230,14 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 			{
 				if (sectors[x * ySectors + y].draw)
 				{
-					batchDrawElements<gfx_api::TerrainDepthPrepassTess>(
+					batchDrawElements<TessPSO>(
 						sectors[x * ySectors + y].patchIndexSize,
 						sectors[x * ySectors + y].patchIndexOffset);
 				}
 			}
 		}
-		flushDrawElementsBatch<gfx_api::TerrainDepthPrepassTess>();
-		gfx_api::TerrainDepthPrepassTess::get().unbind_vertex_buffers(terrainDecalVBO);
+		flushDrawElementsBatch<TessPSO>();
+		TessPSO::get().unbind_vertex_buffers(terrainDecalVBO);
 		gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
 		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 		return;
@@ -2245,9 +2249,10 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 	}
 
 	gfx_api::context::get().set_polygon_offset(depthBiasFactor, depthBiasUnits);
-	gfx_api::TerrainDepthPrepass::get().bind();
-	gfx_api::TerrainDepthPrepass::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepthPrepass::get().bind_constants({ mvp, view });
+	PSO::get().bind();
+	PSO::get().bind_vertex_buffers(geometryVBO);
+	const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS> uniforms { mvp, view };
+	PSO::get().template set_uniforms_at<0>(uniforms);
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 	for (int x = 0; x < xSectors; x++)
@@ -2256,19 +2261,31 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				batchDrawElements<gfx_api::TerrainDepthPrepass>(
+				batchDrawElements<PSO>(
 					sectors[x * ySectors + y].geometryIndexSize,
 					sectors[x * ySectors + y].geometryIndexOffset);
 			}
 		}
 	}
-	flushDrawElementsBatch<gfx_api::TerrainDepthPrepass>();
-	gfx_api::TerrainDepthPrepass::get().unbind_vertex_buffers(geometryVBO);
+	flushDrawElementsBatch<PSO>();
+	PSO::get().unbind_vertex_buffers(geometryVBO);
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 	gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 }
 
-void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view)
+void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view)
+{
+	drawTerrainScenePrepassImpl<gfx_api::TerrainDepthPrepassTess, gfx_api::TerrainDepthPrepass>(modelViewProjection, view);
+}
+
+void drawTerrainDepthOnlyPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view)
+{
+	drawTerrainScenePrepassImpl<gfx_api::TerrainDepthPrepassTessDepthOnly, gfx_api::TerrainDepthPrepassDepthOnly>(modelViewProjection, view);
+}
+
+// Shared body for the water scene-prepass draw - see drawTerrainScenePrepassImpl
+template <typename PSO>
+static void drawWaterScenePrepassImpl(const glm::mat4& projection, const glm::mat4& view)
 {
 	if (!waterVBO || !waterIndexVBO)
 	{
@@ -2276,9 +2293,10 @@ void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& v
 	}
 
 	const glm::mat4 mvp = projection * view;
-	gfx_api::WaterDepthPrepass::get().bind();
-	gfx_api::WaterDepthPrepass::get().bind_vertex_buffers(waterVBO);
-	gfx_api::WaterDepthPrepass::get().bind_constants({ mvp, view });
+	PSO::get().bind();
+	PSO::get().bind_vertex_buffers(waterVBO);
+	const gfx_api::constant_buffer_type<SHADER_WATER_DEPTH_PREPASS> uniforms { mvp, view };
+	PSO::get().template set_uniforms_at<0>(uniforms);
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 
 	for (int x = 0; x < xSectors; x++)
@@ -2287,15 +2305,25 @@ void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& v
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				batchDrawElements<gfx_api::WaterDepthPrepass>(
+				batchDrawElements<PSO>(
 					sectors[x * ySectors + y].waterIndexSize,
 					sectors[x * ySectors + y].waterIndexOffset);
 			}
 		}
 	}
-	flushDrawElementsBatch<gfx_api::WaterDepthPrepass>();
-	gfx_api::WaterDepthPrepass::get().unbind_vertex_buffers(waterVBO);
+	flushDrawElementsBatch<PSO>();
+	PSO::get().unbind_vertex_buffers(waterVBO);
 	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
+}
+
+void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view)
+{
+	drawWaterScenePrepassImpl<gfx_api::WaterDepthPrepass>(projection, view);
+}
+
+void drawWaterDepthOnlyPrepass(const glm::mat4& projection, const glm::mat4& view)
+{
+	drawWaterScenePrepassImpl<gfx_api::WaterDepthPrepassDepthOnly>(projection, view);
 }
 
 /**

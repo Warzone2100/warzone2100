@@ -1319,6 +1319,25 @@ namespace gfx_api
 		>
 	>, notexture, SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED>;
 
+	/// Mesh scene depth-only prepass (no color attachment - PrepassNeed::Normals absent)
+	using Draw3DShapeDepthPrepassDepthOnly_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
+	std::tuple<
+	Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	>,
+	std::tuple<
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
+	vertex_buffer_description<sizeof(Draw3DShapePerInstanceInterleavedData), gfx_api::vertex_attribute_input_rate::instance,
+		vertex_attribute_description<instance_modelMatrix, gfx_api::vertex_attribute_type::float4, 0>,
+		vertex_attribute_description<instance_modelMatrix + 1, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)>,
+		vertex_attribute_description<instance_modelMatrix + 2, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*2>,
+		vertex_attribute_description<instance_modelMatrix + 3, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*3>,
+		vertex_attribute_description<instance_packedValues, gfx_api::vertex_attribute_type::float4, offsetof(Draw3DShapePerInstanceInterleavedData, shaderStretch_ecmState_alphaTest_animFrameNumber)>,
+		vertex_attribute_description<instance_Colour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, colour)>,
+		vertex_attribute_description<instance_TeamColour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, teamcolour)>
+		>
+	>, notexture, SHADER_COMPONENT_DEPTH_PREPASS_DEPTHONLY_INSTANCED>;
+
 	template<>
 	struct constant_buffer_type<SHADER_GENERIC_COLOR>
 	{
@@ -1411,6 +1430,13 @@ namespace gfx_api
 		TerrainDepthPrepassVertexVBODescription
 	>, notexture, SHADER_TERRAIN_DEPTH_PREPASS>;
 
+	/// Terrain scene depth-only prepass (no color attachment - PrepassNeed::Normals absent)
+	using TerrainDepthPrepassDepthOnly = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTH_PREPASS>>,
+	std::tuple<
+		TerrainDepthPrepassVertexVBODescription
+	>, notexture, SHADER_TERRAIN_DEPTH_PREPASS_DEPTHONLY>;
+
 	template<>
 	struct constant_buffer_type<SHADER_WATER_DEPTH_PREPASS>
 	{
@@ -1424,6 +1450,14 @@ namespace gfx_api
 		vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex,
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, notexture, SHADER_WATER_DEPTH_PREPASS>;
+
+	/// Water scene depth-only prepass (no color attachment - PrepassNeed::Normals absent)
+	using WaterDepthPrepassDepthOnly = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_WATER_DEPTH_PREPASS>>,
+	std::tuple<
+		vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
+	>, notexture, SHADER_WATER_DEPTH_PREPASS_DEPTHONLY>;
 
 
 	struct TerrainDecalVertex
@@ -1583,6 +1617,17 @@ namespace gfx_api
 		tess_texture_description<1, sampler_type::bilinear>, // baked terrain outline offset
 		tess_texture_description<2, sampler_type::bilinear>  // baked terrain normal
 	>, SHADER_TERRAIN_DEPTH_PREPASS_TESS>;
+
+	/// Tessellated terrain scene depth-only prepass (no color attachment - PrepassNeed::Normals absent)
+	using TerrainDepthPrepassTessDepthOnly = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
+	std::tuple<TerrainDepthPrepassTessUniforms>,
+	std::tuple<
+		TerrainPatchCornerVBODescription
+	>, std::tuple<
+		tess_texture_description<0, sampler_type::bilinear>, // baked terrain height
+		tess_texture_description<1, sampler_type::bilinear>, // baked terrain outline offset
+		tess_texture_description<2, sampler_type::bilinear>  // baked terrain normal
+	>, SHADER_TERRAIN_DEPTH_PREPASS_TESS_DEPTHONLY>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER>

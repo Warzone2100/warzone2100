@@ -158,11 +158,17 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::DepthCascade, i);
 	}
 
-	if (prepassNeeds(snapshot) != PrepassNeed::None)
+	const PrepassNeed scenePrepassNeeds = prepassNeeds(snapshot);
+	if (scenePrepassNeeds != PrepassNeed::None)
 	{
-		builder.beginPass(PassId::ScenePrepass, "ScenePrepass")
-			.color(PipelineSurfaceId::ScenePrepassNormals, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
-			.depth(PipelineSurfaceId::ScenePrepassDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
+		builder.beginPass(PassId::ScenePrepass, "ScenePrepass");
+		if (hasFlag(scenePrepassNeeds, PrepassNeed::Normals))
+		{
+			// When Normals is off the pass runs depth-only (record follows the attachment count, see recordScenePrepass)
+			// and skips the normals rasterization entirely.
+			builder.color(PipelineSurfaceId::ScenePrepassNormals, AttachmentLoadOp::Clear, AttachmentStoreOp::Store);
+		}
+		builder.depth(PipelineSurfaceId::ScenePrepassDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::SceneColorTarget);
 	}
 

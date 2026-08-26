@@ -1574,7 +1574,7 @@ void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMat
 			drawParts |= InstancedMeshRenderer::DrawParts::ShadowCastingShapes;
 		}
 	}
-	else if (depthPassMode == MeshDepthPassMode::ScenePrepass)
+	else if (depthPassMode == MeshDepthPassMode::ScenePrepass || depthPassMode == MeshDepthPassMode::ScenePrepassDepthOnly)
 	{
 		// Opaque bucket only (no translucent / additive / stencil shadows).
 		drawParts = InstancedMeshRenderer::DrawParts::ShadowCastingShapes;
@@ -1766,18 +1766,22 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 }
 
-static void drawInstanced3dShapeDepthPrepass(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+// Shared body for the scene-prepass mesh draw.
+// `PrepassPSO` is either the depth+normal PSO (normals attachment bound) or the depth-only PSO (no color attachment bound).
+// Both share vertex layout and the depth-only uniform block.
+template<typename PrepassPSO>
+static void drawInstanced3dShapeDepthPrepassImpl(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
 	if (pieFlag & pie_NODEPTHWRITE)
 	{
 		return;
 	}
 
-	gfx_api::Draw3DShapeDepthPrepass_Instanced::get().bind();
+	PrepassPSO::get().bind();
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
-	globalsOnce.perform_once<gfx_api::Draw3DShapeDepthPrepass_Instanced>([&globalUniforms]{
+	globalsOnce.perform_once<PrepassPSO>([&globalUniforms]{
 		gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms depthGlobals = {globalUniforms.ProjectionMatrix, globalUniforms.ViewMatrix};
-		gfx_api::Draw3DShapeDepthPrepass_Instanced::get().set_uniforms_at(0, depthGlobals);
+		PrepassPSO::get().set_uniforms_at(0, depthGlobals);
 	});
 
 	gfx_api::context::get().bind_vertex_buffers(0, {
@@ -1785,7 +1789,17 @@ static void drawInstanced3dShapeDepthPrepass(ShaderOnce& globalsOnce, const gfx_
 		std::make_tuple(shape->buffers[VBO_NORMAL], 0),
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
 
-	gfx_api::Draw3DShapeDepthPrepass_Instanced::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
+	PrepassPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
+}
+
+static void drawInstanced3dShapeDepthPrepass(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+{
+	drawInstanced3dShapeDepthPrepassImpl<gfx_api::Draw3DShapeDepthPrepass_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+}
+
+static void drawInstanced3dShapeDepthPrepassDepthOnly(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+{
+	drawInstanced3dShapeDepthPrepassImpl<gfx_api::Draw3DShapeDepthPrepassDepthOnly_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
 }
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename PremultipliedNoDepthWRTPSO, typename OpaquePSO>
@@ -1873,6 +1887,10 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 	else if (depthPassMode == MeshDepthPassMode::ScenePrepass)
 	{
 		drawInstanced3dShapeDepthPrepass(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
+	else if (depthPassMode == MeshDepthPassMode::ScenePrepassDepthOnly)
+	{
+		drawInstanced3dShapeDepthPrepassDepthOnly(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
 	}
 	else if (light)
 	{

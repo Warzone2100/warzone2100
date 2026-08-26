@@ -19,7 +19,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file scene_prepass.cpp
- * Combined scene depth + view-space normals prepass for SSAO and deferred fog.
+ * Scene prepass for SSAO, deferred fog, and forward transparents:
+ * depth + view-space normals when needed (ex: SSAO), depth alone otherwise.
  */
 
 #include "scene_prepass.h"
@@ -29,7 +30,7 @@
 
 #include "lib/ivis_opengl/piedraw.h"
 
-void recordScenePrepass(const gfx_api::RenderPassContext& /*passCtx*/)
+void recordScenePrepass(const gfx_api::RenderPassContext& passCtx)
 {
 	if (!pie_IsInGame3DFrameContextReady())
 	{
@@ -39,8 +40,23 @@ void recordScenePrepass(const gfx_api::RenderPassContext& /*passCtx*/)
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos{fc.cameraPos.x, fc.cameraPos.y, fc.cameraPos.z};
 
-	drawTerrainDepthNormalPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
-	drawWaterDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix);
+	// The blueprint attaches the normals color target only when an enabled post-effect needs it (PrepassNeed::Normals, i.e. SSAO).
+	// Follow the pass's actual attachments rather than re-deriving the config, so record and blueprint can never disagree:
+	// with no color attachment bound, rasterize depth alone through the depth-only PSOs (empty fragment stage, no normals
+	// bandwidth - many GPUs rasterize depth-only at increased rate).
+	const bool writesNormals = passCtx.writeCount() > 0;
+
+	if (writesNormals)
+	{
+		drawTerrainDepthNormalPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
+		drawWaterDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix);
+	}
+	else
+	{
+		drawTerrainDepthOnlyPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
+		drawWaterDepthOnlyPrepass(fc.perspectiveMatrix, fc.viewMatrix);
+	}
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix,
-		cameraPos, fc.shadowCascadesInfo, nullptr, fc.pointLights, MeshDepthPassMode::ScenePrepass);
+		cameraPos, fc.shadowCascadesInfo, nullptr, fc.pointLights,
+		writesNormals ? MeshDepthPassMode::ScenePrepass : MeshDepthPassMode::ScenePrepassDepthOnly);
 }
