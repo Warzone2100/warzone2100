@@ -761,7 +761,10 @@ std::unique_ptr<CorridorMap> corridorMapBuild(const WorldMapState& mapState)
 	{
 		for (int x = 0; x < g.w; ++x)
 		{
-			passable[g.idx(x, y)] = fpathBlockingTile(mapState, x, y, GROUND_PROP) ? 0 : 1;
+			// Scroll limits are ignored: they partition the map temporarily, and the detected
+			// corridors must come out the same whichever window was active at build time, or a
+			// save's narrowed window would rebuild a different geometry than the map load did.
+			passable[g.idx(x, y)] = fpathBlockingTileScrollIgnored(mapState, x, y, GROUND_PROP) ? 0 : 1;
 		}
 	}
 

@@ -113,6 +113,12 @@ bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_M
  *  @return true if the given tile is blocking for this droid
  */
 bool fpathBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+
+/// Like fpathBlockingTile, but ignoring the scroll limits: they partition a map temporarily
+/// (campaign widens them mid-game and a save restores whatever window was active), so anything
+/// derived once per map must not read them. Sees the whole map, with the outermost ring blocked
+/// exactly as a full-map scroll window blocks it.
+bool fpathBlockingTileScrollIgnored(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 bool fpathDroidBlockingTile(DROID *psDroid, const WorldMapState& mapState, int x, int y, FPATH_MOVETYPE moveType);
 bool fpathBaseBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
