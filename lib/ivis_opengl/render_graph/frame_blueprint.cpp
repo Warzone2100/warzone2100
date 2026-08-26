@@ -194,8 +194,14 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		}
 	}
 
-	addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades);
-	incomingColor = PassId::SceneTransparent;
+	// The transparents only need their own pass when a post-effect sits between them and the opaque scene.
+	// With every effect off, we instead fuse them back into ScenePass (see recordScenePass): no prepass, no extra pass roundtrip,
+	// and scene MSAA covers the transparents again.
+	if (anyScenePostEffectEnabled(snapshot))
+	{
+		addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades);
+		incomingColor = PassId::SceneTransparent;
+	}
 	appendPresentation(builder, snapshot, incomingColor);
 
 	addSwapchainPassToBuilder(builder, PassId::TargettingEffects, "TargettingEffects", snapshot.swapchainMsaa,

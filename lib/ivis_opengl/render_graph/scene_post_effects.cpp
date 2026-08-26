@@ -123,20 +123,53 @@ PrepassNeed unionPrepassNeeds(Enabled&& enabled)
 	return needs;
 }
 
+template <typename Enabled>
+bool anyEffectEnabled(Enabled&& enabled)
+{
+	for (const ScenePostEffectDesc& effect : kScenePostEffects)
+	{
+		if (enabled(effect.id))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 } // anonymous namespace
+
+bool anyScenePostEffectEnabled(const RenderTopologySnapshot& snapshot)
+{
+	return anyEffectEnabled([&](ScenePostEffectId id) { return effectEnabled(snapshot, id); });
+}
+
+bool anyScenePostEffectEnabled(const SceneEffectSurfaces& cfg)
+{
+	return anyEffectEnabled([&](ScenePostEffectId id) { return cfg.enabled(id); });
+}
 
 PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot)
 {
-	// Forward transparents always depth-test against the single-sample prepass depth.
-	return PrepassNeed::Depth
-		| unionPrepassNeeds([&](ScenePostEffectId id) { return effectEnabled(snapshot, id); });
+	PrepassNeed needs = unionPrepassNeeds([&](ScenePostEffectId id) { return effectEnabled(snapshot, id); });
+	if (anyScenePostEffectEnabled(snapshot))
+	{
+		// A post-effect sits between opaque ScenePass and the transparents, so the blueprint separates them into SceneTransparent,
+		// which depth-tests forward transparents against the single-sample prepass depth.
+		// (With no effect enabled, the passes fuse - transparents draw in ScenePass - and no prepass is required at all.)
+		needs = needs | PrepassNeed::Depth;
+	}
+	return needs;
 }
 
 PrepassNeed prepassNeeds(const SceneEffectSurfaces& cfg)
 {
 	// Keep surface allocation in lockstep with the in-game blueprint requirement above.
-	return PrepassNeed::Depth
-		| unionPrepassNeeds([&](ScenePostEffectId id) { return cfg.enabled(id); });
+	PrepassNeed needs = unionPrepassNeeds([&](ScenePostEffectId id) { return cfg.enabled(id); });
+	if (anyScenePostEffectEnabled(cfg))
+	{
+		needs = needs | PrepassNeed::Depth;
+	}
+	return needs;
 }
 
 void emitApplyPass(BlueprintBuilder& builder, const ScenePostEffectDesc& effect, PassId incomingColor)

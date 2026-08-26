@@ -144,6 +144,13 @@ PassGraphTopologyBlueprint BlueprintBuilder::build()
 {
 	PassGraphTopologyBlueprint blueprint;
 	blueprint._passes = std::move(_passes);
+	for (const BlueprintPass& pass : blueprint._passes)
+	{
+		if (pass.id < PassId::Count)
+		{
+			blueprint._passPresence.set(static_cast<size_t>(pass.id));
+		}
+	}
 	_current = nullptr;
 	return blueprint;
 }

@@ -56,8 +56,9 @@ namespace gfx_api
 
 struct abstract_texture;
 
-/// Independent SSAO/fog/range-ring catalog requests. The scene prepass always provides
-/// depth for forward transparents and adds effect-specific capabilities via `prepassNeeds(cfg)`.
+/// Independent SSAO/fog/range-ring catalog requests.
+/// When any effect is enabled the scene prepass provides depth for the separated forward transparents, plus effect-specific capabilities via `prepassNeeds(cfg)`.
+/// With all effects off the transparents draw fused in ScenePass and no prepass runs.
 struct SceneEffectSurfaces
 {
 	bool ssao = false;
@@ -356,7 +357,7 @@ struct PipelineSurfaceSyncInputs
 	bool smaa = false;
 	/// Allocated scene-effect catalog request (enable flags + SSAO divisors).
 	SceneEffectSurfaces effects;
-	/// Baseline transparent-depth need plus enabled post-effect capabilities (`prepassNeeds(effects)`).
+	/// Enabled post-effect prepass capabilities, plus the separated transparents depth need when any effect is enabled (`prepassNeeds(effects)`).
 	PrepassNeed prepassNeeds = PrepassNeed::None;
 };
 
