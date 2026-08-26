@@ -2073,7 +2073,6 @@ static const Vector2i aDirOffset[] =
 };
 
 // Flood fill a "continent".
-// TODO take into account scroll limits and update continents on scroll limit changes
 static void mapFloodFill(WorldMapState& mapState, int x, int y, int continent, uint8_t blockedBits, uint16_t MAPTILE::*varContinent)
 {
 	std::vector<Vector2i> open;
@@ -2130,16 +2129,16 @@ void mapFloodFillContinents(WorldMapState& mapState)
 		{
 			MAPTILE *psTile = mapTile(mapState, x, y);
 
-			if (psTile->limitedContinent == 0 && !fpathBlockingTile(mapState, x, y, PROPULSION_TYPE_WHEELED))
+			if (psTile->limitedContinent == 0 && !fpathBlockingTileScrollIgnored(mapState, x, y, PROPULSION_TYPE_WHEELED))
 			{
 				mapFloodFill(mapState, x, y, 1 + limitedContinents++, WATER_BLOCKED | FEATURE_BLOCKED, &MAPTILE::limitedContinent);
 			}
-			else if (psTile->limitedContinent == 0 && !fpathBlockingTile(mapState, x, y, PROPULSION_TYPE_PROPELLOR))
+			else if (psTile->limitedContinent == 0 && !fpathBlockingTileScrollIgnored(mapState, x, y, PROPULSION_TYPE_PROPELLOR))
 			{
 				mapFloodFill(mapState, x, y, 1 + limitedContinents++, LAND_BLOCKED | FEATURE_BLOCKED, &MAPTILE::limitedContinent);
 			}
 
-			if (psTile->hoverContinent == 0 && !fpathBlockingTile(mapState, x, y, PROPULSION_TYPE_HOVER))
+			if (psTile->hoverContinent == 0 && !fpathBlockingTileScrollIgnored(mapState, x, y, PROPULSION_TYPE_HOVER))
 			{
 				mapFloodFill(mapState, x, y, 1 + hoverContinents++, FEATURE_BLOCKED, &MAPTILE::hoverContinent);
 			}
