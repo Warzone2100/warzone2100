@@ -354,6 +354,22 @@ bool fpathBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPUL
 	return fpathBaseBlockingTile(mapState, x, y, propulsion, 0, FMT_BLOCK);  // with FMT_BLOCK, it is irrelevant which player is passed in
 }
 
+bool fpathBlockingTileScrollIgnored(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
+{
+	// The border test folds in the ring a full-map scroll window blocks, so a map whose window is
+	// wide open computes exactly what fpathBlockingTile computes.
+	if (x < 1 || y < 1 || x >= mapState.width - 1 || y >= mapState.height - 1)
+	{
+		return true;
+	}
+	const unsigned unitbits = prop2bits(propulsion);
+	if ((unitbits & FEATURE_BLOCKED) != 0 && (auxTile(mapState, x, y, 0) & AUXBITS_BLOCKING) != 0)
+	{
+		return true;
+	}
+	return (blockTile(mapState, x, y, 0) & unitbits) != 0;
+}
+
 
 // Returns the closest non-blocking tile to pos, or returns pos if no non-blocking tiles are present within a 2 tile distance.
 static Position findNonblockingPosition(const WorldMapState& mapState, Position pos, PROPULSION_TYPE propulsion, int player = 0, FPATH_MOVETYPE moveType = FMT_BLOCK)
