@@ -888,35 +888,22 @@ void corridorGateUpdate(GameWorld &world)
 		// The map every corridor decision is made against, into the sync stream once per map.
 		// Emitted here so it lands on a tick that every client shares.
 		syncDebug("corridorMap = %08X, %zu corridors", cmap->checksum, cmap->corridors.size());
-		flow.prevFlow.assign(cmap->corridors.size(), 0);
-		++g_queryStamp;   // the joint flow is reset, so no earlier answer holds
+		// Joint flow measured against another corridor map does not apply to this one, so it is
+		// reset - but flow the map's own checksum vouches for stays, which is what lets a carry a
+		// load restored survive to the first update, classifying droids at a joint exactly as the
+		// saved run's next tick would have.
+		if (flow.prevFlowChecksum != cmap->checksum || flow.prevFlow.size() != cmap->corridors.size())
+		{
+			flow.prevFlow.assign(cmap->corridors.size(), 0);
+			flow.prevFlowChecksum = cmap->checksum;
+		}
+		++g_queryStamp;   // the joints changed, so no earlier answer holds
 		// droid ids recycle across games, so the transition log dedup restarts with the map
 		g_logClass.clear();
 		g_logSpeed.clear();
 	}
 	const size_t n = cmap->corridors.size();
 	const CorridorChains &chains = cmap->chains;
-	// A load leaves the joints at zero, where a continuing game would have the flow the previous tick saw,
-	// so the first tick after a load classifies droids at a joint differently.
-	// Put the recorded flow back before the loop below reads it.
-	// NOTE: Only if it was measured against this corridor map - the flow is indexed by corridor id, so a
-	// different map would apply it to the wrong passages.
-	if (flow.pendingCarry.has_value())
-	{
-		const bool sameMap = flow.pendingCarry->mapChecksum == cmap->checksum
-		                     && flow.pendingCarry->flow.size() == n;
-		if (sameMap)
-		{
-			flow.prevFlow = flow.pendingCarry->flow;
-			++g_queryStamp;   // the joint flow changed, so no earlier answer holds
-		}
-		else
-		{
-			debug(LOG_MOVEMENT, "corridor carry discarded: saved map %08X over %zu corridors, loaded %08X over %zu",
-			      flow.pendingCarry->mapChecksum, flow.pendingCarry->flow.size(), cmap->checksum, n);
-		}
-		flow.pendingCarry.reset();
-	}
 	// Flow is aggregated over each chain, with member directions mapped into
 	// chain orientation, so a passage split at junctions still reads as the one
 	// stream of traffic it physically carries.
@@ -1189,6 +1176,7 @@ void corridorGateUpdate(GameWorld &world)
 	{
 		flow.prevFlow[i] = static_cast<uint8_t>((flow.cFlowFwd[i] > 0 ? 1 : 0) | (flow.cFlowBwd[i] > 0 ? 2 : 0));
 	}
+	flow.prevFlowChecksum = cmap->checksum;
 	++g_queryStamp;   // the joint flow changed, so no earlier answer holds
 
 	flow.handed.assign(n, 1);
@@ -1714,25 +1702,37 @@ const uint32_t QUEUE_REEVAL = 15000;
 
 std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world)
 {
+	// prevFlow IS the carry: written by this world's updates and by a restored save alike, so an
+	// inactive world saved again before its next active tick still round-trips the flow it held.
 	const CorridorFlowState &flow = world.corridorFlow;
 	const CorridorMap *cmap = world.map.corridors.get();
-	if (cmap == nullptr || flow.cFlowFwd.size() != cmap->corridors.size())
+	if (cmap == nullptr || flow.prevFlowChecksum != cmap->checksum
+	    || flow.prevFlow.size() != cmap->corridors.size())
 	{
-		return std::nullopt;   // no map, or no update has run yet, so nothing is carried
+		return std::nullopt;   // no map, or nothing measured against this map, so nothing is carried
 	}
 	CorridorGateCarry carry;
 	carry.mapChecksum = cmap->checksum;
-	carry.flow.resize(flow.cFlowFwd.size(), 0);
-	for (size_t i = 0; i < flow.cFlowFwd.size(); ++i)
-	{
-		carry.flow[i] = static_cast<uint8_t>((flow.cFlowFwd[i] > 0 ? 1 : 0) | (flow.cFlowBwd[i] > 0 ? 2 : 0));
-	}
+	carry.flow = flow.prevFlow;
 	return carry;
 }
 
-void corridorGateSetCarry(GameWorld &world, std::optional<CorridorGateCarry> carry)
+void corridorGateRestoreCarry(GameWorld &world, const CorridorGateCarry &carry)
 {
-	world.corridorFlow.pendingCarry = std::move(carry);
+	const CorridorMap *cmap = world.map.corridors.get();
+	if (cmap == nullptr || carry.mapChecksum != cmap->checksum
+	    || carry.flow.size() != cmap->corridors.size())
+	{
+		// The flow is indexed by corridor id, so a carry from a different map would apply to the
+		// wrong passages. Dropping it degrades to rebuilding the flow on the next update.
+		debug(LOG_MOVEMENT, "corridor carry discarded: saved map %08X over %zu corridors, loaded %08X over %zu",
+		      carry.mapChecksum, carry.flow.size(),
+		      cmap != nullptr ? cmap->checksum : 0, cmap != nullptr ? cmap->corridors.size() : 0);
+		return;
+	}
+	world.corridorFlow.prevFlow = carry.flow;
+	world.corridorFlow.prevFlowChecksum = carry.mapChecksum;
+	++g_queryStamp;   // the joint flow changed, so no earlier answer holds
 }
 
 bool corridorContested(const GameWorld &world, int corridorId)
