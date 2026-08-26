@@ -57,6 +57,11 @@ void CachedRenderGraph::setRecordFuncs(RecordFuncTable funcs)
 	invalidateCache(false);
 }
 
+bool CachedRenderGraph::blueprintContainsPass(PassId id) const
+{
+	return _blueprint.containsPass(id);
+}
+
 void CachedRenderGraph::ensureBuilt(const RenderTopologySnapshot& snapshot)
 {
 	const uint64_t materializeHash = snapshot.materializeHash();

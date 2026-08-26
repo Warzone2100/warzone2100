@@ -28,6 +28,7 @@
 #include "render_pass_id.h"
 
 #include <array>
+#include <bitset>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -159,6 +160,11 @@ class PassGraphTopologyBlueprint
 public:
 	/// Ordered pass sequence for this frame topology.
 	const std::vector<BlueprintPass>& passes() const { return _passes; }
+	/// Whether this topology contains a pass with `id`.
+	inline bool containsPass(PassId id) const
+	{
+		return id < PassId::Count && _passPresence.test(static_cast<size_t>(id));
+	}
 	/// Hash of pass ids, attachment layout, reads, and viewport rules (not dimensions).
 	uint64_t topologyHash() const;
 
@@ -168,6 +174,7 @@ public:
 private:
 	friend class BlueprintBuilder;
 	std::vector<BlueprintPass> _passes;
+	std::bitset<static_cast<size_t>(PassId::Count)> _passPresence;
 };
 
 /// Human-readable dump of pass order, attachments, and read edges (debug logging).

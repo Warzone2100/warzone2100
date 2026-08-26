@@ -72,6 +72,10 @@ struct ScenePostEffectDesc
 };
 
 bool effectEnabled(const RenderTopologySnapshot& snapshot, ScenePostEffectId id);
+/// True when at least one scene post-effect is enabled - i.e. something sits between opaque ScenePass and the transparents,
+/// so the blueprint separates them into the SceneTransparent pass (and the prepass must provide depth).
+bool anyScenePostEffectEnabled(const RenderTopologySnapshot& snapshot);
+bool anyScenePostEffectEnabled(const SceneEffectSurfaces& cfg);
 PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot);
 PrepassNeed prepassNeeds(const SceneEffectSurfaces& cfg);
 

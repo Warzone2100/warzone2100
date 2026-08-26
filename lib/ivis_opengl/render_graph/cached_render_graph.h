@@ -58,6 +58,9 @@ public:
 	void ensureBuilt(const RenderTopologySnapshot& snapshot);
 	/// Record the cached pass list for the current frame (no submit/present).
 	void execute();
+	/// True when the current blueprint contains `id`.
+	/// Valid during `execute` (record callbacks may consult it to learn the frame's pass composition).
+	bool blueprintContainsPass(PassId id) const;
 
 private:
 	PassGraphTopologyBlueprint _blueprint;

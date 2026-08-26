@@ -44,6 +44,8 @@
 
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/piedraw.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/render_graph/cached_render_graph.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/render_graph/render_pass_id.h"
@@ -125,14 +127,28 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 	drawWater(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, shadowMap, fc.pointLights);
 	wzPerfEnd(PERF_WATER);
 
+	// When no post-effect is enabled, the blueprint emits no SceneTransparent pass and the transparents fuse back into this pass
+	// (pre-separation behavior: no prepass cost, one pass roundtrip, and scene MSAA covers the transparents).
+	// Key off the executing blueprint, so record and blueprint cannot disagree.
+	const bool fusedTransparents =
+		!pie_GetCachedFrameRenderGraph().blueprintContainsPass(gfx_api::PassId::SceneTransparent);
+
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
+		// Opaque meshes keep per-mesh fog disabled either way (fogOutput is Disabled outside the transparent buckets),
+		// so ForwardDistance in the fused case only fogs the transparent buckets, from fragment distance.
 		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
 			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None,
-			MeshDrawParts::Opaque, MeshFogMode::Disabled);
+			fusedTransparents ? MeshDrawParts::All : MeshDrawParts::Opaque,
+			fusedTransparents ? MeshFogMode::ForwardDistance : MeshFogMode::Disabled);
 	}
 	wzPerfEnd(PERF_MODELS);
+
+	if (fusedTransparents && !gamePaused())
+	{
+		display3d_doConstructionLines(fc.viewMatrix);
+	}
 
 	display3d_locateMouse();
 }
