@@ -2732,11 +2732,23 @@ static nlohmann::ordered_json writeWorldObjects(const GameWorld &world, bool onM
 	// one exception: which directions had flow at each corridor, which the following tick reads to
 	// decide whether a junction carries both. Without it the first tick after a load may classify
 	// droids at a junction differently, and the run may diverge from the one that was saved.
-	// Recorded per world, so the off-world half of a campaign save carries its own flow too.
-	const std::optional<CorridorGateCarry> gateCarry = corridorGateCarry(world);
-	if (gateCarry.has_value())
+	// Recorded per world, so the off-world half of a campaign save carries its own flow too, and
+	// per player, since each player's cohort measures its own flow. A player whose flow says
+	// nothing is left out, restoring nothing leaves the same clean state behind.
+	nlohmann::ordered_json jgateCarry = nlohmann::ordered_json::object();
+	for (unsigned p = 0; p < MAX_PLAYERS; ++p)
 	{
-		j["corridorFlow"] = *gateCarry;
+		const std::optional<CorridorGateCarry> gateCarry = corridorGateCarry(world, p);
+		if (!gateCarry.has_value()
+		    || std::all_of(gateCarry->flow.begin(), gateCarry->flow.end(), [](uint8_t f) { return f == 0; }))
+		{
+			continue;
+		}
+		jgateCarry[std::to_string(p)] = *gateCarry;
+	}
+	if (!jgateCarry.empty())
+	{
+		j["corridorFlow"] = std::move(jgateCarry);
 	}
 
 	nlohmann::ordered_json jfeatures = nlohmann::ordered_json::array();
@@ -2775,10 +2787,26 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 	// back the saved carry. The world's corridors were already rebuilt from the restored terrain
 	// (main world before any other section, off-world inside readMission), so it applies directly,
 	// checked against the checksum of the map that actually loaded.
-	world.corridorFlow = CorridorFlowState();
+	world.corridorFlow = CorridorFlowWorld();
 	if (j.contains("corridorFlow"))
 	{
-		corridorGateRestoreCarry(world, j.at("corridorFlow").get<CorridorGateCarry>());
+		const nlohmann::ordered_json &jgateCarry = j.at("corridorFlow");
+		if (!jgateCarry.is_object())
+		{
+			throw StateError("world.corridorFlow must be an object");
+		}
+		for (auto it = jgateCarry.begin(); it != jgateCarry.end(); ++it)
+		{
+			const std::string &key = it.key();
+			const bool numeric = !key.empty()
+			                     && std::all_of(key.begin(), key.end(), [](char ch) { return ch >= '0' && ch <= '9'; });
+			const int p = numeric && key.size() <= 2 ? std::stoi(key) : -1;
+			if (p < 0 || p >= MAX_PLAYERS)
+			{
+				throw StateError("world.corridorFlow player key out of range");
+			}
+			corridorGateRestoreCarry(world, static_cast<unsigned>(p), it.value().get<CorridorGateCarry>());
+		}
 	}
 
 	const nlohmann::ordered_json &jfeatures = j.at("features");
