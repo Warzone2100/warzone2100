@@ -788,6 +788,11 @@ bool pathfindingSettleTimeEnabled()
 	return (game.pathfindingBackend & PF_SETTLE_TIME) != 0;
 }
 
+bool pathfindingBackoffEnabled()
+{
+	return (game.pathfindingBackend & PF_BACKOFF) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;

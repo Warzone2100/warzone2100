@@ -74,6 +74,7 @@ enum PathfindingFeature : uint16_t
 	PF_WIDE_QUEUE        = 1 << 9,   ///< size the entry queue by the room at the approach, not by the corridor band
 	PF_TURN_VOTE         = 1 << 10,  ///< read a passage's turn side at its own mouths, by majority
 	PF_SETTLE_TIME       = 1 << 11,  ///< settle for what is reachable by time tried, not by nearness
+	PF_BACKOFF           = 1 << 12,  ///< back a droid that has gained no ground out of the press holding it
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -109,6 +110,7 @@ bool pathfindingTurnVoteEnabled();
 /// True if a droid at the end of its route widens what it will settle for by
 /// how long it has been trying, not only once it is already nearly there.
 bool pathfindingSettleTimeEnabled();
+bool pathfindingBackoffEnabled();
 
 class IPathfindingBackend
 {

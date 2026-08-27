@@ -1459,6 +1459,62 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	CHECK_DROID(psDroid);
 }
 
+// A plain mover that has gained no real ground for the stall limit is backed away from whatever is holding it
+// (since collision resolution always permits movement away from contacts).
+// Uses a high enough limit to try to avoid impacting productive turn-taking waits when streams cross, but so that
+// a press that has stopped draining retreats. Jittered by id so that a jammed crowd peels off in rolling waves.
+const uint32_t BACKOFF_STALL_BASE = 40000;
+const uint32_t BACKOFF_STALL_JITTER = 8000;
+const uint32_t BACKOFF_TIME = 4000;
+const int32_t BACKOFF_DEST_EXEMPT = 6 * TILE_UNITS;
+
+static bool moveBackoffActive(DROID *psDroid)
+{
+	MOVE_CONTROL &m = psDroid->sMove;
+	// The stall clock only runs while the droid is a plain mover the mechanism may act on.
+	// Anything else - fighting (DACTION_MOVEFIRE and the attack actions never reach here),
+	// held by the gate, packing at its destination - clears the state, so time spent in
+	// those states never counts toward a retreat.
+	if (!pathfindingBackoffEnabled() || psDroid->action != DACTION_MOVE
+	    || m.Status == MOVEINACTIVE
+	    || (pathfindingCorridorLanesEnabled() && corridorHold(gameWorld, psDroid) != CORRIDOR_HOLD_NONE))
+	{
+		m.backoffTime = 0;
+		m.backoffUntil = 0;
+		return false;
+	}
+	const Vector2i toDest = m.destination - psDroid->pos.xy();
+	if (static_cast<int64_t>(toDest.x) * toDest.x + static_cast<int64_t>(toDest.y) * toDest.y
+	    < static_cast<int64_t>(BACKOFF_DEST_EXEMPT) * BACKOFF_DEST_EXEMPT)
+	{
+		// packing at the destination is the settle machinery's job to handle
+		m.backoffTime = 0;
+		m.backoffUntil = 0;
+		return false;
+	}
+	if (gameTime < m.backoffUntil)
+	{
+		return true;
+	}
+	const Vector2i d = psDroid->pos.xy() - m.backoffPos;
+	if (m.backoffTime == 0 || m.backoffUntil != 0
+	    || static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y
+	       > static_cast<int64_t>(BLOCK_DIST) * BLOCK_DIST)
+	{
+		m.backoffPos = psDroid->pos.xy();
+		m.backoffTime = gameTime;
+		m.backoffUntil = 0;
+		return false;
+	}
+	const uint32_t stallLimit = BACKOFF_STALL_BASE + (psDroid->id * 2654435761u >> 16) % BACKOFF_STALL_JITTER;
+	if (gameTime - m.backoffTime > stallLimit)
+	{
+		m.backoffUntil = gameTime + BACKOFF_TIME;
+		return true;
+	}
+	return false;
+}
+
 /*!
  * Get a direction for a droid to avoid obstacles etc.
  * \param psDroid Which droid to examine
@@ -1478,6 +1534,18 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	if (pathfindingCorridorLanesEnabled() && corridorLaneTarget(gameWorld, psDroid, laneTarget))
 	{
 		ctx.targetPos = laneTarget;
+	}
+	if (moveBackoffActive(psDroid))
+	{
+		// Retreat: aim directly away from the waypoint, two tiles back.
+		// A steering aim only, so blocked ground clips or slides the motion like any other target.
+		Vector2i away = psDroid->pos.xy() - psDroid->sMove.target;
+		if (away.x == 0 && away.y == 0)
+		{
+			away = iSinCosR(static_cast<uint16_t>(psDroid->sMove.moveDir + DEG(180)), TILE_UNITS);
+		}
+		const int32_t len = std::max(iHypot(away), 1);
+		ctx.targetPos = psDroid->pos.xy() + Vector2i(away.x * 2 * TILE_UNITS / len, away.y * 2 * TILE_UNITS / len);
 	}
 	ctx.velocity = iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed);
 	ctx.moveDir = psDroid->sMove.moveDir;
