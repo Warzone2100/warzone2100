@@ -315,6 +315,77 @@
         "min": 12
       }
     },
+    "counterflow_hostile": {
+      "arrival_p50": {
+        "max": 4578,
+        "median": 1150,
+        "min": 314
+      },
+      "arrival_p95": {
+        "max": 4665,
+        "median": 1214,
+        "min": 314
+      },
+      "density_p95": {
+        "max": 29,
+        "median": 25,
+        "min": 21
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 10,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 12,
+        "median": 3,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 101755,
+        "median": 15863,
+        "min": 2062
+      },
+      "hardStopsNear": {
+        "max": 28,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 101755,
+        "median": 15857,
+        "min": 2061
+      },
+      "peakDensity": {
+        "max": 29,
+        "median": 27,
+        "min": 22
+      },
+      "repaths": {
+        "max": 2425,
+        "median": 345,
+        "min": 50
+      },
+      "resolved": {
+        "count": 22,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 27.31,
+        "median": 6.82,
+        "min": 1.74
+      },
+      "unitsArrived": {
+        "max": 32,
+        "median": 32,
+        "min": 1
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 1
+      }
+    },
     "counterflow_tracked": {
       "arrival_p50": {
         "max": 4137,
