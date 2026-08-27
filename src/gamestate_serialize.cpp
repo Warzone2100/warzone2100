@@ -2090,6 +2090,10 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 	// Restoring the counter while its record started over would grow the total again from a different tick.
 	mv["settleTime"] = d->sMove.settleTime;
 	mv["settleBest"] = d->sMove.settleBest;
+	// The backoff stall clock.
+	mv["backoffPos"] = writeVector2i(d->sMove.backoffPos);
+	mv["backoffTime"] = d->sMove.backoffTime;
+	mv["backoffUntil"] = d->sMove.backoffUntil;
 	j["move"] = std::move(mv);
 
 	if (d->sMove.psFormation != nullptr)
@@ -2318,6 +2322,12 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	d->sMove.tolerance = mv.at("tolerance").get<uint32_t>();
 	d->sMove.settleTime = mv.value("settleTime", static_cast<uint32_t>(0));
 	d->sMove.settleBest = mv.value("settleBest", static_cast<int32_t>(0));
+	if (mv.contains("backoffPos"))
+	{
+		d->sMove.backoffPos = readVector2i(mv.at("backoffPos"));
+	}
+	d->sMove.backoffTime = mv.value("backoffTime", static_cast<uint32_t>(0));
+	d->sMove.backoffUntil = mv.value("backoffUntil", static_cast<uint32_t>(0));
 	if (d->isVtol() && d->sMove.Status != MOVEINACTIVE)
 	{
 		d->rot.pitch = 0;

@@ -113,7 +113,7 @@ static int parsePathfindingBackendArg(const char *arg)
 	                               | PF_SOFT_COLLISION | PF_CROWD_MASS | PF_BEND_HOLD
 	                               | PF_BEND_HAND | PF_WIDE_LANES | PF_HAND_JOINT
 	                               | PF_WIDE_QUEUE | PF_TURN_VOTE
-	                               | PF_SETTLE_TIME;
+	                               | PF_SETTLE_TIME | PF_BACKOFF;
 	unsigned mask = 0;
 	const char *p = arg;
 	while (*p != '\0')
@@ -129,7 +129,7 @@ static int parsePathfindingBackendArg(const char *arg)
 	}
 	if ((mask & ~validMask) != 0)
 	{
-		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time", arg);
+		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time, 4096 backoff", arg);
 	}
 	return static_cast<int>(mask);
 }

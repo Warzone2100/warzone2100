@@ -89,6 +89,9 @@ struct MOVE_CONTROL
 	unsigned shuffleStart = 0;            ///< When a shuffle started
 	unsigned settleTime = 0;              ///< When this droid last closed on its destination
 	int32_t settleBest = 0;               ///< How close it has come, 0 until it has been measured
+	Vector2i backoffPos = Vector2i(0, 0); ///< Where this droid last gained real ground
+	unsigned backoffTime = 0;             ///< When it was there, 0 until it has been measured
+	unsigned backoffUntil = 0;            ///< End of the running backoff episode, 0 outside one
 
 	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 
