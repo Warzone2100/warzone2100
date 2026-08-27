@@ -31,6 +31,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/sync_debug.h"
 
+#include "ai.h"          // aiCheckAlliances, alliances
 #include "corridor_map.h"
 #include "droid.h"
 #include "game_world.h"
@@ -39,6 +40,7 @@
 #include "pathfinding_backend.h"
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <functional>
 #include <unordered_map>
@@ -147,9 +149,10 @@ const int32_t FUNNEL_MERGE = 2 * TILE_UNITS;
 // Fixed-point length for the unit direction vectors the funnel projects along.
 const int32_t DIR_UNIT = 4096;
 
-// The flow state itself lives on the GameWorld (CorridorFlowState in corridor_gate.h), derived
-// each update from that world's droids against its corridor map, so it travels through world
-// swaps with the droids and map it describes. Chains and mouth adjacency come derived with the
+// The flow state itself lives on the GameWorld (CorridorFlowWorld in corridor_gate.h), one state
+// per player, each derived every update from the droids of that player and its allies against the
+// world's corridor map, so it travels through world swaps with the droids and map it describes and
+// coordination never reaches across enemy lines. Chains and mouth adjacency come derived with the
 // map (CorridorMap::chains). Flow is coordinated over a whole chain - whether it is contested,
 // which way it runs, and where the waiting side queues - and queuing at an inner mouth would park
 // droids inside the neighbouring corridor and block it, so only a chain's outermost mouths hold a
@@ -228,7 +231,7 @@ bool corridorAtSharedJoint(const CorridorFlowState &flow, const CorridorChains &
 // stamp stays correct through world swaps without the memo having to record which world.
 uint32_t g_queryStamp = 1;
 
-Query queryCorridor(const GameWorld &world, const Vector2i &pos, const Vector2i &target)
+Query queryCorridor(const GameWorld &world, const CorridorFlowState &flow, const Vector2i &pos, const Vector2i &target)
 {
 	Query q;
 	const CorridorMap *cmap = world.map.corridors.get();
@@ -328,7 +331,7 @@ Query queryCorridor(const GameWorld &world, const Vector2i &pos, const Vector2i 
 		}
 		// Only span it if the nearest joint is a real gap. If it is not, say
 		// nothing rather than reaching past it to some further passage.
-		if (jointHolds(world.corridorFlow, self, selfEndB, pick))
+		if (jointHolds(flow, self, selfEndB, pick))
 		{
 			const Corridor &nc = cmap->corridors[static_cast<size_t>(pick->corridor)];
 			if (nc.centerline.size() >= 3)
@@ -507,7 +510,8 @@ int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr,
 /// The side a droid's route turns, read from the first sharp bend ahead of it.
 /// With a passage given, only a bend at that passage's own mouths answers, and
 /// bends elsewhere are stepped over rather than ending the scan.
-int routeTurnSide(const GameWorld &world, const DROID *psDroid, const Corridor *passage = nullptr)
+int routeTurnSide(const GameWorld &world, const CorridorFlowState &flow, const DROID *psDroid,
+                  const Corridor *passage = nullptr)
 {
 	const std::vector<Vector2i> &path = psDroid->sMove.asPath;
 	const int start = std::max(psDroid->sMove.pathIndex, 0);
@@ -527,8 +531,8 @@ int routeTurnSide(const GameWorld &world, const DROID *psDroid, const Corridor *
 			const int64_t dot = static_cast<int64_t>(seg.x) * next.x + static_cast<int64_t>(seg.y) * next.y;
 			if ((cross < 0 ? -cross : cross) > (dot < 0 ? -dot : dot))
 			{
-				const Query at = queryCorridor(world, prev, prev);
-				const Query after = queryCorridor(world, path[i], path[i]);
+				const Query at = queryCorridor(world, flow, prev, prev);
+				const Query after = queryCorridor(world, flow, path[i], path[i]);
 				const bool winding = at.relation == INSIDE && after.relation == INSIDE
 				                     && at.corridorId == after.corridorId;
 				bool ours = true;
@@ -550,9 +554,10 @@ int routeTurnSide(const GameWorld &world, const DROID *psDroid, const Corridor *
 	return 0;
 }
 
-Query queryDroid(const GameWorld &world, const DROID *psDroid, int *coverLoOut = nullptr, int *coverHiOut = nullptr)
+Query queryDroid(const GameWorld &world, const CorridorFlowState &flow, const DROID *psDroid,
+                 int *coverLoOut = nullptr, int *coverHiOut = nullptr)
 {
-	Query q = queryCorridor(world, psDroid->pos.xy(), psDroid->sMove.target);
+	Query q = queryCorridor(world, flow, psDroid->pos.xy(), psDroid->sMove.target);
 	if (q.corridorId < 0)
 	{
 		return q;
@@ -616,7 +621,7 @@ Query queryDroid(const GameWorld &world, const DROID *psDroid, int *coverLoOut =
 				}
 			}
 			// One unambiguous answer, and the joint it names has ground to span.
-			if (hits == 1 && jointHolds(world.corridorFlow, ci, chainPickEndB, chainPick))
+			if (hits == 1 && jointHolds(flow, ci, chainPickEndB, chainPick))
 			{
 				q.dir = chainDir;
 				return q;
@@ -690,7 +695,8 @@ bool routeEntersMouth(const DROID *psDroid, const Corridor &c, int dir)
 // coverLoOut and coverHiOut report how far along the corridor the droid's route
 // reaches, filled from the scan this already runs, so a caller wanting it does
 // not have to call routeDir again. Only written when a corridor was found.
-Query classifyDroid(const GameWorld &world, const DROID *psDroid, int *coverLoOut = nullptr, int *coverHiOut = nullptr)
+Query classifyDroid(const GameWorld &world, const CorridorFlowState &flow, const DROID *psDroid,
+                    int *coverLoOut = nullptr, int *coverHiOut = nullptr)
 {
 	// A droid going nowhere creates no flow, imposes no lanes and joins no
 	// queue, however close to a corridor it sits. Neither does one fighting on
@@ -702,7 +708,7 @@ Query classifyDroid(const GameWorld &world, const DROID *psDroid, int *coverLoOu
 	{
 		return Query();
 	}
-	Query q = queryDroid(world, psDroid, coverLoOut, coverHiOut);
+	Query q = queryDroid(world, flow, psDroid, coverLoOut, coverHiOut);
 	if (q.corridorId < 0)
 	{
 		q = approachQuery(world, psDroid->pos.xy(), psDroid->sMove.target);
@@ -872,36 +878,13 @@ Query approachQuery(const GameWorld &world, const Vector2i &pos, const Vector2i 
 
 } // anonymous namespace
 
-void corridorGateUpdate(GameWorld &world)
+/// One cohort's flow for this tick, measured over the droids of cohortPlayer and its allies.
+/// canonical names the player whose pass carries each owner's droids, so the classification log
+/// still emits one line per droid however the cohorts share their computation.
+static void corridorFlowCompute(const GameWorld &world, CorridorFlowState &flow, unsigned cohortPlayer,
+                                const std::array<int, MAX_PLAYERS> &canonical)
 {
-	CorridorFlowState &flow = world.corridorFlow;
 	const CorridorMap *cmap = world.map.corridors.get();
-	if (!pathfindingCorridorLanesEnabled() || cmap == nullptr)
-	{
-		flow.activeDir.clear();
-		return;
-	}
-	if (flow.seenMap != cmap || flow.seenChecksum != cmap->checksum)
-	{
-		flow.seenMap = cmap;
-		flow.seenChecksum = cmap->checksum;
-		// The map every corridor decision is made against, into the sync stream once per map.
-		// Emitted here so it lands on a tick that every client shares.
-		syncDebug("corridorMap = %08X, %zu corridors", cmap->checksum, cmap->corridors.size());
-		// Joint flow measured against another corridor map does not apply to this one, so it is
-		// reset - but flow the map's own checksum vouches for stays, which is what lets a carry a
-		// load restored survive to the first update, classifying droids at a joint exactly as the
-		// saved run's next tick would have.
-		if (flow.prevFlowChecksum != cmap->checksum || flow.prevFlow.size() != cmap->corridors.size())
-		{
-			flow.prevFlow.assign(cmap->corridors.size(), 0);
-			flow.prevFlowChecksum = cmap->checksum;
-		}
-		++g_queryStamp;   // the joints changed, so no earlier answer holds
-		// droid ids recycle across games, so the transition log dedup restarts with the map
-		g_logClass.clear();
-		g_logSpeed.clear();
-	}
 	const size_t n = cmap->corridors.size();
 	const CorridorChains &chains = cmap->chains;
 	// Flow is aggregated over each chain, with member directions mapped into
@@ -991,14 +974,18 @@ void corridorGateUpdate(GameWorld &world)
 	};
 	std::vector<SidePref> prefFwd(n), prefBwd(n);
 
-	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	for (unsigned owner = 0; owner < MAX_PLAYERS; ++owner)
 	{
-		for (const DROID *psDroid : world.objects.droids[player])
+		if (owner != cohortPlayer && !aiCheckAlliances(cohortPlayer, owner))
+		{
+			continue;   // enemy units contribute nothing, coordination stays within the alliance
+		}
+		for (const DROID *psDroid : world.objects.droids[owner])
 		{
 			int coverLo = 0;
 			int coverHi = 0;
-			const Query q = classifyDroid(world, psDroid, &coverLo, &coverHi);
-			if (enabled_debug[LOG_MOVEMENT])
+			const Query q = classifyDroid(world, flow, psDroid, &coverLo, &coverHi);
+			if (enabled_debug[LOG_MOVEMENT] && canonical[owner] == static_cast<int>(cohortPlayer))
 			{
 				const int rdir = q.corridorId >= 0
 				                 ? routeDir(psDroid, cmap->corridors[static_cast<size_t>(q.corridorId)]) : 0;
@@ -1094,13 +1081,13 @@ void corridorGateUpdate(GameWorld &world)
 			SidePref &pref = q.dir > 0 ? prefFwd[c] : prefBwd[c];
 			if (pathfindingTurnVoteEnabled())
 			{
-				const int side = routeTurnSide(world, psDroid, &cmap->corridors[c]);
+				const int side = routeTurnSide(world, flow, psDroid, &cmap->corridors[c]);
 				if (side < 0) { pref.left += 1; }
 				else if (side > 0) { pref.right += 1; }
 			}
 			else if (psDroid->id < pref.id)
 			{
-				const int side = routeTurnSide(world, psDroid);
+				const int side = routeTurnSide(world, flow, psDroid);
 				if (side != 0)
 				{
 					pref.id = psDroid->id;
@@ -1177,7 +1164,6 @@ void corridorGateUpdate(GameWorld &world)
 		flow.prevFlow[i] = static_cast<uint8_t>((flow.cFlowFwd[i] > 0 ? 1 : 0) | (flow.cFlowBwd[i] > 0 ? 2 : 0));
 	}
 	flow.prevFlowChecksum = cmap->checksum;
-	++g_queryStamp;   // the joint flow changed, so no earlier answer holds
 
 	flow.handed.assign(n, 1);
 	for (size_t c = 0; c < n; ++c)
@@ -1205,7 +1191,8 @@ void corridorGateUpdate(GameWorld &world)
 	}
 	if (enabled_debug[LOG_MOVEMENT])
 	{
-		static std::vector<int8_t> prevHanded;
+		static std::array<std::vector<int8_t>, MAX_PLAYERS> prevHandedPerPlayer;
+		std::vector<int8_t> &prevHanded = prevHandedPerPlayer[cohortPlayer];
 		prevHanded.resize(n, 0);
 		for (size_t c = 0; c < n; ++c)
 		{
@@ -1224,7 +1211,8 @@ void corridorGateUpdate(GameWorld &world)
 	}
 	if (enabled_debug[LOG_MOVEMENT])
 	{
-		static std::vector<int16_t> prevFlow;
+		static std::array<std::vector<int16_t>, MAX_PLAYERS> prevFlowPerPlayer;
+		std::vector<int16_t> &prevFlow = prevFlowPerPlayer[cohortPlayer];
 		prevFlow.resize(n, INT16_MIN);
 		for (size_t c = 0; c < n; ++c)
 		{
@@ -1240,8 +1228,8 @@ void corridorGateUpdate(GameWorld &world)
 				continue;
 			}
 			prevFlow[c] = packed;
-			debug(LOG_MOVEMENT, "corridor t=%u chain %zu contested=%d active=%d insideFwd=%d insideBwd=%d stalledFwd=%d stalledBwd=%d",
-			      gameTime, c, flow.contested[c], flow.activeDir[c], insideFwd[c], insideBwd[c], stalledFwd[c], stalledBwd[c]);
+			debug(LOG_MOVEMENT, "corridor t=%u p%u chain %zu contested=%d active=%d insideFwd=%d insideBwd=%d stalledFwd=%d stalledBwd=%d",
+			      gameTime, cohortPlayer, c, flow.contested[c], flow.activeDir[c], insideFwd[c], insideBwd[c], stalledFwd[c], stalledBwd[c]);
 		}
 	}
 
@@ -1345,14 +1333,118 @@ void corridorGateUpdate(GameWorld &world)
 	       "corridor flow sized for %zu corridors on a map with %zu", flow.contested.size(), n);
 }
 
+void corridorGateUpdate(GameWorld &world)
+{
+	CorridorFlowWorld &wf = world.corridorFlow;
+	const CorridorMap *cmap = world.map.corridors.get();
+	if (!pathfindingCorridorLanesEnabled() || cmap == nullptr)
+	{
+		for (CorridorFlowState &flow : wf.perPlayer)
+		{
+			flow.activeDir.clear();
+		}
+		return;
+	}
+	if (wf.seenMap != cmap || wf.seenChecksum != cmap->checksum)
+	{
+		wf.seenMap = cmap;
+		wf.seenChecksum = cmap->checksum;
+		// The map every corridor decision is made against, into the sync stream once per map.
+		// Emitted here so it lands on a tick that every client shares.
+		syncDebug("corridorMap = %08X, %zu corridors", cmap->checksum, cmap->corridors.size());
+		// Joint flow measured against another corridor map does not apply to this one, so it is
+		// reset - but flow the map's own checksum vouches for stays, which is what lets a carry a
+		// load restored survive to the first update, classifying droids at a joint exactly as the
+		// saved run's next tick would have.
+		for (CorridorFlowState &flow : wf.perPlayer)
+		{
+			if (flow.prevFlowChecksum != cmap->checksum || flow.prevFlow.size() != cmap->corridors.size())
+			{
+				flow.prevFlow.assign(cmap->corridors.size(), 0);
+				flow.prevFlowChecksum = cmap->checksum;
+			}
+		}
+		++g_queryStamp;   // the joints changed, so no earlier answer holds
+		// droid ids recycle across games, so the transition log dedup restarts with the map
+		g_logClass.clear();
+		g_logSpeed.clear();
+	}
+
+	// Each player's flow is measured over its own and allied droids, the cohort the congestion
+	// overlay stamps by, so the two mechanisms never disagree about who counts as us and
+	// coordination never reaches across enemy lines. Players whose allied sets match see the
+	// same droids, so their census is computed once, on the lowest such player, and shared -
+	// an n-player team would otherwise classify every droid n times over.
+	std::array<int, MAX_PLAYERS> canonical;
+	std::array<uint32_t, MAX_PLAYERS> allyMask;
+	for (unsigned p = 0; p < MAX_PLAYERS; ++p)
+	{
+		canonical[p] = -1;
+		uint32_t mask = 0;
+		for (unsigned q = 0; q < MAX_PLAYERS; ++q)
+		{
+			if (q == p || aiCheckAlliances(p, q))
+			{
+				mask |= 1u << q;
+			}
+		}
+		allyMask[p] = mask;
+		if (world.objects.droids[p].empty())
+		{
+			continue;   // judgment is per owner, so a droidless player's state has no reader
+		}
+		canonical[p] = static_cast<int>(p);
+		for (unsigned q = 0; q < p; ++q)
+		{
+			if (canonical[q] == static_cast<int>(q) && allyMask[q] == mask)
+			{
+				canonical[p] = static_cast<int>(q);
+				break;
+			}
+		}
+	}
+	for (unsigned p = 0; p < MAX_PLAYERS; ++p)
+	{
+		CorridorFlowState &flow = wf.perPlayer[p];
+		if (canonical[p] == static_cast<int>(p))
+		{
+			corridorFlowCompute(world, flow, p, canonical);
+		}
+		else if (canonical[p] >= 0)
+		{
+			flow = wf.perPlayer[static_cast<size_t>(canonical[p])];
+		}
+		else
+		{
+			// No droids means no flow. Clear the per-tick state and quiet the carried
+			// flow, as a computed empty census would.
+			flow.activeDir.clear();
+			flow.contested.clear();
+			flow.slotAlong.clear();
+			if (flow.prevFlow.size() == cmap->corridors.size())
+			{
+				std::fill(flow.prevFlow.begin(), flow.prevFlow.end(), 0);
+			}
+		}
+	}
+	++g_queryStamp;   // the joint flow changed, so no earlier answer holds
+}
+
+/// The flow state a droid is judged against: its owner's.
+static const CorridorFlowState &flowFor(const GameWorld &world, const DROID *psDroid)
+{
+	return world.corridorFlow.perPlayer[psDroid->player];
+}
+
 bool corridorLaneTarget(const GameWorld &world, const DROID *psDroid, Vector2i &laneTarget)
 {
 	const Vector2i pos = psDroid->pos.xy();
+	const CorridorFlowState &flow = flowFor(world, psDroid);
 	// A droid too far out for the centerline search still gets funnelled in from its
 	// approach so it is drawn onto its own lane side before the mouth, leaving the
 	// entrance clear rather than blobbing across it. The ones that must wait are held
 	// by the flow gate, so steering them costs nothing.
-	const Query q = classifyDroid(world, psDroid);
+	const Query q = classifyDroid(world, flow, psDroid);
 	if (q.relation != INSIDE && q.relation != APPROACHING)
 	{
 		return false;
@@ -1360,7 +1452,6 @@ bool corridorLaneTarget(const GameWorld &world, const DROID *psDroid, Vector2i &
 	const size_t cid = static_cast<size_t>(q.corridorId);
 	const Corridor &c = world.map.corridors->corridors[cid];
 	const CorridorChains &chains = world.map.corridors->chains;
-	const CorridorFlowState &flow = world.corridorFlow;
 	const int last = static_cast<int>(c.centerline.size()) - 1;
 
 	// With no opposing flow the passage is not split, so a droid is left to steer
@@ -1557,7 +1648,7 @@ namespace
 {
 int queueSpeedInner(const GameWorld &world, const DROID *psDroid, int moveSpeed, const Query &q)
 {
-	const CorridorFlowState &flow = world.corridorFlow;
+	const CorridorFlowState &flow = flowFor(world, psDroid);
 	if (q.relation != APPROACHING || q.corridorId < 0)
 	{
 		return moveSpeed;
@@ -1600,10 +1691,10 @@ int queueSpeedInner(const GameWorld &world, const DROID *psDroid, int moveSpeed,
 
 int corridorQueueSpeed(const GameWorld &world, const DROID *psDroid, int moveSpeed)
 {
-	const CorridorFlowState &flow = world.corridorFlow;
+	const CorridorFlowState &flow = flowFor(world, psDroid);
 	// The same classification the lane steering uses, so the whole approach
 	// queues along the funnel line rather than scrumming near the mouth.
-	const Query q = classifyDroid(world, psDroid);
+	const Query q = classifyDroid(world, flow, psDroid);
 	const int out = queueSpeedInner(world, psDroid, moveSpeed, q);
 	if (enabled_debug[LOG_MOVEMENT] && moveSpeed > 0)
 	{
@@ -1629,8 +1720,8 @@ int corridorQueueSpeed(const GameWorld &world, const DROID *psDroid, int moveSpe
 
 void corridorClampSlide(const GameWorld &world, const DROID *psDroid, int32_t *pdx, int32_t *pdy)
 {
-	const CorridorFlowState &flow = world.corridorFlow;
-	const Query q = queryDroid(world, psDroid);
+	const CorridorFlowState &flow = flowFor(world, psDroid);
+	const Query q = queryDroid(world, flow, psDroid);
 	if (q.relation != INSIDE)
 	{
 		return;
@@ -1700,11 +1791,15 @@ const uint32_t QUEUE_GRACE = 40000;
 // much shorter clock than the plain grace.
 const uint32_t QUEUE_REEVAL = 15000;
 
-std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world)
+std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world, unsigned player)
 {
+	if (player >= MAX_PLAYERS)
+	{
+		return std::nullopt;
+	}
 	// prevFlow IS the carry: written by this world's updates and by a restored save alike, so an
 	// inactive world saved again before its next active tick still round-trips the flow it held.
-	const CorridorFlowState &flow = world.corridorFlow;
+	const CorridorFlowState &flow = world.corridorFlow.perPlayer[player];
 	const CorridorMap *cmap = world.map.corridors.get();
 	if (cmap == nullptr || flow.prevFlowChecksum != cmap->checksum
 	    || flow.prevFlow.size() != cmap->corridors.size())
@@ -1717,27 +1812,32 @@ std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world)
 	return carry;
 }
 
-void corridorGateRestoreCarry(GameWorld &world, const CorridorGateCarry &carry)
+void corridorGateRestoreCarry(GameWorld &world, unsigned player, const CorridorGateCarry &carry)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "corridor carry for player %u", player);
 	const CorridorMap *cmap = world.map.corridors.get();
 	if (cmap == nullptr || carry.mapChecksum != cmap->checksum
 	    || carry.flow.size() != cmap->corridors.size())
 	{
 		// The flow is indexed by corridor id, so a carry from a different map would apply to the
 		// wrong passages. Dropping it degrades to rebuilding the flow on the next update.
-		debug(LOG_MOVEMENT, "corridor carry discarded: saved map %08X over %zu corridors, loaded %08X over %zu",
-		      carry.mapChecksum, carry.flow.size(),
+		debug(LOG_MOVEMENT, "corridor carry discarded: p%u saved map %08X over %zu corridors, loaded %08X over %zu",
+		      player, carry.mapChecksum, carry.flow.size(),
 		      cmap != nullptr ? cmap->checksum : 0, cmap != nullptr ? cmap->corridors.size() : 0);
 		return;
 	}
-	world.corridorFlow.prevFlow = carry.flow;
-	world.corridorFlow.prevFlowChecksum = carry.mapChecksum;
+	world.corridorFlow.perPlayer[player].prevFlow = carry.flow;
+	world.corridorFlow.perPlayer[player].prevFlowChecksum = carry.mapChecksum;
 	++g_queryStamp;   // the joint flow changed, so no earlier answer holds
 }
 
-bool corridorContested(const GameWorld &world, int corridorId)
+bool corridorContested(const GameWorld &world, unsigned player, int corridorId)
 {
-	const CorridorFlowState &flow = world.corridorFlow;
+	if (player >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	const CorridorFlowState &flow = world.corridorFlow.perPlayer[player];
 	return corridorId >= 0 && static_cast<size_t>(corridorId) < flow.contested.size()
 	       && flow.contested[static_cast<size_t>(corridorId)] != 0;
 }
@@ -1751,12 +1851,12 @@ static CorridorHold corridorHoldUncached(const GameWorld &world, const DROID *ps
 	// pinned when the grace runs out gets the normal reroute. A droid inside
 	// that stops long enough to trip the watchdog is genuinely wedged, and the
 	// watchdog's reroute is what recovers it, so it keeps its normal watch.
-	const Query q = classifyDroid(world, psDroid);
+	const CorridorFlowState &flow = flowFor(world, psDroid);
+	const Query q = classifyDroid(world, flow, psDroid);
 	if (q.relation != APPROACHING)
 	{
 		return CORRIDOR_HOLD_NONE;
 	}
-	const CorridorFlowState &flow = world.corridorFlow;
 	const size_t c = static_cast<size_t>(q.corridorId);
 	if (c >= flow.contested.size() || !flow.contested[c])
 	{

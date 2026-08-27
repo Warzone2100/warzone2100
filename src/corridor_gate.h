@@ -30,8 +30,10 @@
 
 #pragma once
 
+#include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 
+#include <array>
 #include <cstdint>
 #include <optional>
 #include <unordered_map>
@@ -50,10 +52,11 @@ struct CorridorGateCarry
 	std::vector<uint8_t> flow;   ///< per corridor, bit 0 flow toward the far mouth, bit 1 toward the near one
 };
 
-/// One world's corridor flow state, derived each update from that world's droids against its
-/// corridor map. Owned by the GameWorld so it travels through world swaps with the droids and map
-/// it describes, and a save records any world's carry from the world itself. Everything here
-/// except prevFlow is rebuilt by corridorGateUpdate before anything reads it.
+/// One cohort's corridor flow state, derived each update from the droids of one player and its
+/// allies against the world's corridor map. Coordination never reaches across enemy lines: an
+/// enemy stream is not a flow to form lanes with or to wait for, it is an obstacle, exactly as
+/// legacy movement treats it everywhere. Everything here except prevFlow is rebuilt by
+/// corridorGateUpdate before anything reads it.
 struct CorridorFlowState
 {
 	/// Per-corridor flow direction for this tick: +1, -1, or 0 for open. Rebuilt each
@@ -104,6 +107,16 @@ struct CorridorFlowState
 	/// a restored carry that matches the loaded map survives the first update's reset.
 	std::vector<uint8_t> prevFlow;
 	uint32_t prevFlowChecksum = 0;
+};
+
+/// One world's corridor flow, one state per player. Owned by the GameWorld so it travels through
+/// world swaps with the droids and map it describes, and a save records any world's carries from
+/// the world itself. Each player's state is measured over its own and allied droids, the same
+/// cohort the congestion overlay stamps, and a droid is always judged against its owner's state.
+/// Mutually allied players hold identical state, computed once and shared.
+struct CorridorFlowWorld
+{
+	std::array<CorridorFlowState, MAX_PLAYERS> perPlayer;
 
 	/// Which corridors instance the last update ran against. The first update against a new one
 	/// announces the map into the sync stream and clears the joint flow the previous map's ticks
@@ -112,13 +125,13 @@ struct CorridorFlowState
 	uint32_t seenChecksum = 0;
 };
 
-/// The carry a save should record for this world, or nullopt while no update or restored carry
-/// has measured flow against the world's current corridor map.
-std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world);
+/// The carry a save should record for this world and player, or nullopt while no update or
+/// restored carry has measured that player's flow against the world's current corridor map.
+std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world, unsigned player);
 
-/// Restores a saved carry into this world's flow.
+/// Restores a saved carry into this world's flow for one player.
 /// Applied immediately, and only if it was recorded against the corridor map the world now holds.
-void corridorGateRestoreCarry(GameWorld &world, const CorridorGateCarry &carry);
+void corridorGateRestoreCarry(GameWorld &world, unsigned player, const CorridorGateCarry &carry);
 
 /// Recomputes the world's per-corridor flow state for this tick. Call once
 /// before any droid moves, so every droid decides against the same snapshot.
@@ -141,11 +154,11 @@ int corridorQueueSpeed(const GameWorld &world, const DROID *psDroid, int moveSpe
 /// Cuts only the crossing component of the given velocity, in place.
 void corridorClampSlide(const GameWorld &world, const DROID *psDroid, int32_t *pdx, int32_t *pdy);
 
-/// Whether this corridor carries opposing flows this tick. The gate updates
-/// before the overlay build and before any droid moves, so every reader sees
-/// the tick's own state, derived from synced state alone. False for
-/// out-of-range ids.
-bool corridorContested(const GameWorld &world, int corridorId);
+/// Whether this corridor carries opposing flows of this player's cohort this
+/// tick. The gate updates before the overlay build and before any droid moves,
+/// so every reader sees the tick's own state, derived from synced state alone.
+/// False for out-of-range ids or players.
+bool corridorContested(const GameWorld &world, unsigned player, int corridorId);
 
 /// How the corridor layer wants the blocked watchdog to treat this droid.
 enum CorridorHold
