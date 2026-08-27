@@ -19,7 +19,7 @@
 set -e
 
 WZ=${WZ:-build/src/warzone2100}
-SCENARIOS=${SCENARIOS:-"counterflow_tracked oneway_tracked counterflow_cyborg counterflow_w1 counterflow_w3 counterflow_w4 counterflow_w6 counterflow_w8 tworoute crossing separating corner corner_mixed blob parking openfield strafe enemyblock enemyblock_press"}
+SCENARIOS=${SCENARIOS:-"counterflow_tracked oneway_tracked counterflow_cyborg counterflow_w1 counterflow_w3 counterflow_w4 counterflow_w6 counterflow_w8 tworoute crossing separating corner corner_mixed blob parking openfield strafe enemyblock enemyblock_press counterflow_hostile"}
 ARRANGEMENTS=${ARRANGEMENTS:-9}
 
 if [ ! -x "$WZ" ]; then

@@ -134,6 +134,9 @@ const BenchScenario scenarios[] =
 	{ "strafe",              "movebench_strafe.json",              1200, 0x5EEDBEEF, false },
 	{ "enemyblock",          "movebench_enemyblock.json",           900, 0x5EEDBEEF },
 	{ "enemyblock_press",    "movebench_enemyblock_press.json",      900, 0x5EEDBEEF },
+	// Guards the coordination scope: the counterflow conflict across enemy lines,
+	// where neither side may lane up with or wait for the other.
+	{ "counterflow_hostile", "movebench_counterflow_hostile.json",  5000, 0x5EEDBEEF },
 };
 
 optional<uint32_t> seedOverride;
