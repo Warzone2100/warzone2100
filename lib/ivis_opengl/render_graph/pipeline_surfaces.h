@@ -243,7 +243,11 @@ enum class SurfaceSamplePolicy : uint8_t
 /// Which format source resolve uses (HW capability slot, present format, or companion).
 enum class SurfaceFormatClass : uint8_t
 {
+	/// Scene referred color, everything up to and including the transparents.
 	SceneColor,
+	/// Display referred color, the presentation tail after the scene is tonemapped.
+	/// Separate from SceneColor because SMAA and FSR need LDR input even when the scene is HDR.
+	DisplayColor,
 	DepthStencil,
 	DepthSampled,
 	PresentColor,
@@ -398,6 +402,8 @@ struct PipelineSurfaceSyncInputs
 struct SurfaceCapabilityHints
 {
 	pixel_format sceneColorFormat = pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	/// Format for the presentation tail, negotiated to the same format as the scene.
+	pixel_format displayColorFormat = pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	pixel_format depthStencilFormat = pixel_format::FORMAT_D24_UNORM_S8;
 	pixel_format depthSampledFormat = pixel_format::FORMAT_D24_UNORM_S8;
 };

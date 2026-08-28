@@ -108,7 +108,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchDrawable,
 		SurfaceSamplePolicy::One,
-		SurfaceFormatClass::SceneColor,
+		SurfaceFormatClass::DisplayColor,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
 		SurfaceEnablePolicy::FsrUpscaleActive,
@@ -145,7 +145,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchScene,
 		SurfaceSamplePolicy::One,
-		SurfaceFormatClass::SceneColor,
+		SurfaceFormatClass::DisplayColor,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
 		SurfaceEnablePolicy::SmaaIntermediateActive,
@@ -573,6 +573,8 @@ pixel_format resolveFormat(SurfaceFormatClass formatClass, PipelineSurfaceId for
 	{
 	case SurfaceFormatClass::SceneColor:
 		return caps.sceneColorFormat;
+	case SurfaceFormatClass::DisplayColor:
+		return caps.displayColorFormat;
 	case SurfaceFormatClass::DepthStencil:
 		return caps.depthStencilFormat;
 	case SurfaceFormatClass::DepthSampled:

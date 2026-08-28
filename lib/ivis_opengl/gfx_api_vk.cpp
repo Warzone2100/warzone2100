@@ -6267,6 +6267,9 @@ gfx_api::SurfaceCapabilityHints VkRoot::surfaceCapabilities() const
 	{
 		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	}
+	// Surfaces after the tonemap use the scene format. Under HDR they hold the tonemap output, since SMAA
+	// and FSR need display range input.
+	caps.displayColorFormat = caps.sceneColorFormat;
 	caps.depthStencilFormat = (depthStencilAttachmentFormat != vk::Format::eUndefined)
 		? gfx_api::vkFormatToPixelFormat(depthStencilAttachmentFormat)
 		: gfx_api::pixel_format::FORMAT_D24_UNORM_S8;

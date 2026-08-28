@@ -4257,6 +4257,9 @@ gfx_api::SurfaceCapabilityHints gl_context::surfaceCapabilities() const
 	{
 		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
 	}
+	// Surfaces after the tonemap use the scene format. Under HDR they hold the tonemap output, since SMAA
+	// and FSR need display range input.
+	caps.displayColorFormat = caps.sceneColorFormat;
 	caps.depthStencilFormat = gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
 	caps.depthSampledFormat = gfx_api::pixel_format::FORMAT_D32_SFLOAT;
 	return caps;
