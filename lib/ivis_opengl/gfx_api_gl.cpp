@@ -97,6 +97,26 @@ static int GLAD_GL_EXT_texture_filter_anisotropic = 0;
 # define GL_COMPRESSED_RGBA_ASTC_4x4_KHR 0x93B0
 #endif
 
+#ifndef GL_COMPRESSED_SRGB8_ETC2
+# define GL_COMPRESSED_SRGB8_ETC2 0x9275
+#endif
+#ifndef GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
+# define GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC 0x9279
+#endif
+#ifndef GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR
+# define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR 0x93D0
+#endif
+
+#ifndef GL_COMPRESSED_SRGB_S3TC_DXT1_EXT
+# define GL_COMPRESSED_SRGB_S3TC_DXT1_EXT 0x8C4C
+#endif
+#ifndef GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT
+# define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT 0x8C4E
+#endif
+#ifndef GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT
+# define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
+#endif
+
 #ifndef GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS
 # define GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS 0x8DA8
 #endif
@@ -231,6 +251,25 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 			return GL_COMPRESSED_RG11_EAC;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
+		// sRGB formats
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
+			return GL_SRGB8_ALPHA8;
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
+			return GL_SRGB8;
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB:
+			return GL_COMPRESSED_SRGB_S3TC_DXT1_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB:
+			return GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB:
+			return GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB:
+			return GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT; // same value as GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB:
+			return GL_COMPRESSED_SRGB8_ETC2;
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB:
+			return GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB:
+			return GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR;
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
@@ -293,6 +332,10 @@ static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 		case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
 			return GL_RGBA;
 		case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+			return GL_RGB;
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
+			return GL_RGBA;
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
 			return GL_RGB;
 		// COMPRESSED FORMAT
 		default:
@@ -4712,6 +4755,11 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			retVal |= gfx_api::pixel_format_usage::sampled_image;
 			break;
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
+			// core in WebGL 2.0
+			retVal |= gfx_api::pixel_format_usage::sampled_image;
+			break;
 		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			// supported in WebGL2
 			retVal |= gfx_api::pixel_format_usage::sampled_image;
@@ -4728,6 +4776,14 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 				retVal |= gfx_api::pixel_format_usage::sampled_image;
 			}
 			break;
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB:
+			if (enabledWebGLExtensions.count("WEBGL_compressed_texture_s3tc_srgb") > 0)
+			{
+				retVal |= gfx_api::pixel_format_usage::sampled_image;
+			}
+			break;
 		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
 		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
 			if (enabledWebGLExtensions.count("EXT_texture_compression_rgtc") > 0)
@@ -4736,6 +4792,7 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 			}
 			break;
 		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB:
 			if (enabledWebGLExtensions.count("EXT_texture_compression_bptc") > 0)
 			{
 				retVal |= gfx_api::pixel_format_usage::sampled_image;
@@ -4746,6 +4803,8 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 			break;
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
 		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB:
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB:
 		case gfx_api::pixel_format::FORMAT_R11_EAC:
 		case gfx_api::pixel_format::FORMAT_RG11_EAC:
 			if (enabledWebGLExtensions.count("WEBGL_compressed_texture_etc") > 0)
@@ -4754,6 +4813,7 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 			}
 			break;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB:
 			if (enabledWebGLExtensions.count("WEBGL_compressed_texture_astc") > 0)
 			{
 				retVal |= gfx_api::pixel_format_usage::sampled_image;
@@ -4796,6 +4856,14 @@ void gl_context::initPixelFormatsSupport()
 	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
 	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
 
+	// Uncompressed sRGB
+	// WebGL: core in WebGL 2.0
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8)
+	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8)
+
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8)
+	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8)
+
 	// RG8
 	// WebGL: WebGL 2.0
 	PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
@@ -4814,6 +4882,19 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
 	}
 
+	// S3TC sRGB
+	// WebGL: WEBGL_compressed_texture_s3tc_srgb
+	if (enabledWebGLExtensions.count("WEBGL_compressed_texture_s3tc_srgb") > 0)
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB) // DXT1
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB) // DXT3
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB) // DXT5
+
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB) // DXT1
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB) // DXT3
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB) // DXT5
+	}
+
 	// RGTC
 	// WebGL: EXT_texture_compression_rgtc
 	if (enabledWebGLExtensions.count("EXT_texture_compression_rgtc") > 0)
@@ -4829,6 +4910,8 @@ void gl_context::initPixelFormatsSupport()
 	{
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB)
 	}
 
 	// ETC1
@@ -4842,15 +4925,19 @@ void gl_context::initPixelFormatsSupport()
 		bool canSupport2DTextureArrays = true;
 
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB)
 		if (canSupport2DTextureArrays)
 		{
 			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB)
 		}
 
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB)
 		if (canSupport2DTextureArrays)
 		{
 			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB)
 		}
 
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
@@ -4872,6 +4959,8 @@ void gl_context::initPixelFormatsSupport()
 	{
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 	}
 }
 
@@ -4894,6 +4983,7 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 		{
 			// ASTC:
 			case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+			case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB:
 				//   - While WZ currently only supports ASTC on GLES, some desktop platforms support GLES *and* advertise ASTC support, but may encounter performance issues (in practice)
 				//   - In OpenGL mode, glGetInternalformativ could be used to query "full support", but that functionality isn't currently available (and isn't even possible in OpenGL ES?)
 				//   - So restrict this to specific platforms for now:
@@ -4987,6 +5077,18 @@ void gl_context::initPixelFormatsSupport()
 	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
 	PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
 
+	// Uncompressed sRGB
+	// Desktop OpenGL: core in 2.1+, or GL_EXT_texture_sRGB
+	// OpenGL ES: core in 3.0+
+	if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_EXT_texture_sRGB)) || (gles && GLAD_GL_ES_VERSION_3_0))
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8)
+
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8)
+	}
+
 	// RG8
 	// Desktop OpenGL: OpenGL 3.0+, or GL_ARB_texture_rg
 	// OpenGL ES: GL_EXT_texture_rg
@@ -5030,6 +5132,23 @@ void gl_context::initPixelFormatsSupport()
 			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
 			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
 		}
+
+		// The sRGB forms require a second extension
+		// Desktop OpenGL: GL_EXT_texture_sRGB
+		// OpenGL ES: GL_EXT_texture_compression_s3tc_srgb
+		if ((!gles && GLAD_GL_EXT_texture_sRGB) || (gles && GLAD_GL_EXT_texture_compression_s3tc_srgb))
+		{
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB) // DXT1
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB) // DXT3
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB) // DXT5
+			if ((!gles && (GLAD_GL_VERSION_3_0 || GLAD_GL_EXT_texture_array))
+				|| (gles && GLAD_GL_ES_VERSION_3_0))
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB) // DXT1
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB) // DXT3
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB) // DXT5
+			}
+		}
 	}
 	else if (gles)
 	{
@@ -5067,6 +5186,8 @@ void gl_context::initPixelFormatsSupport()
 		// GL_EXT_texture_compression_bptc claims it is supported in glCompressedTex*Image2D, glCompressedTex*Image3D
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB)
 	}
 
 	// ETC1
@@ -5096,17 +5217,21 @@ void gl_context::initPixelFormatsSupport()
 		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM, gfx_api::pixel_format_usage::sampled_image))
 		{
 			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB)
 			if (canSupport2DTextureArrays)
 			{
 				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB)
 			}
 		}
 		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM, gfx_api::pixel_format_usage::sampled_image))
 		{
 			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB)
 			if (canSupport2DTextureArrays)
 			{
 				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB)
 			}
 		}
 		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_R_BC4_UNORM, gfx_api::pixel_format_usage::sampled_image))
@@ -5135,6 +5260,8 @@ void gl_context::initPixelFormatsSupport()
 		// NOTE: GL_KHR_texture_compression_astc_ldr claims it is supported in glCompressedTex*Image3D
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 	}
 
 	// Determine multiSampledBufferInternalFormat

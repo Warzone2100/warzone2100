@@ -662,6 +662,15 @@ const char* gfx_api::format_to_str(gfx_api::pixel_format format)
 		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32: return "A2B10G10R10_UNORM_PACK32";
 		case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT: return "R16G16B16A16_SFLOAT";
 		case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32: return "B10G11R11_UFLOAT_PACK32";
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8: return "RGBA8_SRGB_PACK8";
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8: return "RGB8_SRGB_PACK8";
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB: return "RGB_BC1_SRGB";
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB: return "RGBA_BC2_SRGB";
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB: return "RGBA_BC3_SRGB";
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB: return "RGBA_BPTC_SRGB";
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB: return "RGB8_ETC2_SRGB";
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB: return "RGBA8_ETC2_EAC_SRGB";
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB: return "ASTC_4x4_SRGB";
 		case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT: return "D32_SFLOAT_S8_UINT";
 		case gfx_api::pixel_format::FORMAT_D32_SFLOAT: return "D32_SFLOAT";
 		// COMPRESSED FORMAT
@@ -692,9 +701,11 @@ unsigned int gfx_api::format_channels(gfx_api::pixel_format format)
 			return 1; // just return 1 for now...
 		// UNCOMPRESSED FORMATS
 		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
 		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
 			return 3;
 		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			return 2;
@@ -715,27 +726,34 @@ unsigned int gfx_api::format_channels(gfx_api::pixel_format format)
 			return 3;
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB:
 			return 3;
 		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
 			return 1;
 		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
 			return 2;
 		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB:
 			return 3;
 		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_R11_EAC:
 			return 1;
 		case gfx_api::pixel_format::FORMAT_RG11_EAC:
 			return 2;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB:
 			return 4; // just return 4 for now...
 	}
 
@@ -756,9 +774,11 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 			return 0;
 		// [UNCOMPRESSED FORMATS]
 		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
 		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
 			return width * height * 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
 			return width * height * 3;
 		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			return width * height * 2;
@@ -784,21 +804,27 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 		// BC / DXT formats
 		// 4x4 blocks, each block having a certain number of bytes
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
 		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB:
 		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
 		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
 		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
 		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
 		// ETC
 		// Size calculations from: https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glCompressedTexImage2D.xhtml
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
+		case gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
 		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
+		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
 		case gfx_api::pixel_format::FORMAT_R11_EAC:
 			return ((width + 3) / 4) * ((height + 3) / 4) * 8;
@@ -806,6 +832,7 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 			return ((width + 3) / 4) * ((height + 3) / 4) * 16;
 		// ASTC
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
+		case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB:
 			return calculate_astc_size<4, 4>(width, height);
 
 		// no default case to ensure compiler error if more formats are added
