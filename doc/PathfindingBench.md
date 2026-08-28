@@ -140,9 +140,10 @@ mp.wz stale, and a scenario edit silently appears to have no effect.
 ## The pathfinding feature bitmask
 
 Congestion features live behind independent bits of the synced
-`game.pathfindingBackend` setting, declared in src/pathfinding_backend.h. Zero
-is the legacy planner with none of them, every client in a game runs the same
-value, and it travels with the game everywhere simulation-affecting options do.
+`game.pathfindingBackend` setting, declared in src/pathfinding_backend.h.
+A new game starts with every feature on, zero is the legacy planner with none
+of them, every client in a game runs the same value, and it travels with the
+game everywhere simulation-affecting options do (saves, replays, etc).
 The bits are independent so mechanisms can be measured alone and in
 combination, and so a regression can be attributed to the bit that causes it.
 
