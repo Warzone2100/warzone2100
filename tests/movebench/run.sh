@@ -101,6 +101,15 @@ while [ $REMAINING -gt 0 ]; do
 	REMAINING=$((REMAINING - 1))
 done
 
+# Baselines record the plain planner. The game default carries every feature,
+# so baseline sweeps pin the features off unless the caller names a set.
+if [ "$SUB" = "--baseline" ]; then
+	case " $* " in
+		*" --pathfindingbackend="*) ;;
+		*) set -- --pathfindingbackend=0 "$@" ;;
+	esac
+fi
+
 if [ "$SUB" = "--check" ]; then
 	rc=0
 	for s in $SCENARIOS; do

@@ -56,10 +56,11 @@ struct DynamicCostOverlay;
 
 /// Congestion features a game has turned on, held as a bitmask in the synced
 /// game.pathfindingBackend setting. Each is independent so a run can enable one
-/// or any combination, which is how they are compared. Zero is the legacy
-/// integer-grid A* with none of them. The values are serialized, so they are
-/// fixed, only append. A new feature also joins the --pathfindingbackend
-/// valid list in clparse.cpp.
+/// or any combination, which is how they are compared. A new game starts with
+/// every feature on, and zero is the legacy integer-grid A* with none of them.
+/// The values are serialized, so they are fixed, only append.
+/// A new feature also joins the --pathfindingbackend valid list in clparse.cpp
+/// and the default mask in multiplay.h.
 enum PathfindingFeature : uint16_t
 {
 	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping after the search

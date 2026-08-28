@@ -82,7 +82,7 @@ struct MULTIPLAYERGAME
 	PLAYER_LEAVE_MODE	playerLeaveMode;	// The behavior used for when players leave a game
 	uint16_t	playerReconnectWaitSeconds = PLAYER_RECONNECT_WAIT_SECONDS_DEFAULT;	// Max seconds the host holds a dropped player's slot for a mid-match reconnect before declaring them left (0 = do not wait)
 	BLIND_MODE	blindMode = BLIND_MODE::NONE;
-	uint16_t	pathfindingBackend = 0;		// congestion feature bitmask (PathfindingFeature), synced, locked before the match starts
+	uint16_t	pathfindingBackend = 8191;	// congestion feature bitmask (PathfindingFeature), every feature on by default, synced, locked before the match starts
 
 	// NOTE: If adding to this struct, a lot of things probably require changing
 	// (send/recvOptions? loadMainFile/writeMainFile? to/from_json in multiint.h.cpp?)
