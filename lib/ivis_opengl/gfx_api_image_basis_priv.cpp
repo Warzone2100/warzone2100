@@ -209,8 +209,52 @@ void gfx_api::initBasisTranscoder()
 	}
 }
 
+static void checkTransferFunctionMatchesTextureType(uint32_t dfd_transfer_func, gfx_api::texture_type textureType, const std::string& filename)
+{
+	uint32_t expected = 0;
+	switch (textureType)
+	{
+		case gfx_api::texture_type::user_interface:
+		case gfx_api::texture_type::game_texture:
+			expected = basist::KTX2_KHR_DF_TRANSFER_SRGB;
+			break;
+		case gfx_api::texture_type::alpha_mask:
+		case gfx_api::texture_type::normal_map:
+		case gfx_api::texture_type::specular_map:
+		case gfx_api::texture_type::height_map:
+			expected = basist::KTX2_KHR_DF_TRANSFER_LINEAR;
+			break;
+		default:
+			return;
+	}
+
+	if (dfd_transfer_func == expected)
+	{
+		return;
+	}
+
+	auto transferName = [](uint32_t fn) -> const char* {
+		switch (fn)
+		{
+			case basist::KTX2_KHR_DF_TRANSFER_SRGB: return "sRGB";
+			case basist::KTX2_KHR_DF_TRANSFER_LINEAR: return "linear";
+			default: return "an unrecognized transfer function";
+		}
+	};
+	if (dfd_transfer_func == basist::KTX2_KHR_DF_TRANSFER_SRGB && expected == basist::KTX2_KHR_DF_TRANSFER_LINEAR)
+	{
+		// A color page used as data: the format follows the texture type, so the shader gets the
+		// authored bytes without the transfer function, which is needed for a mask or map.
+		debug(LOG_3D, "Texture %s is tagged sRGB and loads as data, sampled without the transfer function", filename.c_str());
+		return;
+	}
+	// A real mismatch: a linear tagged file loaded as color would be decoded as if it carried the transfer function
+	debug(LOG_ERROR, "Texture %s is tagged %s but loads as a type that expects %s",
+		filename.c_str(), transferName(dfd_transfer_func), transferName(expected));
+}
+
 // Determine the best available live compressed image format for the current system (+ textureType)
-static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFile(gfx_api::pixel_format_target target, const basist::ktx2_df_channel_id channel_id, uint32_t dfd_transfer_func, gfx_api::texture_type textureType)
+static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFile(gfx_api::pixel_format_target target, const basist::ktx2_df_channel_id channel_id, gfx_api::texture_type textureType)
 {
 	auto target_idx = static_cast<size_t>(target);
 	switch (textureType)
@@ -340,11 +384,13 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		return {};
 	}
 
+	checkTransferFunctionMatchesTextureType(transcoder.get_dfd_transfer_func(), textureType, filename);
+
 	auto format = basist::transcoder_texture_format::cTFRGBA32; // standard full uncompressed format
 	auto internalFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	if (!desiredFormat.has_value())
 	{
-		desiredFormat = getBestAvailableTranscodeFormatForBasisFile(target, transcoder.get_dfd_channel_id0(), transcoder.get_dfd_transfer_func(), textureType);
+		desiredFormat = getBestAvailableTranscodeFormatForBasisFile(target, transcoder.get_dfd_channel_id0(), textureType);
 	}
 	if (desiredFormat.has_value() && !gfx_api::is_uncompressed_format(desiredFormat.value()))
 	{
