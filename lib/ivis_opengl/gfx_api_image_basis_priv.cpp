@@ -113,7 +113,7 @@ static bool basisLibrarySupportsFormat(gfx_api::pixel_format format)
 	{
 		return false;
 	}
-	return basist::basis_is_format_supported(bFormat.value(), basist::basis_tex_format::cUASTC4x4) || basist::basis_is_format_supported(bFormat.value(), basist::basis_tex_format::cETC1S);
+	return basist::basis_is_format_supported(bFormat.value(), basist::basis_tex_format::cUASTC_LDR_4x4) || basist::basis_is_format_supported(bFormat.value(), basist::basis_tex_format::cETC1S);
 }
 
 void gfx_api::initBasisTranscoder()
@@ -367,11 +367,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		}
 	}
 
-#if defined(BASISD_LIB_VERSION) && BASISD_LIB_VERSION >= 160
 	if (!basist::basis_is_format_supported(format, transcoder.get_basis_tex_format()))
-#else
-	if (!basist::basis_is_format_supported(format, transcoder.get_format()))
-#endif
 	{
 		const char* formatName = basist::basis_get_format_name(format);
 		debug(LOG_ERROR, "Basis transcoder was not compiled with support for format: %s; failed to transcode file: %s", (formatName) ? formatName : "", filename.c_str());
