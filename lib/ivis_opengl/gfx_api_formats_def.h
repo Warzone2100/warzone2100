@@ -131,7 +131,7 @@ namespace gfx_api
 		specular_map, // a single-channel texture, containing the specular / luma value
 		height_map, // a single-channel texture, containing the height values
 	};
-	constexpr texture_type MAX_TEXTURE_TYPE = texture_type::specular_map;
+	constexpr texture_type MAX_TEXTURE_TYPE = texture_type::height_map;
 	constexpr size_t TEXTURE_TYPE_COUNT = static_cast<size_t>(MAX_TEXTURE_TYPE) + 1;
 
 	enum class max_texture_compression_level: uint8_t {
