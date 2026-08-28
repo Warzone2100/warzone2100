@@ -210,6 +210,9 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 		# -Wnontrivial-memcall
 		check_compiler_flags_output("-Werror -Wno-nontrivial-memcall -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-nontrivial-memcall" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
 
+		# -Wdeprecated-enum-enum-conversion (C++ only)
+		check_compiler_flags_output("-Werror -Wno-deprecated-enum-enum-conversion -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "$<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-enum-enum-conversion>" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
 		if (NOT _supported_basistranscoder_cxx_compiler_flags STREQUAL "")
 			string(REPLACE " " ";" _supported_basistranscoder_cxx_compiler_flags "${_supported_basistranscoder_cxx_compiler_flags}")
 			target_compile_options(basis_transcoder PRIVATE ${_supported_basistranscoder_cxx_compiler_flags})
