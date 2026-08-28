@@ -190,6 +190,14 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 #else
 			return GL_INVALID_ENUM;
 #endif
+		// Render target color formats
+		// (Nothing uploads pixels in these, but the surface allocator needs the mappings)
+		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+			return GL_RGB10_A2;
+		case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
+			return GL_RGBA16F;
+		case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+			return GL_R11F_G11F_B10F;
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			return GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
@@ -280,6 +288,12 @@ static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 			return (!gles) ? GL_RED : GL_INVALID_ENUM;
 		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
 			return (!gles) ? GL_RG : GL_INVALID_ENUM;
+		// Packed and float color, where the base format does not follow the internal format
+		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+		case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
+			return GL_RGBA;
+		case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+			return GL_RGB;
 		// COMPRESSED FORMAT
 		default:
 			return to_gl_internalformat(format, gles);
@@ -294,6 +308,12 @@ static GLenum to_gl_pixel_data_type(const gfx_api::pixel_format& format)
 		case gfx_api::pixel_format::FORMAT_R16_UNORM:
 		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
 			return GL_UNSIGNED_SHORT;
+		case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+			return GL_UNSIGNED_INT_2_10_10_10_REV;
+		case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
+			return GL_HALF_FLOAT;
+		case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+			return GL_UNSIGNED_INT_10F_11F_11F_REV;
 		default:
 			return GL_UNSIGNED_BYTE;
 	}
@@ -6409,17 +6429,13 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 		{
 		case gfx_api::SurfaceStorageKind::SampledColor2D:
 		{
-			GLenum colorInternalFormat = GL_RGB8;
-			GLenum colorBaseFormat = GL_RGB;
-			GLenum colorType = GL_UNSIGNED_BYTE;
+			GLenum colorInternalFormat = to_gl_internalformat(createSpec.format, root.gles);
+			GLenum colorBaseFormat = to_gl_format(createSpec.format, root.gles);
+			GLenum colorType = to_gl_pixel_data_type(createSpec.format);
 			switch (createSpec.format)
 			{
-			case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
-				colorInternalFormat = GL_RGB10_A2;
-				colorBaseFormat = GL_RGBA;
-				colorType = GL_UNSIGNED_INT_2_10_10_10_REV;
-				break;
 			case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+				// the RGBA8 formats picked for multisampled buffers at startup
 				colorInternalFormat = root.multiSampledBufferInternalFormat;
 				colorBaseFormat = root.multiSampledBufferBaseFormat;
 				break;
