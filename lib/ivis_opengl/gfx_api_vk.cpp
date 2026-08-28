@@ -5612,6 +5612,10 @@ gfx_api::pixel_format gfx_api::vkFormatToPixelFormat(::vk::Format format)
 		return gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
 	case ::vk::Format::eA2B10G10R10UnormPack32:
 		return gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32;
+	case ::vk::Format::eR16G16B16A16Sfloat:
+		return gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT;
+	case ::vk::Format::eB10G11R11UfloatPack32:
+		return gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32;
 	case ::vk::Format::eD24UnormS8Uint:
 		return gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
 	case ::vk::Format::eD32SfloatS8Uint:
@@ -5644,6 +5648,10 @@ gfx_api::pixel_format gfx_api::vkFormatToPixelFormat(::vk::Format format)
 		return ::vk::Format::eR16G16Unorm;
 	case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
 		return ::vk::Format::eA2B10G10R10UnormPack32;
+	case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
+		return ::vk::Format::eR16G16B16A16Sfloat;
+	case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+		return ::vk::Format::eB10G11R11UfloatPack32;
 	case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
 		return ::vk::Format::eD24UnormS8Uint;
 	case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:

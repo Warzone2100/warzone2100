@@ -64,8 +64,12 @@ namespace gfx_api
 		FORMAT_A2B10G10R10_UNORM_PACK32, // 10-bit RGB + 2-bit A (e.g. VK scene color)
 		FORMAT_D32_SFLOAT_S8_UINT,       // depth/stencil attachment
 		FORMAT_D32_SFLOAT,               // depth-only (e.g. shadow maps)
+
+		// Floating point color, render targets only (nothing loads a texture in these)
+		FORMAT_R16G16B16A16_SFLOAT,      // half float RGBA
+		FORMAT_B10G11R11_UFLOAT_PACK32,  // packed unsigned float, same size as RGBA8 but no alpha
 	};
-	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_D32_SFLOAT;
+	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32;
 
 	static inline bool is_uncompressed_format(const pixel_format& format)
 	{
@@ -80,6 +84,8 @@ namespace gfx_api
 			case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
 			case gfx_api::pixel_format::FORMAT_R16_UNORM:
 			case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
+			case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
 				return true;
 			default:
 				return false;
