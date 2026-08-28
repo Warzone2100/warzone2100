@@ -2160,10 +2160,12 @@ size_t VkTexture::format_size(const gfx_api::pixel_format& format)
 	switch (format)
 	{
 		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
+		case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
 			return 3;
 		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			return 2;
@@ -2175,6 +2177,7 @@ size_t VkTexture::format_size(const gfx_api::pixel_format& format)
 			return 2;
 		// compressed formats
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
+		case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB:
 			return 3;
 		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
 		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
@@ -5153,28 +5156,37 @@ bool VkRoot::initPixelFormatsSupport()
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R8_UNORM)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16_UNORM)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG16_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8)
 
 	// RGB8 is optional
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8)
 
 	// S3TC
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB)
 
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
 
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB)
 
 	// ETC2
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R11_EAC)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG11_EAC)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB)
 
 	// ASTC (LDR)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 
 	// DEPTH FORMAT
 	// - find the best available depth format
@@ -5616,6 +5628,10 @@ gfx_api::pixel_format gfx_api::vkFormatToPixelFormat(::vk::Format format)
 		return gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT;
 	case ::vk::Format::eB10G11R11UfloatPack32:
 		return gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32;
+	case ::vk::Format::eR8G8B8A8Srgb:
+		return gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8;
+	case ::vk::Format::eR8G8B8Srgb:
+		return gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8;
 	case ::vk::Format::eD24UnormS8Uint:
 		return gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
 	case ::vk::Format::eD32SfloatS8Uint:
@@ -5652,6 +5668,24 @@ gfx_api::pixel_format gfx_api::vkFormatToPixelFormat(::vk::Format format)
 		return ::vk::Format::eR16G16B16A16Sfloat;
 	case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
 		return ::vk::Format::eB10G11R11UfloatPack32;
+	case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
+		return ::vk::Format::eR8G8B8A8Srgb;
+	case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
+		return ::vk::Format::eR8G8B8Srgb;
+	case gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB:
+		return ::vk::Format::eBc1RgbSrgbBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB:
+		return ::vk::Format::eBc2SrgbBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BC3_SRGB:
+		return ::vk::Format::eBc3SrgbBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA_BPTC_SRGB:
+		return ::vk::Format::eBc7SrgbBlock;
+	case gfx_api::pixel_format::FORMAT_RGB8_ETC2_SRGB:
+		return ::vk::Format::eEtc2R8G8B8SrgbBlock;
+	case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB:
+		return ::vk::Format::eEtc2R8G8B8A8SrgbBlock;
+	case gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB:
+		return ::vk::Format::eAstc4x4SrgbBlock;
 	case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
 		return ::vk::Format::eD24UnormS8Uint;
 	case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:

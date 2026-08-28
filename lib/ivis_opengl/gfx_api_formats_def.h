@@ -68,8 +68,37 @@ namespace gfx_api
 		// Floating point color, render targets only (nothing loads a texture in these)
 		FORMAT_R16G16B16A16_SFLOAT,      // half float RGBA
 		FORMAT_B10G11R11_UFLOAT_PACK32,  // packed unsigned float, same size as RGBA8 but no alpha
+
+		// sRGB counterparts (for color formats)
+		FORMAT_RGBA8_SRGB_PACK8,
+		FORMAT_RGB8_SRGB_PACK8,
+		FORMAT_RGB_BC1_SRGB,
+		FORMAT_RGBA_BC2_SRGB,
+		FORMAT_RGBA_BC3_SRGB,
+		FORMAT_RGBA_BPTC_SRGB,
+		FORMAT_RGB8_ETC2_SRGB,
+		FORMAT_RGBA8_ETC2_EAC_SRGB,
+		FORMAT_ASTC_4x4_SRGB,
 	};
-	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32;
+	constexpr pixel_format MAX_PIXEL_FORMAT = pixel_format::FORMAT_ASTC_4x4_SRGB;
+
+	/// The sRGB counterpart of a color format, or `invalid` where the format has none
+	static inline pixel_format srgb_format_for(const pixel_format& format)
+	{
+		switch (format)
+		{
+			case pixel_format::FORMAT_RGBA8_UNORM_PACK8: return pixel_format::FORMAT_RGBA8_SRGB_PACK8;
+			case pixel_format::FORMAT_RGB8_UNORM_PACK8:  return pixel_format::FORMAT_RGB8_SRGB_PACK8;
+			case pixel_format::FORMAT_RGB_BC1_UNORM:     return pixel_format::FORMAT_RGB_BC1_SRGB;
+			case pixel_format::FORMAT_RGBA_BC2_UNORM:    return pixel_format::FORMAT_RGBA_BC2_SRGB;
+			case pixel_format::FORMAT_RGBA_BC3_UNORM:    return pixel_format::FORMAT_RGBA_BC3_SRGB;
+			case pixel_format::FORMAT_RGBA_BPTC_UNORM:   return pixel_format::FORMAT_RGBA_BPTC_SRGB;
+			case pixel_format::FORMAT_RGB8_ETC2:         return pixel_format::FORMAT_RGB8_ETC2_SRGB;
+			case pixel_format::FORMAT_RGBA8_ETC2_EAC:    return pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB;
+			case pixel_format::FORMAT_ASTC_4x4_UNORM:    return pixel_format::FORMAT_ASTC_4x4_SRGB;
+			default: return pixel_format::invalid;
+		}
+	}
 
 	static inline bool is_uncompressed_format(const pixel_format& format)
 	{
@@ -86,6 +115,8 @@ namespace gfx_api
 			case gfx_api::pixel_format::FORMAT_RG16_UNORM:
 			case gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT:
 			case gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+			case gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8:
+			case gfx_api::pixel_format::FORMAT_RGB8_SRGB_PACK8:
 				return true;
 			default:
 				return false;
