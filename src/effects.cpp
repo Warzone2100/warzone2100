@@ -1324,8 +1324,13 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 
 	light.position = psEffect->position;
 	light.position.y += fireLightHeightAboveGround;
-	light.range = (percent * psEffect->radius * 6) / 100;
-	light.colour = pal_Colour(255, 0, 0);
+	light.range = (percent * psEffect->radius * 7) / 100;
+	if (light.range < 8)
+	{
+		light.range = 8;
+	}
+	light.colour = pal_Colour(255, 180, 40);
+	light.intensity = 3.0f;
 	lightData.lights.push_back(light);
 
 	/* Time to update the frame number on the construction sprite */
