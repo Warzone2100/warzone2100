@@ -2,7 +2,7 @@
 // The loader substitutes the point light values before compiling, so the numbers written here are only placeholders.
 
 #ifndef WZ_MAX_SHADOW_CASCADES
-#define WZ_MAX_SHADOW_CASCADES 3
+#define WZ_MAX_SHADOW_CASCADES 4
 #endif
 
 #define WZ_MAX_POINT_LIGHTS 0

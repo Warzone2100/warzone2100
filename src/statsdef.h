@@ -30,6 +30,7 @@ struct iIMDBaseShape;
 #include <algorithm>
 #include <bitset>
 #include "lib/framework/wzstring.h"
+#include "lib/ivis_opengl/pietypes.h"
 
 /* The different types of droid */
 // NOTE, if you add to, or change this list then you'll need
@@ -443,6 +444,9 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	UBYTE faceInFlight = 0;				///< flag to make the inflight effect face the player when drawn
 	UBYTE surfaceToAir = 0;				///< indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
 	bool lightWorld = false;			///< flag to indicate whether the effect lights up the world
+	PIELIGHT lightColour;				///< colour of the light the projectile throws while in flight
+	UDWORD lightRange = 0;				///< how far that light reaches (0 = the projectile throws no light)
+	float lightIntensity = 1.f;			///< brightness of the light
 	bool penetrate = false;				///< flag to indicate whether pentrate droid or not
 	bool fireOnMove = false;			///< indicates whether the droid has to stop before firing
 

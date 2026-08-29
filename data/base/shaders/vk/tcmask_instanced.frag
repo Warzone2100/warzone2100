@@ -30,8 +30,8 @@ layout(location = 14) in vec3 posViewSpace;
 
 layout(location = 0) out vec4 FragColor;
 
-#include "pointlights.glsl"
 #include "shadow_mapping.glsl"
+#include "pointlights.glsl"
 #include "light.glsl"
 #include "tangentspace.glsl"
 #include "distance_fog.glsl"

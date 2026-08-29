@@ -82,7 +82,11 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 surfaceNormal, v
 	float spec4 = spec2 * spec2;
 	float spec8 = spec4 * spec4;
 	float pointLightBlinn = min(spec8 * spec8, 1.f);
-	return lightColor * (pointLightLambert * albedo + pointLightBlinn * gloss);
+	// The last shadow map layer holds the projectile light shadow. It only covers that
+	// light's own footprint, and is 1.0 (fully lit) everywhere else, so asking every
+	// light is cheaper than picking the one it belongs to and just as correct.
+	float lightShadowVisibility = getProjectileLightShadowVisibility(WorldFragPos, pointLightLambert);
+	return lightColor * (pointLightLambert * albedo + pointLightBlinn * gloss) * lightShadowVisibility;
 }
 
 // Accessors for the light arrays. The loop below reads light data only through these.

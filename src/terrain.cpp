@@ -2045,6 +2045,8 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
+		shadowCascades.projectileLightShadowMVP,
+		glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2096,6 +2098,8 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
+		shadowCascades.projectileLightShadowMVP,
+		glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2448,6 +2452,8 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		waterOffset*10, gfx_api::context::get().getSceneMipLodBias(), 0.f,
 		static_cast<int>(dimension.first), static_cast<int>(dimension.second),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
+		shadowCascades.projectileLightShadowMVP,
+		glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::constant_buffer_type<SHADER_WATER_HIGH>>());

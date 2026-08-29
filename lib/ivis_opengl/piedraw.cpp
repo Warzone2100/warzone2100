@@ -41,6 +41,7 @@
 #include "piematrix.h"
 #include "pielighting.h"
 #include "screen.h"
+#include "src/warzoneconfig.h"
 
 #include <string.h>
 #include <vector>
@@ -74,7 +75,9 @@ static size_t drawCallsCount = 0;
 static bool shadows = false;
 static bool shadowsHasBeenInit = false;
 static ShadowMode shadowMode = ShadowMode::Shadow_Mapping;
-static uint32_t numShadowCascades = WZ_MAX_SHADOW_CASCADES;
+// The sun keeps one cascade back from the last layer: that one holds the shadow of the
+// per-frame projectile light, so both fit in the WZ_MAX_SHADOW_CASCADES array texture.
+static uint32_t numShadowCascades = WZ_MAX_SHADOW_CASCADES - 1;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
 
@@ -121,17 +124,35 @@ static inline bool isShadowMappingEnabled()
 	return (shadows && shadowMode == ShadowMode::Shadow_Mapping);
 }
 
+// Projectile lights reach the scene only through per-pixel lighting, so the extra
+// shadow layer they cast is a feature of that mode alone; every other mode keeps
+// the old shadow layer count. (Terrain quality gates the lights themselves; a spare
+// cascade layer costs a small empty clear in any mode that does not light them.)
+static bool projectileLightShadowsEnabled()
+{
+	return isShadowMappingEnabled() && war_getPointLightPerPixelLighting();
+}
+
+// While the projectile light shadow layer exists, the sun is pinned to WZ_MAX_SHADOW_CASCADES - 1
+// cascades: the projectile layer is always the last one of the array, which is the index the
+// shaders sample. Otherwise the user-selected cascade count (1..WZ_MAX_SHADOW_CASCADES - 1) applies.
+static uint32_t effectiveShadowCascades()
+{
+	return (projectileLightShadowsEnabled()) ? WZ_MAX_SHADOW_CASCADES - 1 : numShadowCascades;
+}
+
 static void refreshShadowShaders()
 {
 	if (gfx_api::context::isInitialized())
 	{
 		auto shadowConstants = gfx_api::context::get().getShadowConstants();
 		bool bShadowMappingEnabled = isShadowMappingEnabled();
-		uint32_t actualNumCascadesAndPasses = (bShadowMappingEnabled) ? numShadowCascades : 0;
+		// The sun's cascades stay at effectiveShadowCascades - the last layer belongs to the projectile light shadow
+		uint32_t actualNumCascadesAndPasses = (bShadowMappingEnabled) ? effectiveShadowCascades() + ((projectileLightShadowsEnabled()) ? 1 : 0) : 0;
 		if (bShadowMappingEnabled)
 		{
 			shadowConstants.shadowMode = 1; // Possible future TODO: Could get this from the config file to allow testing alternative filter methods
-			shadowConstants.shadowCascadesCount = actualNumCascadesAndPasses;
+			shadowConstants.shadowCascadesCount = effectiveShadowCascades();
 		}
 		else
 		{
@@ -169,7 +190,8 @@ bool pie_setShadowMapResolution(uint32_t resolution)
 {
 	ASSERT_OR_RETURN(false, resolution && !(resolution & (resolution - 1)), "Expecting power-of-2 resolution, received: %" PRIu32, resolution);
 	bool bShadowMappingEnabled = isShadowMappingEnabled();
-	return gfx_api::context::get().setDepthPassProperties((bShadowMappingEnabled) ? numShadowCascades : 0, resolution);
+	uint32_t depthPasses = (bShadowMappingEnabled) ? effectiveShadowCascades() + ((projectileLightShadowsEnabled()) ? 1 : 0) : 0;
+	return gfx_api::context::get().setDepthPassProperties(depthPasses, resolution);
 }
 
 uint32_t pie_getShadowMapResolution()
@@ -215,7 +237,9 @@ ShadowMode pie_getShadowMode()
 
 bool pie_setShadowCascades(uint32_t newValue)
 {
-	if (newValue == 0 || newValue > WZ_MAX_SHADOW_CASCADES)
+	// The last layer is reserved for the projectile light shadow, so the sun can
+	// never use all WZ_MAX_SHADOW_CASCADES cascades.
+	if (newValue == 0 || newValue >= WZ_MAX_SHADOW_CASCADES)
 	{
 		return false;
 	}
@@ -230,7 +254,9 @@ bool pie_setShadowCascades(uint32_t newValue)
 
 uint32_t pie_getShadowCascades()
 {
-	return numShadowCascades;
+	// When the projectile light shadow layer is active it owns the last array layer, so the
+	// sun's cascade count is pinned to WZ_MAX_SHADOW_CASCADES - 1 regardless of the stored setting.
+	return effectiveShadowCascades();
 }
 
 static Vector3f currentSunPosition(0.f, 0.f, 0.f); // world space
@@ -1686,6 +1712,8 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 			pie_GetShaderTime(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(),
 			static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f, 0.f,
+			shadowCascades.projectileLightShadowMVP,
+			glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
 			getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, pointLights, shadowMap, drawParts, depthPassMode);

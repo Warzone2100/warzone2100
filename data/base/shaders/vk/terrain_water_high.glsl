@@ -22,6 +22,10 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int viewportHeight;
 	int bucketDimensionUsed;
 	float pad1;
+	// Biased ortho MVP of the per-frame projectile light shadow and whether it is
+	// active (w of the info vec4). Last shadow map layer.
+	mat4 projectileLightShadowMVP;
+	vec4 projectileLightShadowInfo;
 	// Last because its length follows the grid dimension
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 };

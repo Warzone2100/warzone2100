@@ -192,6 +192,15 @@ static void recordShadowCascade(const gfx_api::RenderPassContext& passCtx)
 	{
 		return;
 	}
+	// The last layer is the projectile light's shadow: it only draws on frames that have a
+	// projectile light to cast one, and is an empty (fully lit) layer on the other frames.
+	if (cascadeIndex == WZ_MAX_SHADOW_CASCADES - 1)
+	{
+		if (fc.shadowCascadesInfo.projectileLightShadowEnabled <= 0.f)
+		{
+			return;
+		}
+	}
 
 	const Vector3f cameraPos = toVector3f(fc.cameraPos);
 	if (getDrawTerrainShadows())

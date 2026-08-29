@@ -51,6 +51,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
 
 #include "loop.h"
@@ -1200,6 +1201,153 @@ glm::mat4 getBiasedShadowMapMVPMatrix(glm::mat4 lightOrthoMatrix, const glm::mat
 	return biasMatrix * shadowMatrix;
 }
 
+// Burning and glowing projectiles throw light on what they pass, by the colour set on the weapon in its data
+// file (WEAPON_STATS::lightColour). Runs before the light manager buckets the frame's lights, so the lights
+// reach both the terrain lightmap and the per-pixel scene lighting in the same frame.
+static void drawProjectileLights(LightingData& lightData)
+{
+	// Only in per-pixel scene lighting: baking projectile lights into the terrain
+	// lightmap makes a large coloured splash under the flight path, which reads as
+	// badly in the flat ambient light as it looks good lit live on the scene.
+	if (!war_getProjectileLighting()
+	    || !war_getPointLightPerPixelLighting()
+	    || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		return;
+	}
+
+	PROJECTILE *psObj = proj_GetFirst();
+	while (psObj != nullptr)
+	{
+		// Only projectiles that are actually showing this instant
+		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
+		{
+			const WEAPON_STATS *psStats = psObj->psWStats;
+			if (psStats->lightRange > 0)
+			{
+				const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
+				LIGHT light;
+				// A light is positioned by game coordinates, with its height in the middle component
+				light.position = Vector3i(st.pos.x, st.pos.z, st.pos.y);
+				light.range = psStats->lightRange;
+				light.colour = psStats->lightColour;
+				light.intensity = psStats->lightIntensity;
+				lightData.lights.push_back(light);
+			}
+		}
+		psObj = proj_GetNext();
+	}
+}
+
+// Picks the projectile light that casts the shadow this frame (the brightest one) and fits an
+// ortho box around it, looking straight down, for the shadow pass on the last shadow map layer.
+// Returns whether any projectile light is lit this frame, filling the box only when it is.
+static bool pickProjectileLightShadow(glm::mat4& lightView, glm::mat4& lightProjection)
+{
+	// Same gates as drawProjectileLights: the shadow only matters where the lights themselves run.
+	if (!war_getProjectileLighting()
+	    || !war_getPointLightPerPixelLighting()
+	    || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		return false;
+	}
+
+	// Keep the shadow locked onto one projectile from frame to frame so it does not hop from
+	// shot to shot as the "brightest" changes every frame, which otherwise reads as flickering,
+	// jumping shadows. We only let go once the current projectile has faded well below the new
+	// brightest, damping the jitter without freezing the shadow in place for the whole flight.
+	struct ProjPick
+	{
+		const PROJECTILE *obj = nullptr;
+		float strength = 0.f;
+		float range = 0.f;
+		glm::vec3 position {0.f, 0.f, 0.f};
+		glm::vec3 direction {0.f, -1.f, 0.f};
+	};
+	static const PROJECTILE *stableObj = nullptr;
+
+	ProjPick best;
+	ProjPick stable;
+	PROJECTILE *psObj = proj_GetFirst();
+	while (psObj != nullptr)
+	{
+		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
+		{
+			const WEAPON_STATS *psStats = psObj->psWStats;
+			if (psStats->lightRange > 0)
+			{
+				const float strength = static_cast<float>(psStats->lightRange) * psStats->lightIntensity;
+				ProjPick pick;
+				pick.obj = psObj;
+				pick.strength = strength;
+				pick.range = static_cast<float>(psStats->lightRange);
+				const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
+				// The shadow box must sit in shader world space, which mirrors the map's latitude axis:
+				// a light at map (x, height, z) is at (x, height, -z) there (see the vk/gl point light z flip).
+				pick.position = glm::vec3(st.pos.x, st.pos.z, -st.pos.y);
+				// Direction of travel, so the shadow sweeps along the flight path like a searchlight.
+				const Spacetime stPrev = interpolateObjectSpacetime(psObj, graphicsTime - 1);
+				const glm::vec3 now = glm::vec3(st.pos.x, st.pos.z, -st.pos.y);
+				const glm::vec3 prev = glm::vec3(stPrev.pos.x, stPrev.pos.z, -stPrev.pos.y);
+				const glm::vec3 dir = now - prev;
+				if (glm::dot(dir, dir) > 0.01f)
+				{
+					pick.direction = glm::normalize(dir);
+				}
+				if (pick.obj == stableObj)
+				{
+					stable = pick;
+				}
+				if (pick.strength > best.strength)
+				{
+					best = pick;
+				}
+			}
+		}
+		psObj = proj_GetNext();
+	}
+
+	// Hysteresis: prefer the previous projectile while it is still flying and not much dimmer
+	// than the current brightest, so rapid-fire salvos do not tear the shadow to pieces.
+	ProjPick chosen = best;
+	if (stable.obj != nullptr && stable.strength > best.strength * 0.6f)
+	{
+		chosen = stable;
+	}
+	stableObj = chosen.obj;
+
+	if (chosen.strength <= 0.f)
+	{
+		return false;
+	}
+
+	const float bestRange = chosen.range;
+	const glm::vec3 bestPosition = chosen.position;
+	glm::vec3 bestDir = chosen.direction;
+
+	// Clamp the footprint so an overlarge light does not outgrow what a single shadow map layer resolves.
+	// Cover a bit more than the light's own reach so the shone area that wants shadows fits in the box.
+	float halfExtent = std::clamp(bestRange * 1.5f, 96.f, 1800.f);
+	// Tilt the beam toward the ground so it licks terrain and structures ahead of the flight path
+	// (falls back to straight down for nearly static projectiles such as beam effects).
+	// Keep the "sun" fairly low over the light so units and walls cast long, clearly visible
+	// contact shadows on the ground inside the footprint, like a setting searchlight. A low Y
+	// weight makes the light shallow (long shadows); a high one would point it almost straight
+	// down and shrink the shadows into a barely noticeable blob.
+	glm::vec3 beamDir = glm::normalize(bestDir + glm::vec3(0.f, 0.7f, 0.f));
+	const glm::vec3 up = std::abs(glm::dot(beamDir, glm::vec3(0.f, 1.f, 0.f))) > 0.95f ? glm::vec3(0.f, 0.f, 1.f) : glm::vec3(0.f, 1.f, 0.f);
+	// Sun-cascade scheme (see calculateShadowCascades): the eye floats one unit off the box center
+	// along the light-to-sun axis, the box covers center +/- halfExtent laterally and +/- boxDepth in
+	// depth, and the projection maps that view-space Z band straight into GL depth with scale(1,1,-1).
+	const glm::vec3 boxCenter = bestPosition;
+	const glm::vec3 lightDir = -beamDir; // direction from the box toward the "sun"
+	const float boxDepth = 2.f * halfExtent;
+	lightView = glm::lookAt(boxCenter + lightDir, boxCenter, up);
+	lightProjection = glm::ortho(-halfExtent, halfExtent, -halfExtent, halfExtent,
+	                        1.f - boxDepth, 1.f + boxDepth) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
+	return true;
+}
+
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap, ILightingManager& lightManager)
 {
@@ -1232,7 +1380,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 	// Calculate shadow mapping cascades
 	glm::vec3 lightInvDir = getTheSun();
-	size_t numShadowCascades = std::min<size_t>(gfx_api::context::get().numDepthPasses(), WZ_MAX_SHADOW_CASCADES);
+	// The sun never fills the last layer: it belongs to the per-frame projectile light shadow.
+	size_t numShadowCascades = pie_getShadowCascades();
 	std::vector<Cascade> shadowCascades;
 	if (currShadowMode == ShadowMode::Shadow_Mapping)
 	{
@@ -1333,6 +1482,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
 	processEffects(perspectiveViewMatrix, lightData);
+	drawProjectileLights(lightData);
 	atmosUpdateSystem(gameWorld.map);
 	avUpdateTiles(gameWorld.map);
 	wzPerfEnd(PERF_EFFECTS);
@@ -1430,6 +1580,20 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		shadowCascadesInfo.shadowCascadeSplit[i] = shadowCascades[i].splitDepth;
 	}
 
+	// The last layer holds the shadow of the per-frame projectile light, projected straight down.
+	glm::mat4 projectileLightShadowView(1.f);
+	glm::mat4 projectileLightShadowProjection(1.f);
+	if (currShadowMode == ShadowMode::Shadow_Mapping
+	    && pickProjectileLightShadow(projectileLightShadowView, projectileLightShadowProjection))
+	{
+		shadowCascadesInfo.projectileLightShadowMVP = getBiasedShadowMapMVPMatrix(projectileLightShadowProjection, projectileLightShadowView);
+		shadowCascadesInfo.projectileLightShadowEnabled = 1.f;
+	}
+	else
+	{
+		shadowCascadesInfo.projectileLightShadowMVP = glm::mat4(1.f);
+		shadowCascadesInfo.projectileLightShadowEnabled = 0.f;
+	}
 	InGame3DFrameContext& ctx = pie_GetInGame3DFrameContext();
 	ctx.perspectiveViewMatrix = perspectiveViewMatrix;
 	ctx.viewMatrix = viewMatrix;
@@ -1439,11 +1603,13 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	ctx.currentGameFrame = currentGameFrame;
 	ctx.pointLights = pointLightsRef;
 	ctx.shadowCascadesInfo = shadowCascadesInfo;
-	for (size_t i = 0; i < shadowCascades.size() && i < WZ_MAX_SHADOW_CASCADES; ++i)
+	for (size_t i = 0; i < shadowCascades.size() && i < WZ_MAX_SHADOW_CASCADES - 1; ++i)
 	{
 		ctx.cascadeProj[i] = shadowCascades[i].projectionMatrix;
 		ctx.cascadeView[i] = shadowCascades[i].viewMatrix;
 	}
+	ctx.cascadeProj[WZ_MAX_SHADOW_CASCADES - 1] = projectileLightShadowProjection;
+	ctx.cascadeView[WZ_MAX_SHADOW_CASCADES - 1] = projectileLightShadowView;
 	pie_BindInGame3DFrameContext(&ctx);
 }
 
@@ -1775,27 +1941,6 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	}
 }	/* end of function display3DProjectiles */
 
-/// A projectile drawn additively is burning or glowing rather than merely lit, so it throws light on what it passes.
-/// (That comes from the model rather than the weapon.)
-static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD)
-{
-	if (!war_getProjectileLighting() || !war_getPointLightPerPixelLighting() || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
-	{
-		return;
-	}
-
-	LIGHT light;
-	light.position = lightPosition;
-	// The graphic already says how big the glow is, so calculate reach and brightness from it.
-	// Its cross section rather than its radius, because some models are drawn as streaks.
-	constexpr float referenceGlowSize = 32.f; // the medium rocket plume, where the values here were set
-	const float plumeScale = glm::clamp(static_cast<float>(pIMD->crossSection) / referenceGlowSize, 0.5f, 1.5f);
-	light.range = static_cast<UDWORD>(260.f * plumeScale);
-	light.colour = (psStats->weaponClass == WC_HEAT) ? pal_Colour(150, 205, 255) : pal_Colour(255, 170, 90);
-	light.intensity = 1.1f * plumeScale;
-	getCurrentLightingData().lights.push_back(light);
-}
-
 /// Draw a projectile to the screen
 void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -1858,7 +2003,6 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
-	bool alreadyLitTheWorld = false;
 	for (; pIMD != nullptr; pIMD = pIMD->next.get())
 	{
 		bool rollToCamera = false;
@@ -1887,14 +2031,6 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		{
 			additive = false;
 			premultiplied = true;
-		}
-
-		// One light for the projectile (not one per part), since the parts are the same glow
-		if ((additive || premultiplied) && !alreadyLitTheWorld)
-		{
-			// A light is positioned by game coordinates, where the height is the middle component
-			addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pIMD);
-			alreadyLitTheWorld = true;
 		}
 
 		Vector3i camera = camera_base;
@@ -4709,6 +4845,7 @@ void display3d_recordSceneOverlays(const gfx_api::RenderPassContext&)
 	{
 		return;
 	}
+
 	pie_BeginInterface();
 
 	drawDragBox();

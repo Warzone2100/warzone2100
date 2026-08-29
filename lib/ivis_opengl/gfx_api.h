@@ -1193,6 +1193,10 @@ namespace gfx_api
 		int bucketDimensionUsed;
 		float pad1 = 0.f;
 		float pad2 = 0.f;
+		// Biased ortho MVP of the per-frame projectile light shadow and whether it is
+		// active (w of the info vec4). Last shadow map layer.
+		glm::mat4 projectileLightShadowMVP;
+		glm::vec4 projectileLightShadowInfo;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
@@ -1496,6 +1500,10 @@ namespace gfx_api
 		float mipLoadBias;
 		int bucketDimensionUsed;
 		float pad1 = 0.f;
+		// Biased ortho MVP of the per-frame projectile light shadow and whether it is
+		// active (w of the info vec4). Last shadow map layer.
+		glm::mat4 projectileLightShadowMVP;
+		glm::vec4 projectileLightShadowInfo;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
@@ -1680,6 +1688,10 @@ namespace gfx_api
 		int viewportHeight;
 		int bucketDimensionUsed;
 		float pad1 = 0.f;
+		// Biased ortho MVP of the per-frame projectile light shadow and whether it is
+		// active (w of the info vec4). Last shadow map layer.
+		glm::mat4 projectileLightShadowMVP;
+		glm::vec4 projectileLightShadowInfo;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;

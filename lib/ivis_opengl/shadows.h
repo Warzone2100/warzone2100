@@ -22,11 +22,16 @@
 #include "lib/framework/frame.h"
 #include <glm/mat4x4.hpp>
 
-#define WZ_MAX_SHADOW_CASCADES 3
+#define WZ_MAX_SHADOW_CASCADES 4
 
 struct ShadowCascadesInfo
 {
 	glm::mat4 shadowMVPMatrix[WZ_MAX_SHADOW_CASCADES] = {glm::mat4(1.f)};
 	float shadowCascadeSplit[WZ_MAX_SHADOW_CASCADES] = {1.f};
 	int shadowMapSize = 0;
+	// Biased ortho MVP for the shadow the per-frame projectile light casts and
+	// whether it is active this frame. The last shadow map layer is reserved for it,
+	// while the sun keeps WZ_SHADOW_CASCADES_COUNT cascades.
+	glm::mat4 projectileLightShadowMVP = glm::mat4(1.f);
+	float projectileLightShadowEnabled = 0.f;
 };

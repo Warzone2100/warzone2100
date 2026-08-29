@@ -224,3 +224,69 @@ float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float N
 		return visibility;
 	}
 }
+
+// Shadow cast by the per-frame projectile light, held in the last shadow map layer.
+// It only covers that light's own footprint, so applying it to every light in the
+// loop is harmless: the light loop is exactly what the per-frame light lights up.
+float getProjectileLightShadowVisibility(vec3 fragPosModelSpace, float NdotL)
+{
+	if (WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0)
+	{
+		// no shadow-mapping
+		return 1.0;
+	}
+	if (projectileLightShadowInfo.w <= 0.f)
+	{
+		return 1.0;
+	}
+
+	vec4 shadowPos = projectileLightShadowMVP * vec4(fragPosModelSpace, 1.0);
+	vec3 pos = shadowPos.xyz / shadowPos.w;
+
+	// The shadow map only covers the light's own footprint
+	if (pos.x < 0.f || pos.x > 1.f || pos.y < 0.f || pos.y > 1.f || pos.z < 0.f || pos.z > 1.f)
+	{
+		return 1.0;
+	}
+
+	float bias = (sqrt(1.0 - NdotL * NdotL) / max(NdotL, 0.01f)) * 0.0004f;
+	float lightDepth = pos.z + bias;
+
+	vec2 shadowMapSize = vec2(float(ShadowMapSize), float(ShadowMapSize));
+	vec2 uv = pos.xy * shadowMapSize; // 1 unit - 1 texel
+
+	vec2 shadowMapSizeInv = 1.0 / shadowMapSize;
+
+	vec2 base_uv;
+	base_uv.x = floor(uv.x + 0.5);
+	base_uv.y = floor(uv.y + 0.5);
+
+	float s = (uv.x + 0.5 - base_uv.x);
+	float t = (uv.y + 0.5 - base_uv.y);
+
+	base_uv -= vec2(0.5, 0.5);
+	base_uv *= shadowMapSizeInv;
+
+	int shadowCascadeIndex = WZ_MAX_SHADOW_CASCADES - 1;
+	float sum = 0.0;
+
+	float uw0 = (3.0 - 2.0 * s);
+	float uw1 = (1.0 + 2.0 * s);
+
+	float u0 = (2.0 - s) / uw0 - 1.0;
+	float u1 = s / uw1 + 1.0;
+
+	float vw0 = (3.0 - 2.0 * t);
+	float vw1 = (1.0 + 2.0 * t);
+
+	float v0 = (2.0 - t) / vw0 - 1.0;
+	float v1 = t / vw1 + 1.0;
+
+	sum += uw0 * vw0 * getShadowMapDepthComp(base_uv, u0, v0, shadowMapSizeInv, shadowCascadeIndex, lightDepth);
+	sum += uw1 * vw0 * getShadowMapDepthComp(base_uv, u1, v0, shadowMapSizeInv, shadowCascadeIndex, lightDepth);
+	sum += uw0 * vw1 * getShadowMapDepthComp(base_uv, u0, v1, shadowMapSizeInv, shadowCascadeIndex, lightDepth);
+	sum += uw1 * vw1 * getShadowMapDepthComp(base_uv, u1, v1, shadowMapSizeInv, shadowCascadeIndex, lightDepth);
+
+	float visibility = sum * 1.0f / 16;
+	return clamp(visibility, 0.05, 1.0);
+}

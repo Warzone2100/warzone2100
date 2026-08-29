@@ -54,10 +54,10 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
+#include "shadow_mapping.glsl"
 #if WZ_POINT_LIGHT_ENABLED == 1
 #include "pointlights.frag"
 #endif
-#include "shadow_mapping.glsl"
 #include "light.glsl"
 #include "tangentspace.glsl"
 #include "distance_fog.glsl"
