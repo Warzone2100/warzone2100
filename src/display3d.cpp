@@ -1225,10 +1225,26 @@ static void drawProjectileLights(LightingData& lightData)
 			const WEAPON_STATS *psStats = psObj->psWStats;
 			if (psStats->lightRange > 0)
 			{
-				const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
+				// Use float interpolation instead of integer interpolateObjectSpacetime
+				// to avoid position quantization that causes light flicker
+				const Spacetime& st1 = psObj->prevSpacetime;
+				const Spacetime& st2 = psObj->time != st1.time
+					? getSpacetime(psObj) : st1;
+				float t = static_cast<float>(graphicsTime - st1.time);
+				float duration = static_cast<float>(st2.time - st1.time);
+				float frac = (duration > 0.f) ? (t / duration) : 1.f;
+				// Clamp to [0,1] to handle edge cases
+				if (frac < 0.f) frac = 0.f;
+				if (frac > 1.f) frac = 1.f;
+
+				// Interpolate position in float
+				float px = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * frac;
+				float py = static_cast<float>(st1.pos.y) + (static_cast<float>(st2.pos.y) - static_cast<float>(st1.pos.y)) * frac;
+				float pz = static_cast<float>(st1.pos.z) + (static_cast<float>(st2.pos.z) - static_cast<float>(st1.pos.z)) * frac;
+
 				LIGHT light;
 				// A light is positioned by game coordinates, with its height in the middle component
-				light.position = Vector3i(st.pos.x, st.pos.z, st.pos.y);
+				light.position = Vector3i(static_cast<int>(px), static_cast<int>(pz), static_cast<int>(py));
 				light.range = psStats->lightRange;
 				light.colour = psStats->lightColour;
 				light.intensity = psStats->lightIntensity;
@@ -1281,14 +1297,30 @@ static bool pickProjectileLightShadow(glm::mat4& lightView, glm::mat4& lightProj
 				pick.obj = psObj;
 				pick.strength = strength;
 				pick.range = static_cast<float>(psStats->lightRange);
-				const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
+				// Same float interpolation as drawProjectileLights to avoid position jitter
+				const Spacetime& st1 = psObj->prevSpacetime;
+				const Spacetime& st2 = psObj->time != st1.time ? getSpacetime(psObj) : st1;
+				float t = static_cast<float>(graphicsTime - st1.time);
+				float duration = static_cast<float>(st2.time - st1.time);
+				float frac = (duration > 0.f) ? (t / duration) : 1.f;
+				if (frac < 0.f) frac = 0.f;
+				if (frac > 1.f) frac = 1.f;
+				float px = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * frac;
+				float py = static_cast<float>(st1.pos.y) + (static_cast<float>(st2.pos.y) - static_cast<float>(st1.pos.y)) * frac;
+				float pz = static_cast<float>(st1.pos.z) + (static_cast<float>(st2.pos.z) - static_cast<float>(st1.pos.z)) * frac;
 				// The shadow box must sit in shader world space, which mirrors the map's latitude axis:
 				// a light at map (x, height, z) is at (x, height, -z) there (see the vk/gl point light z flip).
-				pick.position = glm::vec3(st.pos.x, st.pos.z, -st.pos.y);
+				pick.position = glm::vec3(px, pz, -py);
 				// Direction of travel, so the shadow sweeps along the flight path like a searchlight.
-				const Spacetime stPrev = interpolateObjectSpacetime(psObj, graphicsTime - 1);
-				const glm::vec3 now = glm::vec3(st.pos.x, st.pos.z, -st.pos.y);
-				const glm::vec3 prev = glm::vec3(stPrev.pos.x, stPrev.pos.z, -stPrev.pos.y);
+				float tPrev = t - 1.f;
+				float fracPrev = (duration > 0.f) ? (tPrev / duration) : 0.f;
+				if (fracPrev < 0.f) fracPrev = 0.f;
+				if (fracPrev > 1.f) fracPrev = 1.f;
+				float pxPrev = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * fracPrev;
+				float pyPrev = static_cast<float>(st1.pos.y) + (static_cast<float>(st2.pos.y) - static_cast<float>(st1.pos.y)) * fracPrev;
+				float pzPrev = static_cast<float>(st1.pos.z) + (static_cast<float>(st2.pos.z) - static_cast<float>(st1.pos.z)) * fracPrev;
+				const glm::vec3 now = glm::vec3(px, pz, -py);
+				const glm::vec3 prev = glm::vec3(pxPrev, pzPrev, -pyPrev);
 				const glm::vec3 dir = now - prev;
 				if (glm::dot(dir, dir) > 0.01f)
 				{
