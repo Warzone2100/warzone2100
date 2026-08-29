@@ -123,6 +123,10 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 		{
 			snapshot.features |= RenderFeatures::SceneUpscale;
 		}
+		if (query.hdrSceneActive())
+		{
+			snapshot.features |= RenderFeatures::HdrScene;
+		}
 		if (query.smaaActive())
 		{
 			snapshot.features |= RenderFeatures::Smaa;

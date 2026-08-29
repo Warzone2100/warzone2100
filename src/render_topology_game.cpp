@@ -106,6 +106,11 @@ public:
 		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::UpscaledColor) != nullptr;
 	}
 
+	bool hdrSceneActive() const override
+	{
+		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::TonemapColor) != nullptr;
+	}
+
 	bool smaaActive() const override
 	{
 		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::SmaaEdges) != nullptr;

@@ -61,6 +61,7 @@ enum class PassId : uint16_t
 	RangeRingSdfMin,
 	RangeRingComposite,
 	SceneTransparent,
+	SceneTonemap,
 	SceneBlit,
 	SceneUpscaleEASU,
 	SceneUpscaleRCAS,

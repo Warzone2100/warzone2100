@@ -4231,6 +4231,7 @@ gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	inputs.smaa = smaaEnabled();
+	inputs.hdrScene = gfx_api::is_float_format(surfaceCapabilities().sceneColorFormat);
 	inputs.effects = storedSceneEffectSurfaces();
 	inputs.prepassNeeds = gfx_api::prepassNeeds(inputs.effects);
 	return inputs;

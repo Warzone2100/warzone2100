@@ -101,6 +101,7 @@ constexpr std::array<shader_program_desc, SHADER_MAX> make_catalog_table()
 	t[SHADER_SSR_BLUR] = make_program("SSR blur program", "postprocess_fullscreen.vert", "ssr_blur.frag");
 	t[SHADER_SCENE_COMPOSE_SSR] = make_program("Scene compose SSR program", "postprocess_fullscreen.vert", "scene_compose_ssr.frag");
 	t[SHADER_SCENE_FOG] = make_program("Scene fog program", "postprocess_fullscreen.vert", "scene_fog.frag");
+	t[SHADER_SCENE_TONEMAP] = make_program("Scene tonemap program", "postprocess_fullscreen.vert", "scene_tonemap.frag");
 	t[SHADER_RANGE_RING_SDF] = make_program("Range ring SDF program", "range_ring_sdf.vert", "range_ring_sdf.frag");
 	t[SHADER_RANGE_RING_COMPOSITE] = make_program("Range ring composite program", "postprocess_fullscreen.vert", "range_ring_composite.frag");
 	t[SHADER_DEBUG_TEXTURE2D_QUAD] = make_program("Debug texture quad program", "quad_texture2d.vert", "quad_texture2d.frag");

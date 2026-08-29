@@ -69,6 +69,7 @@ static const char* passIdName(PassId id)
 	case PassId::ScenePrepass: return "ScenePrepass";
 	case PassId::ScenePass: return "ScenePass";
 	case PassId::SceneTransparent: return "SceneTransparent";
+	case PassId::SceneTonemap: return "SceneTonemap";
 	case PassId::SSAOGenerate: return "SSAOGenerate";
 	case PassId::SSAODownsample: return "SSAODownsample";
 	case PassId::SSAOBlurH: return "SSAOBlurH";
@@ -179,6 +180,22 @@ int main()
 		expectInGame("fog-only", snapshot, {
 			PassId::ScenePrepass, PassId::ScenePass, PassId::FogApply,
 			PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.features |= RenderFeatures::HdrScene;
+		expectInGame("hdr-no-effects", snapshot, {
+			PassId::ScenePass, PassId::SceneTonemap, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.fog = true;
+		snapshot.features |= RenderFeatures::HdrScene;
+		expectInGame("hdr-fog", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass, PassId::FogApply,
+			PassId::SceneTransparent, PassId::SceneTonemap, PassId::SceneBlit});
 	}
 
 	{
