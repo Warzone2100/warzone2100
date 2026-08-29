@@ -21,7 +21,7 @@
 /** @file tonemap_pass.cpp
  * Brings scene referred color down to display range.
  *
- * Emitted only when the scene color format is floating point, which nothing selects yet.
+ * Emitted only when the scene color format is floating point, which the HDR Lighting option selects.
  */
 
 #include "tonemap_pass.h"
@@ -46,6 +46,8 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_TONEMAP> constants {};
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
+	// Where the shoulder starts: low enough to bend toward white, high enough to leave most of it untouched
+	constants.tonemapKnee = 0.75f;
 	display3d_drawFullscreenTriangle<gfx_api::SceneTonemapPSO>(constants, scene);
 }
 

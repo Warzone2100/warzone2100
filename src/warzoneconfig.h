@@ -276,6 +276,16 @@ void war_setMuzzleFlashLighting(bool muzzleFlashesEnabled);
 bool war_getProjectileLighting();
 void war_setProjectileLighting(bool projectilesEnabled);
 
+enum class HDR_LIGHTING_MODE : uint8_t
+{
+	OFF,
+	ON,
+};
+HDR_LIGHTING_MODE war_getHdrLightingMode();
+void war_setHdrLightingMode(HDR_LIGHTING_MODE mode);
+/// Whether HDR lighting is asked for.
+bool war_getHdrLighting();
+
 enum class SSAO_MODE : uint8_t
 {
 	OFF,

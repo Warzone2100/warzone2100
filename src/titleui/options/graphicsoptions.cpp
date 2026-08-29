@@ -399,6 +399,26 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true, 1);
 	}
+	{
+		auto optionInfo = OptionInfo("gfx.hdrLighting", N_("HDR Lighting"), N_("Bright highlights fade smoothly instead of clipping to white. No HDR display needed."));
+		optionInfo.setRequiresRestart(true);
+		auto valueChanger = OptionsDropdown<HDR_LIGHTING_MODE>::make(
+			[]() {
+				OptionChoices<HDR_LIGHTING_MODE> result;
+				result.choices = {
+					{ _("On"), "", HDR_LIGHTING_MODE::ON },
+					{ _("Off"), "", HDR_LIGHTING_MODE::OFF },
+				};
+				result.setCurrentIdxForValue(war_getHdrLightingMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setHdrLightingMode(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
 
 	// Effects:
 	result->addSection(OptionsSection(N_("Effects"), ""), true);

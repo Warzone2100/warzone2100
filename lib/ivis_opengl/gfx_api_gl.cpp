@@ -3526,15 +3526,16 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	debug(LOG_INFO, "  * Texture gather support %s detected", hasTextureGatherSupport ? "was" : "was NOT");
 	hasGpuTimestampSupport = initGpuTimestampSupport();
 	debug(LOG_INFO, "  * GPU timestamp query support %s detected", hasGpuTimestampSupport ? "was" : "was NOT");
-	hasTenBitSceneColorSupport = initTenBitSceneColorSupport();
+	hasTenBitSceneColorSupport = initSceneColorFormatSupport(gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32);
 	debug(LOG_INFO, "  * 10 bit scene color support %s detected", hasTenBitSceneColorSupport ? "was" : "was NOT");
 	const GLsizei requestedMsaaSamples = static_cast<GLsizei>(clampedMultiSampleCount());
 	if (hasTenBitSceneColorSupport && requestedMsaaSamples > 1)
 	{
-		hasTenBitMsaaSupport = initTenBitMsaaSupport(requestedMsaaSamples);
+		hasTenBitMsaaSupport = initSceneColorMsaaSupport(gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32, requestedMsaaSamples);
 		debug(LOG_INFO, "  * 10 bit scene color at %dx MSAA %s supported", requestedMsaaSamples,
 			hasTenBitMsaaSupport ? "is" : "is NOT");
 	}
+	initFloatSceneColorSupport(requestedMsaaSamples);
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -4245,8 +4246,15 @@ gfx_api::SurfaceCapabilityHints gl_context::surfaceCapabilities() const
 	// (The extra precision shows as less banding across the gradients terrain and sky produce.)
 	// With MSAA: the format must also back a multisampled renderbuffer at the sample count in use -
 	// if it can't, the sample count wins (since MSAA is the setting the player chose).
-	const bool useTenBit = hasTenBitSceneColorSupport && (clampedMsaa <= 1 || hasTenBitMsaaSupport);
-	if (useTenBit)
+	const bool useFloat = hdrSceneEnabled()
+		&& (floatSceneColorFormat != gfx_api::pixel_format::invalid)
+		&& (clampedMsaa <= 1 || hasFloatMsaaSupport);
+	const bool useTenBit = !useFloat && hasTenBitSceneColorSupport && (clampedMsaa <= 1 || hasTenBitMsaaSupport);
+	if (useFloat)
+	{
+		caps.sceneColorFormat = floatSceneColorFormat;
+	}
+	else if (useTenBit)
 	{
 		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32;
 	}
@@ -5826,7 +5834,7 @@ bool gl_context::initTextureGatherSupport()
 
 // Ask the driver whether a 10 bit scene color target is renderable rather than assuming,
 // by building one and checking the framebuffer is complete with it attached.
-bool gl_context::initTenBitSceneColorSupport()
+bool gl_context::initSceneColorFormatSupport(gfx_api::pixel_format format)
 {
 	wzGLClearErrors();
 
@@ -5835,7 +5843,8 @@ bool gl_context::initTenBitSceneColorSupport()
 	glBindTexture(GL_TEXTURE_2D, probeTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB10_A2, 4, 4, 0, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, to_gl_internalformat(format, gles), 4, 4, 0,
+		to_gl_format(format, gles), to_gl_pixel_data_type(format), nullptr);
 	bool supported = (glGetError() == GL_NO_ERROR);
 
 	GLuint probeFbo = 0;
@@ -5860,11 +5869,36 @@ bool gl_context::initTenBitSceneColorSupport()
 	return supported;
 }
 
-// RGB10_A2 is a required color renderable renderbuffer format in both desktop GL and
-// OpenGL ES 3.0, but the sample counts it accepts are not guaranteed to match RGBA8's.
-// Build one at the count we would actually ask for and see whether it is complete, which
-// answers that without needing the per format query that only newer desktop GL has.
-bool gl_context::initTenBitMsaaSupport(GLsizei samples)
+// Pick the floating point scene color format, preferring B10G11R11, which is 32 bits per pixel like RGBA8
+void gl_context::initFloatSceneColorSupport(GLsizei requestedSamples)
+{
+	const gfx_api::pixel_format candidates[] = {
+		gfx_api::pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32,
+		gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT };
+	for (auto candidate : candidates)
+	{
+		if (!initSceneColorFormatSupport(candidate))
+		{
+			continue;
+		}
+		const bool msaaOk = (requestedSamples <= 1) || initSceneColorMsaaSupport(candidate, requestedSamples);
+		floatSceneColorFormat = candidate;
+		hasFloatMsaaSupport = msaaOk;
+		if (msaaOk)
+		{
+			break;
+		}
+	}
+	debug(LOG_INFO, "  * float scene color: %s%s",
+		(floatSceneColorFormat != gfx_api::pixel_format::invalid)
+			? gfx_api::format_to_str(floatSceneColorFormat) : "unavailable",
+		(floatSceneColorFormat != gfx_api::pixel_format::invalid && !hasFloatMsaaSupport)
+			? " (not multisampled)" : "");
+}
+
+// A format may not support the same MSAA sample counts as RGBA8. Create a test framebuffer at the
+// requested count and check that it is complete (the per format query needs newer desktop GL).
+bool gl_context::initSceneColorMsaaSupport(gfx_api::pixel_format format, GLsizei samples)
 {
 	wzGLClearErrors();
 
@@ -5874,7 +5908,7 @@ bool gl_context::initTenBitMsaaSupport(GLsizei samples)
 	GLuint probeRenderbuffer = 0;
 	glGenRenderbuffers(1, &probeRenderbuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, probeRenderbuffer);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_RGB10_A2, 4, 4);
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, to_gl_internalformat(format, gles), 4, 4);
 	bool supported = (glGetError() == GL_NO_ERROR);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
@@ -6173,6 +6207,21 @@ bool gl_context::setSmaaEnabled(bool enabled)
 		return true;
 	}
 	gfx_api::context::setSmaaEnabled(enabled);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		// no usable drawable right now, the setting applies when the scene framebuffer is next created
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
+bool gl_context::setHdrSceneEnabled(bool enabled)
+{
+	if (enabled == hdrSceneEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setHdrSceneEnabled(enabled);
 	if (viewportWidth == 0 || viewportHeight == 0)
 	{
 		// no usable drawable right now, the setting applies when the scene framebuffer is next created

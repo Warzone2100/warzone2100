@@ -847,6 +847,17 @@ bool loadConfig()
 		war_setMuzzleFlashLighting(value.value_or(true));
 	}
 	{
+		std::string hdrLightingValue = iniGetString("hdrLighting", "off").value();
+		if (hdrLightingValue == "on")
+		{
+			war_setHdrLightingMode(HDR_LIGHTING_MODE::ON);
+		}
+		else
+		{
+			war_setHdrLightingMode(HDR_LIGHTING_MODE::OFF);
+		}
+	}
+	{
 		auto value = iniGetBoolOpt("projectileLights");
 		war_setProjectileLighting(value.value_or(true));
 	}
@@ -1149,6 +1160,11 @@ bool saveConfig()
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetBool("muzzleFlashLights", war_getMuzzleFlashLighting());
 	iniSetBool("projectileLights", war_getProjectileLighting());
+	switch (war_getHdrLightingMode())
+	{
+		case HDR_LIGHTING_MODE::OFF: iniSetString("hdrLighting", "off"); break;
+		case HDR_LIGHTING_MODE::ON: iniSetString("hdrLighting", "on"); break;
+	}
 	switch (war_getSsaoMode())
 	{
 		case SSAO_MODE::OFF: iniSetString("ssao", "off"); break;
