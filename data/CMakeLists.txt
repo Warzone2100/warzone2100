@@ -144,6 +144,7 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssr_blur.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_compose_ssr.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_fog.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_tonemap.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/range_ring_sdf.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/range_ring_sdf.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/range_ring_composite.frag"

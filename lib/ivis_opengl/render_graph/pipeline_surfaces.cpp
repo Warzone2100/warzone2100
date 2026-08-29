@@ -361,6 +361,18 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::None,
 		ScenePostEffectId::RangeRings),
+	// TonemapColor: scene mapped to display range, the first display referred surface
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::DisplayColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::HdrSceneActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
 	// ShadowMap
 	makeCatalogEntry(
 		PipelineSurfaceUsage::DepthOnly,
@@ -521,6 +533,8 @@ bool evalEnablePolicy(const PipelineSurfaceCatalogEntry& cat, const PipelineSurf
 				|| inputs.sceneDynamicResolution);
 	case SurfaceEnablePolicy::SmaaActive:
 		return inputs.smaa;
+	case SurfaceEnablePolicy::HdrSceneActive:
+		return inputs.hdrScene;
 	case SurfaceEnablePolicy::SmaaIntermediateActive:
 		return inputs.smaa
 			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH

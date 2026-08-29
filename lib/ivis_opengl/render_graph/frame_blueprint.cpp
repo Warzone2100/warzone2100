@@ -202,6 +202,17 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades);
 		incomingColor = PassId::SceneTransparent;
 	}
+
+	// Everything above is scene referred, and the tonemap brings it to display range before presentation
+	if (snapshot.features & RenderFeatures::HdrScene)
+	{
+		builder.beginPass(PassId::SceneTonemap, "SceneTonemap")
+			.color(PipelineSurfaceId::TonemapColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::SceneColorTarget)
+			.readFrom(incomingColor, AttachmentRole::PrimaryColor);
+		incomingColor = PassId::SceneTonemap;
+	}
+
 	appendPresentation(builder, snapshot, incomingColor);
 
 	addSwapchainPassToBuilder(builder, PassId::TargettingEffects, "TargettingEffects", snapshot.swapchainMsaa,

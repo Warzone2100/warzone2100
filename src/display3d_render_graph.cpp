@@ -40,6 +40,7 @@
 #include "ssao.h"
 #include "ssr.h"
 #include "fog_pass.h"
+#include "tonemap_pass.h"
 #include "range_rings.h"
 #include "terrain.h"
 
@@ -289,6 +290,7 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSRBlurV, ssr::recordBlurV);
 	table.set(gfx_api::PassId::SSRCompose, ssr::recordCompose);
 	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
+	table.set(gfx_api::PassId::SceneTonemap, tonemap_pass::recordApply);
 	table.set(gfx_api::PassId::RangeRingSdfSensor, range_rings::recordSdfSensor);
 	table.set(gfx_api::PassId::RangeRingSdfWeapon, range_rings::recordSdfWeapon);
 	table.set(gfx_api::PassId::RangeRingSdfMin, range_rings::recordSdfMin);

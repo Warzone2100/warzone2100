@@ -71,6 +71,8 @@ struct RenderFeatures
 		SSAODownsample     = 1u << 7,
 		/// Downsample generated SSR into the blur target when blur is coarser.
 		SSRDownsample      = 1u << 8,
+		/// Scene color is HDR, so a tonemap pass converts it to display range.
+		HdrScene           = 1u << 9,
 	};
 };
 
@@ -156,6 +158,8 @@ public:
 	/// True when the backend has a scene-sized SMAA blend output surface for a
 	/// following scaling pass to consume.
 	virtual bool smaaIntermediateActive() const = 0;
+	/// True when the backend has a tonemap target, which it allocates only for an HDR scene format.
+	virtual bool hdrSceneActive() const = 0;
 	/// Allocated scene-effect surfaces (not raw gameplay config).
 	virtual SceneEffectSurfaces sceneEffectSurfaces() const = 0;
 	virtual uint32_t shadowMapSize() const = 0;

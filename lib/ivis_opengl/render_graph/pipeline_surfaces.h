@@ -166,6 +166,8 @@ enum class PipelineSurfaceId : uint8_t
 	RangeRingSdfDepth,
 	/// Scene-sized lit scene with range-ring overlay applied; feeds SMAA/blit/FSR.
 	RangeRingColor,
+	/// Display referred output of the tonemap pass, present only when the scene is HDR.
+	TonemapColor,
 	ShadowMap,
 	SwapchainColor,
 	SwapchainMSAAColor,
@@ -304,6 +306,8 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaActive,
 	/// SMAA enabled and its blend output feeds a scaling pass instead of the swapchain.
 	SmaaIntermediateActive,
+	/// Scene color is a floating point format, so a tonemap target is needed.
+	HdrSceneActive,
 	/// Catalog row owned by a `ScenePostEffectId` (`sceneEffect`).
 	ScenePostEffect,
 	/// Extra effect-owned buffer when blur resolves smaller than generate.
@@ -392,6 +396,8 @@ struct PipelineSurfaceSyncInputs
 	/// Dynamic resolution keeps scene-sized intermediates alive even at a 1:1 scene size.
 	bool sceneDynamicResolution = false;
 	bool smaa = false;
+	/// Scene color negotiated to a floating point format, so the scene needs tonemapping to display range.
+	bool hdrScene = false;
 	/// Allocated scene-effect catalog request (enable flags + SSAO divisors).
 	SceneEffectSurfaces effects;
 	/// Enabled post-effect prepass capabilities, plus the separated transparents depth need when any effect is enabled (`prepassNeeds(effects)`).

@@ -100,6 +100,19 @@ namespace gfx_api
 		}
 	}
 
+	/// True for the floating point color formats
+	static inline bool is_float_format(const pixel_format& format)
+	{
+		switch (format)
+		{
+			case pixel_format::FORMAT_R16G16B16A16_SFLOAT:
+			case pixel_format::FORMAT_B10G11R11_UFLOAT_PACK32:
+				return true;
+			default:
+				return false;
+		}
+	}
+
 	static inline bool is_uncompressed_format(const pixel_format& format)
 	{
 		switch (format)
