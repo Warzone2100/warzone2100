@@ -658,6 +658,15 @@ namespace gfx_api
 			return true;
 		}
 
+		/// Floating point scene color plus a tonemap pass, instead of writing display range directly
+		bool hdrSceneEnabled() const { return _hdrSceneEnabled; }
+		/// Backend overrides store the value here and renegotiate the scene color format
+		virtual bool setHdrSceneEnabled(bool enabled)
+		{
+			_hdrSceneEnabled = enabled;
+			return true;
+		}
+
 		/// SMAA 1x post-process antialiasing over the scene color
 		bool smaaEnabled() const { return _smaaEnabled; }
 		/// Backend overrides store the value via this base implementation and rebuild
@@ -786,6 +795,7 @@ namespace gfx_api
 		uint32_t _sceneRenderScalePercent = 100;
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
+		bool _hdrSceneEnabled = false;
 		SceneEffectSurfaces _sceneEffectSurfaces;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;

@@ -434,6 +434,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
 	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
 	virtual bool setSmaaEnabled(bool enabled) override;
+	virtual bool setHdrSceneEnabled(bool enabled) override;
 	virtual bool setSceneEffectSurfaces(gfx_api::SceneEffectSurfaces cfg) override;
 	virtual bool setSceneDynamicResolution(bool enabled) override;
 	virtual bool supportsGpuFrameTiming() const override;
@@ -544,8 +545,9 @@ private:
 			? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
 			: 0u;
 	}
-	bool initTenBitSceneColorSupport();
-	bool initTenBitMsaaSupport(GLsizei samples);
+	bool initSceneColorFormatSupport(gfx_api::pixel_format format);
+	bool initSceneColorMsaaSupport(gfx_api::pixel_format format, GLsizei samples);
+	void initFloatSceneColorSupport(GLsizei requestedSamples);
 	bool initGpuTimestampSupport();
 	void createGpuTimingQueries();
 	void destroyGpuTimingQueries();
@@ -581,6 +583,9 @@ private:
 	// whether a 10 bit per channel scene colour target is renderable on this driver
 	bool hasTenBitMsaaSupport = false; // and whether it is renderable multisampled
 	bool hasTenBitSceneColorSupport = false;
+	// Best floating point scene color format the driver will render to, or invalid where there is none
+	gfx_api::pixel_format floatSceneColorFormat = gfx_api::pixel_format::invalid;
+	bool hasFloatMsaaSupport = false;
 
 	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
 	bool hasGpuTimestampSupport = false;

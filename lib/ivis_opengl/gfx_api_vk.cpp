@@ -565,9 +565,16 @@ vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const
 	);
 }
 
-vk::Format findSceneColorBufferFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
+vk::Format findSceneColorBufferFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader, bool preferFloat)
 {
 	std::vector<vk::Format> sceneColorFormats = { vk::Format::eA2B10G10R10UnormPack32, vk::Format::eR8G8B8A8Unorm };
+	if (preferFloat)
+	{
+		// Try B10G11R11 first (32 bits per pixel, like RGBA8), then R16G16B16A16, which Vulkan guarantees
+		// as a blendable color attachment. If neither works, use the fixed point formats above.
+		sceneColorFormats.insert(sceneColorFormats.begin(),
+			{ vk::Format::eB10G11R11UfloatPack32, vk::Format::eR16G16B16A16Sfloat });
+	}
 	return findSupportedFormat(
 		physicalDevice,
 		sceneColorFormats,
@@ -4622,7 +4629,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	}
 
 	depthStencilAttachmentFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
-	sceneColorVkFormat = findSceneColorBufferFormat(physicalDevice, vkDynLoader);
+	sceneColorVkFormat = findSceneColorBufferFormat(physicalDevice, vkDynLoader, hdrSceneEnabled());
 	debug(LOG_3D, "Using depth buffer format: %s", to_string(depthStencilAttachmentFormat).c_str());
 	debug(LOG_3D, "Using scene color format: %s", to_string(sceneColorVkFormat).c_str());
 
@@ -7427,6 +7434,25 @@ bool VkRoot::setSmaaEnabled(bool enabled)
 		// no surfaces exist yet, the setting applies when they are created
 		return true;
 	}
+	invalidateWarmEntries();
+	return syncPipelineSurfaces();
+}
+
+bool VkRoot::setHdrSceneEnabled(bool enabled)
+{
+	if (enabled == hdrSceneEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setHdrSceneEnabled(enabled);
+	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		// no surfaces exist yet, the setting applies when they are created
+		return true;
+	}
+	// createSwapchain() picked the scene color format using the old setting
+	sceneColorVkFormat = findSceneColorBufferFormat(physicalDevice, vkDynLoader, enabled);
+	debug(LOG_3D, "Using scene color format: %s", to_string(sceneColorVkFormat).c_str());
 	invalidateWarmEntries();
 	return syncPipelineSurfaces();
 }
