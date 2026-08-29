@@ -75,9 +75,13 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	vec4 light = adjustedAmbientLight + diffuseLight * diffuseFactor;
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
 
+	// Clamp gloss to keep terrain looking like rough dirty ground, not polished surface
+	const float maxGloss = 0.15f;
+	float clampedGloss = min(b.gloss, maxGloss);
+
 	vec4 light_spec = specularLight * specularFactor * diffuseFactor;
 	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
-	light_spec *= (b.gloss * b.gloss);
+	light_spec *= (clampedGloss * clampedGloss);
 
 	vec4 res = (b.color*light) + light_spec;
 
@@ -88,7 +92,7 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 		// The light loop works in world space, so the tangent frame is inverted once here.
 		// The frame is built orthonormal, so its transpose stands in for its inverse, and the third column of that is the vertex normal.
 		mat3 tangentToWorld = transpose(ModelTangentMatrix);
-		res += iterateOverAllPointLights(clipSpaceCoord, frag.posModelSpace, tangentToWorld * b.N, tangentToWorld[2], tangentToWorld * normalize(groundHalfVec - groundLightDir), b.color, b.gloss);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.posModelSpace, tangentToWorld * b.N, tangentToWorld[2], tangentToWorld * normalize(groundHalfVec - groundLightDir), b.color, clampedGloss);
 	}
 
 	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/
