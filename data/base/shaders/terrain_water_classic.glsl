@@ -12,5 +12,5 @@ layout(std140) uniform cbuffer {
 	float timeSec;
 	float WZ_MIP_LOAD_BIAS;
 	float pad0;
-	float pad1;
+	int linearLighting;
 };

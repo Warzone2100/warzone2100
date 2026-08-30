@@ -3,6 +3,7 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #include "terrain_water_classic.glsl"
+#include "srgb.glsl"
 //
 
 uniform sampler2D lightmap_tex;
@@ -37,8 +38,16 @@ vec4 main_legacy()
 {
 	vec4 decal = texture(tex2, uv2, WZ_MIP_LOAD_BIAS);
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
+	// The tile attenuation, the lightmap divisor and the product with the decal were tuned for display
+	// values, so under linear lighting the formula is evaluated in display space
+	if (linearLighting != 0)
+	{
+		vec3 colorD = wzLinearToSrgb(decal.rgb) * lightmap_vec4.a;
+		colorD = blendAddEffectLighting(colorD, lightmap_vec4.rgb / 2.f);
+		return vec4(wzSrgbToLinear(colorD), decal.a);
+	}
 	vec4 color = decal * vec4(vec3(lightmap_vec4.a), 1.f); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
-	color.rgb = blendAddEffectLighting(color.rgb, (lightmap_vec4.rgb / 2.f)); // additive color (from environmental point lights / effects)
+	color.rgb = blendAddEffectLighting(color.rgb, lightmap_vec4.rgb / 2.f); // additive color (from environmental point lights / effects)
 	return color;
 }
 
