@@ -42,6 +42,9 @@
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/pieclip.h"
 
+#include <array>
+#include <nonstd/optional.hpp>
+
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -1775,6 +1778,27 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	}
 }	/* end of function display3DProjectiles */
 
+/// A subclass with no entry uses the weapon class default.
+static const std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> projectileLightColorBySubClass = []() {
+	std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> table;
+	// WSC_FLAME is WC_HEAT, which would otherwise take the color meant for energy weapons.
+	table[WSC_FLAME] = pal_Colour(255, 180, 100);
+	return table;
+}();
+
+static PIELIGHT projectileLightColor(const WEAPON_STATS *psStats)
+{
+	if (psStats->weaponSubClass < WSC_NUM_WEAPON_SUBCLASSES)
+	{
+		const auto &subClassColor = projectileLightColorBySubClass[psStats->weaponSubClass];
+		if (subClassColor.has_value())
+		{
+			return subClassColor.value();
+		}
+	}
+	return (psStats->weaponClass == WC_HEAT) ? pal_Colour(150, 205, 255) : pal_Colour(255, 170, 90);
+}
+
 /// A projectile drawn additively is burning or glowing rather than merely lit, so it throws light on what it passes.
 /// (That comes from the model rather than the weapon.)
 static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD)
@@ -1791,7 +1815,7 @@ static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &ligh
 	constexpr float referenceGlowSize = 32.f; // the medium rocket plume, where the values here were set
 	const float plumeScale = glm::clamp(static_cast<float>(pIMD->crossSection) / referenceGlowSize, 0.5f, 1.5f);
 	light.range = static_cast<UDWORD>(260.f * plumeScale);
-	light.colour = (psStats->weaponClass == WC_HEAT) ? pal_Colour(150, 205, 255) : pal_Colour(255, 170, 90);
+	light.colour = projectileLightColor(psStats);
 	light.intensity = 1.1f * plumeScale;
 	getCurrentLightingData().lights.push_back(light);
 }
