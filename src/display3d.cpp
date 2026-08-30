@@ -42,9 +42,6 @@
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/pieclip.h"
 
-#include <array>
-#include <nonstd/optional.hpp>
-
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -88,6 +85,7 @@
 #include "multiplay.h"
 #include "advvis.h"
 #include "cmddroid.h"
+#include "effectlights.h"
 #include "terrain.h"
 #include "profiling.h"
 #include "warzoneconfig.h"
@@ -1778,45 +1776,26 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	}
 }	/* end of function display3DProjectiles */
 
-/// A subclass with no entry uses the weapon class default.
-static const std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> projectileLightColorBySubClass = []() {
-	std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> table;
-	// WSC_FLAME is WC_HEAT, which would otherwise take the color meant for energy weapons.
-	table[WSC_FLAME] = pal_Colour(255, 180, 100);
-	return table;
-}();
-
-static PIELIGHT projectileLightColor(const WEAPON_STATS *psStats)
-{
-	if (psStats->weaponSubClass < WSC_NUM_WEAPON_SUBCLASSES)
-	{
-		const auto &subClassColor = projectileLightColorBySubClass[psStats->weaponSubClass];
-		if (subClassColor.has_value())
-		{
-			return subClassColor.value();
-		}
-	}
-	return (psStats->weaponClass == WC_HEAT) ? pal_Colour(150, 205, 255) : pal_Colour(255, 170, 90);
-}
-
 /// A projectile drawn additively is burning or glowing rather than merely lit, so it throws light on what it passes.
-/// (That comes from the model rather than the weapon.)
-static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD)
+/// (Unless the data files say otherwise, that comes from the model rather than the weapon.)
+static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD, bool modelIsGlowing)
 {
 	if (!war_getProjectileLighting() || !war_getPointLightPerPixelLighting() || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
 	{
 		return;
 	}
 
+	const auto projectileLight = resolveProjectileLight(psStats, pIMD, modelIsGlowing);
+	if (!projectileLight.has_value())
+	{
+		return;
+	}
+
 	LIGHT light;
 	light.position = lightPosition;
-	// The graphic already says how big the glow is, so calculate reach and brightness from it.
-	// Its cross section rather than its radius, because some models are drawn as streaks.
-	constexpr float referenceGlowSize = 32.f; // the medium rocket plume, where the values here were set
-	const float plumeScale = glm::clamp(static_cast<float>(pIMD->crossSection) / referenceGlowSize, 0.5f, 1.5f);
-	light.range = static_cast<UDWORD>(260.f * plumeScale);
-	light.colour = projectileLightColor(psStats);
-	light.intensity = 1.1f * plumeScale;
+	light.range = projectileLight->range;
+	light.colour = projectileLight->color;
+	light.intensity = projectileLight->intensity;
 	getCurrentLightingData().lights.push_back(light);
 }
 
@@ -1883,6 +1862,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
 	bool alreadyLitTheWorld = false;
+	const iIMDShape *pFirstIMD = pIMD;
 	for (; pIMD != nullptr; pIMD = pIMD->next.get())
 	{
 		bool rollToCamera = false;
@@ -1917,7 +1897,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		if ((additive || premultiplied) && !alreadyLitTheWorld)
 		{
 			// A light is positioned by game coordinates, where the height is the middle component
-			addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pIMD);
+			addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pIMD, true);
 			alreadyLitTheWorld = true;
 		}
 
@@ -1964,6 +1944,12 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		{
 			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix, 0.f, true);
 		}
+	}
+
+	// No part glows, so only the data files can ask this projectile for a light
+	if (!alreadyLitTheWorld && pFirstIMD != nullptr)
+	{
+		addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pFirstIMD, false);
 	}
 }
 

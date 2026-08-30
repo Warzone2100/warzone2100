@@ -79,6 +79,7 @@
 #include "multiint.h"
 #include "challenge.h"
 #include "multistat.h"
+#include "effectlights.h"
 #include "lighting.h"
 #include "texture.h"
 #include "warzoneconfig.h"
@@ -1202,6 +1203,11 @@ public:
 			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
+		}, prevButton);
+		prevButton = panel->createButton(3, "Reload Effect Lights", [](){
+			debug(LOG_INFO, "Reloading effect light settings");
+			reloadEffectLights();
+			debug(LOG_INFO, "Done");
 		}, prevButton);
 
 		auto dropdownWidget = panel->makeTerrainQualityDropdown(4);
