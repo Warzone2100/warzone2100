@@ -48,6 +48,7 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
 	// Where the shoulder starts: low enough to bend toward white, high enough to leave most of it untouched
 	constants.tonemapKnee = 0.75f;
+	constants.encodeOutput = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
 	display3d_drawFullscreenTriangle<gfx_api::SceneTonemapPSO>(constants, scene);
 }
 

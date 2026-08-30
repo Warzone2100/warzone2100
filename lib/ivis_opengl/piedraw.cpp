@@ -318,7 +318,9 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
-		static_cast<int>(gfx_api::ForwardFogOutput::Disabled)
+		static_cast<int>(gfx_api::ForwardFogOutput::Disabled),
+		// Buttons skip the tonemap, so the shader encodes them itself
+		gfx_api::context::get().linearLightingEnabled() ? 1 : 0
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
@@ -438,7 +440,8 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
-		static_cast<int>(forwardFogOutputForFlags(pieFlag))
+		static_cast<int>(forwardFogOutputForFlags(pieFlag)),
+		0 // in scene, so the tonemap encodes it
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {

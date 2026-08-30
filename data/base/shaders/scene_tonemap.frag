@@ -4,9 +4,9 @@
 layout(std140) uniform cbuffer {
 	vec4 uvScaleClamp;
 	float tonemapKnee;
+	float encodeOutput;
 	float padding0;
 	float padding1;
-	float padding2;
 };
 uniform sampler2D sceneTexture;
 
@@ -28,6 +28,8 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
+#include "srgb.glsl"
+
 // Leaves values below the knee unchanged and rolls values above it off smoothly toward 1
 vec3 tonemapShoulder(vec3 color, float knee)
 {
@@ -43,6 +45,11 @@ void main()
 	vec4 scene = texture(sceneTexture, uv);
 
 	vec3 result = tonemapShoulder(scene.rgb, tonemapKnee);
+	if (encodeOutput > 0.5)
+	{
+		// Linear lighting is on, so encode the scene for display
+		result = wzLinearToSrgb(result);
+	}
 
 #ifdef NEWGL
 	FragColor = vec4(result, scene.a);

@@ -1163,6 +1163,8 @@ namespace gfx_api
 		int specularMap;
 		int hasTangents;
 		int fogOutput;
+		/// 1 where the result goes straight to the display rather than through the scene tonemap
+		int encodeOutput;
 	};
 
 	// Change per instance of mesh

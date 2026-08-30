@@ -28,6 +28,7 @@ layout(std140) uniform meshuniforms {
 	int specularmap;
 	int hasTangents;
 	int fogOutput;
+	int encodeOutput;
 };
 
 layout(std140) uniform instanceuniforms {
@@ -79,6 +80,7 @@ out vec4 FragColor;
 
 #include "tangentspace.glsl"
 #include "distance_fog.glsl"
+#include "srgb.glsl"
 
 void main()
 {
@@ -150,6 +152,12 @@ void main()
 	{
 		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
 		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
+	}
+
+	if (encodeOutput != 0)
+	{
+		// Drawn outside the scene, so nothing downstream will encode this for display
+		fragColour.rgb = wzLinearToSrgb(fragColour.rgb);
 	}
 
 	#ifdef NEWGL

@@ -35,6 +35,7 @@ layout(std140) uniform meshuniforms {
 	int specularmap;
 	int hasTangents;
 	int fogOutput;
+	int encodeOutput;
 };
 
 layout(std140) uniform instanceuniforms {

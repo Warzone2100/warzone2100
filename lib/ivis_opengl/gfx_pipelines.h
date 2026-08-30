@@ -1067,9 +1067,10 @@ namespace gfx_api
 	{
 		glm::vec4 uvScaleClamp;
 		float tonemapKnee;
+		/// 1 when linear lighting is on, so the result has to be encoded for display
+		float encodeOutput;
 		float padding0;
 		float padding1;
-		float padding2;
 	};
 
 	using SceneTonemapPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
