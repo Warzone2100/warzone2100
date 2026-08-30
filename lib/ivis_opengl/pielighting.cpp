@@ -124,18 +124,23 @@ static inline int32_t pielight_maptile_coord(int32_t worldCoord)
 	return worldCoord >> TILE_SHIFT;
 }
 
-//! A point light color in the form the shaders want it. These are display values and are added straight
-//! into lit output, so under linear lighting they are decoded.
-static glm::vec3 pointLightColour(PIELIGHT colour)
+//! Point light intensities were tuned for the classic path, where light added in display space looks much
+//! brighter than in linear. Raise them under linear lighting, a little short of the classic brightness.
+static constexpr float LINEAR_POINT_LIGHT_INTENSITY_GAIN = 1.5f;
+static float pointLightShaderIntensityGain()
 {
-	glm::vec3 result(colour.byte.r / 255.f, colour.byte.g / 255.f, colour.byte.b / 255.f);
-	if (gfx_api::context::get().linearLightingEnabled())
+	return gfx_api::context::get().linearLightingEnabled() ? LINEAR_POINT_LIGHT_INTENSITY_GAIN : 1.f;
+}
+
+//! Point light colors are display values and are added straight into lit output, so under linear lighting
+//! they are decoded on the way to the GPU (ranking and folding use the encoded values).
+static glm::vec3 pointLightShaderColour(const glm::vec3& colour)
+{
+	if (!gfx_api::context::get().linearLightingEnabled())
 	{
-		result.r = srgbChannelToLinear(result.r);
-		result.g = srgbChannelToLinear(result.g);
-		result.b = srgbChannelToLinear(result.b);
+		return colour;
 	}
-	return result;
+	return glm::vec3(srgbChannelToLinear(colour.r), srgbChannelToLinear(colour.g), srgbChannelToLinear(colour.b));
 }
 
 // Folding one light into another has to keep two things apart: the hue, and how much light there is.
@@ -283,7 +288,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 							// If the new light has a greater range, use that as the "base"
 							CalculatedPointLight calcLight;
 							calcLight.position = glm::vec3(light.position.x,  light.position.y, light.position.z);
-							calcLight.colour = pointLightColour(light.colour);
+							calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
 							calcLight.range = light.range;
 							calcLight.intensity = light.intensity;
 							calcLight.direction = glm::vec3(light.direction.x, light.direction.y, light.direction.z);
@@ -300,7 +305,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 						{
 							float weight = light.range / existingLight.light.range;
 							foldLightInto(existingLight.light,
-								pointLightColour(light.colour),
+								glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f),
 								light.intensity, weight);
 							existingLight.importance = pointLightImportance(existingLight.light, scene);
 						}
@@ -334,7 +339,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 
 		CalculatedPointLight calcLight;
 		calcLight.position = glm::vec3(light.position.x,  light.position.y, light.position.z);
-		calcLight.colour = pointLightColour(light.colour);
+		calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
 		calcLight.range = light.range;
 		calcLight.intensity = light.intensity;
 		calcLight.direction = glm::vec3(light.direction.x, light.direction.y, light.direction.z);
@@ -496,11 +501,12 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		result.positions[lightIndex].x = light.position.x;
 		result.positions[lightIndex].y = light.position.y;
 		result.positions[lightIndex].z = light.position.z;
-		result.colorAndEnergy[lightIndex].x = light.colour.x;
-		result.colorAndEnergy[lightIndex].y = light.colour.y;
-		result.colorAndEnergy[lightIndex].z = light.colour.z;
+		const glm::vec3 shaderColour = pointLightShaderColour(light.colour);
+		result.colorAndEnergy[lightIndex].x = shaderColour.x;
+		result.colorAndEnergy[lightIndex].y = shaderColour.y;
+		result.colorAndEnergy[lightIndex].z = shaderColour.z;
 		result.colorAndEnergy[lightIndex].w = light.range;
-		result.positions[lightIndex].w = light.intensity;
+		result.positions[lightIndex].w = light.intensity * pointLightShaderIntensityGain();
 		result.directionAndCos[lightIndex] = glm::vec4(light.direction, light.cosOuter);
 	}
 
