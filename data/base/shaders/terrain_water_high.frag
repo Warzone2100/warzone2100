@@ -3,6 +3,7 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #include "terrain_water_high.glsl"
+#include "srgb.glsl"
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
@@ -70,12 +71,15 @@ vec4 main_bumpMapping()
 
 	// Textures
 	float d = mix(depth * 0.1, depth, 0.5);
-	float noise = texture2DArray(tex, vec3(uv1, 0.0), WZ_MIP_LOAD_BIAS).r * texture2DArray(tex, vec3(uv2, 1.0), WZ_MIP_LOAD_BIAS).r;
+	float noise1 = texture2DArray(tex, vec3(uv1, 0.0), WZ_MIP_LOAD_BIAS).r;
+	float noise2 = texture2DArray(tex, vec3(uv2, 1.0), WZ_MIP_LOAD_BIAS).r;
 	float foam = texture2DArray(tex_sm, vec3(vec2(uv1.x, uv1.y), 0.0), WZ_MIP_LOAD_BIAS).r;
 	foam *= texture2DArray(tex_sm, vec3(vec2(uv2.x, uv2.y), 1.0), WZ_MIP_LOAD_BIAS).r;
 	foam = (foam+pow(length(N.xz),2.5)*1000.0)*d*d ;
 	foam = clamp(foam, 0.0, 0.2);
+	// Display values, picked by eye
 	vec3 waterColor = vec3(0.18,0.33,0.42);
+	vec3 fresnelTint = vec3(1.0,0.8,0.63);
 	// Water is a mirror rather than a rough surface, so a point light on it should be mostly highlight.
 	// (But capped to keep the broader shape from washing out.)
 	const float waterGloss = 0.5f;
@@ -89,18 +93,35 @@ vec4 main_bumpMapping()
 	float r = pow(max(dot(reflectLight, halfVec), 0.0), 14.0);
 	specularFactor = (specularFactor + r) * 0.5;
 
-	vec4 ambientColor = vec4(ambientLight.rgb * foam, 0.15);
-	vec4 diffuseColor = vec4(diffuseLight.rgb * diffuseFactor * waterColor+noise*noise*0.5, 0.35);
-	vec4 specColor = vec4(specularLight.rgb * specularFactor * diffuseFactor, fresnel_alpha);
-
-	vec4 finalColor = vec4(0.0);
-	finalColor.rgb = ambientColor.rgb + diffuseColor.rgb + specColor.rgb;
-	finalColor.rgb = mix(finalColor.rgb, (finalColor.rgb+vec3(1.0,0.8,0.63))*0.5, fresnel);
-	finalColor.a = (ambientColor.a + diffuseColor.a + specColor.a) * (1.0-depth);
-
+	float alpha = (0.15 + 0.35 + fresnel_alpha) * (1.0-depth);
 	vec4 lightmap = texture(lightmap_tex, uvLightmap, 0.0);
-	finalColor.rgb = blendAddEffectLighting(finalColor.rgb, (lightmap.rgb / 1.5f)); // additive color (from environmental point lights / effects)
-	finalColor.rgb *= lightmap.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+	vec3 color;
+	if (linearLighting != 0)
+	{
+		// The water was tuned for display values, so each lit term is computed in linear and encoded, and the
+		// composition runs in display space
+		vec3 lit = diffuseLight.rgb * wzSrgbToLinear(vec3(diffuseFactor)).r * wzSrgbToLinear(waterColor);
+		vec3 spec = specularLight.rgb * wzSrgbToLinear(vec3(specularFactor * diffuseFactor)).r;
+		// The noise pages decode on sample, and the amount was tuned for their encoded values
+		float noise = wzLinearToSrgb(vec3(noise1)).r * wzLinearToSrgb(vec3(noise2)).r;
+		vec3 display = wzLinearToSrgb(ambientLight.rgb) * foam + wzLinearToSrgb(lit) + vec3(noise*noise*0.5) + wzLinearToSrgb(spec);
+		display = mix(display, (display + fresnelTint) * 0.5, fresnel);
+		display = blendAddEffectLighting(display, lightmap.rgb / 1.5);
+		display *= lightmap.a;
+		color = wzSrgbToLinear(display);
+		// The point lights below shade in linear
+		waterColor = wzSrgbToLinear(waterColor);
+	}
+	else
+	{
+		float noise = noise1 * noise2;
+		vec3 display = ambientLight.rgb * foam + diffuseLight.rgb * diffuseFactor * waterColor + vec3(noise*noise*0.5) + specularLight.rgb * specularFactor * diffuseFactor;
+		display = mix(display, (display + fresnelTint) * 0.5, fresnel);
+		display = blendAddEffectLighting(display, lightmap.rgb / 1.5); // additive color (from environmental point lights / effects)
+		display *= lightmap.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+		color = display;
+	}
+	vec4 finalColor = vec4(color, alpha);
 
 #if WZ_POINT_LIGHT_ENABLED == 1
 	// Water needs no tangent frame: its normal is already in model space and the surface it sits on is flat,

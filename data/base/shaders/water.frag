@@ -3,6 +3,7 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #include "terrain_water.glsl"
+#include "srgb.glsl"
 //
 
 uniform sampler2D tex1;
@@ -41,6 +42,14 @@ vec4 main_medium()
 	vec2 uv2 = uv1_uv2.zw;
 	vec4 fragColor = texture(tex1, uv1, WZ_MIP_LOAD_BIAS);
 	float specColor = texture(tex2, uv2, WZ_MIP_LOAD_BIAS).r;
+	if (linearLighting != 0)
+	{
+		// This water multiplies what is already drawn by color * mask + (1 - alpha), tuned for display values.
+		// Under linear lighting the whole multiplier, alpha included, is computed in display space,
+		// so the blend itself does no math in linear.
+		vec3 multiplier = wzLinearToSrgb(fragColor.rgb) * specColor + vec3(1.0 - fragColor.a);
+		return vec4(wzSrgbToLinear(multiplier), 1.0);
+	}
 	fragColor *= vec4(specColor, specColor, specColor, 1.0);
 	return fragColor;
 }

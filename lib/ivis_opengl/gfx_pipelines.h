@@ -433,7 +433,8 @@ namespace gfx_api
 		float timeSec;
 		float mipLoadBias;
 		float pad0 = 0.f;
-		float pad1 = 0.f;
+		/// 1 when linear lighting is on
+		int linearLighting = 0;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -466,7 +467,8 @@ namespace gfx_api
 		int viewportWidth;
 		int viewportHeight;
 		int bucketDimensionUsed;
-		float pad1 = 0.f;
+		/// 1 when linear lighting is on
+		int linearLighting = 0;
 		float pad2 = 0.f;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
@@ -500,7 +502,8 @@ namespace gfx_api
 		float timeSec;
 		float mipLoadBias;
 		float pad0 = 0.f;
-		float pad1 = 0.f;
+		/// 1 when linear lighting is on
+		int linearLighting = 0;
 	};
 
 	using WaterClassicPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
