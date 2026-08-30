@@ -14,3 +14,10 @@ vec3 wzLinearToSrgb(vec3 color)
 	vec3 hi = 1.055 * pow(max(color, vec3(0.0)), vec3(1.0 / 2.4)) - 0.055;
 	return mix(hi, lo, step(color, vec3(0.0031308)));
 }
+
+vec3 wzSrgbToLinear(vec3 color)
+{
+	vec3 lo = color / 12.92;
+	vec3 hi = pow((max(color, vec3(0.0)) + 0.055) / 1.055, vec3(2.4));
+	return mix(hi, lo, step(color, vec3(0.04045)));
+}

@@ -37,6 +37,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int hasTangents;
 	int shieldEffect;
 	int fogOutput;
+	int linearLighting;
 };
 
 // Light data shares the texture set rather than taking one of its own, because the instanced
