@@ -36,6 +36,7 @@ layout(std140) uniform meshuniforms {
 	int hasTangents;
 	int fogOutput;
 	int encodeOutput;
+	int linearLighting;
 };
 
 layout(std140) uniform instanceuniforms {

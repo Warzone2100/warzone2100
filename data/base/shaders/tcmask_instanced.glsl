@@ -37,6 +37,7 @@ layout(std140) uniform meshuniforms {
 	int hasTangents;
 	int shieldEffect;
 	int fogOutput;
+	int linearLighting;
 };
 
 // Which transport carries the light arrays: 0 uniform block, 1 buffer texture, 2 storage buffer.

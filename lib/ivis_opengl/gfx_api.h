@@ -1165,6 +1165,8 @@ namespace gfx_api
 		int fogOutput;
 		/// 1 where the result goes straight to the display rather than through the scene tonemap
 		int encodeOutput;
+		/// 1 when linear lighting is on
+		int linearLighting;
 	};
 
 	// Change per instance of mesh
@@ -1290,6 +1292,8 @@ namespace gfx_api
 		int hasTangents;
 		int shieldEffect;
 		int fogOutput;
+		/// 1 when linear lighting is on
+		int linearLighting;
 	};
 
 	template<>

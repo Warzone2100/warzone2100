@@ -29,6 +29,7 @@ layout(std140) uniform meshuniforms {
 	int hasTangents;
 	int fogOutput;
 	int encodeOutput;
+	int linearLighting;
 };
 
 layout(std140) uniform instanceuniforms {
@@ -102,33 +103,47 @@ void main()
 	N = normalize(N);
 
 	// Сalculate and combine final lightning
-	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
-
-	if (lambertTerm > 0.0)
-	{
-		float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
-
-		if (specularmap != 0)
-		{
-			float specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
-			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
-
-			// Gaussian specular term computation
-			vec3 H = normalize(halfVec);
-			float exponent = acos(dot(H, N)) / 0.33; //0.33 is shininess
-			float gaussianTerm = exp(-(exponent * exponent));
-
-			light += specular * gaussianTerm * lambertTerm * specularFromMap;
-
-			vanillaFactor = 1.0; // Neutralize factor for spec map
-		}
-
-		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
-	}
 	// ambient light maxed for classic models to keep results similar to original
-	light += ambient * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+	float ambientBoost = 1.0 + (1.0 - float(specularmap));
+
+	float specularMapValue = 0.f;
+	float gaussianTerm = 0.f;
+	float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
+	if (lambertTerm > 0.0 && specularmap != 0)
+	{
+		specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
+
+		// Gaussian specular term computation
+		vec3 H = normalize(halfVec);
+		float exponent = acos(dot(H, N)) / 0.33; //0.33 is shininess
+		gaussianTerm = exp(-(exponent * exponent));
+
+		vanillaFactor = 1.0; // Neutralize factor for spec map
+	}
+
+	// Calculate and combine final lighting
+	vec4 light;
+	if (linearLighting != 0)
+	{
+		// The model lighting was tuned for display values, so it is evaluated in display space
+		vec3 albedoD = wzLinearToSrgb(diffuseMap.rgb);
+		vec3 lightD = wzLinearToSrgb(sceneColor.rgb);
+		lightD += wzLinearToSrgb(specular.rgb) * gaussianTerm * lambertTerm * specularMapValue;
+		lightD += wzLinearToSrgb(diffuse.rgb) * lambertTerm * albedoD * vanillaFactor;
+		lightD += wzLinearToSrgb(ambient.rgb) * albedoD * ambientBoost;
+		light = vec4(wzSrgbToLinear(lightD), 1.0);
+	}
+	else
+	{
+		light = sceneColor;
+		light += specular * gaussianTerm * lambertTerm * vec4(vec3(specularMapValue), 1.0);
+		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
+		vec4 boostedAmbient = ambient * diffuseMap;
+		boostedAmbient.rgb *= ambientBoost;
+		light += boostedAmbient;
+	}
 
 	vec4 fragColour;
 	if (tcmask != 0)
@@ -137,11 +152,23 @@ void main()
 		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
+		if (linearLighting != 0)
+		{
+			// Grain merge (neutral at 0.5) and the color multiply also run in display space, as tuned
+			vec4 blended = vec4(wzLinearToSrgb(light.rgb), light.a) + (teamcolour - 0.5) * maskAlpha;
+			fragColour = vec4(wzSrgbToLinear(max(blended.rgb, vec3(0.0)) * wzLinearToSrgb(colour.rgb)), blended.a * colour.a);
+		}
+		else
+		{
+			vec4 blended = light + (teamcolour - 0.5) * maskAlpha;
+			fragColour = blended * colour;
+		}
 	}
 	else
 	{
-		fragColour = light * colour;
+		fragColour = (linearLighting != 0)
+			? vec4(wzSrgbToLinear(wzLinearToSrgb(light.rgb) * wzLinearToSrgb(colour.rgb)), light.a * colour.a)
+			: light * colour;
 	}
 
 	if (ecmEffect > 0)

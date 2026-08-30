@@ -35,6 +35,7 @@ layout(location = 0) out vec4 FragColor;
 #include "light.glsl"
 #include "tangentspace.glsl"
 #include "distance_fog.glsl"
+#include "srgb.glsl"
 
 float random(vec2 uv)
 {
@@ -79,7 +80,6 @@ void main()
 	N = normalize(N);
 
 	// Сalculate and combine final lightning
-	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float diffuseFactor = lambertTerm(N, L); //diffuse light
 	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.0002f);
@@ -88,33 +88,47 @@ void main()
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
+	// ambient light maxed for classic models to keep results similar to original
+	float ambientBoost = 1.0 + (1.0 - float(specularmap));
 
 	float specularMapValue = 0.f;
-	if (diffuseFactor > 0.0)
+	float gaussianTerm = 0.f;
+	float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
+	if (diffuseFactor > 0.0 && specularmap != 0)
 	{
-		float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
+		specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
 
-		if (specularmap != 0)
-		{
-			specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
-			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
+		// Gaussian specular term computation
+		vec3 H = normalize(halfVec);
+		float exponent = acos(dot(H, N)) / 0.33; //0.33 is shininess
+		gaussianTerm = exp(-(exponent * exponent));
 
-			// Gaussian specular term computation
-			vec3 H = normalize(halfVec);
-			float exponent = acos(dot(H, N)) / 0.33; //0.33 is shininess
-			float gaussianTerm = exp(-(exponent * exponent));
-
-			light += specular * gaussianTerm * diffuseFactor * specularFromMap;
-
-			vanillaFactor = 1.0; // Neutralize factor for spec map
-		}
-
-		light += diffuse * diffuseFactor * diffuseMap * vanillaFactor;
+		vanillaFactor = 1.0; // Neutralize factor for spec map
 	}
 
-	vec4 ambientLight = vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap;
-	// ambient light maxed for classic models to keep results similar to original
-	light += ambientLight * (1.0 + (1.0 - float(specularmap))) * visibility;
+	// Calculate and combine final lighting
+	vec4 light;
+	if (linearLighting != 0)
+	{
+		// The model lighting was tuned for display values, so it is evaluated in display space
+		vec3 albedoD = wzLinearToSrgb(diffuseMap.rgb);
+		vec3 lightD = wzLinearToSrgb(sceneColor.rgb);
+		lightD += wzLinearToSrgb(specular.rgb) * gaussianTerm * diffuseFactor * specularMapValue;
+		lightD += wzLinearToSrgb(diffuse.rgb) * diffuseFactor * albedoD * vanillaFactor;
+		vec3 ambientTermD = blendAddEffectLighting(wzLinearToSrgb(ambient.rgb), ((lightmap_vec4.rgb * lightmapFactor) / 3.f));
+		lightD += ambientTermD * albedoD * ambientBoost * visibility;
+		light = vec4(wzSrgbToLinear(lightD), 1.0);
+	}
+	else
+	{
+		light = sceneColor;
+		light += specular * gaussianTerm * diffuseFactor * vec4(vec3(specularMapValue), 1.0);
+		light += diffuse * diffuseFactor * diffuseMap * vanillaFactor;
+		vec3 ambientTerm = blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f));
+		vec4 boostedAmbient = vec4(ambientTerm, ambient.a) * diffuseMap;
+		boostedAmbient.rgb *= ambientBoost;
+		light += boostedAmbient * visibility;
+	}
 
 	if (WZ_POINT_LIGHT_ENABLED == 1)
 	{
@@ -131,11 +145,23 @@ void main()
 		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
+		if (linearLighting != 0)
+		{
+			// Grain merge (neutral at 0.5) and the color multiply also run in display space, as tuned
+			vec4 blended = vec4(wzLinearToSrgb(light.rgb), light.a) + (teamcolour - 0.5) * maskAlpha;
+			fragColour = vec4(wzSrgbToLinear(max(blended.rgb, vec3(0.0)) * wzLinearToSrgb(colour.rgb)), blended.a * colour.a);
+		}
+		else
+		{
+			vec4 blended = light + (teamcolour - 0.5) * maskAlpha;
+			fragColour = blended * colour;
+		}
 	}
 	else
 	{
-		fragColour = light * colour;
+		fragColour = (linearLighting != 0)
+			? vec4(wzSrgbToLinear(wzLinearToSrgb(light.rgb) * wzLinearToSrgb(colour.rgb)), light.a * colour.a)
+			: light * colour;
 	}
 
 	if (ecmEffect)

@@ -28,6 +28,7 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int hasTangents;
 	int fogOutput;
 	int encodeOutput;
+	int linearLighting;
 };
 
 layout(std140, set = 2, binding = 0) uniform instanceuniforms

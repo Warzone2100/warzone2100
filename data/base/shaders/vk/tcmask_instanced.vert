@@ -3,6 +3,7 @@
 
 #include "tcmask_instanced.glsl"
 #include "mesh_shading_normal.glsl"
+#include "srgb.glsl"
 
 layout(location = 0) in vec4 vertex;
 layout(location = 3) in vec3 vertexNormal;
@@ -88,6 +89,12 @@ void main()
 
 	// pack outputs for fragment shader
 	colour = instanceColour;
+	if (linearLighting != 0)
+	{
+		// The tint multiplies the lit color, so convert it to linear.
+		// The team color stays encoded because it is blended in display space.
+		colour.rgb = wzSrgbToLinear(colour.rgb);
+	}
 	teamcolour = instanceTeamColour;
 	packed_ecmState_alphaTest_texCoord = vec4(ecmState, alphaTest, texCoord.x, texCoord.y);
 }

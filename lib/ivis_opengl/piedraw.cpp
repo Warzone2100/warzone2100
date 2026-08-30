@@ -337,14 +337,14 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
 		static_cast<int>(gfx_api::ForwardFogOutput::Disabled),
 		// Buttons skip the tonemap, so the shader encodes them itself
+		gfx_api::context::get().linearLightingEnabled() ? 1 : 0,
 		gfx_api::context::get().linearLightingEnabled() ? 1 : 0
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelMatrix,
 		glm::mat4(glm::transpose(glm::inverse(glm::mat3(modelMatrix)))),
-		// The team color is a signed bias around 0.5 in the shader, not a multiplier, so it stays display
-		// encoded (decoding it would move the neutral point)
+		// The team color stays display encoded, because the shader blends it in display space
 		pie_SceneColourToVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		0.f, 0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
 	};
@@ -460,14 +460,14 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
 		static_cast<int>(forwardFogOutputForFlags(pieFlag)),
-		0 // in scene, so the tonemap encodes it
+		0, // in scene, so the tonemap encodes it
+		gfx_api::context::get().linearLightingEnabled() ? 1 : 0
 	};
 
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelMatrix,
 		glm::mat4(glm::transpose(glm::inverse(glm::mat3(modelMatrix)))),
-		// The team color is a signed bias around 0.5 in the shader, not a multiplier, so it stays display
-		// encoded (decoding it would move the neutral point)
+		// The team color stays display encoded, because the shader blends it in display space
 		pie_SceneColourToVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		stretch, float(frame), ecmState, !(pieFlag & pie_PREMULTIPLIED)
 	};
@@ -1738,7 +1738,8 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 
 	gfx_api::Draw3DShapeInstancedPerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr,
-		shieldEffect ? 1 : 0, static_cast<int>(fogOutput)
+		shieldEffect ? 1 : 0, static_cast<int>(fogOutput),
+		gfx_api::context::get().linearLightingEnabled() ? 1 : 0
 	};
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
