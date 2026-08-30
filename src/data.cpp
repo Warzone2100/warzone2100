@@ -44,6 +44,7 @@
 #include "multiplay.h"
 #include "research.h"
 #include "stats.h"
+#include "effectlights.h"
 #include "template.h"
 #include "text.h"
 #include "texture.h"
@@ -293,6 +294,24 @@ static bool bufferSPROPSNDLoad(const char *fileName, void **ppData)
 	//not interested in this value
 	*ppData = nullptr;
 	return true;
+}
+
+/* Load the effect light settings */
+static bool bufferSEFFECTLIGHTSLoad(const char *fileName, void **ppData)
+{
+	if (!loadEffectLights(fileName))
+	{
+		return false;
+	}
+
+	//not interested in this value
+	*ppData = nullptr;
+	return true;
+}
+
+static void dataReleaseEffectLights(WZ_DECL_UNUSED void *pData)
+{
+	effectLightsShutDown();
 }
 
 /* Load the STERRTABLE stats */
@@ -696,6 +715,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
 	{"SWEAPMOD", bufferSWEAPMODLoad, dataReleaseStats},
 	{"SPROPSND", bufferSPROPSNDLoad, dataReleaseStats},
+	{"SEFFECTLIGHTS", bufferSEFFECTLIGHTSLoad, dataReleaseEffectLights},
 	{"AUDIOCFG", dataAudioCfgLoad, nullptr},
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
 	{"TERTILES", dataTERTILESLoad, nullptr},
