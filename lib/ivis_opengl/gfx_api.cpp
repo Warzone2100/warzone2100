@@ -602,6 +602,16 @@ optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFor
 	return channels;
 }
 
+bool gfx_api::context::setLinearLightingEnabled(bool enabled)
+{
+	if (enabled == _linearLightingEnabled)
+	{
+		return true;
+	}
+	_linearLightingEnabled = enabled;
+	return true;
+}
+
 // Determine the best available uncompressed image format for the current system (+ textureType)
 gfx_api::pixel_format gfx_api::context::bestUncompressedPixelFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType)
 {

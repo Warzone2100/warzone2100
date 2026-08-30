@@ -2228,7 +2228,9 @@ int realmain(int argc, char *argv[])
 			war_setRenderResolutionPercent(gfx_api::context::get().getSceneRenderScalePercent());
 		}
 	}
-	gfx_api::context::get().setHdrSceneEnabled(war_getHdrLighting());
+	const bool hdrLighting = war_getHdrLighting();
+	gfx_api::context::get().setHdrSceneEnabled(hdrLighting);
+	gfx_api::context::get().setLinearLightingEnabled(hdrLighting);
 	if (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1)
 	{
 		if (!gfx_api::context::get().setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode::fsr1))

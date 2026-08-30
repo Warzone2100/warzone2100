@@ -122,7 +122,7 @@ struct WARZONE_GLOBALS
 	bool pointLightLighting = false;
 	bool muzzleFlashLighting = true;
 	bool projectileLighting = true;
-	HDR_LIGHTING_MODE hdrLightingMode = HDR_LIGHTING_MODE::OFF; // floating point scene color plus a tonemap
+	HDR_LIGHTING_MODE hdrLightingMode = HDR_LIGHTING_MODE::OFF; // floating point scene color and linear space lighting
 	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
 	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops

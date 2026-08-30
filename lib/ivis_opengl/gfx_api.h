@@ -658,6 +658,14 @@ namespace gfx_api
 			return true;
 		}
 
+		/// Sample color textures through the sRGB transfer function and light in linear space.
+		/// Consulted while choosing texture formats, so it takes effect on the next backend start.
+		///
+		/// Reports the effective value, which is off unless HDR scene rendering is on, since the tonemap is
+		/// what encodes linear light for display.
+		bool linearLightingEnabled() const { return _linearLightingEnabled && _hdrSceneEnabled; }
+		virtual bool setLinearLightingEnabled(bool enabled);
+
 		/// Floating point scene color plus a tonemap pass, instead of writing display range directly
 		bool hdrSceneEnabled() const { return _hdrSceneEnabled; }
 		/// Backend overrides store the value here and renegotiate the scene color format
@@ -796,6 +804,7 @@ namespace gfx_api
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
 		bool _hdrSceneEnabled = false;
+		bool _linearLightingEnabled = false;
 		SceneEffectSurfaces _sceneEffectSurfaces;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
