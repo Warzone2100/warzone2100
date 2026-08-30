@@ -100,6 +100,32 @@ namespace gfx_api
 		}
 	}
 
+	/// The UNORM counterpart of an sRGB format, or the format itself where it is not sRGB.
+	/// The bytes are identical either way, so encoders and transcoders work in these terms.
+	static inline pixel_format unorm_format_for(const pixel_format& format)
+	{
+		switch (format)
+		{
+			case pixel_format::FORMAT_RGBA8_SRGB_PACK8:      return pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+			case pixel_format::FORMAT_RGB8_SRGB_PACK8:       return pixel_format::FORMAT_RGB8_UNORM_PACK8;
+			case pixel_format::FORMAT_RGB_BC1_SRGB:          return pixel_format::FORMAT_RGB_BC1_UNORM;
+			case pixel_format::FORMAT_RGBA_BC2_SRGB:         return pixel_format::FORMAT_RGBA_BC2_UNORM;
+			case pixel_format::FORMAT_RGBA_BC3_SRGB:         return pixel_format::FORMAT_RGBA_BC3_UNORM;
+			case pixel_format::FORMAT_RGBA_BPTC_SRGB:        return pixel_format::FORMAT_RGBA_BPTC_UNORM;
+			case pixel_format::FORMAT_RGB8_ETC2_SRGB:        return pixel_format::FORMAT_RGB8_ETC2;
+			case pixel_format::FORMAT_RGBA8_ETC2_EAC_SRGB:   return pixel_format::FORMAT_RGBA8_ETC2_EAC;
+			case pixel_format::FORMAT_ASTC_4x4_SRGB:         return pixel_format::FORMAT_ASTC_4x4_UNORM;
+			default: return format;
+		}
+	}
+
+	/// True where an image's bytes can be uploaded to a texture created with `textureFormat`
+	/// (an sRGB format and its UNORM counterpart hold identical bytes)
+	static inline bool format_bytes_compatible(const pixel_format& imageFormat, const pixel_format& textureFormat)
+	{
+		return unorm_format_for(imageFormat) == unorm_format_for(textureFormat);
+	}
+
 	/// True for the floating point color formats
 	static inline bool is_float_format(const pixel_format& format)
 	{

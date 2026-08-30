@@ -62,6 +62,8 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 
 static optional<basist::transcoder_texture_format> to_basis_format(gfx_api::pixel_format desiredFormat)
 {
+	// The transcoder produces bytes, which are the same for a format and its sRGB counterpart
+	desiredFormat = gfx_api::unorm_format_for(desiredFormat);
 	switch (desiredFormat)
 	{
 		// UNCOMPRESSED FORMATS

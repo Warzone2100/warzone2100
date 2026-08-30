@@ -207,7 +207,9 @@ uint64_t* iV_CompressedImage::uint64_w()
 #include <ProcessDxtc.hpp>
 #include <ProcessRGB.hpp>
 
-static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& image, gfx_api::pixel_format desiredFormat)
+// `desiredFormat` selects the encoder and `storageFormat` is what the result is tagged with. They differ
+// only when the texture is sampled through the sRGB transfer function, which does not change the bytes.
+static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& image, gfx_api::pixel_format desiredFormat, gfx_api::pixel_format storageFormat)
 {
 	ASSERT_OR_RETURN(nullptr, image.width() > 0 && image.height() > 0, "Image has 0 width or height (%u x %u)", image.width(), image.height());
 
@@ -287,7 +289,7 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 	size_t outputSize = gfx_api::format_memory_size(desiredFormat, originalWidth, originalHeight);
 
 	std::unique_ptr<iV_CompressedImage> compressedOutput = std::make_unique<iV_CompressedImage>();
-	if (!compressedOutput->allocate(desiredFormat, outputSize, alignedWidth, alignedHeight, originalWidth, originalHeight, false))
+	if (!compressedOutput->allocate(storageFormat, outputSize, alignedWidth, alignedHeight, originalWidth, originalHeight, false))
 	{
 		debug(LOG_ERROR, "Failed to allocate memory for buffer");
 		return nullptr;
@@ -393,6 +395,10 @@ optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormat(gfx_api::
 // Compresses an iV_Image to the desired compressed image format (if possible)
 std::unique_ptr<iV_BaseImage> gfx_api::compressImage(const iV_Image& image, gfx_api::pixel_format desiredFormat)
 {
+	// The compressor only handles UNORM, so compress as UNORM and tag the result with the requested format
+	const gfx_api::pixel_format storageFormat = desiredFormat;
+	desiredFormat = gfx_api::unorm_format_for(desiredFormat);
+
 	// Runtime compress to the desired format
 	switch (desiredFormat)
 	{
@@ -403,7 +409,7 @@ std::unique_ptr<iV_BaseImage> gfx_api::compressImage(const iV_Image& image, gfx_
 		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
 			// Use EtcPak
 #if defined(ETCPAK_ENABLED)
-			return compressImageEtcPak(image, desiredFormat);
+			return compressImageEtcPak(image, desiredFormat, storageFormat);
 #else
 			// fall-through
 #endif
