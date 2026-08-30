@@ -2411,7 +2411,7 @@ void VkTexture::bind() {}
 bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const iV_BaseImage& image)
 {
 	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
-	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	ASSERT_OR_RETURN(false, gfx_api::format_bytes_compatible(image.pixel_format(), internal_format), "Uploading image to texture with different format");
 	size_t width = image.width();
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
@@ -2756,7 +2756,7 @@ VkTextureArray::~VkTextureArray()
 bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image)
 {
 	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
-	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
+	ASSERT_OR_RETURN(false, gfx_api::format_bytes_compatible(image.pixel_format(), internal_format), "Uploading image to texture with different format");
 	size_t width = image.width();
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
