@@ -400,7 +400,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true, 1);
 	}
 	{
-		auto optionInfo = OptionInfo("gfx.hdrLighting", N_("HDR Lighting"), N_("Bright highlights fade smoothly instead of clipping to white. No HDR display needed."));
+		auto optionInfo = OptionInfo("gfx.hdrLighting", N_("HDR Lighting"), N_("Lights blend more naturally, and bright highlights fade smoothly instead of clipping to white. No HDR display needed."));
 		optionInfo.setRequiresRestart(true);
 		auto valueChanger = OptionsDropdown<HDR_LIGHTING_MODE>::make(
 			[]() {
