@@ -474,6 +474,10 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	}
 
 	auto uploadFormat = image.pixel_format();
+	if (textureType == gfx_api::texture_type::game_texture)
+	{
+		uploadFormat = gfx_api::colorTextureFormat(gfx_api::pixel_format_target::texture_2d, uploadFormat);
+	}
 	auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target::texture_2d, image, textureType);
 	if (bestAvailableCompressedFormat.has_value() && bestAvailableCompressedFormat.value() != gfx_api::pixel_format::invalid)
 	{
@@ -491,7 +495,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	std::unique_ptr<gfx_api::texture> pTexture = std::unique_ptr<gfx_api::texture>(gfx_api::context::get().create_texture(mipmap_levels, image.width(), image.height(), uploadFormat, filename));
 
 	// 6.) Upload initial (full) level
-	if (uploadFormat == image.pixel_format())
+	if (gfx_api::format_bytes_compatible(image.pixel_format(), uploadFormat))
 	{
 		bool uploadResult = pTexture->upload(0, image);
 		ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
@@ -520,7 +524,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 		bool resizeResult = image.resize(output_w, output_h, alphaChannelOverride);
 		ASSERT_OR_RETURN(nullptr, resizeResult, "Failed to resize image mipmap [%zu] to output size (%u x %u): %s", i, output_w, output_h, filename.c_str());
 
-		if (uploadFormat == image.pixel_format())
+		if (gfx_api::format_bytes_compatible(image.pixel_format(), uploadFormat))
 		{
 			bool uploadResult = pTexture->upload(i, image);
 			ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
@@ -609,7 +613,27 @@ bool gfx_api::context::setLinearLightingEnabled(bool enabled)
 		return true;
 	}
 	_linearLightingEnabled = enabled;
+	// The backend built the color texture format tables against the previous value, so rebuild them
+	gfx_api::initBestRealTimeCompressionFormats();
+#if defined(BASIS_ENABLED)
+	gfx_api::initBasisTranscoder();
+#endif
 	return true;
+}
+
+gfx_api::pixel_format gfx_api::colorTextureFormat(gfx_api::pixel_format_target target, gfx_api::pixel_format format)
+{
+	if (!gfx_api::context::get().linearLightingEnabled())
+	{
+		return format;
+	}
+	const gfx_api::pixel_format srgb = gfx_api::srgb_format_for(format);
+	if (srgb == gfx_api::pixel_format::invalid
+		|| !gfx_api::context::get().textureFormatIsSupported(target, srgb, gfx_api::pixel_format_usage::sampled_image))
+	{
+		return format;
+	}
+	return srgb;
 }
 
 // Determine the best available uncompressed image format for the current system (+ textureType)
@@ -618,9 +642,11 @@ gfx_api::pixel_format gfx_api::context::bestUncompressedPixelFormat(gfx_api::pix
 	switch (textureType)
 	{
 		case gfx_api::texture_type::user_interface:
+			// The UI draws straight to the swapchain, past the tonemap, so it stays gamma encoded
+			return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, possibly stored in a compressed format
 			// Since we don't have an image, to check whether it's actually RGB (no alpha), we have to err on the side of RGBA
-			return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+			return gfx_api::colorTextureFormat(target, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
 		case gfx_api::texture_type::specular_map:
 		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 		case gfx_api::texture_type::height_map:

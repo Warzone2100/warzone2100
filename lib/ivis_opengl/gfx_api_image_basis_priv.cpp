@@ -166,7 +166,7 @@ void gfx_api::initBasisTranscoder()
 			}
 			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
 			{
-				bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx] = format;
+				bestAvailableBasisCompressionFormat_GameTextureRGBA[target_idx] = gfx_api::colorTextureFormat(target, format);
 				break;
 			}
 		}
@@ -179,7 +179,7 @@ void gfx_api::initBasisTranscoder()
 			}
 			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
 			{
-				bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx] = format;
+				bestAvailableBasisCompressionFormat_GameTextureRGB[target_idx] = gfx_api::colorTextureFormat(target, format);
 				break;
 			}
 		}
