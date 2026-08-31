@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_pipelines.h"
 
 #include <glm/fwd.hpp>
 #include <glm/vec4.hpp>

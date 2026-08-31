@@ -52,6 +52,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/pielighting.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/gfx_pipelines.h"
 #include "lib/ivis_opengl/piedraw.h"
 #include "lib/ivis_opengl/pielight_convert.h"
 #include "world_map_state.h"
