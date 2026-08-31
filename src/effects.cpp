@@ -91,6 +91,9 @@
 #endif
 #include <glm/gtx/transform.hpp>
 
+//! The light cast by fire, burning wreckage and destruction, close to an 1800 K blackbody
+static const PIELIGHT FIRE_LIGHT_COLOUR = pal_Colour(255, 120, 30);
+
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
 #define	EFFECT_Y_FLIP		0x2
@@ -826,7 +829,7 @@ static bool updateExplosion(EFFECT *psEffect, LightingData& lightData)
 			UDWORD range = percent;
 			light.position = psEffect->position;
 			light.range = (3 * range) / 2;
-			light.colour = pal_Colour(255, 0, 0);
+			light.colour = pal_Colour(255, 0, 0); // landing zone beacons are red by design
 			lightData.lights.push_back(light);
 		}
 	}
@@ -1125,7 +1128,7 @@ static bool updateDestruction(EFFECT *psEffect, LightingData& lightData)
 	}
 	else
 	{
-		light.colour = pal_Colour(255, 0, 0);
+		light.colour = FIRE_LIGHT_COLOUR;
 	}
 	lightData.lights.push_back(light);
 
@@ -1328,7 +1331,7 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 	light.position = psEffect->position;
 	light.position.y += fireLightHeightAboveGround;
 	light.range = (percent * psEffect->radius * 6) / 100;
-	light.colour = pal_Colour(255, 0, 0);
+	light.colour = FIRE_LIGHT_COLOUR;
 	lightData.lights.push_back(light);
 
 	/* Time to update the frame number on the construction sprite */
