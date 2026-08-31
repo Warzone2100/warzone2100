@@ -20,6 +20,7 @@
 
 #include "pielighting.h"
 #include "gfx_api.h"
+#include "piestate.h"
 #include <array>
 #include <glm/glm.hpp>
 #include <algorithm>
@@ -121,6 +122,20 @@ namespace {
 static inline int32_t pielight_maptile_coord(int32_t worldCoord)
 {
 	return worldCoord >> TILE_SHIFT;
+}
+
+//! A point light color in the form the shaders want it. These are display values and are added straight
+//! into lit output, so under linear lighting they are decoded.
+static glm::vec3 pointLightColour(PIELIGHT colour)
+{
+	glm::vec3 result(colour.byte.r / 255.f, colour.byte.g / 255.f, colour.byte.b / 255.f);
+	if (gfx_api::context::get().linearLightingEnabled())
+	{
+		result.r = srgbChannelToLinear(result.r);
+		result.g = srgbChannelToLinear(result.g);
+		result.b = srgbChannelToLinear(result.b);
+	}
+	return result;
 }
 
 // Folding one light into another has to keep two things apart: the hue, and how much light there is.
@@ -268,7 +283,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 							// If the new light has a greater range, use that as the "base"
 							CalculatedPointLight calcLight;
 							calcLight.position = glm::vec3(light.position.x,  light.position.y, light.position.z);
-							calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
+							calcLight.colour = pointLightColour(light.colour);
 							calcLight.range = light.range;
 							calcLight.intensity = light.intensity;
 							calcLight.direction = glm::vec3(light.direction.x, light.direction.y, light.direction.z);
@@ -285,7 +300,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 						{
 							float weight = light.range / existingLight.light.range;
 							foldLightInto(existingLight.light,
-								glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f),
+								pointLightColour(light.colour),
 								light.intensity, weight);
 							existingLight.importance = pointLightImportance(existingLight.light, scene);
 						}
@@ -319,7 +334,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 
 		CalculatedPointLight calcLight;
 		calcLight.position = glm::vec3(light.position.x,  light.position.y, light.position.z);
-		calcLight.colour = glm::vec3(light.colour.byte.r / 255.f, light.colour.byte.g / 255.f, light.colour.byte.b / 255.f);
+		calcLight.colour = pointLightColour(light.colour);
 		calcLight.range = light.range;
 		calcLight.intensity = light.intensity;
 		calcLight.direction = glm::vec3(light.direction.x, light.direction.y, light.direction.z);

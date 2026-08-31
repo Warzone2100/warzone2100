@@ -104,6 +104,18 @@ void pie_SetFogColour(PIELIGHT colour)
 	rendStates.fogColour = colour;
 }
 
+glm::vec4 pie_SceneColourToVec4(PIELIGHT rgba)
+{
+	glm::vec4 result = pal_PIELIGHTtoVec4(rgba);
+	if (gfx_api::context::get().linearLightingEnabled())
+	{
+		result.r = srgbChannelToLinear(result.r);
+		result.g = srgbChannelToLinear(result.g);
+		result.b = srgbChannelToLinear(result.b);
+	}
+	return result;
+}
+
 PIELIGHT pie_GetFogColour()
 {
 	return rendStates.fogColour;
