@@ -31,7 +31,7 @@
 #include "terrain.h"
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_pipelines.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/pielight_convert.h"
 #include "lib/ivis_opengl/piematrix.h"

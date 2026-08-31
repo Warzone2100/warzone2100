@@ -24,7 +24,7 @@
 #include "display3d_render_internal.h"
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_pipelines.h"
 
 #include <algorithm>
 #include <utility>
