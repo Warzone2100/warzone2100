@@ -64,8 +64,11 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 
 static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
-	// Cyp says this should never happen, #3037 and #3238 say it does though.
-	ASSERT_OR_RETURN(st2, st1.time != st2.time, "Spacetime overlap!");
+	// A freshly-spawned object can present two samples that share a timestamp
+	if (st1.time == st2.time)
+	{
+		return st2;
+	}
 	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 

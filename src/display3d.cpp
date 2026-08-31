@@ -1782,6 +1782,12 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const gl
 	*pR = radius;
 }
 
+/// A projectile is drawn only while it is spawned, not yet impacted, and visible to the viewer.
+static bool projectileIsShowing(const PROJECTILE *psObj)
+{
+	return graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj);
+}
+
 /// Decide whether to render a projectile, and make sure it will be drawn
 static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -1789,8 +1795,7 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	PROJECTILE *psObj = proj_GetFirst();
 	while (psObj != nullptr)
 	{
-		// If source or destination is visible, and projectile has been spawned and has not impacted.
-		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
+		if (projectileIsShowing(psObj))
 		{
 			/* Draw a bullet at psObj->pos.x for X coord
 			   psObj->pos.y for Z coord
