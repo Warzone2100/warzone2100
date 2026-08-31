@@ -6,24 +6,12 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	mat4 ViewMatrix;
 };
 
-layout(std140, set = 1, binding = 0) uniform meshuniforms
-{
-	int hasTangents;
-	int pad0;
-	int pad1;
-	int pad2;
-};
-
 layout(location = 0) in vec4 vertex;
 layout(location = 3) in vec3 vertexNormal;
 layout(location = 5) in mat4 instanceModelMatrix;
 layout(location = 9) in vec4 instancePackedValues;
 layout(location = 10) in vec4 instanceColour;
 layout(location = 11) in vec4 instanceTeamColour;
-
-layout(location = 0) out vec3 viewNormal;
-
-#include "mesh_shading_normal.glsl"
 
 float when_gt(float x, float y) {
   return max(sign(x - y), 0.0);
@@ -42,10 +30,6 @@ void main()
 
 	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
 	gl_Position = ModelViewProjectionMatrix * position;
-	// Match scene mesh / terrain SSAO depth clip conventions on Vulkan.
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
-
-	mat3 normalMatrix = mat3(transpose(inverse(instanceModelMatrix)));
-	viewNormal = wzViewShadingNormal(mat3(ViewMatrix), normalMatrix, vertexNormal, hasTangents);
 }

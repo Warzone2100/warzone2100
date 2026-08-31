@@ -78,6 +78,8 @@ varying vec2 texCoord;
 varying mat3 TangentSpaceMatrix;
 #endif
 
+#include "mesh_shading_normal.glsl"
+
 float when_gt(float x, float y) {
   return max(sign(x - y), 0.0);
 }
@@ -96,16 +98,11 @@ void main()
 	vec3 posWorld = (ModelMatrix * vertex).xyz;
 	vec3 cameraVec = normalize(cameraPos.xyz - posWorld);
 
-	// Classic models are lit with the normal negated, which cancels against the
-	// negated light below.
-	normal = -normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
+	normal = wzWorldShadingNormal(mat3(NormalMatrix), vertexNormal, hasTangents);
 	lightDir = -normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
-		// ...but NOT negated when it is the shading normal of a tangent basis.
-		normal = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-
 		// Building the World Space -> Tangent Space matrix with handness w to
 		// support uv mirroring. The fragment shader applies it.
 		vec3 t = normalize((NormalMatrix * vertexTangent).xyz);

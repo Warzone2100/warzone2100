@@ -1283,7 +1283,7 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_prepass_instanced.vert.spv", "shaders/vk/tcmask_depth_prepass_instanced.frag.spv" }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_DEPTHONLY_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_prepass_instanced.vert.spv", "shaders/vk/prepass_depth_only.frag.spv" }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_DEPTHONLY_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_prepass_depthonly_instanced.vert.spv", "shaders/vk/prepass_depth_only.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),

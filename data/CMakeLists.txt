@@ -107,6 +107,7 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_instanced.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_depthonly_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/postprocess_fullscreen.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.vert"

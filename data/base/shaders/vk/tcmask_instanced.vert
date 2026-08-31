@@ -2,6 +2,7 @@
 //#pragma debug(on)
 
 #include "tcmask_instanced.glsl"
+#include "mesh_shading_normal.glsl"
 
 layout(location = 0) in vec4 vertex;
 layout(location = 3) in vec3 vertexNormal;
@@ -47,14 +48,11 @@ void main()
 
 	mat4 ModelVeiwMatrix = ViewMatrix * instanceModelMatrix;
 	NormalMatrix = mat3(transpose(inverse(instanceModelMatrix)));
-
-	// transform face normals of classic models to World Space
-	normal = -normalize(NormalMatrix * vertexNormal);
+	normal = wzWorldShadingNormal(NormalMatrix, vertexNormal, hasTangents);
 
 	if (hasTangents != 0)
 	{
 		// Building the World Space <-> Tangent Space matrix with handness w to support uv mirroring
-		normal = normalize(NormalMatrix * vertexNormal);
 		vec3 t = normalize(NormalMatrix * vertexTangent.xyz);
 		vec3 b = cross (normal, t) * vertexTangent.w;
 		TangentSpaceMatrix = mat3(t, b, normal); // conventional (T, B, N)
