@@ -172,7 +172,7 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 		pie_UIPerspectiveGet() * modelViewMatrix,
 		modelViewMatrix,
 		color,
-		pal_PIELIGHTtoVec4(pie_GetFogColour()),
+		pie_SceneColourToVec4(pie_GetFogColour()),
 		fogRange
 	});
 	gfx_api::context::get().bind_streamed_vertex_buffers(vrt.data(), 3 * sizeof(Vector3f));

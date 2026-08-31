@@ -106,4 +106,10 @@ static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)
 	};
 }
 
+float srgbChannelToLinear(float value);
+
+//! Converts a PIELIGHT color for a scene shader. PIELIGHT colors are display values, so like textures they
+//! are converted to linear while linear lighting is on.
+glm::vec4 pie_SceneColourToVec4(PIELIGHT rgba);
+
 #endif // _pieState_h

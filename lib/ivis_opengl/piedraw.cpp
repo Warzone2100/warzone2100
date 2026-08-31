@@ -88,16 +88,33 @@ static bool canInstancedMeshRendererUseInstancedRendering(bool quiet = false);
  *	Source
  */
 
+//! One channel of the sRGB display encoding back to linear light
+float srgbChannelToLinear(float value)
+{
+	return (value <= 0.04045f) ? (value / 12.92f) : std::pow((value + 0.055f) / 1.055f, 2.4f);
+}
+
 void pie_InitLighting()
 {
 	// set scene color, ambient, diffuse and specular light intensities of sun
 	// diffuse lighting is turned off because players dislike it
-	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {
+	gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {
 		{0.0f, 0.0f, 0.0f, 1.0f}, // LIGHT_EMISSIVE
 		{0.5f, 0.5f, 0.5f, 1.0f}, // LIGHT_AMBIENT
 		{1.0f, 1.0f, 1.0f, 1.0f}, // LIGHT_DIFFUSE
 		{1.0f, 1.0f, 1.0f, 1.0f}  // LIGHT_SPECULAR
 	};
+	if (gfx_api::context::get().linearLightingEnabled())
+	{
+		// The light constants are display values, so convert them to linear like other colors
+		for (size_t entry = 0; entry < LIGHT_MAX; ++entry)
+		{
+			for (size_t channel = 0; channel < 3; ++channel)
+			{
+				defaultLight[entry][channel] = srgbChannelToLinear(defaultLight[entry][channel]);
+			}
+		}
+	}
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
 	memcpy(lightingDefault, defaultLight, sizeof(lightingDefault));
 }
@@ -326,7 +343,9 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelMatrix,
 		glm::mat4(glm::transpose(glm::inverse(glm::mat3(modelMatrix)))),
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
+		// The team color is a signed bias around 0.5 in the shader, not a multiplier, so it stays display
+		// encoded (decoding it would move the neutral point)
+		pie_SceneColourToVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		0.f, 0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
 	};
 
@@ -447,7 +466,9 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	gfx_api::Draw3DShapePerInstanceUniforms instanceUniforms {
 		modelMatrix,
 		glm::mat4(glm::transpose(glm::inverse(glm::mat3(modelMatrix)))),
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
+		// The team color is a signed bias around 0.5 in the shader, not a multiplier, so it stays display
+		// encoded (decoding it would move the neutral point)
+		pie_SceneColourToVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
 		stretch, float(frame), ecmState, !(pieFlag & pie_PREMULTIPLIED)
 	};
 
@@ -1675,7 +1696,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 	const auto& renderState = getCurrentRenderState();
 	const bool forwardFogEnabled = fogMode == MeshFogMode::ForwardDistance && pie_GetFogEnabled();
-	const glm::vec4 fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
+	const glm::vec4 fogColor = pie_SceneColourToVec4(pie_GetFogColour());
 	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, forwardFogEnabled ? 1.f : 0.f, 0.f);
 
 	if (useInstancedRendering)

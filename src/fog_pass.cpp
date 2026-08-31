@@ -51,7 +51,7 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	const auto& fc = pie_GetInGame3DFrameContext();
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_FOG> constants {};
-	constants.fogColor = pal_PIELIGHTtoVec4(pie_GetFogColour());
+	constants.fogColor = pie_SceneColourToVec4(pie_GetFogColour());
 	constants.invProjectionMatrix = glm::inverse(fc.perspectiveMatrix);
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.uvScaleClamp);
 	constants.fogBegin = renderState.fogBegin;
