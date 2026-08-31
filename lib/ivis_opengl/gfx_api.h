@@ -811,6 +811,10 @@ namespace gfx_api
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
+	/// The format a color texture is sampled through: its sRGB counterpart while linear lighting is on, so
+	/// the hardware decodes it. Returns `format` where there is no counterpart or the device cannot sample it.
+	pixel_format colorTextureFormat(pixel_format_target target, pixel_format format);
+
 	// High-level API for getting an uncompressed image (iV_Image) from a file
 	std::unique_ptr<iV_Image> loadUncompressedImageFromFile(const char *filename, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool forceRGBA8 = false);
 
