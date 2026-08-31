@@ -48,3 +48,11 @@ void reloadEffectLights();
 
 /// Return the light that a projectile of psStats (drawn with pIMD) throws, or nullopt when it throws none
 nonstd::optional<ProjectileLight> resolveProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pIMD, bool modelIsGlowing);
+
+/// Whether any part of the in-flight graphic is drawn as a glow (additive or premultiplied), so it lights the world.
+/// Mirrors the additive decision in renderProjectile (which must stay in sync).
+bool projectileGraphicGlows(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD);
+
+/// The light thrown by an in-flight projectile of psStats, resolving glow and plume scale from its graphic.
+/// Returns nullopt when the projectile throws no light.
+nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD);

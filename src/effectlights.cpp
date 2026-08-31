@@ -26,6 +26,7 @@
 
 #include "lib/framework/file.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piepalette.h"
 
@@ -430,6 +431,58 @@ nonstd::optional<ProjectileLight> resolveProjectileLight(const WEAPON_STATS *psS
 	light.range = std::min(std::max(static_cast<UDWORD>(range), minLightRange), maxLightRange);
 	light.intensity = std::min(std::max(intensity, minLightIntensity), maxLightIntensity);
 	return light;
+}
+
+// A part is drawn as a glow when its subclass or model flags make it additive or premultiplied.
+// The flag order here matches renderProjectile - later flags override earlier ones.
+static bool projectilePartGlows(const WEAPON_STATS *psStats, const iIMDShape *pIMD)
+{
+	bool additive = psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
+		|| psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE;
+	bool premultiplied = false;
+	if (pIMD->flags & iV_IMD_NO_ADDITIVE)
+	{
+		additive = false;
+	}
+	if (pIMD->flags & iV_IMD_ADDITIVE)
+	{
+		additive = true;
+	}
+	if (pIMD->flags & iV_IMD_PREMULTIPLIED)
+	{
+		additive = false;
+		premultiplied = true;
+	}
+	return additive || premultiplied;
+}
+
+bool projectileGraphicGlows(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD)
+{
+	for (const iIMDShape *pIMD = pFirstIMD; pIMD != nullptr; pIMD = pIMD->next.get())
+	{
+		if (projectilePartGlows(psStats, pIMD))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD)
+{
+	if (psStats == nullptr || pFirstIMD == nullptr)
+	{
+		return nonstd::nullopt;
+	}
+	// The first glowing part lights the world (its plume sizes the light). If none glow, only the data files can.
+	for (const iIMDShape *pIMD = pFirstIMD; pIMD != nullptr; pIMD = pIMD->next.get())
+	{
+		if (projectilePartGlows(psStats, pIMD))
+		{
+			return resolveProjectileLight(psStats, pIMD, true);
+		}
+	}
+	return resolveProjectileLight(psStats, pFirstIMD, false);
 }
 
 static void reportResolvedProjectileLights()
