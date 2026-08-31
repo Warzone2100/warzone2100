@@ -1719,7 +1719,10 @@ bool initTerrain(WorldMapState& mapState)
 	}
 	if (lightmap_texture)
 		delete lightmap_texture;
-	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapPixmap->width(), lightmapPixmap->height(), lightmapPixmap->pixel_format(), "mem::lightmap");
+	// The lightmap is one texel per tile and tuned for display values, so it stays UNORM under linear
+	// lighting and filters between tiles in display space (the shaders read it as display values)
+	const gfx_api::pixel_format lightmapFormat = lightmapPixmap->pixel_format();
+	lightmap_texture = gfx_api::context::get().create_texture(1, lightmapPixmap->width(), lightmapPixmap->height(), lightmapFormat, "mem::lightmap");
 
 	lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	terrainInitialised = true;
@@ -2024,7 +2027,9 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
+
 template<typename PSO>
+
 static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (!terrainDecalVBO || !terrainDecalIndexVBO)
@@ -2051,7 +2056,8 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias(),
-		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
+		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
+		gfx_api::context::get().linearLightingEnabled() ? 1 : 0,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2102,7 +2108,8 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias(),
-		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
+		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
+		gfx_api::context::get().linearLightingEnabled() ? 1 : 0,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
