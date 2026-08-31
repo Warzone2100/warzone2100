@@ -8318,6 +8318,9 @@ msgstr "Lo lamentarás"
 msgid "Barely a scratch!"
 msgstr "¡Apenas un rasguño!"
 
+msgid "See you again, have a good game everyone!"
+msgstr "¡Nos vemos, buen juego a todos!"
+
 msgid "Attack now?"
 msgstr "¿Atacar ahora?"
 

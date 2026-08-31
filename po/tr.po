@@ -8318,8 +8318,11 @@ msgstr "Buna pişman olacaksın"
 msgid "Barely a scratch!"
 msgstr "Çizik bile sayılmaz!"
 
+msgid "See you again, have a good game everyone!"
+msgstr "Tekrar görüşmek üzere, herkese iyi oyunlar!"
+
 msgid "Attack now?"
-msgstr "Şimdi saldır?
+msgstr "Şimdi saldıralım mı?"
 
 msgid "Group up"
 msgstr "Birlikte hareket edin!"
