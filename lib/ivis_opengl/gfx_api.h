@@ -1399,7 +1399,8 @@ namespace gfx_api
 		float tessMaxLevel; // hardware-tessellated terrain only
 		float mipLoadBias;
 		int bucketDimensionUsed;
-		float pad1 = 0.f;
+		/// 1 when linear lighting is on
+		int linearLighting = 0;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;

@@ -12,6 +12,7 @@
 #endif
 
 #include "terrain_combined.glsl"
+#include "srgb.glsl"
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_SHADOW_MODE 1
@@ -88,8 +89,18 @@ vec4 main_classic() {
 	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.001f);
 
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
-	vec4 light = (visibility*diffuseLight*0.75*diffuseFactor + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
-	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
+	float tileBrightness = lightmap_vec4.a; // tile brightness / ambient occlusion
+	if (linearLighting != 0)
+	{
+		// The tier's lighting was tuned for display values, so it is evaluated in display space
+		vec3 lightD = (visibility * wzLinearToSrgb(diffuseLight.rgb) * diffuseFactor * 0.75 + wzLinearToSrgb(ambientLight.rgb) * 0.25) * tileBrightness;
+		lightD = blendAddEffectLighting(lightD, lightmap_vec4.rgb / 1.5f);
+		return vec4(wzSrgbToLinear(lightD * wzLinearToSrgb(decal.rgb)), decal.a);
+	}
+	vec3 diffuseTerm = (visibility*diffuseLight*diffuseFactor).rgb * 0.75;
+	vec3 ambientTerm = ambientLight.rgb * 0.25;
+	vec4 light = vec4(diffuseTerm + ambientTerm, ambientLight.a) * tileBrightness;
+	light.rgb = blendAddEffectLighting(light.rgb, lightmap_vec4.rgb / 1.5f); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 
 	return light * decal;
