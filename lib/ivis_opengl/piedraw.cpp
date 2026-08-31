@@ -1697,7 +1697,8 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	const auto& renderState = getCurrentRenderState();
 	const bool forwardFogEnabled = fogMode == MeshFogMode::ForwardDistance && pie_GetFogEnabled();
 	const glm::vec4 fogColor = pie_SceneColourToVec4(pie_GetFogColour());
-	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, forwardFogEnabled ? 1.f : 0.f, 0.f);
+	// fogRange.w carries the linear lighting flag for the fog mix in the forward shaders
+	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, forwardFogEnabled ? 1.f : 0.f, gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f);
 
 	if (useInstancedRendering)
 	{

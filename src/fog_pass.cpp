@@ -56,6 +56,7 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.uvScaleClamp);
 	constants.fogBegin = renderState.fogBegin;
 	constants.fogEnd = renderState.fogEnd;
+	constants.linearLighting = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
 	display3d_drawFullscreenTriangle<gfx_api::SceneFogPSO>(constants, scene, depth);
 }
 

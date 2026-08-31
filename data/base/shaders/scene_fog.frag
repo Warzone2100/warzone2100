@@ -3,6 +3,7 @@
 
 #include "view_position.glsl"
 #include "distance_fog.glsl"
+#include "srgb.glsl"
 
 layout(std140) uniform cbuffer {
 	vec4 fogColor;
@@ -10,7 +11,7 @@ layout(std140) uniform cbuffer {
 	vec4 uvScaleClamp;
 	float fogBegin;
 	float fogEnd;
-	float padding0;
+	float linearLighting;
 	float padding1;
 };
 uniform sampler2D sceneTexture;
@@ -45,7 +46,16 @@ void main()
 	if (depth < SKY_DEPTH_THRESHOLD)
 	{
 		float viewDist = length(wzGetViewPosition(texCoords, depth, invProjectionMatrix));
-		result = mix(lit, fogColor.rgb, wzDistanceFogAmount(viewDist, fogBegin, fogEnd));
+		float fogAmount = wzDistanceFogAmount(viewDist, fogBegin, fogEnd);
+		if (linearLighting > 0.5)
+		{
+			// The fog fade was tuned for display values, so the mix runs in display space
+			result = wzSrgbToLinear(mix(wzLinearToSrgb(lit), wzLinearToSrgb(fogColor.rgb), fogAmount));
+		}
+		else
+		{
+			result = mix(lit, fogColor.rgb, fogAmount);
+		}
 	}
 	// Sky / no prepass geometry: skybox already applied its own fog in ScenePass.
 
