@@ -537,6 +537,7 @@ namespace gfx_api
 		glm::vec4 color;
 		glm::vec4 fog_color;
 		int fog_enabled;
+		int linearLighting;
 	};
 
 	template<>

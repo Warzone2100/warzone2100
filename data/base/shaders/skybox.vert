@@ -7,6 +7,7 @@ layout(std140) uniform cbuffer
 	vec4 color;
 	vec4 fog_color;
 	int fog_enabled;
+	int linearLighting;
 };
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))

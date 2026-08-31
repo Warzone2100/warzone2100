@@ -328,6 +328,6 @@ void pie_DrawSkybox(float scale, const glm::mat4& projectionMatrix, const glm::m
 	const glm::vec4 fogColor = pielightToRGBAVec4(renderState.fogColour);
 
 	gfx_api::SkyboxPSO::get().bind();
-	gfx_api::SkyboxPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec4(1.f), fogColor, renderState.fogEnabled });
+	gfx_api::SkyboxPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec4(1.f), fogColor, renderState.fogEnabled, gfx_api::context::get().linearLightingEnabled() ? 1 : 0 });
 	skyboxGfx->draw<gfx_api::SkyboxPSO>(modelViewProjectionMatrix);
 }
