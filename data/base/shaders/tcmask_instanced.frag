@@ -134,6 +134,7 @@ void main()
 
 	// Calculate and combine final lighting
 	vec4 light;
+	float pointLightSpecularMap = specularMapValue;
 	if (linearLighting != 0)
 	{
 		// The model lighting was tuned for display values, so it is evaluated in display space
@@ -144,6 +145,8 @@ void main()
 		vec3 ambientTermD = blendAddEffectLighting(wzLinearToSrgb(ambient.rgb), ((lightmap_vec4.rgb * lightmapFactor) / 3.f));
 		lightD += ambientTermD * albedoD * ambientBoost * visibility;
 		light = vec4(wzSrgbToLinear(lightD), 1.0);
+		// Like the albedo, the specular map scales display values, so convert it to linear the same way
+		pointLightSpecularMap = wzSrgbToLinear(vec3(specularMapValue)).r;
 	}
 	else
 	{
@@ -158,7 +161,7 @@ void main()
 
 #if WZ_POINT_LIGHT_ENABLED == 1
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(normal), normalize(halfVec - lightDir), diffuseMap, specularMapValue);
+	light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(normal), normalize(halfVec - lightDir), diffuseMap, pointLightSpecularMap);
 #endif
 
 	light.a = 1.0f;

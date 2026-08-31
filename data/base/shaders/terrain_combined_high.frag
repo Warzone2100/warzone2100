@@ -125,6 +125,7 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 	vec4 res;
 	vec4 albedoLinear = b.color;
+	float pointLightGloss = b.gloss;
 	if (linearLighting != 0)
 	{
 		// The tier's lighting was tuned for display values, so it is evaluated in display space
@@ -135,6 +136,8 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 		vec3 specD = (specularD * specularFactor * diffuseFactor + lightmap_vec4.rgb / 2.5f) * (b.gloss * b.gloss);
 		res = vec4(wzSrgbToLinear(b.color.rgb * lightD + specD), b.color.a);
 		albedoLinear.rgb = wzSrgbToLinear(b.color.rgb);
+		// Like the albedo, the gloss map scales display values, so convert it to linear the same way
+		pointLightGloss = wzSrgbToLinear(vec3(b.gloss)).r;
 	}
 	else
 	{
@@ -155,7 +158,7 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	// The light loop works in world space, so the tangent frame is inverted once here.
 	// The frame is built orthonormal, so its transpose stands in for its inverse, and the third column of that is the vertex normal.
 	mat3 tangentToWorld = transpose(ModelTangentMatrix);
-	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, tangentToWorld * b.N, tangentToWorld[2], tangentToWorld * normalize(groundHalfVec - groundLightDir), albedoLinear, b.gloss);
+	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, tangentToWorld * b.N, tangentToWorld[2], tangentToWorld * normalize(groundHalfVec - groundLightDir), albedoLinear, pointLightGloss);
 #endif
 
 	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/
