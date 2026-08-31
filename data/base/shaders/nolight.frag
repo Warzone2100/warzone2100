@@ -66,6 +66,7 @@ out vec4 FragColor;
 #endif
 
 #include "distance_fog.glsl"
+#include "srgb.glsl"
 
 void main()
 {
@@ -75,7 +76,7 @@ void main()
 	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
 	{
 		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
-		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput, int(fogRange.w));
 	}
 
 	if (alphaTest > 0 && (fragColour.a <= 0.001))

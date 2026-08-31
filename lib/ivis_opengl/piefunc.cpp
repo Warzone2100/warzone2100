@@ -165,7 +165,7 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 {
 	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
 	const auto& renderState = getCurrentRenderState();
-	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, pie_GetFogEnabled() ? 1.f : 0.f, 0.f);
+	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, pie_GetFogEnabled() ? 1.f : 0.f, gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f);
 
 	gfx_api::TransColouredTrianglePSO::get().bind();
 	gfx_api::TransColouredTrianglePSO::get().bind_constants({

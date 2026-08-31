@@ -178,7 +178,7 @@ void main()
 	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
 	{
 		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
-		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput, int(fogRange.w));
 	}
 
 	if (encodeOutput != 0)

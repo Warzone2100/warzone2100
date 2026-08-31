@@ -17,6 +17,7 @@ varying vec3 posViewSpace;
 #endif
 
 #include "distance_fog.glsl"
+#include "srgb.glsl"
 
 void main()
 {
@@ -24,7 +25,7 @@ void main()
 	if (fogRange.z > 0.5)
 	{
 		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
-		result.rgb = wzApplyForwardFog(result.rgb, result.a, fogAmount, fogColor.rgb, WZ_FOG_OUTPUT_ADDITIVE);
+		result.rgb = wzApplyForwardFog(result.rgb, result.a, fogAmount, fogColor.rgb, WZ_FOG_OUTPUT_ADDITIVE, int(fogRange.w));
 	}
 	FragColor = result;
 }

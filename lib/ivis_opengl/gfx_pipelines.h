@@ -1050,7 +1050,7 @@ namespace gfx_api
 		glm::vec4 uvScaleClamp;
 		float fogBegin;
 		float fogEnd;
-		float padding0;
+		float linearLighting;
 		float padding1;
 	};
 
