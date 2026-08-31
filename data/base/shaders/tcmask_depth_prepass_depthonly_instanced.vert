@@ -14,19 +14,10 @@ layout(std140) uniform globaluniforms {
 	mat4 ViewMatrix;
 };
 
-layout(std140) uniform meshuniforms {
-	int hasTangents;
-	int pad0;
-	int pad1;
-	int pad2;
-};
-
 #ifdef NEWGL
 #define VERTEX_INPUT in
-#define VERTEX_OUTPUT out
 #else
 #define VERTEX_INPUT attribute
-#define VERTEX_OUTPUT varying
 #endif
 
 VERTEX_INPUT vec4 vertex;
@@ -35,10 +26,6 @@ VERTEX_INPUT mat4 instanceModelMatrix;
 VERTEX_INPUT vec4 instancePackedValues; // shaderStretch_ecmState_alphaTest_animFrameNumber
 VERTEX_INPUT vec4 instanceColour;
 VERTEX_INPUT vec4 instanceTeamColour;
-
-VERTEX_OUTPUT vec3 viewNormal;
-
-#include "mesh_shading_normal.glsl"
 
 float when_gt(float x, float y) {
   return max(sign(x - y), 0.0);
@@ -57,7 +44,4 @@ void main()
 
 	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
 	gl_Position = ModelViewProjectionMatrix * position;
-
-	mat3 normalMatrix = mat3(transpose(inverse(instanceModelMatrix)));
-	viewNormal = wzViewShadingNormal(mat3(ViewMatrix), normalMatrix, vertexNormal, hasTangents);
 }

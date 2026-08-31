@@ -45,7 +45,12 @@ vec3 getViewNormal(vec2 uv)
 	float len = length(n);
 	if (len < 1e-5)
 	{
-		return vec3(0.0, 0.0, 1.0);
+		// Packed G-buffer RGB 0.5 unpacks to a ~zero vector (clear / unwritten
+		// pixels that still have valid depth). View space is +Z into the scene
+		// (pie_PerspectiveGet); LearnOpenGL's (0,0,1) assumes -Z-forward.
+		// Camera-facing is therefore (0,0,-1). Using +Z would invert the TBN
+		// and occlusion on those fragments.
+		return vec3(0.0, 0.0, -1.0);
 	}
 	return n / len;
 }

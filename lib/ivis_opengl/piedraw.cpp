@@ -1768,8 +1768,8 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 
 // Shared body for the scene-prepass mesh draw.
 // `PrepassPSO` is either the depth+normal PSO (normals attachment bound) or the depth-only PSO (no color attachment bound).
-// Both share vertex layout and the depth-only uniform block.
-template<typename PrepassPSO>
+// Both share vertex layout and the depth-only global uniform block. Only the color PSO binds meshuniforms (hasTangents).
+template<typename PrepassPSO, bool BindMeshHasTangents>
 static void drawInstanced3dShapeDepthPrepassImpl(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
 	if (pieFlag & pie_NODEPTHWRITE)
@@ -1784,6 +1784,13 @@ static void drawInstanced3dShapeDepthPrepassImpl(ShaderOnce& globalsOnce, const 
 		PrepassPSO::get().set_uniforms_at(0, depthGlobals);
 	});
 
+	if constexpr (BindMeshHasTangents)
+	{
+		gfx_api::Draw3DShapeDepthPrepassMeshUniforms meshUniforms;
+		meshUniforms.hasTangents = (shape->buffers[VBO_TANGENT] != nullptr) ? 1 : 0;
+		PrepassPSO::get().template set_uniforms_at<1>(meshUniforms);
+	}
+
 	gfx_api::context::get().bind_vertex_buffers(0, {
 		std::make_tuple(shape->buffers[VBO_VERTEX], 0),
 		std::make_tuple(shape->buffers[VBO_NORMAL], 0),
@@ -1794,12 +1801,12 @@ static void drawInstanced3dShapeDepthPrepassImpl(ShaderOnce& globalsOnce, const 
 
 static void drawInstanced3dShapeDepthPrepass(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
-	drawInstanced3dShapeDepthPrepassImpl<gfx_api::Draw3DShapeDepthPrepass_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	drawInstanced3dShapeDepthPrepassImpl<gfx_api::Draw3DShapeDepthPrepass_Instanced, true>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
 }
 
 static void drawInstanced3dShapeDepthPrepassDepthOnly(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
-	drawInstanced3dShapeDepthPrepassImpl<gfx_api::Draw3DShapeDepthPrepassDepthOnly_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	drawInstanced3dShapeDepthPrepassImpl<gfx_api::Draw3DShapeDepthPrepassDepthOnly_Instanced, false>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
 }
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename PremultipliedNoDepthWRTPSO, typename OpaquePSO>

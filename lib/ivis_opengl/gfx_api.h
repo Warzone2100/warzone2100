@@ -1279,6 +1279,16 @@ namespace gfx_api
 		glm::mat4 ViewMatrix;
 	};
 
+	/// Color (depth+normals) mesh prepass only. Depth-only prepass stays globals-only.
+	struct Draw3DShapeDepthPrepassMeshUniforms
+	{
+		int hasTangents = 0;
+		int pad0 = 0;
+		int pad1 = 0;
+		int pad2 = 0;
+	};
+	static_assert(sizeof(Draw3DShapeDepthPrepassMeshUniforms) == 16, "std140 mesh prepass UBO must be 16 bytes");
+
 	using Draw3DShapeDepthOnly_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::shadow_mapping>, primitive_type::triangles, index_type::u16,
 	std::tuple<
 	Draw3DShapeInstancedDepthOnlyGlobalUniforms
@@ -1303,7 +1313,8 @@ namespace gfx_api
 	/// Mesh scene depth+normals prepass (view-space normals encoded to color RT0).
 	using Draw3DShapeDepthPrepass_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<
-	Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	Draw3DShapeInstancedDepthOnlyGlobalUniforms,
+	Draw3DShapeDepthPrepassMeshUniforms
 	>,
 	std::tuple<
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
