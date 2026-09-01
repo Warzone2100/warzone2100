@@ -53,6 +53,9 @@ static constexpr float maxLightScale = 4.f;
 static constexpr UDWORD advisoryLightRange = 512;
 static constexpr float advisoryLightIntensity = 2.f;
 
+static constexpr UDWORD maxFadeDuration = 1000; // ms - keeps a data file from creating long-lived phantom lights
+static constexpr UDWORD defaultFadeDuration = 200; // ms
+
 /// A field with no value is taken from the next place that has one
 struct EffectLightSettings
 {
@@ -62,6 +65,7 @@ struct EffectLightSettings
 	nonstd::optional<float> intensity;
 	nonstd::optional<float> rangeScale;
 	nonstd::optional<float> intensityScale;
+	nonstd::optional<UDWORD> fadeDuration;
 };
 
 static std::array<EffectLightSettings, WSC_NUM_WEAPON_SUBCLASSES> projectileSubClassSettings;
@@ -72,6 +76,7 @@ static std::string effectLightsFileName;
 struct ResolvedProjectileLight
 {
 	nonstd::optional<ProjectileLight> light;
+	UDWORD fadeDuration = defaultFadeDuration;
 };
 static std::vector<ResolvedProjectileLight> resolvedProjectileLights;
 
@@ -193,6 +198,29 @@ static bool parseRangeValue(const nlohmann::json &value, const std::string &what
 	return true;
 }
 
+static bool parseFadeDurationValue(const nlohmann::json &value, const std::string &what, UDWORD &output)
+{
+	if (!value.is_number_integer())
+	{
+		debug(LOG_ERROR, "%s: \"fadeDuration\" must be a whole number of milliseconds", what.c_str());
+		return false;
+	}
+	const int64_t duration = value.get<int64_t>();
+	if (duration < 0)
+	{
+		debug(LOG_ERROR, "%s: \"fadeDuration\" cannot be negative", what.c_str());
+		return false;
+	}
+	if (duration > static_cast<int64_t>(maxFadeDuration))
+	{
+		debug(LOG_ERROR, "%s: \"fadeDuration\" %" PRId64 " is above the limit of %" PRIu32 ", using the limit", what.c_str(), duration, maxFadeDuration);
+		output = maxFadeDuration;
+		return true;
+	}
+	output = static_cast<UDWORD>(duration);
+	return true;
+}
+
 static bool parseFloatValue(const nlohmann::json &value, const std::string &what, const std::string &key, float lowest, float highest, float &output)
 {
 	if (!value.is_number())
@@ -265,6 +293,14 @@ static void parseEntry(const nlohmann::json &entry, const std::string &what, Eff
 				{
 					debug(LOG_WARNING, "%s: \"intensity\" %g is bright enough to flatten the light into a disk of flat color", what.c_str(), intensity);
 				}
+			}
+		}
+		else if (key == "fadeDuration")
+		{
+			UDWORD duration = 0;
+			if (parseFadeDurationValue(it.value(), what, duration))
+			{
+				output.fadeDuration = duration;
 			}
 		}
 		else if (key == "rangeScale")
@@ -504,7 +540,10 @@ static void buildResolvedProjectileLights()
 			continue;
 		}
 		const iIMDShape *pIMD = (psStats.pInFlightGraphic != nullptr) ? psStats.pInFlightGraphic->displayModel() : nullptr;
-		resolvedProjectileLights[psStats.index].light = resolveInFlightProjectileLight(&psStats, pIMD);
+		ResolvedProjectileLight &resolved = resolvedProjectileLights[psStats.index];
+		resolved.light = resolveInFlightProjectileLight(&psStats, pIMD);
+		resolved.fadeDuration = resolveField(projectileWeaponSettingsFor(&psStats), projectileSubClassSettingsFor(&psStats),
+			&EffectLightSettings::fadeDuration).value_or(defaultFadeDuration);
 	}
 }
 
@@ -520,7 +559,6 @@ const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex)
 
 // Max fades that may exist at once - past the cap the cheapest is evicted
 static constexpr size_t maxProjectileFades = 24;
-static constexpr uint32_t defaultProjectileFadeDuration = 200; // ms
 // Below this a light is invisible but would still cost a light slot
 static constexpr float fadeCutoffIntensity = 0.05f;
 
@@ -554,16 +592,20 @@ void beginProjectileLightFrame()
 
 void recordProjectileLight(uint32_t id, const Vector3i &position, size_t weaponIndex)
 {
-	const ProjectileLight *light = cachedInFlightProjectileLight(weaponIndex);
-	if (light == nullptr)
+	if (weaponIndex >= resolvedProjectileLights.size())
+	{
+		return;
+	}
+	const ResolvedProjectileLight &resolved = resolvedProjectileLights[weaponIndex];
+	if (!resolved.light.has_value())
 	{
 		return;
 	}
 	EmittedProjectileLight emitted;
 	emitted.id = id;
 	emitted.position = position;
-	emitted.light = *light;
-	emitted.duration = defaultProjectileFadeDuration;
+	emitted.light = resolved.light.value();
+	emitted.duration = resolved.fadeDuration;
 	emittedThisFrame.push_back(emitted);
 }
 
@@ -711,11 +753,13 @@ static void reportResolvedProjectileLights()
 			      fieldSource(weapon, subClass, &EffectLightSettings::enabled));
 			continue;
 		}
-		debug(LOG_WZ, "%s (%s): color [%u, %u, %u] (%s), range %" PRIu32 " (%s), intensity %g (%s)",
+		const UDWORD fadeDuration = resolveField(weapon, subClass, &EffectLightSettings::fadeDuration).value_or(defaultFadeDuration);
+		debug(LOG_WZ, "%s (%s): color [%u, %u, %u] (%s), range %" PRIu32 " (%s), intensity %g (%s), fade %" PRIu32 " ms (%s)",
 		      getID(&psStats), getWeaponSubClass(psStats.weaponSubClass),
 		      light->color.byte.r, light->color.byte.g, light->color.byte.b, fieldSource(weapon, subClass, &EffectLightSettings::color),
 		      light->range, fieldSource(weapon, subClass, &EffectLightSettings::range),
-		      light->intensity, fieldSource(weapon, subClass, &EffectLightSettings::intensity));
+		      light->intensity, fieldSource(weapon, subClass, &EffectLightSettings::intensity),
+		      fadeDuration, fieldSource(weapon, subClass, &EffectLightSettings::fadeDuration));
 	}
 }
 
