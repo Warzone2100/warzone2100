@@ -56,3 +56,7 @@ bool projectileGraphicGlows(const WEAPON_STATS *psStats, const iIMDShape *pFirst
 /// The light thrown by an in-flight projectile of psStats, resolving glow and plume scale from its graphic.
 /// Returns nullopt when the projectile throws no light.
 nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD);
+
+/// The pre-resolved in-flight light for a weapon by its stat index, or nullptr when it throws none.
+/// Rebuilt when the settings load / reload.
+const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex);
