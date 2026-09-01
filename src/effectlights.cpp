@@ -29,6 +29,8 @@
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/pielighting.h"
+#include "lib/gamelib/gtime.h"
 
 #include "stats.h"
 #include "statsdef.h"
@@ -516,6 +518,173 @@ const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex)
 	return resolved.light.has_value() ? &resolved.light.value() : nullptr;
 }
 
+// Max fades that may exist at once - past the cap the cheapest is evicted
+static constexpr size_t maxProjectileFades = 24;
+static constexpr uint32_t defaultProjectileFadeDuration = 200; // ms
+// Below this a light is invisible but would still cost a light slot
+static constexpr float fadeCutoffIntensity = 0.05f;
+
+/// The light a projectile threw last frame, kept so the frame it stops can start a fade from it.
+struct EmittedProjectileLight
+{
+	uint32_t id;
+	Vector3i position;
+	ProjectileLight light;
+	uint32_t duration;
+};
+
+struct FadingProjectileLight
+{
+	uint32_t id;
+	Vector3i position;
+	ProjectileLight light;
+	uint32_t startTime;
+	uint32_t duration;
+};
+
+// Swapped each frame - what threw a light this frame, and what did last frame.
+static std::vector<EmittedProjectileLight> emittedThisFrame;
+static std::vector<EmittedProjectileLight> emittedLastFrame;
+static std::vector<FadingProjectileLight> fadingLights;
+
+void beginProjectileLightFrame()
+{
+	emittedThisFrame.clear();
+}
+
+void recordProjectileLight(uint32_t id, const Vector3i &position, size_t weaponIndex)
+{
+	const ProjectileLight *light = cachedInFlightProjectileLight(weaponIndex);
+	if (light == nullptr)
+	{
+		return;
+	}
+	EmittedProjectileLight emitted;
+	emitted.id = id;
+	emitted.position = position;
+	emitted.light = *light;
+	emitted.duration = defaultProjectileFadeDuration;
+	emittedThisFrame.push_back(emitted);
+}
+
+// A fade cools like an ember: its intensity falls quadratically and its range shrinks toward half.
+// Returns false once the light has cooled past the point it is worth a light slot.
+static bool fadeToLight(const FadingProjectileLight &fade, uint32_t now, LIGHT &out)
+{
+	const uint32_t age = now - fade.startTime;
+	if (age >= fade.duration)
+	{
+		return false;
+	}
+	const float remaining = 1.f - static_cast<float>(age) / static_cast<float>(fade.duration);
+	const float intensity = fade.light.intensity * remaining * remaining;
+	if (intensity < fadeCutoffIntensity)
+	{
+		return false;
+	}
+	out.position = fade.position;
+	out.range = static_cast<UDWORD>(static_cast<float>(fade.light.range) * (0.5f + 0.5f * remaining));
+	out.colour = fade.light.color;
+	out.intensity = intensity;
+	return true;
+}
+
+// The importance the light manager would give this fade
+static float fadeImportance(const FadingProjectileLight &fade, uint32_t now)
+{
+	LIGHT light;
+	if (!fadeToLight(fade, now, light))
+	{
+		return 0.f;
+	}
+	return light.intensity * static_cast<float>(light.range) * static_cast<float>(light.range);
+}
+
+static void spawnFade(const EmittedProjectileLight &seed, uint32_t now)
+{
+	if (seed.duration == 0)
+	{
+		return;
+	}
+	FadingProjectileLight fade;
+	fade.id = seed.id;
+	fade.position = seed.position;
+	fade.light = seed.light;
+	fade.startTime = now;
+	fade.duration = seed.duration;
+
+	if (fadingLights.size() < maxProjectileFades)
+	{
+		fadingLights.push_back(fade);
+		return;
+	}
+	size_t cheapest = 0;
+	float cheapestImportance = fadeImportance(fadingLights[0], now);
+	for (size_t i = 1; i < fadingLights.size(); ++i)
+	{
+		const float importance = fadeImportance(fadingLights[i], now);
+		if (importance < cheapestImportance)
+		{
+			cheapest = i;
+			cheapestImportance = importance;
+		}
+	}
+	fadingLights[cheapest] = fade;
+}
+
+static bool idEmittedThisFrame(uint32_t id)
+{
+	for (const auto &emitted : emittedThisFrame)
+	{
+		if (emitted.id == id)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void emitProjectileFades(LightingData &lightData)
+{
+	const uint32_t now = graphicsTime;
+
+	// A projectile that re-enters emission cancels its own fade, so a one-frame flap never doubles the light.
+	fadingLights.erase(std::remove_if(fadingLights.begin(), fadingLights.end(),
+		[](const FadingProjectileLight &fade) { return idEmittedThisFrame(fade.id); }), fadingLights.end());
+
+	for (const auto &emitted : emittedLastFrame)
+	{
+		if (!idEmittedThisFrame(emitted.id))
+		{
+			spawnFade(emitted, now);
+		}
+	}
+
+	for (size_t i = 0; i < fadingLights.size(); )
+	{
+		LIGHT light;
+		if (fadeToLight(fadingLights[i], now, light))
+		{
+			lightData.lights.push_back(light);
+			++i;
+		}
+		else
+		{
+			fadingLights[i] = fadingLights.back();
+			fadingLights.pop_back();
+		}
+	}
+
+	std::swap(emittedLastFrame, emittedThisFrame);
+}
+
+void clearFadingProjectileLights()
+{
+	fadingLights.clear();
+	emittedThisFrame.clear();
+	emittedLastFrame.clear();
+}
+
 static void reportResolvedProjectileLights()
 {
 	if (!enabled_debug[LOG_WZ])
@@ -623,5 +792,6 @@ void effectLightsShutDown()
 	projectileSubClassSettings = {};
 	projectileWeaponSettings.clear();
 	resolvedProjectileLights.clear();
+	clearFadingProjectileLights();
 	effectLightsFileName.clear();
 }

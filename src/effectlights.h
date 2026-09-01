@@ -31,6 +31,7 @@
 
 struct iIMDShape;
 struct WEAPON_STATS;
+struct LightingData;
 
 /// The light a projectile throws while it is in flight
 struct ProjectileLight
@@ -60,3 +61,15 @@ nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_ST
 /// The pre-resolved in-flight light for a weapon by its stat index, or nullptr when it throws none.
 /// Rebuilt when the settings load / reload.
 const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex);
+
+/// Start recording the lights emitted this frame.
+void beginProjectileLightFrame();
+
+/// Note that projectile `id` threw a light at `position` this frame (weaponIndex gives its fade duration).
+void recordProjectileLight(uint32_t id, const Vector3i &position, size_t weaponIndex);
+
+/// Spawn fades for lights that stopped since last frame, then emit every live fade into lightData.
+void emitProjectileFades(LightingData &lightData);
+
+/// Drop every fade and the emission record, so no fade outlives its game or a lighting toggle.
+void clearFadingProjectileLights();
