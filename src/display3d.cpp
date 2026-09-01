@@ -1864,16 +1864,14 @@ static void emitProjectileLights(LightingData &lightData)
 		{
 			continue;
 		}
-		const WEAPON_STATS *psStats = psObj->psWStats;
-		const iIMDShape *pFirstIMD = (psStats->pInFlightGraphic != nullptr) ? psStats->pInFlightGraphic->displayModel() : nullptr;
-		const auto projectileLight = resolveInFlightProjectileLight(psStats, pFirstIMD);
-		if (!projectileLight.has_value())
+		const ProjectileLight *projectileLight = cachedInFlightProjectileLight(psObj->psWStats->index);
+		if (projectileLight == nullptr)
 		{
 			continue;
 		}
 		const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
 		// A light is positioned by game coordinates, where the height is the middle component
-		pushProjectileLight(lightData, Vector3i(st.pos.x, st.pos.z, st.pos.y), projectileLight.value());
+		pushProjectileLight(lightData, Vector3i(st.pos.x, st.pos.z, st.pos.y), *projectileLight);
 	}
 }
 

@@ -66,6 +66,13 @@ static std::array<EffectLightSettings, WSC_NUM_WEAPON_SUBCLASSES> projectileSubC
 static std::vector<EffectLightSettings> projectileWeaponSettings;
 static std::string effectLightsFileName;
 
+/// The in-flight light each weapon throws, resolved once when the settings load and indexed by weapon stat index.
+struct ResolvedProjectileLight
+{
+	nonstd::optional<ProjectileLight> light;
+};
+static std::vector<ResolvedProjectileLight> resolvedProjectileLights;
+
 /// A subclass with no entry uses the weapon class default.
 static const std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> projectileLightColorBySubClass = []() {
 	std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> table;
@@ -485,6 +492,30 @@ nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_ST
 	return resolveProjectileLight(psStats, pFirstIMD, false);
 }
 
+static void buildResolvedProjectileLights()
+{
+	resolvedProjectileLights.assign(asWeaponStats.size(), ResolvedProjectileLight{});
+	for (const auto &psStats : asWeaponStats)
+	{
+		if (psStats.index >= resolvedProjectileLights.size())
+		{
+			continue;
+		}
+		const iIMDShape *pIMD = (psStats.pInFlightGraphic != nullptr) ? psStats.pInFlightGraphic->displayModel() : nullptr;
+		resolvedProjectileLights[psStats.index].light = resolveInFlightProjectileLight(&psStats, pIMD);
+	}
+}
+
+const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex)
+{
+	if (weaponIndex >= resolvedProjectileLights.size())
+	{
+		return nullptr;
+	}
+	const auto &resolved = resolvedProjectileLights[weaponIndex];
+	return resolved.light.has_value() ? &resolved.light.value() : nullptr;
+}
+
 static void reportResolvedProjectileLights()
 {
 	if (!enabled_debug[LOG_WZ])
@@ -519,22 +550,8 @@ static void reportResolvedProjectileLights()
 	}
 }
 
-bool loadEffectLights(const char *pFileName)
+static void parseEffectLightsSections(const char *pFileName, const std::vector<char> &fileContents)
 {
-	ASSERT_OR_RETURN(false, pFileName != nullptr, "Expecting a file name");
-	effectLightsFileName = pFileName;
-
-	projectileSubClassSettings = {};
-	projectileWeaponSettings.clear();
-	projectileWeaponSettings.resize(asWeaponStats.size());
-
-	std::vector<char> fileContents;
-	if (!loadFileToBufferVector(pFileName, fileContents, false))
-	{
-		// No file is fine - every light then comes from its graphic and the built-in values
-		return true;
-	}
-
 	nlohmann::json root;
 	try
 	{
@@ -543,13 +560,13 @@ bool loadEffectLights(const char *pFileName)
 	catch (const std::exception &e)
 	{
 		debug(LOG_ERROR, "%s is not valid JSON, ignoring it: %s", pFileName, e.what());
-		return true;
+		return;
 	}
 
 	if (!root.is_object())
 	{
 		debug(LOG_ERROR, "%s: expecting a group of sections", pFileName);
-		return true;
+		return;
 	}
 
 	for (auto it = root.begin(); it != root.end(); ++it)
@@ -568,7 +585,25 @@ bool loadEffectLights(const char *pFileName)
 			debug(LOG_ERROR, "%s: unknown section \"%s\"", pFileName, key.c_str());
 		}
 	}
+}
 
+bool loadEffectLights(const char *pFileName)
+{
+	ASSERT_OR_RETURN(false, pFileName != nullptr, "Expecting a file name");
+	effectLightsFileName = pFileName;
+
+	projectileSubClassSettings = {};
+	projectileWeaponSettings.clear();
+	projectileWeaponSettings.resize(asWeaponStats.size());
+
+	// No file is fine - every light then comes from its graphic and the built-in values.
+	std::vector<char> fileContents;
+	if (loadFileToBufferVector(pFileName, fileContents, false))
+	{
+		parseEffectLightsSections(pFileName, fileContents);
+	}
+
+	buildResolvedProjectileLights();
 	reportResolvedProjectileLights();
 	return true;
 }
@@ -587,5 +622,6 @@ void effectLightsShutDown()
 {
 	projectileSubClassSettings = {};
 	projectileWeaponSettings.clear();
+	resolvedProjectileLights.clear();
 	effectLightsFileName.clear();
 }
