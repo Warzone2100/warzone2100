@@ -1558,6 +1558,8 @@ bool init3DView()
 		debug(LOG_ERROR, "Failed to initialize range-ring buffers");
 	}
 
+	clearFadingProjectileLights();
+
 	return true;
 }
 
@@ -1856,23 +1858,29 @@ static void emitProjectileLights(LightingData &lightData)
 {
 	if (!projectileLightingActive())
 	{
+		clearFadingProjectileLights();
 		return;
 	}
+	beginProjectileLightFrame();
 	for (PROJECTILE *psObj = proj_GetFirst(); psObj != nullptr; psObj = proj_GetNext())
 	{
 		if (!projectileIsShowing(psObj) || projectileDrawnAsEffect(psObj->psWStats))
 		{
 			continue;
 		}
-		const ProjectileLight *projectileLight = cachedInFlightProjectileLight(psObj->psWStats->index);
+		const size_t weaponIndex = psObj->psWStats->index;
+		const ProjectileLight *projectileLight = cachedInFlightProjectileLight(weaponIndex);
 		if (projectileLight == nullptr)
 		{
 			continue;
 		}
 		const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
 		// A light is positioned by game coordinates, where the height is the middle component
-		pushProjectileLight(lightData, Vector3i(st.pos.x, st.pos.z, st.pos.y), *projectileLight);
+		const Vector3i position(st.pos.x, st.pos.z, st.pos.y);
+		pushProjectileLight(lightData, position, *projectileLight);
+		recordProjectileLight(psObj->id, position, weaponIndex);
 	}
+	emitProjectileFades(lightData);
 }
 
 /// Draw a projectile to the screen
