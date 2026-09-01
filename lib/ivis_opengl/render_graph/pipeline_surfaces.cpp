@@ -673,6 +673,8 @@ void collectPipelineSurfaceIdsByLifetime(SurfaceLifetimePolicy policy,
 bool context::syncPipelineSurfaces()
 {
 	const PipelineSurfaceSyncInputs inputs = pipelineSurfaceSyncInputs();
+	// The tonemap surface below is decided by the same value, so the shaders' linear lighting flag matches it
+	updateFloatSceneColorInUse(inputs.hdrScene);
 	const ResolvedSurfaceTable specs = resolvePipelineSurfaces(inputs, surfaceCapabilities());
 	const ResolvedSurfaceSpec& scene = specs[static_cast<size_t>(PipelineSurfaceId::SceneColor)];
 	const ResolvedSurfaceSpec& current = resolvedPipelineSurface(PipelineSurfaceId::SceneColor);

@@ -606,18 +606,51 @@ optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFor
 	return channels;
 }
 
+void gfx_api::context::refreshColorTextureFormats()
+{
+	gfx_api::initBestRealTimeCompressionFormats();
+#if defined(BASIS_ENABLED)
+	gfx_api::initBasisTranscoder();
+#endif
+}
+
+void gfx_api::context::updateFloatSceneColorInUse(bool inUse)
+{
+	if (_hdrSceneEnabled && !inUse && !_loggedNoFloatSceneColor)
+	{
+		_loggedNoFloatSceneColor = true;
+		debug(LOG_INFO, "HDR scene rendering is off: no floating point scene color at these settings");
+	}
+	else if (inUse)
+	{
+		_loggedNoFloatSceneColor = false;
+	}
+	if (inUse == _floatSceneColorInUse)
+	{
+		return;
+	}
+	const bool wasLinear = linearLightingEnabled();
+	_floatSceneColorInUse = inUse;
+	if (linearLightingEnabled() != wasLinear)
+	{
+		// The tables were built against the previous value
+		refreshColorTextureFormats();
+	}
+}
+
 bool gfx_api::context::setLinearLightingEnabled(bool enabled)
 {
 	if (enabled == _linearLightingEnabled)
 	{
 		return true;
 	}
+	const bool wasLinear = linearLightingEnabled();
 	_linearLightingEnabled = enabled;
-	// The backend built the color texture format tables against the previous value, so rebuild them
-	gfx_api::initBestRealTimeCompressionFormats();
-#if defined(BASIS_ENABLED)
-	gfx_api::initBasisTranscoder();
-#endif
+	if (linearLightingEnabled() != wasLinear)
+	{
+		// The backend built the color texture format tables against the previous value
+		refreshColorTextureFormats();
+	}
 	return true;
 }
 
