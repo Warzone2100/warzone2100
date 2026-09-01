@@ -63,6 +63,19 @@ struct PROJECTILE : public SIMPLE_OBJECT
 	bool            penetratingProjectile;  ///< If the projectile is the post-impact spawned one
 };
 
+/// A destroyed projectile keeps casting a fading light for a short time after death,
+/// instead of its light vanishing the instant the projectile is removed.
+struct ProjectileLightFade
+{
+	Vector3i          pos;             ///< World position of the fading light.
+	WEAPON_STATS     *psWStats;        ///< Weapon stats providing the light's colour, range and intensity.
+	uint32_t          spawnTime;       ///< Game time (ms) at which the fade started.
+	uint32_t          fadeDuration;    ///< How long (ms) the light fades out to nothing.
+};
+
+/// Fading lights left behind by destroyed projectiles, pruned each game tick.
+extern std::vector<ProjectileLightFade> projectileFadeLights;
+
 typedef std::vector<PROJECTILE *>::const_iterator ProjectileIterator;
 
 

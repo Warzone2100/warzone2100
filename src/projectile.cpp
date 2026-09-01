@@ -131,6 +131,11 @@ static ProjectileIterator psProjectileNext;
 /// </summary>
 static PagedEntityContainer<PROJECTILE> globalProjectileStorage;
 
+/// How long (in game time, ms) a destroyed projectile's light fades out before going dark.
+static constexpr uint32_t projLightFadeTime = 300u;
+
+std::vector<ProjectileLightFade> projectileFadeLights;
+
 /***************************************************************************/
 
 static void	proj_ImpactFunc(PROJECTILE *psObj);
@@ -1511,21 +1516,40 @@ void proj_UpdateAll()
 	}
 
 	// Remove and free dead projectiles.
-	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), [](PROJECTILE* p)
-	{
-		if (p->died == 0 || p->died >= gameTime - deltaGameTime)
+		psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), [](PROJECTILE* p)
 		{
-			return false;
-		}
-		auto it = globalProjectileStorage.find(*p);
-		ASSERT(it != globalProjectileStorage.end(), "Invalid projectile, not found in global storage");
+			if (p->died == 0 || p->died >= gameTime - deltaGameTime)
+			{
+				return false;
+			}
+			// Keep the projectile's light alive as a short fade-out now that it's being
+			// removed, instead of letting the light vanish the instant the projectile dies.
+			if (p->psWStats != nullptr && p->psWStats->lightRange > 0)
+			{
+				projectileFadeLights.push_back(ProjectileLightFade{
+					p->pos,
+					p->psWStats,
+					gameTime,
+					projLightFadeTime,
+				});
+			}
+			auto it = globalProjectileStorage.find(*p);
+			ASSERT(it != globalProjectileStorage.end(), "Invalid projectile, not found in global storage");
 
-		// Make sure to get rid of some final references in the sound code to this object first
-		audio_RemoveObj(p);
+			// Make sure to get rid of some final references in the sound code to this object first
+			audio_RemoveObj(p);
 
-		globalProjectileStorage.erase(it);
-		return true;
-	}), psProjectileList.end());
+			globalProjectileStorage.erase(it);
+			return true;
+		}), psProjectileList.end());
+
+	// Drop fade lights whose glow has faded out.
+	projectileFadeLights.erase(
+		std::remove_if(projectileFadeLights.begin(), projectileFadeLights.end(), [] (ProjectileLightFade const& fade)
+		{
+			return static_cast<uint32_t>(gameTime - fade.spawnTime) >= fade.fadeDuration;
+		}),
+		projectileFadeLights.end());
 
 	// Add spawned penetrating projectiles,
 	// which were collected earlier during the update procedure.

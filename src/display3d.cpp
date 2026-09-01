@@ -1253,6 +1253,30 @@ static void drawProjectileLights(LightingData& lightData)
 		}
 		psObj = proj_GetNext();
 	}
+
+	// Destroyed projectiles keep casting a fading light for a short time after death,
+	// instead of the light vanishing the instant the projectile is removed.
+	for (ProjectileLightFade const& fade : projectileFadeLights)
+	{
+		const WEAPON_STATS *psStats = fade.psWStats;
+		if (psStats == nullptr || psStats->lightRange == 0)
+		{
+			continue;
+		}
+		float t = static_cast<float>(gameTime - fade.spawnTime) / static_cast<float>(fade.fadeDuration);
+		if (t >= 1.f)
+		{
+			continue;
+		}
+		// The glow cools as it dies, so brightness falls as the square of what remains.
+		float scale = (1.f - t) * (1.f - t);
+		LIGHT light;
+		light.position = Vector3i(static_cast<int>(fade.pos.x), static_cast<int>(fade.pos.z), static_cast<int>(fade.pos.y));
+		light.range = psStats->lightRange;
+		light.colour = psStats->lightColour;
+		light.intensity = psStats->lightIntensity * scale;
+		lightData.lights.push_back(light);
+	}
 }
 
 // Picks the projectile light that casts the shadow this frame (the brightest one) and fits an
