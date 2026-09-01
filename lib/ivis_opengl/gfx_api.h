@@ -661,13 +661,16 @@ namespace gfx_api
 		/// Sample color textures through the sRGB transfer function and light in linear space.
 		/// Consulted while choosing texture formats, so it takes effect on the next backend start.
 		///
-		/// Reports the effective value, which is off unless HDR scene rendering is on, since the tonemap is
-		/// what encodes linear light for display.
-		bool linearLightingEnabled() const { return _linearLightingEnabled && _hdrSceneEnabled; }
+		/// Reports the effective value, which is off unless HDR scene rendering is in effect, since the
+		/// tonemap is what encodes linear light for display.
+		bool linearLightingEnabled() const { return _linearLightingEnabled && hdrSceneInEffect(); }
 		virtual bool setLinearLightingEnabled(bool enabled);
 
 		/// Floating point scene color plus a tonemap pass, instead of writing display range directly
 		bool hdrSceneEnabled() const { return _hdrSceneEnabled; }
+		/// Whether HDR scene rendering is actually active. A backend falls back to a fixed point scene color,
+		/// with no tonemap, when no floating point format is renderable at the sample count MSAA asked for.
+		bool hdrSceneInEffect() const { return _hdrSceneEnabled && _floatSceneColorInUse; }
 		/// Backend overrides store the value here and renegotiate the scene color format
 		virtual bool setHdrSceneEnabled(bool enabled)
 		{
@@ -804,10 +807,16 @@ namespace gfx_api
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		bool _smaaEnabled = false;
 		bool _hdrSceneEnabled = false;
+		bool _floatSceneColorInUse = false;
+		bool _loggedNoFloatSceneColor = false;
 		bool _linearLightingEnabled = false;
 		SceneEffectSurfaces _sceneEffectSurfaces;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
+		/// Record whether the scene color format the backend settled on is floating point
+		void updateFloatSceneColorInUse(bool inUse);
+		/// The color texture formats are picked against linearLightingEnabled(), so they follow it
+		void refreshColorTextureFormats();
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
