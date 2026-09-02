@@ -73,6 +73,7 @@ using nonstd::nullopt;
 #define LANG_NAME_INDONESIAN "Bahasa Indonesia"
 #define LANG_NAME_IRISH "Imruagadh"
 #define LANG_NAME_ITALIAN "Italiano"
+#define LANG_NAME_JAPANESE "日本語"
 #define LANG_NAME_KOREAN "한국어"
 #define LANG_NAME_LATIN "Latine"
 #define LANG_NAME_LATVIAN "Latviešu valoda"
@@ -138,6 +139,7 @@ static const struct
 	{ "hu", LANG_NAME_HUNGARIAN, "hu", LANG_HUNGARIAN, SUBLANG_DEFAULT },
 	{ "id", LANG_NAME_INDONESIAN, "id", LANG_INDONESIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, "it", LANG_ITALIAN, SUBLANG_ITALIAN },
+	{ "ja_JP", LANG_NAME_JAPANESE, "ja", LANG_JAPANESE, SUBLANG_DEFAULT },
 	{ "ko_KR", LANG_NAME_KOREAN, "ko", LANG_KOREAN, SUBLANG_DEFAULT },
 //	{ "la", LANG_NAME_LATIN, "la", LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", LANG_NAME_LITHUANIAN, "lt", LANG_LITHUANIAN, SUBLANG_DEFAULT },
@@ -203,6 +205,7 @@ static const struct
 	{ "hu", LANG_NAME_HUNGARIAN, "hu", "hu_HU.UTF-8", "hu_HU" },
 	{ "id", LANG_NAME_INDONESIAN, "id", "id_ID.UTF-8", "id" },
 	{ "it", LANG_NAME_ITALIAN, "it", "it_IT.UTF-8", "it_IT" },
+	{ "ja_JP", LANG_NAME_JAPANESE, "ja_JP", "ja_JP.UTF-8", "ja_JP" },
 	{ "ko_KR", LANG_NAME_KOREAN, "ko", "ko_KR.UTF-8", "ko" },
 	{ "la", LANG_NAME_LATIN, "la", "la.UTF-8", "la" },
 	{ "lt", LANG_NAME_LITHUANIAN, "lt", "lt_LT.UTF-8", "lt_LT" },
