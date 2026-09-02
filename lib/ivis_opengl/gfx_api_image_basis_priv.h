@@ -37,6 +37,9 @@ namespace gfx_api
 
 	void initBasisTranscoder();
 
+	// True while every basis transcode target this device would use has an sRGB counterpart
+	bool basisTranscodeSrgbComplete();
+
 	optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasis(gfx_api::pixel_format_target target, gfx_api::texture_type textureType);
 
 	std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis(const std::string& filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target,  optional<gfx_api::pixel_format> desiredFormat = nullopt, uint32_t maxWidth = UINT32_MAX, uint32_t maxHeight = UINT32_MAX);

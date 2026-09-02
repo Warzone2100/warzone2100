@@ -36,6 +36,7 @@
 #include "keybind.h"
 #include "radar.h"
 #include "activity.h"
+#include "terrain.h"
 
 #include <algorithm>
 
@@ -122,7 +123,7 @@ struct WARZONE_GLOBALS
 	bool pointLightLighting = false;
 	bool muzzleFlashLighting = true;
 	bool projectileLighting = true;
-	HDR_LIGHTING_MODE hdrLightingMode = HDR_LIGHTING_MODE::OFF; // floating point scene color and linear space lighting
+	HDR_LIGHTING_MODE hdrLightingMode = HDR_LIGHTING_MODE::AUTO; // floating point scene color and linear space lighting
 	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
 	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
@@ -1012,7 +1013,13 @@ void war_setHdrLightingMode(HDR_LIGHTING_MODE mode)
 
 bool war_getHdrLighting()
 {
-	return warGlobs.hdrLightingMode == HDR_LIGHTING_MODE::ON;
+	switch (warGlobs.hdrLightingMode)
+	{
+		case HDR_LIGHTING_MODE::OFF: return false;
+		case HDR_LIGHTING_MODE::ON: return true;
+		case HDR_LIGHTING_MODE::AUTO: break;
+	}
+	return war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING;
 }
 
 bool war_getProjectileLighting()

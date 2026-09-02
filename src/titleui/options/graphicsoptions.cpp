@@ -91,6 +91,14 @@ OptionInfo::AvailabilityResult RemasteredTerrainAppearanceAvailable(const Option
 	return result;
 }
 
+OptionInfo::AvailabilityResult HdrLightingSupported(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = gfx_api::context::get().hdrLightingSupported();
+	result.localizedUnavailabilityReason = _("Not supported by your graphics driver with the current settings.");
+	return result;
+}
+
 OptionInfo::AvailabilityResult PerPixelLightingEnabled(const OptionInfo& optionInfo)
 {
 	OptionInfo::AvailabilityResult result = PerPixelLightingAvailable(optionInfo);
@@ -401,11 +409,15 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	}
 	{
 		auto optionInfo = OptionInfo("gfx.hdrLighting", N_("HDR Lighting"), N_("Lights blend more naturally, and bright highlights fade smoothly instead of clipping to white. No HDR display needed."));
+		optionInfo.addAvailabilityCondition(HdrLightingSupported);
 		optionInfo.setRequiresRestart(true);
 		auto valueChanger = OptionsDropdown<HDR_LIGHTING_MODE>::make(
 			[]() {
 				OptionChoices<HDR_LIGHTING_MODE> result;
+				// Show what Auto currently resolves to (it follows the Point Lights setting)
+				WzString autoName = WzString(_("Auto")) + " (" + (war_getHdrLighting() ? _("On") : _("Off")) + ")";
 				result.choices = {
+					{ (war_getHdrLightingMode() == HDR_LIGHTING_MODE::AUTO) ? autoName : WzString(_("Auto")), _("On while Point Lights is set to Per-Pixel (HQ)."), HDR_LIGHTING_MODE::AUTO },
 					{ _("On"), "", HDR_LIGHTING_MODE::ON },
 					{ _("Off"), "", HDR_LIGHTING_MODE::OFF },
 				};

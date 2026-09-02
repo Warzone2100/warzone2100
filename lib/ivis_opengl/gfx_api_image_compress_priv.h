@@ -32,6 +32,9 @@ namespace gfx_api
 {
 	void initBestRealTimeCompressionFormats();
 
+	// True while every real-time compression format this device would use has an sRGB counterpart
+	bool realTimeCompressionSrgbComplete();
+
 	// Determine the best available live compressed image format for the current system (+ textureType)
 	optional<gfx_api::pixel_format> bestRealTimeCompressionFormatForImage(gfx_api::pixel_format_target target, const iV_Image& image, gfx_api::texture_type textureType);
 	optional<gfx_api::pixel_format> bestRealTimeCompressionFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType);

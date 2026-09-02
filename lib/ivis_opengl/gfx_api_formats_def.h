@@ -119,6 +119,12 @@ namespace gfx_api
 		}
 	}
 
+	/// True for the sRGB color formats (the sampler converts them to linear)
+	static inline bool is_srgb_format(const pixel_format& format)
+	{
+		return unorm_format_for(format) != format;
+	}
+
 	/// True where an image's bytes can be uploaded to a texture created with `textureFormat`
 	/// (an sRGB format and its UNORM counterpart hold identical bytes)
 	static inline bool format_bytes_compatible(const pixel_format& imageFormat, const pixel_format& textureFormat)
