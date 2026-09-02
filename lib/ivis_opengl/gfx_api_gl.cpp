@@ -4246,9 +4246,7 @@ gfx_api::SurfaceCapabilityHints gl_context::surfaceCapabilities() const
 	// (The extra precision shows as less banding across the gradients terrain and sky produce.)
 	// With MSAA: the format must also back a multisampled renderbuffer at the sample count in use -
 	// if it can't, the sample count wins (since MSAA is the setting the player chose).
-	const bool useFloat = hdrSceneEnabled()
-		&& (floatSceneColorFormat != gfx_api::pixel_format::invalid)
-		&& (clampedMsaa <= 1 || hasFloatMsaaSupport);
+	const bool useFloat = hdrSceneEnabled() && floatSceneColorSupported();
 	const bool useTenBit = !useFloat && hasTenBitSceneColorSupport && (clampedMsaa <= 1 || hasTenBitMsaaSupport);
 	if (useFloat)
 	{
@@ -5867,6 +5865,12 @@ bool gl_context::initSceneColorFormatSupport(gfx_api::pixel_format format)
 	glDeleteTextures(1, &probeTexture);
 	wzGLClearErrors();
 	return supported;
+}
+
+bool gl_context::floatSceneColorSupported() const
+{
+	return (floatSceneColorFormat != gfx_api::pixel_format::invalid)
+		&& (clampedMultiSampleCount() <= 1 || hasFloatMsaaSupport);
 }
 
 // Pick the floating point scene color format, preferring B10G11R11, which is 32 bits per pixel like RGBA8

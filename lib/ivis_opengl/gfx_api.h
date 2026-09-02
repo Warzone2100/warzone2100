@@ -659,11 +659,13 @@ namespace gfx_api
 		}
 
 		/// Sample color textures through the sRGB transfer function and light in linear space.
-		/// Consulted while choosing texture formats, so it takes effect on the next backend start.
 		///
-		/// Reports the effective value, which is off unless HDR scene rendering is in effect, since the
-		/// tonemap is what encodes linear light for display.
-		bool linearLightingEnabled() const { return _linearLightingEnabled && hdrSceneInEffect(); }
+		/// Reports the effective value, which is off unless HDR scene rendering is in effect (the tonemap
+		/// encodes linear light for display) and every color texture format has an sRGB counterpart.
+		bool linearLightingEnabled() const
+		{
+			return _linearLightingEnabled && hdrSceneInEffect() && _srgbColorFormatsComplete;
+		}
 		virtual bool setLinearLightingEnabled(bool enabled);
 
 		/// Floating point scene color plus a tonemap pass, instead of writing display range directly
@@ -677,6 +679,10 @@ namespace gfx_api
 			_hdrSceneEnabled = enabled;
 			return true;
 		}
+		/// Whether the device can render the scene at floating point at the current sample count
+		virtual bool floatSceneColorSupported() const { return false; }
+		/// Whether turning on HDR Lighting would take effect on this device
+		bool hdrLightingSupported() const { return floatSceneColorSupported() && _srgbColorFormatsComplete; }
 
 		/// SMAA 1x post-process antialiasing over the scene color
 		bool smaaEnabled() const { return _smaaEnabled; }
@@ -809,20 +815,38 @@ namespace gfx_api
 		bool _hdrSceneEnabled = false;
 		bool _floatSceneColorInUse = false;
 		bool _loggedNoFloatSceneColor = false;
+		bool _srgbColorFormatsComplete = false;
 		bool _linearLightingEnabled = false;
 		SceneEffectSurfaces _sceneEffectSurfaces;
 		float _sceneRenderFraction = 1.f;
 		bool _sceneDynamicResolution = false;
 		/// Record whether the scene color format the backend settled on is floating point
 		void updateFloatSceneColorInUse(bool inUse);
-		/// The color texture formats are picked against linearLightingEnabled(), so they follow it
-		void refreshColorTextureFormats();
+		/// Scan the color texture formats the device carries, for both lighting modes
+		void initColorTextureFormats();
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
 	/// The format a color texture is sampled through: its sRGB counterpart while linear lighting is on, so
 	/// the hardware decodes it. Returns `format` where there is no counterpart or the device cannot sample it.
 	pixel_format colorTextureFormat(pixel_format_target target, pixel_format format);
+
+	/// The best color format a scan found, and the best one whose sRGB counterpart the device also carries
+	struct color_format_choice
+	{
+		optional<pixel_format> plain;
+		optional<pixel_format> srgb;
+		/// The format for the current lighting mode
+		optional<pixel_format> forCurrentLighting() const;
+		/// False when a format was found but no sRGB version of it
+		bool srgbComplete() const { return !plain.has_value() || srgb.has_value(); }
+	};
+
+	/// True while every color texture format this device would use has an sRGB counterpart it can sample
+	bool srgbColorTextureFormatsComplete();
+
+	/// Log the first color texture that loads without an sRGB format while linear lighting is on
+	void noteColorTextureFormat(pixel_format format, const std::string& filename);
 
 	// High-level API for getting an uncompressed image (iV_Image) from a file
 	std::unique_ptr<iV_Image> loadUncompressedImageFromFile(const char *filename, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool forceRGBA8 = false);

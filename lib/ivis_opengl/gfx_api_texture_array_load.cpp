@@ -269,6 +269,11 @@ bool prepareTextureArrayLoadContext(TextureArrayLoadContext& ctx)
 		}
 	}
 
+	if (ctx.textureType == gfx_api::texture_type::game_texture)
+	{
+		gfx_api::noteColorTextureFormat(ctx.uploadFormat, ctx.debugName);
+	}
+
 	ctx.uncompressedExtractionFormat = gfx_api::is_uncompressed_format(ctx.desiredImageExtractionFormat);
 	return true;
 }

@@ -7438,6 +7438,25 @@ bool VkRoot::setSmaaEnabled(bool enabled)
 	return syncPipelineSurfaces();
 }
 
+bool VkRoot::floatSceneColorSupported() const
+{
+	if (!physicalDevice)
+	{
+		return false;
+	}
+	// Same candidates and feature checks as findSceneColorBufferFormat
+	for (vk::Format format : { vk::Format::eB10G11R11UfloatPack32, vk::Format::eR16G16B16A16Sfloat })
+	{
+		if (checkFormatSupport(physicalDevice, format, vk::ImageTiling::eOptimal,
+			vk::FormatFeatureFlags{vk::FormatFeatureFlagBits::eColorAttachment | vk::FormatFeatureFlagBits::eColorAttachmentBlend | vk::FormatFeatureFlagBits::eSampledImage},
+			vkDynLoader))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool VkRoot::setHdrSceneEnabled(bool enabled)
 {
 	if (enabled == hdrSceneEnabled())

@@ -128,13 +128,8 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 		gfx_api::setActiveLightCapacity(capacity);
 	}
 
-	// Calculate the best available run-time compression formats
-	gfx_api::initBestRealTimeCompressionFormats();
-
-#if defined(BASIS_ENABLED)
-	// Init basis transcoder
-	gfx_api::initBasisTranscoder();
-#endif
+	// Calculate the best available compression formats, and whether they can all be sampled as sRGB
+	current_backend_context->initColorTextureFormats();
 
 	return result;
 }
@@ -491,6 +486,11 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 		}
 	}
 
+	if (textureType == gfx_api::texture_type::game_texture)
+	{
+		gfx_api::noteColorTextureFormat(uploadFormat, filename);
+	}
+
 	// 5.) Create a new compatible gpu texture object
 	std::unique_ptr<gfx_api::texture> pTexture = std::unique_ptr<gfx_api::texture>(gfx_api::context::get().create_texture(mipmap_levels, image.width(), image.height(), uploadFormat, filename));
 
@@ -606,12 +606,59 @@ optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFor
 	return channels;
 }
 
-void gfx_api::context::refreshColorTextureFormats()
+optional<gfx_api::pixel_format> gfx_api::color_format_choice::forCurrentLighting() const
+{
+	return gfx_api::context::get().linearLightingEnabled() ? srgb : plain;
+}
+
+bool gfx_api::srgbColorTextureFormatsComplete()
+{
+	for (size_t target_idx = 0; target_idx < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target_idx++)
+	{
+		const auto target = static_cast<gfx_api::pixel_format_target>(target_idx);
+		// Any color texture can fall back to uncompressed, so RGBA8 and RGB8 need sRGB versions.
+		// A device without RGB8 loads RGB images as RGBA8, so RGB8_SRGB is only needed if RGB8 is supported.
+		for (auto format : { gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8 })
+		{
+			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image)
+				&& !gfx_api::context::get().textureFormatIsSupported(target, gfx_api::srgb_format_for(format), gfx_api::pixel_format_usage::sampled_image))
+			{
+				return false;
+			}
+		}
+	}
+	if (!gfx_api::realTimeCompressionSrgbComplete())
+	{
+		return false;
+	}
+#if defined(BASIS_ENABLED)
+	if (!gfx_api::basisTranscodeSrgbComplete())
+	{
+		return false;
+	}
+#endif
+	return true;
+}
+
+void gfx_api::noteColorTextureFormat(gfx_api::pixel_format format, const std::string& filename)
+{
+	static bool reported = false;
+	if (reported || !gfx_api::context::get().linearLightingEnabled() || gfx_api::is_srgb_format(format))
+	{
+		return;
+	}
+	reported = true;
+	debug(LOG_ERROR, "Color texture %s loads as %s, which the sampler does not decode, so it will read too dark under linear lighting",
+		filename.c_str(), gfx_api::format_to_str(format));
+}
+
+void gfx_api::context::initColorTextureFormats()
 {
 	gfx_api::initBestRealTimeCompressionFormats();
 #if defined(BASIS_ENABLED)
 	gfx_api::initBasisTranscoder();
 #endif
+	_srgbColorFormatsComplete = gfx_api::srgbColorTextureFormatsComplete();
 }
 
 void gfx_api::context::updateFloatSceneColorInUse(bool inUse)
@@ -625,17 +672,7 @@ void gfx_api::context::updateFloatSceneColorInUse(bool inUse)
 	{
 		_loggedNoFloatSceneColor = false;
 	}
-	if (inUse == _floatSceneColorInUse)
-	{
-		return;
-	}
-	const bool wasLinear = linearLightingEnabled();
 	_floatSceneColorInUse = inUse;
-	if (linearLightingEnabled() != wasLinear)
-	{
-		// The tables were built against the previous value
-		refreshColorTextureFormats();
-	}
 }
 
 bool gfx_api::context::setLinearLightingEnabled(bool enabled)
@@ -644,12 +681,11 @@ bool gfx_api::context::setLinearLightingEnabled(bool enabled)
 	{
 		return true;
 	}
-	const bool wasLinear = linearLightingEnabled();
 	_linearLightingEnabled = enabled;
-	if (linearLightingEnabled() != wasLinear)
+	if (enabled && !linearLightingEnabled())
 	{
-		// The backend built the color texture format tables against the previous value
-		refreshColorTextureFormats();
+		debug(LOG_INFO, "Linear lighting is off: %s",
+			(!hdrSceneInEffect()) ? "HDR scene rendering is not in effect" : "the color texture formats here are not all available in sRGB");
 	}
 	return true;
 }

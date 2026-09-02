@@ -43,15 +43,53 @@ static inline bool hasBuiltInRealTimeFormatCompressor(gfx_api::pixel_format desi
 	});
 }
 
-static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableCompressionFormat_GameTextureRGBA = {nullopt};
-static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableCompressionFormat_GameTextureRGB = {nullopt};
+static std::array<gfx_api::color_format_choice, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableCompressionFormat_GameTextureRGBA;
+static std::array<gfx_api::color_format_choice, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableCompressionFormat_GameTextureRGB;
+
+// Finds the best format and the best one with an sRGB version in one pass (a device may support a
+// compressed format but not its sRGB version)
+template<size_t N>
+static gfx_api::color_format_choice scanBestCompressionFormats(gfx_api::pixel_format_target target, const std::array<gfx_api::pixel_format, N>& qualityOrder)
+{
+	gfx_api::color_format_choice choice;
+	for (auto format : qualityOrder)
+	{
+		if (!hasBuiltInRealTimeFormatCompressor(format)
+			|| !gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
+		{
+			continue;
+		}
+		if (!choice.plain.has_value())
+		{
+			choice.plain = format;
+		}
+		const gfx_api::pixel_format srgb = gfx_api::srgb_format_for(format);
+		if (!choice.srgb.has_value() && srgb != gfx_api::pixel_format::invalid
+			&& gfx_api::context::get().textureFormatIsSupported(target, srgb, gfx_api::pixel_format_usage::sampled_image))
+		{
+			choice.srgb = srgb;
+		}
+		if (choice.plain.has_value() && choice.srgb.has_value())
+		{
+			break;
+		}
+	}
+	return choice;
+}
+
+static void debugColorFormatChoice(const char* label, const gfx_api::color_format_choice& choice)
+{
+	debug(LOG_3D, "  * %s: %s (sRGB: %s)", label,
+		(choice.plain.has_value()) ? gfx_api::format_to_str(choice.plain.value()) : "<none>",
+		(choice.srgb.has_value()) ? gfx_api::format_to_str(choice.srgb.value()) : "<none>");
+}
 
 void gfx_api::initBestRealTimeCompressionFormats()
 {
 	for (size_t target = 0; target < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target++)
 	{
-		bestAvailableCompressionFormat_GameTextureRGBA[target] = nullopt;
-		bestAvailableCompressionFormat_GameTextureRGB[target] = nullopt;
+		bestAvailableCompressionFormat_GameTextureRGBA[target] = {};
+		bestAvailableCompressionFormat_GameTextureRGB[target] = {};
 	}
 
 	if (!wz_texture_compression)
@@ -71,33 +109,24 @@ void gfx_api::initBestRealTimeCompressionFormats()
 	{
 		gfx_api::pixel_format_target target = static_cast<gfx_api::pixel_format_target>(target_idx);
 		debug(LOG_3D, "Real-time compression formats [%zu]", target_idx);
-		for ( auto format : qualityOrderRGBA )
-		{
-			if (!hasBuiltInRealTimeFormatCompressor(format))
-			{
-				continue;
-			}
-			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
-			{
-				bestAvailableCompressionFormat_GameTextureRGBA[target_idx] = gfx_api::colorTextureFormat(target, format);
-				break;
-			}
-		}
-		debug(LOG_3D, "  * GameTextureRGBA: %s", (bestAvailableCompressionFormat_GameTextureRGBA[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableCompressionFormat_GameTextureRGBA[target_idx].value()) : "<none>");
-		for ( auto format : qualityOrderRGB )
-		{
-			if (!hasBuiltInRealTimeFormatCompressor(format))
-			{
-				continue;
-			}
-			if (gfx_api::context::get().textureFormatIsSupported(target, format, gfx_api::pixel_format_usage::sampled_image))
-			{
-				bestAvailableCompressionFormat_GameTextureRGB[target_idx] = gfx_api::colorTextureFormat(target, format);
-				break;
-			}
-		}
-		debug(LOG_3D, "  * GameTextureRGB: %s", (bestAvailableCompressionFormat_GameTextureRGB[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableCompressionFormat_GameTextureRGB[target_idx].value()) : "<none>");
+		bestAvailableCompressionFormat_GameTextureRGBA[target_idx] = scanBestCompressionFormats(target, qualityOrderRGBA);
+		debugColorFormatChoice("GameTextureRGBA", bestAvailableCompressionFormat_GameTextureRGBA[target_idx]);
+		bestAvailableCompressionFormat_GameTextureRGB[target_idx] = scanBestCompressionFormats(target, qualityOrderRGB);
+		debugColorFormatChoice("GameTextureRGB", bestAvailableCompressionFormat_GameTextureRGB[target_idx]);
 	}
+}
+
+bool gfx_api::realTimeCompressionSrgbComplete()
+{
+	for (size_t target_idx = 0; target_idx < gfx_api::PIXEL_FORMAT_TARGET_COUNT; target_idx++)
+	{
+		if (!bestAvailableCompressionFormat_GameTextureRGBA[target_idx].srgbComplete()
+			|| !bestAvailableCompressionFormat_GameTextureRGB[target_idx].srgbComplete())
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 // MARK: - iV_CompressedImage
@@ -346,9 +375,9 @@ optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormatForImage(g
 			switch (image.pixel_format())
 			{
 				case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
-					return bestAvailableCompressionFormat_GameTextureRGBA[target_idx];
+					return bestAvailableCompressionFormat_GameTextureRGBA[target_idx].forCurrentLighting();
 				case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-					return bestAvailableCompressionFormat_GameTextureRGB[target_idx];
+					return bestAvailableCompressionFormat_GameTextureRGB[target_idx].forCurrentLighting();
 				default:
 					break;
 			}
@@ -378,7 +407,7 @@ optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormat(gfx_api::
 			break;
 		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, possibly stored in a compressed format
 			// Since we don't have an image, to check whether it's actually RGB (no alpha), we have to err on the side of RGBA
-			return bestAvailableCompressionFormat_GameTextureRGBA[target_idx];
+			return bestAvailableCompressionFormat_GameTextureRGBA[target_idx].forCurrentLighting();
 		case gfx_api::texture_type::specular_map:
 		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 		case gfx_api::texture_type::height_map:
