@@ -1,6 +1,5 @@
 {
 	"AAGun2Mk1": {
-
 		"buildPoints": 450,
 		"buildPower": 150,
 		"damage": 140,
@@ -43,7 +42,6 @@
 		"weight": 4000
 	},
 	"AAGun2Mk1Quad": {
-
 		"buildPoints": 900,
 		"buildPower": 250,
 		"damage": 250,
@@ -86,7 +84,6 @@
 		"weight": 5000
 	},
 	"AAGunLaser": {
-
 		"buildPoints": 1000,
 		"buildPower": 250,
 		"damage": 225,
@@ -129,7 +126,6 @@
 		"weight": 4000
 	},
 	"BJeepMG": {
-
 		"buildPoints": 16,
 		"buildPower": 4,
 		"damage": 14,
@@ -163,7 +159,6 @@
 		"weight": 1
 	},
 	"BTowerMG": {
-
 		"buildPoints": 16,
 		"buildPower": 12,
 		"damage": 16,
@@ -197,7 +192,6 @@
 		"weight": 1
 	},
 	"BaBaCannon": {
-
 		"buildPoints": 10,
 		"buildPower": 10,
 		"damage": 28,
@@ -233,7 +227,6 @@
 		"weight": 10
 	},
 	"BaBaMG": {
-
 		"buildPoints": 1,
 		"buildPower": 1,
 		"damage": 10,
@@ -266,7 +259,6 @@
 		"weight": 1
 	},
 	"BabaFlame": {
-
 		"buildPoints": 200,
 		"buildPower": 40,
 		"damage": 25,
@@ -346,7 +338,6 @@
 		"weight": 250
 	},
 	"BabaPitRocketAT": {
-
 		"buildPoints": 500,
 		"buildPower": 100,
 		"damage": 50,
@@ -688,7 +679,6 @@
 		"weight": 3800
 	},
 	"BuggyMG": {
-
 		"buildPoints": 11,
 		"buildPower": 3,
 		"damage": 16,
@@ -722,7 +712,6 @@
 		"weight": 1
 	},
 	"BusCannon": {
-
 		"buildPoints": 10,
 		"buildPower": 10,
 		"damage": 28,
@@ -924,7 +913,6 @@
 		"weight": 8000
 	},
 	"Cannon4AUTO-VTOL": {
-
 		"buildPoints": 700,
 		"buildPower": 175,
 		"damage": 140,
@@ -966,7 +954,6 @@
 		"weight": 2000
 	},
 	"Cannon4AUTOMk1": {
-
 		"buildPoints": 700,
 		"buildPower": 175,
 		"damage": 70,
@@ -1007,7 +994,6 @@
 		"weight": 3000
 	},
 	"Cannon5Vulcan-VTOL": {
-
 		"buildPoints": 700,
 		"buildPower": 150,
 		"damage": 80,
@@ -1048,7 +1034,6 @@
 		"weight": 1250
 	},
 	"Cannon5VulcanMk1": {
-
 		"buildPoints": 700,
 		"buildPower": 150,
 		"damage": 40,
@@ -1089,7 +1074,6 @@
 		"weight": 2500
 	},
 	"Cannon6TwinAslt": {
-
 		"buildPoints": 800,
 		"buildPower": 250,
 		"damage": 50,
@@ -1170,7 +1154,6 @@
 		"weight": 120000
 	},
 	"CommandTurret1": {
-
 		"buildPoints": 500,
 		"buildPower": 250,
 		"damage": 4,
@@ -1207,7 +1190,6 @@
 		"weight": 1000
 	},
 	"Cyb-Hvywpn-A-T": {
-
 		"buildPoints": 1000,
 		"buildPower": 235,
 		"damage": 460,
@@ -1249,7 +1231,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-Acannon": {
-
 		"buildPoints": 400,
 		"buildPower": 125,
 		"damage": 40,
@@ -1290,7 +1271,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-HPV": {
-
 		"buildPoints": 450,
 		"buildPower": 150,
 		"damage": 70,
@@ -1370,7 +1350,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-PulseLsr": {
-
 		"buildPoints": 450,
 		"buildPower": 150,
 		"damage": 155,
@@ -1410,7 +1389,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-RailGunner": {
-
 		"buildPoints": 750,
 		"buildPower": 240,
 		"damage": 160,
@@ -1452,7 +1430,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-TK": {
-
 		"buildPoints": 600,
 		"buildPower": 200,
 		"damage": 300,
@@ -1492,7 +1469,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Atmiss": {
-
 		"buildPoints": 1000,
 		"buildPower": 233,
 		"damage": 460,
@@ -1533,7 +1509,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Grenade": {
-
 		"buildPoints": 320,
 		"buildPower": 80,
 		"damage": 60,
@@ -1575,7 +1550,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Laser": {
-
 		"buildPoints": 600,
 		"buildPower": 100,
 		"damage": 90,
@@ -1615,7 +1589,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Rail1": {
-
 		"buildPoints": 800,
 		"buildPower": 160,
 		"damage": 120,
@@ -1657,7 +1630,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Thermite": {
-
 		"buildPoints": 320,
 		"buildPower": 100,
 		"damage": 38,
@@ -1740,7 +1712,6 @@
 		"weight": 120
 	},
 	"CyborgChaingun": {
-
 		"buildPoints": 160,
 		"buildPower": 40,
 		"damage": 12,
@@ -1778,7 +1749,6 @@
 		"weight": 120
 	},
 	"CyborgFlamer01": {
-
 		"buildPoints": 200,
 		"buildPower": 55,
 		"damage": 22,
@@ -1821,7 +1791,6 @@
 		"weight": 120
 	},
 	"CyborgRocket": {
-
 		"buildPoints": 500,
 		"buildPower": 125,
 		"damage": 160,
@@ -1863,7 +1832,6 @@
 		"weight": 120
 	},
 	"CyborgRotMG": {
-
 		"buildPoints": 270,
 		"buildPower": 90,
 		"damage": 18,
@@ -1901,7 +1869,6 @@
 		"weight": 120
 	},
 	"EMP-Cannon": {
-
 		"buildPoints": 1000,
 		"buildPower": 400,
 		"damage": 70,
@@ -1942,7 +1909,6 @@
 		"weight": 8000
 	},
 	"Flame1Mk1": {
-
 		"buildPoints": 200,
 		"buildPower": 60,
 		"damage": 28,
@@ -1985,7 +1951,6 @@
 		"weight": 250
 	},
 	"Flame2": {
-
 		"buildPoints": 400,
 		"buildPower": 110,
 		"damage": 40,
@@ -2028,7 +1993,6 @@
 		"weight": 5000
 	},
 	"HeavyLaser": {
-
 		"buildPoints": 600,
 		"buildPower": 400,
 		"damage": 380,
@@ -2067,7 +2031,6 @@
 		"weight": 5000
 	},
 	"HeavyLaser-VTOL": {
-
 		"buildPoints": 1000,
 		"buildPower": 400,
 		"damage": 720,
@@ -2109,7 +2072,6 @@
 		"weight": 5000
 	},
 	"ParticleGun": {
-
 		"buildPoints": 600,
 		"buildPower": 400,
 		"damage": 290,
@@ -2151,7 +2113,6 @@
 		"weight": 5000
 	},
 	"ParticleGun-VTOL": {
-
 		"buildPoints": 1000,
 		"buildPower": 400,
 		"damage": 550,
@@ -2363,7 +2324,6 @@
 		"weight": 20000
 	},
 	"LasSat": {
-
 		"buildPoints": 500,
 		"buildPower": 100,
 		"damage": 5400,
@@ -2406,7 +2366,6 @@
 		"weight": 600
 	},
 	"Laser2PULSE-VTOL": {
-
 		"buildPoints": 800,
 		"buildPower": 200,
 		"damage": 320,
@@ -2449,7 +2408,6 @@
 		"weight": 500
 	},
 	"Laser2PULSEMk1": {
-
 		"buildPoints": 800,
 		"buildPower": 200,
 		"damage": 165,
@@ -2489,7 +2447,6 @@
 		"weight": 500
 	},
 	"Laser3BEAM-VTOL": {
-
 		"buildPoints": 600,
 		"buildPower": 150,
 		"damage": 160,
@@ -2532,7 +2489,6 @@
 		"weight": 300
 	},
 	"Laser3BEAMMk1": {
-
 		"buildPoints": 600,
 		"buildPower": 150,
 		"damage": 100,
@@ -2572,7 +2528,6 @@
 		"weight": 300
 	},
 	"Laser4-PlasmaCannon": {
-
 		"buildPoints": 1000,
 		"buildPower": 400,
 		"damage": 500,
@@ -2614,7 +2569,6 @@
 		"weight": 30000
 	},
 	"MG1-Pillbox": {
-
 		"buildPoints": 50,
 		"buildPower": 10,
 		"damage": 10,
@@ -2648,7 +2602,6 @@
 		"weight": 200
 	},
 	"MG1-VTOL": {
-
 		"buildPoints": 50,
 		"buildPower": 10,
 		"damage": 15,
@@ -2687,7 +2640,6 @@
 		"weight": 200
 	},
 	"MG1Mk1": {
-
 		"buildPoints": 50,
 		"buildPower": 10,
 		"damage": 10,
@@ -2725,7 +2677,6 @@
 		"weight": 200
 	},
 	"MG2-Pillbox": {
-
 		"buildPoints": 125,
 		"buildPower": 25,
 		"damage": 14,
@@ -2759,7 +2710,6 @@
 		"weight": 400
 	},
 	"MG2-VTOL": {
-
 		"buildPoints": 125,
 		"buildPower": 25,
 		"damage": 21,
@@ -2798,7 +2748,6 @@
 		"weight": 350
 	},
 	"MG2Mk1": {
-
 		"buildPoints": 125,
 		"buildPower": 25,
 		"damage": 14,
@@ -2836,7 +2785,6 @@
 		"weight": 400
 	},
 	"MG3-Pillbox": {
-
 		"buildPoints": 250,
 		"buildPower": 50,
 		"damage": 17,
@@ -2870,7 +2818,6 @@
 		"weight": 600
 	},
 	"MG3-VTOL": {
-
 		"buildPoints": 250,
 		"buildPower": 50,
 		"damage": 27,
@@ -2909,7 +2856,6 @@
 		"weight": 300
 	},
 	"MG3Mk1": {
-
 		"buildPoints": 250,
 		"buildPower": 50,
 		"damage": 17,
@@ -2947,7 +2893,6 @@
 		"weight": 600
 	},
 	"MG4ROTARY-Pillbox": {
-
 		"buildPoints": 500,
 		"buildPower": 100,
 		"damage": 19,
@@ -2981,7 +2926,6 @@
 		"weight": 600
 	},
 	"MG4ROTARY-VTOL": {
-
 		"buildPoints": 500,
 		"buildPower": 100,
 		"damage": 28,
@@ -3020,7 +2964,6 @@
 		"weight": 300
 	},
 	"MG4ROTARYMk1": {
-
 		"buildPoints": 375,
 		"buildPower": 125,
 		"damage": 19,
@@ -3058,7 +3001,6 @@
 		"weight": 600
 	},
 	"MG5TWINROTARY": {
-
 		"buildPoints": 375,
 		"buildPower": 150,
 		"damage": 28,
@@ -3096,7 +3038,6 @@
 		"weight": 600
 	},
 	"MassDriver": {
-
 		"buildPoints": 2000,
 		"buildPower": 2000,
 		"damage": 1200,
@@ -3137,7 +3078,6 @@
 		"weight": 150000
 	},
 	"Missile-A-T": {
-
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 360,
@@ -3179,7 +3119,6 @@
 		"weight": 400
 	},
 	"Missile-HvyArt": {
-
 		"buildPoints": 2000,
 		"buildPower": 700,
 		"damage": 160,
@@ -3316,7 +3255,6 @@
 		"weight": 400
 	},
 	"Missile-MdArt": {
-
 		"buildPoints": 1200,
 		"buildPower": 400,
 		"damage": 110,
@@ -3359,7 +3297,6 @@
 		"weight": 1000
 	},
 	"Missile-VTOL-AT": {
-
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 480,
@@ -3401,7 +3338,6 @@
 		"weight": 750
 	},
 	"MissileSuper": {
-
 		"buildPoints": 1200,
 		"buildPower": 1600,
 		"damage": 1100,
@@ -3446,7 +3382,6 @@
 		"weight": 120000
 	},
 	"Mortar-Incendiary": {
-
 		"buildPoints": 750,
 		"buildPower": 200,
 		"damage": 80,
@@ -3494,7 +3429,6 @@
 		"weight": 2000
 	},
 	"Mortar1Mk1": {
-
 		"buildPoints": 440,
 		"buildPower": 105,
 		"damage": 60,
@@ -3618,7 +3552,6 @@
 		"weight": 2000
 	},
 	"MortarEMP": {
-
 		"buildPoints": 1000,
 		"buildPower": 200,
 		"damage": 40,
@@ -3704,7 +3637,6 @@
 		"weight": 30000
 	},
 	"PlasmiteFlamer": {
-
 		"buildPoints": 400,
 		"buildPower": 160,
 		"damage": 63,
@@ -3747,7 +3679,6 @@
 		"weight": 1000
 	},
 	"QuadMg1AAGun": {
-
 		"buildPoints": 400,
 		"buildPower": 150,
 		"damage": 70,
@@ -3790,7 +3721,6 @@
 		"weight": 2000
 	},
 	"QuadRotAAGun": {
-
 		"buildPoints": 800,
 		"buildPower": 200,
 		"damage": 90,
@@ -3833,7 +3763,6 @@
 		"weight": 4000
 	},
 	"RailGun1-VTOL": {
-
 		"buildPoints": 900,
 		"buildPower": 250,
 		"damage": 360,
@@ -3874,7 +3803,6 @@
 		"weight": 2000
 	},
 	"RailGun1Mk1": {
-
 		"buildPoints": 900,
 		"buildPower": 250,
 		"damage": 180,
@@ -3915,7 +3843,6 @@
 		"weight": 1000
 	},
 	"RailGun2-VTOL": {
-
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 440,
@@ -3957,7 +3884,6 @@
 		"weight": 4000
 	},
 	"RailGun2Mk1": {
-
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 220,
@@ -3999,7 +3925,6 @@
 		"weight": 2000
 	},
 	"RailGun3Mk1": {
-
 		"buildPoints": 1600,
 		"buildPower": 400,
 		"damage": 300,
@@ -4043,7 +3968,6 @@
 		"weight": 5000
 	},
 	"Rocket-BB": {
-
 		"buildPoints": 750,
 		"buildPower": 150,
 		"damage": 175,
@@ -4083,7 +4007,6 @@
 		"weight": 250
 	},
 	"Rocket-HvyA-T": {
-
 		"buildPoints": 1000,
 		"buildPower": 200,
 		"damage": 180,
@@ -4125,7 +4048,6 @@
 		"weight": 300
 	},
 	"Rocket-IDF": {
-
 		"buildPoints": 1500,
 		"buildPower": 300,
 		"damage": 45,
@@ -4168,7 +4090,6 @@
 		"weight": 20000
 	},
 	"Rocket-LtA-T": {
-
 		"buildPoints": 500,
 		"buildPower": 150,
 		"damage": 105,
@@ -4254,7 +4175,6 @@
 		"weight": 250
 	},
 	"Rocket-MRL-Hvy": {
-
 		"buildPoints": 800,
 		"buildPower": 150,
 		"damage": 40,
@@ -4385,7 +4305,6 @@
 		"weight": 250
 	},
 	"Rocket-VTOL-BB": {
-
 		"buildPoints": 750,
 		"buildPower": 150,
 		"damage": 200,
@@ -4428,7 +4347,6 @@
 		"weight": 750
 	},
 	"Rocket-VTOL-HvyA-T": {
-
 		"buildPoints": 1000,
 		"buildPower": 250,
 		"damage": 240,
@@ -4471,7 +4389,6 @@
 		"weight": 750
 	},
 	"Rocket-VTOL-LtA-T": {
-
 		"buildPoints": 500,
 		"buildPower": 150,
 		"damage": 165,
@@ -4603,7 +4520,6 @@
 		"weight": 250
 	},
 	"RocketSuper": {
-
 		"buildPoints": 1250,
 		"buildPower": 1200,
 		"damage": 280,
@@ -4644,7 +4560,6 @@
 		"weight": 100000
 	},
 	"SpyTurret01": {
-
 		"buildPoints": 1600,
 		"buildPower": 400,
 		"damage": 2,
@@ -4709,7 +4624,6 @@
 		"weaponSubClass": "MACHINE GUN"
 	},
 	"bTrikeMG": {
-
 		"buildPoints": 11,
 		"buildPower": 2,
 		"damage": 13,
@@ -4778,7 +4692,6 @@
 		"weight": 200
 	},
 	"bbaawep": {
-
 		"buildPoints": 25,
 		"buildPower": 20,
 		"damage": 18,
@@ -4815,7 +4728,6 @@
 		"weight": 600
 	},
 	"MG1-VTOL-SCAVS": {
-
 		"buildPoints": 50,
 		"buildPower": 10,
 		"damage": 17,

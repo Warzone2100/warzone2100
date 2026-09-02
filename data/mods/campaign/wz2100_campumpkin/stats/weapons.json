@@ -1,7 +1,5 @@
 {
 	"AAGun2Mk1": {
-		"lightColour": "170,235,226",
-		"lightRange": 160,
 		"buildPoints": 450,
 		"buildPower": 150,
 		"damage": 45,
@@ -58,8 +56,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 1,
 		"id": "BabaBuggyMG",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -94,8 +90,6 @@
 		"hitGfx": "FXGRDexl.PIE",
 		"hitpoints": 10,
 		"id": "BabaBusCannon",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 960,
@@ -133,8 +127,6 @@
 		"hitGfx": "FXGRDexl.PIE",
 		"hitpoints": 10,
 		"id": "BabaCannon",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 40,
 		"longRange": 960,
@@ -158,8 +150,6 @@
 		"weight": 10
 	},
 	"BabaFlame": {
-		"lightColour": "222,235,190",
-		"lightRange": 720,
 		"buildPoints": 200,
 		"buildPower": 40,
 		"damage": 25,
@@ -211,8 +201,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 1,
 		"id": "BabaJeepMG",
-		"lightColour": "235,115,53",
-		"lightRange": 450,
 		"longHit": 50,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -246,8 +234,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 1,
 		"id": "BabaMG",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 40,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -400,8 +386,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 1,
 		"id": "BabaTowerMG",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -435,8 +419,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 1,
 		"id": "BabaTrikeMG",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -805,8 +787,6 @@
 		"hitGfx": "FXMExp.PIE",
 		"hitpoints": 10,
 		"id": "Cannon4AUTO-VTOL",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 1152,
@@ -848,8 +828,6 @@
 		"hitGfx": "FXGRDexl.PIE",
 		"hitpoints": 400,
 		"id": "Cannon4AUTOMk1",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 1152,
@@ -892,8 +870,6 @@
 		"hitGfx": "FXMExp.PIE",
 		"hitpoints": 10,
 		"id": "Cannon5Vulcan-VTOL",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 1024,
@@ -933,8 +909,6 @@
 		"hitGfx": "FXMExp.PIE",
 		"hitpoints": 500,
 		"id": "Cannon5VulcanMk1",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 1024,
@@ -972,8 +946,6 @@
 		"hitGfx": "FXSFlms.PIE",
 		"hitpoints": 999,
 		"id": "CommandTurret1",
-		"lightColour": "188,235,233",
-		"lightRange": 1780,
 		"lightWorld": 1,
 		"longHit": 99,
 		"longRange": 1536,
@@ -998,8 +970,6 @@
 		"weight": 1000
 	},
 	"Cyb-Wpn-Atmiss": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 1000,
 		"buildPower": 250,
 		"damage": 250,
@@ -1039,8 +1009,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Laser": {
-		"lightColour": "26,235,234",
-		"lightRange": 210,
 		"buildPoints": 600,
 		"buildPower": 150,
 		"damage": 100,
@@ -1078,8 +1046,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Rail1": {
-		"lightColour": "33,235,235",
-		"lightRange": 410,
 		"buildPoints": 800,
 		"buildPower": 200,
 		"damage": 140,
@@ -1166,8 +1132,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 50,
 		"id": "CyborgChaingun",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -1192,8 +1156,6 @@
 		"weight": 120
 	},
 	"CyborgFlamer01": {
-		"lightColour": "222,235,190",
-		"lightRange": 720,
 		"buildPoints": 200,
 		"buildPower": 50,
 		"damage": 25,
@@ -1284,8 +1246,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 50,
 		"id": "CyborgRotMG",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -1310,8 +1270,6 @@
 		"weight": 120
 	},
 	"Flame1Mk1": {
-		"lightColour": "222,235,190",
-		"lightRange": 720,
 		"buildPoints": 200,
 		"buildPower": 40,
 		"damage": 30,
@@ -1353,8 +1311,6 @@
 		"weight": 250
 	},
 	"Flame2": {
-		"lightColour": "222,235,190",
-		"lightRange": 720,
 		"buildPoints": 400,
 		"buildPower": 80,
 		"damage": 50,
@@ -1531,8 +1487,6 @@
 		"hitGfx": "FXMelt.PIE",
 		"hitpoints": 500,
 		"id": "LasSat",
-		"lightColour": "188,235,233",
-		"lightRange": 1780,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 960,
@@ -1576,8 +1530,6 @@
 		"hitGfx": "FXLENFL.PIE",
 		"hitpoints": 125,
 		"id": "Laser2PULSE-VTOL",
-		"lightColour": "99,235,109",
-		"lightRange": 880,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 2048,
@@ -1618,8 +1570,6 @@
 		"hitGfx": "FXLENFL.PIE",
 		"hitpoints": 250,
 		"id": "Laser2PULSEMk1",
-		"lightColour": "99,235,109",
-		"lightRange": 880,
 		"lightWorld": 1,
 		"longHit": 70,
 		"longRange": 2048,
@@ -1645,8 +1595,6 @@
 		"weight": 500
 	},
 	"Laser3BEAM-VTOL": {
-		"lightColour": "26,235,234",
-		"lightRange": 210,
 		"buildPoints": 600,
 		"buildPower": 150,
 		"damage": 200,
@@ -1686,8 +1634,6 @@
 		"weight": 300
 	},
 	"Laser3BEAMMk1": {
-		"lightColour": "26,235,234",
-		"lightRange": 210,
 		"buildPoints": 600,
 		"buildPower": 150,
 		"damage": 100,
@@ -1737,8 +1683,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 75,
 		"id": "MG1-Pillbox",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -1774,8 +1718,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 75,
 		"id": "MG1-VTOL",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 768,
 		"minElevation": -60,
@@ -1813,8 +1755,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 75,
 		"id": "MG1Mk1",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -1850,8 +1790,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 125,
 		"id": "MG2-Pillbox",
-		"lightColour": "235,222,143",
-		"lightRange": 110,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -1887,8 +1825,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 10,
 		"id": "MG2-VTOL",
-		"lightColour": "235,222,143",
-		"lightRange": 110,
 		"longHit": 50,
 		"longRange": 768,
 		"minElevation": -60,
@@ -1926,8 +1862,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 125,
 		"id": "MG2Mk1",
-		"lightColour": "235,222,143",
-		"lightRange": 110,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -1963,8 +1897,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 175,
 		"id": "MG3-Pillbox",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -2000,8 +1932,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 10,
 		"id": "MG3-VTOL",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 960,
 		"minElevation": -60,
@@ -2039,8 +1969,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 175,
 		"id": "MG3Mk1",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 960,
 		"maxElevation": 90,
@@ -2076,8 +2004,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 300,
 		"id": "MG4ROTARY-Pillbox",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 1152,
 		"maxElevation": 90,
@@ -2113,8 +2039,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 10,
 		"id": "MG4ROTARY-VTOL",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 1152,
 		"minElevation": -60,
@@ -2152,8 +2076,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 300,
 		"id": "MG4ROTARYMk1",
-		"lightColour": "235,222,143",
-		"lightRange": 140,
 		"longHit": 50,
 		"longRange": 1152,
 		"maxElevation": 90,
@@ -2178,8 +2100,6 @@
 		"weight": 600
 	},
 	"Missile-A-T": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 300,
@@ -2220,8 +2140,6 @@
 		"weight": 400
 	},
 	"Missile-HvyArt": {
-		"lightColour": "235,108,12",
-		"lightRange": 390,
 		"buildPoints": 1500,
 		"buildPower": 500,
 		"damage": 250,
@@ -2355,8 +2273,6 @@
 		"weight": 400
 	},
 	"Missile-MdArt": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 1200,
 		"buildPower": 400,
 		"damage": 200,
@@ -2399,8 +2315,6 @@
 		"weight": 1000
 	},
 	"Missile-VTOL-AT": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 600,
@@ -2459,8 +2373,6 @@
 		"hitGfx": "FXLExp.PIE",
 		"hitpoints": 5,
 		"id": "Mortar1Mk1",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"lightWorld": 1,
 		"longHit": 50,
 		"longRange": 2304,
@@ -2605,8 +2517,6 @@
 		"weaponWav": "nxstower.ogg"
 	},
 	"NX-Cyb-Rail1": {
-		"lightColour": "33,235,235",
-		"lightRange": 410,
 		"buildPoints": 800,
 		"buildPower": 200,
 		"damage": 140,
@@ -2654,8 +2564,6 @@
 		"hitGfx": "FXMETHIT.PIE",
 		"hitpoints": 50,
 		"id": "NX-CyborgChaingun",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 50,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -2720,8 +2628,6 @@
 		"weight": 120
 	},
 	"NX-CyborgPulseLas": {
-		"lightColour": "26,235,234",
-		"lightRange": 210,
 		"buildPoints": 375,
 		"buildPower": 125,
 		"damage": 100,
@@ -2805,8 +2711,6 @@
 		"weight": 10000
 	},
 	"QuadMg1AAGun": {
-		"lightColour": "170,235,226",
-		"lightRange": 160,
 		"buildPoints": 400,
 		"buildPower": 100,
 		"damage": 40,
@@ -2849,8 +2753,6 @@
 		"weight": 10000
 	},
 	"QuadRotAAGun": {
-		"lightColour": "170,235,226",
-		"lightRange": 130,
 		"buildPoints": 1200,
 		"buildPower": 150,
 		"damage": 45,
@@ -2893,8 +2795,6 @@
 		"weight": 10000
 	},
 	"RailGun1-VTOL": {
-		"lightColour": "33,235,235",
-		"lightRange": 410,
 		"buildPoints": 1000,
 		"buildPower": 250,
 		"damage": 320,
@@ -2933,8 +2833,6 @@
 		"weight": 600
 	},
 	"RailGun1Mk1": {
-		"lightColour": "33,235,235",
-		"lightRange": 410,
 		"buildPoints": 1000,
 		"buildPower": 250,
 		"damage": 150,
@@ -2972,8 +2870,6 @@
 		"weight": 400
 	},
 	"RailGun2-VTOL": {
-		"lightColour": "33,235,235",
-		"lightRange": 520,
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 400,
@@ -3011,8 +2907,6 @@
 		"weight": 1000
 	},
 	"RailGun2Mk1": {
-		"lightColour": "33,235,235",
-		"lightRange": 520,
 		"buildPoints": 1200,
 		"buildPower": 300,
 		"damage": 200,
@@ -3050,8 +2944,6 @@
 		"weight": 2000
 	},
 	"RailGun3Mk1": {
-		"lightColour": "43,235,234",
-		"lightRange": 120,
 		"buildPoints": 1600,
 		"buildPower": 400,
 		"damage": 300,
@@ -3092,8 +2984,6 @@
 		"weight": 5000
 	},
 	"Rocket-BB": {
-		"lightColour": "126,154,235",
-		"lightRange": 200,
 		"buildPoints": 750,
 		"buildPower": 150,
 		"damage": 125,
@@ -3133,8 +3023,6 @@
 		"weight": 250
 	},
 	"Rocket-HvyA-T": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 1250,
 		"buildPower": 250,
 		"damage": 250,
@@ -3176,8 +3064,6 @@
 		"weight": 250
 	},
 	"Rocket-IDF": {
-		"lightColour": "235,108,12",
-		"lightRange": 390,
 		"buildPoints": 1500,
 		"buildPower": 300,
 		"damage": 100,
@@ -3220,8 +3106,6 @@
 		"weight": 10000
 	},
 	"Rocket-LtA-T": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 500,
 		"buildPower": 100,
 		"damage": 160,
@@ -3348,8 +3232,6 @@
 		"weight": 200
 	},
 	"Rocket-VTOL-BB": {
-		"lightColour": "126,154,235",
-		"lightRange": 200,
 		"buildPoints": 750,
 		"buildPower": 150,
 		"damage": 180,
@@ -3390,8 +3272,6 @@
 		"weight": 750
 	},
 	"Rocket-VTOL-HvyA-T": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 1250,
 		"buildPower": 250,
 		"damage": 375,
@@ -3435,8 +3315,6 @@
 		"weight": 750
 	},
 	"Rocket-VTOL-LtA-T": {
-		"lightColour": "235,108,12",
-		"lightRange": 290,
 		"buildPoints": 500,
 		"buildPower": 100,
 		"damage": 240,
@@ -3568,8 +3446,6 @@
 		"hitGfx": "FXGRDexl.PIE",
 		"hitpoints": 9999,
 		"id": "Superweapon",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 90,
 		"longRange": 768,
 		"maxElevation": 90,
@@ -3608,8 +3484,6 @@
 		"hitGfx": "FXGRDexl.PIE",
 		"hitpoints": 9999,
 		"id": "Superweapon2",
-		"lightColour": "235,222,143",
-		"lightRange": 70,
 		"longHit": 1,
 		"longRange": 768,
 		"maxElevation": 90,
