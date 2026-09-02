@@ -70,18 +70,18 @@
 #define OBJ_MAXRADIUS	(TILE_UNITS * 4)
 
 // how long a shuffle can propagate before they all stop
-#define MOVE_SHUFFLETIME	10000
+int moveTuning_MOVE_SHUFFLETIME = 10000;
 
 // Length of time a droid has to be stationery to be considered blocked
-#define BLOCK_TIME		6000
-#define SHUFFLE_BLOCK_TIME	2000
+int moveTuning_BLOCK_TIME = 6000;
+int moveTuning_SHUFFLE_BLOCK_TIME = 2000;
 // How long a droid has to be stationary before stopping trying to move
-#define BLOCK_PAUSETIME	1500
-#define BLOCK_PAUSERELEASE 500
+int moveTuning_BLOCK_PAUSETIME = 1500;
+int moveTuning_BLOCK_PAUSERELEASE = 500;
 // How far a droid has to move before it is no longer 'stationary'
-#define BLOCK_DIST		64
+int moveTuning_BLOCK_DIST = 64;
 // How far a droid has to rotate before it is no longer 'stationary'
-#define BLOCK_DIR		90
+int moveTuning_BLOCK_DIR = 90;
 
 // How far out from an obstruction to start avoiding it
 #define AVOID_DIST		(TILE_UNITS*2)
@@ -96,9 +96,9 @@
 #define FOM_MOVEPAUSE		1500
 
 // distance to consider droids for a shuffle
-#define SHUFFLE_DIST		(3*TILE_UNITS/2)
+int moveTuning_SHUFFLE_DIST = (3 * TILE_UNITS / 2);
 // how far to move for a shuffle
-#define SHUFFLE_MOVE		(2*TILE_UNITS/2)
+int moveTuning_SHUFFLE_MOVE = (2 * TILE_UNITS / 2);
 
 /// Extra precision added to movement calculations.
 #define EXTRA_BITS                              8
@@ -414,7 +414,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 		return;
 	}
 
-	shuffleMove = SHUFFLE_MOVE;
+	shuffleMove = moveTuning_SHUFFLE_MOVE;
 
 	// calculate the possible movement vectors
 	svx = s.x * shuffleMove / shuffleMag;  // Straight in the direction of s.
@@ -446,7 +446,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 
 	// find any droids that could block the shuffle
 	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST);
+	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, moveTuning_SHUFFLE_DIST);
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
 		DROID *psCurr = castDroid(*gi);
@@ -816,7 +816,7 @@ bool moveBlocked(DROID *psDroid)
 	}
 
 	// See if the block can be cancelled
-	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))
+	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(moveTuning_BLOCK_DIR))
 	{
 		// Move on, clear the bump
 		psDroid->sMove.bumpTime = 0;
@@ -826,7 +826,7 @@ bool moveBlocked(DROID *psDroid)
 	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->sMove.bumpPos.x;
 	ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->sMove.bumpPos.y;
 	diffSq = xdiff * xdiff + ydiff * ydiff;
-	if (diffSq > BLOCK_DIST * BLOCK_DIST)
+	if (diffSq > moveTuning_BLOCK_DIST * moveTuning_BLOCK_DIST)
 	{
 		// Move on, clear the bump
 		psDroid->sMove.bumpTime = 0;
@@ -836,11 +836,11 @@ bool moveBlocked(DROID *psDroid)
 
 	if (psDroid->sMove.Status == MOVESHUFFLE)
 	{
-		blockTime = SHUFFLE_BLOCK_TIME;
+		blockTime = moveTuning_SHUFFLE_BLOCK_TIME;
 	}
 	else
 	{
-		blockTime = BLOCK_TIME;
+		blockTime = moveTuning_BLOCK_TIME;
 	}
 
 	if (gameTime - psDroid->sMove.bumpTime > blockTime)
@@ -2218,7 +2218,7 @@ void moveUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case MOVESHUFFLE:
-		if (moveReachedWayPoint(psDroid) || (psDroid->sMove.shuffleStart + MOVE_SHUFFLETIME) < gameTime)
+		if (moveReachedWayPoint(psDroid) || (psDroid->sMove.shuffleStart + moveTuning_MOVE_SHUFFLETIME) < gameTime)
 		{
 			if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 			{
@@ -2341,7 +2341,7 @@ void moveUpdateDroid(DROID *psDroid)
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
 		if ((psDroid->sMove.bumpTime != 0) &&
-		    (psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + BLOCK_PAUSETIME < gameTime))
+		    (psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + moveTuning_BLOCK_PAUSETIME < gameTime))
 		{
 			if (psDroid->sMove.Status == MOVEPOINTTOPOINT)
 			{
@@ -2357,7 +2357,7 @@ void moveUpdateDroid(DROID *psDroid)
 		if ((psDroid->sMove.Status == MOVEPAUSE) &&
 		    (psDroid->sMove.bumpTime != 0) &&
 		    (psDroid->sMove.lastBump > psDroid->sMove.pauseTime) &&
-		    (psDroid->sMove.lastBump + psDroid->sMove.bumpTime + BLOCK_PAUSERELEASE < gameTime))
+		    (psDroid->sMove.lastBump + psDroid->sMove.bumpTime + moveTuning_BLOCK_PAUSERELEASE < gameTime))
 		{
 			psDroid->sMove.Status = MOVEPOINTTOPOINT;
 		}

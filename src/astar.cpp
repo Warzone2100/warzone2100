@@ -57,6 +57,8 @@
 #include "lib/netplay/sync_debug.h"
 #include "game_world.h"
 
+#include "densityflow.h"
+
 /// A coordinate.
 struct PathCoord
 {
@@ -174,17 +176,57 @@ struct PathfindContext
 	{
 		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * gameWorld.map.width];
 	}
+	/// Extra A* cost factor contributed by ground/water traffic density and flow,
+	/// scaled respectively by aStarDensityWeight, aStarFlowWeight.
+	/// one tile = one (mass, flowX, flowY) accumulator
+	/// limitation: the flow term is the unnormalized dot product of this query's own intended direction (dfDirX, dfDirY)
+	/// against the tile's single flow vector, so tiles with roughly balanced opposing traffic net close to zero flow
+	unsigned densityFlowCostFactor(int x, int y) const
+	{
+		if (!densityFlowMap)
+		{
+			return 0;
+		}
+		const DensityFlowCell &cell = densityFlowMap->at(x, y);
+		if (cell.mass <= 0)
+		{
+			return 0;
+		}
+
+		// Bucket the raw mass into a small integer factor (unnormalized, plain
+		// integer math - no sqrt/magnitude division anywhere in this feature).
+		int32_t densityBucket = std::min<int32_t>(cell.mass >> 8, 8);
+		if (densityBucket <= 0)
+		{
+			return 0;
+		}
+
+		// Sign only (aligned discounts, opposed penalizes, perpendicular/no-signal is neutral). magnitude comes from densityBucket.
+		int64_t dot = (int64_t)dfDirX * cell.flowX + (int64_t)dfDirY * cell.flowY;
+		int32_t flowSign = (dot > 0) ? -1 : (dot < 0 ? 1 : 0);
+
+		int64_t term = (int64_t)aStarDensityWeight * densityBucket
+		             + (int64_t)aStarFlowWeight * flowSign * densityBucket;
+		term = std::max<int64_t>(term, 0); // never let an aligned discount go negative
+		term = std::min<int64_t>(term, UINT16_MAX); // sane ceiling
+
+		return (unsigned)term;
+	}
 	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
 		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
+	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_,
+	            const std::shared_ptr<const DensityFlowMap> &densityFlowMap_ = nullptr, PathCoord dfDir_ = PathCoord(0, 0))
 	{
 		blockingMap = blockingMap_;
 		tileS = tileS_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
+		densityFlowMap = densityFlowMap_;
+		dfDirX = dfDir_.x;
+		dfDirY = dfDir_.y;
 		nodes.clear();
 
 		// Make the iteration not match any value of iteration in map.
@@ -211,6 +253,9 @@ struct PathfindContext
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
 	std::shared_ptr<const PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
+
+	std::shared_ptr<const DensityFlowMap> densityFlowMap; ///< This query's owner's traffic density+flow grid (may be null). See densityflow.h.
+	int16_t dfDirX = 0, dfDirY = 0;     ///< This query's own intended direction (unnormalized tile-coord delta), for the flow dot-product gate.
 };
 
 /// Lists of blocking maps from current tick.
@@ -267,6 +312,12 @@ static inline unsigned WZ_DECL_PURE fpathGoodEstimate(PathCoord s, PathCoord f)
 	return iHypot((s.x - f.x) * 140, (s.y - f.y) * 140);
 }
 
+/// The three A* costFactor scalers
+/// Set both aStarDensityWeight, aStarFlowWeight to 0 for old movement.
+int32_t aStarDangerWeight  = 5;
+int32_t aStarDensityWeight = 2;
+int32_t aStarFlowWeight    = 6;
+
 /** Generate a new node
  */
 static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
@@ -275,7 +326,9 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 
 	// Create the node.
 	PathNode node;
-	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
+	unsigned costFactor = 1
+	                     + (context.isDangerous(pos.x, pos.y) ? (unsigned)aStarDangerWeight : 0)
+	                     + context.densityFlowCostFactor(pos.x, pos.y);
 	node.p = pos;
 	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor;
 	node.est = node.dist + fpathGoodEstimate(pos, dest);
@@ -431,9 +484,10 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore,
+                              const std::shared_ptr<const DensityFlowMap> &densityFlowMap = nullptr, PathCoord dfDir = PathCoord(0, 0))
 {
-	context.assign(blockingMap, tileS, dstIgnore);
+	context.assign(blockingMap, tileS, dstIgnore, densityFlowMap, dfDir);
 
 	// Add the start point to the open list
 	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
@@ -591,6 +645,11 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	const PathCoord tileDest(map_coord(psJob->destX), map_coord(psJob->destY));
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
 
+	// The droid's own intended direction of travel used to gate the density/flow cost
+	// discount/amplification. Fixed for the whole query, regardless of which
+	// direction A* happens to be searching (dest->orig vs orig->dest)
+	const PathCoord dfDir(tileDest.x - tileOrig.x, tileDest.y - tileOrig.y);
+
 	PathCoord endCoord;  // Either nearest coord (mustReverse = true) or orig (mustReverse = false).
 
 	auto contextIterator = fpathContexts.begin();
@@ -634,7 +693,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
+		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore, psJob->densityFlowMap, dfDir);
 		endCoord = fpathAStarExplore(*contextIterator, tileDest);
 		contextIterator->nearestCoord = endCoord;
 	}
@@ -713,7 +772,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, dstIgnore);
+			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, dstIgnore, psJob->densityFlowMap, dfDir);
 		}
 	}
 	else

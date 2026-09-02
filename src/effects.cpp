@@ -189,6 +189,7 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type);
 // ----------------------------------------------------------------------------------------
 // ---- Update functions - every group type of effect has one of these */
 static bool updateWaypoint(EFFECT *psEffect);
+static bool updateDensityFlowArrow(EFFECT *psEffect);
 static bool updateExplosion(EFFECT *psEffect, LightingData& lightData);
 static bool updatePolySmoke(EFFECT *psEffect);
 static bool updateGraviton(EFFECT *psEffect, LightingData& lightData);
@@ -221,6 +222,7 @@ static void effectSetupGraviton(EFFECT& effect);
 static void effectSetupExplosion(EFFECT& effect);
 static void effectSetupConstruction(EFFECT& effect);
 static void effectSetupWayPoint(EFFECT& effect);
+static void effectSetupDensityFlowArrow(EFFECT& effect);
 static void effectSetupBlood(EFFECT& effect);
 static void effectSetupDestruction(EFFECT& effect);
 static void effectSetupFire(EFFECT& effect);
@@ -451,6 +453,9 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	case EFFECT_WAYPOINT:
 		effectSetupWayPoint(effect);
 		break;
+	case EFFECT_DENSITYFLOW_ARROW:
+		effectSetupDensityFlowArrow(effect);
+		break;
 	case EFFECT_BLOOD:
 		effectSetupBlood(effect);
 		break;
@@ -526,6 +531,12 @@ static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 			return updateWaypoint(psEffect);
 		}
 		return true;
+	case EFFECT_DENSITYFLOW_ARROW:
+		if (!gamePaused())
+		{
+			return updateDensityFlowArrow(psEffect);
+		}
+		return true;
 	case EFFECT_CONSTRUCTION:
 		if (!gamePaused())
 		{
@@ -594,6 +605,12 @@ static bool updateWaypoint(EFFECT *psEffect)
 		return false;
 	}
 	return true;
+}
+
+/** Update the density/flow debug overlay arrows: expire once lifeSpan has elapsed. */
+static bool updateDensityFlowArrow(EFFECT *psEffect)
+{
+	return graphicsTime - psEffect->birthTime <= psEffect->lifeSpan;
 }
 
 static bool updateFirework(EFFECT *psEffect)
@@ -1405,6 +1422,11 @@ void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 		renderWaypointEffect(psEffect, viewMatrix);
 		return;
 
+	case EFFECT_DENSITYFLOW_ARROW:
+		// Generic imd-drawing function; nothing in it is waypoint-specific.
+		renderWaypointEffect(psEffect, viewMatrix);
+		return;
+
 	case EFFECT_EXPLOSION:
 		renderExplosionEffect(psEffect, viewMatrix);
 		return;
@@ -1458,7 +1480,23 @@ void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 /** drawing func for wapypoints */
 static void renderWaypointEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, positionEffect(psEffect), viewMatrix);
+	if (psEffect->imd == nullptr)
+	{
+		return;
+	}
+
+	// Still works with callers that leave rotation at {0,0,0}
+	glm::mat4 modelMatrix = positionEffect(psEffect);
+	modelMatrix *=
+		glm::rotate(UNDEG(psEffect->rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.z), glm::vec3(0.f, 0.f, 1.f));
+	if (psEffect->size != 0)
+	{
+		modelMatrix *= glm::scale(glm::vec3(psEffect->size / 100.f));
+	}
+
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
 }
 
 static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
@@ -2105,6 +2143,15 @@ void	effectSetupWayPoint(EFFECT& effect)
 
 	/* These effects musnt make way for others */
 	SET_ESSENTIAL(effect);
+}
+
+static void effectSetupDensityFlowArrow(EFFECT& effect)
+{
+	// Since we can only set lifeSpan in ms, it's hard to get it to last exactly one frame.
+	// Just a rough debug visual so it's not super important.
+	// This lasts one 60fps frame. Will overdraw on faster fps, will flicker on lower fps.
+	effect.imd = (pProximityMsgIMD) ? pProximityMsgIMD->displayModel() : nullptr;
+	effect.lifeSpan = 1000/60;
 }
 
 

@@ -78,12 +78,15 @@
 #include "template.h"
 #include "multiint.h"
 #include "challenge.h"
+#include "densityflow.h"
+#include "move.h"
 #include "multistat.h"
 #include "effectlights.h"
 #include "lighting.h"
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "component.h"
+#include "astar.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -1110,6 +1113,212 @@ static bool debugReloadSelectedObjectDisplayModels()
 
 	return true;
 }
+
+// MARK: - WzTunableRow / WzPathfindingPanel
+
+/// One row in the Pathfinding debug tab: a label, a numeric edit field, and a "Set" button
+/// that parses the field and calls the row's setter.
+class WzTunableRow : public W_FORM
+{
+public:
+	WzTunableRow(): W_FORM() {}
+public:
+	typedef std::function<int32_t ()> GetterFunc;
+	typedef std::function<void (int32_t)> SetterFunc;
+
+	static std::shared_ptr<WzTunableRow> make(const std::string& label, const std::string& tip, const GetterFunc& getter, const SetterFunc& setter)
+	{
+		auto row = std::make_shared<WzTunableRow>();
+		row->setter = setter;
+
+		row->labelWidget = std::make_shared<W_LABEL>();
+		row->attach(row->labelWidget);
+		row->labelWidget->setFont(font_regular, WZCOL_FORM_TEXT);
+		row->labelWidget->setString(WzString::fromUtf8(label));
+		row->labelWidget->setCanTruncate(true);
+		if (!tip.empty())
+		{
+			row->labelWidget->setTip(tip);
+		}
+		row->labelWidget->setGeometry(0, 0, 260, TAB_BUTTONS_HEIGHT);
+
+		row->editField = std::make_shared<W_EDITBOX>();
+		row->attach(row->editField);
+		row->editField->setGeometry(266, 0, 110, TAB_BUTTONS_HEIGHT);
+		row->editField->setString(WzString::number(getter()));
+		row->editField->setMaxStringSize(11); // room for a leading '-' and up to 10 digits
+		row->editField->setBoxColours(WZCOL_DEBUG_FILL_COLOR_DARK, WZCOL_DEBUG_BORDER_LIGHT, WZCOL_DEBUG_FILL_COLOR);
+
+		auto applyButton = makeDebugButton("Set");
+		row->attach(applyButton);
+		applyButton->setGeometry(382, 0, applyButton->width(), TAB_BUTTONS_HEIGHT);
+		std::weak_ptr<W_EDITBOX> editFieldWeak = row->editField;
+		std::weak_ptr<WzTunableRow> rowWeak = row;
+		applyButton->addOnClickHandler([editFieldWeak, rowWeak](W_BUTTON&) {
+			auto editField = editFieldWeak.lock();
+			auto self = rowWeak.lock();
+			if (!editField || !self || !self->setter)
+			{
+				return;
+			}
+			WzString valueString = editField->getString();
+			try
+			{
+				int32_t value = std::stoi(valueString.toStdString());
+				auto setterCopy = self->setter;
+				widgScheduleTask([setterCopy, value]() {
+					setterCopy(value);
+				});
+			}
+			catch (const std::exception&)
+			{
+				debug(LOG_ERROR, "Invalid tunable value (integers only): %s", valueString.toUtf8().c_str());
+			}
+		});
+
+		row->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psParent = psWidget->parent();
+			if (psParent)
+			{
+				psWidget->setGeometry(0, psWidget->y(), psParent->width(), TAB_BUTTONS_HEIGHT);
+			}
+		}));
+
+		// Set the row's own geometry last, once every child it touches in
+		// geometryChanged() below actually exists - setGeometry() synchronously
+		// fires geometryChanged(), so calling it any earlier (e.g. before
+		// labelWidget/editField are constructed) null-derefs and crashes.
+		row->setGeometry(0, 0, 500, TAB_BUTTONS_HEIGHT);
+
+		return row;
+	}
+public:
+	virtual void display(int xOffset, int yOffset) override
+	{
+		// no background
+	}
+	virtual void geometryChanged() override
+	{
+		// Defensive: only reachable after both are constructed in make() above,
+		// but guard anyway in case something ever triggers a geometry change
+		// (e.g. via attach()) earlier in construction.
+		if (labelWidget)
+		{
+			labelWidget->callCalcLayout();
+		}
+		if (editField)
+		{
+			editField->callCalcLayout();
+		}
+	}
+private:
+	std::shared_ptr<W_LABEL> labelWidget;
+	std::shared_ptr<W_EDITBOX> editField;
+	SetterFunc setter;
+};
+
+/// The debug menu's "Pathfinding" tab: a scrollable list of WzTunableRow entries for every
+/// tunable routing/steering/avoidance constantL the density/flow grid's class weights
+/// and reroute-trigger thresholds (densityflow.h), plus move.cpp's local shuffle/block
+/// constants (move.h). Setting a value takes effect immediately (next tick's map
+/// build, or next call into the affected move.cpp logic), and may or may not trigger reroutes.
+class WzPathfindingPanel : public W_FORM
+{
+public:
+	WzPathfindingPanel(): W_FORM() {}
+public:
+	virtual void display(int xOffset, int yOffset) override
+	{
+		// no background
+	}
+	virtual void geometryChanged() override
+	{
+		list->callCalcLayout();
+	}
+public:
+	static std::shared_ptr<WzPathfindingPanel> make()
+	{
+		auto result = std::make_shared<WzPathfindingPanel>();
+
+		result->list = ScrollableListWidget::make();
+		result->attach(result->list);
+		result->list->setGeometry(0, 0, 500, 200);
+		result->list->setItemSpacing(2);
+		result->list->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psParent = psWidget->parent();
+			if (psParent)
+			{
+				psWidget->setGeometry(0, 0, psParent->width(), psParent->height());
+			}
+		}));
+
+		auto addRow = [&result](const std::string& label, const std::string& tip, const WzTunableRow::GetterFunc& getter, const WzTunableRow::SetterFunc& setter) {
+			auto row = WzTunableRow::make(label, tip, getter, setter);
+			result->list->addItem(row);
+		};
+
+		addRow("A*: danger weight", "Cost added to a tile flagged dangerous (isDangerous) by A*. Replaces the old hardcoded 5x multiplier.",
+			[]() { return aStarDangerWeight; },
+			[](int32_t v) { aStarDangerWeight = v; });
+		addRow("A*: density weight", "Cost added per unit of tile traffic mass, independent of direction (density/flow grid).",
+			[]() { return aStarDensityWeight; },
+			[](int32_t v) { aStarDensityWeight = v; });
+		addRow("A*: flow weight", "Cost discount/penalty from traffic direction: negative when aligned with this droid's own travel direction, positive when opposed.",
+			[]() { return aStarFlowWeight; },
+			[](int32_t v) { aStarFlowWeight = v; });
+
+		addRow("Reroute: pct change threshold", "Percent change in a tile's traffic that counts as a \"significant\" change (see fpathDensityFlowUpdate).",
+			[]() { return densityFlowPctThreshold; },
+			[](int32_t v) { densityFlowPctThreshold = v; });
+		addRow("Reroute: noise floor", "Tile mass below this (both before and after) is treated as noise and never triggers a reroute.",
+			[]() { return densityFlowNoiseFloor; },
+			[](int32_t v) { densityFlowNoiseFloor = v; });
+		addRow("Reroute: global gate threshold", "Number of significantly-changed tiles required, per owner, before any droid is checked for a reroute.",
+			[]() { return densityFlowGlobalGateThreshold; },
+			[](int32_t v) { densityFlowGlobalGateThreshold = v; });
+
+		for (int i = 0; i < DFLOW_WEIGHT_CLASS_COUNT; ++i)
+		{
+			DFLOW_WEIGHT_CLASS wclass = static_cast<DFLOW_WEIGHT_CLASS>(i);
+			std::string label = std::string("Class weight: ") + densityFlowClassWeightName(wclass);
+			addRow(label, "Lower = more nimble = costs less A* cost to route through (density/flow grid).",
+				[wclass]() { return densityFlowClassWeight[wclass]; },
+				[wclass](int32_t v) { densityFlowClassWeight[wclass] = v; });
+		}
+
+		addRow("Shuffle propagation time", "How long (ms) a shuffle can propagate through a group before they all stop.",
+			[]() { return moveTuning_MOVE_SHUFFLETIME; },
+			[](int32_t v) { moveTuning_MOVE_SHUFFLETIME = v; });
+		addRow("Block time", "How long (ms) a droid has to be stationary to be considered blocked.",
+			[]() { return moveTuning_BLOCK_TIME; },
+			[](int32_t v) { moveTuning_BLOCK_TIME = v; });
+		addRow("Shuffle block time", "Like block time, but while a droid is shuffling out of the way.",
+			[]() { return moveTuning_SHUFFLE_BLOCK_TIME; },
+			[](int32_t v) { moveTuning_SHUFFLE_BLOCK_TIME = v; });
+		addRow("Block pause time", "How long (ms) a droid has to be stationary before it stops trying to move.",
+			[]() { return moveTuning_BLOCK_PAUSETIME; },
+			[](int32_t v) { moveTuning_BLOCK_PAUSETIME = v; });
+		addRow("Block pause release", "How long (ms) since the last bump before a droid is released from the block pause.",
+			[]() { return moveTuning_BLOCK_PAUSERELEASE; },
+			[](int32_t v) { moveTuning_BLOCK_PAUSERELEASE = v; });
+		addRow("Block distance", "How far (world units) a droid has to move before it is no longer considered 'stationary'.",
+			[]() { return moveTuning_BLOCK_DIST; },
+			[](int32_t v) { moveTuning_BLOCK_DIST = v; });
+		addRow("Block direction", "How far (degrees) a droid has to rotate before it is no longer considered 'stationary'.",
+			[]() { return moveTuning_BLOCK_DIR; },
+			[](int32_t v) { moveTuning_BLOCK_DIR = v; });
+		addRow("Shuffle distance", "Distance (world units) to consider other droids for a shuffle.",
+			[]() { return moveTuning_SHUFFLE_DIST; },
+			[](int32_t v) { moveTuning_SHUFFLE_DIST = v; });
+		addRow("Shuffle move", "How far (world units) to move for a shuffle.",
+			[]() { return moveTuning_SHUFFLE_MOVE; },
+			[](int32_t v) { moveTuning_SHUFFLE_MOVE = v; });
+
+		return result;
+	}
+private:
+	std::shared_ptr<ScrollableListWidget> list;
+};
 
 class WzGraphicsPanel : public W_FORM
 {
@@ -2613,6 +2822,9 @@ void WZScriptDebugger::switchPanel(WZScriptDebugger::ScriptDebuggerPanel newPane
 		case ScriptDebuggerPanel::Graphics:
 			psPanel = createGraphicsPanel();
 			break;
+		case ScriptDebuggerPanel::Pathfinding:
+			psPanel = createPathfindingPanel();
+			break;
 		default:
 			debug(LOG_ERROR, "Panel not implemented yet");
 			break;
@@ -2679,6 +2891,11 @@ std::shared_ptr<W_FORM> WZScriptDebugger::createMainPanel()
 std::shared_ptr<W_FORM> WZScriptDebugger::createGraphicsPanel()
 {
 	return WzGraphicsPanel::make();
+}
+
+std::shared_ptr<WIDGET> WZScriptDebugger::createPathfindingPanel()
+{
+	return WzPathfindingPanel::make();
 }
 
 std::shared_ptr<WIDGET> WZScriptDebugger::createSelectedPanel()
@@ -2787,6 +3004,7 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Messages, "Messages");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Labels, "Labels");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Graphics, "Graphics");
+	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Pathfinding, "Pathfinding");
 	result->pageTabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue){
 		// Switch actively-displayed "tab"
 		widgScheduleTask([newValue](){

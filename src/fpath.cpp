@@ -40,6 +40,7 @@
 #include "astar.h"
 
 #include "fpath.h"
+#include "densityflow.h"
 #include "profiling.h"
 #include "game_world.h"
 
@@ -206,6 +207,7 @@ void fpathShutdown()
 #endif
 	}
 	fpathHardTableReset();
+	densityFlowHardReset();
 }
 
 
@@ -215,7 +217,7 @@ void fpathShutdown()
  */
 void fpathUpdate()
 {
-	// Nothing now
+	fpathDensityFlowUpdate();
 }
 
 static constexpr size_t fpathPropulsionDomain(PROPULSION_TYPE propulsion)
@@ -541,6 +543,7 @@ queuePathfinding:
 	job.acceptNearest = acceptNearest;
 	job.deleted = false;
 	fpathSetBlockingMap(&job);
+	fpathSetDensityFlowMap(&job);
 
 	debug(LOG_NEVER, "starting new job for droid %d 0x%x", id, id);
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one

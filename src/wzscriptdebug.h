@@ -83,6 +83,7 @@ private:
 	std::shared_ptr<WIDGET> createMessagesPanel();
 	std::shared_ptr<WIDGET> createLabelsPanel();
 	std::shared_ptr<W_FORM> createGraphicsPanel();
+	std::shared_ptr<WIDGET> createPathfindingPanel();
 
 private:
 	enum class ScriptDebuggerPanel {
@@ -93,7 +94,8 @@ private:
 		Triggers,
 		Messages,
 		Labels,
-		Graphics
+		Graphics,
+		Pathfinding
 	};
 	static void addTextTabButton(const std::shared_ptr<MultibuttonWidget>& mbw, ScriptDebuggerPanel value, const char* text);
 	void switchPanel(ScriptDebuggerPanel newPanel);

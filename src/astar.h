@@ -44,6 +44,12 @@ public:
 };
 std::shared_ptr<FPathExecuteContext> makeFPathExecuteContext();
 
+/// tunable weights for astar.cpp's costFactor 
+/// (see PathfindContext::densityFlowCostFactor and fpathNewNode).
+extern int32_t aStarDangerWeight;
+extern int32_t aStarDensityWeight;
+extern int32_t aStarFlowWeight;
+
 /** Use the A* algorithm to find a path
  *
  *  @ingroup pathfinding
