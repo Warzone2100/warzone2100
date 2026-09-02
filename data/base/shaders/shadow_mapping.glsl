@@ -225,7 +225,7 @@ float getProjectileLightShadowVisibility(vec3 fragPosModelSpace, float NdotL)
 	// no shadow-mapping
 	return 1.0;
 #else
-	if (projectileLightShadowInfo.w <= 0.f)
+	if (!projectileLightShadowActive)
 	{
 		return 1.0;
 	}

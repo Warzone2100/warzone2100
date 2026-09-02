@@ -2046,7 +2046,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
 		shadowCascades.projectileLightShadowMVP,
-		glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
+		shadowCascades.projectileLightShadowEnabled,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2099,7 +2099,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
 		shadowCascades.projectileLightShadowMVP,
-		glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
+		shadowCascades.projectileLightShadowEnabled,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2453,7 +2453,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		static_cast<int>(dimension.first), static_cast<int>(dimension.second),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f,
 		shadowCascades.projectileLightShadowMVP,
-		glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
+		shadowCascades.projectileLightShadowEnabled,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::constant_buffer_type<SHADER_WATER_HIGH>>());

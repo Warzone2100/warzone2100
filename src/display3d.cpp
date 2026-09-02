@@ -1643,12 +1643,12 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	    && pickProjectileLightShadow(projectileLightShadowView, projectileLightShadowProjection))
 	{
 		shadowCascadesInfo.projectileLightShadowMVP = getBiasedShadowMapMVPMatrix(projectileLightShadowProjection, projectileLightShadowView);
-		shadowCascadesInfo.projectileLightShadowEnabled = 1.f;
+		shadowCascadesInfo.projectileLightShadowEnabled = true;
 	}
 	else
 	{
 		shadowCascadesInfo.projectileLightShadowMVP = glm::mat4(1.f);
-		shadowCascadesInfo.projectileLightShadowEnabled = 0.f;
+		shadowCascadesInfo.projectileLightShadowEnabled = false;
 	}
 	InGame3DFrameContext& ctx = pie_GetInGame3DFrameContext();
 	ctx.perspectiveViewMatrix = perspectiveViewMatrix;

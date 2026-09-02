@@ -196,7 +196,7 @@ static void recordShadowCascade(const gfx_api::RenderPassContext& passCtx)
 	// projectile light to cast one, and is an empty (fully lit) layer on the other frames.
 	if (cascadeIndex == WZ_MAX_SHADOW_CASCADES - 1)
 	{
-		if (fc.shadowCascadesInfo.projectileLightShadowEnabled <= 0.f)
+		if (!fc.shadowCascadesInfo.projectileLightShadowEnabled)
 		{
 			return;
 		}

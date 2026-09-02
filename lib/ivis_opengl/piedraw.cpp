@@ -1713,7 +1713,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			pie_GetShaderTime(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(),
 			static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f, 0.f,
 			shadowCascades.projectileLightShadowMVP,
-			glm::vec4(0.f, 0.f, 0.f, shadowCascades.projectileLightShadowEnabled),
+			shadowCascades.projectileLightShadowEnabled,
 			getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, pointLights, shadowMap, drawParts, depthPassMode);

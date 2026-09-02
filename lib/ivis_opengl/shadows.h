@@ -33,5 +33,5 @@ struct ShadowCascadesInfo
 	// whether it is active this frame. The last shadow map layer is reserved for it,
 	// while the sun keeps WZ_SHADOW_CASCADES_COUNT cascades.
 	glm::mat4 projectileLightShadowMVP = glm::mat4(1.f);
-	float projectileLightShadowEnabled = 0.f;
+	bool projectileLightShadowEnabled = false;
 };
