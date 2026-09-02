@@ -1,18 +1,30 @@
 {
 	"_comment": "Light thrown by effects. Cosmetic only. See doc/EffectLights.md.",
 	"projectiles": {
-		"_comment": "Sustained lights, on screen for a whole flight and often several at once. Warm or near-white reads as light. A saturated hue may read as a color filter over the ground. ELECTRONIC has no entry because its weapons span both weapon classes and take their color from that instead.",
+		"_comment": "Colors reproduce those the weapons carried before the switch to effectlights.json. A projectile only throws a light where its weapon allows it; subgroup colors are overridable per weapon.",
 		"subclass": {
-			"EMP": { "color": [255, 170, 90] },
-			"ENERGY": { "color": [150, 205, 255] },
-			"FLAME": { "color": [255, 180, 100] },
-			"MACHINE GUN": { "color": [255, 170, 90] },
-			"MISSILE": { "color": [255, 170, 90] },
-			"ROCKET": { "color": [255, 170, 90] },
-			"SLOW ROCKET": { "color": [255, 170, 90] }
+			"A-A GUN": { "color": [170, 235, 226] },
+			"CANNON": { "color": [235, 222, 143] },
+			"COMMAND": { "color": [188, 235, 233] },
+			"ELECTRONIC": { "color": [188, 235, 233] },
+			"EMP": { "color": [188, 235, 233] },
+			"ENERGY": { "color": [26, 235, 234] },
+			"FLAME": { "color": [222, 235, 190] },
+			"GAUSS": { "color": [33, 235, 235] },
+			"LAS_SAT": { "color": [188, 235, 233] },
+			"MACHINE GUN": { "color": [235, 222, 143] },
+			"MISSILE": { "color": [235, 108, 12] },
+			"MORTARS": { "color": [235, 222, 143] },
+			"ROCKET": { "color": [235, 108, 12] },
+			"SLOW ROCKET": { "color": [235, 108, 12] }
 		},
 		"weapon": {
-			"_comment": "An entry here overrides the subclass table for one weapon, keyed by its id in weapons.json."
+			"BabaMG": { "color": [235, 115, 53] },
+			"Laser2PULSE-VTOL": { "color": [99, 235, 109] },
+			"Laser2PULSEMk1": { "color": [99, 235, 109] },
+			"RailGun3Mk1": { "color": [43, 235, 234] },
+			"Rocket-BB": { "color": [126, 154, 235] },
+			"Rocket-VTOL-BB": { "color": [126, 154, 235] }
 		}
 	}
 }
