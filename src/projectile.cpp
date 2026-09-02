@@ -42,6 +42,7 @@
 #include "action.h"
 #include "combat.h"
 #include "effects.h"
+#include "effectlights.h"
 #include "map.h"
 #include "order.h"
 #include "projectile.h"
@@ -1524,7 +1525,7 @@ void proj_UpdateAll()
 			}
 			// Keep the projectile's light alive as a short fade-out now that it's being
 			// removed, instead of letting the light vanish the instant the projectile dies.
-			if (p->psWStats != nullptr && p->psWStats->lightRange > 0)
+			if (projectileCastsLight(p->psWStats))
 			{
 				projectileFadeLights.push_back(ProjectileLightFade{
 					p->pos,

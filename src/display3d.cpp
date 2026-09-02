@@ -86,6 +86,7 @@
 #include "multiplay.h"
 #include "advvis.h"
 #include "cmddroid.h"
+#include "effectlights.h"
 #include "terrain.h"
 #include "profiling.h"
 #include "warzoneconfig.h"
@@ -1201,14 +1202,11 @@ glm::mat4 getBiasedShadowMapMVPMatrix(glm::mat4 lightOrthoMatrix, const glm::mat
 	return biasMatrix * shadowMatrix;
 }
 
-// Burning and glowing projectiles throw light on what they pass, by the colour set on the weapon in its data
-// file (WEAPON_STATS::lightColour). Runs before the light manager buckets the frame's lights, so the lights
-// reach both the terrain lightmap and the per-pixel scene lighting in the same frame.
-static void drawProjectileLights(LightingData& lightData)
+// A projectile's light is added by addProjectileLight as its model is drawn. Destroyed projectiles
+// additionally keep casting a fading light for a short time after death, instead of their light
+// vanishing the instant the projectile is removed. That is handled here, from the effect light settings.
+static void drawProjectileLightFades(LightingData& lightData)
 {
-	// Only in per-pixel scene lighting: baking projectile lights into the terrain
-	// lightmap makes a large coloured splash under the flight path, which reads as
-	// badly in the flat ambient light as it looks good lit live on the scene.
 	if (!war_getProjectileLighting()
 	    || !war_getPointLightPerPixelLighting()
 	    || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
@@ -1216,56 +1214,16 @@ static void drawProjectileLights(LightingData& lightData)
 		return;
 	}
 
-	PROJECTILE *psObj = proj_GetFirst();
-	while (psObj != nullptr)
-	{
-		// Only projectiles that are actually showing this instant
-		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
-		{
-			const WEAPON_STATS *psStats = psObj->psWStats;
-			if (psStats->lightRange > 0)
-			{
-				// Use float interpolation instead of integer interpolateObjectSpacetime
-				// to avoid position quantization that causes light flicker
-				const Spacetime& st1 = psObj->prevSpacetime;
-				const Spacetime& st2 = psObj->time != st1.time
-					? getSpacetime(psObj) : st1;
-				float t = static_cast<float>(graphicsTime - st1.time);
-				float duration = static_cast<float>(st2.time - st1.time);
-				float frac = (duration > 0.f) ? (t / duration) : 1.f;
-				// Clamp to [0,1] to handle edge cases
-				if (frac < 0.f)
-				{
-					frac = 0.f;
-				}
-				if (frac > 1.f)
-				{
-					frac = 1.f;
-				}
-
-				// Interpolate position in float
-				float px = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * frac;
-				float py = static_cast<float>(st1.pos.y) + (static_cast<float>(st2.pos.y) - static_cast<float>(st1.pos.y)) * frac;
-				float pz = static_cast<float>(st1.pos.z) + (static_cast<float>(st2.pos.z) - static_cast<float>(st1.pos.z)) * frac;
-
-				LIGHT light;
-				// A light is positioned by game coordinates, with its height in the middle component
-				light.position = Vector3i(static_cast<int>(px), static_cast<int>(pz), static_cast<int>(py));
-				light.range = psStats->lightRange;
-				light.colour = psStats->lightColour;
-				light.intensity = psStats->lightIntensity;
-				lightData.lights.push_back(light);
-			}
-		}
-		psObj = proj_GetNext();
-	}
-
-	// Destroyed projectiles keep casting a fading light for a short time after death,
-	// instead of the light vanishing the instant the projectile is removed.
 	for (ProjectileLightFade const& fade : projectileFadeLights)
 	{
 		const WEAPON_STATS *psStats = fade.psWStats;
-		if (psStats == nullptr || psStats->lightRange == 0)
+		if (psStats == nullptr)
+		{
+			continue;
+		}
+		const iIMDShape *pIMD = (psStats->pInFlightGraphic != nullptr) ? psStats->pInFlightGraphic->displayModel() : nullptr;
+		const auto projectileLight = resolveProjectileLight(psStats, pIMD, false);
+		if (!projectileLight.has_value())
 		{
 			continue;
 		}
@@ -1278,9 +1236,9 @@ static void drawProjectileLights(LightingData& lightData)
 		float scale = (1.f - t) * (1.f - t);
 		LIGHT light;
 		light.position = Vector3i(static_cast<int>(fade.pos.x), static_cast<int>(fade.pos.z), static_cast<int>(fade.pos.y));
-		light.range = psStats->lightRange;
-		light.colour = psStats->lightColour;
-		light.intensity = psStats->lightIntensity * scale;
+		light.range = projectileLight->range;
+		light.colour = projectileLight->color;
+		light.intensity = projectileLight->intensity * scale;
 		lightData.lights.push_back(light);
 	}
 }
@@ -1320,13 +1278,15 @@ static bool pickProjectileLightShadow(glm::mat4& lightView, glm::mat4& lightProj
 		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
 		{
 			const WEAPON_STATS *psStats = psObj->psWStats;
-			if (psStats->lightRange > 0)
+			const iIMDShape *pIMD = (psStats->pInFlightGraphic != nullptr) ? psStats->pInFlightGraphic->displayModel() : nullptr;
+			const auto projectileLight = resolveProjectileLight(psStats, pIMD, false);
+			if (projectileLight.has_value())
 			{
-				const float strength = static_cast<float>(psStats->lightRange) * psStats->lightIntensity;
+				const float strength = static_cast<float>(projectileLight->range) * projectileLight->intensity;
 				ProjPick pick;
 				pick.obj = psObj;
 				pick.strength = strength;
-				pick.range = static_cast<float>(psStats->lightRange);
+				pick.range = static_cast<float>(projectileLight->range);
 				// Same float interpolation as drawProjectileLights to avoid position jitter
 				const Spacetime& st1 = psObj->prevSpacetime;
 				const Spacetime& st2 = psObj->time != st1.time ? getSpacetime(psObj) : st1;
@@ -1556,7 +1516,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
 	processEffects(perspectiveViewMatrix, lightData);
-	drawProjectileLights(lightData);
+	drawProjectileLightFades(lightData);
 	atmosUpdateSystem(gameWorld.map);
 	avUpdateTiles(gameWorld.map);
 	wzPerfEnd(PERF_EFFECTS);
@@ -2015,6 +1975,29 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	}
 }	/* end of function display3DProjectiles */
 
+/// A projectile drawn additively is burning or glowing rather than merely lit, so it throws light on what it passes.
+/// (Unless the data files say otherwise, that comes from the model rather than the weapon.)
+static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD, bool modelIsGlowing)
+{
+	if (!war_getProjectileLighting() || !war_getPointLightPerPixelLighting() || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		return;
+	}
+
+	const auto projectileLight = resolveProjectileLight(psStats, pIMD, modelIsGlowing);
+	if (!projectileLight.has_value())
+	{
+		return;
+	}
+
+	LIGHT light;
+	light.position = lightPosition;
+	light.range = projectileLight->range;
+	light.colour = projectileLight->color;
+	light.intensity = projectileLight->intensity;
+	getCurrentLightingData().lights.push_back(light);
+}
+
 /// Draw a projectile to the screen
 void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -2077,6 +2060,8 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
+	bool alreadyLitTheWorld = false;
+	const iIMDShape *pFirstIMD = pIMD;
 	for (; pIMD != nullptr; pIMD = pIMD->next.get())
 	{
 		bool rollToCamera = false;
@@ -2105,6 +2090,14 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		{
 			additive = false;
 			premultiplied = true;
+		}
+
+		// One light for the projectile (not one per part), since the parts are the same glow
+		if ((additive || premultiplied) && !alreadyLitTheWorld)
+		{
+			// A light is positioned by game coordinates, where the height is the middle component
+			addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pIMD, true);
+			alreadyLitTheWorld = true;
 		}
 
 		Vector3i camera = camera_base;
@@ -2150,6 +2143,12 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		{
 			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix, 0.f, true);
 		}
+	}
+
+	// No part glows, so only the data files can ask this projectile for a light
+	if (!alreadyLitTheWorld && pFirstIMD != nullptr)
+	{
+		addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pFirstIMD, false);
 	}
 }
 

@@ -1,7 +1,5 @@
 {
 	"AAGun2Mk1": {
-        "lightColour": "170,235,226",
-        "lightRange": 130,
 
 		"buildPoints": 450,
 		"buildPower": 150,
@@ -45,8 +43,6 @@
 		"weight": 4000
 	},
 	"AAGun2Mk1Quad": {
-        "lightColour": "170,235,226",
-        "lightRange": 160,
 
 		"buildPoints": 900,
 		"buildPower": 250,
@@ -90,8 +86,6 @@
 		"weight": 5000
 	},
 	"AAGunLaser": {
-        "lightColour": "99,235,109",
-        "lightRange": 880,
 
 		"buildPoints": 1000,
 		"buildPower": 250,
@@ -135,8 +129,6 @@
 		"weight": 4000
 	},
 	"BJeepMG": {
-        "lightColour": "235,115,53",
-        "lightRange": 450,
 
 		"buildPoints": 16,
 		"buildPower": 4,
@@ -171,8 +163,6 @@
 		"weight": 1
 	},
 	"BTowerMG": {
-        "lightColour": "235,115,53",
-        "lightRange": 450,
 
 		"buildPoints": 16,
 		"buildPower": 12,
@@ -207,8 +197,6 @@
 		"weight": 1
 	},
 	"BaBaCannon": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 10,
 		"buildPower": 10,
@@ -245,8 +233,6 @@
 		"weight": 10
 	},
 	"BaBaMG": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 1,
 		"buildPower": 1,
@@ -280,8 +266,6 @@
 		"weight": 1
 	},
 	"BabaFlame": {
-        "lightColour": "222,235,190",
-        "lightRange": 720,
 
 		"buildPoints": 200,
 		"buildPower": 40,
@@ -362,8 +346,6 @@
 		"weight": 250
 	},
 	"BabaPitRocketAT": {
-        "lightColour": "235,220,180",
-        "lightRange": 360,
 
 		"buildPoints": 500,
 		"buildPower": 100,
@@ -706,8 +688,6 @@
 		"weight": 3800
 	},
 	"BuggyMG": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 11,
 		"buildPower": 3,
@@ -742,8 +722,6 @@
 		"weight": 1
 	},
 	"BusCannon": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 10,
 		"buildPower": 10,
@@ -946,8 +924,6 @@
 		"weight": 8000
 	},
 	"Cannon4AUTO-VTOL": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 700,
 		"buildPower": 175,
@@ -990,8 +966,6 @@
 		"weight": 2000
 	},
 	"Cannon4AUTOMk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 700,
 		"buildPower": 175,
@@ -1033,8 +1007,6 @@
 		"weight": 3000
 	},
 	"Cannon5Vulcan-VTOL": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 700,
 		"buildPower": 150,
@@ -1076,8 +1048,6 @@
 		"weight": 1250
 	},
 	"Cannon5VulcanMk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 700,
 		"buildPower": 150,
@@ -1119,8 +1089,6 @@
 		"weight": 2500
 	},
 	"Cannon6TwinAslt": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 800,
 		"buildPower": 250,
@@ -1202,8 +1170,6 @@
 		"weight": 120000
 	},
 	"CommandTurret1": {
-        "lightColour": "188,235,233",
-        "lightRange": 1780,
 
 		"buildPoints": 500,
 		"buildPower": 250,
@@ -1241,8 +1207,6 @@
 		"weight": 1000
 	},
 	"Cyb-Hvywpn-A-T": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1000,
 		"buildPower": 235,
@@ -1285,8 +1249,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-Acannon": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 400,
 		"buildPower": 125,
@@ -1328,8 +1290,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-HPV": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 450,
 		"buildPower": 150,
@@ -1410,8 +1370,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-PulseLsr": {
-        "lightColour": "99,235,109",
-        "lightRange": 880,
 
 		"buildPoints": 450,
 		"buildPower": 150,
@@ -1452,8 +1410,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-RailGunner": {
-        "lightColour": "33,235,235",
-        "lightRange": 520,
 
 		"buildPoints": 750,
 		"buildPower": 240,
@@ -1496,8 +1452,6 @@
 		"weight": 120
 	},
 	"Cyb-Hvywpn-TK": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 600,
 		"buildPower": 200,
@@ -1538,8 +1492,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Atmiss": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1000,
 		"buildPower": 233,
@@ -1581,8 +1533,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Grenade": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 320,
 		"buildPower": 80,
@@ -1625,8 +1575,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Laser": {
-        "lightColour": "26,235,234",
-        "lightRange": 210,
 
 		"buildPoints": 600,
 		"buildPower": 100,
@@ -1667,8 +1615,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Rail1": {
-        "lightColour": "33,235,235",
-        "lightRange": 410,
 
 		"buildPoints": 800,
 		"buildPower": 160,
@@ -1711,8 +1657,6 @@
 		"weight": 120
 	},
 	"Cyb-Wpn-Thermite": {
-        "lightColour": "222,235,190",
-        "lightRange": 720,
 
 		"buildPoints": 320,
 		"buildPower": 100,
@@ -1796,8 +1740,6 @@
 		"weight": 120
 	},
 	"CyborgChaingun": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 160,
 		"buildPower": 40,
@@ -1836,8 +1778,6 @@
 		"weight": 120
 	},
 	"CyborgFlamer01": {
-        "lightColour": "222,235,190",
-        "lightRange": 720,
 
 		"buildPoints": 200,
 		"buildPower": 55,
@@ -1881,8 +1821,6 @@
 		"weight": 120
 	},
 	"CyborgRocket": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 500,
 		"buildPower": 125,
@@ -1925,8 +1863,6 @@
 		"weight": 120
 	},
 	"CyborgRotMG": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 270,
 		"buildPower": 90,
@@ -1965,8 +1901,6 @@
 		"weight": 120
 	},
 	"EMP-Cannon": {
-        "lightColour": "188,235,233",
-        "lightRange": 1780,
 
 		"buildPoints": 1000,
 		"buildPower": 400,
@@ -2008,8 +1942,6 @@
 		"weight": 8000
 	},
 	"Flame1Mk1": {
-        "lightColour": "222,235,190",
-        "lightRange": 720,
 
 		"buildPoints": 200,
 		"buildPower": 60,
@@ -2053,8 +1985,6 @@
 		"weight": 250
 	},
 	"Flame2": {
-        "lightColour": "222,235,190",
-        "lightRange": 720,
 
 		"buildPoints": 400,
 		"buildPower": 110,
@@ -2098,8 +2028,6 @@
 		"weight": 5000
 	},
 	"HeavyLaser": {
-        "lightColour": "99,235,109",
-        "lightRange": 880,
 
 		"buildPoints": 600,
 		"buildPower": 400,
@@ -2139,8 +2067,6 @@
 		"weight": 5000
 	},
 	"HeavyLaser-VTOL": {
-        "lightColour": "99,235,109",
-        "lightRange": 880,
 
 		"buildPoints": 1000,
 		"buildPower": 400,
@@ -2183,8 +2109,6 @@
 		"weight": 5000
 	},
 	"ParticleGun": {
-        "lightColour": "235,152,69",
-        "lightRange": 440,
 
 		"buildPoints": 600,
 		"buildPower": 400,
@@ -2227,8 +2151,6 @@
 		"weight": 5000
 	},
 	"ParticleGun-VTOL": {
-        "lightColour": "235,152,69",
-        "lightRange": 440,
 
 		"buildPoints": 1000,
 		"buildPower": 400,
@@ -2441,8 +2363,6 @@
 		"weight": 20000
 	},
 	"LasSat": {
-        "lightColour": "188,235,233",
-        "lightRange": 1780,
 
 		"buildPoints": 500,
 		"buildPower": 100,
@@ -2486,8 +2406,6 @@
 		"weight": 600
 	},
 	"Laser2PULSE-VTOL": {
-        "lightColour": "99,235,109",
-        "lightRange": 880,
 
 		"buildPoints": 800,
 		"buildPower": 200,
@@ -2531,8 +2449,6 @@
 		"weight": 500
 	},
 	"Laser2PULSEMk1": {
-        "lightColour": "99,235,109",
-        "lightRange": 880,
 
 		"buildPoints": 800,
 		"buildPower": 200,
@@ -2573,8 +2489,6 @@
 		"weight": 500
 	},
 	"Laser3BEAM-VTOL": {
-        "lightColour": "26,235,234",
-        "lightRange": 210,
 
 		"buildPoints": 600,
 		"buildPower": 150,
@@ -2618,8 +2532,6 @@
 		"weight": 300
 	},
 	"Laser3BEAMMk1": {
-        "lightColour": "26,235,234",
-        "lightRange": 210,
 
 		"buildPoints": 600,
 		"buildPower": 150,
@@ -2660,8 +2572,6 @@
 		"weight": 300
 	},
 	"Laser4-PlasmaCannon": {
-        "lightColour": "42,235,235",
-        "lightRange": 170,
 
 		"buildPoints": 1000,
 		"buildPower": 400,
@@ -2704,8 +2614,6 @@
 		"weight": 30000
 	},
 	"MG1-Pillbox": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 50,
 		"buildPower": 10,
@@ -2740,8 +2648,6 @@
 		"weight": 200
 	},
 	"MG1-VTOL": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 50,
 		"buildPower": 10,
@@ -2781,8 +2687,6 @@
 		"weight": 200
 	},
 	"MG1Mk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 50,
 		"buildPower": 10,
@@ -2821,8 +2725,6 @@
 		"weight": 200
 	},
 	"MG2-Pillbox": {
-        "lightColour": "235,222,143",
-        "lightRange": 110,
 
 		"buildPoints": 125,
 		"buildPower": 25,
@@ -2857,8 +2759,6 @@
 		"weight": 400
 	},
 	"MG2-VTOL": {
-        "lightColour": "235,222,143",
-        "lightRange": 110,
 
 		"buildPoints": 125,
 		"buildPower": 25,
@@ -2898,8 +2798,6 @@
 		"weight": 350
 	},
 	"MG2Mk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 110,
 
 		"buildPoints": 125,
 		"buildPower": 25,
@@ -2938,8 +2836,6 @@
 		"weight": 400
 	},
 	"MG3-Pillbox": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 250,
 		"buildPower": 50,
@@ -2974,8 +2870,6 @@
 		"weight": 600
 	},
 	"MG3-VTOL": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 250,
 		"buildPower": 50,
@@ -3015,8 +2909,6 @@
 		"weight": 300
 	},
 	"MG3Mk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 250,
 		"buildPower": 50,
@@ -3055,8 +2947,6 @@
 		"weight": 600
 	},
 	"MG4ROTARY-Pillbox": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 500,
 		"buildPower": 100,
@@ -3091,8 +2981,6 @@
 		"weight": 600
 	},
 	"MG4ROTARY-VTOL": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 500,
 		"buildPower": 100,
@@ -3132,8 +3020,6 @@
 		"weight": 300
 	},
 	"MG4ROTARYMk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 375,
 		"buildPower": 125,
@@ -3172,8 +3058,6 @@
 		"weight": 600
 	},
 	"MG5TWINROTARY": {
-        "lightColour": "235,222,143",
-        "lightRange": 140,
 
 		"buildPoints": 375,
 		"buildPower": 150,
@@ -3212,8 +3096,6 @@
 		"weight": 600
 	},
 	"MassDriver": {
-        "lightColour": "42,235,235",
-        "lightRange": 170,
 
 		"buildPoints": 2000,
 		"buildPower": 2000,
@@ -3255,8 +3137,6 @@
 		"weight": 150000
 	},
 	"Missile-A-T": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1200,
 		"buildPower": 300,
@@ -3299,8 +3179,6 @@
 		"weight": 400
 	},
 	"Missile-HvyArt": {
-        "lightColour": "235,108,12",
-        "lightRange": 390,
 
 		"buildPoints": 2000,
 		"buildPower": 700,
@@ -3438,8 +3316,6 @@
 		"weight": 400
 	},
 	"Missile-MdArt": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1200,
 		"buildPower": 400,
@@ -3483,8 +3359,6 @@
 		"weight": 1000
 	},
 	"Missile-VTOL-AT": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1200,
 		"buildPower": 300,
@@ -3527,8 +3401,6 @@
 		"weight": 750
 	},
 	"MissileSuper": {
-        "lightColour": "235,108,12",
-        "lightRange": 390,
 
 		"buildPoints": 1200,
 		"buildPower": 1600,
@@ -3574,8 +3446,6 @@
 		"weight": 120000
 	},
 	"Mortar-Incendiary": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 750,
 		"buildPower": 200,
@@ -3624,8 +3494,6 @@
 		"weight": 2000
 	},
 	"Mortar1Mk1": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 440,
 		"buildPower": 105,
@@ -3750,8 +3618,6 @@
 		"weight": 2000
 	},
 	"MortarEMP": {
-        "lightColour": "178,235,221",
-        "lightRange": 340,
 
 		"buildPoints": 1000,
 		"buildPower": 200,
@@ -3838,8 +3704,6 @@
 		"weight": 30000
 	},
 	"PlasmiteFlamer": {
-        "lightColour": "222,235,190",
-        "lightRange": 720,
 
 		"buildPoints": 400,
 		"buildPower": 160,
@@ -3883,8 +3747,6 @@
 		"weight": 1000
 	},
 	"QuadMg1AAGun": {
-        "lightColour": "170,235,226",
-        "lightRange": 160,
 
 		"buildPoints": 400,
 		"buildPower": 150,
@@ -3928,8 +3790,6 @@
 		"weight": 2000
 	},
 	"QuadRotAAGun": {
-        "lightColour": "170,235,226",
-        "lightRange": 130,
 
 		"buildPoints": 800,
 		"buildPower": 200,
@@ -3973,8 +3833,6 @@
 		"weight": 4000
 	},
 	"RailGun1-VTOL": {
-        "lightColour": "33,235,235",
-        "lightRange": 410,
 
 		"buildPoints": 900,
 		"buildPower": 250,
@@ -4016,8 +3874,6 @@
 		"weight": 2000
 	},
 	"RailGun1Mk1": {
-        "lightColour": "33,235,235",
-        "lightRange": 410,
 
 		"buildPoints": 900,
 		"buildPower": 250,
@@ -4059,8 +3915,6 @@
 		"weight": 1000
 	},
 	"RailGun2-VTOL": {
-        "lightColour": "33,235,235",
-        "lightRange": 520,
 
 		"buildPoints": 1200,
 		"buildPower": 300,
@@ -4103,8 +3957,6 @@
 		"weight": 4000
 	},
 	"RailGun2Mk1": {
-        "lightColour": "33,235,235",
-        "lightRange": 520,
 
 		"buildPoints": 1200,
 		"buildPower": 300,
@@ -4147,8 +3999,6 @@
 		"weight": 2000
 	},
 	"RailGun3Mk1": {
-        "lightColour": "43,235,234",
-        "lightRange": 120,
 
 		"buildPoints": 1600,
 		"buildPower": 400,
@@ -4193,8 +4043,6 @@
 		"weight": 5000
 	},
 	"Rocket-BB": {
-        "lightColour": "126,154,235",
-        "lightRange": 200,
 
 		"buildPoints": 750,
 		"buildPower": 150,
@@ -4235,8 +4083,6 @@
 		"weight": 250
 	},
 	"Rocket-HvyA-T": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1000,
 		"buildPower": 200,
@@ -4279,8 +4125,6 @@
 		"weight": 300
 	},
 	"Rocket-IDF": {
-        "lightColour": "235,108,12",
-        "lightRange": 390,
 
 		"buildPoints": 1500,
 		"buildPower": 300,
@@ -4324,8 +4168,6 @@
 		"weight": 20000
 	},
 	"Rocket-LtA-T": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 500,
 		"buildPower": 150,
@@ -4412,8 +4254,6 @@
 		"weight": 250
 	},
 	"Rocket-MRL-Hvy": {
-        "lightColour": "235,108,12",
-        "lightRange": 390,
 
 		"buildPoints": 800,
 		"buildPower": 150,
@@ -4545,8 +4385,6 @@
 		"weight": 250
 	},
 	"Rocket-VTOL-BB": {
-        "lightColour": "126,154,235",
-        "lightRange": 200,
 
 		"buildPoints": 750,
 		"buildPower": 150,
@@ -4590,8 +4428,6 @@
 		"weight": 750
 	},
 	"Rocket-VTOL-HvyA-T": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1000,
 		"buildPower": 250,
@@ -4635,8 +4471,6 @@
 		"weight": 750
 	},
 	"Rocket-VTOL-LtA-T": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 500,
 		"buildPower": 150,
@@ -4769,8 +4603,6 @@
 		"weight": 250
 	},
 	"RocketSuper": {
-        "lightColour": "235,108,12",
-        "lightRange": 290,
 
 		"buildPoints": 1250,
 		"buildPower": 1200,
@@ -4812,8 +4644,6 @@
 		"weight": 100000
 	},
 	"SpyTurret01": {
-		"lightColour": "188,235,233",
-		"lightRange": 1780,
 
 		"buildPoints": 1600,
 		"buildPower": 400,
@@ -4879,8 +4709,6 @@
 		"weaponSubClass": "MACHINE GUN"
 	},
 	"bTrikeMG": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 11,
 		"buildPower": 2,
@@ -4950,8 +4778,6 @@
 		"weight": 200
 	},
 	"bbaawep": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 25,
 		"buildPower": 20,
@@ -4989,8 +4815,6 @@
 		"weight": 600
 	},
 	"MG1-VTOL-SCAVS": {
-        "lightColour": "235,222,143",
-        "lightRange": 70,
 
 		"buildPoints": 50,
 		"buildPower": 10,

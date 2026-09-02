@@ -366,20 +366,6 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index
 	}
 }
 
-/* A light colour from a data file, e.g. "255,128,0". Returns white on bad input. */
-static PIELIGHT parseLightColour(const WzString &value, const char *what)
-{
-	unsigned r = 0, g = 0, b = 0;
-	if (sscanf(value.toUtf8().c_str(), "%u,%u,%u", &r, &g, &b) != 3 || r > 255 || g > 255 || b > 255)
-	{
-		debug(LOG_ERROR, "Invalid light colour \"%s\" for %s (expected \"R,G,B\" with 0-255)", value.toUtf8().c_str(), what);
-		return PIELIGHT();
-	}
-	PIELIGHT colour;
-	colour.fromRGBA(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b), 255);
-	return colour;
-}
-
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(WzConfig &ini)
 {
@@ -568,18 +554,6 @@ bool loadWeaponStats(WzConfig &ini)
 
 		//set the light world value
 		psStats->lightWorld = ini.value("lightWorld", false).toBool();
-
-		// colour of the light the projectile throws while in flight, e.g. "255,128,0"
-		// (absent, or black, means the projectile throws no light)
-		// The default reach is well over a tile wide, so the glow is easy to see on
-		// the ground below; everything that lits the world indicates its size.
-		WzString lightColour = ini.value("lightColour", "").toWzString();
-		if (!lightColour.isEmpty())
-		{
-			psStats->lightColour = parseLightColour(lightColour, getStatsName(psStats));
-			psStats->lightRange = ini.value("lightRange", 420).toUInt();
-			psStats->lightIntensity = ini.value("lightIntensity", 3.5f).toFloat();
-		}
 
 		// interpret flags
 		psStats->surfaceToAir = SHOOT_ON_GROUND; // default
