@@ -1234,8 +1234,14 @@ static void drawProjectileLights(LightingData& lightData)
 				float duration = static_cast<float>(st2.time - st1.time);
 				float frac = (duration > 0.f) ? (t / duration) : 1.f;
 				// Clamp to [0,1] to handle edge cases
-				if (frac < 0.f) frac = 0.f;
-				if (frac > 1.f) frac = 1.f;
+				if (frac < 0.f)
+				{
+					frac = 0.f;
+				}
+				if (frac > 1.f)
+				{
+					frac = 1.f;
+				}
 
 				// Interpolate position in float
 				float px = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * frac;
@@ -1327,8 +1333,14 @@ static bool pickProjectileLightShadow(glm::mat4& lightView, glm::mat4& lightProj
 				float t = static_cast<float>(graphicsTime - st1.time);
 				float duration = static_cast<float>(st2.time - st1.time);
 				float frac = (duration > 0.f) ? (t / duration) : 1.f;
-				if (frac < 0.f) frac = 0.f;
-				if (frac > 1.f) frac = 1.f;
+				if (frac < 0.f)
+				{
+					frac = 0.f;
+				}
+				if (frac > 1.f)
+				{
+					frac = 1.f;
+				}
 				float px = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * frac;
 				float py = static_cast<float>(st1.pos.y) + (static_cast<float>(st2.pos.y) - static_cast<float>(st1.pos.y)) * frac;
 				float pz = static_cast<float>(st1.pos.z) + (static_cast<float>(st2.pos.z) - static_cast<float>(st1.pos.z)) * frac;
@@ -1338,8 +1350,14 @@ static bool pickProjectileLightShadow(glm::mat4& lightView, glm::mat4& lightProj
 				// Direction of travel, so the shadow sweeps along the flight path like a searchlight.
 				float tPrev = t - 1.f;
 				float fracPrev = (duration > 0.f) ? (tPrev / duration) : 0.f;
-				if (fracPrev < 0.f) fracPrev = 0.f;
-				if (fracPrev > 1.f) fracPrev = 1.f;
+				if (fracPrev < 0.f)
+				{
+					fracPrev = 0.f;
+				}
+				if (fracPrev > 1.f)
+				{
+					fracPrev = 1.f;
+				}
 				float pxPrev = static_cast<float>(st1.pos.x) + (static_cast<float>(st2.pos.x) - static_cast<float>(st1.pos.x)) * fracPrev;
 				float pyPrev = static_cast<float>(st1.pos.y) + (static_cast<float>(st2.pos.y) - static_cast<float>(st1.pos.y)) * fracPrev;
 				float pzPrev = static_cast<float>(st1.pos.z) + (static_cast<float>(st2.pos.z) - static_cast<float>(st1.pos.z)) * fracPrev;
