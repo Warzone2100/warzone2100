@@ -70,6 +70,8 @@
 #include "power.h"
 #include "hci.h"
 #include "display.h"
+#include "input/manager.h"
+#include "input/debugmappings.h"
 #include "keybind.h"
 #include "loop.h"
 #include "mission.h"
@@ -731,6 +733,12 @@ public:
 			psWidget->setGeometry(x0, bottomOfPowerRow, psWidget->width(), psWidget->height());
 		}));
 		panel->aiAttachButton->addOnClickHandler([](W_BUTTON& button){
+			const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+			if (!dbgInputManager.debugMappingsAllowed())
+			{
+				debug(LOG_INFO, "Cannot attach a script: debug mode is not enabled");
+				return;
+			}
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(button.parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			auto selectedAiButton = psParent->aiDropdown->getSelectedItem();
