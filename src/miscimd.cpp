@@ -145,19 +145,36 @@ const iIMDBaseShape	*getRandomDebrisImd()
 }
 // -------------------------------------------------------------------------------
 
-iIMDBaseShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
+#define MAX_FACTORY_FLAG_IMDS 32
+static iIMDBaseShape *pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
+static iIMDBaseShape *pAssemblyPointBlankIMDs[NUM_FLAG_TYPES];
 
-static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
+const iIMDBaseShape *getAssemblyPointIMD(unsigned flagType, unsigned factoryInc)
 {
-	char pieName[100];
-	snprintf(pieName, sizeof(pieName), nameFormat, n);
-	pAssemblyPointIMDs[flagType][i] = modelGet(pieName);
-	if (!pAssemblyPointIMDs[flagType][i])
+	if (flagType >= NUM_FLAG_TYPES)
+	{
+		ASSERT(false, "Invalid flag type %u", flagType);
+		flagType = FACTORY_FLAG; // Fallback; Prevent consumers from dereferencing a nullptr
+	}
+	return factoryInc < MAX_FACTORY_FLAG_IMDS ? pAssemblyPointIMDs[flagType][factoryInc] : pAssemblyPointBlankIMDs[flagType];
+}
+
+static bool loadAssemblyPointIMD(iIMDBaseShape **ppIMD, const char *pieName)
+{
+	*ppIMD = modelGet(pieName);
+	if (!*ppIMD)
 	{
 		debug(LOG_ERROR, "Can't find assembly point graphic %s for factory", pieName);
 		return false;
 	}
 	return true;
+}
+
+static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
+{
+	char pieName[100];
+	snprintf(pieName, sizeof(pieName), nameFormat, n);
+	return loadAssemblyPointIMD(&pAssemblyPointIMDs[flagType][i], pieName);
 }
 
 bool	initMiscImds()
@@ -170,7 +187,6 @@ bool	initMiscImds()
 	{
 		unsigned n = i + 1;
 
-		STATIC_ASSERT(MAX_FACTORY <= MAX_FACTORY_FLAG_IMDS);
 		STATIC_ASSERT(MAX_FACTORY_FLAG_IMDS <= 32);  // Need to add more assembly point graphics, if increasing MAX_FACTORY_FLAG_IMDS.
 		if (!initMiscImd(i, n, "minum%u.pie",  FACTORY_FLAG) ||
 		    !initMiscImd(i, n, "micnum%u.pie", CYBORG_FLAG) ||
@@ -180,5 +196,15 @@ bool	initMiscImds()
 			return false;
 		}
 	}
+
+	/* Load unnumbered assembly points */
+	if (!loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[FACTORY_FLAG], "minumblank.pie") ||
+	    !loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[CYBORG_FLAG],  "micnumblank.pie") ||
+	    !loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[VTOL_FLAG],    "mivnumblank.pie") ||
+	    !loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[REPAIR_FLAG],  "mirnum1.pie"))
+	{
+		return false;
+	}
+
 	return (true);
 }
