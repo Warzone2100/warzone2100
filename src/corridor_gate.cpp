@@ -1764,8 +1764,8 @@ void corridorClampSlide(const GameWorld &world, const DROID *psDroid, int32_t *p
 		return;
 	}
 	const int64_t axisSq = static_cast<int64_t>(q.axis.x) * q.axis.x + static_cast<int64_t>(q.axis.y) * q.axis.y;
-	*pdx -= static_cast<int32_t>(sideSign * -q.axis.y * latMove / axisSq);
-	*pdy -= static_cast<int32_t>(sideSign * q.axis.x * latMove / axisSq);
+	*pdx -= static_cast<int32_t>(static_cast<int64_t>(sideSign) * -q.axis.y * latMove / axisSq);
+	*pdy -= static_cast<int32_t>(static_cast<int64_t>(sideSign) * q.axis.x * latMove / axisSq);
 }
 
 // An approacher waiting into an inner junction is left in peace this long, then
