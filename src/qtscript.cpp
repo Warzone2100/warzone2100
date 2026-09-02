@@ -44,6 +44,9 @@
 #include "lib/framework/wzpaths.h"
 
 #include "qtscript.h"
+#include "display.h"
+#include "input/manager.h"
+#include "input/debugmappings.h"
 
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
@@ -527,9 +530,9 @@ bool scripting_engine::updateScripts()
 	return true;
 }
 
-wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
+wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding)
 {
-	return scripting_engine::instance().loadPlayerScript(path, player, difficulty);
+	return scripting_engine::instance().loadPlayerScript(path, player, difficulty, binding);
 }
 
 static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path, int player, int realDifficulty)
@@ -545,9 +548,17 @@ static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path
 	return nullptr;
 }
 
-wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
+wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding)
 {
 	ASSERT_OR_RETURN(nullptr, player >= 0 && (player < MAX_PLAYERS || player == selectedPlayer), "Player index %d out of bounds", player);
+
+	if (binding == wzapi::ScriptBinding::PlayerAI && bMultiPlayer && NetPlay.bComms
+	    && player >= 0 && static_cast<size_t>(player) < NetPlay.players.size()
+	    && NetPlay.players[player].allocated)
+	{
+		debug(LOG_ERROR, "Cannot load script \"%s\" for player %d", path.toUtf8().c_str(), player);
+		return nullptr;
+	}
 
 	debug(LOG_SCRIPT, "loadPlayerScript[%d]: %s", player, path.toUtf8().c_str());
 
@@ -562,6 +573,10 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	}
 
 	wzapi::scripting_instance* pNewInstance = loadPlayerScriptByBackend(path, player, realDifficulty);
+	if (pNewInstance)
+	{
+		pNewInstance->setBinding(binding);
+	}
 	if (!pNewInstance)
 	{
 		// failed to create new scripting instance
@@ -706,7 +721,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 bool loadGlobalScript(WzString path)
 {
-	return loadPlayerScript(std::move(path), selectedPlayer, AIDifficulty::DISABLED);
+	return loadPlayerScript(std::move(path), selectedPlayer, AIDifficulty::DISABLED,
+	                        wzapi::ScriptBinding::HostDeclaredGlobal);
 }
 
 bool saveScriptStates(const char *filename)
@@ -1346,7 +1362,17 @@ std::vector<scripting_engine::timerNodeSnapshot> scripting_engine::debug_GetTime
 
 void jsAutogameSpecific(const WzString &name, int player, AIDifficulty difficulty)
 {
-	wzapi::scripting_instance* instance = loadPlayerScript(name, player, difficulty);
+	if (bMultiPlayer && NetPlay.bComms)
+	{
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (!dbgInputManager.debugMappingsAllowed())
+		{
+			debug(LOG_ERROR, "Cannot attach script \"%s\" to player %d", name.toUtf8().c_str(), player);
+			return;
+		}
+	}
+
+	wzapi::scripting_instance* instance = loadPlayerScript(name, player, difficulty, wzapi::ScriptBinding::PlayerAI);
 	if (!instance)
 	{
 		console(_("Failed to load selected AI! Check your logs to see why."));

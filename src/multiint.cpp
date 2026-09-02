@@ -611,7 +611,7 @@ void loadMultiScripts()
 				if (aidata[NetPlay.players[i].ai].js[0] != '\0')
 				{
 					debug(LOG_SAVE, "Loading javascript AI for player %d", i);
-					if (!loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty))
+					if (!loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty, wzapi::ScriptBinding::PlayerAI))
 					{
 						debug(LOG_ERROR, "Failed to load AI!: %s", aidata[NetPlay.players[i].ai].js);
 					}
@@ -624,7 +624,7 @@ void loadMultiScripts()
 	if (game.scavengers != NO_SCAVENGERS && myResponsibility(scavengerPlayer()))
 	{
 		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
-		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY);
+		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY, wzapi::ScriptBinding::PlayerAI);
 	}
 
 	// Reset resource path, otherwise things break down the line

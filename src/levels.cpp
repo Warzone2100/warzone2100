@@ -1389,17 +1389,24 @@ static LoadingTask<> levFinalizeLevelLoad(ResourceLoadingController& controller,
 
 	if (autogame_enabled() && getHostLaunch() != HostLaunch::LoadReplay)
 	{
-		// Watched bench runs are meant to be followed, so they keep normal speed.
-		gameTimeSetMod(Rational(movementBenchWatching() ? 1 : 500));
-		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
+		if (bMultiPlayer && NetPlay.bComms)
 		{
-			if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+			debug(LOG_INFO, "Ignoring --autogame in a networked multiplayer game");
+		}
+		else
+		{
+			// Watched bench runs are meant to be followed, so they keep normal speed.
+			gameTimeSetMod(Rational(movementBenchWatching() ? 1 : 500));
+			if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 			{
-				jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer, AIDifficulty::DEFAULT);
-			}
-			else
-			{
-				debug(LOG_INFO, "Skipping autogame auto-AI for selectedPlayer %" PRIu32 "", selectedPlayer);
+				if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+				{
+					jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer, AIDifficulty::DEFAULT);
+				}
+				else
+				{
+					debug(LOG_INFO, "Skipping autogame auto-AI for selectedPlayer %" PRIu32 "", selectedPlayer);
+				}
 			}
 		}
 	}

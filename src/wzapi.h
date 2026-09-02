@@ -582,6 +582,12 @@ namespace wzapi
 		return lhs;
 	}
 
+	enum class ScriptBinding : uint8_t
+	{
+		PlayerAI = 0,
+		HostDeclaredGlobal = 1,
+	};
+
 	class scripting_instance : public scripting_event_handling_interface
 	{
 	public:
@@ -596,6 +602,8 @@ namespace wzapi
 		const std::string& scriptPath() const { return m_scriptPath; }
 		int player() const { return m_player; }
 		bool isHostAI() const;
+		ScriptBinding binding() const { return m_binding; }
+		void setBinding(ScriptBinding binding) { m_binding = binding; }
 
 	public:
 		inline void setReceiveAllEvents(bool value) { m_isReceivingAllEvents = value; }
@@ -687,6 +695,7 @@ namespace wzapi
 		std::string m_scriptName;
 		std::string m_scriptPath;
 		bool m_isReceivingAllEvents = false;
+		ScriptBinding m_binding = ScriptBinding::PlayerAI;
 	};
 
 	class execution_context_base
