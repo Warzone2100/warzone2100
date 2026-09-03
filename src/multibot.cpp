@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -388,24 +390,35 @@ void sendQueuedDroidInfo()
 			for (eqEnd = eqBegin + 1; eqEnd != qOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
 			{}
 
-			auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDINFO);
-			NETQueuedDroidInfo(w, *eqBegin);
-
-			uint32_t num = eqEnd - eqBegin;
-			NETuint32_t(w, num);
-
-			uint32_t prevDroidId = 0;
-			for (unsigned n = 0; n < num; ++n)
+			// A range that would not fit in one message is split into several messages.
+			for (auto chunkBegin = eqBegin; chunkBegin != eqEnd;)
 			{
-				uint32_t droidId = (eqBegin + n)->droidId;
+				auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDINFO);
+				NETQueuedDroidInfo(w, *eqBegin);
 
-				// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
-				uint32_t deltaDroidId = droidId - prevDroidId;
-				NETuint32_t(w, deltaDroidId);
+				// The count and each droid ID delta encode to at most 5 bytes.
+				constexpr size_t maxVarintBytes = 5;
+				constexpr size_t maxPayloadBytes = MaxMsgSize - NetMessage::HEADER_LENGTH;
+				const size_t headerBytes = w.msgBuilder.payloadSize();
+				ASSERT(headerBytes + 2 * maxVarintBytes <= maxPayloadBytes, "GAME_DROIDINFO header too large: %zu", headerBytes);
+				const size_t maxIds = (maxPayloadBytes - headerBytes - maxVarintBytes) / maxVarintBytes;
+				const uint32_t num = static_cast<uint32_t>(std::min<size_t>(eqEnd - chunkBegin, std::max<size_t>(maxIds, 1)));
+				NETuint32_t(w, num);
 
-				prevDroidId = droidId;
+				uint32_t prevDroidId = 0;
+				for (unsigned n = 0; n < num; ++n)
+				{
+					uint32_t droidId = (chunkBegin + n)->droidId;
+
+					// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
+					uint32_t deltaDroidId = droidId - prevDroidId;
+					NETuint32_t(w, deltaDroidId);
+
+					prevDroidId = droidId;
+				}
+				NETend(w);
+				chunkBegin += num;
 			}
-			NETend(w);
 		}
 	}
 	// Sent the orders. Don't send them again.
