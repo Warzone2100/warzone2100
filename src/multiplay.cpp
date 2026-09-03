@@ -75,7 +75,8 @@
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "modding.h"
-#include "multiplay.h"								// warzone net stuff.
+#include "multiplay.h"
+#include "ordersource_wire.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
 #include "multistat.h"
@@ -1234,7 +1235,7 @@ static bool recvDataCheck2(NETQUEUE queue)
 		}
 		zCheck = std::numeric_limits<uint16_t>::max();
 		auto it = layers.find(zCheck);
-		if (it != layers.end() && it->second > 1)
+		if (it != layers.end() && it->second > 2)
 		{
 			debug(LOG_INFO, "%s (%u) has an unexpected number of notification layers. (count: %" PRIu32 ")", getPlayerName(player), player, it->second);
 		}
@@ -1815,12 +1816,20 @@ static bool recvResearch(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart)
+bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart, const OrderSource &source)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
 		return true;
 	}
+
+	if (!orderSourcePermitsPlayerAction(player, source))
+	{
+		orderProvenanceRecord(player, source.origin(), true);
+		debug(LOG_NET, "Invalid research status change for player %u from %s", player, source.toDescription().c_str());
+		return false;
+	}
+	orderProvenanceRecord(player, source.origin(), false);
 
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_RESEARCHSTATUS);
 	NETuint8_t(w, player);
@@ -1840,6 +1849,10 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t pla
 
 	// Finally the topic in question
 	NETuint32_t(w, index);
+
+	OrderProvenanceWire provenance = orderProvenanceFromSource(source);
+	NETOrderProvenance(w, provenance);
+
 	NETend(w);
 
 	// Tell UI to remove from the list of available research.
@@ -1883,7 +1896,11 @@ bool recvResearchStatus(NETQUEUE queue)
 	NETbool(r, bStart);
 	NETuint32_t(r, structRef);
 	NETuint32_t(r, index);
+	OrderProvenanceWire provenance;
+	NETOrderProvenance(r, provenance);
 	NETend(r);
+
+	orderProvenanceRecordReported(player, static_cast<OrderOrigin>(provenance.origin));
 
 	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);
 

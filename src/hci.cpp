@@ -56,6 +56,7 @@
 #include "edit3d.h"
 #include "game.h"
 #include "hci.h"
+#include "ordersource.h"
 #include "ingameop.h"
 #include "intdisplay.h"
 #include "intelmap.h"
@@ -1403,6 +1404,14 @@ void intRequestQuitToMainMenu()
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets()
 {
+	uint16_t widgetViewX = 0, widgetViewY = 0;
+	const bool haveWidgetViewPos = orderSourceNormalizeViewPos(
+		mouseX(), mouseY(), pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(),
+		widgetViewX, widgetViewY);
+	OrderSourceScope orderScope(haveWidgetViewPos
+		? OrderSource::widgetAt(widgetViewX, widgetViewY)
+		: OrderSource::widget());
+
 	bool			quitting = false;
 
 	if (quitToMainMenuRequested)

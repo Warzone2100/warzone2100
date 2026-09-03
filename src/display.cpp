@@ -40,6 +40,7 @@
 
 #include "action.h"
 #include "display.h"
+#include "ordersource.h"
 #include "droid.h"
 #include "fpath.h"
 #include "group.h"
@@ -811,6 +812,15 @@ static void updateGamepadCursorMagnet()
 	}
 }
 
+/// Mints an order source for the click event currently being dispatched. The record carries the cursor
+/// position at the time the event was consumed, in screen space and as this frame's screen->world pick.
+static OrderSource pointerOrderSource()
+{
+	return OrderSource::pointer(mintPointerEventInfo(mouseX(), mouseY(),
+	                                               pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(),
+	                                               mousePos.x, mousePos.y));
+}
+
 //don't want to do any of these whilst in the Intelligence Screen
 void processMouseClickInput()
 {
@@ -852,6 +862,7 @@ void processMouseClickInput()
 
 	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
+		OrderSourceScope orderScope(pointerOrderSource());
 		if (bEffectiveRightClickOrders)
 		{
 			dealWithRMB();
@@ -872,11 +883,13 @@ void processMouseClickInput()
 
 	if (mouseDClicked(MOUSE_LMB))
 	{
+		OrderSourceScope orderScope(pointerOrderSource());
 		dealWithLMBDClick();
 	}
 
 	if (mouseReleased(MOUSE_RMB) && !rotActive && !panActive && !ignoreRMBC)
 	{
+		OrderSourceScope orderScope(pointerOrderSource());
 		dragBox3D.status = DRAG_INACTIVE;
 		// Pretty sure we wan't set walldrag status here aswell.
 		wallDrag.status = DRAG_INACTIVE;
@@ -2249,7 +2262,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 						AddDerrickBurningMessage();
 					}
 
-					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], psFeature->pos.xy(), playerPos.r.y), ctrlShiftDown());
+					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], psFeature->pos.xy(), playerPos.r.y), ctrlShiftDown(), currentOrderSource());
 					FeedbackOrderGiven();
 				}
 			}
@@ -2267,7 +2280,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
 				{
-					sendDroidInfo(psNearestUnit, DroidOrder(DORDER_RECOVER, psFeature), ctrlShiftDown());
+					sendDroidInfo(psNearestUnit, DroidOrder(DORDER_RECOVER, psFeature), ctrlShiftDown(), currentOrderSource());
 					FeedbackOrderGiven();
 				}
 				break;

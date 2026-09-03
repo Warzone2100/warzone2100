@@ -27,6 +27,7 @@
 #include <map>
 
 #include "lib/framework/frame.h"
+#include "ordersource.h"
 #include "lib/netplay/sync_debug.h"
 #include "lib/ivis_opengl/imd.h"
 #include "objects.h"
@@ -1439,7 +1440,7 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 	if (mode == ModeQueue)
 	{
-		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDRESEARCH, nullptr);
+		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDRESEARCH, nullptr, currentOrderSource());
 		setStatusPendingHold(*psResFac);
 		return;
 	}
@@ -1467,7 +1468,7 @@ void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 	if (mode == ModeQueue)
 	{
-		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASERESEARCH, nullptr);
+		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASERESEARCH, nullptr, currentOrderSource());
 		setStatusPendingRelease(*psResFac);
 		return;
 	}
@@ -1528,7 +1529,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		if (mode == ModeQueue)
 		{
 			// Tell others that we want to stop researching something.
-			sendResearchStatus(psBuilding, topicInc, psBuilding->player, false);
+			sendResearchStatus(psBuilding, topicInc, psBuilding->player, false, currentOrderSource());
 			// Immediately tell the UI that we can research this now. (But don't change the game state.)
 			MakeResearchCancelledPending(pPlayerRes);
 			setStatusPendingCancel(*psResFac);

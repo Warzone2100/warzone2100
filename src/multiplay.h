@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_MULTIPLAY_H__
 
 #include "lib/framework/frame.h"
+#include "ordersource.h"
 #include "lib/framework/types.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
@@ -302,16 +303,16 @@ bool multiplayerWinSequence(bool firstCall);
 bool SendDestroyStructure(const STRUCTURE *s);
 bool SendBuildFinished(const STRUCTURE *psStruct);
 bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj);
-void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl);
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl, const OrderSource &source);
 
 // droids . multibot
 bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
-void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
+void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add, const OrderSource &source);
 
-bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid);
+bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state, const OrderSource &source);
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid, const OrderSource &source);
 
 // Startup. mulitopt
 bool multiShutdown();
@@ -351,7 +352,7 @@ void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
-bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
+bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart, const OrderSource &source);
 
 bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
 

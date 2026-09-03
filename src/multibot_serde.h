@@ -35,6 +35,7 @@
 
 #include "basedef.h"
 #include "orderdef.h"
+#include "ordersource_wire.h"
 
 #include <type_traits>
 
@@ -141,6 +142,12 @@ struct QueuedDroidInfo
 			}
 			break;
 		}
+		// Provenance participates too, so a group never mixes two origins.
+		const int provComp = provenance.compare(z.provenance);
+		if (provComp != 0)
+		{
+			return provComp;
+		}
 		return 0;
 	}
 
@@ -161,6 +168,9 @@ struct QueuedDroidInfo
 	// subType == SecondaryOrder
 	SECONDARY_ORDER secOrder = DSO_UNUSED;
 	SECONDARY_STATE secState = DSS_NONE;
+
+	/// Provenance - see ordersource_wire.h.
+	OrderProvenanceWire provenance;
 };
 
 template <typename SerdeContext, typename T>
@@ -212,6 +222,8 @@ inline void NETQueuedDroidInfo(SerdeContext& c, typename SerdeFnArgT<SerdeContex
 		NETenum(c, info.secState);
 		break;
 	}
+
+	NETOrderProvenance(c, info.provenance);
 }
 
 #endif // __INCLUDED_SRC_MULTIBOT_SERDE_H__

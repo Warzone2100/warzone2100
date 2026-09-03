@@ -1182,7 +1182,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 
 	if (mode == ModeQueue)
 	{
-		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
+		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl, currentOrderSource());
 		setStatusPendingStart(*psFact, psTempl);
 		return true;  // Wait for our message before doing anything.
 	}
@@ -6277,7 +6277,7 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 
 	if (mode == ModeQueue)
 	{
-		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, nullptr);
+		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, nullptr, currentOrderSource());
 		setStatusPendingCancel(*psFactory);
 
 		return;
@@ -6301,7 +6301,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 	if (mode == ModeQueue)
 	{
-		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, nullptr);
+		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, nullptr, currentOrderSource());
 		setStatusPendingHold(*psFactory);
 
 		return;
@@ -6330,7 +6330,7 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 	if (mode == ModeQueue)
 	{
-		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, nullptr);
+		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, nullptr, currentOrderSource());
 		setStatusPendingRelease(*psFactory);
 
 		return;

@@ -97,6 +97,7 @@
 #include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
+#include "ordersource.h"
 #include "notifications.h"
 #include "screens/gamepadlayoutscreen.h"
 #include "input/gamepadcursor.h"
@@ -831,6 +832,8 @@ LoadingTask<> startGameAbortLevelLoadFailure(ResourceLoadingController& controll
 	{
 		multiGameShutdown();
 	}
+	orderSourceReset();
+	orderProvenanceReset();
 	levReleaseAll();
 	closeLoadingScreen();
 	cdAudio_SetGameMode(MusicGameMode::MENUS);

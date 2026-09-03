@@ -77,6 +77,7 @@
 #include "advvis.h"
 #include "loadsave.h"
 #include "wzapi.h"
+#include "ordersource.h"
 #include "order.h"
 #include "chat.h"
 #include "scores.h"
@@ -335,8 +336,17 @@ wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 //--
 //-- Give a droid an order to do something. (3.2+ only)
 //--
+static OrderSource scriptOrderSource(const wzapi::execution_context &context)
+{
+	const wzapi::scripting_instance *instance = context.currentInstance();
+	const bool hostDeclared = (instance != nullptr)
+	                          && (instance->binding() == wzapi::ScriptBinding::HostDeclaredGlobal);
+	return OrderSource::script(context.player(), hostDeclared);
+}
+
 bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	SCRIPT_ASSERT(false, context, order == DORDER_STOP || order == DORDER_RTB || order == DORDER_RTR ||
 	              order == DORDER_RECYCLE || order == DORDER_REARM || order == DORDER_HOLD,
@@ -371,6 +381,7 @@ bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 //--
 bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string structureName, int x, int y, optional<float> _direction))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
@@ -1366,7 +1377,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 			}
 			if (!started) // found relevant item on the path?
 			{
-				sendResearchStatus(psStruct, curResearch->index, player, true);
+				sendResearchStatus(psStruct, curResearch->index, player, true, scriptOrderSource(context));
 #if defined (DEBUG)
 				char sTemp[128];
 				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(curResearch));
@@ -1467,6 +1478,7 @@ int32_t wzapi::distBetweenTwoPoints(WZAPI_PARAMS(int32_t x1, int32_t y1, int32_t
 //--
 bool wzapi::orderDroidLoc(WZAPI_PARAMS(DROID *psDroid, int order_, int x, int y))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)order_;
 	SCRIPT_ASSERT(false, context, validOrderForLoc(order), "Invalid location based order: %s", getDroidOrderName(order));
@@ -1759,6 +1771,7 @@ bool wzapi::tileIsBurning(WZAPI_PARAMS(int x, int y))
 //--
 bool wzapi::orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *psObj))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)_order;
 	SCRIPT_ASSERT(false, context, psObj, "No valid object provided");
