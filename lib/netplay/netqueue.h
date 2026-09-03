@@ -127,6 +127,12 @@ public:
 		data_.insert(data_.end(), src, src + len);
 	}
 
+	// Bytes appended so far, excluding the header
+	size_t payloadSize() const
+	{
+		return data_.size() - NetMessage::HEADER_LENGTH;
+	}
+
 	// Build the final message (invalidates NetMessageBuilder instance)
 	NetMessage build()
 	{
