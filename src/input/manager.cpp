@@ -27,6 +27,7 @@
 #include "lib/framework/gamepad_input.h"
 
 #include "manager.h"
+#include "../ordersource.h"
 #include "context.h"
 #include "mapping.h"
 
@@ -319,6 +320,9 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 		/* Execute the action if mapping was hit */
 		if (keyToProcess.isActivated())
 		{
+			// Anything this mapping originates is a consequence of a real key event. findCurrentMapping()
+			// below runs the same loop without executing anything, so no event record is minted there.
+			OrderSourceScope orderScope(OrderSource::keybind(mintInputEventInfo(-1, -1, -1, -1)));
 			keyToProcess.info.function();
 			consumedInputs.insert(keyToProcess.keys.input);
 		}

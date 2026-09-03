@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/tex.h"
 
 #include "action.h"
+#include "ordersource.h"
 #include "clparse.h"
 #include "combat.h"
 #include "console.h"
@@ -2703,6 +2704,10 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		{
 			size_t idx WZ_DECL_UNUSED = 0; // unused when Args... is empty
 			quickjs_execution_context execution_context(context);
+			const wzapi::scripting_instance *orderScopeInstance = execution_context.currentInstance();
+			OrderSourceScope orderScope(OrderSource::script(
+				(orderScopeInstance != nullptr) ? orderScopeInstance->player() : -1,
+				(orderScopeInstance != nullptr) && (orderScopeInstance->binding() == wzapi::ScriptBinding::HostDeclaredGlobal)));
 			return box(applyAndCallF(f, UnboxTuple<Args...>(execution_context, idx, context, argc, argv, wrappedFunctionName)()), context);
 		}
 

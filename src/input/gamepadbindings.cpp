@@ -21,6 +21,7 @@
  */
 
 #include "gamepadbindings.h"
+#include "../ordersource.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/gamepad_input.h"
@@ -119,11 +120,13 @@ void gamepadProcessBindings()
 	{
 		stopPressTime = wzGetTicks();
 		stopHoldIssued = false;
+		OrderSourceScope orderScope(OrderSource::keybind(mintInputEventInfo(-1, -1, -1, -1)));
 		kf_OrderDroid(DORDER_STOP)();
 	}
 	if (!stopHoldIssued && gamepadButtonDown(GPAD_BTN_NORTH) && wzGetTicks() - stopPressTime >= GAMEPAD_STOP_HOLD_MS)
 	{
 		stopHoldIssued = true;
+		OrderSourceScope orderScope(OrderSource::keybind(mintInputEventInfo(-1, -1, -1, -1)));
 		kf_OrderDroid(DORDER_HOLD)();
 	}
 

@@ -45,12 +45,19 @@
 #include "transporter.h"
 #include "game_world.h"
 #include "multibot_serde.h"
+#include "ordersource.h"
+#include "ordersource_wire.h"
 
 #include <vector>
 #include <algorithm>
 
 
 static std::vector<QueuedDroidInfo> queuedOrders;
+
+static void applyOrderSource(QueuedDroidInfo &info, const OrderSource &source)
+{
+	info.provenance = orderProvenanceFromSource(source);
+}
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -70,12 +77,20 @@ static BASE_OBJECT *const TargetMissing = &TargetMissing_;  // Error return valu
 // Secondary Orders.
 
 // Send
-bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
+bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state, const OrderSource &source)
 {
 	if (!bMultiMessages)
 	{
 		return true;
 	}
+
+	if (!orderSourcePermitsPlayerAction(psDroid->player, source))
+	{
+		orderProvenanceRecord(psDroid->player, source.origin(), true);
+		debug(LOG_NET, "Invalid secondary order for player %u from %s", psDroid->player, source.toDescription().c_str());
+		return false;
+	}
+	orderProvenanceRecord(psDroid->player, source.origin(), false);
 
 	QueuedDroidInfo info;
 
@@ -84,6 +99,7 @@ bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 	info.subType = SecondaryOrder;
 	info.secOrder = sec;
 	info.secState = state;
+	applyOrderSource(info, source);
 
 	// Send later, grouped by order, so multiple droids with the same order can be encoded to much less data.
 	queuedOrders.push_back(info);
@@ -95,12 +111,20 @@ bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STA
  *
  *  \sa recvDroidDisEmbark()
  */
-bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid)
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid, const OrderSource &source)
 {
 	if (!bMultiMessages)
 	{
 		return true;
 	}
+
+	if (!orderSourcePermitsPlayerAction(psDroid->player, source))
+	{
+		orderProvenanceRecord(psDroid->player, source.origin(), true);
+		debug(LOG_NET, "Invalid disembark for player %u from %s", psDroid->player, source.toDescription().c_str());
+		return false;
+	}
+	orderProvenanceRecord(psDroid->player, source.origin(), false);
 
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDDISEMBARK);
 	uint32_t player = psTransporter->player;
@@ -404,7 +428,7 @@ DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, STRUCTURE_STATS co
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
+void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add, const OrderSource &source)
 {
 	if (!myResponsibility(psDroid->player))
 	{
@@ -414,6 +438,16 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 	{
 		return;
 	}
+
+	// Check before orderDroidAddPending() below, so an invalid order does not
+	// leave a phantom waypoint drawn on the issuing client's own screen.
+	if (!orderSourcePermitsPlayerAction(psDroid->player, source))
+	{
+		orderProvenanceRecord(psDroid->player, source.origin(), true);
+		debug(LOG_NET, "Invalid droid order for player %u from %s", psDroid->player, source.toDescription().c_str());
+		return;
+	}
+	orderProvenanceRecord(psDroid->player, source.origin(), false);
 
 	QueuedDroidInfo info;
 
@@ -450,6 +484,8 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 
 	info.add = add;
 
+	applyOrderSource(info, source);
+
 	// Send later, grouped by order, so multiple droids with the same order can be encoded to much less data.
 	queuedOrders.push_back(info);
 
@@ -470,6 +506,8 @@ bool recvDroidInfo(NETQUEUE queue)
 	{
 		QueuedDroidInfo info;
 		NETQueuedDroidInfo(r, info);
+
+		orderProvenanceRecordReported(info.player, static_cast<OrderOrigin>(info.provenance.origin));
 
 		STRUCTURE_STATS *psStats = nullptr;
 		if (info.subType == LocOrder && (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD))

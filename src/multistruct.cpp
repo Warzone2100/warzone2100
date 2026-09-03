@@ -52,6 +52,7 @@
 #include "research.h"
 #include "qtscript.h"
 #include "combat.h"
+#include "ordersource_wire.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // structures
@@ -251,11 +252,13 @@ bool recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT)
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT, const OrderSource &source)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
 	uint8_t  structureInfo = structureInfo_;
+
+	orderProvenanceRecord(player, source.origin(), false);
 
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_STRUCTUREINFO);
 	NETuint8_t(w, player);
@@ -280,6 +283,10 @@ void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_,
 			NETuint32_t(w, pT->asWeaps[i]);
 		}
 	}
+
+	OrderProvenanceWire provenance = orderProvenanceFromSource(source);
+	NETOrderProvenance(w, provenance);
+
 	NETend(w);
 }
 
@@ -327,7 +334,11 @@ void recvStructureInfo(NETQUEUE queue)
 			pT = copyTemplate(player, pT);
 		}
 	}
+	OrderProvenanceWire provenance;
+	NETOrderProvenance(r, provenance);
 	NETend(r);
+
+	orderProvenanceRecordReported(player, static_cast<OrderOrigin>(provenance.origin));
 
 	psStruct = IdToStruct(structId, player);
 

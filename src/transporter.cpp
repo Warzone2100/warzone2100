@@ -36,6 +36,7 @@
 #include "intdisplay.h"
 #include "objmem.h"
 #include "transporter.h"
+#include "ordersource.h"
 #include "group.h"
 #include "move.h"
 #include "pathfinding_backend.h"
@@ -914,8 +915,10 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 
 	if (bMultiMessages && mode == ModeQueue)
 	{
-		sendDroidDisembark(psTransport, psDroid);
-		psDroid->selected = true;  // Remove from interface.
+		if (sendDroidDisembark(psTransport, psDroid, currentOrderSource()))
+		{
+			psDroid->selected = true;  // Remove from interface.
+		}
 		return;
 	}
 
