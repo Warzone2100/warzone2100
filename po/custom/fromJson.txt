@@ -575,11 +575,11 @@ _("Armed with Cyborg Scourge Missile Launcher")
 // data/base/messages/resmessages2.json: $.RES_CYW_RK2.text[1]
 _("Armed with Cyborg Tank Killer rocket")  
 // TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
-_("Armed with Cyborg Thermite Flamer")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_FL2.text[1]
 _("Armed with Cyborg Thermite flamer")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
+_("Armed with Cyborg Thermite Flamer")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
@@ -1105,26 +1105,26 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-_("Best Targets: Bunkers and Hardpoints")  
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 // ... + 2 refs
 _("Best Targets: Bunkers and hardpoints")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+_("Best Targets: Bunkers and Hardpoints")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 _("Best Targets: Bunkers, defenses, base structures")  
@@ -1623,6 +1623,9 @@ _("Construction Unit")
 // data/base/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 // data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 _("Controls up to ten commanders")  
+// TRANSLATORS: 
+// data/mp/tests/corridordump.json: $.challenge.name
+_("Corridor Dump")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
 // data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[3]
@@ -4204,6 +4207,81 @@ _("Mortar")
 // data/base/stats/weapons.json: $.MG1-Tower.name
 _("Mounted Machinegun")  
 // TRANSLATORS: 
+// data/mp/tests/movebench_blob.json: $.challenge.name
+_("MoveBench blob")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_corner.json: $.challenge.name
+_("MoveBench corner")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_corner_mixed.json: $.challenge.name
+_("MoveBench corner_mixed")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w1.json: $.challenge.name
+_("MoveBench Counterflow (gap 1)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w3.json: $.challenge.name
+_("MoveBench Counterflow (gap 3)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w4.json: $.challenge.name
+_("MoveBench Counterflow (gap 4)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w6.json: $.challenge.name
+_("MoveBench Counterflow (gap 6)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w8.json: $.challenge.name
+_("MoveBench Counterflow (gap 8)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_hostile.json: $.challenge.name
+_("MoveBench Counterflow (hostile)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_tracked.json: $.challenge.name
+_("MoveBench Counterflow (tracked)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_cyborg.json: $.challenge.name
+_("MoveBench counterflow_cyborg")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_crossing.json: $.challenge.name
+_("MoveBench crossing")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_enemyblock_press.json: $.challenge.name
+_("MoveBench Enemy Block (pressure)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_enemyblock.json: $.challenge.name
+_("MoveBench Enemy Block")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_mountain_chain_cross.json: $.challenge.name
+_("MoveBench Mountain Chain Cross")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_mountain_chain.json: $.challenge.name
+_("MoveBench Mountain Chain")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_oneway_tracked.json: $.challenge.name
+_("MoveBench One-way (tracked)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_open_corner.json: $.challenge.name
+_("MoveBench Open Corner")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_openfield.json: $.challenge.name
+_("MoveBench openfield")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking.json: $.challenge.name
+_("MoveBench parking")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_rush_corner.json: $.challenge.name
+_("MoveBench Rush Corner")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_rush_turn.json: $.challenge.name
+_("MoveBench Rush Turn")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_separating.json: $.challenge.name
+_("MoveBench separating")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_strafe.json: $.challenge.name
+_("MoveBench Strafe")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_tworoute.json: $.challenge.name
+_("MoveBench Two-route counterflow")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Vehicle-Body14.name
 _("Multi Turret Body - Dragon")  
 // TRANSLATORS: 
@@ -4540,11 +4618,11 @@ _("NEXUS Resistance Circuits Mk2")
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
-_("Nexus Resistance Circuits")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
 _("NEXUS Resistance Circuits")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
+_("Nexus Resistance Circuits")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSWall.name
 // data/mp/stats/structure.json: $.NEXUSWall.name
@@ -4626,6 +4704,9 @@ _("Particle Gun Emplacement")
 // data/mp/stats/research.json: $.R-Wpn-ParticleGun.name
 // data/mp/stats/weapons.json: $.ParticleGun.name
 _("Particle Gun")  
+// TRANSLATORS: 
+// data/mp/tests/pathbench.json: $.challenge.name
+_("PathBench")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotMor.name
 // data/base/stats/structure.json: $.Emplacement-RotMor.name
