@@ -210,16 +210,18 @@ void usePower(int player, uint32_t quantity)
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity * FP_ONE);
 }
 
-void addPower(int player, int32_t quantity)
+int32_t addPower(int player, int32_t quantity)
 {
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("addPower%d %" PRId64"+=%d", player, asPower[player].currentPower, quantity);
+	int64_t before = asPower[player].currentPower;
 	asPower[player].currentPower += quantity * FP_ONE;
 	if (asPower[player].currentPower > asPower[player].maxStorage)
 	{
 		asPower[player].wastedPower += asPower[player].currentPower - asPower[player].maxStorage;
 		asPower[player].currentPower = asPower[player].maxStorage;
 	}
+	return static_cast<int32_t>((asPower[player].currentPower - before) / FP_ONE);
 }
 
 /*resets the power calc flag for all players*/
