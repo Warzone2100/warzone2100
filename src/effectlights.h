@@ -31,6 +31,7 @@
 
 struct iIMDShape;
 struct WEAPON_STATS;
+struct LightingData;
 
 /// The light a projectile throws while it is in flight
 struct ProjectileLight
@@ -48,3 +49,27 @@ void reloadEffectLights();
 
 /// Return the light that a projectile of psStats (drawn with pIMD) throws, or nullopt when it throws none
 nonstd::optional<ProjectileLight> resolveProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pIMD, bool modelIsGlowing);
+
+/// Whether any part of the in-flight graphic is drawn as a glow (additive or premultiplied), so it lights the world.
+/// Mirrors the additive decision in renderProjectile (which must stay in sync).
+bool projectileGraphicGlows(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD);
+
+/// The light thrown by an in-flight projectile of psStats, resolving glow and plume scale from its graphic.
+/// Returns nullopt when the projectile throws no light.
+nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD);
+
+/// The pre-resolved in-flight light for a weapon by its stat index, or nullptr when it throws none.
+/// Rebuilt when the settings load / reload.
+const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex);
+
+/// Start recording the lights emitted this frame.
+void beginProjectileLightFrame();
+
+/// Note that projectile `id` threw a light at `position` this frame (weaponIndex gives its fade duration).
+void recordProjectileLight(uint32_t id, const Vector3i &position, size_t weaponIndex);
+
+/// Spawn fades for lights that stopped since last frame, then emit every live fade into lightData.
+void emitProjectileFades(LightingData &lightData);
+
+/// Drop every fade and the emission record, so no fade outlives its game or a lighting toggle.
+void clearFadingProjectileLights();

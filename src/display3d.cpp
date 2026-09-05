@@ -119,6 +119,7 @@ static void	drawDragBox();
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const glm::mat4 &perspectiveViewModelMatrix);
 static void	drawTiles(iView *player, LightingData& lightData, LightMap& lightmap, ILightingManager& lightManager);
 static void	display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
+static void	emitProjectileLights(LightingData &lightData);
 static void	drawDroidAndStructureSelections();
 static void	drawDroidSelections();
 static void	drawStructureSelections();
@@ -1377,6 +1378,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	processEffects(perspectiveViewMatrix, lightData);
 	atmosUpdateSystem(gameWorld.map);
 	avUpdateTiles(gameWorld.map);
+	emitProjectileLights(lightData);
 	wzPerfEnd(PERF_EFFECTS);
 
 	// The lightmap need to be ready at this point
@@ -1555,6 +1557,8 @@ bool init3DView()
 	{
 		debug(LOG_ERROR, "Failed to initialize range-ring buffers");
 	}
+
+	clearFadingProjectileLights();
 
 	return true;
 }
@@ -1782,6 +1786,12 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const gl
 	*pR = radius;
 }
 
+/// A projectile is drawn (and lights the world) only while it is spawned, not yet impacted, and visible to the viewer.
+static bool projectileIsShowing(const PROJECTILE *psObj)
+{
+	return graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj);
+}
+
 /// Decide whether to render a projectile, and make sure it will be drawn
 static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -1789,8 +1799,7 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	PROJECTILE *psObj = proj_GetFirst();
 	while (psObj != nullptr)
 	{
-		// If source or destination is visible, and projectile has been spawned and has not impacted.
-		if (graphicsTime >= psObj->prevSpacetime.time && graphicsTime <= psObj->time && gfxVisible(psObj))
+		if (projectileIsShowing(psObj))
 		{
 			/* Draw a bullet at psObj->pos.x for X coord
 			   psObj->pos.y for Z coord
@@ -1817,27 +1826,61 @@ static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	}
 }	/* end of function display3DProjectiles */
 
-/// A projectile drawn additively is burning or glowing rather than merely lit, so it throws light on what it passes.
-/// (Unless the data files say otherwise, that comes from the model rather than the weapon.)
-static void addProjectileLight(const WEAPON_STATS *psStats, const Vector3i &lightPosition, const iIMDShape *pIMD, bool modelIsGlowing)
+/// Whether projectile lighting is switched on and the renderer can carry per-pixel point lights.
+static bool projectileLightingActive()
 {
-	if (!war_getProjectileLighting() || !war_getPointLightPerPixelLighting() || getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
-	{
-		return;
-	}
+	return war_getProjectileLighting() && war_getPointLightPerPixelLighting()
+		&& getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING;
+}
 
-	const auto projectileLight = resolveProjectileLight(psStats, pIMD, modelIsGlowing);
-	if (!projectileLight.has_value())
-	{
-		return;
-	}
+/// The subclasses renderProjectile skips, because an effect is drawn in place of the projectile graphic.
+static bool projectileDrawnAsEffect(const WEAPON_STATS *psStats)
+{
+	return psStats->weaponSubClass == WSC_FLAME
+		|| psStats->weaponSubClass == WSC_COMMAND
+		|| psStats->weaponSubClass == WSC_ELECTRONIC
+		|| psStats->weaponSubClass == WSC_EMP
+		|| (bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT);
+}
 
+static void pushProjectileLight(LightingData &lightData, const Vector3i &lightPosition, const ProjectileLight &projectileLight)
+{
 	LIGHT light;
 	light.position = lightPosition;
-	light.range = projectileLight->range;
-	light.colour = projectileLight->color;
-	light.intensity = projectileLight->intensity;
-	getCurrentLightingData().lights.push_back(light);
+	light.range = projectileLight.range;
+	light.colour = projectileLight.color;
+	light.intensity = projectileLight.intensity;
+	lightData.lights.push_back(light);
+}
+
+/// Emit the light every showing in-flight projectile throws, in the same frame the light manager reads them.
+static void emitProjectileLights(LightingData &lightData)
+{
+	if (!projectileLightingActive())
+	{
+		clearFadingProjectileLights();
+		return;
+	}
+	beginProjectileLightFrame();
+	for (PROJECTILE *psObj = proj_GetFirst(); psObj != nullptr; psObj = proj_GetNext())
+	{
+		if (!projectileIsShowing(psObj) || projectileDrawnAsEffect(psObj->psWStats))
+		{
+			continue;
+		}
+		const size_t weaponIndex = psObj->psWStats->index;
+		const ProjectileLight *projectileLight = cachedInFlightProjectileLight(weaponIndex);
+		if (projectileLight == nullptr)
+		{
+			continue;
+		}
+		const Spacetime st = interpolateObjectSpacetime(psObj, graphicsTime);
+		// A light is positioned by game coordinates, where the height is the middle component
+		const Vector3i position(st.pos.x, st.pos.z, st.pos.y);
+		pushProjectileLight(lightData, position, *projectileLight);
+		recordProjectileLight(psObj->id, position, weaponIndex);
+	}
+	emitProjectileFades(lightData);
 }
 
 /// Draw a projectile to the screen
@@ -1902,8 +1945,10 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
-	bool alreadyLitTheWorld = false;
+#ifdef DEBUG
+	bool anyPartGlowed = false;
 	const iIMDShape *pFirstIMD = pIMD;
+#endif
 	for (; pIMD != nullptr; pIMD = pIMD->next.get())
 	{
 		bool rollToCamera = false;
@@ -1934,13 +1979,9 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 			premultiplied = true;
 		}
 
-		// One light for the projectile (not one per part), since the parts are the same glow
-		if ((additive || premultiplied) && !alreadyLitTheWorld)
-		{
-			// A light is positioned by game coordinates, where the height is the middle component
-			addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pIMD, true);
-			alreadyLitTheWorld = true;
-		}
+#ifdef DEBUG
+		anyPartGlowed = anyPartGlowed || additive || premultiplied;
+#endif
 
 		Vector3i camera = camera_base;
 		glm::mat4 modelMatrix = modelMatrix_base;
@@ -1987,11 +2028,10 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		}
 	}
 
-	// No part glows, so only the data files can ask this projectile for a light
-	if (!alreadyLitTheWorld && pFirstIMD != nullptr)
-	{
-		addProjectileLight(psStats, Vector3i(st.pos.x, st.pos.z, st.pos.y), pFirstIMD, false);
-	}
+#ifdef DEBUG
+	ASSERT(anyPartGlowed == projectileGraphicGlows(psStats, pFirstIMD),
+	       "Projectile glow decision disagrees with the one lighting uses for %s", getStatsName(psStats));
+#endif
 }
 
 /// Draw the buildings

@@ -26,8 +26,11 @@
 
 #include "lib/framework/file.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/pielighting.h"
+#include "lib/gamelib/gtime.h"
 
 #include "stats.h"
 #include "statsdef.h"
@@ -50,6 +53,9 @@ static constexpr float maxLightScale = 4.f;
 static constexpr UDWORD advisoryLightRange = 512;
 static constexpr float advisoryLightIntensity = 2.f;
 
+static constexpr UDWORD maxFadeDuration = 1000; // ms - keeps a data file from creating long-lived phantom lights
+static constexpr UDWORD defaultFadeDuration = 200; // ms
+
 /// A field with no value is taken from the next place that has one
 struct EffectLightSettings
 {
@@ -59,11 +65,20 @@ struct EffectLightSettings
 	nonstd::optional<float> intensity;
 	nonstd::optional<float> rangeScale;
 	nonstd::optional<float> intensityScale;
+	nonstd::optional<UDWORD> fadeDuration;
 };
 
 static std::array<EffectLightSettings, WSC_NUM_WEAPON_SUBCLASSES> projectileSubClassSettings;
 static std::vector<EffectLightSettings> projectileWeaponSettings;
 static std::string effectLightsFileName;
+
+/// The in-flight light each weapon throws, resolved once when the settings load and indexed by weapon stat index.
+struct ResolvedProjectileLight
+{
+	nonstd::optional<ProjectileLight> light;
+	UDWORD fadeDuration = defaultFadeDuration;
+};
+static std::vector<ResolvedProjectileLight> resolvedProjectileLights;
 
 /// A subclass with no entry uses the weapon class default.
 static const std::array<nonstd::optional<PIELIGHT>, WSC_NUM_WEAPON_SUBCLASSES> projectileLightColorBySubClass = []() {
@@ -183,6 +198,29 @@ static bool parseRangeValue(const nlohmann::json &value, const std::string &what
 	return true;
 }
 
+static bool parseFadeDurationValue(const nlohmann::json &value, const std::string &what, UDWORD &output)
+{
+	if (!value.is_number_integer())
+	{
+		debug(LOG_ERROR, "%s: \"fadeDuration\" must be a whole number of milliseconds", what.c_str());
+		return false;
+	}
+	const int64_t duration = value.get<int64_t>();
+	if (duration < 0)
+	{
+		debug(LOG_ERROR, "%s: \"fadeDuration\" cannot be negative", what.c_str());
+		return false;
+	}
+	if (duration > static_cast<int64_t>(maxFadeDuration))
+	{
+		debug(LOG_ERROR, "%s: \"fadeDuration\" %" PRId64 " is above the limit of %" PRIu32 ", using the limit", what.c_str(), duration, maxFadeDuration);
+		output = maxFadeDuration;
+		return true;
+	}
+	output = static_cast<UDWORD>(duration);
+	return true;
+}
+
 static bool parseFloatValue(const nlohmann::json &value, const std::string &what, const std::string &key, float lowest, float highest, float &output)
 {
 	if (!value.is_number())
@@ -255,6 +293,14 @@ static void parseEntry(const nlohmann::json &entry, const std::string &what, Eff
 				{
 					debug(LOG_WARNING, "%s: \"intensity\" %g is bright enough to flatten the light into a disk of flat color", what.c_str(), intensity);
 				}
+			}
+		}
+		else if (key == "fadeDuration")
+		{
+			UDWORD duration = 0;
+			if (parseFadeDurationValue(it.value(), what, duration))
+			{
+				output.fadeDuration = duration;
 			}
 		}
 		else if (key == "rangeScale")
@@ -432,6 +478,255 @@ nonstd::optional<ProjectileLight> resolveProjectileLight(const WEAPON_STATS *psS
 	return light;
 }
 
+// A part is drawn as a glow when its subclass or model flags make it additive or premultiplied.
+// The flag order here matches renderProjectile - later flags override earlier ones.
+static bool projectilePartGlows(const WEAPON_STATS *psStats, const iIMDShape *pIMD)
+{
+	bool additive = psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
+		|| psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE;
+	bool premultiplied = false;
+	if (pIMD->flags & iV_IMD_NO_ADDITIVE)
+	{
+		additive = false;
+	}
+	if (pIMD->flags & iV_IMD_ADDITIVE)
+	{
+		additive = true;
+	}
+	if (pIMD->flags & iV_IMD_PREMULTIPLIED)
+	{
+		additive = false;
+		premultiplied = true;
+	}
+	return additive || premultiplied;
+}
+
+bool projectileGraphicGlows(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD)
+{
+	for (const iIMDShape *pIMD = pFirstIMD; pIMD != nullptr; pIMD = pIMD->next.get())
+	{
+		if (projectilePartGlows(psStats, pIMD))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+nonstd::optional<ProjectileLight> resolveInFlightProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pFirstIMD)
+{
+	if (psStats == nullptr || pFirstIMD == nullptr)
+	{
+		return nonstd::nullopt;
+	}
+	// The first glowing part lights the world (its plume sizes the light). If none glow, only the data files can.
+	for (const iIMDShape *pIMD = pFirstIMD; pIMD != nullptr; pIMD = pIMD->next.get())
+	{
+		if (projectilePartGlows(psStats, pIMD))
+		{
+			return resolveProjectileLight(psStats, pIMD, true);
+		}
+	}
+	return resolveProjectileLight(psStats, pFirstIMD, false);
+}
+
+static void buildResolvedProjectileLights()
+{
+	resolvedProjectileLights.assign(asWeaponStats.size(), ResolvedProjectileLight{});
+	for (const auto &psStats : asWeaponStats)
+	{
+		if (psStats.index >= resolvedProjectileLights.size())
+		{
+			continue;
+		}
+		const iIMDShape *pIMD = (psStats.pInFlightGraphic != nullptr) ? psStats.pInFlightGraphic->displayModel() : nullptr;
+		ResolvedProjectileLight &resolved = resolvedProjectileLights[psStats.index];
+		resolved.light = resolveInFlightProjectileLight(&psStats, pIMD);
+		resolved.fadeDuration = resolveField(projectileWeaponSettingsFor(&psStats), projectileSubClassSettingsFor(&psStats),
+			&EffectLightSettings::fadeDuration).value_or(defaultFadeDuration);
+	}
+}
+
+const ProjectileLight *cachedInFlightProjectileLight(size_t weaponIndex)
+{
+	if (weaponIndex >= resolvedProjectileLights.size())
+	{
+		return nullptr;
+	}
+	const auto &resolved = resolvedProjectileLights[weaponIndex];
+	return resolved.light.has_value() ? &resolved.light.value() : nullptr;
+}
+
+// Max fades that may exist at once - past the cap the cheapest is evicted
+static constexpr size_t maxProjectileFades = 24;
+// Below this a light is invisible but would still cost a light slot
+static constexpr float fadeCutoffIntensity = 0.05f;
+
+/// The light a projectile threw last frame, kept so the frame it stops can start a fade from it.
+struct EmittedProjectileLight
+{
+	uint32_t id;
+	Vector3i position;
+	ProjectileLight light;
+	uint32_t duration;
+};
+
+struct FadingProjectileLight
+{
+	uint32_t id;
+	Vector3i position;
+	ProjectileLight light;
+	uint32_t startTime;
+	uint32_t duration;
+};
+
+// Swapped each frame - what threw a light this frame, and what did last frame.
+static std::vector<EmittedProjectileLight> emittedThisFrame;
+static std::vector<EmittedProjectileLight> emittedLastFrame;
+static std::vector<FadingProjectileLight> fadingLights;
+
+void beginProjectileLightFrame()
+{
+	emittedThisFrame.clear();
+}
+
+void recordProjectileLight(uint32_t id, const Vector3i &position, size_t weaponIndex)
+{
+	if (weaponIndex >= resolvedProjectileLights.size())
+	{
+		return;
+	}
+	const ResolvedProjectileLight &resolved = resolvedProjectileLights[weaponIndex];
+	if (!resolved.light.has_value())
+	{
+		return;
+	}
+	EmittedProjectileLight emitted;
+	emitted.id = id;
+	emitted.position = position;
+	emitted.light = resolved.light.value();
+	emitted.duration = resolved.fadeDuration;
+	emittedThisFrame.push_back(emitted);
+}
+
+// A fade cools like an ember: its intensity falls quadratically and its range shrinks toward half.
+// Returns false once the light has cooled past the point it is worth a light slot.
+static bool fadeToLight(const FadingProjectileLight &fade, uint32_t now, LIGHT &out)
+{
+	const uint32_t age = now - fade.startTime;
+	if (age >= fade.duration)
+	{
+		return false;
+	}
+	const float remaining = 1.f - static_cast<float>(age) / static_cast<float>(fade.duration);
+	const float intensity = fade.light.intensity * remaining * remaining;
+	if (intensity < fadeCutoffIntensity)
+	{
+		return false;
+	}
+	out.position = fade.position;
+	out.range = static_cast<UDWORD>(static_cast<float>(fade.light.range) * (0.5f + 0.5f * remaining));
+	out.colour = fade.light.color;
+	out.intensity = intensity;
+	return true;
+}
+
+// The importance the light manager would give this fade
+static float fadeImportance(const FadingProjectileLight &fade, uint32_t now)
+{
+	LIGHT light;
+	if (!fadeToLight(fade, now, light))
+	{
+		return 0.f;
+	}
+	return light.intensity * static_cast<float>(light.range) * static_cast<float>(light.range);
+}
+
+static void spawnFade(const EmittedProjectileLight &seed, uint32_t now)
+{
+	if (seed.duration == 0)
+	{
+		return;
+	}
+	FadingProjectileLight fade;
+	fade.id = seed.id;
+	fade.position = seed.position;
+	fade.light = seed.light;
+	fade.startTime = now;
+	fade.duration = seed.duration;
+
+	if (fadingLights.size() < maxProjectileFades)
+	{
+		fadingLights.push_back(fade);
+		return;
+	}
+	size_t cheapest = 0;
+	float cheapestImportance = fadeImportance(fadingLights[0], now);
+	for (size_t i = 1; i < fadingLights.size(); ++i)
+	{
+		const float importance = fadeImportance(fadingLights[i], now);
+		if (importance < cheapestImportance)
+		{
+			cheapest = i;
+			cheapestImportance = importance;
+		}
+	}
+	fadingLights[cheapest] = fade;
+}
+
+static bool idEmittedThisFrame(uint32_t id)
+{
+	for (const auto &emitted : emittedThisFrame)
+	{
+		if (emitted.id == id)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void emitProjectileFades(LightingData &lightData)
+{
+	const uint32_t now = graphicsTime;
+
+	// A projectile that re-enters emission cancels its own fade, so a one-frame flap never doubles the light.
+	fadingLights.erase(std::remove_if(fadingLights.begin(), fadingLights.end(),
+		[](const FadingProjectileLight &fade) { return idEmittedThisFrame(fade.id); }), fadingLights.end());
+
+	for (const auto &emitted : emittedLastFrame)
+	{
+		if (!idEmittedThisFrame(emitted.id))
+		{
+			spawnFade(emitted, now);
+		}
+	}
+
+	for (size_t i = 0; i < fadingLights.size(); )
+	{
+		LIGHT light;
+		if (fadeToLight(fadingLights[i], now, light))
+		{
+			lightData.lights.push_back(light);
+			++i;
+		}
+		else
+		{
+			fadingLights[i] = fadingLights.back();
+			fadingLights.pop_back();
+		}
+	}
+
+	std::swap(emittedLastFrame, emittedThisFrame);
+}
+
+void clearFadingProjectileLights()
+{
+	fadingLights.clear();
+	emittedThisFrame.clear();
+	emittedLastFrame.clear();
+}
+
 static void reportResolvedProjectileLights()
 {
 	if (!enabled_debug[LOG_WZ])
@@ -458,30 +753,18 @@ static void reportResolvedProjectileLights()
 			      fieldSource(weapon, subClass, &EffectLightSettings::enabled));
 			continue;
 		}
-		debug(LOG_WZ, "%s (%s): color [%u, %u, %u] (%s), range %" PRIu32 " (%s), intensity %g (%s)",
+		const UDWORD fadeDuration = resolveField(weapon, subClass, &EffectLightSettings::fadeDuration).value_or(defaultFadeDuration);
+		debug(LOG_WZ, "%s (%s): color [%u, %u, %u] (%s), range %" PRIu32 " (%s), intensity %g (%s), fade %" PRIu32 " ms (%s)",
 		      getID(&psStats), getWeaponSubClass(psStats.weaponSubClass),
 		      light->color.byte.r, light->color.byte.g, light->color.byte.b, fieldSource(weapon, subClass, &EffectLightSettings::color),
 		      light->range, fieldSource(weapon, subClass, &EffectLightSettings::range),
-		      light->intensity, fieldSource(weapon, subClass, &EffectLightSettings::intensity));
+		      light->intensity, fieldSource(weapon, subClass, &EffectLightSettings::intensity),
+		      fadeDuration, fieldSource(weapon, subClass, &EffectLightSettings::fadeDuration));
 	}
 }
 
-bool loadEffectLights(const char *pFileName)
+static void parseEffectLightsSections(const char *pFileName, const std::vector<char> &fileContents)
 {
-	ASSERT_OR_RETURN(false, pFileName != nullptr, "Expecting a file name");
-	effectLightsFileName = pFileName;
-
-	projectileSubClassSettings = {};
-	projectileWeaponSettings.clear();
-	projectileWeaponSettings.resize(asWeaponStats.size());
-
-	std::vector<char> fileContents;
-	if (!loadFileToBufferVector(pFileName, fileContents, false))
-	{
-		// No file is fine - every light then comes from its graphic and the built-in values
-		return true;
-	}
-
 	nlohmann::json root;
 	try
 	{
@@ -490,13 +773,13 @@ bool loadEffectLights(const char *pFileName)
 	catch (const std::exception &e)
 	{
 		debug(LOG_ERROR, "%s is not valid JSON, ignoring it: %s", pFileName, e.what());
-		return true;
+		return;
 	}
 
 	if (!root.is_object())
 	{
 		debug(LOG_ERROR, "%s: expecting a group of sections", pFileName);
-		return true;
+		return;
 	}
 
 	for (auto it = root.begin(); it != root.end(); ++it)
@@ -515,7 +798,25 @@ bool loadEffectLights(const char *pFileName)
 			debug(LOG_ERROR, "%s: unknown section \"%s\"", pFileName, key.c_str());
 		}
 	}
+}
 
+bool loadEffectLights(const char *pFileName)
+{
+	ASSERT_OR_RETURN(false, pFileName != nullptr, "Expecting a file name");
+	effectLightsFileName = pFileName;
+
+	projectileSubClassSettings = {};
+	projectileWeaponSettings.clear();
+	projectileWeaponSettings.resize(asWeaponStats.size());
+
+	// No file is fine - every light then comes from its graphic and the built-in values.
+	std::vector<char> fileContents;
+	if (loadFileToBufferVector(pFileName, fileContents, false))
+	{
+		parseEffectLightsSections(pFileName, fileContents);
+	}
+
+	buildResolvedProjectileLights();
 	reportResolvedProjectileLights();
 	return true;
 }
@@ -534,5 +835,7 @@ void effectLightsShutDown()
 {
 	projectileSubClassSettings = {};
 	projectileWeaponSettings.clear();
+	resolvedProjectileLights.clear();
+	clearFadingProjectileLights();
 	effectLightsFileName.clear();
 }
