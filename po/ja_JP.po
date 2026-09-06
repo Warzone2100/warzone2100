@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-08-10 02:49\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -1776,7 +1776,7 @@ msgid "Locate and rescue your units from the shot down transporter"
 msgstr "撃墜されたトランスポーターから自軍のユニットを探し出し、救出せよ"
 
 msgid "Destroy all enemy bases"
-msgstr ""
+msgstr "すべての敵基地を破壊せよ"
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "多くの人がコレクティブ軍に捕まる前に、民間人を救出せよ"
@@ -1800,7 +1800,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "NEXUSからアルファ チームを救出"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr ""
+msgstr "Nexusのホバー戦車をエリアから逃走させるな"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "NEXUS本部を破壊し、NEXUS侵入プログラムを無効化する"
@@ -1824,7 +1824,7 @@ msgid "Return to LZ"
 msgstr "着陸地帯に戻れ"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "インセイン難易度のヒント："
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "コレクティブ軍から身を守るため、マップ全域に強固な基地を築け"
@@ -2013,7 +2013,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "おめでとうございます、司令官 - 最初のミッションの準備は整いました"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "チュートリアルが終了しました。Esc または歯車アイコンを押して、メインメニューを終了します。"
 
 msgid "CAMPAIGN ONE"
 msgstr "キャンペーン１"
@@ -2949,26 +2949,26 @@ msgid "System locale"
 msgstr "システム言語設定"
 
 msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
-msgstr ""
+msgstr "このホストは特定のホスティングプロバイダ、VPN、および/またはプロキシからの参加を許可していません。"
 
 msgid "Please try another room or disable any proxies / VPNs and try again."
-msgstr ""
+msgstr "別の部屋を試すか、プロキシ/VPNを無効にして再度お試しください。"
 
 msgid "Game not found in lobby."
-msgstr ""
+msgstr "ゲームはロビーにありません。"
 
 msgid "The game may have already started, or the host may have disbanded the game lobby."
 msgstr "すでにゲームが始まっているか、ホストがゲームロビーを解散している可能性があります。"
 
 msgid "Error hosting game in lobby server"
-msgstr ""
+msgstr "ロビーサーバーでゲームのホスティングに失敗しました"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
-msgstr ""
+msgstr "%d ポートが受信接続を受け取れることを確認してください。"
 
 msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
-msgstr ""
+msgstr "ルータを使用している場合は、UPnP/NAT-PMP/PCPを有効にするか、ポートをPCに転送するように設定してください。"
 
 msgid "Failed to create port mapping"
 msgstr "ポートマッピングの作成に失敗しました"
@@ -2979,7 +2979,7 @@ msgstr "ポート %dを開くようにルーター/ファイアウォールを�
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "ポートマッピングが外部ポートを開きました: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2990,37 +2990,37 @@ msgstr "ポートマッピングの作成に失敗しました (タイムアウ�
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "%s ネットワークバックエンドを使用しています。"
 
 msgid "Client failed to ack player index swap"
 msgstr "クライアントがプレーヤーのインデックス交換に失敗した"
 
 msgid "Game is listed in the lobby"
-msgstr ""
+msgstr "ゲームはロビーに一覧表示されています"
 
 msgid "Lobby GameId"
-msgstr ""
+msgstr "ロビーゲームID"
 
 msgid "Game not listed in the lobby."
-msgstr ""
+msgstr "ゲームがロビーに一覧表示されていません。"
 
 msgid "Error connecting to the lobby server."
-msgstr ""
+msgstr "ロビーサーバーへの接続中にエラーが発生しました。"
 
 msgid "Please check your internet connection, or wait a short while and try hosting again."
-msgstr ""
+msgstr "インターネット接続を確認するか、しばらく待ってから再度ホストを試してください。"
 
 msgid "Your game will only be accessible via direct connection (or local LAN)."
-msgstr ""
+msgstr "あなたのゲームは直接接続（またはローカルLAN）でのみアクセス可能になります。"
 
 msgid "Multiplayer lobby support unavailable. Please update your client."
-msgstr ""
+msgstr "マルチプレイヤーロビーのサポートが利用できません。クライアントを更新してください。"
 
 msgid "Game not listed in the lobby:"
-msgstr ""
+msgstr "ゲームがロビーに一覧表示されていません："
 
 msgid "Failed to create game listing. Check WZ logs."
-msgstr ""
+msgstr "ゲームの一覧登録に失敗しました。WZログを確認してください。"
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "リプレイファイルのフォーマットは、このバージョンのWarzone 2100がサポートしているものより新しいものです。"
@@ -3033,38 +3033,38 @@ msgid "Replay File Format Unsupported"
 msgstr "リプレイファイルの形式が未対応"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "このリプレイファイルの形式は、このバージョンのWarzone 2100がサポートするものより古いです。"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "リプレイを読み込むことができません。リプレイファイルが不完全か破損しています。"
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100：グラフィックの初期化に失敗しました"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "すべてのバックエンドでグラフィックの初期化に失敗しました。"
 
 msgid "Error Details:"
-msgstr ""
+msgstr "エラー詳細："
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "グラフィックドライバーを更新または再インストールし、システム設定を確認してください。"
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100：前回の起動に失敗しました"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "以下のグラフィックバックエンドの初期化を試みた際にクラッシュが発生しました："
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "グラフィックバックエンド：%s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100は別のグラフィックバックエンドを使用して起動を試みます。"
 
 msgid "Menu"
 msgstr "メニュー"
@@ -3103,16 +3103,16 @@ msgid "Tab Scroll right"
 msgstr "タブ 右スクロール"
 
 msgid "Please enter the text below"
-msgstr ""
+msgstr "以下のテキストを入力してください"
 
 msgid "Enter the text"
-msgstr ""
+msgstr "テキストを入力"
 
 msgid "Please drag the slider to verify"
-msgstr ""
+msgstr "確認のためスライダーをドラッグしてください"
 
 msgid "Please drag the tile to verify"
-msgstr ""
+msgstr "確認のためタイルをドラッグしてください"
 
 msgid ".50-calibre heavy machinegun"
 msgstr "50口径ヘビーマシンガン"
@@ -3298,7 +3298,7 @@ msgid "All rail guns upgraded automatically"
 msgstr "すべてのレールガンを自動アップグレード"
 
 msgid "All Ripple Rockets upgraded automatically"
-msgstr ""
+msgstr "すべてのリップルロケットが自動的にアップグレードされます"
 
 msgid "All sensors upgraded automatically"
 msgstr "すべてのセンサーを自動アップグレード"
@@ -3447,7 +3447,7 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "徹甲弾フィン安定化ディスカードサボット"
 
 msgid "Armored bunker with Assault Gun"
-msgstr ""
+msgstr "装甲バンカー アサルトガン搭載"
 
 msgid "Armored bunker with Flamer"
 msgstr "装甲バンカー フレイマー搭載"
@@ -3537,7 +3537,7 @@ msgid "Armored strongpoint with Heavy Laser"
 msgstr "装甲ストロングポイント ヘビーレーザー搭載"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr ""
+msgstr "装甲ストロングポイント パーティクルガン"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "装甲ストロングポイント プラズマイトフレイマー搭載"
@@ -3768,7 +3768,7 @@ msgid "Bomb damage +25%"
 msgstr "爆破ダメージ +25"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "爆弾ダメージ"
 
 msgid "Bomb Upgrade"
 msgstr "ボムアップグレード"
@@ -3795,7 +3795,7 @@ msgid "Buggy"
 msgstr "バギー"
 
 msgid "Buildings"
-msgstr ""
+msgstr "建造物"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "診断・修理システム内蔵"
@@ -3838,7 +3838,7 @@ msgid "Cannon accuracy +10%"
 msgstr "キャノン 命中率 +10%"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "キャノン命中率"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "キャノン オートローダー Mk2"
@@ -3854,7 +3854,7 @@ msgid "Cannon damage +25%"
 msgstr "キャノン ダメージ +25"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "キャノンダメージ"
 
 msgid "Cannon Fire Truck"
 msgstr "キャノン ファイヤー トラック"
@@ -3882,7 +3882,7 @@ msgid "Cannon reload time -10%"
 msgstr "キャノン リロード時間 -10%"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "キャノンリロード"
 
 msgid "Cannon Tower"
 msgstr "キャノン タワー"
@@ -3990,10 +3990,10 @@ msgid "Complete battlefield visibility"
 msgstr "戦場の完全な視認性"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "複合合金強化 AI Mk2"
 
 msgid "Composite Alloys Buff AI"
-msgstr ""
+msgstr "複合合金強化 AI"
 
 msgid "Composite Alloys Mk2"
 msgstr "複合合金 Mk2"
@@ -4055,13 +4055,13 @@ msgid "Crane2"
 msgstr "クレーン2"
 
 msgid "Cyborg Alloys"
-msgstr ""
+msgstr "サイボーグ合金"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "サイボーグ複合合金強化 AI Mk2"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr ""
+msgstr "サイボーグ複合合金強化 AI"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "サイボーグ 複合合金 Mk2"
@@ -4130,10 +4130,10 @@ msgid "Cyborg Tank Killer"
 msgstr "サイボーグ戦車キラー"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "サイボーグ サーマルアーマー AI強化 Mk2"
 
 msgid "Cyborg Thermal Armor Buff AI"
-msgstr ""
+msgstr "サイボーグ サーマルアーマー AI強化"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "サイボーグ サーマルアーマー Mk2"
@@ -4145,7 +4145,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "サイボーグ サーマルアーマー"
 
 msgid "Cyborg Thermal"
-msgstr ""
+msgstr "サイボーグ サーマル"
 
 msgid "Cyborg Thermite"
 msgstr "サイボーグテルミット"
@@ -4274,7 +4274,7 @@ msgid "Enemy"
 msgstr "敵"
 
 msgid "Engine"
-msgstr ""
+msgstr "エンジン"
 
 msgid "Engineering"
 msgstr "エンジニアリング"
@@ -4346,7 +4346,7 @@ msgid "Fire Truck"
 msgstr "消防車"
 
 msgid "Fires beams of subatomic particle"
-msgstr ""
+msgstr "亜原子粒子のビームを発射"
 
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "電子磁気パルスミサイルを発射"
@@ -4383,7 +4383,7 @@ msgid "Flamer damage +25%"
 msgstr "フレイマーダメージ +25%"
 
 msgid "Flamer Damage"
-msgstr ""
+msgstr "フレイマーダメージ"
 
 msgid "Flamer Fast Loader"
 msgstr "フレイマーファストローダー"
@@ -4393,7 +4393,7 @@ msgid "Flamer reload time -15%"
 msgstr "フレイマーリロード時間 -15%"
 
 msgid "Flamer Reload"
-msgstr ""
+msgstr "フレイマーリロード"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "フレイマー バイパー ハーフトラック"
@@ -4832,22 +4832,22 @@ msgid "Hero and Special rank units are protected"
 msgstr "ヒーローとスペシャルランクのユニットが保護される"
 
 msgid "HESC Mortar Shells Mk2"
-msgstr ""
+msgstr "HESC迫撃砲弾 Mk2"
 
 msgid "HESC Mortar Shells Mk3"
-msgstr ""
+msgstr "HESC迫撃砲弾 Mk3"
 
 msgid "HESC Mortar Shells"
-msgstr ""
+msgstr "HESC迫撃砲弾"
 
 msgid "HESCHC Mortar Shells Mk2"
-msgstr ""
+msgstr "HESCHC迫撃砲弾 Mk2"
 
 msgid "HESCHC Mortar Shells Mk3"
-msgstr ""
+msgstr "HESCHC迫撃砲弾 Mk3"
 
 msgid "HESCHC Mortar Shells"
-msgstr ""
+msgstr "HESCHC迫撃砲弾"
 
 msgid "HESH Rocket Warhead Mk2"
 msgstr "HESHロケット弾頭 Mk2"
@@ -4898,10 +4898,10 @@ msgid "High explosive shaped charge missile"
 msgstr "高火力成形チャージミサイル"
 
 msgid "High Explosive Soft Casing High Capacity Shells"
-msgstr ""
+msgstr "高火力成形チャージ大容量砲弾"
 
 msgid "High Explosive Soft Casing Shells"
-msgstr ""
+msgstr "高性能炸薬・軟性被甲砲弾"
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "高強度サーマルアーマー Mk2"
@@ -4969,13 +4969,13 @@ msgid "Howitzer damage +25%"
 msgstr "榴弾砲ダメージ +25%"
 
 msgid "Howitzer Damage Buff AI Mk2"
-msgstr ""
+msgstr "榴弾砲ダメージAI 強化 Mk2"
 
 msgid "Howitzer Damage Buff AI Mk3"
-msgstr ""
+msgstr "榴弾砲ダメージAI 強化 Mk3"
 
 msgid "Howitzer Damage Buff AI"
-msgstr ""
+msgstr "榴弾砲ダメージAI 強化"
 
 msgid "Howitzer Fast Loader"
 msgstr "榴弾砲ファストローダー"
@@ -4988,13 +4988,13 @@ msgid "Howitzer"
 msgstr "榴弾砲"
 
 msgid "Howitzers Accuracy"
-msgstr ""
+msgstr "榴弾砲命中率"
 
 msgid "Howitzers Damage"
-msgstr ""
+msgstr "榴弾砲ダメージ"
 
 msgid "Howitzers Reload"
-msgstr ""
+msgstr "榴弾砲リロード"
 
 msgid "Hurricane AA Site"
 msgstr "ハリケーン AA サイト"
@@ -5060,7 +5060,7 @@ msgid "Improved fire detection systems"
 msgstr "火災検知システムの改良"
 
 msgid "Improved Hardcrete Buff AI"
-msgstr ""
+msgstr "改良型ハードクリート強化 AI"
 
 msgid "Improved Hardcrete Mk2"
 msgstr "改良型ハードクリート Mk2"
@@ -5198,7 +5198,7 @@ msgid "Increases Rail Gun ROF"
 msgstr "レールガンのROF増加"
 
 msgid "Increases Ripple Rocket ROF"
-msgstr ""
+msgstr "リップルロケットの連射速度が上昇"
 
 msgid "Increases Rocket accuracy"
 msgstr "ロケットの命中率向上"
@@ -5325,14 +5325,14 @@ msgid "Laser accuracy +10%"
 msgstr "レーザー精度+10%"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "レーザー命中率"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "レーザーダメージ+25%"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "レーザーダメージ"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "レーザーデジグネーターでターゲットに照射し誘導する"
@@ -5342,7 +5342,7 @@ msgid "Laser reload time -15%"
 msgstr "レーザーリロード時間 -15%"
 
 msgid "Laser Reload"
-msgstr ""
+msgstr "レーザー再充填"
 
 msgid "Laser Satellite Command Post"
 msgstr "レーザーサテライト コマンドポスト"
@@ -5521,10 +5521,10 @@ msgid "Medium Super Heavy Body"
 msgstr "ミディアムスーパーヘビーボディ"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "MGダメージ"
 
 msgid "MG Reload"
-msgstr ""
+msgstr "MG再装填"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "ミニロケット 装甲要塞"
@@ -5582,7 +5582,7 @@ msgid "Missile accuracy +10%"
 msgstr "ミサイル命中率 +10%"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "ミサイル命中率"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "ミサイルは積極的にターゲットを探し、追尾する"
@@ -5592,7 +5592,7 @@ msgid "Missile damage +25%"
 msgstr "ミサイル ダメージ +25%"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "ミサイルダメージ"
 
 msgid "Missile Fortress"
 msgstr "ミサイルフォートレス"
@@ -5602,7 +5602,7 @@ msgid "Missile reload time -15%"
 msgstr "ミサイル リロード時間 -15%"
 
 msgid "Missile Reload"
-msgstr ""
+msgstr "ミサイル再装填"
 
 msgid "Missile Upgrade"
 msgstr "ミサイル アップグレード"
@@ -5624,7 +5624,7 @@ msgid "Mortar accuracy +10%"
 msgstr "迫撃砲の命中率+10%"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "迫撃砲命中率"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "迫撃砲オートローダー Mk2"
@@ -5643,13 +5643,13 @@ msgid "Mortar damage +25%"
 msgstr "迫撃砲ダメージ+25%"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "迫撃砲ダメージ"
 
 msgid "Mortar Fast Loader Mk2"
-msgstr ""
+msgstr "迫撃砲高速ローダー Mk2"
 
 msgid "Mortar Fast Loader Mk3"
-msgstr ""
+msgstr "迫撃砲高速ローダー Mk3"
 
 msgid "Mortar Fast Loader"
 msgstr "迫撃砲高速ローダー"
@@ -5662,7 +5662,7 @@ msgid "Mortar reload time -10%"
 msgstr "迫撃砲リロード時間 -10%"
 
 msgid "Mortar Reload"
-msgstr ""
+msgstr "迫撃砲再装填"
 
 msgid "Mortar Targeting Computer"
 msgstr "迫撃砲照準コンピュータ"
@@ -5899,10 +5899,10 @@ msgid "Panther"
 msgstr "パンサー"
 
 msgid "Particle Gun Emplacement"
-msgstr ""
+msgstr "パーティクルガン砲台"
 
 msgid "Particle Gun"
-msgstr ""
+msgstr "パーティクルガン"
 
 msgid "Pepperpot Pit"
 msgstr "ペッパーポット ピット"
@@ -6006,7 +6006,7 @@ msgid "Produces Cyborgs"
 msgstr "サイボーグを生み出す"
 
 msgid "Production"
-msgstr ""
+msgstr "生産"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "プロフェッショナルとレギュラーランクのユニットを保護する"
@@ -6081,10 +6081,10 @@ msgid "Radar Detector"
 msgstr "レーダー探知機"
 
 msgid "Rail Accuracy"
-msgstr ""
+msgstr "レールガン命中率"
 
 msgid "Rail Damage"
-msgstr ""
+msgstr "レールガンダメージ"
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
@@ -6129,7 +6129,7 @@ msgid "Rail Gun"
 msgstr "レールガン"
 
 msgid "Rail Reload"
-msgstr ""
+msgstr "レールガン再装填"
 
 msgid "Rail Target Prediction Computer"
 msgstr "レールターゲット予測コンピュータ"
@@ -6163,10 +6163,10 @@ msgid "Refuels, rearms and repairs VTOLs"
 msgstr "VTOLの給油、再装備、修理"
 
 msgid "Reinforced Base Structure Materials Buff AI Mk2"
-msgstr ""
+msgstr "強化基地ストラクチャー素材強化 AI Mk2"
 
 msgid "Reinforced Base Structure Materials Buff AI"
-msgstr ""
+msgstr "強化基地ストラクチャー素材強化 AI"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "強化基地ストラクチャー素材 Mk2"
@@ -6308,7 +6308,7 @@ msgid "Rocket accuracy +10%"
 msgstr "ロケット命中率+10%"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "ロケット命中率"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "ロケット砲はセンサーに割り当てることができる"
@@ -6330,7 +6330,7 @@ msgid "Rocket damage +25%"
 msgstr "ロケットダメージ +25%"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "ロケットダメージ"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "エンジンの排ガスを検知してロックオンするロケット"
@@ -6355,7 +6355,7 @@ msgid "Rocket reload time -15%"
 msgstr "ロケット再装填時間 -15%"
 
 msgid "Rocket Reload"
-msgstr ""
+msgstr "ロケット再装填"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "ロケットがレーザーデジネータを追尾してターゲットする"
@@ -6514,7 +6514,7 @@ msgid "Sensor Upgrade"
 msgstr "センサー アップグレード"
 
 msgid "Sensor"
-msgstr ""
+msgstr "センサー"
 
 msgid "Sensors Improved"
 msgstr "センサーの改良"
@@ -6700,7 +6700,7 @@ msgid "Systems Research Completed"
 msgstr "システム研究終了"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "戦車合金"
 
 msgid "Tank Killer Cyborg"
 msgstr "戦車キラーサイボーグ"
@@ -6730,7 +6730,7 @@ msgid "Tank Killer"
 msgstr "タンクキラー"
 
 msgid "Tank Thermal"
-msgstr ""
+msgstr "戦車耐熱装甲"
 
 msgid "Tank Traps"
 msgstr "タンクトラップ"
@@ -6742,7 +6742,7 @@ msgid "Target Acquisition Artillery Shells"
 msgstr "ターゲット捕捉砲弾"
 
 msgid "Target Acquisition Mortar Shells Mk2"
-msgstr ""
+msgstr "ターゲット捕捉迫撃砲弾 Mk2"
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "ターゲット捕捉迫撃砲弾"
@@ -6779,10 +6779,10 @@ msgid "Thermal Armor +45%"
 msgstr "サーマルアーマー +45%"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "サーマルアーマー強化 AI Mk2"
 
 msgid "Thermal Armor Buff AI"
-msgstr ""
+msgstr "サーマルアーマー強化 AI"
 
 msgid "Thermal Armor Mk2"
 msgstr "サーマルアーマー Mk2"
@@ -6830,7 +6830,7 @@ msgid "Tower wars AI, based on NullBot"
 msgstr "NullBotをベースとしたタワーウォーズAI"
 
 msgid "Tower Wars Buff"
-msgstr ""
+msgstr "タワーウォーズ強化"
 
 msgid "Tracked Propulsion"
 msgstr "トラック推進装置"
@@ -7155,7 +7155,7 @@ msgid "VTOL Needle Gun"
 msgstr "VTOL ニードルガン"
 
 msgid "VTOL Particle Gun"
-msgstr ""
+msgstr "VTOLパーティクルガン"
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL リン爆弾ベイ"
@@ -7182,7 +7182,7 @@ msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "VTOLの飛行を維持するために必要なVTOL再武装パッド"
 
 msgid "VTOL Rearming"
-msgstr ""
+msgstr "VTOL再武装"
 
 msgid "VTOL Scourge Missile"
 msgstr "VTOL スカージ ミサイル"
@@ -8394,7 +8394,7 @@ msgid "Capture oil resources"
 msgstr "石油資源を占領する"
 
 msgid "That didn't go well..."
-msgstr "うまくいきませんでした..."
+msgstr "うまくいきませんでした…"
 
 msgid "I have another plan"
 msgstr "私は別の計画を持っています"
@@ -8442,7 +8442,7 @@ msgid "Waiting for other teams to finish planning."
 msgstr ""
 
 msgid "Weapons:"
-msgstr ""
+msgstr "武器："
 
 msgid "Units:"
 msgstr ""
@@ -8548,10 +8548,10 @@ msgid "Debug Keys"
 msgstr ""
 
 msgid "Debug (level editor)"
-msgstr "デバッグ（レベルエディタ）"
+msgstr "デバッグ(レベルエディタ)"
 
 msgid "Debug (selection)"
-msgstr "デバッグ（選択）"
+msgstr "デバッグ(選択)"
 
 msgid "Manufacture"
 msgstr "製造"
@@ -9096,7 +9096,7 @@ msgstr "電力毎秒"
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "%u 個の採掘機（群）が稼働していません"
 
 msgid "Need more resources!"
 msgstr "もっとリソースが必要だ！"
@@ -10041,7 +10041,7 @@ msgstr "%sはゲームを終了しました"
 
 #, c-format
 msgid "%s joined the Game"
-msgstr ""
+msgstr "%sがゲームに参加しました"
 
 #, c-format
 msgid "(codename: %s)"
@@ -10063,7 +10063,7 @@ msgstr "あなたのデータとホストのデータが一致しません！"
 
 #, c-format
 msgid "%s is joining the game"
-msgstr "%sがゲームに参加しました"
+msgstr "%sがゲームに参加しています"
 
 msgid "Server message:"
 msgstr "サーバーメッセージ："
@@ -10093,7 +10093,7 @@ msgid "Administrator has kicked you from the game."
 msgstr "管理者があなたをゲームからキックしました。"
 
 msgid "Search for map"
-msgstr ""
+msgstr "マップをサーチ"
 
 msgid "Any number of players"
 msgstr "プレイヤー人数"
@@ -11856,22 +11856,22 @@ msgid "Block suspicious connections from hosting provider IPs."
 msgstr ""
 
 msgid "Lobby Join Bypass"
-msgstr ""
+msgstr "ロビー参加のバイパス"
 
 msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
-msgstr ""
+msgstr "直接IP接続でロビー参加をバイパスすることを許可します。（荒らし行為がロビーの不正利用対策を回避できるようになる可能性があります。）"
 
 msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
-msgstr ""
+msgstr "任意のIPからの直接参加を許可します。ロビーの不正利用対策をバイパスします。"
 
 msgid "(Not Recommended)"
-msgstr ""
+msgstr "（非推奨）"
 
 msgid "Do not allow direct joins. Require joining through the lobby."
-msgstr ""
+msgstr "直接参加を許可しません。ロビー経由での参加を必須とします。"
 
 msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
-msgstr ""
+msgstr "ローカル／LANのIPには直接参加を許可します。それ以外はロビー経由での参加を必須とします。"
 
 msgid "Joined:"
 msgstr "加盟:"
@@ -11954,22 +11954,22 @@ msgid "Structure Limits Enforced."
 msgstr "ストラクチャー上限の実施。"
 
 msgid "Challenge:"
-msgstr ""
+msgstr "チャレンジ："
 
 msgid "Skirmish:"
-msgstr ""
+msgstr "スカーミッシュ："
 
 msgid "Local (Offline)"
-msgstr ""
+msgstr "ローカル（オフライン）"
 
 msgid "Hosting:"
-msgstr ""
+msgstr "ホスト中："
 
 msgid "Password-Protected (Private)"
-msgstr ""
+msgstr "パスワード保護（非公開）"
 
 msgid "Open (Public)"
-msgstr ""
+msgstr "オープン（公開）"
 
 msgid "Connected to Host:"
 msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-09-02 02:34\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -21,13 +21,13 @@ msgid "Artifacts"
 msgstr "Artefatti"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
-msgstr "Man mano che progredisci attraverso la campagna, raccoglierai degli Artefatti dalle basi nemiche (e da unità nemici specifiche)."
+msgstr "Man mano che progredisci nella campagna, raccoglierai degli Artefatti dalle basi nemiche (e da unità nemici specifiche)."
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr "Questi sbloccheranno tecnologie preziose che potrai ricercare in un Centro di Ricerca."
+msgstr "Questi sbloccheranno tecnologie preziose che potrai ricercare in un Centro di ricerca."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr "Gli artefatti sono piccole scatole bianche con un indicatore verde sopra, e possono essere raccolti muovendo qualsiasi unità abbastanza vicino."
+msgstr "Gli artefatti sono piccole scatole bianche con un indicatore verde sopra, e possono essere raccolti spostando qualsiasi unità che sia abbastanza vicina."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
 msgstr "Tutti gli artefatti devono essere raccolti come parte delle condizioni di vittoria di ogni livello."
@@ -42,133 +42,133 @@ msgid "However, during a routine maintenance check, something went terribly wron
 msgstr "Tuttavia, durante un controllo di manutenzione ordinaria, qualcosa è andato terribilmente storto..."
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr "Il collasso è arrivato veloce e con grande impatto. A seguito di un errore tecnico nel sistema di difesa satellitare, le testate nucleari sono state lanciate nelle principali città di tutto il mondo."
+msgstr "Il Collasso è arrivato veloce e con grande impatto. A seguito di un errore tecnico nel sistema di difesa satellitare, le testate nucleari sono state lanciate nelle principali città di tutto il mondo."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr ""
+msgstr "Alcuni minuti dopo, le postazioni terrestri hanno risposto all'attacco. Milioni di persone sono morte a causa delle tempeste di fuoco che hanno spazzato via le città in tutto il mondo. Altri miliardi di persone sono morte a casa di epidemie e pestilenze che hanno cancellato ciò che rimaneva della civiltà."
 
 msgid "Less than a million people survived the Collapse."
-msgstr "Meno di un milione di persone sopravvissero al Collapse."
+msgstr "Meno di un milione di persone sono sopravvissute al Collasso."
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr ""
+msgstr "Sulla Terra si formarono centinaia di piccole bande di predoni in lotta tra di loro per accaparrarsi ciò che rimaneva della precedente civiltà. Solo pochi avevano intenzione di provare a ricostruire un nuovo mondo dalle sue ceneri."
 
 msgid "## Present Day:"
 msgstr "## Oggi:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr ""
+msgstr "Il giocatore (indicato come \"il Comandante) fa parte di un gruppo di superstiti che cercavano rifugio in una base militare sulle Montagne Rocciose."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr ""
+msgstr "Emergono dalla base con lo scopo di ricostruire il mondo, adottando il nome \"il Progetto\"."
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr ""
+msgstr "Il Progetto invia tre team con l'obiettivo di raccogliere artefatti, le quali permettono la ricerca e l'applicazione delle tecnologie impiegate prima del Collasso."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr ""
+msgstr "- La squadra Alpha viene inviata in un punto del deserto dell'Arizona a sud-est del quartier generale del Progetto"
 
 msgid "- Beta team is sent to the remains of Chicago"
-msgstr ""
+msgstr "- La squadra Beta viene inviata alle rovine di Chicago"
 
 msgid "- Gamma team is sent into the northern Rockies in Colorado"
-msgstr ""
+msgstr "- La squadra Gamma viene inviata nella parte nord delle Montagne Rocciose nel Colorado"
 
 msgid "Command Panel"
 msgstr "Pannello di comando"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr ""
+msgstr "Ci sono sei interfacce diverse del pannello di comando più un pulsante centrale. Puoi aprire un comando dell'interfaccia schiacciando il pulsante appropriato."
 
 msgid "The middle / central button closes any open command interface."
-msgstr ""
+msgstr "Il pulsante centrale chiude qualsiasi interfaccia di comando aperta."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Difendere la tua base"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "Su Warzone 2100, la tua base principale rimane la stessa per tutta la campagna."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "E dunque è essenziale prepararsi per la futura difesa della tua base."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Le unità sono ovviamente importanti per difendere la tua base, ma anche il suo design gioca un ruolo cruciale."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Costruisci strutture difensive che forniscono copertura, restringono l'accesso, rilevano i nemici e provocano danni così puoi respingere meglio gli attacchi nemici."
 
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Intelligence Display"
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr ""
+msgstr "Nella schermata dell'Intelligence Display puoi trovare gli attuali obiettivi della missione, rigiocare le missioni e scoprire di più sui progetti di ricerca completati."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr ""
+msgstr "Quando apri l'Intelligence Display, appariranno due file di icone nella parte bassa dello schermo."
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr ""
+msgstr "Selezionando un'icona vedrai le informazioni su quella ricerca o quell'obiettivo della missione al centro dello schermo."
 
 msgid "Using the Mission Timer"
-msgstr ""
+msgstr "Usare il timer della missione"
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr ""
+msgstr "Molte missioni saranno a tempo. A volte sarai in una situazione in cui desidererai avere più tempo. Altre volte penserai di averne troppo."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr ""
+msgstr "Ci sono diversi modi per sfruttare in modo strategico il tempo extra e prepararsi in anticipo alle battaglie."
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr ""
+msgstr "Che si tratti di completare una nuova ricerca, costruire delle difese o riciclare e sostituire le unità con nuove armi e tecnologie... non sprecare il tempo a tua disposizione."
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
-msgstr ""
+msgstr "(Se hai l'opzione Timer Power Bonus attiva, lo è per impostazione predefinita, non è necessario attendere la scadenza del timer per ottenere la corrente. Ti verrà assegnata automaticamente la quantità di corrente che avresti ricevuto lasciando scorrere il timer. Gli altri utilizzi del timer restano invece invariati!)"
 
 msgid "Power"
-msgstr "Energia"
+msgstr "Corrente"
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr "In Warzone 2100, l'energia è la tua risorsa chiave."
+msgstr "In Warzone 2100, la corrente è la tua risorsa chiave."
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
-msgstr ""
+msgstr "Consumi corrente per costruire strutture, produrre unità e ricercare nuove tecnologie."
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr ""
+msgstr "La corrente viene generata dai Generatori alimentati dalle Torri di trivellazione."
 
 msgid "Researching Technology"
 msgstr "Ricerca tecnologia"
 
 msgid "Researching technologies is accomplished using Research Facilities."
-msgstr ""
+msgstr "È possibile ricercare nuove tecnologie usando i Centri di ricerca."
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
-msgstr ""
+msgstr "Quando viene selezionato un Centro di ricerca, tutte le opzioni disponibili vengono mostrate sul lato sinistro dello schermo."
 
 msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
-msgstr ""
+msgstr "Ciascun progetto di ricerca richiede una certa quantità di corrente e tempo per essere completato. L'investimento in corrente non è rimborsabile."
 
 msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
-msgstr ""
+msgstr "Tuttavia il progresso della ricerca non viene mai perso, anche quando il Centro di ricerca viene distrutto. Il progetto deve solo essere riassegnato ad un altro centro."
 
 msgid "Completing research of a new technology may:"
-msgstr ""
+msgstr "Completare la ricerca di una nuova tecnologia potrebbe:"
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
-msgstr ""
+msgstr "- Rendere disponibili nuove armi, strutture, unità, sistemi di propulsione etc."
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
-msgstr ""
+msgstr "- Migliorare l'efficacia di armi, strutture, unità etc. già esistenti"
 
 msgid "- Enable the research of additional technologies"
-msgstr ""
+msgstr "- Consentire la ricerca di ulteriori tecnologie"
 
 msgid "General"
 msgstr "Generale"
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
-msgstr "In Warzone 2100, comandi le forze di \"The Project\" in una battaglia per ricostruire il mondo dopo che l'umanità è quasi stata distrutta dai missili nucleari."
+msgstr "In Warzone 2100, comandi le forze di \"Il Progetto\" in una battaglia per ricostruire il mondo dopo che l'umanità è quasi stata distrutta dai missili nucleari."
 
 msgid "This guide will help walk you through key facets of the game."
 msgstr "Questa guida ti illustrerà gli aspetti chiave del gioco."
@@ -177,862 +177,862 @@ msgid "(If you are playing the campaign, new guide topics may be unlocked as you
 msgstr "(Se stai giocando la campagna, nuovi argomenti della guida potrebbero essere sbloccati man mano che avanzi nel gioco.)"
 
 msgid "Building Structures"
-msgstr ""
+msgstr "Costruire strutture"
 
 msgid "Click the \"Build\" button on the Command Panel."
-msgstr ""
+msgstr "Clicca sul pulsante \"Costruisci\" nel Pannello di comando."
 
 msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
-msgstr ""
+msgstr "In questo modo si aprirà il menu delle Strutture sul lato sinistro dello schermo, con un pulsante per ciascuna struttura che puoi costruire."
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr ""
+msgstr "Seleziona il pulsante della struttura che desideri. Sul gioco apparirà una sagoma a indicare il punto in cui verrà collocata la struttura una volta che hai dato la conferma."
 
 msgid "Move the silhouette by moving the input device."
-msgstr ""
+msgstr "Sposta la sagoma muovendo il mouse."
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
-msgstr ""
+msgstr "- Se la posizione è idonea per collocare la struttura, la sagoma avrà un colore verde quando ci passerai sopra."
 
 msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
-msgstr ""
+msgstr "- Se la posizione non è idonea, la sagoma avrà un colore rosso."
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr ""
+msgstr "Una volta che hai scelto una posizione idonea, seleziona per confermare la costruzione. Un camion si sposterà nel punto scelto per cominciare a costruire la struttura."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "Puoi ordinare ad altri camion di dare una mano (e costruire la struttura più velocemente) selezionandoli e ordinando loro di recarsi alla struttura in costruzione."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr ""
+msgstr "Suggerimento: per costruire \"mura\" (una volta che sono disponibili), puoi cliccare e trascinare per disegnare un muro in linea retta."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Fabbrica cyborg"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Una Fabbrica di cyborg opera in modo analogo alla Fabbrica standard con la differenza che sviluppa esclusivamente cyborg."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Ciascuna Fabbrica può sviluppare un cyborg alla volta, ma puoi aggiungere alla coda di produzione più cyborg."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Quando viene sviluppato un cyborg, riceve gli ordini delle unità della Fabbrica di cyborg e si dirige verso il Punto di raccolta."
 
 msgid "Demolishing Structures"
-msgstr ""
+msgstr "Demolire le strutture"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Demolire una struttura è semplice quasi quanto costruirne una."
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Seleziona \"Demolisci struttura\" nel menu delle Strutture e clicca su un edificio per demolirlo."
 
 msgid "A unit will move to the building and destroy it."
-msgstr ""
+msgstr "Un'unità si dirigerà verso l'edificio e lo distruggerà."
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr ""
+msgstr "Le strutture demolite restituiscono metà della corrente usata per costruire la struttura."
 
 msgid "Factory"
-msgstr ""
+msgstr "Fabbrica"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Una Fabbrica viene usata per produrre unità. Ciascuna Fabbrica può produrre un'unità alla volta, ma puoi aggiungere alla coda diverse unità per la produzione."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Quando un'unità viene prodotta, riceve gli ordini delle unità della Fabbrica e si dirige verso il Punto di raccolta."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Nota: la Fabbrica è in grado di produrre solo unità con corpi leggeri. È necessario ricercare e costruire i moduli della Fabbrica per sviluppare ulteriormente le sue capacità di produzione."
 
 msgid "Command Center"
-msgstr ""
+msgstr "Centro di comando"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr ""
+msgstr "Il Centro di comando è il quartier generale della tua base."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr ""
+msgstr "Fornisce l'accesso alla mini mappa / radar e alla capacità di modellare unità."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr ""
+msgstr "Per costruire un Centro di comando, clicca su \"Costruisci\" sul pannello di comando e seleziona la struttura Centro di comando."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr ""
+msgstr "Poi, clicca sul punto in cui vuoi che venga costruita."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Moduli della struttura"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Generatori di corrente, Fabbriche e Centri di ricerca possono essere sviluppati ulteriormente con i loro rispettivi moduli."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Una volta ricercati, puoi accedere a questi moduli dal menu Costruisci per applicarli alle strutture in questione."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr ""
+msgstr "In alternativa puoi selezionare un Camion o un Ingegnere da combattimento e cliccare sulla struttura per iniziare la costruzione."
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Nota: quando una di queste strutture viene potenziata, non sarà disponibile finché il potenziamento non è stato completato."
 
 msgid "Upgrade Effects:"
-msgstr ""
+msgstr "Effetti del potenziamento:"
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr ""
+msgstr "- I moduli del Generatore di Corrente aumentano il flusso di corrente prodotta"
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- I moduli della Fabbrica permettono la produzione di unità Medie e Pesanti e riducono il tempo necessario per produrre unità"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr ""
+msgstr "- I moduli del Centro di ricerca riducono il tempo necessario per completare i progetti di ricerca assegnati"
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Torre di trivellazione"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "È possibile costruire una Torre di trivellazione selezionando un Camion e puntandolo verso una Risorsa petrolifera disponibile."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "La distruzione di una Torre di trivellazione impedirà temporaneamente la costruzione di un'altra nello stesso punto finché le fiamme non si estinguono."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr ""
+msgstr "Per utilizzare una Torre di trivellazione e generare corrente è richiesto un Generatore di corrente."
 
 msgid "Power Generator"
-msgstr ""
+msgstr "Generatore di corrente"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr ""
+msgstr "Ciascun Generatore di corrente utilizza fino a 4 Torri di trivellazione. Quindi, ad esempio, se hai 10 Torri di trivellazione, avrai bisogno di 3 Generatori di corrente per utilizzare tutte le torri e generare il massimo flusso di energia."
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr ""
+msgstr "Mentre le torri di trivellazione devono essere costruite sulle risorse petrolifere, i generatori di corrente possono essere costruiti ovunque sulla mappa. Tuttavia, tieni presente che aggiungere più di un generatore ogni 4 torri non darà alcun vantaggio."
 
 msgid "Rally Point"
-msgstr ""
+msgstr "Punto di raccolta"
 
 msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
-msgstr ""
+msgstr "Quando una Fabbrica ha finito di produrre un'unità, quest'ultima apparirà affianco alla Fabbrica e poi procederà verso il Punto di raccolta designato."
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr ""
+msgstr "Per impostazione predefinita, il Punto di raccolta è situato affianco alla Fabbrica. Cliccare sul Punto di raccolta ti permetterà di spostarlo."
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
-msgstr ""
+msgstr "Nota: spostare un Punto di raccolta mentre un'unità è in movimento non modificherà il suo percorso."
 
 msgid "Repair Facility"
-msgstr ""
+msgstr "Centro di riparazione"
 
 msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
-msgstr ""
+msgstr "Costruendo un Centro di riparazione avrai una struttura fissa verso la quale le unità possono dirigersi per essere riparate."
 
 msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
-msgstr ""
+msgstr "I Centri di riparazione possono riparare le unità più velocemente delle unità mobili con torrette di riparazione."
 
 msgid "Research Facility"
-msgstr ""
+msgstr "Centro di ricerca"
 
 msgid "Research Facilities are required in order to research new technologies."
-msgstr ""
+msgstr "I Centri di ricerca sono necessari per sviluppare nuove tecnologie."
 
 msgid "Each Research Facility can research one technology at a time."
-msgstr ""
+msgstr "Ciascun Centro di ricerca può sviluppare una tecnologia alla volta."
 
 msgid "VTOL Factory"
-msgstr ""
+msgstr "Fabbrica VTOL"
 
 msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
-msgstr ""
+msgstr "Una Fabbrica VTOL viene usata per sviluppare unità con propulsione VTOL (ad esempio unità aeree)."
 
 msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Ciascuna Fabbrica VTOL può sviluppare un'unità alla volta, ma puoi aggiungere alla coda diverse unità per la produzione."
 
 msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
-msgstr ""
+msgstr "Quando una Fabbrica VTOL avrà finito di sviluppare un'unità, le ordinerà di volare ed atterrare vicino al Punto di raccolta della fabbrica."
 
 msgid "Structures"
-msgstr ""
+msgstr "Strutture"
 
 msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
-msgstr ""
+msgstr "In Warzone 2100 è di vitale importanza costruire strutture, dalle Fabbriche che producono unità fino ai Centri di ricerca che sviluppano nuove tecnologie."
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
-msgstr ""
+msgstr "La costruzione può essere effettuata da unità equipaggiate con una torretta e/o da Genieri da combattimento."
 
 msgid "Attack Range"
-msgstr ""
+msgstr "Portata d'attacco"
 
 msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
-msgstr ""
+msgstr "Puoi usare il menu degli Ordini delle unità per configurare la \"Portata d'attacco\" di un'unità."
 
 msgid "- Optimum Range: Fires at the most accurate range"
-msgstr ""
+msgstr "- Portata ottimale: spara dalla distanza di massima precisione"
 
 msgid "- Short Range: Moves to short range and attacks"
-msgstr ""
+msgstr "- Breve distanza: accorcia la distanza e attacca"
 
 msgid "- Long Range: Attacks at long range (default)"
-msgstr ""
+msgstr "- Lunga distanza: attacca sulla lunga distanza (impostazione predefinita)"
 
 msgid "Firing Mode"
-msgstr ""
+msgstr "Modalità di fuoco"
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
-msgstr ""
+msgstr "Puoi usare il menu degli Ordini delle unità per configurare la \"Modalità di fuoco\" dell'unità."
 
 msgid "- Fire At Will: Fires at any enemy (default)"
-msgstr ""
+msgstr "- Fuoco a volontà: attacca qualsiasi nemico (impostazione predefinita)"
 
 msgid "- Return Fire: Only fire if fired at"
-msgstr ""
+msgstr "- Rispondi al fuoco: l'unità attacca solo se viene attaccata"
 
 msgid "- Do Not Fire: Units will not fire"
-msgstr ""
+msgstr "- Non fare fuoco: le unità non attaccano"
 
 msgid "Movement"
-msgstr ""
+msgstr "Movimento"
 
 msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
-msgstr ""
+msgstr "Puoi usare il menu degli Ordini delle unità per configurare il \"Movimento\" dell'unità."
 
 msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
-msgstr ""
+msgstr "- Pattuglia: si sposta tra due punti. Basta cliccare su un punto della mappa dopo averlo selezionato"
 
 msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
-msgstr ""
+msgstr "- Orbita: (solo VTOL) vola in cerchio attorno ad una posizione. Fai clic su un'area dopo averla selezionata"
 
 msgid "- Pursue: Pursue enemy"
-msgstr ""
+msgstr "- Inseguimento: segue il nemico"
 
 msgid "- Guard: Stay near an area or structure. (default)"
-msgstr ""
+msgstr "- In guardia: rimane vicino ad un'area o ad una struttura. (impostazione predefinita)"
 
 msgid "- Hold Position: Do not move under any circumstances"
-msgstr ""
+msgstr "- Mantieni la posizione: non si sposta in nessuna circostanza"
 
 msgid "Recycling"
-msgstr ""
+msgstr "Riciclo"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Riciclare un'unità vuol dire inviarla alla Fabbrica o al Centro di riparazione più vicini dove verrà rimossa dal gioco."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
-msgstr ""
+msgstr "La metà della corrente usata per produrre l'unità verrà rimborsata (la quantità potrebbe diminuire se l'unità viene danneggiata)."
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "I punti esperienza dell'unità riciclata verranno trasferiti alla prossima unità che viene prodotta."
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Quando ricicli più unità con esperienza, i punti esperienza vengono trasferiti iniziando dall'unità con il livello di esperienza più alto."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
-msgstr ""
+msgstr "Puoi ordinare alle unità selezionate di ritornare per il riciclo attraverso il menu degli Ordini delle unità o il tasto assegnato \"Ritorna per il riciclo\"."
 
 msgid "Retreating"
-msgstr ""
+msgstr "Ritirata"
 
 msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
-msgstr ""
+msgstr "Perdere unità (soprattutto quelle con esperienza) può essere un duro colpo per la capacità di un'armata di condurre con successo una battaglia."
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
-msgstr ""
+msgstr "Puoi usare il menu degli Ordini delle unità per scegliere una \"Soglia di ritiro\" che farà ritirare automaticamente le unità dalla battaglia una volta raggiunta una determinata quantità di danni."
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
-msgstr ""
+msgstr "- Combatti o muori: la tua unità non si ritirerà a meno che non le venga ordinato. (impostazione predefinita)"
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
-msgstr ""
+msgstr "- Ritirata per danni medi: la tua unità si ritirerà dopo aver subito una quantità media di danni (giallo)"
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr ""
+msgstr "- Ritirata per danni pesanti: la tua unità si ritirerà dopo aver subito danni pesanti (rosso)"
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
-msgstr ""
+msgstr "Le unità che si ritirano faranno ritorno al centro di riparazione, unità di riparazione, quartier generale o zona di atterraggio più vicini."
 
 msgid "Return To"
-msgstr ""
+msgstr "Ritorna a"
 
 msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
-msgstr ""
+msgstr "Puoi usare il menu degli Ordini delle unità per ordinare subito alle unità di ritornare in un punto specifico."
 
 msgid "- Return for Repair: Unit will return to a Repair Facility"
-msgstr ""
+msgstr "- Ritorna per essere riparata: l'unità ritornerà ad un Centro di riparazione"
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr ""
+msgstr "- Ritorna al quartier generale: l'unità ritornerà al Centro di comando o Zona di atterraggio (campagna)"
 
 msgid "- Go To Transport: Unit will go to and board transport"
-msgstr ""
+msgstr "- Vai al trasporto: l'unità raggiungerà il trasporto e vi salirà a bordo"
 
 msgid "Unit Orders"
-msgstr ""
+msgstr "Ordini dell'unità"
 
 msgid "Right-click a unit or group of units to show their current Unit Orders."
-msgstr ""
+msgstr "Clicca col tasto destro su un'unità o un gruppo di unità per vedere gli attuali Ordini dell'unità."
 
 msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
-msgstr ""
+msgstr "Il pannello degli Ordini delle unità ti permette di personalizzare il comportamento delle tue unità, dal pattugliamento di un'area alla ritirata in caso di danni subiti."
 
 msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
-msgstr ""
+msgstr "Clicca col tasto destro su una Fabbrica per modificare gli Ordini delle unità per tutte le unità future prodotte dalla Fabbrica."
 
 msgid "Building Units"
-msgstr ""
+msgstr "Produrre unità"
 
 msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
-msgstr ""
+msgstr "Per produrre unità, seleziona una Fabbrica o clicca sul pulsante \"Manifattura\" sul Pannello di comando. In questo modo si aprirà il pannello di Manifattura sul lato sinistro dello schermo."
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
-msgstr ""
+msgstr "Il pannello di Manifattura mostrerà i design dell'unità che la Fabbrica selezionata è in grado di produrre. Le Fabbriche potrebbero avere dei limiti nel produrre un certo tipo di unità (o potrebbero produrre determinati tipi solo se sono state potenziate con i moduli)."
 
 msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
-msgstr ""
+msgstr "Per selezionare una Fabbrica diversa, clicca sulla Fabbrica nel gioco o clicca sul pulsante corrispettivo nel pannello delle Fabbriche in basso al centro dello schermo."
 
 msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
-msgstr ""
+msgstr "Per produrre un'unità in una Fabbrica, clicca sul pulsante del design dell'unità desiderato nel pannello \"Manifattura\". Puoi aggiungere alla coda più unità dello stesso tipo cliccando ripetutamente sul design dell'unità."
 
 msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
-msgstr ""
+msgstr "Quando vine prodotta un'unità, questa verrà mostrata nel pannello delle Fabbriche sopra la Fabbrica che la sta producendo. Se la barra è verde, la Fabbrica sta raccogliendo corrente per produrre l'unità. Se la barra è gialla, l'unità è in fase di produzione."
 
 msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
-msgstr ""
+msgstr "Quando una Fabbrica ha terminato la produzione di un'unità, le ordinerà di procedere verso il suo Punto di raccolta."
 
 msgid "Attaching Units"
-msgstr ""
+msgstr "Assegnare unità"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "Per assegnare unità ad un Comandante, seleziona la/le unità, poi clicca col tasto sinistro sul Comandante a cui vuoi assegnarla/le. Apparirà un simbolo affianco alla/e unità assegnata/e per indicare l'assegnazione."
 
 msgid "## Limits:"
-msgstr ""
+msgstr "## Limiti:"
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "I Comandanti hanno un limite alla quantità di unità che possono controllare, che è influenzata dal loro rango. Le Promozioni sono ottenute dal Comandante raggiungendo una quantità di punti esperienza specifica."
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "Dopo ogni promozione, il Comandante è in grado di controllare 2 unità in più."
 
 msgid "Detaching Units"
-msgstr ""
+msgstr "Rimuovere unità assegnate"
 
 msgid "To detach a unit from a Commander:"
-msgstr ""
+msgstr "Per rimuovere un'unità assegnata ad un Comandante:"
 
 msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
-msgstr ""
+msgstr "1. Clicca col tasto destro sull'unità (o tieni premuto MAIUSC mentre selezioni l'unità) per selezionare solo quella specifica unità (anziché tutto il gruppo)"
 
 msgid "2. Give the unit a new order (eg. move)"
-msgstr ""
+msgstr "2. Dai all'unità un nuovo ordine (ad esempio \"spostarsi\")"
 
 msgid "Going for repairs, BRB"
-msgstr ""
+msgstr "Vado a ripararmi, torno subito"
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
-msgstr ""
+msgstr "Un'unità che si ritira dalla battaglia per dirigersi verso un centro di riparazione, rimarrà connessa al gruppo del Comandante."
 
 msgid "When it is done repairing, it will return to its Commander."
-msgstr ""
+msgstr "Quando le riparazioni saranno terminate, ritornerà dal suo Comandante."
 
 msgid "Targeting"
-msgstr ""
+msgstr "Puntare"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "Quando selezioni un Comandante e punti un'unità nemica o una struttura, le unità assegnate si sposteranno per attaccare l'obiettivo."
 
 msgid "The attached units will have greater accuracy when firing."
-msgstr ""
+msgstr "Le unità assegnate avranno una maggiore precisione di fuoco."
 
 msgid "Commanders"
-msgstr ""
+msgstr "Comandanti"
 
 msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
-msgstr ""
+msgstr "Le torrette di comando vengono usate come dei sensori con la differenza che possono dare ordini a qualsiasi unità d'attacco, non solo all'artiglieria."
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr ""
+msgstr "I Comandanti forniscono un bonus a precisione, armatura e velocità di movimento a tutte le unità assegnate a loro. Questi bonus aumentano quando il comandante sale di grado."
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "Ai comandanti possono essere assegnati un massimo di 6 unità di attacco all'inizio, ma questo limite sale di 2 unità ogni volta che un comandante sale di grado."
 
 msgid "Designing Units"
-msgstr ""
+msgstr "Modellare le unità"
 
 msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
-msgstr ""
+msgstr "Dovrai modellare nuove unità se vuoi battere i tuoi nemici e provare il dolce sapore della vittoria. Questo è un aspetto chiave del gameplay di Warzone 2100."
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr ""
+msgstr "Per cominciare a modellare un'unità, seleziona il pulsante Design nel Pannello di comando. In questo modo appariranno due colonne sulla parte sinistra dello schermo."
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
-msgstr ""
+msgstr "Per creare un nuovo modello, seleziona il corpo verde \"vuoto\" in alto a sinistra. Per modificare un modello già esistente, selezionalo."
 
 msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
-msgstr ""
+msgstr "Modellare una nuova unità è un semplice processo in tre passaggi; seleziona un corpo, un sistema di propulsione e una torretta. Queste tre componenti andranno a formare una nuova unità."
 
 msgid "Once you have designed a unit, you will need a Factory to build it."
-msgstr ""
+msgstr "Una volta modellata un'unità, avrai bisogno di una Fabbrica per costruirla."
 
 msgid "Experience & Ranks"
-msgstr ""
+msgstr "Esperienza & Gradi"
 
 msgid "Units gain experience when they successfully dispatch enemies."
-msgstr ""
+msgstr "Le unità guadagnano esperienza quando sconfiggono i nemici con successo."
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
-msgstr ""
+msgstr "Un livello di esperienza più alto vuol dire che un'unità è più precisa, si muove più velocemente e subisce meno danni."
 
 msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
-msgstr ""
+msgstr "Un'icona che mostra il grado dell'unità appare affianco alla sua barra della salute."
 
 msgid "Units with higher experience levels can make all the difference in battle!"
-msgstr ""
+msgstr "Le unità con livelli di esperienza più alti possono fare la differenza in una battaglia!"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborg"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "I Cyborg sono le tue principali unità di fanteria."
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "Sono unità veloci ed affidabili e sono estremamente resistenti ad armi Anticarro."
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "Tuttavia, sono più vulnerabili ad armi antiuomo e all'artiglieria."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "Tieni presente che i Cyborg non possono essere modellati. I modelli di Cyborg vengono sviluppati in modo indipendente e richiedono una Fabbrica di cyborg per essere costruiti."
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "Semicingolati"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "I semicingolati sono un sistema di propulsione a metà tra ruote e cingolati."
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "Questi hanno un costo e una velocità moderati e forniscono una quantità moderata di punti salute."
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Inoltre forniscono resistenza contro danni da armi Antiuomo e Artiglieria, ma sono abbastanza vulnerabili alle armi Anticarro."
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "I semicingolati sono eccellenti per unità generiche, ma sono sprovvisti della durabilità dei cingolati e dell'alta velocità dei mezzi a ruote."
 
 msgid "Hover"
-msgstr ""
+msgstr "Propulsione Hover"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "Hover è un sistema di propulsione veloce e anfibio."
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "Il sistema di propulsione Hover fornisce il massimo della velocità e la capacità di spostarsi liberamente sull'acqua, fattore che può essere decisivo per trovare vie d'attacco uniche."
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "Tuttavia, hanno un costo di produzione più alto, forniscono pochi punti salute e sono vulnerabili alla maggior parte dei tipi di danno."
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "L'alta velocità dell'Hover e la sua capacità di spostarsi sull'acqua lo rendono ideale per tattiche di incursione rapida."
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "Analogamente ai mezzi su ruote, non sono adatti per battaglie prolungate sul fronte."
 
 msgid "Tracks"
-msgstr ""
+msgstr "Cingolati"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "I cingolati sono veicoli pesantemente equipaggiati."
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "Forniscono una grande quantità di punti salute e un alto grado di resistenza contro danni da armi Antiuomo e Artiglieria."
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Tuttavia, hanno un costo di produzione più alto, tempistiche più lunghe per essere costruiti e sono molto vulnerabili alle armi Anticarro."
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "Inoltre, i mezzi cingolati hanno dei limiti importanti in termini di velocità."
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "Per via della loro durabilità, i cingolati sono perfetti per veicoli pensati per combattere sul fronte."
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "Tuttavia, bisogna fare attenzione. Il fatto che si muovano molto lentamente può rendere difficile portare avanti una ritirata."
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "Attaccare con unità VTOL"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr ""
+msgstr "Per attaccare con unità VTOL, selezionala e clicca su un nemico come faresti normalmente."
 
 msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
-msgstr ""
+msgstr "Tuttavia, potresti notare la barra bianca delle munizioni sotto la barra della salute quando cominci ad attaccare."
 
 msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr ""
+msgstr "A differenza delle unità di terra che ricaricano automaticamente, le unità VTOL hanno una quantità limitata di munizioni. Una volta terminate, l'unità aerea non può attaccare finché non si rifornisce."
 
 msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr ""
+msgstr "Un'unità VTOL troverà automaticamente una piattaforma di riarmo per rifornirsi e ripararsi (e ritornerà ad attaccare solo dopo essersi riarmata) o puoi farlo manualmente selezionandola e cliccando sulla piattaforma di riarmo."
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
+msgstr "A differenza delle altre unità che solitamente attaccano l'obiettivo più vicino, le unità VTOL non attaccano in modo automatico. Tuttavia, se selezioni l'unità aerea e poi schiacci alt e clicchi su un'area, l'unità pattuglierà la zona tra la sua attuale posizione e il punto cliccato e attaccherà qualsiasi cosa nelle vicinanze."
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr ""
+msgstr "In alternativa, le unità VTOL possono essere assegnate alle torri d'attacco VTOL e alle torri CB VTOL che le faranno funzionare in modo analogo all'artiglieria assegnata alle torri di rilevamento."
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "Difendere con unità VTOL"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "Le unità VTOL potrebbero essere usate per difendere aree della mappa."
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "Le unità VTOL possono essere assegnate alle torri d'attacco VTOL o alla torre radar VTOL e attaccheranno automaticamente qualsiasi oggetto rilevato dal sensore (come l'artiglieria assegnata al sensore standard)."
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "Alle unità VTOL può essere ordinato di pattugliare o volare intorno ad un'area. Nel farlo, attaccheranno automaticamente qualsiasi nemico incontrato lungo il percorso."
 
 msgid "Defending Against VTOLs"
-msgstr ""
+msgstr "Difendersi contro le unità VTOL"
 
 msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr ""
+msgstr "Cos'è quella cosa nel cielo? ... È un'unità VTOL"
 
 msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr ""
+msgstr "Poiché le unità VTOL non sono unità di terra, la maggior parte delle armi da terra non possono colpirle."
 
 msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr ""
+msgstr "Possono essere colpite solo da contraeree o da armi versatili (in grado di colpire bersagli aerei e terrestri)."
 
 msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr ""
+msgstr "Solo alcune armi sono versatili: mitragliatrici, laser e moduli lanciarazzi."
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(Anche i missili e i razzi sono versatili, ma solo quando sono equipaggiati su un cyborg o un'unità VTOL.)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "Oltre a non essere molto comuni, le armi versatili non provocano tanti danni alle unità VTOL quanti ne provocano le contraeree, quindi possedere quest'ultime è consigliato contro le unità VTOL."
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "Usare Unità VTOL"
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "Le unità VTOL vengono modellate in modo analogo alle unità di terra."
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "Quando scegli un sistema di propulsione, ti basta scegliere la propulsione \"VTOL\"."
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr ""
+msgstr "Dopodiché sarai in grado di scegliere le armi VTOL disponibili."
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "Per produrre il tuo modello VTOL dovrai costruire una Fabbrica VTOL."
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "Per riparare, riarmare e mantenere le tue unità VTOL, dovrai costruire una o più Piattaforme di riarmo VTOL."
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "Armi VTOL"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "La maggior parte delle armi hanno un equivalente VTOL che provoca più danni, ma ha munizioni limitate."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "Le versioni VTOL di armi regolari non devono essere ricercate separatamente."
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr "In aggiunta alle versioni VTOL di armi terrestri, le unità VTOL possono anche usare bombe. Queste armi sono l'equivalente dell'artiglieria e sono molto potenti."
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr ""
+msgstr "Le unità VTOL (Vertical Take-Off and Landing) sono i principali mezzi aerei per dominare i cieli."
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
-msgstr ""
+msgstr "Le unità VTOL sono estremamente veloci e possono attraversare tutti i tipi di terreno."
 
 msgid "Additionally, they cannot be targeted by most weapons while airborne."
-msgstr ""
+msgstr "Inoltre non possono essere bersagliati dalla maggior parte delle armi mentre sono in volo."
 
 msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
-msgstr ""
+msgstr "Tieni presente che mentre le unità VTOL possono essere modellate come altri veicoli, queste possono essere prodotte solo da una Fabbrica specializzata in VTOL."
 
 msgid "Wheels"
-msgstr ""
+msgstr "Ruote"
 
 msgid "Wheels are the most basic vehicle propulsion."
-msgstr ""
+msgstr "Le ruote sono il sistema di propulsione di base."
 
 msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
-msgstr ""
+msgstr "Costano poco, sono veloci da produrre e hanno una velocità massima superiore."
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "Tuttavia, sono vulnerabili alla maggior parte dei danni e non forniscono molti punti salute."
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
-msgstr ""
+msgstr "È meglio usare le ruote su veicoli che agiscono nelle retrovie o su veicoli che sfruttano l'alta velocità per tattiche di incursione rapida."
 
 msgid "Propulsions"
-msgstr ""
+msgstr "Sistemi di propulsione"
 
 msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
-msgstr ""
+msgstr "Proprio come con le armi, potresti scoprire nuovi sistemi di propulsione che possono essere usati nei modelli."
 
 msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Quando finisci di sviluppare un nuovo sistema di propulsione, un messaggio dall'Intelligence Display fornirà diverse informazioni sulle sue caratteristiche."
 
 msgid "Additionally, you can find descriptions of each propulsion in this guide."
-msgstr ""
+msgstr "Inoltre, in questa guida puoi trovare le descrizioni di ciascun sistema di propulsione."
 
 msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
-msgstr ""
+msgstr "Comprendere i vantaggi e gli svantaggi di ciascun sistema di propulsione è essenziale sia per modellare le tue unità sia per combattere quelle nemiche."
 
 msgid "Repairing Units"
-msgstr ""
+msgstr "Unità di riparazione"
 
 msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
-msgstr ""
+msgstr "Puoi modellare un'unità con una torretta di riparazione invece di un'arma e le può essere ordinato di riparare le altre tue unità."
 
 msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
-msgstr ""
+msgstr "Puoi anche tenere le unità di riparazione lontane dalla battaglia e usare le Opzioni di ritirata per ordinare alle tue unità di attacco di ritornare da esse dopo una certa quantità di danni."
 
 msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
-msgstr ""
+msgstr "Ritirare e riparare le unità spesso è molto meglio che perdere unità con esperienza sul campo di battaglia."
 
 msgid "CB Sensors"
-msgstr ""
+msgstr "Torri di rilevamento CB"
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
-msgstr ""
+msgstr "Le torri di rilevamento Contro-Batteria (CB) cambiano radicalmente il campo di battaglia consentendo alle unità di artiglieria di colpire direttamente le postazioni di artiglieria nemiche, purché siano a portata di tiro."
 
 msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
-msgstr ""
+msgstr "Le strutture o le unità identificate verranno evidenziate in rosso nella nebbia di guerra una volta che la torre di rilevamento CB rileva un attacco da parte dell'artiglieria nemica."
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr ""
+msgstr "Se attive, le unità di artiglieria daranno priorità ai bersagli delle torri di rilevamento CB rispetto a quelli rilevati dalle torri normali."
 
 msgid "Un-Assigning"
-msgstr ""
+msgstr "Rimozione"
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr ""
+msgstr "Per rimuovere un'unità da una torre di rilevamento, il modo più semplice è cliccare con il tasto destro sull'unità e spostarla da qualche parte."
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
-msgstr ""
+msgstr "Si possono selezionare più unità tenendo premuto CTRL mente clicchi."
 
 msgid "Using Sensors"
-msgstr ""
+msgstr "Usare torri di rilevamento"
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr ""
+msgstr "Le unità di artiglieria sono le più semplici. Ti basta costruire una torre di rilevamento e se questa rileva un oggetto entro il raggio di azione delle unità di artiglieria, queste lo attaccheranno."
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
-msgstr ""
+msgstr "Un carro di artiglieria invece deve essere assegnato esplicitamente ad una torre di rilevamento per funzionare. Seleziona i carri di artiglieria poi clicca su una torre per assegnarli."
 
 msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
-msgstr ""
+msgstr "Una volta che l'artiglieria è stata assegnata, se assegnata ad una torre di rilevamento, attaccherà automaticamente i nemici che entrano nel raggio d'azione."
 
 msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
-msgstr ""
+msgstr "Se è assegnata a un carro sensore, la torre di rilevamento può essere usata per attaccare i nemici. Basta selezionarla e scegliere un bersaglio. Tutte le unità di artiglieria assegnate alla torre attaccheranno quel bersaglio."
 
 msgid "Sensors"
-msgstr ""
+msgstr "Torri di rilevamento"
 
 msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
-msgstr ""
+msgstr "Le torri di rilevamento possono essere usate per sondare e sorvegliare l'area, ma hanno una funzione ancora più importante: rilevare le unità di artiglieria."
 
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
-msgstr ""
+msgstr "L'artiglieria, di per sé, non può attaccare al di fuori del raggio di rilevamento del proprio sensore (8 caselle senza potenziamenti)."
 
 msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "Tuttavia, anche l'arma di artiglieria più basilare ha una gittata superiore al raggio di rilevamento del sensore integrato. Per utilizzarla dovrai costruire e schierare sensori sul campo di battaglia (o torri di rilevamento o carri con torrette di rilevamento)."
 
 msgid "Kinetic & Thermal Damage"
-msgstr ""
+msgstr "Danni cinetici e termici"
 
 msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
-msgstr ""
+msgstr "La maggior parte delle armi infligge danni di tipo cinetico (proiettili, missili, etc.) ed è quindi influenzata dalla normale corazzatura cinetica."
 
 msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
-msgstr ""
+msgstr "Tuttavia, alcune armi infliggono invece danni termici che non sono influenzati dall'armatura cinetica del bersaglio."
 
 msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
-msgstr ""
+msgstr "Le armi termiche sono invece contrastate dalla corazza termica del bersaglio."
 
 msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
-msgstr ""
+msgstr "L'armatura termica e cinetica di un'unità può essere visualizzata nel menu del design, sulla schermata di selezione del corpo."
 
 msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
-msgstr ""
+msgstr "Tieni presente che tutte le unità hanno meno corazza termica di quella cinetica. Questo vuol dire che i danni termici vengono assorbiti meno di quelli cinetici!"
 
 msgid "Attacking"
-msgstr ""
+msgstr "Attaccare"
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "Modellare unità VTOL"
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "Ricorda: avrai bisogno di una Fabbrica VTOL per produrre unità VTOL."
 
 msgid "Weapons"
-msgstr ""
+msgstr "Armi"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "La maggior parte delle armi ha un equivalente VTOL che infligge almeno il doppio dei danni, ma ha munizioni limitate."
 
 msgid "VTOLs"
-msgstr ""
+msgstr "Unità VTOL"
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "Per produrre unità VTOL, devi aver scoperto e ricercato \"Propulsione VTOL\" e \"Fabbrica VTOL\"."
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "Dovresti anche ricercare e produrre alcune \"Piattaforme di Riarmo VTOL\" così le tue unità VTOL possono ricaricare le munizioni."
 
 msgid "Weapon Selection"
-msgstr ""
+msgstr "Selezione delle armi"
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr ""
+msgstr "Più armi scopri e sviluppi, più troverai che alcune armi sono di gran lunga meglio in certe situazioni rispetto ad altre (o contro alcune unità o strutture nemiche)."
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Quando completi la ricerca di una nuova arma, un messaggio dall'Intelligence Display fornirà alcune informazioni sulle sue caratteristiche."
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr ""
+msgstr "Sperimentare diversi tipi di armi ha i suoi vantaggi. Se stai avendo difficoltà e non hai ancora rivalutato la composizione delle tue forze sul campo, potrebbe essere il momento di sostituire le armi attuali con quelle più potenti o con nuove varianti!"
 
 msgid "Units"
-msgstr ""
+msgstr "Unità"
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr ""
+msgstr "Dovrai modellare e produrre nuove unità se vuoi battere i tuoi nemici e provare il dolce sapore della vittoria."
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr ""
+msgstr "Questo aspetto del gioco è ciò che rende Warzone 2100 unico nel suo genere."
 
 msgid "To be able to design units, a Command Center is required."
-msgstr ""
+msgstr "Per modellare delle unità è richiesto un Centro di comando."
 
 msgid "All-Rounder"
-msgstr ""
+msgstr "Armi versatili"
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr ""
+msgstr "Le armi \"versatili\" sono meno efficaci delle armi specializzate."
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr ""
+msgstr "Tuttavia, le armi versatili sono moderatamente efficaci contro tutti i tipi di bersagli, a differenza di quelle specializzate."
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr ""
+msgstr "Le armi versatili offrono inoltre una quantità significativa di punti salute bonus alle unità a cui sono equipaggiate, ma con lo svantaggio di avere un peso maggiore."
 
 msgid "Anti-Air"
-msgstr ""
+msgstr "Armi antiaeree"
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr ""
+msgstr "Le armi antiaeree (AA) sono specializzate contro tutti i tipi di unità aeree."
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr ""
+msgstr "Tuttavia, le armi AA non sono in grado di attaccare strutture o unità a terra."
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr ""
+msgstr "Mentre le armi AA sono eccellenti per affrontare minacce aeree, bisogna proteggerle dalle minacce che vengono da terra."
 
 msgid "Anti-Personnel"
-msgstr ""
+msgstr "Antiuomo"
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr ""
+msgstr "Le armi antiuomo sono estremamente efficaci nel falciare la fanteria nemica e i veicoli leggeri."
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr ""
+msgstr "Tuttavia, queste armi sono meno efficaci contro le strutture e obiettivi pesantemente equipaggiati."
 
 msgid "Anti-Tank"
-msgstr ""
+msgstr "Armi anticarro"
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr ""
+msgstr "Le armi anticarro sono specializzate contro tutti i tipi di veicoli nemici."
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr ""
+msgstr "Tuttavia, sono meno efficaci contro strutture e soprattutto contro le unità di fanteria."
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr ""
+msgstr "In generale, le armi anticarro sono leggere, ma forniscono pochi punti salute. I veicoli equipaggiati con queste armi saranno più vulnerabili rispetto a quelli equipaggiati con la maggior parte degli altri tipi di armi."
 
 msgid "Artillery"
-msgstr ""
+msgstr "Artiglieria"
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr ""
+msgstr "Le armi d'artiglieria sono devastanti contro la fanteria e la maggior parte delle strutture."
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr ""
+msgstr "Tuttavia, le armi d'artiglieria sono meno efficaci contro bunker e veicoli cingolati."
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr ""
+msgstr "La maggior parte (non tutte) delle armi d'artiglieria devono essere statiche per far fuoco. Questo, insieme al fatto che questo tipo di armi fornisce una quantità molto bassa di punti salute, rende le unità equipaggiate con l'artiglieria vulnerabili."
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr ""
+msgstr "Per questo è meglio usare le armi d'artiglieria come supporto per altre unità o strutture evitando lo scontro diretto."
 
 msgid "High-Explosive Bombs"
-msgstr ""
+msgstr "Bombe altamente esplosive"
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr ""
+msgstr "Le bombe esplosive funzionano in modo analogo alle armi d'artiglieria da terra (come i mortai)."
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr ""
+msgstr "Queste bombe esplodono all'impatto, danneggiando tutto ciò che viene coinvolto nell'esplosione."
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr ""
+msgstr "Come le armi d'artiglieria, le bombe esplosive eccellono nel distruggere la maggior parte delle strutture e dei gruppi di fanteria e veicoli leggeri, ma sono meno efficaci contro i bunker e i carri armati blindati."
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr ""
+msgstr "Assicurati che le tue unità e le tue strutture non siano coinvolte nell'esplosione!"
 
 msgid "Incendiary Bombs"
-msgstr ""
+msgstr "Bombe incendiarie"
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr ""
+msgstr "Le bombe incendiarie agiscono in modo analogo alle armi da fuoco a terra."
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr ""
+msgstr "Le bombe incendiarie infliggono una bassa quantità di danni all'impatto, ma bruciano immediatamente l'area intorno."
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr ""
+msgstr "Le unità e le strutture nemiche che si trovano all'interno di questa area subiranno una grande quantità di danni nel tempo."
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr ""
+msgstr "Come le armi a fiamma, le bombe incendiarie sono eccellenti contro tutti i tipi di unità e bunker, ma sono deboli contro le strutture corazzate."
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "Vano Bombe"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "I vani bombe sono un tipo unico di arma che possono essere equipaggiati solo su unità VTOL."
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "Anche se la loro portata d'attacco è breve e la capacità di munizioni è bassa, i vani bombe garantiscono punti salute bonus e in generale trasportano un carico esplosivo più potente rispetto ad altre armi VTOL."
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "Come altre armi, bombe diverse hanno effetti, punti di forza e applicazioni diversi."
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Bunker Buster"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "Il Bunker Buster è un'arma unica estremamente efficace contro tutte le strutture."
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "Tuttavia, il Bunker Buster è altrettanto debole contro qualsiasi bersaglio che non sia una struttura."
 
 msgid "Flamer"
-msgstr ""
+msgstr "Armi a fiamma"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "Armi incendiarie \"a fiamma\" sono efficaci contro la fanteria e carri con un sistema di propulsione debole."
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "Le armi a fiamma sono anche estremamente efficaci contro bunker e strutture dei predoni, ma più deboli contro altre strutture."
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "Le armi a fiamma possono penetrare le unità, danneggiando ed eventualmente bruciando più unità con un singolo colpo e questo le rende ottime contro gruppi di nemici."
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "Tuttavia, a causa della loro breve portata di attacco, le armi a fiamma possono essere rischiose da usare."
