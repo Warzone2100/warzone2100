@@ -21,6 +21,7 @@
 #include "lib/framework/wzapp.h"
 #include "screen.h"
 #include "gfx_api_gl.h"
+#include "shader_catalog.h"
 #include "render_graph/pass_resolve.h"
 #include "render_graph/scene_post_effects.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -895,22 +896,6 @@ enum SHADER_VERSION_ES
 	VERSION_ES_310
 };
 
-struct program_data
-{
-	std::string friendly_name;
-	std::string vertex_file;
-	std::string fragment_file;
-	std::vector<std::string> uniform_names;
-	std::vector<std::tuple<std::string, GLint>> additional_samplers = {};
-	// optional tessellation stages (require supportsTessellationShaders() and shaders targeting GLSL >= 4.00 core)
-	std::string tess_control_file = {};
-	std::string tess_evaluation_file = {};
-	// the highest GLSL ES version this program may target (most shaders are only tested up to 300 es)
-	SHADER_VERSION_ES maxShaderVersionES = VERSION_ES_300;
-	// std140 uniform block names, in the order the pipeline supplies its constant buffers
-	std::vector<std::string> uniform_block_names = {};
-};
-
 // Terrain claims units 0 to 12, so the light data samplers sit above that and still inside the required 16 minimum.
 constexpr GLint lightDataTextureUnit = 13;
 constexpr GLint lightIndexTextureUnit = 14;
@@ -931,184 +916,29 @@ static const std::vector<std::tuple<std::string, GLint>> lightDataSamplers = {
 	{"lightDataBuffer", lightDataTextureUnit}, {"lightIndexBuffer", lightIndexTextureUnit}
 };
 
-static const std::vector<std::tuple<std::string, GLint>> terrainCombinedSamplers = {
-	{"lightmap_tex", 0},
-	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
-	{"decalTex", 5}, {"decalNormal", 6}, {"decalSpecular", 7}, {"decalHeight", 8},
-	{"shadowMap", 9}
-};
-
-static const std::vector<std::tuple<std::string, GLint>> terrainCombinedTessSamplers = {
-	{"lightmap_tex", 0},
-	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
-	{"decalTex", 5}, {"decalNormal", 6}, {"decalSpecular", 7}, {"decalHeight", 8},
-	{"shadowMap", 9},
-	{"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12}
-};
-
-static const std::map<SHADER_MODE, program_data> shader_to_file_table =
+static std::string gl_stage_path(const gfx_api::shader_program_desc& desc, gfx_api::shader_stage_kind kind)
 {
-	std::make_pair(SHADER_COMPONENT, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask.vert", .fragment_file = "shaders/tcmask.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "globaluniforms", "meshuniforms", "instanceuniforms" } }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask_instanced.vert", .fragment_file = "shaders/tcmask_instanced.frag",
-		.uniform_names = {}, .additional_samplers = { {"shadowMap", 4}, {"lightmap_tex", 5} },
-		.uniform_block_names = { "globaluniforms", "meshuniforms", "pointlights" } }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask_depth_instanced.vert", .fragment_file = "shaders/tcmask_depth_instanced.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "globaluniforms" } }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, program_data{ .friendly_name = "Component depth prepass program", .vertex_file = "shaders/tcmask_depth_prepass_instanced.vert", .fragment_file = "shaders/tcmask_depth_prepass_instanced.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "globaluniforms", "meshuniforms" } }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_DEPTHONLY_INSTANCED, program_data{ .friendly_name = "Component depth-only prepass program", .vertex_file = "shaders/tcmask_depth_prepass_depthonly_instanced.vert", .fragment_file = "shaders/prepass_depth_only.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "globaluniforms" } }),
-	std::make_pair(SHADER_NOLIGHT, program_data{ .friendly_name = "Plain program", .vertex_file = "shaders/nolight.vert", .fragment_file = "shaders/nolight.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "globaluniforms", "meshuniforms", "instanceuniforms" } }),
-	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ .friendly_name = "Plain program", .vertex_file = "shaders/nolight_instanced.vert", .fragment_file = "shaders/nolight_instanced.frag",
-		.uniform_names = {}, .additional_samplers = { {"shadowMap", 4} },
-		.uniform_block_names = { "globaluniforms", "meshuniforms", "pointlights" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ .friendly_name = "terrain_depth program", .vertex_file = "shaders/terrain_depth.vert", .fragment_file = "shaders/terraindepth.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"lightmap_tex", 0} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ .friendly_name = "terrain_depthmap program", .vertex_file = "shaders/terrain_depth_only.vert", .fragment_file = "shaders/terrain_depth_only.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, program_data{ .friendly_name = "terrain_depth_prepass program", .vertex_file = "shaders/terrain_depth_prepass.vert", .fragment_file = "shaders/terrain_depth_prepass.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_DEPTHONLY, program_data{ .friendly_name = "terrain_depth_prepass depth-only program", .vertex_file = "shaders/terrain_depth_prepass.vert", .fragment_file = "shaders/prepass_depth_only.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_classic.frag",
-		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
-		.uniform_block_names = { "cbuffer", "pointlights" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_medium.frag",
-		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
-		.uniform_block_names = { "cbuffer", "pointlights" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_high.frag",
-		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
-		.uniform_block_names = { "cbuffer", "pointlights" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ .friendly_name = "terrain_depthmap tess program", .vertex_file = "shaders/terrain_depth_tess.vert", .fragment_file = "shaders/terrain_depth_only.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
-		.tess_control_file = "shaders/terrain_depth_tess.tesc", .tess_evaluation_file = "shaders/terrain_depthmap_tess.tese",
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, program_data{ .friendly_name = "terrain_depth_prepass tess program", .vertex_file = "shaders/terrain_depth_prepass_tess.vert", .fragment_file = "shaders/terrain_depth_prepass_tess.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
-		.tess_control_file = "shaders/terrain_depth_prepass_tess.tesc", .tess_evaluation_file = "shaders/terrain_depth_prepass_tess.tese",
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS_DEPTHONLY, program_data{ .friendly_name = "terrain_depth_prepass tess depth-only program", .vertex_file = "shaders/terrain_depth_prepass_tess.vert", .fragment_file = "shaders/prepass_depth_only.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
-		.tess_control_file = "shaders/terrain_depth_prepass_tess.tesc", .tess_evaluation_file = "shaders/terrain_depth_prepass_tess.tese",
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, program_data{ .friendly_name = "terrain decals tess program", .vertex_file = "shaders/terrain_combined_tess.vert", .fragment_file = "shaders/terrain_combined_medium.frag",
-		.uniform_names = {}, .additional_samplers = terrainCombinedTessSamplers,
-		.tess_control_file = "shaders/terrain_combined_tess.tesc", .tess_evaluation_file = "shaders/terrain_combined_tess.tese",
-		.uniform_block_names = { "cbuffer", "pointlights" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, program_data{ .friendly_name = "terrain decals tess program", .vertex_file = "shaders/terrain_combined_tess.vert", .fragment_file = "shaders/terrain_combined_high.frag",
-		.uniform_names = {}, .additional_samplers = terrainCombinedTessSamplers,
-		.tess_control_file = "shaders/terrain_combined_tess.tesc", .tess_evaluation_file = "shaders/terrain_combined_tess.tese",
-		.uniform_block_names = { "cbuffer", "pointlights" } }),
-	std::make_pair(SHADER_WATER, program_data{ .friendly_name = "water program", .vertex_file = "shaders/terrain_water.vert", .fragment_file = "shaders/water.frag",
-		.uniform_names = {}, .additional_samplers = { {"tex1", 0}, {"tex2", 1}, {"lightmap_tex", 2} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_WATER_DEPTH_PREPASS, program_data{ .friendly_name = "water_depth_prepass program", .vertex_file = "shaders/water_depth_prepass.vert", .fragment_file = "shaders/water_depth_prepass.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_WATER_DEPTH_PREPASS_DEPTHONLY, program_data{ .friendly_name = "water_depth_prepass depth-only program", .vertex_file = "shaders/water_depth_prepass.vert", .fragment_file = "shaders/prepass_depth_only.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_WATER_HIGH, program_data{ .friendly_name = "high water program", .vertex_file = "shaders/terrain_water_high.vert", .fragment_file = "shaders/terrain_water_high.frag",
-		.uniform_names = {}, .additional_samplers = { {"tex", 0}, {"tex_nm", 1}, {"tex_sm", 2}, {"lightmap_tex", 3}, {"shadowMap", 4} },
-		.uniform_block_names = { "cbuffer", "pointlights" } }),
-	std::make_pair(SHADER_WATER_CLASSIC, program_data{ .friendly_name = "classic water program", .vertex_file = "shaders/terrain_water_classic.vert", .fragment_file = "shaders/terrain_water_classic.frag",
-		.uniform_names = {}, .additional_samplers = { {"lightmap_tex", 0}, {"tex2", 1} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_RECT, program_data{ .friendly_name = "Rect program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/rect.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_RECT_INSTANCED, program_data{ .friendly_name = "Rect instanced program", .vertex_file = "shaders/rect_instanced.vert", .fragment_file = "shaders/rect_instanced.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TEXRECT, program_data{ .friendly_name = "Textured rect program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/texturedrect.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_GFX_COLOUR, program_data{ .friendly_name = "gfx_color program", .vertex_file = "shaders/gfx_color.vert", .fragment_file = "shaders/gfx.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_GFX_TEXT, program_data{ .friendly_name = "gfx_text program", .vertex_file = "shaders/gfx_text.vert", .fragment_file = "shaders/texturedrect.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SKYBOX, program_data{ .friendly_name = "skybox program", .vertex_file = "shaders/skybox.vert", .fragment_file = "shaders/skybox.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_GENERIC_COLOR, program_data{ .friendly_name = "generic color program", .vertex_file = "shaders/generic.vert", .fragment_file = "shaders/rect.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_CONSTRUCTION_LINE, program_data{ .friendly_name = "construction line program", .vertex_file = "shaders/construction_line.vert", .fragment_file = "shaders/construction_line.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_LINE, program_data{ .friendly_name = "line program", .vertex_file = "shaders/line.vert", .fragment_file = "shaders/rect.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_TEXT, program_data{ .friendly_name = "Text program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/text.frag",
-		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ .friendly_name = "Debug texture quad program", .vertex_file = "shaders/quad_texture2d.vert", .fragment_file = "shaders/quad_texture2d.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ .friendly_name = "Debug texture array quad program", .vertex_file = "shaders/quad_texture2darray.vert", .fragment_file = "shaders/quad_texture2darray.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_DEBUG_TESS_QUAD, program_data{ .friendly_name = "Debug tessellated quad program", .vertex_file = "shaders/tess_quad.vert", .fragment_file = "shaders/tess_quad.frag",
-		.uniform_names = {},
-		.tess_control_file = "shaders/tess_quad.tesc", .tess_evaluation_file = "shaders/tess_quad.tese",
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ .friendly_name = "World to screen quad program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/world_to_screen.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_FSR1_EASU, program_data{ .friendly_name = "FSR1 EASU program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/fsr1_easu.frag",
-		.uniform_names = {},
-		.maxShaderVersionES = VERSION_ES_310,
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_FSR1_RCAS, program_data{ .friendly_name = "FSR1 RCAS program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/fsr1_rcas.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SMAA_EDGES, program_data{ .friendly_name = "SMAA edge detection program", .vertex_file = "shaders/smaa_edges.vert", .fragment_file = "shaders/smaa_edges.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"colorTex", 0} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SMAA_WEIGHTS, program_data{ .friendly_name = "SMAA blending weights program", .vertex_file = "shaders/smaa_weights.vert", .fragment_file = "shaders/smaa_weights.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"edgesTex", 0}, {"areaTex", 1}, {"searchTex", 2} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SMAA_BLEND, program_data{ .friendly_name = "SMAA neighborhood blending program", .vertex_file = "shaders/smaa_blend.vert", .fragment_file = "shaders/smaa_blend.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"colorTex", 0}, {"blendTex", 1} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SSAO_GENERATE, program_data{ .friendly_name = "SSAO generate program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_generate.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"depthTexture", 0}, {"normalsTexture", 1}, {"noiseTexture", 2} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SSAO_BLUR, program_data{ .friendly_name = "SSAO blur program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_blur.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"occlusionTexture", 0}, {"depthTexture", 1} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SSAO_DOWNSAMPLE, program_data{ .friendly_name = "SSAO downsample program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_downsample.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"occlusionTexture", 0} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ .friendly_name = "Scene compose SSAO program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_compose_ssao.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_SCENE_FOG, program_data{ .friendly_name = "Scene fog program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_fog.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1} },
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_RANGE_RING_SDF, program_data{ .friendly_name = "Range ring SDF program", .vertex_file = "shaders/range_ring_sdf.vert", .fragment_file = "shaders/range_ring_sdf.frag",
-		.uniform_names = {},
-		.uniform_block_names = { "cbuffer" } }),
-	std::make_pair(SHADER_RANGE_RING_COMPOSITE, program_data{ .friendly_name = "Range ring composite program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/range_ring_composite.frag",
-		.uniform_names = {},
-		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1}, {"rangeRingSdf", 2} },
-		.uniform_block_names = { "cbuffer" } })
-};
+	const gfx_api::shader_stage_file* stage = gfx_api::find_stage(desc, kind);
+	if (stage == nullptr || stage->basename == nullptr)
+	{
+		return {};
+	}
+	return gfx_api::gl_shader_path(stage->basename);
+}
+
+static SHADER_VERSION_ES to_gl_es_version(gfx_api::shader_es_version version)
+{
+	switch (version)
+	{
+	case gfx_api::shader_es_version::es_100:
+		return VERSION_ES_100;
+	case gfx_api::shader_es_version::es_300:
+		return VERSION_ES_300;
+	case gfx_api::shader_es_version::es_310:
+		return VERSION_ES_310;
+	}
+	return VERSION_ES_300;
+}
 
 enum SHADER_VERSION
 {
@@ -1306,9 +1136,9 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	std::string tessShaderHeader;
 	std::string fragmentShaderHeader;
 
-	const program_data& programInfo = shader_to_file_table.at(createInfo.shader_mode);
-	const bool hasTessStages = !programInfo.tess_control_file.empty() || !programInfo.tess_evaluation_file.empty();
-	ASSERT(!hasTessStages || ctx.supportsTessellationShaders(), "Tessellation pipeline requested without tessellation support: %s", programInfo.friendly_name.c_str());
+	const gfx_api::shader_program_desc& programInfo = gfx_api::shader_catalog(createInfo.shader_mode);
+	const bool hasTessStages = gfx_api::shader_has_tessellation(programInfo);
+	ASSERT(!hasTessStages || ctx.supportsTessellationShaders(), "Tessellation pipeline requested without tessellation support: %s", programInfo.friendly_name);
 
 	if (!ctx.gles)
 	{
@@ -1356,8 +1186,8 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL ES context
 		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300,
-		// individual programs can opt in to higher versions via program_data::maxShaderVersionES)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_300, programInfo.maxShaderVersionES));
+		// individual programs can opt in to higher versions via shader_program_desc::max_es)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_300, to_gl_es_version(programInfo.max_es)));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
@@ -1378,15 +1208,22 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
 	}
 
-	for (const auto& sampler : programInfo.additional_samplers)
+	for (const auto& texture : createInfo.texture_desc)
 	{
-		ASSERT(std::get<1>(sampler) != lightDataTextureUnit && std::get<1>(sampler) != lightIndexTextureUnit,
-			"%s binds %s to texture unit %d, which the light data samplers reserve",
-			programInfo.friendly_name.c_str(), std::get<0>(sampler).c_str(), static_cast<int>(std::get<1>(sampler)));
+		ASSERT(texture.glsl_name != nullptr && texture.glsl_name[0] != '\0',
+			"%s texture unit %zu is missing a GLSL sampler name", programInfo.friendly_name, texture.id);
+		ASSERT(texture.id != static_cast<size_t>(lightDataTextureUnit) && texture.id != static_cast<size_t>(lightIndexTextureUnit),
+			"%s binds %s to texture unit %zu, which the light data samplers reserve",
+			programInfo.friendly_name, texture.glsl_name, texture.id);
 	}
 
-	// The light data samplers only exist in a program built for the buffer texture transport.
-	std::vector<std::tuple<std::string, GLint>> samplersToBind = programInfo.additional_samplers;
+	// Recipe samplers first; light data samplers only exist in a program built for the buffer texture transport.
+	std::vector<std::tuple<std::string, GLint>> samplersToBind;
+	samplersToBind.reserve(createInfo.texture_desc.size() + lightDataSamplers.size());
+	for (const auto& texture : createInfo.texture_desc)
+	{
+		samplersToBind.emplace_back(texture.glsl_name, static_cast<GLint>(texture.id));
+	}
 	if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::texel_buffer)
 	{
 		samplersToBind.insert(samplersToBind.end(), lightDataSamplers.begin(), lightDataSamplers.end());
@@ -1395,27 +1232,26 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	build_program(ctx,
 				  programInfo.friendly_name,
 				  vertexShaderHeader.c_str(),
-				  programInfo.vertex_file,
+				  gl_stage_path(programInfo, gfx_api::shader_stage_kind::vertex),
 				  tessShaderHeader.c_str(),
-				  programInfo.tess_control_file,
-				  programInfo.tess_evaluation_file,
+				  gl_stage_path(programInfo, gfx_api::shader_stage_kind::tess_control),
+				  gl_stage_path(programInfo, gfx_api::shader_stage_kind::tess_eval),
 				  fragmentShaderHeader.c_str(),
-				  programInfo.fragment_file,
-				  programInfo.uniform_names,
+				  gl_stage_path(programInfo, gfx_api::shader_stage_kind::fragment),
 				  samplersToBind,
 				  shadowConstants);
 
 	// Constants travel as std140 uniform blocks: slot order matches the pipeline's
 	// constant buffer order, so no per type binding table is involved.
-	ASSERT(programInfo.uniform_block_names.size() == createInfo.uniform_blocks.size(),
+	ASSERT(createInfo.uniform_block_names.size() == createInfo.uniform_blocks.size(),
 		"%s declares %zu uniform blocks but the pipeline supplies %zu constant buffers",
-		programInfo.friendly_name.c_str(), programInfo.uniform_block_names.size(), createInfo.uniform_blocks.size());
-	if (!setupUniformBlocks(ctx, programInfo.uniform_block_names, programInfo.friendly_name))
+		programInfo.friendly_name, createInfo.uniform_block_names.size(), createInfo.uniform_blocks.size());
+	if (!setupUniformBlocks(ctx, createInfo.uniform_block_names, programInfo.friendly_name))
 	{
 		broken = true;
 	}
 	uniformBlockTypes = createInfo.uniform_blocks;
-	for (size_t slot = 0; slot < programInfo.uniform_block_names.size(); ++slot)
+	for (size_t slot = 0; slot < createInfo.uniform_block_names.size(); ++slot)
 	{
 		uniform_bind_functions.push_back([this, slot](const void* buffer, size_t size) {
 			this->uploadUniformBlock(slot, buffer, size);
@@ -1901,7 +1737,7 @@ void gl_uniform_block_allocator::destroy()
 	totalCapacity = 0;
 }
 
-bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName)
+bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::vector<const char*>& blockNames, const std::string& programName)
 {
 	owningContext = &ctx;
 	uniformBlockSizes.resize(blockNames.size(), 0);
@@ -1910,11 +1746,12 @@ bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::ve
 	bool success = true;
 	for (size_t slot = 0; slot < blockNames.size(); ++slot)
 	{
-		const GLuint blockIndex = glGetUniformBlockIndex(program, blockNames[slot].c_str());
+		const char* blockName = blockNames[slot] != nullptr ? blockNames[slot] : "";
+		const GLuint blockIndex = glGetUniformBlockIndex(program, blockName);
 		if (blockIndex == GL_INVALID_INDEX)
 		{
 			// the linker drops a block no stage reads, so leave the slot empty
-			debug(LOG_3D, "%s: uniform block \"%s\" is unused, skipping", programName.c_str(), blockNames[slot].c_str());
+			debug(LOG_3D, "%s: uniform block \"%s\" is unused, skipping", programName.c_str(), blockName);
 			continue;
 		}
 
@@ -1923,7 +1760,7 @@ bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::ve
 		if (blockSize > ctx.maxUniformBlockSize)
 		{
 			debug(LOG_ERROR, "%s: uniform block \"%s\" needs %d bytes, more than the %d the driver allows",
-				programName.c_str(), blockNames[slot].c_str(), blockSize, ctx.maxUniformBlockSize);
+				programName.c_str(), blockName, blockSize, ctx.maxUniformBlockSize);
 			success = false;
 			continue;
 		}
@@ -2041,22 +1878,6 @@ void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string,
 {
 	glUseProgram(program);
 
-	// Uniforms, these never change.
-	GLint locTex[4] = {-1};
-	locTex[0] = glGetUniformLocation(program, "Texture");
-	locTex[1] = glGetUniformLocation(program, "TextureTcmask");
-	locTex[2] = glGetUniformLocation(program, "TextureNormal");
-	locTex[3] = glGetUniformLocation(program, "TextureSpecular");
-
-	for (GLint i = 0; i < 4; ++i)
-	{
-		if (locTex[i] != -1)
-		{
-			glUniform1i(locTex[i], i);
-		}
-	}
-
-	// additional sampler uniforms
 	for (const auto& uniformSampler : samplersToBind)
 	{
 		GLint loc = glGetUniformLocation(program, std::get<0>(uniformSampler).c_str());
@@ -2069,7 +1890,6 @@ void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string,
 			debug(LOG_3D, "Missing expected sampler uniform: %s", std::get<0>(uniformSampler).c_str());
 		}
 	}
-
 }
 
 static bool regex_replace_wrapper(std::string& input, const std::regex& re, const std::string& replace, std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
@@ -2149,12 +1969,36 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
 }
 
+static void bindUsedVertexAttribLocations(GLuint program, const std::unordered_set<std::size_t>& expectedVertexAttribLoc)
+{
+	auto bindIfUsed = [&](GLuint index, const GLchar *name) {
+		if (expectedVertexAttribLoc.count(index) > 0)
+		{
+			glBindAttribLocation(program, index, name);
+		}
+	};
+	bindIfUsed(gfx_api::position, "vertex");
+	bindIfUsed(gfx_api::texcoord, "vertexTexCoord");
+	bindIfUsed(gfx_api::color, "vertexColor");
+	bindIfUsed(gfx_api::normal, "vertexNormal");
+	bindIfUsed(gfx_api::tangent, "vertexTangent");
+	// instanced mesh / instanced rects
+	bindIfUsed(gfx_api::instance_modelMatrix, "instanceModelMatrix"); // uses 4 slots
+	static_assert(gfx_api::instance_modelMatrix + 4 == gfx_api::instance_packedValues, "");
+	bindIfUsed(gfx_api::instance_packedValues, "instancePackedValues");
+	bindIfUsed(gfx_api::instance_Colour, "instanceColour");
+	bindIfUsed(gfx_api::instance_TeamColour, "instanceTeamColour");
+	// terrain renderer (terrain_tileNo shares location 5 with instance_modelMatrix)
+	bindIfUsed(gfx_api::terrain_tileNo, "tileNo");
+	bindIfUsed(gfx_api::terrain_grounds, "grounds");
+	bindIfUsed(gfx_api::terrain_groundWeights, "groundWeights");
+}
+
 void gl_pipeline_state_object::build_program(gl_context& ctx,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
 											 const char * fragment_header, const std::string& fragmentPath,
-											 const std::vector<std::string> &uniformNames,
 											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
 											 const gfx_api::lighting_constants& lightingConstants)
 {
@@ -2170,30 +2014,9 @@ void gl_pipeline_state_object::build_program(gl_context& ctx,
 		}
 	}
 
-	auto bindVertexAttribLocationIfUsed = [&expectedVertexAttribLoc](GLuint prg, GLuint index, const GLchar *name) {
-		if (expectedVertexAttribLoc.count(index) > 0)
-		{
-			glBindAttribLocation(prg, index, name);
-		}
-	};
-
 	program = glCreateProgram();
-	bindVertexAttribLocationIfUsed(program, 0, "vertex");
-	bindVertexAttribLocationIfUsed(program, 1, "vertexTexCoord");
-	bindVertexAttribLocationIfUsed(program, 2, "vertexColor");
-	bindVertexAttribLocationIfUsed(program, 3, "vertexNormal");
-	bindVertexAttribLocationIfUsed(program, 4, "vertexTangent");
-	// only needed for instanced mesh rendering
-	bindVertexAttribLocationIfUsed(program, gfx_api::instance_modelMatrix, "instanceModelMatrix"); // uses 4 slots
-	static_assert(gfx_api::instance_modelMatrix + 4 == gfx_api::instance_packedValues, "");
-	bindVertexAttribLocationIfUsed(program, gfx_api::instance_packedValues, "instancePackedValues");
-	bindVertexAttribLocationIfUsed(program, gfx_api::instance_Colour, "instanceColour");
-	bindVertexAttribLocationIfUsed(program, gfx_api::instance_TeamColour, "instanceTeamColour");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
-	// only needed for new terrain renderer
-	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_tileNo, "tileNo");
-	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_grounds, "grounds");
-	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_groundWeights, "groundWeights");
+	bindUsedVertexAttribLocations(program, expectedVertexAttribLoc);
 
 	std::string vertexShaderContents;
 
@@ -5842,7 +5665,7 @@ bool gl_context::initTextureGatherSupport()
 	if (gles)
 	{
 		// texture gather is core in GLSL ES 3.10, targeted when the context is OpenGL ES 3.1+
-		// (see program_data::maxShaderVersionES)
+		// (see shader_program_desc::max_es)
 		return GLAD_GL_ES_VERSION_3_1;
 	}
 	// core in GLSL 4.00, otherwise available via the GL_ARB_gpu_shader5 extension

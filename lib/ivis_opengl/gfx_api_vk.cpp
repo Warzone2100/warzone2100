@@ -54,6 +54,7 @@
 // transitionImageLayout, getVkImageHandle, and getVkImageAspect remain here as facades for vk/ friends.
 
 #include "gfx_api_vk.h"
+#include "shader_catalog.h"
 #include "render_graph/layout_subresource.h"
 #include "render_graph/pass_resolve.h"
 #include "render_graph/scene_post_effects.h"
@@ -1262,74 +1263,15 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
 
 // MARK: VkPSO
 
-struct shader_infos
+static std::string vk_stage_path(const gfx_api::shader_program_desc& desc, gfx_api::shader_stage_kind kind)
 {
-	std::string vertexSpv;
-	std::string fragmentSpv;
-	bool specializationConstant_1_shadowMode = false;
-	bool specializationConstant_2_shadowFilterSize = false;
-	bool specializationConstant_3_shadowCascadesCount = false;
-	bool specializationConstant_4_pointLightEnabled = false;
-	// optional tessellation stages (requires supportsTessellationShaders())
-	std::string tessControlSpv = {};
-	std::string tessEvalSpv = {};
-
-	bool hasTessellationStages() const { return !tessControlSpv.empty() || !tessEvalSpv.empty(); }
-};
-
-static const std::map<SHADER_MODE, shader_infos> spv_files
-{
-	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv" }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_prepass_instanced.vert.spv", "shaders/vk/tcmask_depth_prepass_instanced.frag.spv" }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_DEPTHONLY_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_prepass_depthonly_instanced.vert.spv", "shaders/vk/prepass_depth_only.frag.spv" }),
-	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv" }),
-	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, shader_infos{ "shaders/vk/terrain_depth_prepass.vert.spv", "shaders/vk/terrain_depth_prepass.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_DEPTHONLY, shader_infos{ "shaders/vk/terrain_depth_prepass.vert.spv", "shaders/vk/prepass_depth_only.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, shader_infos{ "shaders/vk/terrain_depth_tess.vert.spv", "shaders/vk/terrain_depth_only.frag.spv", false, false, false, false, "shaders/vk/terrain_depth_tess.tesc.spv", "shaders/vk/terrain_depthmap_tess.tese.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, shader_infos{ "shaders/vk/terrain_depth_prepass_tess.vert.spv", "shaders/vk/terrain_depth_prepass_tess.frag.spv", false, false, false, false, "shaders/vk/terrain_depth_prepass_tess.tesc.spv", "shaders/vk/terrain_depth_prepass_tess.tese.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS_DEPTHONLY, shader_infos{ "shaders/vk/terrain_depth_prepass_tess.vert.spv", "shaders/vk/prepass_depth_only.frag.spv", false, false, false, false, "shaders/vk/terrain_depth_prepass_tess.tesc.spv", "shaders/vk/terrain_depth_prepass_tess.tese.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, shader_infos{ "shaders/vk/terrain_combined_tess.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, false, "shaders/vk/terrain_combined_tess.tesc.spv", "shaders/vk/terrain_combined_tess.tese.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, shader_infos{ "shaders/vk/terrain_combined_tess.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, "shaders/vk/terrain_combined_tess.tesc.spv", "shaders/vk/terrain_combined_tess.tese.spv" }),
-	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv" }),
-	std::make_pair(SHADER_WATER_DEPTH_PREPASS, shader_infos{ "shaders/vk/water_depth_prepass.vert.spv", "shaders/vk/water_depth_prepass.frag.spv" }),
-	std::make_pair(SHADER_WATER_DEPTH_PREPASS_DEPTHONLY, shader_infos{ "shaders/vk/water_depth_prepass.vert.spv", "shaders/vk/prepass_depth_only.frag.spv" }),
-	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water_high.vert.spv", "shaders/vk/terrain_water_high.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv" }),
-	std::make_pair(SHADER_RECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/rect.frag.spv" }),
-	std::make_pair(SHADER_RECT_INSTANCED, shader_infos{ "shaders/vk/rect_instanced.vert.spv", "shaders/vk/rect_instanced.frag.spv" }),
-	std::make_pair(SHADER_TEXRECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/texturedrect.frag.spv" }),
-	std::make_pair(SHADER_GFX_COLOUR, shader_infos{ "shaders/vk/gfx_color.vert.spv", "shaders/vk/gfx.frag.spv" }),
-	std::make_pair(SHADER_GFX_TEXT, shader_infos{ "shaders/vk/gfx_text.vert.spv", "shaders/vk/texturedrect.frag.spv" }),
-	std::make_pair(SHADER_SKYBOX, shader_infos{ "shaders/vk/skybox.vert.spv", "shaders/vk/skybox.frag.spv" }),
-	std::make_pair(SHADER_GENERIC_COLOR, shader_infos{ "shaders/vk/generic.vert.spv", "shaders/vk/rect.frag.spv" }),
-	std::make_pair(SHADER_CONSTRUCTION_LINE, shader_infos{ "shaders/vk/construction_line.vert.spv", "shaders/vk/construction_line.frag.spv" }),
-	std::make_pair(SHADER_LINE, shader_infos{ "shaders/vk/line.vert.spv", "shaders/vk/rect.frag.spv" }),
-	std::make_pair(SHADER_TEXT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/text.frag.spv" }),
-	std::make_pair(SHADER_WORLD_TO_SCREEN, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/world_to_screen.frag.spv" }),
-	std::make_pair(SHADER_FSR1_EASU, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/fsr1_easu.frag.spv" }),
-	std::make_pair(SHADER_FSR1_RCAS, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/fsr1_rcas.frag.spv" }),
-	std::make_pair(SHADER_SMAA_EDGES, shader_infos{ "shaders/vk/smaa_edges.vert.spv", "shaders/vk/smaa_edges.frag.spv" }),
-	std::make_pair(SHADER_SMAA_WEIGHTS, shader_infos{ "shaders/vk/smaa_weights.vert.spv", "shaders/vk/smaa_weights.frag.spv" }),
-	std::make_pair(SHADER_SMAA_BLEND, shader_infos{ "shaders/vk/smaa_blend.vert.spv", "shaders/vk/smaa_blend.frag.spv" }),
-	std::make_pair(SHADER_SSAO_GENERATE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_generate.frag.spv" }),
-	std::make_pair(SHADER_SSAO_BLUR, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_blur.frag.spv" }),
-	std::make_pair(SHADER_SSAO_DOWNSAMPLE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/ssao_downsample.frag.spv" }),
-	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/scene_compose_ssao.frag.spv" }),
-	std::make_pair(SHADER_SCENE_FOG, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/scene_fog.frag.spv" }),
-	std::make_pair(SHADER_RANGE_RING_SDF, shader_infos{ "shaders/vk/range_ring_sdf.vert.spv", "shaders/vk/range_ring_sdf.frag.spv" }),
-	std::make_pair(SHADER_RANGE_RING_COMPOSITE, shader_infos{ "shaders/vk/postprocess_fullscreen.vert.spv", "shaders/vk/range_ring_composite.frag.spv" }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" }),
-	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
-};
+	const gfx_api::shader_stage_file* stage = gfx_api::find_stage(desc, kind);
+	if (stage == nullptr || stage->basename == nullptr)
+	{
+		return {};
+	}
+	return gfx_api::vk_spv_path(stage->basename);
+}
 
 std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
 {
@@ -1793,8 +1735,8 @@ VkPSO::VkPSO(vk::Device _dev,
 	const std::vector<gfx_api::texture_input>& texture_desc = createInfo.texture_desc;
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions = createInfo.attribute_descriptions;
 
-	const auto& shaderInfo = spv_files.at(shader_mode);
-	const bool hasTessStages = shaderInfo.hasTessellationStages();
+	const gfx_api::shader_program_desc& shaderInfo = gfx_api::shader_catalog(shader_mode);
+	const bool hasTessStages = gfx_api::shader_has_tessellation(shaderInfo);
 	ASSERT(!hasTessStages || root->supportsTessellationShaders(), "Tessellation pipeline requested without tessellation support (SHADER_MODE: %d)", (int)shader_mode);
 	ASSERT((primitive == gfx_api::primitive_type::patch_list_4) == hasTessStages, "patch_list_4 topology and tessellation stages must be used together (SHADER_MODE: %d)", (int)shader_mode);
 
@@ -1949,16 +1891,20 @@ VkPSO::VkPSO(vk::Device _dev,
 
 	const auto depthStencilState = to_vk(state_desc.depth_mode, state_desc.stencil);
 	const auto rasterizationState = to_vk(state_desc.offset, state_desc.cull);
-	vertexShader = get_module(shaderInfo.vertexSpv, *pVkDynLoader);
-	if (!shaderInfo.tessControlSpv.empty())
+	const std::string vertexSpv = vk_stage_path(shaderInfo, gfx_api::shader_stage_kind::vertex);
+	const std::string tessControlSpv = vk_stage_path(shaderInfo, gfx_api::shader_stage_kind::tess_control);
+	const std::string tessEvalSpv = vk_stage_path(shaderInfo, gfx_api::shader_stage_kind::tess_eval);
+	const std::string fragmentSpv = vk_stage_path(shaderInfo, gfx_api::shader_stage_kind::fragment);
+	vertexShader = get_module(vertexSpv, *pVkDynLoader);
+	if (!tessControlSpv.empty())
 	{
-		tessControlShader = get_module(shaderInfo.tessControlSpv, *pVkDynLoader);
+		tessControlShader = get_module(tessControlSpv, *pVkDynLoader);
 	}
-	if (!shaderInfo.tessEvalSpv.empty())
+	if (!tessEvalSpv.empty())
 	{
-		tessEvalShader = get_module(shaderInfo.tessEvalSpv, *pVkDynLoader);
+		tessEvalShader = get_module(tessEvalSpv, *pVkDynLoader);
 	}
-	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
+	fragmentShader = get_module(fragmentSpv, *pVkDynLoader);
 	auto pipelineStages = get_stages(vertexShader, tessControlShader, tessEvalShader, fragmentShader);
 
 	std::vector<char> specializationConstantsDataBuffer;
@@ -1970,22 +1916,22 @@ VkPSO::VkPSO(vk::Device _dev,
 		memcpy(&specializationConstantsDataBuffer[copyIdx], &value, sizeof(uint32_t));
 		specializationEntries.emplace_back(constantID, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(uint32_t));
 	};
-	if (shaderInfo.specializationConstant_1_shadowMode)
+	if (shaderInfo.spec_constants & gfx_api::spec_shadow_mode)
 	{
 		appendSpecializationConstant_uint32(1, root->shadowConstants.shadowMode);
 		hasSpecializationConstant_ShadowConstants = true;
 	}
-	if (shaderInfo.specializationConstant_2_shadowFilterSize)
+	if (shaderInfo.spec_constants & gfx_api::spec_shadow_filter_size)
 	{
 		appendSpecializationConstant_uint32(2, root->shadowConstants.shadowFilterSize);
 		hasSpecializationConstant_ShadowConstants = true;
 	}
-	if (shaderInfo.specializationConstant_3_shadowCascadesCount)
+	if (shaderInfo.spec_constants & gfx_api::spec_shadow_cascades)
 	{
 		appendSpecializationConstant_uint32(3, root->shadowConstants.shadowCascadesCount);
 		hasSpecializationConstant_ShadowConstants = true;
 	}
-	if (shaderInfo.specializationConstant_4_pointLightEnabled)
+	if (shaderInfo.spec_constants & gfx_api::spec_point_light_enabled)
 	{
 		appendSpecializationConstant_uint32(4, static_cast<uint32_t>(root->shadowConstants.isPointLightPerPixelEnabled));
 		hasSpecializationConstant_PointLightConstants = true;
