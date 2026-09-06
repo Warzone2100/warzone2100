@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-09-06 02:16\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -27,10 +27,10 @@ msgid "These will unlock valuable technologies that you can research in a Resear
 msgstr "Bunlar, bir araştırma tesisinde araştırabileceğiniz değerli teknolojilerin kilidini açacaktır."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr "Eserler, üzerinde yeşil bir gösterge bulunan küçük beyaz kutulardır ve herhangi bir birimi yeterince yakın hareket ettirerek alınabilir."
+msgstr "Kalıntılar, üzerinde yeşil bir gösterge bulunan küçük beyaz kutulardır ve herhangi bir birimi yeterince yakın hareket ettirerek alınabilir."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr "Tüm eserler, her seviyenin zafer koşullarının bir parçası olarak alınmalıdır."
+msgstr "Tüm kalıntılar, her seviyenin zafer koşullarının bir parçası olarak alınmalıdır."
 
 msgid "Backstory"
 msgstr "Geçmişin Hikayesi"
@@ -45,7 +45,7 @@ msgid "The Collapse came fast and hard. Following a technical error in the satel
 msgstr "Yıkım hızlı ve sert geldi. Uydu savunma sistemindeki teknik bir hatanın ardından, dünyanın dört bir yanındaki büyük şehirlere nükleer savaş başlıkları ateşlendi."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr "Dakikalar sonra, fırlatmaya yanıt olarak yer tabanlı sahalar ateşlendi. Nükleer fırtınalar dünya şehirlerini yok ederken milyonlarca insan öldü. Vebalar ve salgın hastalıklar medeniyetten geriye kalanları süpürürken milyarlarca kişi daha öldü."
+msgstr "Dakikalar sonra, yerdeki üsler bu fırlatmaya karşılık olarak ateş açtı. Nükleer ateş fırtınaları dünyanın şehirlerini yerle bir ederken milyonlarca insan hayatını kaybetti. Salgın hastalıklar ve vebalar, medeniyetten geriye kalanları da silip süpürürken milyarlarca insan daha hayatını kaybetti."
 
 msgid "Less than a million people survived the Collapse."
 msgstr "Yıkımdan bir milyondan az insan hayatta kaldı."
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "Orta / Merkezi buton açık bütün komut arayüzlerini kapatır."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Üssünüzü Savunmak"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "Warzone 2100'de ana üssünüz, seferberlik boyunca varlıklarını sürdürür."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Bu nedenle, ana üssünüzün gelecekteki savunması için hazırlık yapmak hayati önem taşımaktadır."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Birimler üssünüzü savunmak için elbette yararlı olsa da, üssünüzün tasarımı da hayati önem taşır."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Düşman saldırılarına daha etkili bir şekilde karşı koyabilmek için, siper sağlayan, erişimi kısıtlayan, düşmanları tespit eden ve hasar veren savunma yapıları inşa et."
 
 msgid "Intelligence Display"
 msgstr "İstihbarat Ekranı"
@@ -186,244 +186,244 @@ msgid "This will open the Structures menu on the left side of screen, with a but
 msgstr "Bu, oluşturabileceğiniz her yapı için bir düğme ile ekranın sol tarafındaki Yapılar menüsünü açacaktır."
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr ""
+msgstr "İstediğiniz yapı düğmesini seçin. Oyun dünyasında bir silüet belirecektir - onayladıktan sonra yapınız buraya yerleştirilecektir."
 
 msgid "Move the silhouette by moving the input device."
-msgstr ""
+msgstr "Giriş aygıtını hareket ettirerek silueti hareket ettirin."
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
-msgstr ""
+msgstr "- Bir konumda yapı inşa edilebiliyorsa, fareyi o konumun üzerine getirdiğinizde yapının silüeti yeşil renkte görünecektir."
 
 msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
-msgstr ""
+msgstr "- Bir yapının bir yerde inşa edilememesi durumunda, silüeti kırmızı renkle gösterilecektir."
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr ""
+msgstr "Uygun bir yer seçtikten sonra, inşaat alanının yerini onaylamak için işlemi tamamlayın. Bir kamyon belirtilen yere hareket edecek ve inşaata başlayacaktır."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "İnşaat halindeki yapıya yönelik olarak diğer kamyonlarla (ve yapıyı daha hızlı inşa ederek) yardımcı olabilirsiniz."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr ""
+msgstr "İpucu: \"Duvarlar\" inşa etmek için (kullanıma sunulduktan sonra), tıklayıp sürükleyerek bir çizgi üzerinde duvar çizebilirsiniz."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Sayborg Fabrikası"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Bir Sayborg Fabrikası, standart bir Fabrikaya benzer şekilde çalışır, ancak yalnızca Sayborglar üretir."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Her fabrika aynı anda yalnızca bir sayborg üretebilir, ancak üretim için birden fazla sayborg sıraya koyabilirsiniz."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Bir sayborg üretildiğinde, Sayborg Fabrikası'nın Birim Emirlerini alır ve fabrikanın Toplanma Noktasına doğru ilerler."
 
 msgid "Demolishing Structures"
 msgstr "Binalar yıkılıyor"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Bir binayı yıkmak, neredeyse bir bina inşa etmek kadar kolaydır."
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Yapılar menüsünden \"Yapıyı Yık\" seçeneğini seçin ve yıkmak istediğiniz binaya tıklayın."
 
 msgid "A unit will move to the building and destroy it."
-msgstr ""
+msgstr "Birimlerden biri binaya gidip onu yıkacak."
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr ""
+msgstr "Yıkılan yapılar, yapının inşası için kullanılan enerjinin yarısını geri kazandırır."
 
 msgid "Factory"
 msgstr "Fabrika"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Fabrika, birim üretmek için kullanılır. Her fabrika aynı anda yalnızca bir birim üretebilir, ancak üretim için birden fazla birimi sıraya koyabilirsiniz."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Birim üretildiğinde, fabrikanın birim siparişlerini alır ve fabrikanın toplanma noktasına doğru ilerler."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Not: Temel Fabrika yalnızca Hafif gövdeli birimler üretebilir. Fabrika üretim kapasitesini yükseltmek için Fabrika modüllerinin keşfedilmesi ve inşa edilmesi gerekmektedir."
 
 msgid "Command Center"
 msgstr "Komuta Merkezi"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr ""
+msgstr "Komuta Merkezi, üssünüzün karargahıdır."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr ""
+msgstr "Bu, mini harita/radara erişim ve birim tasarlama olanağı sağlar."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr ""
+msgstr "Komuta Merkezi oluşturmak için, komuta panelindeki \"İnşa\" düğmesine tıklayın ve Komuta Merkezi yapısını seçin."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr ""
+msgstr "Ardından inşaatçılarınızın inşa etmesini istediğiniz yeri tıklayın."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Yapı Modülleri"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Enerji Üretim Tesisleri, Fabrikalar ve Araştırma Tesisleri, ilgili yapı modülleriyle yükseltilebilir."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Araştırmayı tamamladıktan sonra, bu modüllere Yapı menüsünden erişebilir ve söz konusu yapılara uygulayabilirsiniz."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr ""
+msgstr "Alternatif olarak, bir Kamyon veya Savaş Mühendisi seçebilir ve yapının üzerine tıklayarak inşaatına başlayabilirsiniz."
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Not: Bu yapılardan birinin yükseltme çalışmaları devam ederken, yükseltme tamamlanana kadar geçici olarak kullanılamayacaktır."
 
 msgid "Upgrade Effects:"
-msgstr ""
+msgstr "Yükseltme Etkileri:"
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr ""
+msgstr "- Güç jeneratörü modülleri, güç üretim hızını artırır"
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- Fabrika modülleri, orta ve ağır birimlerin üretimini mümkün kılmanın yanı sıra, birim üretim süresini de kısaltır"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr ""
+msgstr "- Araştırma tesisi modülleri, verilen araştırma projelerinin tamamlanması için gereken süreyi azaltır"
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Petrol Kuyusu"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "Bir petrol sondaj kulesi, bir kamyon seçilerek ve mevcut bir petrol kaynağı hedeflenerek inşa edilebilir."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "Petrol sondaj kulesinin yıkılması, yangın sönene kadar aynı yere başka bir kule inşa edilmesini geçici olarak engelleyecektir."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr ""
+msgstr "Petrol sondaj kulesini kullanmak ve enerji üretmek için bir jeneratöre ihtiyaç vardır."
 
 msgid "Power Generator"
 msgstr "Güç Jeneratörü"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr ""
+msgstr "Her bir güç jeneratörü 4 adede kadar petrol kulesi kullanır. Dolayısıyla, örneğin 10 petrol kuleniz varsa, tüm kulelerden faydalanmak ve maksimum güç üretmek için 3 güç jeneratörüne ihtiyacınız olacaktır."
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr ""
+msgstr "Petrol kuleleri petrol kaynakları üzerine inşa edilmek zorundayken, enerji jeneratörleri haritanın herhangi bir yerine inşa edilebilir. Ancak şunu unutmayın: her 4 kule için bir jeneratörden fazlasının kurulması hiçbir fayda sağlamayacaktır."
 
 msgid "Rally Point"
-msgstr ""
+msgstr "Toplanma Noktası"
 
 msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
-msgstr ""
+msgstr "Bir fabrika bir birimi üretmeyi bitirdiğinde, birim fabrikanın yanında belirecek ve ardından fabrikanın belirlenmiş toplanma noktasına doğru ilerleyecektir."
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr ""
+msgstr "Varsayılan olarak, Toplanma Noktası Fabrikanın yanına yerleştirilir. Toplanma Noktasına tıklayarak onu taşıyabilirsiniz."
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
-msgstr ""
+msgstr "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
 
 msgid "Repair Facility"
-msgstr "Onarım Tesisi"
+msgstr "Tamir Tesisi"
 
 msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
-msgstr ""
+msgstr "Bir onarım tesisi inşa etmek, ünitelerin onarım için geri çekilebileceği sabit bir yapı oluşturur."
 
 msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
-msgstr ""
+msgstr "Onarım tesisleri, onarım kulelerine sahip mobil birliklere göre birimleri daha hızlı onarabilir."
 
 msgid "Research Facility"
 msgstr "Araştırma Tesisi"
 
 msgid "Research Facilities are required in order to research new technologies."
-msgstr ""
+msgstr "Yeni teknolojileri araştırmak için araştırma tesislerine ihtiyaç duyulmaktadır."
 
 msgid "Each Research Facility can research one technology at a time."
-msgstr ""
+msgstr "Her araştırma tesisi aynı anda yalnızca bir teknoloji üzerinde araştırma yapabilir."
 
 msgid "VTOL Factory"
 msgstr "DİvK Fabrikası"
 
 msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
-msgstr ""
+msgstr "VTOL fabrikası, VTOL itiş gücüne sahip (yani uçan) ünitelerin üretimi için kullanılır."
 
 msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Her VTOL fabrikası aynı anda yalnızca bir ünite üretebilir, ancak üretim için birden fazla üniteyi sıraya koyabilirsiniz."
 
 msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
-msgstr ""
+msgstr "Bir VTOL fabrikası bir üniteyi üretmeyi tamamladığında, ünitenin uçmasını ve fabrikanın toplanma noktasına yakın bir yere inmesini emreder."
 
 msgid "Structures"
 msgstr "Yapılar"
 
 msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
-msgstr ""
+msgstr "Warzone 2100'de yapı inşa etmek kesinlikle hayati önem taşıyor; birim üreten fabrikalardan, yeni teknolojileri araştıran araştırma tesislerine kadar her şey önemli."
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
-msgstr ""
+msgstr "İnşaat, taret olarak kamyon ve/veya savaş mühendisleri bulunan birimlerle yapılabilir."
 
 msgid "Attack Range"
 msgstr "Saldırı Menzili"
 
 msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
-msgstr ""
+msgstr "Birim Emirleri menüsünü kullanarak birimlerin \"Saldırı Menzili\"ni yapılandırabilirsiniz."
 
 msgid "- Optimum Range: Fires at the most accurate range"
-msgstr ""
+msgstr "- Optimum Menzil: En isabetli menzilde atış yapar"
 
 msgid "- Short Range: Moves to short range and attacks"
-msgstr ""
+msgstr "- Kısa Menzil: Kısa menzile hareket eder ve saldırır"
 
 msgid "- Long Range: Attacks at long range (default)"
-msgstr ""
+msgstr "- Uzun Menzil: Uzun menzilden saldırır (varsayılan)"
 
 msgid "Firing Mode"
 msgstr "Atış Modu"
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
-msgstr ""
+msgstr "Birim Emirleri menüsünü kullanarak birimin \"Ateşleme Modu\"nu yapılandırabilirsiniz."
 
 msgid "- Fire At Will: Fires at any enemy (default)"
-msgstr ""
+msgstr "- Ateş Aç: Herhangi bir düşmana ateş eder (varsayılan)"
 
 msgid "- Return Fire: Only fire if fired at"
-msgstr ""
+msgstr "- Karşılık Ver: Sadece size ateş açılırsa karşılık verir"
 
 msgid "- Do Not Fire: Units will not fire"
-msgstr ""
+msgstr "- Ateş Etme: Birimler ateş etmeyecektir"
 
 msgid "Movement"
-msgstr ""
+msgstr "Hareket"
 
 msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
-msgstr ""
+msgstr "Birim \"Hareketini\" yapılandırmak için Birim Emirleri menüsünü kullanabilirsiniz."
 
 msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
-msgstr ""
+msgstr "- Devriye: İki nokta arasında hareket edin. Haritada bir nokta seçtikten sonra üzerine tıklamanız yeterlidir"
 
 msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
-msgstr ""
+msgstr "- Daire: (Sadece VTOL'ler için) Bir konumun üzerinde daire çizerek hareket edin. Seçtikten sonra bir alana tıklamanız yeterlidir"
 
 msgid "- Pursue: Pursue enemy"
-msgstr ""
+msgstr "- Takip Et: Düşmanı takip et"
 
 msgid "- Guard: Stay near an area or structure. (default)"
-msgstr ""
+msgstr "- Koruma: Bir alanın veya yapının yakınında durun. (varsayılan)"
 
 msgid "- Hold Position: Do not move under any circumstances"
-msgstr ""
+msgstr "- Pozisyonunu koru: Hiçbir koşulda hareket etmez"
 
 msgid "Recycling"
-msgstr ""
+msgstr "Geri Dönüşüm"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Geri dönüştürülen bir birim, en yakın Fabrika veya Onarım Tesisine gönderilecek ve orada oyun dışı bırakılacaktır."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
-msgstr ""
+msgstr "Cihazın üretiminde kullanılan enerjinin yarısı size iade edilecektir (ancak cihaz hasar görürse bu miktar azalacaktır)."
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "Geri dönüştürülen ünitenin deneyim puanları, üretilen bir sonraki üniteye aktarılacaktır."
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Birden fazla deneyimli birim geri dönüştürüldüğünde, en yüksek deneyim puanı miktarına sahip olan birim önce aktarılır."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr ""

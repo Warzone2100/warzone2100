@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-09-02 02:34\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1776,7 +1776,7 @@ msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Individua e salva le unità del trasportatore abbattuto"
 
 msgid "Destroy all enemy bases"
-msgstr ""
+msgstr "Distruggi tutte le basi nemiche"
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Salva i civili dal Collettivo prima che ne vengano catturati troppi"
@@ -2949,26 +2949,26 @@ msgid "System locale"
 msgstr "Lingua di sistema"
 
 msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
-msgstr ""
+msgstr "Questo host non consente l'accesso se si usano determinati servizi di hosting, VPN e/o server proxy."
 
 msgid "Please try another room or disable any proxies / VPNs and try again."
-msgstr ""
+msgstr "Prova da un'altra stanza o disattiva eventuali proxy / VPN e riprova."
 
 msgid "Game not found in lobby."
-msgstr ""
+msgstr "Partita non trovata nella lobby."
 
 msgid "The game may have already started, or the host may have disbanded the game lobby."
 msgstr "Il gioco potrebbe già essere stato avviato, oppure l'host potrebbe aver sciolto la lobby del gioco."
 
 msgid "Error hosting game in lobby server"
-msgstr ""
+msgstr "Errore durante la creazione della partita sul server della lobby"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
-msgstr ""
+msgstr "Assicurati che la porta %d possa ricevere connessioni in ingresso."
 
 msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
-msgstr ""
+msgstr "Se stai usando un router, configuralo per abilitare UPnP/NAT-PMP/PCP o per inoltrare la porta al tuo sistema."
 
 msgid "Failed to create port mapping"
 msgstr "Impossibile creare la mappatura porte"
@@ -2979,7 +2979,7 @@ msgstr "Configura manualmente il router/firewall per aprire la porta %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "La mappatura della porta ha aperto la porta esterna: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2996,31 +2996,31 @@ msgid "Client failed to ack player index swap"
 msgstr "Il client non ha potuto riconoscere il cambio d'indice del giocatore"
 
 msgid "Game is listed in the lobby"
-msgstr ""
+msgstr "La partita è elencata nella lobby"
 
 msgid "Lobby GameId"
-msgstr ""
+msgstr "ID partita nella lobby"
 
 msgid "Game not listed in the lobby."
-msgstr ""
+msgstr "Partita non elencata nella lobby."
 
 msgid "Error connecting to the lobby server."
-msgstr ""
+msgstr "Errore di connessione al server della lobby."
 
 msgid "Please check your internet connection, or wait a short while and try hosting again."
-msgstr ""
+msgstr "Verifica la tua connessione internet o attendi un momento e prova a creare nuovamente la partita."
 
 msgid "Your game will only be accessible via direct connection (or local LAN)."
-msgstr ""
+msgstr "La tua partita sarà accessibile solo tramite connessione diretta (o rete LAN locale)."
 
 msgid "Multiplayer lobby support unavailable. Please update your client."
-msgstr ""
+msgstr "Il supporto per la lobby multiplayer non è disponibile. Aggiorna il tuo client."
 
 msgid "Game not listed in the lobby:"
-msgstr ""
+msgstr "Partita non elencata nella lobby:"
 
 msgid "Failed to create game listing. Check WZ logs."
-msgstr ""
+msgstr "Impossibile creare l'elenco della partita. Controlla i log di WZ."
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Il formato del file del replay è più recente di quanto questa versione di Warzone 2100 possa supportare."
@@ -3103,16 +3103,16 @@ msgid "Tab Scroll right"
 msgstr "Scorri tabella a Destra"
 
 msgid "Please enter the text below"
-msgstr ""
+msgstr "Inserisci il testo in basso"
 
 msgid "Enter the text"
-msgstr ""
+msgstr "Inserisci il testo"
 
 msgid "Please drag the slider to verify"
-msgstr ""
+msgstr "Trascina il cursore per verificare"
 
 msgid "Please drag the tile to verify"
-msgstr ""
+msgstr "Trascina il riquadro per verificare"
 
 msgid ".50-calibre heavy machinegun"
 msgstr "Mitragliatrice pesante calibro .50"
@@ -3298,7 +3298,7 @@ msgid "All rail guns upgraded automatically"
 msgstr "Tutti i cannoni a rotaia sono stati aggiornati automaticamente"
 
 msgid "All Ripple Rockets upgraded automatically"
-msgstr ""
+msgstr "Tutti i Lanciarazzi a raffica sono stati automaticamente potenziati"
 
 msgid "All sensors upgraded automatically"
 msgstr "Tutti i sensori sono stati aggiornati automaticamente"
@@ -3447,7 +3447,7 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Proiettile perforante ad abbandono d'involucro con pinne stabilizzanti"
 
 msgid "Armored bunker with Assault Gun"
-msgstr ""
+msgstr "Bunker blindato con Cannone d'assalto"
 
 msgid "Armored bunker with Flamer"
 msgstr "Bunker corazzato con Lanciafiamme"
@@ -3537,7 +3537,7 @@ msgid "Armored strongpoint with Heavy Laser"
 msgstr "Posizione corazzato con Laser Pesante"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr ""
+msgstr "Postazione fortificata con Cannone a particelle"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Postazione corazzata con Lanciafiamme alla Plasmite"
@@ -3768,7 +3768,7 @@ msgid "Bomb damage +25%"
 msgstr "Danno delle Bombe +25%"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Danni da bomba"
 
 msgid "Bomb Upgrade"
 msgstr "Miglioramento delle bombe"
@@ -3795,7 +3795,7 @@ msgid "Buggy"
 msgstr "Buggy"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Strutture"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Diagnostica e sistemi di riparazione integrati"
@@ -3990,10 +3990,10 @@ msgid "Complete battlefield visibility"
 msgstr "Visibilità completa del campo di battaglia"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Miglioramento delle leghe composite AI Mk2"
 
 msgid "Composite Alloys Buff AI"
-msgstr ""
+msgstr "Miglioramento delle leghe composite AI"
 
 msgid "Composite Alloys Mk2"
 msgstr "Leghe composite Mk2"
@@ -4058,10 +4058,10 @@ msgid "Cyborg Alloys"
 msgstr "Leghe cyborg"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Miglioramento delle leghe composite dei cyborg AI Mk2"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr ""
+msgstr "Miglioramento delle leghe composite AI"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Leghe composite cyborg Mk2"
@@ -4130,10 +4130,10 @@ msgid "Cyborg Tank Killer"
 msgstr "Cyborg con Tank Killer"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Miglioramento dell'armatura termica dei cyborg AI Mk2"
 
 msgid "Cyborg Thermal Armor Buff AI"
-msgstr ""
+msgstr "Miglioramento dell'armatura termica dei cyborg AI"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Armatura Termica Cyborg Mk2"
@@ -4145,7 +4145,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Armatura Termica Cyborg"
 
 msgid "Cyborg Thermal"
-msgstr ""
+msgstr "Cyborg termico"
 
 msgid "Cyborg Thermite"
 msgstr "Termite per Cyborg"
@@ -4346,7 +4346,7 @@ msgid "Fire Truck"
 msgstr "Camion dei Pompieri"
 
 msgid "Fires beams of subatomic particle"
-msgstr ""
+msgstr "Spara raggi di particelle subatomiche"
 
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Spara Missili a Impulso Elettromagnetico"
@@ -4383,7 +4383,7 @@ msgid "Flamer damage +25%"
 msgstr "Danni del Lanciafiamme +25%"
 
 msgid "Flamer Damage"
-msgstr ""
+msgstr "Danno delle armi a fiamma"
 
 msgid "Flamer Fast Loader"
 msgstr "Caricatore rapido per lanciafiamme"
@@ -4393,7 +4393,7 @@ msgid "Flamer reload time -15%"
 msgstr "Tempo di Ricarica dei Lanciafiamme -10%"
 
 msgid "Flamer Reload"
-msgstr ""
+msgstr "Ricarica delle armi a fiamma"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Lanciafiamme Viper Semicingoli"
@@ -4832,22 +4832,22 @@ msgid "Hero and Special rank units are protected"
 msgstr "Le unità di rango Eroe e Speciale sono protette"
 
 msgid "HESC Mortar Shells Mk2"
-msgstr ""
+msgstr "Proiettili da mortaio HESC Mk2"
 
 msgid "HESC Mortar Shells Mk3"
-msgstr ""
+msgstr "Proiettili da mortaio HESC Mk3"
 
 msgid "HESC Mortar Shells"
-msgstr ""
+msgstr "Proiettili da mortaio HESC"
 
 msgid "HESCHC Mortar Shells Mk2"
-msgstr ""
+msgstr "Proiettili da mortaio HESCHC Mk2"
 
 msgid "HESCHC Mortar Shells Mk3"
-msgstr ""
+msgstr "Proiettili da mortaio HESCHC Mk3"
 
 msgid "HESCHC Mortar Shells"
-msgstr ""
+msgstr "Proiettili da mortaio HESCHC"
 
 msgid "HESH Rocket Warhead Mk2"
 msgstr "Testata HESH per Razzi Mk2"
@@ -4898,10 +4898,10 @@ msgid "High explosive shaped charge missile"
 msgstr "Missili ad alto esplosivo a carica cava"
 
 msgid "High Explosive Soft Casing High Capacity Shells"
-msgstr ""
+msgstr "Proiettili altamente esplosivi ad alta capacità e con involucro leggero"
 
 msgid "High Explosive Soft Casing Shells"
-msgstr ""
+msgstr "Proiettili altamente esplosivi con involucro leggero"
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Armatura Termica ad Alta Intensità Mk2"
@@ -4969,13 +4969,13 @@ msgid "Howitzer damage +25%"
 msgstr "Danni degli Obici +25%"
 
 msgid "Howitzer Damage Buff AI Mk2"
-msgstr ""
+msgstr "Potenziamento del danno degli obici AI Mk2"
 
 msgid "Howitzer Damage Buff AI Mk3"
-msgstr ""
+msgstr "Potenziamento del danno degli obici AI Mk3"
 
 msgid "Howitzer Damage Buff AI"
-msgstr ""
+msgstr "Potenziamento del danno degli obici AI"
 
 msgid "Howitzer Fast Loader"
 msgstr "Caricatore rapido per obice"
@@ -4988,13 +4988,13 @@ msgid "Howitzer"
 msgstr "Obice"
 
 msgid "Howitzers Accuracy"
-msgstr ""
+msgstr "Precisione degli obici"
 
 msgid "Howitzers Damage"
-msgstr ""
+msgstr "Danni degli obici"
 
 msgid "Howitzers Reload"
-msgstr ""
+msgstr "Ricarica degli obici"
 
 msgid "Hurricane AA Site"
 msgstr "Sito contraereo Hurricane"
@@ -5060,7 +5060,7 @@ msgid "Improved fire detection systems"
 msgstr "Sistemi di rilevamento del fuoco migliorati"
 
 msgid "Improved Hardcrete Buff AI"
-msgstr ""
+msgstr "Miglioramento del calcestruzzo rinforzato AI"
 
 msgid "Improved Hardcrete Mk2"
 msgstr "Cemento Migliorato Mk2"
@@ -5198,7 +5198,7 @@ msgid "Increases Rail Gun ROF"
 msgstr "Aumenta la cadenza di tiro del cannone a rotaia"
 
 msgid "Increases Ripple Rocket ROF"
-msgstr ""
+msgstr "Aumenta la cadenza di fuoco del lanciarazzi a raffica"
 
 msgid "Increases Rocket accuracy"
 msgstr "Aumenta la precisione dei Razzi"
@@ -5646,10 +5646,10 @@ msgid "Mortar Damage"
 msgstr "Danno mortaio"
 
 msgid "Mortar Fast Loader Mk2"
-msgstr ""
+msgstr "Caricatore rapido per mortaio Mk2"
 
 msgid "Mortar Fast Loader Mk3"
-msgstr ""
+msgstr "Caricatore rapido per mortaio Mk3"
 
 msgid "Mortar Fast Loader"
 msgstr "Caricatore rapido per mortaio"
@@ -5899,10 +5899,10 @@ msgid "Panther"
 msgstr "Panther"
 
 msgid "Particle Gun Emplacement"
-msgstr ""
+msgstr "Postazione con cannone a particelle"
 
 msgid "Particle Gun"
-msgstr ""
+msgstr "Cannone a particelle"
 
 msgid "Pepperpot Pit"
 msgstr "Fossa per Pepperpot"
@@ -6081,10 +6081,10 @@ msgid "Radar Detector"
 msgstr "Rilevatore radar"
 
 msgid "Rail Accuracy"
-msgstr ""
+msgstr "Precisione dei cannoni a rotaia"
 
 msgid "Rail Damage"
-msgstr ""
+msgstr "Danni dei cannoni a rotaia"
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
@@ -6129,7 +6129,7 @@ msgid "Rail Gun"
 msgstr "Cannone a rotaia"
 
 msgid "Rail Reload"
-msgstr ""
+msgstr "Ricarica dei cannoni a rotaia"
 
 msgid "Rail Target Prediction Computer"
 msgstr "Computer di Previsione dei Bersagli"
@@ -6163,10 +6163,10 @@ msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Rifornisce,riarma e ripara i VTOL"
 
 msgid "Reinforced Base Structure Materials Buff AI Mk2"
-msgstr ""
+msgstr "Potenziamento dei materiali rinforzati per le strutture della base AI Mk2"
 
 msgid "Reinforced Base Structure Materials Buff AI"
-msgstr ""
+msgstr "Potenziamento dei materiali rinforzati per le strutture della base AI"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Materiali da Costruzione Rinforzati Mk2"
@@ -6308,7 +6308,7 @@ msgid "Rocket accuracy +10%"
 msgstr "Precisione dei Razzi +10%"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "Precisione dei missili"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artiglieria di razzi; può essere assegnato a un sensore"
@@ -6330,7 +6330,7 @@ msgid "Rocket damage +25%"
 msgstr "Danni dei Razzi +25%"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "Danni dei missili"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "I razzi localizzano e si agganciano sulle emissioni del motore"
@@ -6355,7 +6355,7 @@ msgid "Rocket reload time -15%"
 msgstr "Tempo di ricarica dei razzi -15%"
 
 msgid "Rocket Reload"
-msgstr ""
+msgstr "Ricarica dei missili"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Il missile segue il designatore laser verso il bersaglio"
@@ -6514,7 +6514,7 @@ msgid "Sensor Upgrade"
 msgstr "Miglioramento dei Sensori"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Torre di rilevamento"
 
 msgid "Sensors Improved"
 msgstr "Sensori migliorati"
@@ -6700,7 +6700,7 @@ msgid "Systems Research Completed"
 msgstr "Ricerca dei sistemi completata"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "Leghe per carri"
 
 msgid "Tank Killer Cyborg"
 msgstr "Cyborg con Tank Killer"
@@ -6730,7 +6730,7 @@ msgid "Tank Killer"
 msgstr "Tank Killer"
 
 msgid "Tank Thermal"
-msgstr ""
+msgstr "Corazzatura termica per carri"
 
 msgid "Tank Traps"
 msgstr "Trappole per carri armati"
@@ -6742,7 +6742,7 @@ msgid "Target Acquisition Artillery Shells"
 msgstr "Proiettili d'Artiglieria ad Acquisizione di Bersagli"
 
 msgid "Target Acquisition Mortar Shells Mk2"
-msgstr ""
+msgstr "Proiettili da mortaio con acquisizione del bersaglio Mk2"
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "Granate di Mortaio ad Acquisizione di Bersagli"
@@ -6779,10 +6779,10 @@ msgid "Thermal Armor +45%"
 msgstr "Armatura Termica +45%"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Miglioramento dell'armatura termica AI Mk2"
 
 msgid "Thermal Armor Buff AI"
-msgstr ""
+msgstr "Miglioramento dell'armatura termica AI"
 
 msgid "Thermal Armor Mk2"
 msgstr "Armatura Termica Mk2"
@@ -6830,7 +6830,7 @@ msgid "Tower wars AI, based on NullBot"
 msgstr "IA Torri Belliche, basata su NullBot"
 
 msgid "Tower Wars Buff"
-msgstr ""
+msgstr "Potenziamento di Tower Wars"
 
 msgid "Tracked Propulsion"
 msgstr "Propulsione su cingoli"
@@ -7155,7 +7155,7 @@ msgid "VTOL Needle Gun"
 msgstr "Cannone ad ago per VTOL"
 
 msgid "VTOL Particle Gun"
-msgstr ""
+msgstr "Cannone a particelle VTOL"
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Alloggiamento per bomba al fosforo su VTOL"
@@ -7182,7 +7182,7 @@ msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Sono richieste delle piattaforme di riarmo per mantenere i VTOL in volo"
 
 msgid "VTOL Rearming"
-msgstr ""
+msgstr "Riarmo VTOL"
 
 msgid "VTOL Scourge Missile"
 msgstr "Missile Scourge VTOL"
@@ -7360,7 +7360,7 @@ msgid "You have sent too many messages in the last few seconds. Please wait and 
 msgstr "Hai inviato troppi messaggi negli ultimi secondi. Si prega di attendere e riprovare."
 
 msgid "The host has disabled debug mode / cheats for this game."
-msgstr ""
+msgstr "L'host ha disattivato la modalità debug e i trucchi per questa partita."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7486,13 +7486,13 @@ msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Connettiti direttamente a IP/hostname come spettatore"
 
 msgid "Connect to lobby game"
-msgstr ""
+msgstr "Connettiti alla partita nella lobby"
 
 msgid "lobbyGameId"
-msgstr ""
+msgstr "lobbyGameId"
 
 msgid "Connect to lobby game as a spectator"
-msgstr ""
+msgstr "Connettiti alla lobby della partita come spettatore"
 
 msgid "Go directly to host screen"
 msgstr "Vai direttamente alla schermata host"
@@ -7573,7 +7573,7 @@ msgid "Enable command interface"
 msgstr "Abilita l'interfaccia di comando"
 
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket:path)"
 
 msgid "Minimum required players to auto-start game"
 msgstr "Giocatori minimi necessari per l'avvio automatico della partita"
@@ -7582,16 +7582,16 @@ msgid "startplayers"
 msgstr "startplayers"
 
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Modalità di output del registro delle partite"
 
 msgid "Game history log output key"
 msgstr "Tasto di output della cronologia di gioco"
 
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Denominazione file del registro delle partite"
 
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Intervallo dei fotogrammi del registro delle partite"
 
 msgid "interval in seconds"
 msgstr "intervallo in secondi"
@@ -7603,7 +7603,7 @@ msgid "number of minutes"
 msgstr "numero di minuti"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Converte una mappa speculare .png in un'immagine .png in scala di grigi a un singolo canale di luminanza (e termina)"
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
 msgstr "Consenti i layer Vulkan impliciti (potrebbero essere disabilitati di default a causa di potenziali crash o bug)"
@@ -7615,7 +7615,7 @@ msgid "Enable async join approval (for connecting clients)"
 msgstr "Abilita approvazione di adesione asincrona (per la connessione dei client)"
 
 msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
-msgstr ""
+msgstr "Avvia l'host (autohost) come non pronto, anche se si tratta di un host spettatore"
 
 msgid "Base URL for on-demand video downloads"
 msgstr "URL base per lo scaricamento a richiesta dei video"
@@ -7624,7 +7624,7 @@ msgid "Base video URL"
 msgstr "URL base dei video"
 
 msgid "Specify connection provider type to use when hosting game sessions"
-msgstr ""
+msgstr "Specifica il tipo di servizio di connessione da utilizzare per ospitare le sessioni di gioco"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "Il comandante ha bisogno di un livello più elevato per comandare più unità"
@@ -8064,15 +8064,15 @@ msgstr "Seleziona / Assegna Numero del Gruppo: "
 
 #, c-format
 msgid "Group %zu"
-msgstr ""
+msgstr "Gruppo %zu"
 
 #, c-format
 msgid "Select the Units in Group %zu"
-msgstr ""
+msgstr "Seleziona le unità nel gruppo %zu"
 
 #, c-format
 msgid "Assign Selected Units to Group %zu"
-msgstr ""
+msgstr "Assegna le unità selezionate al gruppo %zu"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Centra la vista su questo gruppo facendo click o toccando due volte"
@@ -8185,21 +8185,21 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) ha cambiato fazione del giocatore (%s) a: %s"
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr ""
+msgstr "AVVISO: se non selezioni \"Pronto\" a breve, verrai espulso dalla sessione "
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "Il giocatore verrà espulso se non seleziona \"Pronto\" a breve: %s"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr ""
+msgstr "Espulsione automatica del giocatore (%s) perché ha impiegato troppo tempo a dichiararsi pronto"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "AVVISO: seleziona \"Pronto\""
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "AVVISO: seleziona \"Pronto\" così la partita può iniziare"
 
 msgid "Players who don't check Ready in time will be kicked."
 msgstr "I giocatori che non mettono Pronto in tempo verranno cacciati."
@@ -9102,7 +9102,7 @@ msgstr "Potenza Al Secondo"
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "%u torre/i di trivellazione inattiva/e"
 
 msgid "Need more resources!"
 msgstr "Necessiti di più risorse!"
@@ -9681,22 +9681,22 @@ msgid "Select Player Name"
 msgstr "Seleziona il nome del giocatore"
 
 msgid "Player Name changes are not allowed when you are muted"
-msgstr ""
+msgstr "Non puoi cambiare il nome del giocatore mentre sei in modalità silenziosa"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "L'host non consente le modifiche al nome del giocatore"
 
 msgid "Blind Game:"
-msgstr ""
+msgstr "Partita al buio:"
 
 msgid "- Player names will not be visible to other players (until the game is over)"
-msgstr ""
+msgstr "- I nomi dei giocatori non saranno visibili fino alla fine della partita"
 
 msgid "Blind Lobby:"
-msgstr ""
+msgstr "Lobby al buio:"
 
 msgid "- Player names will not be visible to other players (until the game has started)"
-msgstr ""
+msgstr "- I nomi dei giocatori non saranno visibili fino all'inizio della partita"
 
 msgid "OPTIONS"
 msgstr "OPZIONI"
@@ -9845,11 +9845,11 @@ msgid "Yes, select Player slot"
 msgstr "Sì, seleziona lo slot del giocatore"
 
 msgid "BLIND LOBBY NOTICE:"
-msgstr ""
+msgstr "AVVISO LOBBY AL BUIO:"
 
 #, c-format
 msgid "You have been assigned the codename: \"%s\""
-msgstr ""
+msgstr "Ti è stato assegnato il nome in codice: \"%s\""
 
 msgid "For Spectator:"
 msgstr "Per gli spettatori:"
@@ -9936,13 +9936,13 @@ msgid "Disconnected from host:"
 msgstr "Disconnesso dall'host:"
 
 msgid "Unable to handle host redirect"
-msgstr ""
+msgstr "Impossibile gestire il reindirizzamento dell'host"
 
 msgid "Unable to process redirect"
-msgstr ""
+msgstr "Impossibile elaborare il reindirizzamento"
 
 msgid "Unable to process repeated or invalid redirects"
-msgstr ""
+msgstr "Impossibile elaborare i reindirizzamenti ripetuti o non validi"
 
 msgid "Host supplied invalid options"
 msgstr "L'host ha fornito opzioni non valide"
@@ -9988,19 +9988,19 @@ msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mappatura porte disattivata dall'utente. L'auto configurazione della porta %d non avverrà."
 
 msgid "BLIND GAME NOTICE:"
-msgstr ""
+msgstr "AVVISO PARTITA AL BUIO:"
 
 msgid "Player names will not be visible to other players (until the game is over)"
-msgstr ""
+msgstr "I nomi dei giocatori non saranno visibili fino alla fine della partita"
 
 msgid "Player names will not be visible to other players (until the game has started)"
-msgstr ""
+msgstr "I nomi dei giocatori non saranno visibili fino all'inizio della partita"
 
 msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
-msgstr ""
+msgstr "IMPORTANTE: l'host è un giocatore e può vedere e regolare altri giocatori (!)"
 
 msgid "The host is a spectator, and can see player identities and configure players / teams"
-msgstr ""
+msgstr "L'host è uno spettatore e può vedere le identità dei giocatori e regolare giocatori / squadre"
 
 msgid "Failed to load challenge:"
 msgstr "Impossibile caricare la sfida:"
@@ -10009,11 +10009,11 @@ msgid "Failed to load the challenge's map or config"
 msgstr "Impossibile caricare la mappa o la configurazione della sfida"
 
 msgid "Failed to process autohost config:"
-msgstr ""
+msgstr "Impossibile elaborare la configurazione dell'autohost:"
 
 #, c-format
 msgid "Failed to load the autohost map or config from: %s"
-msgstr ""
+msgstr "Impossibile caricare la mappa o la configurazione dell'autohost da: %s"
 
 msgid "Closed"
 msgstr "Chiuso"
@@ -10051,7 +10051,7 @@ msgstr "%s è entrato nella partita"
 
 #, c-format
 msgid "(codename: %s)"
-msgstr ""
+msgstr "(nome in codice: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10201,7 +10201,7 @@ msgstr "L'host ha abilitato la chat libera per il giocatore: %s"
 
 #, c-format
 msgid "The host has enabled free chat for %d players"
-msgstr ""
+msgstr "L'host ha abilitato la chat libera per %d giocatori"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
@@ -10209,14 +10209,14 @@ msgstr "L'host ha silenziato la chat libera per il giocatore: %s"
 
 #, c-format
 msgid "The host has muted free chat for %d players"
-msgstr ""
+msgstr "L'host ha silenziato la chat libera per %d giocatori"
 
 msgid "Limits set to default."
-msgstr ""
+msgstr "Limiti impostati come predefiniti."
 
 #, c-format
 msgid "Changed structure limits [%u]:"
-msgstr ""
+msgstr "Limiti della struttura modificati [%u]:"
 
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
@@ -10228,7 +10228,7 @@ msgstr "[%d] Limite [%s]: %u (predefinito: nessun limite)"
 
 #, c-format
 msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%zu] Limite maggiore di numStructureStats (%u): %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10590,7 +10590,7 @@ msgid "Error:"
 msgstr "Errore:"
 
 msgid "Message from Lobby:"
-msgstr ""
+msgstr "Messaggio dalla Lobby:"
 
 msgid "Join Attempt Rejected"
 msgstr "Tentativo di partecipazione rifiutato"
@@ -10617,10 +10617,10 @@ msgid "Connection Error"
 msgstr "Errore di connessione"
 
 msgid "Gathering connection details"
-msgstr ""
+msgstr "Raccogliendo i dettagli della connessione"
 
 msgid "Could Not Connect"
-msgstr ""
+msgstr "Impossibile connettersi"
 
 msgid "Timeout"
 msgstr ""
@@ -11213,37 +11213,37 @@ msgid "Camera Speed"
 msgstr "Velocità della telecamera"
 
 msgid "Camera Starting Zoom"
-msgstr ""
+msgstr "Zoom iniziale della telecamera"
 
 msgid "Camera Zoom Rate"
-msgstr ""
+msgstr "Velocità dello zoom della telecamera"
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "Rotazione del mouse"
 
 msgid "Reverse Rotation"
 msgstr "Inverti la rotazione"
 
 msgid "Mouse Pan"
-msgstr ""
+msgstr "Scorrimento con il mouse"
 
 msgid "Edge Scrolling"
-msgstr ""
+msgstr "Scorrimento laterale"
 
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 msgid "Reset Keys to:"
-msgstr ""
+msgstr "Ripristina i tasti su:"
 
 msgid "(Select Profile)"
-msgstr ""
+msgstr "(Seleziona Profilo)"
 
 msgid "Reset Keys to: Defaults"
-msgstr ""
+msgstr "Ripristina i tasti su: predefiniti"
 
 msgid "Only useful if Enable IPv6 is On."
-msgstr ""
+msgstr "Utile solo se Abilita IPv6 è attivo."
 
 #, c-format
 msgid "%u minutes"
@@ -11258,22 +11258,22 @@ msgid "%s hours"
 msgstr "%s ore"
 
 msgid "Unit Color"
-msgstr ""
+msgstr "Colore unità"
 
 msgid "Difficulty Level"
-msgstr ""
+msgstr "Livello difficoltà"
 
 msgid "Default AI"
-msgstr ""
+msgstr "AI predefinita"
 
 msgid "Lobby Options"
-msgstr ""
+msgstr "Opzioni della lobby"
 
 msgid "Enable IPv6"
-msgstr ""
+msgstr "Abilita IPv6"
 
 msgid "Whether to list and try connecting via IPv6 (if available)."
-msgstr ""
+msgstr "Indica se elencare le connessioni IPv6 e provare a connettersi tramite IPv6 (se disponibile)."
 
 msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
 msgstr ""

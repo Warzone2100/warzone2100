@@ -1,0 +1,1038 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: warzone2100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2026-06-10 03:13\n"
+"Last-Translator: \n"
+"Language-Team: Latin\n"
+"Language: la_LA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
+"X-Crowdin-Language: la-LA\n"
+"X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
+"X-Crowdin-File-ID: 360\n"
+
+msgid "Artifacts"
+msgstr "Artefacta"
+
+msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
+msgstr "Dum per expeditionem progredieris, artefacta ex castris hostium (et ex certis unitatibus hostium) colliges."
+
+msgid "These will unlock valuable technologies that you can research in a Research Facility."
+msgstr "Hae technologias pretiosas reserabunt quas in Centro Investigationis investigare potes."
+
+msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
+msgstr "Artefacta sunt parvae arcae albae cum indice viridi supra, et summi possunt quamlibet unitatem satis prope admovendo."
+
+msgid "All artifacts must be picked up as part of each level's victory conditions."
+msgstr "Omnia artefacta colligi debent ut pars condicionum victoriae cuiusque gradus."
+
+msgid "Backstory"
+msgstr "Historia Praeterita"
+
+msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
+msgstr "Saeculo XXI exeunte, NASDA (Agentura Defensionis Strategicae Americae Septentrionalis) systema defensionis contra missilia ingens elaboravit et disposuit, quod reti satellitum nuclearibus instructorum et locorum terrestrium emissionem complectebatur."
+
+msgid "However, during a routine maintenance check, something went terribly wrong..."
+msgstr "Attamen, inter inspectionem ordinariam curationis, aliquid graviter erravit..."
+
+msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
+msgstr "Ruina celeriter et difficiliter accidit. Post errorem technicum in systemate defensionis satellitum, capita bellica nuclearia in urbes maiores toto orbe terrarum missa sunt."
+
+msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
+msgstr "Paucis minutis post, stationes terrestres in responsionem ad immissionem incendia emissae sunt. Milliones hominum perierunt dum procellae ignis nuclearis urbes orbis terrarum deleverunt. Millionibus aliis perierunt dum pestes et epidemiae quod reliquum civilizationis abstulerunt."
+
+msgid "Less than a million people survived the Collapse."
+msgstr "Minus quam decies centena milia hominum ruinam supervixerunt."
+
+msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
+msgstr "Terra in centenas parvas catervas latrociniorum divisa est, inter se pro reliquiis pristinae civilizationis certantes. Pauci tantum visionem habuerunt ut mundum novum ex cineribus reconstruere conarentur."
+
+msgid "## Present Day:"
+msgstr "## Dies Praesens:"
+
+msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
+msgstr "Lusor (qui \"Imperator\" appellatur) est pars coetus superstitum qui perfugium in castris militaribus in Montibus Saxosis quaesiverunt."
+
+msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
+msgstr "E basi emergunt cum proposito mundum reconstruendi, nomen \"Proiectum\" assumentes."
+
+msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
+msgstr "Propositum tres turmas mittit cum proposito artefacta recuperandi, ita investigationem et applicationem technologiarum ante collapsum permittentes."
+
+msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
+msgstr "- Turma Alpha ad locum deserticum Arizonae ad meridiem et orientem a sede Proiecti mittitur"
+
+msgid "- Beta team is sent to the remains of Chicago"
+msgstr "- Turma Beta ad reliquias Chicago mittitur"
+
+msgid "- Gamma team is sent into the northern Rockies in Colorado"
+msgstr "- Turma Gamma in montes Saxosos septentrionales Colorati mittitur"
+
+msgid "Command Panel"
+msgstr "Tabula Mandatorum"
+
+msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
+msgstr "Sex interfacies tabulae imperii diversae sunt, una cum pyga centrali. Interfaciem imperii aperias pygam aptam premendo."
+
+msgid "The middle / central button closes any open command interface."
+msgstr "Globulus medius/centralis quamlibet interfaciem imperii apertam claudit."
+
+msgid "Defending Your Base"
+msgstr "Defendens Basim Tuam"
+
+msgid "In Warzone 2100, your home base persists throughout the campaign."
+msgstr "In Warzone 2100, basis tua domestica per totam expeditionem manet."
+
+msgid "As such, preparing for the future defense of your home base is essential."
+msgstr "Quapropter, ad futuram defensionem basis domesticae tuae se parare essentiale est."
+
+msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
+msgstr "Dum copiae ad basim tuam defendendam manifeste utiles sunt, forma basis tuae quoque magni momenti est."
+
+msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
+msgstr "Structuras defensivas construe quae tegumentum praebent, accessum restringunt, hostes sentiunt, et damnum infringunt, ut impetus hostium melius repellere possis."
+
+msgid "Intelligence Display"
+msgstr "Ostentatio Intelligentiae"
+
+msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
+msgstr "In Ostensione Intellegentiae invenire, instructiones missionis tuae hodiernae repetere, et plura de inceptis investigationis perfectis legere potes."
+
+msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
+msgstr "Cum Intelligentia Ostentationem aperis, duae series iconum in imo scrinii apparent."
+
+msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
+msgstr "Iconem eligendo, informationes de illo investigationis vel proposito missionis in medio scrinii ostendentur."
+
+msgid "Using the Mission Timer"
+msgstr "Utens Temporatore Missionis"
+
+msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
+msgstr "Plerumque, horarium agebis. Interdum, te ipsum invenies optantem ut plus temporis haberes. Aliquando fortasse putes te nimium habere."
+
+msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
+msgstr "Semper sunt rationes callidae ut tempore superfluo utaris ad proelia futura praeparanda."
+
+msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
+msgstr "Sive novas investigationes perficiendo, sive defensiones aedificando, sive copias novis armis et technologiarum usu et substituendo agitur... ne tempus bonum perire patiaris."
+
+msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
+msgstr "(Si modificationem \"Bonus Potentiae Temporis\" activam habes — quod est praedefinitum — non opus est exspectare tempus temporis antequam potestatem det. Potestas quam adeptus esses si tempus temporis currere permisisses tibi sponte dabitur. Sed reliqui usus adhuc valent!)"
+
+msgid "Power"
+msgstr "Energia"
+
+msgid "In Warzone 2100, power is your key resource."
+msgstr "In Warzone 2100, energia est tua praecipua copia."
+
+msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
+msgstr "Energiam impendis ad structuras aedificandas, unitates fabricandas, et emendationes / novas technologias investigandas."
+
+msgid "Power is generated by Power Generators that are fed by Oil Derricks."
+msgstr "Energia a Generatoribus Energiae generatur, qui a Turribus Petroleariis aluntur."
+
+msgid "Researching Technology"
+msgstr "Investigatio Technologiae"
+
+msgid "Researching technologies is accomplished using Research Facilities."
+msgstr "Investigatio technologiarum per Instrumenta Investigationis perficitur."
+
+msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
+msgstr "Cum Facilitas Investigationis selecta est, omnes optiones praesto in latere sinistro scrinii monstrantur."
+
+msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
+msgstr "Quodque proiectum investigationis certam vim et tempus ad perficiendum requirit. Impensa vim non restituitur."
+
+msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
+msgstr "Sed progressus investigationis numquam perditur, etiam si Institutum Investigationis destruatur - proiectum tantum ad aliud institutum reassignandum est."
+
+msgid "Completing research of a new technology may:"
+msgstr "Investigatio novae technologiae perficienda potest:"
+
+msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
+msgstr "- Nova arma, structuras, corpora unitatum, propulsionem, etc. praebere potes"
+
+msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
+msgstr "- Efficacitatem armorum, structurarum, corporum unitatum, etc. iam exstantium auge"
+
+msgid "- Enable the research of additional technologies"
+msgstr "- Investigationem technologiarum additionalium permittere"
+
+msgid "General"
+msgstr "Generalis"
+
+msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
+msgstr "In ludo Warzone 2100, copiis \"Propositi\" in proelio ad mundum reconstruendum praesisti, postquam genus humanum paene deletum est missilibus nuclearibus."
+
+msgid "This guide will help walk you through key facets of the game."
+msgstr "Hic dux te per partes clavis ludi ducet."
+
+msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
+msgstr "(Si expeditionem ludis, nova argumenta ducis reserari possunt dum per ludum progrediris.)"
+
+msgid "Building Structures"
+msgstr "Structurae Aedificandae"
+
+msgid "Click the \"Build\" button on the Command Panel."
+msgstr "Preme bullam \"Aedificare\" in Tabula Mandatorum."
+
+msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
+msgstr "Hoc aperiet indicem Structurarum in latere sinistro scrinii, cum bulla pro qualibet structura quam aedificare potes."
+
+msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
+msgstr "Elige bullam structurae desideratae. Umbra in mundo ludi apparebit - hic est ubi structura tua collocabitur cum confirmaveris."
+
+msgid "Move the silhouette by moving the input device."
+msgstr "Silhouettam move movendo instrumentum inputationis."
+
+msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
+msgstr "- Si structura in loco aedificabilis est, umbra viridis coloris erit cum super locum cursorem moves."
+
+msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
+msgstr "- Si structura in loco quodam aedificari non potest, umbra rubro colore afficietur."
+
+msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
+msgstr "Cum locum idoneum elegeris, locum constructionis confirmare elige. Autocinetum onerarium ad locum movebit et constructionem incipiet."
+
+msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
+msgstr "Plura vehicula ad auxilium (et structuram celerius construendam) ordinare potes ea deligendo et iubendo ut structuram sub constructione petant."
+
+msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+msgstr "Consilium: Ad \"muros\" construendos (cum iam praesto sint), premere et trahere potes ut murum in linea delinees."
+
+msgid "Cyborg Factory"
+msgstr "Officina Cyborgica"
+
+msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
+msgstr "Officina Cyborg similiter ac Officina vulgaris operatur, sed exclusive Cyborgos construit."
+
+msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
+msgstr "Quaeque Officina unum Cyborg simul aedificare potest, sed plures Cyborgs ad productionem in ordinem vocare potes."
+
+msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgstr "Cum Cyborg producitur, Mandata Unitatum Officinae Cyborg accipit et ad Punctum Conventus officinae progreditur."
+
+msgid "Demolishing Structures"
+msgstr "Structuras Demolientes"
+
+msgid "Demolishing a building is almost as simple as building one."
+msgstr "Demolitio aedificii fere tam simplex est quam aedificatio."
+
+msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
+msgstr "\"Structuram Demolire\" in indice Structurarum elige et aedificium ad demolendum preme."
+
+msgid "A unit will move to the building and destroy it."
+msgstr "Manus ad aedificium movebitur et id destruet."
+
+msgid "Demolished structures return half the power used to build the structure."
+msgstr "Structurae destructae dimidium energiae ad structuram construendam adhibitae reddunt."
+
+msgid "Factory"
+msgstr "Officina"
+
+msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "Officina ad unitates construendas adhibetur. Quaeque Officina singulas unitates simul construere potest, sed plures unitates ad productionem in ordinem redigere potes."
+
+msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
+msgstr "Cum unitas producitur, Mandata Unitatis Officinae accipit et ad Locum Conventus Officinae progreditur."
+
+msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
+msgstr "Nota: Officina fundamentalis solum unitates cum corporibus Levibus producere potest. Moduli officinae inveniendi et construi debent ad facultates productionis officinae augendas."
+
+msgid "Command Center"
+msgstr "Centrum Imperii"
+
+msgid "The Command Center is the headquarters of your base."
+msgstr "Centrum Imperii est sedes basis tuae."
+
+msgid "It provides access to the mini-map / radar, and the ability to design units."
+msgstr "Aditum ad minimam tabulam / radar et facultatem designandi unitates praebet."
+
+msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
+msgstr "Ad Centrum Imperii construendum, imprime bullam \"Construe\" in tabula imperiorum et structuram Centri Imperii elige."
+
+msgid "Then, click where you want your builders to construct it."
+msgstr "Deinde, preme ubi vis ut artifices tui id construant."
+
+msgid "Structure Modules"
+msgstr "Moduli Structurae"
+
+msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
+msgstr "Generatores energiae, officinae, et facilitates investigationis cum suis modulis structurae respectivis emendari possunt."
+
+msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
+msgstr "Post investigationem, his modulis ex indice \"Aedificare\" accedere potes ut eos structuris de quibus agitur applices."
+
+msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
+msgstr "Aliter, autocinetum onerarium vel machinatorem bellicum eligere et structuram premere potes ut constructionem eius incipias."
+
+msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
+msgstr "Nota: Dum una ex his structuris renovatur, ea temporarie non praesto erit donec renovatio completa sit."
+
+msgid "Upgrade Effects:"
+msgstr "Effectus Augmentare:"
+
+msgid "- Power Generator modules increase the rate of power generation"
+msgstr "- Moduli generatorum energiae ratem generationis potentiae augent"
+
+msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
+msgstr "- Moduli officinarum productionem unitatum Mediarum et Gravium permittunt, necnon tempus ad unitates producendas minuunt"
+
+msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
+msgstr "- Moduli Instituti Investigationis tempus necessarium ad perficienda proposita investigationis assignata minuunt"
+
+msgid "Oil Derrick"
+msgstr "Torrella Petrolearia"
+
+msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
+msgstr "Torres petroleae construi potest eligendo autocinetum olei et fontem petroleum praesto designando."
+
+msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
+msgstr "Destructio torris petrolei constructionem alterius in eodem loco ad tempus impediet, donec ignis consedeat."
+
+msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
+msgstr "Ad turrim petroleam utendum et energiam generandam, Generator Energiae requiritur."
+
+msgid "Power Generator"
+msgstr "Generator Energiae"
+
+msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
+msgstr "Quisque Generator Energiae usque ad quattuor turres olearias utitur. Exempli gratia, si decem turres olearias habes, tribus Generatoribus Energiae opus erit ut omnes turres olearias utaris et maximam Energiam generes."
+
+msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
+msgstr "Dum turres oleariae ex opibus olei aedificandae sunt, Generatores Energiae ubicumque in tabula aedificari possunt. Sed memento: generatores additionales ultra unum pro singulis quattuor turribus nullum commodum afferent."
+
+msgid "Rally Point"
+msgstr "Locus Conventus"
+
+msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
+msgstr "Cum Officina unitatem aedificare perfecerit, unitas iuxta Officinam orietur, deinde ad Locum Conventus Officinae designatum progredietur."
+
+msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
+msgstr "Defalta ratione, Punctum Conventus iuxta Officinam ponitur. Si Punctum Conventus premas, id movere poteris."
+
+msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
+msgstr "Nota: Movere Punctum Conventus dum unitas ad eum movetur iter unitatis non afficiet."
+
+msgid "Repair Facility"
+msgstr "Officina Reparationis"
+
+msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
+msgstr "Aedificatio Officinae Reparationis structuram fixam creat ad quam copiae se recipere possunt ad reparandas."
+
+msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
+msgstr "Officinae Reparationis unitates celerius reparare possunt quam unitates mobiles cum turribus reparationis."
+
+msgid "Research Facility"
+msgstr "Institutum Investigationis"
+
+msgid "Research Facilities are required in order to research new technologies."
+msgstr "Instrumenta investigationis requiruntur ad novas technologias investigandas."
+
+msgid "Each Research Facility can research one technology at a time."
+msgstr "Quaeque Institutum Investigationis unam technologiam tempore investigare potest."
+
+msgid "VTOL Factory"
+msgstr "Officina VTOL"
+
+msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
+msgstr "Officina VTOL ad construendas unitates cum propulsione VTOL (i.e. unitates volantes) adhibetur."
+
+msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "Quaeque Officina VTOL singulas unitates simul fabricare potest, sed plures unitates ad productionem in ordinem disponere potes."
+
+msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+msgstr "Cum officina VTOL unitatem construere perfecerit, ei iubebit ut volare et prope punctum conventus officinae ad terram adducat."
+
+msgid "Structures"
+msgstr "Structurae"
+
+msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
+msgstr "Structuras aedificare omnino necessarium est in Warzone 2100 — a fabricis quae unitates construunt, ad instituta investigationis quae novas technologias investigant."
+
+msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
+msgstr "Aedificatio fieri potest cum unitatibus cum plaustris ut turribus et/vel machinatoribus bellicis."
+
+msgid "Attack Range"
+msgstr "Spatium Impetus"
+
+msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
+msgstr "Ad \"Spatium Impetus\" unitatis configurandum, indice Ordines Unitatum uti potes."
+
+msgid "- Optimum Range: Fires at the most accurate range"
+msgstr "- Optimum Spatium: Ex accuratissimo spatio iaculatur"
+
+msgid "- Short Range: Moves to short range and attacks"
+msgstr "Brevis Spatium: Ad breve spatium movetur et impetus facit"
+
+msgid "- Long Range: Attacks at long range (default)"
+msgstr "- Longa Spatia: Impetus e longa spatia (praedefinitum)"
+
+msgid "Firing Mode"
+msgstr "Modus Ignitionis"
+
+msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
+msgstr "Ad \"Modum Ignis\" unitatis configurandum, indice \"Ordines Unitatum\" uti potes."
+
+msgid "- Fire At Will: Fires at any enemy (default)"
+msgstr "- Ignis Ad Voluntatem: In quemlibet hostem iacit (praedefinitum)"
+
+msgid "- Return Fire: Only fire if fired at"
+msgstr "- Ignis Reversa: Solum ignire si ictum est in"
+
+msgid "- Do Not Fire: Units will not fire"
+msgstr "- Noli Ignem Facere: Unitates non ignem facient"
+
+msgid "Movement"
+msgstr "Motus"
+
+msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
+msgstr "Menu Ordines Unitatum ad Motum unitatis configurandum uti potes."
+
+msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
+msgstr "- Patrula: Inter duo puncta move. Post selectionem puncti in tabula geographica preme"
+
+msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
+msgstr "- Circulus: (VTOLs tantum) Circulo super locum move. Post selectionem aream preme"
+
+msgid "- Pursue: Pursue enemy"
+msgstr "- Persequi: Persequi hostem"
+
+msgid "- Guard: Stay near an area or structure. (default)"
+msgstr "- Custos: Prope aream vel structuram mane. (praedefinitum)"
+
+msgid "- Hold Position: Do not move under any circumstances"
+msgstr "- Positionem tene: Nullo modo te moveas"
+
+msgid "Recycling"
+msgstr "Reciclatio"
+
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
+msgstr "Unitas recirculando, ad proximam Officinam vel Officinam Reparationis mittetur, ubi e ludo removebitur."
+
+msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
+msgstr "Dimidia pars energiae in fabricanda unitate adhibitae tibi restituetur (quamquam haec summa minuetur si unitas laesa est)."
+
+msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
+msgstr "Puncta experientiae unitatis redivivae ad unitatem proximam quae fabricatur transferentur."
+
+msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
+msgstr "Cum plures unitates peritae redivivae fiunt, maxima copia punctorum experientiae primum transfertur."
+
+msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
+msgstr "Unitates selectas ad redivivum reddendas per indicem \"Unit Orders\" vel clavem \"Return for Recycling\" iubere potes."
+
+msgid "Retreating"
+msgstr "Recedens"
+
+msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
+msgstr "Amissio copiarum (praesertim copiarum cum peritia) magnum detrimentum potest esse facultati copiarum prospere proelium gerendi."
+
+msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
+msgstr "Uti potes indice Ordines Unitatum ad \"Limen Recessionis\" eligendum, quod efficiet ut unitates sponte e proelio recedant cum ad certum gradum damni pervenerint."
+
+msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
+msgstr "- Aut Fac aut Mori: Cohors tua non se recipiet nisi iussa sit. (praedefinitum)"
+
+msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
+msgstr "- Refugium cum Damno Mediocri: Cohors tua recedet cum damno mediocri (flavo)"
+
+msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
+msgstr "- Refugium cum Grave Damno: Unitas tua recedet cum gravi (rubro) damno"
+
+msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
+msgstr "Copiae recipientes ad proximam officinam reparationis, cohortem reparationis, praetorium, vel zonam operariam LZ revertentur."
+
+msgid "Return To"
+msgstr "Reditus ad"
+
+msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
+msgstr "Menu Ordines Unitatum uti potes ut unitates celeriter ad locum specificum revertantur."
+
+msgid "- Return for Repair: Unit will return to a Repair Facility"
+msgstr "- Reditus ad Reparationem: Machina ad Officinam Reparationis redibit"
+
+msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
+msgstr "- Reditus ad Praetorium: Unitas ad Centrum Imperii vel LZ (expeditionem) revertetur"
+
+msgid "- Go To Transport: Unit will go to and board transport"
+msgstr "- Ad Vehiculum Ire: Unitas ad vehiculum ibit et conscendet"
+
+msgid "Unit Orders"
+msgstr "Mandata Unitatum"
+
+msgid "Right-click a unit or group of units to show their current Unit Orders."
+msgstr "Dextro clavi preme unitatem vel gregem unitatum ut ordines unitatum praesentes eorum ostendas."
+
+msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
+msgstr "Tabula Ordines Unitatum te sinit mores copiarum tuarum modificare, a custodiendo regionem ad recessum cum salute parva."
+
+msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
+msgstr "Dextro clavi preme Officinam ut Ordines Unitatum omnium unitatum futurarum ab Officina productarum accommodes."
+
+msgid "Building Units"
+msgstr "Unitates Aedificiorum"
+
+msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
+msgstr "Ad unitates construendas, vel Officinam elige, vel bullam \"Fabricatio\" in Tabula Imperii elige - hoc tabulam Fabricationis in latere sinistro scrinii aperiet."
+
+msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+msgstr "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+
+msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
+msgstr "Ad aliam Officinam eligendam, vel Officinam in mundo ludi preme, vel bullam aptam in tabula Officinarum in imo medio scrinii preme."
+
+msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
+msgstr "Ad unitatem in Officina fabricandam, imprime bullam designationis unitatis desideratam in tabula Fabricationis. Multas eiusdem unitatis in ordinem redigere potes bullam designationis unitatis iterum iterumque premendo."
+
+msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgstr "Dum unitas construitur, unitas in tabula \"Officinarum\" supra Officinam quae eam construit demonstrabitur. Si linea viridis est, Officina vires colligit ad unitatem construendam. Si linea flava est, unitas construitur."
+
+msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
+msgstr "Cum Officina unitatem aedificare perfecerit, unitati iubebit ut ad Locum Conventus Officinae progrediatur."
+
+msgid "Attaching Units"
+msgstr "Unitates Adnectere"
+
+msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
+msgstr "Ad unitates Duci adiungendas, elige unitatem (vel unitates), deinde sinistro clavi preme Ducem cui eas adiungere vis. Symbolum iuxta unitatem (vel unitates) assignatam apparebit ad adiunctionem significandam."
+
+msgid "## Limits:"
+msgstr "## Limites:"
+
+msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
+msgstr "Ducibus est numerus copiarum quas moderari possunt, qui numerus a gradu eorum afficitur. Promotiones a Duce ad certum numerum punctorum experientiae perveniente acquiruntur."
+
+msgid "After each promotion, the Commander is able to control 2 more units."
+msgstr "Post quamque promotionem, Dux duas plures unitates moderari potest."
+
+msgid "Detaching Units"
+msgstr "Unitates Separantes"
+
+msgid "To detach a unit from a Commander:"
+msgstr "Ad unitatem a Duce separandam:"
+
+msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
+msgstr "1. Dextro clavi preme unitatem (vel clavem \"Shift\" preme dum unitatem eligis) ut solam illam unitatem (loco totius gregis ducum) eligas"
+
+msgid "2. Give the unit a new order (eg. move)"
+msgstr "2. Da unitati novum mandatum (eg. movere)"
+
+msgid "Going for repairs, BRB"
+msgstr "Ad reparationes eundo, BRB"
+
+msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
+msgstr "Unitas quae e proelio se recipit ut ad officinam reparationis eat, cum grege Ducum suorum coniuncta manebit."
+
+msgid "When it is done repairing, it will return to its Commander."
+msgstr "Cum reparatione perfecta erit, ad Imperatorem suum revertetur."
+
+msgid "Targeting"
+msgstr "Scopus"
+
+msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
+msgstr "Cum Imperatorem eliges et unitatem vel structuram hostilem petis, unitates adiunctae movebuntur ut in scopum ignem mittant."
+
+msgid "The attached units will have greater accuracy when firing."
+msgstr "Unitates adiunctae maiorem accuratiam in iaculando habebunt."
+
+msgid "Commanders"
+msgstr "Imperatores"
+
+msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
+msgstr "Turres imperii similes sensoriis adhibentur, nisi quod quamlibet unitatem impetum facientem, non solum tormenta, imperare possunt."
+
+msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
+msgstr "Duces omnibus unitatibus sibi assignatis praemium accuratiae, armaturae, et celeritatis motus praebent, quod cum gradus ducis crescit, augetur."
+
+msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
+msgstr "Initio ad sex unitates impetum facientes assignatas habent, sed hic limes duabus unitatibus augetur quotiescumque dux gradum assequitur."
+
+msgid "Designing Units"
+msgstr "Designatio Unitatum"
+
+msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
+msgstr "Novas copias designare debebis si hostes superare et dulcem victoriae gustum capere vis. Hoc est momentum magni momenti in ludo Warzone 2100."
+
+msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
+msgstr "Ad unitatem designandam incipiendam, bullam designandi in Tabula Mandatorum elige. Hoc faciet ut duae columnae in sinistra parte scrinii appareant."
+
+msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
+msgstr "Ad novum exemplar creandum, corpus viride \"vacuum\" in summo sinistro angulo elige. Ad exemplar unitatis iam exstans mutandum, id potius elige."
+
+msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
+msgstr "Designatio novae unitatis est processus simplex trium graduum: eligendo corpus, systema propulsionis, et turrim. Hae tres selectiones novam unitatem resultabunt."
+
+msgid "Once you have designed a unit, you will need a Factory to build it."
+msgstr "Postquam unitatem designaveris, Officinam ad eam construendam requirebis."
+
+msgid "Experience & Ranks"
+msgstr "Experientia et Gradus"
+
+msgid "Units gain experience when they successfully dispatch enemies."
+msgstr "Copiae experientiam acquirunt cum hostes feliciter solvunt."
+
+msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
+msgstr "Maior gradus experientiae significat unitatem accuratiorem esse, celerius moveri, et minus damni accipere."
+
+msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
+msgstr "Imago gradum unitatis ostendens iuxta vectem salutis unitatis apparet."
+
+msgid "Units with higher experience levels can make all the difference in battle!"
+msgstr "Copiae cum altiore gradu experientiae omnem differentiam in proelio efficere possunt!"
+
+msgid "Cyborgs"
+msgstr "Cyborgi"
+
+msgid "Cyborgs are your main infantry units."
+msgstr "Cyborgi sunt principales unitates peditum tuarum."
+
+msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
+msgstr "Sunt unitates celeres et fideles, et armis anticarris maxime resistunt."
+
+msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
+msgstr "Tamen vulnerabiliores sunt armis antihomogenicis et artilleriae."
+
+msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
+msgstr "Nota bene Cyborgos designari non posse. Formae Cyborgorum separatim investigantur et Officinam Cyborgorum ad producendum requirunt."
+
+msgid "Half-tracks"
+msgstr "Semi-cinguli"
+
+msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
+msgstr "Semi-cinguli sunt propulsio hybrida inter rotas et cingulos."
+
+msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
+msgstr "Pretium et celeritatem moderatum habent, et moderatam quantitatem punctorum vitae praebent."
+
+msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
+msgstr "Resistentiam quoque contra damnum antihomo et artilleriae praebent, sed adhuc satis vulnerabiles sunt armis anticarris."
+
+msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
+msgstr "Semi-cinguli excellentes sunt ad unitates generales usus, sed non prorsus eandem magnam firmitatem cinguli aut celeritatem rotarum praebent."
+
+msgid "Hover"
+msgstr "Navis aëria"
+
+msgid "Hover is a fast, amphibious propulsion for vehicles."
+msgstr "Navis aëria est modus propulsionis celeris et amphibia pro vehiculis."
+
+msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
+msgstr "Propulsio navis aëria celeritates maximas altissimas et facultatem libere aquam transeundi praebet, quae ad vias impetus singulares inveniendas necessaria esse possunt."
+
+msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
+msgstr "Tamen, maiori pretio productionis veniunt, parva puncta vitae praebent, et plerisque generibus damni vulnerabiles sunt."
+
+msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
+msgstr "Magnae velocitates navis aëria et facultas super aquam transeundi eum aptum reddunt ad tacticas impetus et fugae."
+
+msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
+msgstr "Similiter autem Rotae, ad diuturnas pugnas in prima acie parum aptae sunt."
+
+msgid "Tracks"
+msgstr "Semitae"
+
+msgid "Tracks are a highly-armored propulsion for vehicles."
+msgstr "Ordines propulsivi valde armati pro vehiculis sunt."
+
+msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
+msgstr "Magnum numerum punctorum vitae, necnon resistentiam magnam contra damnum Anti-Personale et Tormentorum praebent."
+
+msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
+msgstr "Attamen, sumptu productionis maiori veniunt, tempora constructionis longiora habent, et adhuc armis anticarris valde vulnerabiles sunt."
+
+msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
+msgstr "Praeterea, semitae magnam poenam celeritati maximae habent."
+
+msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
+msgstr "Propter magnam firmitatem, cinguli aptissimi sunt vehiculis ad pugnam in prima acie designatis."
+
+msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
+msgstr "Cave tamen oportet. Tarda eorum motus celeritas effugium rerum adversarum difficillimum reddere potest."
+
+msgid "Attacking with VTOLs"
+msgstr "Impetus cum DEAV"
+
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr "Ad impetum cum DEAV, eum elige et hostem solito modo preme."
+
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr "Tamen, fortasse animadverteris albam vectem tormentorum sub vecte salutis cum impetum incipis."
+
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr "Dissimiles unitatibus terrestribus, quae sponte se recaricant, tormenta volantia (DEAV) limitatam copiam tormentorum portant. Cum ea tormenta deficiunt, tormenta volantia impetum facere non possunt donec se refecerint."
+
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr "Tormentum volante (DEAV) tormentis carens tabulam rearmandi DEAV inveniet ad se rearmandum et reparandum (et impetum resumet postquam plene rearmatus est), vel manu rearmari potest eum eligendo et tabulam rearmandi premendo."
+
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr "Dissimiles aliis unitatibus quae plerumque proximum scopum aggrediuntur, tormenta volantia nihil sponte aggredientur. Attamen, tormentum volante eligendo et clavi alt+cliccando in area, tormentum volante aream inter locum suum praesentem et locum cliccatum custodiet, et quidquid in proximo est aggredietur."
+
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr "Alternative, tormenta DEAV turribus impetus DEAV et turribus CB DEAV assignari possunt, quod eas similiter ac tormenta turribus sensoriis assignata fungi faciet."
+
+msgid "Defending with VTOLs"
+msgstr "Defensio cum DEAV"
+
+msgid "VTOL units may also be used to defend areas of the map."
+msgstr "Unitates DEAV etiam ad regiones tabulae defendendas adhiberi possunt."
+
+msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
+msgstr "Tormenta tormentaria turri impetus DEAV vel turri radaricae DEAV assignari possunt, et quidquid a sensore petitum est sponte aggredientur (sicut tormenta tormento sensori communi assignata)."
+
+msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
+msgstr "Vehiculae volantes (DEAV) etiam iuberi possunt ut regionem patrolent vel circumeant. Hoc faciendo, quemvis hostem in via sua invenient sponte aggredientur."
+
+msgid "Defending Against VTOLs"
+msgstr "Defensio contra DEAV"
+
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr "Quid est illud in caelo? ... Est machina DEAV"
+
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr "Cum DEAV non sint copiae terrestres, pleraque arma terrestria eas attingere non possunt."
+
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr "Feriri possunt tantum armis vel antiaeriis (saepe abbreviatis \"AA\") vel versatilibus (vel aereis vel terrestribus)."
+
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr "Pauca tantum arma sunt quae versatilia sunt: ​​sclopeta automataria, lasera, et Capsula Mini-Rocket."
+
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr "(Missilia etiam versatilia sunt, sed tantum cum in cyborg vel DEAV imposita sunt.)"
+
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr "Praeterquam quod rara sunt, arma versatilia non tantum damnum DEAV inferunt quantum dedicata anti-aerea, ergo habere aliquod antiaereum contra DEAV commendatur."
+
+msgid "Using VTOLs"
+msgstr "Utendis DEAV"
+
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr "Designare unitates DEAV simile est designare unitates terrestres."
+
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr "Cum propulsionem eligis, simpliciter propulsionem \"DEAV\" elige."
+
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr "Deinde ex armis DEAV praesto eligere poteris."
+
+msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
+msgstr "Ad consilia tua DEAV producenda, officinam DEAV construere debebis."
+
+msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
+msgstr "Ad unitates DEAV tuas reparandas, rearmandas, et conservandas, unum vel plura tabulata rearmandi DEAV construere debebis."
+
+msgid "VTOL Weapons"
+msgstr "Arma DEAV"
+
+msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
+msgstr "Pleraque arma aequivalens DEAV habent, quod damnum auget, sed munitiones limitatas habet."
+
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr "Versiones DEAV armorum communium separatim investigandae non sunt."
+
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr "Praeter versiones DEAV armorum terrestrium directorum, DEAV etiam bombis uti possunt. Haec arma tormentis aequivalent, et valde potentia sunt."
+
+msgid "VTOL"
+msgstr "DEAV"
+
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr "Instrumenta DEAV (Decollatio et Appulsus Verticalis) praecipua instrumenta aerea ad caelum dominandum sunt."
+
+msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
+msgstr "DEAV celeritatem maximam altissimam habent et omnia genera terrarum transire possunt."
+
+msgid "Additionally, they cannot be targeted by most weapons while airborne."
+msgstr "Praeterea, plerisque armis in aere volantibus petere non possunt."
+
+msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
+msgstr "Note that while DEAV units can be designed like other vehicles, they can only be produced from a specialized DEAV Factory."
+
+msgid "Wheels"
+msgstr "Rotae"
+
+msgid "Wheels are the most basic vehicle propulsion."
+msgstr "Rotae sunt instrumentum propulsionis vehiculi fundamentalissimum."
+
+msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
+msgstr "Vili pretio et celeriter producuntur, et celeritatem maximam magnam habent."
+
+msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
+msgstr "Tamen, plerisque generibus damni vulnerabiles sunt, nec multa puncta vitae praebent."
+
+msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
+msgstr "Rotae optime adhibentur in vehiculis quae post aciem primam operantur, vel vehiculis quae celeritate sua magna ad impetus et fugam utuntur."
+
+msgid "Propulsions"
+msgstr "Propulsiones"
+
+msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
+msgstr "Sicut cum armis, etiam nova genera propulsionis vehiculorum invenire potes quae in designis adhiberi possunt."
+
+msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
+msgstr "Cum investigationem de nova propulsione perfeceris, nuntius Ostentationis Intelligentiae informationem aliquam de eius proprietatibus praebebit."
+
+msgid "Additionally, you can find descriptions of each propulsion in this guide."
+msgstr "Praeterea, descriptiones cuiusque propulsionis in hoc indice invenire potes."
+
+msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
+msgstr "Intellegere commoda et incommoda cuiusque propulsionis essentiale est et ad proprias copias designandas et ad hostes debellandos."
+
+msgid "Repairing Units"
+msgstr "Unitates Reparantes"
+
+msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
+msgstr "Unitatem cum turri reparatoria loco teli designare potes, et ei imperari potest ut alias unitates tuas reparet."
+
+msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
+msgstr "Copias reparatorias a proelio etiam arcere potes, et Optionibus Regressus uti ut copias tuas offensivas ad eas se recipiant ad reparationem cum certo gradu damni."
+
+msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
+msgstr "Recipere et copias reparare saepe multo praestat quam copias peritas in acie amittere."
+
+msgid "CB Sensors"
+msgstr "Sensoria CT"
+
+msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
+msgstr "Sensoria Contra-Tormenta (CT) campum proelii magnopere mutant, permittendo unitatibus tormentorum directe suggestus tormentorum longinquos petere — dummodo iactum satis longinquum habeant."
+
+msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
+msgstr "Structurae vel unitates identificatae in nebula belli rubro colore apparebunt, simul ac sensor CT emissionem tormentorum hostium deprehenderit."
+
+msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
+msgstr "Si activum est, unitates tormentariae scopos Sensoriis CT prae scopis a Sensoribus normalibus revelatis praeferunt."
+
+msgid "Un-Assigning"
+msgstr "De-Assignatio"
+
+msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
+msgstr "Ad unitatem a sensore removendam, facillima via est unitatem dextro-mus premere, deinde ei iubere ut alicubi moveatur."
+
+msgid "Multiple units can be selected by holding CTRL while clicking."
+msgstr "Plures unitates eligi possunt premendo CTRL dum premitur."
+
+msgid "Using Sensors"
+msgstr "Sensoribus Utentibus"
+
+msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
+msgstr "Structurae tormentariae facillimae sunt. Simpliciter turrim sensoriam construe, et si turris sensoria aliquid intra iactum armorum structurarum tormentariarum tuarum petit, in id tela iacient."
+
+msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
+msgstr "Currus tormentarius autem, ut functionet, explicite sensori assignandus est. Currus tormentarios elige, deinde sensorem preme ut currus sensori assignes."
+
+msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
+msgstr "Postquam tormenta assignata sunt, si turri sensoria assignata sunt, illa turris hostes qui in iactum veniunt sponte petet."
+
+msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
+msgstr "Si currui sensorio assignatum est, sensore ad hostes oppugnandos adhiberi potest sensorem eligendo et hostem petendo. Omnia tormenta sensori assignata scopum suum oppugnabunt."
+
+msgid "Sensors"
+msgstr "Sensoria"
+
+msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
+msgstr "Sensoria ad explorationem et vigilantiam adhiberi possunt, sed etiam usum maiorem habent: ad tormenta detegenda."
+
+msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
+msgstr "Arma tormentaria, per se, plus quam iactum sensorium suorum (octo quadrata sine meliorationibus) iaculare non possunt."
+
+msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr "Attamen, etiam simplicissima arma tormentaria iactum armorum habent qui iactum sensorum inclusorum excedit. Ut ea uteris, sensores in acie (vel turres sensorum vel currus armatos cum turribus sensorum) aedificare et disponere debebis."
+
+msgid "Kinetic & Thermal Damage"
+msgstr "Damnum Cineticum et Thermale"
+
+msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
+msgstr "Pleraque arma damnum per media cinetica (glandes, missiles, etc.) inferunt, et ideo a communi lorica cinetica afficiuntur."
+
+msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
+msgstr "Attamen quaedam arma damnum thermalem inferunt, quod ab armatura cinetica scopi non afficitur."
+
+msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
+msgstr "Potius, arma thermalia a lorica thermali scopi mitigantur."
+
+msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
+msgstr "Lorica cinetica et thermalis unitatis in indice designandi, in pagina selectionis corporis, videri potest."
+
+msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
+msgstr "Nota bene omnes unitates minus armaturae thermalis quam armaturae kineticae habere. Hoc significat damnum thermale minus quam damnum kineticum imminutum iri!"
+
+msgid "Attacking"
+msgstr "Impetus"
+
+msgid "Designing VTOLs"
+msgstr "Designans DEAV"
+
+msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
+msgstr "Memento: \"Officina DEAV\" tibi necessaria erit ad revera designanda exemplaria unitatum DEAV."
+
+msgid "Weapons"
+msgstr "Arma"
+
+msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
+msgstr "Pleraque arma aequivalens DEAV habent, quod saltem duplo plus damni infert, sed limitatam munitionem habet."
+
+msgid "VTOLs"
+msgstr "DEAV"
+
+msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
+msgstr "Ad machinas DEAV producendas, \"Propulsionem DEAV\" et \"Officinam DEAV\" invenisse et investigasse debebis."
+
+msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
+msgstr "Investigare etiam debes et aliquot \"DEAV Rearming Pads\" fabricare, ut unitates tuae DEAV globulos recargare possint."
+
+msgid "Weapon Selection"
+msgstr "Selectio Armorum"
+
+msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
+msgstr "Dum plura arma invenis et investigas, etiam invenies quaedam arma in certis casibus (aut contra certas hostium copias vel structuras) multo melius operari posse quam alia."
+
+msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
+msgstr "Cum investigationem novi teli perfeceris, nuntius Ostentationis Intelligentiae informationem de eius proprietatibus praebebit."
+
+msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
+msgstr "Tibi prodest varia genera armorum experiri. Si difficultates habes nec compositionem copiarum tuarum iamdiu revaluisti, fortasse tempus est arma pro validioribus vel novis generibus mutare cogitare!"
+
+msgid "Units"
+msgstr "Unitates"
+
+msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
+msgstr "Novas copias designare et aedificare debebis si hostes superare et dulcem victoriae gustum capere vis."
+
+msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
+msgstr "Hic aspectus ludi est qui Warzone 2100 suo modo unicum facit."
+
+msgid "To be able to design units, a Command Center is required."
+msgstr "Ad copias designandas, Centrum Imperii requiritur."
+
+msgid "All-Rounder"
+msgstr "Omnibus Personis"
+
+msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
+msgstr "Arma \"universaria\" minus efficacia sunt quam arma specialia."
+
+msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
+msgstr "Arma autem universalia (vel \"omnia ad omnia genera scoporum\") moderate efficacia sunt contra omnia genera scoporum, dissimilia armis specialibus."
+
+msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
+msgstr "Universalia etiam significantes puncta vitae additamenta unitati cui instructa sunt dant, sed tamen ponderis altiores habentur."
+
+msgid "Anti-Air"
+msgstr "Arma antiaerea"
+
+msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
+msgstr "Arma antiaerea (vel AA) contra omnia genera copiarum volantium specializata sunt."
+
+msgid "However, AA weapons are incapable of attacking structures or units on the ground."
+msgstr "Arma autem antiaerea structuras vel copias in terra aggredi non possunt."
+
+msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
+msgstr "Quamquam arma antiaerea optima sunt ad minas aereas tractandas, a periculis terrestribus protegi debent."
+
+msgid "Anti-Personnel"
+msgstr "Contra Personam"
+
+msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
+msgstr "Contra Personam ad delendos pedites hostium et vehicula levia maxime efficacia sunt."
+
+msgid "However, these weapons are less effective against structures and heavily armored targets."
+msgstr "Haec autem arma minus efficacia sunt contra structuras et proposita graviter armaturata."
+
+msgid "Anti-Tank"
+msgstr "Antitancorum"
+
+msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
+msgstr "Arma antitancorum contra omnia genera vehiculorum hostium specializata sunt."
+
+msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
+msgstr "Arma autem anticarrorum minus efficacia sunt contra structuras, et praesertim inefficacia contra pedites."
+
+msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
+msgstr "Arma antitancorum plerumque levia sunt, sed paucissima puncta vitae praebent. Vehicula his armis instructa fragiliora erunt quam ea quae plerisque aliis generibus armorum instructa sunt."
+
+msgid "Artillery"
+msgstr "Tormenta"
+
+msgid "Artillery weapons are devastating against infantry and most structures."
+msgstr "Arma tormentaria contra pedites et plerasque structuras vastant."
+
+msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
+msgstr "Attamen arma artilleriae minus efficacia sunt contra munitiones et vehicula cingulata."
+
+msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
+msgstr "Pleraque (sed non omnia) arma artilleriae immobilia esse debent ut igni possint. Hoc, cum paucissimo numero punctorum vitae ab armis artilleriae praebitorum, coniunctum, efficit ut unitates artilleriis instructae per se vulnerabiles sint."
+
+msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
+msgstr "Ergo, arma artilleriae optime adhibentur ad alias unitates vel structuras sustinendas, conflictu directo vitato."
+
+msgid "High-Explosive Bombs"
+msgstr "Bombae Alto-Explosivae"
+
+msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
+msgstr "Bombae explosivae similiter agunt ac tela artilleriae terrestris (ut mortaria)."
+
+msgid "These bombs explode on impact, damaging everything caught in the blast."
+msgstr "Hae bombae impactu explodunt, omnia ab explosione capta laedentes."
+
+msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
+msgstr "Sicut arma artilleriae, bombae explosivae excellunt in delendis plerisque structuris et coetibus peditum et vehiculorum levium, sed contra munitiones et currus graviter armatos luctant."
+
+msgid "Just make sure your own units and structures aren't caught in the blast!"
+msgstr "Modo cave ne tuae copiae et structurae in explosione capiantur!"
+
+msgid "Incendiary Bombs"
+msgstr "Bombae Incendiariae"
+
+msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
+msgstr "Bombae incendiariae aliquantum simili modo agunt cum armis flammae fundatae."
+
+msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
+msgstr "Bombae incendiariae parvum damnum in impactu infligunt, sed magnam aream circa locum impactus statim incenderent."
+
+msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
+msgstr "Copiae hostium et structurae quae intra hanc regionem morantur magnum damnum per tempus accipient."
+
+msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
+msgstr "Sicut arma lampadium ignifera, bombae incendiariae contra omnia genera copiarum et munimenta excellentes sunt, sed contra structuras duratas infirmae sunt."
+
+msgid "Bomb Bays"
+msgstr "Bombarum receptacula"
+
+msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
+msgstr "Bombarum receptacula sunt genus armorum unicum quod solum in DEAV instrui potest."
+
+msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
+msgstr "Quamquam brevis est eorum spatium impetus et capacitas tormentorum parva, receptacula bomborum puncta vitae addita praebent et plerumque onus potentius continent quam alia tela DEAV."
+
+msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
+msgstr "Sicut omnia alia arma, bombae diversae diversos effectus, vires, et usus habent."
+
+msgid "Bunker Buster"
+msgstr "Dissipator Bunkerorum"
+
+msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
+msgstr "Dissipator Bunkerorum est telum unicum quod contra omnes structuras egregie efficax est."
+
+msgid "However, the Bunker Buster is extremely weak against any non-structure target."
+msgstr "Attamen, Dissipator Bunkerorum contra quemlibet scopum non-structuralem valde debilis est."
+
+msgid "Flamer"
+msgstr "Flammator"
+
+msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
+msgstr "Arma ignifera flammator efficacia sunt contra pedites et currus propulsores debiliores."
+
+msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
+msgstr "Arma ignifera etiam optima sunt contra munitiones et structuras ad res advehendas, sed infirmiora contra alias structuras."
+
+msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
+msgstr "Flammae unitates \"penetrare\" possunt, plures unitates laedendo et fortasse incendendo uno impetu, ita arma Flammarum egregia interfectoria turbae faciunt."
+
+msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
+msgstr "Tamen, propter breves impetus spatia, arma Flamera periculosa in usu esse possunt."
