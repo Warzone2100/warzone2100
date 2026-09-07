@@ -830,6 +830,11 @@ void reloadEffectLights()
 	loadEffectLights(effectLightsFileName.c_str());
 }
 
+void effectLightsWeaponStatsLoaded()
+{
+	loadEffectLights(effectLightsFileName.empty() ? "stats/effectlights.json" : effectLightsFileName.c_str());
+}
+
 void effectLightsShutDown()
 {
 	projectileSubClassSettings = {};
