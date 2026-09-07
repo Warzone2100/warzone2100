@@ -47,6 +47,9 @@ void effectLightsShutDown();
 /// Re-reads the file the settings were last loaded from
 void reloadEffectLights();
 
+/// Runs when the weapon stats load, so a dataset without an SEFFECTLIGHTS entry still gets lights.
+void effectLightsWeaponStatsLoaded();
+
 /// Return the light that a projectile of psStats (drawn with pIMD) throws, or nullopt when it throws none
 nonstd::optional<ProjectileLight> resolveProjectileLight(const WEAPON_STATS *psStats, const iIMDShape *pIMD, bool modelIsGlowing);
 

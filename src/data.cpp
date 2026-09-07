@@ -165,6 +165,9 @@ static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 		return false;
 	}
 
+	// A dataset that never loads SEFFECTLIGHTS still resolves its lights against the weapon stats
+	effectLightsWeaponStatsLoaded();
+
 	// not interested in this value
 	*ppData = nullptr;
 	return true;
