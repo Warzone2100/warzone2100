@@ -90,6 +90,7 @@
 #include "profiling.h"
 #include "warzoneconfig.h"
 #include "ssao.h"
+#include "ssr.h"
 #include "range_rings.h"
 #include "scene_effect_surfaces.h"
 #include "multistat.h"
@@ -702,6 +703,11 @@ float getCurrentSkyboxWindSpeed()
 float getCurrentSkyboxScale()
 {
 	return skybox_scale;
+}
+
+float getCurrentSkyboxWindAngle()
+{
+	return wind;
 }
 
 static inline void rotateSomething(int &x, int &y, uint16_t angle)
@@ -1520,7 +1526,7 @@ bool init3DView()
 
 	setDefaultFogColour();
 
-	// Allocate / free SSAO and fog pipeline surfaces to match persisted config.
+	// Allocate / free scene-effect pipeline surfaces to match persisted config.
 	applySceneEffectSurfaces();
 
 	playerPos.r.z = 0; // roll
@@ -1551,6 +1557,7 @@ bool init3DView()
 	}
 
 	ssao::init();
+	ssr::init();
 	if (!range_rings::init())
 	{
 		debug(LOG_ERROR, "Failed to initialize range-ring buffers");
@@ -1590,6 +1597,7 @@ void shutdown3DView_FullReset()
 	batchedObjectStatusRenderer.reset();
 
 	ssao::shutdown();
+	ssr::shutdown();
 	range_rings::shutdown();
 
 	setLightingManager(nullptr);

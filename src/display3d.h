@@ -137,6 +137,7 @@ void setSkyBox(const char *page, float mywind, float myscale);
 const std::string &getCurrentSkyboxPage();
 float getCurrentSkyboxWindSpeed();
 float getCurrentSkyboxScale();
+float getCurrentSkyboxWindAngle();
 
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128

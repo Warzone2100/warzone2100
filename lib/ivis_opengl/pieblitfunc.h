@@ -97,6 +97,8 @@ public:
 	/// Upload given memory buffer to already allocated texture space on the GPU
 	void updateTexture(const iV_Image& image /*= nullptr*/);
 
+	gfx_api::texture* getTexture() const { return mTexture; }
+
 	/// Upload vertex and texture buffer data to the GPU
 	void buffers(int vertices, const void *vertBuf, const void *texBuf);
 

@@ -26,6 +26,7 @@
 
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
+#include "depth_aware_blur.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
@@ -34,7 +35,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
-#include <algorithm>
 #include <cstdint>
 #include <cstring>
 #include <utility>
@@ -202,45 +202,6 @@ void drawSSAOGenerate(
 	display3d_drawFullscreenTriangle<gfx_api::SSAOGeneratePSO>(constants, depthTexture, normalsTexture, s_noiseTexture);
 }
 
-void drawSSAOBlur(
-	const gfx_api::RenderPassContext& passCtx,
-	gfx_api::abstract_texture* occlusionTexture,
-	gfx_api::abstract_texture* depthTexture,
-	const glm::vec2& blurDirection)
-{
-	gfx_api::constant_buffer_type<SHADER_SSAO_BLUR> constants {};
-	constants.blurDirection = blurDirection;
-	constants.depthSigma = s_tuning.blurDepthSigma;
-	constants.tapPairs = static_cast<float>(activeSettings().blurTapPairs);
-	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.occlusionUvScaleClamp);
-	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.depthUvScaleClamp);
-
-	display3d_drawFullscreenTriangle<gfx_api::SSAOBlurPSO>(constants, occlusionTexture, depthTexture);
-}
-
-enum class BlurAxis
-{
-	Horizontal,
-	Vertical,
-};
-
-void recordBlur(const gfx_api::RenderPassContext& passCtx, BlurAxis axis)
-{
-	ASSERT(passCtx.readCount() == 2, "SSAO blur: occlusion + depth");
-	if (passCtx.getRead(0) == nullptr || passCtx.getRead(1) == nullptr)
-	{
-		return;
-	}
-	// Taps are in pass texCoord space (0-1 over the used write viewport).
-	const auto used = passCtx.writeViewportSize().value_or(std::pair<uint32_t, uint32_t>{1, 1});
-	const float usedW = static_cast<float>(std::max(used.first, 1u));
-	const float usedH = static_cast<float>(std::max(used.second, 1u));
-	const glm::vec2 blurDirection = (axis == BlurAxis::Horizontal)
-		? glm::vec2(1.0f / usedW, 0.0f)
-		: glm::vec2(0.0f, 1.0f / usedH);
-	drawSSAOBlur(passCtx, passCtx.getRead(0), passCtx.getRead(1), blurDirection);
-}
-
 } // namespace
 
 void init()
@@ -279,26 +240,21 @@ void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 
 void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 1, "SSAO downsample: 0 generate AO");
-	gfx_api::abstract_texture* ao = passCtx.getRead(0);
-	if (ao == nullptr)
-	{
-		return;
-	}
-
-	gfx_api::constant_buffer_type<SHADER_SSAO_DOWNSAMPLE> constants {};
-	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
-	display3d_drawFullscreenTriangle<gfx_api::SSAODownsamplePSO>(constants, ao);
+	post_effect_blur::recordBilinearResample(passCtx, "SSAO downsample");
 }
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
 {
-	recordBlur(passCtx, BlurAxis::Horizontal);
+	post_effect_blur::recordDepthAwareBlur<SHADER_SSAO_BLUR, gfx_api::SSAOBlurPSO>(
+		passCtx, post_effect_blur::Axis::Horizontal, s_tuning.blurDepthSigma,
+		activeSettings().blurTapPairs, "SSAO blur");
 }
 
 void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 {
-	recordBlur(passCtx, BlurAxis::Vertical);
+	post_effect_blur::recordDepthAwareBlur<SHADER_SSAO_BLUR, gfx_api::SSAOBlurPSO>(
+		passCtx, post_effect_blur::Axis::Vertical, s_tuning.blurDepthSigma,
+		activeSettings().blurTapPairs, "SSAO blur");
 }
 
 void recordCompose(const gfx_api::RenderPassContext& passCtx)

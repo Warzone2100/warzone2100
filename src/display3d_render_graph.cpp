@@ -38,6 +38,7 @@
 #include "profiling.h"
 #include "scene_prepass.h"
 #include "ssao.h"
+#include "ssr.h"
 #include "fog_pass.h"
 #include "range_rings.h"
 #include "terrain.h"
@@ -282,6 +283,11 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSAOBlurH, ssao::recordBlurH);
 	table.set(gfx_api::PassId::SSAOBlurV, ssao::recordBlurV);
 	table.set(gfx_api::PassId::SSAOCompose, ssao::recordCompose);
+	table.set(gfx_api::PassId::SSRGenerate, ssr::recordGenerate);
+	table.set(gfx_api::PassId::SSRDownsample, ssr::recordDownsample);
+	table.set(gfx_api::PassId::SSRBlurH, ssr::recordBlurH);
+	table.set(gfx_api::PassId::SSRBlurV, ssr::recordBlurV);
+	table.set(gfx_api::PassId::SSRCompose, ssr::recordCompose);
 	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
 	table.set(gfx_api::PassId::RangeRingSdfSensor, range_rings::recordSdfSensor);
 	table.set(gfx_api::PassId::RangeRingSdfWeapon, range_rings::recordSdfWeapon);

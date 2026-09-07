@@ -45,8 +45,8 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	SurfaceStorageKind storageKind,
 	SurfaceLifetimePolicy lifetimePolicy,
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count,
-	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None,
-	ScenePostEffectId enableEffect = ScenePostEffectId::Count)
+	BlurResolutionStage blurResolutionStage = BlurResolutionStage::None,
+	ScenePostEffectId sceneEffect = ScenePostEffectId::Count)
 {
 	PipelineSurfaceCatalogEntry entry;
 	entry.usage = usage;
@@ -60,8 +60,8 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	entry.storageKind = storageKind;
 	entry.lifetimePolicy = lifetimePolicy;
 	entry.formatCompanion = formatCompanion;
-	entry.extentDivisorSource = extentDivisorSource;
-	entry.enableEffect = enableEffect;
+	entry.blurResolutionStage = blurResolutionStage;
+	entry.sceneEffect = sceneEffect;
 	return entry;
 }
 
@@ -189,7 +189,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::SsaoGenerate,
+		BlurResolutionStage::Generate,
 		ScenePostEffectId::Ssao),
 	// SSAOBlurH - horizontal-blur ping-pong at blur resolution
 	makeCatalogEntry(
@@ -204,7 +204,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::SsaoBlur,
+		BlurResolutionStage::Blur,
 		ScenePostEffectId::Ssao),
 	// SSAOBlurred - blur-res dest when blur is coarser than generate
 	makeCatalogEntry(
@@ -214,12 +214,13 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceFormatClass::SingleChannelR8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
-		SurfaceEnablePolicy::SsaoSeparateBlurBuffers,
+		SurfaceEnablePolicy::SeparateBlurBuffers,
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::SsaoBlur),
+		BlurResolutionStage::Blur,
+		ScenePostEffectId::Ssao),
 	// SSAOComposedColor - lit scene with AO applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -233,8 +234,68 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::None,
+		BlurResolutionStage::None,
 		ScenePostEffectId::Ssao),
+	// SsrRaw - generate output / final blurred SSR when generate and blur share a size
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::ScenePostEffect,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::Generate,
+		ScenePostEffectId::Ssr),
+	// SsrBlurH - horizontal-blur ping-pong at blur resolution
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::ScenePostEffect,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::Blur,
+		ScenePostEffectId::Ssr),
+	// SsrBlurred - blur-res destination when blur is coarser than generate
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SeparateBlurBuffers,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::Blur,
+		ScenePostEffectId::Ssr),
+	// SsrComposedColor - lit(+AO) scene with SSR applied
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchScene,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::ScenePostEffect,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::None,
+		ScenePostEffectId::Ssr),
 	// FogColor - lit(+AO) scene with distance fog applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -248,7 +309,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::None,
+		BlurResolutionStage::None,
 		ScenePostEffectId::Fog),
 	// RangeRingSdf - packed per-type union field (RGB)
 	makeCatalogEntry(
@@ -263,7 +324,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::None,
+		BlurResolutionStage::None,
 		ScenePostEffectId::RangeRings),
 	// RangeRingSdfDepth - cone Z-test scratch (not sampled)
 	makeCatalogEntry(
@@ -278,7 +339,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::DepthStencilAttachment,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::None,
+		BlurResolutionStage::None,
 		ScenePostEffectId::RangeRings),
 	// RangeRingColor - lit scene with range-ring overlay
 	makeCatalogEntry(
@@ -293,7 +354,7 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
-		SurfaceExtentDivisorSource::None,
+		BlurResolutionStage::None,
 		ScenePostEffectId::RangeRings),
 	// ShadowMap
 	makeCatalogEntry(
@@ -405,15 +466,24 @@ void validatePipelineSurfaceCatalog()
 				"MatchCompanion companion index must precede dependent (row %zu)", i);
 		}
 
-		if (cat.enablePolicy == SurfaceEnablePolicy::ScenePostEffect)
+		const bool effectOwned = cat.enablePolicy == SurfaceEnablePolicy::ScenePostEffect
+			|| cat.enablePolicy == SurfaceEnablePolicy::SeparateBlurBuffers
+			|| cat.blurResolutionStage != BlurResolutionStage::None;
+		if (effectOwned)
 		{
-			ASSERT(cat.enableEffect != ScenePostEffectId::Count,
-				"ScenePostEffect catalog row %zu requires enableEffect", i);
+			ASSERT(cat.sceneEffect != ScenePostEffectId::Count,
+				"Effect-owned catalog row %zu requires sceneEffect", i);
 		}
 		else
 		{
-			ASSERT(cat.enableEffect == ScenePostEffectId::Count,
-				"enableEffect is only valid for ScenePostEffect (row %zu)", i);
+			ASSERT(cat.sceneEffect == ScenePostEffectId::Count,
+				"sceneEffect is only valid for effect-owned rows (row %zu)", i);
+		}
+		if (cat.blurResolutionStage != BlurResolutionStage::None
+			|| cat.enablePolicy == SurfaceEnablePolicy::SeparateBlurBuffers)
+		{
+			ASSERT(cat.sceneEffect == ScenePostEffectId::Ssao || cat.sceneEffect == ScenePostEffectId::Ssr,
+				"Blur catalog row %zu requires an SSAO/SSR owner", i);
 		}
 	}
 	ASSERT(persistentCount == 1, "Expected exactly one Persistent catalog surface, got %zu", persistentCount);
@@ -451,11 +521,10 @@ bool evalEnablePolicy(const PipelineSurfaceCatalogEntry& cat, const PipelineSurf
 			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH
 				|| inputs.sceneDynamicResolution);
 	case SurfaceEnablePolicy::ScenePostEffect:
-		return inputs.effects.enabled(cat.enableEffect);
-	case SurfaceEnablePolicy::SsaoSeparateBlurBuffers:
-		return inputs.effects.ssao
-			&& ssaoBlurIsCoarser(inputs.sceneW, inputs.sceneH,
-				inputs.effects.ssaoGenerateDivisor, inputs.effects.ssaoBlurDivisor);
+		return inputs.effects.enabled(cat.sceneEffect);
+	case SurfaceEnablePolicy::SeparateBlurBuffers:
+		return inputs.effects.enabled(cat.sceneEffect)
+			&& blurIsCoarser(inputs.sceneW, inputs.sceneH, inputs.effects.blurResolution(cat.sceneEffect));
 	case SurfaceEnablePolicy::ScenePrepassActive:
 		return inputs.prepassNeeds != PrepassNeed::None;
 	case SurfaceEnablePolicy::ScenePrepassNormalsActive:
@@ -538,13 +607,12 @@ void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurface
 	case SurfaceExtentPolicy::MatchSceneDivided:
 	{
 		uint32_t divisor = 1;
-		if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoGenerate)
+		if (cat.blurResolutionStage != BlurResolutionStage::None)
 		{
-			divisor = inputs.effects.ssaoGenerateDivisor;
-		}
-		else if (cat.extentDivisorSource == SurfaceExtentDivisorSource::SsaoBlur)
-		{
-			divisor = inputs.effects.ssaoBlurDivisor;
+			const BlurResolution& resolution = inputs.effects.blurResolution(cat.sceneEffect);
+			divisor = cat.blurResolutionStage == BlurResolutionStage::Generate
+				? resolution.generateDivisor
+				: resolution.blurDivisor;
 		}
 		width = divideSurfaceExtent(inputs.sceneW, divisor);
 		height = divideSurfaceExtent(inputs.sceneH, divisor);

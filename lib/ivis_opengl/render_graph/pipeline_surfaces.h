@@ -25,7 +25,7 @@
  *
  * Adding a PipelineSurfaceId:
  * 1. Append enum value (before Count) and catalog row (policies + lifetime).
- *    Post-effect rows use EnablePolicy::ScenePostEffect and `enableEffect`.
+ *    Post-effect rows use EnablePolicy::ScenePostEffect and `sceneEffect`.
  * 2. Implement create/destroy for storageKind in VK and GL PipelineSurfaceAllocator.
  * 3. Wire blueprint attachments / topology if the surface is graph-visible.
  * 4. beginPass attachment binding if new cascade/view rules are needed.
@@ -56,22 +56,35 @@ namespace gfx_api
 
 struct abstract_texture;
 
-/// Independent SSAO/fog/range-ring catalog requests.
+struct BlurResolution
+{
+	uint32_t generateDivisor = 1;
+	uint32_t blurDivisor = 1;
+
+	bool operator==(const BlurResolution& other) const
+	{
+		return generateDivisor == other.generateDivisor && blurDivisor == other.blurDivisor;
+	}
+};
+
+/// Independent SSAO/SSR/fog/range-ring catalog requests.
 /// When any effect is enabled the scene prepass provides depth for the separated forward transparents, plus effect-specific capabilities via `prepassNeeds(cfg)`.
 /// With all effects off the transparents draw fused in ScenePass and no prepass runs.
 struct SceneEffectSurfaces
 {
 	bool ssao = false;
-	uint32_t ssaoGenerateDivisor = 1;
-	uint32_t ssaoBlurDivisor = 1;
+	BlurResolution ssaoResolution;
+	bool ssr = false;
+	BlurResolution ssrResolution;
 	bool fog = false;
 	bool rangeRings = false;
 
 	bool operator==(const SceneEffectSurfaces& other) const
 	{
 		return ssao == other.ssao
-			&& ssaoGenerateDivisor == other.ssaoGenerateDivisor
-			&& ssaoBlurDivisor == other.ssaoBlurDivisor
+			&& ssaoResolution == other.ssaoResolution
+			&& ssr == other.ssr
+			&& ssrResolution == other.ssrResolution
 			&& fog == other.fog
 			&& rangeRings == other.rangeRings;
 	}
@@ -82,6 +95,8 @@ struct SceneEffectSurfaces
 		{
 		case ScenePostEffectId::Ssao:
 			return ssao;
+		case ScenePostEffectId::Ssr:
+			return ssr;
 		case ScenePostEffectId::Fog:
 			return fog;
 		case ScenePostEffectId::RangeRings:
@@ -90,6 +105,15 @@ struct SceneEffectSurfaces
 			break;
 		}
 		return false;
+	}
+
+	const BlurResolution& blurResolution(ScenePostEffectId id) const
+	{
+		if (id == ScenePostEffectId::Ssao)
+		{
+			return ssaoResolution;
+		}
+		return ssrResolution; // Callers use this only for blur-owning catalog rows.
 	}
 };
 
@@ -113,7 +137,7 @@ enum class PipelineSurfaceId : uint8_t
 	/// Scene-sized SMAA neighborhood blend output, present only when a scaling
 	/// pass consumes it (otherwise the blend writes the swapchain directly).
 	SmaaColor,
-	/// Scene-sized sampleable depth for SSAO and deferred fog.
+	/// Scene-sized sampleable depth for SSAO, deferred fog, and SSR.
 	ScenePrepassDepth,
 	/// Scene-sized view-space normals (RGB) + SSAO application weight (A).
 	ScenePrepassNormals,
@@ -125,6 +149,14 @@ enum class PipelineSurfaceId : uint8_t
 	SSAOBlurred,
 	/// Scene-sized lit scene with AO applied; feeds fog / SMAA / blit / FSR.
 	SSAOComposedColor,
+	/// SSR generate output / final blurred SSR when generate and blur share a size.
+	SsrRaw,
+	/// Horizontal SSR blur intermediate.
+	SsrBlurH,
+	/// Blur-resolution dest when blur is coarser than generate (downsample + blurV).
+	SsrBlurred,
+	/// Scene-sized lit(+AO) scene with SSR applied; feeds fog / SMAA / blit / FSR.
+	SsrComposedColor,
 	/// Scene-sized lit(+AO) scene with distance fog applied; feeds SMAA/blit/FSR.
 	FogColor,
 	/// Packed per-type range-ring union field (RGB = sensor / weapon / min-range).
@@ -165,17 +197,17 @@ enum class SurfaceExtentPolicy : uint8_t
 {
 	MatchDrawable,
 	MatchScene,
-	/// sceneW/H divided by `PipelineSurfaceCatalogEntry::extentDivisorSource`.
+	/// sceneW/H divided by the owner effect's selected blur-resolution stage.
 	MatchSceneDivided,
 	ShadowMapSquare,
 };
 
-/// Which sync-input divisor `MatchSceneDivided` uses.
-enum class SurfaceExtentDivisorSource : uint8_t
+/// Which stage of a scene effect's blur resolution `MatchSceneDivided` uses.
+enum class BlurResolutionStage : uint8_t
 {
 	None,
-	SsaoGenerate,
-	SsaoBlur,
+	Generate,
+	Blur,
 };
 
 inline uint32_t divideSurfaceExtent(uint32_t size, uint32_t divisor)
@@ -193,10 +225,10 @@ inline uint32_t divideSurfaceExtent(uint32_t size, uint32_t divisor)
 
 /// True when the resolved blur RT is strictly smaller than the generate RT.
 /// Compare extents, not raw divisors: tiny scenes can clamp both to 2.
-inline bool ssaoBlurIsCoarser(uint32_t sceneW, uint32_t sceneH, uint32_t generateDivisor, uint32_t blurDivisor)
+inline bool blurIsCoarser(uint32_t sceneW, uint32_t sceneH, const BlurResolution& resolution)
 {
-	return divideSurfaceExtent(sceneW, generateDivisor) > divideSurfaceExtent(sceneW, blurDivisor)
-		|| divideSurfaceExtent(sceneH, generateDivisor) > divideSurfaceExtent(sceneH, blurDivisor);
+	return divideSurfaceExtent(sceneW, resolution.generateDivisor) > divideSurfaceExtent(sceneW, resolution.blurDivisor)
+		|| divideSurfaceExtent(sceneH, resolution.generateDivisor) > divideSurfaceExtent(sceneH, resolution.blurDivisor);
 }
 
 /// How resolve derives MSAA sample count from sync inputs.
@@ -267,10 +299,10 @@ enum class SurfaceEnablePolicy : uint8_t
 	SmaaActive,
 	/// SMAA enabled and its blend output feeds a scaling pass instead of the swapchain.
 	SmaaIntermediateActive,
-	/// Catalog row owned by a `ScenePostEffectId` (`enableEffect`).
+	/// Catalog row owned by a `ScenePostEffectId` (`sceneEffect`).
 	ScenePostEffect,
-	/// Extra blur-resolution buffer when blur is coarser than generate.
-	SsaoSeparateBlurBuffers,
+	/// Extra effect-owned buffer when blur resolves smaller than generate.
+	SeparateBlurBuffers,
 	/// Scene prepass depth/normals when `prepassNeeds` is not None.
 	ScenePrepassActive,
 	/// Scene prepass normals only when `prepassNeeds` includes Normals (example: SSAO).
@@ -317,9 +349,9 @@ struct PipelineSurfaceCatalogEntry
 	SurfaceStorageKind storageKind = SurfaceStorageKind::None;
 	SurfaceLifetimePolicy lifetimePolicy = SurfaceLifetimePolicy::SwapchainBound;
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count; // MatchCompanion only
-	SurfaceExtentDivisorSource extentDivisorSource = SurfaceExtentDivisorSource::None;
-	/// Used when `enablePolicy == ScenePostEffect`.
-	ScenePostEffectId enableEffect = ScenePostEffectId::Count;
+	BlurResolutionStage blurResolutionStage = BlurResolutionStage::None;
+	/// Owner used by ScenePostEffect/SeparateBlurBuffers and divided blur extents.
+	ScenePostEffectId sceneEffect = ScenePostEffectId::Count;
 };
 
 /// Runtime identity produced by resolve; consumed by ensure / matches.
