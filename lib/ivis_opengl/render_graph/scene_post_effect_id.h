@@ -36,6 +36,7 @@ namespace gfx_api
 enum class ScenePostEffectId : uint8_t
 {
 	Ssao,
+	Ssr,
 	Fog,
 	RangeRings,
 	Count

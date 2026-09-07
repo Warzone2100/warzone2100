@@ -91,7 +91,7 @@ private:
 };
 
 /// One screen-space effect after opaque ScenePass and before forward transparents.
-/// Table order of `applyPass` is the apply chain (SSAO compose -> fog -> rings).
+/// Table order of `applyPass` is the apply chain (SSAO -> SSR -> fog -> rings).
 /// FogApply intentionally belongs here: its sampled prepass depth identifies the
 /// visible opaque surface only. Transparent layers use their own fragment distance
 /// and must apply fog before blending; a later fullscreen pass cannot recover them.
@@ -109,7 +109,7 @@ struct ScenePostEffectDesc
 
 	/// Optional subgraph after opaque ScenePass and before this effect's apply pass.
 	/// Writes intermediate surfaces the apply pass samples; does not write scene color.
-	void (*emitPreparePasses)(BlueprintBuilder&, const RenderTopologySnapshot&) = nullptr;
+	void (*emitPreparePasses)(BlueprintBuilder&, const RenderTopologySnapshot&, PassId incomingColor) = nullptr;
 
 	/// Fullscreen pass that applies the effect to incoming scene color. `PassId::Count` = none.
 	PassId applyPass = PassId::Count;

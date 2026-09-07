@@ -69,6 +69,8 @@ struct RenderFeatures
 		SmaaIntermediate   = 1u << 6,
 		/// Downsample generate AO into the blur target when blur is coarser.
 		SSAODownsample     = 1u << 7,
+		/// Downsample generated SSR into the blur target when blur is coarser.
+		SSRDownsample      = 1u << 8,
 	};
 };
 
@@ -77,7 +79,7 @@ struct RenderFeatures
 ///
 /// Collected from `IRenderTopologyQuery` via `render_topology::snapshot`. Split into
 /// `topologyHash` (graph shape / MSAA / features) and `materializeHash` (adds allocated
-/// sizes, SSAO divisors, and `backendEpoch`) so `CachedRenderGraph` can rebuild blueprint vs rematerialize passes separately. Used extents / dyn-res fraction are not hashed.
+/// sizes, effect divisors, and `backendEpoch`) so `CachedRenderGraph` can rebuild blueprint vs rematerialize passes separately. Used extents / dyn-res fraction are not hashed.
 /// </summary>
 struct RenderTopologySnapshot
 {
@@ -97,7 +99,7 @@ struct RenderTopologySnapshot
 	uint32_t sceneW = 0;
 	uint32_t sceneH = 0;
 	uint32_t shadowMapSize = 0;
-	/// Allocated scene-effect enable flags and SSAO divisors. Enable flags are part of
+	/// Allocated scene-effect enable flags and resolution divisors. Enable flags are part of
 	/// `topologyHash`; divisors are part of `materializeHash` only.
 	SceneEffectSurfaces sceneEffects;
 
@@ -118,9 +120,9 @@ struct RenderTopologySnapshot
 			&& sceneEffects == other.sceneEffects;
 	}
 
-	/// Hash of screen kind, features (including SSAO downsample), cascade count, MSAA flags, scene blit load op, and effect enables.
+	/// Hash of screen kind, features (including effect downsample passes), cascade count, MSAA flags, scene blit load op, and effect enables.
 	uint64_t topologyHash() const;
-	/// `topologyHash` plus allocated dimensions, `backendEpoch`, `shadowMapSize`, and SSAO divisors.
+	/// `topologyHash` plus allocated dimensions, `backendEpoch`, `shadowMapSize`, and effect divisors.
 	uint64_t materializeHash() const;
 };
 

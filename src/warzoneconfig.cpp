@@ -124,6 +124,7 @@ struct WARZONE_GLOBALS
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
 	SMAA_MODE smaaMode = SMAA_MODE::OFF;
 	SSAO_MODE ssaoMode = SSAO_MODE::OFF; // screen-space ambient occlusion (default off)
+	SSR_MODE ssrMode = SSR_MODE::OFF; // screen-space reflections (default off)
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -978,6 +979,21 @@ void war_setSsaoMode(SSAO_MODE mode)
 bool war_getSSAO()
 {
 	return warGlobs.ssaoMode != SSAO_MODE::OFF;
+}
+
+SSR_MODE war_getSsrMode()
+{
+	return warGlobs.ssrMode;
+}
+
+void war_setSsrMode(SSR_MODE mode)
+{
+	warGlobs.ssrMode = mode;
+}
+
+bool war_getSSR()
+{
+	return warGlobs.ssrMode != SSR_MODE::OFF;
 }
 
 bool war_getGroupsMenuEnabled()
