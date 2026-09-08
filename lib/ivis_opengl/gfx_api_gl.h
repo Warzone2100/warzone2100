@@ -332,7 +332,7 @@ private:
 
 	// Point each named block at the binding index matching its slot.
 	// Returns false if a block exceeds what the driver accepts.
-	bool setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName);
+	bool setupUniformBlocks(gl_context& ctx, const std::vector<const char*>& blockNames, const std::string& programName);
 
 	// Replace the contents of a uniform block slot.
 	void uploadUniformBlock(size_t slot, const void* buffer, size_t size);
@@ -342,7 +342,6 @@ private:
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
 					   const char * fragment_header, const std::string& fragmentPath,
-					   const std::vector<std::string> &uniformNames,
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
 					   const gfx_api::lighting_constants& shadowConstants);
 

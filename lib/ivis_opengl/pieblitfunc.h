@@ -31,7 +31,7 @@
 
 /***************************************************************************/
 
-#include "gfx_api.h"
+#include "gfx_pipelines.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/vector.h"

@@ -37,7 +37,7 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_pipelines.h"
 #include "sequence.h"
 #include "video_decoder.h"
 #include "lib/framework/math_ext.h"
