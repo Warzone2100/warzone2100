@@ -58,6 +58,15 @@ const int LOOKAHEAD = CORRIDOR_LOOKAHEAD;
 // still at the entrance rather than through it.
 const int MOUTH_MARGIN = 2;
 
+// The centerline index to read a profile (width, extents) at for idx, pulled-in from either
+// mouth by MOUTH_MARGIN, where the measured width expands into the open ground the mouth faces.
+// A corridor too short for an interior that deep shrinks the margin to what its length allows.
+int profileReadIdx(int idx, int last)
+{
+	const int margin = std::min(MOUTH_MARGIN, last / 2);
+	return std::clamp(idx, margin, last - margin);
+}
+
 // Which way a droid relates to a corridor this tick.
 enum Relation
 {
@@ -437,7 +446,7 @@ int routeDir(const DROID *psDroid, const Corridor &c, bool *strongOut = nullptr,
 	for (int i = start; i < stop; ++i)
 	{
 		const int idx = static_cast<int>(nearestCenterlineIdx(c, path[i]));
-		const int wIdx = std::clamp(idx, std::min(MOUTH_MARGIN, last), std::max(last - MOUTH_MARGIN, 0));
+		const int wIdx = profileReadIdx(idx, last);
 		// Capped where the profile balloons, ex. a bowl opening onto open
 		// ground mid-line. There the footprint overlaps other passages and
 		// their legs of the route would read as this corridor's evidence,
@@ -658,7 +667,7 @@ bool routeEntersMouth(const DROID *psDroid, const Corridor &c, int dir)
 			const Vector2i p = c.centerline[idx];
 			// The passable width here, read a couple in from the end where the
 			// measured width balloons into open space.
-			const int wIdx = std::clamp(idx, std::min(MOUTH_MARGIN, last), std::max(last - MOUTH_MARGIN, 0));
+			const int wIdx = profileReadIdx(idx, last);
 			const int32_t nearRadius = c.widthProfile[wIdx] / 2 + TILE_UNITS / 2;
 			const Vector2i toP = p - prev;
 			int64_t distSq;
@@ -1488,8 +1497,7 @@ bool corridorLaneTarget(const GameWorld &world, const DROID *psDroid, Vector2i &
 	// Read the room from a point a couple in from either mouth rather than
 	// right at it, or a droid at the entrance is flung wide toward that
 	// balloon and onto the corner.
-	const int loRead = std::min(MOUTH_MARGIN, last);
-	const int extIdx = std::clamp(static_cast<int>(q.nearest), loRead, std::max(loRead, last - MOUTH_MARGIN));
+	const int extIdx = profileReadIdx(static_cast<int>(q.nearest), last);
 	const int32_t rightExt = c.rightExtent[extIdx];
 	const int32_t leftExt = c.leftExtent[extIdx];
 
