@@ -1806,7 +1806,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Nexus saldırgan yazılımını devre dışı bırakmak için Nexus karargahını imha et"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr "Uyarı: Karargah VTOL saldırılarına karşı korumalıdır"
+msgstr "Uyarı: Karargah VTOL saldırılarına karşı korunmalıdır"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Direniş devrelerini araştır ve Nexus saldırısına karşı diren"
@@ -1824,7 +1824,7 @@ msgid "Return to LZ"
 msgstr "İniş Bölgesine Geri Dön"
 
 msgid "Insane difficulty hint:"
-msgstr "İnsafsız zorluk ipucu:"
+msgstr "İnanılmaz zorluk seviyesi ipucu:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Kendini Kolektif'ten korumak için harita boyunca güçlü bir üssü güçlendir"
@@ -2961,7 +2961,7 @@ msgid "The game may have already started, or the host may have disbanded the gam
 msgstr "Oyun zaten başlamış olabilir veya kurucu oyun lobisini dağıtmış olabilir."
 
 msgid "Error hosting game in lobby server"
-msgstr "Oyun sunucusunda oyun kurulamadı"
+msgstr "Lobi sunucusunda oyun barındırma hatası"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
@@ -3838,7 +3838,7 @@ msgid "Cannon accuracy +10%"
 msgstr "Topçu hedef tutturması +%10"
 
 msgid "Cannon Accuracy"
-msgstr "Topçu Hedef Tutarlılığı"
+msgstr "Topçu Hedef İsabeti"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Topçu Otomatik Yükleme Sistemi Kdm2"
@@ -4055,7 +4055,7 @@ msgid "Crane2"
 msgstr "Vinç2"
 
 msgid "Cyborg Alloys"
-msgstr "SayborgAlaşımları"
+msgstr "Sayborg Alaşımları"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
 msgstr "Sayborg Kompozit Alaşımları Buff AI Kdm2"
@@ -4148,7 +4148,7 @@ msgid "Cyborg Thermal"
 msgstr "Sayborg Termal"
 
 msgid "Cyborg Thermite"
-msgstr "Sayborg Thermit"
+msgstr "Sayborg Termit"
 
 msgid "Cyborg Transport Available"
 msgstr "Sayborg Taşıma Gemisi Kullanılabilir"
@@ -4988,7 +4988,7 @@ msgid "Howitzer"
 msgstr "Obüs"
 
 msgid "Howitzers Accuracy"
-msgstr "Obüs Hedef Tutarlılığı"
+msgstr "Obüs Hedef İsabeti"
 
 msgid "Howitzers Damage"
 msgstr "Obüs Hasarı"
@@ -5325,7 +5325,7 @@ msgid "Laser accuracy +10%"
 msgstr "Lazer hedef tutturması +%10"
 
 msgid "Laser Accuracy"
-msgstr "Lazer Hedef Tutarlılığı"
+msgstr "Lazer Hedef İsabeti"
 
 #, no-c-format
 msgid "Laser damage +25%"
@@ -5582,7 +5582,7 @@ msgid "Missile accuracy +10%"
 msgstr "Füze hedef tutturması +%10"
 
 msgid "Missile Accuracy"
-msgstr "Füze Hedef Tutarlılığı"
+msgstr "Füze Hedef İsabeti"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "Füzeler hedefi izler ve ona yönelir"
@@ -5624,7 +5624,7 @@ msgid "Mortar accuracy +10%"
 msgstr "Havan topu hedef tutturması +%10"
 
 msgid "Mortar Accuracy"
-msgstr "Havan Hedef Tutarlılığı"
+msgstr "Havan Hedef İsabeti"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Havan Topu Otomatik Yükleme Sistemi Kdm2"
@@ -6081,7 +6081,7 @@ msgid "Radar Detector"
 msgstr "Radar Tespit Edici"
 
 msgid "Rail Accuracy"
-msgstr "Demir Topu Hedef Tutarlılığı"
+msgstr "Demir Topu Hedef İsabeti"
 
 msgid "Rail Damage"
 msgstr "Demir Topu Hasarı"
@@ -6308,7 +6308,7 @@ msgid "Rocket accuracy +10%"
 msgstr "Roket hedef tutturması +%10"
 
 msgid "Rocket Accuracy"
-msgstr "Roket Hedef Tutarlılığı"
+msgstr "Roket Hedef İsabeti"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Roket Topçusu; bir algılayıcıya bağlanabilir"
@@ -6730,7 +6730,7 @@ msgid "Tank Killer"
 msgstr "Tank Katili"
 
 msgid "Tank Thermal"
-msgstr "Tank Isıl"
+msgstr "Tank Termal"
 
 msgid "Tank Traps"
 msgstr "Tank Tuzakları"
@@ -9684,10 +9684,10 @@ msgid "Select Player Name"
 msgstr "Oyuncu İsmi Seç"
 
 msgid "Player Name changes are not allowed when you are muted"
-msgstr "Sessize alındığınızda oyuncu adınızı değiştirmenize izin verilmez."
+msgstr "Sessize alındığınızda oyuncu adınızı değiştirmenize izin verilmez"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr "Oyuncu adınızı değiştirmenize kurucu tarafından izin verilmez."
+msgstr "Oyuncu adınızı değiştirmenize kurucu tarafından izin verilmez"
 
 msgid "Blind Game:"
 msgstr "Kör Oyun:"
@@ -9829,7 +9829,7 @@ msgstr "%s adlı oyuncu Gözlemci oldu"
 
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr "%s, Oyunculara taşınamadı - Kullanılabilir bir yuva yok."
+msgstr "%s, Oyunculara taşınamadı - Kullanılabilir bir yuva yok"
 
 msgid "Spectator would like to become a Player"
 msgstr "Gözlemci, oyuncu olmak istiyor"
@@ -9939,19 +9939,19 @@ msgid "Disconnected from host:"
 msgstr "Kurucudan bağlantı kesildi:"
 
 msgid "Unable to handle host redirect"
-msgstr "Kurucu yönlendirmesini işleyemedi."
+msgstr "Kurucu yönlendirmesini işleyemedi"
 
 msgid "Unable to process redirect"
-msgstr "Yönlendirme işlenemedi."
+msgstr "Yönlendirme işlemi gerçekleştirilemedi"
 
 msgid "Unable to process repeated or invalid redirects"
-msgstr "Tekrarlanan veya geçersiz yönlendirmeler işlenemedi."
+msgstr "Tekrarlanan veya geçersiz yönlendirmeler işlenemedi"
 
 msgid "Host supplied invalid options"
 msgstr "Kurucu, geçersiz seçenekler sundu"
 
 msgid "Host supplied invalid host config"
-msgstr "Kurucu, geçersiz bir sunucu yapılandırması sundu."
+msgstr "Kurucu, geçersiz bir sunucu yapılandırması sundu"
 
 msgid "You have been kicked: "
 msgstr "Atıldınız: "

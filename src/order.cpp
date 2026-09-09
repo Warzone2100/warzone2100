@@ -3590,6 +3590,10 @@ bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORD
 		}
 		break;
 	case DSO_CIRCLE:  // This doesn't even make any sense whatsoever as a secondary order...
+		if (!psDroid->isVtol())
+		{
+			break;
+		}
 		secondaryMask = DSS_CIRCLE_MASK;
 		secondarySet = (State & DSS_CIRCLE_SET) ? DSS_CIRCLE_SET : 0;
 		break;

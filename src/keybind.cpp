@@ -2194,6 +2194,10 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 		// Only set the state if it's not a transporter.
 		if (psDroid->selected && !psDroid->isTransporter())
 		{
+			if (sec == DSO_CIRCLE && !psDroid->isVtol())
+			{
+				continue;
+			}
 			secondarySetState(psDroid, gameWorld.objects, sec, state);
 		}
 	}
