@@ -50,6 +50,16 @@ struct LANDING_ZONE
 	uint8_t y2;
 };
 
+// how the mission timer behaves; values are exposed to scripts as the
+// TIMER_* constants and stored in savegames - do not renumber
+enum MISSION_TIMER_MODE
+{
+	TIMER_COUNTDOWN = 0,	// counts down from mission.time and triggers a timeout when it expires (default)
+	TIMER_COUNTUP = 1,		// counts up (elapsed time since startTime) and never expires
+	TIMER_PAUSE = 2,		// frozen at mission.time and never expires
+	TIMER_NONE = 3,			// no mission timer; internal and savegames only, not settable from scripts
+};
+
 //storage structure for values that need to be kept between missions
 struct MISSION
 {
@@ -59,11 +69,11 @@ struct MISSION
 	int32_t                         asCurrentPower[MAX_PLAYERS];
 
 	UDWORD				startTime;			//time the mission started
-	SDWORD				time;				//how long the mission can last
-	// < 0 = no limit
+	SDWORD				time;				//countdown limit, or the frozen time for TIMER_PAUSE
+	// unused for TIMER_COUNTUP/TIMER_NONE
+	MISSION_TIMER_MODE	timerMode;			//how the mission timer behaves (countdown, count-up, ...)
 	SDWORD				ETA;				//time taken for reinforcements to arrive
 	// < 0 = none allowed
-	UDWORD				cheatTime;			//time the cheating started (mission time-wise!)
 
 	UWORD               homeLZ_X;           //selectedPlayer's LZ x and y
 	UWORD               homeLZ_Y;

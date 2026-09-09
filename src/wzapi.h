@@ -1092,7 +1092,7 @@ namespace wzapi
 	bool setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player));
 	bool applyLimitSet(WZAPI_NO_PARAMS);
 	bool emitSound(WZAPI_PARAMS(std::string sound, int x, int y));
-	no_return_value setMissionTime(WZAPI_PARAMS(int _time));
+	no_return_value setMissionTime(WZAPI_PARAMS(int _time, optional<int> _mode));
 	int getMissionTime(WZAPI_NO_PARAMS);
 	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch));
 	no_return_value completeResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player, optional<bool> _forceResearch));

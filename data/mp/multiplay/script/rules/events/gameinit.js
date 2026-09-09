@@ -56,4 +56,9 @@ function eventGameInit()
 		setTimer("weatherCycle", 45000);
 	}
 	setTimer("autoSave", 10*60*1000);
+
+	if (challenge)
+	{
+		setMissionTime(0, TIMER_COUNTUP);
+	}
 }

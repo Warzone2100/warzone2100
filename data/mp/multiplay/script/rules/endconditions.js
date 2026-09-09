@@ -16,6 +16,7 @@ const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which 
 const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
 
 var ENABLE_activity;
+var activityTimerSet = false;
 var teams; // array class instance Team
 var playersTeam; // array class instancePlayer
 
@@ -388,7 +389,7 @@ function activityAlert()
 	// avoid using selectedPlayer to access playersTeam array if it's a spectator (as it may be beyond the bounds of playersTeam.length for spectator-only slots)
 	if (isSpectator(-1) || (playersTeam[selectedPlayer].state !== STATE_contender))
 	{
-		setMissionTime(-1);
+		clearActivityTimer();
 		removeTimer("activityAlert");
 		return;
 	}
@@ -403,11 +404,22 @@ function activityAlert()
 		if (getMissionTime() <= -1)
 		{
 			setMissionTime((playersTeam[selectedPlayer].lastActivity + idleTime - gameTime) / 1000);
+			activityTimerSet = true;
 		}
 	}
 	if (playersTeam[selectedPlayer].lastActivity + idleTime / 2 > gameTime)
 	{
-		setMissionTime(-1); // remove timer widget
+		clearActivityTimer();
+	}
+}
+
+function clearActivityTimer()
+{
+	// Try to avoid accidentally removing timers set by mods
+	if (activityTimerSet)
+	{
+		setMissionTime(-1);
+		activityTimerSet = false;
 	}
 }
 function conditions_eventDroidBuilt(droid)

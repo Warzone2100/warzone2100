@@ -32,6 +32,7 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/widget/button.h"
@@ -42,7 +43,6 @@
 #include "intdisplay.h"
 #include "loadsave.h"
 #include "multiplay.h"
-#include "mission.h"
 #include "lib/framework/wztime.h"
 #include "titleui/titleui.h"
 #include "titleui/multiplayer.h"
@@ -101,9 +101,6 @@ const char* currentChallengeName()
 void updateChallenge(bool gameWon)
 {
 	std::string fullName = challengeFileName.toStdString();
-	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
-	bool victory = false;
-	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
 	ASSERT_OR_RETURN(, fullName.length() > 0, "Empty challengeFileName");
 
 	std::string fName;
@@ -127,22 +124,32 @@ void updateChallenge(bool gameWon)
 	{
 		sPath.truncate(sPath.length() - 5);
 	}
-	scores.beginGroup(sPath);
-	victory = scores.value("victory", false).toBool();
-	seconds = scores.value("seconds", 0).toInt();
 
-	// Update score if we have a victory and best recorded was a loss,
-	// or both were losses but time is higher, or both were victories
-	// but time is lower.
-	if ((!victory && gameWon)
-	    || (!gameWon && !victory && newtime > seconds)
-	    || (gameWon && victory && newtime < seconds))
+	// Open the file containing the scores
+	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
+
+	// Read the old score
+	const nlohmann::json oldScore = scores.json(sPath, nlohmann::json::object());
+	const bool oldVictory = oldScore.value("victory", false);
+	const int oldSeconds = oldScore.value("seconds", 0);
+
+	// Calculate new time
+	const int newSeconds = gameTime / GAME_TICKS_PER_SEC;
+
+	// Update score if the new score is "better":
+	// - Old score was a loss; New score is a victory
+	// - Old score was a loss; New score is a loss, with longer survival time
+	// - Old score was a victory; New score is a victory, with quicker time
+	if ((!oldVictory && gameWon)
+	    || (!oldVictory && !gameWon && newSeconds > oldSeconds)
+	    || (oldVictory && gameWon && newSeconds < oldSeconds))
 	{
-		scores.setValue("seconds", newtime);
+		scores.beginGroup(sPath);
+		scores.setValue("seconds", newSeconds);
 		scores.setValue("victory", gameWon);
 		scores.setValue("player", NetPlay.players[selectedPlayer].name);
+		scores.endGroup();
 	}
-	scores.endGroup();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
