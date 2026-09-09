@@ -189,6 +189,14 @@ void main()
 	}
 
 	vec3 R = reflect(V, N);
+	// Depth buffer can only answer rays that recede from the camera
+	// (McGuire JCGT 3(4)). Toward-camera R still walks UV: nearer is larger
+	// on screen, so the DDA false-hits the shore. Miss to the skybox.
+	if (dot(R, V) <= 0.0)
+	{
+		writeMiss(ssrWeight, N, V, R);
+		return;
+	}
 	float maxDist = ssrClipRayToNearPlane(origin, R, max(params.x, 1.0));
 	if (maxDist <= MIN_RAY_START_ABS)
 	{
