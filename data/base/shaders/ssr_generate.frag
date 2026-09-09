@@ -163,8 +163,13 @@ void writeMiss(float ssrWeight, vec3 N, vec3 V, vec3 R)
 	// the framebuffer. A miss looks up the same 2D skybox the ScenePass uses.
 	// Keep miss confidence below nearby geometry hits so the blur does not
 	// wash units into the sky-colored ripples.
+	//
+	// Generate V is camera -> surface. ndotv = 1 when looking down. Eye-fade with
+	// (1 - ndotv) so facing misses do not boost sky; compose Schlick still
+	// decides how much of this RGB is mixed over the ScenePass water. Grazing misses
+	// keep the higher miss alpha (still < HIT_CONFIDENCE_MIN).
 	float ndotv = clamp(dot(N, -V), 0.0, 1.0);
-	float confidence = ssrWeight * mix(MISS_CONFIDENCE_MIN, MISS_CONFIDENCE_MAX, ndotv);
+	float confidence = ssrWeight * mix(MISS_CONFIDENCE_MIN, MISS_CONFIDENCE_MAX, 1.0 - ndotv);
 	if (skyboxAvailable < 0.5)
 	{
 		writeColor(vec4(0.0));
