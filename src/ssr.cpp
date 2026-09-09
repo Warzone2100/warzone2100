@@ -111,7 +111,7 @@ struct Tuning
 	/// color. Water was already drawn; this does not change the water shader.
 	/// 1 leaves little of that ScenePass look.
 	float overWaterMix;
-	/// Schlick F0 when looking straight down. 0.1 is above water (~0.02) /
+	/// Schlick F0 when looking straight down. 0.2 is above water (~0.02) /
 	/// dielectric (~0.04) so default-tilt hits read; look-down is still F0,
 	/// not a min floor.
 	float F0;
@@ -124,7 +124,7 @@ constexpr Tuning DEFAULT_TUNING = {
 	.blurDepthSigma = 0.0025f,
 	.intensity = 2.0f,
 	.overWaterMix = 0.8f,
-	.F0 = 0.1f,
+	.F0 = 0.2f,
 };
 
 Tuning s_tuning = DEFAULT_TUNING;
