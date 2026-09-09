@@ -2268,7 +2268,7 @@ namespace gfx_api
 	std::tuple<
 		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
 		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>,
-		texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<2, sampler_type::nearest_clamped, pixel_format_target::texture_2d>,
 		texture_description<3, sampler_type::nearest_clamped, pixel_format_target::texture_2d>
 	>, SHADER_SCENE_COMPOSE_SSR>;
 
