@@ -407,6 +407,12 @@ bool initTemplates()
 		if (psDestTemplate)
 		{
 			psDestTemplate->stored = true; // assimilate it
+			if (psDestTemplate->hidden)
+			{
+				// It was deleted in an earlier match, but the file still has it
+				psDestTemplate->hidden = false;
+				localTemplates.push_back(*psDestTemplate);
+			}
 			continue; // next!
 		}
 		design.enabled = allowDesign;
@@ -497,7 +503,7 @@ bool storeTemplates()
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
 		const DROID_TEMPLATE *psCurr = keyvaluepair.second.get();
-		if (psCurr->stored)
+		if (psCurr->stored && !psCurr->hidden)
 		{
 			ini.currentJsonValue() = saveTemplateCommon(psCurr);
 			ini.nextArrayItem();
@@ -522,6 +528,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, prefab(false)
 	, stored(false)
 	, enabled(false)
+	, hidden(false)
 {
 	std::fill_n(asParts, DROID_MAXCOMP, static_cast<uint8_t>(0));
 	std::fill_n(asWeaps, MAX_WEAPONS, 0);
@@ -832,7 +839,7 @@ void listTemplates()
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
 		DROID_TEMPLATE *t = keyvaluepair.second.get();
-		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
+		debug(LOG_INFO, "template %s : %ld : %s : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed", t->hidden ? "Hidden" : "Listed");
 	}
 }
 

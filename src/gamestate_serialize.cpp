@@ -818,6 +818,7 @@ static nlohmann::ordered_json writeTemplates()
 			jt["enabled"] = psTempl->enabled;
 			jt["stored"] = psTempl->stored;
 			jt["prefab"] = psTempl->prefab;
+			jt["hidden"] = psTempl->hidden;
 			jlist.push_back(std::move(jt));
 			return true;
 		});
@@ -858,6 +859,7 @@ static void readTemplates(const nlohmann::ordered_json &j, uint32_t version)
 			psTempl->enabled = jt.at("enabled").get<bool>();
 			psTempl->stored = jt.at("stored").get<bool>();
 			psTempl->prefab = jt.at("prefab").get<bool>();
+			psTempl->hidden = jt.value("hidden", false);
 			addTemplate(p, std::move(psTempl));
 		}
 	}
