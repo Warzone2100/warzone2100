@@ -317,7 +317,15 @@ void recvStructureInfo(NETQUEUE queue)
 			NETuint32_t(r, pT->asWeaps[i]);
 		}
 		pT->droidType = (DROID_TYPE)droidType;
-		pT = copyTemplate(player, pT);
+		DROID_TEMPLATE *psExisting = (player < MAX_PLAYERS) ? findPlayerTemplateById(player, pT->multiPlayerID) : nullptr;
+		if (psExisting != nullptr && templatesHaveSameComponents(*psExisting, *pT))
+		{
+			pT = psExisting;
+		}
+		else
+		{
+			pT = copyTemplate(player, pT);
+		}
 	}
 	NETend(r);
 
