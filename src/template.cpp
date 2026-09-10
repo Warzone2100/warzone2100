@@ -344,6 +344,22 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 	return designable;
 }
 
+bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &b)
+{
+	return a.droidType == b.droidType
+	       && a.numWeaps == b.numWeaps
+	       && a.asWeaps[0] == b.asWeaps[0]
+	       && a.asWeaps[1] == b.asWeaps[1]
+	       && a.asWeaps[2] == b.asWeaps[2]
+	       && a.asParts[COMP_BODY] == b.asParts[COMP_BODY]
+	       && a.asParts[COMP_PROPULSION] == b.asParts[COMP_PROPULSION]
+	       && a.asParts[COMP_REPAIRUNIT] == b.asParts[COMP_REPAIRUNIT]
+	       && a.asParts[COMP_ECM] == b.asParts[COMP_ECM]
+	       && a.asParts[COMP_SENSOR] == b.asParts[COMP_SENSOR]
+	       && a.asParts[COMP_CONSTRUCT] == b.asParts[COMP_CONSTRUCT]
+	       && a.asParts[COMP_BRAIN] == b.asParts[COMP_BRAIN];
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
@@ -381,25 +397,12 @@ bool initTemplates()
 		DROID_TEMPLATE *psDestTemplate = nullptr;
 		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 		{
-			psDestTemplate = keyvaluepair.second.get();
-			// Check if template is identical to a loaded template
-			if (psDestTemplate->droidType == design.droidType
-			    && psDestTemplate->name.compare(design.name) == 0
-			    && psDestTemplate->numWeaps == design.numWeaps
-			    && psDestTemplate->asWeaps[0] == design.asWeaps[0]
-			    && psDestTemplate->asWeaps[1] == design.asWeaps[1]
-			    && psDestTemplate->asWeaps[2] == design.asWeaps[2]
-			    && psDestTemplate->asParts[COMP_BODY] == design.asParts[COMP_BODY]
-			    && psDestTemplate->asParts[COMP_PROPULSION] == design.asParts[COMP_PROPULSION]
-			    && psDestTemplate->asParts[COMP_REPAIRUNIT] == design.asParts[COMP_REPAIRUNIT]
-			    && psDestTemplate->asParts[COMP_ECM] == design.asParts[COMP_ECM]
-			    && psDestTemplate->asParts[COMP_SENSOR] == design.asParts[COMP_SENSOR]
-			    && psDestTemplate->asParts[COMP_CONSTRUCT] == design.asParts[COMP_CONSTRUCT]
-			    && psDestTemplate->asParts[COMP_BRAIN] == design.asParts[COMP_BRAIN])
+			DROID_TEMPLATE *psCandidate = keyvaluepair.second.get();
+			if (psCandidate->name.compare(design.name) == 0 && templatesHaveSameComponents(*psCandidate, design))
 			{
+				psDestTemplate = psCandidate;
 				break;
 			}
-			psDestTemplate = nullptr;
 		}
 		if (psDestTemplate)
 		{

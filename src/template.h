@@ -30,6 +30,10 @@ extern bool includeRedundantDesigns;
 extern bool playerBuiltHQ;
 
 bool designableTemplate(const DROID_TEMPLATE *psTempl, int player);
+
+/// True if both templates have the same droid type, parts and weapons (the name is not compared)
+bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &b);
+
 bool initTemplates();
 
 /// Take ownership of template given by pointer.
