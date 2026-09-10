@@ -8332,13 +8332,6 @@ static void setMapScroll(WorldMapState& mapState)
 }
 
 
-// -----------------------------------------------------------------------------------------
-/*returns the current type of save game being loaded*/
-GAME_TYPE getSaveGameType()
-{
-	return gameType;
-}
-
 const char *savegameWithoutExtension(const char *name)
 {
 	static char displaySavegameName[256] = {'\0'};

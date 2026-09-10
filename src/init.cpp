@@ -1762,7 +1762,7 @@ static void displayLoadingErrors()
 
 static bool stageThreeInitialiseSync()
 {
-	bool fromSave = (getSaveGameType() == GTYPE_SAVE_MIDMISSION);
+	bool fromSave = (getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
