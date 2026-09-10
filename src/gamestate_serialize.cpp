@@ -863,6 +863,8 @@ static void readTemplates(const nlohmann::ordered_json &j, uint32_t version)
 			addTemplate(p, std::move(psTempl));
 		}
 	}
+	// droidTemplates is the source of truth, localTemplates is derived from it
+	rebuildLocalTemplates(selectedPlayer);
 }
 
 // MARK: - Section: production runs
