@@ -360,6 +360,24 @@ bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &
 	       && a.asParts[COMP_BRAIN] == b.asParts[COMP_BRAIN];
 }
 
+void rebuildLocalTemplates(unsigned player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return; // a spectator has no design screen or factories
+	}
+	localTemplates.clear();
+	for (auto &keyvaluepair : droidTemplates[player])
+	{
+		const DROID_TEMPLATE *psTempl = keyvaluepair.second.get();
+		if (psTempl->prefab || psTempl->hidden)
+		{
+			continue;
+		}
+		localTemplates.push_back(*psTempl);
+	}
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
@@ -407,19 +425,14 @@ bool initTemplates()
 		if (psDestTemplate)
 		{
 			psDestTemplate->stored = true; // assimilate it
-			if (psDestTemplate->hidden)
-			{
-				// It was deleted in an earlier match, but the file still has it
-				psDestTemplate->hidden = false;
-				localTemplates.push_back(*psDestTemplate);
-			}
+			psDestTemplate->hidden = false; // the file still has it
 			continue; // next!
 		}
 		design.enabled = allowDesign;
 		copyTemplate(selectedPlayer, &design);
-		localTemplates.push_back(design);
 	}
 	ini.endArray();
+	rebuildLocalTemplates(selectedPlayer);
 	return true;
 }
 

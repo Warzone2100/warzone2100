@@ -36,6 +36,10 @@ bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &
 
 bool initTemplates();
 
+/// Refill the UI template list (localTemplates) from droidTemplates[player]
+/// NOTE: this invalidates every pointer into localTemplates, so it is only safe before any UI or pending production order exists
+void rebuildLocalTemplates(unsigned player);
+
 /// Take ownership of template given by pointer.
 /// Returns a new usable DROID_TEMPLATE *
 DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate);

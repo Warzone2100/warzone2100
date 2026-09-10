@@ -108,6 +108,7 @@
 #include "screens/guidescreen.h"
 #include "game_world.h"
 #include <array>
+#include <set>
 #include "lib/framework/loading_task.h"
 
 #include "wzphysfszipioprovider.h"
@@ -7374,6 +7375,24 @@ bool loadSaveTemplate(const char *pFileName)
 		// Old savegame compatibility, should remove this branch sometime.
 		enumerateTemplates(selectedPlayer, [](DROID_TEMPLATE * psTempl) {
 			localTemplates.push_back(*psTempl);
+			return true;
+		});
+	}
+
+	// This older format records a deleted design only as the difference between the two lists,
+	// so translate to the newer "hidden" flag
+	if (selectedPlayer < MAX_PLAYERS)
+	{
+		std::set<UDWORD> uiIds;
+		for (const DROID_TEMPLATE &t : localTemplates)
+		{
+			uiIds.insert(t.multiPlayerID);
+		}
+		enumerateTemplates(selectedPlayer, [&uiIds](DROID_TEMPLATE *psTempl) {
+			if (!psTempl->prefab && uiIds.count(psTempl->multiPlayerID) == 0)
+			{
+				psTempl->hidden = true;
+			}
 			return true;
 		});
 	}
