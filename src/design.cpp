@@ -3349,6 +3349,8 @@ void intProcessDesign(UDWORD id)
 				/* remove template if found */
 				if (psTempl != nullptr)
 				{
+					const UDWORD deletedId = psTempl->multiPlayerID;
+
 					//update player template list.
 					for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 					{
@@ -3359,6 +3361,17 @@ void intProcessDesign(UDWORD id)
 							// Delete the template.
 							localTemplates.erase(i);
 							break;
+						}
+					}
+
+					// The droidTemplates entry stays put - a factory may still be building it, and both save
+					// writers enumerate that map to keep production's template references resolvable.
+					if (selectedPlayer < MAX_PLAYERS)
+					{
+						if (DROID_TEMPLATE *psGameTempl = findPlayerTemplateById(selectedPlayer, deletedId))
+						{
+							psGameTempl->hidden = true;
+							psGameTempl->stored = false;
 						}
 					}
 

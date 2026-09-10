@@ -2913,6 +2913,7 @@ bool wzapi::removeTemplate(WZAPI_PARAMS(std::string _templateName))
 		if (templateName.compare(psTempl->id) == 0)
 		{
 			psTempl->enabled = false;
+			psTempl->hidden = true;
 			found = true;
 			return false; // break;
 		}

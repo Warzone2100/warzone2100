@@ -83,6 +83,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool            prefab;                     ///< Not player designed, not saved, never delete or change
 	bool            stored;                     ///< Stored template
 	bool            enabled;                    ///< Has been enabled
+	bool            hidden;                     ///< Deleted by the player, kept only for production and save references
 };
 
 static inline DROID_TEMPLATE *castDroidTemplate(BASE_STATS *stats)

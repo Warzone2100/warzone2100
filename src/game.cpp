@@ -7337,6 +7337,7 @@ bool loadSaveTemplate(const char *pFileName)
 		t.enabled = ini.value("enabled", false).toBool();
 		t.stored = ini.value("stored", false).toBool();
 		t.prefab = ini.value("prefab", false).toBool();
+		t.hidden = ini.value("hidden", false).toBool();
 		ini.nextArrayItem();
 		return t;
 	};
@@ -7388,6 +7389,7 @@ static nlohmann::json convGameTemplateToJSON(DROID_TEMPLATE *psCurr)
 	templateObj["enabled"] = psCurr->enabled;
 	templateObj["stored"] = psCurr->stored;
 	templateObj["prefab"] = psCurr->prefab;
+	templateObj["hidden"] = psCurr->hidden;
 	return templateObj;
 }
 
