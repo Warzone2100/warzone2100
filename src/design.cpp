@@ -2973,6 +2973,8 @@ void intRemoveDesign()
 	widgDelete(psWScreen, IDDES_FORM);
 	widgDelete(psWScreen, IDDES_STATSFORM);
 
+	storeTemplates(); // in-place edits to stored designs accumulate while the screen is open
+
 	resetDesignPauseState();
 }
 
@@ -3350,6 +3352,8 @@ void intProcessDesign(UDWORD id)
 				if (psTempl != nullptr)
 				{
 					const UDWORD deletedId = psTempl->multiPlayerID;
+					const bool wasStored = psTempl->stored;
+					const nlohmann::json deletedEntry = wasStored ? saveTemplateCommon(psTempl) : nlohmann::json();
 
 					//update player template list.
 					for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
@@ -3373,6 +3377,11 @@ void intProcessDesign(UDWORD id)
 							psGameTempl->hidden = true;
 							psGameTempl->stored = false;
 						}
+					}
+					if (bMultiPlayer && wasStored)
+					{
+						templateStoreRemove(deletedEntry);
+						storeTemplates();
 					}
 
 					/* get previous template and set as current */
@@ -3420,8 +3429,10 @@ void intProcessDesign(UDWORD id)
 			}
 		case IDDES_STOREBUTTON:
 			sCurrDesign.stored = !sCurrDesign.stored;	// Invert the current status
-			saveTemplate();
-			storeTemplates();
+			if (saveTemplate())
+			{
+				storeTemplates();
+			}
 			updateStoreButton(sCurrDesign.stored);
 			break;
 		case IDDES_SYSTEMBUTTON:
@@ -3851,6 +3862,9 @@ static bool saveTemplate()
 		deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 	}
 
+	const bool wasStored = psTempl->stored;
+	const nlohmann::json previousEntry = wasStored ? saveTemplateCommon(psTempl) : nlohmann::json();
+
 	/* Copy the template */
 	*psTempl = sCurrDesign;
 
@@ -3860,6 +3874,19 @@ static bool saveTemplate()
 
 	// Add template to in-game template list, since localTemplates/apsTemplateList is for UI use only.
 	copyTemplate(selectedPlayer, psTempl);
+
+	// Editing a stored design changes the name and components the store is keyed on, so the old entry must go before the new one is written
+	if (bMultiPlayer)
+	{
+		if (wasStored && (!psTempl->stored || !templateStoreEntryMatches(previousEntry, *psTempl)))
+		{
+			templateStoreRemove(previousEntry);
+		}
+		if (psTempl->stored)
+		{
+			templateStoreUpsert(*psTempl);
+		}
+	}
 
 	return true;
 }
