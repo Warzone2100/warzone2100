@@ -55,6 +55,13 @@ void clearTemplates(int player);
 bool shutdownTemplates();
 bool storeTemplates();
 
+/// Add or replace a design in the cross-match design store
+void templateStoreUpsert(const DROID_TEMPLATE &psTemplate);
+/// Remove a design, given the entry saveTemplateCommon produced for it before it was edited or deleted
+void templateStoreRemove(const nlohmann::json &entry);
+/// True if the entry describes the same design as the template (an in-place edit changes this)
+bool templateStoreEntryMatches(const nlohmann::json &entry, const DROID_TEMPLATE &psTemplate);
+
 bool loadDroidTemplates(const char *filename);
 
 /// return whether a template is for an IDF droid
