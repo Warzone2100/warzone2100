@@ -101,9 +101,6 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave = false
 // Get the campaign number for loadGameInit game
 UDWORD getCampaign(const char *fileName);
 
-/*returns the current type of save game being loaded*/
-GAME_TYPE getSaveGameType();
-
 // Removes .gam from a save for display purposes
 const char *savegameWithoutExtension(const char *name);
 
