@@ -2541,11 +2541,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ASSERT_OR_RETURN(, (psDroid->psActionTarget[0] != nullptr) && (psDroid->psActionTarget[0]->type == OBJ_STRUCTURE),
 		       "invalid target for repair order");
 		order->psStats = ((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType;
-		if (secHoldActive && (order->type == DORDER_NONE || order->type == DORDER_HOLD))
-		{
-			psDroid->action = DACTION_REPAIR;
-		}
-		else if ((!secHoldActive && order->type != DORDER_HOLD) || (secHoldActive && order->type == DORDER_REPAIR))
+		if (order->type != DORDER_HOLD && !(secHoldActive && order->type == DORDER_NONE))
 		{
 			psDroid->action = DACTION_MOVETOREPAIR;
 			moveDroidTo(psDroid, psAction->x, psAction->y);
