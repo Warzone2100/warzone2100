@@ -3927,7 +3927,6 @@
 		"name": "Medium Body - Panther",
 		"requiredResearch": [
 			"R-Vehicle-Body02",
-			"R-Vehicle-Body05",
 			"R-Vehicle-Metals04"
 		],
 		"researchPoints": 4800,
@@ -3976,7 +3975,6 @@
 		"msgName": "RES_V_B09",
 		"name": "Heavy Body - Tiger",
 		"requiredResearch": [
-			"R-Vehicle-Body11",
 			"R-Vehicle-Body06",
 			"R-Vehicle-Metals05"
 		],
