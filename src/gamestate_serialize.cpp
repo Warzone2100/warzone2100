@@ -2304,9 +2304,13 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 
 	// Movement state:
 	const nlohmann::ordered_json &mv = j.at("move");
-	d->sMove.Status = static_cast<MOVE_STATUS>(mv.at("status").get<int>());
-	const int savedPathIndex = mv.at("pathIndex").get<int>();
+	d->sMove.Status = static_cast<MOVE_STATUS>(reqRange(mv.at("status").get<int>(), MOVEINACTIVE, MOVESHUFFLE));
 	const nlohmann::ordered_json &path = mv.at("path");
+	if (!path.is_array())
+	{
+		throw StateError("droid move.path must be an array");
+	}
+	const int savedPathIndex = reqRange(mv.at("pathIndex").get<int>(), 0, static_cast<int>(path.size()));
 	std::vector<Vector2i> route(path.size());
 	for (size_t p = 0; p < path.size(); ++p)
 	{

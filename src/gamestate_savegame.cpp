@@ -278,6 +278,10 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 
 	bMultiPlayer = j.at("multiplayer").get<bool>();
 	selectedPlayer = j.at("selectedPlayer").get<uint32_t>();
+	if (selectedPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		throw StateError("setup.selectedPlayer out of range");
+	}
 	NetPlay.hostPlayer = j.at("hostPlayer").get<uint32_t>();
 	NetPlay.playercount = j.at("playerCount").get<uint32_t>();
 	NetPlay.bComms = j.at("bComms").get<bool>();
@@ -343,6 +347,10 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	game.scavengers = jopt.at("scavengers").get<uint8_t>();
 	game.techLevel = jopt.at("techLevel").get<uint32_t>();
 	game.maxPlayers = jopt.at("maxPlayers").get<uint8_t>();
+	if (game.maxPlayers > MAX_PLAYERS)
+	{
+		throw StateError("options.maxPlayers exceeds MAX_PLAYERS");
+	}
 	sstrcpy(game.name, jopt.at("name").get<std::string>().c_str());
 	game.blindMode = static_cast<BLIND_MODE>(jopt.at("blindMode").get<uint8_t>());
 	game.gameTimeLimitMinutes = jopt.at("gameTimeLimitMinutes").get<uint32_t>();
