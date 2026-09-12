@@ -92,7 +92,7 @@ static optional<MapDataLoadResult> loadMapData_Internal(const std::string &filen
 		debug(pCustomLogger, LOG_ERROR, "%s: Undefined save format version %u", path, mapVersion);
 		return nullopt;
 	}
-	if ((uint64_t)map.width * map.height > MAP_MAXAREA)
+	if ((uint64_t)map.width * map.height > MAP_MAXAREA || map.width > MAP_MAXWIDTH || map.height > MAP_MAXHEIGHT)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Map %s too large : %d %d", path, map.width, map.height);
 		return nullopt;
