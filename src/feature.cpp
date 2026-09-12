@@ -236,12 +236,8 @@ static void updateFeatureOrientation(FEATURE *psFeature, const WorldMapState& ma
 /* Create a feature on the map */
 FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
-	//try and create the Feature, obtain stable address.
-	FEATURE& feature = GlobalFeatureContainer().emplace(id, psStats);
-	FEATURE* psFeature = &feature;
-
-	//add the feature to the list - this enables it to be drawn whilst being built
-	addFeature(psFeature, world.objects);
+	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "Invalid feature stats");
+	ASSERT_OR_RETURN(nullptr, psStats->psImd != nullptr, "No IMD for feature %s", getStatsName(psStats));
 
 	// snap the coords to a tile
 	if (!FromSave)
@@ -258,10 +254,25 @@ FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD
 		}
 	}
 
+	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y));
+
+	for (int breadth = 0; breadth < b.size.y; ++breadth)
+	{
+		for (int width = 0; width < b.size.x; ++width)
+		{
+			ASSERT_OR_RETURN(nullptr, tileOnMap(world.map, b.map.x + width, b.map.y + breadth), "feature is off-map - %s, id = %u, position (%u,%u)", getStatsName(psStats), id, x, y);
+		}
+	}
+
+	//try and create the Feature, obtain stable address.
+	FEATURE& feature = GlobalFeatureContainer().emplace(id, psStats);
+	FEATURE* psFeature = &feature;
+
+	//add the feature to the list - this enables it to be drawn whilst being built
+	addFeature(psFeature, world.objects);
+
 	psFeature->pos.x = x;
 	psFeature->pos.y = y;
-
-	StructureBounds b = getStructureBounds(psFeature);
 
 	// get the terrain average height
 	int foundationMin = INT32_MAX;
@@ -300,15 +311,12 @@ FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD
 	// set up the imd for the feature
 	psFeature->sDisplay.imd = psStats->psImd;
 
-	ASSERT_OR_RETURN(nullptr, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
-
 	for (int breadth = 0; breadth < b.size.y; ++breadth)
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
 			const int tileX = b.map.x + width;
 			const int tileY = b.map.y + breadth;
-			ASSERT_OR_RETURN(nullptr, tileOnMap(world.map, tileX, tileY), "feature is off-map - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
 			MAPTILE *psTile = mapTile(world.map, tileX, tileY);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
