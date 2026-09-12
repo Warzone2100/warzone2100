@@ -8330,6 +8330,9 @@ msgstr "Ты пожалеешь об этом"
 msgid "Barely a scratch!"
 msgstr "Всего лишь царапина!"
 
+msgid "See you again, have a good game everyone!"
+msgstr "До встречи, всем хорошей игры!"
+
 msgid "Attack now?"
 msgstr "Атаковать сейчас?"
 

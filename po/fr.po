@@ -8322,6 +8322,9 @@ msgstr "Vous allez le regretter"
 msgid "Barely a scratch!"
 msgstr "Même pas une égratignure !"
 
+msgid "See you again, have a good game everyone!"
+msgstr "À la prochaine, bon jeu à tous !"
+
 msgid "Attack now?"
 msgstr "Attaquer maintenant ?"
 
