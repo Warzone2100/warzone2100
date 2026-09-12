@@ -822,6 +822,10 @@ bool mapReloadGroundTypes()
 	{
 		return false;
 	}
+	if (mission.gameWorld.map.tiles && !mapSetGroundTypes(mission.gameWorld.map))
+	{
+		return false;
+	}
 	return true;
 }
 
