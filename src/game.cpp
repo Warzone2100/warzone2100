@@ -7576,7 +7576,7 @@ bool loadTerrainTypeMapOverride(MAP_TILESET tileSet)
 			{
 				unsigned int tileType = ini.value(keys.at(j)).toUInt();
 
-				if (tileType > TER_MAX)
+				if (tileType >= TER_MAX)
 				{
 					debug(LOG_ERROR, "loadTerrainTypeMapOverride: terrain type out of range");
 					resForceBaseDir("");
@@ -7618,7 +7618,7 @@ static bool writeTerrainTypeMapFile(char *pFileName)
 	for (size_t i = 0; i < MAX_TILE_TEXTURES; i++)
 	{
 		UBYTE &tType = terrainTypes[i];
-		if (tType > TER_MAX)
+		if (tType >= TER_MAX)
 		{
 			debug(LOG_ERROR, "Terrain type exceeds TER_MAX: %" PRIu8 "", tType);
 		}

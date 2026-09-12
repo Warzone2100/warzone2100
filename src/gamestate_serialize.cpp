@@ -3291,7 +3291,7 @@ static void readMapTerrain(WorldMapState &map, const nlohmann::ordered_json &j, 
 		const std::vector<uint8_t> tt = decodeBase64Field(j.at("terrainTypes"), MAX_TILE_TEXTURES, "map terrain terrainTypes");
 		for (uint8_t t : tt)
 		{
-			if (t > TER_MAX)
+			if (t >= TER_MAX)
 			{
 				throw StateError("map terrain terrainTypes value out of range");
 			}
