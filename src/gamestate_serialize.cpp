@@ -814,6 +814,8 @@ static nlohmann::ordered_json writeTemplates()
 		enumerateTemplates(p, [&jlist](DROID_TEMPLATE *psTempl)
 		{
 			nlohmann::ordered_json jt = saveTemplateCommon(psTempl);
+			// The stats id is what map-placed droids resolve against
+			jt["id"] = psTempl->id.toUtf8();
 			jt["multiPlayerID"] = psTempl->multiPlayerID;
 			jt["enabled"] = psTempl->enabled;
 			jt["stored"] = psTempl->stored;
@@ -855,6 +857,7 @@ static void readTemplates(const nlohmann::ordered_json &j, uint32_t version)
 			{
 				throw StateError("template contains an unknown component (different stats/mods?)");
 			}
+			psTempl->id = WzString::fromUtf8(jt.value("id", std::string()));
 			psTempl->multiPlayerID = jt.at("multiPlayerID").get<uint32_t>();
 			psTempl->enabled = jt.at("enabled").get<bool>();
 			psTempl->stored = jt.at("stored").get<bool>();
