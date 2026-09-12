@@ -7334,6 +7334,7 @@ bool loadSaveTemplate(const char *pFileName)
 			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", ini.string("name").toUtf8().c_str());
 		}
 		t.name = ini.string("name");
+		t.id = ini.string("id");
 		t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
 		t.enabled = ini.value("enabled", false).toBool();
 		t.stored = ini.value("stored", false).toBool();
@@ -7403,6 +7404,7 @@ bool loadSaveTemplate(const char *pFileName)
 static nlohmann::json convGameTemplateToJSON(DROID_TEMPLATE *psCurr)
 {
 	nlohmann::json templateObj = saveTemplateCommon(psCurr);
+	templateObj["id"] = psCurr->id;
 	templateObj["ref"] = psCurr->ref;
 	templateObj["multiPlayerID"] = psCurr->multiPlayerID;
 	templateObj["enabled"] = psCurr->enabled;
