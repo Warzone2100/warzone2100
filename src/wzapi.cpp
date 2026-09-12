@@ -308,6 +308,8 @@ uint32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 //--
 bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 {
+	SCRIPT_ASSERT_PLAYER(false, context, player1);
+	SCRIPT_ASSERT_PLAYER(false, context, player2);
 	if (areAllies)
 	{
 		formAlliance(player1, player2, true, false, true);
@@ -325,6 +327,8 @@ bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 //--
 wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 {
+	SCRIPT_ASSERT_PLAYER({}, context, context.player());
+	SCRIPT_ASSERT_PLAYER({}, context, player);
 	if (!alliancesFixed(game.alliance))
 	{
 		requestAlliance(context.player(), player, true, true);
