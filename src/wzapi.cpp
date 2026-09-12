@@ -1245,9 +1245,12 @@ GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 //--
 wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
+	int player = _player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER({}, context, player);
+
 	researchResult result;
 	result.psResearch = ::getResearch(researchName.c_str());
-	result.player = _player.value_or(context.player());
+	result.player = player;
 	return result;
 }
 
@@ -1521,6 +1524,7 @@ bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structureName, optiona
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
 	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	int player = _player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 
 	int status = apStructTypeLists[player][structureIndex];
 	return (status == AVAILABLE || status == REDUNDANT)
