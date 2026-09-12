@@ -754,7 +754,7 @@ static size_t droidCancelRepairers(DROID *psDroid, PerPlayerDroidLists& pList)
 					{
 						// found a droid repairing this droid
 						wasRepairingDroid = true;
-						setDroidActionTarget(psDroid, nullptr, i);
+						setDroidActionTarget(psCurr, nullptr, i);
 						// actionUpdateDroid will handle when DACTION_DROIDREPAIR and the action target is null
 
 						if (i != 0)
