@@ -4658,8 +4658,11 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy, GameWorld& world)
 		if (psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
 			FEATURE *psOil = buildFeature(world, oilResFeature, psDel->pos.x, psDel->pos.y, false);
-			memcpy(psOil->seenThisTick, psDel->visible, sizeof(psOil->seenThisTick));
-			resourceFound = true;
+			if (psOil != nullptr)
+			{
+				memcpy(psOil->seenThisTick, psDel->visible, sizeof(psOil->seenThisTick));
+				resourceFound = true;
+			}
 		}
 	}
 
