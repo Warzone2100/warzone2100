@@ -1130,8 +1130,9 @@ bool loadPropulsionTypes(WzConfig &ini)
 	asPropulsionTypes.resize(NumTypes);
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
+	std::vector<bool> seenTypes(NumTypes, false);
 
-	for (int i = 0; i < NumTypes; ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_TYPE type;
 
@@ -1144,6 +1145,12 @@ bool loadPropulsionTypes(WzConfig &ini)
 			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().c_str());
 			return false;
 		}
+		if (seenTypes[type])
+		{
+			debug(LOG_FATAL, "Duplicate Propulsion type - %s", list[i].toUtf8().c_str());
+			return false;
+		}
+		seenTypes[type] = true;
 
 		PROPULSION_TYPES *pPropType = &asPropulsionTypes[type];
 
@@ -1180,6 +1187,15 @@ bool loadPropulsionTypes(WzConfig &ini)
 		pPropType->shutDownID = NO_SOUND;
 
 		ini.endGroup();
+	}
+
+	for (size_t type = 0; type < NumTypes; ++type)
+	{
+		if (!seenTypes[type])
+		{
+			debug(LOG_FATAL, "Missing Propulsion type - %zu", type);
+			return false;
+		}
 	}
 
 	return true;
