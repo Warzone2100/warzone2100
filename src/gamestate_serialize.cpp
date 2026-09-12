@@ -307,6 +307,10 @@ static void applyDeterminismCounters(const nlohmann::ordered_json &j, uint32_t v
 	GameRandomState rng;
 	rng.lastSeed = jrng.at("lastSeed").get<uint32_t>();
 	rng.offset = jrng.at("offset").get<int32_t>();
+	if (rng.offset < 0 || rng.offset > static_cast<int32_t>(RNG_STATE_WORDS))
+	{
+		throw StateError("determinismCore: rng.offset out of range");
+	}
 	const std::vector<uint8_t> stateBytes = decodeBase64Field(jrng.at("state"), RNG_STATE_WORDS * 4, "determinismCore: rng.state");
 	for (size_t i = 0; i < RNG_STATE_WORDS; ++i)
 	{

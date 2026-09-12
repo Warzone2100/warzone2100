@@ -20,6 +20,8 @@
 #include "random.h"
 #include "lib/netplay/sync_debug.h"
 
+#include <algorithm>
+
 static MersenneTwister gamePseudorandomNumberGenerator;
 static uint32_t lastSeed = 0;
 
@@ -93,7 +95,8 @@ void MersenneTwister::setInternalState(const uint32_t (&inState)[RNG_STATE_WORDS
 	{
 		state[i] = inState[i];
 	}
-	offset = inOffset;
+	ASSERT(inOffset >= 0 && inOffset <= static_cast<int32_t>(RNG_STATE_WORDS), "Invalid RNG offset %" PRIi32, inOffset);
+	offset = std::clamp<int32_t>(inOffset, 0, static_cast<int32_t>(RNG_STATE_WORDS));
 }
 
 void gameSRand(uint32_t seed)
