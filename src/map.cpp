@@ -1145,7 +1145,7 @@ bool loadTerrainTypeMap(const std::shared_ptr<WzMap::TerrainTypeData>& ttypeData
 	for (size_t i = 0; i < quantity; i++)
 	{
 		auto& type = ttypeData->terrainTypes[i];
-		if (type > TER_MAX)
+		if (type >= TER_MAX)
 		{
 			debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
 			return false;
