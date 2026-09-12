@@ -443,6 +443,7 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 
 void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 {
+	ASSERT_OR_RETURN(, from < MAX_PLAYERS && to < MAX_PLAYERS, "Invalid players %u, %u", from, to);
 	if (prop && bMultiMessages)
 	{
 		sendAlliance(from, to, ALLIANCE_REQUESTED, false);
@@ -479,6 +480,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 {
 	char	tm1[128];
 
+	ASSERT_OR_RETURN(, p1 < MAX_PLAYERS && p2 < MAX_PLAYERS, "Invalid players %u, %u", p1, p2);
 	if (prop && bMultiMessages)
 	{
 		sendAlliance(p1, p2, ALLIANCE_BROKEN, false);
@@ -538,6 +540,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 {
 	char	tm1[128];
 
+	ASSERT_OR_RETURN(, p1 < MAX_PLAYERS && p2 < MAX_PLAYERS, "Invalid players %u, %u", p1, p2);
 	if (bMultiMessages && prop)
 	{
 		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
