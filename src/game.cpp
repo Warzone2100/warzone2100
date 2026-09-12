@@ -544,11 +544,20 @@ static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERG
 
 	return true;
 }
+static uint8_t clampSavedMaxPlayers(unsigned maxPlayers)
+{
+	if (maxPlayers > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Saved maxPlayers (%u) exceeds MAX_PLAYERS (%d) - clamping", maxPlayers, MAX_PLAYERS);
+		return MAX_PLAYERS;
+	}
+	return static_cast<uint8_t>(maxPlayers);
+}
 static void deserializeMultiplayerGame_json(const nlohmann::json &o, MULTIPLAYERGAME *serializeMulti)
 {
 	serializeMulti->type = static_cast<LEVEL_TYPE>(o.at("multiType").get<uint8_t>());
 	sstrcpy(serializeMulti->map,  o.at("multiMapName").get<std::string>().c_str());
-	serializeMulti->maxPlayers = o.at("multiMaxPlayers").get<uint8_t>();
+	serializeMulti->maxPlayers = clampSavedMaxPlayers(o.at("multiMaxPlayers").get<uint8_t>());
 	sstrcpy(serializeMulti->name, o.at("multiGameName").get<std::string>().c_str());
 	serializeMulti->power = o.at("multiPower").get<uint32_t>();
 	serializeMulti->base = o.at("multiBase").get<uint8_t>();
@@ -594,6 +603,8 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 			return false;
 		}
 	}
+
+	serializeMulti->maxPlayers = clampSavedMaxPlayers(serializeMulti->maxPlayers);
 
 	return true;
 }
@@ -710,7 +721,12 @@ static void deserializeNetPlay_json(const nlohmann::json &o, NETPLAY *serializeN
 	serializeNetPlay->isHost = true; // only host can load
 	serializeNetPlay->playercount = o.at("netPlayerCount").get<uint32_t>();
 	serializeNetPlay->bComms = o.at("netbComms").get<bool>();
-	selectedPlayer = o.at("netSelectedPlayer").get<uint32_t>();
+	const uint32_t savedSelectedPlayer = o.at("netSelectedPlayer").get<uint32_t>();
+	if (savedSelectedPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		throw std::runtime_error("netSelectedPlayer out of range: " + std::to_string(savedSelectedPlayer));
+	}
+	selectedPlayer = savedSelectedPlayer;
 	game.scavengers = o.at("netScavengers").get<uint8_t>();
 }
 static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPlay)
@@ -726,19 +742,29 @@ static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPla
 		}
 	}
 
-	uint32_t dummy, bComms = serializeNetPlay->bComms, scavs = game.scavengers;
+	uint32_t dummy, bComms = serializeNetPlay->bComms, scavs = game.scavengers, savedSelectedPlayer = selectedPlayer;
 
 	serializeNetPlay->isHost = true;	// only host can load
 	retv = (PHYSFS_readUBE32(fileHandle, &bComms)
 	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->playercount)
 	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->hostPlayer)
-	        && PHYSFS_readUBE32(fileHandle, &selectedPlayer)
+	        && PHYSFS_readUBE32(fileHandle, &savedSelectedPlayer)
 	        && PHYSFS_readUBE32(fileHandle, &scavs)
 	        && PHYSFS_readUBE32(fileHandle, &dummy)
 	        && PHYSFS_readUBE32(fileHandle, &dummy));
+	if (!retv)
+	{
+		return false;
+	}
+	if (savedSelectedPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "selectedPlayer out of range: %" PRIu32, savedSelectedPlayer);
+		return false;
+	}
 	serializeNetPlay->bComms = bComms;
 	game.scavengers = scavs;
-	return retv;
+	selectedPlayer = savedSelectedPlayer;
+	return true;
 }
 
 struct SAVE_GAME_V7
@@ -2075,7 +2101,7 @@ static bool deserializeSaveGameData_json(const nlohmann::json &o, SAVE_GAME *ser
 	{
 		deserializeSaveGameV38Data_json(o, (SAVE_GAME_V38 *) serializeGame);
 		return true;
-	} catch (nlohmann::json::exception &e)
+	} catch (std::exception &e)
 	{
 		debug(LOG_ERROR, "%s", e.what());
 		return false;
@@ -2240,6 +2266,16 @@ static SDWORD		startX, startY;
 static UDWORD		width, height;
 static GAME_TYPE	gameType;
 static bool IsScenario;
+
+static uint32_t validateSavedDefaultComponent(uint32_t index, size_t numStats, const char *componentName, int player)
+{
+	if (index >= numStats)
+	{
+		debug(LOG_ERROR, "Saved default %s (%" PRIu32 ") for player %d is out of range (%zu stats) - resetting", componentName, index, player, numStats);
+		return 0;
+	}
+	return index;
+}
 
 /***************************************************************************/
 /*
@@ -2815,9 +2851,9 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 			//mission data
 			for (player = 0; player < MAX_PLAYERS; player++)
 			{
-				aDefaultSensor[player]				= saveGameData.aDefaultSensor[player];
-				aDefaultECM[player]					= saveGameData.aDefaultECM[player];
-				aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
+				aDefaultSensor[player]				= validateSavedDefaultComponent(saveGameData.aDefaultSensor[player], asSensorStats.size(), "sensor", player);
+				aDefaultECM[player]					= validateSavedDefaultComponent(saveGameData.aDefaultECM[player], asECMStats.size(), "ECM", player);
+				aDefaultRepair[player]				= validateSavedDefaultComponent(saveGameData.aDefaultRepair[player], asRepairStats.size(), "repair", player);
 				//check for self repair having been set
 				if (aDefaultRepair[player] != 0
 				    && asRepairStats[aDefaultRepair[player]].location == LOC_DEFAULT)
@@ -3545,8 +3581,10 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 			//The droids lists are "reversed" as they are loaded in loadSaveDroid().
 			//Which later causes issues in saveCampaignData() which tries to extract
 			//the first transporter group sent off at Beta-end by reversing this very list.
-			ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
-			mission.gameWorld.objects.droids[selectedPlayer].reverse();
+			if (selectedPlayer < MAX_PLAYERS)
+			{
+				mission.gameWorld.objects.droids[selectedPlayer].reverse();
+			}
 		}
 	}
 
@@ -3572,8 +3610,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 		 * been another flag to indicate this state has changed but its late in
 		 * the day excuses...excuses...excuses
 		 */
-		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
-		if (mission.gameWorld.objects.droids[selectedPlayer].empty())
+		if (selectedPlayer < MAX_PLAYERS && mission.gameWorld.objects.droids[selectedPlayer].empty())
 		{
 			//set the mission type
 			startMissionSave(LEVEL_TYPE::LDS_EXPAND);
@@ -4581,9 +4618,9 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 			mission.iTranspEntryTileY[player]	= saveGameData.iTranspEntryTileY[player];
 			mission.iTranspExitTileX[player]	= saveGameData.iTranspExitTileX[player];
 			mission.iTranspExitTileY[player]	= saveGameData.iTranspExitTileY[player];
-			aDefaultSensor[player]				= saveGameData.aDefaultSensor[player];
-			aDefaultECM[player]					= saveGameData.aDefaultECM[player];
-			aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
+			aDefaultSensor[player]				= validateSavedDefaultComponent(saveGameData.aDefaultSensor[player], asSensorStats.size(), "sensor", player);
+			aDefaultECM[player]					= validateSavedDefaultComponent(saveGameData.aDefaultECM[player], asECMStats.size(), "ECM", player);
+			aDefaultRepair[player]				= validateSavedDefaultComponent(saveGameData.aDefaultRepair[player], asRepairStats.size(), "repair", player);
 		}
 	}
 
@@ -4759,7 +4796,7 @@ static bool loadMainFile(const std::string &fileName)
 	}
 	if (save.contains("maxPlayers"))
 	{
-		game.maxPlayers = save.value("maxPlayers").toUInt();
+		game.maxPlayers = clampSavedMaxPlayers(save.value("maxPlayers").toUInt());
 	}
 	if (save.contains("mapHasScavengers"))
 	{
@@ -5452,7 +5489,13 @@ static int getPlayer(WzConfig &ini)
 			game.mapHasScavengers = true;
 			return scavengerSlot();
 		}
-		return result.toInt();
+		int player = result.toInt();
+		if (player < 0 || (player >= MAX_PLAYERS && player != PLAYER_FEATURE))
+		{
+			debug(LOG_ERROR, "Invalid player %d in save file", player);
+			return -1;
+		}
+		return player;
 	}
 	else if (ini.contains("startpos"))
 	{
@@ -5505,7 +5548,7 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 		int id = ini.value("id", -1).toInt();
 		int player = getPlayer(ini);
 
-		if (id <= 0)
+		if (id <= 0 || player < 0 || player >= MAX_PLAYERS)
 		{
 			ini.endGroup();
 			continue; // special hack for campaign missions, cannot have targets
@@ -5769,6 +5812,12 @@ static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroi
 		ini.beginGroup(sortedList[i].second);
 		DROID *psDroid;
 		int player = getPlayer(ini);
+		if (player < 0 || player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "%s: skipping droid %s with invalid player %d", pFileName, sortedList[i].second.toUtf8().c_str(), player);
+			ini.endGroup();
+			continue;
+		}
 		int id = ini.value("id", -1).toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
@@ -5793,12 +5842,12 @@ static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroi
 			// Create fake template
 			templ.name = ini.string("name", "UNKNOWN");
 			templ.droidType = (DROID_TYPE)ini.value("droidType").toInt();
-			templ.numWeaps = ini.value("weapons", 0).toInt();
-			if (templ.numWeaps > MAX_WEAPONS)
+			const int savedNumWeaps = ini.value("weapons", 0).toInt();
+			if (savedNumWeaps < 0 || savedNumWeaps > MAX_WEAPONS)
 			{
-				debug(LOG_ERROR, "Invalid numWeaps (%d)", templ.numWeaps);
-				templ.numWeaps = MAX_WEAPONS;
+				debug(LOG_ERROR, "Invalid numWeaps (%d)", savedNumWeaps);
 			}
+			templ.numWeaps = static_cast<int8_t>(clip(savedNumWeaps, 0, MAX_WEAPONS));
 			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
 			templ.asParts[COMP_BODY] = getCompFromName_NullCompOnFail<uint8_t>(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
 			templ.asParts[COMP_BRAIN] = getCompFromName_NullCompOnFail<uint8_t>(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
@@ -5928,9 +5977,20 @@ static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroi
 			}
 		}
 
-		psDroid->sMove.Status = (MOVE_STATUS)ini.value("moveStatus", 0).toInt();
+		const int savedMoveStatus = ini.value("moveStatus", 0).toInt();
 		const int savedPathIndex = ini.value("pathIndex", 0).toInt();
 		const int numPoints = ini.value("pathLength", 0).toInt();
+		if (savedMoveStatus < MOVEINACTIVE || savedMoveStatus > MOVESHUFFLE)
+		{
+			debug(LOG_ERROR, "%s: droid %s has invalid moveStatus %d", pFileName, sortedList[i].second.toUtf8().c_str(), savedMoveStatus);
+			return false;
+		}
+		if (numPoints < 0 || numPoints > MAP_MAXAREA || savedPathIndex < 0 || savedPathIndex > numPoints)
+		{
+			debug(LOG_ERROR, "%s: droid %s has invalid path (pathLength %d, pathIndex %d)", pFileName, sortedList[i].second.toUtf8().c_str(), numPoints, savedPathIndex);
+			return false;
+		}
+		psDroid->sMove.Status = (MOVE_STATUS)savedMoveStatus;
 		std::vector<Vector2i> route(numPoints);
 		for (int j = 0; j < numPoints; j++)
 		{
@@ -6542,6 +6602,12 @@ static bool loadSaveStructure2(const char *pFileName, GameWorld& world)
 
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
+		if (player < 0 || player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "%s: skipping structure %s with invalid player %d", pFileName, list[i].toUtf8().c_str(), player);
+			ini.endGroup();
+			continue;
+		}
 		int id = ini.value("id", -1).toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
@@ -6979,7 +7045,10 @@ bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists
 		STRUCTURE *psStruct = nullptr;
 		int player = getPlayer(ini);
 		int id = ini.value("id", -1).toInt();
-		psStruct = (STRUCTURE*)getBaseObjFromId((*ppList)[player], id);
+		if (player >= 0 && player < MAX_PLAYERS)
+		{
+			psStruct = (STRUCTURE*)getBaseObjFromId((*ppList)[player], id);
+		}
 		if (!psStruct)
 		{
 			ini.endGroup();
@@ -7267,6 +7336,7 @@ bool loadSaveFeature2(const char *pFileName, GameWorld& world)
 		{
 			debug(LOG_ERROR, "This feature no longer exists - %s", name.toUtf8().c_str());
 			//ignore this
+			ini.endGroup();
 			continue;
 		}
 		//create the Feature
@@ -7282,6 +7352,7 @@ bool loadSaveFeature2(const char *pFileName, GameWorld& world)
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", name.toUtf8().c_str());
+			ini.endGroup();
 			continue;
 		}
 		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
@@ -7290,7 +7361,8 @@ bool loadSaveFeature2(const char *pFileName, GameWorld& world)
 		}
 		//restore values
 		pFeature->rot = ini.vector3i("rotation");
-		pFeature->player = getPlayer(ini);
+		const int featurePlayer = getPlayer(ini);
+		pFeature->player = (featurePlayer >= 0) ? featurePlayer : PLAYER_FEATURE;
 
 		// common BASE_OBJECT info
 		loadSaveObject(ini, pFeature);
@@ -7353,6 +7425,12 @@ bool loadSaveTemplate(const char *pFileName)
 	{
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
+		if (player < 0 || player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "Skipping templates for invalid player %d", player);
+			ini.endGroup();
+			continue;
+		}
 		ini.beginArray("templates");
 		while (ini.remainingArrayItems() > 0)
 		{
