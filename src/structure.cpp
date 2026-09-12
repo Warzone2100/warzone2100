@@ -2240,6 +2240,17 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 		break;
 	}
 
+	if (priorPlayer < MAX_PLAYERS)
+	{
+		for (DROID *psDroid : gameWorld.objects.droids[priorPlayer])
+		{
+			if (psDroid->psBaseStruct == psBuilding)
+			{
+				setDroidBase(psDroid, nullptr);
+			}
+		}
+	}
+
 	switch (functionType)
 	{
 	case REF_FACTORY:
@@ -2247,6 +2258,11 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 	case REF_VTOL_FACTORY:
 		{
 			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
+
+			if (psFactory->psCommander != nullptr)
+			{
+				assignFactoryCommandDroid(psBuilding, nullptr);
+			}
 
 			// Reset factoryNumFlag for prior player
 			auto psAssemblyPoint = psFactory->psAssemblyPoint;
@@ -2285,8 +2301,22 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 		}
 	case REF_POWER_GEN:
 	case REF_HQ:
+		{
+			break;
+		}
 	case REF_REARM_PAD:
 		{
+			REARM_PAD *psReArmPad = &psBuilding->pFunctionality->rearmPad;
+
+			DROID *psRearming = castDroid(psReArmPad->psObj);
+			psReArmPad->psObj = nullptr;
+			psReArmPad->timeStarted = ACTION_START_TIME;
+			psReArmPad->timeLastUpdated = 0;
+			if (psRearming != nullptr && !psRearming->died)
+			{
+				psRearming->action = DACTION_NONE;
+				moveToRearm(psRearming);
+			}
 			break;
 		}
 	case REF_RESOURCE_EXTRACTOR:
@@ -2300,6 +2330,14 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 	case REF_REPAIR_FACILITY:
 		{
 			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
+
+			DROID *psRepairing = castDroid(psRepairFac->psObj);
+			psRepairFac->psObj = nullptr;
+			psRepairFac->state = RepairState::Idle;
+			if (psRepairing != nullptr && !psRepairing->died)
+			{
+				orderDroid(psRepairing, DORDER_RTR, ModeImmediate);
+			}
 
 			// POSSIBLE TODO: Do something about the group? (Or can we just keep it?)
 
