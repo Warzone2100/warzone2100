@@ -65,6 +65,7 @@ static_assert(MAX_PIE_POLYGONS <= ((UINT16_MAX-1) / 3), "MAX_PIE_POLYGONS must n
 
 typedef std::unordered_map<std::string, std::unique_ptr<iIMDBaseShape>> ModelMap;
 static ModelMap models;
+static std::unordered_set<std::string> modelsBeingLoaded;
 static size_t currentTilesetIdx = 0;
 
 static size_t modelLoadingErrors = 0;
@@ -282,6 +283,7 @@ size_t getModelTextureLoadingFailuresCount()
 void modelShutdown()
 {
 	models.clear();
+	modelsBeingLoaded.clear();
 	modelLoadingErrors = 0;
 	modelTextureLoadingFailures = 0;
 }
@@ -426,10 +428,18 @@ iIMDBaseShape *modelGet(const WzString &filename)
 	{
 		return it->second.get(); // cached
 	}
-	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
+	if (!modelsBeingLoaded.insert(name.toStdString()).second)
+	{
+		debug(LOG_ERROR, "Recursive model reference: %s", name.toUtf8().c_str());
+		++modelLoadingErrors;
+		return nullptr;
+	}
+	const bool loaded = tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
 	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
 	         || tryLoad("components/bodies/", name) || tryLoad("features/", name)
-	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name))
+	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name);
+	modelsBeingLoaded.erase(name.toStdString());
+	if (loaded)
 	{
 		return models.at(name.toStdString()).get();
 	}
@@ -782,6 +792,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 		if (sscanf(pRestOfLine, "%x %u%n", &flags, &npnts, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "(_load_polys) [poly %u] error loading flags and npoints", i);
+			return false;
 		}
 		pRestOfLine += cnt;
 
@@ -1449,8 +1460,10 @@ static bool ReadNormals(const char **ppFileData, const char *FileDataEnd, std::v
 
 static bool _imd_load_normals(const char **ppFileData, const char *FileDataEnd, std::vector<Vector3f> &pie_level_normals, uint32_t num_normal_lines)
 {
+   ASSERT_OR_RETURN(false, num_normal_lines <= MAX_PIE_POLYGONS, "'NORMALS' directive count (%" PRIu32") exceeds maximum supported (%" PRIu32")", num_normal_lines, MAX_PIE_POLYGONS);
+
    // We only support triangles!
-   pie_level_normals.resize(static_cast<size_t>(num_normal_lines * 3));
+   pie_level_normals.resize(static_cast<size_t>(num_normal_lines) * 3);
 
    if (ReadNormals(ppFileData, FileDataEnd, pie_level_normals, num_normal_lines) == false)
    {
@@ -1744,7 +1757,11 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 	// It could be optional normals directive
  	if (strcmp(buffer, "NORMALS") == 0)
  	{
- 		_imd_load_normals(&lineToProcess.pNextLineBegin, FileDataEnd, pie_level_normals, npolys);
+		if (!_imd_load_normals(&lineToProcess.pNextLineBegin, FileDataEnd, pie_level_normals, npolys))
+		{
+			debug(LOG_ERROR, "_imd_load_level(3n): file corrupt - invalid normals: %s", filename.toUtf8().c_str());
+			return nullptr;
+		}
 
  		// Attemps to read polys again
 		if (!getNextPossibleCommandLine())
@@ -1758,6 +1775,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 	ASSERT_OR_RETURN(nullptr, npolys <= MAX_PIE_POLYGONS, "'POLYGONS' directive count (%" PRIu32") exceeds maximum supported (%" PRIu32")", npolys, MAX_PIE_POLYGONS);
+	ASSERT_OR_RETURN(nullptr, pie_level_normals.empty() || pie_level_normals.size() == static_cast<size_t>(npolys) * 3, "'NORMALS' count (%zu) does not match 'POLYGONS' count (%" PRIu32") in %s", pie_level_normals.size() / 3, npolys, filename.toUtf8().c_str());
 	s.polys.resize(npolys);
 
 	if (!_imd_load_polys(filename, &lineToProcess.pNextLineBegin, FileDataEnd, &s, pieVersion, npoints))
@@ -2070,7 +2088,12 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	{
 		char animpie[PATH_MAX];
 
-		ASSERT(value < ANIM_EVENT_COUNT, "Invalid event type %u", value);
+		if (value >= ANIM_EVENT_COUNT)
+		{
+			debug(LOG_ERROR, "%s: Invalid event type %u", filename.toUtf8().c_str(), value);
+			++modelLoadingErrors;
+			return nullptr;
+		}
 		const char* pRestOfLine = lineToProcess.lineContents.c_str() + cnt;
 		if (sscanf(pRestOfLine, "%255s%n", animpie, &cnt) != 1)
 		{
