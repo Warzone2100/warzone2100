@@ -2436,6 +2436,7 @@ bool scripting_engine::areaLabelCheck(DROID *psDroid)
 	// Trip any untriggered area/radius label the droid has entered
 	// - A global (map-authored) label fires eventArea to every instance (triggerEventArea)
 	// - An owned label fires only to its owner
+	std::vector<std::pair<std::string, wzapi::scripting_instance*>> triggeredLabels;
 	auto checkBucket = [&](LABELMAP& bucket, wzapi::scripting_instance* owner)
 	{
 		for (auto& it : bucket)
@@ -2448,14 +2449,7 @@ bool scripting_engine::areaLabelCheck(DROID *psDroid)
 				// We're inside an untriggered area
 				activated = true;
 				l.triggered = psDroid->id;
-				if (owner)
-				{
-					owner->handle_eventArea(it.first, psDroid); // owned label - only its creating instance
-				}
-				else
-				{
-					triggerEventArea(it.first, psDroid); // global/map label - all instances
-				}
+				triggeredLabels.emplace_back(it.first, owner);
 			}
 		}
 	};
@@ -2467,6 +2461,17 @@ bool scripting_engine::areaLabelCheck(DROID *psDroid)
 		if (bucketIt != ownedLabels.end())
 		{
 			checkBucket(bucketIt->second, instance);
+		}
+	}
+	for (const auto& triggered : triggeredLabels)
+	{
+		if (triggered.second)
+		{
+			triggered.second->handle_eventArea(triggered.first, psDroid); // owned label - only its creating instance
+		}
+		else
+		{
+			triggerEventArea(triggered.first, psDroid); // global/map label - all instances
 		}
 	}
 	if (activated)
