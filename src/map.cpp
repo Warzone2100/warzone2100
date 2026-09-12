@@ -1200,6 +1200,11 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 	for (int i = 0; i < mapState.width * mapState.height; ++i)
 	{
 		ASSERT(loadedMap->mMapTiles[i].height <= TILE_MAX_HEIGHT, "Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", loadedMap->mMapTiles[i].height, static_cast<size_t>(TILE_MAX_HEIGHT));
+		if (TileNumber_tile(loadedMap->mMapTiles[i].texture) >= MAX_TILE_TEXTURES)
+		{
+			debug(LOG_ERROR, "Tile %d has texture number %u, which exceeds the maximum (%d)", i, (unsigned)TileNumber_tile(loadedMap->mMapTiles[i].texture), MAX_TILE_TEXTURES - 1);
+			co_return mapLoadFail(mapState);
+		}
 		mapState.tiles[i].texture = loadedMap->mMapTiles[i].texture;
 		mapState.tiles[i].height = loadedMap->mMapTiles[i].height;
 
