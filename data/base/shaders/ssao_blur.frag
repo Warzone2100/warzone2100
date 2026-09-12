@@ -5,7 +5,7 @@ layout(std140) uniform cbuffer {
 	vec2 blurDirection;
 	float depthSigma;
 	float tapPairs;
-	vec4 occlusionUvScaleClamp;
+	vec4 valueUvScaleClamp;
 	vec4 depthUvScaleClamp;
 };
 uniform sampler2D occlusionTexture;
@@ -29,35 +29,22 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
-const float SKY_DEPTH_THRESHOLD = 0.9999;
-// Separable 9-tap Gaussian weights (center + 4 pairs).
-const float WEIGHT0 = 0.227027;
-const float WEIGHT1 = 0.1945946;
-const float WEIGHT2 = 0.1216216;
-const float WEIGHT3 = 0.054054;
-const float WEIGHT4 = 0.016216;
-
-float depthWeight(float centerDepth, float sampleDepth, float sigma)
-{
-	float d = centerDepth - sampleDepth;
-	float s = max(sigma, 1e-6);
-	return exp(-(d * d) / (2.0 * s * s));
-}
+#include "depth_aware_blur.glsl"
 
 void accumulateTap(inout float result, inout float weightSum, vec2 tapTexCoords, float centerDepth, float spatialWeight)
 {
 	vec2 sampleDepthUV = clamp(tapTexCoords * depthUvScaleClamp.xy, vec2(0.0), depthUvScaleClamp.zw);
 	float sampleDepth = texture(depthTexture, sampleDepthUV).r;
-	if (sampleDepth >= SKY_DEPTH_THRESHOLD)
+	if (sampleDepth >= WZ_BLUR_SKY_DEPTH_THRESHOLD)
 	{
 		return;
 	}
-	float w = spatialWeight * depthWeight(centerDepth, sampleDepth, depthSigma);
+	float w = spatialWeight * wzBlurDepthWeight(centerDepth, sampleDepth, depthSigma);
 	if (w <= 0.0)
 	{
 		return;
 	}
-	vec2 sampleAoUV = clamp(tapTexCoords * occlusionUvScaleClamp.xy, vec2(0.0), occlusionUvScaleClamp.zw);
+	vec2 sampleAoUV = clamp(tapTexCoords * valueUvScaleClamp.xy, vec2(0.0), valueUvScaleClamp.zw);
 	result += texture(occlusionTexture, sampleAoUV).r * w;
 	weightSum += w;
 }
@@ -66,7 +53,7 @@ void main()
 {
 	vec2 depthUv = clamp(texCoords * depthUvScaleClamp.xy, vec2(0.0), depthUvScaleClamp.zw);
 	float centerDepth = texture(depthTexture, depthUv).r;
-	if (centerDepth >= SKY_DEPTH_THRESHOLD)
+	if (centerDepth >= WZ_BLUR_SKY_DEPTH_THRESHOLD)
 	{
 		#ifdef NEWGL
 		FragColor = vec4(1.0);
@@ -76,30 +63,29 @@ void main()
 		return;
 	}
 
-	vec2 aoUv = clamp(texCoords * occlusionUvScaleClamp.xy, vec2(0.0), occlusionUvScaleClamp.zw);
-	float result = texture(occlusionTexture, aoUv).r * WEIGHT0;
-	float weightSum = WEIGHT0;
+	vec2 aoUv = clamp(texCoords * valueUvScaleClamp.xy, vec2(0.0), valueUvScaleClamp.zw);
+	float result = texture(occlusionTexture, aoUv).r * wzBlurGaussianWeight(0);
+	float weightSum = wzBlurGaussianWeight(0);
 
-	int pairs = int(tapPairs + 0.5);
-	if (pairs >= 1)
+	if (wzBlurPairEnabled(tapPairs, 1))
 	{
-		accumulateTap(result, weightSum, texCoords + blurDirection * 1.0, centerDepth, WEIGHT1);
-		accumulateTap(result, weightSum, texCoords - blurDirection * 1.0, centerDepth, WEIGHT1);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 1.0, centerDepth, wzBlurGaussianWeight(1));
+		accumulateTap(result, weightSum, texCoords - blurDirection * 1.0, centerDepth, wzBlurGaussianWeight(1));
 	}
-	if (pairs >= 2)
+	if (wzBlurPairEnabled(tapPairs, 2))
 	{
-		accumulateTap(result, weightSum, texCoords + blurDirection * 2.0, centerDepth, WEIGHT2);
-		accumulateTap(result, weightSum, texCoords - blurDirection * 2.0, centerDepth, WEIGHT2);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 2.0, centerDepth, wzBlurGaussianWeight(2));
+		accumulateTap(result, weightSum, texCoords - blurDirection * 2.0, centerDepth, wzBlurGaussianWeight(2));
 	}
-	if (pairs >= 3)
+	if (wzBlurPairEnabled(tapPairs, 3))
 	{
-		accumulateTap(result, weightSum, texCoords + blurDirection * 3.0, centerDepth, WEIGHT3);
-		accumulateTap(result, weightSum, texCoords - blurDirection * 3.0, centerDepth, WEIGHT3);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 3.0, centerDepth, wzBlurGaussianWeight(3));
+		accumulateTap(result, weightSum, texCoords - blurDirection * 3.0, centerDepth, wzBlurGaussianWeight(3));
 	}
-	if (pairs >= 4)
+	if (wzBlurPairEnabled(tapPairs, 4))
 	{
-		accumulateTap(result, weightSum, texCoords + blurDirection * 4.0, centerDepth, WEIGHT4);
-		accumulateTap(result, weightSum, texCoords - blurDirection * 4.0, centerDepth, WEIGHT4);
+		accumulateTap(result, weightSum, texCoords + blurDirection * 4.0, centerDepth, wzBlurGaussianWeight(4));
+		accumulateTap(result, weightSum, texCoords - blurDirection * 4.0, centerDepth, wzBlurGaussianWeight(4));
 	}
 
 	result /= max(weightSum, 1e-6);

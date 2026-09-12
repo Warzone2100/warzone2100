@@ -859,6 +859,33 @@ bool loadConfig()
 			war_setSsaoMode(SSAO_MODE::OFF);
 		}
 	}
+	{
+		std::string ssrValue = iniGetString("ssr", "off").value();
+		if (ssrValue == "low")
+		{
+			war_setSsrMode(SSR_MODE::LOW);
+		}
+		else if (ssrValue == "normal")
+		{
+			war_setSsrMode(SSR_MODE::NORMAL);
+		}
+		else if (ssrValue == "high")
+		{
+			war_setSsrMode(SSR_MODE::HIGH);
+		}
+		else if (ssrValue == "ultra")
+		{
+			war_setSsrMode(SSR_MODE::ULTRA);
+		}
+		else
+		{
+			if (ssrValue != "off")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid ssr value: \"%s\"; using \"off\"", ssrValue.c_str());
+			}
+			war_setSsrMode(SSR_MODE::OFF);
+		}
+	}
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
@@ -1108,6 +1135,14 @@ bool saveConfig()
 		case SSAO_MODE::NORMAL: iniSetString("ssao", "normal"); break;
 		case SSAO_MODE::HIGH: iniSetString("ssao", "high"); break;
 		case SSAO_MODE::ULTRA: iniSetString("ssao", "ultra"); break;
+	}
+	switch (war_getSsrMode())
+	{
+		case SSR_MODE::OFF: iniSetString("ssr", "off"); break;
+		case SSR_MODE::LOW: iniSetString("ssr", "low"); break;
+		case SSR_MODE::NORMAL: iniSetString("ssr", "normal"); break;
+		case SSR_MODE::HIGH: iniSetString("ssr", "high"); break;
+		case SSR_MODE::ULTRA: iniSetString("ssr", "ultra"); break;
 	}
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());

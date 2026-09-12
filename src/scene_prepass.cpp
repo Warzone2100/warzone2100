@@ -19,8 +19,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file scene_prepass.cpp
- * Scene prepass for SSAO, deferred fog, and forward transparents:
- * depth + view-space normals when needed (ex: SSAO), depth alone otherwise.
+ * Scene prepass for SSAO, SSR, deferred fog, and forward transparents:
+ * depth + view-space normals when needed (ex: SSAO, SSR), depth alone otherwise.
  */
 
 #include "scene_prepass.h"
@@ -40,7 +40,7 @@ void recordScenePrepass(const gfx_api::RenderPassContext& passCtx)
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos{fc.cameraPos.x, fc.cameraPos.y, fc.cameraPos.z};
 
-	// The blueprint attaches the normals color target only when an enabled post-effect needs it (PrepassNeed::Normals, i.e. SSAO).
+	// The blueprint attaches the normals color target only when an enabled post-effect needs it (PrepassNeed::Normals, i.e. SSAO / SSR).
 	// Follow the pass's actual attachments rather than re-deriving the config, so record and blueprint can never disagree:
 	// with no color attachment bound, rasterize depth alone through the depth-only PSOs (empty fragment stage, no normals
 	// bandwidth - many GPUs rasterize depth-only at increased rate).

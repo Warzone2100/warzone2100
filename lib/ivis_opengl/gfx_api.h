@@ -664,7 +664,7 @@ namespace gfx_api
 			return true;
 		}
 
-		/// Commit SSAO/fog/range-ring catalog requests in one store. Backends rebuild surfaces.
+		/// Commit SSAO/SSR/fog/range-ring catalog requests in one store. Backends rebuild surfaces.
 		/// Scene prepass follows `prepassNeeds(cfg)` in pipelineSurfaceSyncInputs().
 		virtual bool setSceneEffectSurfaces(SceneEffectSurfaces cfg)
 		{
@@ -748,8 +748,12 @@ namespace gfx_api
 
 		static SceneEffectSurfaces normalizeSceneEffectSurfaces(SceneEffectSurfaces cfg)
 		{
-			cfg.ssaoGenerateDivisor = std::max(cfg.ssaoGenerateDivisor, 1u);
-			cfg.ssaoBlurDivisor = std::max(cfg.ssaoBlurDivisor, 1u);
+			auto normalizeBlurResolution = [](BlurResolution& resolution) {
+				resolution.generateDivisor = std::max(resolution.generateDivisor, 1u);
+				resolution.blurDivisor = std::max(resolution.blurDivisor, resolution.generateDivisor);
+			};
+			normalizeBlurResolution(cfg.ssaoResolution);
+			normalizeBlurResolution(cfg.ssrResolution);
 			return cfg;
 		}
 		void storeSceneEffectSurfaces(SceneEffectSurfaces cfg)
@@ -1470,6 +1474,26 @@ namespace gfx_api
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, notexture, SHADER_WATER_DEPTH_PREPASS_DEPTHONLY>;
 
+	template<>
+	struct constant_buffer_type<SHADER_WATER_DEPTH_PREPASS_BUMP>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
+		float timeSec;
+		float mipLoadBias;
+		float pad0 = 0.f;
+		float pad1 = 0.f;
+	};
+
+	using WaterDepthPrepassBump = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_WATER_DEPTH_PREPASS_BUMP>>,
+	std::tuple<
+		vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>>
+	>, std::tuple<
+		texture_description<0, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>
+	>, SHADER_WATER_DEPTH_PREPASS_BUMP>;
+
 
 	struct TerrainDecalVertex
 	{
@@ -1686,7 +1710,6 @@ namespace gfx_api
 		int ShadowMapSize;
 		float timeSec;
 		float mipLoadBias;
-		float pad0 = 0.f;
 		int viewportWidth;
 		int viewportHeight;
 		int bucketDimensionUsed;
@@ -2140,15 +2163,19 @@ namespace gfx_api
 		texture_description<2, sampler_type::bilinear_repeat, pixel_format_target::texture_2d> // noise
 	>, SHADER_SSAO_GENERATE>;
 
-	template<>
-	struct constant_buffer_type<SHADER_SSAO_BLUR>
+	// Shared transport/mechanics only. Effect shaders still own validity,
+	// accumulation, clear values, formats, and compose semantics.
+	struct DepthAwareBlurConstants
 	{
 		glm::vec2 blurDirection;
 		float depthSigma;
 		float tapPairs;
-		glm::vec4 occlusionUvScaleClamp;
+		glm::vec4 valueUvScaleClamp;
 		glm::vec4 depthUvScaleClamp;
 	};
+
+	template<>
+	struct constant_buffer_type<SHADER_SSAO_BLUR> : DepthAwareBlurConstants {};
 
 	using SSAOBlurPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_SSAO_BLUR>>,
@@ -2162,22 +2189,24 @@ namespace gfx_api
 		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d> // depth
 	>, SHADER_SSAO_BLUR>;
 
-	template<>
-	struct constant_buffer_type<SHADER_SSAO_DOWNSAMPLE>
+	struct BilinearResampleConstants
 	{
 		glm::vec4 uvScaleClamp;
 	};
 
-	using SSAODownsamplePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
-	std::tuple<constant_buffer_type<SHADER_SSAO_DOWNSAMPLE>>,
+	template<>
+	struct constant_buffer_type<SHADER_BILINEAR_RESAMPLE> : BilinearResampleConstants {};
+
+	using BilinearResamplePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_BILINEAR_RESAMPLE>>,
 	std::tuple<
 		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
 		>
 	>,
 	std::tuple<
-		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d> // occlusion
-	>, SHADER_SSAO_DOWNSAMPLE>;
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>
+	>, SHADER_BILINEAR_RESAMPLE>;
 
 	template<>
 	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>
@@ -2202,6 +2231,76 @@ namespace gfx_api
 		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>, // ao
 		texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d>  // prepassNormals
 	>, SHADER_SCENE_COMPOSE_SSAO>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SSR_GENERATE>
+	{
+		glm::mat4 invProjectionMatrix;
+		glm::mat4 projectionMatrix;
+		glm::mat4 viewToSkyLocal;
+		glm::vec4 params;
+		glm::vec4 prepassUvScaleClamp;
+		glm::vec4 sceneUvScaleClamp;
+		glm::vec4 skyFogColor;
+		float stepCount;
+		float skyboxAvailable = 0.f;
+		float padding1 = 0.f;
+		float padding2 = 0.f;
+	};
+
+	using SSRGeneratePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SSR_GENERATE>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::nearest_clamped, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>,
+		texture_description<2, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<3, sampler_type::bilinear_repeat, pixel_format_target::texture_2d>
+	>, SHADER_SSR_GENERATE>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SSR_BLUR> : DepthAwareBlurConstants {};
+
+	using SSRBlurPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SSR_BLUR>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>
+	>, SHADER_SSR_BLUR>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSR>
+	{
+		glm::mat4 invProjectionMatrix;
+		glm::vec4 sceneUvScaleClamp;
+		glm::vec4 ssrUvScaleClamp;
+		glm::vec4 normalsUvScaleClamp;
+		glm::vec4 depthUvScaleClamp;
+		float intensity;
+		float F0;
+		float padding0 = 0.f;
+		float padding1 = 0.f;
+	};
+
+	using SceneComposeSSRPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SCENE_COMPOSE_SSR>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<2, sampler_type::nearest_clamped, pixel_format_target::texture_2d>,
+		texture_description<3, sampler_type::nearest_clamped, pixel_format_target::texture_2d>
+	>, SHADER_SCENE_COMPOSE_SSR>;
 
 	template<>
 	struct constant_buffer_type<SHADER_SCENE_FOG>

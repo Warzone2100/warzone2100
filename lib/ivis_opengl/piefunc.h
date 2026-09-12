@@ -34,6 +34,11 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include <array>
 
+namespace gfx_api
+{
+	struct texture;
+}
+
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix);
 
 void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);
@@ -44,6 +49,7 @@ void pie_DrawSkybox(float scale, const glm::mat4& projectionMatrix, const glm::m
 void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
 void pie_Skybox_Texture(const char *filename);
+gfx_api::texture* pie_Skybox_GetTexture();
 
 // Dev-only tessellation smoke test (set WZ_DEBUG_TESS_TEST=1): draws a tessellated patch overlay
 void pie_DebugDrawTessellationTestPatch();
