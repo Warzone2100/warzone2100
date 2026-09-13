@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-08-07 03:03\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -1776,7 +1776,7 @@ msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Localiza y rescata tus unidades del transportador derribado"
 
 msgid "Destroy all enemy bases"
-msgstr ""
+msgstr "Destruir todas las bases enemigas"
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Rescata a los civiles de The Collective antes de que muchos sean capturados"
@@ -1800,7 +1800,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Rescata al equipo Alfa de Nexus"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr ""
+msgstr "Evitar que cualquier tanque de flotación Nexus escape del área"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Destruye el cuartel general de Nexo para desactivar el programa de intrusos Nexo"
@@ -2013,7 +2013,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Enhorabuena comandante - ahora estás listo para tu primera misión"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "El tutorial ha terminado. Pulsa Esc o el icono de engranaje para salir del menú principal."
 
 msgid "CAMPAIGN ONE"
 msgstr "CAMPAÑA UNO"
@@ -2949,26 +2949,26 @@ msgid "System locale"
 msgstr "Idioma del sistema"
 
 msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
-msgstr ""
+msgstr "Este host no ha permitido uniones de ciertos proveedores de hosting, VPN y/o proxies."
 
 msgid "Please try another room or disable any proxies / VPNs and try again."
-msgstr ""
+msgstr "Por favor, pruebe otra sala o desactive cualquier proxy/VPN y vuelva a intentarlo."
 
 msgid "Game not found in lobby."
-msgstr ""
+msgstr "Juego no encontrado en el lobby."
 
 msgid "The game may have already started, or the host may have disbanded the game lobby."
 msgstr "Es posible que la partida ya haya comenzado, o que el anfitrión haya disuelto la sala del juego."
 
 msgid "Error hosting game in lobby server"
-msgstr ""
+msgstr "Error al alojar el juego en el servidor del lobby"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
-msgstr ""
+msgstr "Asegúrese de que el puerto %d puede recibir conexiones entrantes."
 
 msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
-msgstr ""
+msgstr "Si está utilizando un router, configúrelo para habilitar UPnP/NAT-PMP/PCP o para redirigir el puerto a su sistema."
 
 msgid "Failed to create port mapping"
 msgstr "Error al crear mapeo de puertos"
@@ -2979,7 +2979,7 @@ msgstr "¡Configura manualmente el router/firewall para abrir el puerto %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "Puerto externo abierto de mapeo: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2990,37 +2990,37 @@ msgstr "Error al crear mapeo de puerto (tiempo máximo alcanzado)"
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "Usando el backend de red %s."
 
 msgid "Client failed to ack player index swap"
 msgstr "El cliente falló al confirmar el intercambio de índice de jugadores"
 
 msgid "Game is listed in the lobby"
-msgstr ""
+msgstr "El juego aparece en el lobby"
 
 msgid "Lobby GameId"
-msgstr ""
+msgstr "Lobby GameId"
 
 msgid "Game not listed in the lobby."
-msgstr ""
+msgstr "El juego no aparece en el lobby."
 
 msgid "Error connecting to the lobby server."
-msgstr ""
+msgstr "Error al conectar con el servidor del lobby."
 
 msgid "Please check your internet connection, or wait a short while and try hosting again."
-msgstr ""
+msgstr "Por favor, compruebe su conexión a Internet o espere un poco y trate de alojar de nuevo."
 
 msgid "Your game will only be accessible via direct connection (or local LAN)."
-msgstr ""
+msgstr "Tu juego sólo será accesible mediante una conexión directa (o LAN local)."
 
 msgid "Multiplayer lobby support unavailable. Please update your client."
-msgstr ""
+msgstr "Soporte de lobby multijugador no disponible. Por favor, actualice su cliente."
 
 msgid "Game not listed in the lobby:"
-msgstr ""
+msgstr "El juego no aparece en el lobby:"
 
 msgid "Failed to create game listing. Check WZ logs."
-msgstr ""
+msgstr "Error al crear la lista de juegos. Compruebe los registros WZ."
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "El formato de archivo de repetición es más reciente de lo que esta versión de Warzone 2100 puede soportar."
@@ -3042,7 +3042,7 @@ msgid "Warzone 2100: Failed to initialize graphics"
 msgstr "Warzone 2100: Error al inicializar gráficos"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "Error al inicializar gráficos para todos los backends."
 
 msgid "Error Details:"
 msgstr "Detalles de error:"
@@ -3057,14 +3057,14 @@ msgid "Warzone 2100: Prior launch failed"
 msgstr "Warzone 2100: Error al iniciar antes"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "El intento anterior de inicializar el siguiente backend de gráficos causó un fallo:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Respaldo de gráficos: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Ahora, Warzone 2100 intentará lanzarse usando un backend de gráficos diferente."
 
 msgid "Menu"
 msgstr "Menú"
@@ -3103,16 +3103,16 @@ msgid "Tab Scroll right"
 msgstr "Tab Desplazamiento Derecha"
 
 msgid "Please enter the text below"
-msgstr ""
+msgstr "Por favor, introduzca el texto a continuación"
 
 msgid "Enter the text"
-msgstr ""
+msgstr "Introduzca el texto"
 
 msgid "Please drag the slider to verify"
-msgstr ""
+msgstr "Por favor, arrastra el deslizador para verificar"
 
 msgid "Please drag the tile to verify"
-msgstr ""
+msgstr "Por favor, arrastra la pieza para verificar"
 
 msgid ".50-calibre heavy machinegun"
 msgstr "ametralladora pesada calibre .50"
@@ -3149,16 +3149,16 @@ msgid "AA Chainfeed Loader"
 msgstr "AA Recarga Encadenada"
 
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "AA Emplazamiento de cañón antiaéreo Ciclón"
 
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "AA Punto de anclaje de cañón antiaéreo Ciclón"
 
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "AA Semi-orugas Pitón con cañón hidráulico Ciclón"
 
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "AA cañón hidráulico Ciclón"
 
 #, no-c-format
 msgid "AA Flak damage +25%"
@@ -4898,7 +4898,7 @@ msgid "High explosive shaped charge missile"
 msgstr "Misiles de carga altamente explosiva"
 
 msgid "High Explosive Soft Casing High Capacity Shells"
-msgstr ""
+msgstr "Proyectiles de alta capacidad explosivos de carcasa blanda"
 
 msgid "High Explosive Soft Casing Shells"
 msgstr ""
@@ -11447,7 +11447,7 @@ msgid "Default"
 msgstr "Predeterminado"
 
 msgid "The system default (no supplied bias, may result in less sharp visuals)."
-msgstr ""
+msgstr "El sistema por defecto (no hay prejuicios suministrados, puede resultar en visuales menos afilados)."
 
 msgid "Use LOD Distance bias to increase visual sharpness."
 msgstr "Usar el sesgo de la distancia de detalles para aumentar la nitidez visual"
@@ -11477,7 +11477,7 @@ msgid "Display Scale"
 msgstr "Escalado de Interfaz"
 
 msgid "Game UI"
-msgstr ""
+msgstr "IU del juego"
 
 msgid "Show FPS"
 msgstr "Mostrar FPS"
@@ -11576,7 +11576,7 @@ msgid "Window"
 msgstr "Ventana"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Escritorio Completo"
 
 msgid "Window Mode"
 msgstr "Modo ventana"
@@ -11585,7 +11585,7 @@ msgid "Windowed"
 msgstr "En ventana"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Modo Pantalla Completa"
 
 msgid "Behaviors"
 msgstr "Comportamientos"
@@ -11661,15 +11661,15 @@ msgid "Waiting Room"
 msgstr "Sala de espera"
 
 msgid "Reset Lobby Address to Default"
-msgstr ""
+msgstr "Restablecer dirección de Lobby por defecto"
 
 #, c-format
 msgid "Host Name: %s"
-msgstr ""
+msgstr "Nombre del Anfitrión: %s"
 
 #, c-format
 msgid "ID: %s"
-msgstr ""
+msgstr "ID: %s"
 
 msgid "FFA"
 msgstr "TCT"
@@ -11681,7 +11681,7 @@ msgid "Teams"
 msgstr "Equipos"
 
 msgid "Teams (No Shared Res)"
-msgstr ""
+msgstr "Equipos (Sin Res)"
 
 msgid "Matchmaking"
 msgstr "Emparejamiento"
@@ -11696,7 +11696,7 @@ msgid "No Tanks"
 msgstr "Sin Tanques"
 
 msgid "No VTOL"
-msgstr ""
+msgstr "Sin VTOL"
 
 msgid "No Cyborgs"
 msgstr "Sin Cyborgs"
@@ -11705,35 +11705,35 @@ msgid "Spectate Game"
 msgstr "Observar partida"
 
 msgid "Join as Player"
-msgstr ""
+msgstr "Unirse como jugador"
 
 msgid "Join as Spectator"
-msgstr ""
+msgstr "Únete como Espectador"
 
 #, c-format
 msgid "Last IP: %s"
-msgstr ""
+msgstr "Última IP: %s"
 
 msgid "Clear Last IP"
-msgstr ""
+msgstr "Limpiar última IP"
 
 msgid "GameID or IP:port"
-msgstr ""
+msgstr "GameID o IP:puerto"
 
 msgid "Join"
-msgstr ""
+msgstr "Unirse"
 
 msgid "There appears to be a game update available!"
 msgstr "¡Parece haber una actualización del juego disponible!"
 
 msgid "Error dispatching request"
-msgstr ""
+msgstr "Error al enviar la solicitud"
 
 msgid "Failed to connect to lobby server"
 msgstr "¡No se pudo conectar al vestíbulo!"
 
 msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
-msgstr ""
+msgstr "Este juego es sólo IPv6 y tiene la opción \"Habilitar IPv6\" desactivada en Opciones > Valores por defecto."
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Tu versión de Warzone es incompatible con esta partida."
@@ -11784,103 +11784,103 @@ msgid "Hide Modded Games"
 msgstr "Ocultar partidas modificadas"
 
 msgid "Hide IPv6-Only"
-msgstr ""
+msgstr "Ocultar sólo IPv6"
 
 msgid "Host Lobby Options"
-msgstr ""
+msgstr "Opciones de Lobby de Host"
 
 msgid "Game must be listed in lobby to support this option."
-msgstr ""
+msgstr "El juego debe estar listado en el lobby para soportar esta opción."
 
 msgid "This option is not supported by the current lobby."
-msgstr ""
+msgstr "Esta opción no está soportada por el lobby actual."
 
 msgid "Awaiting lobby information..."
-msgstr ""
+msgstr "Esperando información del lobby..."
 
 msgid "Slot Options"
-msgstr ""
+msgstr "Opciones de Slot"
 
 msgid "Spectator Join"
-msgstr ""
+msgstr "Unirse al Espectador"
 
 msgid "Locked"
-msgstr ""
+msgstr "Bloqueado"
 
 msgid "Allow Change"
-msgstr ""
+msgstr "Permitir cambio"
 
 msgid "Position"
-msgstr ""
+msgstr "Posición"
 
 msgid "Game Options"
-msgstr ""
+msgstr "Opciones de Juego"
 
 msgid "Lobby Join Options"
-msgstr ""
+msgstr "Opciones de unión de Lobby"
 
 msgid "Bot Protection"
-msgstr ""
+msgstr "Protección del bot"
 
 msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
-msgstr ""
+msgstr "Si los robots o herramientas automatizados pueden unirse o reunir información de conexión del host (incluyendo su dirección IP). Si encuentras unidades, spammers, o cualquier otro abuso, es posible que desees activar esta opción."
 
 msgid "Block Known Bots"
-msgstr ""
+msgstr "Bloquear Robots Conocidos"
 
 msgid "Block known bots or automated tools."
-msgstr ""
+msgstr "Bloquear bots conocidos o herramientas automatizadas."
 
 msgid "Proxy / VPN Connections"
-msgstr ""
+msgstr "Conexiones Proxy / VPN"
 
 msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
-msgstr ""
+msgstr "Los proxies / VPN ocultan la verdadera fuente de conexiones. Pueden ser utilizados por jugadores que intentan evadir prohibiciones u ocultar su identidad."
 
 msgid "Block suspicious connections from proxies / VPNs."
-msgstr ""
+msgstr "Bloquear conexiones sospechosas de proxies / VPNs."
 
 msgid "(Recommended)"
-msgstr ""
+msgstr "(Recomendado)"
 
 msgid "Block All"
-msgstr ""
+msgstr "Bloquear todos"
 
 msgid "Block all connections from proxies / VPNs."
-msgstr ""
+msgstr "Bloquear todas las conexiones de proxies / VPNs."
 
 msgid "Block Suspicious"
-msgstr ""
+msgstr "Bloquear sospechoso"
 
 msgid "Hosting Provider IPs"
-msgstr ""
+msgstr "Alojamiento de Proveedores IP"
 
 msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
-msgstr ""
+msgstr "Proveedores de alojamiento de servidores. Puede ser utilizado por herramientas automatizadas, escáneres de puertos, o jugadores que intentan evadir prohibiciones."
 
 msgid "Block all connections from hosting provider IPs."
-msgstr ""
+msgstr "Bloquear todas las conexiones de las IPs de los proveedores."
 
 msgid "Block suspicious connections from hosting provider IPs."
-msgstr ""
+msgstr "Bloquear conexiones sospechosas de las IPs del proveedor de alojamiento."
 
 msgid "Lobby Join Bypass"
-msgstr ""
+msgstr "Lobby unirse a Bypass"
 
 msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
-msgstr ""
+msgstr "Permitir a los clientes omitir unirse al vestíbulo a través de una conexión directa puerto:IP. (Puede permitir a los trols eludir las protecciones antiabuso del lobby.)"
 
 msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
-msgstr ""
+msgstr "Permitir que cualquier IP se una directamente. Bypass protecciones antiabuso del lobby."
 
 msgid "(Not Recommended)"
-msgstr ""
+msgstr "(No recomendado)"
 
 msgid "Do not allow direct joins. Require joining through the lobby."
-msgstr ""
+msgstr "No permitir entradas directas. Requiere unirte a través del lobby."
 
 msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
-msgstr ""
+msgstr "Permitir a los usuarios que accedan directamente a la red local o LAN. Requiere que otros se unan a través del vestíbulo."
 
 msgid "Joined:"
 msgstr "Unido:"
@@ -12052,7 +12052,7 @@ msgid "Match Option Preferences:"
 msgstr "Coincidir preferencias:"
 
 msgid "Star All"
-msgstr ""
+msgstr "Todo"
 
 msgid "Clear All"
 msgstr "Limpiar todo"
@@ -12103,16 +12103,16 @@ msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr "Las identidades de los jugadores son visibles, en el lobby y en el juego (predeterminado)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
+msgstr "Las identidades de los jugadores están ocultas para todos (excepto el anfitrión del espectador) hasta que el juego comience."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
-msgstr ""
+msgstr "Las identidades de los jugadores están ocultas para todos (excepto el anfitrión del espectador) hasta que el juego termine."
 
 msgid "Start Hosting"
-msgstr ""
+msgstr "Empezar a ser anfitrión"
 
 msgid "Configure Advanced Hosting Options"
-msgstr ""
+msgstr "Configurar Opciones Avanzadas de Hosting"
 
 msgid "Launch Transport"
 msgstr "Lanzar Transporte"
