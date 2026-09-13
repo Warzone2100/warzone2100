@@ -128,7 +128,7 @@ if(NOT TARGET ZipIOProvider)
 	message(FATAL_ERROR "Missing ZipIOProvider - check if libzip detection was successful?")
 endif()
 
-target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ZipIOProvider ivis-opengl netplay sdl-backend framework sequence sound widget)
+target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ZipIOProvider ivis-opengl netplay sandbox sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 target_link_libraries(warzone2100 mikktspace) # terrain decal tangents - see calcDecalTangents
 target_link_libraries(warzone2100 fmt::fmt)

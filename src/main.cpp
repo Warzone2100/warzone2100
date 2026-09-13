@@ -63,6 +63,7 @@
 #include "lib/framework/wztime.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "lib/sandbox/sandbox.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -1951,6 +1952,10 @@ int realmain(int argc, char *argv[])
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
 
+	// The log file callback does not exist yet, so this reaches only stderr. Logged again below.
+	const wz::sandbox::Status& sandboxStatus = wz::sandbox::status();
+	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
+
 	/** Initialize crash-handling provider, if configured */
 	/** NOTE: Should come as early as possible in process init, but needs to be after initialize_PhysicsFS because we need the platform pref dir for storing temporary crash files... */
 	bool debugCrashHandler = false;
@@ -2079,6 +2084,7 @@ int realmain(int argc, char *argv[])
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 	debug(LOG_WZ, "Backend: %s", BACKEND);
+	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
 	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
 
