@@ -1595,9 +1595,9 @@ void osSpecificPostInit_Win()
 
 void osSpecificFirstChanceProcessSetup()
 {
-#if defined(WZ_OS_WIN)
 	wz::sandbox::harden();
-#elif defined(WZ_OS_UNIX)
+
+#if defined(WZ_OS_UNIX)
 	// Before anything else is run, and before creating any threads, ignore SIGPIPE
 	// see: https://curl.haxx.se/libcurl/c/CURLOPT_NOSIGNAL.html
 	struct sigaction sa;
@@ -1608,8 +1608,6 @@ void osSpecificFirstChanceProcessSetup()
 
 	// Initialize time conversion information
 	tzset();
-#else
-	// currently, no-op
 #endif
 
 #if defined(__EMSCRIPTEN__) // must be separate, because WZ_OS_UNIX is also defined for emscripten builds

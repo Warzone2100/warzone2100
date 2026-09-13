@@ -23,11 +23,25 @@
 
 #include "sandbox_internal.h"
 
+#if defined(__FreeBSD__)
+# include <cerrno>
+# include <cstring>
+# include <sys/procctl.h>
+# include <unistd.h>
+#endif
+
 namespace wz::sandbox
 {
 
 void backendHarden()
 {
+#if defined(__FreeBSD__) && defined(PROC_NO_NEW_PRIVS_CTL)
+	int enable = PROC_NO_NEW_PRIVS_ENABLE;
+	if (procctl(P_PID, getpid(), PROC_NO_NEW_PRIVS_CTL, &enable) != 0)
+	{
+		logPending(LogLevel::Info, "no_new_privs unavailable: %s", strerror(errno));
+	}
+#endif
 }
 
 Status backendConfine(const Plan& plan, Tier requested)
