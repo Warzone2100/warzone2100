@@ -64,6 +64,7 @@
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/sandbox/sandbox.h"
+#include "wzsandbox.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -1670,6 +1671,9 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 	std::string systemRamString = std::to_string(systemRamMiB);
 	crashHandlingProviderSetTag("wz.system_ram", systemRamString);
 
+	const wz::sandbox::Status& sandboxStatus = wz::sandbox::status();
+	crashHandlingProviderSetTag("wz.sandbox", sandboxStatus.backend + "/" + wz::sandbox::tierName(sandboxStatus.effective) + "/" + sandboxStatus.detail);
+
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
 	// Truncate absurdly long backend info values (if needed - common culprit is GL_EXTENSIONS)
 	const size_t MAX_BACKENDINFO_VALUE_LENGTH = 2048;
@@ -1858,6 +1862,10 @@ int realmain(int argc, char *argv[])
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
 
+	/** Confine the process before anything creates a thread or parses a file */
+	const std::string platformPrefDir = getWzPlatformPrefDir();
+	wzSandboxEarlySetup(utfargc, utfargv, platformPrefDir);
+
 	// The log file callback does not exist yet, so this reaches only stderr. Logged again below.
 	const wz::sandbox::Status& sandboxStatus = wz::sandbox::status();
 	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
@@ -1868,7 +1876,7 @@ int realmain(int argc, char *argv[])
 	bool bCrashHandlingProvider = useCrashHandlingProvider(utfargc, utfargv, debugCrashHandler);
 	if (bCrashHandlingProvider)
 	{
-		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
+		bCrashHandlingProvider = initCrashHandlingProvider(platformPrefDir, getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
 		if (!bCrashHandlingProvider)
 		{
 			debug(LOG_WZ, "Failed to init crash handling provider");
