@@ -22,8 +22,8 @@
 /**
  * Checks for lib/sandbox. Build with -DWZ_BUILD_SANDBOX_TEST=ON and run the binary.
  *
- * The confinement checks run in a child process: once a tier is applied it cannot be lifted, and the parent
- * still has to remove the temporary directory it made under $HOME.
+ * Each tier's checks run in their own child process: confinement cannot be lifted once applied, and the
+ * parent still has to remove the temporary directory it made under $HOME.
  */
 
 #include "lib/sandbox/sandbox.h"
@@ -90,12 +90,15 @@ static void checkTierParsing()
 	check(strcmp(wz::sandbox::tierName(wz::sandbox::Tier::Strict), "strict") == 0, "tierName(Strict)");
 }
 
-static int runConfinedChecks(const std::string& writeRoot, const std::string& homeOutside)
+static int runConfinedChecks(wz::sandbox::Tier tier, const std::string& writeRoot,
+                             const std::string& homeOutside, const std::string& homeReadable)
 {
+	const char* tierText = wz::sandbox::tierName(tier);
+
 	wz::sandbox::Plan plan;
 	plan.writeRoots.push_back(writeRoot);
 
-	const wz::sandbox::Status status = wz::sandbox::confine(plan, wz::sandbox::Tier::WriteConfined);
+	const wz::sandbox::Status status = wz::sandbox::confine(plan, tier);
 	for (const wz::sandbox::LogLine& line : wz::sandbox::pendingLog())
 	{
 		printf("  sandbox: %s\n", line.text.c_str());
@@ -103,18 +106,46 @@ static int runConfinedChecks(const std::string& writeRoot, const std::string& ho
 
 	if (!status.active)
 	{
-		printf("SKIP: no confinement applied (%s)\n", status.detail.c_str());
+		printf("SKIP %s: no confinement applied (%s)\n", tierText, status.detail.c_str());
 		return 0;
 	}
-	printf("confined with %s (%s)\n", status.backend.c_str(), status.detail.c_str());
+	printf("confined with %s (%s), tier %s\n", status.backend.c_str(), status.detail.c_str(), tierText);
 
+	check(status.effective == tier, "status() reports the tier that was requested");
 	check(canWrite(writeRoot + "/probe"), "write inside the write root is allowed");
 	check(!canWrite(homeOutside), "write elsewhere under $HOME is denied");
 	check(errno == EACCES, "the denial is EACCES");
 	check(canRead("/etc/hostname"), "reads outside the write root still work");
-	check(wz::sandbox::status().active, "status() reports the applied confinement");
+
+	// The tiers differ only in whether the rest of $HOME stays readable
+	const bool readable = canRead(homeReadable.c_str());
+	if (tier == wz::sandbox::Tier::Strict)
+	{
+		check(!readable, "reads elsewhere under $HOME are denied");
+	}
+	else
+	{
+		check(readable, "reads elsewhere under $HOME are allowed");
+	}
 
 	return failures;
+}
+
+static bool runTierInChild(wz::sandbox::Tier tier, const std::string& writeRoot,
+                           const std::string& homeOutside, const std::string& homeReadable)
+{
+	fflush(stdout);   // or the child inherits this output and prints it again
+	const pid_t child = fork();
+	if (child == 0)
+	{
+		const int childFailures = runConfinedChecks(tier, writeRoot, homeOutside, homeReadable);
+		fflush(stdout);   // _exit() does not flush, and stdout is fully buffered when it is not a terminal
+		_exit(childFailures != 0);
+	}
+
+	int status = 0;
+	waitpid(child, &status, 0);
+	return WIFEXITED(status) && WEXITSTATUS(status) == 0;
 }
 
 int main()
@@ -135,23 +166,22 @@ int main()
 		return failures != 0;
 	}
 	const std::string homeOutside = std::string(home) + "/.wz-sandbox-test-outside";
-
-	fflush(stdout);   // or the child inherits this output and prints it again
-	const pid_t child = fork();
-	if (child == 0)
+	const std::string homeReadable = std::string(home) + "/.wz-sandbox-test-readable";
+	const int readableFd = open(homeReadable.c_str(), O_WRONLY | O_CREAT, 0600);
+	if (readableFd < 0)
 	{
-		const int childFailures = runConfinedChecks(writeRoot, homeOutside);
-		fflush(stdout);   // _exit() does not flush, and stdout is fully buffered when it is not a terminal
-		_exit(childFailures != 0);
+		printf("SKIP: could not create %s: %s\n", homeReadable.c_str(), strerror(errno));
+		return failures != 0;
 	}
+	close(readableFd);
 
-	int status = 0;
-	waitpid(child, &status, 0);
+	bool tiersPassed = runTierInChild(wz::sandbox::Tier::WriteConfined, writeRoot, homeOutside, homeReadable);
+	tiersPassed = runTierInChild(wz::sandbox::Tier::Strict, writeRoot, homeOutside, homeReadable) && tiersPassed;
 
+	unlink(homeReadable.c_str());
 	unlink(homeOutside.c_str());
 	rmdir(writeRoot.c_str());
 
-	const bool childFailed = !WIFEXITED(status) || WEXITSTATUS(status) != 0;
-	printf("%s\n", (failures == 0 && !childFailed) ? "PASS" : "FAIL");
-	return (failures == 0 && !childFailed) ? 0 : 1;
+	printf("%s\n", (failures == 0 && tiersPassed) ? "PASS" : "FAIL");
+	return (failures == 0 && tiersPassed) ? 0 : 1;
 }

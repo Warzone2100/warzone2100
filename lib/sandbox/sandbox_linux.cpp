@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <string>
 #include <sys/prctl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 // Linux 3.5
@@ -130,22 +131,27 @@ static void addPathRule(int rulesetFd, const std::string& path, uint64_t allowed
 	close(pathFd);
 }
 
+/// Per the XDG base directory spec, the variable is used only when it holds an absolute path.
+static std::string xdgDir(const char* variable, const char* fallback)
+{
+	const char* value = getenv(variable);
+	if (value != nullptr && value[0] == '/')
+	{
+		return value;
+	}
+
+	const char* home = getenv("HOME");
+	if (home == nullptr || home[0] == '\0')
+	{
+		return std::string();
+	}
+	return std::string(home) + fallback;
+}
+
 /// The GPU driver writes its shader cache as the game process, so the ruleset has to cover it.
 static void addShaderCacheRules(int rulesetFd, uint64_t handled)
 {
-	const char* home = getenv("HOME");
-	const char* xdgCache = getenv("XDG_CACHE_HOME");
-
-	std::string cacheDir;
-	if (xdgCache != nullptr && xdgCache[0] != '\0')
-	{
-		cacheDir = xdgCache;
-	}
-	else if (home != nullptr && home[0] != '\0')
-	{
-		cacheDir = std::string(home) + "/.cache";
-	}
-
+	const std::string cacheDir = xdgDir("XDG_CACHE_HOME", "/.cache");
 	if (!cacheDir.empty())
 	{
 		for (const char* name : { "mesa_shader_cache", "mesa_shader_cache_db", "radv_builtin_shaders", "nvidia" })
@@ -153,17 +159,16 @@ static void addShaderCacheRules(int rulesetFd, uint64_t handled)
 			addPathRule(rulesetFd, cacheDir + "/" + name, RIGHTS_RW & handled);
 		}
 	}
+	const char* home = getenv("HOME");
 	if (home != nullptr && home[0] != '\0')
 	{
 		addPathRule(rulesetFd, std::string(home) + "/.nv", RIGHTS_RW & handled);
 	}
 }
 
-static void addWriteTierRules(int rulesetFd, const Plan& plan, uint64_t handled)
+/// The rules both tiers grant. They differ only in how much of the filesystem stays readable on top.
+static void addCommonRules(int rulesetFd, const Plan& plan, uint64_t handled)
 {
-	// Everything stays readable, which is what covers the Plan's readRoots and execRoots
-	addPathRule(rulesetFd, "/", RIGHTS_ROX & handled);
-
 	addPathRule(rulesetFd, "/dev", RIGHTS_DEV & handled);
 	addPathRule(rulesetFd, "/dev/shm", RIGHTS_RW & handled);
 	addPathRule(rulesetFd, "/tmp", RIGHTS_RW & handled);
@@ -188,6 +193,111 @@ static void addWriteTierRules(int rulesetFd, const Plan& plan, uint64_t handled)
 	{
 		addPathRule(rulesetFd, path, RIGHTS_ONE_FILE & handled);
 	}
+}
+
+static void addWriteTierRules(int rulesetFd, const Plan& plan, uint64_t handled)
+{
+	// Everything stays readable, which is what covers the Plan's readRoots and execRoots
+	addPathRule(rulesetFd, "/", RIGHTS_ROX & handled);
+	addCommonRules(rulesetFd, plan, handled);
+}
+
+/**
+ * Everything at the top level except the four names that hold personal data and removable media.
+ *
+ * /run is granted whole rather than enumerated. A rule binds the inodes that exist when it is added, so
+ * any /run/<daemon> created after startup would otherwise be unreachable.
+ */
+static void addRootChildRules(int rulesetFd, uint64_t handled)
+{
+	static const char* const denied[] = { "home", "root", "media", "mnt" };
+
+	DIR* root = opendir("/");
+	if (root == nullptr)
+	{
+		logPending(LogLevel::Error, "cannot enumerate /: %s", strerror(errno));
+		return;
+	}
+
+	while (const dirent* entry = readdir(root))
+	{
+		if (entry->d_name[0] == '.')
+		{
+			continue;
+		}
+
+		bool skip = false;
+		for (const char* name : denied)
+		{
+			if (strcmp(entry->d_name, name) == 0)
+			{
+				skip = true;
+				break;
+			}
+		}
+		if (skip)
+		{
+			continue;
+		}
+
+		// Landlock refuses a rule carrying directory rights on anything that is not one, and a plain file
+		// at the root (a swap image, a kernel image) is nothing the game reads
+		const std::string path = std::string("/") + entry->d_name;
+		struct stat info;
+		if (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode))
+		{
+			addPathRule(rulesetFd, path, RIGHTS_ROX & handled);
+		}
+	}
+	closedir(root);
+}
+
+/// The audio settings, the only files under $HOME the game reads from outside its own directories.
+static void addAudioConfigRules(int rulesetFd, uint64_t handled)
+{
+	const uint64_t readFile = LANDLOCK_ACCESS_FS_READ_FILE & handled;
+
+	const char* pulseCookie = getenv("PULSE_COOKIE");
+	if (pulseCookie != nullptr && pulseCookie[0] != '\0')
+	{
+		addPathRule(rulesetFd, pulseCookie, readFile);
+	}
+
+	const char* home = getenv("HOME");
+	if (home == nullptr || home[0] == '\0')
+	{
+		return;
+	}
+
+	for (const char* name : { "/.asoundrc", "/.alsoftrc", "/.pulse-cookie" })
+	{
+		addPathRule(rulesetFd, std::string(home) + name, readFile);
+	}
+
+	// The cookie only matters against a remote server, but libpulse logs an error when it cannot read it
+	const std::string configDir = xdgDir("XDG_CONFIG_HOME", "/.config");
+	if (!configDir.empty())
+	{
+		addPathRule(rulesetFd, configDir + "/pulse/cookie", readFile);
+	}
+}
+
+static void addStrictTierRules(int rulesetFd, const Plan& plan, uint64_t handled)
+{
+	addRootChildRules(rulesetFd, handled);
+	addAudioConfigRules(rulesetFd, handled);
+
+	// $HOME is not readable at this tier, so the game's own directories need naming
+	for (const std::string& path : plan.readRoots)
+	{
+		addPathRule(rulesetFd, path, RIGHTS_RO & handled);
+	}
+	for (const std::string& path : plan.execRoots)
+	{
+		addPathRule(rulesetFd, path, RIGHTS_ROX & handled);
+	}
+
+	addCommonRules(rulesetFd, plan, handled);
 }
 
 static bool isSingleThreaded()
@@ -231,11 +341,6 @@ Status backendConfine(const Plan& plan, Tier requested)
 	{
 		logPending(LogLevel::Error, "confine() ran with threads already started, so only this one is confined");
 	}
-	if (requested == Tier::Strict)
-	{
-		logPending(LogLevel::Info, "the strict tier is not implemented, applying the write tier");
-	}
-
 	const uint64_t handled = handledAccess(abi);
 	const landlock::RulesetAttr attr{ handled };
 	const int rulesetFd = landlock::createRuleset(&attr, sizeof(attr), 0);
@@ -246,7 +351,14 @@ Status backendConfine(const Plan& plan, Tier requested)
 		return result;
 	}
 
-	addWriteTierRules(rulesetFd, plan, handled);
+	if (requested == Tier::Strict)
+	{
+		addStrictTierRules(rulesetFd, plan, handled);
+	}
+	else
+	{
+		addWriteTierRules(rulesetFd, plan, handled);
+	}
 
 	prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
 
@@ -261,7 +373,7 @@ Status backendConfine(const Plan& plan, Tier requested)
 	close(rulesetFd);
 
 	result.active = true;
-	result.effective = Tier::WriteConfined;
+	result.effective = requested;
 	result.backend = "landlock";
 	result.detail = "ABI " + std::to_string(abi);
 	return result;
