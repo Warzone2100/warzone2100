@@ -41,7 +41,7 @@
 #  define WZ_DATADIR "data"
 #endif
 
-static const wz::sandbox::Tier defaultTier = wz::sandbox::Tier::Off;
+static const wz::sandbox::Tier defaultTier = wz::sandbox::Tier::WriteConfined;
 
 /// Returns the value of --<name>=<value>, or an empty string if the option is absent. Mirrors the game's
 /// own parser, which takes no other form of an option with a value and strips quotes a shell left behind.
