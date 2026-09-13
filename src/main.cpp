@@ -1829,6 +1829,18 @@ void mainShutdown()
 	ActivityManager::instance().shutdown();
 }
 
+static code_part sandboxLogPart(wz::sandbox::LogLevel level)
+{
+	switch (level)
+	{
+	case wz::sandbox::LogLevel::Error:
+		return LOG_ERROR;
+	case wz::sandbox::LogLevel::Info:
+		break;
+	}
+	return LOG_INFO;
+}
+
 int realmain(int argc, char *argv[])
 {
 	utfargc = argc;
@@ -1869,6 +1881,10 @@ int realmain(int argc, char *argv[])
 	// The log file callback does not exist yet, so this reaches only stderr. Logged again below.
 	const wz::sandbox::Status& sandboxStatus = wz::sandbox::status();
 	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
+	for (const wz::sandbox::LogLine& line : wz::sandbox::pendingLog())
+	{
+		debug(sandboxLogPart(line.level), "Sandbox: %s", line.text.c_str());
+	}
 
 	/** Initialize crash-handling provider, if configured */
 	/** NOTE: Should come as early as possible in process init, but needs to be after initialize_PhysicsFS because we need the platform pref dir for storing temporary crash files... */
@@ -1999,6 +2015,10 @@ int realmain(int argc, char *argv[])
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 	debug(LOG_WZ, "Backend: %s", BACKEND);
 	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
+	for (const wz::sandbox::LogLine& line : wz::sandbox::pendingLog())
+	{
+		debug(sandboxLogPart(line.level), "Sandbox: %s", line.text.c_str());
+	}
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
 	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
 

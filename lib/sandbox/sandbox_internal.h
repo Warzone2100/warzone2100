@@ -30,6 +30,8 @@ namespace wz::sandbox
 
 void backendHarden();
 
+void logPending(LogLevel level, const char* format, ...);
+
 /// Receives Tier::Off as given - macOS still reports the App Sandbox container when the tier is off.
 Status backendConfine(const Plan& plan, Tier requested);
 

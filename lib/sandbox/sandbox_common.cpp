@@ -22,12 +22,15 @@
 #include "sandbox.h"
 #include "sandbox_internal.h"
 
+#include <cstdarg>
+#include <cstdio>
 #include <cstring>
 
 namespace wz::sandbox
 {
 
 static Status lastStatus;
+static std::vector<LogLine> pending;
 
 void harden()
 {
@@ -43,6 +46,23 @@ Status confine(const Plan& plan, Tier requested)
 const Status& status()
 {
 	return lastStatus;
+}
+
+const std::vector<LogLine>& pendingLog()
+{
+	return pending;
+}
+
+void logPending(LogLevel level, const char* format, ...)
+{
+	char text[512];
+
+	va_list ap;
+	va_start(ap, format);
+	vsnprintf(text, sizeof(text), format, ap);
+	va_end(ap);
+
+	pending.push_back({ level, text });
 }
 
 bool parseTier(const char* text, Tier& out)

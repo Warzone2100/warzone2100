@@ -16,5 +16,3 @@ elseif(APPLE)
 else()
 	target_sources(sandbox PRIVATE "sandbox_null.cpp")
 endif()
-
-target_link_libraries(sandbox PRIVATE framework)

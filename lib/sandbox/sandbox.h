@@ -60,6 +60,18 @@ struct Status
 	std::string detail = "not applied";  ///< ex. "ABI 4", "unavailable: ENOSYS", "disabled"
 };
 
+enum class LogLevel
+{
+	Info,
+	Error
+};
+
+struct LogLine
+{
+	LogLevel level = LogLevel::Info;
+	std::string text;
+};
+
 /// Applies the platform mitigations that need no configuration. Safe to call first thing in main().
 void harden();
 
@@ -73,6 +85,10 @@ Status confine(const Plan& plan, Tier requested);
 
 /// What the last confine() call applied, or a default "none" if it has not been called.
 const Status& status();
+
+/// Messages from harden() and confine(), in order. harden() runs before the game's log exists, so the
+/// caller writes these out once it does.
+const std::vector<LogLine>& pendingLog();
 
 /// Parses "off" (or "0"), "write" or "strict". Anything else returns false and leaves out untouched.
 bool parseTier(const char* text, Tier& out);
