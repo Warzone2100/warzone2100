@@ -86,6 +86,7 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
+#include "ordersource.h"
 #include "multistat.h"
 #include "notifications.h"
 #include "projectile.h"
@@ -1791,6 +1792,9 @@ static bool stageThreeInitialiseSync()
 		intAddReticule();
 	}
 
+	orderSourceReset();
+	orderProvenanceReset();
+
 	if (bMultiPlayer)
 	{
 		multiGameInit();
@@ -1977,6 +1981,8 @@ bool stageThreeShutDown()
 	{
 		multiGameShutdown();
 	}
+	orderSourceReset();
+	orderProvenanceReset();
 
 	//call this here before mission data is released
 	if (!missionShutDown())

@@ -51,8 +51,8 @@ static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
-static const uint32_t currentReplayFormatVer = 3;
-static const uint32_t minReplayFormatVerSupported = 3;
+static const uint32_t currentReplayFormatVer = 4;
+static const uint32_t minReplayFormatVerSupported = 4;
 static const size_t DefaultReplayBufferSize = 32768;
 static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
 

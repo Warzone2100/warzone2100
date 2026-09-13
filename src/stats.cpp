@@ -1130,8 +1130,9 @@ bool loadPropulsionTypes(WzConfig &ini)
 	asPropulsionTypes.resize(NumTypes);
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
+	std::vector<bool> seenTypes(NumTypes, false);
 
-	for (int i = 0; i < NumTypes; ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_TYPE type;
 
@@ -1144,6 +1145,12 @@ bool loadPropulsionTypes(WzConfig &ini)
 			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().c_str());
 			return false;
 		}
+		if (seenTypes[type])
+		{
+			debug(LOG_FATAL, "Duplicate Propulsion type - %s", list[i].toUtf8().c_str());
+			return false;
+		}
+		seenTypes[type] = true;
 
 		PROPULSION_TYPES *pPropType = &asPropulsionTypes[type];
 
@@ -1182,18 +1189,36 @@ bool loadPropulsionTypes(WzConfig &ini)
 		ini.endGroup();
 	}
 
+	for (size_t type = 0; type < NumTypes; ++type)
+	{
+		if (!seenTypes[type])
+		{
+			debug(LOG_FATAL, "Missing Propulsion type - %zu", type);
+			return false;
+		}
+	}
+
 	return true;
 }
 
 bool loadTerrainTable(WzConfig &ini)
 {
-	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
+	deallocTerrainTable();
+	const size_t terrainTableSize = static_cast<size_t>(PROPULSION_TYPE_NUM) * static_cast<size_t>(TER_MAX);
+	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * terrainTableSize);
+	std::fill_n(asTerrainTable, terrainTableSize, 100);
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		int terrainType = ini.value("id").toInt();
+		if (terrainType < 0 || terrainType >= TER_MAX)
+		{
+			debug(LOG_ERROR, "Invalid terrain type id (%d) in %s", terrainType, list[i].toUtf8().c_str());
+			ini.endGroup();
+			continue;
+		}
 		ini.beginGroup("speedFactor");
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_WHEELED] = ini.value("wheeled", 100).toUInt();
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_TRACKED] = ini.value("tracked", 100).toUInt();

@@ -34,6 +34,7 @@
 
 #include "objects.h"
 #include "order.h"
+#include "ordersource.h"
 #include "action.h"
 #include "map.h"
 #include "formationdef.h"
@@ -1961,7 +1962,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 	DROID_ORDER_DATA sOrder(order);
 	if (mode == ModeQueue)
 	{
-		sendDroidInfo(psDroid, sOrder, false);
+		sendDroidInfo(psDroid, sOrder, false, currentOrderSource());
 	}
 	else
 	{
@@ -2005,7 +2006,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_
 	DROID_ORDER_DATA sOrder(order, Vector2i(x, y));
 	if (mode == ModeQueue)
 	{
-		sendDroidInfo(psDroid, sOrder, false);
+		sendDroidInfo(psDroid, sOrder, false, currentOrderSource());
 		return;  // Wait to receive our order before changing the droid.
 	}
 
@@ -2067,7 +2068,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 	DroidOrder sOrder(order, psObj);
 	if (mode == ModeQueue) //ajl
 	{
-		sendDroidInfo(psDroid, sOrder, false);
+		sendDroidInfo(psDroid, sOrder, false, currentOrderSource());
 		return;  // Wait for the order to be received before changing the droid.
 	}
 
@@ -2175,7 +2176,7 @@ void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *p
 	DroidOrder sOrder(order, psStats, Vector2i(x, y), direction);
 	if (mode == ModeQueue)
 	{
-		sendDroidInfo(psDroid, sOrder, false);
+		sendDroidInfo(psDroid, sOrder, false, currentOrderSource());
 		return;  // Wait for our order before changing the droid.
 	}
 
@@ -2197,7 +2198,7 @@ void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS
 		return;
 	}
 
-	sendDroidInfo(psDroid, DroidOrder(order, psStats, Vector2i(x, y), direction), add);
+	sendDroidInfo(psDroid, DroidOrder(order, psStats, Vector2i(x, y), direction), add, currentOrderSource());
 }
 
 
@@ -2210,7 +2211,7 @@ void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS
 	DroidOrder sOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction);
 	if (mode == ModeQueue)
 	{
-		sendDroidInfo(psDroid, sOrder, false);
+		sendDroidInfo(psDroid, sOrder, false, currentOrderSource());
 		return;  // Wait for our order before changing the droid.
 	}
 
@@ -2227,7 +2228,7 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_ST
 	ASSERT(psDroid != nullptr, "Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
 
-	sendDroidInfo(psDroid, DroidOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction), true);
+	sendDroidInfo(psDroid, DroidOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction), true, currentOrderSource());
 }
 
 
@@ -2457,7 +2458,7 @@ static bool orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 		return false;
 	}
 
-	sendDroidInfo(psDroid, DroidOrder(order, Vector2i(x, y)), add);
+	sendDroidInfo(psDroid, DroidOrder(order, Vector2i(x, y)), add, currentOrderSource());
 
 	return true;
 }
@@ -2486,7 +2487,7 @@ static bool orderDroidObjAdd(DROID *psDroid, DroidOrder const &order, bool add)
 		return false;
 	}
 
-	sendDroidInfo(psDroid, order, add);
+	sendDroidInfo(psDroid, order, add, currentOrderSource());
 
 	return true;
 }
@@ -3648,7 +3649,11 @@ bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORD
 			secondaryCheckDamageLevelDeselect(psDroid, State);  // Deselect droid immediately, if applicable, so it isn't ordered around by mistake.
 		}
 
-		sendDroidSecondary(psDroid, sec, State);
+		if (!sendDroidSecondary(psDroid, sec, State, currentOrderSource()))
+		{
+			// Refused - do not record a pending state for an order that was rejected.
+			return false;
+		}
 		psDroid->secondaryOrderPending = newSecondaryState;
 		++psDroid->secondaryOrderPendingCount;
 		return true;  // Wait for our order before changing the droid.

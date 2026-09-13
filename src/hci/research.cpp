@@ -19,6 +19,7 @@
 
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "../ordersource.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "lib/widget/button.h"
@@ -168,7 +169,7 @@ bool startResearchAt(STRUCTURE *facility, RESEARCH &research, uint32_t player)
 	}
 
 	// Say that we want to do research [sic].
-	sendResearchStatus(facility, research.ref - STAT_RESEARCH, player, true);
+	sendResearchStatus(facility, research.ref - STAT_RESEARCH, player, true, currentOrderSource());
 	setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
 
 	//stop the button from flashing once a topic has been chosen

@@ -108,7 +108,7 @@ bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
 bool loadGlobalScript(WzString path);
-wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
+wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.
@@ -335,7 +335,7 @@ public:
 	bool updateScripts();
 	bool shutdownScripts();
 
-	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
+	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding);
 
 	// Set/write variables in the script's global context, run after loading script,
 	// but before triggering any events.

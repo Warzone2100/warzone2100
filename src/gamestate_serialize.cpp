@@ -307,6 +307,10 @@ static void applyDeterminismCounters(const nlohmann::ordered_json &j, uint32_t v
 	GameRandomState rng;
 	rng.lastSeed = jrng.at("lastSeed").get<uint32_t>();
 	rng.offset = jrng.at("offset").get<int32_t>();
+	if (rng.offset < 0 || rng.offset > static_cast<int32_t>(RNG_STATE_WORDS))
+	{
+		throw StateError("determinismCore: rng.offset out of range");
+	}
 	const std::vector<uint8_t> stateBytes = decodeBase64Field(jrng.at("state"), RNG_STATE_WORDS * 4, "determinismCore: rng.state");
 	for (size_t i = 0; i < RNG_STATE_WORDS; ++i)
 	{
@@ -2304,9 +2308,13 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 
 	// Movement state:
 	const nlohmann::ordered_json &mv = j.at("move");
-	d->sMove.Status = static_cast<MOVE_STATUS>(mv.at("status").get<int>());
-	const int savedPathIndex = mv.at("pathIndex").get<int>();
+	d->sMove.Status = static_cast<MOVE_STATUS>(reqRange(mv.at("status").get<int>(), MOVEINACTIVE, MOVESHUFFLE));
 	const nlohmann::ordered_json &path = mv.at("path");
+	if (!path.is_array())
+	{
+		throw StateError("droid move.path must be an array");
+	}
+	const int savedPathIndex = reqRange(mv.at("pathIndex").get<int>(), 0, static_cast<int>(path.size()));
 	std::vector<Vector2i> route(path.size());
 	for (size_t p = 0; p < path.size(); ++p)
 	{
@@ -3287,7 +3295,7 @@ static void readMapTerrain(WorldMapState &map, const nlohmann::ordered_json &j, 
 		const std::vector<uint8_t> tt = decodeBase64Field(j.at("terrainTypes"), MAX_TILE_TEXTURES, "map terrain terrainTypes");
 		for (uint8_t t : tt)
 		{
-			if (t > TER_MAX)
+			if (t >= TER_MAX)
 			{
 				throw StateError("map terrain terrainTypes value out of range");
 			}

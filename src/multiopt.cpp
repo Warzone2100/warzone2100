@@ -54,6 +54,7 @@
 #include "component.h"
 #include "console.h"
 #include "multiplay.h"
+#include "ordersource.h"
 #include "lib/sound/audio.h"
 #include "multijoin.h"
 #include "frontend.h"
@@ -674,6 +675,14 @@ bool multiStartScreenInit()
 bool multiGameShutdown()
 {
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
+
+	{
+		const std::string provenance = orderProvenanceSummary();
+		if (!provenance.empty())
+		{
+			debug(LOG_INFO, "Order provenance: %s", provenance.c_str());
+		}
+	}
 
 	shutdownGameStartScreen();	// make sure the start screen overlay is closed (in case the game shuts down before it fully starts)
 
