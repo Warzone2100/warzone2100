@@ -1743,25 +1743,19 @@ void actionUpdateDroid(DROID *psDroid)
 			formationLeave(psDroid->sMove.psFormation, psDroid);
 			psDroid->sMove.psFormation = nullptr;
 		}
-		if (DROID_STOPPED(psDroid) &&
-		    !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
+		if (!actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
-			objTrace(psDroid->id, "DACTION_BUILD: Starting to drive toward construction site");
-			moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+			objTrace(psDroid->id, "DACTION_BUILD: No longer in range, returning to construction site");
+			psDroid->action = DACTION_MOVETOBUILD;
+			break;
 		}
-		else if (!DROID_STOPPED(psDroid) &&
-		         psDroid->sMove.Status != MOVETURNTOTARGET &&
-		         psDroid->sMove.Status != MOVESHUFFLE &&
-		         actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
+		// Stop at the construction site
+		if (!DROID_STOPPED(psDroid) &&
+		    psDroid->sMove.Status != MOVETURNTOTARGET &&
+		    psDroid->sMove.Status != MOVESHUFFLE)
 		{
 			objTrace(psDroid->id, "DACTION_BUILD: Stopped - at construction site");
 			moveStopDroid(psDroid);
-		}
-		if (psDroid->action == DACTION_SULK)
-		{
-			objTrace(psDroid->id, "Failed to go to objective, aborting build action");
-			psDroid->action = DACTION_NONE;
-			break;
 		}
 		if (droidUpdateBuild(psDroid))
 		{
@@ -1879,28 +1873,34 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 
-		// now do the action update
-		if (DROID_STOPPED(psDroid) && !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
+		if (!actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
 		{
 			if (order->type != DORDER_HOLD && (!secHoldActive || (secHoldActive && order->type != DORDER_NONE)))
 			{
-				objTrace(psDroid->id, "Secondary order: Go to construction site");
-				moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+				objTrace(psDroid->id, "No longer in range, returning to construction site");
+				switch (psDroid->action)
+				{
+				case DACTION_DEMOLISH: psDroid->action = DACTION_MOVETODEMOLISH; break;
+				case DACTION_REPAIR:   psDroid->action = DACTION_MOVETOREPAIR;   break;
+				case DACTION_RESTORE:  psDroid->action = DACTION_MOVETORESTORE;  break;
+				default: break;
+				}
 			}
 			else
 			{
 				psDroid->action = DACTION_NONE;
 			}
+			break;
 		}
-		else if (!DROID_STOPPED(psDroid) &&
-		         psDroid->sMove.Status != MOVETURNTOTARGET &&
-		         psDroid->sMove.Status != MOVESHUFFLE &&
-		         actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
+		// Stop at the construction site
+		if (!DROID_STOPPED(psDroid) &&
+		    psDroid->sMove.Status != MOVETURNTOTARGET &&
+		    psDroid->sMove.Status != MOVESHUFFLE)
 		{
 			objTrace(psDroid->id, "Stopped - reached build position");
 			moveStopDroid(psDroid);
 		}
-		else if (actionUpdateFunc(psDroid))
+		if (actionUpdateFunc(psDroid))
 		{
 			//use 0 for non-combat(only 1 'weapon')
 			actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
