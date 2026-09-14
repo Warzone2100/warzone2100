@@ -420,15 +420,11 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 		}
 		else if (amount == 0) // the GUI option
 		{
-			value = getPower(from) / 3;
-			usePower(from, value);
-			addPower(to, value);
+			value = transferPower(from, to, getPower(from) / 3);
 		}
 		else // for scripts etc that can give precise amounts
 		{
-			value = MIN(getPower(from), amount);
-			usePower(from, value);
-			addPower(to, value);
+			value = transferPower(from, to, MIN(getPower(from), amount));
 		}
 		if (from != ANYPLAYER && to == selectedPlayer)
 		{

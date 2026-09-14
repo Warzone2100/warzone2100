@@ -48,6 +48,10 @@ bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);
 
 void addPower(int player, int32_t quantity);
 
+/// Moves (up to) `quantity` whole units of power from `from` to `to`, limited by the sender's current power and the recipient's free storage.
+/// Returns the amount moved, rounded down.
+int32_t transferPower(int from, int to, int32_t quantity);
+
 void usePower(int player, uint32_t quantity);
 
 /** Update current power based on what was extracted during the last cycle and what Power Generators exist.
