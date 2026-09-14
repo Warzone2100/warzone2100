@@ -222,6 +222,25 @@ void addPower(int player, int32_t quantity)
 	}
 }
 
+int32_t transferPower(int from, int to, int32_t quantity)
+{
+	ASSERT_OR_RETURN(0, from < MAX_PLAYERS, "Bad sender (%d)", from);
+	ASSERT_OR_RETURN(0, to < MAX_PLAYERS, "Bad recipient (%d)", to);
+
+	// Calculations in fixed point - ensure credited and debited amounts are identical.
+	// Limited by the sender's current power and the recipient's free storage.
+	int64_t amount = std::min<int64_t>(static_cast<int64_t>(std::max(quantity, 0)) * FP_ONE, asPower[from].currentPower);
+	amount = std::min<int64_t>(amount, asPower[to].maxStorage - asPower[to].currentPower);
+	amount = std::max<int64_t>(amount, 0);
+
+	syncDebug("transferPower%d->%d %" PRId64" (%" PRId64",%" PRId64")", from, to, amount, asPower[from].currentPower, asPower[to].currentPower);
+	asPower[from].currentPower -= amount;
+	asPower[to].currentPower += amount;
+	// Power that did not fit remains with the sender - nothing is wasted
+
+	return static_cast<int32_t>(amount / FP_ONE);
+}
+
 /*resets the power calc flag for all players*/
 void powerCalc(bool on)
 {
