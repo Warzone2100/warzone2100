@@ -15,10 +15,10 @@ varying vec3 viewNormal;
 void main()
 {
 	vec3 n = normalize(viewNormal);
-	// Alpha = SSAO application weight (1.0 = full terrain AO).
+	// Alpha = SSAO application weight. Water is 0 so SSAO skips lakes and SSR can identify them.
 	#ifdef NEWGL
-	FragColor = vec4(n * 0.5 + 0.5, 1.0);
+	FragColor = vec4(n * 0.5 + 0.5, 0.0);
 	#else
-	gl_FragColor = vec4(n * 0.5 + 0.5, 1.0);
+	gl_FragColor = vec4(n * 0.5 + 0.5, 0.0);
 	#endif
 }

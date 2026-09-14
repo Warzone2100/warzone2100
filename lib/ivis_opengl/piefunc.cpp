@@ -309,6 +309,11 @@ void pie_Skybox_Texture(const char *filename)
 	skyboxGfx->loadTexture(filename, gfx_api::texture_type::game_texture);
 }
 
+gfx_api::texture* pie_Skybox_GetTexture()
+{
+	return skyboxGfx != nullptr ? skyboxGfx->getTexture() : nullptr;
+}
+
 void pie_Skybox_Shutdown()
 {
 	delete skyboxGfx;

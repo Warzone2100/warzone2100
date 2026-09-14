@@ -68,11 +68,17 @@ static const char* passIdName(PassId id)
 	case PassId::ShadowCascade3: return "ShadowCascade3";
 	case PassId::ScenePrepass: return "ScenePrepass";
 	case PassId::ScenePass: return "ScenePass";
+	case PassId::SceneTransparent: return "SceneTransparent";
 	case PassId::SSAOGenerate: return "SSAOGenerate";
 	case PassId::SSAODownsample: return "SSAODownsample";
 	case PassId::SSAOBlurH: return "SSAOBlurH";
 	case PassId::SSAOBlurV: return "SSAOBlurV";
 	case PassId::SSAOCompose: return "SSAOCompose";
+	case PassId::SSRGenerate: return "SSRGenerate";
+	case PassId::SSRDownsample: return "SSRDownsample";
+	case PassId::SSRBlurH: return "SSRBlurH";
+	case PassId::SSRBlurV: return "SSRBlurV";
+	case PassId::SSRCompose: return "SSRCompose";
 	case PassId::FogApply: return "FogApply";
 	case PassId::RangeRingSdfSensor: return "RangeRingSdfSensor";
 	case PassId::RangeRingSdfWeapon: return "RangeRingSdfWeapon";
@@ -171,7 +177,8 @@ int main()
 		RenderTopologySnapshot snapshot = inGameBase();
 		snapshot.sceneEffects.fog = true;
 		expectInGame("fog-only", snapshot, {
-			PassId::ScenePrepass, PassId::ScenePass, PassId::FogApply, PassId::SceneBlit});
+			PassId::ScenePrepass, PassId::ScenePass, PassId::FogApply,
+			PassId::SceneTransparent, PassId::SceneBlit});
 	}
 
 	{
@@ -180,7 +187,7 @@ int main()
 		expectInGame("rings-only", snapshot, {
 			PassId::ScenePrepass, PassId::ScenePass,
 			PassId::RangeRingSdfSensor, PassId::RangeRingSdfWeapon, PassId::RangeRingSdfMin,
-			PassId::RangeRingComposite, PassId::SceneBlit});
+			PassId::RangeRingComposite, PassId::SceneTransparent, PassId::SceneBlit});
 	}
 
 	{
@@ -189,7 +196,7 @@ int main()
 		expectInGame("ssao", snapshot, {
 			PassId::ScenePrepass, PassId::ScenePass,
 			PassId::SSAOGenerate, PassId::SSAOBlurH, PassId::SSAOBlurV, PassId::SSAOCompose,
-			PassId::SceneBlit});
+			PassId::SceneTransparent, PassId::SceneBlit});
 	}
 
 	{
@@ -199,7 +206,37 @@ int main()
 		expectInGame("ssao-downsample", snapshot, {
 			PassId::ScenePrepass, PassId::ScenePass,
 			PassId::SSAOGenerate, PassId::SSAODownsample, PassId::SSAOBlurH, PassId::SSAOBlurV,
-			PassId::SSAOCompose, PassId::SceneBlit});
+			PassId::SSAOCompose, PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.ssr = true;
+		expectInGame("ssr", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass,
+			PassId::SSRGenerate, PassId::SSRBlurH, PassId::SSRBlurV, PassId::SSRCompose,
+			PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.ssr = true;
+		snapshot.features |= RenderFeatures::SSRDownsample;
+		expectInGame("ssr-downsample", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass,
+			PassId::SSRGenerate, PassId::SSRDownsample, PassId::SSRBlurH, PassId::SSRBlurV,
+			PassId::SSRCompose, PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.ssao = true;
+		snapshot.sceneEffects.ssr = true;
+		expectInGame("ssao-ssr", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass,
+			PassId::SSAOGenerate, PassId::SSAOBlurH, PassId::SSAOBlurV, PassId::SSAOCompose,
+			PassId::SSRGenerate, PassId::SSRBlurH, PassId::SSRBlurV, PassId::SSRCompose,
+			PassId::SceneTransparent, PassId::SceneBlit});
 	}
 
 	{
@@ -212,7 +249,24 @@ int main()
 			PassId::SSAOGenerate, PassId::SSAOBlurH, PassId::SSAOBlurV, PassId::SSAOCompose,
 			PassId::FogApply,
 			PassId::RangeRingSdfSensor, PassId::RangeRingSdfWeapon, PassId::RangeRingSdfMin,
-			PassId::RangeRingComposite, PassId::SceneBlit});
+			PassId::RangeRingComposite, PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.ssao = true;
+		snapshot.sceneEffects.ssr = true;
+		snapshot.sceneEffects.fog = true;
+		snapshot.sceneEffects.rangeRings = true;
+		snapshot.features |= RenderFeatures::SSAODownsample | RenderFeatures::SSRDownsample;
+		expectInGame("all-scene-effects-downsampled", snapshot, {
+			PassId::ScenePrepass, PassId::ScenePass,
+			PassId::SSAOGenerate, PassId::SSAODownsample, PassId::SSAOBlurH, PassId::SSAOBlurV,
+			PassId::SSAOCompose,
+			PassId::SSRGenerate, PassId::SSRDownsample, PassId::SSRBlurH, PassId::SSRBlurV,
+			PassId::SSRCompose, PassId::FogApply,
+			PassId::RangeRingSdfSensor, PassId::RangeRingSdfWeapon, PassId::RangeRingSdfMin,
+			PassId::RangeRingComposite, PassId::SceneTransparent, PassId::SceneBlit});
 	}
 
 	{

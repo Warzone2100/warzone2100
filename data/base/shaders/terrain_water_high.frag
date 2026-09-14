@@ -55,6 +55,7 @@ out vec4 FragColor;
 #include "shadow_mapping.glsl"
 #include "light.glsl"
 #include "pointlights.frag"
+#include "water_normals.glsl"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
@@ -65,16 +66,7 @@ vec4 main_bumpMapping()
 	vec2 uv1 = uv1_uv2.xy;
 	vec2 uv2 = uv1_uv2.zw;
 
-	vec3 N1 = texture2DArray(tex_nm, vec3(vec2(uv1.x, uv1.y+timeSec*0.04), 0.0), WZ_MIP_LOAD_BIAS).xzy * vec3( 2.0, 2.0, 2.0) + vec3(-1.0, 0.0, -1.0); // y is up in modelSpace
-	vec3 N2 = texture2DArray(tex_nm, vec3(vec2(uv2.x+timeSec*0.02, uv2.y), 1.0), WZ_MIP_LOAD_BIAS).xzy * vec3(-2.0, 2.0,-2.0) + vec3( 1.0, -1.0, 1.0);
-	vec3 N3 = texture2DArray(tex_nm, vec3(vec2(uv1.x+timeSec*0.05, uv1.y), 0.0), WZ_MIP_LOAD_BIAS).xzy * 2.0 - 1.0;
-	vec3 N4 = texture2DArray(tex_nm, vec3(vec2(uv2.x, uv2.y+timeSec*0.03), 1.0), WZ_MIP_LOAD_BIAS).xzy * 2.0 - 1.0;
-
-	//use RNM blending to mix normal maps properly, see https://blog.selfshadow.com/publications/blending-in-detail/
-	vec3 RNM = normalize(N1 * dot(N1,N2) - N2*N1.y);
-	vec3 Na = mix(N3, N4, 0.5); //more waves to mix
-	vec3 N = mix(RNM, Na, 0.5);
-	N = normalize(vec3(N.x, N.y * 5.0, N.z)); // 5 is a strength
+	vec3 N = wzWaterModelNormal(tex_nm, uv1, uv2, timeSec, WZ_MIP_LOAD_BIAS);
 
 	// Textures
 	float d = mix(depth * 0.1, depth, 0.5);
