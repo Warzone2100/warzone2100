@@ -14,7 +14,7 @@ if grep -q "ID=ubuntu" /etc/os-release; then
     libfribidi-dev libjack-dev libsndio-dev libx11-dev libxext-dev \
     libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev \
     libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
-    libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libthai-dev \
+    libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libthai-dev libusb-1.0-0-dev \
     libwayland-dev libdecor-0-dev liburing-dev
 else
   echo "*********************************************************************************"
@@ -29,8 +29,8 @@ fi
 echo "Downloading SDL3 source"
 
 # Download, build, & install SDL3 from source
-SDL3_VERSION="3.4.4"
-SDL3_SHA256="ee712dbe6a89bb140bbfc2ce72358fb5ee5cc2240abeabd54855012db30b3864"
+SDL3_VERSION="3.4.16"
+SDL3_SHA256="7322236cd12090c3eb40b9728be4d49c76f66ad17d04369584d4ecad5cf77c68"
 SDL3_DLURL="https://github.com/libsdl-org/SDL/releases/download/release-${SDL3_VERSION}/SDL3-${SDL3_VERSION}.tar.gz"
 
 mkdir tmp_sdl3_build
