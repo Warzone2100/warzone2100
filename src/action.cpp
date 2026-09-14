@@ -676,6 +676,44 @@ void actionSanity(DROID *psDroid)
 	}
 }
 
+// Shared "idle but still watching for something to shoot" logic, used by any
+// action state where the droid isn't actively moving/repairing/etc but should
+// still defend itself (e.g. DACTION_NONE, DACTION_WAITFORREPAIR,
+// DACTION_WAITDURINGREPAIR). Scans the droid's weapons for one that's allowed
+// to auto-engage and due a target-acquisition check this tick, and switches
+// to DACTION_ATTACK on the first hit.
+static void actionAcquireIdleTarget(DROID *psDroid, DROID_ORDER_DATA *order, const bool nonNullWeapon[MAX_WEAPONS])
+{
+	// shoot without engaging (chasing)
+	bool shootableOrder = order->type == DORDER_NONE || order->type == DORDER_HOLD || order->type == DORDER_RTR || order->type == DORDER_GUARD;
+
+	if (!shootableOrder || psDroid->numWeaps == 0 || psDroid->isVtol())
+	{
+		return;
+	}
+
+	for (unsigned i = 0; i < psDroid->numWeaps; ++i)
+	{
+		if (nonNullWeapon[i])
+		{
+			BASE_OBJECT *psTemp = nullptr;
+
+			WEAPON_STATS *const psWeapStats = psDroid->getWeaponStats(i);
+			if (psDroid->asWeaps[i].nStat > 0
+			    && psWeapStats->rotate
+				&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
+				&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
+				// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick and failed
+				&& psDroid->lastCheckNearestTargetFailed[i] != gameTime
+			    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
+			{
+				psDroid->action = DACTION_ATTACK;
+				setDroidActionTarget(psDroid, psTemp, i);
+			}
+		}
+	}
+}
+
 // Update the action state for a droid
 void actionUpdateDroid(DROID *psDroid)
 {
@@ -738,32 +776,8 @@ void actionUpdateDroid(DROID *psDroid)
 	{
 	case DACTION_NONE:
 	case DACTION_WAITFORREPAIR:
-		// doing nothing
-		// see if there's anything to shoot.
-		if (psDroid->numWeaps > 0 && !psDroid->isVtol()
-		    && (order->type == DORDER_NONE || order->type == DORDER_HOLD || order->type == DORDER_RTR || order->type == DORDER_GUARD))
-		{
-			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
-			{
-				if (nonNullWeapon[i])
-				{
-					BASE_OBJECT *psTemp = nullptr;
-
-					WEAPON_STATS *const psWeapStats = psDroid->getWeaponStats(i);
-					if (psDroid->asWeaps[i].nStat > 0
-					    && psWeapStats->rotate
-						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
-						&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
-						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick and failed
-						&& psDroid->lastCheckNearestTargetFailed[i] != gameTime
-					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
-					{
-						psDroid->action = DACTION_ATTACK;
-						setDroidActionTarget(psDroid, psTemp, i);
-					}
-				}
-			}
-		}
+		// doing nothing, see if there's anything to shoot.
+		actionAcquireIdleTarget(psDroid, order, nonNullWeapon);
 		break;
 	case DACTION_WAITDURINGREPAIR:
 		// don't want to be in a formation for this move
@@ -797,6 +811,8 @@ void actionUpdateDroid(DROID *psDroid)
 				moveStopDroid(psDroid);
 			}
 		}
+		// while waiting to be repaired, still defend ourselves
+		actionAcquireIdleTarget(psDroid, order, nonNullWeapon);
 		break;
 	case DACTION_TRANSPORTWAITTOFLYIN:
 		//if we're moving droids to safety and currently waiting to fly back in, see if time is up
