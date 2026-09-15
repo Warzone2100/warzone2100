@@ -293,18 +293,21 @@ void W_BUTTON::display(int xOffset, int yOffset)
 	// Display the button.
 	if (!images.normal.isNull())
 	{
-		iV_DrawImageImage(images.normal, x0, y0);
+		// (in its middle when it's larger: setImageButtonSize)
+		const int imageX = ownSize ? x0 + (width() - images.normal.width()) / 2 : x0;
+		const int imageY = ownSize ? y0 + (height() - images.normal.height()) / 2 : y0;
+		iV_DrawImageImage(images.normal, imageX, imageY);
 		if (isDown && !images.down.isNull())
 		{
-			iV_DrawImageImage(images.down, x0, y0);
+			iV_DrawImageImage(images.down, imageX, imageY);
 		}
 		if (isDisabled && !images.disabled.isNull())
 		{
-			iV_DrawImageImage(images.disabled, x0, y0);
+			iV_DrawImageImage(images.disabled, imageX, imageY);
 		}
 		if (isHighlight && !images.highlighted.isNull())
 		{
-			iV_DrawImageImage(images.highlighted, x0, y0);
+			iV_DrawImageImage(images.highlighted, imageX, imageY);
 		}
 	}
 	else
@@ -540,7 +543,20 @@ void W_BUTTON::setImages(Images const &images_)
 {
 	images = images_;
 	dirty = true;
-	if (!images.normal.isNull())
+	if (!images.normal.isNull() && !ownSize)
+	{
+		setGeometry(x(), y(), images.normal.width(), images.normal.height());
+	}
+}
+
+void W_BUTTON::setImageButtonSize(int width, int height)
+{
+	ownSize = width > 0 && height > 0;
+	if (ownSize)
+	{
+		setGeometry(x(), y(), width, height);
+	}
+	else if (!images.normal.isNull())
 	{
 		setGeometry(x(), y(), images.normal.width(), images.normal.height());
 	}
