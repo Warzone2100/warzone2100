@@ -2225,6 +2225,7 @@ void WzQuickChatForm::initializeLobby()
 	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NO_PROBLEM);					// No problem
 	reactions->addChatOption(WzQuickChatMessage::LOBBY_GREETING_WAVE);					// Hey everyone!
 	reactions->addChatOption(WzQuickChatMessage::LOBBY_GREETING_WELCOME);				// Welcome!
+	reactions->addChatOption(WzQuickChatMessage::LOBBY_GREETING_SEE_YOU_GOOD_GAME);		// See you again, have a good game everyone!
 	reactions->addChatOption(WzQuickChatMessage::REACTIONS_SORRY_DO_NOT_UNDERSTAND_PLEASE_USE_QUICK_CHAT);	// Sorry, I don't understand. Please use Quick Chat?
 	panel->addSection(reactions);
 
@@ -2671,6 +2672,8 @@ const char* to_display_string(WzQuickChatMessage msg)
 			return _("I want to switch teams");
 		case WzQuickChatMessage::LOBBY_REQUEST_CHECK_READY:
 			return _("Please check Ready so we can start");
+		case WzQuickChatMessage::LOBBY_GREETING_SEE_YOU_GOOD_GAME:
+			return _("See you again, have a good game everyone!");
 
 		// ALL (lobby + in-game global *and* team)
 
