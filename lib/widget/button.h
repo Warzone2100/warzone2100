@@ -54,6 +54,7 @@ public:
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	virtual bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key);
+	void playPendingClickSound();
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
@@ -168,6 +169,8 @@ private:
 	optional<WidgetHelp>	help;
 	optional<std::chrono::steady_clock::time_point> clickDownStart; // the start time of click down on this button
 	optional<WIDGET_KEY> clickDownKey;
+	bool clickSoundPending = false;  // a touch press a list may still take over: play its click sound on release (or hold)
+	bool touchLongPressPending = false;  // a touch press not yet offered as a long-press (widgOfferTouchLongPress)
 };
 
 class MultipleChoiceButton : public W_BUTTON

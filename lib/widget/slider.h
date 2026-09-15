@@ -59,6 +59,8 @@ public:
 	void addOnChange(const SliderOnChangeFunc& func);
 
 	bool capturesMouseDrag(WIDGET_KEY) override;
+	WzDragAxes capturedDragAxes() const override;
+	void pressCancelled(WIDGET_KEY key) override;
 	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
@@ -71,6 +73,7 @@ private:
 	optional<WidgetHelp> help;
 	bool		bGamepadCursorMagnetTarget = true;
 	bool		isHandlingDrag = false;
+	bool		touchPressPending = false;  // a touch press not yet acted on (W_SLIDER::clicked)
 	std::vector<SliderOnChangeFunc> onChangeFuncs;
 private:
 	void updateSliderFromMousePosition(W_CONTEXT*);

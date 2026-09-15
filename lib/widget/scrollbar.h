@@ -43,6 +43,7 @@ public:
 	}
 
 	uint32_t position() const;
+	uint32_t maxPosition() const;
 	void setPosition(uint32_t newPosition);
 	void setScrollableSize(uint32_t value);
 	void setViewSize(uint32_t value);
