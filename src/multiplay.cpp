@@ -1162,6 +1162,12 @@ static bool recvDataCheck2(NETQUEUE queue)
 	uint16_t zOrder = 0;
 	uint32_t layerCount = 0;
 	NETuint32_t(r, layersSize);
+	constexpr uint32_t maxLayers = 1024;
+	if (layersSize > maxLayers)
+	{
+		debug(LOG_INFO, "Received an invalid layersSize: %" PRIu32, layersSize);
+		return false;
+	}
 	for (uint32_t i = 0; i < layersSize; ++i)
 	{
 		NETuint16_t(r, zOrder);
@@ -1208,12 +1214,6 @@ static bool recvDataCheck2(NETQUEUE queue)
 	if (!NetPlay.players[player].isSpectator && (recvSelectedPlayer != player || recvRealSelectedPlayer != player))
 	{
 		debug(LOG_INFO, "%s (%u) has a corrupted player index. (selectedPlayer: %" PRIu32 ", realSelectedPlayer: %" PRIu32 ")", getPlayerName(player), player, recvSelectedPlayer, recvRealSelectedPlayer);
-		hasWrongData = true;
-	}
-
-	if (layersSize > 1024)
-	{
-		debug(LOG_INFO, "%s (%u) has a very high layersSize - something is probably wrong. (layersSize: %" PRIu32 ")", getPlayerName(player), player, layersSize);
 		hasWrongData = true;
 	}
 
