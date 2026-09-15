@@ -825,11 +825,28 @@ void NETVector2i(MessageReader& r, Vector2i& vec)
 	NETint32_t(r, vec.y);
 }
 
-void NETnetMessage(MessageReader& r, NetMessage** msg)
+bool NETnetMessage(MessageReader& r, NetMessage** msg)
 {
+	ASSERT_OR_RETURN(false, msg != nullptr, "NETnetMessage called with a null output pointer");
+	*msg = nullptr;
+
 	NetMsgDataVector rawData{MsgDataAllocator(defaultMemoryPool())};
 	NETbytes(r, rawData, std::numeric_limits<uint32_t>::max());
-	*msg = new NetMessage(NetMessageBuilder(std::move(rawData)).build());
+	if (rawData.size() < NetMessage::HEADER_LENGTH)
+	{
+		debug(LOG_ERROR, "NETnetMessage: nested message is shorter than its header");
+		return false;
+	}
+
+	auto parsedMessage = NetMessage::tryFromRawData(rawData.data(), rawData.size());
+	if (!parsedMessage)
+	{
+		debug(LOG_ERROR, "NETnetMessage: invalid nested message");
+		return false;
+	}
+
+	*msg = new NetMessage(std::move(*parsedMessage));
+	return true;
 }
 
 // MessageWriter overloads for encoding

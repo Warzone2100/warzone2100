@@ -130,7 +130,7 @@ void NETbytes(MessageReader& r, VecT& vec, unsigned maxLen = 10000)
 void NETPosition(MessageReader& r, Position& pos);
 void NETRotation(MessageReader& r, Rotation& rot);
 void NETVector2i(MessageReader& r, Vector2i& vec);
-void NETnetMessage(MessageReader& r, NetMessage** msg);  ///< Must delete the NETMESSAGE.
+bool NETnetMessage(MessageReader& r, NetMessage** msg);  ///< Must delete the NETMESSAGE.
 
 template <typename EnumT>
 void NETenum(MessageReader& r, EnumT& enumRef)
