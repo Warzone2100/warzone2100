@@ -25,6 +25,7 @@
 #include "button.h"
 #include "label.h"
 #include "lib/framework/math_ext.h"
+#include "lib/gamelib/gtime.h"
 
 #include <algorithm>
 
@@ -443,6 +444,54 @@ void ListTabWidget::addWidgetToLayout(const std::shared_ptr<WIDGET> &widget)
 
 	widgets->attach(widget);
 	widgets->addWidgetToLayout(widget);
+}
+
+WzDragAxes ListTabWidget::touchDragAxes()
+{
+	return pages() > 1 ? WzDragAxes::Horizontal : WzDragAxes::None;
+}
+
+void ListTabWidget::mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current)
+{
+	if (!swiping)
+	{
+		swiping = true;
+		swipeSamples.clear();
+	}
+	swipeDistance = current->mx - start->mx;
+	swipeSamples.emplace_back(realTime, current->mx);
+	while (swipeSamples.size() > 2 && realTime - swipeSamples.front().first > 100)
+	{
+		swipeSamples.erase(swipeSamples.begin());
+	}
+}
+
+void ListTabWidget::released(W_CONTEXT *, WIDGET_KEY)
+{
+	if (!swiping)
+	{
+		return;
+	}
+	swiping = false;
+	float velocity = 0.f;  // (px per ms)
+	if (swipeSamples.size() >= 2 && realTime - swipeSamples.back().first < 60 && swipeSamples.back().first > swipeSamples.front().first)
+	{
+		velocity = static_cast<float>(swipeSamples.back().second - swipeSamples.front().second) / static_cast<float>(swipeSamples.back().first - swipeSamples.front().first);
+	}
+	swipeSamples.clear();
+	// Leftwards to the next page, rightwards to the one before: far enough, or fast enough the same way
+	int direction = 0;
+	if (std::abs(swipeDistance) > widgets->width() / 4 || (std::abs(velocity) > 0.3f && velocity * static_cast<float>(swipeDistance) > 0.f))
+	{
+		direction = swipeDistance < 0 ? 1 : -1;
+	}
+	const size_t from = currentPage();
+	if ((direction > 0 && from + 1 < pages()) || (direction < 0 && from > 0))
+	{
+		const size_t to = direction > 0 ? from + 1 : from - 1;
+		setCurrentPage(to);
+		pageTurnedByTouch(from, to);
+	}
 }
 
 void ListTabWidget::setTabPosition(TabPosition pos)

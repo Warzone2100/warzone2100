@@ -1781,8 +1781,10 @@ void WzResearchTreeCanvas::applyGamepadZoom()
 void WzResearchTreeCanvas::applyGestureInput()
 {
 	bool moved = false;
+	// (a second finger while the first scrolls a list: the gesture is dropped)
+	const bool fingerInList = widgTouchHeldInList();
 
-	if (auto scale = consumePinchGestureScaleUpdate())
+	if (auto scale = consumePinchGestureScaleUpdate(); scale && !fingerInList)
 	{
 		const float before = m_zoom;
 		m_zoom = std::clamp(m_zoom * scale.value(), minimumZoom(), ZOOM_MAX);
@@ -1795,7 +1797,7 @@ void WzResearchTreeCanvas::applyGestureInput()
 		}
 	}
 
-	if (auto delta = consumePanGestureDeltaUpdate())
+	if (auto delta = consumePanGestureDeltaUpdate(); delta && !fingerInList)
 	{
 		if (delta.value().deltaX != 0.f || delta.value().deltaY != 0.f)
 		{

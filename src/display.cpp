@@ -1202,11 +1202,13 @@ void processGestureInput()
 	}
 
 	bool processedGesture = false;
+	// (a second finger while the first scrolls a list: the gesture is dropped)
+	const bool fingerInList = widgTouchHeldInList();
 
 	// consume pinch gesture updates
 	if (auto pinchScaleUpdate = consumePinchGestureScaleUpdate())
 	{
-		if (bPinchToZoomTouchGesture)
+		if (bPinchToZoomTouchGesture && !fingerInList)
 		{
 			if (pinchScaleUpdate.value() != 1.0f)
 			{
@@ -1225,7 +1227,7 @@ void processGestureInput()
 	// consume pan gesture updates
 	if (auto panDeltaUpdate = consumePanGestureDeltaUpdate())
 	{
-		if (bPanTouchGesture)
+		if (bPanTouchGesture && !fingerInList)
 		{
 			if (panDeltaUpdate.value().deltaX != 0.f || panDeltaUpdate.value().deltaY != 0.f)
 			{

@@ -45,6 +45,12 @@ public:
 	}
 
 	void run(W_CONTEXT *psContext) override;
+	// Touch: a drag scrolls the list (and a flick keeps it going), a press stops it
+	WzDragAxes touchDragAxes() override;
+	bool interceptsTouchPress() override;
+	bool isTouchScrolling() const override;
+	void mouseDragged(WIDGET_KEY key, W_CONTEXT *start, W_CONTEXT *current) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	size_t addItem(const std::shared_ptr<WIDGET> &widget);
 	size_t numItems() const;
 	std::shared_ptr<WIDGET> getItemAtIdx(size_t itemNum) const;
@@ -88,8 +94,33 @@ public:
 
 protected:
 	void geometryChanged() override;
+	/// Ends a touch scroll on the release: whether there was one (then the release isn't a click)
+	bool endTouchScroll();
 
 private:
+	struct TouchSample
+	{
+		uint32_t time;
+		int y;
+	};
+	// Touch scrolling: following the finger, then flinging (px per ms), then settling on an item's edge (snapOffset)
+	bool touchDragging = false;
+	bool touchPressTaken = false;
+	uint32_t touchDragStartPosition = 0;
+	std::vector<TouchSample> touchSamples;
+	float touchPosition = 0.f;
+	float flingVelocity = 0.f;
+	uint32_t flingLastTime = 0;
+	bool settling = false;
+	uint32_t settleFrom = 0;
+	uint32_t settleTo = 0;
+	uint32_t settleStart = 0;
+
+	bool touchScrollMoving() const;
+	void runTouchScroll();
+	void settleTouchScroll();
+	uint32_t nearestSnapPosition(uint32_t position);
+
 	std::shared_ptr<ScrollBarWidget> scrollBar;
 	std::shared_ptr<ClipRectWidget> listView;
 	uint32_t scrollableHeight = 0;

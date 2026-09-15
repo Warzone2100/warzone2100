@@ -24,6 +24,8 @@
 #include "scrollablelist.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/gamelib/gtime.h"
+#include <cmath>
 
 static const auto SCROLLBAR_WIDTH = 15;
 
@@ -48,7 +50,168 @@ void ScrollableListWidget::geometryChanged()
 void ScrollableListWidget::run(W_CONTEXT *psContext)
 {
 	updateLayout();
-	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
+	runTouchScroll();
+	// (while a touch moves it, the content follows the finger: an item crossing the edge is hidden until it settles)
+	listView->setTopOffset((snapOffset && !touchScrollMoving()) ? snappedOffset() : scrollBar->position());
+}
+
+WzDragAxes ScrollableListWidget::touchDragAxes()
+{
+	updateLayout();
+	return (scrollBar->isEnabled() && scrollBar->visible()) ? WzDragAxes::Vertical : WzDragAxes::None;
+}
+
+bool ScrollableListWidget::interceptsTouchPress()
+{
+	if (flingVelocity == 0.f && !settling)
+	{
+		return false;
+	}
+	// A press stops the scrolling where it is, and isn't a press on the item under it
+	flingVelocity = 0.f;
+	settling = false;
+	touchPressTaken = true;
+	return true;
+}
+
+void ScrollableListWidget::mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current)
+{
+	if (!touchDragging)
+	{
+		touchDragging = true;
+		flingVelocity = 0.f;
+		settling = false;
+		touchDragStartPosition = scrollBar->position();
+		touchSamples.clear();
+	}
+	touchPosition = std::clamp(static_cast<float>(touchDragStartPosition) - static_cast<float>(current->my - start->my), 0.f, static_cast<float>(scrollBar->maxPosition()));
+	scrollBar->setPosition(static_cast<uint32_t>(std::lround(touchPosition)));
+	// The finger's last 100 ms, for the flick's speed
+	touchSamples.push_back({realTime, current->my});
+	while (touchSamples.size() > 2 && realTime - touchSamples.front().time > 100)
+	{
+		touchSamples.erase(touchSamples.begin());
+	}
+}
+
+void ScrollableListWidget::released(W_CONTEXT *, WIDGET_KEY)
+{
+	endTouchScroll();
+}
+
+bool ScrollableListWidget::endTouchScroll()
+{
+	const bool wasTouchScroll = touchDragging || touchPressTaken;
+	if (touchDragging)
+	{
+		float velocity = 0.f;
+		if (touchSamples.size() >= 2 && realTime - touchSamples.back().time < 60)
+		{
+			const auto elapsed = touchSamples.back().time - touchSamples.front().time;
+			if (elapsed > 0)
+			{
+				velocity = -static_cast<float>(touchSamples.back().y - touchSamples.front().y) / static_cast<float>(elapsed);
+			}
+		}
+		if (std::abs(velocity) > 0.15f)
+		{
+			flingVelocity = std::clamp(velocity, -6.f, 6.f);
+			flingLastTime = realTime;
+		}
+		else
+		{
+			settleTouchScroll();
+		}
+	}
+	else if (touchPressTaken)
+	{
+		settleTouchScroll();
+	}
+	touchDragging = false;
+	touchPressTaken = false;
+	touchSamples.clear();
+	return wasTouchScroll;
+}
+
+bool ScrollableListWidget::isTouchScrolling() const
+{
+	return touchScrollMoving();
+}
+
+bool ScrollableListWidget::touchScrollMoving() const
+{
+	return touchDragging || touchPressTaken || flingVelocity != 0.f || settling;
+}
+
+void ScrollableListWidget::runTouchScroll()
+{
+	if (flingVelocity != 0.f)
+	{
+		const float elapsed = static_cast<float>(std::min<uint32_t>(realTime - flingLastTime, 100));
+		flingLastTime = realTime;
+		const float maxPosition = static_cast<float>(scrollBar->maxPosition());
+		touchPosition += flingVelocity * elapsed;
+		flingVelocity *= std::exp(-elapsed / 325.f);
+		if (touchPosition <= 0.f || touchPosition >= maxPosition || std::abs(flingVelocity) < 0.02f)
+		{
+			touchPosition = std::clamp(touchPosition, 0.f, maxPosition);
+			flingVelocity = 0.f;
+		}
+		scrollBar->setPosition(static_cast<uint32_t>(std::lround(touchPosition)));
+		if (flingVelocity == 0.f)
+		{
+			settleTouchScroll();
+		}
+	}
+	else if (settling)
+	{
+		const float t = std::min(1.f, static_cast<float>(realTime - settleStart) / 150.f);
+		const float eased = 1.f - (1.f - t) * (1.f - t) * (1.f - t);
+		const float position = static_cast<float>(settleFrom) + (static_cast<float>(settleTo) - static_cast<float>(settleFrom)) * eased;
+		scrollBar->setPosition(static_cast<uint32_t>(std::lround(position)));
+		if (t >= 1.f)
+		{
+			settling = false;
+		}
+	}
+}
+
+/* At rest after a touch, the list settles on the nearest item edge (as it would snap) */
+void ScrollableListWidget::settleTouchScroll()
+{
+	settling = false;
+	if (!snapOffset)
+	{
+		return;
+	}
+	settleFrom = scrollBar->position();
+	settleTo = nearestSnapPosition(settleFrom);
+	if (settleTo != settleFrom)
+	{
+		settling = true;
+		settleStart = realTime;
+	}
+}
+
+uint32_t ScrollableListWidget::nearestSnapPosition(uint32_t position)
+{
+	uint32_t nearest = 0;
+	uint32_t nearestDistance = position;
+	for (const auto& child : listView->children())
+	{
+		const auto childOffsets = child->getScrollSnapOffsets().value_or(std::vector<uint32_t>{0});
+		for (const auto childOffset : childOffsets)
+		{
+			const auto y = static_cast<uint32_t>(std::max(0, child->y() + static_cast<int>(childOffset)));
+			const auto distance = (y > position) ? y - position : position - y;
+			if (distance < nearestDistance)
+			{
+				nearest = y;
+				nearestDistance = distance;
+			}
+		}
+	}
+	return std::min(nearest, scrollBar->maxPosition());
 }
 
 /**
@@ -518,7 +681,7 @@ void ClickableScrollableList::clicked(W_CONTEXT *, WIDGET_KEY)
 
 void ClickableScrollableList::released(W_CONTEXT *, WIDGET_KEY)
 {
-	bool wasFullClick = mouseDownOnList;
+	bool wasFullClick = mouseDownOnList && !endTouchScroll();
 	mouseDownOnList = false;
 	if (wasFullClick)
 	{

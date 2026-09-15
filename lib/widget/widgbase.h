@@ -99,6 +99,20 @@ enum
 	WIDG_HIDDEN = 0x8000,  ///< The widget is initially hidden
 };
 
+/* The ways a touch drag may go (WIDGET::touchDragAxes, WIDGET::capturedDragAxes) */
+enum class WzDragAxes : uint8_t
+{
+	None = 0,
+	Horizontal = 1,
+	Vertical = 2,
+	Both = 3,
+};
+
+inline bool hasDragAxis(WzDragAxes axes, WzDragAxes axis)
+{
+	return (static_cast<uint8_t>(axes) & static_cast<uint8_t>(axis)) != 0;
+}
+
 // Possible states for a button or clickform.
 enum ButtonState
 {
@@ -222,6 +236,25 @@ public:
 	}
 
 	virtual bool capturesMouseDrag(WIDGET_KEY) { return false; }
+
+	// Touch: the ways a drag that starts on a widget inside this one scrolls it. Once the finger has moved past a
+	// slop along one of them, the drag is taken over: the pressed widget gets pressCancelled(), and this one the
+	// drag (mouseDragged, then released), as if it had captured it from the start
+	virtual WzDragAxes touchDragAxes() { return WzDragAxes::None; }
+	// Touch: for a widget that captures drags, the ways it uses them. A drag the other way is taken over by an
+	// ancestor scrolling that way (a horizontal slider in a vertical list)
+	virtual WzDragAxes capturedDragAxes() const { return WzDragAxes::Both; }
+	// Touch: whether a press inside this widget goes to this widget instead (ex. to stop its own scrolling).
+	// It then gets clicked(), the drag and released()
+	virtual bool interceptsTouchPress() { return false; }
+	// Touch: whether this widget is still scrolling after a flick (the pointer's hover stays on it meanwhile)
+	virtual bool isTouchScrolling() const { return false; }
+	// A press this widget got was taken over by a touch drag: no click or hold follows (by default, as when the pointer
+	// leaves it)
+	virtual void pressCancelled(WIDGET_KEY) { highlightLost(); }
+	// Whether a touch press on this widget may yet be taken over by an ancestor's touch drag
+	// (the widget may then wait for the drag to start, or the press to be released, before acting on it)
+	bool touchPressMayBeTakenOver(WIDGET_KEY key);
 
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void highlight(W_CONTEXT *) {}

@@ -25,6 +25,7 @@
 #include "widget.h"
 #include "widgint.h"
 #include "button.h"
+#include "lib/framework/input.h"
 #include "form.h"
 #include "tip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -60,7 +61,12 @@ W_BUTTON::W_BUTTON()
 
 unsigned W_BUTTON::getState() const
 {
-	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
+	unsigned shown = state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
+	if (widgTouchPressedLookWaits(clickSoundPending, clickDownStart))
+	{
+		shown &= ~WBUT_DOWN;
+	}
+	return shown;
 }
 
 void W_BUTTON::setFlash(bool enable)
@@ -114,6 +120,20 @@ void W_BUTTON::setHelp(optional<WidgetHelp> _help)
 
 void W_BUTTON::run(W_CONTEXT *psContext)
 {
+	if (clickDownStart.has_value() && touchLongPressPending)
+	{
+		const WzTouchLongPress longPress = widgOfferTouchLongPress(*this, clickDownStart.value());
+		touchLongPressPending = longPress == WzTouchLongPress::NotYet;
+		if (longPress == WzTouchLongPress::Taken)
+		{
+			state &= ~WBUT_DOWN;
+			clickDownStart.reset();
+			clickDownKey.reset();
+			clickSoundPending = false;
+			dirty = true;
+			return;
+		}
+	}
 	if (clickDownStart.has_value())
 	{
 		const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
@@ -125,6 +145,7 @@ void W_BUTTON::run(W_CONTEXT *psContext)
 				{
 					// clear button down state, as the clickHeld event "consumed" this click
 					state &= ~WBUT_DOWN;
+					playPendingClickSound();
 				}
 			}
 			clickDownStart.reset();
@@ -155,7 +176,10 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			if (AudioCallback)
+			// (for a touch in a list, once it's known not to be a scroll)
+			clickSoundPending = touchPressMayBeTakenOver(key);
+			touchLongPressPending = key == WKEY_PRIMARY && inputLastPointerInputWasTouch();
+			if (AudioCallback && !clickSoundPending)
 			{
 				AudioCallback(ClickedAudioID);
 			}
@@ -178,6 +202,7 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
 			lastClickButton = key;
+			playPendingClickSound();
 
 			/* Call all onClick event handlers */
 			for (auto it = onClickHandlers.begin(); it != onClickHandlers.end(); it++)
@@ -202,6 +227,17 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 
 	clickDownStart = nullopt;
 	clickDownKey = nullopt;
+	clickSoundPending = false;
+	touchLongPressPending = false;
+}
+
+void W_BUTTON::playPendingClickSound()
+{
+	if (clickSoundPending && AudioCallback)
+	{
+		AudioCallback(ClickedAudioID);
+	}
+	clickSoundPending = false;
 }
 
 WIDGET_KEY W_BUTTON::getOnClickButtonPressed() const
@@ -237,6 +273,8 @@ void W_BUTTON::highlightLost()
 
 	clickDownStart = nullopt;
 	clickDownKey = nullopt;
+	clickSoundPending = false;
+	touchLongPressPending = false;
 }
 
 void W_BUTTON::display(int xOffset, int yOffset)
@@ -248,7 +286,7 @@ void W_BUTTON::display(int xOffset, int yOffset)
 
 	bool haveText = !pText.isEmpty();
 
-	bool isDown = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isDisabled = (state & WBUT_DISABLE) != 0;
 	bool isHighlight = (state & WBUT_HIGHLIGHT) != 0;
 

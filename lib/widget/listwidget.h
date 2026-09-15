@@ -246,16 +246,28 @@ public:
 
 	int32_t heightOfTabsLabel() const;
 
+	// Touch: a horizontal swipe over the list turns its page (a drag past a quarter of its width, or a flick)
+	WzDragAxes touchDragAxes() override;
+	void mouseDragged(WIDGET_KEY key, W_CONTEXT *start, W_CONTEXT *current) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
+
 	void goToChildPage(size_t childIndex)
 	{
 		setCurrentPage(childIndex / widgets->widgetsPerPage());
 	}
+
+protected:
+	/// A swipe turned the page (ex. to show the new one coming in)
+	virtual void pageTurnedByTouch(size_t from, size_t to) { (void)from; (void)to; }
 
 private:
 	std::shared_ptr<TabSelectionWidget> tabs;
 	std::shared_ptr<ListWidget> widgets;
 	std::shared_ptr<W_LABEL> label;
 	TabPosition tabPos;
+	bool swiping = false;
+	int swipeDistance = 0;
+	std::vector<std::pair<uint32_t, int>> swipeSamples;  ///< (the finger's last 100 ms: time, x)
 };
 
 #endif //THISISALISTWIDGET_H
