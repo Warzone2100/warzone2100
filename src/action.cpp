@@ -621,7 +621,19 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		if (bestDist != UINT32_MAX)
 		{
 			// Push the droid out of the way.
+			auto blocked = [droid](Vector2i p) {
+				return fpathBlockingTile(gameWorld.map, map_coord(p.x), map_coord(p.y), droid->getPropulsionStats()->propulsionType);
+			};
 			Vector2i newPos = droid->pos.xy() + iSinCosR(iAtan2(bestDest - droid->pos.xy()), gameTimeAdjustedIncrement(TILE_UNITS));
+			if (blocked(newPos))
+			{
+				// Slide along whichever axis stays on unblocked ground, keeping
+				// the droid on unblocked tiles until it can cross cleanly into
+				// the destination tile.
+				Vector2i slideX(newPos.x, droid->pos.y);
+				Vector2i slideY(droid->pos.x, newPos.y);
+				newPos = !blocked(slideX) ? slideX : !blocked(slideY) ? slideY : droid->pos.xy();
+			}
 			droidSetPosition(droid, gameWorld.map, newPos.x, newPos.y);
 		}
 	}
