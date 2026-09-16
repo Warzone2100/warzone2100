@@ -1183,7 +1183,15 @@ static nlohmann::ordered_json writeFeature(const FEATURE *psFeature)
 	return j;
 }
 
-static void readFeature(GameWorld &world, const nlohmann::ordered_json &j)
+static void requireUniqueObjectId(std::unordered_set<uint32_t> &seenIds, uint32_t id, const char *objectKind)
+{
+	if (!seenIds.insert(id).second)
+	{
+		throw StateError(std::string("duplicate ") + objectKind + " id " + std::to_string(id));
+	}
+}
+
+static void readFeature(GameWorld &world, const nlohmann::ordered_json &j, std::unordered_set<uint32_t> &seenIds)
 {
 	const WzString statId = WzString::fromUtf8(j.at("statId").get<std::string>());
 	const SDWORD statIndex = getFeatureStatFromName(statId);
@@ -1194,6 +1202,7 @@ static void readFeature(GameWorld &world, const nlohmann::ordered_json &j)
 	FEATURE_STATS *psStats = &asFeatureStats[statIndex];
 
 	const uint32_t id = j.at("id").get<uint32_t>();
+	requireUniqueObjectId(seenIds, id, "feature");
 	const nlohmann::ordered_json &jpos = reqArray(j.at("pos"), 2);
 	const UDWORD x = static_cast<UDWORD>(jpos[0].get<int32_t>());
 	const UDWORD y = static_cast<UDWORD>(jpos[1].get<int32_t>());
@@ -1344,7 +1353,7 @@ static nlohmann::ordered_json writeStructure(const STRUCTURE *psStruct)
 
 /// Pass 1: construct the structure and restore its scalar + functionality state.
 /// Object cross-references (targets, commander, repair/rearm target) are resolved in pass 2.
-static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j)
+static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j, std::unordered_set<uint32_t> &seenIds)
 {
 	const WzString name = WzString::fromUtf8(j.at("statId").get<std::string>());
 	STRUCTURE_STATS *psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats,
@@ -1355,6 +1364,7 @@ static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j
 	}
 
 	const uint32_t id = j.at("id").get<uint32_t>();
+	requireUniqueObjectId(seenIds, id, "structure");
 	const nlohmann::ordered_json &jpos = reqArray(j.at("pos"), 2);
 	const UDWORD x = static_cast<UDWORD>(jpos[0].get<int32_t>());
 	const UDWORD y = static_cast<UDWORD>(jpos[1].get<int32_t>());
@@ -2201,6 +2211,10 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 		pos.y = clip(pos.y, world_coord(1), world_coord(world.map.height - 1));
 	}
 
+	if (droidById.count(id) != 0)
+	{
+		throw StateError("duplicate droid id " + std::to_string(id));
+	}
 	DROID *d = reallyBuildDroid(world, &templ, pos, player, onMission, rot, id);
 	if (d == nullptr)
 	{
@@ -2843,13 +2857,15 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 	}
 	// PASS 1: Construct objects. Rebuild in reverse: addObjectToList prepends
 	// (emplace_front), so reverse rebuild reproduces the original list order.
+	std::unordered_set<uint32_t> seenIds;
 	for (size_t i = jfeatures.size(); i-- > 0; )
 	{
-		readFeature(world, jfeatures[i]);
+		readFeature(world, jfeatures[i], seenIds);
 	}
+	seenIds.clear();
 	for (size_t i = jstructures.size(); i-- > 0; )
 	{
-		readStructurePass1(world, jstructures[i]);
+		readStructurePass1(world, jstructures[i], seenIds);
 	}
 	resetFactoryNumFlag(world.objects);
 
