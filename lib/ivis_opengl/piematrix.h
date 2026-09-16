@@ -33,5 +33,6 @@ void pie_SetGeometricOffset(int x, int y);
 void pie_Begin3DScene();
 void pie_BeginInterface();
 float pie_getPerspectiveZFar();
+float pie_getPerspectiveZClose();
 
 #endif
