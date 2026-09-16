@@ -2317,14 +2317,16 @@ static void drawWaterScenePrepassImpl(const glm::mat4& projection, const glm::ma
 	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
 }
 
-void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view)
+void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view,
+	bool writeSsrWaterNormals)
 {
 	if (!waterVBO || !waterIndexVBO)
 	{
 		return;
 	}
 
-	const bool bumpPrepass = (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
+	const bool bumpPrepass = writeSsrWaterNormals
+		&& (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
 		&& (waterTexturesHigh.tex_nm != nullptr);
 	if (bumpPrepass)
 	{
