@@ -307,6 +307,7 @@ bool intAddPower();
 void intRemoveReticule();
 void intHideInGameOptionsButton();
 void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), const playerCallbackFunc& callbackFunc = nullptr);
+void clearReticuleCallbacks();
 void setReticulesEnabled(bool enabled);
 void setReticuleFlash(int ButId, bool flash);
 optional<std::string> getReticuleButtonDisplayFilename(int ButId);

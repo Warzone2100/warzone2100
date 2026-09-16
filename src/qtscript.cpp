@@ -45,6 +45,7 @@
 
 #include "qtscript.h"
 #include "display.h"
+#include "hci.h"
 #include "input/manager.h"
 #include "input/debugmappings.h"
 
@@ -436,6 +437,7 @@ bool scripting_engine::shutdownScripts()
 	scriptsReady = false;
 	jsDebugShutdown();
 	globalDialog = false;
+	clearReticuleCallbacks();
 	for (auto *instance : scripts)
 	{
 		MONITOR *monitor = monitors.at(instance);
