@@ -58,7 +58,9 @@ void drawTerrainDepthNormalPrepass(const glm::mat4& modelViewProjection, const g
 /// Opaque terrain depth alone, for a prepass with no normals attachment (PrepassNeed::Normals absent).
 void drawTerrainDepthOnlyPrepass(const glm::mat4& modelViewProjection, const glm::mat4& view);
 /// Water surface depth + view-space normals so deferred fog samples the lake, not the lakebed.
-void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view);
+/// writeSsrWaterNormals selects the bump-mapped water prepass (SSR tracing normals).
+void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& view,
+	bool writeSsrWaterNormals);
 /// Water surface depth alone, for a prepass with no normals attachment (PrepassNeed::Normals absent).
 void drawWaterDepthOnlyPrepass(const glm::mat4& projection, const glm::mat4& view);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,

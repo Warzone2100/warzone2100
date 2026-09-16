@@ -49,7 +49,8 @@ void recordScenePrepass(const gfx_api::RenderPassContext& passCtx)
 	if (writesNormals)
 	{
 		drawTerrainDepthNormalPrepass(fc.perspectiveViewMatrix, fc.viewMatrix);
-		drawWaterDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix);
+		const bool writeSsrWaterNormals = gfx_api::context::get().storedSceneEffectSurfaces().ssr;
+		drawWaterDepthNormalPrepass(fc.perspectiveMatrix, fc.viewMatrix, writeSsrWaterNormals);
 	}
 	else
 	{
