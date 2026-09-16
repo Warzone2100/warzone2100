@@ -13,6 +13,14 @@ const float SKY_LOWER_BAND_Y0 = -0.45;
 const float SKY_LOWER_BAND_SPAN = 0.60;
 const float SKY_FOG_Y = 0.5;
 
+// The skybox is mipmapped. Implicit texture() on fract(u) from divergent SSR
+// miss paths picks a low mip at each wall seam (one-pixel column). Force LOD 0
+// so the lookup matches pie_DrawSkybox, which also uses the top mip.
+vec3 wzSampleSkyboxLod0(vec2 uv)
+{
+	return textureLod(skyboxTexture, uv, 0.0).rgb;
+}
+
 vec3 wzSampleSkyRadiance(vec3 viewDir)
 {
 	vec3 d = mat3(viewToSkyLocal) * viewDir;
@@ -38,7 +46,7 @@ vec3 wzSampleSkyRadiance(vec3 viewDir)
 		v = mix(SKY_V_BASELINE, SKY_V_MIDDLE, clamp((y - SKY_LOWER_BAND_Y0) / SKY_LOWER_BAND_SPAN, 0.0, 1.0));
 	}
 
-	vec3 color = texture(skyboxTexture, vec2(u, v)).rgb;
+	vec3 color = wzSampleSkyboxLod0(vec2(u, v));
 	if (skyFogColor.a > 0.5 && y < SKY_FOG_Y)
 	{
 		color = skyFogColor.rgb;

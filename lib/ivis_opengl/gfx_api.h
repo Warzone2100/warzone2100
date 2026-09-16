@@ -2209,6 +2209,7 @@ namespace gfx_api
 		glm::mat4 projectionMatrix;
 		glm::mat4 viewToSkyLocal;
 		glm::vec4 params;
+		glm::vec4 generatePixelUV; // xy = 1 / used viewport of this pass (not alloc size)
 		glm::vec4 prepassUvScaleClamp;
 		glm::vec4 sceneUvScaleClamp;
 		glm::vec4 skyFogColor;

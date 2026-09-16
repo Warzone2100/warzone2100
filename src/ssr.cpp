@@ -153,6 +153,10 @@ void drawSSRGenerate(
 	constants.viewToSkyLocal = glm::mat4(invScale * invWind * invViewRot);
 	// params.z is the camera near plane; generate start is MIN_RAY_START_ABS.
 	constants.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thickness, pie_getPerspectiveZClose(), 0.f);
+	const auto vp = passCtx.writeViewportSize();
+	const float invW = (vp && vp->first > 0) ? 1.f / static_cast<float>(vp->first) : 0.f;
+	const float invH = (vp && vp->second > 0) ? 1.f / static_cast<float>(vp->second) : 0.f;
+	constants.generatePixelUV = glm::vec4(invW, invH, 0.f, 0.f);
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.prepassUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 2, constants.sceneUvScaleClamp);
 	const auto& renderState = getCurrentRenderState();
