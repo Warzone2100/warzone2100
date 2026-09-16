@@ -557,7 +557,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	UWORD OrdIndex;
 	UWORD Height, NumDisplayedOrders;
 	UWORD NumButs;
-	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore;
+	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore, PlaceOnLine;
 	bool  bLastCombine, bHidden;
 	DROID *Droid;
 	STRUCTURE *psStructure;
@@ -753,14 +753,15 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				}
 			}
 
-			// get position on line
-			NumCombineButs = (UWORD)(NumCombineButs - (NumCombineBefore - (NumCombineBefore % ORD_MAX_COMBINE_BUTS)));
+			// its place on its line, and how many buttons that line has
+			PlaceOnLine = (UWORD)(NumCombineBefore % ORD_MAX_COMBINE_BUTS);
+			NumCombineButs = (UWORD)std::min<int>(ORD_MAX_COMBINE_BUTS, NumCombineButs - (NumCombineBefore - PlaceOnLine));
 
 			if (NumCombineButs >= ORD_MAX_COMBINE_BUTS)
 			{
 				// the buttons will fill the line
 				sButInit.x = (SWORD)(ORDER_BUTX +
-				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * NumCombineBefore);
+				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * PlaceOnLine);
 			}
 			else
 			{
@@ -769,11 +770,11 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				             (NumCombineButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
 				              (NumCombineButs - 1) * ORDER_BUTGAP) / 2;
 				sButInit.x = (SWORD)(sButInit.x +
-				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * NumCombineBefore);
+				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * PlaceOnLine);
 			}
 
-			// see if need to start a new line of buttons
-			if ((NumCombineBefore + 1) == (NumCombineButs % ORD_MAX_COMBINE_BUTS))
+			// start a new line of buttons after the line's last one
+			if (PlaceOnLine + 1 == NumCombineButs)
 			{
 				bLastCombine = true;
 			}
