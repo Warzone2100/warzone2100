@@ -35,6 +35,7 @@ void main()
 	// stay readable instead of breaking up at the wave frequency.
 	modelN = normalize(mix(modelN, vec3(0.0, 1.0, 0.0), SSR_NORMAL_CALM));
 	vec3 viewN = normalize(mat3(ViewMatrix) * modelN);
+	// Alpha 0: SSAO skips water; SSR uses (1-A) as the reflector mask.
 	#ifdef NEWGL
 	FragColor = vec4(viewN * 0.5 + 0.5, 0.0);
 	#else
