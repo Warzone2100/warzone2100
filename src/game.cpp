@@ -5627,7 +5627,11 @@ foundDroid:
 			ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
 			BASE_OBJECT *psObj = getBaseObjFromData(tid, tplayer, ttype);
 			ASSERT(psObj, "Failed to find droid base structure");
-			ASSERT(!psObj || psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
+			if (psObj != nullptr && psObj->type != OBJ_STRUCTURE)
+			{
+				debug(LOG_ERROR, "Droid %u base structure %d is not a structure", psDroid->id, tid);
+				psObj = nullptr;
+			}
 			setSaveDroidBase(psDroid, (STRUCTURE *)psObj);
 		}
 		if (ini.contains("commander"))
@@ -8291,7 +8295,15 @@ bool readFiresupportDesignators(const char *pFileName)
 		uint32_t id = ini.value("Player_" + WzString::number(i) + "/id", NULL_ID).toInt();
 		if (id != NULL_ID)
 		{
-			cmdDroidSetDesignator((DROID *)getBaseObjFromId(id));
+			BASE_OBJECT *psObj = getBaseObjFromId(id);
+			if (psObj != nullptr && psObj->type == OBJ_DROID)
+			{
+				cmdDroidSetDesignator((DROID *)psObj);
+			}
+			else
+			{
+				debug(LOG_ERROR, "Fire support designator %" PRIu32 " is not a droid", id);
+			}
 		}
 	}
 	return true;
