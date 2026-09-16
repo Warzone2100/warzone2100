@@ -28,6 +28,9 @@ varying vec2 texCoords;
 
 // Must match HIT_CONFIDENCE_MIN in ssr_generate.frag. Miss alpha is 0.3-0.65.
 const float SSR_BLUR_HIT_ALPHA = 0.75;
+// Input/output is premultiplied (rgb * confidence, confidence). Averaging rgb
+// and a with the same spatial weight preserves that. Taps are nearest so the
+// 0.75 hit/miss split is not bilinear-interpolated.
 
 void writeColor(vec4 color)
 {

@@ -60,6 +60,8 @@ void main()
 	float ndotv = clamp(dot(N, V), 0.0, 1.0);
 	float F = F0 + (1.0 - F0) * pow(1.0 - ndotv, SCHLICK_EXPONENT);
 	// intensity is Tuning::intensity * overWaterMix (overall gain, not a floor).
+	// ssr is premultiplied; unpremultiply for the mix color, keep a as the weight.
+	vec3 refl = ssr.rgb / max(ssr.a, SSR_WEIGHT_EPSILON);
 	float mixAmt = clamp(ssrWeight * F * ssr.a * intensity, 0.0, 1.0);
-	FragColor = vec4(mix(scene, ssr.rgb, mixAmt), 1.0);
+	FragColor = vec4(mix(scene, refl, mixAmt), 1.0);
 }
