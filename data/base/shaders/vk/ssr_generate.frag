@@ -4,7 +4,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 invProjectionMatrix;
 	mat4 projectionMatrix;
 	mat4 viewToSkyLocal;
-	vec4 params;              // x=maxRayLength, y=thickness cap; z unused (start is MIN_RAY_START_ABS)
+	vec4 params;              // x=maxRayLength, y=thickness cap, z=nearPlaneZ
 	vec4 prepassUvScaleClamp; // xy scale, zw clamp
 	vec4 sceneUvScaleClamp;
 	vec4 skyFogColor;         // rgb, a=fog enabled
@@ -55,8 +55,6 @@ const float EDGE_FADE_WIDTH = 0.05;
 const int MAX_STEPS = 64;
 // First sample sits this far along R so it is not the reflector texel.
 const float MIN_RAY_START_ABS = 0.25;
-// pie_PerspectiveGet near plane (perspectiveZClose). Clip so clip-w stays valid.
-const float NEAR_PLANE_Z = 330.0;
 // Slab min(cpuCap, max(MIN, REL * |surfZ|)). At view-Z ~2000 that is ~20 map
 // units (droid/hover scale). McGuire Fig. 3: small thickness is strict.
 const float THICKNESS_RELATIVE = 0.01;
@@ -97,7 +95,7 @@ float ssrClipRayToNearPlane(vec3 origin, vec3 R, float maxDist)
 {
 	if (R.z < -1e-5)
 	{
-		float tNear = (NEAR_PLANE_Z - origin.z) / R.z;
+		float tNear = (params.z - origin.z) / R.z;
 		if (tNear > 0.0)
 		{
 			maxDist = min(maxDist, tNear);

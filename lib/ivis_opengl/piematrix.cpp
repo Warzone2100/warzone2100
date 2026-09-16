@@ -162,6 +162,11 @@ float pie_getPerspectiveZFar()
 	return perspectiveZFar;
 }
 
+float pie_getPerspectiveZClose()
+{
+	return perspectiveZClose;
+}
+
 void pie_Begin3DScene()
 {
 	gfx_api::context::get().set_depth_range(0.f, 1.f);

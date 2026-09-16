@@ -34,6 +34,7 @@
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/pielight_convert.h"
+#include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piestate.h"
 
 #include <glm/glm.hpp>
@@ -150,8 +151,8 @@ void drawSSRGenerate(
 		glm::vec3(0.f, 2.f / skyScale, 0.f),
 		glm::vec3(0.f, 0.f, 1.f / skyScale));
 	constants.viewToSkyLocal = glm::mat4(invScale * invWind * invViewRot);
-	// params.z unused (generate start is MIN_RAY_START_ABS).
-	constants.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thickness, 0.f, 0.f);
+	// params.z is the camera near plane; generate start is MIN_RAY_START_ABS.
+	constants.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thickness, pie_getPerspectiveZClose(), 0.f);
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.prepassUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 2, constants.sceneUvScaleClamp);
 	const auto& renderState = getCurrentRenderState();
