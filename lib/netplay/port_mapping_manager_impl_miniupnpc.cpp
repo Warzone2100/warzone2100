@@ -318,7 +318,7 @@ void PortMappingImpl_Miniupnpc::miniupnpc_background_thread(std::shared_ptr<Port
 		}
 
 		size_t i = 0;
-		size_t anyMappings = false;
+		bool anyMappings = false;
 		while (true)
 		{
 			auto mappingId = i;
