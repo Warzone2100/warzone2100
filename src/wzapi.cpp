@@ -3137,6 +3137,13 @@ bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx))
 	SCRIPT_ASSERT(false, context,
 	    psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID || psObj->type == OBJ_FEATURE,
 	    "Wrong game object type");
+	if (psObj->type == OBJ_STRUCTURE)
+	{
+		SCRIPT_ASSERT(false, context, psObj->player < MAX_PLAYERS, "Invalid structure player %d", (int)psObj->player);
+		const auto& structures = gameWorld.objects.structures[psObj->player];
+		SCRIPT_ASSERT(false, context, std::find(structures.begin(), structures.end(), static_cast<const STRUCTURE*>(psObj)) != structures.end(),
+		    "Cannot remove off-world structure %s", objInfo(psObj));
+	}
 
 	scriptQueuedObjectRemovals().emplace_back(psObj, _sfx.value_or(false));
 	return true;
