@@ -112,6 +112,8 @@ void gridShutDown()
 	gridFiltersUnseen = nullptr;
 	delete[] gridFiltersDroidsByPlayer;
 	gridFiltersDroidsByPlayer = nullptr;
+	delete[] gridFiltersDroidsRepairCandidates;
+	gridFiltersDroidsRepairCandidates = nullptr;
 }
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
