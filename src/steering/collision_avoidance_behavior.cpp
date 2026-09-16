@@ -207,7 +207,7 @@ bool CollisionAvoidanceBehavior::isValidObstacle(const BASE_OBJECT* obj, const D
 
 	// Only consider droids
 	const DROID* obstacle = castDroid(const_cast<BASE_OBJECT*>(obj));
-	if (!obstacle)
+	if (!obstacle || obstacle->died)
 	{
 		return false;
 	}
