@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include <array>
+#include <vector>
 
 namespace gfx_api
 {
@@ -41,7 +42,10 @@ namespace gfx_api
 
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix);
 
-void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);
+/// The radar's viewing window: a convex polygon, its points in order around (none: nothing is drawn)
+void pie_SetViewingWindow(const std::vector<Vector3i> &points, PIELIGHT colour);
+/// Whether a viewing window is set (and not empty)
+bool pie_HasViewingWindow();
 void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix);
 void pie_ViewingWindow_Shutdown();
 
