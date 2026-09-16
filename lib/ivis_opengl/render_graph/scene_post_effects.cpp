@@ -46,6 +46,9 @@ struct SeparableBlurPrepareChainDesc
 	const char* verticalName;
 	ClearValue clearValue;
 	uint32_t downsampleFeature;
+	/// Generate is emitted by the effect. This covers downsample + H + V.
+	/// SSAO keeps Clear (unoccluded 1 if a pixel is skipped). SSR overwrites every pixel.
+	AttachmentLoadOp blurLoadOp = AttachmentLoadOp::Clear;
 };
 
 void emitSeparableBlurPasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot,
@@ -59,7 +62,7 @@ void emitSeparableBlurPasses(BlueprintBuilder& builder, const RenderTopologySnap
 	if (downsample)
 	{
 		builder.beginPass(desc.downsamplePass, desc.downsampleName)
-			.color(desc.coarseSurface, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, desc.clearValue)
+			.color(desc.coarseSurface, desc.blurLoadOp, AttachmentStoreOp::Store, desc.clearValue)
 			.viewport(ViewportRule::ColorTarget)
 			.readFrom(desc.generatePass, AttachmentRole::PrimaryColor);
 		horizontalInput = desc.downsamplePass;
@@ -67,13 +70,13 @@ void emitSeparableBlurPasses(BlueprintBuilder& builder, const RenderTopologySnap
 	}
 
 	builder.beginPass(desc.horizontalPass, desc.horizontalName)
-		.color(desc.horizontalSurface, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, desc.clearValue)
+		.color(desc.horizontalSurface, desc.blurLoadOp, AttachmentStoreOp::Store, desc.clearValue)
 		.viewport(ViewportRule::ColorTarget)
 		.readFrom(horizontalInput, AttachmentRole::PrimaryColor)
 		.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
 
 	builder.beginPass(desc.verticalPass, desc.verticalName)
-		.color(verticalOutput, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, desc.clearValue)
+		.color(verticalOutput, desc.blurLoadOp, AttachmentStoreOp::Store, desc.clearValue)
 		.viewport(ViewportRule::ColorTarget)
 		.readFrom(desc.horizontalPass, AttachmentRole::PrimaryColor)
 		.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
@@ -102,7 +105,7 @@ void emitSsrPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapsho
 	const ClearValue noReflection = ClearValue::colorClear(0.f, 0.f, 0.f, 0.f);
 
 	builder.beginPass(PassId::SSRGenerate, "SSRGenerate")
-		.color(PipelineSurfaceId::SsrRaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, noReflection)
+		.color(PipelineSurfaceId::SsrRaw, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store, noReflection)
 		.viewport(ViewportRule::ColorTarget)
 		.readFrom(PassId::ScenePrepass, AttachmentRole::Depth) // 0: prepass depth
 		.readFrom(PassId::ScenePrepass, AttachmentRole::Color, /*attachmentIndex=*/0) // 1: prepass normals
@@ -113,6 +116,7 @@ void emitSsrPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapsho
 		PipelineSurfaceId::SsrRaw, PipelineSurfaceId::SsrBlurH, PipelineSurfaceId::SsrBlurred,
 		"SSRDownsample", "SSRBlurH", "SSRBlurV", noReflection,
 		RenderFeatures::SSRDownsample,
+		AttachmentLoadOp::DontCare,
 	});
 }
 
