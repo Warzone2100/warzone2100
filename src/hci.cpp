@@ -323,6 +323,14 @@ struct RETBUTSTATS
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
 
+void clearReticuleCallbacks()
+{
+	for (auto& i : retbutstats)
+	{
+		i.callbackFunc = nullptr;
+	}
+}
+
 static bool buttonIsClickable(uint16_t id)
 {
 	bool enabled = intCheckReticuleButEnabled(id);
