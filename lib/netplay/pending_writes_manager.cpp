@@ -183,7 +183,14 @@ void PendingWritesManager::threadImplFunction()
 				if (retSent.has_value())
 				{
 					// Erase as much data as written.
-					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + retSent.value());
+					ASSERT(retSent.value() >= 0 && static_cast<size_t>(retSent.value()) <= writeQueue.size(),
+						"sendImpl reported %zd bytes sent, but the write queue only holds %zu", static_cast<ssize_t>(retSent.value()), writeQueue.size());
+					size_t sentCount = (retSent.value() >= 0) ? static_cast<size_t>(retSent.value()) : 0;
+					if (sentCount > writeQueue.size())
+					{
+						sentCount = writeQueue.size();
+					}
+					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + sentCount);
 					if (writeQueue.empty())
 					{
 						pendingWrites_.erase(currentIt);  // Nothing left to write, delete from pending list.

@@ -93,7 +93,8 @@ static bool NETreplaySaveWritePreamble(const nlohmann::json& settings, ReplayOpt
 	}
 
 	auto data = settings.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
-	PHYSFS_writeUBE32(replaySaveHandle, data.size());
+	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Settings JSON is too large: %zu", data.size());
+	PHYSFS_writeUBE32(replaySaveHandle, static_cast<uint32_t>(data.size()));
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
 	// Save extra map data (if present)
@@ -269,9 +270,11 @@ bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)
 	// FUTURE TODO: Could save things like the game results / winners + losers
 
 	auto data = endOfGameInfo.dump();
-	PHYSFS_writeUBE32(replaySaveHandle, data.size());
+	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "End-of-game JSON is too large: %zu", data.size());
+	const uint32_t endOfGameInfoSize = static_cast<uint32_t>(data.size());
+	PHYSFS_writeUBE32(replaySaveHandle, endOfGameInfoSize);
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
-	PHYSFS_writeUBE32(replaySaveHandle, data.size()); // should also end with the json size for easy reading from end of file
+	PHYSFS_writeUBE32(replaySaveHandle, endOfGameInfoSize); // should also end with the json size for easy reading from end of file
 
 	if (!PHYSFS_close(replaySaveHandle))
 	{

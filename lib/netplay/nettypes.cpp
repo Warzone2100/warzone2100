@@ -493,7 +493,7 @@ bool NETend(MessageWriter& w)
 		tmpMessageRawDataBuffer.clear();
 		msg.rawDataAppendToVector(tmpMessageRawDataBuffer);
 
-		auto encryptedData = netSessionKeys[w.queueInfo.index]->encryptMessageForOther(&tmpMessageRawDataBuffer[0], tmpMessageRawDataBuffer.size());
+		auto encryptedData = netSessionKeys[w.queueInfo.index]->encryptMessageForOther(tmpMessageRawDataBuffer.data(), tmpMessageRawDataBuffer.size());
 		NetMessageBuilder encryptedNetMessage(NET_SECURED_NET_MESSAGE, encryptedData.size());
 		encryptedNetMessage.append(encryptedData.data(), encryptedData.size());
 		msg = encryptedNetMessage.build();
@@ -782,10 +782,15 @@ void NETstring(MessageReader &r, char *str, uint16_t maxlen)
 {
     uint16_t len;
     NETuint16_t(r, len);
-    len = std::min(len, maxlen);
+
+    uint16_t maxReadLen = (maxlen > 0) ? static_cast<uint16_t>(maxlen - 1) : 0;
+    len = std::min(len, maxReadLen);
 
     r.bytes((uint8_t *)str, len);
-    str[len] = '\0';
+    if (maxlen > 0)
+    {
+        str[len] = '\0';
+    }
 }
 
 void NETstring(MessageReader& r, std::string& s, uint32_t maxLen /* = 65536 */)

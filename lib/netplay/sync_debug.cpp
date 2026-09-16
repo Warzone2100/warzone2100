@@ -407,6 +407,7 @@ bool DesyncLogOutputter::write(uint32_t time, unsigned player, const uint8_t* bu
 
 bool DesyncLogOutputter::closeEOF(uint32_t time, unsigned player)
 {
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
 	return players[player].closeEOF(time, player);
 }
 

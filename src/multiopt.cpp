@@ -197,6 +197,11 @@ bool recvOptions(NETQUEUE queue)
 		NETbin(r, hash.bytes, hash.Bytes);
 	}
 	NETuint8_t(r, game.maxPlayers);
+	if (game.maxPlayers > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid maxPlayers value specified: %" PRIu8, game.maxPlayers);
+		return false;
+	}
 	NETstring(r, game.name, 128);
 	NETuint32_t(r, game.power);
 	NETuint8_t(r, game.base);
