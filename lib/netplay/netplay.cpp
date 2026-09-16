@@ -2309,6 +2309,27 @@ static void LogChatMsg(uint8_t msgType, const NetMessage& message, uint8_t sende
 	}
 }
 
+static void NETkickSenderOfInvalidMessage(NETQUEUE playerQueue, const char *messageName)
+{
+	char msg[256] = {'\0'};
+
+	if (!NetPlay.isHost || playerQueue.index == NetPlay.hostPlayer || !NETplayerHasConnection(playerQueue.index))
+	{
+		ssprintf(msg, "Invalid or corrupt message received from player: %u", (unsigned int)playerQueue.index);
+		NETlogEntry(msg, SYNC_FLAG, playerQueue.index);
+		debug(LOG_ERROR, "%s", msg);
+		return;
+	}
+
+	ssprintf(msg, "Auto-kicking player %u - invalid or corrupt message received: %s", (unsigned int)playerQueue.index, messageName);
+	NETlogEntry(msg, SYNC_FLAG, playerQueue.index);
+
+	ssprintf(msg, "Auto-kicking player %u - invalid or corrupt message received.", (unsigned int)playerQueue.index);
+	sendRoomSystemMessage(msg);
+	debug(LOG_ERROR, "%s", msg);
+	kickPlayer(playerQueue.index, "Invalid or corrupt message", ERROR_INVALID, true);
+}
+
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
 static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
@@ -2340,11 +2361,16 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			auto r = NETbeginDecode(playerQueue, NET_SEND_TO_PLAYER);
 			NETuint8_t(r, sender);
 			NETuint8_t(r, receiver);
-			NETnetMessage(r, &message);  // Must delete message later.
+			bool validNestedMessage = NETnetMessage(r, &message);  // Must delete message later.
 			std::unique_ptr<NetMessage> deleteLater(message);
+			if (!validNestedMessage)
+			{
+				NETkickSenderOfInvalidMessage(playerQueue, "NET_SEND_TO_PLAYER");
+				break;
+			}
 			if (!NETend(r))
 			{
-				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
+				debug(LOG_ERROR, "Invalid NET_SEND_TO_PLAYER.");
 				break;
 			}
 			if (sender >= MAX_CONNECTED_PLAYERS || (receiver >= MAX_CONNECTED_PLAYERS && receiver != NET_ALL_PLAYERS))
@@ -2488,9 +2514,14 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				NETend(r);
 				break;
 			}
+			bool validMessages = true;
 			for (n = 0; n < num; ++n)
 			{
-				NETnetMessage(r, &message);
+				if (!NETnetMessage(r, &message))
+				{
+					validMessages = false;
+					break;
+				}
 
 				NETlogPacket(message->type(), static_cast<uint32_t>(message->rawData().size()), true);
 				NETinsertMessageFromNet(NETgameQueue(player), std::move(*message));
@@ -2498,9 +2529,14 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				delete message;
 				message = nullptr;
 			}
+			if (!validMessages)
+			{
+				NETkickSenderOfInvalidMessage(playerQueue, "NET_SHARE_GAME_QUEUE");
+				break;
+			}
 			if (!NETend(r))
 			{
-				debug(LOG_ERROR, "Bad NET_SHARE_GAME_QUEUE message.");
+				debug(LOG_ERROR, "Invalid NET_SHARE_GAME_QUEUE message.");
 				break;
 			}
 			break;

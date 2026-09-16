@@ -69,6 +69,8 @@ public:
 
 	// Static factory method to create from raw data
 	static optional<NetMessage> tryFromRawData(const uint8_t* buffer, size_t bufferLen);
+	// Takes ownership of a buffer that must hold exactly one complete message (header + payload)
+	static optional<NetMessage> tryFromRawData(NetMsgDataVector&& rawData);
 
 	NetMessage(NetMessage&&) = default;
 	NetMessage& operator=(NetMessage&&) = default;
@@ -108,7 +110,6 @@ class NetMessageBuilder
 public:
 
 	explicit NetMessageBuilder(uint8_t type, size_t reservedCapacity = 16);
-	explicit NetMessageBuilder(NetMsgDataVector&& rawData);
 
 	uint8_t type() const
 	{
@@ -250,6 +251,10 @@ public:
 	bool valid() const
 	{
 		return index <= msgData->size();
+	}
+	void markInvalid() const
+	{
+		index = msgData->size() + 1;
 	}
 
 	const NetMsgDataVector* msgData;
