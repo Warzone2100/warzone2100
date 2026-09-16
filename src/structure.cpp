@@ -4050,7 +4050,8 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 			                                                 aDefaultRepair[psBuilding->player]].time);
 
 			//add the blue flashing effect for multiPlayer
-			if (bMultiPlayer && ONEINTEN && !bMission && psBuilding->sDisplay.imd)
+			const iIMDShape *pDisplayModel = psBuilding->sDisplay.imd ? psBuilding->sDisplay.imd->displayModel() : nullptr;
+			if (bMultiPlayer && ONEINTEN && !bMission && pDisplayModel && pDisplayModel->points.size() >= 2)
 			{
 				Vector3i position;
 				const Vector3f *point;
@@ -4058,7 +4059,6 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 				UDWORD	pointIndex;
 
 				// since this is a visual effect, it should be based on the *display* model
-				const iIMDShape *pDisplayModel = psBuilding->sDisplay.imd->displayModel();
 				pointIndex = rand() % (pDisplayModel->points.size() - 1);
 				point = &(pDisplayModel->points.at(pointIndex));
 				position.x = static_cast<int>(psBuilding->pos.x + point->x);
