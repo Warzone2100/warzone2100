@@ -773,13 +773,15 @@ wzapi::no_return_value wzapi::hackNetOn(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, int messageType, int player, bool immediate))
 {
+	SCRIPT_ASSERT({}, context, messageType >= 0 && messageType < MSG_TYPES, "Invalid message type %d", messageType);
 	MESSAGE_TYPE msgType = (MESSAGE_TYPE)messageType;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
+	VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
+	SCRIPT_ASSERT({}, context, psViewData, "Viewdata not found");
+	SCRIPT_ASSERT({}, context, msgType != MSG_PROXIMITY || psViewData->type == VIEW_PROX, "Viewdata %s is not a proximity view", message.c_str());
 	MESSAGE *psMessage = addMessage(msgType, false, player);
 	if (psMessage)
 	{
-		VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
-		SCRIPT_ASSERT({}, context, psViewData, "Viewdata not found");
 		psMessage->pViewData = psViewData;
 		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), static_cast<void *>(psMessage->pViewData));
 		if (msgType == MSG_PROXIMITY)
@@ -807,6 +809,7 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 //--
 wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message, int messageType, int player))
 {
+	SCRIPT_ASSERT({}, context, messageType >= 0 && messageType < MSG_TYPES, "Invalid message type %d", messageType);
 	MESSAGE_TYPE msgType = (MESSAGE_TYPE)messageType;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
