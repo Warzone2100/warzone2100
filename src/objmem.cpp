@@ -163,7 +163,7 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 			continue;  // Don't worry about self references.
 		}
 
-		for (unsigned i = 0; i < psStruct->numWeaps; ++i)
+		for (unsigned i = 0; i < MAX_WEAPONS; ++i)
 		{
 			ASSERT_OR_RETURN_REPORT(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i], psStruct));
 		}
@@ -228,7 +228,7 @@ static bool _checkDroidReferences(BASE_OBJECT *psVictim, const DroidList& psPlay
 
 		ASSERT_OR_RETURN_REPORT(false, psDroid->psBaseStruct != psVictim, "Illegal reference to p%d:%s:%d (%s) in psBaseStruct in %s[%u] (%s:%d - %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(psDroid->type), psDroid->id, getObjDebugDescriptiveName(psDroid));
 
-		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
+		for (unsigned i = 0; i < MAX_WEAPONS; ++i)
 		{
 			if (psDroid->psActionTarget[i] == psVictim)
 			{
