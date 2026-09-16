@@ -41,36 +41,24 @@
 
 static GFX *skyboxGfx = nullptr;
 static GFX *radarViewGfx[2] = { nullptr, nullptr };
+static bool radarViewEmpty = true;
 
-#define VW_VERTICES 5
-
-void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
+void pie_SetViewingWindow(const std::vector<Vector3i> &points, PIELIGHT colour)
 {
-	Vector3i pieVrts_insidefill[VW_VERTICES - 1];
-	Vector3i pieVrts_outline[VW_VERTICES];
-
 	if (!radarViewGfx[0])
 	{
 		radarViewGfx[0] = new GFX(GFX_COLOUR, 2);
 		radarViewGfx[1] = new GFX(GFX_COLOUR, 2);
 	}
-
-	static_assert(VW_VERTICES == 5, "Assumption that VW_VERTICES == 5 invalid. Update the following code.");
-	pieVrts_outline[0] = v[1];
-	pieVrts_outline[1] = v[0];
-	pieVrts_outline[2] = v[2];
-	pieVrts_outline[3] = v[3];
-	pieVrts_outline[4] = v[1];
-	pieVrts_insidefill[0] = v[2];
-	pieVrts_insidefill[1] = v[3];
-	pieVrts_insidefill[2] = v[0];
-	pieVrts_insidefill[3] = v[1];
-
-	gfx_api::gfxFloat vert[VW_VERTICES * 2];
-	uint8_t cols[VW_VERTICES * 4];
-
-	// Initialize the RGB values for both, and the alpha for the inside fill
-	for (int i = 0; i < VW_VERTICES * 4; i += 4)
+	const size_t count = points.size();
+	radarViewEmpty = count < 3;
+	if (radarViewEmpty)
+	{
+		return;
+	}
+	std::vector<gfx_api::gfxFloat> vert((count + 1) * 2);
+	std::vector<uint8_t> cols((count + 1) * 4);
+	for (size_t i = 0; i < cols.size(); i += 4)
 	{
 		cols[i + 0] = colour.byte.r;
 		cols[i + 1] = colour.byte.g;
@@ -78,29 +66,39 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 		cols[i + 3] = colour.byte.a >> 1;
 	}
 
-	// Inside fill
-	for (int i = 0; i < (VW_VERTICES - 1); i++)
+	// Inside fill: a triangle strip zigzagging across the polygon (0, 1, n-1, 2, n-2, ...)
+	for (size_t i = 0, low = 1, high = count - 1; i < count; ++i)
 	{
-		vert[i * 2 + 0] = pieVrts_insidefill[i].x;
-		vert[i * 2 + 1] = pieVrts_insidefill[i].y;
+		const size_t index = i == 0 ? 0 : (i % 2 == 1 ? low++ : high--);
+		vert[i * 2 + 0] = static_cast<gfx_api::gfxFloat>(points[index].x);
+		vert[i * 2 + 1] = static_cast<gfx_api::gfxFloat>(points[index].y);
 	}
-	radarViewGfx[0]->buffers(VW_VERTICES - 1, vert, cols);
+	radarViewGfx[0]->buffers(static_cast<int>(count), vert.data(), cols.data());
 
-	// Outline
-	for (int i = 0; i < VW_VERTICES; i++)
+	// Outline: around, back to the first point
+	for (size_t i = 0; i <= count; ++i)
 	{
-		vert[i * 2 + 0] = pieVrts_outline[i].x;
-		vert[i * 2 + 1] = pieVrts_outline[i].y;
+		vert[i * 2 + 0] = static_cast<gfx_api::gfxFloat>(points[i % count].x);
+		vert[i * 2 + 1] = static_cast<gfx_api::gfxFloat>(points[i % count].y);
 	}
-	for (int i = 0; i < VW_VERTICES * 4; i += 4) // set the proper alpha for the outline
+	for (size_t i = 0; i < cols.size(); i += 4)
 	{
 		cols[i + 3] = colour.byte.a;
 	}
-	radarViewGfx[1]->buffers(VW_VERTICES, vert, cols);
+	radarViewGfx[1]->buffers(static_cast<int>(count + 1), vert.data(), cols.data());
+}
+
+bool pie_HasViewingWindow()
+{
+	return !radarViewEmpty && radarViewGfx[0] != nullptr;
 }
 
 void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 {
+	if (radarViewEmpty || !radarViewGfx[0])
+	{
+		return;
+	}
 	gfx_api::RadarViewInsideFillPSO::get().bind();
 	gfx_api::RadarViewInsideFillPSO::get().bind_constants({ modelViewProjectionMatrix });
 	radarViewGfx[0]->draw<gfx_api::RadarViewInsideFillPSO>(modelViewProjectionMatrix);
@@ -121,6 +119,7 @@ void pie_ViewingWindow_Shutdown()
 		delete radarViewGfx[1];
 		radarViewGfx[1] = nullptr;
 	}
+	radarViewEmpty = true;
 }
 
 void pie_DebugDrawTessellationTestPatch()

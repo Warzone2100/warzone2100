@@ -55,6 +55,7 @@
 #include "warzoneconfig.h"
 #include "order.h"
 #include "cameratrace.h"
+#include "display3d_render_graph.h"
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -680,117 +681,137 @@ static void applyMinimapOverlay()
 	}
 }
 
-/** Rotate an array of 2d vectors about a given angle, also translates them after rotating. */
-static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, int Angle, int Count)
+/// Where the ray from the camera through a point of the screen (in normalized device coordinates) meets the ground, in
+/// world coordinates. It's met with a level plane at `groundHeight`, then a few times with one at the ground's height
+/// where it last met. Above the horizon or past the far plane, it's where the ray reaches the far plane
+/// The ground's height at a point, or past the map's edge, at the edge (the polygon is clipped to the map after)
+static float groundHeightAt(const WorldMapState& mapState, float x, float y)
 {
-	int64_t Cos = iCos(Angle);
-	int64_t Sin = iSin(Angle);
-	int ox = 0;
-	int oy = 0;
-	int i;
-	Vector3i *Vec = Vector;
-	Vector3i *TVec = TVector;
-
-	if (Pos)
-	{
-		ox = Pos->x;
-		oy = Pos->y;
-	}
-
-	for (i = 0; i < Count; i++)
-	{
-		TVec->x = ((Vec->x * Cos + Vec->y * Sin) >> 16) + ox;
-		TVec->y = ((Vec->y * Cos - Vec->x * Sin) >> 16) + oy;
-		Vec++;
-		TVec++;
-	}
+	const float maxX = static_cast<float>(world_coord(mapState.width) - 1);
+	const float maxY = static_cast<float>(world_coord(mapState.height) - 1);
+	return static_cast<float>(map_Height(mapState, static_cast<int>(glm::clamp(x, 0.f, maxX)), static_cast<int>(glm::clamp(y, 0.f, maxY))));
 }
 
-static SDWORD getDistanceAdjust()
+static glm::vec2 groundUnderScreenPoint(const WorldMapState& mapState, const glm::mat4 &inversePerspectiveView, float screenX, float screenY, float groundHeight)
 {
-	int dif = std::max<int>(static_cast<int>(MAXDISTANCE - getViewDistance()), 0);
-
-	return dif / 100;
-}
-
-static SDWORD getLengthAdjust()
-{
-	const int pitch = static_cast<int>(360 - (playerPos.r.x / DEG_1));
-
-	// Max at
-	const int lookingDown = (0 - MIN_PLAYER_X_ANGLE);
-	const int lookingFar = (0 - MAX_PLAYER_X_ANGLE);
-
-	int dif = MAX(pitch - lookingFar, 0);
-	if (dif > (lookingDown - lookingFar))
+	const glm::vec4 nearPoint = inversePerspectiveView * glm::vec4(screenX, screenY, 0.f, 1.f);
+	const glm::vec4 farPoint = inversePerspectiveView * glm::vec4(screenX, screenY, 1.f, 1.f);
+	const glm::vec3 from = glm::vec3(nearPoint) / nearPoint.w;
+	const glm::vec3 to = glm::vec3(farPoint) / farPoint.w;
+	glm::vec3 hit = to;
+	float height = groundHeight;
+	for (int i = 0; i < 3; ++i)
 	{
-		dif = (lookingDown - lookingFar);
+		const float drop = to.y - from.y;
+		const float t = drop < 0.f ? (height - from.y) / drop : -1.f;
+		if (t < 0.f || t > 1.f)
+		{
+			break;
+		}
+		hit = from + t * (to - from);
+		height = groundHeightAt(mapState, hit.x, -hit.z);
 	}
-
-	return dif / 2;
+	// (The 3D view's z is the map's y, negated)
+	return glm::vec2(hit.x, -hit.z);
 }
 
-/** Draws a Myth/FF7 style viewing window */
+/// The part of a convex polygon inside a rectangle (Sutherland-Hodgman)
+static std::vector<glm::vec2> clipToRect(std::vector<glm::vec2> polygon, glm::vec2 min, glm::vec2 max)
+{
+	for (int edge = 0; edge < 4 && !polygon.empty(); ++edge)
+	{
+		const int axis = edge % 2;
+		const bool keepAbove = edge < 2;
+		const float bound = keepAbove ? min[axis] : max[axis];
+		auto inside = [&](const glm::vec2 &p) { return keepAbove ? p[axis] >= bound : p[axis] <= bound; };
+		std::vector<glm::vec2> clipped;
+		for (size_t i = 0; i < polygon.size(); ++i)
+		{
+			const glm::vec2 &a = polygon[i];
+			const glm::vec2 &b = polygon[(i + 1) % polygon.size()];
+			if (inside(a))
+			{
+				clipped.push_back(a);
+			}
+			if (inside(a) != inside(b))
+			{
+				const float t = (bound - a[axis]) / (b[axis] - a[axis]);
+				clipped.push_back(a + t * (b - a));
+			}
+		}
+		polygon = std::move(clipped);
+	}
+	return polygon;
+}
+
+/// The radar's viewing window: the ground the 3D view shows, from the screen's corners cast through the frame's
+/// projection onto the terrain, clipped to the map. Set again only when the camera, the radar's zoom or the map's
+/// scroll limits change.
 static void setViewingWindow(const WorldMapState& mapState)
 {
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	const glm::mat4 &perspectiveView = pie_GetInGame3DFrameContext().perspectiveViewMatrix;
 	float pixSizeH, pixSizeV;
-	Vector3i v[4] = {{0, 0, 0}}, tv[4] = {{0, 0, 0}}, centre = {0, 0, 0};
-	int	shortX, longX, yDrop, yDropVar;
-	int	dif = getDistanceAdjust();
-	int	dif2 = getLengthAdjust();
-	PIELIGHT colour;
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
-	int x = static_cast<int>(playerPos.p.x * pixSizeH / TILE_UNITS);
-	int y = static_cast<int>(playerPos.p.z * pixSizeV / TILE_UNITS);
 
-	shortX = static_cast<int>(((visibleTiles.x / 4) - (dif / 6)) * pixSizeH);
-	longX = static_cast<int>(((visibleTiles.x / 2) - (dif / 4)) * pixSizeH);
-	yDropVar = static_cast<int>(((visibleTiles.y / 2) - (dif2 / 3)) * pixSizeV);
-	yDrop = static_cast<int>(((visibleTiles.y / 2) - dif2 / 3) * pixSizeV);
-
-	v[0].x = longX;
-	v[0].y = -yDropVar;
-
-	v[1].x = -longX;
-	v[1].y = -yDropVar;
-
-	v[2].x = shortX;
-	v[2].y = yDrop;
-
-	v[3].x = -shortX;
-	v[3].y = yDrop;
-
-	centre.x = static_cast<int>(x - mapState.scroll.minX * pixSizeH);
-	centre.y = static_cast<int>(y - mapState.scroll.minY * pixSizeV);
-
-	RotateVector2D(v, tv, &centre, playerPos.r.y, 4);
-
+	PIELIGHT colour;
 	switch (getCampaignNumber())
 	{
 	case 1:
 	case 2:
 		// white
-		colour.byte.r = UBYTE_MAX;
-		colour.byte.g = UBYTE_MAX;
-		colour.byte.b = UBYTE_MAX;
-		colour.byte.a = 0x3f;
+		colour = pal_RGBA(UBYTE_MAX, UBYTE_MAX, UBYTE_MAX, 0x3f);
 		break;
 	case 3:
 		// greenish
-		colour.byte.r = 0x3f;
-		colour.byte.g = UBYTE_MAX;
-		colour.byte.b = 0x3f;
-		colour.byte.a = 0x3f;
+		colour = pal_RGBA(0x3f, UBYTE_MAX, 0x3f, 0x3f);
 		break;
 	default:
 		// black
-		colour.clear();
-		colour.byte.a = 0x3f;
+		colour = pal_RGBA(0, 0, 0, 0x3f);
 		break;
 	}
 
-	/* Send the four points to the draw routine and the clip box params */
-	pie_SetViewingWindow(tv, colour);
+	static glm::mat4 lastPerspectiveView(0.f);
+	static glm::vec4 lastRadar(0.f);
+	static Vector2i lastScrollMin(-1, -1);
+	static uint32_t lastColour = 0;
+	const glm::vec4 radar(pixSizeH, pixSizeV, static_cast<float>(radarWidth), static_cast<float>(radarHeight));
+	const Vector2i scrollMin(mapState.scroll.minX, mapState.scroll.minY);
+	if (perspectiveView == lastPerspectiveView && radar == lastRadar && scrollMin == lastScrollMin && colour.rgba() == lastColour && pie_HasViewingWindow())
+	{
+		return;
+	}
+	lastPerspectiveView = perspectiveView;
+	lastRadar = radar;
+	lastScrollMin = scrollMin;
+	lastColour = colour.rgba();
+
+	const glm::mat4 inverse = glm::inverse(perspectiveView);
+	// The ground under the screen's center first: the plane the corners start from
+	const float centerHeight = groundHeightAt(mapState, static_cast<float>(playerPos.p.x), static_cast<float>(playerPos.p.z));
+	const glm::vec2 center = groundUnderScreenPoint(mapState, inverse, 0.f, 0.f, centerHeight);
+	const float groundHeight = groundHeightAt(mapState, center.x, center.y);
+
+	// The screen's corners, in order around, as radar pixels
+	std::vector<glm::vec2> polygon;
+	for (const glm::vec2 &corner : {glm::vec2(-1.f, 1.f), glm::vec2(1.f, 1.f), glm::vec2(1.f, -1.f), glm::vec2(-1.f, -1.f)})
+	{
+		const glm::vec2 ground = groundUnderScreenPoint(mapState, inverse, corner.x, corner.y, groundHeight);
+		polygon.emplace_back((ground.x / TILE_UNITS - static_cast<float>(mapState.scroll.minX)) * pixSizeH,
+		                     (ground.y / TILE_UNITS - static_cast<float>(mapState.scroll.minY)) * pixSizeV);
+	}
+	polygon = clipToRect(std::move(polygon), glm::vec2(0.f, 0.f), glm::vec2(static_cast<float>(radarWidth), static_cast<float>(radarHeight)));
+
+	std::vector<Vector3i> points;
+	for (const glm::vec2 &p : polygon)
+	{
+		points.emplace_back(static_cast<int>(std::lround(p.x)), static_cast<int>(std::lround(p.y)), 0);
+	}
+	pie_SetViewingWindow(points, colour);
 }
 
 static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix)
