@@ -661,14 +661,20 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 	NETint32_t(r, value);
 	NETend(r);
 
+	if (from >= MAX_PLAYERS || to >= MAX_PLAYERS || from == to)
+	{
+		debug(LOG_WARNING, "Invalid alliance players (%d, %d), queue.index %d", (int)from, (int)to, (int)queue.index);
+		return false;
+	}
+
 	if (!canGiveOrdersFor(queue.index, from))
 	{
 		return false;
 	}
 
-	if (to >= MAX_PLAYERS)
+	if (bMultiPlayer && alliancesFixed(game.alliance))
 	{
-		debug(LOG_WARNING, "Invalid recipient player (%d), queue.index %d", (int)to, (int)queue.index);
+		debug(LOG_WARNING, "Ignoring alliance change in a fixed-alliance game.");
 		return false;
 	}
 
@@ -701,6 +707,11 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 		break;
 	case ALLIANCE_FORMED:
 		if (prohibitedNewAlliance(from, to)) { return false; }
+		if (alliances[from][to] != ALLIANCE_INVITATION || alliances[to][from] != ALLIANCE_REQUESTED)
+		{
+			debug(LOG_WARNING, "Ignoring alliance formation without a pending invitation (%d, %d).", (int)from, (int)to);
+			return false;
+		}
 		formAlliance(from, to, false, allowAudio, true);
 		break;
 	case ALLIANCE_BROKEN:
