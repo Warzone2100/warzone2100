@@ -39,6 +39,9 @@ layout(location = 0) out vec4 FragColor;
 // View space is +Z into the scene (pie_PerspectiveGet). The voxel extends away
 // from the camera: [surfZ, surfZ + thickness]. Water (1 - normals.a) and sky
 // (depth >= 0.9999) are skipped before the overlap test.
+//
+// Output is premultiplied: vec4(rgb * confidence, confidence). Empty is (0,0,0,0).
+// Alpha is still the hit/miss classifier (HIT_CONFIDENCE_MIN). Compose unpremultiplies.
 
 // Empty/sky prepass depth. Same convention as SSAO generate.
 const float SKY_DEPTH_THRESHOLD = 0.9999;
@@ -137,6 +140,11 @@ float edgeFade(vec2 uv, vec2 clampZW)
 	return fadeX * fadeY;
 }
 
+void writePremul(vec3 rgb, float confidence)
+{
+	FragColor = vec4(rgb * confidence, confidence);
+}
+
 void writeMiss(float ssrWeight, vec3 N, vec3 V, vec3 R)
 {
 	// Screen-space color cannot supply sky that is behind the camera or off
@@ -155,7 +163,7 @@ void writeMiss(float ssrWeight, vec3 N, vec3 V, vec3 R)
 		FragColor = vec4(0.0);
 		return;
 	}
-	FragColor = vec4(wzSampleSkyRadiance(R), confidence);
+	writePremul(wzSampleSkyRadiance(R), confidence);
 }
 
 void main()
@@ -327,5 +335,5 @@ void main()
 	vec2 sceneUv = clamp(hitUV / max(prepassUvScaleClamp.xy, vec2(UV_EPSILON)) * sceneUvScaleClamp.xy,
 		vec2(0.0), sceneUvScaleClamp.zw);
 	vec3 color = texture(sceneTexture, sceneUv).rgb;
-	FragColor = vec4(color, confidence);
+	writePremul(color, confidence);
 }

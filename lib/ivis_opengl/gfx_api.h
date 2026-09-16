@@ -2241,8 +2241,8 @@ namespace gfx_api
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
 	>,
 	std::tuple<
-		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
-		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>
+		texture_description<0, sampler_type::nearest_clamped, pixel_format_target::texture_2d>, // premul SSR
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>  // depth
 	>, SHADER_SSR_BLUR>;
 
 	template<>
