@@ -286,8 +286,6 @@ enum class SSR_MODE : uint8_t
 };
 SSR_MODE war_getSsrMode();
 void war_setSsrMode(SSR_MODE mode);
-/// True when SSR is not Off.
-bool war_getSSR();
 
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);

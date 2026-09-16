@@ -44,8 +44,6 @@ struct SsrSettings
 SsrSettings settingsFor(SSR_MODE mode);
 /// settingsFor(war_getSsrMode()), then disabled unless Normal Mapping terrain has water.
 SsrSettings activeSettings();
-/// True when `activeSettings().enabled` - used by applySceneEffectSurfaces.
-bool surfacesRequested();
 
 void init();
 void shutdown();
