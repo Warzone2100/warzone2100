@@ -3910,25 +3910,31 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			psStats->upgrade[player].resistance = value;
 			break;
 		case SCRCB_HIT:
+		{
+			SCRIPT_ASSERT(false, context, value > 0, "Structure HitPoints must be positive, got %d", value);
 			// Update body points for all structures, to avoid making them damaged
 			// FIXME - this is _really_ slow! we could be doing this for
 			// dozens of buildings one at a time!
+			const unsigned previousHitpoints = psStats->upgrade[player].hitpoints;
+			const unsigned newHitpoints = static_cast<unsigned>(value);
+			auto rescaleBody = [&](STRUCTURE *psCurr)
+			{
+				if (psStats == psCurr->pStructureType && previousHitpoints > 0 && (!bMultiPlayer || previousHitpoints < newHitpoints))
+				{
+					psCurr->body = static_cast<UDWORD>(static_cast<uint64_t>(psCurr->body) * newHitpoints / previousHitpoints);
+				}
+			};
 			for (STRUCTURE *psCurr : gameWorld.objects.structures[player])
 			{
-				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
-				{
-					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
-				}
+				rescaleBody(psCurr);
 			}
 			for (STRUCTURE *psCurr : mission.gameWorld.objects.structures[player])
 			{
-				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
-				{
-					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
-				}
+				rescaleBody(psCurr);
 			}
-			psStats->upgrade[player].hitpoints = value;
+			psStats->upgrade[player].hitpoints = newHitpoints;
 			break;
+		}
 		case SCRCB_LIMIT:
 			psStats->upgrade[player].limit = value; break;
 		}
