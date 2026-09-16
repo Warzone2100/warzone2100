@@ -9,7 +9,7 @@ layout(std140) uniform cbuffer {
 	vec4 prepassUvScaleClamp; // xy scale, zw clamp
 	vec4 sceneUvScaleClamp;
 	vec4 skyFogColor;         // rgb, a=fog enabled
-	float stepCount;          // uploaded from quality presets; this shader does not read it
+	float stepCount;          // runtime march cap; loop still bound by MAX_STEPS
 	float skyboxAvailable;
 	float padding1;
 	float padding2;
@@ -61,8 +61,8 @@ const float NORMAL_LENGTH_EPSILON = 1e-5;
 const float UV_EPSILON = 1e-6;
 const float EDGE_FADE_WIDTH = 0.05;
 
-// Loop bound. McGuire's quality floor is ~25 steps at 1080p; 64 matches ssr.h.
-// n = min(pixelCount, MAX_STEPS) keeps stride bounded on a mirror.
+// Compile-time loop bound. McGuire's quality floor is ~25 steps at 1080p.
+// Runtime n = min(pixelCount, stepCount) keeps stride bounded on a mirror.
 const int MAX_STEPS = 64;
 // First sample sits this far along R so it is not the reflector texel.
 const float MIN_RAY_START_ABS = 0.25;
@@ -252,8 +252,8 @@ void main()
 		return;
 	}
 
-	int n = int(min(pixelCount + 0.5, float(MAX_STEPS)));
-	n = max(n, 1);
+	int n = int(min(pixelCount + 0.5, stepCount));
+	n = clamp(n, 1, MAX_STEPS);
 
 	float thicknessCap = max(params.y, THICKNESS_MIN);
 	float prevZ = rayOrig.z;

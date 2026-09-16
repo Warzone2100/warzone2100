@@ -102,8 +102,6 @@ struct Tuning
 	/// Upper cap on the generate slab min(cap, max(8, 0.01*|surfZ|)). At typical
 	/// view-Z the relative term is smaller. McGuire JCGT 3(4) Figure 3.
 	float thickness;
-	/// Unused by the generate shader (start offset is MIN_RAY_START_ABS). Packed in params.z.
-	float minRayStart;
 	/// Sigma of the blur's depth falloff, in normalized depth units
 	float blurDepthSigma;
 	/// Analog compose gain after Schlick F. Not a water-shader blend and not a
@@ -122,7 +120,6 @@ struct Tuning
 constexpr Tuning DEFAULT_TUNING = {
 	.maxRayLength = 8000.f,
 	.thickness = 80.f,
-	.minRayStart = 0.004f,
 	.blurDepthSigma = 0.0025f,
 	.intensity = 2.0f,
 	.overWaterMix = 0.8f,
@@ -153,14 +150,13 @@ void drawSSRGenerate(
 		glm::vec3(0.f, 2.f / skyScale, 0.f),
 		glm::vec3(0.f, 0.f, 1.f / skyScale));
 	constants.viewToSkyLocal = glm::mat4(invScale * invWind * invViewRot);
-	// params.z is packed for std140; generate uses MIN_RAY_START_ABS instead of minRayStart.
-	constants.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thickness, s_tuning.minRayStart, 0.f);
+	// params.z unused (generate start is MIN_RAY_START_ABS).
+	constants.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thickness, 0.f, 0.f);
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.prepassUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 2, constants.sceneUvScaleClamp);
 	const auto& renderState = getCurrentRenderState();
 	const glm::vec4 fog = pielightToRGBAVec4(renderState.fogColour);
 	constants.skyFogColor = glm::vec4(fog.r, fog.g, fog.b, renderState.fogEnabled ? 1.f : 0.f);
-	// Packed for std140; generate uses min(pixelCount, MAX_STEPS) instead of this preset.
 	constants.stepCount = static_cast<float>(activeSettings().stepCount);
 	constants.skyboxAvailable = skyboxTexture != nullptr ? 1.f : 0.f;
 
