@@ -88,11 +88,6 @@ SsrSettings activeSettings()
 	return s;
 }
 
-bool surfacesRequested()
-{
-	return activeSettings().enabled;
-}
-
 namespace
 {
 

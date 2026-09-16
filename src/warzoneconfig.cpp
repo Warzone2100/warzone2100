@@ -991,11 +991,6 @@ void war_setSsrMode(SSR_MODE mode)
 	warGlobs.ssrMode = mode;
 }
 
-bool war_getSSR()
-{
-	return warGlobs.ssrMode != SSR_MODE::OFF;
-}
-
 bool war_getGroupsMenuEnabled()
 {
 	return warGlobs.groupsMenuEnabled;
