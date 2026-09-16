@@ -626,28 +626,32 @@ bool wzapi::changePlayerColour(WZAPI_PARAMS(int player, int colour))
 bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY_SYNCREQUEST_REQUIRED
 {
 	SCRIPT_ASSERT(false, context, psObject, "No valid object provided");
-	SCRIPT_ASSERT(false, context, health >= 1, "Bad health value %d", health);
+	SCRIPT_ASSERT(false, context, health >= 1 && health <= 100, "Bad health value %d", health);
 	int id = psObject->id;
 	int player = psObject->player;
 	OBJECT_TYPE objectType = psObject->type;
 	SCRIPT_ASSERT(false, context, objectType == OBJ_DROID || objectType == OBJ_STRUCTURE || objectType == OBJ_FEATURE, "Bad object type");
+	const auto percentOf = [health](uint32_t maxBody) -> UDWORD
+	{
+		return static_cast<UDWORD>(static_cast<uint64_t>(maxBody) * static_cast<uint64_t>(health) / 100);
+	};
 	if (objectType == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID *)psObject;
 		SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", id, player);
-		psDroid->body = static_cast<UDWORD>(health * (double)psDroid->originalBody / 100);
+		psDroid->body = percentOf(psDroid->originalBody);
 	}
 	else if (objectType == OBJ_STRUCTURE)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObject;
 		SCRIPT_ASSERT(false, context, psStruct, "No such structure id %d belonging to player %d", id, player);
-		psStruct->body = health * MAX(1, psStruct->structureBody()) / 100;
+		psStruct->body = percentOf(MAX(1, psStruct->structureBody()));
 	}
 	else
 	{
 		FEATURE *psFeat = (FEATURE *)psObject;
 		SCRIPT_ASSERT(false, context, psFeat, "No such feature id %d belonging to player %d", id, player);
-		psFeat->body = health * psFeat->psStats->body / 100;
+		psFeat->body = percentOf(psFeat->psStats->body);
 	}
 	return true;
 }
