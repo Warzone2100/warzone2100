@@ -55,6 +55,7 @@
 #include "qtscript.h"
 #include "astar.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "levels.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/load_result.h"
@@ -1457,6 +1458,7 @@ bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState)
 bool mapShutdown()
 {
 	stopDangerThread();
+	fpathActiveBackend().waitForIdle();
 
 	mapDecals = nullptr;
 	free(floodbucket);
