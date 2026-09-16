@@ -410,6 +410,18 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 	LEVELPARSER_STATE state;
 	int token, currData = -1;
 	LEVEL_DATASET	*psDataSet = nullptr;
+	LEVEL_DATASET	*psCamChangeOwner = nullptr;
+
+	auto commitDataSet = [&]()
+	{
+		if (psCamChangeOwner != nullptr)
+		{
+			psCamChangeOwner->psChange = psDataSet;
+			psCamChangeOwner = nullptr;
+		}
+		psLevels.push_back(psDataSet);
+		psDataSet = nullptr;
+	};
 
 	input.type = LEXINPUT_BUFFER;
 	input.input.buffer.begin = buffer;
@@ -439,8 +451,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (psDataSet)
 				{
 					// push the previous level onto the level list
-					psLevels.push_back(psDataSet);
-					psDataSet = nullptr;
+					commitDataSet();
 				}
 
 				// start a new level data set
@@ -628,7 +639,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 						if (psDataSet) { delete psDataSet; }
 						return false;
 					}
-					psFoundData->psChange = psDataSet;
+					psCamChangeOwner = psFoundData;
 				}
 				// store the level name
 				psDataSet->pName = pLevToken;
@@ -703,13 +714,13 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 	        || currData == 0))
 	{
 		lev_error("Unexpected end of file");
+		if (psDataSet) { delete psDataSet; }
 		return false;
 	}
 
 	if (psDataSet)
 	{
-		psLevels.push_back(psDataSet);
-		psDataSet = nullptr;
+		commitDataSet();
 	}
 
 	return true;
