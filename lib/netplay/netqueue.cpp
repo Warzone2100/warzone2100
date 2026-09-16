@@ -153,6 +153,21 @@ optional<NetMessage> NetMessage::tryFromRawData(const uint8_t* buffer, size_t bu
 	return optional<NetMessage>{msg.build()};
 }
 
+optional<NetMessage> NetMessage::tryFromRawData(NetMsgDataVector&& rawData)
+{
+	if (rawData.size() < NetMessage::HEADER_LENGTH) { return nullopt; }
+
+	uint16_t len = 0;
+	wz_ntohs_load_unaligned(len, &rawData[1]);
+
+	if (rawData.size() - HEADER_LENGTH != len)
+	{
+		return nullopt;
+	}
+
+	return optional<NetMessage>{NetMessage(std::move(rawData))};
+}
+
 void NetMessage::rawDataAppendToVector(std::vector<uint8_t>& output) const
 {
 	const size_t oldLen = output.size();
@@ -167,10 +182,6 @@ NetMessageBuilder::NetMessageBuilder(uint8_t type, size_t reservedCapacity /* = 
 	data_.resize(NetMessage::HEADER_LENGTH);
 	data_[0] = type;
 }
-
-NetMessageBuilder::NetMessageBuilder(NetMsgDataVector&& rawData)
-	: data_(std::move(rawData))
-{}
 
 NetQueue::NetQueue()
 	: canGetMessagesForNet(true)
