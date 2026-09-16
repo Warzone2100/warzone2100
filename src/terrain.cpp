@@ -1583,7 +1583,6 @@ bool initTerrain(WorldMapState& mapState)
 	}
 	free(waterIndex);
 
-
 	// and finally the decals
 	const int decalN = combinedMeshSubdivision;
 	const bool buildPatches = (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess);
@@ -1730,6 +1729,7 @@ bool initTerrain(WorldMapState& mapState)
 		terrainSurface::debugLogSurfaceStats(mapState);
 	}
 
+	applySceneEffectSurfaces();
 	return true;
 }
 
@@ -1774,6 +1774,11 @@ void shutdownTerrain()
 	delete decalHeightArr; decalHeightArr = nullptr;
 
 	terrainInitialised = false;
+}
+
+bool terrainHasWater()
+{
+	return waterIndexVBO != nullptr;
 }
 
 static void updateLightMap(WorldMapState& mapState, const LightMap& lightmap)

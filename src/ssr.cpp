@@ -78,7 +78,9 @@ SsrSettings settingsFor(SSR_MODE mode)
 SsrSettings activeSettings()
 {
 	SsrSettings s = settingsFor(war_getSsrMode());
-	if (s.enabled && getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	if (s.enabled
+		&& (getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING
+			|| !terrainHasWater()))
 	{
 		s.enabled = false;
 	}
