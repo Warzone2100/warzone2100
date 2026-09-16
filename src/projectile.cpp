@@ -176,6 +176,7 @@ bool gfxVisible(const PROJECTILE *psObj)
 	    && !psObj->psSource->died
 	    && psObj->psSource->type == OBJ_STRUCTURE
 	    && psObj->psSource->player != selectedPlayer
+	    && !psObj->psSource->visibleForLocalDisplay()
 	    && (psObj->psDest == nullptr
 	        || psObj->psDest->died
 	        || !psObj->psDest->visibleForLocalDisplay()))
@@ -188,6 +189,7 @@ bool gfxVisible(const PROJECTILE *psObj)
 	    && !psObj->psDest->died
 	    && psObj->psDest->type == OBJ_STRUCTURE
 	    && psObj->psDest->player != selectedPlayer
+	    && !psObj->psDest->visibleForLocalDisplay()
 	    && (psObj->psSource == nullptr
 	        || !psObj->psSource->visibleForLocalDisplay()))
 	{
