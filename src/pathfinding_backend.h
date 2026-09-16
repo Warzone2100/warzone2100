@@ -121,6 +121,10 @@ public:
 	virtual bool initialise() = 0;
 	virtual void shutdown() = 0;
 
+	/// Blocks until every job queued so far has finished executing on the worker threads.
+	/// Call before replacing the map the workers may still be reading.
+	virtual void waitForIdle() = 0;
+
 	/// Discard cached state that a load or a mission boundary has made stale.
 	virtual void hardReset() = 0;
 

@@ -185,6 +185,32 @@ static bool fpathInitialise()
 }
 
 
+static void fpathWaitForIdle()
+{
+	if (fpathThreads.empty())
+	{
+		return;
+	}
+
+	std::vector<wz::future<PATHRESULT>> fences;
+	fences.reserve(fpathThreadsInfo.size());
+	for (auto& threadInfo : fpathThreadsInfo)
+	{
+		packagedPathJob fence([](const std::shared_ptr<FPathExecuteContext>&) { return PATHRESULT(); });
+		fences.push_back(fence.get_future());
+
+		wzMutexLock(threadInfo->mutex);
+		threadInfo->pathJobs.push_back(std::move(fence));
+		wzMutexUnlock(threadInfo->mutex);
+
+		wzSemaphorePost(threadInfo->semaphore);
+	}
+	for (auto& fence : fences)
+	{
+		fence.get();
+	}
+}
+
 static void fpathShutdown()
 {
 	if (!fpathThreads.empty())
@@ -607,6 +633,7 @@ class LegacyAStarBackend : public IPathfindingBackend
 public:
 	bool initialise() override { return fpathInitialise(); }
 	void shutdown() override { fpathShutdown(); }
+	void waitForIdle() override { fpathWaitForIdle(); }
 	void hardReset() override { fpathHardTableReset(); }
 	void updateTick(const WorldMapState&) override { fpathUpdate(); }
 

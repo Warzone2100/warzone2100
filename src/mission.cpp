@@ -68,6 +68,7 @@
 #include "researchlogviewer.h"
 #include "main.h"
 #include "display.h"
+#include "pathfinding_backend.h"
 #include "loadsave.h"
 #include "cmddroid.h"
 #include "warcam.h"
@@ -350,6 +351,7 @@ bool missionShutDown()
 		// freeAll*() above flushed gameWorld's pending visibility removals
 		// nothing should be left to strand when this world is overwritten by the swap
 		ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
+		fpathActiveBackend().waitForIdle();
 		gameWorld = std::move(mission.gameWorld);
 		mission.gameWorld = {};
 	}
@@ -837,6 +839,7 @@ static void saveMissionData()
 	//   mission.gameWorld being overwritten must have its own queue flushed first so nothing is
 	//   stranded
 	flushPendingVisRemoval(mission.gameWorld);
+	fpathActiveBackend().waitForIdle();
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
 
@@ -890,6 +893,7 @@ void restoreMissionData()
 	// freeAllXXX above flushed gameWorld's pending visibility removals; nothing should be
 	// left to strand when this world is overwritten by the swap.
 	ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
+	fpathActiveBackend().waitForIdle();
 	gameWorld = std::move(mission.gameWorld);
 	mission.gameWorld = {};
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
