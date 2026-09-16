@@ -149,9 +149,9 @@ enum class PipelineSurfaceId : uint8_t
 	SSAOBlurred,
 	/// Scene-sized lit scene with AO applied; feeds fog / SMAA / blit / FSR.
 	SSAOComposedColor,
-	/// SSR generate output / final blurred SSR when generate and blur share a size.
+	/// Premultiplied SSR generate / shared-size blur (rgb * confidence, confidence).
 	SsrRaw,
-	/// Horizontal SSR blur intermediate.
+	/// Horizontal SSR blur intermediate (same premul contract as SsrRaw).
 	SsrBlurH,
 	/// Blur-resolution dest when blur is coarser than generate (downsample + blurV).
 	SsrBlurred,
