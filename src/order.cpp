@@ -740,13 +740,19 @@ bool orderUpdateDroid(DROID *psDroid)
 				//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
 				Vector2i diff = psDroid->pos.xy() - psDroid->order.pos;
 				uint16_t angle = iAtan2(diff) - DEG(30);
+				int attempts = 0;
 				do
 				{
 					xoffset = iSinR(angle, 1500);
 					yoffset = iCosR(angle, 1500);
 					angle -= DEG(10);
 				}
-				while (!worldOnMap(gameWorld.map, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));    // Don't try to fly off map.
+				while (++attempts < 36 && !worldOnMap(gameWorld.map, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));    // Don't try to fly off map.
+				if (!worldOnMap(gameWorld.map, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset))
+				{
+					xoffset = 0;
+					yoffset = 0;
+				}
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset);
 			}
 
