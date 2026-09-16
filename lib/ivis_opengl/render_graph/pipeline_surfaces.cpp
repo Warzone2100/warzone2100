@@ -164,7 +164,10 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledDepth2D,
 		SurfaceLifetimePolicy::SwapchainBound),
-	// ScenePrepassNormals - view-space normals (RGB) + SSAO application weight (A)
+	// ScenePrepassNormals - view-space normals (RGB) + SSAO application weight (A).
+	// Water writes A = 0: SSAO skips lakes; SSR treats (1-A) as the reflector mask.
+	// A later effect that needs both AO-on-water and an SSR mask should add a
+	// dedicated channel or surface, not pack more into RGB.
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchScene,

@@ -140,6 +140,7 @@ enum class PipelineSurfaceId : uint8_t
 	/// Scene-sized sampleable depth for SSAO, deferred fog, and SSR.
 	ScenePrepassDepth,
 	/// Scene-sized view-space normals (RGB) + SSAO application weight (A).
+	/// Water writes A = 0 so SSAO skips lakes; SSR uses (1-A) as the reflector mask.
 	ScenePrepassNormals,
 	/// SSAO generate output / final blurred AO when generate and blur share a size.
 	SSAORaw,
