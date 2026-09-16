@@ -83,6 +83,14 @@ OptionInfo::AvailabilityResult PerPixelLightingAvailable(const OptionInfo&)
 	return result;
 }
 
+OptionInfo::AvailabilityResult RemasteredTerrainAppearanceAvailable(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = (getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING);
+	result.localizedUnavailabilityReason = _("Only available when using terrain appearance: Remastered (HQ)");
+	return result;
+}
+
 OptionInfo::AvailabilityResult PerPixelLightingEnabled(const OptionInfo& optionInfo)
 {
 	OptionInfo::AvailabilityResult result = PerPixelLightingAvailable(optionInfo);
@@ -424,6 +432,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	}
 	{
 		auto optionInfo = OptionInfo("gfx.ssao", N_("SSAO"), N_("Screen-space ambient occlusion. Darkens creases and contact areas for stronger depth cues. May impact performance."));
+		optionInfo.addAvailabilityCondition(RemasteredTerrainAppearanceAvailable);
 		auto valueChanger = OptionsDropdown<SSAO_MODE>::make(
 			[]() {
 				OptionChoices<SSAO_MODE> result;
@@ -447,6 +456,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	}
 	{
 		auto optionInfo = OptionInfo("gfx.ssr", N_("SSR"), N_("Screen-space reflections (water). May impact performance."));
+		optionInfo.addAvailabilityCondition(RemasteredTerrainAppearanceAvailable);
 		auto valueChanger = OptionsDropdown<SSR_MODE>::make(
 			[]() {
 				OptionChoices<SSR_MODE> result;
