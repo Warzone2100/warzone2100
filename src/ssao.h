@@ -42,6 +42,7 @@ struct SsaoSettings
 };
 
 SsaoSettings settingsFor(SSAO_MODE mode);
+/// settingsFor(war_getSsaoMode()), then disabled unless terrain is Normal Mapping.
 SsaoSettings activeSettings();
 
 void init();
