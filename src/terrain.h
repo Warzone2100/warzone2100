@@ -41,6 +41,8 @@ void loadTerrainTexturesBlocking(MAP_TILESET mapTileset);
 
 bool initTerrain(WorldMapState& mapState);
 void shutdownTerrain();
+/// True when initTerrain allocated a water index VBO (the map has water triangles).
+bool terrainHasWater();
 
 namespace gfx_api
 {
