@@ -236,12 +236,14 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::None,
 		ScenePostEffectId::Ssao),
-	// SsrRaw - generate output / final blurred SSR when generate and blur share a size
+	// SsrRaw - generate output / final blurred SSR when generate and blur share a size.
+	// Premultiplied (rgb * confidence, confidence). Alpha is a classifier, so this
+	// must not follow caps.sceneColorFormat (2-bit or missing A).
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchSceneDivided,
 		SurfaceSamplePolicy::One,
-		SurfaceFormatClass::SceneColor,
+		SurfaceFormatClass::FixedRGBA8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
 		SurfaceEnablePolicy::ScenePostEffect,
@@ -251,12 +253,12 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Generate,
 		ScenePostEffectId::Ssr),
-	// SsrBlurH - horizontal-blur ping-pong at blur resolution
+	// SsrBlurH - horizontal-blur ping-pong at blur resolution (same premul contract)
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchSceneDivided,
 		SurfaceSamplePolicy::One,
-		SurfaceFormatClass::SceneColor,
+		SurfaceFormatClass::FixedRGBA8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
 		SurfaceEnablePolicy::ScenePostEffect,
@@ -266,12 +268,12 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Blur,
 		ScenePostEffectId::Ssr),
-	// SsrBlurred - blur-res destination when blur is coarser than generate
+	// SsrBlurred - blur-res destination when blur is coarser than generate (same premul contract)
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
 		SurfaceExtentPolicy::MatchSceneDivided,
 		SurfaceSamplePolicy::One,
-		SurfaceFormatClass::SceneColor,
+		SurfaceFormatClass::FixedRGBA8,
 		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
 		SurfaceArrayLayerPolicy::One,
 		SurfaceEnablePolicy::SeparateBlurBuffers,
