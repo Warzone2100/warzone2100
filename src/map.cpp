@@ -766,9 +766,9 @@ static void SetDecals(const char *filename, const char *decal_type)
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
-		if ((unsigned)tiledecal > MAX_TERRAIN_TILES)
+		if ((unsigned)tiledecal >= MAX_TERRAIN_TILES)
 		{
-			debug(LOG_ERROR, "Tile index is out of range!  Was %d, our max is %d", tiledecal, MAX_TERRAIN_TILES);
+			debug(LOG_ERROR, "Tile index is out of range!  Was %d, our max is %d", tiledecal, MAX_TERRAIN_TILES - 1);
 			continue;
 		}
 		mapDecals[tiledecal] = true;
@@ -780,9 +780,9 @@ static bool hasDecals(WorldMapState& mapState, int i, int j)
 {
 	int index = 0;
 	index = TileNumber_tile(mapTile(mapState, i, j)->texture);
-	if (index > MAX_TERRAIN_TILES)
+	if (index >= MAX_TERRAIN_TILES)
 	{
-		debug(LOG_FATAL, "Tile index is out of range!  Was %d, our max is %d", index, MAX_TERRAIN_TILES);
+		debug(LOG_FATAL, "Tile index is out of range!  Was %d, our max is %d", index, MAX_TERRAIN_TILES - 1);
 		abort();
 	}
 	return mapDecals[index];
