@@ -66,8 +66,14 @@ void NETpermissionsShutdown()
 static void NETloadUserConfigBanList()
 {
 	loadedUserConfigBanList = true;
+	const char* writeDir = PHYSFS_getWriteDir();
+	if (writeDir == nullptr)
+	{
+		debug(LOG_INFO, "No write directory set; skipping banlist load");
+		return;
+	}
 	char BanListPath[4096] = {0};
-	strncpy(BanListPath, PHYSFS_getWriteDir(), 4095);
+	strncpy(BanListPath, writeDir, 4095);
 	size_t BanListAppendFname = strlen(BanListPath);
 	strncpy(BanListPath+BanListAppendFname, "/banlist.txt", 4095-BanListAppendFname);
 	FILE* f = fopen(BanListPath, "r");

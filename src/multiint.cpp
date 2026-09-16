@@ -606,7 +606,7 @@ void loadMultiScripts()
 				continue;
 			}
 
-			if (NetPlay.players[i].ai >= 0 && myResponsibility(i))
+			if (NetPlay.players[i].ai >= 0 && static_cast<size_t>(NetPlay.players[i].ai) < aidata.size() && myResponsibility(i))
 			{
 				if (aidata[NetPlay.players[i].ai].js[0] != '\0')
 				{
@@ -6237,7 +6237,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 					break;
 				}
 
-				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
+				if (queue.index != NetPlay.hostPlayer)
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
 					break;
