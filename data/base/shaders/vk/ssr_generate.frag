@@ -5,6 +5,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 projectionMatrix;
 	mat4 viewToSkyLocal;
 	vec4 params;              // x=maxRayLength, y=thickness cap, z=nearPlaneZ
+	vec4 generatePixelUV;     // xy = 1 / used viewport of this pass
 	vec4 prepassUvScaleClamp; // xy scale, zw clamp
 	vec4 sceneUvScaleClamp;
 	vec4 skyFogColor;         // rgb, a=fog enabled
@@ -133,8 +134,10 @@ float edgeFade(vec2 uv, vec2 clampZW)
 	// Screen-space rays cannot recover data beyond the rendered prepass extent.
 	// Fade hits near that boundary instead of exposing a hard reflection cutoff.
 	vec2 n = uv / max(clampZW, vec2(UV_EPSILON));
-	float fadeX = smoothstep(0.0, EDGE_FADE_WIDTH, uv.x) * smoothstep(1.0, 1.0 - EDGE_FADE_WIDTH, n.x);
-	float fadeY = smoothstep(0.0, EDGE_FADE_WIDTH, uv.y) * smoothstep(1.0, 1.0 - EDGE_FADE_WIDTH, n.y);
+	float fadeX = smoothstep(0.0, EDGE_FADE_WIDTH, uv.x)
+		* (1.0 - smoothstep(1.0 - EDGE_FADE_WIDTH, 1.0, n.x));
+	float fadeY = smoothstep(0.0, EDGE_FADE_WIDTH, uv.y)
+		* (1.0 - smoothstep(1.0 - EDGE_FADE_WIDTH, 1.0, n.y));
 	return fadeX * fadeY;
 }
 
@@ -222,7 +225,7 @@ void main()
 	vec3 Q0 = rayOrig * k0;
 	vec3 Q1 = rayEnd * k1;
 
-	vec2 pixelUV = max(max(abs(dFdx(uv)), abs(dFdy(uv))), vec2(UV_EPSILON));
+	vec2 pixelUV = max(generatePixelUV.xy, vec2(UV_EPSILON));
 	float pixelCount = length((uv1 - uv0) / pixelUV);
 	if (pixelCount < MIN_SCREEN_TRAVEL_PX)
 	{
