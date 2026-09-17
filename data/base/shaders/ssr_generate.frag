@@ -12,8 +12,7 @@ layout(std140) uniform cbuffer {
 	vec4 skyFogColor;         // rgb, a=fog enabled
 	float stepCount;          // runtime march cap; loop still bound by MAX_STEPS
 	float skyboxAvailable;
-	float padding1;
-	float padding2;
+	vec2 projZCoeffs;         // x = P[2][2], y = P[3][2]; see wzGetViewZ
 };
 
 uniform sampler2D depthTexture;
@@ -119,13 +118,6 @@ float ssrClipRayToNearPlane(vec3 origin, vec3 R, float maxDist)
 vec2 clipToUV(vec4 clip)
 {
 	return clip.xy * 0.5 + 0.5;
-}
-
-vec2 ssrProjectUV(vec3 viewPos)
-{
-	vec4 clip = projectionMatrix * vec4(viewPos, 1.0);
-	clip.xyz /= clip.w;
-	return clipToUV(clip);
 }
 
 vec3 getViewNormal(vec2 uv)
@@ -260,6 +252,7 @@ void main()
 	float prevZ = rayOrig.z;
 	// lastMiss and hitView form the bracket later refined by binary search.
 	vec3 lastMiss = rayOrig;
+	vec2 lastMissUV = uv0;
 	vec3 hitView = rayOrig;
 	vec2 hitUV = uv;
 	float hitT = MIN_RAY_START_ABS;
@@ -274,7 +267,8 @@ void main()
 		float ddaT = float(i) / float(n);
 		float k = mix(k0, k1, ddaT);
 		vec3 rayView = mix(Q0, Q1, ddaT) / max(k, 1e-8);
-		vec2 sampleUV = ssrProjectUV(rayView);
+		// Homogeneous t is linear in UV: mix(uv0, uv1, t) == project(Q/k).
+		vec2 sampleUV = mix(uv0, uv1, ddaT);
 		if (sampleUV.x < 0.0 || sampleUV.y < 0.0 || sampleUV.x > prepassUvScaleClamp.z || sampleUV.y > prepassUvScaleClamp.w)
 		{
 			break;
@@ -289,24 +283,29 @@ void main()
 		if (sampleDepth >= SKY_DEPTH_THRESHOLD)
 		{
 			lastMiss = rayView;
+			lastMissUV = sampleUV;
 			continue;
 		}
-		vec3 surfView = wzGetViewPosition(sampleUV, sampleDepth, invProjectionMatrix);
-		// Water is the reflector, not a reflectee. Keep marching.
+		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
+		if (!ssrRayOverlapsSurface(rayZMin, rayZMax, surfZ, ssrViewThickness(surfZ, thicknessCap)))
+		{
+			lastMiss = rayView;
+			lastMissUV = sampleUV;
+			continue;
+		}
+		// Water is the reflector, not a reflectee. After the slab test so sky
+		// and Z-misses skip the normals fetch.
 		if (ssrIsReflectorPixel(sampleUV))
 		{
 			lastMiss = rayView;
+			lastMissUV = sampleUV;
 			continue;
 		}
-		if (ssrRayOverlapsSurface(rayZMin, rayZMax, surfView.z, ssrViewThickness(surfView.z, thicknessCap)))
-		{
-			hit = true;
-			hitView = rayView;
-			hitUV = sampleUV;
-			hitT = length(rayView - origin);
-			break;
-		}
-		lastMiss = rayView;
+		hit = true;
+		hitView = rayView;
+		hitUV = sampleUV;
+		hitT = length(rayView - origin);
+		break;
 	}
 
 	if (!hit)
@@ -319,30 +318,31 @@ void main()
 	for (int b = 0; b < BINARY_SEARCH_STEPS; ++b)
 	{
 		vec3 midView = mix(lastMiss, hitView, 0.5);
-		vec2 sampleUV = clamp(ssrProjectUV(midView), vec2(0.0), prepassUvScaleClamp.zw);
+		vec2 sampleUV = clamp(mix(lastMissUV, hitUV, 0.5), vec2(0.0), prepassUvScaleClamp.zw);
 		float sampleDepth = texture(depthTexture, sampleUV).r;
 		if (sampleDepth >= SKY_DEPTH_THRESHOLD)
 		{
 			lastMiss = midView;
+			lastMissUV = sampleUV;
 			continue;
 		}
-		vec3 surfView = wzGetViewPosition(sampleUV, sampleDepth, invProjectionMatrix);
+		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
+		if (!ssrRayOverlapsSurface(min(lastMiss.z, midView.z), max(lastMiss.z, midView.z),
+			surfZ, ssrViewThickness(surfZ, thicknessCap)))
+		{
+			lastMiss = midView;
+			lastMissUV = sampleUV;
+			continue;
+		}
 		if (ssrIsReflectorPixel(sampleUV))
 		{
 			lastMiss = midView;
+			lastMissUV = sampleUV;
 			continue;
 		}
-		if (ssrRayOverlapsSurface(min(lastMiss.z, midView.z), max(lastMiss.z, midView.z),
-			surfView.z, ssrViewThickness(surfView.z, thicknessCap)))
-		{
-			hitView = midView;
-			hitUV = sampleUV;
-			hitT = length(midView - origin);
-		}
-		else
-		{
-			lastMiss = midView;
-		}
+		hitView = midView;
+		hitUV = sampleUV;
+		hitT = length(midView - origin);
 	}
 
 	// Geometry hits need to outrank the water's own ripple albedo. Distance still
