@@ -570,6 +570,9 @@ namespace gfx_api
 	using RadarPSO = GFX<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::triangle_strip, gfx_vtx2, gfx_tc, SHADER_GFX_TEXT, std::tuple<texture_description<0, gfx_api::sampler_type::nearest_clamped, kSampler_Texture>>>;
 	using RadarViewInsideFillPSO = GFX<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::triangle_strip, gfx_vtx2, gfx_colour, SHADER_GFX_COLOUR, notexture>;
 	using RadarViewOutlinePSO = GFX<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::line_strip, gfx_vtx2, gfx_colour, SHADER_GFX_COLOUR, notexture>;
+	// UI shapes (PieShapes): colored triangles, either winding
+	using Shapes2DPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_GFX_COLOUR>>, std::tuple<gfx_vtx2, gfx_colour>, notexture, SHADER_GFX_COLOUR>;
 
 	template<>
 	struct constant_buffer_type<SHADER_TEXT>
@@ -625,12 +628,15 @@ namespace gfx_api
 		float gradient_exponent;	// 1.0 = linear, 2.0 matches an (1-t)^2 falloff from colour_a
 		float border_width;			// in pixels, 0 = no border
 		float edge_softness;		// alpha fade width at the SDF edge, in pixels (1.0 = crisp AA)
-		float _padding = 0.f;		// std140 block size alignment
+		float dash_length = 0.f;	// border dashes along each straight side, in pixels, 0 = solid border
+		float dash_gap = 0.f;		// least gap between dashes, in pixels
+		float _padding[3] = {};		// std140 block size alignment
 	};
 	static_assert(sizeof(constant_buffer_type<SHADER_UI_BOX>) % 16 == 0, "Must match std140 layout size");
 	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, colour_a) == 80, "Must match std140 layout");
 	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, corner_radii) == 128, "Must match std140 layout");
 	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, gradient_exponent) == 160, "Must match std140 layout");
+	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, dash_gap) == 176, "Must match std140 layout");
 
 	using UIBoxPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangle_strip, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_UI_BOX>>,
