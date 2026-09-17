@@ -275,25 +275,25 @@ var heavy_bodies = ["Body13SUP", "Body10MBT", "Body9REC", "Body12SUP", "Body11AB
 var avail_cyborgs = [];
 
 
-// Research, Body, Weapon
+// Research, Body, Weapon, Propulsion
 var cyborgs = [
-	//	["R-Wpn-MG1Mk1",			"CyborgLightBody",		"CyborgChaingun"],			// легкий пулемёт
-	["R-Wpn-Flamer01Mk1", "CyborgLightBody", "CyborgFlamer01"], // лёгкий огнемёт
-	["R-Wpn-MG4", "CyborgLightBody", "CyborgRotMG"], // тяжёлый пулемёт
-	["R-Wpn-Flame2", "CyborgLightBody", "Cyb-Wpn-Thermite"], // горячий напалм
-	["R-Wpn-Cannon1Mk1", "CyborgLightBody", "CyborgCannon"], // лёгкая пушка
-	["R-Wpn-Mortar01Lt", "CyborgLightBody", "Cyb-Wpn-Grenade"], // гранатамёт
-	["R-Wpn-Rocket01-LtAT", "CyborgLightBody", "CyborgRocket"], // Lancer
-	["R-Wpn-Missile2A-T", "CyborgLightBody", "Cyb-Wpn-Atmiss"], // scourge
-	["R-Wpn-Laser01", "CyborgLightBody", "Cyb-Wpn-Laser"], // Flashlight Gunner
-	["R-Wpn-RailGun01", "CyborgLightBody", "Cyb-Wpn-Rail1"], // Needle Gunner
-	["R-Cyborg-Hvywpn-A-T", "CyborgHeavyBody", "Cyb-Hvywpn-A-T"], // Super scourge
-	["R-Cyborg-Hvywpn-Mcannon", "CyborgHeavyBody", "Cyb-Hvywpn-Mcannon"], // Super Heavy Gunner
-	["R-Cyborg-Hvywpn-HPV", "CyborgHeavyBody", "Cyb-Hvywpn-HPV"], // Super Hyper velocity
-	["R-Cyborg-Hvywpn-Acannon", "CyborgHeavyBody", "Cyb-Hvywpn-Acannon"], // Super autocannon
-	["R-Cyborg-Hvywpn-PulseLsr", "CyborgHeavyBody", "Cyb-Hvywpn-PulseLsr"], // Super pulse laser
-	["R-Cyborg-Hvywpn-TK", "CyborgHeavyBody", "Cyb-Hvywpn-TK"], // Super tank killer
-	["R-Cyborg-Hvywpn-RailGunner", "CyborgHeavyBody", "Cyb-Hvywpn-RailGunner"], // Super Rail-Gunner
+	//	["R-Wpn-MG1Mk1",			"CyborgLightBody",		"CyborgChaingun",		"CyborgLegs"],			// легкий пулемёт
+	["R-Wpn-Flamer01Mk1", "CyborgLightBody", "CyborgFlamer01", "CyborgLegs"], // лёгкий огнемёт
+	["R-Wpn-MG4", "CyborgLightBody", "CyborgRotMG", "CyborgLegs"], // тяжёлый пулемёт
+	["R-Wpn-Flame2", "CyborgLightBody", "Cyb-Wpn-Thermite", "CyborgLegs"], // горячий напалм
+	["R-Wpn-Cannon1Mk1", "CyborgLightBody", "CyborgCannon", "CyborgLegs"], // лёгкая пушка
+	["R-Wpn-Mortar01Lt", "CyborgLightBody", "Cyb-Wpn-Grenade", "CyborgLegs"], // гранатамёт
+	["R-Wpn-Rocket01-LtAT", "CyborgLightBody", "CyborgRocket", "CyborgLegs"], // Lancer
+	["R-Wpn-Missile2A-T", "CyborgLightBody", "Cyb-Wpn-Atmiss", "CyborgLegs"], // scourge
+	["R-Wpn-Laser01", "CyborgLightBody", "Cyb-Wpn-Laser", "CyborgLegs"], // Flashlight Gunner
+	["R-Wpn-RailGun01", "CyborgLightBody", "Cyb-Wpn-Rail1", "CyborgLegs"], // Needle Gunner
+	["R-Cyborg-Hvywpn-A-T", "CyborgHeavyBody", "Cyb-Hvywpn-A-T", "CyborgLegsSuper"], // Super scourge
+	["R-Cyborg-Hvywpn-Mcannon", "CyborgHeavyBody", "Cyb-Hvywpn-Mcannon", "CyborgLegsSuper"], // Super Heavy Gunner
+	["R-Cyborg-Hvywpn-HPV", "CyborgHeavyBody", "Cyb-Hvywpn-HPV", "CyborgLegsSuper"], // Super Hyper velocity
+	["R-Cyborg-Hvywpn-Acannon", "CyborgHeavyBody", "Cyb-Hvywpn-Acannon", "CyborgLegsSuper"], // Super autocannon
+	["R-Cyborg-Hvywpn-PulseLsr", "CyborgHeavyBody", "Cyb-Hvywpn-PulseLsr", "CyborgLegsSuper"], // Super pulse laser
+	["R-Cyborg-Hvywpn-TK", "CyborgHeavyBody", "Cyb-Hvywpn-TK", "CyborgLegsSuper"], // Super tank killer
+	["R-Cyborg-Hvywpn-RailGunner", "CyborgHeavyBody", "Cyb-Hvywpn-RailGunner", "CyborgLegsSuper"], // Super Rail-Gunner
 ];
 
 const bodies = [
@@ -580,7 +580,7 @@ function init()
 
 		if (technology.length)
 		{
-			cyborgs.unshift(["R-Wpn-MG1Mk1", "CyborgLightBody", "CyborgChaingun"]);
+			cyborgs.unshift(["R-Wpn-MG1Mk1", "CyborgLightBody", "CyborgChaingun", "CyborgLegs"]);
 		}
 
 		buildersTimer = 7000;
