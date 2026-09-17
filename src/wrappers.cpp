@@ -521,8 +521,12 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 
 	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
 	{
-		// Special screen for spectators to inform them that the game is fully over
-		showSpectatorGameOverScreen();
+		// Special screen for spectators to inform them that the game is fully over (unless the player's own results, from
+		// when they lost, are still up)
+		if (!MissionResUp)
+		{
+			showSpectatorGameOverScreen();
+		}
 	}
 	else
 	{
