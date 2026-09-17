@@ -410,6 +410,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        lib/ivis_opengl/gfx_api_frame_resource_cache.h
        lib/ivis_opengl/gfx_api_mipmap_priv.h
        lib/ivis_opengl/jpeg_util.*
+       lib/ivis_opengl/pieshapes.*
        lib/ivis_opengl/png_util_spng.cpp
        lib/ivis_opengl/render_graph/attachment.h
        lib/ivis_opengl/render_graph/blueprint_materializer.*

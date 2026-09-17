@@ -38,6 +38,7 @@
 #include "lib/framework/wzstring.h"
 #include "lib/framework/geometry.h"
 #include <glm/mat4x4.hpp>
+#include <glm/vec2.hpp>
 #include "piedef.h"
 #include "ivisdef.h"
 #include "pietypes.h"
@@ -45,6 +46,7 @@
 #include "pieclip.h"
 #include <list>
 #include <map>
+#include <memory>
 
 /***************************************************************************/
 /*
@@ -291,6 +293,8 @@ void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT
 // reshapes the corners). Draws nothing when the rect is fully outside.
 void pie_DrawRoundedBoxClipped(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, const WzRect& clipRect);
 void pie_DrawGradientRoundedBoxClipped(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth, const WzRect& clipRect);
+// Rounded box with a dashed border (whole dashes on the straight sides, at least dashGap apart, and whole corners)
+void pie_DrawDashedRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, float dashLength, float dashGap);
 // Rounded box with a wide, soft alpha falloff at the edge (ex. glowing dots/motes)
 void pie_DrawSoftRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, float edgeSoftness);
 // Same soft box, rotated by angleRadians about its center (positive = clockwise on screen).
