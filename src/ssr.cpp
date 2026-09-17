@@ -152,6 +152,8 @@ void drawSSRGenerate(
 	const float invW = (vp && vp->first > 0) ? 1.f / static_cast<float>(vp->first) : 0.f;
 	const float invH = (vp && vp->second > 0) ? 1.f / static_cast<float>(vp->second) : 0.f;
 	constants.generatePixelUV = glm::vec4(invW, invH, 0.f, 0.f);
+	// Z row of pie_PerspectiveGet does not depend on x/y; matches wzGetViewZ.
+	constants.projZCoeffs = glm::vec2(projectionMatrix[2][2], projectionMatrix[3][2]);
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.prepassUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 2, constants.sceneUvScaleClamp);
 	const auto& renderState = getCurrentRenderState();

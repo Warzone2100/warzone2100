@@ -2245,8 +2245,7 @@ namespace gfx_api
 		glm::vec4 skyFogColor;
 		float stepCount;
 		float skyboxAvailable = 0.f;
-		float padding1 = 0.f;
-		float padding2 = 0.f;
+		glm::vec2 projZCoeffs{}; // x = P[2][2], y = P[3][2]; see wzGetViewZ
 	};
 
 	using SSRGeneratePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
