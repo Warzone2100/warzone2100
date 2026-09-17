@@ -113,7 +113,7 @@ std::string formatClockLabel(uint32_t playheadMs, uint32_t durationMs)
 // ---------------------------------------------------------------------------------------------------------------------
 // The transport bar
 
-constexpr int REPLAY_TRANSPORT_PADDING = 8;
+constexpr int REPLAY_TRANSPORT_PADDING = 5;
 constexpr int REPLAY_TRANSPORT_MARGIN = 6;
 constexpr int REPLAY_TRANSPORT_MIN_WIDTH = 420;
 constexpr float REPLAY_TRANSPORT_WIDTH_FRAC = 0.6f;
@@ -122,7 +122,7 @@ constexpr int REPLAY_ACTION_BUTTONS_SPACING = 5;
 constexpr int REPLAY_ACTION_BUTTONS_IMAGE_SIZE = 16;
 constexpr int REPLAY_ACTION_BUTTONS_WIDTH = REPLAY_ACTION_BUTTONS_IMAGE_SIZE + (REPLAY_ACTION_BUTTONS_PADDING * 2);
 constexpr int REPLAY_ACTION_BUTTONS_HEIGHT = REPLAY_ACTION_BUTTONS_WIDTH;
-constexpr int REPLAY_TIMELINE_SPACING = 6;
+constexpr int REPLAY_TIMELINE_SPACING = 10;
 constexpr size_t WZ_MAX_REPLAY_FASTFORWARD_TICKS = 3;
 
 class W_REPLAY_CONTROL_BUTTON : public W_BUTTON
@@ -134,6 +134,8 @@ public:
 	{
 		delete pButtonImage;
 		pButtonImage = nullptr;
+		delete pAltImage;
+		pAltImage = nullptr;
 	}
 
 	void display(int xOffset, int yOffset) override
@@ -168,16 +170,19 @@ public:
 				break;
 		}
 
-		if (pButtonImage)
+		gfx_api::texture *image = (showAltImage && pAltImage) ? pAltImage : pButtonImage;
+		if (image)
 		{
 			const int imageLeft = x1 - REPLAY_ACTION_BUTTONS_PADDING - REPLAY_ACTION_BUTTONS_IMAGE_SIZE;
 			const int imageTop = y0 + REPLAY_ACTION_BUTTONS_PADDING;
-			iV_DrawImageAnisotropic(*pButtonImage, Vector2i(imageLeft, imageTop), Vector2f(0, 0),
+			iV_DrawImageAnisotropic(*image, Vector2i(imageLeft, imageTop), Vector2f(0, 0),
 				Vector2f(REPLAY_ACTION_BUTTONS_IMAGE_SIZE, REPLAY_ACTION_BUTTONS_IMAGE_SIZE), 0.f, isDisabled ? pal_RGBA(255, 255, 255, 110) : WZCOL_WHITE);
 		}
 	}
 
 	gfx_api::texture* pButtonImage = nullptr;
+	gfx_api::texture* pAltImage = nullptr; ///< (shown instead while showAltImage: the play/pause button's play)
+	bool showAltImage = false;
 	enum class OutlineState
 	{
 		None,
@@ -208,8 +213,7 @@ private:
 	std::shared_ptr<ReplayTimelineWidget> timeline;
 	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> startButton;
 	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> skipBackButton;
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> pauseButton;
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> playButton;
+	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> playPauseButton;
 	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> skipForwardButton;
 	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> fastForwardButton;
 	std::shared_ptr<W_LABEL> timeLabel;
@@ -313,19 +317,13 @@ std::shared_ptr<ReplayTransportBar> ReplayTransportBar::make()
 		seekRelative(-static_cast<int32_t>(REPLAY_SKIP_STEP_MS));
 	});
 
-	result->pauseButton = result->makeReplayActionButton("images/replay/pause.png");
-	result->pauseButton->setTip(_("Pause"));
-	result->attach(result->pauseButton);
-	result->pauseButton->addOnClickHandler([refreshSoon](W_BUTTON&) {
-		setPaused(true);
-		refreshSoon();
-	});
-
-	result->playButton = result->makeReplayActionButton("images/replay/play.png");
-	result->playButton->setTip(_("Resume"));
-	result->attach(result->playButton);
-	result->playButton->addOnClickHandler([refreshSoon](W_BUTTON&) {
-		setPaused(false);
+	// One button: pause while playing, resume while paused
+	result->playPauseButton = result->makeReplayActionButton("images/replay/pause.png");
+	result->playPauseButton->pAltImage = WZ_Notification_Image("images/replay/play.png").loadImageToTexture();
+	result->playPauseButton->setTip(_("Pause"));
+	result->attach(result->playPauseButton);
+	result->playPauseButton->addOnClickHandler([refreshSoon](W_BUTTON&) {
+		setPaused(!gameTimeIsStopped());
 		refreshSoon();
 	});
 
@@ -350,8 +348,8 @@ std::shared_ptr<ReplayTransportBar> ReplayTransportBar::make()
 	result->timeLabel->setCacheNeverExpires(true);
 	result->attach(result->timeLabel);
 
-	const int barHeight = REPLAY_TRANSPORT_PADDING + REPLAY_PLAYHEAD_SIZE + REPLAY_TIMELINE_SPACING
-		+ REPLAY_ACTION_BUTTONS_HEIGHT + REPLAY_TRANSPORT_PADDING;
+	// One row: the buttons, the timeline, the time
+	const int barHeight = REPLAY_TRANSPORT_PADDING + REPLAY_ACTION_BUTTONS_HEIGHT + REPLAY_TRANSPORT_PADDING;
 	result->setGeometry(0, 0, REPLAY_TRANSPORT_MIN_WIDTH, barHeight);
 	result->refreshButtonStates();
 	return result;
@@ -381,8 +379,9 @@ void ReplayTransportBar::refreshButtonStates()
 {
 	const bool busy = replayplayback::isBusy();
 	const bool paused = gameTimeIsStopped();
-	playButton->setState((busy || !paused) ? WBUT_DISABLE : 0);
-	pauseButton->setState((busy || paused) ? WBUT_DISABLE : 0);
+	playPauseButton->setState(busy ? WBUT_DISABLE : 0);
+	playPauseButton->showAltImage = paused;
+	playPauseButton->setTip(paused ? _("Resume") : _("Pause"));
 
 	const auto maxFastForwardTicks = getMaxFastForwardTicks();
 	if (maxFastForwardTicks > 0)
@@ -414,22 +413,26 @@ void ReplayTransportBar::layoutContent()
 	{
 		return;
 	}
-	const int contentW = std::max(1, width() - 2 * REPLAY_TRANSPORT_PADDING);
-	const int contentX = REPLAY_TRANSPORT_PADDING;
-	timeline->setGeometry(contentX, REPLAY_TRANSPORT_PADDING, contentW, REPLAY_PLAYHEAD_SIZE);
-	const int buttonsY = REPLAY_TRANSPORT_PADDING + REPLAY_PLAYHEAD_SIZE + REPLAY_TIMELINE_SPACING;
-
-	int x = contentX;
-	for (const auto &button : {startButton, skipBackButton, pauseButton, playButton, skipForwardButton, fastForwardButton})
+	int x = REPLAY_TRANSPORT_PADDING;
+	const int buttonsY = (height() - REPLAY_ACTION_BUTTONS_HEIGHT) / 2;
+	for (const auto &button : {startButton, skipBackButton, playPauseButton, skipForwardButton, fastForwardButton})
 	{
 		button->setGeometry(x, buttonsY, button->width(), button->height());
 		x += button->width() + REPLAY_ACTION_BUTTONS_SPACING;
 	}
 
+	// The time at the right, as wide as the total time both sides (the digits are all as wide), so the timeline keeps
+	// its length while it plays
+	const uint32_t duration = replayplayback::durationMs();
+	const std::string widest = replayplayback::formatClockLabel(duration, duration);
+	const int labelWidth = std::max(static_cast<int>(iV_GetTextWidth(widest.c_str(), font_regular)), static_cast<int>(timeLabel->getMaxLineWidth()));
 	const int labelHeight = iV_GetTextLineSize(font_regular);
-	const int labelY = buttonsY + (REPLAY_ACTION_BUTTONS_HEIGHT - labelHeight) / 2;
-	const int labelWidth = std::max(timeLabel->getMaxLineWidth(), 1);
-	timeLabel->setGeometry(contentX + contentW - labelWidth, labelY, labelWidth, labelHeight);
+	const int labelX = width() - REPLAY_TRANSPORT_PADDING - 3 - labelWidth;
+	timeLabel->setGeometry(labelX, (height() - labelHeight) / 2, labelWidth, labelHeight);
+
+	const int timelineX = x - REPLAY_ACTION_BUTTONS_SPACING + REPLAY_TIMELINE_SPACING;
+	const int timelineW = std::max(1, labelX - REPLAY_TIMELINE_SPACING - timelineX);
+	timeline->setGeometry(timelineX, (height() - REPLAY_PLAYHEAD_SIZE) / 2, timelineW, REPLAY_PLAYHEAD_SIZE);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -467,6 +467,7 @@ src/hci/groups.cpp
 src/hci/manufacture.cpp
 src/hci/objects_stats.cpp
 src/hci/quickchat.cpp
+src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
 src/ingameop.cpp
