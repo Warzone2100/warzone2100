@@ -8314,6 +8314,9 @@ msgstr "你会后悔的"
 msgid "Barely a scratch!"
 msgstr "刮痧呢？"
 
+msgid "See you again, have a good game everyone!"
+msgstr "再见，祝大家游戏愉快！"
+
 msgid "Attack now?"
 msgstr "现在攻击吗？"
 

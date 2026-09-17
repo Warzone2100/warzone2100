@@ -223,6 +223,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/GL>")
 	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/INCREMENTAL:NO>")
 	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/LTCG>")
+	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/cgthreads:1>")
 
 	# Ensure all builds always have debug info built
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
