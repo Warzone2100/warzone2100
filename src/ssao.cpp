@@ -27,7 +27,6 @@
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
 #include "depth_aware_blur.h"
-#include "terrain.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
@@ -74,12 +73,7 @@ SsaoSettings settingsFor(SSAO_MODE mode)
 
 SsaoSettings activeSettings()
 {
-	SsaoSettings s = settingsFor(war_getSsaoMode());
-	if (s.enabled && getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
-	{
-		s.enabled = false;
-	}
-	return s;
+	return settingsFor(war_getSsaoMode());
 }
 
 namespace

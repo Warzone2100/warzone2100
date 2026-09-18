@@ -432,7 +432,6 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	}
 	{
 		auto optionInfo = OptionInfo("gfx.ssao", N_("SSAO"), N_("Screen-space ambient occlusion. Darkens creases and contact areas for stronger depth cues. May impact performance."));
-		optionInfo.addAvailabilityCondition(RemasteredTerrainAppearanceAvailable);
 		auto valueChanger = OptionsDropdown<SSAO_MODE>::make(
 			[]() {
 				OptionChoices<SSAO_MODE> result;
