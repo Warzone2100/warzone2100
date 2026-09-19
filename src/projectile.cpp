@@ -923,34 +923,34 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 	{
 		CHECK_OBJECT(psTempObj);
 
-		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
-		{
-			// Dont damage one target twice
-			continue;
-		}
-		else if (psTempObj->died)
+		if (psTempObj->died)
 		{
 			// Do not damage dead objects further
 			ASSERT(psTempObj->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psTempObj->type);
 			continue;
 		}
-		else if (psTempObj->type == OBJ_FEATURE && !((FEATURE *)psTempObj)->psStats->damageable)
+		if (psTempObj->type == OBJ_FEATURE && !((FEATURE *)psTempObj)->psStats->damageable)
 		{
 			// Ignore oil resources, artifacts and other pickups
 			continue;
 		}
-		else if (aiCheckAlliances(psTempObj->player, psProj->player) && psTempObj != psProj->psDest)
+		if (aiCheckAlliances(psTempObj->player, psProj->player) && psTempObj != psProj->psDest)
 		{
 			// No friendly fire unless intentional
 			continue;
 		}
-		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
-		         (psTempObj->type == OBJ_STRUCTURE ||
-		          psTempObj->type == OBJ_FEATURE ||
-		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlightBasedTransporter() && !((DROID*)psTempObj)->isFlying())
-		         ))
+		if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
+		    (psTempObj->type == OBJ_STRUCTURE ||
+		     psTempObj->type == OBJ_FEATURE ||
+		     (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlightBasedTransporter() && !((DROID*)psTempObj)->isFlying())
+		    ))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
+			continue;
+		}
+		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
+		{
+			// Dont damage one target twice
 			continue;
 		}
 
@@ -959,6 +959,12 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 		const Vector3i diff = psProj->pos - psTempObj->pos;
 		const Vector3i prevDiff = psProj->prevSpacetime.pos - psTempObjPrevPos;
 		const unsigned int targetHeight = establishTargetHeight(psTempObj);
+		if (intervalEmpty(collisionZ(prevDiff.z, diff.z, targetHeight)))
+		{
+			// collisionXYZ() starts with this same test and reports no collision when it fails, without
+			// ever reading the shape.
+			continue;
+		}
 		const ObjectShape targetShape = establishTargetShape(psTempObj);
 		const int32_t collision = collisionXYZ(prevDiff, diff, targetShape, targetHeight);
 		const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time) * collision / 1024;
