@@ -701,7 +701,7 @@ bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdenti
 		if (lobby_slashcommands_enabled())
 		{
 			// Inform the new player that this lobby has slash commands enabled.
-			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex, true);
+			sendHostNoticeToPlayer(playerIndex, WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::LobbySlashCommandsEnabled);
 		}
 	}
 	addConsolePlayerJoinMessage(playerIndex);
@@ -766,7 +766,7 @@ bool recvDataCheck(NETQUEUE queue)
 			}
 
 			snprintf(msg, sizeof(msg), _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
-			sendInGameSystemMessage(msg);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::IncompatibleModKicked, 0, player);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);

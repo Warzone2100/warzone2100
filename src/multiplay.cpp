@@ -225,9 +225,8 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 		int LagSecondsCount = ingame.LagCounter[i] / LagKickAggressiveness;
 
 		if (LagSecondsCount >= LagAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i, true), LagAutoKickSeconds);
-			debug(LOG_INFO, "%s", msg.c_str());
-			sendInGameSystemMessage(msg.c_str());
+			debug(LOG_INFO, "Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i, true), LagAutoKickSeconds);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::LagKicked, LagAutoKickSeconds, i);
 			if (wz_command_interface_enabled()) {
 				const auto& identity = getOutputPlayerIdentity(i);
 				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
@@ -237,14 +236,12 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			ingame.LagCounter[i] = 0;
 		}
 		else if (LagSecondsCount == (LagAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
-			debug(LOG_INFO, "%s", msg.c_str());
-			sendInGameSystemMessage(msg.c_str());
+			debug(LOG_INFO, "Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::LagKickWarning, LagAutoKickSeconds - LagSecondsCount, i);
 		}
 		else if (LagSecondsCount % 15 == 0) { // every 15 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
-			debug(LOG_INFO, "%s", msg.c_str());
-			sendInGameSystemMessage(msg.c_str());
+			debug(LOG_INFO, "Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::LagKickWarning, LagAutoKickSeconds - LagSecondsCount, i);
 		}
 	}
 }
@@ -309,9 +306,8 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.DesyncCounter[i]++;
 		if (ingame.DesyncCounter[i] >= DesyncAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i, true), DesyncAutoKickSeconds);
-			debug(LOG_INFO, "%s", msg.c_str());
-			sendInGameSystemMessage(msg.c_str());
+			debug(LOG_INFO, "Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i, true), DesyncAutoKickSeconds);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::DesyncKicked, DesyncAutoKickSeconds, i);
 			if (wz_command_interface_enabled()) {
 				const auto& identity = getOutputPlayerIdentity(i);
 				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
@@ -321,14 +317,12 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 			ingame.DesyncCounter[i] = 0;
 		}
 		else if (ingame.DesyncCounter[i] >= (DesyncAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
-			debug(LOG_INFO, "%s", msg.c_str());
-			sendInGameSystemMessage(msg.c_str());
+			debug(LOG_INFO, "Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::DesyncKickWarning, DesyncAutoKickSeconds - ingame.DesyncCounter[i], i);
 		}
 		else if (ingame.DesyncCounter[i] % 2 == 0) { // every 2 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
-			debug(LOG_INFO, "%s", msg.c_str());
-			sendInGameSystemMessage(msg.c_str());
+			debug(LOG_INFO, "Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::DesyncKickWarning, DesyncAutoKickSeconds - ingame.DesyncCounter[i], i);
 		}
 	}
 }
@@ -610,7 +604,7 @@ bool multiPlayerLoop()
 							char msg[256] = {'\0'};
 
 							snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
-							sendInGameSystemMessage(msg);
+							sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::DataIntegrityKicked, 0, index);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 							NETlogEntry(msg, SYNC_FLAG, index);
 						}
@@ -1083,7 +1077,7 @@ static bool sendDataCheck2()
 				if (!ingame.PendingDisconnect[player])
 				{
 					std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
-					sendInGameSystemMessage(msg.c_str());
+					sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::IncompatibleModKicked, 0, player);
 					addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
 				}
 
@@ -1268,7 +1262,7 @@ static bool recvDataCheck2(NETQUEUE queue)
 	{
 		ASSERT_HOST_ONLY(return false);
 		std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
-		sendInGameSystemMessage(msg.c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::IncompatibleModKicked, 0, player);
 		addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 		kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
@@ -1419,11 +1413,9 @@ bool shouldProcessMessage(NETQUEUE& queue, uint8_t type)
 			if (NetPlay.isHost)
 			{
 				// kick sender for sending unauthorized message
-				char buf[255];
 				auto senderPlayerIdx = queue.index;
 				debug(LOG_INFO, "Auto kicking player %s, invalid command received: %s", getPlayerName(senderPlayerIdx), messageTypeToString(type));
-				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), getPlayerName(senderPlayerIdx, true), static_cast<unsigned>(type));
-				sendInGameSystemMessage(buf);
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::InvalidCommandKicked, type, senderPlayerIdx);
 				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID, false);
 			}
 			return false;
@@ -1736,7 +1728,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 		if (NETplayerHasConnection(actual))
 		{
 			ssprintf(buf, _("Auto kicking player %s, invalid command received."), getPlayerName(actual, true));
-			sendInGameSystemMessage(buf);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::InvalidCommandKicked, 0, actual);
 		}
 		kickPlayer(actual, buf, KICK_TYPE, false);
 	}

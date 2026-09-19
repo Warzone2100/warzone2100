@@ -1864,16 +1864,17 @@ public:
 				auto strongTitleUI = titleUI.lock();
 				ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 
-				std::string playerName = getPlayerName(switcherPlayerIdx, true);
-
-				NETmoveSpectatorToPlayerSlot(switcherPlayerIdx, selectPositionRow->targetPlayerIdx, true);
+				optional<uint32_t> newPlayerIdx = selectPositionRow->targetPlayerIdx;
+				auto result = NETmoveSpectatorToPlayerSlot(switcherPlayerIdx, newPlayerIdx, true);
 				resetReadyStatus(true, isBlindSimpleLobby(game.blindMode));		//reset and send notification to all clients
 				widgScheduleTask([strongTitleUI] {
 					strongTitleUI->closePlayerSlotSwapChooser();
 					strongTitleUI->updatePlayers();
 				});
-				std::string msg = astringf(_("Spectator %s has moved to Players"), playerName.c_str());
-				sendRoomSystemMessage(msg.c_str());
+				if (result == SpectatorToPlayerMoveResult::SUCCESS)
+				{
+					sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::SpectatorMovedToPlayers, 0, newPlayerIdx);
+				}
 			});
 		}
 		else
@@ -2176,9 +2177,8 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-			std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player, true));
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostKickedPlayer, 0, player);
 			kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
-			sendRoomSystemMessage(msg.c_str());
 			resetReadyStatus(true);		//reset and send notification to all clients
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeTeamChooser();
@@ -2196,9 +2196,8 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-			std::string msg = astringf(_("The host has banned %s from the game!"), getPlayerName(player, true));
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostBannedPlayer, 0, player);
 			kickPlayer(player, _("The host has banned you from the game."), ERROR_KICKED, true);
-			sendRoomSystemMessage(msg.c_str());
 			resetReadyStatus(true);		//reset and send notification to all clients
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeTeamChooser();
@@ -2230,15 +2229,15 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 					std::string playerName = getPlayerName(player, true);
 
-					if (!NETmovePlayerToSpectatorOnlySlot(player, true))
+					auto newSpectatorIdx = NETmovePlayerToSpectatorOnlySlot(player, true);
+					if (!newSpectatorIdx.has_value())
 					{
 						std::string msg = astringf(_("Failed to move %s to Spectators"), playerName.c_str());
-						sendRoomSystemMessageToSingleReceiver(msg.c_str(), selectedPlayer);
+						displayRoomSystemMessage(msg.c_str());
 						return;
 					}
 
-					std::string msg = astringf(_("The host has moved %s to Spectators!"), playerName.c_str());
-					sendRoomSystemMessage(msg.c_str());
+					sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostMovedPlayerToSpectators, 0, newSpectatorIdx);
 					resetReadyStatus(true);		//reset and send notification to all clients
 					widgScheduleTask([pStrongPtr] {
 						pStrongPtr->closeTeamChooser();
@@ -3244,20 +3243,17 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 		return false;
 	}
 
-	const char *pPlayerName = getPlayerName(playerIndex, true);
-	std::string playerName = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(playerIndex) + "]");
-
 	if (desiredIsSpectator)
 	{
-		if (!NETmovePlayerToSpectatorOnlySlot(playerIndex, false))
+		auto newSpectatorIdx = NETmovePlayerToSpectatorOnlySlot(playerIndex, false);
+		if (!newSpectatorIdx.has_value())
 		{
 			// Notify the player that the answer is "no" / the move failed by sending a no-op PlayerSlotTypeRequest
 			SendPlayerSlotTypeRequest(playerIndex, NetPlay.players[playerIndex].isSpectator);
 			return false;
 		}
 
-		std::string msg = astringf(_("Player %s has moved to Spectators"), playerName.c_str());
-		sendRoomSystemMessage(msg.c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::PlayerMovedToSpectators, 0, newSpectatorIdx);
 		resetReadyStatus(true);		//reset and send notification to all clients
 	}
 	else
@@ -3265,15 +3261,15 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 		// Spectator wants to switch to a player slot
 
 		// Try a move to any open player slot
-		auto result = NETmoveSpectatorToPlayerSlot(playerIndex, nullopt, bHostRequestedMoveToPlayers.at(playerIndex));
+		optional<uint32_t> newPlayerIdx;
+		auto result = NETmoveSpectatorToPlayerSlot(playerIndex, newPlayerIdx, bHostRequestedMoveToPlayers.at(playerIndex));
 		bHostRequestedMoveToPlayers[playerIndex] = false;
 		switch (result)
 		{
 			case SpectatorToPlayerMoveResult::SUCCESS:
 			{
 				// Was able to move spectator to an open player slot automatically
-				std::string msg = astringf(_("Spectator %s has moved to Players"), playerName.c_str());
-				sendRoomSystemMessage(msg.c_str());
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::SpectatorMovedToPlayers, 0, newPlayerIdx);
 				resetReadyStatus(true);		//reset and send notification to all clients
 				break;
 			}
@@ -3283,8 +3279,7 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 				{
 					// displaying a UI won't work
 					// so instead, send a room message about the failure
-					std::string msg = astringf(_("Unable to move %s to Players - no available slot"), playerName.c_str());
-					sendRoomSystemMessage(msg.c_str());
+					sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::MoveToPlayersFailedNoSlot, 0, playerIndex);
 					return true; // and immediately return
 				}
 
@@ -5684,7 +5679,7 @@ void startMultiplayerGame()
 
 	if (NetPlay.isHost)
 	{
-		sendRoomSystemMessage(_("Host is Starting Game"));
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostStartingGame);
 	}
 }
 
@@ -5833,8 +5828,7 @@ public:
 			debug(LOG_INFO, "Unable to kick player: %" PRIu32 " - not a connected human player", player);
 			return false;
 		}
-		std::string slotType = (NetPlay.players[player].isSpectator) ? "spectator" : "player";
-		sendRoomSystemMessage((std::string("Kicking ")+slotType+": "+std::string(getPlayerName(player, true))).c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::KickingPlayer, (NetPlay.players[player].isSpectator) ? 1 : 0, player);
 		::kickPlayer(player, reason, ERROR_KICKED, ban);
 		resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());
 		return true;
@@ -5894,15 +5888,13 @@ public:
 			debug(LOG_INFO, "Unable to move player: %" PRIu32 " - not a connected human player", player);
 			return false;
 		}
-		const char *pPlayerName = getPlayerName(player, true);
-		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(player) + "]");
-		if (!NETmovePlayerToSpectatorOnlySlot(player, true))
+		auto newSpectatorIdx = NETmovePlayerToSpectatorOnlySlot(player, true);
+		if (!newSpectatorIdx.has_value())
 		{
 			// failure is already logged by NETmovePlayerToSpectatorOnlySlot
 			return false;
 		}
-		std::string msg = astringf(_("Moving %s to Spectators!"), playerNameStr.c_str());
-		sendRoomSystemMessage(msg.c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::MovingPlayerToSpectators, 0, newSpectatorIdx);
 		resetReadyStatus(true);		//reset and send notification to all clients
 		return true;
 	}
@@ -5923,13 +5915,10 @@ public:
 			return false;
 		}
 
-		const char *pPlayerName = getPlayerName(player, true);
-		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(player) + "]");
 		// Ask the spectator if they are okay with a move from spectator -> player?
 		SendPlayerSlotTypeRequest(player, false);
 
-		std::string msg = astringf(_("Asking %s to move to Players..."), playerNameStr.c_str());
-		sendRoomSystemMessage(msg.c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AskingSpectatorToMoveToPlayers, 0, player);
 		return true;
 	}
 	virtual void quitGame(int exitCode) override
@@ -6235,8 +6224,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 					int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
 					if (minAutoStartPlayerCount > 0)
 					{
-						std::string msg = astringf("Game will not start until there are %d players.", minAutoStartPlayerCount);
-						sendRoomSystemMessage(msg.c_str());
+						sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::MinPlayersToStart, minAutoStartPlayerCount);
 					}
 				}
 			}

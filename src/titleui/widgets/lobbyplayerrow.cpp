@@ -43,6 +43,7 @@
 
 #include "src/titleui/multiplayer.h"
 #include "src/multistat.h"
+#include "src/hci/quickchat.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 
@@ -939,8 +940,7 @@ void WzPlayerRow::updateReadyButton()
 				{
 					if (mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 					{
-						std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player, true));
-						sendRoomSystemMessage(msg.c_str());
+						sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostKickedPlayer, 0, player);
 						kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
 						resetReadyStatus(true, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		//reset and send notification to all clients
 					}
