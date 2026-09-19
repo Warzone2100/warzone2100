@@ -2458,6 +2458,15 @@ void moveUpdateDroid(DROID *psDroid)
 		}
 	}
 
+	// Run the blocked watchdog before this update's movement as well as after it, so a block whose time
+	// has already run out reroutes the droid before it moves.
+	// NOTE: the result is dropped on purpose. Only the clearing and the reroute are wanted here, and the
+	// status change belongs to the check at the end of the update.
+	if (psPropStats->propulsionType != PROPULSION_TYPE_LIFT)
+	{
+		moveBlocked(psDroid);
+	}
+
 	/* save current motion status of droid */
 	bStopped = moveDroidStopped(psDroid, 0);
 
