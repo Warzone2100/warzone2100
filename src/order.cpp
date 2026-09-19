@@ -66,6 +66,7 @@
 #include "display3d.h"
 #include "console.h"
 #include "mapgrid.h"
+#include "perfcounters.h"
 
 #include "random.h"
 
@@ -307,6 +308,8 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 
 	unsigned bestDistanceSq = radius * radius;
 	std::pair<STRUCTURE *, DROID_ACTION> best = {nullptr, DACTION_NONE};
+
+	WZ_PERF_SCOPE(T_checkForDamagedStruct);
 
 	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
 	{

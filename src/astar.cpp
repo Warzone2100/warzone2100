@@ -59,6 +59,7 @@
 #include "congestion_overlay.h"
 #include "pathfinding_backend.h"
 #include "corridor_map.h"
+#include "perfcounters.h"
 
 #if WZ_PATHFINDING_INSTRUMENTATION
 uint64_t *g_pathNodesExpanded = nullptr;
@@ -975,6 +976,7 @@ static void fpathKeepRightOffset(const PATHJOB *psJob, MOVE_CONTROL *psMove)
 
 ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
+	WZ_PERF_SCOPE(T_fpathAStarRoute);
 	ASR_RETVAL      retval = ASR_OK;
 
 	bool            mustReverse = true;
@@ -1026,6 +1028,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	if (contextIterator == fpathContexts.end())
 	{
 		// We did not find an appropriate context. Make one.
+		WZ_PERF_COUNT(C_pathContextsAllocated, 1);
 		contextIterator = fpathContexts.push_back(PathfindContext());
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
@@ -1140,6 +1143,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 
 void fpathSetBlockingMap(PATHJOB *psJob)
 {
+	WZ_PERF_SCOPE(T_fpathSetBlockingMap);
 	if (fpathCurrentGameTime != gameTime)
 	{
 		// New tick, remove maps which are no longer needed.
@@ -1161,6 +1165,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 	if (i == fpathBlockingMaps.end())
 	{
 		// Didn't find the map, so i does not point to a map.
+		WZ_PERF_COUNT(C_blockingMapsBuilt, 1);
 		auto blockMap = std::make_shared<PathBlockingMap>();
 		fpathBlockingMaps.push_back(blockMap);
 

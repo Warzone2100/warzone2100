@@ -84,6 +84,7 @@
 #include "profiling.h"
 #include "game_world.h"
 #include "wrappers.h"
+#include "perfcounters.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -490,6 +491,8 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 void processEffects(const glm::mat4 &perspectiveViewMatrix, LightingData& lightData)
 {
 	WZ_PROFILE_SCOPE(processEffects);
+	WZ_PERF_SCOPE(T_processEffects);
+	WZ_PERF_COUNT(C_effectsAlive, gActiveEffects.size());
 	for (auto it = gActiveEffects.begin(); it != gActiveEffects.end(); ++it)
 	{
 		EFFECT& e = *it;
@@ -1398,6 +1401,7 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 /** Calls the appropriate render routine for each type of effect */
 void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
+	WZ_PERF_SCOPE(T_renderEffects);
 	/* What type of effect are we dealing with? */
 	switch (psEffect->group)
 	{

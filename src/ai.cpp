@@ -38,6 +38,7 @@
 #include "order.h"
 #include "visibility.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
@@ -572,6 +573,7 @@ size_t getCountNearestTargetChecks()
 // Returns integer representing target priority, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
+	WZ_PERF_SCOPE(T_aiBestNearestTarget);
 	int failure = -1;
 	int bestMod = 0;
 	BASE_OBJECT                     *psTarget = nullptr, *bestTarget = nullptr, *tempTarget;
@@ -888,6 +890,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
+		WZ_PERF_SCOPE(T_aiChooseTargetDroid);
 		BASE_OBJECT *psCurrTarget = ((DROID *)psObj)->psActionTarget[0];
 
 		/* find a new target */
@@ -962,6 +965,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		if (psTarget == nullptr && !bCommanderBlock)
 		{
+			WZ_PERF_SCOPE(T_aiChooseTargetStruct);
 			int targetValue = -1;
 			int tarDist = INT32_MAX;
 			int srange = longRange;

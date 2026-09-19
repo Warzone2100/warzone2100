@@ -73,6 +73,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/netreplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 
@@ -96,6 +97,7 @@
 #include "mission.h"
 #include "modding.h"
 #include "multiplay.h"
+#include "perfcounters.h"
 #include "ordersource.h"
 #include "notifications.h"
 #include "screens/gamepadlayoutscreen.h"
@@ -1882,6 +1884,8 @@ void mainShutdown()
 	discordRPCShutdown();
 #endif
 	wzCmdInterfaceShutdown();
+	perf::close();
+	setSyncCrcTraceFile("");
 	cleanupOldLogFiles();
 	// NOTE: urlRequestShutdown is called inside systemShutdown, as it must happen after certain other calls
 	systemShutdown();

@@ -36,6 +36,7 @@
 #include "corridor_map.h"
 #include "corridor_gate.h"
 #include "pathfinding_backend.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -77,6 +78,7 @@ uint32_t foldChecksum(const DynamicCostOverlay &overlay)
 
 std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(uint32_t buildTime, bool consumeFlow, bool consumeMass)
 {
+	WZ_PERF_SCOPE(T_congestionOverlay);
 	const int width = gameWorld.map.width;
 	const int height = gameWorld.map.height;
 	const size_t cells = static_cast<size_t>(width) * static_cast<size_t>(height);

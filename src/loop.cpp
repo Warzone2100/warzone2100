@@ -48,6 +48,7 @@
 #include "pathbench.h"
 #include "corridordump.h"
 #include "corridor_gate.h"
+#include "perfcounters.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -516,6 +517,7 @@ void countUpdate(bool synch)
 static void gameStateUpdate()
 {
 	WZ_PROFILE_SCOPE(gameStateUpdate);
+	WZ_PERF_SCOPE(T_gameStateUpdate);
 	syncDebug("map = \"%s\", pseudorandom 32-bit integer = 0x%08X, allocated = %d %d %d %d %d %d %d %d %d %d, position = %d %d %d %d %d %d %d %d %d %d", game.map, gameRandU32(),
 	          NetPlay.players[0].allocated, NetPlay.players[1].allocated, NetPlay.players[2].allocated, NetPlay.players[3].allocated, NetPlay.players[4].allocated, NetPlay.players[5].allocated, NetPlay.players[6].allocated, NetPlay.players[7].allocated, NetPlay.players[8].allocated, NetPlay.players[9].allocated,
 	          NetPlay.players[0].position, NetPlay.players[1].position, NetPlay.players[2].position, NetPlay.players[3].position, NetPlay.players[4].position, NetPlay.players[5].position, NetPlay.players[6].position, NetPlay.players[7].position, NetPlay.players[8].position, NetPlay.players[9].position
@@ -637,6 +639,28 @@ static void gameStateUpdate()
 	gamestate::gamestateMaybeRunRoundTripTest();
 }
 
+/// Record the object census and write this tick's counter line. Runs after gameStateUpdate() has
+/// returned so that T_gameStateUpdate is on the line for the tick it measured.
+static void gameStatePerfEndOfTick()
+{
+	if (!perf::g_enabled)
+	{
+		return;
+	}
+#if defined(WZ_PERF_COUNTERS)
+	size_t numDroidsAlive = 0, numStructuresAlive = 0;
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		numDroidsAlive += gameWorld.objects.droids[i].size();
+		numStructuresAlive += gameWorld.objects.structures[i].size();
+	}
+	WZ_PERF_COUNT(C_droidsAlive, numDroidsAlive);
+	WZ_PERF_COUNT(C_structuresAlive, numStructuresAlive);
+	WZ_PERF_COUNT(C_projectilesAlive, proj_Count());
+#endif
+	perf::endOfTick(gameTime);
+}
+
 size_t getMaxFastForwardTicks()
 {
 	return maxFastForwardTicks;
@@ -718,6 +742,7 @@ GAMECODE gameLoop()
 		unsigned before = wzGetTicks();
 		syncDebug("Begin game state update, gameTime = %d", gameTime);
 		gameStateUpdate();
+		gameStatePerfEndOfTick();
 		syncDebug("End game state update, gameTime = %d", gameTime);
 		unsigned after = wzGetTicks();
 

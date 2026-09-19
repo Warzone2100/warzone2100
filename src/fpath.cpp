@@ -44,6 +44,7 @@
 #include "congestion_overlay.h"
 #include "profiling.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -495,6 +496,7 @@ void fpathSetPendingResult(uint32_t droidID, const FPathPendingResult &in)
 static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {
+	WZ_PERF_SCOPE(T_fpathRoute);
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
 #ifdef DEBUG
@@ -542,7 +544,15 @@ static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMo
 
 		auto const I = pathResults.find(id);
 		ASSERT_OR_RETURN(FPR_FAILED, I != pathResults.end(), "Missing path result promise");
-		PATHRESULT result = I->second.get();
+		PATHRESULT result;
+		{
+			WZ_PERF_SCOPE(T_fpathRouteWait);
+			if (perf::g_enabled && I->second.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+			{
+				WZ_PERF_COUNT(C_pathPollsNotReady, 1);
+			}
+			result = I->second.get();
+		}
 		ASSERT(result.retval != FPR_OK || result.sMove.asPath.size() > 0, "Ok result but no path in list");
 
 		// Copy over select fields - preserve others
@@ -610,6 +620,7 @@ queuePathfinding:
 	threadInfo.pathJobs.push_back(std::move(task));
 	wzMutexUnlock(threadInfo.mutex);
 
+	WZ_PERF_COUNT(C_pathJobsQueued, 1);
 	wzSemaphorePost(threadInfo.semaphore);  // Increment semaphore
 
 #ifdef DEBUG

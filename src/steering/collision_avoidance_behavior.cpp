@@ -38,6 +38,7 @@
 #include "src/move.h"
 #include "src/objects.h"
 #include "src/game_world.h"
+#include "src/perfcounters.h"
 
 #include <algorithm>
 
@@ -46,6 +47,7 @@ namespace steering
 
 SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 {
+	WZ_PERF_SCOPE(T_steeringScan);
 	int32_t numObstacles = 0;
 	int32_t distTotal = 0;
 	Vector2i totalDir(0, 0);
