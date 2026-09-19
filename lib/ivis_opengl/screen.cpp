@@ -30,6 +30,7 @@
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/vectorimage.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -229,6 +230,7 @@ void screenShutDown()
 	pie_ShutDown();
 	pie_TexShutDown();
 	iV_TextShutdown();
+	iV_VectorImagesShutdown();
 
 	pie_Skybox_Shutdown();
 

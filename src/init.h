@@ -73,6 +73,8 @@ void unregisterSearchPath(const std::string& path);
 void debugOutputSearchPaths();
 void debugOutputSearchPathMountErrors();
 bool rebuildSearchPath(searchPathMode mode, bool force);
+/// Whether the file is part of the game's own data (base and multiplayer), and not of a mod, a map or the user's folder
+bool isGameDataFile(const char *path);
 bool rebuildExistingSearchPathWithGraphicsOptionChange();
 
 bool buildMapList(bool campaignOnly = false);

@@ -425,6 +425,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        lib/ivis_opengl/render_graph/pipeline_prewarm_step.cpp
        lib/ivis_opengl/render_graph/read_scope.cpp
        lib/ivis_opengl/render_graph/scene_post_effect_id.h
+       lib/ivis_opengl/vectorimage.*
        lib/ivis_opengl/vk/handle_storage.h
        lib/ivis_opengl/vk/layout_key_builder.*
        lib/ivis_opengl/vk/layout_translation.h
@@ -538,6 +539,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/urlrequest.*
        src/urlrequest_emscripten.cpp
        src/urlrequest_private.h
+       src/vectorimageloader.*
        src/wzcrashhandlingproviders.*
        src/wzjsonhelpers.*
        src/wzphysfszipioprovider.*
