@@ -8428,6 +8428,12 @@ static bool loadSaveGuideTopics(const char *pFileName)
 /* set the global scroll values to use for the save game */
 static void setMapScroll(WorldMapState& mapState)
 {
+	if (mapState.tiles == nullptr)
+	{
+		// An expand level brings no map of its own, so a cold-load reconstruct gets here - with nothing to clamp against.
+		// (The snapshot's terrain, carrying its own scroll limits, is restored after this.)
+		return;
+	}
 	//if loading in a pre version5 then scroll values will not have been set up so set to max poss
 	if (width == 0 && height == 0)
 	{

@@ -931,6 +931,13 @@ static void levPreloadFactionModelsFromLoadedSet()
 	}
 }
 
+// Whether a level type plays on the map that the _previous_ level loaded (instead of one of its own).
+// (An expand level's .gam holds no map data, and loadGame skips the map load for it (GTYPE_SCENARIO_EXPAND).)
+static bool levelKeepsPreviousMap(LEVEL_TYPE type)
+{
+	return type == LEVEL_TYPE::LDS_EXPAND || type == LEVEL_TYPE::LDS_EXPAND_LIMBO;
+}
+
 static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& controller, LEVEL_DATASET* psNewLevel, SWORD i, bool reconstructFromSnapshot)
 {
 	switch (psNewLevel->type)
@@ -1309,6 +1316,18 @@ static LoadingTask<> levLoadMissionDataLoop(ResourceLoadingController& controlle
 				if (!gamestate::savegame::coldLoadRestoreWorld())
 				{
 					co_return load_fail();
+				}
+
+				// The scenario load above loaded no map for an expand level, so it built no display layer either.
+				// A cold load enters at the expand level with no earlier level to have loaded one,
+				// so build the display layer from the _snapshot's_ terrain (like the between-mission branch does).
+				if (levelKeepsPreviousMap(psNewLevel->type))
+				{
+					if (!(co_await mapSnapshotDisplayInit(controller, gameWorld.map)))
+					{
+						debug(LOG_ERROR, "Failed mapSnapshotDisplayInit() (expand)");
+						co_return load_fail();
+					}
 				}
 			}
 		}
