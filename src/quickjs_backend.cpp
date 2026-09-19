@@ -3205,28 +3205,24 @@ bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::f
 		debug(LOG_ERROR, "JS_GetOwnPropertyNames failed");
 		return false;
 	}
+	auto free_properties = gsl::finally([ctx, properties, count] { JS_FreePropertyEnum(ctx, properties, count); });
 
 	for(uint32_t i = 0; i < count; i++)
     {
         JSAtom atom = properties[i].atom;
 
         const char *key = JS_AtomToCString(ctx, atom);
+		auto free_key = gsl::finally([ctx, key] { JS_FreeCString(ctx, key); });
 
 		if (key)
 		{
 			func(key, atom);
-			JS_FreeCString(ctx, key);
 		}
 		else
 		{
 			debug(LOG_INFO, "JS_AtomToCString returned null?");
 		}
     }
-	for (int i = 0; i < count; i++)
-	{
-		JS_FreeAtom(ctx, properties[i].atom);
-	}
-	js_free(ctx, properties);
 	return true;
 }
 
@@ -4273,6 +4269,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 
 		nlohmann::ordered_json j;
 		c.stack.push_back(value);
+		auto pop_stack = gsl::finally([&c] { c.stack.pop_back(); });
 
 		if (c.tag_class_instances)
 		{
@@ -4312,6 +4309,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 						return;
 					}
 					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+					auto free_jsVal = gsl::finally([&c, jsVal] { JS_FreeValue(c.ctx, jsVal); });
 					if (!JS_IsException(jsVal))
 					{
 						if (!JS_IsConstructor(c.ctx, jsVal))
@@ -4324,7 +4322,6 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 							props[nameStr] = "<constructor>";
 						}
 					}
-					JS_FreeValue(c.ctx, jsVal);
 				}, false);
 				if (!props.empty())
 				{
@@ -4343,6 +4340,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 						return;
 					}
 					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+					auto free_jsVal = gsl::finally([&c, jsVal] { JS_FreeValue(c.ctx, jsVal); });
 					std::string nameStr = key;
 					if (!JS_IsException(jsVal))
 					{
@@ -4359,7 +4357,6 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 					{
 						debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
 					}
-					JS_FreeValue(c.ctx, jsVal);
 				}, false);
 				if (!className.empty())
 				{
@@ -4403,6 +4400,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			j = nlohmann::ordered_json::object();
 			QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &j](const char *key, JSAtom &atom) {
 				JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+				auto free_jsVal = gsl::finally([&c, jsVal] { JS_FreeValue(c.ctx, jsVal); });
 				std::string nameStr = key;
 				if (!JS_IsException(jsVal))
 				{
@@ -4419,11 +4417,9 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				{
 					debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
 				}
-				JS_FreeValue(c.ctx, jsVal);
 			}, false);
 		}
 
-		c.stack.pop_back();
 		return j;
 	}
 
