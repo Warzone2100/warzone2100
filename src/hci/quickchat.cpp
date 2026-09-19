@@ -47,6 +47,7 @@
 #include "../qtscript.h"
 #include "../main.h"
 #include "../faction.h"
+#include "../multilobbycommands.h"
 
 #include <array>
 #include <chrono>
@@ -134,6 +135,19 @@ void recordPlayerMessageSent(uint32_t playerIdx)
 static bool isInternalMessage(WzQuickChatMessage msg)
 {
 	return static_cast<uint32_t>(msg) >= WzQuickChatMessage_FIRST_INTERNAL_MSG_VALUE;
+}
+
+static bool isHostOnlyInternalMessage(WzQuickChatMessage msg)
+{
+	switch (msg)
+	{
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
+			return true;
+		default:
+			return false;
+	}
 }
 
 // MARK: - Helper functions
@@ -2563,6 +2577,96 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 	}
 } // namespace INTERNAL_LOCALIZED_LOBBY_NOTICE
 
+// - INTERNAL_LOCALIZED_HOST_NOTICE
+namespace INTERNAL_LOCALIZED_HOST_NOTICE {
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t additionalData, optional<uint32_t> targetPlayerIdx)
+	{
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), additionalData, targetPlayerIdx.value_or(MAX_CONNECTED_PLAYERS) };
+	}
+
+	std::string to_output_string(WzQuickChatMessageData messageData)
+	{
+		uint32_t additionalData = messageData.dataA;
+		uint32_t targetPlayerIdx = messageData.dataB;
+
+		const char* targetPlayerName = (targetPlayerIdx < MAX_CONNECTED_PLAYERS) ? getPlayerName(targetPlayerIdx) : "";
+
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::Invalid):
+				return "";
+			case static_cast<uint32_t>(Context::LagKickWarning):
+				return astringf(_("Auto-kicking player (%s) in %u seconds. (lag)"), targetPlayerName, additionalData);
+			case static_cast<uint32_t>(Context::LagKicked):
+				return astringf(_("Auto-kicking player (%s) because of ping issues. (Timeout: %u seconds)"), targetPlayerName, additionalData);
+			case static_cast<uint32_t>(Context::DesyncKickWarning):
+				return astringf(_("Auto-kicking player (%s) in %u seconds. (desync)"), targetPlayerName, additionalData);
+			case static_cast<uint32_t>(Context::DesyncKicked):
+				return astringf(_("Auto-kicking player (%s) because of desync. (Timeout: %u seconds)"), targetPlayerName, additionalData);
+			case static_cast<uint32_t>(Context::DataIntegrityKicked):
+				return astringf(_("Kicking player %s, because they tried to bypass data integrity check!"), targetPlayerName);
+			case static_cast<uint32_t>(Context::IncompatibleModKicked):
+				return astringf(_("%s (%u) has an incompatible mod, and has been kicked."), targetPlayerName, targetPlayerIdx);
+			case static_cast<uint32_t>(Context::InvalidCommandKicked):
+				if (additionalData == 0)
+				{
+					return astringf(_("Auto kicking player %s, invalid command received."), targetPlayerName);
+				}
+				return astringf(_("Auto kicking player %s, invalid command received: %u"), targetPlayerName, additionalData);
+			case static_cast<uint32_t>(Context::InvalidMessageKicked):
+				return astringf(_("Auto-kicking player %s - invalid or corrupt message received."), targetPlayerName);
+			case static_cast<uint32_t>(Context::AccessLevelKicked):
+				return astringf(_("Auto-kicking player %s, lacked the required access level for command(%u)."), targetPlayerName, additionalData);
+			case static_cast<uint32_t>(Context::IndexChangeNotAckedKicked):
+				return astringf(_("Auto-kicking player %s, did not ack player index change within required timeframe."), targetPlayerName);
+			case static_cast<uint32_t>(Context::VoteKickFor):
+				return astringf(_("A player voted FOR kicking: %s"), targetPlayerName);
+			case static_cast<uint32_t>(Context::VoteKickAgainst):
+				return astringf(_("A player voted AGAINST kicking: %s"), targetPlayerName);
+			case static_cast<uint32_t>(Context::VoteKickSucceeded):
+				return astringf(_("The vote to kick player %s succeeded (sufficient votes in favor) - kicking"), targetPlayerName);
+			case static_cast<uint32_t>(Context::VoteKickFailed):
+				return astringf(_("The vote to kick player %s failed (insufficient votes in favor)"), targetPlayerName);
+			case static_cast<uint32_t>(Context::VoteKickTimedOut):
+				return astringf(_("The vote to kick player %s failed (insufficient votes before timeout)"), targetPlayerName);
+			case static_cast<uint32_t>(Context::MapChangeVoteAllowed):
+				return astringf(_("%s (%u) allowed map change. Total: %u/%u"), targetPlayerName, targetPlayerIdx, additionalData >> 16, additionalData & 0xFFFF);
+			case static_cast<uint32_t>(Context::SpectatorMovedToPlayers):
+				return astringf(_("Spectator %s has moved to Players"), targetPlayerName);
+			case static_cast<uint32_t>(Context::PlayerMovedToSpectators):
+				return astringf(_("Player %s has moved to Spectators"), targetPlayerName);
+			case static_cast<uint32_t>(Context::MoveToPlayersFailedNoSlot):
+				return astringf(_("Unable to move %s to Players - no available slot"), targetPlayerName);
+			case static_cast<uint32_t>(Context::HostKickedPlayer):
+				return astringf(_("The host has kicked %s from the game!"), targetPlayerName);
+			case static_cast<uint32_t>(Context::HostBannedPlayer):
+				return astringf(_("The host has banned %s from the game!"), targetPlayerName);
+			case static_cast<uint32_t>(Context::HostMovedPlayerToSpectators):
+				return astringf(_("The host has moved %s to Spectators!"), targetPlayerName);
+			case static_cast<uint32_t>(Context::MovingPlayerToSpectators):
+				return astringf(_("Moving %s to Spectators!"), targetPlayerName);
+			case static_cast<uint32_t>(Context::AskingSpectatorToMoveToPlayers):
+				return astringf(_("Asking %s to move to Players..."), targetPlayerName);
+			case static_cast<uint32_t>(Context::KickingPlayer):
+				return astringf((additionalData) ? _("Kicking spectator: %s") : _("Kicking player: %s"), targetPlayerName);
+			case static_cast<uint32_t>(Context::AdminKickedPlayer):
+				return astringf(_("Player %s was kicked by the administrator."), targetPlayerName);
+			case static_cast<uint32_t>(Context::AdminBannedPlayer):
+				return astringf(_("Player %s was banned by the administrator."), targetPlayerName);
+			case static_cast<uint32_t>(Context::HostStartingGame):
+				return _("Host is Starting Game");
+			case static_cast<uint32_t>(Context::MinPlayersToStart):
+				return astringf(_("Game will not start until there are %u players."), additionalData);
+			case static_cast<uint32_t>(Context::LimitsReset):
+				return _("Limits Reset To Default Values");
+			case static_cast<uint32_t>(Context::LobbySlashCommandsEnabled):
+				return astringf(_("Lobby slash commands enabled. Type %shelp to see details."), LOBBY_COMMAND_PREFIX);
+		}
+
+		return ""; // Silence compiler warning
+	}
+} // namespace INTERNAL_LOCALIZED_HOST_NOTICE
+
 } // namespace WzQuickChatDataContexts
 
 // MARK: - Public functions
@@ -2574,6 +2678,7 @@ bool quickChatMessageExpectsExtraData(WzQuickChatMessage msg)
 		// WZ-generated internal messages which require extra data
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
 			return true;
 
 		default:
@@ -2588,6 +2693,7 @@ int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender)
 	{
 		// WZ-generated internal messages - not for users to deliberately send
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
 			// override the "sender" to SYSTEM_MESSAGE type
 			return SYSTEM_MESSAGE;
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
@@ -2647,6 +2753,8 @@ std::string to_output_string(WzQuickChatMessage msg, const optional<WzQuickChatM
 			return WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::to_output_string(messageData.value());
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 			return WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::to_output_string(messageData.value());
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
+			return WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::to_output_string(messageData.value());
 
 		default:
 			return to_display_string(msg);
@@ -2814,6 +2922,7 @@ const char* to_display_string(WzQuickChatMessage msg)
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return _("Admin modified a setting");
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
 			return "";
 
 		// not a valid message
@@ -2983,10 +3092,21 @@ static std::string formatReceivers(uint32_t senderIdx, const WzQuickChatTargetin
 
 void addQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
+	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
+	auto outputSender = to_output_sender(message, sender);
+	if (outputSender < 0)
+	{
+		auto outputMsg = to_output_string(message, messageData);
+		if (outputMsg.empty())
+		{
+			return;
+		}
+		addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, outputSender, teamSpecific);
+		return;
+	}
 	char formatted[MAX_CONSOLE_STRING_LENGTH];
 	ssprintf(formatted, "[%s] %s (%s): %s", formatLocalDateTime("%H:%M").c_str(), getPlayerName(sender), formatReceivers(sender, targeting).c_str(), to_output_string(message, messageData).c_str());
-	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
-	addConsoleMessage(formatted, DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
+	addConsoleMessage(formatted, DEFAULT_JUSTIFY, outputSender, teamSpecific);
 }
 
 void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
@@ -3000,7 +3120,7 @@ void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t send
 	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
 }
 
-bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message)
+bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message, const WzQuickChatTargeting& targeting)
 {
 	if (!isInternalMessage(message))
 	{
@@ -3011,6 +3131,8 @@ bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message)
 	{
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return false;
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
+			return !targeting.all;
 		default:
 			break;
 	}
@@ -3025,6 +3147,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 	ASSERT_OR_RETURN(, quickChatMessageExpectsExtraData(message) == messageData.has_value(), "Message [%d] unexpectedly %s", static_cast<int>(message), messageData.has_value() ? "has message data" : "lacks message data");
 
 	bool internalMessage = isInternalMessage(message);
+	bool internalHostMessage = internalMessage && fromPlayer == NetPlay.hostPlayer;
 
 	auto mutedUntil = playerSpamMutedUntil(fromPlayer);
 	if (mutedUntil.has_value() && !internalMessage)
@@ -3045,7 +3168,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 			return false;
 		}
 
-		if (isInGame && senderIsSpectator && !NetPlay.players[playerIdx].isSpectator)
+		if (isInGame && senderIsSpectator && !NetPlay.players[playerIdx].isSpectator && !internalHostMessage)
 		{
 			return false;
 		}
@@ -3056,6 +3179,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 			return true;
 		}
 		else if (isInGame
+				 && !internalMessage
 				 && playerIdx < game.maxPlayers
 				 && NetPlay.players[playerIdx].ai >= 0
 				 && NetPlay.players[playerIdx].difficulty != AIDifficulty::DISABLED
@@ -3182,7 +3306,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		NETend(wref);
 	}
 
-	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !shouldHideQuickChatMessageFromLocalDisplay(message))
+	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !shouldHideQuickChatMessageFromLocalDisplay(message, targeting))
 	{
 		if (isInGame)
 		{
@@ -3200,9 +3324,25 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 	}
 }
 
+void sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData, optional<uint32_t> targetPlayerIdx)
+{
+	ASSERT_HOST_ONLY(return);
+	sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::constructMessageData(ctx, additionalData, targetPlayerIdx));
+}
+
+void sendHostNoticeToPlayer(uint32_t receiver, WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData, optional<uint32_t> targetPlayerIdx)
+{
+	ASSERT_HOST_ONLY(return);
+	WzQuickChatTargeting targeting;
+	targeting.specificPlayers.insert(receiver);
+	sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::constructMessageData(ctx, additionalData, targetPlayerIdx));
+}
+
 bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuickChatMessage message, uint32_t sender, uint32_t recipient, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
 	bool internalMessage = isInternalMessage(message);
+	bool hostOnlyInternalMessage = isHostOnlyInternalMessage(message);
+	bool internalHostMessage = internalMessage && sender == NetPlay.hostPlayer;
 
 	if (sender >= MAX_CONNECTED_PLAYERS || recipient >= MAX_CONNECTED_PLAYERS)
 	{
@@ -3220,7 +3360,7 @@ bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuick
 	}
 
 	bool senderIsSpectator = NetPlay.players[sender].isSpectator;
-	if (isInGame && senderIsSpectator && !NetPlay.players[recipient].isSpectator)
+	if (isInGame && senderIsSpectator && !NetPlay.players[recipient].isSpectator && !internalHostMessage)
 	{
 		// spectators can't talk to players in-game
 		return false;
@@ -3233,22 +3373,10 @@ bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuick
 		return false;
 	}
 
-	// begin: message-specific checks
-	switch (message)
+	if (hostOnlyInternalMessage && queue.index != NetPlay.hostPlayer)
 	{
-		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
-		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
-			// should only ever be sent by the host
-			if (queue.index != NetPlay.hostPlayer)
-			{
-				return false;
-			}
-			break;
-		default:
-			// no special handling
-			break;
+		return false;
 	}
-	// end: message-specific checks
 
 	// passes checks
 	return true;
