@@ -210,6 +210,14 @@ void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE);
 uint16_t war_getMPPlayerReconnectWaitSeconds();
 void war_setMPPlayerReconnectWaitSeconds(uint16_t seconds);
 
+enum class MP_CHAT_MODE : uint8_t
+{
+	ON = 0,
+	QUICK_CHAT_ONLY = 1
+};
+MP_CHAT_MODE war_getMPChatMode();
+void war_setMPChatMode(MP_CHAT_MODE mode);
+
 void war_setLastIpServerConnect(const std::string& serverName);
 const std::string& war_getLastIpServerConnect();
 

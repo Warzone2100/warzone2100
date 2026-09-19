@@ -372,6 +372,8 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 void setPlayerMuted(uint32_t playerIdx, bool muted);
 bool isPlayerMuted(uint32_t sender);
+bool isLocalQuickChatOnlyMode();
+bool shouldHideFreeChatFrom(uint32_t sender);
 
 bool setGameStoryLogPlayerDataValue(uint32_t playerIndex, const std::string& key_str, const std::string& value_str);
 bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
