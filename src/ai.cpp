@@ -276,7 +276,9 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 // Calculates attack priority for a certain target
 // Returns the target attack weight if it's greater than currentBest
 // (otherwise, may shortcut various costly calculations, and returns <= 0)
-static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
+/// lineOfFireAlreadyVerified says the caller runs lineOfFire(..., wallsBlock = true) before accepting a
+/// candidate, which implies the unblocked trace below.
+static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot, bool lineOfFireAlreadyVerified = false)
 {
 	SDWORD			targetTypeBonus = 0, damageRatio = 0, attackWeight = 0, noTarget = -1;
 	UDWORD			weaponSlot;
@@ -551,7 +553,7 @@ static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *p
 		{
 			return std::min<int>(0, attackWeight);
 		}
-		if (!lineOfFire(psAttacker, psTarget, weapon_slot, false))
+		if (!lineOfFireAlreadyVerified && !lineOfFire(psAttacker, psTarget, weapon_slot, false))
 		{
 			attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain
 		}
@@ -975,18 +977,26 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				srange = objSensorRange(psObj);
 			}
 
+			const STRUCTURE *psStructAttacker = (const STRUCTURE *)psObj;
+			const bool canAttack = psStructAttacker->numWeaps > 0 && psStructAttacker->asWeaps[0].nStat != 0;
+
 			for (BASE_OBJECT *psCurr : gridStartIterate(psObj->pos.x, psObj->pos.y, srange))
 			{
 				/* Check that it is a valid target */
-				if (psCurr->type != OBJ_FEATURE && !psCurr->died
+				if (canAttack && psCurr->type != OBJ_FEATURE && !psCurr->died
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX
-				    && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot))
+				    && objPosDiffSq(psObj, psCurr) < longRange * longRange)
 				{
-					int newTargetValue = targetAttackWeightIfGreaterThan(targetValue - 1, psCurr, psObj, weapon_slot);
+					int newTargetValue = targetAttackWeightIfGreaterThan(targetValue - 1, psCurr, psObj, weapon_slot, true);
 					// See if in sensor range and visible
 					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
 					if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))
+					{
+						continue;
+					}
+					// The expensive test, run only for a candidate that has already beaten the best so far.
+					if (!lineOfFire(psObj, psCurr, weapon_slot, true))
 					{
 						continue;
 					}
