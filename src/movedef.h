@@ -92,6 +92,9 @@ struct MOVE_CONTROL
 	Vector2i backoffPos = Vector2i(0, 0); ///< Where this droid last gained real ground
 	unsigned backoffTime = 0;             ///< When it was there, 0 until it has been measured
 	unsigned backoffUntil = 0;            ///< End of the running backoff episode, 0 outside one
+	/// Paces re-requesting a route the droid was given and could not use.
+	unsigned routeRetryUntil = 0;         ///< No re-request before this time, 0 outside an episode
+	uint16_t routeRetryStreak = 0;        ///< Consecutive failures, widening the gap between re-requests
 
 	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 
