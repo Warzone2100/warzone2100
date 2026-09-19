@@ -170,7 +170,7 @@ void ScreenFrameCoordinator::acquireSwapchainForFrameDraw()
 	};
 
 	try {
-		auto status = _root.tryAcquireSwapchainImage();
+		const auto status = _root.tryAcquireSwapchainImage();
 		switch (status)
 		{
 		case VkRoot::SwapchainAcquireStatus::Success:
@@ -191,7 +191,11 @@ void ScreenFrameCoordinator::acquireSwapchainForFrameDraw()
 			case SuboptimalAcquireAction::DeferToNextBegin:
 				return;
 
-			case SuboptimalAcquireAction::RecreateAndRetryOnce:
+			case SuboptimalAcquireAction::RecreateAndSkipFrame:
+				// MoltenVK wants the swapchain rebuilt right away, but this frame cannot then go on to draw.
+				// The recreate destroys the ring slot holding everything that the frame uploaded before the acquire
+				// (frame uniform blocks, point light arrays, etc), so acquiring an image here would record draws
+				// against buffers which no longer exist.
 				debug(LOG_INFO, "acquireSwapchainForFrameDraw: eSuboptimalKHR - immediately recreate");
 				if (!_root.recreateSwapchain(::vk::Result::eSuboptimalKHR))
 				{
@@ -200,25 +204,6 @@ void ScreenFrameCoordinator::acquireSwapchainForFrameDraw()
 				// createSwapchain already synced the drawable, so next Begin needs no further recreate
 				_presentation.clearSwapchainRecreatePending();
 				_root.rebindOpenScreenFrameResources();
-				status = _root.tryAcquireSwapchainImage();
-				if (status == VkRoot::SwapchainAcquireStatus::Success)
-				{
-					return;
-				}
-				if (status == VkRoot::SwapchainAcquireStatus::SurfaceLost)
-				{
-					requestSurfaceLostRecovery();
-				}
-				else
-				{
-					requestSwapchainRecreate();
-				}
-				if (status == VkRoot::SwapchainAcquireStatus::OutOfDate
-					|| status == VkRoot::SwapchainAcquireStatus::SurfaceLost)
-				{
-					_root.swapchainSize.width = 1;
-					_root.swapchainSize.height = 1;
-				}
 				return;
 			}
 			return;
