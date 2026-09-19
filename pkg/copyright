@@ -482,6 +482,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/bloom_pass.*
        src/buildprovenance/*
        src/cameratrace.*
+       src/console_history.*
        src/corridor_gate.*
        src/corridor_map.*
        src/corridordump.*

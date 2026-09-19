@@ -575,7 +575,7 @@ void	kf_ToggleConsoleDrop()
 {
 	if (!bInTutorial)
 	{
-		setHistoryMode(false);
+		setConsoleHistoryFilter(ConsoleHistoryFilter::All);
 		toggleConsoleDrop();
 	}
 }
@@ -637,7 +637,7 @@ void kf_ToggleTeamChat()
 {
 	if (!bInTutorial)
 	{
-		setHistoryMode(true);
+		setConsoleHistoryFilter(ConsoleHistoryFilter::Team);
 		toggleConsoleDrop();
 	}
 }
