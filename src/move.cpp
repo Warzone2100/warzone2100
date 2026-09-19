@@ -1310,6 +1310,17 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	spmy = gameTimeAdjustedAverage(*pmy, EXTRA_PRECISION);
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
+
+	// Everything the loop needs that does not vary with the neighbor.
+	// The body writes psDroid->sMove bump fields and shuffles other droids, so none of these can change under it.
+	const bool selfFlying = psDroid->isFlying();
+	const bool softCollision = pathfindingSoftCollisionEnabled();
+	const bool frustrated = psDroid->lastFrustratedTime > 0
+	                        && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME;
+	const int32_t selfZ = psDroid->pos.z;
+	const int32_t steppedX = psDroid->pos.x + spmx;
+	const int32_t steppedY = psDroid->pos.y + spmy;
+
 	BASE_OBJECT *psObst = nullptr;
 	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS))
 	{
@@ -1321,14 +1332,15 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		if (psObj->type == OBJ_DROID)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
-			objR = moveObjRadius(psObj);
 			if (psObjcast->isFlightBasedTransporter())
 			{
 				// ignore transporters
 				continue;
 			}
-			if ((!psDroid->isFlying() && psObjcast->isFlying() && psObjcast->pos.z > (psDroid->pos.z + droidR)) ||
-			    (!psObjcast->isFlying() && psDroid->isFlying() && psDroid->pos.z > (psObjcast->pos.z + objR)))
+			objR = moveObjRadius(psObj);
+			const bool objFlying = psObjcast->isFlying();
+			if ((!selfFlying && objFlying && psObjcast->pos.z > (selfZ + droidR)) ||
+			    (!objFlying && selfFlying && selfZ > (psObjcast->pos.z + objR)))
 			{
 				// ground unit can't bump into a flying saucer..
 				continue;
@@ -1339,9 +1351,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				// everything else doesn't avoid people
 				continue;
 			}
-			if (psObjcast->player == psDroid->player
-			    && psDroid->lastFrustratedTime > 0
-			    && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME)
+			if (frustrated && psObjcast->player == psDroid->player)
 			{
 				continue; // clip straight through own units when sufficient frustrated -- using cheat codes!
 			}
@@ -1352,9 +1362,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 			continue;
 		}
 
-		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
-		if (pathfindingSoftCollisionEnabled())
+		if (softCollision)
 		{
 			const bool allied = psObj->player == psDroid->player || aiCheckAlliances(psObj->player, psDroid->player);
 			if (allied && moveSoftPass(psDroid, static_cast<const DROID *>(psObj)))
@@ -1364,8 +1373,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		}
 		radSq = rad * rad;
 
-		xdiff = psDroid->pos.x + spmx - psObj->pos.x;
-		ydiff = psDroid->pos.y + spmy - psObj->pos.y;
+		xdiff = steppedX - psObj->pos.x;
+		ydiff = steppedY - psObj->pos.y;
 		distSq = xdiff * xdiff + ydiff * ydiff;
 		if (xdiff * spmx + ydiff * spmy >= 0)
 		{
