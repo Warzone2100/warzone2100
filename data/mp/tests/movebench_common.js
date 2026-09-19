@@ -37,6 +37,19 @@ const ROSTER = {
 	// light unit to squeeze past, which does not test blocking at all. Two
 	// heavies leave 16 and actually seal it.
 	heavytruck: { name: "Bench Heavy Truck", body: "Body9REC", prop: "tracked01", weap: "Spade1Mk1" },
+	// Combat rosters, for the perf_* scenarios. The standard suite fires no shot at all, so
+	// anything touching visibility, targeting, line of fire or projectiles is unexercised by it.
+	// One kind per projectile movement model, since each takes a different path through
+	// proj_InFlightFunc and checkFireLine.
+	cannon:  { name: "Bench Cannon Tank",  body: "Body5REC", prop: "tracked01", weap: "Cannon1Mk1" },
+	homing:  { name: "Bench Missile Tank", body: "Body5REC", prop: "tracked01", weap: "Missile-A-T" },
+	mortar:  { name: "Bench Mortar Tank",  body: "Body5REC", prop: "HalfTrack", weap: "Mortar1Mk1" },
+	flamer:  { name: "Bench Flamer Tank",  body: "Body5REC", prop: "tracked01", weap: "Flame1Mk1" },
+	// The only way to get a DROID_PERSON into a skirmish, and the only thing moveCheckSquished acts on.
+	person:  { name: "Bench Person", body: "B1BaBaPerson01", prop: "BaBaLegs", weap: "BaBaMG" },
+	vtol:    { name: "Bench VTOL", body: "Body5REC", prop: "V-Tol", weap: "Rocket-VTOL-LtA-T" },
+	// The only DROID_REPAIR in the suite, for the repair-facility scenario.
+	repair:  { name: "Bench Repair Turret", body: "Body1REC", prop: "wheeled01", weap: "LightRepair1" },
 };
 
 function benchEnable(player, kind)

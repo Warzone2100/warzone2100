@@ -1,0 +1,24 @@
+{
+	"challenge": {
+		"map": "MoveBench-Corridor",
+		"maxPlayers": 2,
+		"scavengers": "false",
+		"alliances": 0,
+		"powerLevel": 1,
+		"bases": 1,
+		"name": "MoveBench Perf Walled Assault",
+		"version": 2
+	},
+	"scripts": {
+		"rules": "movebench_perf_walled_assault.js"
+	},
+	"player_0": {
+		"team": 0,
+		"position": 0
+	},
+	"player_1": {
+		"team": 1,
+		"position": 1,
+		"ai": "none"
+	}
+}
