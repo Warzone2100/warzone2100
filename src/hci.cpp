@@ -85,6 +85,7 @@
 #include "uiobjectrefs.h"
 #include "notifications.h"
 #include "hci/groups.h"
+#include "hci/ingameconsole.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
 #include "screens/researchtreescreen.h"
@@ -651,6 +652,7 @@ bool intInitialise()
 			debug(LOG_ERROR, "Couldn't create power Bar widget(Out of memory ?)");
 			return false;
 		}
+		inGameConsoleAdd(psWScreen);
 	}
 
 	/* Note the current screen state */
@@ -1732,21 +1734,23 @@ static void intStopStructPosition()
 }
 
 
+bool intConsoleShown()
+{
+	if (!gameUpdatePaused())
+	{
+		return true;
+	}
+	// A single player game pauses for the design screen, and for the intelligence screen,
+	// where the tutorial still needs its messages
+	return !bMultiPlayer && (intMode == INT_DESIGN || (bInTutorial && intMode == INT_INTELMAP));
+}
+
 /* Display the widgets for the in game interface */
 void intDisplayWidgets()
 {
-	/*draw the background for the design screen and the Intelligence screen*/
-	if (intMode == INT_DESIGN || intMode == INT_INTELMAP)
+	if (intConsoleShown())
 	{
-		// When will they ever learn!!!!
-		if (!bMultiPlayer)
-		{
-			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
-			if ((intMode == INT_DESIGN) || (bInTutorial && intMode == INT_INTELMAP))
-			{
-				displayConsoleMessages();
-			}
-		}
+		displayConsoleMessages();
 	}
 
 	bool desiredRadarVisibility = false;
@@ -1755,9 +1759,6 @@ void intDisplayWidgets()
 		desiredRadarVisibility = radarVisible();
 
 		cleanupOldBeaconMessages();
-
-		/* Ensure that any text messages are displayed at bottom of screen */
-		displayConsoleMessages();
 	}
 
 	auto radarWidget = getRadarWidget();
@@ -1766,6 +1767,7 @@ void intDisplayWidgets()
 		(desiredRadarVisibility) ? radarWidget->show() : radarWidget->hide();
 	}
 
+	inGameConsoleKeepOnTop();
 	widgDisplayScreen(psWScreen);
 
 	if (bLoadSaveUp)

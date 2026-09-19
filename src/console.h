@@ -21,6 +21,7 @@
 #ifndef __INCLUDED_SRC_CONSOLE_H__
 #define __INCLUDED_SRC_CONSOLE_H__
 
+#include <deque>
 #include <functional>
 #include <memory>
 #include "lib/ivis_opengl/pietypes.h"
@@ -53,6 +54,17 @@ const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING = {2500};
 #define MAX_CONSOLE_MESSAGE_DURATION	((UDWORD)-1)
 #define DEFAULT_CONSOLE_MESSAGE_DURATION	0
 
+/// A line in the console's feed, the recent messages shown until they expire
+struct ConsoleFeedMessage
+{
+	uint32_t id;		///< One more than the line added before it
+	WzString text;
+	UDWORD timeAdded;	///< The realTime it arrived
+	UDWORD duration;	///< MAX_CONSOLE_MESSAGE_DURATION for a line that stays
+	CONSOLE_TEXT_JUSTIFICATION justification;
+	int player;
+};
+
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false, UDWORD duration = DEFAULT_CONSOLE_MESSAGE_DURATION);
@@ -63,13 +75,11 @@ void shutdownConsoleMessages();
 void removeTopConsoleMessage();
 void displayConsoleMessages();
 void flushConsoleMessages();
-void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
 bool getConsoleDisplayStatus();
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 void clearActiveConsole();
-bool mouseOverConsoleBox();
 bool mouseOverHistoryConsoleBox();
 int getNumberConsoleMessages();
 void setConsoleLineInfo(UDWORD vis);
@@ -79,6 +89,10 @@ void toggleConsoleDrop();
 void setConsoleHistoryFilter(ConsoleHistoryFilter filter);
 void clearInfoMessages();
 PIELIGHT getConsoleTextColor(int player);
+
+const std::deque<ConsoleFeedMessage> &getConsoleFeed();
+/// Changes whenever the feed does
+uint32_t getConsoleFeedRevision();
 
 typedef std::function<void(ConsoleMessage const &)> CONSOLE_MESSAGE_LISTENER;
 void consoleAddMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER>& listener);

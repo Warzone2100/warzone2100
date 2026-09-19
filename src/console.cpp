@@ -89,7 +89,9 @@ struct CONSOLE_MESSAGE
 
 };
 
-static std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
+static std::deque<ConsoleFeedMessage> ActiveMessages;	// we add all messages to this container
+static uint32_t nextActiveMessageId = 0;
+static uint32_t activeMessagesRevision = 0;
 static ConsoleHistory history(MAX_CONSOLE_HISTORY);	// every stored message, team and private ones included
 static std::deque<CONSOLE_MESSAGE> InfoMessages;
 static std::array<WzText, NumDisplayLines> historyDisplayLines;
@@ -101,7 +103,6 @@ static bool showBackgroundColor = false;		// if user wants to add more contrast 
 static CONSOLE mainConsole;						// Stores the console dimensions and states
 static CONSOLE historyConsole;					// Stores the History console dimensions and states
 static UDWORD	messageDuration;				/** How long do messages last for? */
-static bool	bTextBoxActive = false;				/** Is there a box under the console text? */
 static bool	bConsoleDisplayEnabled = false;		/** Is the console being displayed? */
 static UDWORD	consoleVisibleLines;			/** How many lines are displayed? */
 static int allowNewMessages;					/** Whether new messages are allowed to be added */
@@ -145,7 +146,6 @@ void	initConsoleMessages()
 	linePitch = iV_GetTextLineSize(font_regular);
 	bConsoleDropped = false;
 	setConsoleMessageDuration(duration);					// Setup how long messages are displayed for
-	setConsoleBackdropStatus(true);							// No box under the text
 	enableConsoleDisplay(true);								// Turn on the console display
 
 	//	Set up the main console size and position x,y,width
@@ -259,7 +259,8 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		}
 		else
 		{
-			ActiveMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// everything gets logged here for a specific period of time
+			ActiveMessages.push_back({nextActiveMessageId++, WzString::fromUtf8(lines), realTime, newMsgDuration, jusType, player});	// everything gets logged here for a specific period of time
+			++activeMessagesRevision;
 			history.add(WzString::fromUtf8(FitText), jusType, player, team, gameTime);
 		}
 	}
@@ -300,6 +301,7 @@ void	updateConsoleMessages()
 		if ((i->duration != MAX_CONSOLE_MESSAGE_DURATION) && (realTime - i->timeAdded > i->duration))
 		{
 			i = ActiveMessages.erase(i);
+			++activeMessagesRevision;
 		}
 		else
 		{
@@ -319,6 +321,7 @@ void	removeTopConsoleMessage()
 	if (getNumberConsoleMessages())
 	{
 		ActiveMessages.pop_front();
+		++activeMessagesRevision;
 	}
 }
 
@@ -326,12 +329,14 @@ void	removeTopConsoleMessage()
 void clearActiveConsole()
 {
 	ActiveMessages.clear();
+	++activeMessagesRevision;
 }
 
 /** Clears all console messages */
 void	flushConsoleMessages()
 {
 	ActiveMessages.clear();
+	++activeMessagesRevision;
 	history.clear();
 	for (auto &line : historyDisplayLines)
 	{
@@ -467,11 +472,21 @@ static void displayOldMessages(ConsoleHistoryFilter filter)
 	}
 }
 
-/** Displays all the console messages */
+const std::deque<ConsoleFeedMessage> &getConsoleFeed()
+{
+	return ActiveMessages;
+}
+
+uint32_t getConsoleFeedRevision()
+{
+	return activeMessagesRevision;
+}
+
+/** Displays the console history and the info bar. The in-game console widget draws the feed. */
 void	displayConsoleMessages()
 {
 	// Check if we have any messages we want to show
-	if (ActiveMessages.empty() && !bConsoleDropped && InfoMessages.empty())
+	if (!bConsoleDropped && InfoMessages.empty())
 	{
 		return;
 	}
@@ -497,25 +512,6 @@ void	displayConsoleMessages()
 		tmp -= i->display.width();
 		console_drawtext(i->display, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, i->display.width());
 	}
-
-	if (!ActiveMessages.empty())
-	{
-		int TextYpos = mainConsole.topY;
-		// Draw the blue background for the text (only in game, not lobby)
-		if (bTextBoxActive && GetGameMode() == GS_NORMAL)
-		{
-			iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,
-							mainConsole.topY - mainConsole.textDepth - CON_BORDER_HEIGHT,
-							mainConsole.topX + mainConsole.width,
-							mainConsole.topY + (getNumberConsoleMessages() * linePitch) + CON_BORDER_HEIGHT - linePitch);
-		}
-		for (auto &ActiveMessage : ActiveMessages)
-		{
-			console_drawtext(ActiveMessage.display, getConsoleTextColor(ActiveMessage.player), mainConsole.topX,
-							 TextYpos, ActiveMessage.JustifyType, mainConsole.width);
-			TextYpos += ActiveMessage.display.lineSize();
-		}
-	}
 }
 
 /** destroy CONPRINTF messages **/
@@ -524,12 +520,6 @@ void clearInfoMessages()
 	InfoMessages.clear();
 }
 
-
-/** Allows toggling of the box under the console text */
-void	setConsoleBackdropStatus(bool state)
-{
-	bTextBoxActive = state;
-}
 
 /**
 	Turns on and off display of console. It's worth
@@ -575,21 +565,6 @@ void	setConsolePermanence(bool state, bool bClearOld)
 		}
 		mainConsole.permanent = state;
 	}
-}
-
-/** Check if mouse is over the Active console 'window' area */
-bool mouseOverConsoleBox()
-{
-	int gotMessages = getNumberConsoleMessages();
-	if (gotMessages &&
-		((UDWORD)mouseX() > mainConsole.topX)
-		&& ((UDWORD)mouseY() > mainConsole.topY)
-		&& ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)
-		&& ((UDWORD)mouseY() < (mainConsole.topY + 4 + linePitch * gotMessages)))
-	{
-		return true;
-	}
-	return false;
 }
 
 /** Check if mouse is over the History console 'window' area */
