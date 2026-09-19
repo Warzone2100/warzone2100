@@ -532,11 +532,6 @@ void processInput()
 		gInputManager.processMappings(allowMouseWheelEvents);
 		gamepadProcessBindings();
 	}
-	/* Allow the user to clear the (Active) console if need be */
-	if (!mouseIsOverScreenOverlayChild && mouseOverConsoleBox() && mousePressed(MOUSE_LMB))
-	{
-		clearActiveConsole();
-	}
 }
 
 static bool OverRadarAndNotDragging()

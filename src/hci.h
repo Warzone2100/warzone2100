@@ -298,6 +298,9 @@ void intRequestQuitToMainMenu();
 /* Display the widgets for the in game interface */
 void intDisplayWidgets();
 
+/* Whether the console shows on the in-game screen this frame */
+bool intConsoleShown();
+
 void intShowWidgetHelp();
 bool intHelpOverlayIsUp();
 

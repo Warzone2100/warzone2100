@@ -501,6 +501,8 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/gamestate_snapshot.cpp
        src/gamestate_snapshot_ring.*
        src/hci/chatoptions.*
+       src/hci/ingameconsole.*
+       src/hci/ingameconsole_layout.h
        src/hci/quickchat.*
        src/hci/teamstrategy.*
        src/input/gamepadbindings.*
