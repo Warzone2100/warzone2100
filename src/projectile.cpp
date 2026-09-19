@@ -61,6 +61,7 @@
 #include "profiling.h"
 #include "game_world.h"
 #include "wrappers.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 #include <functional>
@@ -290,6 +291,13 @@ proj_GetNext()
 {
 	++psProjectileNext;
 	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : nullptr;
+}
+
+/***************************************************************************/
+
+size_t proj_Count()
+{
+	return psProjectileList.size();
 }
 
 /***************************************************************************/
@@ -790,6 +798,7 @@ static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t
 
 static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 {
+	WZ_PERF_SCOPE(T_projInFlight);
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
@@ -1492,6 +1501,7 @@ PROJECTILE* PROJECTILE::update()
 void proj_UpdateAll()
 {
 	WZ_PROFILE_SCOPE(proj_UpdateAll);
+	WZ_PERF_SCOPE(T_projUpdateAll);
 
 	static std::vector<PROJECTILE*> spawnedProjectiles;
 	spawnedProjectiles.reserve(psProjectileList.size());

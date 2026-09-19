@@ -49,6 +49,7 @@
 #include "qtscript.h"
 #include "wavecast.h"
 #include "profiling.h"
+#include "perfcounters.h"
 
 // accuracy for the height gradient
 #define GRAD_MUL 10000
@@ -511,6 +512,7 @@ void revealAll(WorldMapState& mapState, UBYTE player)
  */
 int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock)
 {
+	WZ_PERF_SCOPE(T_visibleObject);
 	ASSERT_OR_RETURN(0, psViewer != nullptr, "Invalid viewer pointer!");
 	ASSERT_OR_RETURN(0, psTarget != nullptr, "Invalid viewed pointer!");
 
@@ -606,6 +608,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	};
 
 	// Cast a ray from the viewer to the target
+	WZ_PERF_COUNT(C_rayCasts, 1);
 	rayCast(gameWorld.map, psViewer->pos.xy(), psTarget->pos.xy(), rayLOSCallback, &help);
 
 	if (gWall != nullptr && gNumWalls != nullptr) // Out globals are set
@@ -862,6 +865,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 void processVisibility()
 {
 	WZ_PROFILE_SCOPE(processVisibility);
+	WZ_PERF_SCOPE(T_processVisibility);
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
@@ -1077,6 +1081,8 @@ static inline void angle_check(int64_t *angletan, int positionSq, int height, in
  */
 static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock, bool direct)
 {
+	WZ_PERF_SCOPE(T_checkFireLine);
+	WZ_PERF_COUNT(C_fireLineTraces, 1);
 	Vector3i pos(0, 0, 0), dest(0, 0, 0);
 	Vector2i start(0, 0), diff(0, 0), current(0, 0), halfway(0, 0), next(0, 0), part(0, 0);
 	Vector3i muzzle(0, 0, 0);

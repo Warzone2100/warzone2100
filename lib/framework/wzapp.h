@@ -222,6 +222,9 @@ namespace wz
 
 #else  // Workaround for cross-compiler without std::mutex.
 
+#include <atomic>
+#include <chrono>
+#include <future>
 #include <memory>
 #include <functional>
 
@@ -255,7 +258,13 @@ namespace wz
 		future &operator =(future const &) = delete;
 		//std::shared_future<T> share();
 		R get() { auto &data = *internal; wzSemaphoreWait(data.sem); return std::move(data.ret); }
-		//valid(), wait*();
+		/// Only a zero timeout is supported - anything longer reports timeout without waiting.
+		template <typename Rep, typename Period>
+		std::future_status wait_for(std::chrono::duration<Rep, Period> const &) const
+		{
+			return internal->done.load(std::memory_order_acquire) ? std::future_status::ready : std::future_status::timeout;
+		}
+		//valid(), wait();
 
 		struct Internal  // Should really be a promise.
 		{
@@ -263,6 +272,7 @@ namespace wz
 			~Internal() { wzSemaphoreDestroy(sem); }
 			R ret;
 			WZ_SEMAPHORE *sem;
+			std::atomic<bool> done{false};
 		};
 
 		std::shared_ptr<Internal> internal;
@@ -282,7 +292,7 @@ namespace wz
 		packaged_task(packaged_task const &) = delete;
 
 		future<R> get_future() { future<R> future; future.internal = internal; return std::move(future); }
-		void operator ()(A &&... args) { auto &data = *internal; data.ret = function(std::forward<A>(args)...); wzSemaphorePost(data.sem); }
+		void operator ()(A &&... args) { auto &data = *internal; data.ret = function(std::forward<A>(args)...); data.done.store(true, std::memory_order_release); wzSemaphorePost(data.sem); }
 
 	private:
 		std::function<R (A...)> function;

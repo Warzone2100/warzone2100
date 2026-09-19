@@ -36,6 +36,7 @@
 #include "miscimd.h"
 #include "profiling.h"
 #include "droid.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 
@@ -387,7 +388,10 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 void bucketRenderCurrentList(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	WZ_PROFILE_SCOPE(bucketRenderCurrentList);
-	std::sort(bucketArray.begin(), bucketArray.end());
+	{
+		WZ_PERF_SCOPE(T_bucketSort);
+		std::sort(bucketArray.begin(), bucketArray.end());
+	}
 
 	for (auto thisTag = bucketArray.cbegin(); thisTag != bucketArray.cend(); ++thisTag)
 	{

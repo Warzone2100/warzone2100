@@ -29,6 +29,7 @@ endif()
 
 # Dev options
 OPTION(WZ_PROFILING_NVTX "Add NVTX-based profiling instrumentation to the code" OFF)
+OPTION(WZ_PERF_COUNTERS "Compile in the per-tick performance counters used by --perfcounters" OFF)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
 	# Only supported on Windows, macOS, and Linux - requires additional configuration, so off by default

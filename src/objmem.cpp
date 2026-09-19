@@ -46,6 +46,7 @@
 #include "wzcrashhandlingproviders.h"
 #include "world_object_state.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 
@@ -247,6 +248,7 @@ static bool _checkDroidReferences(BASE_OBJECT *psVictim, const DroidList& psPlay
 
 static bool checkReferences(BASE_OBJECT *psVictim)
 {
+	WZ_PERF_SCOPE(T_checkReferences);
 	for (unsigned plr = 0; plr < MAX_PLAYERS; ++plr)
 	{
 		if (!checkPlrStructReferences(psVictim, gameWorld.objects.structures)) { return false; }
@@ -323,6 +325,7 @@ bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 /* General housekeeping for the object system */
 void objmemUpdate()
 {
+	WZ_PERF_SCOPE(T_objmemUpdate);
 #ifdef DEBUG
 	// do a general validity check first
 	objListIntegCheck();

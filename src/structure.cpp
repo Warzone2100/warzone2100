@@ -85,6 +85,7 @@
 #include "keybind.h"
 
 #include "random.h"
+#include "perfcounters.h"
 #include <functional>
 #include <unordered_map>
 
@@ -3850,6 +3851,7 @@ int gateCurrentOpenHeight(const STRUCTURE *psStructure, uint32_t time, int minim
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 {
+	WZ_PERF_SCOPE(T_structureUpdate);
 	UDWORD widthScatter, breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;

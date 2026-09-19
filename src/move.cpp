@@ -63,6 +63,7 @@
 #include "steering/collision_avoidance_behavior.h"
 #include "combat.h"
 #include "movebench.h"
+#include "perfcounters.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -765,6 +766,7 @@ SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 // see if a Droid has run over a person
 static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 {
+	WZ_PERF_SCOPE(T_moveCheckSquished);
 	int32_t		rad, radSq, objR, xdiff, ydiff, distSq;
 	const int32_t	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 	const int32_t   mx = gameTimeAdjustedAverage(emx, EXTRA_PRECISION);
@@ -1300,6 +1302,7 @@ static bool moveSoftPass(const DROID *self, const DROID *other)
 // Only consider stationery droids
 static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 {
+	WZ_PERF_SCOPE(T_moveCalcDroidSlide);
 	int32_t		droidR, rad, radSq, objR, xdiff, ydiff, distSq, spmx, spmy;
 	bool            bLegs;
 	ASSERT_OR_RETURN(, psDroid != nullptr, "Bad droid");
@@ -2432,6 +2435,7 @@ static void checkLocalFeatures(DROID *psDroid)
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
 {
+	WZ_PERF_SCOPE(T_moveUpdateDroid);
 	UDWORD				oldx, oldy;
 	UBYTE				oldStatus = psDroid->sMove.Status;
 	SDWORD				moveSpeed;

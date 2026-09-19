@@ -53,6 +53,7 @@ bool	proj_Shutdown();	///< Shut down projectile subsystem.
 
 PROJECTILE *proj_GetFirst();	///< Get first projectile in the list.
 PROJECTILE *proj_GetNext();		///< Get next projectile in the list.
+size_t	proj_Count();		///< Number of projectiles currently in flight.
 
 void proj_AddActiveProjectile(PROJECTILE* p); ///< Add allocated projectile `p` to the list of active projectiles
 

@@ -38,6 +38,7 @@
 #include "map.h"
 #include "move.h"
 #include "pathfinding_backend.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 #include <array>
@@ -1344,6 +1345,7 @@ static void corridorFlowCompute(const GameWorld &world, CorridorFlowState &flow,
 
 void corridorGateUpdate(GameWorld &world)
 {
+	WZ_PERF_SCOPE(T_corridorGateUpdate);
 	CorridorFlowWorld &wf = world.corridorFlow;
 	const CorridorMap *cmap = world.map.corridors.get();
 	if (!pathfindingCorridorLanesEnabled() || cmap == nullptr)

@@ -31,6 +31,7 @@
 #include "mapgrid.h"
 #include "pointtree.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 
 static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
@@ -127,6 +128,8 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 template<class Condition>
 static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
+	WZ_PERF_SCOPE(T_gridQuery);
+	WZ_PERF_COUNT(C_gridQueries, 1);
 	if (filter == nullptr)
 	{
 		gridPointTree->query(x, y, radius);
@@ -160,12 +163,15 @@ static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t r
 	{
 		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
 	}
+	WZ_PERF_COUNT(C_gridResultsReturned, gridList.size());
 	return gridList;
 }
 
 template<class Condition>
 static GridList const &gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
 {
+	WZ_PERF_SCOPE(T_gridQuery);
+	WZ_PERF_COUNT(C_gridQueries, 1);
 	gridPointTree->query(x, y, x2, y2);
 
 	static GridList gridList;
@@ -174,6 +180,7 @@ static GridList const &gridStartIterateFilteredArea(int32_t x, int32_t y, int32_
 	{
 		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
 	}
+	WZ_PERF_COUNT(C_gridResultsReturned, gridList.size());
 	return gridList;
 }
 

@@ -30,6 +30,8 @@
 #include "lib/framework/wzapp.h"
 #include "lib/gamelib/gtime.h"
 
+#include "perfcounters.h"
+
 #include "droid.h"
 #include "game_world.h"
 #include "map.h"
@@ -648,6 +650,7 @@ void movementBenchUpdate()
 	writeScorecard(completed);
 	if (!watching)
 	{
+		perf::close();
 		wzQuit(0);
 	}
 	// When watching, the scorecard is written at the budget and the game is
