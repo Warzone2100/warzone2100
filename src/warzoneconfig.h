@@ -276,6 +276,17 @@ void war_setSsaoMode(SSAO_MODE mode);
 /// True when SSAO is not Off.
 bool war_getSSAO();
 
+enum class SSR_MODE : uint8_t
+{
+	OFF,
+	LOW,
+	NORMAL,
+	HIGH,
+	ULTRA,
+};
+SSR_MODE war_getSsrMode();
+void war_setSsrMode(SSR_MODE mode);
+
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
 uint8_t war_getOptionsButtonVisibility();

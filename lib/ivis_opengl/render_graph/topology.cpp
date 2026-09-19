@@ -45,6 +45,7 @@ uint64_t RenderTopologySnapshot::topologyHash() const
 		swapchainMsaa ? 1u : 0u,
 		static_cast<std::size_t>(sceneBlitColorLoad),
 		sceneEffects.ssao ? 1u : 0u,
+		sceneEffects.ssr ? 1u : 0u,
 		sceneEffects.fog ? 1u : 0u,
 		sceneEffects.rangeRings ? 1u : 0u);
 	return static_cast<uint64_t>(h);
@@ -60,8 +61,10 @@ uint64_t RenderTopologySnapshot::materializeHash() const
 		sceneW,
 		sceneH,
 		shadowMapSize,
-		sceneEffects.ssaoGenerateDivisor,
-		sceneEffects.ssaoBlurDivisor);
+		sceneEffects.ssaoResolution.generateDivisor,
+		sceneEffects.ssaoResolution.blurDivisor,
+		sceneEffects.ssrResolution.generateDivisor,
+		sceneEffects.ssrResolution.blurDivisor);
 	return static_cast<uint64_t>(h);
 }
 
@@ -139,13 +142,17 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 	snapshot.sceneH = sceneColor.second;
 
 	snapshot.sceneEffects = query.sceneEffectSurfaces();
-	if (snapshot.screenKind == RenderScreenKind::InGame
-		&& snapshot.sceneEffects.ssao
-		&& ssaoBlurIsCoarser(snapshot.sceneW, snapshot.sceneH,
-			snapshot.sceneEffects.ssaoGenerateDivisor, snapshot.sceneEffects.ssaoBlurDivisor))
-	{
-		snapshot.features |= RenderFeatures::SSAODownsample;
-	}
+	auto deriveDownsample = [&](ScenePostEffectId effect, uint32_t feature) {
+		if (snapshot.screenKind == RenderScreenKind::InGame
+			&& snapshot.sceneEffects.enabled(effect)
+			&& blurIsCoarser(snapshot.sceneW, snapshot.sceneH,
+				snapshot.sceneEffects.blurResolution(effect)))
+		{
+			snapshot.features |= feature;
+		}
+	};
+	deriveDownsample(ScenePostEffectId::Ssao, RenderFeatures::SSAODownsample);
+	deriveDownsample(ScenePostEffectId::Ssr, RenderFeatures::SSRDownsample);
 
 	return snapshot;
 }

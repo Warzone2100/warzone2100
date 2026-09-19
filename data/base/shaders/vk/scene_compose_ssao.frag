@@ -22,6 +22,7 @@ void main()
 	vec2 aoUv = clamp(texCoords * aoUvScaleClamp.xy, vec2(0.0), aoUvScaleClamp.zw);
 	vec3 scene = texture(sceneTexture, sceneUv).rgb;
 	float ao = texture(ssaoTexture, aoUv).r;
+	// A is SSAO weight (1 = apply). Water prepass writes 0, so lakes get no AO.
 	float weight = texture(prepassNormals, sceneUv).a;
 	vec3 litAo = scene * mix(1.0, ao, ssaoIntensity * weight);
 	FragColor = vec4(litAo, 1.0);

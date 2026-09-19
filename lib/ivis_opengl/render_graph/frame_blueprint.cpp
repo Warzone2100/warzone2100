@@ -184,7 +184,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		}
 		if (effect.emitPreparePasses)
 		{
-			effect.emitPreparePasses(builder, snapshot);
+			effect.emitPreparePasses(builder, snapshot, incomingColor);
 		}
 		if (effect.applyPass != PassId::Count)
 		{

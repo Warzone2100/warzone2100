@@ -36,6 +36,7 @@ namespace gfx_api
 enum class ScenePostEffectId : uint8_t
 {
 	Ssao,
+	Ssr,
 	Fog,
 	RangeRings,
 	Count
@@ -63,16 +64,5 @@ constexpr bool hasFlag(PrepassNeed value, PrepassNeed flag)
 {
 	return (static_cast<uint8_t>(value) & static_cast<uint8_t>(flag)) != 0u;
 }
-
-/// What the apply pass samples. List index is the shader binding index.
-enum class ApplyInput : uint8_t
-{
-	/// ScenePass color, or the previous effect's apply output.
-	IncomingColor,
-	PrepassDepth,
-	PrepassNormals,
-	/// Primary color of `ScenePostEffectDesc::preparedColorPass` (blurred AO, packed SDF).
-	PreparedOutput,
-};
 
 } // namespace gfx_api
