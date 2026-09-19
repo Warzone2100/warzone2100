@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,11 +42,13 @@
 #include "lib/sound/cdaudio.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/paneltabbutton.h"
+#include "lib/netplay/netplay.h"
 
 #include "game.h"
-#include "challenge.h"
 #include "projectile.h"
 #include "power.h"
+#include "lib/framework/resource_loading_controller.h"
 #include "structure.h"
 #include "message.h"
 #include "research.h"
@@ -59,8 +63,12 @@
 #include "group.h"
 #include "frontend.h"		// for displaytextoption.
 #include "intdisplay.h"
+#include "multimenu.h"		// for WzMultiMenuTabs.
+#include "playerstatsgraph.h"
+#include "researchlogviewer.h"
 #include "main.h"
 #include "display.h"
+#include "pathfinding_backend.h"
 #include "loadsave.h"
 #include "cmddroid.h"
 #include "warcam.h"
@@ -85,12 +93,16 @@
 #include "game_world.h"
 #include "wzapi.h"
 #include "screens/guidescreen.h"
+#include "lib/framework/loading_task.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
 #define		IDMISSIONRES_CONTINUE		11008
 #define		IDMISSIONRES_BACKFORM		11013
 #define		IDMISSIONRES_TITLE		11014
+#define		IDMISSIONRES_TABS		11015
+#define		IDMISSIONRES_STATSFORM		11016
+#define		IDMISSIONRES_RESEARCHFORM	11017
 
 /* Mission timer label position */
 #define		TIMER_LABELX			15
@@ -152,12 +164,12 @@ static UBYTE   bPlayCountDown;
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
 static void resetHomeStructureObjects();
-static bool startMissionOffClear(const GameLoadDetails& gameToLoad);
-static bool startMissionOffKeep(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignStart(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignChange(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
 static bool startMissionBetween();
 static void endMissionCamChange();
 static void endMissionOffClear();
@@ -285,6 +297,7 @@ void initMission()
 	mission.gameWorld.objects.oils[0].clear();
 	offWorldKeepLists = false;
 	mission.time = -1;
+	mission.timerMode = TIMER_NONE;
 	setMissionCountDown();
 
 	mission.ETA = -1;
@@ -300,22 +313,20 @@ void initMission()
 	{
 		i.reset();
 	}
+	mission.gameWorld.corridorFlow = {};
 
 	//init all the landing zones
 	initNoGoAreas();
 
 	bDroidsToSafety = false;
 	setPlayCountDown(true);
-
-	//start as not cheating!
-	mission.cheatTime = 0;
 }
 
 //this is called everytime the game is quit
 void releaseMission()
 {
 	/* mission.apsDroidLists may contain some droids that have been transferred from one campaign to the next */
-	freeAllMissionDroids();
+	freeAllDroids(mission.gameWorld);
 
 	/* apsLimboDroids may contain some droids that have been saved at the end of one mission and not yet used */
 	freeAllLimboDroids();
@@ -330,43 +341,19 @@ bool missionShutDown()
 		//clear out the audio
 		audio_StopAll();
 
-		freeAllDroids();
-		freeAllStructs();
-		freeAllFeatures();
-		freeAllFlagPositions();
+		freeAllDroids(gameWorld);
+		freeAllStructs(gameWorld);
+		freeAllFeatures(gameWorld);
+		freeAllFlagPositions(gameWorld.objects);
 		releaseAllProxDisp();
-		gwShutDown();
+		gwShutDown(gameWorld.map);
 
-		for (int inc = 0; inc < MAX_PLAYERS; inc++)
-		{
-			gameWorld.objects.droids[inc] = std::move(mission.gameWorld.objects.droids[inc]);
-			mission.gameWorld.objects.droids[inc].clear();
-			gameWorld.objects.structures[inc] = std::move(mission.gameWorld.objects.structures[inc]);
-			mission.gameWorld.objects.structures[inc].clear();
-			gameWorld.objects.flags[inc] = std::move(mission.gameWorld.objects.flags[inc]);
-			mission.gameWorld.objects.flags[inc].clear();
-			gameWorld.objects.extractors[inc] = std::move(mission.gameWorld.objects.extractors[inc]);
-			mission.gameWorld.objects.extractors[inc].clear();
-		}
-		gameWorld.objects.features[0] = std::move(mission.gameWorld.objects.features[0]);
-		gameWorld.objects.sensors[0] = std::move(mission.gameWorld.objects.sensors[0]);
-		gameWorld.objects.oils[0] = std::move(mission.gameWorld.objects.oils[0]);
-		mission.gameWorld.objects.features[0].clear();
-		mission.gameWorld.objects.sensors[0].clear();
-		mission.gameWorld.objects.oils[0].clear();
-
-		gameWorld.map.tiles = std::move(mission.gameWorld.map.tiles);
-		gameWorld.map.width = mission.gameWorld.map.width;
-		gameWorld.map.height = mission.gameWorld.map.height;
-		for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
-		{
-			gameWorld.map.blockMap[i] = std::move(mission.gameWorld.map.blockMap[i]);
-		}
-		for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
-		{
-			gameWorld.map.auxMap[i] = std::move(mission.gameWorld.map.auxMap[i]);
-		}
-		std::swap(mission.gameWorld.map.gateways, gwGetGateways());
+		// freeAll*() above flushed gameWorld's pending visibility removals
+		// nothing should be left to strand when this world is overwritten by the swap
+		ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
+		fpathActiveBackend().waitForIdle();
+		gameWorld = std::move(mission.gameWorld);
+		mission.gameWorld = {};
 	}
 	keybindShutdown();
 	// sorry if this breaks something - but it looks like it's what should happen - John
@@ -376,16 +363,77 @@ bool missionShutDown()
 }
 
 
+// returns the current mode-aware mission timer value in game ticks
+// - the time elapsed for a count-up timer
+// - the frozen time for a paused timer
+// - the time remaining (clamped to >= 0) for a countdown timer
+// - or 0 if there is no timer
+SDWORD missionTimeRemaining()
+{
+	switch (mission.timerMode)
+	{
+	case TIMER_COUNTUP:
+		return (SDWORD)(gameTime - mission.startTime);
+	case TIMER_PAUSE:
+		return mission.time;
+	case TIMER_NONE:
+		return 0;
+	case TIMER_COUNTDOWN:
+	default:
+		return MAX(mission.time - (SDWORD)(gameTime - mission.startTime), 0);
+	}
+}
+
+// whether a mission timer currently exists (in any mode)
+bool missionTimerActive()
+{
+	return mission.timerMode != TIMER_NONE;
+}
+
+// derive timerMode for a save written before it existed - see mission.h
+void missionTimerRestoreFromLegacySave(bool wasChallenge, UDWORD legacyCheatTime)
+{
+	// older saves did not store the timer mode - challenges used a count-up (elapsed time) display,
+	// and "no timer" was encoded as a countdown with a negative time value
+	if (wasChallenge)
+	{
+		mission.timerMode = TIMER_COUNTUP;
+	}
+	else
+	{
+		mission.timerMode = (mission.time < 0) ? TIMER_NONE : TIMER_COUNTDOWN;
+	}
+
+	// old saves stored the 'time toggle' cheat as a separate frozen clock
+	// convert it into a paused timer holding the value that was frozen on screen
+	if (legacyCheatTime != 0)
+	{
+		// the cheat froze the clock by treating the cheat time as "now", so the
+		// frozen value is whatever the timer displayed at that instant
+		const SDWORD elapsedAtFreeze = (SDWORD)(legacyCheatTime - mission.startTime);
+		switch (mission.timerMode)
+		{
+		case TIMER_COUNTDOWN:
+			mission.time = MAX(mission.time - elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		case TIMER_COUNTUP:
+			mission.time = MAX(elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		default:
+			// TIMER_NONE: nothing to convert
+			break;
+		}
+	}
+}
+
 /*on the PC - sets the countdown played flag*/
 void setMissionCountDown()
 {
 	SDWORD		timeRemaining;
 
-	timeRemaining = mission.time - (gameTime - mission.startTime);
-	if (timeRemaining < 0)
-	{
-		timeRemaining = 0;
-	}
+	timeRemaining = missionTimeRemaining();
 
 	// Need to init the countdown played each time the mission time is changed
 	missionCountDown = NOT_PLAYED_ONE | NOT_PLAYED_TWO | NOT_PLAYED_THREE | NOT_PLAYED_FIVE | NOT_PLAYED_TEN | NOT_PLAYED_ACTIVATED;
@@ -412,8 +460,18 @@ void setMissionCountDown()
 	}
 }
 
+UBYTE getMissionCountDown()
+{
+	return missionCountDown;
+}
 
-bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
+void setMissionCountDownValue(UBYTE value)
+{
+	missionCountDown = value;
+}
+
+
+LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, GameLoadDetails gameDetails)
 {
 	bool	loaded = true;
 
@@ -434,7 +492,7 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 		/*mission type gets set to none when you have returned from a mission
 		so don't want to go another mission when already on one! - so ignore*/
 		debug(LOG_SAVE, "Already on a mission");
-		return true;
+		co_return load_ok();
 	}
 
 	initEffectsSystem();
@@ -442,7 +500,10 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 	//load the game file for all types of mission except a Between Mission
 	if (missionType != LEVEL_TYPE::LDS_BETWEEN)
 	{
-		loadGameInit(gameDetails);
+		if (!(co_await loadGameInit(controller, gameDetails)))
+		{
+			co_return load_fail();
+		}
 	}
 
 	//all proximity messages are removed between missions now
@@ -451,14 +512,14 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 	switch (missionType)
 	{
 	case LEVEL_TYPE::LDS_CAMSTART:
-		if (!startMissionCampaignStart(gameDetails))
+		if (!(co_await startMissionCampaignStart(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MKEEP:
 	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
-		if (!startMissionOffKeep(gameDetails))
+		if (!(co_await startMissionOffKeep(controller, gameDetails)))
 		{
 			loaded = false;
 		}
@@ -471,25 +532,25 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 		}
 		break;
 	case LEVEL_TYPE::LDS_CAMCHANGE:
-		if (!startMissionCampaignChange(gameDetails))
+		if (!(co_await startMissionCampaignChange(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND:
-		if (!startMissionCampaignExpand(gameDetails))
+		if (!(co_await startMissionCampaignExpand(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
-		if (!startMissionCampaignExpandLimbo(gameDetails))
+		if (!(co_await startMissionCampaignExpandLimbo(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MCLEAR:
-		if (!startMissionOffClear(gameDetails))
+		if (!(co_await startMissionOffClear(controller, gameDetails)))
 		{
 			loaded = false;
 		}
@@ -504,7 +565,7 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 	if (!loaded)
 	{
 		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, gameDetails.filePath.c_str());
-		return false;
+		co_return load_fail();
 	}
 
 	mission.type = missionType;
@@ -526,7 +587,7 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 
 	scoreInitSystem();
 
-	return true;
+	co_return load_ok();
 }
 
 
@@ -544,7 +605,7 @@ the display*/
 void addMissionTimerInterface()
 {
 	//don't add if the timer hasn't been set
-	if (mission.time < 0 && !challengeActive)
+	if (!missionTimerActive())
 	{
 		return;
 	}
@@ -660,7 +721,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 				if ((bTrackTransporter == true) && (iPlayer == (SDWORD)selectedPlayer))
 				{
 					/* deselect all droids */
-					selDroidDeselect(selectedPlayer);
+					selDroidDeselect(gameWorld.objects, selectedPlayer);
 
 					if (getWarCamStatus())
 					{
@@ -714,7 +775,7 @@ static void saveMissionData()
 					&& psStructBeingBuilt == psStruct)
 				{
 					// just give it all its build points
-					structureBuild(psStruct, nullptr, structureBuildPointsToCompletion(*psStruct));
+					structureBuild(gameWorld, psStruct, nullptr, structureBuildPointsToCompletion(*psStruct));
 					//don't bother looking for any other droids working on it
 					break;
 				}
@@ -773,36 +834,18 @@ static void saveMissionData()
 	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
-	mission.gameWorld.map.tiles = std::move(gameWorld.map.tiles);
-	mission.gameWorld.map.width = gameWorld.map.width;
-	mission.gameWorld.map.height = gameWorld.map.height;
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
-	{
-		mission.gameWorld.map.blockMap[i] = std::move(gameWorld.map.blockMap[i]);
-	}
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
-	{
-		mission.gameWorld.map.auxMap[i] = std::move(gameWorld.map.auxMap[i]);
-	}
-	mission.gameWorld.map.scroll.minX = gameWorld.map.scroll.minX;
-	mission.gameWorld.map.scroll.minY = gameWorld.map.scroll.minY;
-	mission.gameWorld.map.scroll.maxX = gameWorld.map.scroll.maxX;
-	mission.gameWorld.map.scroll.maxY = gameWorld.map.scroll.maxY;
-	std::swap(mission.gameWorld.map.gateways, gwGetGateways());
+	// NOTE:
+	// - gameWorld's queue is preserved by the move into mission.gameWorld, but the (stale)
+	//   mission.gameWorld being overwritten must have its own queue flushed first so nothing is
+	//   stranded
+	flushPendingVisRemoval(mission.gameWorld);
+	fpathActiveBackend().waitForIdle();
+	mission.gameWorld = std::move(gameWorld);
+	gameWorld = {};
+
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
-
-	for (unsigned int inc = 0; inc < MAX_PLAYERS; ++inc)
-	{
-		mission.gameWorld.objects.structures[inc] = gameWorld.objects.structures[inc];
-		mission.gameWorld.objects.droids[inc] = gameWorld.objects.droids[inc];
-		mission.gameWorld.objects.flags[inc] = gameWorld.objects.flags[inc];
-		mission.gameWorld.objects.extractors[inc] = gameWorld.objects.extractors[inc];
-	}
-	mission.gameWorld.objects.features[0] = gameWorld.objects.features[0];
-	mission.gameWorld.objects.sensors[0] = gameWorld.objects.sensors[0];
-	mission.gameWorld.objects.oils[0] = gameWorld.objects.oils[0];
 
 	mission.playerX = playerPos.p.x;
 	mission.playerY = playerPos.p.z;
@@ -816,15 +859,13 @@ static void saveMissionData()
 	//clear all the effects from the map
 	initEffectsSystem();
 
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 }
 
 /*
 	This routine frees the memory for the offworld mission map (in the call to mapShutdown)
 
 	- so when this routine is called we must still be set to the offworld map data
-	i.e. We shoudn't have called SwapMissionPointers()
-
 */
 void restoreMissionData()
 {
@@ -837,79 +878,41 @@ void restoreMissionData()
 
 	//clear all the lists
 	proj_FreeAllProjectiles();
-	freeAllDroids();
-	freeAllStructs();
-	freeAllFeatures();
-	freeAllFlagPositions();
-	gwShutDown();
+	freeAllDroids(gameWorld);
+	freeAllStructs(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
+	gwShutDown(gameWorld.map);
 	if (game.type != LEVEL_TYPE::CAMPAIGN)
 	{
 		ASSERT(false, "game type isn't campaign, but we are in a campaign game!");
 		game.type = LEVEL_TYPE::CAMPAIGN;	// fix the issue, since it is obviously a bug
 	}
-	//restore the game pointers
+	//restore the game pointers.
+	//swap mission data over
+	// freeAllXXX above flushed gameWorld's pending visibility removals; nothing should be
+	// left to strand when this world is overwritten by the swap.
+	ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
+	fpathActiveBackend().waitForIdle();
+	gameWorld = std::move(mission.gameWorld);
+	mission.gameWorld = {};
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		gameWorld.objects.droids[inc] = std::move(mission.gameWorld.objects.droids[inc]);
-		mission.gameWorld.objects.droids[inc].clear();
 		for (DROID* psObj : gameWorld.objects.droids[inc])
 		{
 			psObj->died = false;	//make sure the died flag is not set
 		}
-
-		gameWorld.objects.structures[inc] = std::move(mission.gameWorld.objects.structures[inc]);
-		mission.gameWorld.objects.structures[inc].clear();
-
-		gameWorld.objects.flags[inc] = std::move(mission.gameWorld.objects.flags[inc]);
-		mission.gameWorld.objects.flags[inc].clear();
-
-		gameWorld.objects.extractors[inc] = std::move(mission.gameWorld.objects.extractors[inc]);
-		mission.gameWorld.objects.extractors[inc].clear();
 	}
-	gameWorld.objects.features[0] = std::move(mission.gameWorld.objects.features[0]);
-	gameWorld.objects.sensors[0] = std::move(mission.gameWorld.objects.sensors[0]);
-	gameWorld.objects.oils[0] = std::move(mission.gameWorld.objects.oils[0]);
-	mission.gameWorld.objects.features[0].clear();
-	mission.gameWorld.objects.sensors[0].clear();
-	mission.gameWorld.objects.oils[0].clear();
-	//swap mission data over
-
-	gameWorld.map.tiles = std::move(mission.gameWorld.map.tiles);
-
-	gameWorld.map.width = mission.gameWorld.map.width;
-	gameWorld.map.height = mission.gameWorld.map.height;
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
-	{
-		gameWorld.map.blockMap[i] = std::move(mission.gameWorld.map.blockMap[i]);
-	}
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
-	{
-		gameWorld.map.auxMap[i] = std::move(mission.gameWorld.map.auxMap[i]);
-	}
-	gameWorld.map.scroll.minX = mission.gameWorld.map.scroll.minX;
-	gameWorld.map.scroll.minY = mission.gameWorld.map.scroll.minY;
-	gameWorld.map.scroll.maxX = mission.gameWorld.map.scroll.maxX;
-	gameWorld.map.scroll.maxY = mission.gameWorld.map.scroll.maxY;
-	std::swap(mission.gameWorld.map.gateways, gwGetGateways());
-	//and clear the mission pointers
-	mission.gameWorld.map.tiles	= nullptr;
-	mission.gameWorld.map.width	= 0;
-	mission.gameWorld.map.height	= 0;
-	mission.gameWorld.map.scroll.minX	= 0;
-	mission.gameWorld.map.scroll.minY	= 0;
-	mission.gameWorld.map.scroll.maxX	= 0;
-	mission.gameWorld.map.scroll.maxY	= 0;
-	mission.gameWorld.map.gateways.clear();
 
 	//reset the current structure lists
-	setCurrentStructQuantity(false);
+	setCurrentStructQuantity(gameWorld.objects, false);
 
 	initFactoryNumFlag();
-	resetFactoryNumFlag();
+	resetFactoryNumFlag(gameWorld.objects);
 
 	offWorldKeepLists = false;
 
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 }
 
 /*Saves the necessary data when moving from one mission to a limbo expand Mission*/
@@ -974,13 +977,13 @@ void placeLimboDroids()
 			//KILL OFF TRANSPORTER - should never be one but....
 			if (psDroid->isTransporter())
 			{
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 				return IterationResult::CONTINUE_ITERATION;
 			}
 			//set up location for each of the droids
 			droidX = map_coord(getLandingX(LIMBO_LANDING));
 			droidY = map_coord(getLandingY(LIMBO_LANDING));
-			pickRes = pickHalfATile(&droidX, &droidY, LOOK_FOR_EMPTY_TILE);
+			pickRes = pickHalfATile(gameWorld, &droidX, &droidY, LOOK_FOR_EMPTY_TILE);
 			if (pickRes == NO_FREE_TILE)
 			{
 				ASSERT(false, "placeLimboUnits: Unable to find a free location");
@@ -989,7 +992,7 @@ void placeLimboDroids()
 			psDroid->pos.y = (UWORD)world_coord(droidY);
 			ASSERT(worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y), "limbo droid is not on the map");
 			psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
-			updateDroidOrientation(psDroid);
+			updateDroidOrientation(psDroid, gameWorld.map);
 			psDroid->selected = false;
 			//this is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
@@ -998,7 +1001,7 @@ void placeLimboDroids()
 			//make sure the died flag is not set
 			psDroid->died = false;
 			//update visibility
-			visTilesUpdate(psDroid);
+			visTilesUpdate(psDroid, gameWorld.map);
 		}
 		else
 		{
@@ -1028,7 +1031,7 @@ void restoreMissionLimboData()
 			//the location of the droid should be valid!
 			if (psDroid->pos.x != INVALID_XY && psDroid->pos.y != INVALID_XY)
 			{
-				visTilesUpdate(psDroid); //update visibility
+				visTilesUpdate(psDroid, gameWorld.map); //update visibility
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
@@ -1140,7 +1143,7 @@ void saveCampaignData()
 	{
 		mutating_list_iterate(gameWorld.objects.droids[inc], [](DROID* d)
 		{
-			vanishDroid(d);
+			vanishDroid(d, gameWorld.objects);
 			return IterationResult::CONTINUE_ITERATION;
 		});
 	}
@@ -1149,22 +1152,22 @@ void saveCampaignData()
 	audio_StopAll();
 
 	//clear all other memory
-	freeAllStructs();
-	freeAllFeatures();
+	freeAllStructs(gameWorld);
+	freeAllFeatures(gameWorld);
 }
 
 
 //start an off world mission - clearing the object lists
-bool startMissionOffClear(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
@@ -1172,19 +1175,19 @@ bool startMissionOffClear(const GameLoadDetails& gameToLoad)
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
 
-	return true;
+	co_return load_ok();
 }
 
 //start an off world mission - keeping the object lists
-bool startMissionOffKeep(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = true;
@@ -1192,10 +1195,10 @@ bool startMissionOffKeep(const GameLoadDetails& gameToLoad)
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
 
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignStart(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
@@ -1206,17 +1209,17 @@ bool startMissionCampaignStart(const GameLoadDetails& gameToLoad)
 	clearCampaignUnits();
 
 	// Load in the new game details
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
 
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignChange(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1233,41 +1236,41 @@ bool startMissionCampaignChange(const GameLoadDetails& gameToLoad)
 	saveCampaignData();
 
 	//load in the new game details
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
 
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	//load in the new game details
-	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	saveMissionLimboData();
 
 	//load in the new game details
-	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
 
-	return true;
+	co_return load_ok();
 }
 
 static bool startMissionBetween()
@@ -1304,7 +1307,7 @@ static void processMission()
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		// clean up visibility
-		visRemoveVisibility((BASE_OBJECT*)psDroid);
+		visRemoveVisibility((BASE_OBJECT*)psDroid, gameWorld.map);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, gameWorld.objects.droids))
 		{
@@ -1313,18 +1316,15 @@ static void processMission()
 			addDroid(psDroid, mission.gameWorld.objects.droids);
 			droidX = getHomeLandingX();
 			droidY = getHomeLandingY();
-			// Swap the droid and map pointers
-			swapMissionPointers();
 
-			pickRes = pickHalfATile(&droidX, &droidY, LOOK_FOR_EMPTY_TILE);
+			pickRes = pickHalfATile(mission.gameWorld, &droidX, &droidY, LOOK_FOR_EMPTY_TILE);
 			ASSERT(pickRes != NO_FREE_TILE, "processMission: Unable to find a free location");
 			x = (UWORD)world_coord(droidX);
 			y = (UWORD)world_coord(droidY);
-			droidSetPosition(psDroid, x, y);
-			ASSERT(worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
-			updateDroidOrientation(psDroid);
-			// Swap the droid and map pointers back again
-			swapMissionPointers();
+			droidSetPosition(psDroid, mission.gameWorld.map, x, y);
+			ASSERT(worldOnMap(mission.gameWorld.map, psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
+			updateDroidOrientation(psDroid, mission.gameWorld.map);
+
 			psDroid->selected = false;
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
@@ -1349,13 +1349,13 @@ void processMissionLimbo()
 		//KILL OFF TRANSPORTER - should never be one but....
 		if (psDroid->isTransporter())
 		{
-			vanishDroid(psDroid);
+			vanishDroid(psDroid, gameWorld.objects);
 		}
 		else
 		{
 			if (numDroidsAddedToLimboList >= MAXLIMBODROIDS)		// any room in limbo list
 			{
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 			}
 			else
 			{
@@ -1375,43 +1375,6 @@ void processMissionLimbo()
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
-}
-
-/*switch the pointers for the map and droid lists so that droid placement
- and orientation can occur on the map they will appear on*/
-// NOTE: This is one huge hack for campaign games!
-// Pay special attention on what is getting swapped!
-void swapMissionPointers()
-{
-	debug(LOG_SAVE, "called");
-
-	std::swap(gameWorld.map.tiles, mission.gameWorld.map.tiles);
-	std::swap(gameWorld.map.width,   mission.gameWorld.map.width);
-	std::swap(gameWorld.map.height,  mission.gameWorld.map.height);
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
-	{
-		std::swap(gameWorld.map.blockMap[i], mission.gameWorld.map.blockMap[i]);
-	}
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
-	{
-		std::swap(gameWorld.map.auxMap[i],   mission.gameWorld.map.auxMap[i]);
-	}
-	//swap gateway zones
-	std::swap(mission.gameWorld.map.gateways, gwGetGateways());
-	std::swap(gameWorld.map.scroll.minX, mission.gameWorld.map.scroll.minX);
-	std::swap(gameWorld.map.scroll.minY, mission.gameWorld.map.scroll.minY);
-	std::swap(gameWorld.map.scroll.maxX, mission.gameWorld.map.scroll.maxX);
-	std::swap(gameWorld.map.scroll.maxY, mission.gameWorld.map.scroll.maxY);
-	for (unsigned inc = 0; inc < MAX_PLAYERS; inc++)
-	{
-		std::swap(gameWorld.objects.droids[inc],     mission.gameWorld.objects.droids[inc]);
-		std::swap(gameWorld.objects.structures[inc],    mission.gameWorld.objects.structures[inc]);
-		std::swap(gameWorld.objects.flags[inc],   mission.gameWorld.objects.flags[inc]);
-		std::swap(gameWorld.objects.extractors[inc], mission.gameWorld.objects.extractors[inc]);
-	}
-	std::swap(gameWorld.objects.features[0],   mission.gameWorld.objects.features[0]);
-	std::swap(gameWorld.objects.sensors[0], mission.gameWorld.objects.sensors[0]);
-	std::swap(gameWorld.objects.oils[0],    mission.gameWorld.objects.oils[0]);
 }
 
 void endMission()
@@ -1488,10 +1451,13 @@ void endMission()
 	//at end of mission always do this
 	intRemoveTransporterLaunch();
 
-	//and this...
-	//make sure the cheat time is not set for the next mission
-	mission.cheatTime = 0;
-
+	// NOTE: A running timer deliberately carries over into the next mission (ex: the campaign's "between" levels)
+	// Only clear an expired timer (frozen at zero by missionTimerUpdate) here
+	if (mission.timerMode == TIMER_PAUSE && mission.time <= 0)
+	{
+		mission.time = -1;
+		mission.timerMode = TIMER_NONE;
+	}
 
 	//reset the bSetPlayCountDown flag
 	setPlayCountDown(true);
@@ -1625,14 +1591,14 @@ static void missionResetDroids()
 			//KILL OFF TRANSPORTER
 			if (d->isTransporter())
 			{
-				vanishDroid(d);
+				vanishDroid(d, gameWorld.objects);
 			}
 			else
 			{
 				if (d->pos.x != INVALID_XY && d->pos.y != INVALID_XY)
 				{
 					// update visibility
-					visTilesUpdate(d);
+					visTilesUpdate(d, gameWorld.map);
 				}
 			}
 			return IterationResult::CONTINUE_ITERATION;
@@ -1670,7 +1636,7 @@ static void missionResetDroids()
 					x = map_coord(psStruct->pos.x);
 					y = map_coord(psStruct->pos.y);
 				}
-				pickRes = pickHalfATile(&x, &y, LOOK_FOR_EMPTY_TILE);
+				pickRes = pickHalfATile(gameWorld, &x, &y, LOOK_FOR_EMPTY_TILE);
 				if (pickRes == NO_FREE_TILE)
 				{
 					ASSERT(false, "missionResetUnits: Unable to find a free location");
@@ -1680,7 +1646,7 @@ static void missionResetDroids()
 					int wx = world_coord(x);
 					int wy = world_coord(y);
 
-					droidSetPosition(psDroid, wx, wy);
+					droidSetPosition(psDroid, gameWorld.map, wx, wy);
 					placed = true;
 				}
 			}
@@ -1692,7 +1658,7 @@ static void missionResetDroids()
 					{
 						UDWORD		x = map_coord(psStructure->pos.x);
 						UDWORD		y = map_coord(psStructure->pos.y);
-						PICKTILE	pickRes = pickHalfATile(&x, &y, LOOK_FOR_EMPTY_TILE);
+						PICKTILE	pickRes = pickHalfATile(gameWorld, &x, &y, LOOK_FOR_EMPTY_TILE);
 
 						if (pickRes == NO_FREE_TILE)
 						{
@@ -1703,7 +1669,7 @@ static void missionResetDroids()
 							int wx = world_coord(x);
 							int wy = world_coord(y);
 
-							droidSetPosition(psDroid, wx, wy);
+							droidSetPosition(psDroid, gameWorld.map, wx, wy);
 							placed = true;
 						}
 						break;
@@ -1720,26 +1686,26 @@ static void missionResetDroids()
 					psDroid->pos.y >= world_coord(gameWorld.map.height - EDGE_SIZE))
 				{
 					debug(LOG_ERROR, "missionResetUnits: unit too close to edge of map - removing");
-					vanishDroid(psDroid);
+					vanishDroid(psDroid, gameWorld.objects);
 					return IterationResult::CONTINUE_ITERATION;
 				}
 
 				// People always stand upright
 				if (psDroid->droidType != DROID_PERSON && !psDroid->isCyborg())
 				{
-					updateDroidOrientation(psDroid);
+					updateDroidOrientation(psDroid, gameWorld.map);
 				}
 				// Reset the selected flag
 				psDroid->selected = false;
 
 				// update visibility
-				visTilesUpdate(psDroid);
+				visTilesUpdate(psDroid, gameWorld.map);
 			}
 			else
 			{
 				//can't put it down so get rid of this droid!!
 				ASSERT(false, "missionResetUnits: can't place unit - cancel to continue");
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
@@ -1774,7 +1740,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 			//starting point...based around the value passed in
 			droidX = map_coord(x);
 			droidY = map_coord(y);
-			if (!pickATileGen(&droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
+			if (!pickATileGen(gameWorld, &droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
 				if (!bMultiPlayer)
 				{
@@ -1804,8 +1770,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 			//add it back into current droid lists
 			addDroid(psDroid, *ppCurrentList);
 
-			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
-			updateDroidOrientation(psDroid);
+			droidSetPosition(psDroid, gameWorld.map, world_coord(droidX), world_coord(droidY));
+			updateDroidOrientation(psDroid, gameWorld.map);
 
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
@@ -2088,38 +2054,16 @@ static void fillTimeDisplay(W_LABEL &Label, UDWORD time, bool bHours)
 void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		timeElapsed;
 	SDWORD		timeRemaining;
 
-	// If the cheatTime has been set, then don't want the timer to countdown until stop cheating
-	if (mission.cheatTime)
-	{
-		timeElapsed = mission.cheatTime - mission.startTime;
-	}
-	else
-	{
-		timeElapsed = gameTime - mission.startTime;
-	}
-
-	if (!challengeActive)
-	{
-		timeRemaining = mission.time - timeElapsed;
-		if (timeRemaining < 0)
-		{
-			timeRemaining = 0;
-		}
-	}
-	else
-	{
-		timeRemaining = timeElapsed;
-	}
+	timeRemaining = missionTimeRemaining();
 
 	fillTimeDisplay(*Label, timeRemaining, true);
 	Label->show();  // Make sure its visible
 
-	if (challengeActive)
+	if (mission.timerMode != TIMER_COUNTDOWN)
 	{
-		return;	// all done
+		return;	// all done - flashing and countdown audio only apply to a countdown timer
 	}
 
 	//make timer flash if time remaining < 5 minutes
@@ -2286,13 +2230,23 @@ void intRemoveTransporterTimer()
 
 
 
+// Inner padding of the research log viewer within its form
+constexpr int MISSIONRES_RESEARCH_PADDING = 10;
+
+// The currently-selected mission results screen tab (0 = "Summary", 1 = "Player Stats", 2 = "Research")
+// (any tab but "Summary" suppresses the score data painted onto the backdrop)
+static int missionResSelectedTab = 0;
+
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using intDisplayMissionBackDrop must have its pUserData initialized to a (ScoreDataToScreenCache*)
 	assert(psWidget->pUserData != nullptr);
 	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
 
-	scoreDataToScreen(psWidget, cache);
+	if (missionResSelectedTab == 0)
+	{
+		scoreDataToScreen(psWidget, cache);
+	}
 }
 
 static void missionResetInGameState()
@@ -2319,10 +2273,89 @@ static void intDestroyMissionResultWidgets()
 {
 	widgDelete(psWScreen, IDMISSIONRES_TITLE);
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
+	widgDelete(psWScreen, IDMISSIONRES_TABS);
+	widgDelete(psWScreen, IDMISSIONRES_STATSFORM);
+	widgDelete(psWScreen, IDMISSIONRES_RESEARCHFORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
+	missionResSelectedTab = 0;
 }
 
-static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
+// Add the "Summary" / "Player Stats" / "Research" tabs and the (initially hidden) stats / research forms
+static void intAddMissionResultStats(W_FORM *missionResBackForm)
+{
+	// player stats form, shown when the "Player Stats" tab is selected
+	auto statsForm = std::make_shared<IntFormAnimated>(false);
+	missionResBackForm->attach(statsForm);
+	statsForm->id = IDMISSIONRES_STATSFORM;
+	statsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_STATS_X, MISSIONRES_STATS_Y, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+	}));
+	statsForm->hide();
+
+	auto statsGraphForm = PlayerStatsGraphForm::make();
+	statsForm->attach(statsGraphForm);
+	statsGraphForm->setGeometry(0, 0, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+
+	// research log form, shown when the "Research" tab is selected
+	auto researchForm = std::make_shared<IntFormAnimated>(false);
+	missionResBackForm->attach(researchForm);
+	researchForm->id = IDMISSIONRES_RESEARCHFORM;
+	researchForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_STATS_X, MISSIONRES_STATS_Y, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+	}));
+	researchForm->hide();
+
+	auto researchLogViewer = GameResearchLogViewerWidget::make();
+	researchForm->attach(researchLogViewer);
+	researchLogViewer->setGeometry(MISSIONRES_RESEARCH_PADDING, MISSIONRES_RESEARCH_PADDING,
+	                               MISSIONRES_STATS_W - MISSIONRES_RESEARCH_PADDING * 2, MISSIONRES_STATS_H - MISSIONRES_RESEARCH_PADDING * 2);
+
+	// tabs, above the title form
+	auto tabs = std::make_shared<WzMultiMenuTabs>(0);
+	missionResBackForm->attach(tabs);
+	tabs->id = IDMISSIONRES_TABS;
+	tabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
+	tabs->addButton(0, WzPanelTabButton::make(_("Summary")));
+	tabs->addButton(1, WzPanelTabButton::make(_("Player Stats")));
+	tabs->addButton(2, WzPanelTabButton::make(_("Research")));
+	tabs->choose(0);
+	tabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue) {
+		// Switch actively-displayed tab
+		widgScheduleTask([newValue]() {
+			missionResSelectedTab = newValue;
+			WIDGET *statsForm = widgGetFromID(psWScreen, IDMISSIONRES_STATSFORM);
+			ASSERT_OR_RETURN(, statsForm != nullptr, "No stats form?");
+			statsForm->show(newValue == 1);
+			WIDGET *researchForm = widgGetFromID(psWScreen, IDMISSIONRES_RESEARCHFORM);
+			ASSERT_OR_RETURN(, researchForm != nullptr, "No research form?");
+			researchForm->show(newValue == 2);
+		});
+	});
+	tabs->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = psWidget->parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int tabsWidth = psWidget->idealWidth();
+		psWidget->setGeometry((psParent->width() - tabsWidth) / 2, 0, tabsWidth, MISSIONRES_TABS_H);
+	}));
+}
+
+void intMissionResultsUpdateButtons()
+{
+	if (!MissionResUp)
+	{
+		return;
+	}
+
+	const bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+
+	if (multiplayerHostQuit)
+	{
+		// the game can't continue without the host
+		widgDeleteLater(psWScreen, IDMISSIONRES_CONTINUE);
+	}
+}
+
+static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	// ensure the guide screen is closed
 	closeGuideScreen();
@@ -2379,6 +2412,12 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 	}));
 
+	// for non-campaign games, add the "Summary" / "Player Stats" / "Research" tabs and the stats graph / research log view
+	if (bMultiPlayer)
+	{
+		intAddMissionResultStats(missionResBackForm);
+	}
+
 	// description of success/fail
 	W_LABINIT sLabInit;
 	sLabInit.formID = IDMISSIONRES_TITLE;
@@ -2388,7 +2427,11 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sLabInit.y = 12;
 	sLabInit.width = MISSIONRES_TITLE_W;
 	sLabInit.height = 16;
-	if (result)
+	if (customTitle)
+	{
+		sLabInit.pText = WzString::fromUtf8(customTitle);
+	}
+	else if (result)
 	{
 
 		//don't bother adding the text if haven't played the audio
@@ -2420,11 +2463,14 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
 		psWidget->pUserData = nullptr;
 	};
+	// the game can't continue without the host
+	bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+
 	//if won
 	if (result || bMultiPlayer)
 	{
 		// Finished the mission, so display "Continue Game"
-		if (!testPlayerHasWon() || bMultiPlayer)
+		if ((!testPlayerHasWon() || bMultiPlayer) && !multiplayerHostQuit)
 		{
 			sButInit.x			= MISSION_1_X;
 			sButInit.y			= MISSION_1_Y;
@@ -2443,25 +2489,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 			widgAddButton(psWScreen, &sButInit);
 		}
 
-		// FIXME, We got serious issues with savegames at the *END* of some missions, and while they
-		// will load, they don't have the correct state information or other settings.
-		// See transition from CAM2->CAM3 for a example.
-		/* Only add save option if in the game for real, ie, not fastplay.
-		* And the player hasn't just completed the whole game
-		* Don't add save option if just lost and in debug mode.
-		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
-		{
-			//save
-			sButInit.id			= IDMISSIONRES_SAVE;
-			sButInit.x			= MISSION_1_X;
-			sButInit.y			= MISSION_1_Y;
-			sButInit.pText		= _("Save Game");//"Save Game";
-			widgAddButton(psWScreen, &sButInit);
-
-			// automatically save the game to be able to restart a mission
-			saveGame((char *)"savegames/Autosave.gam", GTYPE_SAVE_START);
-		}
-		*/
+		// NOTE: There used to be a "Save Game" option here, but it was long disabled because of
+		// serious issues with savegames at the *END* of some missions (example: the CAM2->CAM3
+		// transition) that loaded but had incorrect state. It used the now-deprecated
+		// GTYPE_SAVE_START path and has been removed.
 	}
 	else
 	{
@@ -2492,10 +2523,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 }
 
 
-bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	ActivityManager::instance().completedMission(result, collectEndGameStatsData(), Cheated);
-	return _intAddMissionResult(result, bPlaySuccess, showBackDrop);
+	return _intAddMissionResult(result, bPlaySuccess, showBackDrop, customTitle);
 }
 
 void intRemoveMissionResultNoAnim()
@@ -2533,7 +2564,10 @@ void intRunMissionResult()
 				{
 					char msg[256] = {'\0'};
 
-					saveGame(sRequestResult, GTYPE_SAVE_START);
+					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+					// (the "Save Game" button is no longer added)
+					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+					saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION);
 					sstrcpy(msg, _("GAME SAVED :"));
 					sstrcat(msg, savegameWithoutExtension(sRequestResult));
 					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
@@ -2618,7 +2652,8 @@ DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y, UDWORD pla
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true, nullptr);
+	// XXX: gameWorld.map - should be mission.gameWorld.map really (but keeping it for now to ensure it works exactly as before)
+	psNewDroid = buildDroid(gameWorld, psTempl, world_coord(x), world_coord(y), player, true, nullptr);
 	if (!psNewDroid)
 	{
 		return nullptr;
@@ -2837,12 +2872,12 @@ static void addLandingLights(UDWORD x, UDWORD y)
 
 /*	checks the x,y passed in are not within the boundary of any Landing Zone
 	x and y in tile coords*/
-bool withinLandingZone(UDWORD x, UDWORD y)
+bool withinLandingZone(const WorldMapState& mapState, UDWORD x, UDWORD y)
 {
 	UDWORD		inc;
 
-	ASSERT(x < gameWorld.map.width, "withinLandingZone: x coord bigger than mapWidth");
-	ASSERT(y < gameWorld.map.height, "withinLandingZone: y coord bigger than mapHeight");
+	ASSERT(x < mapState.width, "withinLandingZone: x coord bigger than mapWidth");
+	ASSERT(y < mapState.height, "withinLandingZone: y coord bigger than mapHeight");
 
 
 	for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
@@ -2953,21 +2988,20 @@ void missionGetTransporterExit(SDWORD iPlayer, UDWORD *iX, UDWORD *iY)
 /*update routine for mission details */
 void missionTimerUpdate()
 {
-	//don't bother with the time check if have 'cheated'
-	if (!mission.cheatTime)
+	//Want a mission timer on all types of missions now - AB 26/01/99
+	//only a countdown timer can expire (a paused timer holds mission.time but never runs out)
+	if (mission.timerMode == TIMER_COUNTDOWN)
 	{
-		//Want a mission timer on all types of missions now - AB 26/01/99
-		//only interested in off world missions (so far!) and if timer has been set
-		if (mission.time >= 0)  //&& (
-			//mission.type == LDS_MKEEP || mission.type == LDS_MKEEP_LIMBO ||
-			//mission.type == LDS_MCLEAR || mission.type == LDS_BETWEEN))
+		//check if time is up
+		if ((SDWORD)(gameTime - mission.startTime) > mission.time)
 		{
-			//check if time is up
-			if ((SDWORD)(gameTime - mission.startTime) > mission.time)
-			{
-				//the script can call the end game cos have failed!
-				executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_MISSION_TIMEOUT); });
-			}
+			// freeze the expired timer at zero so the timeout only triggers once and getMissionTime() cannot go negative
+			// scripts can still set a new timer from the event handler
+			mission.timerMode = TIMER_PAUSE;
+			mission.time = 0;
+			mission.startTime = gameTime;
+			// the script can call the end game cos have failed!
+			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_MISSION_TIMEOUT); });
 		}
 	}
 }
@@ -2989,7 +3023,7 @@ void missionDestroyObjects()
 
 			mutating_list_iterate(gameWorld.objects.droids[Player], [](DROID* d)
 			{
-				removeDroidBase(d);
+				removeDroidBase(d, gameWorld.objects);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 
@@ -3000,14 +3034,14 @@ void missionDestroyObjects()
 			{
 				//make sure its died flag is not set since we've swapped the apsDroidList pointers over
 				psDroid->died = false;
-				removeDroidBase(psDroid);
+				removeDroidBase(psDroid, gameWorld.objects);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 			mission.gameWorld.objects.droids[Player].clear();
 
 			mutating_list_iterate(gameWorld.objects.structures[Player], [](STRUCTURE* s)
 			{
-				removeStruct(s, true);
+				removeStruct(s, true, gameWorld);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		}
@@ -3079,7 +3113,7 @@ void processPreviousCampDroids()
 			if (droidRemove(psDroid, mission.gameWorld.objects.droids))
 			{
 				addDroid(psDroid, gameWorld.objects.droids);
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
@@ -3160,7 +3194,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 void clearMissionWidgets()
 {
 	//remove any widgets that are up due to the missions
-	if (mission.time > 0)
+	if (missionTimerActive())
 	{
 		intRemoveMissionTimer();
 	}
@@ -3209,7 +3243,7 @@ void resetMissionWidgets()
 	}
 
 	//add back any widgets that should be up due to the missions
-	if (mission.time > 0)
+	if (missionTimerActive())
 	{
 		intAddMissionTimer();
 		//make sure its not flashing when added
@@ -3282,12 +3316,12 @@ void emptyTransporters(bool bOffWorld)
 					});
 				}
 				//now kill off the Transporter
-				vanishDroid(psTransporter);
+				vanishDroid(psTransporter, gameWorld.objects);
 			}
 			else if (!bOffWorld && orderState(psTransporter, DORDER_TRANSPORTRETURN))
 			{
 				//also destroy transporters in the process of flying back and we're not offWorld
-				vanishDroid(psTransporter);
+				vanishDroid(psTransporter, gameWorld.objects);
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
@@ -3318,18 +3352,29 @@ void emptyTransporters(bool bOffWorld)
 	});
 }
 
-/*bCheating = true == start of cheat
-bCheating = false == end of cheat */
-void setMissionCheatTime(bool bCheating)
+// the 'time toggle' cheat:
+// freeze a running countdown by converting it into a paused timer holding the remaining time, and convert back to resume it
+bool toggleMissionTimerPause()
 {
-	if (bCheating)
+	if (mission.timerMode != TIMER_COUNTDOWN && mission.timerMode != TIMER_PAUSE)
 	{
-		mission.cheatTime = gameTime;
+		return false;	// only a countdown timer can be paused and resumed
+	}
+	if (mission.timerMode == TIMER_PAUSE && mission.time <= 0)
+	{
+		// an expired timer freezes at TIMER_PAUSE/time 0, and a countdown paused at exactly 0 would expire the instant it resumed
+		// refuse either so we never fire TRIGGER_MISSION_TIMEOUT a second time
+		return false;
+	}
+	if (mission.timerMode == TIMER_COUNTDOWN)
+	{
+		mission.time = missionTimeRemaining();
+		mission.timerMode = TIMER_PAUSE;
 	}
 	else
 	{
-		//adjust the mission start time for the duration of the cheat!
-		mission.startTime += gameTime - mission.cheatTime;
-		mission.cheatTime = 0;
+		mission.timerMode = TIMER_COUNTDOWN;
 	}
+	mission.startTime = gameTime;
+	return true;
 }

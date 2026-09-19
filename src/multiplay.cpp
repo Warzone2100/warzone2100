@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -50,6 +52,7 @@
 #include "power.h"
 #include "cmddroid.h"								//  for commanddroidupdatekills
 #include "wrappers.h"								// for game over
+#include "screens/spectatorgameoverscreen.h"
 #include "component.h"
 #include "frontend.h"
 #include "lib/sound/audio.h"
@@ -72,7 +75,8 @@
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "modding.h"
-#include "multiplay.h"								// warzone net stuff.
+#include "multiplay.h"
+#include "ordersource_wire.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
 #include "multistat.h"
@@ -547,7 +551,7 @@ bool multiPlayerLoop()
 	if (joinCount)
 	{
 		// deselect anything selected.
-		selDroidDeselect(selectedPlayer);
+		selDroidDeselect(gameWorld.objects, selectedPlayer);
 	}
 	else		//everyone is in the game now!
 	{
@@ -643,13 +647,13 @@ bool multiPlayerLoop()
 // quikie functions.
 
 // to get droids ...
-DROID *IdToDroid(UDWORD id, UDWORD player)
+DROID *IdToDroid(const WorldObjectState& objState, UDWORD id, UDWORD player)
 {
 	if (player == ANYPLAYER)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(gameWorld.objects.droids[i], id);
+			DROID* d = (DROID*)getBaseObjFromId(objState.droids[i], id);
 			if (d)
 			{
 				return d;
@@ -658,32 +662,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		DROID* d = (DROID*)getBaseObjFromId(gameWorld.objects.droids[player], id);
-		if (d)
-		{
-			return d;
-		}
-	}
-	return nullptr;
-}
-
-// find off-world droids
-DROID *IdToMissionDroid(UDWORD id, UDWORD player)
-{
-	if (player == ANYPLAYER)
-	{
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[i], id);
-			if (d)
-			{
-				return d;
-			}
-		}
-	}
-	else if (player < MAX_PLAYERS)
-	{
-		DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[player], id);
+		DROID* d = (DROID*)getBaseObjFromId(objState.droids[player], id);
 		if (d)
 		{
 			return d;
@@ -730,10 +709,10 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // find a feature
-FEATURE *IdToFeature(UDWORD id, UDWORD player)
+FEATURE *IdToFeature(const WorldObjectState& objState, UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	return (FEATURE*)getBaseObjFromId(gameWorld.objects.features[0], id);
+	return (FEATURE*)getBaseObjFromId(objState.features[0], id);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -770,7 +749,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 	FEATURE		*pF;
 	// droids.
 
-	pD = IdToDroid(id, player);
+	pD = IdToDroid(gameWorld.objects, id, player);
 	if (pD)
 	{
 		return (BASE_OBJECT *)pD;
@@ -784,7 +763,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 	}
 
 	// features
-	pF = IdToFeature(id, player);
+	pF = IdToFeature(gameWorld.objects, id, player);
 	if (pF)
 	{
 		return (BASE_OBJECT *)pF;
@@ -1256,7 +1235,7 @@ static bool recvDataCheck2(NETQUEUE queue)
 		}
 		zCheck = std::numeric_limits<uint16_t>::max();
 		auto it = layers.find(zCheck);
-		if (it != layers.end() && it->second > 1)
+		if (it != layers.end() && it->second > 2)
 		{
 			debug(LOG_INFO, "%s (%u) has an unexpected number of notification layers. (count: %" PRIu32 ")", getPlayerName(player), player, it->second);
 		}
@@ -1556,6 +1535,7 @@ bool recvMessage()
 				}
 				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+				showSpectatorGameOverScreen();
 				break;
 			default:
 				processedMessage1 = false;
@@ -1836,12 +1816,20 @@ static bool recvResearch(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart)
+bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart, const OrderSource &source)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
 		return true;
 	}
+
+	if (!orderSourcePermitsPlayerAction(player, source))
+	{
+		orderProvenanceRecord(player, source.origin(), true);
+		debug(LOG_NET, "Invalid research status change for player %u from %s", player, source.toDescription().c_str());
+		return false;
+	}
+	orderProvenanceRecord(player, source.origin(), false);
 
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_RESEARCHSTATUS);
 	NETuint8_t(w, player);
@@ -1861,6 +1849,10 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t pla
 
 	// Finally the topic in question
 	NETuint32_t(w, index);
+
+	OrderProvenanceWire provenance = orderProvenanceFromSource(source);
+	NETOrderProvenance(w, provenance);
+
 	NETend(w);
 
 	// Tell UI to remove from the list of available research.
@@ -1904,7 +1896,11 @@ bool recvResearchStatus(NETQUEUE queue)
 	NETbool(r, bStart);
 	NETuint32_t(r, structRef);
 	NETuint32_t(r, index);
+	OrderProvenanceWire provenance;
+	NETOrderProvenance(r, provenance);
 	NETend(r);
+
+	orderProvenanceRecordReported(player, static_cast<OrderOrigin>(provenance.origin));
 
 	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);
 
@@ -2335,7 +2331,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		return false;
 	}
 
-	pF = IdToFeature(id, ANYPLAYER);
+	pF = IdToFeature(gameWorld.objects, id, ANYPLAYER);
 	if (pF == nullptr)
 	{
 		debug(LOG_FEATURE, "feature id %d not found (probably already destroyed)", id);
@@ -2345,7 +2341,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getStatsName(pF->psStats));
 	// Remove the feature locally
 	turnOffMultiMsg(true);
-	destroyFeature(pF, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+	destroyFeature(pF, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 	turnOffMultiMsg(false);
 
 	return true;
@@ -2522,7 +2518,7 @@ bool recvMapFileData(NETQUEUE queue)
 			game.isRandom = true;
 		}
 
-		loadMapPreview(false);
+		requestMapPreviewLoad(false);
 		return true;
 	}
 
@@ -2832,11 +2828,11 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		{
 			if (quietly)
 			{
-				removeStruct(psStruct, true);
+				removeStruct(psStruct, true, gameWorld);
 			}
 			else			// show effects
 			{
-				destroyStruct(psStruct, gameTime);
+				destroyStruct(psStruct, gameTime, gameWorld);
 			}
 		}
 
@@ -2846,11 +2842,11 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 		{
 			if (quietly)			// don't show effects
 			{
-				killDroid(d);
+				killDroid(d, gameWorld.objects);
 			}
 			else				// show effects
 			{
-				destroyDroid(d, gameTime);
+				destroyDroid(d, gameTime, gameWorld);
 			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
@@ -2868,11 +2864,11 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 				{
-					removeStruct(psStruct, true);
+					removeStruct(psStruct, true, gameWorld);
 				}
 				else			// show effects
 				{
-					destroyStruct(psStruct, gameTime);
+					destroyStruct(psStruct, gameTime, gameWorld);
 				}
 			}
 			return IterationResult::CONTINUE_ITERATION;

@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008-2020  Warzone 2100 Project
+	Copyright (C) 2008-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +23,7 @@
 #define __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__
 
 #include "lib/framework/types.h"
-#include "lib/framework/physfs_ext.h"
+#include "video_provider.h"
 #include <memory>
 
 typedef enum
@@ -31,13 +33,13 @@ typedef enum
 	SCANLINES_BLACK
 } SCANLINE_MODE;
 
-// Abstraction for handling loading videos from files, or from memory buffer, etc
-class VideoProvider;
-std::shared_ptr<VideoProvider> makeVideoProvider(PHYSFS_file *in, const WzString& filename);
-std::shared_ptr<VideoProvider> makeVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename);
-
 bool seq_Play(std::shared_ptr<VideoProvider> video);
 bool seq_Playing();
+/** Set the preferred FMV audio-track language (a WZ locale code, e.g. "de").
+ * Empty / nullptr (the default) = automatic: follow the game language.
+ * Takes effect from the next seq_Play(). Videos without a matching track
+ * fall back to their English track. */
+void seq_SetPreferredAudioLanguage(const char *languageCode);
 bool seq_Update();
 void seq_Shutdown();
 int seq_GetFrameNumber();

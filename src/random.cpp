@@ -20,15 +20,17 @@
 #include "random.h"
 #include "lib/netplay/sync_debug.h"
 
+#include <algorithm>
+
 static MersenneTwister gamePseudorandomNumberGenerator;
 static uint32_t lastSeed = 0;
 
 MersenneTwister::MersenneTwister(uint32_t seed)
-	: offset(624)
+	: offset(RNG_STATE_WORDS)
 {
 	// Set state to something pseudorandom. Exact constants aren't important here.
 	state[0] = seed;
-	for (unsigned i = 1; i != 624; ++i)
+	for (unsigned i = 1; i != RNG_STATE_WORDS; ++i)
 	{
 		state[i] = 0x6C078965 * (state[i - 1] ^ state[i - 1] >> 30) + i;
 	}
@@ -36,14 +38,14 @@ MersenneTwister::MersenneTwister(uint32_t seed)
 
 uint32_t MersenneTwister::u32()
 {
-	if (offset == 624)
+	if (offset == RNG_STATE_WORDS)
 	{
 		generate();
 	}
 
 	uint32_t ret = state[offset++];
 
-	// Give better than 624 dimensional equidistribution for lower bits.
+	// Give better than 624 (RNG_STATE_WORDS) dimensional equidistribution for lower bits.
 	// Don't change the constants unless you know what you're doing.
 	// Can skip this step if it noticeably affects performance (which it probably doesn't), since we aren't doing Monte-Carlo simulations.
 	ret ^= ret >> 11;
@@ -78,10 +80,43 @@ void MersenneTwister::generate()
 	}
 }
 
+void MersenneTwister::getInternalState(uint32_t (&outState)[RNG_STATE_WORDS], int32_t &outOffset) const
+{
+	for (unsigned i = 0; i != RNG_STATE_WORDS; ++i)
+	{
+		outState[i] = state[i];
+	}
+	outOffset = offset;
+}
+
+void MersenneTwister::setInternalState(const uint32_t (&inState)[RNG_STATE_WORDS], int32_t inOffset)
+{
+	for (unsigned i = 0; i != RNG_STATE_WORDS; ++i)
+	{
+		state[i] = inState[i];
+	}
+	ASSERT(inOffset >= 0 && inOffset <= static_cast<int32_t>(RNG_STATE_WORDS), "Invalid RNG offset %" PRIi32, inOffset);
+	offset = std::clamp<int32_t>(inOffset, 0, static_cast<int32_t>(RNG_STATE_WORDS));
+}
+
 void gameSRand(uint32_t seed)
 {
 	lastSeed = seed;
 	gamePseudorandomNumberGenerator = MersenneTwister(seed);
+}
+
+GameRandomState getGameRandomState()
+{
+	GameRandomState s;
+	gamePseudorandomNumberGenerator.getInternalState(s.state, s.offset);
+	s.lastSeed = lastSeed;
+	return s;
+}
+
+void setGameRandomState(const GameRandomState &s)
+{
+	gamePseudorandomNumberGenerator.setInternalState(s.state, s.offset);
+	lastSeed = s.lastSeed;
 }
 
 uint32_t gameRand_GetSeed()

@@ -6,7 +6,7 @@ include(WZVcpkgInit) # Must come before project() command
 set(CMAKE_MODULE_PATH "${_OLD_CMAKE_MODULE_PATH}")
 unset(_OLD_CMAKE_MODULE_PATH)
 
-project(warzone2100)
+project(warzone2100 LANGUAGES C CXX)
 
 include(CMakeDependentOption)
 
@@ -15,6 +15,7 @@ OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) war
 OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
 OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
+OPTION(WZ_ENABLE_WEBM "Enable WebM (VP8/VP9) video support (requires libvpx)" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
 if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	OPTION(ENABLE_DOCS "Enable documentation generation" ON)
@@ -60,9 +61,10 @@ else()
 endif()
 
 # CXX Standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # Disable compiler-specific extensions
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 # Support folders (for nicer IDE organization)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -412,6 +414,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
 		elseif (CMAKE_CXX_STANDARD EQUAL 17)
 			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++1z")
+		elseif (CMAKE_CXX_STANDARD EQUAL 20)
+			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++2a")
 		else()
 			# Additional mapping required for CMAKE_CXX_STANDARD => Xcode's CLANG_CXX_LANGUAGE_STANDARD attribute (above)
 			# Also may need to bump the minimum supported version of Xcode for compilation
@@ -896,6 +900,21 @@ add_subdirectory(doc)
 add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(pkg)
+
+# Standalone unit test for the (dependency-free) terrain surface interpolation math
+option(WZ_BUILD_TERRAIN_SURFACE_TEST "Build the terrain surface math unit test (tests/terrain_surface_test.cpp)" OFF)
+if(WZ_BUILD_TERRAIN_SURFACE_TEST)
+	add_executable(terrain_surface_test "${PROJECT_SOURCE_DIR}/tests/terrain_surface_test.cpp")
+	target_include_directories(terrain_surface_test PRIVATE "${PROJECT_SOURCE_DIR}/src")
+endif()
+
+# In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
+option(WZ_BUILD_RENDER_GRAPH_TEST "Build the render-graph pass sequence unit test (tests/render_graph_pass_sequence_test.cpp)" OFF)
+if(WZ_BUILD_RENDER_GRAPH_TEST)
+	add_executable(render_graph_pass_sequence_test "${PROJECT_SOURCE_DIR}/tests/render_graph_pass_sequence_test.cpp")
+	target_include_directories(render_graph_pass_sequence_test PRIVATE "${PROJECT_SOURCE_DIR}")
+	target_link_libraries(render_graph_pass_sequence_test PRIVATE ivis-opengl framework)
+endif()
 
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

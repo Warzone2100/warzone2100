@@ -62,7 +62,7 @@ optional<TagVer> version_extractVersionNumberFromTag(const std::string& tag)
     }
 	if (!parser.eof())
 		{
-			// it has "-rc/beta1.." suffix 
+			// it has "-rc/beta1.." suffix
 			if (parser.peek() == '-') parser.get(); // skip
 			parser.read(result.qualifier, TAGVER_MAX_QUALIF_LEN - 1);
 			result.qualifier[TAGVER_MAX_QUALIF_LEN - 1] = 0;
@@ -193,6 +193,11 @@ const char *version_getLatestTag()
 	}
 	// this is non empty for sure!
 	return VCS_MOST_RECENT_TAGGED_VERSION;
+}
+
+const char *version_getVcsFullHash()
+{
+	return VCS_FULL_HASH;
 }
 
 // Should follow the form:

@@ -44,6 +44,7 @@
 #include "map.h"
 #include "mission.h"
 #include "campaigninfo.h"
+#include "movebench.h"
 #include "move.h"
 #include "order.h"
 #include "transporter.h"
@@ -76,6 +77,7 @@
 #include "advvis.h"
 #include "loadsave.h"
 #include "wzapi.h"
+#include "ordersource.h"
 #include "order.h"
 #include "chat.h"
 #include "scores.h"
@@ -112,8 +114,8 @@ BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
 {
 	switch (type)
 	{
-	case OBJ_DROID: return IdToDroid(id, player);
-	case OBJ_FEATURE: return IdToFeature(id, player);
+	case OBJ_DROID: return IdToDroid(gameWorld.objects, id, player);
+	case OBJ_FEATURE: return IdToFeature(gameWorld.objects, id, player);
 	case OBJ_STRUCTURE: return IdToStruct(id, player);
 	default: return nullptr;
 	}
@@ -306,6 +308,8 @@ uint32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 //--
 bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 {
+	SCRIPT_ASSERT_PLAYER(false, context, player1);
+	SCRIPT_ASSERT_PLAYER(false, context, player2);
 	if (areAllies)
 	{
 		formAlliance(player1, player2, true, false, true);
@@ -323,6 +327,8 @@ bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 //--
 wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 {
+	SCRIPT_ASSERT_PLAYER({}, context, context.player());
+	SCRIPT_ASSERT_PLAYER({}, context, player);
 	if (!alliancesFixed(game.alliance))
 	{
 		requestAlliance(context.player(), player, true, true);
@@ -334,8 +340,17 @@ wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 //--
 //-- Give a droid an order to do something. (3.2+ only)
 //--
+static OrderSource scriptOrderSource(const wzapi::execution_context &context)
+{
+	const wzapi::scripting_instance *instance = context.currentInstance();
+	const bool hostDeclared = (instance != nullptr)
+	                          && (instance->binding() == wzapi::ScriptBinding::HostDeclaredGlobal);
+	return OrderSource::script(context.player(), hostDeclared);
+}
+
 bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	SCRIPT_ASSERT(false, context, order == DORDER_STOP || order == DORDER_RTB || order == DORDER_RTR ||
 	              order == DORDER_RECYCLE || order == DORDER_REARM || order == DORDER_HOLD,
@@ -370,6 +385,7 @@ bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 //--
 bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string structureName, int x, int y, optional<float> _direction))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
@@ -404,7 +420,7 @@ bool wzapi::setAssemblyPoint(WZAPI_PARAMS(STRUCTURE *psStruct, int x, int y))
 	SCRIPT_ASSERT(false, context, psStruct->pStructureType->type == REF_FACTORY
 	              || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 	              || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Structure not a factory");
-	setAssemblyPoint(((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint, x, y, psStruct->player, true);
+	setAssemblyPoint(gameWorld, ((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint, x, y, psStruct->player, true);
 	return true;
 }
 
@@ -544,7 +560,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 //--
 uint32_t wzapi::addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, bool radar, uint32_t expiry))
 {
-	return ::addSpotter(x, y, player, range, radar, expiry);
+	return ::addSpotter(gameWorld.map, x, y, player, range, radar, expiry);
 }
 
 //-- ## removeSpotter(spotterId)
@@ -610,28 +626,32 @@ bool wzapi::changePlayerColour(WZAPI_PARAMS(int player, int colour))
 bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY_SYNCREQUEST_REQUIRED
 {
 	SCRIPT_ASSERT(false, context, psObject, "No valid object provided");
-	SCRIPT_ASSERT(false, context, health >= 1, "Bad health value %d", health);
+	SCRIPT_ASSERT(false, context, health >= 1 && health <= 100, "Bad health value %d", health);
 	int id = psObject->id;
 	int player = psObject->player;
 	OBJECT_TYPE objectType = psObject->type;
 	SCRIPT_ASSERT(false, context, objectType == OBJ_DROID || objectType == OBJ_STRUCTURE || objectType == OBJ_FEATURE, "Bad object type");
+	const auto percentOf = [health](uint32_t maxBody) -> UDWORD
+	{
+		return static_cast<UDWORD>(static_cast<uint64_t>(maxBody) * static_cast<uint64_t>(health) / 100);
+	};
 	if (objectType == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID *)psObject;
 		SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", id, player);
-		psDroid->body = static_cast<UDWORD>(health * (double)psDroid->originalBody / 100);
+		psDroid->body = percentOf(psDroid->originalBody);
 	}
 	else if (objectType == OBJ_STRUCTURE)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObject;
 		SCRIPT_ASSERT(false, context, psStruct, "No such structure id %d belonging to player %d", id, player);
-		psStruct->body = health * MAX(1, psStruct->structureBody()) / 100;
+		psStruct->body = percentOf(MAX(1, psStruct->structureBody()));
 	}
 	else
 	{
 		FEATURE *psFeat = (FEATURE *)psObject;
 		SCRIPT_ASSERT(false, context, psFeat, "No such feature id %d belonging to player %d", id, player);
-		psFeat->body = health * psFeat->psStats->body / 100;
+		psFeat->body = percentOf(psFeat->psStats->body);
 	}
 	return true;
 }
@@ -666,6 +686,17 @@ bool wzapi::restoreLimboMissionData(WZAPI_NO_PARAMS)
 uint32_t wzapi::getMultiTechLevel(WZAPI_NO_PARAMS)
 {
 	return game.techLevel;
+}
+
+//-- ## benchArrangement()
+//--
+//-- Returns the arrangement index for a movement benchmark run, or 0 outside
+//-- one. Bench scenarios use it to vary where their spawn blocks are placed, so
+//-- a cell can be run as an enumerated family rather than a single layout.
+//--
+uint32_t wzapi::benchArrangement(WZAPI_NO_PARAMS)
+{
+	return movementBenchArrangement();
 }
 
 //-- ## setCampaignNumber(campaignNumber)
@@ -703,7 +734,7 @@ bool wzapi::getRevealStatus(WZAPI_NO_PARAMS)
 bool wzapi::setRevealStatus(WZAPI_PARAMS(bool status))
 {
 	::setRevealStatus(status);
-	preProcessVisibility();
+	preProcessVisibility(gameWorld.map);
 	return true;
 }
 
@@ -746,13 +777,15 @@ wzapi::no_return_value wzapi::hackNetOn(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, int messageType, int player, bool immediate))
 {
+	SCRIPT_ASSERT({}, context, messageType >= 0 && messageType < MSG_TYPES, "Invalid message type %d", messageType);
 	MESSAGE_TYPE msgType = (MESSAGE_TYPE)messageType;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
+	VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
+	SCRIPT_ASSERT({}, context, psViewData, "Viewdata not found");
+	SCRIPT_ASSERT({}, context, msgType != MSG_PROXIMITY || psViewData->type == VIEW_PROX, "Viewdata %s is not a proximity view", message.c_str());
 	MESSAGE *psMessage = addMessage(msgType, false, player);
 	if (psMessage)
 	{
-		VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
-		SCRIPT_ASSERT({}, context, psViewData, "Viewdata not found");
 		psMessage->pViewData = psViewData;
 		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), static_cast<void *>(psMessage->pViewData));
 		if (msgType == MSG_PROXIMITY)
@@ -780,6 +813,7 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 //--
 wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message, int messageType, int player))
 {
+	SCRIPT_ASSERT({}, context, messageType >= 0 && messageType < MSG_TYPES, "Invalid message type %d", messageType);
 	MESSAGE_TYPE msgType = (MESSAGE_TYPE)messageType;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
@@ -1212,7 +1246,7 @@ std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 //--
 GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 {
-	return gwGetGateways();
+	return gwGetGateways(gameWorld.map);
 }
 
 //-- ## getResearch(researchName[, player])
@@ -1222,9 +1256,12 @@ GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 //--
 wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
+	int player = _player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER({}, context, player);
+
 	researchResult result;
 	result.psResearch = ::getResearch(researchName.c_str());
-	result.player = _player.value_or(context.player());
+	result.player = player;
 	return result;
 }
 
@@ -1354,7 +1391,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 			}
 			if (!started) // found relevant item on the path?
 			{
-				sendResearchStatus(psStruct, curResearch->index, player, true);
+				sendResearchStatus(psStruct, curResearch->index, player, true, scriptOrderSource(context));
 #if defined (DEBUG)
 				char sTemp[128];
 				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(curResearch));
@@ -1455,6 +1492,7 @@ int32_t wzapi::distBetweenTwoPoints(WZAPI_PARAMS(int32_t x1, int32_t y1, int32_t
 //--
 bool wzapi::orderDroidLoc(WZAPI_PARAMS(DROID *psDroid, int order_, int x, int y))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)order_;
 	SCRIPT_ASSERT(false, context, validOrderForLoc(order), "Invalid location based order: %s", getDroidOrderName(order));
@@ -1497,6 +1535,7 @@ bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structureName, optiona
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
 	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	int player = _player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 
 	int status = apStructTypeLists[player][structureIndex];
 	return (status == AVAILABLE || status == REDUNDANT)
@@ -1516,7 +1555,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	yBR = (yy + psBuilding->baseBreadth);
 
 	// check against building in a gateway, as this can seriously block AI passages
-	for (auto psGate : gwGetGateways())
+	for (auto psGate : gwGetGateways(gameWorld.map))
 	{
 		for (x = xx; x <= xBR; x++)
 		{
@@ -1534,7 +1573,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	y = yTL;	// top
 	for (x = xTL; x != xBR + 1; x++)
 	{
-		if (fpathBlockingTile(x, y, propType))
+		if (fpathBlockingTile(gameWorld.map, x, y, propType))
 		{
 			count++;
 			break;
@@ -1544,7 +1583,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	y = yBR;	// bottom
 	for (x = xTL; x != xBR + 1; x++)
 	{
-		if (fpathBlockingTile(x, y, propType))
+		if (fpathBlockingTile(gameWorld.map, x, y, propType))
 		{
 			count++;
 			break;
@@ -1554,7 +1593,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	x = xTL;	// left
 	for (y = yTL + 1; y != yBR; y++)
 	{
-		if (fpathBlockingTile(x, y, propType))
+		if (fpathBlockingTile(gameWorld.map, x, y, propType))
 		{
 			count++;
 			break;
@@ -1564,7 +1603,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	x = xBR;	// right
 	for (y = yTL + 1; y != yBR; y++)
 	{
-		if (fpathBlockingTile(x, y, propType))
+		if (fpathBlockingTile(gameWorld.map, x, y, propType))
 		{
 			count++;
 			break;
@@ -1610,8 +1649,8 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 
 	// save a lot of typing... checks whether a position is valid
 #define LOC_OK(_x, _y) (tileOnMap(gameWorld.map, _x, _y) && \
-                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), propType)) \
-                        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles, propType))
+                        (!psDroid || fpathCheck(gameWorld.map, psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), propType)) \
+                        && validLocation(gameWorld, psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles, propType))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
@@ -1692,7 +1731,7 @@ bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y
 	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
 	return (tileOnMap(gameWorld.map, x, y)
-			&& validLocation(psStat, world_coord(Vector2i(x, y)), direction, player, false));
+			&& validLocation(gameWorld, psStat, world_coord(Vector2i(x, y)), direction, player, false));
 }
 
 //-- ## droidCanReach(droid, x, y)
@@ -1704,7 +1743,7 @@ bool wzapi::droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y))
 {
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	const PROPULSION_STATS* psPropStats = psDroid->getPropulsionStats();
-	return fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType);
+	return fpathCheck(gameWorld.map, psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType);
 }
 
 //-- ## propulsionCanReach(propulsionName, x1, y1, x2, y2)
@@ -1717,7 +1756,7 @@ bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, 
 	int propulsionIndex = getCompFromName(COMP_PROPULSION, WzString::fromUtf8(propulsionName));
 	SCRIPT_ASSERT(false, context, propulsionIndex > 0, "No such propulsion: %s", propulsionName.c_str());
 	const PROPULSION_STATS *psPropStats = &asPropulsionStats[propulsionIndex];
-	return fpathCheck(Vector3i(world_coord(x1), world_coord(y1), 0), Vector3i(world_coord(x2), world_coord(y2), 0), psPropStats->propulsionType);
+	return fpathCheck(gameWorld.map, Vector3i(world_coord(x1), world_coord(y1), 0), Vector3i(world_coord(x2), world_coord(y2), 0), psPropStats->propulsionType);
 }
 
 //-- ## terrainType(x, y)
@@ -1747,6 +1786,7 @@ bool wzapi::tileIsBurning(WZAPI_PARAMS(int x, int y))
 //--
 bool wzapi::orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *psObj))
 {
+	OrderSourceScope orderScope(scriptOrderSource(context));
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)_order;
 	SCRIPT_ASSERT(false, context, psObj, "No valid object provided");
@@ -1953,7 +1993,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 		}
 		else
 		{
-			psDroid = ::buildDroid(psTemplate.get(), world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, nullptr);
+			psDroid = ::buildDroid(gameWorld, psTemplate.get(), world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, nullptr);
 			if (psDroid)
 			{
 				addDroid(psDroid, gameWorld.objects.droids);
@@ -1994,12 +2034,12 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 {
 	int transporterId = transporter.id;
 	int transporterPlayer = transporter.player;
-	DROID *psTransporter = IdToMissionDroid(transporterId, transporterPlayer);
+	DROID *psTransporter = IdToDroid(mission.gameWorld.objects, transporterId, transporterPlayer);
 	SCRIPT_ASSERT(false, context, psTransporter, "No such transporter id %d belonging to player %d", transporterId, transporterPlayer);
 	SCRIPT_ASSERT(false, context, psTransporter->isTransporter(), "Droid id %d belonging to player %d is not a transporter", transporterId, transporterPlayer);
 	int droidId = droid.id;
 	int droidPlayer = droid.player;
-	DROID *psDroid = IdToMissionDroid(droidId, droidPlayer);
+	DROID *psDroid = IdToDroid(mission.gameWorld.objects, droidId, droidPlayer);
 	SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", droidId, droidPlayer);
 	SCRIPT_ASSERT(false, context, checkTransporterSpace(psTransporter, psDroid), "Not enough room in transporter %d for droid %d", transporterId, droidId);
 	bool removeSuccessful = droidRemove(psDroid, mission.gameWorld.objects.droids);
@@ -2018,12 +2058,13 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 	int feature = getFeatureStatFromName(WzString::fromUtf8(featureName));
 	SCRIPT_ASSERT(nullptr, context, feature >= 0 && feature < asFeatureStats.size(), "Unknown feature name: %s", featureName.c_str());
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
+	SCRIPT_ASSERT(nullptr, context, tileOnMap(gameWorld.map, x, y), "Outside map bounds (%d, %d)", x, y);
 	for (const FEATURE *psFeat : gameWorld.objects.features[0])
 	{
 		SCRIPT_ASSERT(nullptr, context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y,
 		              "Building feature on tile already occupied");
 	}
-	FEATURE *psFeature = buildFeature(psStats, world_coord(x), world_coord(y), false);
+	FEATURE *psFeature = buildFeature(gameWorld, psStats, world_coord(x), world_coord(y), false);
 	return psFeature;
 }
 
@@ -2615,25 +2656,43 @@ bool wzapi::applyLimitSet(WZAPI_NO_PARAMS)
 	return ::applyLimitSet();
 }
 
-//-- ## setMissionTime(time)
+//-- ## setMissionTime(time[, mode])
 //--
-//-- Set mission countdown in seconds.
+//-- Set mission countdown in seconds. If time is negative, the mission timer is removed.
+//-- The optional mode parameter (4.8+ only) selects how the timer behaves, and is one of:
+//-- * ```TIMER_COUNTDOWN``` Timer counts down from the given time and expires when it reaches zero (default).
+//-- * ```TIMER_COUNTUP``` Timer counts up, starting from the given number of elapsed seconds, and never expires.
+//-- * ```TIMER_PAUSE``` Timer is frozen at the given time and never expires.
 //--
-wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
+//-- When a countdown timer expires, ```eventMissionTimeout``` is triggered once and the timer freezes at zero, as if ```setMissionTime(0, TIMER_PAUSE)``` had been called
+//-- (The event handler may set a new timer.)
+//--
+wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<int> _mode))
 {
 	int time = _time * GAME_TICKS_PER_SEC;
-	mission.startTime = gameTime;
-	mission.time = time;
-	setMissionCountDown();
-	if (mission.time >= 0)
+	int mode = _mode.value_or(TIMER_COUNTDOWN);
+	SCRIPT_ASSERT({}, context, mode >= TIMER_COUNTDOWN && mode <= TIMER_PAUSE, "Invalid mission timer mode %d", mode);
+	// a negative time always removes the timer, whatever the requested mode
+	mission.timerMode = time >= 0 ? (MISSION_TIMER_MODE)mode : TIMER_NONE;
+	if (mission.timerMode == TIMER_COUNTUP)
+	{
+		// a count-up timer has no limit - offset startTime so the timer begins at the given elapsed time
+		mission.startTime = gameTime - time;
+		mission.time = -1;
+	}
+	else
 	{
 		mission.startTime = gameTime;
+		mission.time = time;
+	}
+	setMissionCountDown();
+	if (missionTimerActive())
+	{
 		addMissionTimerInterface();
 	}
 	else
 	{
 		intRemoveMissionTimer();
-		mission.cheatTime = 0;
 	}
 	return {};
 }
@@ -2641,14 +2700,16 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
 //-- ## getMissionTime()
 //--
 //-- Get time remaining on mission countdown in seconds. (3.2+ only)
+//-- If the mission timer is counting up, returns the elapsed time in seconds.
+//-- If it is paused, returns the time it is frozen at. (4.8+ only.)
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
-	if (mission.time < 0)
+	if (!missionTimerActive())
 	{
-		return -1;
+		return -1;	// no timer
 	}
-	return (mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC;
+	return missionTimeRemaining() / GAME_TICKS_PER_SEC;
 }
 
 //-- ## setReinforcementTime(time[, removeLaunch])
@@ -2901,6 +2962,7 @@ bool wzapi::removeTemplate(WZAPI_PARAMS(std::string _templateName))
 		if (templateName.compare(psTempl->id) == 0)
 		{
 			psTempl->enabled = false;
+			psTempl->hidden = true;
 			found = true;
 			return false; // break;
 		}
@@ -3064,7 +3126,7 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
-	return removeStruct(psStruct, true);
+	return removeStruct(psStruct, true, gameWorld);
 }
 
 //-- ## removeObject(gameObject[, sfx])
@@ -3082,6 +3144,13 @@ bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx))
 	SCRIPT_ASSERT(false, context,
 	    psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID || psObj->type == OBJ_FEATURE,
 	    "Wrong game object type");
+	if (psObj->type == OBJ_STRUCTURE)
+	{
+		SCRIPT_ASSERT(false, context, psObj->player < MAX_PLAYERS, "Invalid structure player %d", (int)psObj->player);
+		const auto& structures = gameWorld.objects.structures[psObj->player];
+		SCRIPT_ASSERT(false, context, std::find(structures.begin(), structures.end(), static_cast<const STRUCTURE*>(psObj)) != structures.end(),
+		    "Cannot remove off-world structure %s", objInfo(psObj));
+	}
 
 	scriptQueuedObjectRemovals().emplace_back(psObj, _sfx.value_or(false));
 	return true;
@@ -3114,13 +3183,13 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 	gameWorld.map.scroll.maxY = maxY;
 
 	// When the scroll limits change midgame - need to redo the lighting
-	initLighting(prevMinX < gameWorld.map.scroll.minX ? prevMinX : gameWorld.map.scroll.minX,
+	initLighting(gameWorld.map, prevMinX < gameWorld.map.scroll.minX ? prevMinX : gameWorld.map.scroll.minX,
 	             prevMinY < gameWorld.map.scroll.minY ? prevMinY : gameWorld.map.scroll.minY,
 	             prevMaxX < gameWorld.map.scroll.maxX ? prevMaxX : gameWorld.map.scroll.maxX,
 	             prevMaxY < gameWorld.map.scroll.maxY ? prevMaxY : gameWorld.map.scroll.maxY);
 
 	// need to reset radar to take into account of new size
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 	return {};
 }
 
@@ -3154,11 +3223,11 @@ wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(s
 	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
 	STRUCTURE_STATS *psStat = &asStructureStats[structureIndex];
-	STRUCTURE *psStruct = buildStructureDir(psStat, x, y, direction, player, false);
+	STRUCTURE *psStruct = buildStructureDir(gameWorld, psStat, x, y, direction, player, false);
 	if (psStruct)
 	{
 		psStruct->status = SS_BUILT;
-		buildingComplete(psStruct);
+		buildingComplete(psStruct, gameWorld);
 		return psStruct;
 	}
 	return nullptr;
@@ -3845,25 +3914,31 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			psStats->upgrade[player].resistance = value;
 			break;
 		case SCRCB_HIT:
+		{
+			SCRIPT_ASSERT(false, context, value > 0, "Structure HitPoints must be positive, got %d", value);
 			// Update body points for all structures, to avoid making them damaged
 			// FIXME - this is _really_ slow! we could be doing this for
 			// dozens of buildings one at a time!
+			const unsigned previousHitpoints = psStats->upgrade[player].hitpoints;
+			const unsigned newHitpoints = static_cast<unsigned>(value);
+			auto rescaleBody = [&](STRUCTURE *psCurr)
+			{
+				if (psStats == psCurr->pStructureType && previousHitpoints > 0 && (!bMultiPlayer || previousHitpoints < newHitpoints))
+				{
+					psCurr->body = static_cast<UDWORD>(static_cast<uint64_t>(psCurr->body) * newHitpoints / previousHitpoints);
+				}
+			};
 			for (STRUCTURE *psCurr : gameWorld.objects.structures[player])
 			{
-				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
-				{
-					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
-				}
+				rescaleBody(psCurr);
 			}
 			for (STRUCTURE *psCurr : mission.gameWorld.objects.structures[player])
 			{
-				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
-				{
-					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
-				}
+				rescaleBody(psCurr);
 			}
-			psStats->upgrade[player].hitpoints = value;
+			psStats->upgrade[player].hitpoints = newHitpoints;
 			break;
+		}
 		case SCRCB_LIMIT:
 			psStats->upgrade[player].limit = value; break;
 		}
@@ -4515,6 +4590,11 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["NoFriendlyFire"] = psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE);
 			weap["AllowedOnTransporter"] = psStats->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER);
 			weap["TeleportCapture"] = psStats->flags.test(WEAPON_FLAG_TELEPORT_CAPTURE);
+			weap["ExpImpactDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_IMPACT);
+			weap["ExpPenetrateImpactDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_IMPACT_PENETRATE);
+			weap["ExpPenetrateSplashDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_SPLASH_PENETRATE);
+			weap["ExpPeriodicalDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_PERIODICAL);
+			weap["ExpSplashDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_SPLASH);
 			weap["FlightSpeed"] = psStats->flightSpeed;
 			weap["Rotate"] = psStats->rotate;
 			weap["MinElevation"] = psStats->minElevation;
@@ -4621,6 +4701,9 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["WEATHER_RAIN"] = WT_RAINING;
 	constants["WEATHER_SNOW"] = WT_SNOWING;
 	constants["WEATHER_CLEAR"] = WT_NONE;
+	constants["TIMER_COUNTDOWN"] = TIMER_COUNTDOWN;
+	constants["TIMER_COUNTUP"] = TIMER_COUNTUP;
+	constants["TIMER_PAUSE"] = TIMER_PAUSE;
 	constants["DORDER_STOP"] = DORDER_STOP;
 	constants["DORDER_MOVE"] = DORDER_MOVE;
 	constants["DORDER_ATTACK"] = DORDER_ATTACK;
@@ -4836,9 +4919,9 @@ void wzapi::processScriptQueuedObjectRemovals()
 		{
 			switch (psObj->type)
 			{
-			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime); break;
-			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime); break;
-			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime); break;
+			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime, gameWorld); break;
+			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime, gameWorld); break;
+			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime, gameWorld); break;
 			default: ASSERT(false, "Wrong game object type"); break;
 			}
 		}
@@ -4846,9 +4929,9 @@ void wzapi::processScriptQueuedObjectRemovals()
 		{
 			switch (psObj->type)
 			{
-			case OBJ_STRUCTURE: removeStruct((STRUCTURE*)psObj, true); break;
-			case OBJ_DROID: removeDroidBase((DROID*)psObj); break;
-			case OBJ_FEATURE: removeFeature((FEATURE*)psObj); break;
+			case OBJ_STRUCTURE: removeStruct((STRUCTURE*)psObj, true, gameWorld); break;
+			case OBJ_DROID: removeDroidBase((DROID*)psObj, gameWorld.objects); break;
+			case OBJ_FEATURE: removeFeature((FEATURE*)psObj, gameWorld); break;
 			default: ASSERT(false, "Wrong game object type"); break;
 			}
 		}

@@ -27,6 +27,8 @@
 #include "objectdef.h"
 #include "fpath.h"
 
+struct WorldMapState;
+
 /* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
 bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
 
@@ -52,7 +54,7 @@ void moveUpdateDroid(DROID *psDroid);
 SDWORD moveCalcDroidSpeed(DROID *psDroid);
 
 /* update body and turret to local slope */
-void updateDroidOrientation(DROID *psDroid);
+void updateDroidOrientation(DROID *psDroid, const WorldMapState& mapState);
 
 /* audio callback used to kill movement sounds */
 bool moveCheckDroidMovingAndVisible(void *psObj);
@@ -62,6 +64,8 @@ const char *moveDescription(MOVE_STATUS status);
 bool moveSetFormationSpeedLimiting(uint32_t player, bool enabled);
 bool moveToggleFormationSpeedLimiting(uint32_t player, bool *pBoolResultingValue);
 bool moveFormationSpeedLimitingOn(uint32_t player);
+// Set the flag directly with no synchronising net message, for GameState restore only.
+void moveRestoreFormationSpeedLimiting(uint32_t player, bool enabled);
 bool recvSyncOptChange(NETQUEUE queue);
 
 void moveInit();

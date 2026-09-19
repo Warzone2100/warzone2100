@@ -265,6 +265,33 @@ static inline void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned id
 void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
+// Styled single-draw boxes (SHADER_UI_BOX): smooth dithered gradient fills and/or
+// anti-aliased rounded corners with an optional border. Alpha-blended.
+//
+// falloffExponent shapes the gradient: 1.0 = linear, e > 1 biases toward `from`
+// such that the blend weight of `from` is (1-t)^e (ex. 2.0 = quadratic falloff).
+void pie_FillGradientBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontal = false, float falloffExponent = 1.f);
+void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius);
+void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth);
+void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, float cornerRadius, PIELIGHT borderColour, float borderWidth);
+// Per-corner radius variants - cornerRadii = (topLeft, topRight, bottomLeft,
+// bottomRight) in pixels, 0 = that corner is sharp (ex. tabs rounded only on
+// top, or a box with one side cut off by the layout)
+void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth);
+void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth);
+// Clipped variants: clipRect (same screen space as x0/y0/x1/y1) bounds the
+// visible region. The box's shape - corners, gradient, border - is computed
+// for the FULL rect and then cut at the clip edges, so partially visible
+// rounded corners render as truncated arcs (unlike shrinking the rect, which
+// reshapes the corners). Draws nothing when the rect is fully outside.
+void pie_DrawRoundedBoxClipped(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, const WzRect& clipRect);
+void pie_DrawGradientRoundedBoxClipped(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth, const WzRect& clipRect);
+// Rounded box with a wide, soft alpha falloff at the edge (ex. glowing dots/motes)
+void pie_DrawSoftRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, float edgeSoftness);
+// Same soft box, rotated by angleRadians about its center (positive = clockwise on screen).
+// centerX/centerY position the box center on screen.
+void pie_DrawSoftRoundedBoxRotated(float centerX, float centerY, float width, float height, float angleRadians, PIELIGHT fill, float cornerRadius, float edgeSoftness);
+
 bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
 
 bool pie_InitRadar();

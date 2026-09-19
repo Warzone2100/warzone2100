@@ -11,8 +11,10 @@
 #extension GL_EXT_gpu_shader4 : enable
 #endif
 
-uniform mat4 ProjectionMatrix;
-uniform mat4 ViewMatrix;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+};
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b

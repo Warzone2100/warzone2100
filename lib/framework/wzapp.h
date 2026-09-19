@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -80,6 +82,9 @@ void wzResetGfxSettingsOnFailure();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage);
 void wzMainEventLoop(std::function<void()> onShutdown);
+/// Platform event pump for synchronous loading drains. Keeps the OS window responsive
+/// while `runTaskToCompletion` / `runBlockingResourceLoad` spin on the main thread.
+/// Called from game-layer loading housekeeping and lib/ivis_opengl blocking gfx loads.
 void wzPumpEventsWhileLoading();
 void wzQuit(int exitCode);              ///< Quit game
 int wzGetQuitExitCode();
@@ -89,6 +94,7 @@ bool wzIsSupportedWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
+void wzProcessPendingWindowChanges();
 WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsMaximized();
 bool wzIsFullscreen();
@@ -111,11 +117,22 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, uns
 unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize();
 unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension);
 unsigned int wzGetCurrentDisplayScale();
+/// The active refresh rate of the display the window is currently on (0 when unknown)
+float wzGetCurrentDisplayRefreshRate();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
+bool wzHasClipboardText();
+WzString wzGetClipboardText();
 bool wzSetClipboardText(const char *text);
 void wzSetCursor(CURSOR index);
+CURSOR wzGetCursor();
+class iV_Image;
+// Returns the image and hotspot for a loaded cursor, or nullptr if unavailable
+const iV_Image* wzGetCursorImage(CURSOR cur, int& hotX, int& hotY);
+// Incremented whenever the cursor image set is rebuilt (e.g. coloured/mono or scale changes)
+unsigned int wzGetCursorImagesGeneration();
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
+void wzGamepadApplyMode(); ///< Applies the current gamepad mode setting, initializing or shutting down the subsystem as needed
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation
 uint32_t wzGetTicks();		///< Milliseconds since start of game
@@ -132,7 +149,6 @@ std::vector<optional<screeninfo>> wzAvailableResolutions();
 optional<screeninfo> wzGetCurrentFullscreenDisplayMode();
 std::vector<unsigned int> wzAvailableDisplayScales();
 std::vector<video_backend> wzAvailableGfxBackends();
-WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support

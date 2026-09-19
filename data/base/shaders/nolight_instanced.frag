@@ -3,17 +3,13 @@
 
 //#pragma debug(on)
 
+#include "tcmask_instanced.glsl"
+
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
 //
 
 uniform sampler2D Texture;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -26,6 +22,7 @@ uniform vec4 fogColor;
 FRAGMENT_INPUT vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 FRAGMENT_INPUT vec4 colour;
 FRAGMENT_INPUT vec4 packed_ecmState_alphaTest;
+FRAGMENT_INPUT vec3 posViewSpace;
 
 #ifdef NEWGL
 out vec4 FragColor;
@@ -33,37 +30,26 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
+#include "distance_fog.glsl"
+
 void main()
 {
 	// unpack inputs
 	vec2 texCoord = vec2(texCoord_vertexDistance.x, texCoord_vertexDistance.y);
-	float vertexDistance = texCoord_vertexDistance.z;
 	bool alphaTest = (packed_ecmState_alphaTest.y > 0.f);
 
 	vec4 texColour = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	vec4 fragColour = texColour * colour;
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
+	}
 
 	if (alphaTest && (fragColour.a <= 0.001))
 	{
 		discard;
-	}
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if(fogFactor > 1.f)
-		{
-			discard;
-		}
-
-		// Return fragment color
-		vec3 fogPremultAlphaFactor = mix(vec3(fragColour.a), vec3(1.f,1.f,1.f), vec3(float(alphaTest)));
-		float fogFactorAdjust = mix(1.f, 0.f, float(alphaTest));
-		fragColour = vec4(mix(fragColour.rgb, fogColor.rgb * fogPremultAlphaFactor, clamp(fogFactor * fogFactorAdjust, 0.0, 1.0)), fragColour.a);
-		fragColour.a = fragColour.a * (1.0 - clamp(fogFactor, 0.0, 1.0));
 	}
 
 	#ifdef NEWGL

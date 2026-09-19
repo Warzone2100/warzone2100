@@ -156,7 +156,7 @@ function __camLandTransporter(player, pos)
 	{
 		for (let i = 0, len = ti.droids.length; i < len; ++i)
 		{
-			camSetDroidExperience(ti.droids[i]);
+			camSetEnemyDroidExperience(ti.droids[i]);
 		}
 	}
 }

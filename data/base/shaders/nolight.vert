@@ -11,9 +11,42 @@
 #extension GL_EXT_gpu_shader4 : enable
 #endif
 
-uniform mat4 ProjectionMatrix;
-uniform mat4 ModelViewMatrix;
-uniform float animFrameNumber;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
+	vec4 lightPosition;
+	vec4 sceneColor;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
+	float graphicsCycle;
+	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
+};
+
+layout(std140) uniform meshuniforms {
+	int tcmask;
+	int normalmap;
+	int specularmap;
+	int hasTangents;
+	int fogOutput;
+};
+
+layout(std140) uniform instanceuniforms {
+	mat4 ModelMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	float animFrameNumber;
+	int ecmEffect;
+	int alphaTest;
+};
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b
@@ -26,15 +59,15 @@ in vec4 vertex;
 in vec4 vertexTexCoordAndTexAnim;
 #else
 attribute vec4 vertex;
-attribute vec2 vertexTexCoordAndTexAnim;
+attribute vec4 vertexTexCoordAndTexAnim;
 #endif
 
 #ifdef NEWGL
 out vec2 texCoord;
-out float vertexDistance;
+out vec3 posViewSpace;
 #else
 varying vec2 texCoord;
-varying float vertexDistance;
+varying vec3 posViewSpace;
 #endif
 
 void main()
@@ -48,10 +81,9 @@ void main()
 	texCoord = vec2(texCoord.x + uFrame, texCoord.y + vFrame);
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * vertex;
 	gl_Position = gposition;
 
-	// Remember vertex distance
-	vertexDistance = gposition.z;
+	posViewSpace = (ViewMatrix * ModelMatrix * vertex).xyz;
 }

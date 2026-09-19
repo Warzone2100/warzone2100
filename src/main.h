@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +22,8 @@
 
 #ifndef __INCLUDED_SRC_MAIN_H__
 #define __INCLUDED_SRC_MAIN_H__
+
+struct Sha256;
 
 enum GS_GAMEMODE
 {
@@ -64,6 +68,9 @@ struct SaveGamePath_t
 GS_GAMEMODE GetGameMode() WZ_DECL_PURE;
 void SetGameMode(GS_GAMEMODE status);
 void mainLoop();
+
+void requestMapPreviewLoad(bool hideInterface);
+void requestMapPreviewLoad(bool hideInterface, std::string mapName, const Sha256& mapHash);
 
 extern char SaveGamePath[PATH_MAX];
 extern char ReplayPath[PATH_MAX];

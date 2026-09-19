@@ -67,6 +67,10 @@ Files: lib/ivis_opengl/3rdparty/etcpak/*
 Copyright: 2013-2021 Bartosz Taudul <wolf@nereid.pl>
 License: BSD-3-clause-etcpak
 
+Files: lib/ivis_opengl/3rdparty/mikktspace/mikktspace.*
+Copyright: 2011 by Morten S. Mikkelsen
+License: Zlib
+
 Files: lib/ivis_opengl/3rdparty/ska_sort.hpp
 Copyright: 2016 Malte Skarupke
 License: BSL-1.0
@@ -120,7 +124,7 @@ Files: src/3rdparty/propertymatcher.*
 Copyright: 2020 past-due
 License: Expat
 
-Files: 3rdparty/date/include/date.h
+Files: 3rdparty/date/date.h
 Copyright: 2015, 2016, 2017 Howard Hinnant
            2016 Adrian Colomitchi
            2017 Florian Dang
@@ -132,6 +136,10 @@ License: Expat
 Files: 3rdparty/discord-rpc/*
 Copyright: 2017 Discord, Inc.
 License: Expat
+
+Files: 3rdparty/ControllerImage/*
+Copyright: 2023-2025 Ryan C. Gordon and others
+License: Zlib
 
 Files: 3rdparty/EmbeddedJSONSignature/*
 Copyright: 2020 past-due
@@ -160,6 +168,11 @@ License: BSD-3-clause-inih
 Files: 3rdparty/libplum/*
 Copyright: 2020-2021, Paul-Louis Ageneau
 License: MPL-2.0
+
+Files: 3rdparty/libwebm/*
+Copyright: 2010 Google Inc
+           2012 The WebM project authors
+License: BSD-3-clause-libwebm
 
 Files: 3rdparty/optional-lite/*
 Copyright: 2014-2018 Martin Moene
@@ -202,6 +215,38 @@ License: CC-BY-SA-3.0
 Files: data/base/images/flags/flag-*.png
 Copyright: 2016 Bowtie AB
 License: Expat
+
+Files: data/base/shaders/fsr1_easu.frag
+       data/base/shaders/fsr1_rcas.frag
+       data/base/shaders/vk/fsr1_easu.frag
+       data/base/shaders/vk/fsr1_rcas.frag
+Copyright: 2021 Advanced Micro Devices, Inc.
+License: Expat
+Comment: Based on AMD FidelityFX Super Resolution 1.0
+ https://github.com/GPUOpen-Effects/FidelityFX-FSR
+
+Files: data/base/shaders/smaa_edges.vert
+       data/base/shaders/smaa_edges.frag
+       data/base/shaders/smaa_weights.vert
+       data/base/shaders/smaa_weights.frag
+       data/base/shaders/smaa_blend.vert
+       data/base/shaders/smaa_blend.frag
+       data/base/shaders/vk/smaa_edges.vert
+       data/base/shaders/vk/smaa_edges.frag
+       data/base/shaders/vk/smaa_weights.vert
+       data/base/shaders/vk/smaa_weights.frag
+       data/base/shaders/vk/smaa_blend.vert
+       data/base/shaders/vk/smaa_blend.frag
+       lib/ivis_opengl/3rdparty/AreaTex.h
+       lib/ivis_opengl/3rdparty/SearchTex.h
+Copyright: 2013 Jorge Jimenez
+           2013 Jose I. Echevarria
+           2013 Belen Masia
+           2013 Fernando Navarro
+           2013 Diego Gutierrez
+License: Expat
+Comment: Based on SMAA (Enhanced Subpixel Morphological Antialiasing)
+ https://github.com/iryoku/smaa
 
 Files: data/base/images/frontend/image_cam_universe_stars.png
        data/base/images/frontend/image_check_circle.png
@@ -419,6 +464,35 @@ License: BSD-3-clause-inih
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+License: BSD-3-clause-libwebm
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are
+ met:
+ .
+   * Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+ .
+   * Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
+     the documentation and/or other materials provided with the
+     distribution.
+ .
+   * Neither the name of Google nor the names of its contributors may
+     be used to endorse or promote products derived from this software
+     without specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 License: BSD-3-clause-miniupnpc
  Redistribution and use in source and binary forms, with or without

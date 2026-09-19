@@ -1432,13 +1432,13 @@ template<typename It, typename OutIt, typename ExtractKey>
 bool ska_sort_copy(It begin, It end, OutIt buffer_begin, ExtractKey && key)
 {
     std::ptrdiff_t num_elements = end - begin;
-    if (num_elements < 128 || detail::radix_sort_pass_count<typename std::result_of<ExtractKey(decltype(*begin))>::type> >= 8)
+    if (num_elements < 128 || detail::radix_sort_pass_count<typename std::invoke_result<ExtractKey, decltype(*begin)>::type> >= 8)
     {
         ska_sort(begin, end, key);
         return false;
     }
     else
-        return detail::RadixSorter<typename std::result_of<ExtractKey(decltype(*begin))>::type>::sort(begin, end, buffer_begin, key);
+        return detail::RadixSorter<typename std::invoke_result<ExtractKey, decltype(*begin)>::type>::sort(begin, end, buffer_begin, key);
 }
 template<typename It, typename OutIt>
 bool ska_sort_copy(It begin, It end, OutIt buffer_begin)

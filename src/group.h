@@ -67,4 +67,10 @@ void grpShutDown();
 
 DROID_GROUP *grpCreate();
 
+/// Reassign an existing group's id, keeping the global group manager consistent. Used by the
+/// GameState reconstruction to restore a command/transporter group's saved id (grpCreate assigns
+/// lowest-free ids, which differ from the original's historical ids). The caller must ensure newId
+/// is not already in use by another group (no-op if the group already has newId).
+void grpReassignId(DROID_GROUP *psGroup, int newId);
+
 #endif // __INCLUDED_SRC_GROUP_H__

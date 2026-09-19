@@ -2,14 +2,19 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
 //
 
 uniform sampler2D lightmap_tex;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
+layout(std140) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
+	vec4 paramx1;
+	vec4 paramy1;
+	vec4 paramx2;
+	vec4 paramy2;
+	mat4 textureMatrix1;
+	mat4 textureMatrix2;
+};
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -34,20 +39,6 @@ out vec4 FragColor;
 void main()
 {
 	vec4 fragColor = texture(lightmap_tex, uv2, 0.f);
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if(fogFactor > 1.f)
-		{
-			discard;
-		}
-
-		// Return fragment color
-		fragColor = fragColor;
-	}
 
 	#ifdef NEWGL
 	FragColor = fragColor;

@@ -48,6 +48,7 @@
 #include "tip.h"
 
 #include <algorithm>
+#include <cmath>
 #include <unordered_set>
 #include <deque>
 
@@ -56,8 +57,10 @@ static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
 static auto psMouseOverWidget = std::weak_ptr<WIDGET>();
+static bool bMouseOverWheelScrollConsumer = false;
 static auto psClickDownWidgetScreen = std::shared_ptr<W_SCREEN>();
 static auto psMouseOverWidgetScreen = std::shared_ptr<W_SCREEN>();
+static auto psLastRunScreen = std::weak_ptr<W_SCREEN>();
 
 struct WIDGET_KEYSTATE
 {
@@ -404,6 +407,123 @@ bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen)
 	return psMouseOverWidgetScreen == psScreen;
 }
 
+static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, const WzRect& clipRect, Vector2i screenPos, Vector2f moveDir, float moveMagnitude, int searchRange, float minAlongMotion, bool excludeContainingPoint, optional<WidgetMagnetTarget>& best, float& bestScore)
+{
+	// clip to the ancestors so scrolled-away widgets are not candidates
+	const WzRect geometry = psWidget->screenGeometry();
+	const int clippedLeft = std::max(clipRect.left(), geometry.left());
+	const int clippedTop = std::max(clipRect.top(), geometry.top());
+	const int clippedRight = std::min(clipRect.right(), geometry.right());
+	const int clippedBottom = std::min(clipRect.bottom(), geometry.bottom());
+	if (clippedRight <= clippedLeft || clippedBottom <= clippedTop)
+	{
+		return;
+	}
+	const WzRect visibleRect(clippedLeft, clippedTop, clippedRight - clippedLeft, clippedBottom - clippedTop);
+
+	// mouse-transparent widgets cannot be clicked, e.g. decorative section
+	// header buttons, so they are never attraction candidates
+	if (psWidget->visible() && !psWidget->transparentToMouse() && psWidget->isGamepadCursorMagnetTarget()
+		&& !(excludeContainingPoint && visibleRect.contains(screenPos.x, screenPos.y)))
+	{
+		float centerX = (float)(visibleRect.left() + visibleRect.right()) / 2.f;
+		float centerY = (float)(visibleRect.top() + visibleRect.bottom()) / 2.f;
+		const float radius = (float)std::min(visibleRect.width(), visibleRect.height()) / 2.f;
+		if (const auto magnetPoint = psWidget->gamepadCursorMagnetPoint())
+		{
+			// widget-supplied grab point, kept inside the visible area
+			centerX = (float)std::clamp(geometry.left() + magnetPoint->x, visibleRect.left(), visibleRect.right());
+			centerY = (float)std::clamp(geometry.top() + magnetPoint->y, visibleRect.top(), visibleRect.bottom());
+		}
+		// score by distance and direction to the nearest point of the visible
+		// rect, so wide widgets are reached by their near edge rather than
+		// their far-away center
+		const float nearestX = (float)std::clamp(screenPos.x, visibleRect.left(), visibleRect.right() - 1);
+		const float nearestY = (float)std::clamp(screenPos.y, visibleRect.top(), visibleRect.bottom() - 1);
+		const float dx = nearestX - (float)screenPos.x;
+		const float dy = nearestY - (float)screenPos.y;
+		const float edgeDistance = std::sqrt(dx * dx + dy * dy);
+		if (edgeDistance <= (float)searchRange)
+		{
+			bool candidateOk = true;
+			float score = edgeDistance;
+			if (moveMagnitude > 0.01f && edgeDistance > 1.f)
+			{
+				const float alongMotion = ((dx * moveDir.x) + (dy * moveDir.y)) / (edgeDistance * moveMagnitude);
+				if (alongMotion < minAlongMotion)
+				{
+					candidateOk = false;
+				}
+				else
+				{
+					score *= (2.f - alongMotion);
+				}
+			}
+			if (candidateOk && (!best.has_value() || score < bestScore))
+			{
+				best = WidgetMagnetTarget{Vector2i((int)centerX, (int)centerY), (int)radius};
+				bestScore = score;
+			}
+		}
+	}
+
+	// minimized forms and forms with disabled children cannot deliver clicks
+	// to their descendants, so none of them attract
+	if (!psWidget->allowChildGamepadCursorMagnetTargets())
+	{
+		return;
+	}
+
+	// hidden children prune their subtree, but a hidden root form still walks
+	// its visible children, matching the mouse-target recursion (notifications
+	// hide their overlay's root form for mouse transparency). Children walk
+	// top-down like mouse targeting, so equal scores - e.g. overlapping
+	// widgets both containing the point - resolve to the one a click would hit
+	const auto& childWidgets = psWidget->children();
+	for (auto i = childWidgets.size(); i--;)
+	{
+		const auto& psChild = childWidgets[i];
+		if (!psChild->visible())
+		{
+			continue;
+		}
+		findMagnetTargetRecursive(psChild, visibleRect, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
+	}
+}
+
+std::shared_ptr<W_SCREEN> widgGetLastRunScreen()
+{
+	return psLastRunScreen.lock();
+}
+
+std::shared_ptr<W_SCREEN> widgGetMouseOverScreen()
+{
+	return psMouseOverWidgetScreen;
+}
+
+optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange, float minAlongMotion, bool excludeContainingPoint, const std::shared_ptr<W_SCREEN>& onlyScreen)
+{
+	optional<WidgetMagnetTarget> best;
+	float bestScore = 0.f;
+	const float moveMagnitude = std::sqrt(moveDir.x * moveDir.x + moveDir.y * moveDir.y);
+	const WzRect unclipped(-1000000, -1000000, 2000000, 2000000);
+
+	if (onlyScreen)
+	{
+		findMagnetTargetRecursive(onlyScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
+		return best;
+	}
+	for (const auto& overlay : overlays)
+	{
+		findMagnetTargetRecursive(overlay.psScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
+	}
+	if (baseScreen)
+	{
+		findMagnetTargetRecursive(baseScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
+	}
+	return best;
+}
+
 bool isMouseOverScreenOverlayChild(int mx, int my)
 {
 	if (psMouseOverWidgetScreen != nullptr)
@@ -436,6 +556,13 @@ bool isMouseOverScreenOverlayChild(int mx, int my)
 		});
 	}
 	return bMouseIsOverOverlayChild;
+}
+
+// Returns whether the current mouse position is over a widget (or an ancestor of it) that consumes mouse wheel scroll
+// When multiple screens are run in a frame, the answer reflects the most recent widgRunScreen call
+bool isMouseOverWheelScrollConsumingWidget()
+{
+	return bMouseOverWheelScrollConsumer;
 }
 
 bool isMouseClickDownOnScreenOverlayChild()
@@ -1307,6 +1434,16 @@ static void widgProcessMouseOver(const std::shared_ptr<WIDGET>& widget, W_CONTEX
 		else
 		{
 			// Note: There are rare exceptions where this can happen, if a WIDGET is doing something funky like drawing widgets it hasn't attached.
+			// (e.g. a dropdown forwarding highlight targeting to its displayed selected item)
+			// Still deliver highlightLost to the prior highlight, so it is not left stuck highlighted
+			if (psMouseOverWidgetScreen)
+			{
+				if (auto lockedLastHighlight = psMouseOverWidgetScreen->lastHighlight.lock())
+				{
+					lockedLastHighlight->highlightLost();
+				}
+				psMouseOverWidgetScreen->lastHighlight.reset();
+			}
 			psMouseOverWidgetScreen = nullptr;
 		}
 	}
@@ -1419,6 +1556,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 {
 	static WidgetTriggers assertReturn;
 	ASSERT_OR_RETURN(assertReturn, psScreen != nullptr, "Invalid screen pointer");
+	psLastRunScreen = psScreen;
 	psScreen->retWidgets.clear();
 	cleanupDeletedOverlays();
 
@@ -1528,7 +1666,27 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	}
 	else
 	{
+		if (psMouseOverWidgetScreen)
+		{
+			// deliver highlightLost before forgetting the screen, so no
+			// widget is left stuck in its highlighted state
+			if (auto lockedLastHighlight = psMouseOverWidgetScreen->lastHighlight.lock())
+			{
+				lockedLastHighlight->highlightLost();
+			}
+			psMouseOverWidgetScreen->lastHighlight.reset();
+		}
 		psMouseOverWidgetScreen.reset();
+	}
+
+	bMouseOverWheelScrollConsumer = false;
+	for (auto widget = mouseOverWidget; widget != nullptr; widget = widget->parent())
+	{
+		if (widget->canConsumeWheelScroll())
+		{
+			bMouseOverWheelScrollConsumer = true;
+			break;
+		}
 	}
 
 	// reset context to screen context

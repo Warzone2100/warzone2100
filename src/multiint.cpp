@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,6 +69,7 @@
 #include "lib/widget/margin.h"
 
 #include "challenge.h"
+#include "corridordump.h"
 #include "main.h"
 #include "levels.h"
 #include "objects.h"
@@ -91,10 +94,15 @@
 #include "game.h"
 #include "warzoneconfig.h"
 #include "modding.h"
+#include "movebench.h"
 #include "qtscript.h"
 #include "random.h"
 #include "notifications.h"
 #include "radar.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "resource_loading_dispatch.h"
+#include "lib/framework/loading_task.h"
+#include "lib/framework/crc.h"
 #include "lib/framework/wztime.h"
 
 #include "multiplay.h"
@@ -197,6 +205,11 @@ static UDWORD hideTime = 0;
 static bool bInActualHostedLobby = false;
 static bool bRequestedSelfMoveToPlayers = false;
 static std::vector<bool> bHostRequestedMoveToPlayers = std::vector<bool>(MAX_CONNECTED_PLAYERS, false);
+
+static inline bool isFullscreenMapPreviewActive()
+{
+	return hideTime != 0 && gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME;
+}
 
 static std::weak_ptr<WzMultiplayerOptionsTitleUI> currentMultiOptionsTitleUI;
 
@@ -593,12 +606,12 @@ void loadMultiScripts()
 				continue;
 			}
 
-			if (NetPlay.players[i].ai >= 0 && myResponsibility(i))
+			if (NetPlay.players[i].ai >= 0 && static_cast<size_t>(NetPlay.players[i].ai) < aidata.size() && myResponsibility(i))
 			{
 				if (aidata[NetPlay.players[i].ai].js[0] != '\0')
 				{
 					debug(LOG_SAVE, "Loading javascript AI for player %d", i);
-					if (!loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty))
+					if (!loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty, wzapi::ScriptBinding::PlayerAI))
 					{
 						debug(LOG_ERROR, "Failed to load AI!: %s", aidata[NetPlay.players[i].ai].js);
 					}
@@ -611,7 +624,7 @@ void loadMultiScripts()
 	if (game.scavengers != NO_SCAVENGERS && myResponsibility(scavengerPlayer()))
 	{
 		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
-		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY);
+		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY, wzapi::ScriptBinding::PlayerAI);
 	}
 
 	// Reset resource path, otherwise things break down the line
@@ -741,7 +754,7 @@ private:
 };
 
 /// Loads the entire map just to show a picture of it
-void loadMapPreview(bool hideInterface)
+static void loadMapPreview(bool hideInterface, std::string mapName, const Sha256& mapHash)
 {
 	std::string		aFileName;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
@@ -758,29 +771,25 @@ void loadMapPreview(bool hideInterface)
 	}
 
 	// load the terrain types
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+	LEVEL_DATASET *psLevel = levFindDataSet(mapName.c_str(), &mapHash);
 	if (psLevel == nullptr)
 	{
-		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), !NET_getDownloadingWzFiles().empty() ? "are" : "aren't");
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", mapName.c_str(), mapHash.toString().c_str(), !NET_getDownloadingWzFiles().empty() ? "are" : "aren't");
 		loadEmptyMapPreview();
 		return;
 	}
 	if (psLevel->game < 0 || psLevel->game >= LEVEL_MAXFILES)
 	{
-		debug(LOG_ERROR, "apDataFiles index (%" PRIi16 ") is out of bounds for: \"%s\" %s.", psLevel->game, game.map, game.hash.toString().c_str());
+		debug(LOG_ERROR, "apDataFiles index (%" PRIi16 ") is out of bounds for: \"%s\" %s.", psLevel->game, mapName.c_str(), mapHash.toString().c_str());
 		loadEmptyMapPreview();
 		return;
 	}
 	if (psLevel->realFileName == nullptr)
 	{
-		builtInMap = true;
-		useTerrainOverrides = shouldLoadTerrainTypeOverrides(psLevel->pName);
-		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d override %d", psLevel->pName.c_str(), psLevel->dataDir, (int)useTerrainOverrides);
+		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName.c_str(), psLevel->dataDir);
 	}
 	else
 	{
-		builtInMap = false;
-		useTerrainOverrides = false;
 		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName.c_str(), WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false);
@@ -887,6 +896,38 @@ void loadMapPreview(bool hideInterface)
 	{
 		hideTime = gameTime;
 	}
+}
+
+static void loadMapPreview(bool hideInterface)
+{
+	loadMapPreview(hideInterface, game.map, game.hash);
+}
+
+namespace
+{
+
+LoadingTask<> mapPreviewLoadTaskImpl(bool hideInterface)
+{
+	loadMapPreview(hideInterface);
+	co_return load_ok();
+}
+
+LoadingTask<> mapPreviewLoadTaskImpl(bool hideInterface, std::string mapName, Sha256 mapHash)
+{
+	loadMapPreview(hideInterface, std::move(mapName), mapHash);
+	co_return load_ok();
+}
+
+} // anonymous namespace
+
+LoadingTask<> mapPreviewLoadTask(ResourceLoadingController &, bool hideInterface)
+{
+	return mapPreviewLoadTaskImpl(hideInterface);
+}
+
+LoadingTask<> mapPreviewLoadTask(ResourceLoadingController &, bool hideInterface, std::string mapName, Sha256 mapHash)
+{
+	return mapPreviewLoadTaskImpl(hideInterface, std::move(mapName), mapHash);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3803,7 +3844,17 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
  */
 static void SendFireUp()
 {
-	uint32_t randomSeed = rand();  // Pick a random random seed for the synchronised random number generator.
+	// A forced backend from the command line wins over the lobby and config, for
+	// testing a run under a specific planner. Applied here so it is in place
+	// before the first tick.
+	if (cli_pathfinding_backend() >= 0)
+	{
+		game.pathfindingBackend = static_cast<uint16_t>(cli_pathfinding_backend());
+	}
+
+	// Pick a random random seed for the synchronised random number generator.
+	// The movement benchmark pins it instead, so a scenario reproduces exactly.
+	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : rand();
 
 	debug(LOG_INFO, "Sending NET_FIREUP");
 
@@ -4445,7 +4496,6 @@ void ChatBoxWidget::initializeMessages(bool preserveOldChat)
 void ChatBoxWidget::displayMessage(RoomMessage const &message)
 {
 	auto paragraph = std::make_shared<Paragraph>();
-	paragraph->setGeometry(0, 0, messages->calculateListViewWidth(), 0);
 
 	switch (message.type)
 	{
@@ -4493,6 +4543,9 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		// display contextual menu
 		psChatBoxWidget->displayParagraphContextualMenu(msgText, senderCopy);
 	});
+
+	// Sized once it has its text, so it settles on the height that text wraps to
+	paragraph->setGeometry(0, 0, messages->calculateListViewWidth(), 0);
 
 	messages->addItem(paragraph);
 }
@@ -4871,6 +4924,10 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		{
 			char mapName[256] = {0};
 			sstrcpy(mapName, ini.value("map", game.map).toWzString().toUtf8().c_str());
+			if (corridorDumpActive())
+			{
+				sstrcpy(mapName, corridorDumpMapName());   // dump the map named on the command line, not the config placeholder
+			}
 			Sha256 mapHash = levGetMapNameHash(mapName);
 
 			LEVEL_DATASET* mapData = levFindDataSet(mapName, &mapHash);
@@ -4912,6 +4969,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 			game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 			sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 			game.techLevel = ini.value("techLevel", game.techLevel).toInt();
+			game.pathfindingBackend = static_cast<uint16_t>(ini.value("pathfindingBackend", game.pathfindingBackend).toInt());
 
 			// Allow making the host a spectator (for MP games)
 			spectatorHost = ini.value("spectatorHost", false).toBool();
@@ -5290,12 +5348,13 @@ void multiLobbyRandomizeOptions()
 	// Structure limits are simply 0 or max, only for NO_TANK, NO_CYBORG, NO_VTOL, NO_UPLINK, NO_LASSAT.
 	if (!bLimiterLoaded || !asStructureStats)
 	{
-		initLoadingScreen(true);
-		if (resLoad("wrf/limiter_data.wrf", 503))
+		auto& controller = ResourceLoadingController::instance();
+		ResourceLoadingController::FramePolicy policy;
+		policy.showLoadingScreen = true;
+		if (runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 		{
 			bLimiterLoaded = true;
 		}
-		closeLoadingScreen();
 	}
 	resetLimits();
 	for (int i = 0; i < static_cast<unsigned>(limitIcons.size()) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
@@ -5564,9 +5623,16 @@ void startMultiplayerGame()
 		{
 			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 
-			if (!resLoad("wrf/limiter_data.wrf", 503))
+			auto& controller = ResourceLoadingController::instance();
+			ResourceLoadingController::FramePolicy policy;
+			policy.showLoadingScreen = true;
+			if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 			{
 				debug(LOG_INFO, "Unable to load limiter_data.");
+			}
+			else
+			{
+				bLimiterLoaded = true;
 			}
 		}
 		else
@@ -5842,12 +5908,14 @@ public:
 	virtual void quitGame(int exitCode) override
 	{
 		ASSERT_HOST_ONLY(return);
-		auto psStrongMultiOptionsTitleUI = currentMultiOptionsTitleUI.lock();
-		if (psStrongMultiOptionsTitleUI)
-		{
-			stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI(), ERROR_NOERROR);
-		}
-		wzQuit(exitCode);
+		wzAsyncExecOnMainThread([exitCode]() {
+			auto psStrongMultiOptionsTitleUI = currentMultiOptionsTitleUI.lock();
+			if (psStrongMultiOptionsTitleUI)
+			{
+				stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI(), ERROR_NOERROR);
+			}
+			wzQuit(exitCode);
+		});
 	}
 };
 
@@ -6169,7 +6237,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 					break;
 				}
 
-				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
+				if (queue.index != NetPlay.hostPlayer)
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
 					break;
@@ -6478,7 +6546,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 			}
 
 			addPlayerBox(true);				// update the player box.
-			loadMapPreview(false);
+			requestMapPreviewLoad(false);
 			updateGameOptions();
 		}
 	}
@@ -6573,7 +6641,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 						game.maxPlayers = mapData->players;
 						game.isMapMod = CheckForMod(mapData->realFileName);
 						game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str());
-						loadMapPreview(false);
+						requestMapPreviewLoad(false, mapData->pName, game.hash);
 
 						/* Change game info to match the previous selection if hover preview was displayed */
 						sstrcpy(game.map, oldGameMap);
@@ -6606,7 +6674,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 					uint8_t oldMaxPlayers = game.maxPlayers;
 					updateMapSettings(mapData);
 
-					loadMapPreview(false);
+					requestMapPreviewLoad(false);
 					loadMapChallengeAndPlayerSettings();
 					debug(LOG_INFO, "Switching map: %s (builtin: %d)", (!mapData->pName.empty()) ? mapData->pName.c_str() : "n/a", (int)builtInMap);
 
@@ -6638,7 +6706,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 				}
 				break;
 			default:
-				loadMapPreview(false);  // Restore the preview of the old map.
+				requestMapPreviewLoad(false);  // Restore the preview of the old map.
 				break;
 			}
 			if (!isHoverPreview)
@@ -6653,7 +6721,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		if (hideTime != 0)
 		{
 			// we abort the 'hidetime' on press of a mouse button.
-			if (gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
+			if (isFullscreenMapPreviewActive() && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
 			{
 				return TITLECODE_CONTINUE;
 			}
@@ -6672,13 +6740,6 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		}
 	}
 
-	widgDisplayScreen(psWScreen);									// show the widgets currently running
-
-	if (multiRequestUp)
-	{
-		widgDisplayScreen(psRScreen);								// show the Requester running
-	}
-
 	if (CancelPressed())
 	{
 		processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
@@ -6695,6 +6756,21 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 
 	return TITLECODE_CONTINUE;
+}
+
+void WzMultiplayerOptionsTitleUI::render()
+{
+	if (isFullscreenMapPreviewActive())
+	{
+		return;
+	}
+
+	widgDisplayScreen(psWScreen);									// show the widgets currently running
+
+	if (multiRequestUp)
+	{
+		widgDisplayScreen(psRScreen);								// show the Requester running
+	}
 }
 
 WzMultiplayerOptionsTitleUI::WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitleUI> parent)
@@ -6904,7 +6980,7 @@ void WzMultiplayerOptionsTitleUI::start()
 		}
 	}
 
-	loadMapPreview(false);
+	requestMapPreviewLoad(false);
 
 	const bool hostOrSingle = ingame.side == InGameSide::HOST_OR_SINGLEPLAYER;
 	/* Re-entering or entering without a challenge */
@@ -7564,7 +7640,9 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
 	j["inactivityMinutes"] = p.inactivityMinutes;
 	j["gameTimeLimitMinutes"] = p.gameTimeLimitMinutes;
 	j["playerLeaveMode"] = p.playerLeaveMode;
+	j["playerReconnectWaitSeconds"] = p.playerReconnectWaitSeconds;
 	j["blindMode"] = p.blindMode;
+	j["pathfindingBackend"] = p.pathfindingBackend;
 }
 
 inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
@@ -7611,6 +7689,15 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 		// default to the old (pre-4.4.0) behavior of destroy resources
 		p.playerLeaveMode = PLAYER_LEAVE_MODE::DESTROY_RESOURCES;
 	}
+	if (j.contains("playerReconnectWaitSeconds"))
+	{
+		p.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(j.at("playerReconnectWaitSeconds").get<uint32_t>());
+	}
+	else
+	{
+		// default to no reconnect wait (prior behavior: a dropped player was declared left immediately)
+		p.playerReconnectWaitSeconds = 0;
+	}
 	if (j.contains("blindMode"))
 	{
 		p.blindMode = j.at("blindMode").get<BLIND_MODE>();
@@ -7620,6 +7707,8 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 		// default to the old (pre-4.6.0) behavior (no blind mode)
 		p.blindMode = BLIND_MODE::NONE;
 	}
+	// default to the legacy A* planner for replays recorded before this setting existed
+	p.pathfindingBackend = j.value("pathfindingBackend", static_cast<uint16_t>(0));
 }
 
 inline void to_json(nlohmann::json& j, const MULTISTRUCTLIMITS& p) {
@@ -8070,10 +8159,6 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 		debug(LOG_POPUP, "Missing map used for replay: \"%s\" (hash: %s)", game.map, game.hash.toString().c_str());
 		return false;
 	}
-	// Must restore `useTerrainOverrides` (this matters for re-loading the map!) - see loadMapPreview() in multiint.cpp
-	builtInMap = (mapData->realFileName == nullptr);
-	useTerrainOverrides = builtInMap && shouldLoadTerrainTypeOverrides(mapData->pName);
-
 	for (Sha256 &hash : game.modHashes)
 	{
 		// TODO: Actually check the loaded mods??

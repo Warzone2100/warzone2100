@@ -153,11 +153,10 @@ bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor)
 {
 # if TARGET_OS_MAC
 	@autoreleasepool {
-		NSOperatingSystemVersion targetMin = {
-			.majorVersion = major,
-			.minorVersion = minor,
-			.patchVersion = 0
-		};
+		NSOperatingSystemVersion targetMin = {};
+		targetMin.majorVersion = major;
+		targetMin.minorVersion = minor;
+		targetMin.patchVersion = 0;
 
 //		if (@available(macOS 10.10, *)) {	// "@available" is only available on Xcode 9+
 		if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10) { // alternative to @available

@@ -27,6 +27,9 @@
 #include "weapondef.h"
 #include "objectdef.h"
 
+// Checks if an object is below a HP percentage.
+bool objectBelowHealthLevel(BASE_OBJECT *psObj, const unsigned int percentage);
+
 /* Fire a weapon at something added int weapon_slot*/
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
 

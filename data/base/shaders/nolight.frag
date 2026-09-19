@@ -4,18 +4,46 @@
 //#pragma debug(on)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
+	vec4 lightPosition;
+	vec4 sceneColor;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
+	float graphicsCycle;
+	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
+};
+
+layout(std140) uniform meshuniforms {
+	int tcmask;
+	int normalmap;
+	int specularmap;
+	int hasTangents;
+	int fogOutput;
+};
+
+layout(std140) uniform instanceuniforms {
+	mat4 ModelMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	float animFrameNumber;
+	int ecmEffect;
+	int alphaTest;
+};
 //
 
 uniform sampler2D Texture;
-uniform vec4 colour;
-uniform bool alphaTest;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -24,10 +52,10 @@ uniform vec4 fogColor;
 #endif
 
 #ifdef NEWGL
-in float vertexDistance;
+in vec3 posViewSpace;
 in vec2 texCoord;
 #else
-varying float vertexDistance;
+varying vec3 posViewSpace;
 varying vec2 texCoord;
 #endif
 
@@ -37,29 +65,22 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
+#include "distance_fog.glsl"
+
 void main()
 {
 	vec4 texColour = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	vec4 fragColour = texColour * colour;
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
+	}
 
-	if (alphaTest && (fragColour.a <= 0.001))
+	if (alphaTest > 0 && (fragColour.a <= 0.001))
 	{
 		discard;
-	}
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if(fogFactor > 1.f)
-		{
-			discard;
-		}
-
-		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
 	}
 
 	#ifdef NEWGL

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@
 #include "nethelpers.h"
 #include "lib/framework/wzapp.h"
 #include "display3d.h" // for building animation speed
+#include "atmos.h"
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
@@ -427,12 +428,14 @@ bool loadConfig()
 	wz_texture_compression = iniGetBool("textureCompression", true).value();
 	showFPS = iniGetBool("showFPS", false).value();
 	showUNITCOUNT = iniGetBool("showUNITCOUNT", false).value();
+	rangeOnScreen = iniGetBool("showUnitRangeRings", false).value();
 	if (auto value = iniGetIntegerOpt("cameraSpeed"))
 	{
 		int v = value.value();
 		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
 	setShakeStatus(iniGetBool("shake", false).value());
+	atmosSetWeatherEnabled(iniGetBool("weather", true).value());
 	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());
 	war_setOptionsButtonVisibility(iniGetInteger("optionsButtonVisibility", war_getOptionsButtonVisibility()).value());
@@ -456,6 +459,8 @@ bool loadConfig()
 	{
 		setRotateMouseKey(iniGetMouseKeyCode("mouseKeyRotate", getRotateMouseKey()));
 	}
+	setPinchToZoomTouchGesture(iniGetBool("pinchToZoom", getPinchToZoomTouchGesture()).value());
+	setPanTouchGesture(iniGetBool("touchPan", getPanTouchGesture()).value());
 	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
@@ -542,6 +547,8 @@ bool loadConfig()
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	war_setMPPlayerLeaveMode(iniGetPlayerLeaveMode("playerLeaveModeMP", war_getMPPlayerLeaveMode()).value());
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+	war_setMPPlayerReconnectWaitSeconds(iniGetInteger("playerReconnectWaitSecondsMP", war_getMPPlayerReconnectWaitSeconds()).value());
+	game.playerReconnectWaitSeconds = war_getMPPlayerReconnectWaitSeconds();
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -584,6 +591,21 @@ bool loadConfig()
 		}
 		war_SetTrapCursor(static_cast<TrapCursorMode>(intTrapCursorValue));
 	}
+	auto intGamepadModeValue = iniGetInteger("gamepadMode", static_cast<int>(GamepadMode::Automatic)).value();
+	if (intGamepadModeValue < static_cast<int>(GamepadMode::Disabled) || intGamepadModeValue > static_cast<int>(GamepadMode::Automatic))
+	{
+		intGamepadModeValue = static_cast<int>(GamepadMode::Automatic);
+	}
+	war_SetGamepadMode(static_cast<GamepadMode>(intGamepadModeValue));
+	war_SetGamepadCursorSpeed(iniGetInteger("gamepadCursorSpeed", GAMEPAD_CURSOR_SPEED_DEFAULT).value());
+	war_SetGamepadStickDeadzone(iniGetInteger("gamepadStickDeadzone", GAMEPAD_DEADZONE_DEFAULT).value());
+	war_SetGamepadTriggerThreshold(iniGetInteger("gamepadTriggerThreshold", GAMEPAD_TRIGGER_THRESHOLD_DEFAULT).value());
+	war_SetGamepadCursorMagnetism(iniGetInteger("gamepadCursorMagnetism", GAMEPAD_MAGNETISM_DEFAULT).value());
+	war_SetGamepadInvertRightStick(iniGetBool("gamepadInvertRightStick", false).value());
+	war_SetGamepadSwapSticks(iniGetBool("gamepadSwapSticks", false).value());
+	war_SetGamepadRumble(iniGetBool("gamepadRumble", true).value());
+	war_SetGamepadShowLayoutOnConnect(iniGetBool("gamepadShowLayoutOnConnect", true).value());
+	war_SetGamepadLayoutSeenDevices(iniGetString("gamepadLayoutSeenDevices", "").value());
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -689,6 +711,7 @@ bool loadConfig()
 	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
 	war_setAutoNotReadyKickSeconds(iniGetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
+	war_setDevForceOldSavegameLoad(iniGetBool("devForceOldSavegameLoad", war_getDevForceOldSavegameLoad()).value());
 	war_setMaxReplaysSaved(iniGetInteger("maxReplaysSaved", war_getMaxReplaysSaved()).value());
 	war_setOldLogsLimit(iniGetInteger("oldLogsLimit", war_getOldLogsLimit()).value());
 	int openSpecSlotsIntValue = iniGetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots()).value();
@@ -715,16 +738,126 @@ bool loadConfig()
 			debug(LOG_WARNING, "Unsupported / invalid terrainShadingQuality value: %d; using default", intValue);
 		}
 	}
+	if (auto value = iniGetIntegerOpt("terrainMeshDetail"))
+	{
+		auto intValue = value.value();
+		if (intValue < 1 || intValue > MAX_TERRAIN_MESH_SUBDIVISION || !setTerrainMeshSubdivision(intValue))
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainMeshDetail value: %d; using default", intValue);
+		}
+	}
+	{
+		// mesh-strategy override (not in the options UI)
+		auto strValue = iniGetString("terrainTessellation", "auto").value();
+		if (strValue == "auto")
+		{
+			setTerrainTessellationPreference(TerrainTessellationPreference::Auto);
+		}
+		else if (strValue == "cpu")
+		{
+			setTerrainTessellationPreference(TerrainTessellationPreference::ForceCPU);
+		}
+		else if (strValue == "hw")
+		{
+			setTerrainTessellationPreference(TerrainTessellationPreference::ForceHardware);
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainTessellation value: \"%s\"; using \"auto\"", strValue.c_str());
+		}
+	}
 	setDrawTerrainShadows(iniGetBool("terrainShadows", true).value());
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
 	if (auto value = iniGetIntegerOpt("shadowMapResolution"))
 	{
 		war_setShadowMapResolution(value.value());
 	}
+	if (auto value = iniGetIntegerOpt("renderResolution"))
+	{
+		war_setRenderResolutionPercent(value.value());
+	}
+	{
+		std::string upscalingValue = iniGetString("upscaling", "bilinear").value();
+		if (upscalingValue == "fsr1")
+		{
+			war_setSceneUpscalingMode(SCENE_UPSCALING_MODE::FSR1);
+		}
+		else
+		{
+			if (upscalingValue != "bilinear")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid upscaling value: \"%s\"; using \"bilinear\"", upscalingValue.c_str());
+			}
+			war_setSceneUpscalingMode(SCENE_UPSCALING_MODE::BILINEAR);
+		}
+	}
+	war_setUpscalingSharpness(iniGetInteger("upscalingSharpness", war_getUpscalingSharpness()).value());
+	{
+		std::string smaaValue = iniGetString("smaa", "off").value();
+		if (smaaValue == "low")
+		{
+			war_setSmaaMode(SMAA_MODE::LOW);
+		}
+		else if (smaaValue == "medium")
+		{
+			war_setSmaaMode(SMAA_MODE::MEDIUM);
+		}
+		else if (smaaValue == "high")
+		{
+			war_setSmaaMode(SMAA_MODE::HIGH);
+		}
+		else if (smaaValue == "ultra")
+		{
+			war_setSmaaMode(SMAA_MODE::ULTRA);
+		}
+		else
+		{
+			if (smaaValue != "off")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid smaa value: \"%s\"; using \"off\"", smaaValue.c_str());
+			}
+			war_setSmaaMode(SMAA_MODE::OFF);
+		}
+	}
 
 	{
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
 		war_setPointLightPerPixelLighting(value.value_or(false));
+	}
+	{
+		auto value = iniGetBoolOpt("muzzleFlashLights");
+		war_setMuzzleFlashLighting(value.value_or(true));
+	}
+	{
+		auto value = iniGetBoolOpt("projectileLights");
+		war_setProjectileLighting(value.value_or(true));
+	}
+	{
+		std::string ssaoValue = iniGetString("ssao", "off").value();
+		if (ssaoValue == "low")
+		{
+			war_setSsaoMode(SSAO_MODE::LOW);
+		}
+		else if (ssaoValue == "normal")
+		{
+			war_setSsaoMode(SSAO_MODE::NORMAL);
+		}
+		else if (ssaoValue == "high")
+		{
+			war_setSsaoMode(SSAO_MODE::HIGH);
+		}
+		else if (ssaoValue == "ultra")
+		{
+			war_setSsaoMode(SSAO_MODE::ULTRA);
+		}
+		else
+		{
+			if (ssaoValue != "off")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid ssao value: \"%s\"; using \"off\"", ssaoValue.c_str());
+			}
+			war_setSsaoMode(SSAO_MODE::OFF);
+		}
 	}
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
@@ -827,6 +960,7 @@ bool saveConfig()
 	iniSetInteger("lodDistanceBias", war_getLODDistanceBiasPercentage());
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
+	iniSetBool("weather", atmosGetWeatherEnabled());
 	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
 	iniSetInteger("optionsButtonVisibility", (int)war_getOptionsButtonVisibility());
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
@@ -835,11 +969,14 @@ bool saveConfig()
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
 	iniSetMouseKeyOpt("mouseKeyPan", getPanMouseKey());
 	iniSetMouseKeyOpt("mouseKeyRotate", getRotateMouseKey());
+	iniSetInteger("pinchToZoom", (int)(getPinchToZoomTouchGesture()));
+	iniSetInteger("touchPan", (int)(getPanTouchGesture()));
 	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
 	iniSetInteger("showFPS", (int)showFPS);
 	iniSetInteger("showUNITCOUNT", (int)showUNITCOUNT);
+	iniSetInteger("showUnitRangeRings", (int)rangeOnScreen);
 	iniSetInteger("shadows", (int)(getDrawShadows()));	// shadows
 	iniSetInteger("sound", (int)war_getSoundEnabled());
 	iniSetInteger("FMVmode", (int)(war_GetFMVmode()));		// sequences
@@ -848,6 +985,16 @@ bool saveConfig()
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
 	iniSetInteger("trapCursor", (int)war_GetTrapCursor());
+	iniSetInteger("gamepadMode", (int)war_GetGamepadMode());
+	iniSetInteger("gamepadCursorSpeed", war_GetGamepadCursorSpeed());
+	iniSetInteger("gamepadStickDeadzone", war_GetGamepadStickDeadzone());
+	iniSetInteger("gamepadTriggerThreshold", war_GetGamepadTriggerThreshold());
+	iniSetInteger("gamepadCursorMagnetism", war_GetGamepadCursorMagnetism());
+	iniSetBool("gamepadInvertRightStick", war_GetGamepadInvertRightStick());
+	iniSetBool("gamepadSwapSticks", war_GetGamepadSwapSticks());
+	iniSetBool("gamepadRumble", war_GetGamepadRumble());
+	iniSetBool("gamepadShowLayoutOnConnect", war_GetGamepadShowLayoutOnConnect());
+	iniSetString("gamepadLayoutSeenDevices", war_GetGamepadLayoutSeenDevices());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
@@ -886,6 +1033,7 @@ bool saveConfig()
 				war_setMPInactivityMinutes(game.inactivityMinutes);
 				war_setMPGameTimeLimitMinutes(game.gameTimeLimitMinutes);
 				war_setMPPlayerLeaveMode(game.playerLeaveMode);
+				war_setMPPlayerReconnectWaitSeconds(game.playerReconnectWaitSeconds);
 
 				// remember number of spectator slots in MP games
 				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
@@ -905,6 +1053,7 @@ bool saveConfig()
 	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
 	iniSetInteger("gameTimeLimitMinutesMP", war_getMPGameTimeLimitMinutes());
 	iniSetInteger("playerLeaveModeMP", (int)war_getMPPlayerLeaveMode());
+	iniSetInteger("playerReconnectWaitSecondsMP", (int)war_getMPPlayerReconnectWaitSeconds());
 	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
@@ -918,16 +1067,48 @@ bool saveConfig()
 	iniSetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds());
 	iniSetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
+	iniSetBool("devForceOldSavegameLoad", war_getDevForceOldSavegameLoad());
 	iniSetInteger("maxReplaysSaved", war_getMaxReplaysSaved());
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
 	iniSetInteger("fogEnd", war_getFogEnd());
 	iniSetInteger("fogStart", war_getFogStart());
 	iniSetInteger("terrainMode", getTerrainShaderQuality());
 	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
+	if (getTerrainMeshSubdivision() > 0) // 0 = default not yet picked, so don't persist it
+	{
+		iniSetInteger("terrainMeshDetail", getTerrainMeshSubdivision());
+	}
+	switch (getTerrainTessellationPreference())
+	{
+		case TerrainTessellationPreference::Auto: iniSetString("terrainTessellation", "auto"); break;
+		case TerrainTessellationPreference::ForceCPU: iniSetString("terrainTessellation", "cpu"); break;
+		case TerrainTessellationPreference::ForceHardware: iniSetString("terrainTessellation", "hw"); break;
+	}
 	iniSetInteger("terrainShadows", (int)(getDrawTerrainShadows()));
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
+	iniSetInteger("renderResolution", (int)war_getRenderResolutionPercent());
+	iniSetString("upscaling", (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1) ? "fsr1" : "bilinear");
+	iniSetInteger("upscalingSharpness", war_getUpscalingSharpness());
+	switch (war_getSmaaMode())
+	{
+		case SMAA_MODE::OFF: iniSetString("smaa", "off"); break;
+		case SMAA_MODE::LOW: iniSetString("smaa", "low"); break;
+		case SMAA_MODE::MEDIUM: iniSetString("smaa", "medium"); break;
+		case SMAA_MODE::HIGH: iniSetString("smaa", "high"); break;
+		case SMAA_MODE::ULTRA: iniSetString("smaa", "ultra"); break;
+	}
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetBool("muzzleFlashLights", war_getMuzzleFlashLighting());
+	iniSetBool("projectileLights", war_getProjectileLighting());
+	switch (war_getSsaoMode())
+	{
+		case SSAO_MODE::OFF: iniSetString("ssao", "off"); break;
+		case SSAO_MODE::LOW: iniSetString("ssao", "low"); break;
+		case SSAO_MODE::NORMAL: iniSetString("ssao", "normal"); break;
+		case SSAO_MODE::HIGH: iniSetString("ssao", "high"); break;
+		case SSAO_MODE::ULTRA: iniSetString("ssao", "ultra"); break;
+	}
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 
@@ -1059,6 +1240,7 @@ bool reloadMPConfig()
 	game.inactivityMinutes = war_getMPInactivityMinutes();
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+	game.playerReconnectWaitSeconds = war_getMPPlayerReconnectWaitSeconds();
 	game.blindMode = BLIND_MODE::NONE;
 
 	// restore group menus enabled setting (as tutorial may override it)

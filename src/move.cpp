@@ -39,6 +39,8 @@
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
+#include "corridor_gate.h"
 #include "loop.h"
 #include "geometry.h"
 #include "action.h"
@@ -59,6 +61,8 @@
 #include "qtscript.h"
 #include "steering/steering.h"
 #include "steering/collision_avoidance_behavior.h"
+#include "combat.h"
+#include "movebench.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -169,6 +173,13 @@ bool moveFormationSpeedLimitingOn(uint32_t player)
 	return playerFormationSpeedLimiting[player];
 }
 
+void moveRestoreFormationSpeedLimiting(uint32_t player, bool enabled)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", player);
+	// Restore the synchronised value verbatim - no net message (every client restores from the snapshot).
+	playerFormationSpeedLimiting[player] = enabled;
+}
+
 bool recvSyncOptChange(NETQUEUE queue)
 {
 	uint8_t player;
@@ -253,7 +264,7 @@ static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation,
 	}
 	else
 	{
-		retVal = fpathDroidRoute(psDroid, x, y, moveType);
+		retVal = fpathDroidRoute(psDroid, gameWorld.map, x, y, moveType);
 	}
 
 	if (retVal == FPR_OK)
@@ -420,17 +431,17 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 
 	const auto droidPropType = psDroid->getPropulsionStats()->propulsionType;
 	// check for blocking tiles
-	if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + lvx),
+	if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + lvx),
 	                      map_coord((SDWORD)psDroid->pos.y + lvy), droidPropType))
 	{
 		leftClear = false;
 	}
-	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + rvx),
+	else if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + rvx),
 	                           map_coord((SDWORD)psDroid->pos.y + rvy), droidPropType))
 	{
 		rightClear = false;
 	}
-	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + svx),
+	else if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + svx),
 	                           map_coord((SDWORD)psDroid->pos.y + svy), droidPropType))
 	{
 		frontClear = false;
@@ -497,8 +508,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.src = psDroid->pos.xy();
 	psDroid->sMove.target = tar;
-	psDroid->sMove.asPath.clear();
-	psDroid->sMove.pathIndex = 0;
+	psDroid->sMove.clearRoute();
 
 	if (psDroid->sMove.psFormation != nullptr)
 	{
@@ -544,7 +554,7 @@ void moveReallyStopDroid(DROID *psDroid)
 #define PITCH_LIMIT 150
 
 /* Get pitch and roll from direction and tile data */
-void updateDroidOrientation(DROID *psDroid)
+void updateDroidOrientation(DROID *psDroid, const WorldMapState& mapState)
 {
 	int32_t hx0, hx1, hy0, hy1;
 	int newPitch, deltaPitch, pitchLimit;
@@ -563,10 +573,10 @@ void updateDroidOrientation(DROID *psDroid)
 	//    hy0
 	// hx0 * hx1      (* = droid)
 	//    hy1
-	hx1 = map_Height(gameWorld.map, psDroid->pos.x + d, psDroid->pos.y);
-	hx0 = map_Height(gameWorld.map, MAX(0, psDroid->pos.x - d), psDroid->pos.y);
-	hy1 = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y + d);
-	hy0 = map_Height(gameWorld.map, psDroid->pos.x, MAX(0, psDroid->pos.y - d));
+	hx1 = map_Height(mapState, psDroid->pos.x + d, psDroid->pos.y);
+	hx0 = map_Height(mapState, MAX(0, psDroid->pos.x - d), psDroid->pos.y);
+	hy1 = map_Height(mapState, psDroid->pos.x, psDroid->pos.y + d);
+	hy0 = map_Height(mapState, psDroid->pos.x, MAX(0, psDroid->pos.y - d));
 
 	//update height in case were in the bottom of a trough
 	psDroid->pos.z = MAX(psDroid->pos.z, (hx0 + hx1) / 2);
@@ -605,10 +615,10 @@ struct BLOCKING_CALLBACK_DATA
 	Vector2i dst;
 };
 
-static bool moveBlockingTileCallback(Vector2i pos, int32_t dist, void *data_)
+static bool moveBlockingTileCallback(WorldMapState& mapState, Vector2i pos, int32_t dist, void *data_)
 {
 	BLOCKING_CALLBACK_DATA *data = (BLOCKING_CALLBACK_DATA *)data_;
-	data->blocking |= pos != data->src && pos != data->dst && fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), data->propulsionType);
+	data->blocking |= pos != data->src && pos != data->dst && fpathBlockingTile(mapState, map_coord(pos.x), map_coord(pos.y), data->propulsionType);
 	return !data->blocking;
 }
 
@@ -624,7 +634,7 @@ static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 	data.blocking = false;
 	data.src = src;
 	data.dst = dst;
-	rayCast(src, dst, &moveBlockingTileCallback, &data);
+	rayCast(gameWorld.map, src, dst, &moveBlockingTileCallback, &data);
 	return data.blocking ? -1 - dist : dist;
 }
 
@@ -786,7 +796,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 			if ((psDroid->player != psObj->player) && !aiCheckAlliances(psDroid->player, psObj->player))
 			{
 				// run over a bloke - kill him
-				destroyDroid((DROID *)psObj, gameTime);
+				destroyDroid((DROID *)psObj, gameTime, gameWorld);
 				scoreUpdateVar(WD_BARBARIANS_MOWED_DOWN);
 				giveExperienceForSquish(psDroid);
 			}
@@ -794,6 +804,73 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 	}
 }
 
+
+// How far apart two clicks may land and still count as the same rally point,
+// how much beyond body contact a settled neighbour still counts as touching,
+// and how far from the destination a droid may settle at all.
+#define SETTLE_DEST_MATCH	(TILE_UNITS * 2)
+#define SETTLE_CONTACT_SLACK	(TILE_UNITS / 2)
+#define SETTLE_MAX_RADIUS	(TILE_UNITS * 5)
+
+// A droid blocked against a neighbour that has already given up on the same
+// destination will not find a way through however often it repaths - the crowd
+// is the destination now. Contact with such a neighbour standing no farther
+// from the shared goal counts as arrival, so a pack grows outward ring by ring
+// instead of its last entrants rerouting forever. The radius cap keeps a
+// blocked single file from parking itself all the way back up a corridor.
+static bool moveSettledPackAtDestination(const DROID *psDroid)
+{
+	if (!pathfindingCorridorLanesEnabled())
+	{
+		return false;
+	}
+	const Vector2i dest = psDroid->sMove.destination;
+	const int32_t myDist = iHypot(dest - psDroid->pos.xy());
+	if (myDist > SETTLE_MAX_RADIUS)
+	{
+		return false;
+	}
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, TILE_UNITS * 2);
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		const DROID *psOther = castDroid(*gi);
+		if (psOther == nullptr || psOther == psDroid || psOther->died
+		    || psOther->player != psDroid->player
+		    || psOther->sMove.Status != MOVEINACTIVE
+		    || psOther->action != DACTION_NONE)
+		{
+			continue;
+		}
+		if (iHypot(psOther->sMove.destination - dest) > SETTLE_DEST_MATCH)
+		{
+			continue;
+		}
+		const int32_t contact = moveObjRadius(psDroid) + moveObjRadius(psOther) + SETTLE_CONTACT_SLACK;
+		if (iHypot(psOther->pos.xy() - psDroid->pos.xy()) > contact)
+		{
+			continue;
+		}
+		if (iHypot(dest - psOther->pos.xy()) <= myDist)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+// Clear the blocked watchdog clock. Both pause exits need a running clock, so
+// a paused droid losing its clock would be stranded in the pause for good, it
+// resumes moving instead.
+static void moveClearBump(DROID *psDroid)
+{
+	psDroid->sMove.bumpTime = 0;
+	psDroid->sMove.lastBump = 0;
+	if (pathfindingCorridorLanesEnabled() && psDroid->sMove.Status == MOVEPAUSE)
+	{
+		psDroid->sMove.Status = MOVEPOINTTOPOINT;
+	}
+}
 
 // See if the droid has been stopped long enough to give up on the move
 bool moveBlocked(DROID *psDroid)
@@ -807,12 +884,21 @@ bool moveBlocked(DROID *psDroid)
 		return false;
 	}
 
+	// A droid held by the corridor layer, queued at an outer mouth or waiting
+	// into an inner junction, is waiting by design, not stuck, so don't reroute
+	// it or give up its move. The watch merely pauses, its clock keeps running,
+	// so a droid still pinned when its grace runs out gets recovered by the
+	// normal machinery.
+	if (pathfindingCorridorLanesEnabled() && corridorHold(gameWorld, psDroid) != CORRIDOR_HOLD_NONE)
+	{
+		return false;
+	}
+
 	// See if the block can be cancelled
 	if (abs(angleDelta(psDroid->rot.direction - psDroid->sMove.bumpDir)) > DEG(BLOCK_DIR))
 	{
 		// Move on, clear the bump
-		psDroid->sMove.bumpTime = 0;
-		psDroid->sMove.lastBump = 0;
+		moveClearBump(psDroid);
 		return false;
 	}
 	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->sMove.bumpPos.x;
@@ -821,8 +907,7 @@ bool moveBlocked(DROID *psDroid)
 	if (diffSq > BLOCK_DIST * BLOCK_DIST)
 	{
 		// Move on, clear the bump
-		psDroid->sMove.bumpTime = 0;
-		psDroid->sMove.lastBump = 0;
+		moveClearBump(psDroid);
 		return false;
 	}
 
@@ -849,15 +934,26 @@ bool moveBlocked(DROID *psDroid)
 		{
 			objTrace(psDroid->id, "BLOCKED");
 		}
-		// if the unit cannot see the next way point - reroute it's got stuck
+		// if the unit cannot see the next way point - reroute it's got stuck,
+		// unless it is stuck against the settled crowd at its own destination,
+		// then it parks with the crowd instead
 		if ((bMultiPlayer || psDroid->player == selectedPlayer || psDroid->lastFrustratedTime == gameTime)
-		    && psDroid->sMove.pathIndex != (int)psDroid->sMove.asPath.size())
+		    && psDroid->sMove.pathIndex != (int)psDroid->sMove.asPath.size()
+		    && !moveSettledPackAtDestination(psDroid))
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+			if (g_moveMetrics)
+			{
+				g_moveMetrics->repaths++;
+			}
 			return false;
 		}
 
+		if (g_moveMetrics)
+		{
+			g_moveMetrics->giveUps++;
+		}
 		return true;
 	}
 
@@ -947,7 +1043,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	moveOpenGates(psDroid, Vector2i(ntx, nty));
 
 	// is the new tile blocking?
-	if (!fpathBlockingTile(ntx, nty, propulsion))
+	if (!fpathBlockingTile(gameWorld.map, ntx, nty, propulsion))
 	{
 		// not blocking, don't change the move vector
 		return;
@@ -982,7 +1078,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		vertX = ntx;
 		vertY = my < 0 ? nty + 1 : nty - 1;
 
-		if (fpathBlockingTile(horizX, horizY, propulsion) && fpathBlockingTile(vertX, vertY, propulsion))
+		if (fpathBlockingTile(gameWorld.map, horizX, horizY, propulsion) && fpathBlockingTile(gameWorld.map, vertX, vertY, propulsion))
 		{
 			// in a corner - choose an arbitrary slide
 			if (gameRand(2) == 0)
@@ -996,11 +1092,11 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 				*pmy = 0;
 			}
 		}
-		else if (fpathBlockingTile(horizX, horizY, propulsion))
+		else if (fpathBlockingTile(gameWorld.map, horizX, horizY, propulsion))
 		{
 			*pmy = 0;
 		}
-		else if (fpathBlockingTile(vertX, vertY, propulsion))
+		else if (fpathBlockingTile(gameWorld.map, vertX, vertY, propulsion))
 		{
 			*pmx = 0;
 		}
@@ -1015,7 +1111,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		if ((psDroid->pos.y & TILE_MASK) > TILE_UNITS / 2)
 		{
 			// top half
-			if (fpathBlockingTile(ntx, nty + 1, propulsion))
+			if (fpathBlockingTile(gameWorld.map, ntx, nty + 1, propulsion))
 			{
 				*pmx = 0;
 			}
@@ -1027,7 +1123,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		else
 		{
 			// bottom half
-			if (fpathBlockingTile(ntx, nty - 1, propulsion))
+			if (fpathBlockingTile(gameWorld.map, ntx, nty - 1, propulsion))
 			{
 				*pmx = 0;
 			}
@@ -1043,7 +1139,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		if ((psDroid->pos.x & TILE_MASK) > TILE_UNITS / 2)
 		{
 			// top half
-			if (fpathBlockingTile(ntx + 1, nty, propulsion))
+			if (fpathBlockingTile(gameWorld.map, ntx + 1, nty, propulsion))
 			{
 				*pmy = 0;
 			}
@@ -1055,7 +1151,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		else
 		{
 			// bottom half
-			if (fpathBlockingTile(ntx - 1, nty, propulsion))
+			if (fpathBlockingTile(gameWorld.map, ntx - 1, nty, propulsion))
 			{
 				*pmy = 0;
 			}
@@ -1079,12 +1175,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 			if (inty < TILE_UNITS / 2)
 			{
 				// top left
-				if ((mx < 0) && fpathBlockingTile(tx - 1, ty, propulsion))
+				if ((mx < 0) && fpathBlockingTile(gameWorld.map, tx - 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) - 1;
 				}
-				if ((my < 0) && fpathBlockingTile(tx, ty - 1, propulsion))
+				if ((my < 0) && fpathBlockingTile(gameWorld.map, tx, ty - 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) - 1;
@@ -1093,12 +1189,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 			else
 			{
 				// bottom left
-				if ((mx < 0) && fpathBlockingTile(tx - 1, ty, propulsion))
+				if ((mx < 0) && fpathBlockingTile(gameWorld.map, tx - 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) + TILE_UNITS;
 				}
-				if ((my >= 0) && fpathBlockingTile(tx, ty + 1, propulsion))
+				if ((my >= 0) && fpathBlockingTile(gameWorld.map, tx, ty + 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) - 1;
@@ -1110,12 +1206,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 			if (inty < TILE_UNITS / 2)
 			{
 				// top right
-				if ((mx >= 0) && fpathBlockingTile(tx + 1, ty, propulsion))
+				if ((mx >= 0) && fpathBlockingTile(gameWorld.map, tx + 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) - 1;
 				}
-				if ((my < 0) && fpathBlockingTile(tx, ty - 1, propulsion))
+				if ((my < 0) && fpathBlockingTile(gameWorld.map, tx, ty - 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) + TILE_UNITS;
@@ -1124,12 +1220,12 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 			else
 			{
 				// bottom right
-				if ((mx >= 0) && fpathBlockingTile(tx + 1, ty, propulsion))
+				if ((mx >= 0) && fpathBlockingTile(gameWorld.map, tx + 1, ty, propulsion))
 				{
 					bJumped = true;
 					jumpy = (jumpy & ~TILE_MASK) + TILE_UNITS;
 				}
-				if ((my >= 0) && fpathBlockingTile(tx, ty + 1, propulsion))
+				if ((my >= 0) && fpathBlockingTile(gameWorld.map, tx, ty + 1, propulsion))
 				{
 					bJumped = true;
 					jumpx = (jumpx & ~TILE_MASK) + TILE_UNITS;
@@ -1184,6 +1280,21 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	CHECK_DROID(psDroid);
 }
 
+
+// True when two droids in plain transit are headed the same way, so they may
+// brush past each other on a reduced footprint. Both must be mid-move on a
+// bare move action - anything stopped, targeting or firing keeps the full
+// radius, so softened collision cannot pack units into shared space.
+static bool moveSoftPass(const DROID *self, const DROID *other)
+{
+	if (self->action != DACTION_MOVE || other->action != DACTION_MOVE
+	    || self->sMove.Status == MOVEINACTIVE || other->sMove.Status == MOVEINACTIVE)
+	{
+		return false;
+	}
+	const int32_t diff = static_cast<int16_t>(other->sMove.moveDir - self->sMove.moveDir);
+	return abs(diff) < DEG(60);
+}
 
 // see if a droid has run into another droid
 // Only consider stationery droids
@@ -1250,6 +1361,14 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 
 		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
+		if (pathfindingSoftCollisionEnabled())
+		{
+			const bool allied = psObj->player == psDroid->player || aiCheckAlliances(psObj->player, psDroid->player);
+			if (allied && moveSoftPass(psDroid, static_cast<const DROID *>(psObj)))
+			{
+				rad /= 2;
+			}
+		}
 		radSq = rad * rad;
 
 		xdiff = psDroid->pos.x + spmx - psObj->pos.x;
@@ -1269,6 +1388,23 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				*pmx = 0;
 				*pmy = 0;
 				psObst = nullptr;
+				if (g_moveMetrics)
+				{
+					g_moveMetrics->hardStops++;
+					g_moveMetrics->hardStopsByDroid[psDroid->id]++;
+					// Split by where the stop happened, measured against the
+					// destination at the moment it stops, so a unit shoved back
+					// out of the crowd counts as transiting again.
+					const int32_t toGoal = iHypot(psDroid->sMove.destination - psDroid->pos.xy());
+					if (toGoal > MOVEBENCH_NEAR_RADIUS)
+					{
+						g_moveMetrics->hardStopsTransit++;
+					}
+					else
+					{
+						g_moveMetrics->hardStopsNear++;
+					}
+				}
 				break;
 			}
 			else
@@ -1283,10 +1419,18 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 					psDroid->sMove.pauseTime = 0;
 					psDroid->sMove.bumpPos = psDroid->pos;
 					psDroid->sMove.bumpDir = psDroid->rot.direction;
+					if (g_moveMetrics)
+					{
+						g_moveMetrics->bumps++;
+					}
 				}
 				else
 				{
 					psDroid->sMove.lastBump = (UWORD)(gameTime - psDroid->sMove.bumpTime);
+					if (g_moveMetrics)
+					{
+						g_moveMetrics->bumpsRepeat++;
+					}
 				}
 
 				// tell inactive droids to get out the way
@@ -1294,7 +1438,9 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				{
 					DROID *psShuffleDroid = (DROID *)psObst;
 
-					if (aiCheckAlliances(psObst->player, psDroid->player)
+					const bool sameSide = psObst->player == psDroid->player || aiCheckAlliances(psObst->player, psDroid->player);
+
+					if (sameSide
 					    && psShuffleDroid->action != DACTION_WAITDURINGREARM
 					    && psShuffleDroid->sMove.Status == MOVEINACTIVE)
 					{
@@ -1313,6 +1459,62 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	CHECK_DROID(psDroid);
 }
 
+// A plain mover that has gained no real ground for the stall limit is backed away from whatever is holding it
+// (since collision resolution always permits movement away from contacts).
+// Uses a high enough limit to try to avoid impacting productive turn-taking waits when streams cross, but so that
+// a press that has stopped draining retreats. Jittered by id so that a jammed crowd peels off in rolling waves.
+const uint32_t BACKOFF_STALL_BASE = 40000;
+const uint32_t BACKOFF_STALL_JITTER = 8000;
+const uint32_t BACKOFF_TIME = 4000;
+const int32_t BACKOFF_DEST_EXEMPT = 6 * TILE_UNITS;
+
+static bool moveBackoffActive(DROID *psDroid)
+{
+	MOVE_CONTROL &m = psDroid->sMove;
+	// The stall clock only runs while the droid is a plain mover the mechanism may act on.
+	// Anything else - fighting (DACTION_MOVEFIRE and the attack actions never reach here),
+	// held by the gate, packing at its destination - clears the state, so time spent in
+	// those states never counts toward a retreat.
+	if (!pathfindingBackoffEnabled() || psDroid->action != DACTION_MOVE
+	    || m.Status == MOVEINACTIVE
+	    || (pathfindingCorridorLanesEnabled() && corridorHold(gameWorld, psDroid) != CORRIDOR_HOLD_NONE))
+	{
+		m.backoffTime = 0;
+		m.backoffUntil = 0;
+		return false;
+	}
+	const Vector2i toDest = m.destination - psDroid->pos.xy();
+	if (static_cast<int64_t>(toDest.x) * toDest.x + static_cast<int64_t>(toDest.y) * toDest.y
+	    < static_cast<int64_t>(BACKOFF_DEST_EXEMPT) * BACKOFF_DEST_EXEMPT)
+	{
+		// packing at the destination is the settle machinery's job to handle
+		m.backoffTime = 0;
+		m.backoffUntil = 0;
+		return false;
+	}
+	if (gameTime < m.backoffUntil)
+	{
+		return true;
+	}
+	const Vector2i d = psDroid->pos.xy() - m.backoffPos;
+	if (m.backoffTime == 0 || m.backoffUntil != 0
+	    || static_cast<int64_t>(d.x) * d.x + static_cast<int64_t>(d.y) * d.y
+	       > static_cast<int64_t>(BLOCK_DIST) * BLOCK_DIST)
+	{
+		m.backoffPos = psDroid->pos.xy();
+		m.backoffTime = gameTime;
+		m.backoffUntil = 0;
+		return false;
+	}
+	const uint32_t stallLimit = BACKOFF_STALL_BASE + (psDroid->id * 2654435761u >> 16) % BACKOFF_STALL_JITTER;
+	if (gameTime - m.backoffTime > stallLimit)
+	{
+		m.backoffUntil = gameTime + BACKOFF_TIME;
+		return true;
+	}
+	return false;
+}
+
 /*!
  * Get a direction for a droid to avoid obstacles etc.
  * \param psDroid Which droid to examine
@@ -1325,6 +1527,26 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	ctx.droid = psDroid;
 	ctx.currentPos = psDroid->pos.xy();
 	ctx.targetPos = psDroid->sMove.target;
+	// Inside a corridor, aim at the droid's lane instead of straight at the
+	// waypoint, so opposing flows split into two passing lanes. The waypoint and
+	// the route are unchanged, only where the steering points.
+	Vector2i laneTarget;
+	if (pathfindingCorridorLanesEnabled() && corridorLaneTarget(gameWorld, psDroid, laneTarget))
+	{
+		ctx.targetPos = laneTarget;
+	}
+	if (moveBackoffActive(psDroid))
+	{
+		// Retreat: aim directly away from the waypoint, two tiles back.
+		// A steering aim only, so blocked ground clips or slides the motion like any other target.
+		Vector2i away = psDroid->pos.xy() - psDroid->sMove.target;
+		if (away.x == 0 && away.y == 0)
+		{
+			away = iSinCosR(static_cast<uint16_t>(psDroid->sMove.moveDir + DEG(180)), TILE_UNITS);
+		}
+		const int32_t len = std::max(iHypot(away), 1);
+		ctx.targetPos = psDroid->pos.xy() + Vector2i(away.x * 2 * TILE_UNITS / len, away.y * 2 * TILE_UNITS / len);
+	}
 	ctx.velocity = iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed);
 	ctx.moveDir = psDroid->sMove.moveDir;
 	ctx.speed = psDroid->sMove.speed;
@@ -1336,6 +1558,31 @@ static uint16_t moveGetDirection(DROID *psDroid)
 }
 
 // Check if a droid has got to a way point
+// How long a droid at the end of its route may go without closing on its
+// destination before it counts as having stopped closing, how much closer it
+// has to get for that to read as progress rather than as jitter, and how much
+// ground it has to lose before its best is taken as stale.
+const uint32_t SETTLE_STALL_TIME = 3000;
+const int32_t SETTLE_STALL_SLACK = TILE_UNITS / 4;
+const int32_t SETTLE_STALL_RESET = 4 * TILE_UNITS;
+
+/// Updates the droid's progress record and reports whether it has stopped
+/// closing on its destination. Measured against the destination, not the
+/// waypoint, so a waypoint changing underneath reads as neither progress nor
+/// its absence.
+static bool moveSettleStalled(DROID *psDroid)
+{
+	const int32_t dist = iHypot(psDroid->sMove.destination - psDroid->pos.xy());
+	if (psDroid->sMove.settleBest == 0 || dist > psDroid->sMove.settleBest + SETTLE_STALL_RESET
+	    || dist + SETTLE_STALL_SLACK < psDroid->sMove.settleBest)
+	{
+		psDroid->sMove.settleBest = std::max(dist, 1);
+		psDroid->sMove.settleTime = gameTime;
+		return false;
+	}
+	return gameTime - psDroid->sMove.settleTime > SETTLE_STALL_TIME;
+}
+
 static bool moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
@@ -1344,6 +1591,20 @@ static bool moveReachedWayPoint(DROID *psDroid)
 	const bool last = psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size();
 	const unsigned int toleranceDist = 3 * (TILE_UNITS / 4);
 	unsigned int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+
+	// At the end of a route, how long a droid has been trying counts even when
+	// it is not yet close: the count below only runs within three quarters of a
+	// tile of the target, which a droid packed into a crowd at a shared
+	// destination never reaches, and the bump clock restarts on every fresh
+	// bump. Only once it has stopped closing, though - a droid still making
+	// ground has not settled for less, and widening its acceptance while it is
+	// still closing would loosen every crowd, not only the ones that cannot pack.
+	if (last && pathfindingSettleTimeEnabled()
+	    && psDroid->sMove.Status != MOVEINACTIVE
+	    && moveSettleStalled(psDroid))
+	{
+		psDroid->sMove.tolerance += 1;
+	}
 
 	// Start the process of potentially increasing the distance threshold when very close to the waypoint.
 	if (sqDist < (toleranceDist * toleranceDist))
@@ -1408,6 +1669,10 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	// now offset the speed for the slope of the droid
 	pitch = angleDelta(psDroid->rot.pitch);
 	speed = (maxPitch - pitch) * speed / maxPitch;
+	if (!bMultiPlayer && getCamTweakOption_heavilyDamagedPenalty() && objectBelowHealthLevel(psDroid, HEAVY_DAMAGE_LEVEL))
+	{
+		speed = 2 * speed / 3; // slow down damaged droids.
+	}
 	if (speed <= 10)
 	{
 		// Very nasty hack to deal with buggy maps, where some cliffs are
@@ -1624,7 +1889,7 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 		if (!psDroid->isTransporter())
 		{
 			/* dreadful last-ditch crash-avoiding hack - sort this! - GJ */
-			destroyDroid(psDroid, gameTime);
+			destroyDroid(psDroid, gameTime, gameWorld);
 			return;
 		}
 	}
@@ -1679,6 +1944,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveOpenGates(psDroid);
 	moveCheckSquished(psDroid, dx, dy);
 	moveCalcDroidSlide(psDroid, &dx, &dy);
+	if (pathfindingCorridorLanesEnabled())
+	{
+		corridorClampSlide(gameWorld, psDroid, &dx, &dy);
+	}
 	bx = dx;
 	by = dy;
 	moveCalcBlockingSlide(psDroid, &bx, &by, direction, &slideDir);
@@ -1692,7 +1961,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	//set the droid height here so other routines can use it
 	psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);//jps 21july96
-	updateDroidOrientation(psDroid);
+	updateDroidOrientation(psDroid, gameWorld.map);
 }
 
 /* Update a persons position and speed given target values */
@@ -1740,6 +2009,10 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
 	moveOpenGates(psDroid);
 	moveCalcDroidSlide(psDroid, &dx, &dy);
+	if (pathfindingCorridorLanesEnabled())
+	{
+		corridorClampSlide(gameWorld, psDroid, &dx, &dy);
+	}
 	moveCalcBlockingSlide(psDroid, &dx, &dy, direction, &slideDir);
 	moveUpdateDroidPos(psDroid, dx, dy);
 
@@ -1916,7 +2189,7 @@ static void moveDescending(DROID *psDroid)
 		psDroid->sMove.Status = MOVEINACTIVE;
 
 		/* conform to terrain */
-		updateDroidOrientation(psDroid);
+		updateDroidOrientation(psDroid, gameWorld.map);
 	}
 }
 
@@ -2150,7 +2423,7 @@ static void checkLocalFeatures(DROID *psDroid)
 		}
 
 		turnOffMultiMsg(true);
-		removeFeature((FEATURE *)psObj);  // remove artifact+.
+		removeFeature((FEATURE *)psObj, gameWorld);  // remove artifact+.
 		turnOffMultiMsg(false);
 	}
 }
@@ -2328,7 +2601,18 @@ void moveUpdateDroid(DROID *psDroid)
 		moveDir = moveGetDirection(psDroid);
 		moveSpeed = moveCalcDroidSpeed(psDroid);
 
-		if ((psDroid->sMove.bumpTime != 0) &&
+		// A droid held by the corridor layer keeps its bump clock running for
+		// the watchdog grace, but must not pause-shuffle off it, that would
+		// stop-start the whole waiting queue or pocket in lockstep.
+		if (psDroid->sMove.bumpTime != 0 && pathfindingCorridorLanesEnabled()
+		    && corridorHold(gameWorld, psDroid) != CORRIDOR_HOLD_NONE)
+		{
+			if (psDroid->sMove.Status == MOVEPAUSE)
+			{
+				psDroid->sMove.Status = MOVEPOINTTOPOINT;
+			}
+		}
+		else if ((psDroid->sMove.bumpTime != 0) &&
 		    (psDroid->sMove.pauseTime + psDroid->sMove.bumpTime + BLOCK_PAUSETIME < gameTime))
 		{
 			if (psDroid->sMove.Status == MOVEPOINTTOPOINT)
@@ -2386,6 +2670,14 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	}
 
+	// A droid queued at a corridor slows into its place in the file and waits
+	// there, resuming on its own as the queue rolls forward. It keeps its
+	// facing throughout.
+	if (pathfindingCorridorLanesEnabled())
+	{
+		moveSpeed = corridorQueueSpeed(gameWorld, psDroid, moveSpeed);
+	}
+
 	// Update the movement model for the droid
 	oldx = psDroid->pos.x;
 	oldy = psDroid->pos.y;
@@ -2410,7 +2702,7 @@ void moveUpdateDroid(DROID *psDroid)
 	if (map_coord(oldx) != map_coord(psDroid->pos.x)
 	    || map_coord(oldy) != map_coord(psDroid->pos.y))
 	{
-		visTilesUpdate((BASE_OBJECT *)psDroid);
+		visTilesUpdate((BASE_OBJECT *)psDroid, gameWorld.map);
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)
 		checkLocalFeatures(psDroid);
@@ -2441,7 +2733,7 @@ void moveUpdateDroid(DROID *psDroid)
 	/* If it's sitting in water then it's got to go with the flow! */
 	if (worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y) && terrainType(mapTile(gameWorld.map, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) == TER_WATER)
 	{
-		updateDroidOrientation(psDroid);
+		updateDroidOrientation(psDroid, gameWorld.map);
 	}
 
 	if (psDroid->sMove.Status == MOVETURNTOTARGET && psDroid->rot.direction == moveDir)

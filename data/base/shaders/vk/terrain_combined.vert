@@ -41,7 +41,7 @@ void main()
 		frag.groundLightDir = ModelTangentMatrix * sunPos.xyz; // already normalized
 		frag.groundHalfVec = frag.groundLightDir + eyeVec;
 
-		vec3 bitangentDecal = -cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
+		vec3 bitangentDecal = cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
 		// transformation matrix from decal tangent space to ground tangent space for normals xy
 		frag.decal2groundMat2 = mat2(
 			dot(vertexTangent.xyz, tangent), dot(bitangentDecal, tangent),

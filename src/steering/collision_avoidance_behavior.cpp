@@ -37,6 +37,7 @@
 #include "src/fpath.h"
 #include "src/move.h"
 #include "src/objects.h"
+#include "src/game_world.h"
 
 #include <algorithm>
 
@@ -99,7 +100,7 @@ SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 		Vector2i deltaDiff = iSinCosR(obstDirectionGuess, predictionFactor);
 
 		// Don't assume obstacle can go through blocking tiles
-		if (!fpathBlockingTile(map_coord(obstacle->pos.x + deltaDiff.x),
+		if (!fpathBlockingTile(gameWorld.map, map_coord(obstacle->pos.x + deltaDiff.x),
 		                       map_coord(obstacle->pos.y + deltaDiff.y),
 		                       obstaclePropStats->propulsionType))
 		{
@@ -206,7 +207,7 @@ bool CollisionAvoidanceBehavior::isValidObstacle(const BASE_OBJECT* obj, const D
 
 	// Only consider droids
 	const DROID* obstacle = castDroid(const_cast<BASE_OBJECT*>(obj));
-	if (!obstacle)
+	if (!obstacle || obstacle->died)
 	{
 		return false;
 	}

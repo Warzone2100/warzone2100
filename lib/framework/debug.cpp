@@ -123,6 +123,7 @@ static const char *code_part_names[] =
 	"savegame",
 	"repairs",
 	"lobby",
+	"gamestate_serial",
 	"last"
 };
 

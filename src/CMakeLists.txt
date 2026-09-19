@@ -88,8 +88,8 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h" "titleui/*/*.h" "hci/*.h" "input/*.h" "screens/*.h" "steering/*.h")
-file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp" "titleui/*/*.cpp" "hci/*.cpp" "input/*.cpp" "screens/*.cpp" "steering/*.cpp")
+file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h" "titleui/*/*.h" "hci/*.h" "input/*.h" "researchtree/*.h" "screens/*.h" "steering/*.h")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp" "titleui/*/*.cpp" "hci/*.cpp" "input/*.cpp" "researchtree/*.cpp" "screens/*.cpp" "steering/*.cpp")
 
 set(_additionalSourceFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -130,6 +130,7 @@ endif()
 
 target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ZipIOProvider ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
+target_link_libraries(warzone2100 mikktspace) # terrain decal tangents - see calcDecalTangents
 target_link_libraries(warzone2100 fmt::fmt)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 ${Intl_LIBRARIES})

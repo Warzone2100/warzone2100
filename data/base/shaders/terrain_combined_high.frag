@@ -8,18 +8,18 @@
 //#endif
 // 2. OpenGL ES 3.0+
 #if (defined(GL_ES) && (__VERSION__ < 300))
-#error "Unsupported version of GLES"
+#error Unsupported version of GLES
 #endif
 
+#include "terrain_combined.glsl"
+
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 #define WZ_POINT_LIGHT_ENABLED 0
 //
 
-#define WZ_MAX_SHADOW_CASCADES 3
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -37,7 +37,6 @@ uniform sampler2DArray groundSpecular;
 uniform sampler2DArray groundHeight;
 
 // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
-uniform mat4 groundScale;
 
 // decal texture arrays. layer = decal tile
 uniform sampler2DArray decalTex;
@@ -48,26 +47,12 @@ uniform sampler2DArray decalHeight;
 // shadow map
 uniform sampler2DArrayShadow shadowMap;
 
-uniform mat4 ViewMatrix;
-uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
-uniform vec4 ShadowMapCascadeSplits;
-uniform int ShadowMapSize;
 
 // sun light colors/intensity:
-uniform vec4 emissiveLight;
-uniform vec4 ambientLight;
-uniform vec4 diffuseLight;
-uniform vec4 specularLight;
 
 
-uniform vec4 cameraPos; // in modelSpace
-uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 in vec2 uvLightmap;
 in vec2 uvDecal;
@@ -98,7 +83,7 @@ out vec4 FragColor;
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
-	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
+	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], float(groundNo));
 }
 
 struct BumpData {
@@ -146,7 +131,10 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 #if WZ_POINT_LIGHT_ENABLED == 1
 	// point lights
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, b.N, normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
+	// The light loop works in world space, so the tangent frame is inverted once here.
+	// The frame is built orthonormal, so its transpose stands in for its inverse, and the third column of that is the vertex normal.
+	mat3 tangentToWorld = transpose(ModelTangentMatrix);
+	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, tangentToWorld * b.N, tangentToWorld[2], tangentToWorld * normalize(groundHalfVec - groundLightDir), b.color, b.gloss);
 #endif
 
 	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/
@@ -175,7 +163,7 @@ vec4 main_bumpMapping() {
 	getGroundBM(3, bump);
 
 	if (tile >= 0) {
-		vec3 uv = vec3(uvDecal, tile);
+		vec3 uv = vec3(uvDecal, float(tile));
 		vec4 decalColor = texture2DArray(decalTex, uv, WZ_MIP_LOAD_BIAS);
 		float a = decalColor.a;
 		// blend color, normal and gloss with ground ones based on alpha
@@ -186,19 +174,14 @@ vec4 main_bumpMapping() {
 		bump.N = (1.f - a)*bump.N + a*n;
 		bump.gloss = (1.f - a)*bump.gloss + a*texture2DArray(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
+	// Every lighting term below assumes unit length - but a weighted sum of unit normals is shorter than unit when they disagree (so normalize)
+	bump.N = normalize(bump.N);
 	return doBumpMapping(bump, groundLightDir, groundHalfVec);
 }
 
 void main()
 {
 	vec4 fragColor = main_bumpMapping();
-
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
-		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), clamp(fogFactor, 0.0, 1.0));
-	}
 
 	#ifdef NEWGL
 	FragColor = fragColor;

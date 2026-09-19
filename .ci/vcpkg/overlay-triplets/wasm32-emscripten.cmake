@@ -29,4 +29,8 @@ set(VCPKG_LIBRARY_LINKAGE static)
 set(VCPKG_CMAKE_SYSTEM_NAME Emscripten)
 set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE "${WZ_WASM_META_TOOLCHAIN}")
 
+# For certain non-CMake vcpkg ports (like libvpx)
+set(ENV{EMCC_CFLAGS} "$ENV{EMCC_CFLAGS} -pthread -fwasm-exceptions")
+set(ENV{EMCC_CXXFLAGS} "$ENV{EMCC_CXXFLAGS} -pthread -fwasm-exceptions")
+
 set(VCPKG_BUILD_TYPE "release")

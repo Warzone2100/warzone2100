@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +33,10 @@
 #include <list>
 #include <string>
 #include <array>
+#include <memory>
+#include <optional>
+
+class ResourceLoadingController;
 
 /// maximum number of data files
 #define LEVEL_MAXFILES	9
@@ -54,10 +60,12 @@ enum class LEVEL_TYPE : uint8_t
 
 	CAMPAIGN = 12,
 	SKIRMISH = 14,
+	SKIRMISH_HIDDEN = 15,           ///< loads like SKIRMISH but is excluded from map-list enumeration, so it resolves by name only (benchmark maps)
 	MULTI_SKIRMISH2 = 18,
 	MULTI_SKIRMISH3 = 19,
 	MULTI_SKIRMISH4 = 20
 };
+constexpr LEVEL_TYPE LEVEL_TYPE_MAX = LEVEL_TYPE::MULTI_SKIRMISH4; ///< highest valid LEVEL_TYPE value (update when adding entries)
 
 struct LEVEL_DATASET
 {
@@ -100,8 +108,16 @@ void levShutDown();
 
 bool levInitialise();
 
-// load up the data for a level
-bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType);
+/// Cooperative level-load coroutine for nesting under another loading task on the same controller.
+/// When reconstructFromSnapshot is true (new-format cold load), the scenario load still runs (for the
+/// map's display layer), then coldLoadRestoreWorld() replaces the world from the GameState snapshot -
+/// before stageThreeInitialise, so the load finalizes on the restored world.
+LoadingTask<> makeLevLoadDataLoadingTask(ResourceLoadingController &controller,
+                                       std::string name,
+                                       std::optional<Sha256> hash,
+                                       char *pSaveName,
+                                       GAME_TYPE saveType,
+                                       bool reconstructFromSnapshot = false);
 
 // find the level dataset
 LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = nullptr);

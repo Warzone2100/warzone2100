@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,6 +32,8 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "resource_loading_dispatch.h"
 
 #include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
@@ -50,6 +54,7 @@
 #include "component.h"
 #include "console.h"
 #include "multiplay.h"
+#include "ordersource.h"
 #include "lib/sound/audio.h"
 #include "multijoin.h"
 #include "frontend.h"
@@ -67,6 +72,7 @@
 #include "activity.h"
 #include "warzoneconfig.h"
 #include "screens/netpregamescreen.h"
+#include "game_world.h"
 
 #define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
 
@@ -110,6 +116,9 @@ void sendOptions()
 	}
 	NETuint32_t(w, game.gameTimeLimitMinutes);
 	NETuint8_t(w, static_cast<uint8_t>(game.playerLeaveMode));
+	game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(game.playerReconnectWaitSeconds);
+	NETuint16_t(w, game.playerReconnectWaitSeconds);
+	NETuint16_t(w, game.pathfindingBackend);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -188,6 +197,11 @@ bool recvOptions(NETQUEUE queue)
 		NETbin(r, hash.bytes, hash.Bytes);
 	}
 	NETuint8_t(r, game.maxPlayers);
+	if (game.maxPlayers > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid maxPlayers value specified: %" PRIu8, game.maxPlayers);
+		return false;
+	}
 	NETstring(r, game.name, 128);
 	NETuint32_t(r, game.power);
 	NETuint8_t(r, game.base);
@@ -215,6 +229,15 @@ bool recvOptions(NETQUEUE queue)
 		return false;
 	}
 	game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(tempPlayerLeaveModeValue);
+	uint16_t tempPlayerReconnectWaitSeconds = 0;
+	NETuint16_t(r, tempPlayerReconnectWaitSeconds);
+	if (tempPlayerReconnectWaitSeconds > PLAYER_RECONNECT_WAIT_SECONDS_MAX)
+	{
+		debug(LOG_ERROR, "Invalid playerReconnectWaitSeconds value specified: %" PRIu16, tempPlayerReconnectWaitSeconds);
+		return false;
+	}
+	game.playerReconnectWaitSeconds = tempPlayerReconnectWaitSeconds;
+	NETuint16_t(r, game.pathfindingBackend);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -264,15 +287,16 @@ bool recvOptions(NETQUEUE queue)
 		// Do not load limits if mods present because mods are not loaded yet
 		if (!modHashesSize && !bLimiterLoaded)
 		{
-			initLoadingScreen(true);
-			if (!resLoad("wrf/limiter_data.wrf", 503))
+			auto& controller = ResourceLoadingController::instance();
+			ResourceLoadingController::FramePolicy policy;
+			policy.showLoadingScreen = true;
+			if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 			{
 				debug(LOG_INFO, "Unable to load limiter_data during recvOptions!");
 			}
 			else
 			{
 				bLimiterLoaded = true;
-				closeLoadingScreen();
 			}
 		}
 	}
@@ -443,7 +467,7 @@ bool recvOptions(NETQUEUE queue)
 
 	if (mapData)
 	{
-		loadMapPreview(false);
+		requestMapPreviewLoad(false);
 	}
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -573,7 +597,7 @@ static bool gameInit()
 			&& !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated)
 			&& !(player < game.maxPlayers && NetPlay.players[player].allocated))
 		{
-			clearPlayer(player, true);			// do this quietly
+			clearPlayer(gameWorld, player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
 	}
@@ -656,6 +680,14 @@ bool multiStartScreenInit()
 bool multiGameShutdown()
 {
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
+
+	{
+		const std::string provenance = orderProvenanceSummary();
+		if (!provenance.empty())
+		{
+			debug(LOG_INFO, "Order provenance: %s", provenance.c_str());
+		}
+	}
 
 	shutdownGameStartScreen();	// make sure the start screen overlay is closed (in case the game shuts down before it fully starts)
 

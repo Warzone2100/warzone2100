@@ -93,7 +93,7 @@ function setUnitRank(transport)
 		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			setDroidExperience(droid, droidExp[transporterIndex - 1]);
+			camSetDroidExperience(droid, droidExp[transporterIndex - 1]);
 		}
 	}
 }
@@ -169,7 +169,7 @@ function sendPlayerTransporter()
 		tWeap.tank.inferno, tWeap.tank.assaultGun, tWeap.tank.assaultGun,
 		tWeap.tank.hyperVelocityCannon, tWeap.tank.tankKiller
 	];
-	const specialList = [tConstruct.truck, tConstruct.truck, tCommand.commander, tCommand.commander];
+	const specialList = (tweakOptions.noCommander) ? [tConstruct.truck, tConstruct.truck] : [tConstruct.truck, tConstruct.truck, tCommand.commander, tCommand.commander];
 	const BODY = bodyList[camRand(bodyList.length)];
 	const PROP = propulsionList[camRand(propulsionList.length)];
 

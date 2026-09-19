@@ -3,18 +3,17 @@
 
 #include "tcmask_instanced.glsl"
 
-layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
 
-layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
-layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
-layout(set = 2, binding = 2) uniform sampler2D TextureNormal; // normal map
-layout(set = 2, binding = 3) uniform sampler2D TextureSpecular; // specular map
-layout(set = 2, binding = 4) uniform sampler2DArrayShadow shadowMap; // shadow map
-layout(set = 2, binding = 5) uniform sampler2D lightmap_tex;
+layout(set = 3, binding = 0) uniform sampler2D Texture; // diffuse
+layout(set = 3, binding = 1) uniform sampler2D TextureTcmask; // tcmask
+layout(set = 3, binding = 2) uniform sampler2D TextureNormal; // normal map
+layout(set = 3, binding = 3) uniform sampler2D TextureSpecular; // specular map
+layout(set = 3, binding = 4) uniform sampler2DArrayShadow shadowMap; // shadow map
+layout(set = 3, binding = 5) uniform sampler2D lightmap_tex;
 
 layout(location = 0) in vec3 normal;
 layout(location = 1) in vec3 lightDir;
@@ -34,6 +33,8 @@ layout(location = 0) out vec4 FragColor;
 #include "pointlights.glsl"
 #include "shadow_mapping.glsl"
 #include "light.glsl"
+#include "tangentspace.glsl"
+#include "distance_fog.glsl"
 
 float random(vec2 uv)
 {
@@ -73,16 +74,7 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		// transform tangent-space normal map into world space
-		N = normalFromMap.xzy * 2.0 - 1.0;
-		N = TangentSpaceMatrix * N;
-
-		if (hasTangents == 0)
-		{
-			// transform object-space normal map into world space
-			N = normalFromMap.xzy * 2.0 - 1.0;
-			N = NormalMatrix * vec3(-N.x, N.y, -N.z);
-		}
+		N = wzDecodeNormalMap(normalFromMap, hasTangents, TangentSpaceMatrix, NormalMatrix);
 	}
 	N = normalize(N);
 
@@ -127,7 +119,7 @@ void main()
 	if (WZ_POINT_LIGHT_ENABLED == 1)
 	{
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-		light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(halfVec - lightDir), diffuseMap, specularMapValue, mat3(1.f));
+		light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(normal), normalize(halfVec - lightDir), diffuseMap, specularMapValue);
 	}
 
 	light.a = 1.0f;
@@ -150,19 +142,15 @@ void main()
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
-
-		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
-	}
 
 	if (shieldEffect != 0)
 	{
 		fragColour = applyShieldFuzzEffect(fragColour);
+	}
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
 	}
 
 	FragColor = fragColour;

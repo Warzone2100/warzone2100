@@ -1,0 +1,159 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2026  Warzone 2100 Project (https://github.com/Warzone2100)
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+/** \file
+ *  Route planner backend interface.
+ *
+ *  fpath.h carries two surfaces with little in common, and this splits them.
+ *  The blocking-tile queries stay free functions there: move.cpp calls them
+ *  thousands of times per tick, so a virtual dispatch on that path is not worth
+ *  paying for, and every planner reads the same static terrain and structure
+ *  state for hard blocking anyway. The asynchronous route planner, called once
+ *  per droid per repath, goes behind this interface instead, so an alternative
+ *  planner can be selected without its callers changing.
+ *
+ *  A backend owns its worker threads, its per-tick snapshots and its job queue.
+ *  Whatever it does with them, it has to keep the guarantees its callers
+ *  already depend on:
+ *
+ *  - One outstanding job per droid. route() queues on the first call and polls
+ *    on the ones after, so a caller can call it every tick while a droid waits.
+ *  - A queued job whose droid has since been deleted is still processed.
+ *    Discarding it would change the order the remaining jobs are handled in,
+ *    and that changes the shape of other droids' paths.
+ *  - Anything a worker thread reads is built on the main thread beforehand
+ *    and is immutable once the worker can see it. Workers never read live
+ *    droid or map state.
+ *  - The sync stream stays compatible, since replays are validated against it.
+ */
+
+#pragma once
+
+#include "fpath.h"
+
+#include <cstdint>
+#include <memory>
+
+struct WorldMapState;
+struct DynamicCostOverlay;
+
+/// Congestion features a game has turned on, held as a bitmask in the synced
+/// game.pathfindingBackend setting. Each is independent so a run can enable one
+/// or any combination, which is how they are compared. A new game starts with
+/// every feature on, and zero is the legacy integer-grid A* with none of them.
+/// The values are serialized, so they are fixed, only append.
+/// A new feature also joins the --pathfindingbackend valid list in clparse.cpp
+/// and the default mask in multiplay.h.
+enum PathfindingFeature : uint16_t
+{
+	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping after the search
+	PF_CORRIDOR_LANES    = 1 << 1,   ///< steer into lanes through detected corridors
+	PF_FLOW_COST         = 1 << 2,   ///< price tiles held by opposing-facing traffic in the search
+	PF_SOFT_COLLISION    = 1 << 3,   ///< same-heading transiting allies collide on a smaller footprint
+	PF_CROWD_MASS        = 1 << 4,   ///< price idle or canceled crowd mass in the search
+	PF_BEND_HOLD         = 1 << 5,   ///< hold the lane side while crossing an inner junction
+	PF_BEND_HAND         = 1 << 6,   ///< do not release a droid at a mouth its route continues through
+	PF_WIDE_LANES        = 1 << 7,   ///< scale the keep-right shift to the room the ground offers
+	PF_HAND_JOINT        = 1 << 8,   ///< at a joint both flows use, wait for both before setting handedness
+	PF_WIDE_QUEUE        = 1 << 9,   ///< size the entry queue by the room at the approach, not by the corridor band
+	PF_TURN_VOTE         = 1 << 10,  ///< read a passage's turn side at its own mouths, by majority
+	PF_SETTLE_TIME       = 1 << 11,  ///< settle for what is reachable by time tried, not by nearness
+	PF_BACKOFF           = 1 << 12,  ///< back a droid that has gained no ground out of the press holding it
+};
+
+/// True if any overlay feature is on, so the planner needs the congestion backend.
+bool pathfindingOverlayEnabled();
+/// True if the movement layer should steer droids into corridor lanes.
+bool pathfindingCorridorLanesEnabled();
+/// True if the planner should shape route bends after the search.
+bool pathfindingDirectionalBiasEnabled();
+/// True if the search should price tiles held by opposing-facing traffic.
+bool pathfindingFlowCostEnabled();
+/// True if the search should price idle or canceled crowd mass.
+bool pathfindingCrowdMassEnabled();
+/// True if same-heading transiting allies should collide on a smaller footprint.
+bool pathfindingSoftCollisionEnabled();
+/// True if the keep-right shift should scale with the room beside the route
+/// instead of being one fixed lane width everywhere.
+bool pathfindingWideLanesEnabled();
+/// True if a droid crossing an inner junction keeps steering at the lane it is
+/// about to occupy, instead of being handed back to its raw route in the gap.
+bool pathfindingBendHoldEnabled();
+/// True if the lane release near a mouth applies only at an outer mouth, not
+/// where the route continues into the next passage of the same chain.
+bool pathfindingBendHandEnabled();
+/// True if a corridor at a joint both flows use waits for both to commit a side
+/// before settling its lane handedness, instead of letting the first decide.
+bool pathfindingHandJointEnabled();
+/// True if the queue outside a mouth is sized by the room the approach offers
+/// rather than by the corridor's own side band.
+bool pathfindingWideQueueEnabled();
+/// True if a corridor's turn side is read only from bends at its own mouths and
+/// settled by majority, instead of by the lowest-id member from wherever it is.
+bool pathfindingTurnVoteEnabled();
+/// True if a droid at the end of its route widens what it will settle for by
+/// how long it has been trying, not only once it is already nearly there.
+bool pathfindingSettleTimeEnabled();
+bool pathfindingBackoffEnabled();
+
+class IPathfindingBackend
+{
+public:
+	virtual ~IPathfindingBackend() = default;
+
+	virtual bool initialise() = 0;
+	virtual void shutdown() = 0;
+
+	/// Blocks until every job queued so far has finished executing on the worker threads.
+	/// Call before replacing the map the workers may still be reading.
+	virtual void waitForIdle() = 0;
+
+	/// Discard cached state that a load or a mission boundary has made stale.
+	virtual void hardReset() = 0;
+
+	/// Main-thread hook, called once per tick from the game loop after the map
+	/// update. A backend holding per-tick snapshots rebuilds them here.
+	virtual void updateTick(const WorldMapState& mapState) = 0;
+
+	/// Queues a route request, or polls one already queued. Returns FPR_WAIT
+	/// while a result is outstanding, and on FPR_OK has filled psDroid->sMove
+	/// with the path and its destination.
+	virtual FPATH_RETVAL route(DROID *psDroid, const WorldMapState& mapState,
+	                           SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType) = 0;
+
+	/// As route(), but does not return until the route is resolved. Loading an
+	/// old-format save uses this, because a droid saved partway through a route
+	/// needs a path before play resumes. Drives the droid's movement status as
+	/// needed to force the resolve. On return sMove holds the path and the
+	/// caller decides the droid's final status from the returned value.
+	virtual FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState,
+	                                      SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType) = 0;
+
+	/// Drops any queued job and pending result for one droid.
+	virtual void removeDroidData(int droidID) = 0;
+
+	/// The soft-cost overlay a search for this player should read, or null to
+	/// search with no overlay. Built once per tick in updateTick, so it is valid
+	/// for the rest of the tick. Legacy has none.
+	virtual std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const { return nullptr; }
+};
+
+/// The backend this game is running. All clients must be running the same one.
+IPathfindingBackend& fpathActiveBackend();

@@ -582,6 +582,12 @@ namespace wzapi
 		return lhs;
 	}
 
+	enum class ScriptBinding : uint8_t
+	{
+		PlayerAI = 0,
+		HostDeclaredGlobal = 1,
+	};
+
 	class scripting_instance : public scripting_event_handling_interface
 	{
 	public:
@@ -596,6 +602,8 @@ namespace wzapi
 		const std::string& scriptPath() const { return m_scriptPath; }
 		int player() const { return m_player; }
 		bool isHostAI() const;
+		ScriptBinding binding() const { return m_binding; }
+		void setBinding(ScriptBinding binding) { m_binding = binding; }
 
 	public:
 		inline void setReceiveAllEvents(bool value) { m_isReceivingAllEvents = value; }
@@ -630,13 +638,21 @@ namespace wzapi
 
 	public:
 		// save / restore state
-		virtual bool saveScriptGlobals(nlohmann::json &result) = 0;
-		virtual bool loadScriptGlobals(const nlohmann::json &result) = 0;
+		virtual bool saveScriptGlobals(nlohmann::ordered_json &result) = 0;
+		// fixedNulls: true if the save distinguishes JS null from undefined (save format
+		// version >= 2). When false (older saves), JSON null is mapped to JS undefined.
+		virtual bool loadScriptGlobals(const nlohmann::ordered_json &result, bool fixedNulls) = 0;
 
-		virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) = 0;
+		virtual nlohmann::ordered_json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) = 0;
 
 		// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-		virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) = 0;
+		virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::ordered_json& savedTimerFuncData) = 0;
+
+		// save / restore the script engine's Math.random() PRNG state
+		// - Restoring it lets a resumed instance continue the identical Math.random() sequence instead of re-seeding from wall-clock
+		//   time at context creation (otherwise AI bots that call Math.random() diverge across a save/restore)
+		virtual uint64_t saveMathRandomState() const = 0;
+		virtual void restoreMathRandomState(uint64_t state) = 0;
 
 	public:
 		// get state for debugging
@@ -679,6 +695,7 @@ namespace wzapi
 		std::string m_scriptName;
 		std::string m_scriptPath;
 		bool m_isReceivingAllEvents = false;
+		ScriptBinding m_binding = ScriptBinding::PlayerAI;
 	};
 
 	class execution_context_base
@@ -998,6 +1015,7 @@ namespace wzapi
 	bool useSafetyTransport(WZAPI_PARAMS(bool flag));
 	bool restoreLimboMissionData(WZAPI_NO_PARAMS);
 	uint32_t getMultiTechLevel(WZAPI_NO_PARAMS);
+	uint32_t benchArrangement(WZAPI_NO_PARAMS);
 	bool setCampaignNumber(WZAPI_PARAMS(int campaignNumber));
 	int32_t getMissionType(WZAPI_NO_PARAMS);
 	bool getRevealStatus(WZAPI_NO_PARAMS);
@@ -1083,7 +1101,7 @@ namespace wzapi
 	bool setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player));
 	bool applyLimitSet(WZAPI_NO_PARAMS);
 	bool emitSound(WZAPI_PARAMS(std::string sound, int x, int y));
-	no_return_value setMissionTime(WZAPI_PARAMS(int _time));
+	no_return_value setMissionTime(WZAPI_PARAMS(int _time, optional<int> _mode));
 	int getMissionTime(WZAPI_NO_PARAMS);
 	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch));
 	no_return_value completeResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player, optional<bool> _forceResearch));

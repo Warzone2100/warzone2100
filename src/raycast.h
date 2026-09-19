@@ -26,29 +26,32 @@
 
 #include "lib/framework/vector.h"
 
+struct WorldMapState;
 
 /*!
  * The raycast intersection callback.
+ * \param mapState The game world map state
  * \param pos Current position
  * \param dist Current distance from start
  * \param data Payload (store intermediate results here)
  * \return true if ore points are required, false otherwise
  */
-typedef bool (*RAY_CALLBACK)(Vector2i pos, int32_t dist, void *data);
+typedef bool (*RAY_CALLBACK)(WorldMapState& mapState, Vector2i pos, int32_t dist, void *data);
 
 
 /*!
  * Cast a ray from a position into a certain direction
+ * \param mapState The game world map state
  * \param src Position to cast from
  * \param dst Position to cast to (casts to end of map, if dst is off the map)
  * \param callback Callback to call for each passed tile
  * \param data Data to pass through to the callback
  */
-void rayCast(Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data);
+void rayCast(WorldMapState& mapState, Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data);
 
 
 // Calculates the maximum height and distance found along a line from any
 // point to the edge of the grid
-void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
+void getBestPitchToEdgeOfGrid(WorldMapState& mapState, UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
 
 #endif // __INCLUDED_SRC_RAYCAST_H__

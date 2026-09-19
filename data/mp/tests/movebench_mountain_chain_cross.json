@@ -1,0 +1,19 @@
+{
+	"challenge": {
+		"map": "Sk-Mountain",
+		"maxPlayers": 1,
+		"scavengers": "false",
+		"alliances": 0,
+		"powerLevel": 1,
+		"bases": 1,
+		"name": "MoveBench Mountain Chain Cross",
+		"version": 2
+	},
+	"scripts": {
+		"rules": "movebench_mountain_chain_cross.js"
+	},
+	"player_0": {
+		"team": 0,
+		"position": 0
+	}
+}

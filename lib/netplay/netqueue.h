@@ -69,6 +69,8 @@ public:
 
 	// Static factory method to create from raw data
 	static optional<NetMessage> tryFromRawData(const uint8_t* buffer, size_t bufferLen);
+	// Takes ownership of a buffer that must hold exactly one complete message (header + payload)
+	static optional<NetMessage> tryFromRawData(NetMsgDataVector&& rawData);
 
 	NetMessage(NetMessage&&) = default;
 	NetMessage& operator=(NetMessage&&) = default;
@@ -108,7 +110,6 @@ class NetMessageBuilder
 public:
 
 	explicit NetMessageBuilder(uint8_t type, size_t reservedCapacity = 16);
-	explicit NetMessageBuilder(NetMsgDataVector&& rawData);
 
 	uint8_t type() const
 	{
@@ -125,6 +126,12 @@ public:
 		auto resultLen = data_.size() + len;
 		ASSERT_OR_RETURN(, resultLen <= UINT16_MAX, "Resulting message length exceeds uint16_t max: %zu", resultLen);
 		data_.insert(data_.end(), src, src + len);
+	}
+
+	// Bytes appended so far, excluding the header
+	size_t payloadSize() const
+	{
+		return data_.size() - NetMessage::HEADER_LENGTH;
 	}
 
 	// Build the final message (invalidates NetMessageBuilder instance)
@@ -245,6 +252,10 @@ public:
 	{
 		return index <= msgData->size();
 	}
+	void markInvalid() const
+	{
+		index = msgData->size() + 1;
+	}
 
 	const NetMsgDataVector* msgData;
 	mutable size_t index = NetMessage::HEADER_LENGTH;
@@ -281,6 +292,12 @@ public:
 	void popMessage();                                                 ///< Pops the last returned message.
 
 	size_t currentIncompleteDataBuffered() const;
+
+	/// Capture the raw bytes of every message not yet read by the sim (the range [begin, messagePos)),
+	/// in read (FIFO) order, without modifying the queue. Used to persist the pending game-action backlog
+	/// into a disk savegame (where there is no host relay to re-feed in-flight commands on restore).
+	/// Restore by pushMessage()ing the captured messages back, in the returned order, into a fresh queue.
+	std::vector<std::vector<uint8_t>> snapshotUnreadMessages() const;
 
 	inline size_t numPendingGameTimeUpdateMessages() const
 	{

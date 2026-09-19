@@ -40,6 +40,7 @@ public:
 	virtual ~WzMultiplayerOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	virtual void render() override;
 
 	enum class MultiMessagesResult
 	{

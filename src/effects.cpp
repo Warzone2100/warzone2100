@@ -34,6 +34,17 @@
 	************************************************************
 	* STILL NEED TO REMOVE SOME MAGIC NUMBERS INTO #DEFINES!!! *
 	************************************************************
+
+	Effects are DISPLAY-ONLY and must stay that way:
+	- Nothing here may read or write game simulation state, or consume the synchronised RNG
+	  (gameRand / gameRandU32). Use plain rand() for visual variation.
+	- The active effect list is only advanced by processEffects(), which runs from the 3D draw
+	  path. It never runs in headless mode, so addEffect() / addMultiEffect() bail out there
+	  rather than accumulate effects that would never be processed.
+	- Sound is fine (it is presentation, not simulation).
+
+	The one exception is readFXData(), which sets burning tiles when loading a classic savegame,
+	because that format persists tile fire nowhere else.
 */
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
@@ -72,6 +83,7 @@
 #include "component.h"
 #include "profiling.h"
 #include "game_world.h"
+#include "wrappers.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -257,7 +269,7 @@ void effectSetSize(UDWORD size)
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
                     EFFECT_TYPE type, bool specified, const iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
 {
-	if (number == 0)
+	if (number == 0 || headlessGameMode())
 	{
 		return;
 	}
@@ -358,7 +370,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
 {
-	if (gamePaused())
+	if (gamePaused() || headlessGameMode())
 	{
 		return;
 	}
@@ -2332,6 +2344,165 @@ void effectResetUpdates()
 	memset(lastUpdateStructures, 0, sizeof(lastUpdateStructures));
 }
 
+// MARK: - Active effect list serialization (disk savegame, display-only)
+//
+// Restoring the effect list is purely so a loaded game looks like the one that was saved (ex. a
+// destroyed oil derrick still burning). Nothing here feeds the simulation, which is why it lives in
+// the savegame's local per-client section rather than the game state document.
+
+static nlohmann::ordered_json writeEffectVector3f(const Vector3f &v)
+{
+	return nlohmann::ordered_json::array({ v.x, v.y, v.z });
+}
+
+static nlohmann::ordered_json writeEffectVector3i(const Vector3i &v)
+{
+	return nlohmann::ordered_json::array({ v.x, v.y, v.z });
+}
+
+static bool readEffectVector3f(const nlohmann::ordered_json &j, const char *key, Vector3f &out)
+{
+	if (!j.contains(key))
+	{
+		return false;
+	}
+	const nlohmann::ordered_json &v = j.at(key);
+	if (!v.is_array() || v.size() < 3)
+	{
+		return false;
+	}
+	out = Vector3f(v[0].get<float>(), v[1].get<float>(), v[2].get<float>());
+	return true;
+}
+
+static bool readEffectVector3i(const nlohmann::ordered_json &j, const char *key, Vector3i &out)
+{
+	if (!j.contains(key))
+	{
+		return false;
+	}
+	const nlohmann::ordered_json &v = j.at(key);
+	if (!v.is_array() || v.size() < 3)
+	{
+		return false;
+	}
+	out = Vector3i(v[0].get<int32_t>(), v[1].get<int32_t>(), v[2].get<int32_t>());
+	return true;
+}
+
+std::vector<nlohmann::ordered_json> serializeActiveEffects()
+{
+	std::vector<nlohmann::ordered_json> out;
+	out.reserve(gActiveEffects.size());
+
+	for (auto iter = gActiveEffects.begin(); iter != gActiveEffects.end(); ++iter)
+	{
+		const EFFECT &e = *iter;
+		if (e.group == EFFECT_FREED)
+		{
+			continue;
+		}
+
+		nlohmann::ordered_json j = nlohmann::ordered_json::object();
+		j["group"] = static_cast<int>(e.group);
+		j["type"] = static_cast<int>(e.type);
+		j["control"] = e.control;
+		j["frameNumber"] = e.frameNumber;
+		j["size"] = e.size;
+		j["baseScale"] = e.baseScale;
+		j["specific"] = e.specific;
+		// The player colour the effect was created with. Gravitons, giblets and the droid death
+		// animation are drawn in it, so it must survive the round-trip.
+		j["player"] = e.player;
+		j["position"] = writeEffectVector3f(e.position);
+		j["velocity"] = writeEffectVector3f(e.velocity);
+		j["rotation"] = writeEffectVector3i(e.rotation);
+		j["spin"] = writeEffectVector3i(e.spin);
+		j["birthTime"] = e.birthTime;
+		j["lastFrame"] = e.lastFrame;
+		j["frameDelay"] = e.frameDelay;
+		j["lifeSpan"] = e.lifeSpan;
+		j["radius"] = e.radius;
+		if (e.imd)
+		{
+			j["imd"] = modelName(e.imd).toUtf8();
+		}
+
+		out.push_back(std::move(j));
+	}
+
+	return out;
+}
+
+void restoreActiveEffects(const std::vector<nlohmann::ordered_json> &effects)
+{
+	if (headlessGameMode())
+	{
+		// Nothing drains the list without the 3D draw path, so leave it empty
+		return;
+	}
+
+	// The restore is authoritative: drop anything already added (the world restore re-creates the
+	// landing lights via setNoGoArea, and those are permanent, so replaying on top would double them).
+	initEffectsSystem();
+
+	for (const nlohmann::ordered_json &j : effects)
+	{
+		if (!j.is_object())
+		{
+			continue;
+		}
+
+		const int group = j.value("group", static_cast<int>(EFFECT_FREED));
+		const int type = j.value("type", -1);
+		if (group < 0 || group >= EFFECT_FREED || type < 0 || type > DROID_ANIMEVENT_DYING_NORMAL_ST)
+		{
+			continue;
+		}
+
+		EFFECT e;
+		e.group = static_cast<EFFECT_GROUP>(group);
+		e.type = static_cast<EFFECT_TYPE>(type);
+		e.control = j.value("control", static_cast<uint8_t>(0));
+		e.frameNumber = j.value("frameNumber", static_cast<uint8_t>(0));
+		e.size = j.value("size", static_cast<uint16_t>(0));
+		e.baseScale = j.value("baseScale", static_cast<uint8_t>(0));
+		e.specific = j.value("specific", static_cast<uint8_t>(0));
+		e.player = j.value("player", static_cast<uint8_t>(0));
+		readEffectVector3f(j, "position", e.position);
+		readEffectVector3f(j, "velocity", e.velocity);
+		readEffectVector3i(j, "rotation", e.rotation);
+		readEffectVector3i(j, "spin", e.spin);
+		e.birthTime = j.value("birthTime", graphicsTime);
+		e.lastFrame = j.value("lastFrame", e.birthTime);
+		e.frameDelay = j.value("frameDelay", static_cast<uint16_t>(0));
+		e.lifeSpan = j.value("lifeSpan", static_cast<uint16_t>(0));
+		e.radius = j.value("radius", static_cast<uint16_t>(0));
+
+		if (j.contains("imd"))
+		{
+			const WzString imdName = WzString::fromUtf8(j.at("imd").get<std::string>());
+			const iIMDBaseShape *baseImd = (!imdName.isEmpty()) ? modelGet(imdName) : nullptr;
+			e.imd = (baseImd) ? baseImd->displayModel() : nullptr;
+		}
+
+		// Same requirement addEffect() asserts: everything except these groups is drawn from its imd,
+		// so an entry that lost its model would be a null dereference at render time.
+		if (e.imd == nullptr && e.group != EFFECT_DESTRUCTION && e.group != EFFECT_FIRE && e.group != EFFECT_SAT_LASER)
+		{
+			continue;
+		}
+
+		// updateFire() scatters its spawns with rand() % radius, so a zero radius would divide by zero.
+		if (e.group == EFFECT_FIRE && e.radius == 0)
+		{
+			e.radius = 1;
+		}
+
+		gActiveEffects.emplace(std::move(e));
+	}
+}
+
 /** This will save out the effects data */
 bool writeFXData(const char *fileName)
 {
@@ -2386,7 +2557,7 @@ bool writeFXData(const char *fileName)
 }
 
 /** This will read in the effects data */
-bool readFXData(const char *fileName)
+bool readFXData(const char *fileName, WorldMapState& mapState)
 {
 	// Clear out anything that's there already!
 	initEffectsSystem();
@@ -2439,7 +2610,7 @@ bool readFXData(const char *fileName)
 			// Sanity check - don't allow a negative time to wrap to a huge positive unsigned value.
 			if (timeLeftToRun > 0)
 			{
-				tileSetFire(gameWorld.map, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
+				tileSetFire(mapState, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
 			}
 		}
 

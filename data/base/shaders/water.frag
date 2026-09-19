@@ -2,7 +2,7 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
+#include "terrain_water.glsl"
 //
 
 uniform sampler2D tex1;
@@ -10,15 +10,7 @@ uniform sampler2D tex2;
 uniform sampler2D lightmap_tex;
 
 // light colors/intensity:
-uniform vec4 emissiveLight;
-uniform vec4 ambientLight;
-uniform vec4 diffuseLight;
-uniform vec4 specularLight;
 
-uniform vec4 fogColor;
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -60,21 +52,6 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 void main()
 {
 	vec4 fragColor = main_medium();
-
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-
-		if (fogFactor >= 1.f)
-		{
-			discard;
-		}
-
-		fogFactor = 1.0 - clamp(fogFactor, 0.0, 1.0);
-		fragColor.rgb *= fogFactor; // premultiply by fogFactor as alpha
-		fragColor.a = fogFactor;
-	}
 
 	FragColor = fragColor;
 }

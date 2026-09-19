@@ -27,12 +27,25 @@
 #include <memory>
 #include <array>
 #include <vector>
+#include <functional>
+#include <utility>
+#include <climits>
+#include <unordered_map>
+
+//! A light with no direction (encoded as cosOuter of -1)
+constexpr float LIGHT_OMNIDIRECTIONAL = -1.f;
 
 struct LIGHT
 {
 	Vector3i position = Vector3i(0, 0, 0);
 	UDWORD range;
 	PIELIGHT colour;
+	//! Brightness, separate from range, which only says how far the light reaches
+	float intensity = 1.f;
+	//! Direction the cone points, normalized - Ignored if cosOuter is LIGHT_OMNIDIRECTIONAL
+	Vector3f direction = Vector3f(0.f, 0.f, 0.f);
+	//! Cosine of the half angle at which the cone has fallen off entirely
+	float cosOuter = LIGHT_OMNIDIRECTIONAL;
 };
 
 
@@ -59,64 +72,134 @@ LightMap& getCurrentLightmapData();
 
 
 
+/// Scene facts the lighting managers need beyond the lights themselves.
+struct LightingSceneInfo
+{
+	//! camera position in world space (z negated, matching getLightBoundingBox)
+	glm::vec3 cameraPosition = glm::vec3(0.f);
+	//! terrain height under a world XY, in raw light coordinates. Consulted once per
+	//! candidate light, so the indirection here costs nothing measurable.
+	std::function<int32_t(int32_t, int32_t)> groundHeightAt;
+};
+
 struct ILightingManager
 {
 	struct PointLightBuckets
 	{
-		std::array<glm::vec4, gfx_api::max_lights> positions = {};
-		std::array<glm::vec4, gfx_api::max_lights> colorAndEnergy = {};
+		std::vector<glm::vec4> positions;
+		std::vector<glm::vec4> colorAndEnergy;
+		// xyz is the cone direction, w the cosine of its outer half angle, or -1 for no cone
+		std::vector<glm::vec4> directionAndCos;
 
 		// z and y components are used for padding, keep ivec4 !
-		std::array<glm::ivec4, gfx_api::bucket_dimension * gfx_api::bucket_dimension> bucketOffsetAndSize = {};
+		std::array<glm::ivec4, gfx_api::max_bucket_dimension * gfx_api::max_bucket_dimension> bucketOffsetAndSize = {};
 		// Unfortunately due to std140 constraint, we pack indexes in glm::ivec4 and unpack them in shader later
-		std::array<glm::ivec4, gfx_api::max_indexed_lights> light_index = {};
+		std::vector<glm::ivec4> light_index;
 
 		size_t bucketDimensionUsed = gfx_api::bucket_dimension;
+
+		//! How many entries of the arrays above a frame actually filled. (Everything past these is stale instead of cleared.)
+		size_t lightsUsed = 0;
+		size_t indexEntriesUsed = 0;
+
+		//! Size the arrays to the active capacity.
+		//! Sizing instead of clearing is safe because the bucket table is cleared in full, and bounds every read to the part the frame wrote, so anything
+		//! remaining past that (from a prior frame) can never be indexed.
+		void reset()
+		{
+			const auto& capacity = gfx_api::activeLightCapacity();
+			positions.resize(capacity.maxLights);
+			colorAndEnergy.resize(capacity.maxLights);
+			directionAndCos.resize(capacity.maxLights);
+			light_index.resize(capacity.maxIndexedLights);
+			bucketOffsetAndSize = {};
+			bucketDimensionUsed = capacity.bucketDimension;
+			lightsUsed = 0;
+			indexEntriesUsed = 0;
+		}
+	};
+
+	//! The same light data laid out for a buffer transport:
+	//! - three vec4 per light: position, color + energy, direction + cone
+	//! - the index list (without the ivec4 packing)
+	struct FlatPointLightData
+	{
+		std::vector<glm::vec4> lights;
+		std::vector<int32_t> indices;
 	};
 
 	virtual ~ILightingManager() = default;
 
 	void SetFrameStart()
 	{
-		currentPointLightBuckets = {};
+		currentPointLightBuckets.reset();
 	}
 
-	virtual void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) = 0;
+	virtual void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) = 0;
 
 	const PointLightBuckets& getPointLightBuckets() const
 	{
 		return currentPointLightBuckets;
 	}
 
+	//! Rebuilt from the buckets on demand (so zero cost while the uniform block transport is in use).
+	const FlatPointLightData& getFlatPointLightData();
+
 	protected:
 		PointLightBuckets currentPointLightBuckets;
+		FlatPointLightData currentFlatPointLightData;
 };
 
 
 namespace renderingNew
 {
+	struct TileCoordsHasher
+	{
+		std::size_t operator()(const std::pair<int32_t, int32_t>& p) const
+		{
+			return std::hash<long long>()(static_cast<long long>(p.first) * (static_cast<long long>(INT_MAX) + 1) + p.second);
+		}
+	};
+
 	//! This lighting manager generate a proper PointLightBuckets for per pixel point lights
 	struct LightingManager final : ILightingManager
 	{
-		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) override;
 
 		struct CalculatedPointLight
 		{
 			glm::vec3 position = glm::vec3(0, 0, 0);
 			glm::vec3 colour;
 			float range;
+			float intensity = 1.f;
+			glm::vec3 direction = glm::vec3(0, 0, 0);
+			float cosOuter = LIGHT_OMNIDIRECTIONAL;
+			bool omnidirectional() const { return cosOuter <= LIGHT_OMNIDIRECTIONAL; }
 		};
-	private:
-		// cached containers to avoid frequent reallocations
+
 		struct CulledLightInfo
 		{
 			CalculatedPointLight light;
-			BoundingBox clipSpaceBoundingBox;
+			ClipSpaceBounds clipSpaceBounds;
+			float importance = 0.f;
 		};
+	private:
+		// cached containers to avoid frequent reallocations
 		std::vector<CulledLightInfo> culledLights;
+		//! tile coordinates to indices into culledLights, rebuilt per frame
+		std::unordered_map<std::pair<int32_t, int32_t>, std::vector<size_t>, TileCoordsHasher> tileRangeLights;
+		//! per screen bucket candidate lists, reused across frames
+		std::vector<std::vector<size_t>> bucketCandidates;
+		//! scratch for ordering one bucket's candidates, reused across frames
+		std::vector<std::pair<float, size_t>> scoredCandidates;
+		//! selection bookkeeping, reused across frames
+		std::vector<bool> selectedLights;
+		std::vector<size_t> nextCandidate;
 	};
 }
 
-void setLightingManager(std::unique_ptr<ILightingManager> manager);
+/// Set the active lighting manager. Ownership stays with the caller, so the manager
+/// (and its cached containers) can persist across frames.
+void setLightingManager(ILightingManager* manager);
 
 ILightingManager& getCurrentLightingManager();

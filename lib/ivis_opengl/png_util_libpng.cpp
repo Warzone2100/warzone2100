@@ -68,6 +68,19 @@ static void wzpng_flush_data(png_structp png_ptr)
 
 	PHYSFS_flush(fileHandle);
 }
+
+// For in-memory encoding (iV_encodeImage_PNG)
+static void wzpng_write_data_to_vector(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+	std::vector<unsigned char> *output = static_cast<std::vector<unsigned char> *>(png_get_io_ptr(png_ptr));
+
+	output->insert(output->end(), data, data + length);
+}
+
+static void wzpng_flush_data_noop(png_structp png_ptr)
+{
+	// no-op (memory buffer)
+}
 // End of PNG callbacks
 
 static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
@@ -731,6 +744,84 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	return IMGSaveError::None;
 }
 
+// Note: This function must be thread-safe.
+//       It does not call the debug() macro directly, but instead returns an IMGSaveError structure with the text of any error.
+static IMGSaveError internal_encodeImage_PNG(const iV_Image *image, int color_type, std::vector<unsigned char>& output, bool bottom_up_write = false)
+{
+	unsigned char **volatile scanlines = nullptr;  // Must be volatile to reliably preserve value if modified between setjmp/longjmp.
+	png_infop info_ptr = nullptr;
+	png_structp png_ptr = nullptr;
+
+	ASSERT(image->channels() != 0, "Bad channels");
+
+	output.clear();
+
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	if (png_ptr == nullptr)
+	{
+		return IMGSaveError("iV_encodeImage_PNG: Unable to create png struct");
+	}
+
+	info_ptr = png_create_info_struct(png_ptr);
+	if (info_ptr == nullptr)
+	{
+		PNGWriteCleanup(&info_ptr, &png_ptr, nullptr);
+		return IMGSaveError("iV_encodeImage_PNG: Unable to create png info struct");
+	}
+
+	// If libpng encounters an error, it will jump into this if-branch
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		free(scanlines);
+		PNGWriteCleanup(&info_ptr, &png_ptr, nullptr);
+		output.clear();
+		return IMGSaveError("iV_encodeImage_PNG: Error encoding PNG data");
+	}
+	else
+	{
+		unsigned int channelsPerPixel = image->channels();
+		unsigned int currentRow, row_stride;
+
+		row_stride = image->width() * channelsPerPixel;
+
+		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height());
+		if (scanlines == nullptr)
+		{
+			PNGWriteCleanup(&info_ptr, &png_ptr, nullptr);
+			return IMGSaveError("iV_encodeImage_PNG: Couldn't allocate memory");
+		}
+
+		png_set_write_fn(png_ptr, &output, wzpng_write_data_to_vector, wzpng_flush_data_noop);
+
+		png_set_IHDR(png_ptr, info_ptr, image->width(), image->height(), 8,
+		             color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+		// Create an array of scanlines
+		unsigned char* bitmap_ptr = const_cast<unsigned char*>(image->bmp());
+		for (currentRow = 0; currentRow < image->height(); ++currentRow)
+		{
+			if (bottom_up_write)
+			{
+				// We're filling the scanline from the bottom up here,
+				// otherwise we'd have a vertically mirrored image.
+				scanlines[currentRow] = &bitmap_ptr[row_stride * (image->height() - currentRow - 1)];
+			}
+			else
+			{
+				scanlines[currentRow] = &bitmap_ptr[row_stride * currentRow];
+			}
+		}
+
+		png_set_rows(png_ptr, info_ptr, (png_bytepp)scanlines);
+
+		png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
+	}
+
+	free(scanlines);
+	PNGWriteCleanup(&info_ptr, &png_ptr, nullptr);
+	return IMGSaveError::None;
+}
+
 MSVC_PRAGMA(warning( pop )) // FIXME?: re-enable MSVC warning C4611: interaction between '_setjmp' and C++ object destruction is non-portable
 
 // Note: This function must be thread-safe.
@@ -753,6 +844,22 @@ IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image)
 IMGSaveError iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
 {
 	return internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_GRAY);
+}
+
+// Note: This function must be thread-safe.
+IMGSaveError iV_encodeImage_PNG(const iV_Image *image, std::vector<unsigned char>& output)
+{
+	int color_type = PNG_COLOR_TYPE_RGB;
+	switch (image->channels())
+	{
+		case 4:
+			color_type = PNG_COLOR_TYPE_RGB_ALPHA;
+			break;
+		case 3:
+			color_type = PNG_COLOR_TYPE_RGB;
+			break;
+	}
+	return internal_encodeImage_PNG(image, color_type, output, /*bottom_up_write=*/false);
 }
 
 // Note: This function is *NOT* thread-safe (jpeg_encode_image is not thread-safe).

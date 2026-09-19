@@ -90,7 +90,11 @@ TITLECODE WzMsgBoxTitleUI::run()
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id;
 	if (id == WZ_MSGBOX_TUI_LEAVE)
 		changeTitleUI(next);
-	widgDisplayScreen(psWScreen);
 	return TITLECODE_CONTINUE;
+}
+
+void WzMsgBoxTitleUI::render()
+{
+	widgDisplayScreen(psWScreen);
 }
 

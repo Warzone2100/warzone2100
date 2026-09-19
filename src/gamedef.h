@@ -44,8 +44,8 @@
 #define VERSION_11              11	        // newstyle save game with extending structure checked in 13 Nov.
 #define VERSION_12              12	        // mission and order stuff checked in 20 Nov.
 //#define VERSION_13            13	        // odds and ends to 24 Nov. and hashed scripts
-#define VERSION_14              14	        // 
-#define VERSION_15              15	        // 
+#define VERSION_14              14	        //
+#define VERSION_15              15	        //
 #define VERSION_16              16	        // beta save game
 #define VERSION_17              17	        // objId and new struct stats included
 #define VERSION_18              18	        // droid name savegame validity stamps
@@ -82,7 +82,7 @@ enum GAME_TYPE
 	GTYPE_SCENARIO_START,   ///< Initial scenario state.
 	GTYPE_SCENARIO_EXPAND,  ///< Scenario scroll area expansion.
 	GTYPE_MISSION,          ///< Stand alone mission.
-	GTYPE_SAVE_START,       ///< User saved game - at the start of a level.
+	GTYPE_SAVE_START,       ///< DEPRECATED / UNUSED / UNSUPPORTED. Never written & rejected on load. Retained only to preserve the enum values of later entries and to detect & reject legacy saves of this type.
 	GTYPE_SAVE_MIDMISSION,  ///< User saved game - in the middle of a level
 };
 

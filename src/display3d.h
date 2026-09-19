@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_DISPLAY3D_H__
 #define __INCLUDED_SRC_DISPLAY3D_H__
 
+#include <string>
+
 #include "display.h"
 #include "display3ddef.h"	// This should be the only place including this file
 #include "lib/ivis_opengl/pietypes.h"
@@ -29,6 +31,8 @@
 #include "message.h"
 
 #define HEIGHT_TRACK_INCREMENTS (50)
+
+struct WorldMapState;
 
 /*!
  * Special tile types
@@ -70,9 +74,10 @@ extern bool	radarPermitted;
 bool radarVisible();
 
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
+void setRangeOnScreen(bool enabled);
 void setViewPos(UDWORD x, UDWORD y, bool Pan);
 Vector2i    getPlayerPos();
-void setPlayerPos(SDWORD x, SDWORD y);
+void setPlayerPos(const WorldMapState& mapState, SDWORD x, SDWORD y);
 void disp3d_setView(iView *newView);
 void disp3d_oldView(); // for save games <= 10
 void disp3d_getView(iView *newView);
@@ -121,6 +126,7 @@ extern Vector2i mousePos;
 
 extern bool showGateways;
 extern bool showPath;
+extern bool showCorridors;
 extern const Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
@@ -128,6 +134,9 @@ UDWORD  getDroidRankGraphic(const DROID *psDroid);
 UDWORD  getDroidRankGraphicFromLevel(unsigned int level);
 
 void setSkyBox(const char *page, float mywind, float myscale);
+const std::string &getCurrentSkyboxPage();
+float getCurrentSkyboxWindSpeed();
+float getCurrentSkyboxScale();
 
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128
@@ -141,6 +150,14 @@ extern bool tuiTargetOrigin;
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
 bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
 
-int calculateCameraHeightAt(int tileX, int tileY);
+int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY);
+
+// RCAS sharpness for FSR1 upscaling, in stops (0 is sharpest, 2 is the least sharp)
+void display3d_setUpscalingSharpness(float stops);
+float display3d_getUpscalingSharpness();
+void display3d_setSmaaParameters(float threshold, float maxSearchSteps, float maxSearchStepsDiag, float cornerRounding);
+enum class SMAA_MODE : uint8_t;
+// Applies an SMAA quality preset and enables or disables the pass chain
+bool display3d_setSmaaMode(SMAA_MODE mode);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

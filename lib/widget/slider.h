@@ -43,6 +43,11 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void setTip(std::string string) override;
 	void setHelp(optional<WidgetHelp> help) override;
+	bool isGamepadCursorMagnetTarget() const override { return bGamepadCursorMagnetTarget; }
+	// scrollbars opt out - lists already scroll via the right stick, so their
+	// scrollbar should not attract the cursor
+	void setIsGamepadCursorMagnetTarget(bool val) { bGamepadCursorMagnetTarget = val; }
+	optional<Vector2i> gamepadCursorMagnetPoint() const override;
 	void enable();
 	void disable();
 	bool isHighlighted() const;
@@ -57,13 +62,14 @@ public:
 	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
-	UWORD		numStops;			// Number of stop positions on the slider
+	uint32_t	numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar
-	UWORD		pos;				// Current stop position of the slider
+	uint32_t	pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
 	std::string pTip;                           // Tool tip
 private:
 	optional<WidgetHelp> help;
+	bool		bGamepadCursorMagnetTarget = true;
 	bool		isHandlingDrag = false;
 	std::vector<SliderOnChangeFunc> onChangeFuncs;
 private:

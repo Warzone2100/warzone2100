@@ -35,6 +35,7 @@
 #include "mapdisplay.h"
 
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
+#define PREVIEW_ROTATE_TIME	(3*GAME_TICKS_PER_SEC)
 
 /* renders the Research IMDs into the surface - used by message display in
 Intelligence Map */
@@ -165,5 +166,99 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	else
 	{
 		ASSERT(false, "Unknown PIEType");
+	}
+}
+
+// Buttons fit a radius-64 model into roughly 60 pixels at scale 100
+#define RESEARCH_FIT_REFERENCE_BOX 60
+// The radius below which the buttons treat a research model like a component
+#define SMALL_RESEARCH_RADIUS 100
+
+static void resolveResearchFit(RESEARCH *psResearch, UDWORD boxSize, BASE_STATS **psResGraphicOut, UDWORD *IMDTypeOut, UDWORD *radiusOut, SDWORD *scaleOut)
+{
+	BASE_STATS *psResGraphic = nullptr;
+	UDWORD IMDType = IMDTYPE_RESEARCH;
+	UDWORD radius = COMPONENT_RADIUS;
+
+	if (psResearch->psStat != nullptr)
+	{
+		psResGraphic = psResearch->psStat;
+		if (StatIsStructure(psResearch->psStat))
+		{
+			IMDType = IMDTYPE_STRUCTURESTAT;
+			const iIMDShape *pDisplayModel = safeGetDisplayModelFromBase(((STRUCTURE_STATS *)psResearch->psStat)->pIMD[0]);
+			radius = (pDisplayModel != nullptr) ? static_cast<UDWORD>(pDisplayModel->sradius) : OBJECT_RADIUS;
+		}
+		else if (StatIsComponent(psResearch->psStat) != COMP_NUMCOMPONENTS)
+		{
+			IMDType = IMDTYPE_COMPONENT;
+			radius = getComponentRadius(psResearch->psStat);
+		}
+		else
+		{
+			psResGraphic = (BASE_STATS *)psResearch;
+			radius = getResearchRadius((BASE_STATS *)psResearch);
+		}
+	}
+	else
+	{
+		psResGraphic = (BASE_STATS *)psResearch;
+		radius = getResearchRadius((BASE_STATS *)psResearch);
+	}
+
+	if (radius == 0)
+	{
+		radius = COMPONENT_RADIUS;
+	}
+	const SDWORD targetRadius = static_cast<SDWORD>(COMPONENT_RADIUS * boxSize / RESEARCH_FIT_REFERENCE_BOX);
+
+	// Averaging against a flat scale keeps a small model from being blown up to
+	// fill the box, but it also puts a floor under the result. So it applies to a
+	// model small enough to need lifting and to nothing else.
+	//
+	// Anything bigger has to be allowed under that floor or it comes out oversized
+	// however small the box: a structure at a radius of 285 against a component's
+	// 50, and a transport body at more again.
+	const bool softenAgainstFlatScale = (radius <= SMALL_RESEARCH_RADIUS);
+	const SDWORD flatScale = softenAgainstFlatScale
+		? static_cast<SDWORD>(COMP_BUT_SCALE * boxSize / RESEARCH_FIT_REFERENCE_BOX)
+		: 0;
+
+	*psResGraphicOut = psResGraphic;
+	*IMDTypeOut = IMDType;
+	*radiusOut = radius;
+	*scaleOut = rescaleButtonObject(static_cast<SDWORD>(radius), flatScale, targetRadius);
+}
+
+void renderResearchFittedToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY, UDWORD boxSize, bool rotate)
+{
+	if (psResearch == nullptr || boxSize == 0)
+	{
+		return;
+	}
+
+	pie_SetGeometricOffset(OriginX, OriginY + static_cast<int>(boxSize) / 8);
+
+	const int angle = (rotate) ? static_cast<int>((realTime % PREVIEW_ROTATE_TIME) * 360 / PREVIEW_ROTATE_TIME) : 45;
+	Vector3i Position = Vector3i(0, 0, BUTTON_DEPTH);
+	Vector3i Rotation = Vector3i(-30, angle, 0);
+
+	BASE_STATS *psResGraphic = nullptr;
+	UDWORD IMDType = IMDTYPE_RESEARCH;
+	UDWORD radius = 0;
+	SDWORD scale = 0;
+	resolveResearchFit(psResearch, boxSize, &psResGraphic, &IMDType, &radius, &scale);
+
+	if (IMDType == IMDTYPE_COMPONENT)
+	{
+		displayComponentButton(psResGraphic, &Rotation, &Position, scale);
+	}
+	else if (IMDType == IMDTYPE_RESEARCH)
+	{
+		displayResearchButton(psResGraphic, &Rotation, &Position, scale);
+	}
+	else
+	{
+		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, scale);
 	}
 }

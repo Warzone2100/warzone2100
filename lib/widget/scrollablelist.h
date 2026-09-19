@@ -51,6 +51,7 @@ public:
 	const std::vector<std::shared_ptr<WIDGET>>& getItems() const;
 	void clear();
 	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	bool canConsumeWheelScroll() override;
 	void enableScroll();
 	void disableScroll();
 	void setStickToBottom(bool value);
@@ -68,9 +69,12 @@ public:
 	void displayRecursive(WidgetGraphicsContext const& context) override;
 	int getScrollbarWidth() const;
 	void setScrollbarWidth(int newWidth);
+	// Optional floor (in pixels) for the scrollbar's slider handle - see
+	// ScrollBarWidget::setMinimumSliderSize. Useful for very long lists.
+	void setScrollbarMinimumSliderSize(uint32_t value);
 	void setExpandWhenScrollbarInvisible(bool expandWidth);
-	uint16_t getScrollPosition() const;
-	void setScrollPosition(uint16_t newPosition);
+	uint32_t getScrollPosition() const;
+	void setScrollPosition(uint32_t newPosition);
 	void scrollToItem(size_t itemNum);
 	void scrollEnsureItemVisible(size_t itemNum);
 	bool isItemVisible(size_t itemNum);
@@ -121,6 +125,7 @@ protected:
 	void released(W_CONTEXT *, WIDGET_KEY) override;
 	void highlight(W_CONTEXT *) override;
 	void highlightLost() override;
+	bool isGamepadCursorMagnetTarget() const override { return true; }
 private:
 	ClickableScrollableList_OnClick_Func onClickFunc;
 	ClickableScrollableList_OnHighlight_Func onHighlightFunc;

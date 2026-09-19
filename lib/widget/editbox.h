@@ -62,6 +62,11 @@ public:
 	void stopEditing();
 	bool isEditing();
 
+	bool isGamepadCursorMagnetTarget() const override
+	{
+		return (state & WEDBS_DISABLE) == 0;
+	}
+
 	void setState(unsigned state) override;
 	WzString getString() const override;
 	void setString(WzString string) override;

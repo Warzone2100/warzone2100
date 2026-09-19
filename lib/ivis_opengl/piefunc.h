@@ -45,4 +45,7 @@ void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
 void pie_Skybox_Texture(const char *filename);
 
+// Dev-only tessellation smoke test (set WZ_DEBUG_TESS_TEST=1): draws a tessellated patch overlay
+void pie_DebugDrawTessellationTestPatch();
+
 #endif // _piedef_h

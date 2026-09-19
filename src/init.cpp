@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +28,7 @@
 #include "lib/framework/frame.h"
 
 #include <string.h>
+#include <utility>
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
@@ -39,6 +42,7 @@
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h" // resetSyncDebug (clear cold-load reconstruction syncDebug)
 #include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
@@ -46,6 +50,8 @@
 #include "init.h"
 
 #include "input/manager.h"
+#include "input/gamepadcursor.h"
+#include "screens/gamepadlayoutscreen.h"
 #include "advvis.h"
 #include "atmos.h"
 #include "campaigninfo.h"
@@ -61,6 +67,7 @@
 #include "effects.h"
 #include "formation.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "frend.h"
 #include "frontend.h"
 #include "game.h"
@@ -79,12 +86,16 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
+#include "ordersource.h"
 #include "multistat.h"
 #include "notifications.h"
 #include "projectile.h"
 #include "order.h"
 #include "radar.h"
 #include "research.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "lib/framework/loading_task.h"
+#include "wrappers.h"
 #include "lib/framework/cursors.h"
 #include "text.h"
 #include "transporter.h"
@@ -94,6 +105,7 @@
 #include "terrain.h"
 #include "ingameop.h"
 #include "qtscript.h"
+#include "gamestate_savegame.h"
 #include "template.h"
 #include "activity.h"
 #include "spectatorwidgets.h"
@@ -981,12 +993,20 @@ private:
 	bool m_logErrors = false;
 };
 
+static bool levelListHoldsCampaignOnly = false;
+
+bool isLevelListCampaignOnly()
+{
+	return levelListHoldsCampaignOnly;
+}
+
 bool buildMapList(bool campaignOnly)
 {
 	if (!loadLevFile("gamedesc.lev", mod_campaign, false, nullptr))
 	{
 		return false;
 	}
+	levelListHoldsCampaignOnly = campaignOnly;
 	if (!campaignOnly)
 	{
 		loadLevFile("addon.lev", mod_multiplay, false, nullptr);
@@ -1055,6 +1075,12 @@ bool buildMapList(bool campaignOnly)
 bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScalePercentage)
 {
 	if (!widgInitialise())
+	{
+		return false;
+	}
+
+	// registered before notifications so the cursor overlay draws above them
+	if (!gamepadCursorInit())
 	{
 		return false;
 	}
@@ -1161,8 +1187,10 @@ void systemShutdown()
 	debug(LOG_MAIN, "shutting down graphics subsystem");
 	levShutDown();
 	notificationsShutDown();
+	closeGamepadLayoutScreen();
+	gamepadCursorShutdown();
 	widgShutDown();
-	fpathShutdown();
+	fpathActiveBackend().shutdown();
 	mapShutdown();
 	modelShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
@@ -1183,12 +1211,60 @@ void systemShutdown()
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
 
-bool frontendInitialise(const char *ResourceFile)
+namespace
 {
+
+LoadingTask<> frontendInitTaskImpl(ResourceLoadingController &controller)
+{
+	SetGameMode(GS_TITLE_SCREEN);
 	frontendIsShuttingDown();
+	static constexpr char resourceFile[] = "wrf/frontend.wrf";
+	debug(LOG_WZ, "== Initializing frontend == : %s", resourceFile);
+	if (!frontendInitialiseSetup())
+	{
+		co_return load_fail();
+	}
 
-	debug(LOG_WZ, "== Initializing frontend == : %s", ResourceFile);
+	co_await controller.yieldFrame();
 
+	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
+	if (!(co_await resLoad(controller, resourceFile, 0)))
+	{
+		co_return load_fail();
+	}
+
+	co_return frontendInitialiseFinalize() ? load_ok() : load_fail();
+}
+
+} // anonymous namespace
+
+LoadingTask<> frontendInitTask(ResourceLoadingController &controller, bool onInitialStartup)
+{
+	const bool openedLoadingScreen = !onInitialStartup && !isLoadingScreenActive();
+	if (openedLoadingScreen)
+	{
+		initLoadingScreen(true);
+	}
+
+	if (!(co_await frontendInitTaskImpl(controller)))
+	{
+		if (openedLoadingScreen)
+		{
+			closeLoadingScreen();
+		}
+		debug(LOG_FATAL, "Shutting down after failure");
+		exit(EXIT_FAILURE);
+	}
+
+	if (openedLoadingScreen)
+	{
+		closeLoadingScreen();
+	}
+	co_return load_ok();
+}
+
+bool frontendInitialiseSetup()
+{
 	if (!InitialiseGlobals())				// Initialise all globals and statics everywhere.
 	{
 		return false;
@@ -1209,13 +1285,11 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
-	if (!resLoad(ResourceFile, 0))
-	{
-		//need the object heaps to have been set up before loading in the save game
-		return false;
-	}
+	return true;
+}
 
+bool frontendInitialiseFinalize()
+{
 	if (!dispInitialise())					// Initialise the display system
 	{
 		return false;
@@ -1434,7 +1508,7 @@ bool stageOneShutDown()
 	ResearchRelease();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	shutdownTerrain();
 
@@ -1449,7 +1523,11 @@ bool stageOneShutDown()
 	modelShutdown();
 	pie_TexShutDown();
 
-	bool needsLevReload = (hasOverrideMods() || hasCampaignMods()) && (game.type == LEVEL_TYPE::CAMPAIGN);
+	// Two separate reasons the level list must be rebuilt:
+	// 1. Loading a campaign save rebuilds it with only campaign levels, so the multiplayer maps are simply not present
+	// 2. Mods may supply their own levels, which aren't present after the mod is gone
+	bool needsLevReload = isLevelListCampaignOnly()
+		|| ((hasOverrideMods() || hasCampaignMods()) && (game.type == LEVEL_TYPE::CAMPAIGN));
 	clearOverrideMods();
 	clearCampaignMods();
 	clearCamTweakOptions();
@@ -1531,7 +1609,7 @@ bool stageTwoInitialise()
 		return false;
 	}
 
-	if (!gwInitialise())
+	if (!gwInitialise(gameWorld.map))
 	{
 		return false;
 	}
@@ -1577,7 +1655,7 @@ bool stageTwoInitialise()
 	// - Loading savegames calls `fPathDroidRoute` (from `loadSaveDroid`) before `stageThreeInitialise`
 	//   is called, hence removing this call to `fpathInitialise` will currently break loading certain
 	//   savegames (if they interact with the fPath system).
-	if (!fpathInitialise())
+	if (!fpathActiveBackend().initialise())
 	{
 		return false;
 	}
@@ -1597,14 +1675,14 @@ bool stageTwoShutDown()
 
 	shutdown3DView_FullReset();
 
-	fpathShutdown();
+	fpathActiveBackend().shutdown();
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 
 	if (!messageShutdown())
 	{
@@ -1621,7 +1699,7 @@ bool stageTwoShutDown()
 	cmdDroidShutDown();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	if (!mapShutdown())
 	{
@@ -1683,27 +1761,9 @@ static void displayLoadingErrors()
 	}
 }
 
-bool stageThreeInitialise()
+static bool stageThreeInitialiseSync()
 {
-	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
-
-	debug(LOG_WZ, "== stageThreeInitialise ==");
-
-	loopMissionState = LMS_NORMAL;
-
-	// preload model textures for current tileset
-	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
-	modelUpdateTilesetIdx(modelTilesetIdx);
-	if (!headlessGameMode())
-	{
-		enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
-			for (const iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
-			{
-				pDisplayShape->getTextures();
-			}
-		});
-	}
-	resDoResLoadCallback();		// do callback.
+	bool fromSave = (getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
@@ -1719,7 +1779,7 @@ bool stageThreeInitialise()
 	}
 
 	effectResetUpdates();
-	initLighting(0, 0, gameWorld.map.width, gameWorld.map.height);
+	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	pie_InitLighting();
 	getCurrentLightmapData().reset(gameWorld.map.width, gameWorld.map.height);
 
@@ -1732,23 +1792,32 @@ bool stageThreeInitialise()
 		intAddReticule();
 	}
 
+	orderSourceReset();
+	orderProvenanceReset();
+
 	if (bMultiPlayer)
 	{
 		multiGameInit();
 		initTemplates();
 	}
 
-	preProcessVisibility();
+	preProcessVisibility(gameWorld.map);
 
-	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
+	// A new-format (GameState) cold load already restored its scripting section during the level load
+	// (applyDeferredScripting in levFinalizeLevelLoad, before this), so prepareScripts' queued
+	// research-event replay below sees the restored script globals. Consume the reconstruct marker to
+	// learn it was a cold load (ex. so the bInTutorial reset further down does not clobber the restored value).
+	const bool wasColdLoad = gamestate::savegame::takeColdLoadReconstructFlag();
 
-	if (!fpathInitialise())
+	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
+
+	if (!fpathActiveBackend().initialise())
 	{
 		return false;
 	}
 
-	mapInit();
-	gridReset();
+	mapInit(gameWorld);
+	gridReset(gameWorld);
 
 	//if mission screen is up, close it.
 	if (MissionResUp)
@@ -1758,8 +1827,11 @@ bool stageThreeInitialise()
 
 	// Re-inititialise some static variables.
 
-	bInTutorial = false;
-	rangeOnScreen = false;
+	// A snapshot cold-load restored bInTutorial during its scripting restore in the level load; don't clobber it.
+	if (!wasColdLoad)
+	{
+		bInTutorial = false;
+	}
 
 	if (fromSave && ActivityManager::instance().getCurrentGameMode() == ActivitySink::GameMode::CHALLENGE)
 	{
@@ -1768,13 +1840,13 @@ bool stageThreeInitialise()
 
 	// add radar to interface screen, and resize
 	intAddRadarWidget();
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 
 	setAllPauseStates(false);
 
 	countUpdate();
 
-	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
+	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
 	}
@@ -1791,7 +1863,7 @@ bool stageThreeInitialise()
 		}
 
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_INIT); });
-		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
+		playerBuiltHQ = structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true);
 	}
 
 	// Start / randomize in-game music
@@ -1816,7 +1888,55 @@ bool stageThreeInitialise()
 	// Call once again to update counts (if modified by earlier wzapi events)
 	countUpdate(false);
 
+	// For a GameState cold load, discard all the syncDebug accumulated while RECONSTRUCTING the world
+	// (object/alliance/script restoration: generateSynchronisedObjectId, formAlliance, group joins, the
+	// TRIGGER_GAME_LOADED/INIT events, ...). A continuously-playing client never produces those in its
+	// current tick, so leaving them in the first post-load sync bucket guarantees a spurious CRC
+	// mismatch (and desync-log dump) on the resume tick and pollutes the first detailed sync log. The
+	// normal game start already does this via gameTimeReset()->resetSyncDebug(), but that runs BEFORE
+	// the cold-load reconstruction; reset once more here, after all load activity and before the first
+	// game tick. (The resume tick's CRC still cannot match the original by construction - a tick's
+	// object syncDebug is attributed to the next boundary - so the acceptance comparison starts from the
+	// first fully-simulated tick after resume.)
+	if (wasColdLoad)
+	{
+		resetSyncDebug();
+		// A tick's object syncDebug is attributed to the NEXT sync boundary's CRC (sendPlayerGameTime runs
+		// mid-gameStateUpdate, after the headers but before the object updates). resetSyncDebug() above
+		// empties the log, so the first post-resume boundary would otherwise hash an empty log where a
+		// continuously-playing host hashed the saved tick's object updates - diverging on that one boundary
+		// and the GAME_GAME_TIME checkCrc that echoes it. Re-seed the accumulator with the CRC captured at
+		// the save boundary (determinismCore.syncDebugCrc) so the first post-resume boundary reproduces the
+		// host's CRC exactly. No-op for snapshots without the field.
+		applyResumeSyncDebugCrc();
+		// This client resumed from a GameState snapshot at gameTime; it cannot reproduce the sync CRC of
+		// any tick at or before the resume tick (those were never simulated here), so suppress incoming
+		// GAME_GAME_TIME CRC checks for those (else a reconnect / mid-match join would spuriously flag a
+		// desync). The first post-resume boundary (> gameTime) is reproduced by applyResumeSyncDebugCrc()
+		// above and so is left verifiable. See setSyncCheckFloorTime.
+		setSyncCheckFloorTime(gameTime);
+	}
+
 	return true;
+}
+
+LoadingTask<> stageThreeInitialiseTask(ResourceLoadingController& controller)
+{
+	debug(LOG_WZ, "== stageThreeInitialise ==");
+
+	loopMissionState = LMS_NORMAL;
+
+	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
+	modelUpdateTilesetIdx(modelTilesetIdx);
+	if (!headlessGameMode())
+	{
+		if (!(co_await preloadAllModelTexturesTask(controller)))
+		{
+			co_return load_fail();
+		}
+	}
+
+	co_return stageThreeInitialiseSync() ? load_ok() : load_fail();
 }
 
 /*****************************************************************************/
@@ -1841,7 +1961,7 @@ bool stageThreeShutDown()
 
 	challengesUp = false;
 	challengeActive = false;
-	isInGamePopupUp = false;
+	resetInGameHostQuit();
 	InGameOpUp = false;
 	bInTutorial = false;
 
@@ -1861,6 +1981,8 @@ bool stageThreeShutDown()
 	{
 		multiGameShutdown();
 	}
+	orderSourceReset();
+	orderProvenanceReset();
 
 	//call this here before mission data is released
 	if (!missionShutDown())
@@ -1879,7 +2001,7 @@ bool stageThreeShutDown()
 bool campaignReset()
 {
 	debug(LOG_MAIN, "campaignReset");
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	mapShutdown();
 	shutdownTerrain();
 	// when the terrain textures are reloaded we need to reset the radar
@@ -1896,15 +2018,15 @@ bool saveGameReset()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 	initMission();
 	initTransporters();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	intResetScreen(true);
 
 	if (!mapShutdown())

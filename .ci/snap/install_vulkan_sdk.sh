@@ -9,8 +9,8 @@ if [[ "$TARGET_BUILD_ARCH" == "amd64" && "$CRAFT_ARCH_BUILD_ON" == "$TARGET_BUIL
   # Install Vulkan SDK (binary package)
   echo "Installing Vulkan SDK"
   
-  VULKANSDK_SHA256="241e75b56c91c0d210ed07a7c638ec05a3e5b0e4c66ba9f0ba0f102d823ad6bf"
-  VULKANSDK_DLURL="https://sdk.lunarg.com/sdk/download/1.4.328.1/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz?Human=true"
+  VULKANSDK_SHA256="4b41e3b30e8aedaa5dac7c136561ab463eb316a25a54e2c6245f2c299ea1fb85"
+  VULKANSDK_DLURL="https://sdk.lunarg.com/sdk/download/1.4.357.1/linux/vulkansdk-linux-x86_64-1.4.357.1.tar.xz?Human=true"
   
   VULKANSDK_INSTALL_PATH="${CRAFT_PART_BUILD}/dep_tmp/vulkan_sdk"
   VULKAN_DL_FILE="${CRAFT_PART_BUILD}/dl_tmp/vulkansdk-linux-x86_64.tar.xz"

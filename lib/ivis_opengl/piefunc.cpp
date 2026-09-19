@@ -123,12 +123,58 @@ void pie_ViewingWindow_Shutdown()
 	}
 }
 
+void pie_DebugDrawTessellationTestPatch()
+{
+	static const bool enabled = []() {
+		const char* env = getenv("WZ_DEBUG_TESS_TEST");
+		return env != nullptr && *env != '\0' && strcmp(env, "0") != 0;
+	}();
+	if (!enabled)
+	{
+		return;
+	}
+	if (!gfx_api::context::get().supportsTessellationShaders())
+	{
+		static bool loggedOnce = false;
+		if (!loggedOnce)
+		{
+			debug(LOG_INFO, "WZ_DEBUG_TESS_TEST: tessellation shaders are not supported on this system");
+			loggedOnce = true;
+		}
+		return;
+	}
+	static bool loggedLevel = false;
+	if (!loggedLevel)
+	{
+		debug(LOG_INFO, "WZ_DEBUG_TESS_TEST: drawing test patch (MAX_TESS_GEN_LEVEL: %d)", (int)gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TESS_GEN_LEVEL));
+		loggedLevel = true;
+	}
+	const float tessLevel = std::min(8.f, static_cast<float>(gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TESS_GEN_LEVEL)));
+	// 4 control points in NDC (lower-left area of the screen), CCW winding
+	static const std::array<glm::vec2, 4> patchCorners = {
+		glm::vec2(-0.9f, -0.9f), glm::vec2(-0.3f, -0.9f), glm::vec2(-0.3f, -0.3f), glm::vec2(-0.9f, -0.3f)
+	};
+	gfx_api::DebugDrawTessQuad::get().bind();
+	gfx_api::DebugDrawTessQuad::get().bind_constants({ glm::mat4(1.f), glm::vec4(0.1f, 0.9f, 0.4f, 0.9f), tessLevel });
+	gfx_api::context::get().bind_streamed_vertex_buffers(patchCorners.data(), patchCorners.size() * sizeof(glm::vec2));
+	gfx_api::DebugDrawTessQuad::get().draw(4, 0);
+	gfx_api::context::get().disable_all_vertex_buffers();
+}
+
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
 {
 	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
+	const auto& renderState = getCurrentRenderState();
+	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, pie_GetFogEnabled() ? 1.f : 0.f, 0.f);
 
 	gfx_api::TransColouredTrianglePSO::get().bind();
-	gfx_api::TransColouredTrianglePSO::get().bind_constants({ pie_UIPerspectiveGet() * modelViewMatrix, glm::vec2(0), glm::vec2(0), color });
+	gfx_api::TransColouredTrianglePSO::get().bind_constants({
+		pie_UIPerspectiveGet() * modelViewMatrix,
+		modelViewMatrix,
+		color,
+		pal_PIELIGHTtoVec4(pie_GetFogColour()),
+		fogRange
+	});
 	gfx_api::context::get().bind_streamed_vertex_buffers(vrt.data(), 3 * sizeof(Vector3f));
 	gfx_api::TransColouredTrianglePSO::get().draw(3, 0);
 	gfx_api::context::get().disable_all_vertex_buffers();

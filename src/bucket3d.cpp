@@ -289,7 +289,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		if (z > 0)
 		{
 			//particle use the image radius
-			radius = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->factoryType][((FLAG_POSITION *)pObject)->factoryInc]->radius;
+			radius = getAssemblyPointIMD(((FLAG_POSITION *)pObject)->factoryType, ((FLAG_POSITION *)pObject)->factoryInc)->radius;
 			radius *= SCALE_DEPTH;
 			radius /= z;
 			if ((pixel.x + radius < CLIP_LEFT) || (pixel.x - radius > CLIP_RIGHT)
@@ -362,8 +362,8 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_DELIVPOINT:
-		pie = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->
-		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc]->displayModel();
+		pie = getAssemblyPointIMD(((FLAG_POSITION *)pObject)->factoryType,
+		                          ((FLAG_POSITION *)pObject)->factoryInc)->displayModel();
 		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_PARTICLE:

@@ -28,6 +28,8 @@
 
 #include <stdint.h>
 
+struct WorldMapState;
+
 struct GATEWAY
 {
 	uint8_t x1, y1, x2, y2;
@@ -36,18 +38,22 @@ struct GATEWAY
 typedef std::list<GATEWAY *> GATEWAY_LIST;
 
 /// Initialise the gateway system
-bool gwInitialise();
+bool gwInitialise(WorldMapState& mapState);
 
 /// Shutdown the gateway system
-void gwShutDown();
+void gwShutDown(WorldMapState& mapState);
 
 /// Add a gateway to the system
-bool gwNewGateway(int x1, int y1, int x2, int y2);
+bool gwNewGateway(WorldMapState& mapState, int x1, int y1, int x2, int y2);
+
+/// Restore a gateway verbatim from a saved GameState (no reorder/clamp), so the gateway list and tile
+/// flags round-trip exactly. gwNewGateway is not idempotent on its own clamped output - see the impl.
+bool gwRestoreGateway(WorldMapState& mapState, int x1, int y1, int x2, int y2);
 
 /// Get number of gateways.
-size_t gwNumGateways();
+size_t gwNumGateways(const WorldMapState& mapState);
 
 /// Get the gateway list.
-GATEWAY_LIST &gwGetGateways();
+GATEWAY_LIST &gwGetGateways(WorldMapState& mapState);
 
 #endif // __INCLUDED_SRC_GATEWAY_H__

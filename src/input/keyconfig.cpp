@@ -36,12 +36,12 @@
 //            entries one-by-one requires only one entry on the stack at a time, mitigating the risk of a stack overflow.
 static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 {
-	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseManufacture,                                          "ChooseManufacture",            N_("Manufacture"),                                  {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F1                                      } }}));
-	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseResearch,                                             "ChooseResearch",               N_("Research"),                                     {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F2                                      } }}));
-	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseBuild,                                                "ChooseBuild",                  N_("Build"),                                        {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F3                                      } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseManufacture,                                          "ChooseManufacture",            N_("Manufacture"),                                  {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F1                                      } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER, GPAD_BTN_WEST } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseResearch,                                             "ChooseResearch",               N_("Research"),                                     {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F2                                      } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER, GPAD_BTN_NORTH } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseBuild,                                                "ChooseBuild",                  N_("Build"),                                        {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F3                                      } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER, GPAD_BTN_SOUTH } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseDesign,                                               "ChooseDesign",                 N_("Design"),                                       {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F4                                      } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseIntelligence,                                         "ChooseIntelligence",           N_("Intelligence Display"),                         {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F5                                      } }}));
-	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseCommand,                                              "ChooseCommand",                N_("Commanders"),                                   {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F6                                      } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::FIXED,       kf_ChooseCommand,                                              "ChooseCommand",                N_("Commanders"),                                   {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F6                                      } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER, GPAD_BTN_EAST } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_QuickSave,                                                  "QuickSave",                    N_("QuickSave"),                                    {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F7                                      } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleRadar,                                                "ToggleRadar",                  N_("Toggle Radar"),                                 {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LSHIFT,     KEY_CODE::KEY_F7            } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_QuickLoad,                                                  "QuickLoad",                    N_("QuickLoad"),                                    {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F8                                      } }}));
@@ -49,8 +49,8 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleEnergyBars,                                           "ToggleEnergyBars",             N_("Toggle Damage Bars On/Off"),                    {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F9                                      } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::BACKGROUND,          KeyMappingType::FIXED,       kf_ScreenDump,                                                 "ScreenDump",                   N_("Take Screen Shot"),                             {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F10                                     } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleFormationSpeedLimiting,                               "ToggleFormationSpeedLimiting", N_("Toggle Formation Speed Limiting"),              {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F11                                     } }}));
-	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_MoveToLastMessagePos,                                       "MoveToLastMessagePos",         N_("View Location of Previous Message"),            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F12                                     } }}));
-	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleSensorDisplay,                                        "ToggleSensorDisplay",          N_("Toggle Sensor display"),                        {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LSHIFT,     KEY_CODE::KEY_F12           } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_MoveToLastMessagePos,                                       "MoveToLastMessagePos",         N_("View Location of Previous Message"),            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F12                                     } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_STICK } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleSensorDisplay,                                        "ToggleSensorDisplay",          N_("Toggle Unit Range Rings"),                        {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LSHIFT,     KEY_CODE::KEY_F12           } }}));
 	// ASSIGN GROUPS
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_AssignGrouping_N(0),                                        "AssignGrouping_0",             N_("Assign Group 0"),                               {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LCTRL,      KEY_CODE::KEY_0             } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_AssignGrouping_N(1),                                        "AssignGrouping_1",             N_("Assign Group 1"),                               {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LCTRL,      KEY_CODE::KEY_1             } }}));
@@ -132,6 +132,7 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_JumpToUnits(DROID_COMMAND),                                 "JumpToCommandUnits",           N_("View next Commander"),                          {}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleOverlays,                                             "ToggleOverlays",               N_("Toggle Overlays"),                              {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_TAB                                     } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleConsoleDrop,                                          "ToggleConsoleDrop",            N_("Toggle Console History "),                      {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_BACKQUOTE                               } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleResearchTree,                                         "ToggleResearchTree",           N_("Toggle Research Tree"),                         {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_N                                       } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_ToggleTeamChat,                                             "ToggleTeamChat",               N_("Toggle Team Chat History"),                     {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LCTRL,      KEY_CODE::KEY_BACKQUOTE     } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_RotateBuildingCW,                                           "RotateBuildingClockwise",      N_("Rotate Building Clockwise"),                    {}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_RotateBuildingACW,                                          "RotateBuildingAnticlockwise",  N_("Rotate Building Anticlockwise"),                {}));
@@ -204,7 +205,7 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextPowerStation(),                                   "SelectNextPowerStation",       N_("Select next Power Generator"),                  {}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextFactory(REF_CYBORG_FACTORY),                      "SelectNextCyborgFactory",      N_("Select next Cyborg Factory"),                   {}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextFactory(REF_VTOL_FACTORY),                        "SelectNextVtolFactory",        N_("Select next VTOL Factory"),                     {}));
-	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextFactory(REF_FACTORY, true),                       "JumpNextFactory",              N_("Jump to next Factory"),                         {}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextFactory(REF_FACTORY, true),                       "JumpNextFactory",              N_("Jump to next Factory"),                         {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_NORTH } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextResearch(true),                                   "JumpNextResearch",             N_("Jump to next Research Facility"),               {}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextPowerStation(true),                               "JumpNextPowerStation",         N_("Jump to next Power Generator"),                 {}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,            KeyMappingType::ASSIGNABLE,  kf_SelectNextFactory(REF_CYBORG_FACTORY, true),                "JumpNextCyborgFactory",        N_("Jump to next Cyborg Factory"),                  {}));
@@ -215,6 +216,7 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_MISC,          KeyMappingType::HIDDEN,      kf_ToggleLevelEditor,                                          "ToggleLevelEditor",            N_("Toggle Level Editor"),                          {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LALT,       KEY_CODE::KEY_L             } }}, true));
 	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_MISC,          KeyMappingType::HIDDEN,      kf_ToggleShowPath,                                             "ToggleShowPath",               N_("Toggle display of droid path"),                 {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LCTRL,      KEY_CODE::KEY_M             } }}, true));
 	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_MISC,          KeyMappingType::HIDDEN,      kf_ToggleShowGateways,                                         "ToggleShowGateways",           N_("Toggle display of gateways"),                   {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LCTRL,      KEY_CODE::KEY_E             } }}, true));
+	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_MISC,          KeyMappingType::HIDDEN,      kf_ToggleShowCorridors,                                        "ToggleShowCorridors",          N_("Toggle display of corridors"),                  {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LCTRL,      KEY_CODE::KEY_K             } }}, true));
 	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_MISC,          KeyMappingType::HIDDEN,      kf_ToggleVisibility,                                           "ToggleVisibility",             N_("Toggle visibility"),                            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_V,                                      } }}, true));
 	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_LEVEL_EDITOR,  KeyMappingType::HIDDEN,      kf_RaiseTile,                                                  "RaiseTile",                    N_("Raise tile height"),                            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_W,          KeyAction::DOWN             } }}, true));
 	entries.emplace_back(KeyFunctionInfo(InputContext::DEBUG_LEVEL_EDITOR,  KeyMappingType::HIDDEN,      kf_LowerTile,                                                  "LowerTile",                    N_("Lower tile height"),                            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_A,          KeyAction::DOWN             } }}, true));
@@ -233,6 +235,32 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 
 	// Hidden/"Hardcoded" mappings
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      kf_ToggleFullscreen,                                           "ToggleFullscreen",             N_("Toggle fullscreen"),                            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LALT,       KEY_CODE::KEY_RETURN        } }}));
+
+	// Research tree, live only while the tree is open. The gamepad half sticks to
+	// the d-pad and Back, which the core gamepad inputs leave alone
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeTracePath,                                      "ResearchTreeTracePath",        N_("Research Tree: Trace Path"),                    {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_F                                       } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_DPAD_UP } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeSearch,                                         "ResearchTreeSearch",           N_("Research Tree: Search"),                        {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_FORWARDSLASH                            } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_DPAD_DOWN } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeToggleNames,                                    "ResearchTreeToggleNames",      N_("Research Tree: Show Names"),                    {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_L                                       } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_NORTH } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeSelectNext,                                     "ResearchTreeSelectNext",       N_("Research Tree: Next Topic"),                    {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_TAB                                     } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_DPAD_RIGHT } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeSelectPrevious,                                 "ResearchTreeSelectPrevious",   N_("Research Tree: Previous Topic"),                {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LSHIFT,     KEY_CODE::KEY_TAB           } }, { KeyMappingSlot::GAMEPAD, { GPAD_BTN_DPAD_LEFT } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeNextPerspective,                                "ResearchTreeNextPerspective",  N_("Research Tree: Next Perspective"),              {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_RBRACE                                  } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreePreviousPerspective,                            "ResearchTreePrevPerspective",  N_("Research Tree: Previous Perspective"),          {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LBRACE                                  } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeBack,                                           "ResearchTreeBack",             N_("Research Tree: Back"),                          {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_BACK                                         } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::RESEARCH_TREE,       KeyMappingType::ASSIGNABLE,  kf_ResearchTreeClose,                                          "ResearchTreeClose",            N_("Research Tree: Close"),                         {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_N                                       } }}));
+
+	// Gamepad core inputs, handled by the SDL backend's cursor and click/key
+	// synthesis. Registered here so conflict checks treat them as taken
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadPrimaryClick",          N_("Left Click / Select"),                          {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_SOUTH                                        } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadSecondaryClick",        N_("Right Click / Order"),                          {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_EAST                                         } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadAddToSelection",        N_("Add to Selection"),                             {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_LEFT_SHOULDER,   GPAD_BTN_SOUTH              } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadQueueOrder",            N_("Queue Move / Order"),                           {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_LEFT_SHOULDER,   GPAD_BTN_EAST               } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadMenu",                  N_("Menu / Back"),                                  {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_START                                        } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadConfirm",               N_("Confirm / Chat"),                               {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_WEST                                         } }}));
+	// Dispatched from the in-game gamepad binding pass - tap stops the selection, holding issues hold position
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadStopHold",              N_("Stop / Hold Position"),                         {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_NORTH                                        } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadResetCursor",           N_("Reset Cursor To Center"),                       {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER,  GPAD_BTN_LEFT_STICK         } }}));
+	// Unlike the rest of the core block this one dispatches through its mapped function, since the camera only exists in-game
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      kf_ResetCamera,                                                "GamepadResetCamera",           N_("Reset Camera"),                                 {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER,  GPAD_BTN_RIGHT_STICK        } }}));
 }
 
 KeyFunctionConfiguration::KeyFunctionConfiguration()
@@ -300,6 +328,8 @@ bool KeyMappingInput::isPressed() const
 		return keyPressed(value.keyCode);
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return mousePressed(value.mouseKeyCode);
+	case KeyMappingInputSource::GAMEPAD:
+		return gamepadButtonPressed(value.gamepadInput);
 	default:
 		return false;
 	}
@@ -312,6 +342,8 @@ bool KeyMappingInput::isDown() const
 		return keyDown(value.keyCode);
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return mouseDown(value.mouseKeyCode);
+	case KeyMappingInputSource::GAMEPAD:
+		return gamepadButtonDown(value.gamepadInput);
 	default:
 		return false;
 	}
@@ -324,6 +356,8 @@ bool KeyMappingInput::isReleased() const
 		return keyReleased(value.keyCode);
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return mouseReleased(value.mouseKeyCode);
+	case KeyMappingInputSource::GAMEPAD:
+		return gamepadButtonReleased(value.gamepadInput);
 	default:
 		return false;
 	}
@@ -342,6 +376,11 @@ bool KeyMappingInput::is(const KEY_CODE keyCode) const
 bool KeyMappingInput::is(const MOUSE_KEY_CODE mouseKeyCode) const
 {
 	return source == KeyMappingInputSource::MOUSE_KEY_CODE && value.mouseKeyCode == mouseKeyCode;
+}
+
+bool KeyMappingInput::is(const GAMEPAD_INPUT gamepadInput) const
+{
+	return source == KeyMappingInputSource::GAMEPAD && value.gamepadInput == gamepadInput;
 }
 
 nonstd::optional<KEY_CODE> KeyMappingInput::asKeyCode() const
@@ -368,6 +407,18 @@ nonstd::optional<MOUSE_KEY_CODE> KeyMappingInput::asMouseKeyCode() const
 	}
 }
 
+nonstd::optional<GAMEPAD_INPUT> KeyMappingInput::asGamepadInput() const
+{
+	if (source == KeyMappingInputSource::GAMEPAD)
+	{
+		return value.gamepadInput;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
 KeyMappingInput::KeyMappingInput()
 	: source(KeyMappingInputSource::KEY_CODE)
 	, value(KEY_CODE::KEY_IGNORE)
@@ -386,6 +437,12 @@ KeyMappingInput::KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode)
 {
 }
 
+KeyMappingInput::KeyMappingInput(const GAMEPAD_INPUT gamepadInput)
+	: source(KeyMappingInputSource::GAMEPAD)
+	, value(KeyMappingInputValue(gamepadInput))
+{
+}
+
 KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)
 	: keyCode(keyCode)
 {
@@ -393,6 +450,11 @@ KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)
 
 KeyMappingInputValue::KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode)
 	: mouseKeyCode(mouseKeyCode)
+{
+}
+
+KeyMappingInputValue::KeyMappingInputValue(const GAMEPAD_INPUT gamepadInput)
+	: gamepadInput(gamepadInput)
 {
 }
 
@@ -407,6 +469,8 @@ bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs)
 		return lhs.value.keyCode == rhs.value.keyCode;
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return lhs.value.mouseKeyCode == rhs.value.mouseKeyCode;
+	case KeyMappingInputSource::GAMEPAD:
+		return lhs.value.gamepadInput == rhs.value.gamepadInput;
 	default:
 		return false;
 	}
@@ -428,6 +492,10 @@ KeyMappingInputSource keyMappingSourceByName(std::string const& name)
 	{
 		return KeyMappingInputSource::MOUSE_KEY_CODE;
 	}
+	else if (name == "gamepad")
+	{
+		return KeyMappingInputSource::GAMEPAD;
+	}
 	else
 	{
 		debug(LOG_WZ, "Encountered invalid key mapping source name '%s', falling back to using 'default'", name.c_str());
@@ -445,6 +513,10 @@ KeyMappingSlot keyMappingSlotByName(std::string const& name)
 	{
 		return KeyMappingSlot::SECONDARY;
 	}
+	else if (name == "gamepad")
+	{
+		return KeyMappingSlot::GAMEPAD;
+	}
 	else
 	{
 		debug(LOG_WZ, "Encountered invalid key mapping slot name '%s', falling back to using 'primary'", name.c_str());
@@ -452,8 +524,71 @@ KeyMappingSlot keyMappingSlotByName(std::string const& name)
 	}
 }
 
+nonstd::optional<KEY_CODE> KeyMappingMeta::asKeyCode() const
+{
+	if (source == KeyMappingMetaSource::KEY_CODE)
+	{
+		return value.keyCode;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
+nonstd::optional<GAMEPAD_INPUT> KeyMappingMeta::asGamepadInput() const
+{
+	if (source == KeyMappingMetaSource::GAMEPAD)
+	{
+		return value.gamepadInput;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
+KeyMappingMeta::KeyMappingMeta()
+	: source(KeyMappingMetaSource::NONE)
+	, value(KEY_CODE::KEY_IGNORE)
+{
+}
+
+KeyMappingMeta::KeyMappingMeta(const KEY_CODE keyCode)
+	: source(keyCode != KEY_CODE::KEY_IGNORE ? KeyMappingMetaSource::KEY_CODE : KeyMappingMetaSource::NONE)
+	, value(keyCode)
+{
+}
+
+KeyMappingMeta::KeyMappingMeta(const GAMEPAD_INPUT gamepadInput)
+	: source(gamepadInput != GPAD_BTN_MAX ? KeyMappingMetaSource::GAMEPAD : KeyMappingMetaSource::NONE)
+	, value(gamepadInput)
+{
+}
+
+bool operator==(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs)
+{
+	if (lhs.source != rhs.source) {
+		return false;
+	}
+
+	switch (lhs.source) {
+	case KeyMappingMetaSource::KEY_CODE:
+		return lhs.value.keyCode == rhs.value.keyCode;
+	case KeyMappingMetaSource::GAMEPAD:
+		return lhs.value.gamepadInput == rhs.value.gamepadInput;
+	default:
+		return true;
+	}
+}
+
+bool operator!=(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs)
+{
+	return !(lhs == rhs);
+}
+
 KeyCombination::KeyCombination(
-	const KEY_CODE        meta,
+	const KeyMappingMeta  meta,
 	const KeyMappingInput input,
 	const KeyAction       action
 )
@@ -471,12 +606,12 @@ KeyCombination::KeyCombination(
 	const KeyMappingInput input,
 	const KeyAction       action
 )
-	: KeyCombination(KEY_CODE::KEY_IGNORE, input, action)
+	: KeyCombination(KeyMappingMeta(), input, action)
 {
 }
 
 KeyCombination::KeyCombination(
-	const KEY_CODE        meta,
+	const KeyMappingMeta  meta,
 	const KeyMappingInput input
 )
 	: KeyCombination(meta, input, KeyAction::PRESSED)

@@ -29,6 +29,7 @@
 #include "feature.h"
 #include "intdisplay.h"
 #include "map.h"
+#include "game_world.h"
 
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
@@ -63,8 +64,11 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 
 static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
-	// Cyp says this should never happen, #3037 and #3238 say it does though.
-	ASSERT_OR_RETURN(st2, st1.time != st2.time, "Spacetime overlap!");
+	// A freshly-spawned object can present two samples that share a timestamp
+	if (st1.time == st2.time)
+	{
+		return st2;
+	}
 	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
@@ -94,14 +98,25 @@ SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 SIMPLE_OBJECT::~SIMPLE_OBJECT()
 {
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvolatile"
+#endif
 	const_cast<OBJECT_TYPE volatile &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
 	const_cast<UBYTE volatile &>(player) += 100;                                  // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
+#ifdef __clang__
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
 	, selected(false)
-	, lastEmission(0)
 	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
 	, timeLastHit(UDWORD_MAX)
 	, body(0)
@@ -109,6 +124,7 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, periodicalDamage(0)
 	, timeAnimationStarted(0)
 	, animationEvent(ANIM_EVENT_NONE)
+	, lastEmission(0)
 {
 	memset(visible, 0, sizeof(visible));
 	sDisplay.imd = nullptr;
@@ -120,7 +136,14 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 BASE_OBJECT::~BASE_OBJECT()
 {
-	visRemoveVisibility(this);
+	// Tile visibility must already have been removed (against the object's own world map) by
+	// the time we get here.
+	//
+	// See flushPendingVisRemoval(), the killXXX + objmemUpdate path, and the freeAllXXX teardown path.
+	//
+	// The destructor cannot do it itself because it has no reliable way to know which world's map this
+	// object belonged to.
+	ASSERT(watchedTiles.empty(), "watchedTiles not removed before destruction (player %d)", (int)player);
 }
 
 

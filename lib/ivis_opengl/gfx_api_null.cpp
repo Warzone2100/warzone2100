@@ -49,7 +49,7 @@ bool null_texture::upload(const size_t& mip_level, const iV_BaseImage& image)
 	return true;
 }
 
-bool null_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+bool null_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
 	ASSERT_OR_RETURN(false, image.data() != nullptr, "Attempt to upload image without data");
 	ASSERT_OR_RETURN(false, image.pixel_format() == internal_format, "Uploading image to texture with different format");
@@ -284,6 +284,22 @@ void null_context::set_uniforms(const size_t& first, const std::vector<std::tupl
 	// no-op
 }
 
+gfx_api::frame_uniform_allocation null_context::upload_frame_uniform_raw(const void* data, size_t size)
+{
+	// Nothing is uploaded, but the reference still has to pass the checks its consumers make
+	gfx_api::frame_uniform_allocation result;
+	result.handle = 1;
+	result.size = static_cast<uint32_t>(size);
+	result.generation = frameUniformGeneration();
+	return result;
+}
+
+void null_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	// no-op
+}
+
 void null_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
 	// no-op
@@ -304,7 +320,7 @@ void null_context::draw_elements_instanced(const std::size_t& offset, const std:
 	// no-op
 }
 
-void null_context::set_polygon_offset(const float& offset, const float& slope)
+void null_context::set_polygon_offset(const float& factor, const float& units)
 {
 	// no-op
 }
@@ -319,10 +335,6 @@ int32_t null_context::get_context_value(const context_value property)
 	// provide some fake, large-enough values to avoid issues
 	switch(property)
 	{
-		case gfx_api::context::context_value::MAX_ELEMENTS_VERTICES:
-			return 32000;
-		case gfx_api::context::context_value::MAX_ELEMENTS_INDICES:
-			return 32000;
 		case gfx_api::context::context_value::MAX_TEXTURE_SIZE:
 			return 4096;
 		case gfx_api::context::context_value::MAX_SAMPLES:
@@ -333,6 +345,8 @@ int32_t null_context::get_context_value(const context_value property)
 			return 16;
 		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
 			return 64;
+		case gfx_api::context::context_value::MAX_TESS_GEN_LEVEL:
+			return 0; // no tessellation support
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
@@ -427,24 +441,54 @@ bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_
 	return true;
 }
 
-void null_context::beginRenderPass()
+void null_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /*passes*/,
+	gfx_api::PassGraphCompileResult& /*compileResult*/)
 {
-	// no-op
 }
 
-void null_context::endRenderPass()
+void null_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
+	(void)pass;
+	frameHasDrawCommands = true;
+}
+
+void null_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
+{
+}
+
+void null_context::beginScreenFrame()
+{
+	frameHasDrawCommands = false;
+	purgeFrameResources();
+	advanceFrameUniformGeneration();
+}
+
+bool null_context::ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& /*specs*/)
+{
+	return true;
+}
+
+void null_context::finishScreenFrame()
+{
+	if (frameHasDrawCommands)
+	{
+		// Backend is expected to handle throttling / sleeping
+		backend_impl->swapWindow();
+		current_program = nullptr;
+	}
+
+	frameHasDrawCommands = false;
 	frameNum = std::max<size_t>(frameNum + 1, 1);
+	purgeFrameResources();
+}
 
-	// Backend is expected to handle throttling / sleeping
-	backend_impl->swapWindow();
-
-	current_program = nullptr;
+void null_context::purgeFrameResources()
+{
 }
 
 void null_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
-	// no-op
+	markScreenGeometryDirty();
 }
 
 std::pair<uint32_t, uint32_t> null_context::getDrawableDimensions()

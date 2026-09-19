@@ -99,7 +99,6 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UBYTE               selected;                   ///< Whether the object is selected (might want this elsewhere)
 	UBYTE               visible[MAX_PLAYERS];       ///< Whether object is visible to specific player
 	UBYTE               seenThisTick[MAX_PLAYERS];  ///< Whether object has been seen this tick by the specific player.
-	UDWORD              lastEmission;               ///< When did it last puff out smoke?
 	WEAPON_SUBCLASS     lastHitWeapon;              ///< The weapon that last hit it
 	UDWORD              timeLastHit;                ///< The time the structure was last attacked
 	UDWORD              body;                       ///< Hit points with lame name
@@ -110,6 +109,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	// DISPLAY-ONLY (*NOT* for game state calculations)
 	UDWORD              timeAnimationStarted;       ///< Animation start time, zero for do not animate
 	UBYTE               animationEvent;             ///< If animation start time > 0, this points to which animation to run
+	UDWORD              lastEmission;               ///< When did it last puff out smoke? Only rate-limits the smoke itself
 	//
 
 	unsigned            numWeaps;

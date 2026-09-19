@@ -1,10 +1,6 @@
 // common parts of tcmask/nolight_instanced.vert and .frag shaders
 
-#define WZ_MAX_SHADOW_CASCADES 3
-
-#define WZ_MAX_POINT_LIGHTS 128
-#define WZ_MAX_INDEXED_POINT_LIGHTS 512
-#define WZ_BUCKET_DIMENSION 8
+#include "wz_shader_constants.glsl"
 
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
@@ -13,26 +9,24 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	mat4 ModelUVLightmapMatrix;
 	mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 	vec4 cameraPos; // in model space
-	vec4 lightPosition; // in view space
+	vec4 lightPosition; // in world space
 	vec4 sceneColor;
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
 	vec4 fogColor;
+	vec4 fogRange;
 	vec4 ShadowMapCascadeSplits;
 	int ShadowMapSize;
-	float fogEnd;
-	float fogStart;
 	float graphicsCycle;
-	int fogEnabled;
 	int viewportWidth;
 	int viewportHeight;
-
-	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
-	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
-	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
-	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
+	float WZ_MIP_LOAD_BIAS;
 	int bucketDimensionUsed;
+	float pad1;
+	float pad2;
+	// Last because its length follows the grid dimension
+	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 };
 
 layout(std140, set = 1, binding = 0) uniform meshuniforms
@@ -42,5 +36,21 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int specularmap;
 	int hasTangents;
 	int shieldEffect;
+	int fogOutput;
 };
 
+// Light data shares the texture set rather than taking one of its own, because the instanced
+// mesh pipeline already sits on the four bound sets Vulkan guarantees. The two consumers do not
+// agree on which set that is, so each names its own.
+#define WZ_LIGHT_DATA_SET 3
+
+// Only the uniform block transport keeps the light arrays here.
+// An empty block is not legal, so the whole declaration goes rather than its contents.
+#if WZ_LIGHT_TRANSPORT == 0
+layout(std140, set = 2, binding = 0) uniform pointlights {
+	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
+	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
+	vec4 PointLightsDirectionAndCos[WZ_MAX_POINT_LIGHTS];
+	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
+};
+#endif

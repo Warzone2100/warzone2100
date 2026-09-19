@@ -1,6 +1,11 @@
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
+if(NOT WZ_ENABLE_WEBM)
+	list(REMOVE_ITEM SRC "${CMAKE_CURRENT_SOURCE_DIR}/webm_decoder.cpp")
+	list(REMOVE_ITEM HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/webm_decoder.h")
+endif()
+
 find_package(OggVorbis REQUIRED)
 find_package(Theora REQUIRED)
 
@@ -10,3 +15,20 @@ include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(sequence)
 target_include_directories(sequence PRIVATE ivis-opengl "${OGGVORBIS_INCLUDE_DIR}")
 target_link_libraries(sequence PRIVATE framework sound ${OGGVORBIS_LIBRARIES} theora::dec)
+
+if(WZ_ENABLE_WEBM)
+	# libvpx: vcpkg provides a CMake config package ("unofficial-libvpx")
+	# Linux system packages (libvpx-dev or equivalent) provide vpx.pc for pkg-config
+	find_package(unofficial-libvpx CONFIG QUIET)
+	if(TARGET unofficial::libvpx::libvpx)
+		message(STATUS "Found libvpx via CMake config package")
+		set(_wz_vpx_lib unofficial::libvpx::libvpx)
+	else()
+		find_package(PkgConfig REQUIRED)
+		pkg_check_modules(VPX REQUIRED IMPORTED_TARGET vpx)
+		message(STATUS "Found libvpx via pkg-config: ${VPX_VERSION}")
+		set(_wz_vpx_lib PkgConfig::VPX)
+	endif()
+	target_compile_definitions(sequence PRIVATE "WZ_ENABLE_WEBM")
+	target_link_libraries(sequence PRIVATE ${_wz_vpx_lib} mkvparser)
+endif()

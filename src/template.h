@@ -30,7 +30,15 @@ extern bool includeRedundantDesigns;
 extern bool playerBuiltHQ;
 
 bool designableTemplate(const DROID_TEMPLATE *psTempl, int player);
+
+/// True if both templates have the same droid type, parts and weapons (the name is not compared)
+bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &b);
+
 bool initTemplates();
+
+/// Refill the UI template list (localTemplates) from droidTemplates[player]
+/// NOTE: this invalidates every pointer into localTemplates, so it is only safe before any UI or pending production order exists
+void rebuildLocalTemplates(unsigned player);
 
 /// Take ownership of template given by pointer.
 /// Returns a new usable DROID_TEMPLATE *
@@ -46,6 +54,13 @@ size_t templateCount(int player);
 void clearTemplates(int player);
 bool shutdownTemplates();
 bool storeTemplates();
+
+/// Add or replace a design in the cross-match design store
+void templateStoreUpsert(const DROID_TEMPLATE &psTemplate);
+/// Remove a design, given the entry saveTemplateCommon produced for it before it was edited or deleted
+void templateStoreRemove(const nlohmann::json &entry);
+/// True if the entry describes the same design as the template (an in-place edit changes this)
+bool templateStoreEntryMatches(const nlohmann::json &entry, const DROID_TEMPLATE &psTemplate);
 
 bool loadDroidTemplates(const char *filename);
 

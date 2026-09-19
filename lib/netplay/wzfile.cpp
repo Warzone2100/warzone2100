@@ -36,7 +36,6 @@ static inline bool physfs_file_safe_close_impl(PHYSFS_file* f)
 		return false;
 	}
 	PHYSFS_close(f);
-	f = nullptr;
 	return true;
 }
 

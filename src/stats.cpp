@@ -577,6 +577,32 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_TELEPORT_CAPTURE, true);
 		}
+		// Exp gain is based on damage from projectiles and all forms of damage allow it by default.
+		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_SPLASH_PENETRATE, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_PERIODICAL, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_SPLASH, true);
+		if (std::find(flags.begin(), flags.end(), "expnoimpactdamage") != flags.end()) // "ExpNoImpactDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnopenetrateimpactdamage") != flags.end()) // "ExpNoPenetrateImpactDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnopenetratesplashdamage") != flags.end()) // "ExpNoPenetrateSplashDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_SPLASH_PENETRATE, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnoperiodicaldamage") != flags.end()) // "ExpNoPeriodicalDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_PERIODICAL, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnosplashdamage") != flags.end()) // "ExpNoSplashDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_SPLASH, false);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -772,6 +798,10 @@ bool loadBrainStats(WzConfig &ini)
 				retVal = false;
 			}
 		}
+
+		psStats->scavengersGiveExpUntilLevel = ini.value("scavengersGiveExpUntilLevel", -1).toInt();
+		psStats->productionCommanderExpLimit = ini.value("productionCommanderExpLimit", 10000).toInt();
+		psStats->autoRewardRankFromAttach = ini.value("autoRewardRankFromAttach", true).toBool();
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 	}
@@ -1100,8 +1130,9 @@ bool loadPropulsionTypes(WzConfig &ini)
 	asPropulsionTypes.resize(NumTypes);
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
+	std::vector<bool> seenTypes(NumTypes, false);
 
-	for (int i = 0; i < NumTypes; ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_TYPE type;
 
@@ -1114,6 +1145,12 @@ bool loadPropulsionTypes(WzConfig &ini)
 			debug(LOG_FATAL, "Invalid Propulsion type - %s", list[i].toUtf8().c_str());
 			return false;
 		}
+		if (seenTypes[type])
+		{
+			debug(LOG_FATAL, "Duplicate Propulsion type - %s", list[i].toUtf8().c_str());
+			return false;
+		}
+		seenTypes[type] = true;
 
 		PROPULSION_TYPES *pPropType = &asPropulsionTypes[type];
 
@@ -1152,18 +1189,36 @@ bool loadPropulsionTypes(WzConfig &ini)
 		ini.endGroup();
 	}
 
+	for (size_t type = 0; type < NumTypes; ++type)
+	{
+		if (!seenTypes[type])
+		{
+			debug(LOG_FATAL, "Missing Propulsion type - %zu", type);
+			return false;
+		}
+	}
+
 	return true;
 }
 
 bool loadTerrainTable(WzConfig &ini)
 {
-	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
+	deallocTerrainTable();
+	const size_t terrainTableSize = static_cast<size_t>(PROPULSION_TYPE_NUM) * static_cast<size_t>(TER_MAX);
+	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * terrainTableSize);
+	std::fill_n(asTerrainTable, terrainTableSize, 100);
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		int terrainType = ini.value("id").toInt();
+		if (terrainType < 0 || terrainType >= TER_MAX)
+		{
+			debug(LOG_ERROR, "Invalid terrain type id (%d) in %s", terrainType, list[i].toUtf8().c_str());
+			ini.endGroup();
+			continue;
+		}
 		ini.beginGroup("speedFactor");
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_WHEELED] = ini.value("wheeled", 100).toUInt();
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_TRACKED] = ini.value("tracked", 100).toUInt();

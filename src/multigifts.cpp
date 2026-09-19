@@ -57,7 +57,7 @@
 
 static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID);
 static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID);
-static void sendGiftDroids(uint8_t from, uint8_t to);
+static void sendGiftDroids(const WorldObjectState& objState, uint8_t from, uint8_t to);
 static void giftResearch(uint8_t from, uint8_t to, bool send);
 static void giftAutoGame(uint8_t from, uint8_t to, bool send);
 
@@ -156,7 +156,7 @@ bool sendGift(uint8_t type, uint8_t to)
 		break;
 	case DROID_GIFT:
 		audioTrack = ID_UNITS_TRANSFER;
-		sendGiftDroids(selectedPlayer, to);
+		sendGiftDroids(gameWorld.objects, selectedPlayer, to);
 		break;
 	case RESEARCH_GIFT:
 		audioTrack = ID_TECHNOLOGY_TRANSFER;
@@ -233,7 +233,7 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 	// If we are receiving the gift
 	else
 	{
-		hqReward(from, to);
+		hqReward(gameWorld, from, to);
 		if (to == selectedPlayer && loopMissionState == LMS_NORMAL)
 		{
 			CONPRINTF(_("%s Gives You A Visibility Report"), getPlayerName(from));
@@ -269,7 +269,7 @@ static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
 // \param to    :player that should be getting the droid
 static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 {
-	DROID *psDroid = IdToDroid(droidID, from);
+	DROID *psDroid = IdToDroid(gameWorld.objects, droidID, from);
 
 	if (psDroid)
 	{
@@ -290,15 +290,16 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 // sendGiftDroids()
 // We give selected droid(s) as a gift to another player.
 //
+// \param objState : the object state to send the droids between `from` and `to`
 // \param from  :player that sent us the droid
 // \param to    :player that should be getting the droid
-static void sendGiftDroids(uint8_t from, uint8_t to)
+static void sendGiftDroids(const WorldObjectState& objState, uint8_t from, uint8_t to)
 {
 	DroidList::const_iterator psD;
 	uint8_t      giftType = DROID_GIFT;
 	uint8_t      totalToSend = 0;
 
-	if (gameWorld.objects.droids[from].empty())
+	if (objState.droids[from].empty())
 	{
 		return;
 	}
@@ -309,8 +310,8 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * over their droid limit.
 	 */
 
-	for (psD = gameWorld.objects.droids[from].begin();
-	     psD != gameWorld.objects.droids[from].end() && (getNumDroids(to) + totalToSend < getMaxDroids(to)) && totalToSend != UINT8_MAX;
+	for (psD = objState.droids[from].begin();
+	     psD != objState.droids[from].end() && (getNumDroids(to) + totalToSend < getMaxDroids(to)) && totalToSend != UINT8_MAX;
 	     ++psD)
 	{
 		if ((*psD)->selected)
@@ -328,7 +329,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * does its own net calls.
 	 */
 
-	for (psD = gameWorld.objects.droids[from].begin(); psD != gameWorld.objects.droids[from].end() && totalToSend != 0; ++psD)
+	for (psD = objState.droids[from].begin(); psD != objState.droids[from].end() && totalToSend != 0; ++psD)
 	{
 		if ((*psD)->selected)
 		{
@@ -419,15 +420,11 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 		}
 		else if (amount == 0) // the GUI option
 		{
-			value = getPower(from) / 3;
-			usePower(from, value);
-			addPower(to, value);
+			value = transferPower(from, to, getPower(from) / 3);
 		}
 		else // for scripts etc that can give precise amounts
 		{
-			value = MIN(getPower(from), amount);
-			usePower(from, value);
-			addPower(to, value);
+			value = transferPower(from, to, MIN(getPower(from), amount));
 		}
 		if (from != ANYPLAYER && to == selectedPlayer)
 		{
@@ -442,6 +439,7 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 
 void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 {
+	ASSERT_OR_RETURN(, from < MAX_PLAYERS && to < MAX_PLAYERS, "Invalid players %u, %u", from, to);
 	if (prop && bMultiMessages)
 	{
 		sendAlliance(from, to, ALLIANCE_REQUESTED, false);
@@ -478,6 +476,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 {
 	char	tm1[128];
 
+	ASSERT_OR_RETURN(, p1 < MAX_PLAYERS && p2 < MAX_PLAYERS, "Invalid players %u, %u", p1, p2);
 	if (prop && bMultiMessages)
 	{
 		sendAlliance(p1, p2, ALLIANCE_BROKEN, false);
@@ -537,6 +536,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 {
 	char	tm1[128];
 
+	ASSERT_OR_RETURN(, p1 < MAX_PLAYERS && p2 < MAX_PLAYERS, "Invalid players %u, %u", p1, p2);
 	if (bMultiMessages && prop)
 	{
 		sendAlliance(p1, p2, ALLIANCE_FORMED, false);
@@ -740,13 +740,13 @@ void  technologyGiveAway(const STRUCTURE *pS)
 	}
 
 	uint32_t x = map_coord(pS->pos.x), y = map_coord(pS->pos.y);
-	if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
+	if (!pickATileGen(gameWorld, &x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 	{
 		syncDebug("Did not find location for oil drum.");
 		debug(LOG_FEATURE, "Unable to find a free location.");
 		return;
 	}
-	FEATURE *pF = buildFeature(&asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
+	FEATURE *pF = buildFeature(gameWorld, &asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
 	if (pF)
 	{
 		pF->player = pS->player;
@@ -801,7 +801,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 		if (asFeatureStats[i].ref == ref)
 		{
 			// Create a feature of the specified type at the given location
-			buildFeature(&asFeatureStats[i], x, y, false, id);
+			buildFeature(gameWorld, &asFeatureStats[i], x, y, false, id);
 			break;
 		}
 	}

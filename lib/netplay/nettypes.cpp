@@ -139,6 +139,40 @@ NETQUEUE NETgameQueue(unsigned player)
 	return ret;
 }
 
+std::vector<std::vector<uint8_t>> NETgameQueueCapturePending(unsigned player)
+{
+	ASSERT_OR_RETURN({}, player < MAX_GAMEQUEUE_SLOTS, "Invalid game queue slot %u", player);
+	NetQueue *queue = gameQueues[player];
+	if (queue == nullptr)
+	{
+		return {};
+	}
+	return queue->snapshotUnreadMessages();
+}
+
+size_t NETgameQueueRestorePending(unsigned player, const std::vector<std::vector<uint8_t>> &rawMessages)
+{
+	ASSERT_OR_RETURN(0, player < MAX_GAMEQUEUE_SLOTS, "Invalid game queue slot %u", player);
+	NetQueue *queue = gameQueues[player];
+	if (queue == nullptr)
+	{
+		return 0;  // queues not yet allocated (caller should treat as "could not restore")
+	}
+	size_t restored = 0;
+	for (const std::vector<uint8_t> &raw : rawMessages)
+	{
+		optional<NetMessage> msg = NetMessage::tryFromRawData(raw.data(), raw.size());
+		if (!msg.has_value())
+		{
+			debug(LOG_ERROR, "Discarding malformed pending game-queue message for slot %u", player);
+			continue;
+		}
+		queue->pushMessage(std::move(msg.value()));
+		++restored;
+	}
+	return restored;
+}
+
 bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates /*= 2*/)
 {
 	// if we should be waited on, then there's no reason we should be behind other players
@@ -459,7 +493,7 @@ bool NETend(MessageWriter& w)
 		tmpMessageRawDataBuffer.clear();
 		msg.rawDataAppendToVector(tmpMessageRawDataBuffer);
 
-		auto encryptedData = netSessionKeys[w.queueInfo.index]->encryptMessageForOther(&tmpMessageRawDataBuffer[0], tmpMessageRawDataBuffer.size());
+		auto encryptedData = netSessionKeys[w.queueInfo.index]->encryptMessageForOther(tmpMessageRawDataBuffer.data(), tmpMessageRawDataBuffer.size());
 		NetMessageBuilder encryptedNetMessage(NET_SECURED_NET_MESSAGE, encryptedData.size());
 		encryptedNetMessage.append(encryptedData.data(), encryptedData.size());
 		msg = encryptedNetMessage.build();
@@ -748,10 +782,15 @@ void NETstring(MessageReader &r, char *str, uint16_t maxlen)
 {
     uint16_t len;
     NETuint16_t(r, len);
-    len = std::min(len, maxlen);
+
+    uint16_t maxReadLen = (maxlen > 0) ? static_cast<uint16_t>(maxlen - 1) : 0;
+    len = std::min(len, maxReadLen);
 
     r.bytes((uint8_t *)str, len);
-    str[len] = '\0';
+    if (maxlen > 0)
+    {
+        str[len] = '\0';
+    }
 }
 
 void NETstring(MessageReader& r, std::string& s, uint32_t maxLen /* = 65536 */)
@@ -791,11 +830,25 @@ void NETVector2i(MessageReader& r, Vector2i& vec)
 	NETint32_t(r, vec.y);
 }
 
-void NETnetMessage(MessageReader& r, NetMessage** msg)
+bool NETnetMessage(MessageReader& r, NetMessage** msg)
 {
+	ASSERT_OR_RETURN(false, msg != nullptr, "NETnetMessage called with a null output pointer");
+	*msg = nullptr;
+
 	NetMsgDataVector rawData{MsgDataAllocator(defaultMemoryPool())};
 	NETbytes(r, rawData, std::numeric_limits<uint32_t>::max());
-	*msg = new NetMessage(NetMessageBuilder(std::move(rawData)).build());
+	const size_t rawLen = rawData.size();
+
+	auto parsedMessage = NetMessage::tryFromRawData(std::move(rawData));
+	if (!parsedMessage)
+	{
+		debug(LOG_ERROR, "NETnetMessage: invalid nested message (%zu bytes)", rawLen);
+		r.markInvalid();
+		return false;
+	}
+
+	*msg = new NetMessage(std::move(*parsedMessage));
+	return true;
 }
 
 // MessageWriter overloads for encoding

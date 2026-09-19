@@ -45,6 +45,8 @@
 /** How long to display a single electronic warfare shimmmer. */
 #define ELEC_DAMAGE_DURATION    (GAME_TICKS_PER_SEC/5)
 
+#define PROJ_PENETRATE_SLOT -1731
+
 bool	proj_InitSystem();	///< Initialize projectiles subsystem.
 void	proj_UpdateAll();	///< Frame update for projectiles.
 bool	proj_Shutdown();	///< Shut down projectile subsystem.
@@ -53,6 +55,10 @@ PROJECTILE *proj_GetFirst();	///< Get first projectile in the list.
 PROJECTILE *proj_GetNext();		///< Get next projectile in the list.
 
 void proj_AddActiveProjectile(PROJECTILE* p); ///< Add allocated projectile `p` to the list of active projectiles
+
+/// Allocate a projectile in the global storage for restoration from a saved match state.
+/// Caller fills in the remaining fields and then calls proj_AddActiveProjectile().
+PROJECTILE* proj_AllocForRestore(uint32_t id, unsigned player);
 
 void	proj_FreeAllProjectiles();	///< Free all projectiles in the list.
 

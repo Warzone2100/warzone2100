@@ -22,6 +22,11 @@
 
 #include "objects_stats.h"
 
+// Start a topic in one named facility, cancelling whatever it was doing and
+// whatever other lab held the same topic. The research screen reads its facility
+// from a selection this has no business touching, so the shared part is here.
+bool startResearchAt(STRUCTURE *facility, RESEARCH &research, uint32_t player);
+
 class ResearchController: public BaseObjectsStatsController, public std::enable_shared_from_this<ResearchController>
 {
 public:

@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/gamepad_input.h"
 #include "lib/netplay/sync_debug.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
@@ -46,9 +47,38 @@
 #include "objmem.h"
 #include "effects.h"
 #include "display3ddef.h"
+#include "campaigninfo.h"
 
 #define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
 #define DROID_SHIELD_PARTICLES		(6 + rand()%8)
+
+// Check if an object is below a certain HP threshold. Primarily used for a campaign tweak option to restore
+// original behavior to reduce speed and ROF if heavily damaged.
+bool objectBelowHealthLevel(BASE_OBJECT *psObj, const unsigned int percentage)
+{
+	ASSERT_OR_RETURN(false, psObj != nullptr, "Invalid object to check health against");
+	const unsigned int maxHealthLevel = 100;
+	unsigned int healthLevel = maxHealthLevel; // Fail by default if an unexpected object gets passed here.
+
+	if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = castDroid(psObj);
+		if (psDroid != nullptr)
+		{
+			healthLevel = PERCENT(psDroid->body, psDroid->originalBody);
+		}
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		STRUCTURE *psStructure = castStructure(psObj);
+		if (psStructure != nullptr)
+		{
+			healthLevel = PERCENT(psStructure->body, psStructure->structureBody());
+		}
+	}
+
+	return healthLevel < std::min(maxHealthLevel, percentage);
+}
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -107,6 +137,10 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	/* See when the weapon last fired to control it's rate of fire */
 	firePause = weaponFirePause(*psStats, psAttacker->player);
 	firePause = std::max(firePause, 1u);  // Don't shoot infinitely many shots at once.
+	if (!bMultiPlayer && getCamTweakOption_heavilyDamagedPenalty() && objectBelowHealthLevel(psAttacker, HEAVY_DAMAGE_LEVEL))
+	{
+		firePause += firePause;
+	}
 	fireTime = std::max(fireTime, psWeap->lastFired + firePause);
 
 	if (gameTime < fireTime)
@@ -454,6 +488,19 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 		triggerEventAttacked(psObj, (psProjectile != nullptr) ? psProjectile->psSource : nullptr, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
+
+		// a light controller pulse when our forces come under fire after a
+		// quiet spell - continuous battle stays silent instead of buzzing
+		// periodically
+		if (psObj->player == selectedPlayer)
+		{
+			static UDWORD lastOwnForcesHitTime = 0;
+			if (realTime - lastOwnForcesHitTime > 15000)
+			{
+				gamepadRumble(0.3f, 0.2f, 200);
+			}
+			lastOwnForcesHitTime = realTime;
+		}
 	}
 
 	if (psObj->type == OBJ_DROID)
@@ -600,7 +647,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
 
 	// You always do at least a third of the experience modified damage
-	actualDamage = MAX(actualDamage - armour, actualDamage * psStats->upgrade[player].minimumDamage / 100);
+	actualDamage = MAX(actualDamage - armour, actualDamage * (int)psStats->upgrade[player].minimumDamage / 100);
 
 	// And at least MIN_WEAPON_DAMAGE points
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);

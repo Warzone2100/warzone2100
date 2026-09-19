@@ -28,17 +28,25 @@
 #include "lib/framework/string_ext.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/png_util.h"
 
 #include "levels.h"
 #include "clparse.h"
 #include "display3d.h"
+#include "dynamicresolution.h"
 #include "frontend.h"
+#include "gamestate_serialize.h"
+#include "gamestate_savegame.h"
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
 #include "modding.h"
+#include "movebench.h"
+#include "pathbench.h"
+#include "pathfinding_backend.h"
+#include "corridordump.h"
 #include "multiplay.h"
 #include "version.h"
 #include "warzoneconfig.h"
@@ -89,8 +97,42 @@ static std::string wz_test;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
+static bool wz_lobby_slashcommands_hostexit = false;
 static int wz_min_autostart_players = -1;
+static int wz_pathfinding_backend = -1;
 static std::string wz_lobby_game_to_connect_str;
+
+// Parse the --pathfindingbackend argument: a combined feature mask, or a
+// comma-separated list of feature values OR'd together, so a stack can be
+// named as a known mask plus the flags under test, ex. 7,8. A value with
+// bits no feature defines is rejected, so a mask from an older numbering
+// fails loudly instead of silently running a different stack.
+static int parsePathfindingBackendArg(const char *arg)
+{
+	constexpr unsigned validMask = PF_DIRECTIONAL_BIAS | PF_CORRIDOR_LANES | PF_FLOW_COST
+	                               | PF_SOFT_COLLISION | PF_CROWD_MASS | PF_BEND_HOLD
+	                               | PF_BEND_HAND | PF_WIDE_LANES | PF_HAND_JOINT
+	                               | PF_WIDE_QUEUE | PF_TURN_VOTE
+	                               | PF_SETTLE_TIME | PF_BACKOFF;
+	unsigned mask = 0;
+	const char *p = arg;
+	while (*p != '\0')
+	{
+		char *end = nullptr;
+		const long value = strtol(p, &end, 10);
+		if (end == p || (*end != '\0' && *end != ',') || value < 0 || value > 65535)
+		{
+			qFatal("Bad pathfinding backend value \"%s\": expected a mask or comma-separated feature values 0-65535", arg);
+		}
+		mask |= static_cast<unsigned>(value);
+		p = (*end == ',') ? end + 1 : end;
+	}
+	if ((mask & ~validMask) != 0)
+	{
+		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time, 4096 backoff", arg);
+	}
+	return static_cast<int>(mask);
+}
 
 #if defined(WZ_OS_WIN)
 
@@ -318,6 +360,13 @@ typedef enum
 	CLI_LOADREPLAY,
 	CLI_WINDOW,
 	CLI_VERSION,
+	CLI_GAMESTATE_SELFTEST,
+	CLI_GAMESTATE_ROUNDTRIP,
+	CLI_GAMESTATE_CRCTRACE,
+	CLI_GAMESTATE_CRCDETAIL,
+	CLI_GAMESTATE_CRCDETAIL_ONSAVE,
+	CLI_TMP_PREFER_OLD_SAVE,
+	CLI_DRS_FRACTION,
 	CLI_RESOLUTION,
 	CLI_SHADOWS,
 	CLI_NOSHADOWS,
@@ -334,6 +383,7 @@ typedef enum
 	CLI_NOTEXTURECOMPRESSION,
 	CLI_GFXBACKEND,
 	CLI_GFXDEBUG,
+	CLI_GAMEPAD,
 	CLI_JSBACKEND,
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
@@ -341,6 +391,14 @@ typedef enum
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
 	CLI_AUTOHEADLESS,
+	CLI_MOVEMENTBENCH,
+	CLI_MOVEMENTSEED,
+	CLI_MOVEMENTARRANGE,
+	CLI_MOVEMENTWATCH,
+	CLI_PATHBENCH,
+	CLI_PATHBENCHREPEATS,
+	CLI_PATHFINDINGBACKEND,
+	CLI_CORRIDORDUMP,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
@@ -350,6 +408,7 @@ typedef enum
 	CLI_WZ_DEBUG_CRASH_HANDLER,
 	CLI_STREAMER_SPECTATOR,
 	CLI_LOBBY_SLASHCOMMANDS,
+	CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT,
 	CLI_ADD_LOBBY_ADMINHASH,
 	CLI_ADD_LOBBY_ADMINPUBLICKEY,
 	CLI_COMMAND_INTERFACE,
@@ -403,6 +462,13 @@ static const struct poptOption *getOptionsTable()
 		{ "loadreplay", POPT_ARG_STRING, CLI_LOADREPLAY, N_("Load a replay"),     N_("replay file") },
 		{ "window", POPT_ARG_NONE, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr },
 		{ "version", POPT_ARG_NONE, CLI_VERSION,    N_("Show version information and exit"), nullptr },
+		{ "gamestate-selftest", POPT_ARG_NONE, CLI_GAMESTATE_SELFTEST, N_("Run the GameState serialization determinism self-test and exit"), nullptr },
+		{ "gamestate-roundtrip", POPT_ARG_STRING, CLI_GAMESTATE_ROUNDTRIP, N_("Run the GameState reconstruct round-trip test at the given game tick and exit"), N_("game tick") },
+		{ "gamestate-crc-trace", POPT_ARG_STRING, CLI_GAMESTATE_CRCTRACE, N_("Write a per-tick sync-CRC trace to the given file (for the load sync test)"), N_("file") },
+		{ "gamestate-crc-detail-tick", POPT_ARG_STRING, CLI_GAMESTATE_CRCDETAIL, N_("At this game tick, dump the full sync-debug log to <crc-trace-file>.detail.txt (diff original vs loaded run to pinpoint a divergence)"), N_("game tick") },
+		{ "gamestate-crc-detail-on-save", POPT_ARG_NONE, CLI_GAMESTATE_CRCDETAIL_ONSAVE, N_("Auto-dump a window of full sync-debug logs to <crc-trace-file>.detail.txt around each GameState save/load (no need to know the save tick)"), nullptr },
+		{ "tmp-prefer-old-save", POPT_ARG_NONE, CLI_TMP_PREFER_OLD_SAVE, N_("Prefer the legacy load path for a save folder that has both the old and new-format data (temporary)"), nullptr },
+		{ "drs-fraction", POPT_ARG_STRING, CLI_DRS_FRACTION, N_("Pin the dynamic resolution scene render fraction for testing, bypassing GPU timing feedback"), N_("fraction 0.5 - 1.0") },
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
 		{ "shadows", POPT_ARG_NONE, CLI_SHADOWS,    N_("Enable shadows"),                    nullptr },
 		{ "noshadows", POPT_ARG_NONE, CLI_NOSHADOWS,  N_("Disable shadows"),                   nullptr },
@@ -426,6 +492,7 @@ static const struct poptOption *getOptionsTable()
 			")"
 		},
 		{ "gfxdebug", POPT_ARG_NONE, CLI_GFXDEBUG, N_("Use gfx backend debug"), nullptr },
+		{ "gamepad", POPT_ARG_STRING, CLI_GAMEPAD, N_("Set gamepad support mode"), "(auto, on, off)" },
 		{ "jsbackend", POPT_ARG_STRING, CLI_JSBACKEND, N_("Set JS backend"),
 					"("
 					"quickjs"
@@ -437,6 +504,14 @@ static const struct poptOption *getOptionsTable()
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
+		{ "movementbench", POPT_ARG_STRING, CLI_MOVEMENTBENCH,   N_("Run the named deterministic movement benchmark scenario and quit"), N_("scenario") },
+		{ "movementbenchwatch", POPT_ARG_STRING, CLI_MOVEMENTWATCH,   N_("Run a movement benchmark scenario on screen at normal speed"), N_("scenario") },
+		{ "movementseed", POPT_ARG_STRING, CLI_MOVEMENTSEED,   N_("Override the benchmark scenario seed"), N_("seed") },
+		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
+		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
+		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
+		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time)"), N_("features") },
+		{ "corridordump", POPT_ARG_STRING, CLI_CORRIDORDUMP,   N_("Detect corridors on the named map, dump the geometry, and quit"), N_("map") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -446,6 +521,7 @@ static const struct poptOption *getOptionsTable()
 		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
 		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
+		{ "enablelobbyslashcmdhostexit", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT, N_("Enable lobby hostexit slash command (for connecting admins)"), nullptr},
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
 		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin, unixsocket:path)")},
@@ -635,6 +711,21 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
 			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
 
+		case CLI_GAMESTATE_SELFTEST:
+			if (!gamestate::runGameStateSelfTest())
+			{
+				exit(EXIT_FAILURE);
+			}
+			if (!gamestate::savegame::runSavegameHeaderSelfTest())
+			{
+				exit(EXIT_FAILURE);
+			}
+			if (!gamestate::savegame::runSavegameContainerSelfTest())
+			{
+				exit(EXIT_FAILURE);
+			}
+			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
+
 #if defined(WZ_OS_WIN)
 		case CLI_WIN_ENABLE_CONSOLE:
 			SetStdOutToConsole_Win();
@@ -754,6 +845,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_CONFIGDIR:
 		case CLI_HELP:
 		case CLI_VERSION:
+		case CLI_GAMESTATE_SELFTEST:
 #if defined(WZ_OS_WIN)
 		case CLI_WIN_ENABLE_CONSOLE:
 #endif
@@ -816,6 +908,37 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			// go directly to host screen, bypass all others.
 			setHostLaunch(HostLaunch::Host);
 			break;
+		case CLI_GAMESTATE_ROUNDTRIP:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing game tick value for --gamestate-roundtrip");
+			}
+			gamestate::gamestateSetRoundTripTestTick(static_cast<uint32_t>(atoi(token)));
+			break;
+		case CLI_GAMESTATE_CRCTRACE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing file path for --gamestate-crc-trace");
+			}
+			setSyncCrcTraceFile(token);
+			break;
+		case CLI_GAMESTATE_CRCDETAIL:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing game tick value for --gamestate-crc-detail-tick");
+			}
+			setSyncCrcDetailTick(static_cast<uint32_t>(atoi(token)));
+			break;
+		case CLI_GAMESTATE_CRCDETAIL_ONSAVE:
+			setSyncCrcDetailOnSave(20); // dump a 20-tick window around each save/load (overlaps saving vs loaded run, with headroom for debugging divergences a few ticks past resume)
+			break;
+		case CLI_TMP_PREFER_OLD_SAVE:
+			gamestate::savegame::setPreferLegacyLoadOverride(true);
+			break;
+
 		case CLI_GAME:
 			// retrieve the game name
 			token = poptGetOptArg(poptCon);
@@ -884,6 +1007,21 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				multiplay_mods.push_back(token);
 				break;
 			}
+		case CLI_DRS_FRACTION:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Missing value for --drs-fraction");
+				}
+				const double fraction = atof(token);
+				if (!(fraction > 0.0) || fraction > 1.0)
+				{
+					qFatal("Invalid --drs-fraction value (expected a fraction above 0 and at most 1.0)");
+				}
+				dynamicResolutionSetFractionOverride(static_cast<float>(fraction));
+			}
+			break;
 		case CLI_RESOLUTION:
 			{
 				unsigned int width, height;
@@ -1037,6 +1175,32 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			uses_gfx_debug = true;
 			break;
 
+		case CLI_GAMEPAD:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Missing gamepad mode value");
+				}
+				if (strcmp(token, "auto") == 0)
+				{
+					war_SetGamepadMode(GamepadMode::Automatic);
+				}
+				else if (strcmp(token, "on") == 0)
+				{
+					war_SetGamepadMode(GamepadMode::Enabled);
+				}
+				else if (strcmp(token, "off") == 0)
+				{
+					war_SetGamepadMode(GamepadMode::Disabled);
+				}
+				else
+				{
+					qFatal("Unsupported / invalid gamepad mode value (supported: auto, on, off)");
+				}
+				break;
+			}
+
 		case CLI_JSBACKEND:
 			{
 				// retrieve the backend
@@ -1097,6 +1261,117 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			setHeadlessGameMode(true);
 			break;
 
+		case CLI_MOVEMENTWATCH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench scenario name");
+			}
+			if (!movementBenchSelectScenario(token))
+			{
+				qFatal("Unknown movement bench scenario: %s", token);
+			}
+			// Same scenario setup as the benchmark, but keeps its window and
+			// runs at normal speed so it can be followed.
+			movementBenchSetWatching();
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = movementBenchTestConfig();
+			wz_autogame = true;
+			break;
+
+		case CLI_MOVEMENTSEED:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench seed");
+			}
+			movementBenchSetSeed((uint32_t)strtoul(token, nullptr, 0));
+			break;
+
+		case CLI_MOVEMENTARRANGE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench arrangement index");
+			}
+			movementBenchSetArrangement((uint32_t)strtoul(token, nullptr, 0));
+			break;
+
+		case CLI_MOVEMENTBENCH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench scenario name");
+			}
+			if (!movementBenchSelectScenario(token))
+			{
+				qFatal("Unknown movement bench scenario: %s", token);
+			}
+			// The bench runs as an autostarted headless skirmish, so it reuses the
+			// existing --skirmish plumbing rather than adding a launch path.
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = movementBenchTestConfig();
+			wz_autogame = true;
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
+			break;
+
+		case CLI_PATHBENCHREPEATS:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad path bench repeat count");
+			}
+			pathBenchSetRepeats((uint32_t)strtoul(token, nullptr, 0));
+			break;
+
+		case CLI_PATHBENCH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad path bench name");
+			}
+			if (!pathBenchSelect(token))
+			{
+				qFatal("Unknown path bench: %s", token);
+			}
+			// Launched the same way as the movement bench, for the same reason.
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = pathBenchTestConfig();
+			wz_autogame = true;
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
+			break;
+
+		case CLI_PATHFINDINGBACKEND:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad pathfinding backend value");
+			}
+			wz_pathfinding_backend = parsePathfindingBackendArg(token);
+			break;
+
+		case CLI_CORRIDORDUMP:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad corridor dump map name");
+			}
+			if (!corridorDumpSelectMap(token))
+			{
+				qFatal("Bad corridor dump map name");
+			}
+			// Launched like the movement bench, a headless skirmish that loads the
+			// requested map. The map override in loadMapChallengeSettings points it
+			// at the chosen level rather than the config's placeholder.
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = "corridordump.json";
+			wz_autogame = true;
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
+			break;
+
 		case CLI_GAMEPORT:
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
@@ -1133,6 +1408,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 
 		case CLI_LOBBY_SLASHCOMMANDS:
 			wz_lobby_slashcommands = true;
+			break;
+
+		case CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT:
+			wz_lobby_slashcommands_hostexit = true;
 			break;
 
 		case CLI_ADD_LOBBY_ADMINHASH:
@@ -1410,6 +1689,16 @@ bool streamer_spectator_mode()
 bool lobby_slashcommands_enabled()
 {
 	return wz_lobby_slashcommands;
+}
+
+bool lobby_slashcommands_hostexit_enabled()
+{
+	return wz_lobby_slashcommands_hostexit;
+}
+
+int cli_pathfinding_backend()
+{
+	return wz_pathfinding_backend;
 }
 
 int min_autostart_player_count()

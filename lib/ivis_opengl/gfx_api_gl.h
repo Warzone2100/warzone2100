@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2020  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 #pragma once
 
 #include "gfx_api.h"
+#include "gfx_api_frame_resource_cache.h"
+#include "render_graph/pass_resolve.h"
+#include "render_graph/pipeline_surfaces.h"
+#include "render_graph/render_pass.h"
 
 #if defined(__EMSCRIPTEN__)
 # define WZ_STATIC_GL_BINDINGS
@@ -86,7 +90,7 @@ public:
 	virtual size_t backend_internal_value() const override;
 	void unbind();
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
-	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
+	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
 	virtual unsigned id() override;
 	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 private:
@@ -129,6 +133,8 @@ private:
 	GLuint _id;
 	bool gles = false;
 	bool _isArray = false;
+	uint32_t tex_width = 0;
+	uint32_t tex_height = 0;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;
 #endif
@@ -142,6 +148,54 @@ public:
 	GLenum target() const;
 	unsigned id() const;
 	void unbind();
+};
+
+struct gl_gpurendered_renderbuffer final : public gfx_api::abstract_texture
+{
+	friend struct gl_context;
+	GLuint _id = 0;
+	GLsizei _samples = 0;
+	uint32_t _width = 0;
+	uint32_t _height = 0;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
+	gl_gpurendered_renderbuffer() = default;
+	~gl_gpurendered_renderbuffer() override;
+public:
+	virtual void bind() override;
+	virtual bool isArray() const override { return false; }
+	virtual size_t backend_internal_value() const override;
+	GLuint id() const { return _id; }
+	GLsizei samples() const { return _samples; }
+	bool isMultisampled() const { return _samples > 1; }
+};
+
+enum class GLPipelineSurfaceKind : size_t
+{
+	SwapchainColor = 200,
+	SwapchainDepth = 201,
+};
+
+/// Sentinel pipeline surface for the default framebuffer (no GL texture object).
+struct gl_pipeline_surface_proxy final : public gfx_api::abstract_texture
+{
+	GLPipelineSurfaceKind kind = GLPipelineSurfaceKind::SwapchainColor;
+
+	explicit gl_pipeline_surface_proxy(GLPipelineSurfaceKind surfaceKind);
+	~gl_pipeline_surface_proxy() override;
+	void bind() override;
+	bool isArray() const override { return false; }
+	size_t backend_internal_value() const override;
+};
+
+struct gl_context;
+
+/// Backend-owned GPU objects for one pipeline surface (store holds non-owning texture*).
+struct GlSurfaceGpu
+{
+	std::unique_ptr<gfx_api::abstract_texture> texture;
 };
 
 struct gl_buffer final : public gfx_api::buffer
@@ -177,30 +231,88 @@ public:
 
 struct gl_context;
 
+
+/// Linear allocator over a chain of uniform buffer objects (like the Vulkan backend's BlockBufferAllocator).
+///
+/// Callers must rotate between one allocator per frame in flight, so the blocks being written were last read by the GPU enough frames ago.
+/// (Nothing else should write to its buffers, since multiple programs may share one buffer object.)
+///
+/// When initialized with `persistentMapped_ = true` (requires `ARB_buffer_storage` or `EXT_buffer_storage`),
+/// each block is immutable storage kept persistently mapped (write-only, coherent) for its whole lifetime, and allocations carry a direct
+/// write pointer - so filling a range is a plain memcpy with no map/unmap or glBufferSubData per write.
+/// CPU-side access to that pointer must stay write-only and forward-moving: the mapping may be write-combined memory on some drivers,
+/// where reads (including compiler-generated read-modify-write) are extremely slow.
+struct gl_uniform_block_allocator
+{
+public:
+	struct Allocation
+	{
+		GLuint buffer = 0;
+		GLintptr offset = 0;
+		// Direct write pointer for this range when the block is persistently mapped, nullptr otherwise.
+		// WRITE-ONLY - *never* read through it.
+		void* mappedWrite = nullptr;
+		bool valid() const { return buffer != 0; }
+	};
+
+	void init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_, bool persistentMapped_ = false);
+	bool persistentMapped() const { return persistentMappedMode; }
+	// Reserve an aligned range (growing the chain if the current block is full)
+	Allocation alloc(GLsizeiptr amount);
+	// Rewind for a new frame (consolidating or shrinking as needed)
+	void recycle();
+	void destroy();
+
+private:
+	struct Block
+	{
+		GLuint buffer = 0;
+		GLsizeiptr size = 0;
+		// Persistent mapping of the whole block (nullptr when not persistently mapped)
+		void* mapped = nullptr;
+	};
+	void allocateNewBlock(GLsizeiptr minimumSize);
+	void freeAllBlocks();
+
+	std::vector<Block> blocks;
+	GLsizeiptr currentWritePosInLastBlock = 0;
+	GLsizeiptr totalCapacity = 0;
+	GLsizeiptr minimumBlockSize = 0;
+	GLsizeiptr minimumFirstBlockSize = 0;
+	GLint alignment = 1;
+	bool persistentMappedMode = false;
+};
+
 struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 {
 	gfx_api::state_description desc;
 	GLuint program = 0;
 	GLuint vertexShader = 0;
+	GLuint tessControlShader = 0;
+	GLuint tessEvalShader = 0;
 	GLuint fragmentShader = 0;
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
-	std::vector<GLint> locations;
-	std::vector<GLint> duplicateFragmentUniformLocations;
 	bool hasSpecializationConstant_ShadowConstants = false;
 	bool hasSpecializationConstants_PointLights = false;
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 
-	template<SHADER_MODE shader>
-	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_binding_entry();
+	// One buffer per uniform block slot.
+	// Driver reported size of each block, which a bound range must cover in full.
+	// (Zero means the linked program does not read that block.)
+	std::vector<GLint> uniformBlockSizes;
+	// The range each slot was last given, restored by bind().
+	std::vector<std::pair<gl_uniform_block_allocator::Allocation, GLsizeiptr>> uniformBlockRanges;
+	// Block type each slot expects - so a frame uniform reaching the wrong slot can be caught
+	std::vector<std::type_index> uniformBlockTypes;
+	gl_context* owningContext = nullptr;
 
-	template<typename T>
-	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
-
-	gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
+	gl_pipeline_state_object(gl_context& ctx, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
+	// Bind a range already written for this frame, instead of writing this slot's own copy.
+	void set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration);
 
 	void bind();
 
@@ -218,66 +330,22 @@ private:
 
 	void getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind);
 
+	// Point each named block at the binding index matching its slot.
+	// Returns false if a block exceeds what the driver accepts.
+	bool setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName);
+
+	// Replace the contents of a uniform block slot.
+	void uploadUniformBlock(size_t slot, const void* buffer, size_t size);
+
 	void build_program(gl_context& ctx,
-					   bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
+					   const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
 					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames,
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-					   optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
+					   const gfx_api::lighting_constants& shadowConstants);
 
-	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
-
-	/**
-	 * setUniforms is an overloaded wrapper around glUniform* functions
-	 * accepting glm structures.
-	 * Please do not use directly, use pie_ActivateShader below.
-	 */
-	void setUniforms(size_t uniformIdx, const ::glm::vec4 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::mat4 &m);
-	void setUniforms(size_t uniformIdx, const ::glm::ivec4 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::ivec2 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::vec2 &v);
-	void setUniforms(size_t uniformIdx, const int32_t &v);
-	void setUniforms(size_t uniformIdx, const float &v);
-
-	void setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count);
-	void setUniforms(size_t uniformIdx, const ::glm::vec4* m, size_t count);
-	template<typename T, size_t count>
-	void setUniforms(size_t uniformIdx, const std::array<T, count>& m)
-	{
-		setUniforms(uniformIdx, m.data(), count);
-	}
-	void setUniforms(size_t uniformIdx, const ::glm::ivec4* m, size_t count);
-	void setUniforms(size_t uniformIdx, const float *v, size_t count);
-
-	// Wish there was static reflection in C++...
-	void set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf);
-	void set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf);
-
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf);
-	void set_constants(const gfx_api::TerrainCombinedUniforms& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_TEXT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT_INSTANCED>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context
@@ -288,12 +356,52 @@ struct gl_context final : public gfx_api::context
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
-	optional<float> mipLodBias;
 	gfx_api::lighting_constants shadowConstants;
 
 	bool gles = false;
-	bool fragmentHighpFloatAvailable = true;
-	bool fragmentHighpIntAvailable = true;
+
+	// Uniform block limits, queried once at initialization. Uniform buffer objects are
+	// core in both OpenGL 3.1 and OpenGL ES 3.0, so only the limits vary.
+	GLint maxUniformBlockSize = 0;
+	GLint maxVertexUniformBlocks = 0;
+	GLint maxFragmentUniformBlocks = 0;
+	GLint uniformBufferOffsetAlignment = 1;
+	// Whether constants can be written through a mapped range rather than glBufferSubData.
+	// Mapping is core in OpenGL 3.0+ and OpenGL ES 3.0+, but absent from WebGL 2.
+	bool hasBufferMapping = false;
+
+	// How uniform block contents get from the CPU to the buffer.
+	enum class UniformBlockWriteMethod
+	{
+		BufferSubData,	// glBufferSubData per write
+		MapRange,		// glMapBufferRange(UNSYNCHRONIZED) + memcpy + glUnmapBuffer per write
+		PersistentMap	// memcpy into a persistently-mapped coherent buffer (ARB/EXT_buffer_storage)
+	};
+	UniformBlockWriteMethod uniformBlockWriteMethod = UniformBlockWriteMethod::BufferSubData;
+	// Whether immutable + persistently mappable buffer storage is usable on this context
+	// (desktop: ARB_buffer_storage, GLES 3.1+: EXT_buffer_storage), including the sync
+	// objects the ring rotation relies on in that mode.
+	bool hasPersistentBufferStorage = false;
+
+	// One per (frames in flight + 1), so blocks written this frame were last read by
+	// the GPU a full frame ago and need no synchronization.
+	std::vector<gl_uniform_block_allocator> uniformBlockAllocators;
+	size_t currentUniformBlockAllocator = 0;
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	// PersistentMap only: fence inserted when an allocator's frame is finished, waited
+	// on before that allocator is rewritten.
+	std::vector<GLsync> uniformBlockAllocatorFences;
+#endif
+	gl_uniform_block_allocator& activeUniformBlockAllocator() { return uniformBlockAllocators[currentUniformBlockAllocator]; }
+
+	// Bind a range, skipping when that index already holds it.
+	// (Pipelines restore their own ranges on every bind, so most restores ask for what is already bound.)
+	// NOTE: A zero buffer unbinds the index.
+	void bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
+	// Fill a reserved range.
+	void writeUniformRange(const gl_uniform_block_allocator::Allocation& allocation, const void* data, GLsizeiptr size);
+	struct BoundUniformRange { GLuint buffer = 0; GLintptr offset = 0; GLsizeiptr size = 0; };
+	std::vector<BoundUniformRange> boundUniformRanges;
 
 	gl_context(bool _debug) : khr_debug(_debug) {}
 	~gl_context();
@@ -313,24 +421,43 @@ struct gl_context final : public gfx_api::context
 	virtual void bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures) override;
 	virtual void set_constants(const void* buffer, const size_t& size) override;
 	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
+	virtual gfx_api::frame_uniform_allocation upload_frame_uniform_raw(const void* data, size_t size) override;
+	virtual void set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type) override;
 	virtual void draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive) override;
 	virtual void draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index) override;
-	virtual void set_polygon_offset(const float& offset, const float& slope) override;
+	virtual void set_polygon_offset(const float& factor, const float& units) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 
 	virtual size_t numDepthPasses() override;
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
-	virtual void beginDepthPass(size_t idx) override;
+	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
+	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
+	virtual bool setSmaaEnabled(bool enabled) override;
+	virtual bool setSceneEffectSurfaces(gfx_api::SceneEffectSurfaces cfg) override;
+	virtual bool setSceneDynamicResolution(bool enabled) override;
+	virtual bool supportsGpuFrameTiming() const override;
+	virtual bool setGpuFrameTimingEnabled(bool enabled) override;
+	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void beginScreenFrame() override;
+	virtual void finishScreenFrame() override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
-	virtual void endCurrentDepthPass() override;
-	virtual gfx_api::abstract_texture* getDepthTexture() override;
-	virtual void beginSceneRenderPass() override;
-	virtual void endSceneRenderPass() override;
-	virtual gfx_api::abstract_texture* getSceneTexture() override;
-	virtual void beginRenderPass() override;
-	virtual void endRenderPass() override;
+	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
+	virtual gfx_api::PipelineSurfaceUsage pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const override;
+	virtual const gfx_api::ResolvedSurfaceSpec& resolvedPipelineSurface(gfx_api::PipelineSurfaceId id) const override;
+	virtual bool isSceneMSAAEnabled() const override;
+	virtual bool isSwapchainMSAAEnabled() const override;
+	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;
+	virtual gfx_api::pixel_format getDepthStencilFormat() const override;
+	virtual gfx_api::PipelineSurfaceSyncInputs pipelineSurfaceSyncInputs() const override;
+	virtual gfx_api::SurfaceCapabilityHints surfaceCapabilities() const override;
+	virtual bool ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs) override;
+	virtual void purgeFrameResources() override;
+	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
+	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
+		gfx_api::PassGraphCompileResult& compileResult) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;
@@ -358,6 +485,7 @@ struct gl_context final : public gfx_api::context
 	virtual size_t maxFramesInFlight() const override;
 	virtual gfx_api::lighting_constants getShadowConstants() override;
 	virtual bool setShadowConstants(gfx_api::lighting_constants values) override;
+	virtual bool supportsTessellationShaders() const override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
@@ -367,17 +495,31 @@ struct gl_context final : public gfx_api::context
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
+	void initUniformBufferLimits();
+	void benchmarkUniformBlockWriteMethods();
 	bool initInstancedFunctions();
 	bool initCheckBorderClampSupport();
-	size_t initDepthPasses(size_t resolution);
 	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_gpurendered_texture_array(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
 	gl_gpurendered_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
+	/// Create a color or depth/stencil renderbuffer.
+	/// Pass samples == 0 for non-multisampled storage; samples > 1 selects glRenderbufferStorageMultisample.
+	std::unique_ptr<gl_gpurendered_renderbuffer> create_framebuffer_renderbuffer(GLenum internalFormat, GLsizei samples,
+		uint32_t width, uint32_t height, const std::string& filename);
 	bool createDefaultTextures();
-	bool createSceneRenderpass();
-	void deleteSceneRenderpass();
-	void _beginRenderPassImpl();
+	void resetAllPipelineSurfaceSlots();
+
+	struct PipelineSurfaceAllocator final : gfx_api::SurfaceAllocator
+	{
+		gl_context& root;
+		explicit PipelineSurfaceAllocator(gl_context& r) : root(r) {}
+		bool create(gfx_api::PipelineSurfaceId id, const gfx_api::ResolvedSurfaceSpec& spec,
+			gfx_api::abstract_texture*& outTexture) override;
+		void destroy(gfx_api::PipelineSurfaceId id, gfx_api::abstract_texture* texture) override;
+		void prepareForSurfaceDestroy() override;
+		void onChanged() override;
+	};
 
 protected:
 	friend struct gl_pipeline_state_object;
@@ -386,8 +528,30 @@ protected:
 	void wzGLPopDebugGroup();
 	bool useKHRSuffixedDebugFuncs();
 
+public:
+	gfx_api::data_buffer_transport lightDataTransport() const override { return lightTransport; }
+	void upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes) override;
+
 private:
 	bool initGLContext();
+	void initLightDataTransport();
+	bool initTessellationSupport();
+	bool initTextureGatherSupport();
+	/// MSAA sample count actually in use, the requested count clamped to what the
+	/// multisampled renderbuffer format accepts, or zero when MSAA is off.
+	uint32_t clampedMultiSampleCount() const
+	{
+		return (multisamples > 0 && maxMultiSampleBufferFormatSamples > 0)
+			? std::min<uint32_t>(multisamples, static_cast<uint32_t>(maxMultiSampleBufferFormatSamples))
+			: 0u;
+	}
+	bool initTenBitSceneColorSupport();
+	bool initTenBitMsaaSupport(GLsizei samples);
+	bool initGpuTimestampSupport();
+	void createGpuTimingQueries();
+	void destroyGpuTimingQueries();
+	void pollGpuFrameTimings();
+	bool ensurePatchVertices4();
 	bool enableDebugMessageCallbacks();
 	void enableVertexAttribArray(GLuint index);
 	void disableVertexAttribArray(GLuint index);
@@ -396,15 +560,51 @@ private:
 	uint32_t getSuggestedDefaultDepthBufferResolution() const;
 	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 
+	void applyAttachmentStoreOps(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight);
+	static void applyAttachmentClears(const gfx_api::RenderPassDesc& pass);
+	void resolveMsaaColorAttachment(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight);
+	void invalidateDepthStencilAttachment(const gfx_api::RenderPassDesc& pass);
+	void clearDynamicFBOCache();
+
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;
 	std::vector<bool> enabledVertexAttribIndexes;
+	bool hasActivePass = false;
+	bool frameHasDrawCommands = false;
 	size_t frameNum = 0;
 	std::string formattedRendererInfoString;
 	std::array<std::vector<gfx_api::pixel_format_usage::flags>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> textureFormatsSupport;
 	bool has2DTextureArraySupport = false;
 	bool hasInstancedRenderingSupport = false;
 	bool hasBorderClampSupport = false;
+	bool hasTessellationSupport = false;
+	bool hasTextureGatherSupport = false;
+	// whether a 10 bit per channel scene colour target is renderable on this driver
+	bool hasTenBitMsaaSupport = false; // and whether it is renderable multisampled
+	bool hasTenBitSceneColorSupport = false;
+
+	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
+	bool hasGpuTimestampSupport = false;
+	gfx_api::data_buffer_transport lightTransport = gfx_api::data_buffer_transport::uniform_block;
+	GLuint lightDataBuffer = 0;
+	GLuint lightIndexBuffer = 0;
+	GLuint lightDataTexture = 0;
+	GLuint lightIndexTexture = 0;
+	size_t lightDataBufferSize = 0;
+	size_t lightIndexBufferSize = 0;
+	struct GpuTimingSlot
+	{
+		GLuint beginQuery = 0;
+		GLuint endQuery = 0;
+		size_t frameNum = 0;
+		bool inFlight = false;
+	};
+	std::array<GpuTimingSlot, 8> gpuTimingSlots;
+	size_t gpuTimingWriteIdx = 0;
+	size_t gpuTimingReadIdx = 0;
+	bool gpuTimingQueriesCreated = false;
+	bool gpuTimingFrameOpen = false;
+	bool patchVertices4Set = false;
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;
 	GLuint vaoId = 0;
@@ -424,21 +624,21 @@ private:
 	gl_texture_array *pDefaultArrayTexture = nullptr;
 	gl_gpurendered_texture *pDefaultDepthTexture = nullptr;
 
-	gl_gpurendered_texture* depthTexture = nullptr;
-	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 
 	uint32_t sceneFramebufferWidth = 0;
 	uint32_t sceneFramebufferHeight = 0;
+	uint32_t scaledSceneDimension(uint32_t drawableDimension) const;
 	GLenum multiSampledBufferInternalFormat = GL_INVALID_ENUM;
 	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
 	GLint maxMultiSampleBufferFormatSamples = 0;
 	uint32_t multisamples = 0;
-	gl_gpurendered_texture* sceneTexture = nullptr;
-	std::vector<GLuint> sceneFBO;
-	std::vector<GLuint> sceneResolveFBO;
-	GLuint sceneMsaaRBO = 0;
-	GLuint sceneDepthStencilRBO = 0;
-	size_t sceneFBOIdx = 0;
+
+	std::array<GlSurfaceGpu, gfx_api::PIPELINE_SURFACE_COUNT> _surfaceGpu {};
+	gfx_api::PipelineSurfaceStore _pipelineSurfaces;
+	gfx_api::DynamicFBOCache _dynamicFBOCache;
+
+	GLuint _dynamicPassFBO = 0;
+	gfx_api::RenderPassDesc _activePassDesc;
 };

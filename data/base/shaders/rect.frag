@@ -1,7 +1,7 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform vec4 color;
+#include "rect_common.glsl"
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec4 FragColor;

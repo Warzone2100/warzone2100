@@ -512,12 +512,12 @@ void ScrollableTableWidget::setBackgroundColor(PIELIGHT const &color)
 	scrollableList->setBackgroundColor(color);
 }
 
-uint16_t ScrollableTableWidget::getScrollPosition() const
+uint32_t ScrollableTableWidget::getScrollPosition() const
 {
 	return scrollableList->getScrollPosition();
 }
 
-void ScrollableTableWidget::setScrollPosition(uint16_t newPosition)
+void ScrollableTableWidget::setScrollPosition(uint32_t newPosition)
 {
 	scrollableList->setScrollPosition(newPosition);
 }

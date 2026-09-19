@@ -5,15 +5,9 @@
 #define NEWGL
 #endif
 
-uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 ModelUVLightmapMatrix;
-uniform mat4 ModelUV1Matrix;
-uniform mat4 ModelUV2Matrix;
+#include "terrain_water_classic.glsl"
 
-uniform float timeSec;
 
-uniform vec4 cameraPos; // in modelSpace
-uniform vec4 sunPos; // in modelSpace, normalized
 
 #ifdef NEWGL
 #define VERTEX_INPUT in

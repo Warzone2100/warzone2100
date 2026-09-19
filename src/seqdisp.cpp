@@ -37,6 +37,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sequence/sequence.h"
+#include "lib/sequence/video_decoder.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 
@@ -111,6 +112,7 @@ static bool bSeqSubtitles = true;
 static bool bSeqPlaying = false;
 static WzString currVideoName;
 static WzString currAudioName;
+static WzString currFetchName;	// the candidate name currently being downloaded (for progress display)
 static std::shared_ptr<VideoProvider> aVideoProvider;
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
@@ -370,7 +372,9 @@ static OnDemandVideoDownloader onDemandVideoProvider;
 
 bool seq_hasVideos()
 {
-	return PHYSFS_exists("sequences/devastation.ogg") || onDemandVideoProvider.hasBaseURLPath();
+	return PHYSFS_exists("sequences/devastation.ogg")
+		|| (videoDecoderWebmSupported() && PHYSFS_exists("sequences/devastation.webm"))
+		|| onDemandVideoProvider.hasBaseURLPath();
 }
 
 void seq_setOnDemandVideoURL(const WzString& videoBaseURL)
@@ -467,19 +471,48 @@ static void seq_SetUserResolution()
 	seq_SetDisplaySize(video_size.x, video_size.y, x, y);
 }
 
+// The list of names to try for a video, in priority order: when this build has
+// WebM support, a ".webm" variant of the data-specified name is preferred (so a
+// WebM sequences package can be dropped in without touching the data JSON).
+static std::vector<WzString> videoNameCandidates(const WzString& videoName)
+{
+	std::vector<WzString> candidates;
+	if (videoDecoderWebmSupported() && videoName.endsWith(".ogg"))
+	{
+		WzString webmName = videoName;
+		webmName.truncate(webmName.length() - 4);
+		webmName += ".webm";
+		candidates.push_back(std::move(webmName));
+	}
+	candidates.push_back(videoName);
+	return candidates;
+}
+
 static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audioName)
 {
 	aVideoProvider.reset();
 	currVideoName = videoName;
 	currAudioName = audioName;
 
+	const auto candidates = videoNameCandidates(videoName);
+
 	// Try to find local sequences
-	WzString aVideoName = WzString("sequences/" + videoName);
-	PHYSFS_file *fpInfile = PHYSFS_openRead(aVideoName.toUtf8().c_str());
+	PHYSFS_file *fpInfile = nullptr;
+	WzString openedName;
+	for (const auto& name : candidates)
+	{
+		WzString aVideoName = WzString("sequences/" + name);
+		fpInfile = PHYSFS_openRead(aVideoName.toUtf8().c_str());
+		if (fpInfile != nullptr)
+		{
+			openedName = name;
+			break;
+		}
+	}
 
 	if (fpInfile != nullptr)
 	{
-		aVideoProvider = makeVideoProvider(fpInfile, videoName);
+		aVideoProvider = makeVideoProvider(fpInfile, openedName);
 	}
 	else
 	{
@@ -494,28 +527,47 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 				// in these special cases, don't clutter the logs with LOG_INFO level events
 				log_part = LOG_VIDEO;
 			}
-			debug(log_part, "unable to open '%s' for playback", aVideoName.toUtf8().c_str());
+			debug(log_part, "unable to open 'sequences/%s' for playback", videoName.toUtf8().c_str());
 
 			seq_Shutdown();
 			return false;
 		}
 
-		// Try to download video from on-demand provider
-		auto videoData = onDemandVideoProvider.getVideoData(videoName);
+		// Try to download video from on-demand provider, walking the candidate
+		// list (a failed download of a preferred variant falls back to the next)
+		std::shared_ptr<const std::vector<char>> videoData;
+		WzString fetchedName;
+		bool requestPending = false;
+		for (const auto& name : candidates)
+		{
+			videoData = onDemandVideoProvider.getVideoData(name);
+			if (videoData)
+			{
+				fetchedName = name;
+				break;
+			}
+			if (!onDemandVideoProvider.getVideoDataError(name))
+			{
+				// Request is queued
+				// Return true and handle waiting inside seq_UpdateFullScreenVideo
+				// (Each later call to seq_UpdateFullScreenVideo will check if still waiting, and then display the download progress before itself kicking off seq_Play once the buffer is ready)
+				currFetchName = name;
+				requestPending = true;
+				break;
+			}
+			// this candidate failed to download - try the next one
+		}
 		if (!videoData)
 		{
-			if (onDemandVideoProvider.getVideoDataError(videoName))
+			if (requestPending)
 			{
-				seq_Shutdown();
-				return false;
+				return true;
 			}
-			// Otherwise, request is queued
-			// Return true and handle waiting inside seq_UpdateFullScreenVideo
-			// (Each later call to seq_UpdateFullScreenVideo will check if still waiting, and then dispkay the download progress before itself kicking off seq_Play once the buffer is ready)
-			return true;
+			seq_Shutdown();
+			return false;
 		}
 
-		aVideoProvider = makeVideoProvider(videoData, videoName);
+		aVideoProvider = makeVideoProvider(videoData, fetchedName);
 	}
 
 	if (!seq_Play(aVideoProvider))
@@ -615,7 +667,7 @@ bool seq_UpdateFullScreenVideo()
 			{
 				wzCachedSeqText.resize(2);
 			}
-			wzCachedSeqText[0].setText(WzString::format("%s (%" PRIu32 "%%)...", _("Loading video"), onDemandVideoProvider.getVideoDataRequestProgress(currVideoName)), font_scaled);
+			wzCachedSeqText[0].setText(WzString::format("%s (%" PRIu32 "%%)...", _("Loading video"), onDemandVideoProvider.getVideoDataRequestProgress(currFetchName)), font_scaled);
 			wzCachedSeqText[0].render((pie_GetVideoBufferWidth() - wzCachedSeqText[0].width()) / 2, (pie_GetVideoBufferHeight() - wzCachedSeqText[0].height()) / 2, WZCOL_WHITE);
 			return true;
 		}
@@ -651,14 +703,6 @@ bool seq_UpdateFullScreenVideo()
 						subMax = seqtext.y;
 					}
 				}
-			}
-
-			if (frameTime >= seqtext.endTime && frameTime < seqtext.endTime)
-			{
-//				if (pbClear != nullptr)
-//				{
-//					*pbClear = CLEAR_BLACK;
-//				}
 			}
 		}
 	}

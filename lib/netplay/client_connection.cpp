@@ -239,6 +239,9 @@ net::result<void> IClientConnection::flush(size_t* rawByteCount)
 		return {};  // No data to flush out.
 	}
 
+	// NOTE: capturing compressionBuf by reference is safe only because append() invokes
+	// the callback synchronously (while holding the pending-writes lock) before returning;
+	// the buffer is cleared immediately below. Do not change append() to defer the callback.
 	pwm_->append(this, [&compressionBuf] (PendingWritesManager::ConnectionWriteQueue& writeQueue)
 	{
 		writeQueue.reserve(writeQueue.size() + compressionBuf.size());

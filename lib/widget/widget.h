@@ -245,8 +245,30 @@ void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_
 bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
 bool isMouseClickDownOnScreenOverlayChild();
+bool isMouseOverWheelScrollConsumingWidget(); // reflects the most recent widgRunScreen call
 bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
 void widgScheduleTask(std::function<void ()> f);
+
+// The base screen most recently passed to widgRunScreen - i.e. the screen
+// currently processing input - or nullptr if it no longer exists
+std::shared_ptr<W_SCREEN> widgGetLastRunScreen();
+
+struct WidgetMagnetTarget
+{
+	Vector2i screenPos;
+	int screenRadius;
+};
+
+// The screen containing the widget the mouse is currently over, or nullptr
+std::shared_ptr<W_SCREEN> widgGetMouseOverScreen();
+
+// Finds the best clickable widget near a screen point for the gamepad
+// cursor's attraction assist, searching the overlay screens and the given
+// base screen - or only onlyScreen when one is given. Candidates ahead of the
+// motion direction are favored and ones with a motion alignment below
+// minAlongMotion are excluded. Directed hops pass a tighter cone and skip the
+// widget already containing the point
+optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange, float minAlongMotion = -0.2f, bool excludeContainingPoint = false, const std::shared_ptr<W_SCREEN>& onlyScreen = nullptr);
 
 void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 

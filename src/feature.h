@@ -28,6 +28,8 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/paged_entity_container.h"
 
+struct GameWorld;
+
 /* The statistics for the features */
 extern std::vector<FEATURE_STATS> asFeatureStats;
 
@@ -41,22 +43,22 @@ bool loadFeatureStats(WzConfig &ini);
 void featureStatsShutDown();
 
 /* Create a feature on the map */
-FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
-FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id);
+FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
+FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id);
 
 /* Update routine for features */
 void featureUpdate(FEATURE *psFeat);
 
 // free up a feature with no visual effects
-bool removeFeature(FEATURE *psDel);
+bool removeFeature(FEATURE *psDel, GameWorld& world);
 
 /* Remove a Feature and free it's memory */
-bool destroyFeature(FEATURE *psDel, unsigned impactTime);
+bool destroyFeature(FEATURE *psDel, unsigned impactTime, GameWorld& world);
 
 /* get a feature stat id from its name */
 SDWORD getFeatureStatFromName(const WzString &name);
 
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t featureDamage(GameWorld& world, FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 void featureInitVars();
 

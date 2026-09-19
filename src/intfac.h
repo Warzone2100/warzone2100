@@ -486,6 +486,13 @@ enum INTFAC_TYPE
 	IMAGE_INTFAC_SIDEBAR_LIST,
 	IMAGE_INGAMEOPTIONS_UP,
 	IMAGE_INGAMEOPTIONS_DOWN,
+	// The same caret frontend.img carries, so that a dropdown in the game looks
+	// like a dropdown in the menus. FrontImages is released when the frontend
+	// shuts down, so nothing on an in-game screen can reach that copy.
+	IMAGE_INTFAC_CARET_DOWN_FILL,
+	// For a list of prerequisites read as a checklist. Only the ticked state needs
+	// an image: an empty circle is a circle, which the renderer draws already.
+	IMAGE_INTFAC_CHECK_CIRCLE,
 };
 
 #endif //__INCLUDED_SRC_INTFAC_H__

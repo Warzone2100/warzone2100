@@ -24,8 +24,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/gamepad_input.h"
 
 #include "manager.h"
+#include "../ordersource.h"
 #include "context.h"
 #include "mapping.h"
 
@@ -104,6 +106,9 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 		}
 	}
 
+	/* Files saved before the gamepad slot existed get the default gamepad mappings seeded in once */
+	const bool bSeedGamepadDefaults = !bForceDefaults && keyMappings.loadedFileVersion() < KEYMAP_FORMAT_VERSION;
+
 	/* Add in the default mappings if we are forcing defaults (e.g. "reset to defaults" button was pressed from the UI) or loading key map failed. */
 	for (const KeyFunctionInfo& info : keyFuncConfig.allKeyFunctionEntries())
 	{
@@ -112,9 +117,9 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 			const auto slot = mapping.first;
 			const auto keys = mapping.second;
 			/* Always add non-assignable mappings as they are not saved. */
-			if (bForceDefaults || info.type != KeyMappingType::ASSIGNABLE)
+			if (bForceDefaults || info.type != KeyMappingType::ASSIGNABLE || (bSeedGamepadDefaults && slot == KeyMappingSlot::GAMEPAD))
 			{
-				addDefaultMapping(keys.meta, keys.input, keys.action, info, slot);
+				addDefaultMapping(keys, info, slot);
 			}
 		}
 	}
@@ -128,7 +133,7 @@ void InputManager::saveMappings()
 	keyMappings.save(currentKeyMapJsonPath.c_str());
 }
 
-bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
+bool InputManager::addDefaultMapping(const KeyCombination& keys, const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
 	const auto psMapping = keyMappings.get(info, slot);
 	if (psMapping.has_value())
@@ -149,10 +154,10 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 	}
 
 	// Clear the keys from any other mappings
-	keyMappings.removeConflicting(metaCode, input, info.context, contextManager);
+	keyMappings.removeConflicting(keys.meta, keys.input, info.context, contextManager);
 
 	// Set default key mapping
-	keyMappings.add({ metaCode, input, action }, info, slot);
+	keyMappings.add(keys, info, slot);
 	return true;
 }
 
@@ -259,6 +264,13 @@ static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseW
 		return true;
 	}
 
+	/* Gamepad mappings cannot fire without a connected gamepad, so skip the state checks entirely */
+	const bool bUsesGamepad = mapping.keys.input.source == KeyMappingInputSource::GAMEPAD || mapping.keys.meta.source == KeyMappingMetaSource::GAMEPAD;
+	if (bUsesGamepad && !gamepadIsConnected())
+	{
+		return true;
+	}
+
 	if (mapping.info.function == nullptr)
 	{
 		return true;
@@ -308,6 +320,9 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 		/* Execute the action if mapping was hit */
 		if (keyToProcess.isActivated())
 		{
+			// Anything this mapping originates is a consequence of a real key event. findCurrentMapping()
+			// below runs the same loop without executing anything, so no event record is minted there.
+			OrderSourceScope orderScope(OrderSource::keybind(mintInputEventInfo(-1, -1, -1, -1)));
 			keyToProcess.info.function();
 			consumedInputs.insert(keyToProcess.keys.input);
 		}

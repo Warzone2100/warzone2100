@@ -1,8 +1,12 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform ivec4 swizzle;
-uniform vec4 color;
+layout(std140) uniform cbuffer {
+	mat4 transformationMatrix;
+	mat4 uvTransformMatrix;
+	ivec4 swizzle;
+	vec4 color;
+};
 uniform sampler2D theTexture;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))

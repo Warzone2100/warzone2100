@@ -24,20 +24,21 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/pielighting.h"
 
+struct WorldMapState;
 
 namespace rendering1999
 {
 	//! This lighting manager relies on lightmap to handle point lights
 	struct LightingManager final : ILightingManager {
 
-		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix, const LightingSceneInfo& scene) override;
 	};
 }
 
 void setTheSun(Vector3f newSun);
 Vector3f getTheSun();
 
-void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
+void initLighting(WorldMapState& mapState, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 void updateFogDistance(float distance);
 void setDefaultFogColour();
 void calcDroidIllumination(DROID *psDroid);

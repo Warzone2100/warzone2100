@@ -12,13 +12,13 @@
 # specifying various options. COMPRESS_ZIP supports all of the above detected ZIP_EXECUTABLE possibilities.
 #
 #
-# Copyright © 2018-2025 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2026 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2025-10-24a
+# Script Version: 2026-04-30a
 #
 
-cmake_minimum_required(VERSION 3.16...3.31)
+cmake_minimum_required(VERSION 3.16...4.3)
 
 set(_PF32BIT "ProgramFiles(x86)")
 
@@ -31,6 +31,17 @@ set(_PF32BIT "ProgramFiles(x86)")
 # Search for 7-Zip
 find_program(ZIP_EXECUTABLE NAMES 7zz 7z 7za PATHS "$ENV{ProgramFiles}/7-Zip" "$ENV{${_PF32BIT}}/7-Zip" "$ENV{ProgramW6432}/7-Zip")
 if(ZIP_EXECUTABLE MATCHES "7zz|7z|7za")
+
+	# Fedora's 7zip package fails if executed with the full path - extract just the 7zip executable name on Fedora
+	if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+		if(EXISTS "/etc/fedora-release")
+			# Get just the name (e.g., '7z')
+			get_filename_component(TMP_NAME "${ZIP_EXECUTABLE}" NAME)
+			message(STATUS "Using \"${TMP_NAME}\" instead of full path: ${ZIP_EXECUTABLE}")
+			set(ZIP_EXECUTABLE "${TMP_NAME}" CACHE FILEPATH "7zip executable name" FORCE)
+		endif()
+  endif()
+
 	# Test whether 7-Zip supports the "-bb0" option to disable log output
 	execute_process(COMMAND ${ZIP_EXECUTABLE} i -bb0
 					RESULT_VARIABLE 7z_bb_result

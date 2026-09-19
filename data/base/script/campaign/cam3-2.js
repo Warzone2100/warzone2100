@@ -87,7 +87,7 @@ function setAlphaExp()
 		const dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
 		{
-			setDroidExperience(dr, DROID_EXP);
+			camSetDroidExperience(dr, DROID_EXP);
 		}
 	}
 }

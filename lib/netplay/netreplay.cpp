@@ -51,10 +51,11 @@ static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
-static const uint32_t currentReplayFormatVer = 3;
-static const uint32_t minReplayFormatVerSupported = 3;
+static const uint32_t currentReplayFormatVer = 4;
+static const uint32_t minReplayFormatVerSupported = 4;
 static const size_t DefaultReplayBufferSize = 32768;
 static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
+static const uint32_t MaxReplaySettingsJSONSize = 16 * 1024 * 1024;
 
 typedef std::vector<uint8_t> SerializedNetMessagesBuffer;
 static moodycamel::BlockingReaderWriterQueue<SerializedNetMessagesBuffer> serializedBufferWriteQueue(256);
@@ -93,7 +94,8 @@ static bool NETreplaySaveWritePreamble(const nlohmann::json& settings, ReplayOpt
 	}
 
 	auto data = settings.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
-	PHYSFS_writeUBE32(replaySaveHandle, data.size());
+	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Settings JSON is too large: %zu", data.size());
+	PHYSFS_writeUBE32(replaySaveHandle, static_cast<uint32_t>(data.size()));
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
 
 	// Save extra map data (if present)
@@ -269,9 +271,11 @@ bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)
 	// FUTURE TODO: Could save things like the game results / winners + losers
 
 	auto data = endOfGameInfo.dump();
-	PHYSFS_writeUBE32(replaySaveHandle, data.size());
+	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "End-of-game JSON is too large: %zu", data.size());
+	const uint32_t endOfGameInfoSize = static_cast<uint32_t>(data.size());
+	PHYSFS_writeUBE32(replaySaveHandle, endOfGameInfoSize);
 	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
-	PHYSFS_writeUBE32(replaySaveHandle, data.size()); // should also end with the json size for easy reading from end of file
+	PHYSFS_writeUBE32(replaySaveHandle, endOfGameInfoSize); // should also end with the json size for easy reading from end of file
 
 	if (!PHYSFS_close(replaySaveHandle))
 	{
@@ -323,14 +327,24 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 	}
 
 	int32_t replayNumber = 0;
-	PHYSFS_readSBE32(replayLoadHandle, &replayNumber);
+	if (!PHYSFS_readSBE32(replayLoadHandle, &replayNumber))
+	{
+		return onFail("truncated header (magic number)");
+	}
 	if ((uint32_t)replayNumber != magicReplayNumber)
 	{
 		return onFail("bad header");
 	}
 
 	uint32_t dataSize = 0;
-	PHYSFS_readUBE32(replayLoadHandle, &dataSize);
+	if (!PHYSFS_readUBE32(replayLoadHandle, &dataSize))
+	{
+		return onFail("truncated header (data size)");
+	}
+	if (dataSize > MaxReplaySettingsJSONSize)
+	{
+		return onFail("header data size exceeds maximum supported size");
+	}
 	std::string data;
 	data.resize(dataSize);
 	size_t dataRead = WZ_PHYSFS_readBytes(replayLoadHandle, &data[0], data.size());
@@ -379,9 +393,15 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 		ReplayOptionsHandler::EmbeddedMapData embeddedMapData;
 		if (replayFormatVer >= 2)
 		{
-			PHYSFS_readUBE32(replayLoadHandle, &embeddedMapData.dataVersion);
+			if (!PHYSFS_readUBE32(replayLoadHandle, &embeddedMapData.dataVersion))
+			{
+				return onFail("truncated embedded map data version");
+			}
 			uint32_t binaryDataSize = 0;
-			PHYSFS_readUBE32(replayLoadHandle, &binaryDataSize);
+			if (!PHYSFS_readUBE32(replayLoadHandle, &binaryDataSize))
+			{
+				return onFail("truncated embedded map data size");
+			}
 			if (binaryDataSize > 0)
 			{
 				if (binaryDataSize <= optionsHandler.maximumEmbeddedMapBufferSize())
@@ -435,14 +455,19 @@ bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &play
 		return false;
 	}
 
-	WZ_PHYSFS_readBytes(replayLoadHandle, &player, 1);
+	if (WZ_PHYSFS_readBytes(replayLoadHandle, &player, 1) != 1)
+	{
+		return false;
+	}
 
-	uint8_t type;
-	WZ_PHYSFS_readBytes(replayLoadHandle, &type, 1);
+	uint8_t type = 0;
+	if (WZ_PHYSFS_readBytes(replayLoadHandle, &type, 1) != 1)
+	{
+		return false;
+	}
 
 	uint8_t b[2];
-	bool rd = WZ_PHYSFS_readBytes(replayLoadHandle, &b, 2);
-	if (!rd)
+	if (WZ_PHYSFS_readBytes(replayLoadHandle, &b, 2) != 2)
 	{
 		return false;
 	}

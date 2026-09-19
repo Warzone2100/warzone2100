@@ -14,7 +14,7 @@
 // cheat - true(читерим, видя через туман войны), null/false/undefined(не читерим, возвращем только то, что можем видеть)
 // inc - true(прибавляем value+1 и возвращаем), null/false/undefined(просто возвращаем value)
 
-var _globalInfoNear = [];
+var _globalInfoNear = {};
 
 function getInfoNear(x, y, command, range, time, obj, cheat, inc)
 {

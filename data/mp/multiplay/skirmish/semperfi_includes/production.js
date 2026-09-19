@@ -35,8 +35,8 @@ const CYBORG_FLAMERS = [
 	"CyborgFlamer01",
 ];
 const CYBORG_ROCKETS = [
-	"Cyb-Hvywpn-TK",
-	"Cyb-Hvywpn-A-T",
+	"Cyb-Hvywpn-A-T",	// Scourge
+	"Cyb-Hvywpn-TK",	// Tank killer
 ];
 
 // System definitions

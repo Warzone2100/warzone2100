@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,8 +27,11 @@
 #define _frameresource_h
 
 #include "lib/framework/frame.h"
+#include "lib/framework/loading_task.h"
 
 #include <list>
+#include <string>
+#include <vector>
 
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
@@ -41,8 +46,20 @@ typedef bool (*RES_FILELOAD)(const char *pFile, void **pData);
 /** Function pointer for releasing a resource loaded by the above functions. */
 typedef void (*RES_FREE)(void *pData);
 
-/** callback type for resload display callback. */
-typedef void (*RESLOAD_CALLBACK)();
+struct ResLoadPlanEntry
+{
+	std::string resourceDirectory;
+	std::string type;
+	std::string file;
+};
+
+struct ResLoadPlan
+{
+	std::string resourceFile;
+	SDWORD blockID = 0;
+	std::vector<ResLoadPlanEntry> entries;
+	size_t nextEntry = 0;
+};
 
 struct RES_DATA
 {
@@ -75,12 +92,6 @@ struct RES_TYPE
 };
 
 
-/** Set the function to call when loading files with resloadfile. */
-void resSetLoadCallback(RESLOAD_CALLBACK funcToCall);
-
-/* do the callback for the resload display function */
-void resDoResLoadCallback();
-
 /** Initialise the resource module. */
 bool resInitialise();
 
@@ -91,8 +102,10 @@ void resShutDown();
 WZ_DECL_NONNULL(1) void resSetBaseDir(const char *pResDir);
 WZ_DECL_NONNULL(1) void resForceBaseDir(const char *pResDir);
 
+class ResourceLoadingController;
+
 /** Parse the res file. */
-WZ_DECL_NONNULL(1) bool resLoad(const char *pResFile, SDWORD blockID);
+WZ_DECL_NONNULL(2) LoadingTask<> resLoad(ResourceLoadingController& controller, const char *pResFile, SDWORD blockID);
 
 /** Release all the resources currently loaded and the resource load functions. */
 void resReleaseAll();

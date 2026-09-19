@@ -226,7 +226,6 @@ enum INTMODE
 	INT_MISSIONRES,	// Results of a mission display.
 	INT_MULTIMENU,	// multiplayer only, player stats etc...
 	INT_CDCHANGE,		// CD Change message box
-	INT_POPUPMSG,	// Adds a popup message to user
 
 	INT_MAXMODE,   //leave as last so we can start the objMode at this value
 };
@@ -291,6 +290,9 @@ void intDoScreenRefresh();
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets();
 
+/* Request quitting the game to the main menu (processed by the next intRunWidgets() call) */
+void intRequestQuitToMainMenu();
+
 /* Display the widgets for the in game interface */
 void intDisplayWidgets();
 
@@ -305,6 +307,7 @@ bool intAddPower();
 void intRemoveReticule();
 void intHideInGameOptionsButton();
 void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), const playerCallbackFunc& callbackFunc = nullptr);
+void clearReticuleCallbacks();
 void setReticulesEnabled(bool enabled);
 void setReticuleFlash(int ButId, bool flash);
 optional<std::string> getReticuleButtonDisplayFilename(int ButId);

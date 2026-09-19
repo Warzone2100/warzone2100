@@ -26,13 +26,15 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/gamepad_input.h"
 
 #include "context.h"
 
 enum class KeyMappingInputSource
 {
 	KEY_CODE = 1,
-	MOUSE_KEY_CODE
+	MOUSE_KEY_CODE,
+	GAMEPAD
 };
 
 KeyMappingInputSource keyMappingSourceByName(const std::string& name);
@@ -41,9 +43,11 @@ union KeyMappingInputValue
 {
 	KEY_CODE       keyCode;
 	MOUSE_KEY_CODE mouseKeyCode;
+	GAMEPAD_INPUT  gamepadInput;
 
 	KeyMappingInputValue(const KEY_CODE keyCode);
 	KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode);
+	KeyMappingInputValue(const GAMEPAD_INPUT gamepadInput);
 };
 
 struct KeyMappingInput
@@ -59,12 +63,15 @@ struct KeyMappingInput
 
 	bool is(const KEY_CODE keyCode) const;
 	bool is(const MOUSE_KEY_CODE mouseKeyCode) const;
+	bool is(const GAMEPAD_INPUT gamepadInput) const;
 
 	nonstd::optional<KEY_CODE> asKeyCode() const;
 	nonstd::optional<MOUSE_KEY_CODE> asMouseKeyCode() const;
+	nonstd::optional<GAMEPAD_INPUT> asGamepadInput() const;
 
 	KeyMappingInput(const KEY_CODE keyCode);
 	KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode);
+	KeyMappingInput(const GAMEPAD_INPUT gamepadInput);
 
 	KeyMappingInput();
 
@@ -83,6 +90,9 @@ struct KeyMappingInput
 				// Offset by large value to avoid conflicts with KEY_CODEs
 				hValue += 10000 + static_cast<unsigned int>(kmi.value.mouseKeyCode);
 				break;
+			case KeyMappingInputSource::GAMEPAD:
+				hValue += 20000 + static_cast<unsigned int>(kmi.value.gamepadInput);
+				break;
 			}
 			return hSource ^ (hValue << 1);
 		}
@@ -99,14 +109,37 @@ enum class KeyAction
 	RELEASED
 };
 
+enum class KeyMappingMetaSource
+{
+	NONE,
+	KEY_CODE,
+	GAMEPAD
+};
+
+struct KeyMappingMeta
+{
+	KeyMappingMetaSource source;
+	KeyMappingInputValue value;
+
+	nonstd::optional<KEY_CODE> asKeyCode() const;
+	nonstd::optional<GAMEPAD_INPUT> asGamepadInput() const;
+
+	KeyMappingMeta();
+	KeyMappingMeta(const KEY_CODE keyCode);
+	KeyMappingMeta(const GAMEPAD_INPUT gamepadInput);
+};
+
+bool operator==(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs);
+bool operator!=(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs);
+
 struct KeyCombination
 {
-	KEY_CODE        meta;
+	KeyMappingMeta  meta;
 	KeyMappingInput input;
 	KeyAction       action;
 
 	KeyCombination(
-		const KEY_CODE        meta,
+		const KeyMappingMeta  meta,
 		const KeyMappingInput input,
 		const KeyAction       action
 	);
@@ -117,7 +150,7 @@ struct KeyCombination
 	);
 
 	KeyCombination(
-		const KEY_CODE        meta,
+		const KeyMappingMeta  meta,
 		const KeyMappingInput input
 	);
 
@@ -145,6 +178,7 @@ enum class KeyMappingSlot
 {
 	PRIMARY,
 	SECONDARY,
+	GAMEPAD,
 	LAST
 };
 

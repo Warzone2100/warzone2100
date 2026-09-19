@@ -88,6 +88,7 @@ find_program( GLSLC "glslc"
 
 file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/generic.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/construction_line.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx_text.vert"
@@ -99,13 +100,19 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_water.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_water_high.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_water_classic.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/water_depth_prepass.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/nolight_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_instanced.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_instanced.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_depthonly_instanced.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/postprocess_fullscreen.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/construction_line.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rect_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/texturedrect.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/gfx.frag"
@@ -123,6 +130,18 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_instanced.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_instanced.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tcmask_depth_prepass_instanced.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/water_depth_prepass.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/prepass_depth_only.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_generate.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_blur.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssao_downsample.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_compose_ssao.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_fog.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/range_ring_sdf.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/range_ring_sdf.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/range_ring_composite.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/skybox.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2d.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2d.frag"
@@ -130,7 +149,94 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/quad_texture2darray.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/world_to_screen.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/world_to_screen.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/fsr1_easu.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/fsr1_rcas.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/smaa_edges.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/smaa_edges.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/smaa_weights.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/smaa_weights.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/smaa_blend.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/smaa_blend.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depthmap_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/uibox.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/uibox.frag"
 )
+
+# A shader stage file that exists on disk but is missing from VK_SHADERS would not be
+# compiled to SPIR-V and would only fail at runtime, so catch that at configure time
+file(GLOB _vk_shader_stage_files
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.tese"
+)
+foreach(_vk_shader_file ${_vk_shader_stage_files})
+	if(NOT _vk_shader_file IN_LIST VK_SHADERS)
+		message(FATAL_ERROR "Vulkan shader file is not listed in VK_SHADERS (it would never be compiled): ${_vk_shader_file}")
+	endif()
+endforeach()
+
+# Stage files include these.
+file(GLOB VK_SHADER_INCLUDES CONFIGURE_DEPENDS
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.glsl"
+)
+
+# Vulkan shaders are compiled ahead of time, so unlike the GL path there is no runtime
+# patching to keep their point light and shadow limits in step with the C++ definitions.
+# Read the values straight out of the headers that define them and generate the include
+# the shaders use, so the two cannot silently disagree.
+set(_wz_gfx_api_header "${CMAKE_SOURCE_DIR}/lib/ivis_opengl/gfx_api.h")
+set(_wz_shadows_header "${CMAKE_SOURCE_DIR}/lib/ivis_opengl/shadows.h")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+	"${_wz_gfx_api_header}" "${_wz_shadows_header}")
+
+function(_wz_extract_constant OUT_VAR FILE_PATH PATTERN DESCRIPTION)
+	file(STRINGS "${FILE_PATH}" _matched_lines REGEX "${PATTERN}")
+	if(NOT _matched_lines)
+		message(FATAL_ERROR "Could not find ${DESCRIPTION} in ${FILE_PATH}")
+	endif()
+	list(GET _matched_lines 0 _first_line)
+	if(NOT _first_line MATCHES "([0-9]+)")
+		message(FATAL_ERROR "Could not read a value for ${DESCRIPTION} from: ${_first_line}")
+	endif()
+	set(${OUT_VAR} "${CMAKE_MATCH_1}" PARENT_SCOPE)
+endfunction()
+
+_wz_extract_constant(WZ_MAX_POINT_LIGHTS "${_wz_gfx_api_header}"
+	"constexpr[ \t]+size_t[ \t]+max_lights[ \t]*=" "max_lights")
+_wz_extract_constant(WZ_MAX_INDEXED_POINT_LIGHTS "${_wz_gfx_api_header}"
+	"constexpr[ \t]+size_t[ \t]+max_indexed_lights[ \t]*=" "max_indexed_lights")
+# Vulkan always carries light data over a storage buffer, so it always gets the raised grid
+_wz_extract_constant(WZ_BUCKET_DIMENSION "${_wz_gfx_api_header}"
+	"constexpr[ \t]+size_t[ \t]+max_bucket_dimension[ \t]*=" "max_bucket_dimension")
+_wz_extract_constant(WZ_MAX_SHADOW_CASCADES "${_wz_shadows_header}"
+	"#define[ \t]+WZ_MAX_SHADOW_CASCADES" "WZ_MAX_SHADOW_CASCADES")
+
+set(_vk_generated_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk_generated")
+file(MAKE_DIRECTORY "${_vk_generated_dir}")
+# Vulkan guarantees storage buffers on every device, so it carries light data over one.
+set(WZ_LIGHT_TRANSPORT 2)
+
+set(_vk_generated_constants "${_vk_generated_dir}/wz_shader_constants.glsl")
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/wz_shader_constants.glsl.in"
+	"${_vk_generated_constants}"
+	@ONLY
+)
+message(STATUS "Vulkan shader constants: point lights ${WZ_MAX_POINT_LIGHTS}, indexed ${WZ_MAX_INDEXED_POINT_LIGHTS}, buckets ${WZ_BUCKET_DIMENSION}, cascades ${WZ_MAX_SHADOW_CASCADES}")
 
 set(SHADER_LIST "")
 if(GLSLC)
@@ -143,9 +249,9 @@ if(GLSLC)
 		set(_output_name "${SHADER_FILE}.spv")
 		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
 			COMMAND "${GLSLC}"
-			ARGS "-c" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
+			ARGS "-c" "-I" "${_vk_generated_dir}" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
 			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
-			DEPENDS "${SHADER}"
+			DEPENDS "${SHADER}" "${_vk_generated_constants}" ${VK_SHADER_INCLUDES}
 			VERBATIM
 		)
 		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
@@ -153,7 +259,7 @@ if(GLSLC)
 	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})
 	set_property(TARGET glsl_compilation PROPERTY FOLDER "data")
 else()
-	message(STATUS "Unable to find glslc")
+	message(STATUS "Unable to find glslc - Vulkan shaders will not be compiled")
 endif()
 
 set(_glsl_generatedfiles_PATHS)

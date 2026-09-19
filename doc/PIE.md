@@ -156,6 +156,21 @@ Optional. This starts a list of vertex normals with the number of lines *n*, whi
 
 Each line *must* be indented with a tab. It *must* contain exactly 3 normals (one per indexed vertex in a corresponding polygon line) and each normal *must* contain exactly 3 floating-point values in the *x y z* order.
 
+Normals *must* point **outwards**. (If a `NORMALS` block is absent the engine derives face normals from the polygon winding instead, and those models are shaded flat.)
+
+Supplying `NORMALS` has two consequences beyond smooth shading, both of which matter if the model uses a `NORMALMAP`:
+
+* It is the **only** thing that makes the engine generate tangents, and
+* Tangents are what select the **tangent-space** interpretation of `NORMALMAP`. Without them the normal map is read as **object-space** instead.
+
+So a model with a tangent-space normal map *must* ship a `NORMALS` block, and the count *must* match the number of polygons exactly - on a mismatch the whole block is discarded and the model falls back to the object-space path.
+
+##### Normal map conventions
+
+* Tangent-space normal maps are expected in the standard **OpenGL / Blender convention ("green up")**. Do not flip green to the DirectX convention.
+* Tangents are generated with **MikkTSpace**, the same implementation used by Blender, Substance, xNormal and Marmoset, so a bake from any of those tools matches what the engine renders. (Texture coordinates are handed to it V-flipped, because Warzone's V axis points down the image - this is internal and does not affect how maps should be authored.)
+* **Object-space normal maps cannot be used on geometry with mirrored or otherwise reused UV islands.** An object-space texel stores one absolute direction, so a texel shared between mirrored faces would have to encode two different directions at once. Tangent-space maps have no such restriction (which is why UV mirroring is standard practice with them).
+
 ### POLYGONS
 
 > POLYGONS n

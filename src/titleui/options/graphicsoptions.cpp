@@ -26,7 +26,10 @@
 
 #include "../../warzoneconfig.h"
 #include "../../terrain.h"
+#include "../../atmos.h"
 #include "../../display.h"
+#include "../../display3d.h"
+#include "../../scene_effect_surfaces.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -38,6 +41,14 @@ OptionInfo::AvailabilityResult TerrainShadingQualityAvailable(const OptionInfo&)
 	OptionInfo::AvailabilityResult result;
 	result.available = (getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING);
 	result.localizedUnavailabilityReason = _("Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)");
+	return result;
+}
+
+OptionInfo::AvailabilityResult TerrainDetailAvailable(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = (getTerrainShaderQuality() != TerrainShaderQuality::CLASSIC);
+	result.localizedUnavailabilityReason = _("Terrain Detail is not available when using terrain appearance: Classic");
 	return result;
 }
 
@@ -61,8 +72,34 @@ OptionInfo::AvailabilityResult SupportsShadowMapping(const OptionInfo&)
 OptionInfo::AvailabilityResult PerPixelLightingAvailable(const OptionInfo&)
 {
 	OptionInfo::AvailabilityResult result;
+	if (pie_PointLightPerPixelShaderUnavailable())
+	{
+		result.available = false;
+		result.localizedUnavailabilityReason = _("Advanced lighting is not supported by this graphics driver");
+		return result;
+	}
 	result.available = (getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING);
 	result.localizedUnavailabilityReason = _("Advanced lighting is only available when using terrain appearance: Remastered (HQ)");
+	return result;
+}
+
+OptionInfo::AvailabilityResult PerPixelLightingEnabled(const OptionInfo& optionInfo)
+{
+	OptionInfo::AvailabilityResult result = PerPixelLightingAvailable(optionInfo);
+	if (!result.available)
+	{
+		return result;
+	}
+	result.available = war_getPointLightPerPixelLighting();
+	result.localizedUnavailabilityReason = _("Point Lights are set to Lightmap.");
+	return result;
+}
+
+OptionInfo::AvailabilityResult UpscalingSharpnessAvailable(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1);
+	result.localizedUnavailabilityReason = _("Sharpness applies when Upscaling is set to FSR 1.0.");
 	return result;
 }
 
@@ -121,6 +158,35 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				if (!setTerrainMappingTexturesMaxSize(newValue))
 				{
 					debug(LOG_ERROR, "Failed to set terrain mapping texture quality: %d", newValue);
+					return false;
+				}
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.terrainDetail", N_("Terrain Detail"), N_("The geometric detail of the terrain. Higher settings smooth the terrain mesh, at the expense of memory usage and map load time."));
+		optionInfo.addAvailabilityCondition(TerrainDetailAvailable);
+		auto valueChanger = OptionsDropdown<int32_t>::make(
+			[]() {
+				OptionChoices<int32_t> result;
+				result.choices = {
+					{ _("Off"), _("The classic, low-poly terrain mesh."), 1 },
+					{ _("Medium"), _("Smoothed terrain mesh."), 2 },
+					{ _("High"), _("Smoothed terrain mesh, higher detail."), 3 },
+					{ _("Ultra"), _("Smoothed terrain mesh, highest detail. Uses more memory."), 4 },
+				};
+				if (!result.setCurrentIdxForValue(getTerrainMeshSubdivision()))
+				{
+					result.currentIdx = 0;
+				}
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				if (!setTerrainMeshSubdivision(newValue))
+				{
+					debug(LOG_ERROR, "Failed to set terrain detail: %d", newValue);
 					return false;
 				}
 				return true;
@@ -285,6 +351,46 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
+	{
+		auto optionInfo = OptionInfo("gfx.muzzleFlashLights", N_("Muzzle Flash Lights"), N_("Whether firing weapons light up their surroundings. Rapid fire makes these flicker, which some may prefer to turn off."));
+		optionInfo.addAvailabilityCondition(PerPixelLightingEnabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_getMuzzleFlashLighting());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setMuzzleFlashLighting(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.projectileLights", N_("Projectile Lights"), N_("Whether burning and glowing projectiles light what they pass. (May impact performance. Requires a more powerful GPU.)"));
+		optionInfo.addAvailabilityCondition(PerPixelLightingEnabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_getProjectileLighting());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setProjectileLighting(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
 
 	// Effects:
 	result->addSection(OptionsSection(N_("Effects"), ""), true);
@@ -310,6 +416,30 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				{
 					pie_EnableFog(true);
 				}
+				applySceneEffectSurfaces();
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.ssao", N_("SSAO"), N_("Screen-space ambient occlusion. Darkens creases and contact areas for stronger depth cues. May impact performance."));
+		auto valueChanger = OptionsDropdown<SSAO_MODE>::make(
+			[]() {
+				OptionChoices<SSAO_MODE> result;
+				result.choices = {
+					{ _("Off"), "", SSAO_MODE::OFF },
+					{ _("Low"), "", SSAO_MODE::LOW },
+					{ _("Normal"), "", SSAO_MODE::NORMAL },
+					{ _("High"), "", SSAO_MODE::HIGH },
+					{ _("Ultra"), "", SSAO_MODE::ULTRA },
+				};
+				result.setCurrentIdxForValue(war_getSsaoMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setSsaoMode(newValue);
+				applySceneEffectSurfaces();
 				return true;
 			}, false
 		);
@@ -329,6 +459,25 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			},
 			[](const auto& newValue) -> bool {
 				setShakeStatus(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.weather", N_("Weather"), N_("Show weather effects, like rain and snow, on maps that use them."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(atmosGetWeatherEnabled());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				atmosSetWeatherEnabled(newValue);
 				return true;
 			}, false
 		);
@@ -426,6 +575,100 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("gfx.renderResolution", N_("Render Resolution"), N_("The percentage of the display resolution used to render the 3D world, which is then upscaled to your display. Lower values improve performance at the cost of sharpness. The interface is always rendered at full resolution."));
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			[]() {
+				OptionChoices<uint32_t> result;
+				result.choices = {
+					{ _("Native"), _("Render the 3D world at the full display resolution."), 100 },
+					{ WzString::fromUtf8("75%"), "", 75 },
+					{ WzString::fromUtf8("67%"), "", 67 },
+					{ WzString::fromUtf8("59%"), "", 59 },
+					{ WzString::fromUtf8("50%"), "", 50 },
+					{ WzString::fromUtf8("33%"), "", 33 },
+					{ _("Dynamic"), _("Automatically adjusts render resolution to keep GPU frame times within the display's budget. Requires GPU timing support."), 0 },
+				};
+				uint32_t currValue = war_getRenderResolutionPercent();
+				if (!result.setCurrentIdxForValue(currValue))
+				{
+					// add "Custom" item
+					result.choices.push_back({WzString::format("(Custom: %" PRIu32 "%%)", currValue), "", currValue});
+					result.currentIdx = result.choices.size() - 1;
+				}
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				// dynamic resolution keeps the scene targets at native size,
+				// the controller drives the per frame fraction from there
+				const uint32_t scalePercent = (newValue == 0) ? 100 : newValue;
+				if (!gfx_api::context::get().setSceneRenderScale(scalePercent))
+				{
+					debug(LOG_ERROR, "Failed to set render resolution: %" PRIu32 "%%", scalePercent);
+					return false;
+				}
+				war_setRenderResolutionPercent(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.upscaling", N_("Upscaling"), N_("How the 3D world is upscaled to your display when Render Resolution is below Native. FSR 1.0 (AMD FidelityFX Super Resolution) preserves edges and detail better than bilinear filtering."));
+		auto valueChanger = OptionsDropdown<SCENE_UPSCALING_MODE>::make(
+			[]() {
+				OptionChoices<SCENE_UPSCALING_MODE> result;
+				result.choices = {
+					{ _("Bilinear"), _("Simple bilinear filtering."), SCENE_UPSCALING_MODE::BILINEAR },
+					{ WzString::fromUtf8("FSR 1.0"), _("AMD FidelityFX Super Resolution 1.0, an edge adaptive upscaler with sharpening. Works best combined with antialiasing."), SCENE_UPSCALING_MODE::FSR1 },
+				};
+				result.setCurrentIdxForValue(war_getSceneUpscalingMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				auto gfxMode = (newValue == SCENE_UPSCALING_MODE::FSR1)
+					? gfx_api::context::scene_upscaling_mode::fsr1
+					: gfx_api::context::scene_upscaling_mode::bilinear;
+				if (!gfx_api::context::get().setSceneUpscalingMode(gfxMode))
+				{
+					debug(LOG_ERROR, "Failed to set upscaling mode");
+					return false;
+				}
+				war_setSceneUpscalingMode(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.upscalingSharpness", N_("Upscaling Sharpness"), N_("How much sharpening FSR 1.0 applies to the upscaled image."));
+		optionInfo.addAvailabilityCondition(UpscalingSharpnessAvailable);
+		auto valueChanger = OptionsDropdown<int>::make(
+			[]() {
+				OptionChoices<int> result;
+				result.choices = {
+					{ _("Maximum"), "", 0 },
+					{ _("High"), "", 25 },
+					{ _("Medium"), "", 50 },
+					{ _("Low"), "", 100 },
+				};
+				int currValue = war_getUpscalingSharpness();
+				if (!result.setCurrentIdxForValue(currValue))
+				{
+					// add "Custom" item
+					result.choices.push_back({WzString::format("(Custom: %d)", currValue), "", currValue});
+					result.currentIdx = result.choices.size() - 1;
+				}
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setUpscalingSharpness(newValue);
+				display3d_setUpscalingSharpness(war_getUpscalingSharpness() / 100.f);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
+	{
 		auto optionInfo = OptionInfo("gfx.antialiasing", N_("Antialiasing"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
 		optionInfo.setRequiresRestart(true);
@@ -450,6 +693,33 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			},
 			[](const auto& newValue) -> bool {
 				war_setAntialiasing(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.smaa", N_("SMAA"), N_("Post-process antialiasing over the 3D world. Works alongside Antialiasing and improves FSR 1.0 upscaling quality."));
+		auto valueChanger = OptionsDropdown<SMAA_MODE>::make(
+			[]() {
+				OptionChoices<SMAA_MODE> result;
+				result.choices = {
+					{ _("Off"), "", SMAA_MODE::OFF },
+					{ _("Low"), "", SMAA_MODE::LOW },
+					{ _("Medium"), "", SMAA_MODE::MEDIUM },
+					{ _("High"), "", SMAA_MODE::HIGH },
+					{ _("Ultra"), "", SMAA_MODE::ULTRA },
+				};
+				result.setCurrentIdxForValue(war_getSmaaMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				if (!display3d_setSmaaMode(newValue))
+				{
+					debug(LOG_ERROR, "Failed to set SMAA mode");
+					return false;
+				}
+				war_setSmaaMode(newValue);
 				return true;
 			}, false
 		);

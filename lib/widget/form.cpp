@@ -583,7 +583,10 @@ void W_FULLSCREENOVERLAY_CLICKFORM::run(W_CONTEXT *psContext)
 			onCancelPressed();
 		}
 	}
-	inputLoseFocus();	// clear the input buffer.
+	if (swallowsInput)
+	{
+		inputLoseFocus();	// clear the input buffer.
+	}
 }
 
 void displayChildDropShadows(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)

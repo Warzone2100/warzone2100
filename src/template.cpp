@@ -24,6 +24,7 @@
  *
  */
 #include "lib/framework/frame.h"
+#include "lib/framework/file.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/strres.h"
@@ -39,6 +40,10 @@
 #include "projectile.h"
 #include "main.h"
 #include "research.h"
+#include "game.h"
+#if defined(__EMSCRIPTEN__)
+# include "emscripten_helpers.h"
+#endif
 
 // Template storage
 std::map<UDWORD, std::unique_ptr<DROID_TEMPLATE>> droidTemplates[MAX_PLAYERS];
@@ -51,6 +56,16 @@ bool allowDesign = true;
 bool includeRedundantDesigns = false;
 bool playerBuiltHQ = false;
 
+// The cross-match design store, backed by userdata/<rulesettag>/templates.json.
+// - Read once per match by initTemplates()
+// - Mutated only when the player stores, unstores or deletes a design
+// - Written by templateStoreFlush()
+// Entries stay as the raw JSON that saveTemplateCommon() produces, so a design whose components
+// do not resolve in the current data set survives in the store.
+static nlohmann::json templateStore;        // {"version": 1, "templates": [ ... ]}
+static WzString templateStorePath;
+static bool templateStoreLoaded = false;    // false means the file could not be read, so never write it
+static bool templateStoreDirty = false;
 
 static bool researchedItem(int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
@@ -344,73 +359,214 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 	return designable;
 }
 
+bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &b)
+{
+	return a.droidType == b.droidType
+	       && a.numWeaps == b.numWeaps
+	       && a.asWeaps[0] == b.asWeaps[0]
+	       && a.asWeaps[1] == b.asWeaps[1]
+	       && a.asWeaps[2] == b.asWeaps[2]
+	       && a.asParts[COMP_BODY] == b.asParts[COMP_BODY]
+	       && a.asParts[COMP_PROPULSION] == b.asParts[COMP_PROPULSION]
+	       && a.asParts[COMP_REPAIRUNIT] == b.asParts[COMP_REPAIRUNIT]
+	       && a.asParts[COMP_ECM] == b.asParts[COMP_ECM]
+	       && a.asParts[COMP_SENSOR] == b.asParts[COMP_SENSOR]
+	       && a.asParts[COMP_CONSTRUCT] == b.asParts[COMP_CONSTRUCT]
+	       && a.asParts[COMP_BRAIN] == b.asParts[COMP_BRAIN];
+}
+
+void rebuildLocalTemplates(unsigned player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return; // a spectator has no design screen or factories
+	}
+	localTemplates.clear();
+	for (auto &keyvaluepair : droidTemplates[player])
+	{
+		const DROID_TEMPLATE *psTempl = keyvaluepair.second.get();
+		if (psTempl->prefab || psTempl->hidden)
+		{
+			continue;
+		}
+		localTemplates.push_back(*psTempl);
+	}
+}
+
+// The keys saveTemplateCommon() writes
+// The optional ones are normalized to null so that entries written by different WZ versions compare equal
+static nlohmann::json templateStoreIdentity(const nlohmann::json &entry)
+{
+	static const char *keys[] = {"name", "type", "body", "propulsion", "brain", "repair", "ecm", "sensor", "construct", "weapons"};
+	nlohmann::json identity = nlohmann::json::object();
+	for (const char *key : keys)
+	{
+		auto it = entry.find(key);
+		identity[key] = (it != entry.end()) ? *it : nlohmann::json(nullptr);
+	}
+	return identity;
+}
+
+static nlohmann::json::iterator templateStoreFind(const nlohmann::json &identity)
+{
+	nlohmann::json &entries = templateStore["templates"];
+	for (auto it = entries.begin(); it != entries.end(); ++it)
+	{
+		if (it->is_object() && templateStoreIdentity(*it) == identity)
+		{
+			return it;
+		}
+	}
+	return entries.end();
+}
+
+static bool templateStoreLoad()
+{
+	templateStore = nlohmann::json{{"version", 1}, {"templates", nlohmann::json::array()}};
+	templateStorePath = "userdata/" + WzString(rulesettag) + "/templates.json";
+	templateStoreLoaded = false;
+	templateStoreDirty = false;
+	const std::string path = templateStorePath.toUtf8();
+	if (!PHYSFS_exists(path.c_str()))
+	{
+		templateStoreLoaded = true; // nothing on disk yet
+		return true;
+	}
+	std::vector<char> buffer;
+	if (!loadFileToBufferVector(path.c_str(), buffer, false, false))
+	{
+		debug(LOG_ERROR, "Could not read %s, stored designs will not be persisted this match", path.c_str());
+		return false;
+	}
+	try
+	{
+		nlohmann::json document = nlohmann::json::parse(buffer.begin(), buffer.end());
+		if (!document.is_object())
+		{
+			debug(LOG_ERROR, "%s is not a JSON object", path.c_str());
+			return false;
+		}
+		if (document.value("version", 0) == 0)
+		{
+			templateStoreLoaded = true; // a version 0 file is ignored and overwritten
+			return true;
+		}
+		auto entries = document.find("templates");
+		if (entries == document.end())
+		{
+			document["templates"] = nlohmann::json::array(); // a file written with nothing stored has no array
+		}
+		else if (!entries->is_array())
+		{
+			debug(LOG_ERROR, "%s has a templates value that is not an array", path.c_str());
+			return false;
+		}
+		templateStore = std::move(document);
+		templateStoreLoaded = true;
+		return true;
+	}
+	catch (const std::exception &e)
+	{
+		debug(LOG_ERROR, "%s is not valid JSON (%s)", path.c_str(), e.what());
+		return false;
+	}
+}
+
+static bool templateStoreFlush()
+{
+	if (!templateStoreLoaded || !templateStoreDirty)
+	{
+		return false;
+	}
+	PHYSFS_mkdir(("userdata/" + WzString(rulesettag)).toUtf8().c_str());
+	const bool saved = saveJSONToFile(templateStore, templateStorePath.toUtf8().c_str());
+	templateStoreDirty = !saved;
+#if defined(__EMSCRIPTEN__)
+	WZ_EmscriptenSyncPersistFSChanges(false);
+#endif
+	return saved;
+}
+
+void templateStoreUpsert(const DROID_TEMPLATE &psTemplate)
+{
+	nlohmann::json entry = saveTemplateCommon(&psTemplate);
+	auto it = templateStoreFind(templateStoreIdentity(entry));
+	if (it == templateStore["templates"].end())
+	{
+		templateStore["templates"].push_back(std::move(entry));
+		templateStoreDirty = true;
+	}
+	else if (*it != entry)
+	{
+		*it = std::move(entry);
+		templateStoreDirty = true;
+	}
+}
+
+bool templateStoreEntryMatches(const nlohmann::json &entry, const DROID_TEMPLATE &psTemplate)
+{
+	return templateStoreIdentity(entry) == templateStoreIdentity(saveTemplateCommon(&psTemplate));
+}
+
+void templateStoreRemove(const nlohmann::json &entry)
+{
+	auto it = templateStoreFind(templateStoreIdentity(entry));
+	if (it != templateStore["templates"].end())
+	{
+		templateStore["templates"].erase(it);
+		templateStoreDirty = true;
+	}
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
 
-	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
-	if (!ini.status())
+	if (!templateStoreLoad())
 	{
-		debug(LOG_WZ, "Could not open %s", ini.fileName().toUtf8().c_str());
 		return false;
 	}
-	int version = ini.value("version", 0).toInt();
-	if (version == 0)
+	for (const nlohmann::json &entry : templateStore["templates"])
 	{
-		return true; // too old version
-	}
-	for (ini.beginArray("templates"); ini.remainingArrayItems(); ini.nextArrayItem())
-	{
+		if (!entry.is_object())
+		{
+			continue;
+		}
 		DROID_TEMPLATE design;
-		bool loadCommonSuccess = loadTemplateCommon(ini, design);
+		if (!loadTemplateCommon(entry, design))
+		{
+			debug(LOG_WZ, "Stored template \"%s\" contains a component this data set does not have, keeping it on disk", design.name.toUtf8().c_str());
+			continue;
+		}
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template
 		design.stored = true;
 
-		if (!loadCommonSuccess)
+		if (!intValidTemplate(&design, design.name.toUtf8().c_str(), false, selectedPlayer))
 		{
-			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", design.name.toUtf8().c_str());
-			continue;
-		}
-		bool valid = intValidTemplate(&design, ini.value("name").toWzString().toUtf8().c_str(), false, selectedPlayer);
-		if (!valid)
-		{
-			debug(LOG_ERROR, "Invalid template \"%s\" from stored templates", design.name.toUtf8().c_str());
+			debug(LOG_WZ, "Stored template \"%s\" is not valid in this data set, keeping it on disk", design.name.toUtf8().c_str());
 			continue;
 		}
 		DROID_TEMPLATE *psDestTemplate = nullptr;
 		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 		{
-			psDestTemplate = keyvaluepair.second.get();
-			// Check if template is identical to a loaded template
-			if (psDestTemplate->droidType == design.droidType
-			    && psDestTemplate->name.compare(design.name) == 0
-			    && psDestTemplate->numWeaps == design.numWeaps
-			    && psDestTemplate->asWeaps[0] == design.asWeaps[0]
-			    && psDestTemplate->asWeaps[1] == design.asWeaps[1]
-			    && psDestTemplate->asWeaps[2] == design.asWeaps[2]
-			    && psDestTemplate->asParts[COMP_BODY] == design.asParts[COMP_BODY]
-			    && psDestTemplate->asParts[COMP_PROPULSION] == design.asParts[COMP_PROPULSION]
-			    && psDestTemplate->asParts[COMP_REPAIRUNIT] == design.asParts[COMP_REPAIRUNIT]
-			    && psDestTemplate->asParts[COMP_ECM] == design.asParts[COMP_ECM]
-			    && psDestTemplate->asParts[COMP_SENSOR] == design.asParts[COMP_SENSOR]
-			    && psDestTemplate->asParts[COMP_CONSTRUCT] == design.asParts[COMP_CONSTRUCT]
-			    && psDestTemplate->asParts[COMP_BRAIN] == design.asParts[COMP_BRAIN])
+			DROID_TEMPLATE *psCandidate = keyvaluepair.second.get();
+			if (psCandidate->name.compare(design.name) == 0 && templatesHaveSameComponents(*psCandidate, design))
 			{
+				psDestTemplate = psCandidate;
 				break;
 			}
-			psDestTemplate = nullptr;
 		}
 		if (psDestTemplate)
 		{
 			psDestTemplate->stored = true; // assimilate it
+			psDestTemplate->hidden = false; // the file still has it
 			continue; // next!
 		}
 		design.enabled = allowDesign;
 		copyTemplate(selectedPlayer, &design);
-		localTemplates.push_back(design);
 	}
-	ini.endArray();
+	rebuildLocalTemplates(selectedPlayer);
 	return true;
 }
 
@@ -480,33 +636,16 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 
 bool storeTemplates()
 {
-	if (selectedPlayer >= MAX_PLAYERS) { return false; }
-
-	// Write stored templates (back) to file
-	WzConfig ini("userdata/" + WzString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
-	if (!ini.status() || !ini.isWritable())
-	{
-		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().c_str());
-		return false;
-	}
-	ini.setValue("version", 1); // for breaking backwards compatibility in a nice way
-	ini.beginArray("templates");
-	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-	{
-		const DROID_TEMPLATE *psCurr = keyvaluepair.second.get();
-		if (psCurr->stored)
-		{
-			ini.currentJsonValue() = saveTemplateCommon(psCurr);
-			ini.nextArrayItem();
-		}
-	}
-	ini.endArray();
-	return true;
+	return templateStoreFlush();
 }
 
 bool shutdownTemplates()
 {
-	return storeTemplates();
+	const bool flushed = templateStoreFlush();
+	templateStore = nlohmann::json{{"version", 1}, {"templates", nlohmann::json::array()}};
+	templateStoreLoaded = false;
+	templateStoreDirty = false;
+	return flushed;
 }
 
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
@@ -519,6 +658,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, prefab(false)
 	, stored(false)
 	, enabled(false)
+	, hidden(false)
 {
 	std::fill_n(asParts, DROID_MAXCOMP, static_cast<uint8_t>(0));
 	std::fill_n(asWeaps, MAX_WEAPONS, 0);
@@ -829,7 +969,7 @@ void listTemplates()
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
 		DROID_TEMPLATE *t = keyvaluepair.second.get();
-		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
+		debug(LOG_INFO, "template %s : %ld : %s : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed", t->hidden ? "Hidden" : "Listed");
 	}
 }
 

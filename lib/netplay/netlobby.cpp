@@ -1584,7 +1584,7 @@ void LobbyServerHostingHandlerImpl::sendListingUpdateImpl()
 		const bool hostIdentityChanged = (lastGameDetails.host.publicIdentity != ownedPendingUpdate.value().gameDetails.host.publicIdentity);
 		if (hostIdentityChanged && trustedLobbyServerAddress)
 		{
-			auto attestation = nlohmann::ordered_json(RequestAttestation(ownedPendingUpdate.value().gameDetails.host.name, ownedPendingUpdate.value().hostIdentity, lobbyServerAddress, nullopt));
+			auto attestation = nlohmann::ordered_json(RequestAttestation(ownedPendingUpdate.value().gameDetails.host.name, ownedPendingUpdate.value().hostIdentity, lobbyServerAddress, hostGameCtx.gameId));
 			hostCreateGameInfo["attest"] = attestation;
 		}
 
@@ -2151,7 +2151,7 @@ bool EnumerateGames(const std::string& lobbyServerAddress, CompletionHandlerFunc
 				ASSERT_OR_RETURN(false, jsonData.is_object(), "Received non-object item");
 
 				auto it = jsonData.find("type");
-				if (it != jsonData.end() && it.value().get<std::string>() == "header")
+				if (it != jsonData.end() && it.value().is_string() && it.value().get<std::string>() == "header")
 				{
 					// Found header object
 					if (!headerObject.has_value())

@@ -7,7 +7,9 @@
 #define NEWGL
 #endif
 
-uniform mat4 ProjectionMatrix;
+layout(std140) uniform cbuffer {
+	mat4 ProjectionMatrix;
+};
 
 #ifdef NEWGL
 #define VERTEX_INPUT in

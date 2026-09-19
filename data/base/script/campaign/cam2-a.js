@@ -120,7 +120,7 @@ function sendPlayerTransporter()
 		tWeap.tank.heavyCannon, tWeap.tank.heavyCannon, tWeap.tank.heavyCannon,
 		tWeap.tank.lancer, tWeap.tank.lancer, tWeap.tank.bombard, tWeap.tank.miniRocketArray
 	];
-	const specialList = [tSensor.sensor, tCommand.commander];
+	const specialList = (tweakOptions.noCommander) ? [tSensor.sensor] : [tSensor.sensor, tCommand.commander];
 	const BODY = bodyList[camRand(bodyList.length)];
 	const PROP = propulsionList[camRand(propulsionList.length)];
 
@@ -323,7 +323,7 @@ function setUnitRank(transport)
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
 			const USE_COMMAND_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
-			setDroidExperience(droid, camGetRankThreshold(ranks[mapRun ? 0 : (transporterIndex - 1)], USE_COMMAND_RANK));
+			camSetDroidExperience(droid, camGetRankThreshold(ranks[mapRun ? 0 : (transporterIndex - 1)], USE_COMMAND_RANK));
 		}
 	}
 }

@@ -12,11 +12,42 @@ file(GLOB HEADERS
 	"culling.h"
 	"gfx_api.h"
 	"gfx_api_formats_def.h"
+	"gfx_api_frame_resource_cache.h"
 	"gfx_api_gl.h"
 	"gfx_api_image_basis_priv.h"
 	"gfx_api_image_compress_priv.h"
 	"gfx_api_null.h"
 	"gfx_api_vk.h"
+	"render_graph/attachment.h"
+	"render_graph/blueprint.h"
+	"render_graph/blueprint_materializer.h"
+	"render_graph/cached_render_graph.h"
+	"render_graph/compile.h"
+	"render_graph/layout_subresource.h"
+	"render_graph/layout_timeline.h"
+	"render_graph/read_scope.h"
+	"render_graph/pass_resolve.h"
+	"render_graph/pipeline_surfaces.h"
+	"render_graph/render_pass.h"
+	"render_graph/render_pass_id.h"
+	"render_graph/scene_post_effect_id.h"
+	"render_graph/scene_post_effects.h"
+	"render_graph/topology.h"
+	"vk/frame_layout_tracker.h"
+	"vk/layout_key_builder.h"
+	"vk/layout_sync.h"
+	"vk/layout_translation.h"
+	"vk/pass_layout_key.h"
+	"vk/pre_pass_barrier_emitter.h"
+	"vk/render_pass_layout_cache.h"
+	"vk/screen_frame_coordinator.h"
+	"vk/screenshot_readback.h"
+	"vk/swapchain_presentation_state.h"
+	"vk/wsi_platform_policy.h"
+	"vk/transfer_recorder.h"
+	"vk/transfer_recording_context.h"
+	"vk/warm_entry.h"
+	"vk/wz_vk.h"
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
@@ -34,8 +65,11 @@ file(GLOB HEADERS
 	"pietypes.h"
 	"png_util.h"
 	"screen.h"
+	"smaa_luts.h"
 	"tex.h"
 	"textdraw.h"
+	"3rdparty/AreaTex.h"
+	"3rdparty/SearchTex.h"
 	"3rdparty/stb_image_resize.h"
 )
 
@@ -43,10 +77,23 @@ file(GLOB SRC
 	"bitimage.cpp"
 	"culling.cpp"
 	"gfx_api.cpp"
+	"gfx_api_texture_array_load.cpp"
 	"gfx_api_gl.cpp"
 	"gfx_api_image_basis_priv.cpp"
 	"gfx_api_image_compress_priv.cpp"
 	"gfx_api_null.cpp"
+	"render_graph/blueprint.cpp"
+	"render_graph/blueprint_materializer.cpp"
+	"render_graph/cached_render_graph.cpp"
+	"render_graph/compile.cpp"
+	"render_graph/layout_subresource.cpp"
+	"render_graph/layout_timeline.cpp"
+	"render_graph/read_scope.cpp"
+	"render_graph/frame_blueprint.cpp"
+	"render_graph/pass_resolve.cpp"
+	"render_graph/pipeline_surfaces.cpp"
+	"render_graph/scene_post_effects.cpp"
+	"render_graph/topology.cpp"
 	"gfx_api_vk.cpp"
 	"imdload.cpp"
 	"jpeg_encoder.cpp"
@@ -63,12 +110,14 @@ file(GLOB SRC
 	"piestate.cpp"
 	"${_png_util_cpp}"
 	"screen.cpp"
+	"smaa_luts.cpp"
 	"tex.cpp"
 	"textdraw.cpp"
 	"3rdparty/stb_image_resize.cpp"
 )
 
 add_subdirectory(3rdparty/etcpak)
+add_subdirectory(3rdparty/mikktspace)
 
 if(WZ_USE_SPNG)
 	find_package(SPNG CONFIG REQUIRED)
@@ -87,6 +136,7 @@ include(CheckCXXCompilerFlag)
 
 add_library(ivis-opengl STATIC ${HEADERS} ${SRC})
 set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
+target_include_directories(ivis-opengl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(ivis-opengl)
 
@@ -102,6 +152,7 @@ if(WZ_USE_SPNG)
 else()
 	target_link_libraries(ivis-opengl PRIVATE PNG::PNG)
 endif()
+target_link_libraries(ivis-opengl PRIVATE mikktspace)
 target_link_libraries(ivis-opengl PUBLIC glad)
 target_link_libraries(ivis-opengl PUBLIC optional-lite)
 if (WZ_DEBUG_GFX_API_LEAKS)
@@ -152,6 +203,19 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 		target_sources(ivis-opengl PRIVATE "3rdparty/vkh_info.cpp" "3rdparty/vkh_info.hpp")
 
 		target_sources(ivis-opengl PRIVATE "3rdparty/vk_mem_alloc.cpp" "3rdparty/vk_mem_alloc.h")
+		target_sources(ivis-opengl PRIVATE
+			"vk/frame_layout_tracker.cpp"
+			"vk/layout_key_builder.cpp"
+			"vk/layout_sync.cpp"
+			"vk/layout_translation.cpp"
+			"vk/pass_layout_key.cpp"
+			"vk/pre_pass_barrier_emitter.cpp"
+			"vk/render_pass_layout_cache.cpp"
+			"vk/screen_frame_coordinator.cpp"
+			"vk/screenshot_readback.cpp"
+			"vk/swapchain_presentation_state.cpp"
+			"vk/wsi_platform_policy.cpp"
+			"vk/transfer_recorder.cpp")
 		CHECK_CXX_COMPILER_FLAG(-Wno-pedantic COMPILER_SUPPORTS_WNO_PEDANTIC)
 		if(COMPILER_SUPPORTS_WNO_PEDANTIC)
 			set_source_files_properties("3rdparty/vk_mem_alloc.cpp" PROPERTIES COMPILE_FLAGS -Wno-pedantic)
@@ -162,9 +226,9 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 		add_dependencies(ivis-opengl glsl_compilation)
 	else()
 		if(NOT VulkanHeaders_FOUND)
-			message(STATUS "Vulkan headers not found - disabling Vulkan backend")
+			message(WARNING "WZ_ENABLE_BACKEND_VULKAN is set but Vulkan headers were not found - disabling the Vulkan backend")
 		elseif(NOT TARGET glsl_compilation)
-			message(STATUS "GLSLC shader compiler not found - disabling Vulkan backend")
+			message(WARNING "WZ_ENABLE_BACKEND_VULKAN is set but the glslc shader compiler was not found - disabling the Vulkan backend (install shaderc or the Vulkan SDK, or set GLSLC)")
 		endif()
 	endif()
 endif()
@@ -221,4 +285,32 @@ else()
 
 	add_dependencies(ivis-opengl libjpeg-turbo-ext) # Ensure libjpeg-turbo builds first
 	target_link_libraries(ivis-opengl PRIVATE $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
+endif()
+
+if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
+	# Workaround for Apple requiring min macOS version 13.3 when C++20 is used.
+	# Temporarily require C++17 for ivis-opengl for all platforms, for the sake
+	# of uniformity.
+	set(cpp17_source_files
+		"3rdparty/vkh_renderpasscompat.cpp"
+		"3rdparty/vkh_info.cpp"
+		"gfx_api_vk.cpp"
+		"gfx_api.cpp"
+		"render_graph/compile.cpp"
+		"render_graph/layout_subresource.cpp"
+		"render_graph/layout_timeline.cpp"
+		"render_graph/read_scope.cpp"
+		"vk/frame_layout_tracker.cpp"
+		"vk/layout_key_builder.cpp"
+		"vk/layout_sync.cpp"
+		"vk/layout_translation.cpp"
+		"vk/pass_layout_key.cpp"
+		"vk/pre_pass_barrier_emitter.cpp"
+		"vk/render_pass_layout_cache.cpp"
+		"vk/screen_frame_coordinator.cpp"
+		"vk/screenshot_readback.cpp"
+		"vk/swapchain_presentation_state.cpp"
+		"vk/wsi_platform_policy.cpp"
+		"vk/transfer_recorder.cpp")
+	set_source_files_properties(${cpp17_source_files} PROPERTIES COMPILE_FLAGS "-std=c++17")
 endif()

@@ -182,6 +182,22 @@ void from_json(const nlohmann::json& j, WzCampaignUniverse& v)
 	throw nlohmann::json::type_error::create(302, "universe value is unknown: \"" + str + "\"", &j);
 }
 
+void from_json(const nlohmann::json& j, WzResearchTreeVisibility& v)
+{
+	auto str = j.get<std::string>();
+	if (str == "hidden")
+	{
+		v = WzResearchTreeVisibility::Hidden;
+		return;
+	}
+	else if (str == "greyed")
+	{
+		v = WzResearchTreeVisibility::Greyed;
+		return;
+	}
+	throw nlohmann::json::type_error::create(302, "researchTreeVisibility value is unknown: \"" + str + "\"", &j);
+}
+
 void from_json(const nlohmann::json& j, WzCampaignTweakOption::Type& v)
 {
 	auto str = j.get<std::string>();
@@ -306,6 +322,13 @@ WzCampaignModInfo loadCampaignModInfo(const nlohmann::json& j, const std::string
 
 	// universe
 	v.universe = j.at("universe").get<WzCampaignUniverse>();
+
+	// researchTreeVisibility (optional)
+	auto researchTreeVisibility = j.find("researchTreeVisibility");
+	if (researchTreeVisibility != j.end())
+	{
+		v.researchTreeVisibility = researchTreeVisibility.value().get<WzResearchTreeVisibility>();
+	}
 
 	// camTweakOptions (optional)
 	v.camTweakOptions.clear();

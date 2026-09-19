@@ -1,0 +1,1455 @@
+{
+  "_comment": "Baseline movement bench scorecards, each metric as min/median/max across spawn arrangements. Regenerate with tests/movebench/run.sh --baseline and review the diff. A difference inside a metric's spread is not a result.",
+  "arrangements": [
+    0,
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69,
+    72,
+    75,
+    78
+  ],
+  "freeTravelFloorSecPerTile": 1.8,
+  "scenarios": {
+    "blob": {
+      "arrival_p50": {
+        "max": 300,
+        "median": 269,
+        "min": 245
+      },
+      "arrival_p95": {
+        "max": 2482,
+        "median": 1399,
+        "min": 528
+      },
+      "density_p95": {
+        "max": 15,
+        "median": 14,
+        "min": 13
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 3045,
+        "median": 2789,
+        "min": 2538
+      },
+      "hardStops": {
+        "max": 89926,
+        "median": 67743,
+        "min": 60613
+      },
+      "hardStopsNear": {
+        "max": 82532,
+        "median": 59458,
+        "min": 54773
+      },
+      "hardStopsTransit": {
+        "max": 8285,
+        "median": 7394,
+        "min": 5840
+      },
+      "peakDensity": {
+        "max": 15,
+        "median": 14,
+        "min": 14
+      },
+      "repaths": {
+        "max": 423,
+        "median": 403,
+        "min": 324
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 20.68,
+        "median": 10.76,
+        "min": 2.7
+      },
+      "unitsArrived": {
+        "max": 12,
+        "median": 12,
+        "min": 10
+      },
+      "unitsNear": {
+        "max": 98,
+        "median": 98,
+        "min": 95
+      }
+    },
+    "corner": {
+      "arrival_p50": {
+        "max": 990,
+        "median": 924,
+        "min": 922
+      },
+      "arrival_p95": {
+        "max": 1450,
+        "median": 1349,
+        "min": 1280
+      },
+      "density_p95": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 32,
+        "median": 30,
+        "min": 20
+      },
+      "hardStops": {
+        "max": 384,
+        "median": 239,
+        "min": 74
+      },
+      "hardStopsNear": {
+        "max": 190,
+        "median": 152,
+        "min": 21
+      },
+      "hardStopsTransit": {
+        "max": 194,
+        "median": 87,
+        "min": 53
+      },
+      "peakDensity": {
+        "max": 10,
+        "median": 9,
+        "min": 9
+      },
+      "repaths": {
+        "max": 44,
+        "median": 28,
+        "min": 23
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.53,
+        "median": 4.21,
+        "min": 4.12
+      },
+      "unitsArrived": {
+        "max": 23,
+        "median": 20,
+        "min": 20
+      },
+      "unitsNear": {
+        "max": 24,
+        "median": 24,
+        "min": 23
+      }
+    },
+    "corner_mixed": {
+      "arrival_p50": {
+        "max": 1285,
+        "median": 1236,
+        "min": 1091
+      },
+      "arrival_p95": {
+        "max": 2027,
+        "median": 2015,
+        "min": 1318
+      },
+      "density_p95": {
+        "max": 7,
+        "median": 7,
+        "min": 7
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 149,
+        "median": 73,
+        "min": 45
+      },
+      "hardStops": {
+        "max": 1133,
+        "median": 675,
+        "min": 233
+      },
+      "hardStopsNear": {
+        "max": 762,
+        "median": 286,
+        "min": 13
+      },
+      "hardStopsTransit": {
+        "max": 389,
+        "median": 371,
+        "min": 220
+      },
+      "peakDensity": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "repaths": {
+        "max": 72,
+        "median": 62,
+        "min": 30
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 6.53,
+        "median": 6.29,
+        "min": 4.25
+      },
+      "unitsArrived": {
+        "max": 20,
+        "median": 19,
+        "min": 13
+      },
+      "unitsNear": {
+        "max": 24,
+        "median": 23,
+        "min": 23
+      }
+    },
+    "counterflow_cyborg": {
+      "arrival_p50": {
+        "max": 1084,
+        "median": 640,
+        "min": 309
+      },
+      "arrival_p95": {
+        "max": 3325,
+        "median": 863,
+        "min": 474
+      },
+      "density_p95": {
+        "max": 38,
+        "median": 32,
+        "min": 29
+      },
+      "formationSpreadTiles": {
+        "max": 11,
+        "median": 11,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 8,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 159158,
+        "median": 9858,
+        "min": 2944
+      },
+      "hardStopsNear": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 159158,
+        "median": 9858,
+        "min": 2944
+      },
+      "peakDensity": {
+        "max": 39,
+        "median": 33,
+        "min": 29
+      },
+      "repaths": {
+        "max": 2835,
+        "median": 213,
+        "min": 53
+      },
+      "resolved": {
+        "count": 23,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 13.3,
+        "median": 3.93,
+        "min": 2.25
+      },
+      "unitsArrived": {
+        "max": 48,
+        "median": 48,
+        "min": 12
+      },
+      "unitsNear": {
+        "max": 48,
+        "median": 48,
+        "min": 12
+      }
+    },
+    "counterflow_hostile": {
+      "arrival_p50": {
+        "max": 4578,
+        "median": 1150,
+        "min": 314
+      },
+      "arrival_p95": {
+        "max": 4665,
+        "median": 1214,
+        "min": 314
+      },
+      "density_p95": {
+        "max": 29,
+        "median": 25,
+        "min": 21
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 10,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 12,
+        "median": 3,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 101755,
+        "median": 15863,
+        "min": 2062
+      },
+      "hardStopsNear": {
+        "max": 28,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 101755,
+        "median": 15857,
+        "min": 2061
+      },
+      "peakDensity": {
+        "max": 29,
+        "median": 27,
+        "min": 22
+      },
+      "repaths": {
+        "max": 2425,
+        "median": 345,
+        "min": 50
+      },
+      "resolved": {
+        "count": 22,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 27.31,
+        "median": 6.82,
+        "min": 1.74
+      },
+      "unitsArrived": {
+        "max": 32,
+        "median": 32,
+        "min": 1
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 1
+      }
+    },
+    "counterflow_tracked": {
+      "arrival_p50": {
+        "max": 4137,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 4587,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 16,
+        "median": 14,
+        "min": 13
+      },
+      "formationSpreadTiles": {
+        "max": 9,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 20,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 100383,
+        "median": 80681,
+        "min": 25664
+      },
+      "hardStopsNear": {
+        "max": 8,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 100383,
+        "median": 80681,
+        "min": 25656
+      },
+      "peakDensity": {
+        "max": 17,
+        "median": 15,
+        "min": 13
+      },
+      "repaths": {
+        "max": 2365,
+        "median": 2271,
+        "min": 828
+      },
+      "resolved": {
+        "count": 1,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 24.58,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "unitsArrived": {
+        "max": 24,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "counterflow_w1": {
+      "arrival_p50": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 16,
+        "median": 13,
+        "min": 12
+      },
+      "formationSpreadTiles": {
+        "max": 1,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 100372,
+        "median": 79848,
+        "min": 67033
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 100372,
+        "median": 79848,
+        "min": 67033
+      },
+      "peakDensity": {
+        "max": 16,
+        "median": 14,
+        "min": 12
+      },
+      "repaths": {
+        "max": 2351,
+        "median": 2290,
+        "min": 2202
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "unitsArrived": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "counterflow_w3": {
+      "arrival_p50": {
+        "max": 3453,
+        "median": 1356,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 4980,
+        "median": 2417,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 15,
+        "median": 14,
+        "min": 11
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 25,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 103491,
+        "median": 73128,
+        "min": 5914
+      },
+      "hardStopsNear": {
+        "max": 691,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 103491,
+        "median": 73128,
+        "min": 5911
+      },
+      "peakDensity": {
+        "max": 15,
+        "median": 14,
+        "min": 12
+      },
+      "repaths": {
+        "max": 2352,
+        "median": 1934,
+        "min": 293
+      },
+      "resolved": {
+        "count": 9,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 31.12,
+        "median": 13.16,
+        "min": 0.0
+      },
+      "unitsArrived": {
+        "max": 30,
+        "median": 5,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 5,
+        "min": 0
+      }
+    },
+    "counterflow_w4": {
+      "arrival_p50": {
+        "max": 3704,
+        "median": 862,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 3899,
+        "median": 1201,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 14,
+        "median": 10,
+        "min": 8
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 9,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 37,
+        "median": 23,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 98718,
+        "median": 3076,
+        "min": 691
+      },
+      "hardStopsNear": {
+        "max": 52,
+        "median": 11,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 98718,
+        "median": 3070,
+        "min": 679
+      },
+      "peakDensity": {
+        "max": 14,
+        "median": 12,
+        "min": 10
+      },
+      "repaths": {
+        "max": 2415,
+        "median": 185,
+        "min": 65
+      },
+      "resolved": {
+        "count": 25,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 21.66,
+        "median": 5.73,
+        "min": 0.0
+      },
+      "unitsArrived": {
+        "max": 29,
+        "median": 25,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 0
+      }
+    },
+    "counterflow_w6": {
+      "arrival_p50": {
+        "max": 619,
+        "median": 498,
+        "min": 421
+      },
+      "arrival_p95": {
+        "max": 941,
+        "median": 744,
+        "min": 633
+      },
+      "density_p95": {
+        "max": 11,
+        "median": 8,
+        "min": 8
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 9,
+        "min": 9
+      },
+      "giveUps": {
+        "max": 35,
+        "median": 19,
+        "min": 10
+      },
+      "hardStops": {
+        "max": 1214,
+        "median": 367,
+        "min": 91
+      },
+      "hardStopsNear": {
+        "max": 68,
+        "median": 7,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 1160,
+        "median": 359,
+        "min": 89
+      },
+      "peakDensity": {
+        "max": 13,
+        "median": 9,
+        "min": 8
+      },
+      "repaths": {
+        "max": 63,
+        "median": 37,
+        "min": 15
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.09,
+        "median": 3.46,
+        "min": 2.87
+      },
+      "unitsArrived": {
+        "max": 28,
+        "median": 25,
+        "min": 21
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 32
+      }
+    },
+    "counterflow_w8": {
+      "arrival_p50": {
+        "max": 495,
+        "median": 445,
+        "min": 385
+      },
+      "arrival_p95": {
+        "max": 814,
+        "median": 636,
+        "min": 516
+      },
+      "density_p95": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 9,
+        "min": 9
+      },
+      "giveUps": {
+        "max": 25,
+        "median": 13,
+        "min": 6
+      },
+      "hardStops": {
+        "max": 389,
+        "median": 101,
+        "min": 21
+      },
+      "hardStopsNear": {
+        "max": 51,
+        "median": 6,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 367,
+        "median": 90,
+        "min": 14
+      },
+      "peakDensity": {
+        "max": 10,
+        "median": 9,
+        "min": 8
+      },
+      "repaths": {
+        "max": 22,
+        "median": 13,
+        "min": 2
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 3.7,
+        "median": 3.0,
+        "min": 2.63
+      },
+      "unitsArrived": {
+        "max": 30,
+        "median": 28,
+        "min": 25
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 32
+      }
+    },
+    "crossing": {
+      "arrival_p50": {
+        "max": 4715,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 4966,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 16,
+        "median": 14,
+        "min": 13
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 4,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 111635,
+        "median": 96731,
+        "min": 48467
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 111635,
+        "median": 96731,
+        "min": 48467
+      },
+      "peakDensity": {
+        "max": 16,
+        "median": 14,
+        "min": 13
+      },
+      "repaths": {
+        "max": 2357,
+        "median": 2275,
+        "min": 1269
+      },
+      "resolved": {
+        "count": 1,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 21.59,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "unitsArrived": {
+        "max": 29,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "enemyblock": {
+      "arrival_p50": {
+        "max": 592,
+        "median": 397,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 592,
+        "median": 397,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "formationSpreadTiles": {
+        "max": 5,
+        "median": 4,
+        "min": 0
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 630,
+        "median": 355,
+        "min": 288
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 630,
+        "median": 355,
+        "min": 288
+      },
+      "peakDensity": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "repaths": {
+        "max": 32,
+        "median": 25,
+        "min": 20
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 3.48,
+        "median": 2.48,
+        "min": 0.0
+      },
+      "unitsArrived": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      }
+    },
+    "enemyblock_press": {
+      "arrival_p50": {
+        "max": 670,
+        "median": 545,
+        "min": 462
+      },
+      "arrival_p95": {
+        "max": 883,
+        "median": 832,
+        "min": 824
+      },
+      "density_p95": {
+        "max": 12,
+        "median": 12,
+        "min": 11
+      },
+      "formationSpreadTiles": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
+      "giveUps": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 5519,
+        "median": 5400,
+        "min": 4044
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 5519,
+        "median": 5400,
+        "min": 4044
+      },
+      "peakDensity": {
+        "max": 13,
+        "median": 12,
+        "min": 12
+      },
+      "repaths": {
+        "max": 117,
+        "median": 116,
+        "min": 96
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.84,
+        "median": 4.41,
+        "min": 3.97
+      },
+      "unitsArrived": {
+        "max": 10,
+        "median": 8,
+        "min": 7
+      },
+      "unitsNear": {
+        "max": 11,
+        "median": 8,
+        "min": 7
+      }
+    },
+    "oneway_tracked": {
+      "arrival_p50": {
+        "max": 428,
+        "median": 406,
+        "min": 368
+      },
+      "arrival_p95": {
+        "max": 682,
+        "median": 663,
+        "min": 608
+      },
+      "density_p95": {
+        "max": 7,
+        "median": 6,
+        "min": 6
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 29,
+        "median": 19,
+        "min": 13
+      },
+      "hardStops": {
+        "max": 42,
+        "median": 9,
+        "min": 9
+      },
+      "hardStopsNear": {
+        "max": 20,
+        "median": 9,
+        "min": 5
+      },
+      "hardStopsTransit": {
+        "max": 22,
+        "median": 4,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "repaths": {
+        "max": 8,
+        "median": 7,
+        "min": 5
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 3.24,
+        "median": 3.01,
+        "min": 2.9
+      },
+      "unitsArrived": {
+        "max": 12,
+        "median": 11,
+        "min": 11
+      },
+      "unitsNear": {
+        "max": 16,
+        "median": 16,
+        "min": 16
+      }
+    },
+    "openfield": {
+      "arrival_p50": {
+        "max": 699,
+        "median": 684,
+        "min": 668
+      },
+      "arrival_p95": {
+        "max": 774,
+        "median": 740,
+        "min": 738
+      },
+      "density_p95": {
+        "max": 6,
+        "median": 5,
+        "min": 5
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 3,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 2.03,
+        "median": 1.94,
+        "min": 1.94
+      },
+      "unitsArrived": {
+        "max": 40,
+        "median": 40,
+        "min": 39
+      },
+      "unitsNear": {
+        "max": 40,
+        "median": 40,
+        "min": 40
+      }
+    },
+    "parking": {
+      "arrival_p50": {
+        "max": 600,
+        "median": 489,
+        "min": 425
+      },
+      "arrival_p95": {
+        "max": 884,
+        "median": 634,
+        "min": 493
+      },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 3
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 8,
+        "median": 3,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 166,
+        "median": 3,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 166,
+        "median": 3,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
+      "repaths": {
+        "max": 8,
+        "median": 2,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.64,
+        "median": 3.34,
+        "min": 2.59
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 6
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      }
+    },
+    "separating": {
+      "arrival_p50": {
+        "max": 3235,
+        "median": 1137,
+        "min": 778
+      },
+      "arrival_p95": {
+        "max": 3450,
+        "median": 1523,
+        "min": 1024
+      },
+      "density_p95": {
+        "max": 14,
+        "median": 11,
+        "min": 8
+      },
+      "formationSpreadTiles": {
+        "max": 12,
+        "median": 12,
+        "min": 12
+      },
+      "giveUps": {
+        "max": 28,
+        "median": 16,
+        "min": 6
+      },
+      "hardStops": {
+        "max": 41615,
+        "median": 4053,
+        "min": 623
+      },
+      "hardStopsNear": {
+        "max": 59,
+        "median": 6,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 41613,
+        "median": 3994,
+        "min": 619
+      },
+      "peakDensity": {
+        "max": 15,
+        "median": 12,
+        "min": 9
+      },
+      "repaths": {
+        "max": 1148,
+        "median": 237,
+        "min": 73
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 18.01,
+        "median": 7.96,
+        "min": 5.12
+      },
+      "unitsArrived": {
+        "max": 31,
+        "median": 28,
+        "min": 25
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 32
+      }
+    },
+    "strafe": {
+      "arrival_p50": {
+        "max": 106,
+        "median": 104,
+        "min": 94
+      },
+      "arrival_p95": {
+        "max": 149,
+        "median": 144,
+        "min": 142
+      },
+      "density_p95": {
+        "max": 11,
+        "median": 11,
+        "min": 11
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 39,
+        "median": 38,
+        "min": 35
+      },
+      "hardStops": {
+        "max": 2207,
+        "median": 1944,
+        "min": 1651
+      },
+      "hardStopsNear": {
+        "max": 701,
+        "median": 474,
+        "min": 416
+      },
+      "hardStopsTransit": {
+        "max": 1528,
+        "median": 1506,
+        "min": 1177
+      },
+      "peakDensity": {
+        "max": 12,
+        "median": 12,
+        "min": 12
+      },
+      "repaths": {
+        "max": 43,
+        "median": 41,
+        "min": 38
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 8.5,
+        "median": 3.9,
+        "min": 3.03
+      },
+      "unitsArrived": {
+        "max": 7,
+        "median": 4,
+        "min": 3
+      },
+      "unitsNear": {
+        "max": 26,
+        "median": 18,
+        "min": 17
+      }
+    },
+    "tworoute": {
+      "arrival_p50": {
+        "max": 870,
+        "median": 697,
+        "min": 559
+      },
+      "arrival_p95": {
+        "max": 4896,
+        "median": 1101,
+        "min": 791
+      },
+      "density_p95": {
+        "max": 14,
+        "median": 9,
+        "min": 7
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 10,
+        "min": 6
+      },
+      "giveUps": {
+        "max": 8,
+        "median": 1,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 61335,
+        "median": 1000,
+        "min": 253
+      },
+      "hardStopsNear": {
+        "max": 22,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 61335,
+        "median": 999,
+        "min": 253
+      },
+      "peakDensity": {
+        "max": 15,
+        "median": 10,
+        "min": 8
+      },
+      "repaths": {
+        "max": 1438,
+        "median": 89,
+        "min": 50
+      },
+      "resolved": {
+        "count": 24,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 30.28,
+        "median": 5.96,
+        "min": 4.75
+      },
+      "unitsArrived": {
+        "max": 32,
+        "median": 31,
+        "min": 12
+      },
+      "unitsNear": {
+        "max": 32,
+        "median": 32,
+        "min": 12
+      }
+    }
+  }
+}

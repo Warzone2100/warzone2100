@@ -56,6 +56,13 @@
 
 #include "lib/netplay/sync_debug.h"
 #include "game_world.h"
+#include "congestion_overlay.h"
+#include "pathfinding_backend.h"
+#include "corridor_map.h"
+
+#if WZ_PATHFINDING_INSTRUMENTATION
+uint64_t *g_pathNodesExpanded = nullptr;
+#endif
 
 /// A coordinate.
 struct PathCoord
@@ -174,14 +181,16 @@ struct PathfindContext
 	{
 		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * gameWorld.map.width];
 	}
-	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
+	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
-		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
+		// The overlay pointer is part of the key too, so a context built for one cohort's traffic is never reused for another's.
+		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && overlay == overlay_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
+	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
+		overlay = overlay_;
 		tileS = tileS_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
@@ -210,6 +219,7 @@ struct PathfindContext
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
 	std::shared_ptr<const PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
+	std::shared_ptr<const DynamicCostOverlay> overlay;  ///< Flow soft cost consumed by fpathNewNode, null for the legacy backend.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
@@ -269,6 +279,14 @@ static inline unsigned WZ_DECL_PURE fpathGoodEstimate(PathCoord s, PathCoord f)
 
 /** Generate a new node
  */
+// Flow-cost scale: with facing vectors summed at 64 per body and edge deltas
+// at 64 per axis, one opposing body met head-on prices about one tile step.
+constexpr int32_t FLOW_COST_SHIFT = 5;
+constexpr int32_t FLOW_COST_CAP = 1120;   // at most eight steps of cost from one tile's flow
+constexpr int32_t FLOW_DEST_EXEMPT = 840; // no flow pricing within ~6 tiles of the search's own goal
+constexpr int32_t MASS_COST_CAP = 1120;   // parity with the flow cap, at most eight steps from one tile's crowd
+constexpr int32_t MASS_START_EXEMPT = 420; // no mass pricing within ~3 tiles of the search's start
+
 static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
 {
 	ASSERT_OR_RETURN(, (unsigned)pos.x < (unsigned)gameWorld.map.width && (unsigned)pos.y < (unsigned)gameWorld.map.height, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
@@ -276,12 +294,68 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 	// Create the node.
 	PathNode node;
 	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
-	node.p = pos;
-	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor;
-	node.est = node.dist + fpathGoodEstimate(pos, dest);
-
 	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y) * 64;
 	bool isDiagonal = delta.x && delta.y;
+	// Soft cost for arriving at this tile, added on top of the step. Flow
+	// prices arriving AGAINST the facing of the units holding the tile, so it
+	// depends on the arrival direction, and any tile carrying flow must also
+	// skip the interpolation below, whose arithmetic assumes
+	// direction-independent step costs.
+	unsigned overlayCost = 0;
+	bool tileHasFlow = false;
+	if (context.overlay)
+	{
+		const size_t tileIdx = static_cast<size_t>(pos.x) + static_cast<size_t>(pos.y) * gameWorld.map.width;
+		if (!context.overlay->flowX.empty())
+		{
+			const int32_t fx = context.overlay->flowX[tileIdx];
+			const int32_t fy = context.overlay->flowY[tileIdx];
+			if (context.overlay->consumeFlow)
+			{
+				tileHasFlow = fx != 0 || fy != 0;
+				const int32_t dot = delta.x * fx + delta.y * fy;
+				// No flow pricing close to this search's own destination: a goal
+				// crowd faces outward, and charging arrivals for their own crowd
+				// sends them circling it instead of parking. Note the cached
+				// context can run the search reversed, in which case this exempts
+				// the origin side instead - measured better than exempting both.
+				if (dot < 0 && fpathGoodEstimate(pos, dest) > FLOW_DEST_EXEMPT)
+				{
+					overlayCost += std::min<int32_t>(FLOW_COST_CAP, -dot >> FLOW_COST_SHIFT);
+				}
+			}
+			if (context.overlay->consumeMass && !context.overlay->mass.empty())
+			{
+				// Mass prices only tiles whose occupants are not moving
+				// coherently. An aligned column's summed facing keeps its L1
+				// length near or above the tile's mass, a parked or canceled
+				// crowd's falls far below, so single bodies and columns stay
+				// free and only real crowds pay. The cost is the same from
+				// every arrival direction, so context sharing stays exact.
+				// Not destination-exempted: symmetric cost spreads approaches
+				// around a goal crowd, the circling risk is specific to
+				// directional cost.
+				// A droid standing inside a parked crowd must plan out through
+				// its neighbors: with those tiles priced, every escape route
+				// detours around bodies it could shove past, the first
+				// waypoints never clear, and the blocked watchdog cycles it
+				// against its own crowd for the rest of the run. The radius
+				// keys on the context's start tile, so shared contexts stay
+				// valid, and a reversed context exempts the goal side instead,
+				// which measured harmless: the crowd tiles beyond the radius
+				// still price every approach.
+				const int32_t m = context.overlay->mass[tileIdx];
+				if (m > 0 && (abs(fx) + abs(fy)) * 2 < m
+				    && fpathGoodEstimate(pos, context.tileS) > MASS_START_EXEMPT)
+				{
+					overlayCost += std::min<int32_t>(MASS_COST_CAP, m);
+				}
+			}
+		}
+	}
+	node.p = pos;
+	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor + overlayCost;
+	node.est = node.dist + fpathGoodEstimate(pos, dest);
 
 	PathExploredTile &expl = context.map[pos.x + pos.y * gameWorld.map.width];
 	if (expl.iteration == context.iteration)
@@ -293,7 +367,11 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 		Vector2i deltaA = delta;
 		Vector2i deltaB = Vector2i(expl.dx, expl.dy);
 		Vector2i deltaDelta = deltaA - deltaB;  // Vector pointing from current considered source tile leading to pos, to the previously considered source tile leading to pos.
-		if (abs(deltaDelta.x) + abs(deltaDelta.y) == 64)
+		// Skip the interpolation when this tile carries overlay cost. It smooths a
+		// path by backing the step cost out of the distance, which the extra
+		// overlay term would throw off. The overlay cost is the same from either
+		// source tile, so both visits skip together and the search stays exact.
+		if (overlayCost == 0 && !tileHasFlow && abs(deltaDelta.x) + abs(deltaDelta.y) == 64)
 		{
 			// prevPos is tile A or B, and pos is tile P. We were previously called with prevPos being tile B or A, and pos tile P.
 			// We want to find the distance to tile P, taking into account that the actual shortest path involves coming from somewhere between tile A and tile B.
@@ -368,6 +446,13 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 		}
 		context.map[node.p.x + node.p.y * gameWorld.map.width].visited = true;
 
+#if WZ_PATHFINDING_INSTRUMENTATION
+		if (g_pathNodesExpanded)
+		{
+			++*g_pathNodesExpanded;
+		}
+#endif
+
 		// note the nearest node to the target so far
 		if (node.est - node.dist < nearestDist)
 		{
@@ -431,9 +516,9 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, const std::shared_ptr<const DynamicCostOverlay> &overlay, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
 {
-	context.assign(blockingMap, tileS, dstIgnore);
+	context.assign(blockingMap, overlay, tileS, dstIgnore);
 
 	// Add the start point to the open list
 	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
@@ -483,8 +568,8 @@ public:
 
 		reference operator[](difference_type n) const { return m_list.contexts[m_list.orderedIndexes[n]]; }
 
-		bool operator== (const Iterator& other) { return m_idx == other.m_idx; }
-		bool operator!= (const Iterator& other) { return m_idx != other.m_idx; }
+		bool operator== (const Iterator& other) const { return m_idx == other.m_idx; }
+		bool operator!= (const Iterator& other) const { return m_idx != other.m_idx; }
 		bool operator< (const Iterator& other) const { return m_idx < other.m_idx; }
 		bool operator> (const Iterator& other) const { return m_idx > other.m_idx; }
 		bool operator<= (const Iterator& other) const { return m_idx <= other.m_idx; }
@@ -577,6 +662,317 @@ std::shared_ptr<FPathExecuteContext> makeFPathExecuteContext()
 	return std::make_shared<FPathExecuteContextImpl>();
 }
 
+// ---- route shaping ----
+// Accepted routes are shaped on the path worker threads after the search: the
+// spine stands off walls, then each direction offsets to its own right so
+// opposing flows sharing a line ride parallel lanes with no crossing points.
+// A pure function of the path, the job's blocking snapshot and the load-time
+// corridor map, so it is deterministic, identical on every client and stable
+// under replanning.
+
+constexpr int32_t WALL_CLEAR = 448;                 // target clearance between the spine and blocking ground
+constexpr int32_t KEEP_RIGHT_HALF = 192;            // lateral shift to each route's right, half the opposing separation
+constexpr int32_t SUBLANE_STEP = 64;                // id-hashed sub-lane spread around the lane line, so a
+                                                    // direction's column marches several files wide, not one
+constexpr int32_t KEEP_RIGHT_RAMP = 384;            // the shift ramps in over this much arc from the route start
+constexpr int32_t KEEP_RIGHT_DEST_RAMP = 1024;      // and back out over this much before the destination, converging
+                                                    // approaches rotate their offsets so crowds must gather unshifted
+
+static bool bendBlockedTile(const PATHJOB *psJob, int tx, int ty)
+{
+	if (tx < 0 || ty < 0 || tx >= gameWorld.map.width || ty >= gameWorld.map.height)
+	{
+		return true;
+	}
+	return psJob->blockingMap->map[tx + ty * gameWorld.map.width];
+}
+
+/// The largest outward offset up to want, in 32wu steps, whose landing tile
+/// and the tile half a step beyond are both clear, so a shaped point never
+/// lands against a wall face. Zero when even the smallest step is blocked.
+static int32_t bendAllowedOffset(const PATHJOB *psJob, Vector2i p, Vector2i outwardStep, int32_t want)
+{
+	for (int32_t o = want; o > 0; o -= 32)
+	{
+		Vector2i q(p.x + outwardStep.x * o / TILE_UNITS, p.y + outwardStep.y * o / TILE_UNITS);
+		Vector2i qm = map_coord(q);
+		Vector2i qb = map_coord(Vector2i(q.x + outwardStep.x / 2, q.y + outwardStep.y / 2));
+		if (!bendBlockedTile(psJob, qm.x, qm.y) && !bendBlockedTile(psJob, qb.x, qb.y))
+		{
+			return o;
+		}
+	}
+	return 0;
+}
+
+// How far the lane pass looks for room beside the route, and the widest shift
+// it will ask for. A fixed lane-width nudge does nothing in a wide channel, so
+// the shift follows the room instead.
+constexpr int32_t LANE_PROBE_FAR = 8 * TILE_UNITS;
+constexpr int32_t KEEP_RIGHT_MAX = 640;
+
+constexpr int32_t WALL_PROBE_STEP = 64;
+constexpr int32_t WALL_KEEP = 320;                  // lane offsets stop this far from a wall face
+
+/// Room beside a point on one side, a tile at a time out to LANE_PROBE_FAR.
+/// Coarser and longer-reaching than wallDistance, which only needs to resolve
+/// the near wall the clearance floor is measured against.
+static int32_t laneRoom(const PATHJOB *psJob, Vector2i p, Vector2i stepT)
+{
+	for (int32_t d = TILE_UNITS; d <= LANE_PROBE_FAR; d += TILE_UNITS)
+	{
+		Vector2i t = map_coord(Vector2i(p.x + stepT.x * d / TILE_UNITS, p.y + stepT.y * d / TILE_UNITS));
+		if (bendBlockedTile(psJob, t.x, t.y))
+		{
+			return d - TILE_UNITS;
+		}
+	}
+	return LANE_PROBE_FAR;
+}
+
+/// Distance from a point to the first blocking tile along a one-tile
+/// perpendicular step, probed coarsely, capped just past WALL_CLEAR.
+static int32_t wallDistance(const PATHJOB *psJob, Vector2i p, Vector2i stepT)
+{
+	for (int32_t d = WALL_PROBE_STEP; d <= WALL_CLEAR; d += WALL_PROBE_STEP)
+	{
+		Vector2i t = map_coord(Vector2i(p.x + stepT.x * d / TILE_UNITS, p.y + stepT.y * d / TILE_UNITS));
+		if (bendBlockedTile(psJob, t.x, t.y))
+		{
+			return d;
+		}
+	}
+	return WALL_CLEAR + WALL_PROBE_STEP;
+}
+
+/// Stands the whole route off walls: wherever the path runs beside blocking
+/// ground with open ground on the other side, the spine moves away from the
+/// wall toward a target clearance, and where walls flank both sides it edges
+/// toward the middle. String-pulled routes hug walls along every leg of a
+/// corner, not only at the bend, so a bend-scoped standoff leaves the legs
+/// scraping - this pass replaces it. It keeps off claimed corridor ground,
+/// ramps at the endpoints, probes clearance and limits slope like the lane
+/// pass that runs after it, so both directions offset from one
+/// wall-respecting spine.
+static void fpathWallClearance(const PATHJOB *psJob, MOVE_CONTROL *psMove)
+{
+	std::vector<Vector2i> &path = psMove->asPath;
+	const size_t n = path.size();
+	if (n < 4)
+	{
+		return;
+	}
+	const CorridorMap *cmap = gameWorld.map.corridors.get();
+
+	static thread_local std::vector<int32_t> arcFwd;
+	arcFwd.assign(n, 0);
+	for (size_t k = 1; k < n; ++k)
+	{
+		arcFwd[k] = arcFwd[k - 1] + iHypot(path[k] - path[k - 1]);
+	}
+	const int32_t total = arcFwd[n - 1];
+	if (total < KEEP_RIGHT_RAMP + KEEP_RIGHT_DEST_RAMP)
+	{
+		return;
+	}
+
+	static thread_local std::vector<int32_t> want;
+	static thread_local std::vector<Vector2i> awayStep;
+	want.assign(n, 0);
+	awayStep.assign(n, Vector2i(0, 0));
+
+	for (size_t k = 1; k + 1 < n; ++k)
+	{
+		Vector2i d = path[k + 1] - path[k - 1];
+		int32_t len = iHypot(d);
+		if (len == 0)
+		{
+			continue;
+		}
+		Vector2i t = map_coord(path[k]);
+		if (cmap != nullptr && cmap->claimed(t.x, t.y))
+		{
+			continue;
+		}
+		Vector2i right(-d.y * TILE_UNITS / len, d.x * TILE_UNITS / len);
+		if (right.x == 0 && right.y == 0)
+		{
+			continue;
+		}
+		Vector2i left(-right.x, -right.y);
+		const int32_t dR = wallDistance(psJob, path[k], right);
+		const int32_t dL = wallDistance(psJob, path[k], left);
+		if (dR > WALL_CLEAR && dL > WALL_CLEAR)
+		{
+			continue;   // open ground both sides
+		}
+		int32_t desired;
+		Vector2i away;
+		if (dR <= WALL_CLEAR && dL <= WALL_CLEAR)
+		{
+			// walls both sides: edge toward the middle
+			desired = (std::max(dR, dL) - std::min(dR, dL)) / 2;
+			away = dR < dL ? left : right;
+		}
+		else
+		{
+			const int32_t nearDist = std::min(dR, dL);
+			desired = WALL_CLEAR - nearDist;
+			away = dR < dL ? left : right;
+		}
+		if (desired <= 0)
+		{
+			continue;
+		}
+		desired = std::min(desired, desired * arcFwd[k] / KEEP_RIGHT_RAMP);
+		desired = std::min(desired, desired * (total - arcFwd[k]) / KEEP_RIGHT_DEST_RAMP);
+		if (desired <= 0)
+		{
+			continue;
+		}
+		awayStep[k] = away;
+		want[k] = bendAllowedOffset(psJob, path[k], away, desired);
+	}
+
+	// Slope limit at 1/2 against zero boundaries, steeper than the lane pass
+	// so the clearance can develop over the few tiles a leg gives it.
+	for (size_t k = 1; k + 1 < n; ++k)
+	{
+		int32_t seg = arcFwd[k] - arcFwd[k - 1];
+		want[k] = std::min(want[k], want[k - 1] + seg / 2);
+	}
+	for (size_t k = n - 1; k-- > 1; )
+	{
+		int32_t seg = arcFwd[k + 1] - arcFwd[k];
+		want[k] = std::min(want[k], want[k + 1] + seg / 2);
+	}
+
+	for (size_t k = 1; k + 1 < n; ++k)
+	{
+		if (want[k] > 0)
+		{
+			path[k].x += awayStep[k].x * want[k] / TILE_UNITS;
+			path[k].y += awayStep[k].y * want[k] / TILE_UNITS;
+		}
+	}
+
+}
+
+
+/// Shifts the whole route to its own right on unclaimed ground, so two
+/// opposing flows sharing a line ride parallel offset lines instead of
+/// meeting head on, along legs and corners alike, with no crossing points
+/// anywhere. Runs after the corner standoff, so both directions offset from
+/// one shared spine. The shift ramps in from zero at both route ends, drops
+/// to zero on ground the corridor layer claims, is clearance probed per
+/// point and slope limited so a clamp never leaves a lateral step.
+static void fpathKeepRightOffset(const PATHJOB *psJob, MOVE_CONTROL *psMove)
+{
+	std::vector<Vector2i> &path = psMove->asPath;
+	const size_t n = path.size();
+	if (n < 4)
+	{
+		return;
+	}
+	// Three sub-lanes per direction, chosen by droid id, so the offset is
+	// stable across this droid's reroutes but the column spreads.
+	// Mixed before the modulus: synchronised ids are generated with a stride,
+	// and a raw modulus collapses every droid into one sub-lane whenever the
+	// stride shares a factor with the lane count.
+	const int32_t subLane = (static_cast<int32_t>(((psJob->droidID * 2654435761u) >> 16) % 3u) - 1) * SUBLANE_STEP;
+	const int32_t laneHalf = KEEP_RIGHT_HALF + subLane;
+	const CorridorMap *cmap = gameWorld.map.corridors.get();
+
+	static thread_local std::vector<int32_t> arcFwd;
+	arcFwd.assign(n, 0);
+	for (size_t k = 1; k < n; ++k)
+	{
+		arcFwd[k] = arcFwd[k - 1] + iHypot(path[k] - path[k - 1]);
+	}
+	const int32_t total = arcFwd[n - 1];
+	if (total < KEEP_RIGHT_RAMP + KEEP_RIGHT_DEST_RAMP)
+	{
+		return;  // too short to ramp in and back out
+	}
+
+	static thread_local std::vector<int32_t> want;
+	static thread_local std::vector<Vector2i> rightStep;
+	want.assign(n, 0);
+	rightStep.assign(n, Vector2i(0, 0));
+
+	for (size_t k = 1; k + 1 < n; ++k)
+	{
+		Vector2i d = path[k + 1] - path[k - 1];
+		int32_t len = iHypot(d);
+		if (len == 0)
+		{
+			continue;
+		}
+		Vector2i t = map_coord(path[k]);
+		if (cmap != nullptr && cmap->claimed(t.x, t.y))
+		{
+			continue;
+		}
+		Vector2i right(-d.y * TILE_UNITS / len, d.x * TILE_UNITS / len);
+		if (right.x == 0 && right.y == 0)
+		{
+			continue;
+		}
+		// Half the room to this side, so the two directions settle on the
+		// quarter points of whatever width the ground offers and each keeps a
+		// full half to itself, instead of both riding the middle.
+		int32_t target = laneHalf;
+		if (pathfindingWideLanesEnabled())
+		{
+			const int32_t half = laneRoom(psJob, path[k], right) / 2;
+			target = std::clamp(half, KEEP_RIGHT_HALF, KEEP_RIGHT_MAX) + subLane;
+		}
+		int32_t w = target;
+		w = std::min(w, target * arcFwd[k] / KEEP_RIGHT_RAMP);
+		w = std::min(w, target * (total - arcFwd[k]) / KEEP_RIGHT_DEST_RAMP);
+		// The lane offset never presses a route within the keep floor of a
+		// wall. The spine's clearance, the lane shift and the follower's
+		// chord cutting all spend from one budget, and without a floor the
+		// wall-side lane spends it to zero and drives the face.
+		const int32_t room = wallDistance(psJob, path[k], right);
+		if (room <= WALL_CLEAR)
+		{
+			w = std::min(w, room - WALL_KEEP);
+		}
+		if (w <= 0)
+		{
+			continue;
+		}
+		rightStep[k] = right;
+		want[k] = bendAllowedOffset(psJob, path[k], right, w);
+	}
+
+	// A gentler slope than the bend limiter: the offset builds over ~4 tiles,
+	// so routes drift into their lane and drift back out approaching claimed
+	// ground or a clearance pocket, instead of stepping at the boundary.
+	for (size_t k = 1; k + 1 < n; ++k)
+	{
+		int32_t seg = arcFwd[k] - arcFwd[k - 1];
+		want[k] = std::min(want[k], want[k - 1] + seg / 4);
+	}
+	for (size_t k = n - 1; k-- > 1; )
+	{
+		int32_t seg = arcFwd[k + 1] - arcFwd[k];
+		want[k] = std::min(want[k], want[k + 1] + seg / 4);
+	}
+
+	for (size_t k = 1; k + 1 < n; ++k)
+	{
+		if (want[k] > 0)
+		{
+			path[k].x += rightStep[k].x * want[k] / TILE_UNITS;
+			path[k].y += rightStep[k].y * want[k] / TILE_UNITS;
+		}
+	}
+}
+// ---- end route bend shaping ----
+
+
 ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
 	ASR_RETVAL      retval = ASR_OK;
@@ -596,7 +992,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	auto contextIterator = fpathContexts.begin();
 	for (; contextIterator != fpathContexts.end(); ++contextIterator)
 	{
-		if (!contextIterator->matches(psJob->blockingMap, tileDest, dstIgnore))
+		if (!contextIterator->matches(psJob->blockingMap, psJob->overlay, tileDest, dstIgnore))
 		{
 			// This context is not for the same droid type and same destination.
 			continue;
@@ -634,7 +1030,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
+		fpathInitContext(*contextIterator, psJob->blockingMap, psJob->overlay, tileOrig, tileOrig, tileDest, dstIgnore);
 		endCoord = fpathAStarExplore(*contextIterator, tileDest);
 		contextIterator->nearestCoord = endCoord;
 	}
@@ -713,7 +1109,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, dstIgnore);
+			fpathInitContext(context, psJob->blockingMap, psJob->overlay, tileDest, context.nearestCoord, tileOrig, dstIgnore);
 		}
 	}
 	else
@@ -729,6 +1125,15 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	}
 
 	psMove->destination = psMove->asPath[path.size() - 1];
+
+	if (retval == ASR_OK || (retval == ASR_NEAREST && psJob->acceptNearest))
+	{
+		if (pathfindingDirectionalBiasEnabled() && psJob->propulsion != PROPULSION_TYPE_LIFT)
+		{
+			fpathWallClearance(psJob, psMove);
+			fpathKeepRightOffset(psJob, psMove);
+		}
+	}
 
 	return retval;
 }
@@ -767,7 +1172,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		for (int y = 0; y < gameWorld.map.height; ++y)
 			for (int x = 0; x < gameWorld.map.width; ++x)
 			{
-				map[x + y * gameWorld.map.width] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
+				map[x + y * gameWorld.map.width] = fpathBaseBlockingTile(gameWorld.map, x, y, type.propulsion, type.owner, type.moveType);
 				checksumMap ^= map[x + y * gameWorld.map.width] * (factor = 3 * factor + 1);
 			}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)

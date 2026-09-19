@@ -1,0 +1,19 @@
+{
+	"challenge": {
+		"map": "MoveBench-OpenCorner",
+		"maxPlayers": 1,
+		"scavengers": "false",
+		"alliances": 0,
+		"powerLevel": 1,
+		"bases": 1,
+		"name": "MoveBench Open Corner",
+		"version": 2
+	},
+	"scripts": {
+		"rules": "movebench_open_corner.js"
+	},
+	"player_0": {
+		"team": 0,
+		"position": 0
+	}
+}

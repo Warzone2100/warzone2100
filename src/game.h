@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,6 +67,9 @@ public:
 	static GameLoadDetails makeMapPackageLoad(const std::string& mapPackageFilePath);
 	static GameLoadDetails makeLevelFileLoad(const std::string& levelFileName);
 	GameLoadDetails& setLogger(const std::shared_ptr<WzMap::LoggingProtocol>& logger);
+	// Load the level's map / display layer but skip placing the scenario's own objects (droids/structures/
+	// features). Used by the new-format cold load, whose objects all come from the GameState snapshot.
+	GameLoadDetails& setSkipObjectPlacement(bool skip);
 public:
 	std::string getMapFolderPath() const;
 	std::shared_ptr<WzMap::Map> getMap(uint32_t mapSeed) const;
@@ -74,16 +79,17 @@ private:
 public:
 	GameLoadType loadType;
 	std::string filePath;
+	bool skipObjectPlacement = false;
 private:
 	std::shared_ptr<WzMap::LoggingProtocol> m_logger;
 	mutable std::shared_ptr<WzMap::MapPackage> m_loadedPackage;
 };
 
-bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem);
+LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem);
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-bool loadGameInit(const GameLoadDetails& gameToLoad);
+LoadingTask<> loadGameInit(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
 
 bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType);
 
@@ -94,9 +100,6 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave = false
 
 // Get the campaign number for loadGameInit game
 UDWORD getCampaign(const char *fileName);
-
-/*returns the current type of save game being loaded*/
-GAME_TYPE getSaveGameType();
 
 // Removes .gam from a save for display purposes
 const char *savegameWithoutExtension(const char *name);

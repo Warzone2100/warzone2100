@@ -62,6 +62,7 @@ void kf_RaiseTile();
 void kf_LowerTile();
 void kf_MapCheck();
 MappableFunction kf_Zoom(const int multiplier);
+void cameraRotate(int deltaYaw, int deltaPitch);
 void kf_RotateLeft();
 void kf_RotateRight();
 void kf_RotateBuildingCW();
@@ -69,6 +70,7 @@ void kf_RotateBuildingACW();
 void kf_PitchBack();
 void kf_PitchForward();
 void kf_ResetPitch();
+void kf_ResetCamera();
 void kf_ShowMappings();
 void kf_SelectGrouping(UDWORD groupNumber);
 MappableFunction kf_SelectGrouping_N(const unsigned int n);
@@ -137,6 +139,16 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected = false);
 MappableFunction kf_SelectNextResearch(const bool bJumpToSelected = false);
 void kf_ToggleConsoleDrop();
+void kf_ToggleResearchTree();
+void kf_ResearchTreeBack();
+void kf_ResearchTreeClose();
+void kf_ResearchTreeTracePath();
+void kf_ResearchTreeSearch();
+void kf_ResearchTreeToggleNames();
+void kf_ResearchTreeSelectNext();
+void kf_ResearchTreeSelectPrevious();
+void kf_ResearchTreeNextPerspective();
+void kf_ResearchTreePreviousPerspective();
 void kf_ToggleShakeStatus();
 void kf_ToggleMouseInvert();
 void kf_BifferBaker();
@@ -152,6 +164,7 @@ MappableFunction kf_SelectCommander_N(const unsigned int n);
 
 void kf_ToggleShowGateways();
 void kf_ToggleShowPath();
+void kf_ToggleShowCorridors();
 
 void kf_FaceNorth();
 void kf_FaceSouth();
@@ -207,6 +220,8 @@ void enableGodMode();
 
 void keybindShutdown();
 
-void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor);
+struct WorldObjectState;
+
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor, const WorldObjectState& objState);
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

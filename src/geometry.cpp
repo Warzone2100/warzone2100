@@ -45,7 +45,7 @@ uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
   NB*****THIS WON'T PICK A VTOL DROID*****
 */
 
-DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
+DROID	*getNearestDroid(WorldObjectState& objState, UDWORD x, UDWORD y, bool bSelected)
 {
 	DROID *psBestUnit = nullptr;
 	unsigned bestSoFar = UDWORD_MAX;
@@ -53,7 +53,7 @@ DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
-	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
+	for (DROID *psDroid : objState.droids[selectedPlayer])
 	{
 		if (!psDroid->isVtol())
 		{

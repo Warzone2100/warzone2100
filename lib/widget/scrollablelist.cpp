@@ -62,7 +62,7 @@ uint32_t ScrollableListWidget::snappedOffset()
 	for (size_t idx = 0; idx < items.size(); ++idx)
 	{
 		const auto& child = items[idx];
-		if (child->geometry().bottom() < scrollBar->position())
+		if (child->geometry().bottom() < static_cast<int32_t>(scrollBar->position()))
 		{
 			continue;
 		}
@@ -152,20 +152,22 @@ void ScrollableListWidget::updateLayout()
 	}
 	auto listViewHeight = calculateListViewHeight();
 
-	resizeChildren(listViewWidthWithScrollBar);
-
-	scrollBar->show(scrollableHeight > listViewHeight);
-
-	if (scrollBar->visible() || !expandWidthWhenScrollbarInvisible)
+	bool needsScrollbar = true;
+	if (expandWidthWhenScrollbarInvisible)
 	{
-		listView->setGeometry(padding.left, padding.top, listViewWidthWithScrollBar, listViewHeight);
-	} else {
-		if (listViewWidthWithScrollBar != listViewWidthWithoutScrollBar)
-		{
-			resizeChildren(listViewWidthWithoutScrollBar);
-		}
-		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
+		resizeChildren(listViewWidthWithoutScrollBar);
+		needsScrollbar = scrollableHeight > listViewHeight;
 	}
+	if (needsScrollbar)
+	{
+		resizeChildren(listViewWidthWithScrollBar);
+		needsScrollbar = scrollableHeight > listViewHeight;
+	}
+	scrollBar->show(needsScrollbar);
+
+	const uint32_t listViewWidth = (needsScrollbar || !expandWidthWhenScrollbarInvisible)
+		? listViewWidthWithScrollBar : listViewWidthWithoutScrollBar;
+	listView->setGeometry(padding.left, padding.top, listViewWidth, listViewHeight);
 
 	scrollBar->setScrollableSize(scrollableHeight + padding.top + padding.bottom);
 }
@@ -198,10 +200,33 @@ uint32_t ScrollableListWidget::calculateListViewWidth() const
 	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
+bool ScrollableListWidget::canConsumeWheelScroll()
+{
+	updateLayout();
+	return scrollBar->isEnabled() && scrollBar->visible();
+}
+
 std::shared_ptr<WIDGET> ScrollableListWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
-	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
+	auto result = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
+
+	// scroll with the mouse wheel only if no nested widget (between this widget and the
+	// mouse target) handles the wheel itself - the innermost wheel consumer under the mouse wins
+	bool nestedScrollableHandlesWheel = false;
+	for (auto widget = result; widget != nullptr && widget.get() != this; widget = widget->parent())
+	{
+		if (widget->canConsumeWheelScroll())
+		{
+			nestedScrollableHandlesWheel = true;
+			break;
+		}
+	}
+	if (!nestedScrollableHandlesWheel)
+	{
+		scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
+	}
+
+	return result;
 }
 
 void ScrollableListWidget::enableScroll()
@@ -336,17 +361,22 @@ void ScrollableListWidget::setScrollbarWidth(int newWidth)
 	updateLayout();
 }
 
+void ScrollableListWidget::setScrollbarMinimumSliderSize(uint32_t value)
+{
+	scrollBar->setMinimumSliderSize(value);
+}
+
 void ScrollableListWidget::setExpandWhenScrollbarInvisible(bool expandWidth)
 {
 	expandWidthWhenScrollbarInvisible = expandWidth;
 }
 
-uint16_t ScrollableListWidget::getScrollPosition() const
+uint32_t ScrollableListWidget::getScrollPosition() const
 {
 	return scrollBar->position();
 }
 
-void ScrollableListWidget::setScrollPosition(uint16_t newPosition)
+void ScrollableListWidget::setScrollPosition(uint32_t newPosition)
 {
 	updateLayout();
 	scrollBar->setPosition(newPosition);
@@ -401,9 +431,10 @@ void ScrollableListWidget::scrollEnsureItemVisible(size_t itemNum)
 		}
 		else
 		{
-			// scroll down the minimum amount
-			auto desiredScrollPos = std::max<int32_t>(scrollPosOfItem - listView->height() + listView->children()[itemNum]->height(), 0);
-			scrollBar->setPosition(desiredScrollPos);
+			// scroll down the minimum amount (signed intermediate: the
+			// unsigned scroll pos minus the view height can be negative)
+			int64_t desiredScrollPos = std::max<int64_t>(static_cast<int64_t>(scrollPosOfItem) - listView->height() + listView->children()[itemNum]->height(), 0);
+			scrollBar->setPosition(static_cast<uint32_t>(desiredScrollPos));
 		}
 		listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
 	}

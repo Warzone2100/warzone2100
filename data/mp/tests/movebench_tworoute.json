@@ -1,0 +1,19 @@
+{
+	"challenge": {
+		"map": "MoveBench-TwoRoute",
+		"maxPlayers": 1,
+		"scavengers": "false",
+		"alliances": 0,
+		"powerLevel": 1,
+		"bases": 1,
+		"name": "MoveBench Two-route counterflow",
+		"version": 2
+	},
+	"scripts": {
+		"rules": "movebench_counterflow_tracked.js"
+	},
+	"player_0": {
+		"team": 0,
+		"position": 0
+	}
+}

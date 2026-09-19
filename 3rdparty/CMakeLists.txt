@@ -320,3 +320,13 @@ if (ENABLE_GNS_NETWORK_BACKEND)
 else()
 	message(STATUS "GameNetworkingSockets backend support: DISABLED")
 endif()
+
+if(WZ_ENABLE_WEBM)
+	# libwebm: only the mkvparser component is needed (WebM/Matroska demuxing)
+	add_library(mkvparser STATIC
+		"libwebm/mkvparser/mkvparser.cc"
+		"libwebm/mkvparser/mkvparser.h"
+	)
+	set_property(TARGET mkvparser PROPERTY FOLDER "3rdparty")
+	target_include_directories(mkvparser PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/libwebm")
+endif()

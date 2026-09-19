@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2011-2020  Warzone 2100 Project
+	Copyright (C) 2011-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +22,7 @@
  * @file main_sdl.cpp
  *
  * SDL backend code
+ * ​‌⁣‌‌⁣‌‌⁣‌⁣‌‌⁣⁣‌⁣‌⁣‌⁣‌‌‌‌‌⁣‌‌⁣⁣⁣⁣‌⁣‌⁣‌‌⁣‌‌⁣‌⁣‌⁣‌‌‌⁣‌‌‌‌‌⁣‌⁣‌‌⁣⁣⁣‌‌⁣‌⁣‌⁣‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣‌‌‌‌‌‌⁣‌⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌⁣⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌‌⁣‌‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣⁣‌⁣⁣‌⁣‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣‌‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌⁣⁣⁣‌‍
  */
 
 // Get platform defines before checking for them!
@@ -57,6 +60,7 @@
 
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
+#include "sdl_gamepad.h"
 #include <algorithm>
 #include <map>
 #include <locale.h>
@@ -117,6 +121,57 @@ struct QueuedWindowDimensions
 };
 optional<QueuedWindowDimensions> deferredDimensionReset = nullopt;
 
+struct QueuedWindowModeChange
+{
+	WINDOW_MODE mode = WINDOW_MODE::windowed;
+	bool silent = false;
+};
+
+struct QueuedDrawableResize
+{
+	unsigned int oldWidth = 0;
+	unsigned int oldHeight = 0;
+	unsigned int newWidth = 0;
+	unsigned int newHeight = 0;
+};
+
+struct QueuedDisplayScaleChange
+{
+	unsigned int displayScale = 100;
+};
+
+static optional<QueuedWindowModeChange> queuedWindowModeChange = nullopt;
+static optional<QueuedDrawableResize> queuedDrawableResize = nullopt;
+static optional<optional<screeninfo>> queuedFullscreenDisplayModeChange = nullopt;
+static optional<QueuedDisplayScaleChange> queuedDisplayScaleChange = nullopt;
+
+static bool shouldDeferSurfaceMutation()
+{
+	return pie_IsScreenFrameRendering();
+}
+
+static void queueDrawableResize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	if (oldWidth == newWidth && oldHeight == newHeight)
+	{
+		return;
+	}
+
+	if (queuedDrawableResize.has_value())
+	{
+		queuedDrawableResize->newWidth = newWidth;
+		queuedDrawableResize->newHeight = newHeight;
+	}
+	else
+	{
+		queuedDrawableResize = QueuedDrawableResize{oldWidth, oldHeight, newWidth, newHeight};
+	}
+}
+
+static bool wzChangeWindowModeImmediate(WINDOW_MODE mode, bool silent);
+static bool wzChangeFullscreenDisplayModeImmediate(optional<screeninfo> config);
+static bool wzChangeDisplayScaleImmediate(unsigned int displayScale);
+
 static std::vector<optional<screeninfo>> displaylist;	// holds all our possible display lists
 
 std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
@@ -124,30 +179,6 @@ enum wzSDLAppEventCodes
 {
 	MAINTHREADEXEC
 };
-
-/* The possible states for keys */
-enum KEY_STATE
-{
-	KEY_UP,
-	KEY_PRESSED,
-	KEY_DOWN,
-	KEY_RELEASED,
-	KEY_PRESSRELEASE,	// When a key goes up and down in a frame
-	KEY_DOUBLECLICK,	// Only used by mouse keys
-	KEY_DRAG			// Only used by mouse keys
-};
-
-struct INPUT_STATE
-{
-	KEY_STATE state; /// Last key/mouse state
-	UDWORD lastdown; /// last key/mouse button down timestamp
-	Vector2i pressPos;    ///< Location of last mouse press event.
-	Vector2i releasePos;  ///< Location of last mouse release event.
-};
-
-// Clipboard routines
-bool has_scrap(void);
-bool get_scrap(char **dst);
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
 #define DOUBLE_CLICK_INTERVAL 250
@@ -209,6 +240,40 @@ static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 void* GetTextEventsOwner = nullptr;
 
+/* Touch / finger handling */
+
+// Struct to store cached state of each active finger
+struct TrackedFinger
+{
+	SDL_FingerID id;
+	float currentX;
+	float currentY;
+	float previousX;
+	float previousY;
+};
+std::vector<TrackedFinger> touchPoints;
+
+/* Multi-finger gesture handling */
+
+#if SDL_VERSION_ATLEAST(3, 3, 4)
+# define WZ_SDL_PINCH_EVENTS_SUPPORTED
+#endif
+
+enum class PinchActiveState
+{
+	Inactive,
+	Active_SDLPinchEvent,
+	Active_SDLFingerEvents
+};
+
+// Pinch gesture input status
+static optional<float> pinchScaleCumulative = nullopt;
+static PinchActiveState pinchActive = PinchActiveState::Inactive;
+
+// Pan gesture input status
+static optional<PanGestureDeltaScreenPts> panScreenPointsCumulative = nullopt;
+static bool panActive = false;
+
 static optional<int> wzQuitExitCode;
 
 bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight);
@@ -233,42 +298,39 @@ WzString wzGetPlatform()
 	return WzString::fromUtf8(SDL_GetPlatform());
 }
 
-// See if we have TEXT in the clipboard
-bool has_scrap(void)
+bool wzHasClipboardText()
 {
 	return SDL_HasClipboardText();
 }
 
-// Set the clipboard text
-bool wzSetClipboardText(const char *src)
+WzString wzGetClipboardText()
 {
-	if (SDL_SetClipboardText(src))
-	{
-		debug(LOG_ERROR, "Could not put clipboard text because : %s", SDL_GetError());
-		return false;
-	}
-	return true;
-}
+	WzString retval;
 
-// Get text from the clipboard
-bool get_scrap(char **dst)
-{
-	if (has_scrap())
+	if (wzHasClipboardText())
 	{
 		char *cliptext = SDL_GetClipboardText();
 		if (!cliptext)
 		{
 			debug(LOG_ERROR, "Could not get clipboard text because : %s", SDL_GetError());
-			return false;
 		}
-		*dst = cliptext;
-		return true;
+		else
+		{
+			retval = WzString::fromUtf8(cliptext);
+			SDL_free(cliptext);
+		}
 	}
-	else
+	return retval;
+}
+
+bool wzSetClipboardText(const char *src)
+{
+	if (!SDL_SetClipboardText(src))
 	{
-		// wasn't text or no text in the clipboard
+		debug(LOG_ERROR, "Could not put clipboard text because : %s", SDL_GetError());
 		return false;
 	}
+	return true;
 }
 
 void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect)
@@ -356,19 +418,6 @@ bool wzHasTouchInputDevices()
 bool wzSeemsLikeNonTouchPlatform()
 {
 	return !wzHasTouchInputDevices() || (SDL_HasScreenKeyboardSupport() == false);
-}
-
-/* Put a character into a text buffer overwriting any text under the cursor */
-WzString wzGetSelection()
-{
-	WzString retval;
-	static char *scrap = nullptr;
-
-	if (get_scrap(&scrap))
-	{
-		retval = WzString::fromUtf8(scrap);
-	}
-	return retval;
 }
 
 std::vector<optional<screeninfo>> wzAvailableResolutions()
@@ -556,6 +605,41 @@ void setDisplayScale(unsigned int displayScale)
 unsigned int wzGetCurrentDisplayScale()
 {
 	return current_displayScale;
+}
+
+// Cached until a display or window-display event invalidates it, since callers
+// may poll frequently while the underlying value changes rarely
+static optional<float> cachedDisplayRefreshRate;
+
+static void markDisplayRefreshRateCacheDirty()
+{
+	cachedDisplayRefreshRate = nullopt;
+}
+
+float wzGetCurrentDisplayRefreshRate()
+{
+	if (WZwindow == nullptr)
+	{
+		return 0.f;
+	}
+	if (cachedDisplayRefreshRate.has_value())
+	{
+		return cachedDisplayRefreshRate.value();
+	}
+	const SDL_DisplayID displayID = SDL_GetDisplayForWindow(WZwindow);
+	if (displayID == 0)
+	{
+		// leave the cache empty so the query is retried
+		return 0.f;
+	}
+	const SDL_DisplayMode* currentMode = SDL_GetCurrentDisplayMode(displayID);
+	if (currentMode == nullptr)
+	{
+		return 0.f;
+	}
+	// may be 0 when the refresh rate is unspecified
+	cachedDisplayRefreshRate = currentMode->refresh_rate;
+	return cachedDisplayRefreshRate.value();
 }
 
 void wzShowMouse(bool visible)
@@ -770,6 +854,30 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 	auto previousMode = wzGetCurrentWindowMode();
 	if (previousMode == mode)
 	{
+		return true;
+	}
+
+	if (!wzIsSupportedWindowMode(mode))
+	{
+		return false;
+	}
+
+	if (shouldDeferSurfaceMutation())
+	{
+		queuedWindowModeChange = QueuedWindowModeChange{mode, silent};
+		debug(LOG_WZ, "Deferring window mode change: %s -> %s",
+			to_display_string(previousMode).c_str(), to_display_string(mode).c_str());
+		return true;
+	}
+
+	return wzChangeWindowModeImmediate(mode, silent);
+}
+
+static bool wzChangeWindowModeImmediate(WINDOW_MODE mode, bool silent)
+{
+	auto previousMode = wzGetCurrentWindowMode();
+	if (previousMode == mode)
+	{
 		// already in this mode
 		return true;
 	}
@@ -836,11 +944,6 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 			break;
 		}
 	}
-
-#if defined(WZ_OS_MAC)
-	// Wait for window size changes to be processed
-	SDL_SyncWindow(WZwindow);
-#endif
 
 	return true;
 }
@@ -1221,6 +1324,36 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 	pEndBuffer = pNext;
 }
 
+/* Adds an editing key press to the text input buffer for text editing control handling */
+void inputAddEditingKey(KEY_CODE code)
+{
+	switch (code)
+	{
+	case KEY_ESC:
+	case KEY_RETURN:
+	case KEY_TAB:
+	case KEY_BACKSPACE:
+	case KEY_LEFTARROW:
+	case KEY_RIGHTARROW:
+	case KEY_UPARROW:
+	case KEY_DOWNARROW:
+	case KEY_HOME:
+	case KEY_END:
+	case KEY_INSERT:
+	case KEY_DELETE:
+	case KEY_PAGEUP:
+	case KEY_PAGEDOWN:
+		// the editing key INPBUF values alias the same KEY_CODE values
+		inputAddBuffer(code, 0);
+		break;
+	case KEY_KPENTER:
+		inputAddBuffer(INPBUF_CR, 0);
+		break;
+	default:
+		break;
+	}
+}
+
 // Returns the human-readable name for the key *in the current keyboard layout*
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
@@ -1403,6 +1536,12 @@ void inputNewFrame(void)
 	}
 	mousePresses.clear();
 	mouseWheelSpeed = Vector2i(0, 0);
+
+	// handle gestures (consume any unconsumed updates)
+	std::ignore = consumePinchGestureScaleUpdate();
+	std::ignore = consumePanGestureDeltaUpdate();
+
+	wzGamepadNewFrame();
 }
 
 /*!
@@ -1420,6 +1559,10 @@ void inputLoseFocus(void)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
+	// inputLoseFocus is also used by game code to swallow pending input, not just
+	// on actual focus loss - so clear only the logical gamepad button states here,
+	// leaving the raw device state driving click/key synthesis intact
+	wzGamepadClearButtonStates();
 }
 
 static void restoreKeyDownState(KEY_CODE code)
@@ -1443,6 +1586,8 @@ void inputRestoreMetaKeyState()
 
 	restoreKeyDownState(KEY_RMETA);
 	restoreKeyDownState(KEY_LMETA);
+
+	wzGamepadRestoreMetaButtonState();
 }
 
 /* This returns true if the key is currently depressed */
@@ -1545,11 +1690,224 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	return false;
 }
 
+// Helper to compute Euclidean distance between two arbitrary points
+float calculateEuclideanDistance(float x1, float y1, float x2, float y2)
+{
+	return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+static void inputHandleTouchFingerEvent(const SDL_TouchFingerEvent &touchFingerEvent)
+{
+	switch (touchFingerEvent.type)
+	{
+		case SDL_EVENT_FINGER_DOWN:
+			// Register new finger contact. Store incoming position as both current and previous.
+			debug(LOG_NEVER, "Finger down: %" PRIu64, touchFingerEvent.fingerID);
+			touchPoints.push_back({
+				touchFingerEvent.fingerID,
+				touchFingerEvent.x, touchFingerEvent.y,
+				touchFingerEvent.x, touchFingerEvent.y
+			});
+			break;
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+		{
+			// Evict finger contact on lift
+			debug(LOG_NEVER, "Finger up: %" PRIu64, touchFingerEvent.fingerID);
+
+			// 1. Reorder elements and get the logical end
+			auto remove_it = std::remove_if(touchPoints.begin(), touchPoints.end(), [&](const TrackedFinger& f) { return f.id == touchFingerEvent.fingerID; });
+
+			// 2. Check if the iterator reached the end
+			bool items_erased = (remove_it != touchPoints.end());
+
+			// 3. Physically erase the elements
+			if (items_erased)
+			{
+				touchPoints.erase(remove_it, touchPoints.end());
+
+				if (pinchActive == PinchActiveState::Active_SDLFingerEvents)
+				{
+					pinchActive = PinchActiveState::Inactive;
+				}
+				panActive = false;
+			}
+			break;
+		}
+
+		case SDL_EVENT_FINGER_MOTION:
+			// Update specific finger positioning tracking matching this hardware interaction id
+			for (auto& f : touchPoints)
+			{
+				if (f.id == touchFingerEvent.fingerID)
+				{
+					f.previousX = f.currentX;
+					f.previousY = f.currentY;
+					f.currentX = touchFingerEvent.x;
+					f.currentY = touchFingerEvent.y;
+					break;
+				}
+			}
+
+			// If exactly two fingers are actively tracing the display screen, calculate two-finger gestures
+			if (touchPoints.size() == 2)
+			{
+				debug(LOG_NEVER, "FingerEvent: Moving %zu fingers", touchPoints.size());
+
+				const auto& f1 = touchPoints[0];
+				const auto& f2 = touchPoints[1];
+
+				if (pinchActive == PinchActiveState::Inactive || pinchActive == PinchActiveState::Active_SDLFingerEvents)
+				{
+					// CALCULATE PINCH (SCALE DELTA)
+					float previousDistance = calculateEuclideanDistance(f1.previousX, f1.previousY, f2.previousX, f2.previousY);
+					float currentDistance  = calculateEuclideanDistance(f1.currentX, f1.currentY, f2.currentX, f2.currentY);
+
+					// Prevent division-by-zero crashes if fingers overlap precisely
+					if (previousDistance > 0.0001f && currentDistance > 0.0001f)
+					{
+						float scaleFactor = currentDistance / previousDistance;
+						debug(LOG_INPUT, "FingerEvent Pinch Scale: %f", scaleFactor);
+
+						pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * scaleFactor;
+						pinchActive = PinchActiveState::Active_SDLFingerEvents;
+					}
+				}
+
+				// CALCULATE PAN (CENTROID TRANSLATION DELTA)
+				// Find the average center midpoint of the old step vs the current step
+				float previousCenterY = (f1.previousY + f2.previousY) * 0.5f;
+				float previousCenterX = (f1.previousX + f2.previousX) * 0.5f;
+
+				float currentCenterX  = (f1.currentX + f2.currentX) * 0.5f;
+				float currentCenterY  = (f1.currentY + f2.currentY) * 0.5f;
+
+				float deltaX = currentCenterX - previousCenterX;
+				float deltaY = currentCenterY - previousCenterY;
+
+				float deltaXScreenPoints = (deltaX * screenWidth);
+				float deltaYScreenPoints = (deltaY * screenHeight);
+
+				debug(LOG_NEVER, "FingerEvent Pan: (deltaXScreenPts: %f, deltaYScreenPts: %f)", deltaXScreenPoints, deltaYScreenPoints);
+
+				auto updatedPanDelta = panScreenPointsCumulative.value_or(PanGestureDeltaScreenPts{0.f, 0.f});
+				updatedPanDelta.deltaX += deltaXScreenPoints;
+				updatedPanDelta.deltaY += deltaYScreenPoints;
+				panScreenPointsCumulative = updatedPanDelta;
+				panActive = true;
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
+// Returns a float if pinch gesture is in progress
+optional<float> consumePinchGestureScaleUpdate()
+{
+	auto result = pinchScaleCumulative;
+	if (pinchActive != PinchActiveState::Inactive)
+	{
+		pinchScaleCumulative = 1.0f;
+	}
+	else
+	{
+		pinchScaleCumulative.reset();
+	}
+	return result;
+}
+
+optional<PanGestureDeltaScreenPts> consumePanGestureDeltaUpdate()
+{
+	auto result = panScreenPointsCumulative;
+	if (panActive)
+	{
+		panScreenPointsCumulative = PanGestureDeltaScreenPts{0.f,0.f};
+	}
+	else
+	{
+		panScreenPointsCumulative.reset();
+	}
+	return result;
+}
+
+#if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
+/*!
+ * Handle pinch events
+ */
+static void inputHandlePinchEvent(SDL_PinchFingerEvent *pinchEvent)
+{
+	switch (pinchEvent->type)
+	{
+		case SDL_EVENT_PINCH_BEGIN:
+			debug(LOG_INPUT, "Pinch event: begin");
+			pinchActive = PinchActiveState::Active_SDLPinchEvent; // native pinch events always take precedence over calculated finger pinch events
+			pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f);
+			break;
+		case SDL_EVENT_PINCH_UPDATE:
+			if (pinchActive == PinchActiveState::Active_SDLPinchEvent)
+			{
+				debug(LOG_INPUT, "Pinch event: update (scale: %f)", pinchEvent->scale);
+				pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * pinchEvent->scale;
+			}
+			break;
+		case SDL_EVENT_PINCH_END:
+			if (pinchActive == PinchActiveState::Active_SDLPinchEvent)
+			{
+				debug(LOG_INPUT, "Pinch event: end");
+				pinchActive = PinchActiveState::Inactive;
+			}
+			break;
+		default:
+			break;
+	}
+}
+#endif
+
+/*!
+ * Update keyboard key state from a press or release
+ */
+void inputSetKey(KEY_CODE code, bool pressed)
+{
+	if (code >= KEY_MAXSCAN)
+	{
+		return;
+	}
+	if (pressed)
+	{
+		if (aKeyState[code].state == KEY_UP ||
+		    aKeyState[code].state == KEY_RELEASED ||
+		    aKeyState[code].state == KEY_PRESSRELEASE)
+		{
+			// whether double key press or not
+			aKeyState[code].state = KEY_PRESSED;
+			aKeyState[code].lastdown = 0;
+			actualKeyState[code].state = KEY_PRESSED;
+			actualKeyState[code].lastdown = 0;
+		}
+	}
+	else
+	{
+		actualKeyState[code].state = KEY_UP;
+		if (aKeyState[code].state == KEY_PRESSED)
+		{
+			aKeyState[code].state = KEY_PRESSRELEASE;
+		}
+		else if (aKeyState[code].state == KEY_DOWN)
+		{
+			aKeyState[code].state = KEY_RELEASED;
+		}
+	}
+}
+
 /*!
  * Handle keyboard events
  */
 static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 {
+	wzGamepadNotifyNonGamepadInput();
+
 	switch (keyEvent->type)
 	{
 	case SDL_EVENT_KEY_DOWN :
@@ -1620,21 +1978,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		SDL_Scancode currentKey = keyEvent->scancode;
 		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
 
-		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
-		if (code >= KEY_MAXSCAN)
-		{
-			break;
-		}
-		if (aKeyState[code].state == KEY_UP ||
-		    aKeyState[code].state == KEY_RELEASED ||
-		    aKeyState[code].state == KEY_PRESSRELEASE)
-		{
-			// whether double key press or not
-			aKeyState[code].state = KEY_PRESSED;
-			aKeyState[code].lastdown = 0;
-			actualKeyState[code].state = KEY_PRESSED;
-			actualKeyState[code].lastdown = 0;
-		}
+		inputSetKey(sdlScancodeToKeyCode(currentKey), true);
 		break;
 	}
 
@@ -1642,20 +1986,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 	{
 		SDL_Scancode currentKey = keyEvent->scancode;
 		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
-		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
-		if (code >= KEY_MAXSCAN)
-		{
-			break;
-		}
-		actualKeyState[code].state = KEY_UP;
-		if (aKeyState[code].state == KEY_PRESSED)
-		{
-			aKeyState[code].state = KEY_PRESSRELEASE;
-		}
-		else if (aKeyState[code].state == KEY_DOWN)
-		{
-			aKeyState[code].state = KEY_RELEASED;
-		}
+		inputSetKey(sdlScancodeToKeyCode(currentKey), false);
 		break;
 	}
 	default:
@@ -1690,10 +2021,32 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
 /*!
  * Handle mouse wheel events
  */
+/*!
+ * Add wheel scroll movement to the mouse wheel state
+ */
+void inputAddMouseWheelScroll(Vector2i delta)
+{
+	mouseWheelSpeed += delta;
+
+	if (delta.x > 0 || delta.y > 0)
+	{
+		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
+		aMouseState[MOUSE_WUP].lastdown = 0;
+	}
+	else if (delta.x < 0 || delta.y < 0)
+	{
+		aMouseState[MOUSE_WDN].state = KEY_PRESSED;
+		aMouseState[MOUSE_WDN].lastdown = 0;
+	}
+}
+
 static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 {
-	mouseWheelSpeed += Vector2i(wheel->integer_x, wheel->integer_y);
+	wzGamepadNotifyNonGamepadInput();
 
+	inputAddMouseWheelScroll(Vector2i(wheel->integer_x, wheel->integer_y));
+
+	// sub-integer wheel movement still registers a direction press
 	if (wheel->x > 0 || wheel->y > 0)
 	{
 		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
@@ -1707,31 +2060,19 @@ static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 }
 
 /*!
- * Handle mouse button events (We can handle up to 5)
+ * Update mouse button state from a press or release at the given logical position
  */
-static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
+void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos)
 {
-	mouseXPos = (int)((float)buttonEvent->x / current_displayScaleFactor);
-	mouseYPos = (int)((float)buttonEvent->y / current_displayScaleFactor);
-
-	MOUSE_KEY_CODE mouseKeyCode;
-	switch (buttonEvent->button)
-	{
-	case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
-	case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
-	case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
-	case SDL_BUTTON_X1: mouseKeyCode = MOUSE_X1; break;
-	case SDL_BUTTON_X2: mouseKeyCode = MOUSE_X2; break;
-	default: return;  // Unknown button.
-	}
+	mouseXPos = logicalPos.x;
+	mouseYPos = logicalPos.y;
 
 	MousePress mousePress;
 	mousePress.key = mouseKeyCode;
-	mousePress.pos = Vector2i(mouseXPos, mouseYPos);
+	mousePress.pos = logicalPos;
 
-	switch (buttonEvent->type)
+	if (pressed)
 	{
-	case SDL_EVENT_MOUSE_BUTTON_DOWN :
 		mousePress.action = MousePress::Press;
 		mousePresses.push_back(mousePress);
 
@@ -1760,8 +2101,9 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 				dragY = mouseYPos;
 			}
 		}
-		break;
-	case SDL_EVENT_MOUSE_BUTTON_UP :
+	}
+	else
+	{
 		mousePress.action = MousePress::Release;
 		mousePresses.push_back(mousePress);
 
@@ -1777,9 +2119,61 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 		{
 			aMouseState[mouseKeyCode].state = KEY_RELEASED;
 		}
+	}
+}
+
+/*!
+ * Handle mouse button events (We can handle up to 5)
+ */
+static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
+{
+	Vector2i logicalPos((int)((float)buttonEvent->x / current_displayScaleFactor), (int)((float)buttonEvent->y / current_displayScaleFactor));
+	if (wzGamepadNotifyNonGamepadInput())
+	{
+		// the event position predates the pointer warp - click where the cursor is shown
+		logicalPos = Vector2i(mouseXPos, mouseYPos);
+	}
+
+	MOUSE_KEY_CODE mouseKeyCode;
+	switch (buttonEvent->button)
+	{
+	case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
+	case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
+	case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
+	case SDL_BUTTON_X1: mouseKeyCode = MOUSE_X1; break;
+	case SDL_BUTTON_X2: mouseKeyCode = MOUSE_X2; break;
+	default: return;  // Unknown button.
+	}
+
+	switch (buttonEvent->type)
+	{
+	case SDL_EVENT_MOUSE_BUTTON_DOWN :
+		inputSetMouseButton(mouseKeyCode, true, logicalPos);
+		break;
+	case SDL_EVENT_MOUSE_BUTTON_UP :
+		inputSetMouseButton(mouseKeyCode, false, logicalPos);
 		break;
 	default:
 		break;
+	}
+}
+
+/*!
+ * Update the logical mouse position and promote a held button to a drag once it moves far enough
+ */
+void inputSetMousePos(int logicalX, int logicalY)
+{
+	/* store the current mouse position */
+	mouseXPos = logicalX;
+	mouseYPos = logicalY;
+
+	/* now see if a drag has started */
+	if ((aMouseState[dragKey].state == KEY_PRESSED ||
+	     aMouseState[dragKey].state == KEY_DOWN) &&
+	    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
+	     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
+	{
+		aMouseState[dragKey].state = KEY_DRAG;
 	}
 }
 
@@ -1791,22 +2185,25 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	switch (motionEvent->type)
 	{
 	case SDL_EVENT_MOUSE_MOTION :
-		/* store the current mouse position */
-		mouseXPos = (int)((float)motionEvent->x / current_displayScaleFactor);
-		mouseYPos = (int)((float)motionEvent->y / current_displayScaleFactor);
-
-		/* now see if a drag has started */
-		if ((aMouseState[dragKey].state == KEY_PRESSED ||
-		     aMouseState[dragKey].state == KEY_DOWN) &&
-		    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
-		     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
+		if (wzGamepadNotifyNonGamepadInput())
 		{
-			aMouseState[dragKey].state = KEY_DRAG;
+			// discard the stale pre-warp position - the warp's own motion event follows
+			break;
 		}
+		inputSetMousePos((int)((float)motionEvent->x / current_displayScaleFactor), (int)((float)motionEvent->y / current_displayScaleFactor));
 		break;
 	default:
 		break;
 	}
+}
+
+/*!
+ * Move the system mouse pointer to the given logical screen coordinates
+ */
+void wzWarpMouseToLogicalPos(int logicalX, int logicalY)
+{
+	ASSERT_OR_RETURN(, WZwindow != nullptr, "No window available");
+	SDL_WarpMouseInWindow(WZwindow, (float)logicalX * current_displayScaleFactor, (float)logicalY * current_displayScaleFactor);
 }
 
 static int copied_argc = 0;
@@ -1870,6 +2267,48 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 
 	gfx_api::context::get().handleWindowSizeChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
+void wzProcessPendingWindowChanges()
+{
+	if (queuedWindowModeChange.has_value())
+	{
+		const QueuedWindowModeChange queued = queuedWindowModeChange.value();
+		queuedWindowModeChange.reset();
+		if (!wzChangeWindowModeImmediate(queued.mode, queued.silent))
+		{
+			debug(LOG_ERROR, "Deferred window mode change failed: %s",
+				to_display_string(queued.mode).c_str());
+		}
+	}
+
+	if (queuedFullscreenDisplayModeChange.has_value())
+	{
+		optional<screeninfo> config = queuedFullscreenDisplayModeChange.value();
+		queuedFullscreenDisplayModeChange.reset();
+		if (!wzChangeFullscreenDisplayModeImmediate(std::move(config)))
+		{
+			debug(LOG_ERROR, "Deferred fullscreen display mode change failed");
+		}
+	}
+
+	// Display scale before drawable resize - scale affects logical mapping / min window size.
+	if (queuedDisplayScaleChange.has_value())
+	{
+		const QueuedDisplayScaleChange queued = queuedDisplayScaleChange.value();
+		queuedDisplayScaleChange.reset();
+		if (!wzChangeDisplayScaleImmediate(queued.displayScale))
+		{
+			debug(LOG_ERROR, "Deferred display scale change failed: %u%%", queued.displayScale);
+		}
+	}
+
+	if (queuedDrawableResize.has_value())
+	{
+		const QueuedDrawableResize queued = queuedDrawableResize.value();
+		queuedDrawableResize.reset();
+		handleWindowSizeChange(queued.oldWidth, queued.oldHeight, queued.newWidth, queued.newHeight);
+	}
 }
 
 
@@ -1967,8 +2406,7 @@ void processScreenSizeChangeNotificationIfNeeded()
 {
 	if (currentScreenResizingStatus != nullptr)
 	{
-		// WZ must process the screen size change
-		screen_updateGeometry(); // must come after gfx_api::context::handleWindowSizeChange
+		// Backdrop VBO GPU upload is deferred to pie_ScreenFrameRenderBegin() via markScreenGeometryDirty().
 		gameScreenSizeDidChange(currentScreenResizingStatus->oldWidth, currentScreenResizingStatus->oldHeight, currentScreenResizingStatus->newWidth, currentScreenResizingStatus->newHeight);
 		delete currentScreenResizingStatus;
 		currentScreenResizingStatus = nullptr;
@@ -2020,6 +2458,24 @@ unsigned int wzGetDefaultBaseDisplayScale(int displayIndex)
 }
 
 bool wzChangeDisplayScale(unsigned int displayScale)
+{
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeDisplayScale called when window is not available");
+		return false;
+	}
+
+	if (shouldDeferSurfaceMutation())
+	{
+		queuedDisplayScaleChange = QueuedDisplayScaleChange{displayScale};
+		debug(LOG_WZ, "Deferring display scale change to %u%%", displayScale);
+		return true; // optimistic, same as deferred window mode
+	}
+
+	return wzChangeDisplayScaleImmediate(displayScale);
+}
+
+static bool wzChangeDisplayScaleImmediate(unsigned int displayScale)
 {
 	if (WZwindow == nullptr)
 	{
@@ -2122,6 +2578,24 @@ bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight)
 }
 
 bool wzChangeFullscreenDisplayMode(optional<screeninfo> config)
+{
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeFullscreenDisplayMode called when window is not available");
+		return false;
+	}
+
+	if (shouldDeferSurfaceMutation())
+	{
+		queuedFullscreenDisplayModeChange = std::move(config);
+		debug(LOG_WZ, "Deferring fullscreen display mode change");
+		return true;
+	}
+
+	return wzChangeFullscreenDisplayModeImmediate(std::move(config));
+}
+
+static bool wzChangeFullscreenDisplayModeImmediate(optional<screeninfo> config)
 {
 	if (WZwindow == nullptr)
 	{
@@ -2538,7 +3012,7 @@ bool wzSDLOneTimeInit()
 	return true;
 }
 
-static bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
+bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
 {
 	if (SDL_WasInit(subsystem_flag) == subsystem_flag)
 	{
@@ -2860,7 +3334,9 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 
 	WZ_SDL_setBackendProperty(props, backend);
 
+#if !defined(WZ_OS_MAC) // always make window resizable on macOS
 	if (fullscreen == WINDOW_MODE::windowed)
+#endif
 	{
 		// Allow the window to be manually resized, if not fullscreen
 		SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
@@ -3501,6 +3977,13 @@ void wzSetWindowIsResizable(bool resizable)
 		debug(LOG_WARNING, "wzSetWindowIsResizable called when window is not available");
 		return;
 	}
+
+#if defined(WZ_OS_MAC)
+	// Making the window non-resizable may interfere with maximizing / fullscreen-space
+	// and other window transitions on macOS + Vulkan, so skip
+	return;
+#else
+
 	SDL_SetWindowResizable(WZwindow, resizable);
 
 	if (resizable)
@@ -3510,6 +3993,8 @@ void wzSetWindowIsResizable(bool resizable)
 		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, current_displayScaleFactor);
 		SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
 	}
+
+#endif
 }
 
 bool wzIsWindowResizable()
@@ -3561,7 +4046,8 @@ static void handleActiveEvent(SDL_Event *event)
 
 				int newWindowWidth = 0, newWindowHeight = 0;
 				SDL_GetWindowSize(WZwindow, &newWindowWidth, &newWindowHeight);
-				handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+				windowWidth = static_cast<unsigned int>(newWindowWidth);
+				windowHeight = static_cast<unsigned int>(newWindowHeight);
 
 				// Store the new values (in case the user manually resized the window bounds)
 				if (wzGetCurrentWindowMode() == WINDOW_MODE::windowed)
@@ -3569,6 +4055,8 @@ static void handleActiveEvent(SDL_Event *event)
 					war_SetWidth(newWindowWidth);
 					war_SetHeight(newWindowHeight);
 				}
+
+				queueDrawableResize(oldWindowWidth, oldWindowHeight, static_cast<unsigned int>(newWindowWidth), static_cast<unsigned int>(newWindowHeight));
 
 				// Handle deferred size reset
 				if (deferredDimensionReset.has_value())
@@ -3613,7 +4101,9 @@ static void handleActiveEvent(SDL_Event *event)
 					|| oldDrawableDimensions.first != newDrawableWidth || oldDrawableDimensions.second != newDrawableHeight)
 				{
 					debug(LOG_WZ, "Triggering handleWindowSizeChange from window restore event");
-					handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+					windowWidth = static_cast<unsigned int>(newWindowWidth);
+					windowHeight = static_cast<unsigned int>(newWindowHeight);
+					queueDrawableResize(oldWindowWidth, oldWindowHeight, static_cast<unsigned int>(newWindowWidth), static_cast<unsigned int>(newWindowHeight));
 				}
 			}
 			break;
@@ -3639,6 +4129,8 @@ static void handleActiveEvent(SDL_Event *event)
 				aKeyState[i].state = KEY_UP;
 				actualKeyState[i].state = KEY_UP;
 			}
+			touchPoints.clear();
+			wzGamepadResetInputState();
 			break;
 		case SDL_EVENT_WINDOW_CLOSE_REQUESTED :
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
@@ -3656,6 +4148,10 @@ static void handleActiveEvent(SDL_Event *event)
 			}
 			break;
 		}
+		case SDL_EVENT_WINDOW_DISPLAY_CHANGED :
+			debug(LOG_WZ, "Window %d moved to display %d", event->window.windowID, (int)event->window.data1);
+			markDisplayRefreshRateCacheDirty();
+			break;
 		default:
 			debug(LOG_WZ, "Window %d got unknown event %d", event->window.windowID, event->window.type);
 			break;
@@ -3700,6 +4196,25 @@ void wzEventLoopOneFrame(void* arg)
 		case SDL_EVENT_TEXT_INPUT:	// SDL now handles text input differently
 			inputhandleText(&event.text);
 			break;
+		case SDL_EVENT_FINGER_DOWN:
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+		case SDL_EVENT_FINGER_MOTION:
+			inputHandleTouchFingerEvent(event.tfinger);
+			break;
+#if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
+		case SDL_EVENT_PINCH_BEGIN:
+		case SDL_EVENT_PINCH_UPDATE:
+		case SDL_EVENT_PINCH_END:
+			inputHandlePinchEvent(&event.pinch);
+			break;
+#endif
+		case SDL_EVENT_GAMEPAD_ADDED:
+		case SDL_EVENT_GAMEPAD_REMOVED:
+		case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+		case SDL_EVENT_GAMEPAD_BUTTON_UP:
+			wzGamepadHandleSDLEvent(event);
+			break;
 		case SDL_EVENT_QUIT:
 #if defined(__EMSCRIPTEN__)
 			// Exit "soft fullscreen" - (as long as we aren't in "real" fullscreen mode)
@@ -3728,6 +4243,11 @@ void wzEventLoopOneFrame(void* arg)
 			{
 				handleActiveEvent(&event);
 			}
+			else if (event.type >= SDL_EVENT_DISPLAY_FIRST && event.type <= SDL_EVENT_DISPLAY_LAST)
+			{
+				// any display topology or mode change may affect the current refresh rate
+				markDisplayRefreshRateCacheDirty();
+			}
 			break;
 		}
 
@@ -3751,6 +4271,7 @@ void wzEventLoopOneFrame(void* arg)
 	}
 
 	processScreenSizeChangeNotificationIfNeeded();
+	wzGamepadUpdate();			// poll gamepad axis state
 	mainLoop();				// WZ does its thing
 	inputNewFrame();			// reset input states
 #if defined(__EMSCRIPTEN__)
@@ -3762,6 +4283,8 @@ void wzEventLoopOneFrame(void* arg)
 void wzMainEventLoop(std::function<void()> onShutdown)
 {
 	event.type = 0;
+
+	wzGamepadInit();
 
 #if defined(__EMSCRIPTEN__)
 	saved_onShutdown = onShutdown;
@@ -3783,12 +4306,14 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 
 void wzPumpEventsWhileLoading()
 {
+	// SDL backend implementation of the platform hook documented in wzapp.h.
 	SDL_PumpEvents();
 }
 
 void wzShutdown()
 {
 	// order is important!
+	wzGamepadShutdown();
 	sdlFreeCursors();
 	if (WZwindow != nullptr)
 	{
@@ -3862,7 +4387,9 @@ EM_BOOL wz_emscripten_window_resized_callback(int eventType, const void *reserve
 
 		unsigned int oldWindowWidth = windowWidth;
 		unsigned int oldWindowHeight = windowHeight;
-		handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+		windowWidth = static_cast<unsigned int>(newWindowWidth);
+		windowHeight = static_cast<unsigned int>(newWindowHeight);
+		queueDrawableResize(oldWindowWidth, oldWindowHeight, static_cast<unsigned int>(newWindowWidth), static_cast<unsigned int>(newWindowHeight));
 		// Store the new values (in case the user manually resized the window bounds)
 		war_SetWidth(newWindowWidth);
 		war_SetHeight(newWindowHeight);

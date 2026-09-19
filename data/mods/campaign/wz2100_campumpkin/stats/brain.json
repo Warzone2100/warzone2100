@@ -1,5 +1,6 @@
 {
 	"CommandBrain01": {
+		"autoRewardRankFromAttach": true,
 		"designable": 1,
 		"droidType": "DROID_COMMAND",
 		"hitpoints": 0,
@@ -7,6 +8,7 @@
 		"maxDroids": 6,
 		"maxDroidsMult": 2,
 		"name": "Command Turret",
+		"productionCommanderExpLimit": 10000,
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 16, 32, 64, 128, 256, 512, 1024, 2048 ],
 		"turret": "CommandTurret1"

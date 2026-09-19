@@ -495,29 +495,38 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 				case KEY_V:
-					aText = wzGetSelection();
+				{
+					if (!wzHasClipboardText())
+					{
+						break;
+					}
+					WzString clipText = wzGetClipboardText();
 					if (onPasteTransformFunc)
 					{
 						// call custom onPasteTransformFunc to process the pasted data
-						aText = onPasteTransformFunc(aText);
+						clipText = onPasteTransformFunc(clipText);
 					}
 					else
 					{
 						// default behavior:
 						// remove any \r, \n chars
-						aText.replace(WzUniCodepoint::fromASCII('\r'), "");
-						aText.replace(WzUniCodepoint::fromASCII('\n'), "");
+						clipText.replace(WzUniCodepoint::fromASCII('\r'), "");
+						clipText.replace(WzUniCodepoint::fromASCII('\n'), "");
 					}
-					// truncate if too long
-					if (aText.length() >= maxStringSize)
+					// Truncate the clipboard text if it will overflow
+					int newLength = aText.length() + clipText.length();
+					if (newLength >= maxStringSize)
 					{
-						aText.truncate(maxStringSize);
+						clipText.truncate(maxStringSize - aText.length());
 					}
-					insPos = aText.length();
+					aText.insert(insPos, clipText);
+					insPos += clipText.length();
+
 					/* Update the printable text */
 					fitStringEnd();
 					debug(LOG_INPUT, "EditBox paste");
 					break;
+				}
 				default:
 					break;
 				}

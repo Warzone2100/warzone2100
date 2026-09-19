@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2020  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 #include "lib/framework/wzapp.h"
 #include "screen.h"
 #include "gfx_api_gl.h"
+#include "render_graph/pass_resolve.h"
+#include "render_graph/scene_post_effects.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
@@ -30,6 +32,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cstdlib>
+#include <chrono>
+#include <cstring>
 #include <unordered_set>
 #include <unordered_map>
 // On Fedora 40, GCC 14 produces false-positive warnings for -Walloc-zero
@@ -170,6 +175,20 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 			// WebGL 2.0
 			return GL_R8;
 #endif
+		case gfx_api::pixel_format::FORMAT_R16_UNORM:
+			// desktop OpenGL only (not supported on OpenGL ES)
+#if !defined(__EMSCRIPTEN__)
+			return (!gles) ? GL_R16 : GL_INVALID_ENUM;
+#else
+			return GL_INVALID_ENUM;
+#endif
+		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			// desktop OpenGL only (not supported on OpenGL ES)
+#if !defined(__EMSCRIPTEN__)
+			return (!gles) ? GL_RG16 : GL_INVALID_ENUM;
+#else
+			return GL_INVALID_ENUM;
+#endif
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			return GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
@@ -256,11 +275,27 @@ static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 			// WebGL 2.0
 			return GL_RED;
 #endif
+		case gfx_api::pixel_format::FORMAT_R16_UNORM:
+			return (!gles) ? GL_RED : GL_INVALID_ENUM;
+		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			return (!gles) ? GL_RG : GL_INVALID_ENUM;
 		// COMPRESSED FORMAT
 		default:
 			return to_gl_internalformat(format, gles);
 	}
 	return GL_INVALID_ENUM;
+}
+
+static GLenum to_gl_pixel_data_type(const gfx_api::pixel_format& format)
+{
+	switch (format)
+	{
+		case gfx_api::pixel_format::FORMAT_R16_UNORM:
+		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			return GL_UNSIGNED_SHORT;
+		default:
+			return GL_UNSIGNED_BYTE;
+	}
 }
 
 static GLenum to_gl(const gfx_api::context::buffer_storage_hint& hint)
@@ -305,6 +340,14 @@ static GLenum to_gl(const gfx_api::primitive_type& primitive)
 			return GL_TRIANGLES;
 		case gfx_api::primitive_type::triangle_strip:
 			return GL_TRIANGLE_STRIP;
+		case gfx_api::primitive_type::patch_list_4:
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			return GL_PATCHES;
+#else
+			// the static GLES bindings lack GL_PATCHES
+			debug(LOG_FATAL, "Tessellation patches are unavailable with static GLES bindings");
+			break;
+#endif
 		default:
 			debug(LOG_FATAL, "Unrecognised primitive type");
 	}
@@ -329,10 +372,6 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 {
 	switch (property)
 	{
-		case gfx_api::context::context_value::MAX_ELEMENTS_VERTICES:
-			return GL_MAX_ELEMENTS_VERTICES;
-		case gfx_api::context::context_value::MAX_ELEMENTS_INDICES:
-			return GL_MAX_ELEMENTS_INDICES;
 		case gfx_api::context::context_value::MAX_TEXTURE_SIZE:
 			return GL_MAX_TEXTURE_SIZE;
 		case gfx_api::context::context_value::MAX_SAMPLES:
@@ -474,6 +513,43 @@ void gl_gpurendered_texture::unbind()
 	glBindTexture((_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, 0);
 }
 
+// MARK: gl_gpurendered_renderbuffer
+
+gl_gpurendered_renderbuffer::~gl_gpurendered_renderbuffer()
+{
+	if (_id != 0)
+	{
+		glDeleteRenderbuffers(1, &_id);
+		_id = 0;
+	}
+}
+
+void gl_gpurendered_renderbuffer::bind()
+{
+	glBindRenderbuffer(GL_RENDERBUFFER, _id);
+}
+
+size_t gl_gpurendered_renderbuffer::backend_internal_value() const
+{
+	return 0;
+}
+
+// MARK: gl_pipeline_surface_proxy
+
+gl_pipeline_surface_proxy::gl_pipeline_surface_proxy(GLPipelineSurfaceKind surfaceKind)
+	: kind(surfaceKind)
+{
+}
+
+gl_pipeline_surface_proxy::~gl_pipeline_surface_proxy() = default;
+
+void gl_pipeline_surface_proxy::bind() { }
+
+size_t gl_pipeline_surface_proxy::backend_internal_value() const
+{
+	return static_cast<size_t>(kind);
+}
+
 // MARK: gl_texture
 
 gl_texture::gl_texture()
@@ -526,7 +602,7 @@ bool gl_texture::upload_internal(const size_t& mip_level, const size_t& offset_x
 	ASSERT(gfx_api::format_memory_size(image.pixel_format(), width, height) == image.data_size(), "data_size (%zu) does not match expected format_memory_size(%s, %zu, %zu)=%zu", image.data_size(), gfx_api::format_to_str(image.pixel_format()), width, height, gfx_api::format_memory_size(image.pixel_format(), width, height));
 	if (is_uncompressed_format(image.pixel_format()))
 	{
-		glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), to_gl_format(image.pixel_format(), gles), GL_UNSIGNED_BYTE, image.data());
+		glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), to_gl_format(image.pixel_format(), gles), to_gl_pixel_data_type(image.pixel_format()), image.data());
 	}
 	else
 	{
@@ -543,7 +619,7 @@ bool gl_texture::upload(const size_t& mip_level, const iV_BaseImage& image)
 	return upload_internal(mip_level, 0, 0, image);
 }
 
-bool gl_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+bool gl_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
 	return upload_internal(mip_level, offset_x, offset_y, image);
 }
@@ -812,6 +888,13 @@ size_t gl_buffer::current_buffer_size()
 
 // MARK: gl_pipeline_state_object
 
+enum SHADER_VERSION_ES
+{
+	VERSION_ES_100,
+	VERSION_ES_300,
+	VERSION_ES_310
+};
+
 struct program_data
 {
 	std::string friendly_name;
@@ -819,122 +902,214 @@ struct program_data
 	std::string fragment_file;
 	std::vector<std::string> uniform_names;
 	std::vector<std::tuple<std::string, GLint>> additional_samplers = {};
+	// optional tessellation stages (require supportsTessellationShaders() and shaders targeting GLSL >= 4.00 core)
+	std::string tess_control_file = {};
+	std::string tess_evaluation_file = {};
+	// the highest GLSL ES version this program may target (most shaders are only tested up to 300 es)
+	SHADER_VERSION_ES maxShaderVersionES = VERSION_ES_300;
+	// std140 uniform block names, in the order the pipeline supplies its constant buffers
+	std::vector<std::string> uniform_block_names = {};
+};
+
+// Terrain claims units 0 to 12, so the light data samplers sit above that and still inside the required 16 minimum.
+constexpr GLint lightDataTextureUnit = 13;
+constexpr GLint lightIndexTextureUnit = 14;
+// 16 per stage is the minimum every target guarantees
+static_assert(lightDataTextureUnit < 16 && lightIndexTextureUnit < 16,
+	"Light data samplers must stay inside the 16 texture image units the spec minimum guarantees");
+static_assert(lightDataTextureUnit != lightIndexTextureUnit, "Light data samplers need distinct units");
+
+// Storage buffer bindings are a namespace of their own, so these do not compete with the
+// texture units above or with any uniform block binding.
+// Bound from here rather than declared in the shader.
+constexpr GLuint lightDataStorageBinding = 0;
+constexpr GLuint lightIndexStorageBinding = 1;
+static const std::vector<std::pair<const char*, GLuint>> lightStorageBlocks = {
+	{"lightData", lightDataStorageBinding}, {"lightIndexData", lightIndexStorageBinding}
+};
+static const std::vector<std::tuple<std::string, GLint>> lightDataSamplers = {
+	{"lightDataBuffer", lightDataTextureUnit}, {"lightIndexBuffer", lightIndexTextureUnit}
+};
+
+static const std::vector<std::tuple<std::string, GLint>> terrainCombinedSamplers = {
+	{"lightmap_tex", 0},
+	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
+	{"decalTex", 5}, {"decalNormal", 6}, {"decalSpecular", 7}, {"decalHeight", 8},
+	{"shadowMap", 9}
+};
+
+static const std::vector<std::tuple<std::string, GLint>> terrainCombinedTessSamplers = {
+	{"lightmap_tex", 0},
+	{"groundTex", 1}, {"groundNormal", 2}, {"groundSpecular", 3}, {"groundHeight", 4},
+	{"decalTex", 5}, {"decalNormal", 6}, {"decalSpecular", 7}, {"decalHeight", 8},
+	{"shadowMap", 9},
+	{"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12}
 };
 
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 {
-	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
-			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest"
-		} }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
-		},
-		{
-			{"shadowMap", 4},
-			{"lightmap_tex", 5}
-		} }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ "Component program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix"
-		} }),
-	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
-			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest"
-		} }),
-	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
-		{
-			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
-		},
-		{
-			{"shadowMap", 4}
-		} }),
-	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
-		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
-		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
-			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
-				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
-	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
-			"cameraPos", "sunPos",
-			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex1", "tex2", "lightmap_tex" } }),
-	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
-		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
-			"cameraPos", "sunPos",
-			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex", "tex_nm", "tex_sm", "lightmap_tex"
-		},
-		{
-			{"shadowMap", 4}
-		} }),
-	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
-			"cameraPos", "sunPos",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"lightmap_tex", "tex2"} }),
-	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
-		{ "transformationMatrix", "color" } }),
-	std::make_pair(SHADER_RECT_INSTANCED, program_data{ "Rect program", "shaders/rect_instanced.vert", "shaders/rect_instanced.frag",
-		{ "ProjectionMatrix" } }),
-	std::make_pair(SHADER_TEXRECT, program_data{ "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
-	std::make_pair(SHADER_GFX_COLOUR, program_data{ "gfx_color program", "shaders/gfx_color.vert", "shaders/gfx.frag",
-		{ "posMatrix" } }),
-	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx_text.vert", "shaders/texturedrect.frag",
-		{ "posMatrix", "color" } }),
-	std::make_pair(SHADER_SKYBOX, program_data{ "skybox program", "shaders/skybox.vert", "shaders/skybox.frag",
-		{ "posMatrix", "color", "fog_color", "fog_enabled" } }),
-	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
-	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
-	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ "Debug texture quad program", "shaders/quad_texture2d.vert", "shaders/quad_texture2d.frag",
-		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
-		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
-	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
-		{ "gamma" } })
+	std::make_pair(SHADER_COMPONENT, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask.vert", .fragment_file = "shaders/tcmask.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "instanceuniforms" } }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask_instanced.vert", .fragment_file = "shaders/tcmask_instanced.frag",
+		.uniform_names = {}, .additional_samplers = { {"shadowMap", 4}, {"lightmap_tex", 5} },
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "pointlights" } }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ .friendly_name = "Component program", .vertex_file = "shaders/tcmask_depth_instanced.vert", .fragment_file = "shaders/tcmask_depth_instanced.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms" } }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_INSTANCED, program_data{ .friendly_name = "Component depth prepass program", .vertex_file = "shaders/tcmask_depth_prepass_instanced.vert", .fragment_file = "shaders/tcmask_depth_prepass_instanced.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms", "meshuniforms" } }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_PREPASS_DEPTHONLY_INSTANCED, program_data{ .friendly_name = "Component depth-only prepass program", .vertex_file = "shaders/tcmask_depth_prepass_depthonly_instanced.vert", .fragment_file = "shaders/prepass_depth_only.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms" } }),
+	std::make_pair(SHADER_NOLIGHT, program_data{ .friendly_name = "Plain program", .vertex_file = "shaders/nolight.vert", .fragment_file = "shaders/nolight.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "instanceuniforms" } }),
+	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ .friendly_name = "Plain program", .vertex_file = "shaders/nolight_instanced.vert", .fragment_file = "shaders/nolight_instanced.frag",
+		.uniform_names = {}, .additional_samplers = { {"shadowMap", 4} },
+		.uniform_block_names = { "globaluniforms", "meshuniforms", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ .friendly_name = "terrain_depth program", .vertex_file = "shaders/terrain_depth.vert", .fragment_file = "shaders/terraindepth.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"lightmap_tex", 0} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ .friendly_name = "terrain_depthmap program", .vertex_file = "shaders/terrain_depth_only.vert", .fragment_file = "shaders/terrain_depth_only.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS, program_data{ .friendly_name = "terrain_depth_prepass program", .vertex_file = "shaders/terrain_depth_prepass.vert", .fragment_file = "shaders/terrain_depth_prepass.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_DEPTHONLY, program_data{ .friendly_name = "terrain_depth_prepass depth-only program", .vertex_file = "shaders/terrain_depth_prepass.vert", .fragment_file = "shaders/prepass_depth_only.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_classic.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_medium.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ .friendly_name = "terrain decals program", .vertex_file = "shaders/terrain_combined.vert", .fragment_file = "shaders/terrain_combined_high.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedSamplers,
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ .friendly_name = "terrain_depthmap tess program", .vertex_file = "shaders/terrain_depth_tess.vert", .fragment_file = "shaders/terrain_depth_only.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
+		.tess_control_file = "shaders/terrain_depth_tess.tesc", .tess_evaluation_file = "shaders/terrain_depthmap_tess.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS, program_data{ .friendly_name = "terrain_depth_prepass tess program", .vertex_file = "shaders/terrain_depth_prepass_tess.vert", .fragment_file = "shaders/terrain_depth_prepass_tess.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
+		.tess_control_file = "shaders/terrain_depth_prepass_tess.tesc", .tess_evaluation_file = "shaders/terrain_depth_prepass_tess.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_PREPASS_TESS_DEPTHONLY, program_data{ .friendly_name = "terrain_depth_prepass tess depth-only program", .vertex_file = "shaders/terrain_depth_prepass_tess.vert", .fragment_file = "shaders/prepass_depth_only.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"terrainBakedHeight", 0}, {"terrainBakedOffset", 1}, {"terrainBakedNormal", 2} },
+		.tess_control_file = "shaders/terrain_depth_prepass_tess.tesc", .tess_evaluation_file = "shaders/terrain_depth_prepass_tess.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, program_data{ .friendly_name = "terrain decals tess program", .vertex_file = "shaders/terrain_combined_tess.vert", .fragment_file = "shaders/terrain_combined_medium.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedTessSamplers,
+		.tess_control_file = "shaders/terrain_combined_tess.tesc", .tess_evaluation_file = "shaders/terrain_combined_tess.tese",
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, program_data{ .friendly_name = "terrain decals tess program", .vertex_file = "shaders/terrain_combined_tess.vert", .fragment_file = "shaders/terrain_combined_high.frag",
+		.uniform_names = {}, .additional_samplers = terrainCombinedTessSamplers,
+		.tess_control_file = "shaders/terrain_combined_tess.tesc", .tess_evaluation_file = "shaders/terrain_combined_tess.tese",
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_WATER, program_data{ .friendly_name = "water program", .vertex_file = "shaders/terrain_water.vert", .fragment_file = "shaders/water.frag",
+		.uniform_names = {}, .additional_samplers = { {"tex1", 0}, {"tex2", 1}, {"lightmap_tex", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WATER_DEPTH_PREPASS, program_data{ .friendly_name = "water_depth_prepass program", .vertex_file = "shaders/water_depth_prepass.vert", .fragment_file = "shaders/water_depth_prepass.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WATER_DEPTH_PREPASS_DEPTHONLY, program_data{ .friendly_name = "water_depth_prepass depth-only program", .vertex_file = "shaders/water_depth_prepass.vert", .fragment_file = "shaders/prepass_depth_only.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WATER_HIGH, program_data{ .friendly_name = "high water program", .vertex_file = "shaders/terrain_water_high.vert", .fragment_file = "shaders/terrain_water_high.frag",
+		.uniform_names = {}, .additional_samplers = { {"tex", 0}, {"tex_nm", 1}, {"tex_sm", 2}, {"lightmap_tex", 3}, {"shadowMap", 4} },
+		.uniform_block_names = { "cbuffer", "pointlights" } }),
+	std::make_pair(SHADER_WATER_CLASSIC, program_data{ .friendly_name = "classic water program", .vertex_file = "shaders/terrain_water_classic.vert", .fragment_file = "shaders/terrain_water_classic.frag",
+		.uniform_names = {}, .additional_samplers = { {"lightmap_tex", 0}, {"tex2", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RECT, program_data{ .friendly_name = "Rect program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/rect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RECT_INSTANCED, program_data{ .friendly_name = "Rect instanced program", .vertex_file = "shaders/rect_instanced.vert", .fragment_file = "shaders/rect_instanced.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TEXRECT, program_data{ .friendly_name = "Textured rect program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/texturedrect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_GFX_COLOUR, program_data{ .friendly_name = "gfx_color program", .vertex_file = "shaders/gfx_color.vert", .fragment_file = "shaders/gfx.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_GFX_TEXT, program_data{ .friendly_name = "gfx_text program", .vertex_file = "shaders/gfx_text.vert", .fragment_file = "shaders/texturedrect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SKYBOX, program_data{ .friendly_name = "skybox program", .vertex_file = "shaders/skybox.vert", .fragment_file = "shaders/skybox.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_GENERIC_COLOR, program_data{ .friendly_name = "generic color program", .vertex_file = "shaders/generic.vert", .fragment_file = "shaders/rect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_CONSTRUCTION_LINE, program_data{ .friendly_name = "construction line program", .vertex_file = "shaders/construction_line.vert", .fragment_file = "shaders/construction_line.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_LINE, program_data{ .friendly_name = "line program", .vertex_file = "shaders/line.vert", .fragment_file = "shaders/rect.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_TEXT, program_data{ .friendly_name = "Text program", .vertex_file = "shaders/rect.vert", .fragment_file = "shaders/text.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_UI_BOX, program_data{ .friendly_name = "UI box program", .vertex_file = "shaders/uibox.vert", .fragment_file = "shaders/uibox.frag",
+		.uniform_names = {}, .uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ .friendly_name = "Debug texture quad program", .vertex_file = "shaders/quad_texture2d.vert", .fragment_file = "shaders/quad_texture2d.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ .friendly_name = "Debug texture array quad program", .vertex_file = "shaders/quad_texture2darray.vert", .fragment_file = "shaders/quad_texture2darray.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_DEBUG_TESS_QUAD, program_data{ .friendly_name = "Debug tessellated quad program", .vertex_file = "shaders/tess_quad.vert", .fragment_file = "shaders/tess_quad.frag",
+		.uniform_names = {},
+		.tess_control_file = "shaders/tess_quad.tesc", .tess_evaluation_file = "shaders/tess_quad.tese",
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ .friendly_name = "World to screen quad program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/world_to_screen.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_FSR1_EASU, program_data{ .friendly_name = "FSR1 EASU program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/fsr1_easu.frag",
+		.uniform_names = {},
+		.maxShaderVersionES = VERSION_ES_310,
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_FSR1_RCAS, program_data{ .friendly_name = "FSR1 RCAS program", .vertex_file = "shaders/world_to_screen.vert", .fragment_file = "shaders/fsr1_rcas.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SMAA_EDGES, program_data{ .friendly_name = "SMAA edge detection program", .vertex_file = "shaders/smaa_edges.vert", .fragment_file = "shaders/smaa_edges.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"colorTex", 0} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SMAA_WEIGHTS, program_data{ .friendly_name = "SMAA blending weights program", .vertex_file = "shaders/smaa_weights.vert", .fragment_file = "shaders/smaa_weights.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"edgesTex", 0}, {"areaTex", 1}, {"searchTex", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SMAA_BLEND, program_data{ .friendly_name = "SMAA neighborhood blending program", .vertex_file = "shaders/smaa_blend.vert", .fragment_file = "shaders/smaa_blend.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"colorTex", 0}, {"blendTex", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SSAO_GENERATE, program_data{ .friendly_name = "SSAO generate program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_generate.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"depthTexture", 0}, {"normalsTexture", 1}, {"noiseTexture", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SSAO_BLUR, program_data{ .friendly_name = "SSAO blur program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_blur.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"occlusionTexture", 0}, {"depthTexture", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SSAO_DOWNSAMPLE, program_data{ .friendly_name = "SSAO downsample program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/ssao_downsample.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"occlusionTexture", 0} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SCENE_COMPOSE_SSAO, program_data{ .friendly_name = "Scene compose SSAO program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_compose_ssao.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"sceneTexture", 0}, {"ssaoTexture", 1}, {"prepassNormals", 2} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_SCENE_FOG, program_data{ .friendly_name = "Scene fog program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/scene_fog.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1} },
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RANGE_RING_SDF, program_data{ .friendly_name = "Range ring SDF program", .vertex_file = "shaders/range_ring_sdf.vert", .fragment_file = "shaders/range_ring_sdf.frag",
+		.uniform_names = {},
+		.uniform_block_names = { "cbuffer" } }),
+	std::make_pair(SHADER_RANGE_RING_COMPOSITE, program_data{ .friendly_name = "Range ring composite program", .vertex_file = "shaders/postprocess_fullscreen.vert", .fragment_file = "shaders/range_ring_composite.frag",
+		.uniform_names = {},
+		.additional_samplers = { {"sceneTexture", 0}, {"prepassDepth", 1}, {"rangeRingSdf", 2} },
+		.uniform_block_names = { "cbuffer" } })
 };
 
 enum SHADER_VERSION
@@ -948,12 +1123,6 @@ enum SHADER_VERSION
 	VERSION_410_CORE,
 	VERSION_FIXED_IN_FILE,
 	VERSION_AUTODETECT_FROM_LEVEL_LOAD
-};
-
-enum SHADER_VERSION_ES
-{
-	VERSION_ES_100,
-	VERSION_ES_300
 };
 
 const char * shaderVersionString(SHADER_VERSION version)
@@ -991,6 +1160,8 @@ const char * shaderVersionString(SHADER_VERSION_ES version)
 			return "#version 100\n";
 		case VERSION_ES_300:
 			return "#version 300 es\n";
+		case VERSION_ES_310:
+			return "#version 310 es\n";
 			// Deliberately omit "default:" case to trigger a compiler warning if the SHADER_VERSION_ES enum is expanded but the new cases aren't handled here
 	}
 	return ""; // Should not reach here - silence a GCC warning
@@ -1111,18 +1282,17 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 	// use the known (and explicit) mapping table between OpenGL version and supported GLSL version.
 
 	GLint gl_majorversion = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
-	//GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+	GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
 
 	// For OpenGL ES < 3.0, default to VERSION_ES_100 shaders
 	SHADER_VERSION_ES version = VERSION_ES_100;
-	if(gl_majorversion == 3)
+	if (gl_majorversion == 3)
 	{
-		return VERSION_ES_300;
+		version = (gl_minorversion >= 1) ? VERSION_ES_310 : VERSION_ES_300;
 	}
 	else if (gl_majorversion > 3)
 	{
-		// Return the OpenGL ES 3.0 value (for now)
-		version = VERSION_ES_300;
+		version = VERSION_ES_310;
 	}
 
 	version = std::max(version, minSupportedShaderVersion);
@@ -1131,44 +1301,65 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 	return version;
 }
 
-template<SHADER_MODE shader>
-typename std::pair<std::type_index, std::function<void(const void*, size_t)>> gl_pipeline_state_object::uniform_binding_entry()
-{
-	return std::make_pair(std::type_index(typeid(gfx_api::constant_buffer_type<shader>)), [this](const void* buffer, size_t buflen) {
-		ASSERT_OR_RETURN(, buflen == sizeof(const gfx_api::constant_buffer_type<shader>), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const gfx_api::constant_buffer_type<shader>));
-		this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer));
-	});
-}
-
-template<typename T>
-typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_pipeline_state_object::uniform_setting_func()
-{
-	return std::make_pair(std::type_index(typeid(T)), [this](const void* buffer, size_t buflen) {
-		ASSERT_OR_RETURN(, buflen == sizeof(const T), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const T));
-		this->set_constants(*reinterpret_cast<const T*>(buffer));
-	});
-}
-
-gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
+gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
+	std::string tessShaderHeader;
 	std::string fragmentShaderHeader;
+
+	const program_data& programInfo = shader_to_file_table.at(createInfo.shader_mode);
+	const bool hasTessStages = !programInfo.tess_control_file.empty() || !programInfo.tess_evaluation_file.empty();
+	ASSERT(!hasTessStages || ctx.supportsTessellationShaders(), "Tessellation pipeline requested without tessellation support: %s", programInfo.friendly_name.c_str());
 
 	if (!ctx.gles)
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL context
-		// (The built-in shaders support (and have been tested with) VERSION_120, VERSION_150_CORE, VERSION_330_CORE)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_120, VERSION_330_CORE));
+		// (The built-in shaders support (and have been tested with) VERSION_140, VERSION_150_CORE, VERSION_330_CORE)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_140, VERSION_330_CORE));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
+
+		if (hasTessStages)
+		{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (GLAD_GL_VERSION_4_0)
+#else
+			if (false)
+#endif
+			{
+				// Tessellation stages are core with GLSL >= 4.00, and all stages of the program must match versions
+				const char *tessVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_400_CORE, VERSION_410_CORE));
+				vertexShaderHeader = tessVersionStr;
+				tessShaderHeader = tessVersionStr;
+				fragmentShaderHeader = tessVersionStr;
+			}
+			else
+			{
+				// GL < 4.0 with GL_ARB_tessellation_shader: keep the context's GLSL version,
+				// and enable the extension in the tessellation stages
+				tessShaderHeader = shaderVersionStr;
+				tessShaderHeader += "#extension GL_ARB_tessellation_shader : require\n";
+			}
+		}
+
+		// Storage buffers are core only from GLSL 430, and the readonly qualifier the shader puts on them only from GLSL 420,
+		// so both extensions have to be requested.
+		// The directives must follow the version directive and precede everything else, which is why they go in the header
+		// instead of the shader (and they go after the block above because it rebuilds the header).
+		if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::storage_buffer)
+		{
+			fragmentShaderHeader += "#extension GL_ARB_shader_storage_buffer_object : require\n";
+			fragmentShaderHeader += "#extension GL_ARB_shader_image_load_store : require\n";
+		}
 	}
 	else
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL ES context
-		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_100, VERSION_ES_300));
+		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300,
+		// individual programs can opt in to higher versions via program_data::maxShaderVersionES)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_300, programInfo.maxShaderVersionES));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
@@ -1189,55 +1380,48 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
 	}
 
+	for (const auto& sampler : programInfo.additional_samplers)
+	{
+		ASSERT(std::get<1>(sampler) != lightDataTextureUnit && std::get<1>(sampler) != lightIndexTextureUnit,
+			"%s binds %s to texture unit %d, which the light data samplers reserve",
+			programInfo.friendly_name.c_str(), std::get<0>(sampler).c_str(), static_cast<int>(std::get<1>(sampler)));
+	}
+
+	// The light data samplers only exist in a program built for the buffer texture transport.
+	std::vector<std::tuple<std::string, GLint>> samplersToBind = programInfo.additional_samplers;
+	if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::texel_buffer)
+	{
+		samplersToBind.insert(samplersToBind.end(), lightDataSamplers.begin(), lightDataSamplers.end());
+	}
+
 	build_program(ctx,
-				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
-				  shader_to_file_table.at(createInfo.shader_mode).friendly_name,
+				  programInfo.friendly_name,
 				  vertexShaderHeader.c_str(),
-				  shader_to_file_table.at(createInfo.shader_mode).vertex_file,
+				  programInfo.vertex_file,
+				  tessShaderHeader.c_str(),
+				  programInfo.tess_control_file,
+				  programInfo.tess_evaluation_file,
 				  fragmentShaderHeader.c_str(),
-				  shader_to_file_table.at(createInfo.shader_mode).fragment_file,
-				  shader_to_file_table.at(createInfo.shader_mode).uniform_names,
-				  shader_to_file_table.at(createInfo.shader_mode).additional_samplers,
-				  mipLodBias, shadowConstants);
+				  programInfo.fragment_file,
+				  programInfo.uniform_names,
+				  samplersToBind,
+				  shadowConstants);
 
-	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
+	// Constants travel as std140 uniform blocks: slot order matches the pipeline's
+	// constant buffer order, so no per type binding table is involved.
+	ASSERT(programInfo.uniform_block_names.size() == createInfo.uniform_blocks.size(),
+		"%s declares %zu uniform blocks but the pipeline supplies %zu constant buffers",
+		programInfo.friendly_name.c_str(), programInfo.uniform_block_names.size(), createInfo.uniform_blocks.size());
+	if (!setupUniformBlocks(ctx, programInfo.uniform_block_names, programInfo.friendly_name))
 	{
-		uniform_setting_func<gfx_api::Draw3DShapeGlobalUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapePerMeshUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapePerInstanceUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapeInstancedGlobalUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapeInstancedPerMeshUniforms>(),
-		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
-		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
-		uniform_binding_entry<SHADER_WATER>(),
-		uniform_binding_entry<SHADER_WATER_HIGH>(),
-		uniform_binding_entry<SHADER_WATER_CLASSIC>(),
-		uniform_binding_entry<SHADER_RECT>(),
-		uniform_binding_entry<SHADER_TEXRECT>(),
-		uniform_binding_entry<SHADER_GFX_COLOUR>(),
-		uniform_binding_entry<SHADER_GFX_TEXT>(),
-		uniform_binding_entry<SHADER_SKYBOX>(),
-		uniform_binding_entry<SHADER_GENERIC_COLOR>(),
-		uniform_binding_entry<SHADER_RECT_INSTANCED>(),
-		uniform_binding_entry<SHADER_LINE>(),
-		uniform_binding_entry<SHADER_TEXT>(),
-		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
-		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>(),
-		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>()
-	};
-
-	for (auto& uniform_block : createInfo.uniform_blocks)
+		broken = true;
+	}
+	uniformBlockTypes = createInfo.uniform_blocks;
+	for (size_t slot = 0; slot < programInfo.uniform_block_names.size(); ++slot)
 	{
-		auto it = uniforms_bind_table.find(uniform_block);
-		if (it == uniforms_bind_table.end())
-		{
-			ASSERT(false, "Missing mapping for uniform block type: %s", uniform_block.name());
-			uniform_bind_functions.push_back(nullptr);
-			continue;
-		}
-		uniform_bind_functions.push_back(it->second);
+		uniform_bind_functions.push_back([this, slot](const void* buffer, size_t size) {
+			this->uploadUniformBlock(slot, buffer, size);
+		});
 	}
 }
 
@@ -1264,6 +1448,18 @@ void gl_pipeline_state_object::set_uniforms(const size_t& first, const std::vect
 void gl_pipeline_state_object::bind()
 {
 	glUseProgram(program);
+
+	// Restore this pipeline's own ranges, in case another pipeline has bound something
+	// else to the same binding indices since this pipeline last did.
+	for (size_t slot = 0; slot < uniformBlockRanges.size(); ++slot)
+	{
+		const auto& range = uniformBlockRanges[slot];
+		if (range.first.valid() && owningContext != nullptr)
+		{
+			owningContext->bindUniformRange(static_cast<GLuint>(slot), range.first.buffer, range.first.offset, range.second);
+		}
+	}
+
 	switch (desc.blend_state)
 	{
 		case REND_OPAQUE:
@@ -1319,10 +1515,11 @@ void gl_pipeline_state_object::bind()
 			break;
 	}
 
-	if (desc.output_mask == 0)
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	else
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glColorMask(
+		(desc.output_mask & 0x01) ? GL_TRUE : GL_FALSE,
+		(desc.output_mask & 0x02) ? GL_TRUE : GL_FALSE,
+		(desc.output_mask & 0x04) ? GL_TRUE : GL_FALSE,
+		(desc.output_mask & 0x08) ? GL_TRUE : GL_FALSE);
 
 	if (desc.offset)
 		glEnable(GL_POLYGON_OFFSET_FILL);
@@ -1507,6 +1704,341 @@ void gl_pipeline_state_object::printProgramInfoLog(code_part part, GLuint progra
 	}
 }
 
+// Blocks start at a size that covers a typical frame's constants
+// (the chaining path exists to ensure correctness)
+static constexpr GLsizeiptr WZ_UNIFORM_BLOCK_MIN_SIZE = 256 * 1024;
+
+// Whether to write constants through a mapped range instead of glBufferSubData (if available).
+// How much this matters depends entirely on the driver: writing a range of a buffer that draws
+// recorded earlier in the frame are still reading leaves the driver free to stall.
+// Mapping is therefore the default wherever it exists, which excludes WebGL 2.
+static constexpr bool WZ_UNIFORM_BLOCK_USE_MAPPING = true;
+
+#if !defined(WZ_STATIC_GL_BINDINGS)
+// Unified glBufferStorage entry point:
+// ARB_buffer_storage (desktop GL) and EXT_buffer_storage (OpenGL ES 3.1+) share the same signature,
+// and the *_EXT map-flag values alias the core ones.
+static PFNGLBUFFERSTORAGEPROC wz_glBufferStorageUnified = nullptr;
+
+// Storage and map flags for the persistently mapped uniform ring:
+// - write-only streaming
+// - coherent, so writes issued before a draw are visible to it without explicit flushes
+static constexpr GLbitfield WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS =
+	GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
+#endif
+
+static const char* uniformBlockWriteMethodName(gl_context::UniformBlockWriteMethod method)
+{
+	switch (method)
+	{
+		case gl_context::UniformBlockWriteMethod::BufferSubData: return "glBufferSubData";
+		case gl_context::UniformBlockWriteMethod::MapRange: return "mapped ranges";
+		case gl_context::UniformBlockWriteMethod::PersistentMap: return "persistently-mapped storage";
+	}
+	return "unknown";
+}
+
+void gl_context::bindUniformRange(GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
+{
+	if (index >= boundUniformRanges.size())
+	{
+		boundUniformRanges.resize(index + 1);
+	}
+	auto& current = boundUniformRanges[index];
+	if (current.buffer == buffer && current.offset == offset && current.size == size)
+	{
+		return;
+	}
+	if (buffer == 0)
+	{
+		// glBindBufferRange rejects a zero buffer with a zero size, so unbind through glBindBufferBase
+		glBindBufferBase(GL_UNIFORM_BUFFER, index, 0);
+	}
+	else
+	{
+		glBindBufferRange(GL_UNIFORM_BUFFER, index, buffer, offset, size);
+	}
+	current = BoundUniformRange{buffer, offset, size};
+}
+
+void gl_uniform_block_allocator::init(GLint offsetAlignment, GLsizeiptr minimumBlockSize_, bool persistentMapped_)
+{
+	alignment = std::max<GLint>(offsetAlignment, 1);
+	minimumBlockSize = minimumBlockSize_;
+	minimumFirstBlockSize = minimumBlockSize_;
+	persistentMappedMode = persistentMapped_;
+}
+
+void gl_uniform_block_allocator::allocateNewBlock(GLsizeiptr minimumSize)
+{
+	// Each new block covers everything allocated so far, so an overrun settles quickly
+	GLsizeiptr newBlockSize = std::max({minimumSize, blocks.empty() ? minimumFirstBlockSize : GLsizeiptr(0), minimumBlockSize, totalCapacity});
+
+	Block newBlock;
+	newBlock.size = newBlockSize;
+	glGenBuffers(1, &newBlock.buffer);
+	glBindBuffer(GL_UNIFORM_BUFFER, newBlock.buffer);
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (persistentMappedMode && wz_glBufferStorageUnified != nullptr)
+	{
+		// Immutable storage, mapped once for the block's whole lifetime
+		wz_glBufferStorageUnified(GL_UNIFORM_BUFFER, newBlockSize, nullptr, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+		newBlock.mapped = glMapBufferRange(GL_UNIFORM_BUFFER, 0, newBlockSize, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+		// NOTE: A failed glBufferStorage leaves the buffer with no data store, so glMapBufferRange returning nullptr
+		// covers both failure modes.
+		if (newBlock.mapped == nullptr)
+		{
+			// Storage or mapping failed - recreate this block as ordinary mutable storage.
+			// uploadUniformBlock falls back per-allocation, so a partial failure degrades
+			// gracefully instead of losing uniforms.
+			debug(LOG_ERROR, "Persistent uniform block storage failed for a %ld byte block, falling back to mutable storage for it", static_cast<long>(newBlockSize));
+			wzGLClearErrors();
+			glDeleteBuffers(1, &newBlock.buffer);
+			glGenBuffers(1, &newBlock.buffer);
+			glBindBuffer(GL_UNIFORM_BUFFER, newBlock.buffer);
+			glBufferData(GL_UNIFORM_BUFFER, newBlockSize, nullptr, GL_STREAM_DRAW);
+		}
+	}
+	else
+#endif
+	{
+		glBufferData(GL_UNIFORM_BUFFER, newBlockSize, nullptr, GL_STREAM_DRAW);
+	}
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	totalCapacity += newBlockSize;
+	blocks.push_back(newBlock);
+	currentWritePosInLastBlock = 0;
+}
+
+gl_uniform_block_allocator::Allocation gl_uniform_block_allocator::alloc(GLsizeiptr amount)
+{
+	if (!blocks.empty())
+	{
+		const GLsizeiptr lastBlockSize = blocks.back().size;
+		const GLsizeiptr newWritePos = ((currentWritePosInLastBlock + alignment - 1) / alignment) * alignment;
+		if (newWritePos + amount <= lastBlockSize)
+		{
+			currentWritePosInLastBlock = newWritePos + amount;
+			void* writePtr = (blocks.back().mapped != nullptr) ? static_cast<char*>(blocks.back().mapped) + newWritePos : nullptr;
+			return Allocation{blocks.back().buffer, static_cast<GLintptr>(newWritePos), writePtr};
+		}
+	}
+
+	// appending leaves earlier blocks untouched, so ranges already bound stay valid
+	allocateNewBlock(amount);
+	if (blocks.empty() || blocks.back().buffer == 0)
+	{
+		return Allocation{};
+	}
+	currentWritePosInLastBlock = amount;
+	return Allocation{blocks.back().buffer, 0, blocks.back().mapped};
+}
+
+void gl_uniform_block_allocator::freeAllBlocks()
+{
+	for (auto& block : blocks)
+	{
+		if (block.buffer)
+		{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (block.mapped != nullptr && glUnmapBuffer != nullptr)
+			{
+				// (glDeleteBuffers would implicitly unmap, but be explicit)
+				glBindBuffer(GL_UNIFORM_BUFFER, block.buffer);
+				glUnmapBuffer(GL_UNIFORM_BUFFER);
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			}
+#endif
+			glDeleteBuffers(1, &block.buffer);
+		}
+	}
+	blocks.clear();
+}
+
+void gl_uniform_block_allocator::recycle()
+{
+	GLsizeiptr totalAllocated = 0;
+	for (const auto& block : blocks) { totalAllocated += block.size; }
+	GLsizeiptr totalUsed = blocks.empty() ? 0 : totalAllocated - (blocks.back().size - currentWritePosInLastBlock);
+
+	const GLsizeiptr previousFirstBlockSize = minimumFirstBlockSize;
+	if (blocks.size() > 1)
+	{
+		// The frame needed more than one block, so ask for the whole allocation as one next time
+		minimumFirstBlockSize = totalAllocated;
+	}
+	else if (totalUsed < (minimumFirstBlockSize / 4))
+	{
+		minimumFirstBlockSize = minimumFirstBlockSize / 2;
+	}
+	minimumFirstBlockSize = std::max(minimumFirstBlockSize, minimumBlockSize);
+
+	if (previousFirstBlockSize != minimumFirstBlockSize)
+	{
+		// Drop current so the next allocation is one correctly sized block
+		freeAllBlocks();
+		totalCapacity = 0;
+	}
+
+	currentWritePosInLastBlock = 0;
+	if (blocks.empty())
+	{
+		// Create the correctly-sized block now, at the frame boundary, rather than
+		// leaving it to the first alloc() of the frame.
+		//
+		// Buffer creation (and, in persistent mode, storage allocation + mapping) is
+		// heavy driver-level work that should ideally not run mid-draw-submission.
+		//
+		// After this, alloc() only creates a block mid-frame on genuine overflow.
+		allocateNewBlock(minimumFirstBlockSize);
+	}
+	totalCapacity = blocks.empty() ? 0 : blocks.back().size;
+}
+
+void gl_uniform_block_allocator::destroy()
+{
+	freeAllBlocks();
+	currentWritePosInLastBlock = 0;
+	totalCapacity = 0;
+}
+
+bool gl_pipeline_state_object::setupUniformBlocks(gl_context& ctx, const std::vector<std::string>& blockNames, const std::string& programName)
+{
+	owningContext = &ctx;
+	uniformBlockSizes.resize(blockNames.size(), 0);
+	uniformBlockRanges.resize(blockNames.size(), {gl_uniform_block_allocator::Allocation{}, 0});
+
+	bool success = true;
+	for (size_t slot = 0; slot < blockNames.size(); ++slot)
+	{
+		const GLuint blockIndex = glGetUniformBlockIndex(program, blockNames[slot].c_str());
+		if (blockIndex == GL_INVALID_INDEX)
+		{
+			// the linker drops a block no stage reads, so leave the slot empty
+			debug(LOG_3D, "%s: uniform block \"%s\" is unused, skipping", programName.c_str(), blockNames[slot].c_str());
+			continue;
+		}
+
+		GLint blockSize = 0;
+		glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+		if (blockSize > ctx.maxUniformBlockSize)
+		{
+			debug(LOG_ERROR, "%s: uniform block \"%s\" needs %d bytes, more than the %d the driver allows",
+				programName.c_str(), blockNames[slot].c_str(), blockSize, ctx.maxUniformBlockSize);
+			success = false;
+			continue;
+		}
+
+		uniformBlockSizes[slot] = blockSize;
+		glUniformBlockBinding(program, blockIndex, static_cast<GLuint>(slot));
+	}
+
+	return success;
+}
+
+void gl_pipeline_state_object::uploadUniformBlock(size_t slot, const void* buffer, size_t size)
+{
+	ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range (have %zu)", slot, uniformBlockSizes.size());
+	ASSERT_OR_RETURN(, owningContext != nullptr, "No owning context");
+	if (uniformBlockSizes[slot] == 0)
+	{
+		return; // the linked program does not read this block
+	}
+
+	// std140 rounds a block up to a multiple of 16, so it can exceed the struct that fills
+	// it, and a bound range has to cover all of it. (The tail padding is never read.)
+	const GLsizeiptr dataSize = static_cast<GLsizeiptr>(size);
+	const GLsizeiptr rangeSize = std::max<GLsizeiptr>(dataSize, uniformBlockSizes[slot]);
+
+	auto allocation = owningContext->activeUniformBlockAllocator().alloc(rangeSize);
+	ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
+
+	owningContext->writeUniformRange(allocation, buffer, dataSize);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
+	uniformBlockRanges[slot] = {allocation, rangeSize};
+}
+
+void gl_pipeline_state_object::set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration)
+{
+	ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range (have %zu)", slot, uniformBlockSizes.size());
+	ASSERT_OR_RETURN(, owningContext != nullptr, "No owning context");
+	if (uniformBlockSizes[slot] == 0)
+	{
+		return; // the linked program does not read this block
+	}
+	ASSERT(slot >= uniformBlockTypes.size() || uniformBlockTypes[slot] == type,
+		"Uniform block slot %zu holds %s, not %s", slot, uniformBlockTypes[slot].name(), type.name());
+
+	// A reference from an earlier frame points at storage the rotation has since handed back out,
+	// and a range shorter than the block would read past what was written.
+	const bool usable = allocation.valid()
+		&& allocation.generation == currentGeneration
+		&& static_cast<GLsizeiptr>(allocation.size) >= uniformBlockSizes[slot];
+	if (!usable)
+	{
+		// Unbind rather than leave the last range in place
+		ASSERT(false, "Uniform block slot %zu was given a frame uniform from generation %" PRIu32 " (current is %" PRIu32 "), covering %" PRIu32 " of %d bytes",
+			slot, allocation.generation, currentGeneration, allocation.size, uniformBlockSizes[slot]);
+		owningContext->bindUniformRange(static_cast<GLuint>(slot), 0, 0, 0);
+		uniformBlockRanges[slot] = {gl_uniform_block_allocator::Allocation{}, 0};
+		return;
+	}
+
+	const gl_uniform_block_allocator::Allocation range{static_cast<GLuint>(allocation.handle), static_cast<GLintptr>(allocation.offset), nullptr};
+	const GLsizeiptr rangeSize = static_cast<GLsizeiptr>(allocation.size);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), range.buffer, range.offset, rangeSize);
+	// Recorded like any other range so bind() restores it, since the binding index is context state
+	// that another pipeline may have taken over in the meantime.
+	uniformBlockRanges[slot] = {range, rangeSize};
+}
+
+void gl_context::writeUniformRange(const gl_uniform_block_allocator::Allocation& allocation, const void* data, GLsizeiptr size)
+{
+	if (allocation.mappedWrite != nullptr)
+	{
+		// Persistently-mapped coherent storage:
+		// - a single forward memcpy, no bind, no map/unmap, no glBufferSubData
+		//
+		// Coherent mapping guarantees the write is visible to any command issued after this point.
+		// The allocator rotation (plus its fences) guarantees the GPU has finished reading this range.
+		// Keep this strictly write-only: the mapping may be write-combined memory, where CPU reads can
+		// be pathologically slow.
+		memcpy(allocation.mappedWrite, data, static_cast<size_t>(size));
+		return;
+	}
+
+	glBindBuffer(GL_UNIFORM_BUFFER, allocation.buffer);
+	bool written = false;
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (hasBufferMapping)
+	{
+		// bump allocation and the per frame rotation together handle what the
+		// unsynchronized bit makes the caller responsible for
+		void* mapped = glMapBufferRange(GL_UNIFORM_BUFFER, allocation.offset, size,
+			GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+		if (mapped != nullptr)
+		{
+			memcpy(mapped, data, static_cast<size_t>(size));
+			if (glUnmapBuffer(GL_UNIFORM_BUFFER) == GL_TRUE)
+			{
+				written = true;
+			}
+			else
+			{
+				// the whole store is lost, not just this range, so rewrite what we can
+				debug(LOG_ERROR, "glUnmapBuffer reported lost uniform buffer contents");
+			}
+		}
+	}
+#endif
+	if (!written)
+	{
+		glBufferSubData(GL_UNIFORM_BUFFER, allocation.offset, size, data);
+	}
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
 void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind)
 {
 	glUseProgram(program);
@@ -1542,75 +2074,6 @@ void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string,
 
 }
 
-static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
-{
-	if (shaderContents == nullptr)
-	{
-		debug(LOG_INFO, "shaderContents is null");
-		return {};
-	}
-
-	std::unordered_set<std::string> uniformNames;
-
-	// White space: the space character, horizontal tab, vertical tab, form feed, carriage-return, and line-feed.
-	const char glsl_whitespace_chars[] = " \t\v\f\r\n";
-
-	const auto re = std::regex("uniform.*(?![^\\{]*\\})(?=[=\\[;])", std::regex_constants::ECMAScript);
-
-	std::cregex_iterator next(shaderContents, shaderContents + strlen(shaderContents), re);
-	std::cregex_iterator end;
-	while (next != end)
-	{
-		std::cmatch uniformLineMatch = *next;
-		std::string uniformLineStr = uniformLineMatch.str();
-
-		// trim glsl whitespace chars from beginning / end
-		uniformLineStr = uniformLineStr.substr(uniformLineStr.find_first_not_of(glsl_whitespace_chars));
-		uniformLineStr.erase(uniformLineStr.find_last_not_of(glsl_whitespace_chars)+1);
-
-		size_t lastWhitespaceIdx = uniformLineStr.find_last_of(glsl_whitespace_chars);
-		if (lastWhitespaceIdx != std::string::npos)
-		{
-			std::string uniformName = uniformLineMatch.str().substr(lastWhitespaceIdx + 1);
-			if (!uniformName.empty())
-			{
-				uniformNames.insert(uniformName);
-			}
-		}
-		next++;
-	}
-
-	return uniformNames;
-}
-
-static std::tuple<std::string, std::unordered_map<std::string, std::string>> renameDuplicateFragmentShaderUniforms(const std::string& vertexShaderContents, const std::string& fragmentShaderContents)
-{
-	std::unordered_map<std::string, std::string> duplicateFragmentUniformNameMap;
-
-	const auto vertexUniformNames = getUniformNamesFromSource(vertexShaderContents.c_str());
-	const auto fragmentUniformNames = getUniformNamesFromSource(fragmentShaderContents.c_str());
-
-	std::string modifiedFragmentShaderSource = fragmentShaderContents;
-	for (const auto& fragmentUniform : fragmentUniformNames)
-	{
-		if (vertexUniformNames.count(fragmentUniform) > 0)
-		{
-			// duplicate uniform name found - rename it!
-			const std::string replacementUniformName = std::string("wzfix_frag_") + fragmentUniform;
-			duplicateFragmentUniformNameMap[fragmentUniform] = replacementUniformName;
-
-			// and replace it in the fragment shader source
-			modifiedFragmentShaderSource = std::regex_replace(
-				modifiedFragmentShaderSource,
-				std::regex(std::string("\\b") + fragmentUniform + "\\b", std::regex_constants::ECMAScript),
-				replacementUniformName
-			);
-		}
-	}
-
-	return std::tuple<std::string, std::unordered_map<std::string, std::string>>(modifiedFragmentShaderSource, duplicateFragmentUniformNameMap);
-}
-
 static bool regex_replace_wrapper(std::string& input, const std::regex& re, const std::string& replace, std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
 {
 	std::string result;
@@ -1641,40 +2104,27 @@ static bool regex_replace_wrapper(std::string& input, const std::regex& re, cons
 	return true;
 }
 
-static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, float mipLodBias)
+static void patchFragmentShaderTextureGather(std::string& fragmentShaderStr, bool hasTextureGatherSupport)
 {
 	// Look for:
-	// #define WZ_MIP_LOAD_BIAS 0.f
-	const auto re = std::regex("#define WZ_MIP_LOAD_BIAS .*", std::regex_constants::ECMAScript);
-
-	std::string floatAsString = astringf("%f", mipLodBias);
-	size_t lastNon0Pos = floatAsString.find_last_not_of('0');
-	if (lastNon0Pos != std::string::npos)
-	{
-		floatAsString = floatAsString.substr(0, lastNon0Pos + 1);
-	}
-	else
-	{
-		// only 0?
-		return;
-	}
-	ASSERT(floatAsString.find_last_not_of("0123456789.-") == std::string::npos, "Found unexpected / invalid character in: %s", floatAsString.c_str());
-
-	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
+	// #define WZ_FSR_EASU_GATHER 0
+	const auto re = std::regex("#define WZ_FSR_EASU_GATHER .*", std::regex_constants::ECMAScript);
+	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_FSR_EASU_GATHER %d", hasTextureGatherSupport ? 1 : 0));
 }
 
-static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
+static bool patchShaderPointLightsDefines(std::string& shaderStr, const gfx_api::lighting_constants& lightingConstants, gfx_api::data_buffer_transport lightTransport)
 {
 	const auto defines = {
 		std::make_pair("WZ_MAX_POINT_LIGHTS", gfx_api::max_lights),
 		std::make_pair("WZ_MAX_INDEXED_POINT_LIGHTS", gfx_api::max_indexed_lights),
-		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::bucket_dimension),
+		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::activeLightCapacity().bucketDimension),
 		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
+		std::make_pair("WZ_LIGHT_TRANSPORT", static_cast<size_t>(lightTransport)),
 	};
 
-	const auto& replacer = [&fragmentShaderStr](const std::string& define, const auto& value) -> bool {
+	const auto& replacer = [&shaderStr](const std::string& define, const auto& value) -> bool {
 		const auto re_1 = std::regex(fmt::format("#define {} .*", define), std::regex_constants::ECMAScript);
-		return regex_replace_wrapper(fragmentShaderStr, re_1, fmt::format("#define {} {}", define, value));
+		return regex_replace_wrapper(shaderStr, re_1, fmt::format("#define {} {}", define, value));
 	};
 	bool foundAndReplaced_PointLightsDefine = false;
 	for (const auto& p : defines)
@@ -1701,14 +2151,14 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
 }
 
-void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
-											 bool patchFragmentShaderMipLodBias,
+void gl_pipeline_state_object::build_program(gl_context& ctx,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
+											 const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames,
 											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-											 optional<float> mipLodBias, const gfx_api::lighting_constants& lightingConstants)
+											 const gfx_api::lighting_constants& lightingConstants)
 {
 	GLint status;
 	bool success = true; // Assume overall success
@@ -1756,6 +2206,8 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 		vertexShaderContents = readShaderBuf(vertexPath);
 		if (!vertexShaderContents.empty())
 		{
+			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(vertexShaderContents, lightingConstants, ctx.lightDataTransport());
+
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 			vertexShader = shader;
 
@@ -1783,7 +2235,54 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 		}
 	}
 
-	std::vector<std::string> duplicateFragmentUniformNames;
+	// optional tessellation stages
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	auto compileSimpleStage = [&](GLenum stageType, const char* stage_header, const std::string& stagePath, const char* stageTypeName, GLuint& outShader) -> bool {
+		std::string stageContents = readShaderBuf(stagePath);
+		if (stageContents.empty())
+		{
+			debug(LOG_ERROR, "Failed to read %s shader [%s]", stageTypeName, stagePath.c_str());
+			return false;
+		}
+		hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(stageContents, lightingConstants, ctx.lightDataTransport());
+
+		GLuint shader = glCreateShader(stageType);
+		outShader = shader;
+
+		const char* ShaderStrings[2] = { stage_header, stageContents.c_str() };
+
+		glShaderSource(shader, 2, ShaderStrings, nullptr);
+		glCompileShader(shader);
+
+		// Check for compilation errors
+		GLint stageStatus = GL_FALSE;
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &stageStatus);
+		if (!stageStatus)
+		{
+			debug(LOG_ERROR, "%s shader compilation has failed [%s]", stageTypeName, stagePath.c_str());
+			printShaderInfoLog(LOG_ERROR, shader);
+			return false;
+		}
+		printShaderInfoLog(LOG_3D, shader);
+		glAttachShader(program, shader);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+		ctx.wzGLObjectLabel(GL_SHADER, shader, -1, stagePath.c_str());
+#endif
+		return true;
+	};
+
+	if (success && !tessControlPath.empty())
+	{
+		success = compileSimpleStage(GL_TESS_CONTROL_SHADER, tess_header, tessControlPath, "Tessellation control", tessControlShader);
+	}
+	if (success && !tessEvalPath.empty())
+	{
+		success = compileSimpleStage(GL_TESS_EVALUATION_SHADER, tess_header, tessEvalPath, "Tessellation evaluation", tessEvalShader);
+	}
+#else
+	// the static GLES bindings lack the tessellation stage enums
+	ASSERT(tessControlPath.empty() && tessEvalPath.empty(), "Tessellation shaders are unavailable with static GLES bindings");
+#endif
 
 	if (success && !fragmentPath.empty())
 	{
@@ -1795,39 +2294,9 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 			fragmentShader = shader;
 
-			if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
-			{
-				// rename duplicate uniforms
-				// to avoid conflicting uniform precision issues
-				std::unordered_map<std::string, std::string> fragmentUniformNameChanges;
-				std::tie(fragmentShaderStr, fragmentUniformNameChanges) = renameDuplicateFragmentShaderUniforms(vertexShaderContents, fragmentShaderStr);
-
-				duplicateFragmentUniformNames.resize(uniformNames.size());
-				for (const auto& it : fragmentUniformNameChanges)
-				{
-					const auto& originalUniformName = it.first;
-					const auto& replacementUniformName = it.second;
-
-					debug(LOG_3D, " - Found duplicate uniform name in fragment shader: %s", originalUniformName.c_str());
-
-					// find uniform index in global uniforms array
-					const auto itr = std::find(uniformNames.begin(), uniformNames.end(), originalUniformName);
-					if (itr != uniformNames.end())
-					{
-						size_t uniformIdx = std::distance(uniformNames.begin(), itr);
-						duplicateFragmentUniformNames[uniformIdx] = replacementUniformName;
-
-						debug(LOG_3D, "  - Renaming \"%s\" -> \"%s\" in fragment shader", originalUniformName.c_str(), replacementUniformName.c_str());
-					}
-				}
-			}
-
-			if (patchFragmentShaderMipLodBias && mipLodBias.has_value())
-			{
-				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
-			}
+			patchFragmentShaderTextureGather(fragmentShaderStr, ctx.hasTextureGatherSupport);
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
-			hasSpecializationConstants_PointLights = patchFragmentShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
+			hasSpecializationConstants_PointLights |= patchShaderPointLightsDefines(fragmentShaderStr, lightingConstants, ctx.lightDataTransport());
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -1873,139 +2342,28 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 		ctx.wzGLObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 #endif
 	}
-	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	// A storage block gets no binding without this.
+	// Declaring one in the shader instead would need GLSL 420 (above what we ask for).
+	if (ctx.lightDataTransport() == gfx_api::data_buffer_transport::storage_buffer)
+	{
+		for (const auto& storageBlock : lightStorageBlocks)
+		{
+			const GLuint blockIndex = glGetProgramResourceIndex(program, GL_SHADER_STORAGE_BLOCK, storageBlock.first);
+			if (blockIndex != GL_INVALID_INDEX)
+			{
+				glShaderStorageBlockBinding(program, blockIndex, storageBlock.second);
+			}
+			else
+			{
+				debug(LOG_3D, "%s does not declare storage block: %s", programName.c_str(), storageBlock.first);
+			}
+		}
+	}
+#endif
+
 	getLocs(samplersToBind);
 	broken |= !success;
-}
-
-void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniformNames, const std::string& programName)
-{
-	std::transform(uniformNames.begin(), uniformNames.end(),
-				   std::back_inserter(locations),
-				   [&](const std::string& name)
-	{
-		GLint result = glGetUniformLocation(program, name.data());
-		if (result == -1)
-		{
-			debug(LOG_3D, "[%s]: Did not find uniform: %s", programName.c_str(), name.c_str());
-		}
-		return result;
-	});
-	if (!duplicateFragmentUniformNames.empty())
-	{
-		std::transform(duplicateFragmentUniformNames.begin(), duplicateFragmentUniformNames.end(),
-					   std::back_inserter(duplicateFragmentUniformLocations),
-					   [&](const std::string& name) {
-			if (name.empty())
-			{
-				return -1;
-			}
-			return glGetUniformLocation(program, name.data());
-		});
-	}
-	else
-	{
-		duplicateFragmentUniformLocations.resize(uniformNames.size(), -1);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 &v)
-{
-	glUniform4f(locations[uniformIdx], v.x, v.y, v.z, v.w);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 &m)
-{
-	glUniformMatrix4fv(locations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count)
-{
-	glUniformMatrix4fv(locations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 *m, size_t count)
-{
-	glUniform4fv(locations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 *m, size_t count)
-{
-	glUniform4iv(locations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4iv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float *v, size_t count)
-{
-	glUniform1fv(locations[uniformIdx], static_cast<GLsizei>(count), v);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform1fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), v);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 &v)
-{
-	glUniform4i(locations[uniformIdx], v.x, v.y, v.z, v.w);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform4i(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec2 &v)
-{
-	glUniform2i(locations[uniformIdx], v.x, v.y);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform2i(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec2 &v)
-{
-	glUniform2f(locations[uniformIdx], v.x, v.y);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform2f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const int32_t &v)
-{
-	glUniform1i(locations[uniformIdx], v);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform1i(duplicateFragmentUniformLocations[uniformIdx], v);
-	}
-}
-
-void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
-{
-	glUniform1f(locations[uniformIdx], v);
-	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
-	{
-		glUniform1f(duplicateFragmentUniformLocations[uniformIdx], v);
-	}
 }
 
 // MARK: -
@@ -2039,305 +2397,10 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
 gl_pipeline_state_object::~gl_pipeline_state_object()
 {
 	if (this->vertexShader) glDeleteShader(this->vertexShader);
+	if (this->tessControlShader) glDeleteShader(this->tessControlShader);
+	if (this->tessEvalShader) glDeleteShader(this->tessEvalShader);
 	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
 	glDeleteProgram(this->program);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-	setUniforms(2, cbuf.ShadowMapMVPMatrix);
-	setUniforms(3, cbuf.sunPos);
-	setUniforms(4, cbuf.sceneColor);
-	setUniforms(5, cbuf.ambient);
-	setUniforms(6, cbuf.diffuse);
-	setUniforms(7, cbuf.specular);
-	setUniforms(8, cbuf.fogColour);
-	setUniforms(9, cbuf.fogEnd);
-	setUniforms(10, cbuf.fogBegin);
-	setUniforms(11, cbuf.timeState);
-	setUniforms(12, cbuf.fogEnabled);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf)
-{
-	setUniforms(13, cbuf.tcmask);
-	setUniforms(14, cbuf.normalMap);
-	setUniforms(15, cbuf.specularMap);
-	setUniforms(16, cbuf.hasTangents);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf)
-{
-	setUniforms(17, cbuf.ModelViewMatrix);
-	setUniforms(18, cbuf.NormalMatrix);
-	setUniforms(19, cbuf.colour);
-	setUniforms(20, cbuf.teamcolour);
-	setUniforms(21, cbuf.shaderStretch);
-	setUniforms(22, cbuf.animFrameNumber);
-	setUniforms(23, cbuf.ecmState);
-	setUniforms(24, cbuf.alphaTest);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-	setUniforms(2, cbuf.ModelUVLightmapMatrix);
-	setUniforms(3, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(4, cbuf.cameraPos);
-	setUniforms(5, cbuf.sunPos);
-	setUniforms(6, cbuf.sceneColor);
-	setUniforms(7, cbuf.ambient);
-	setUniforms(8, cbuf.diffuse);
-	setUniforms(9, cbuf.specular);
-	setUniforms(10, cbuf.fogColour);
-	setUniforms(11, cbuf.ShadowMapCascadeSplits);
-	setUniforms(12, cbuf.ShadowMapSize);
-	setUniforms(13, cbuf.fogEnd);
-	setUniforms(14, cbuf.fogBegin);
-	setUniforms(15, cbuf.timeState);
-	setUniforms(16, cbuf.fogEnabled);
-	setUniforms(17, cbuf.PointLightsPosition);
-	setUniforms(18, cbuf.PointLightsColorAndEnergy);
-	setUniforms(19, cbuf.bucketOffsetAndSize);
-	setUniforms(20, cbuf.indexed_lights);
-	setUniforms(21, cbuf.bucketDimensionUsed);
-	setUniforms(22, cbuf.viewportWidth);
-	setUniforms(23, cbuf.viewportheight);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
-{
-	// IMPORTANT: uniformIdx continues incrementing from Draw3DShapeInstancedGlobalUniforms above
-	setUniforms(24, cbuf.tcmask);
-	setUniforms(25, cbuf.normalMap);
-	setUniforms(26, cbuf.specularMap);
-	setUniforms(27, cbuf.hasTangents);
-	setUniforms(28, cbuf.shieldEffect);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-	setUniforms(1, cbuf.ViewMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.paramX);
-	setUniforms(2, cbuf.paramY);
-	setUniforms(3, cbuf.texture0);
-	setUniforms(4, cbuf.paramXLight);
-	setUniforms(5, cbuf.paramYLight);
-	setUniforms(6, cbuf.fog_enabled);
-	setUniforms(7, cbuf.fog_begin);
-	setUniforms(8, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.fog_enabled);
-	setUniforms(2, cbuf.fog_begin);
-	setUniforms(3, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUniforms& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ViewMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(i++, cbuf.groundScale);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.emissiveLight);
-	setUniforms(i++, cbuf.ambientLight);
-	setUniforms(i++, cbuf.diffuseLight);
-	setUniforms(i++, cbuf.specularLight);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
-	setUniforms(i++, cbuf.ShadowMapSize);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.quality);
-	setUniforms(i++, cbuf.PointLightsPosition);
-	setUniforms(i++, cbuf.PointLightsColorAndEnergy);
-	setUniforms(i++, cbuf.bucketOffsetAndSize);
-	setUniforms(i++, cbuf.indexed_lights);
-	setUniforms(i++, cbuf.bucketDimensionUsed);
-	setUniforms(i++, cbuf.viewportWidth);
-	setUniforms(i++, cbuf.viewportheight);
-	setUniforms(i++, 0); // lightmap_tex
-	setUniforms(i++, 1); // ground
-	setUniforms(i++, 2); // groundNormal
-	setUniforms(i++, 3); // groundSpecular
-	setUniforms(i++, 4); // groundHeight
-	setUniforms(i++, 5); // decal
-	setUniforms(i++, 6); // decalNormal
-	setUniforms(i++, 7); // decalSpecular
-	setUniforms(i++, 8); // decalHeight
-	setUniforms(i++, 9); // shadowMap
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.emissiveLight);
-	setUniforms(i++, cbuf.ambientLight);
-	setUniforms(i++, cbuf.diffuseLight);
-	setUniforms(i++, cbuf.specularLight);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.timeSec);
-	 // textures:
-	setUniforms(i++, 0);
-	setUniforms(i++, 1);
-	setUniforms(i++, 2); // lightmap_tex
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ViewMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.emissiveLight);
-	setUniforms(i++, cbuf.ambientLight);
-	setUniforms(i++, cbuf.diffuseLight);
-	setUniforms(i++, cbuf.specularLight);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
-	setUniforms(i++, cbuf.ShadowMapSize);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.timeSec);
-	 // textures:
-	setUniforms(i++, 0);
-	setUniforms(i++, 1);
-	setUniforms(i++, 2);
-	setUniforms(i++, 3); // lightmap_tex
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf)
-{
-	int i = 0;
-	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
-	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.fog_colour);
-	setUniforms(i++, cbuf.fog_enabled);
-	setUniforms(i++, cbuf.fog_begin);
-	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.timeSec);
-	 // textures:
-	setUniforms(i++, 0);
-	setUniforms(i++, 1);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.colour);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.offset);
-	setUniforms(2, cbuf.size);
-	setUniforms(3, cbuf.color);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_TEXT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.color);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.color);
-	setUniforms(2, cbuf.fog_color);
-	setUniforms(3, cbuf.fog_enabled);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.colour);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT_INSTANCED>& cbuf)
-{
-	setUniforms(0, cbuf.ProjectionMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf)
-{
-	setUniforms(0, cbuf.p0);
-	setUniforms(1, cbuf.p1);
-	setUniforms(2, cbuf.colour);
-	setUniforms(3, cbuf.mat);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.offset);
-	setUniforms(2, cbuf.size);
-	setUniforms(3, cbuf.color);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.uv_transform_matrix);
-	setUniforms(2, cbuf.swizzle);
-	setUniforms(3, cbuf.color);
-	setUniforms(4, cbuf.texture);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.uv_transform_matrix);
-	setUniforms(2, cbuf.swizzle);
-	setUniforms(3, cbuf.color);
-	setUniforms(4, cbuf.layer);
-	setUniforms(5, cbuf.texture);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
-{
-	setUniforms(0, cbuf.gamma);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)
@@ -2484,6 +2547,8 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = false;
+	new_texture->tex_width = static_cast<uint32_t>(width);
+	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2510,6 +2575,8 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = true;
+	new_texture->tex_width = static_cast<uint32_t>(width);
+	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2534,6 +2601,38 @@ gl_gpurendered_texture* gl_context::create_framebuffer_color_texture(GLenum inte
 	return create_gpurendered_texture(internalFormat, format, type, width, height, filename);
 }
 
+std::unique_ptr<gl_gpurendered_renderbuffer> gl_context::create_framebuffer_renderbuffer(GLenum internalFormat, GLsizei samples,
+	uint32_t width, uint32_t height, const std::string& filename)
+{
+	auto surface = std::make_unique<gl_gpurendered_renderbuffer>();
+	surface->_samples = samples;
+	surface->_width = width;
+	surface->_height = height;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	surface->debugName = filename;
+#endif
+	glGenRenderbuffers(1, &surface->_id);
+	glBindRenderbuffer(GL_RENDERBUFFER, surface->_id);
+	if (samples > 0)
+	{
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, internalFormat,
+			static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+	}
+	else
+	{
+		glRenderbufferStorage(GL_RENDERBUFFER, internalFormat,
+			static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+	}
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (!filename.empty())
+	{
+		wzGLObjectLabel(GL_RENDERBUFFER, surface->_id, -1, filename.c_str());
+	}
+#endif
+	return surface;
+}
+
 gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
 {
 	return new gl_buffer(usage, hint);
@@ -2548,8 +2647,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 		psoID = existingPSOId->psoID;
 	}
 
-	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	auto pipeline = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
+	auto pipeline = new gl_pipeline_state_object(*this, createInfo, shadowConstants);
 	if (!psoID.has_value())
 	{
 		createdPipelines.emplace_back(createInfo);
@@ -2855,10 +2953,54 @@ void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<
 	current_program->set_uniforms(first, uniform_blocks);
 }
 
+gfx_api::frame_uniform_allocation gl_context::upload_frame_uniform_raw(const void* data, size_t size)
+{
+	// The consumers are not known here, so reserve the std140 size of the block (rounded up to a multiple of 16)
+	// since a bound range must cover it all
+	const GLsizeiptr rangeSize = static_cast<GLsizeiptr>((size + 15) & ~static_cast<size_t>(15));
+	auto allocation = activeUniformBlockAllocator().alloc(rangeSize);
+	ASSERT_OR_RETURN({}, allocation.valid(), "Failed to allocate %ld bytes of uniform block storage", static_cast<long>(rangeSize));
+
+	writeUniformRange(allocation, data, static_cast<GLsizeiptr>(size));
+
+	gfx_api::frame_uniform_allocation result;
+	result.handle = allocation.buffer;
+	result.offset = static_cast<uint32_t>(allocation.offset);
+	result.size = static_cast<uint32_t>(rangeSize);
+	result.generation = frameUniformGeneration();
+	return result;
+}
+
+void gl_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	current_program->set_frame_uniform(slot, allocation, type, frameUniformGeneration());
+}
+
+bool gl_context::ensurePatchVertices4()
+{
+	ASSERT_OR_RETURN(false, hasTessellationSupport, "Tessellation is unavailable");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	// GL_PATCH_VERTICES is context state (and nothing else sets it) - set once
+	if (!patchVertices4Set)
+	{
+		glPatchParameteri(GL_PATCH_VERTICES, 4);
+		patchVertices4Set = true;
+	}
+	return true;
+#else
+	return false;
+#endif
+}
+
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
+	if (primitive == gfx_api::primitive_type::patch_list_4)
+	{
+		ASSERT_OR_RETURN(, ensurePatchVertices4(), "Tessellation is unavailable");
+	}
 	glDrawArrays(to_gl(primitive), static_cast<GLint>(offset), static_cast<GLsizei>(count));
 }
 
@@ -2874,6 +3016,10 @@ void gl_context::draw_instanced(const std::size_t& offset, const std::size_t &co
 void gl_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
 {
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
+	if (primitive == gfx_api::primitive_type::patch_list_4)
+	{
+		ASSERT_OR_RETURN(, ensurePatchVertices4(), "Tessellation is unavailable");
+	}
 	glDrawElements(to_gl(primitive), static_cast<GLsizei>(count), to_gl(index), reinterpret_cast<void*>(offset));
 }
 
@@ -2885,9 +3031,9 @@ void gl_context::draw_elements_instanced(const std::size_t& offset, const std::s
 	wz_dyn_glDrawElementsInstanced(to_gl(primitive), static_cast<GLsizei>(count), to_gl(index), reinterpret_cast<void*>(offset),  static_cast<GLsizei>(instance_count));
 }
 
-void gl_context::set_polygon_offset(const float& offset, const float& slope)
+void gl_context::set_polygon_offset(const float& factor, const float& units)
 {
-	glPolygonOffset(offset, slope);
+	glPolygonOffset(factor, units);
 }
 
 void gl_context::set_depth_range(const float& min, const float& max)
@@ -2911,6 +3057,14 @@ int32_t gl_context::get_context_value(const context_value property)
 	{
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			return maxMultiSampleBufferFormatSamples;
+		case gfx_api::context::context_value::MAX_TESS_GEN_LEVEL:
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (hasTessellationSupport)
+			{
+				glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &value);
+			}
+#endif
+			return value;
 		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
 			// special-handling for MAX_VERTEX_OUTPUT_COMPONENTS
 #if !defined(__EMSCRIPTEN__)
@@ -3447,7 +3601,7 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 	return 2048;
 }
 
-bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
+bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> /*mipLodBias*/, uint32_t _depthMapResolution)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	khrCallbackOomDetected.store(false);
@@ -3476,9 +3630,27 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	multisamples = (antialiasing > 0) ? static_cast<uint32_t>(antialiasing) : 0;
 
 	initPixelFormatsSupport();
+	initUniformBufferLimits();
+	benchmarkUniformBlockWriteMethods();
+	initLightDataTransport();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
 	hasBorderClampSupport = initCheckBorderClampSupport();
+	hasTessellationSupport = initTessellationSupport();
+	debug(LOG_INFO, "  * Tessellation shader support %s detected", hasTessellationSupport ? "was" : "was NOT");
+	hasTextureGatherSupport = initTextureGatherSupport();
+	debug(LOG_INFO, "  * Texture gather support %s detected", hasTextureGatherSupport ? "was" : "was NOT");
+	hasGpuTimestampSupport = initGpuTimestampSupport();
+	debug(LOG_INFO, "  * GPU timestamp query support %s detected", hasGpuTimestampSupport ? "was" : "was NOT");
+	hasTenBitSceneColorSupport = initTenBitSceneColorSupport();
+	debug(LOG_INFO, "  * 10 bit scene color support %s detected", hasTenBitSceneColorSupport ? "was" : "was NOT");
+	const GLsizei requestedMsaaSamples = static_cast<GLsizei>(clampedMultiSampleCount());
+	if (hasTenBitSceneColorSupport && requestedMsaaSamples > 1)
+	{
+		hasTenBitMsaaSupport = initTenBitMsaaSupport(requestedMsaaSamples);
+		debug(LOG_INFO, "  * 10 bit scene color at %dx MSAA %s supported", requestedMsaaSamples,
+			hasTenBitMsaaSupport ? "is" : "is NOT");
+	}
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -3496,8 +3668,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	//	glEnable(GL_CULL_FACE);
 	wzGLCheckErrors();
 
-	sceneFramebufferWidth = std::max<uint32_t>(viewportWidth, 2);
-	sceneFramebufferHeight = std::max<uint32_t>(viewportHeight, 2);
+	sceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+	sceneFramebufferHeight = scaledSceneDimension(viewportHeight);
 
 	// initialize default (0) textures
 	if (!createDefaultTextures())
@@ -3515,21 +3687,19 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		setSwapIntervalInternal(gfx_api::context::swap_interval_mode::vsync);
 	}
 
-	mipLodBias = _mipLodBias;
 	depthBufferResolution = _depthMapResolution;
 	if (depthBufferResolution == 0)
 	{
 		depthBufferResolution = getSuggestedDefaultDepthBufferResolution();
 	}
 
-	if (!createSceneRenderpass())
+	if (!syncPipelineSurfaces())
 	{
-		// Treat failure to create the scene render pass as a fatal error
+		// Treat failure to sync pipeline surfaces as a fatal error
 		shutdown();
 		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
 		return false;
 	}
-	initDepthPasses(depthBufferResolution);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -3539,10 +3709,6 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		glDisable(GL_FRAMEBUFFER_SRGB);
 		wzGLCheckErrors();
 	}
-#endif
-
-#if !defined(__EMSCRIPTEN__)
-	_beginRenderPassImpl();
 #endif
 
 	return true;
@@ -3913,18 +4079,12 @@ bool gl_context::initGLContext()
 	if (!gles)
 	{
 		debug(LOG_3D, "Notable OpenGL features:");
-		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
-		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
-	#ifdef GLAD_GL_VERSION_4_0
 		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_4_1
 		debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
-	#endif
 
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
@@ -3947,19 +4107,10 @@ bool gl_context::initGLContext()
 #endif
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
-	if (!GLAD_GL_VERSION_3_0 && !GLAD_GL_ES_VERSION_3_0)
+	if ((!gles && !GLAD_GL_VERSION_3_1) || (gles && !GLAD_GL_ES_VERSION_3_0))
 	{
-		debug(LOG_POPUP, "OpenGL 3.0+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers.");
+		debug(LOG_POPUP, "OpenGL 3.1+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers or try a different graphics backend.");
 		return false;
-	}
-
-	if (!gles)
-	{
-		if (!GLAD_GL_VERSION_3_1)
-		{
-			// non-fatal pop-up, to warn about OpenGL < 3.1 (we may require 3.1+ in the future)
-			debug(LOG_POPUP, "OpenGL 3.1+ is not supported - Please upgrade your drivers or try a different graphics backend.");
-		}
 	}
 
 #else
@@ -3999,8 +4150,6 @@ bool gl_context::initGLContext()
 
 #endif
 
-	fragmentHighpFloatAvailable = true;
-	fragmentHighpIntAvailable = true;
 	if (gles)
 	{
 		GLboolean bShaderCompilerSupported = GL_FALSE;
@@ -4011,21 +4160,16 @@ bool gl_context::initGLContext()
 			return false;
 		}
 
+		// OpenGL ES 3.0 requires fragment shaders to support high precision,
+		// so only a non-conforming / broken driver should report otherwise.
 		int highpFloatRange[2] = {0}, highpFloatPrecision = 0;
 		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, highpFloatRange, &highpFloatPrecision);
-		fragmentHighpFloatAvailable = highpFloatPrecision != 0;
-
 		int highpIntRange[2] = {0}, highpIntPrecision = 0;
 		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_INT, highpIntRange, &highpIntPrecision);
-		fragmentHighpIntAvailable = highpFloatRange[1] != 0;
 
-		if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
+		if (highpFloatPrecision == 0 || highpIntRange[1] == 0)
 		{
-			// This can lead to a uniform precision mismatch between the vertex and fragment shaders
-			// (if there are duplicate uniform names).
-			//
-			// This is now handled with a workaround when processing shaders, so just log it.
-			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", highpFloatPrecision, highpIntRange[1]);
 			// FUTURE TODO: return false;
 		}
 	}
@@ -4123,34 +4267,23 @@ bool gl_context::initGLContext()
 
 size_t gl_context::numDepthPasses()
 {
-	return depthFBO.size();
+	return depthPassCount;
 }
 
 bool gl_context::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
 {
-	if (depthPassCount == _numDepthPasses
+	const size_t clampedDepthPasses = std::min<size_t>(_numDepthPasses, WZ_MAX_SHADOW_CASCADES);
+	if (depthPassCount == clampedDepthPasses
 		&& depthBufferResolution == _depthBufferResolution)
 	{
 		// nothing to do
 		return true;
 	}
 
-	depthPassCount = _numDepthPasses;
+	depthPassCount = clampedDepthPasses;
 	depthBufferResolution = _depthBufferResolution;
 
-	// reinitialize depth passes
-	initDepthPasses(depthBufferResolution);
-
-	return true;
-}
-
-void gl_context::beginDepthPass(size_t idx)
-{
-	ASSERT_OR_RETURN(, idx < depthFBO.size(), "Invalid depth pass #: %zu", idx);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO[idx]);
-	glViewport(0, 0, static_cast<GLsizei>(depthBufferResolution), static_cast<GLsizei>(depthBufferResolution));
-	glDepthMask(GL_TRUE);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	return syncPipelineSurfaces();
 }
 
 size_t gl_context::getDepthPassDimensions(size_t idx)
@@ -4158,36 +4291,97 @@ size_t gl_context::getDepthPassDimensions(size_t idx)
 	return depthBufferResolution;
 }
 
-void gl_context::endCurrentDepthPass()
+gfx_api::abstract_texture* gl_context::getPipelineSurface(gfx_api::PipelineSurfaceId id)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//	glViewport(0, 0, viewportWidth, viewportHeight);
-//	glDepthMask(GL_TRUE);
+	return _pipelineSurfaces.get(id);
 }
 
-gfx_api::abstract_texture* gl_context::getDepthTexture()
+gfx_api::PipelineSurfaceUsage gl_context::pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const
 {
-	return depthTexture;
+	return _pipelineSurfaces.usage(id);
 }
 
-void gl_context::_beginRenderPassImpl()
+const gfx_api::ResolvedSurfaceSpec& gl_context::resolvedPipelineSurface(gfx_api::PipelineSurfaceId id) const
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, viewportWidth, viewportHeight);
-	GLbitfield clearFlags = 0;
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glDepthMask(GL_TRUE);
-	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
-	glClear(clearFlags);
+	return _pipelineSurfaces.spec(id);
 }
 
-void gl_context::beginRenderPass()
+bool gl_context::isSceneMSAAEnabled() const
 {
-#if defined(__EMSCRIPTEN__)
-	_beginRenderPassImpl();
-#else
-	// no-op everywhere else
-#endif
+	return multisamples > 0 && _pipelineSurfaces.has(gfx_api::PipelineSurfaceId::SceneMSAAColor);
+}
+
+bool gl_context::isSwapchainMSAAEnabled() const
+{
+	return false;
+}
+
+bool gl_context::isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const
+{
+	if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(texture))
+	{
+		return renderbuffer->isMultisampled();
+	}
+	return false;
+}
+
+gfx_api::pixel_format gl_context::getDepthStencilFormat() const
+{
+	return gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
+}
+
+gfx_api::PipelineSurfaceSyncInputs gl_context::pipelineSurfaceSyncInputs() const
+{
+	gfx_api::PipelineSurfaceSyncInputs inputs;
+	// Drawable may be 0x0 when minimized; scene dims stay floored (>=2) from the last sensible size.
+	inputs.drawableW = viewportWidth;
+	inputs.drawableH = viewportHeight;
+	inputs.sceneW = sceneFramebufferWidth;
+	inputs.sceneH = sceneFramebufferHeight;
+	inputs.shadowMapSize = static_cast<uint32_t>(depthBufferResolution);
+	inputs.numShadowCascades = static_cast<uint32_t>(std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES));
+	const uint32_t clampedMsaa = clampedMultiSampleCount();
+	inputs.sceneMsaaSamples = (clampedMsaa > 0) ? clampedMsaa : 1u;
+	inputs.swapchainMsaaSamples = 1;
+	inputs.presentColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
+	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
+	inputs.smaa = smaaEnabled();
+	inputs.effects = storedSceneEffectSurfaces();
+	inputs.prepassNeeds = gfx_api::prepassNeeds(inputs.effects);
+	return inputs;
+}
+
+gfx_api::SurfaceCapabilityHints gl_context::surfaceCapabilities() const
+{
+	gfx_api::SurfaceCapabilityHints caps;
+	const uint32_t clampedMsaa = clampedMultiSampleCount();
+	// Prefer 10 bits per channel where the driver can render to it.
+	// (The extra precision shows as less banding across the gradients terrain and sky produce.)
+	// With MSAA: the format must also back a multisampled renderbuffer at the sample count in use -
+	// if it can't, the sample count wins (since MSAA is the setting the player chose).
+	const bool useTenBit = hasTenBitSceneColorSupport && (clampedMsaa <= 1 || hasTenBitMsaaSupport);
+	if (useTenBit)
+	{
+		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32;
+	}
+	else if (clampedMsaa > 1)
+	{
+		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	}
+	else
+	{
+		caps.sceneColorFormat = gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
+	}
+	caps.depthStencilFormat = gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
+	caps.depthSampledFormat = gfx_api::pixel_format::FORMAT_D32_SFLOAT;
+	return caps;
+}
+
+bool gl_context::ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs)
+{
+	PipelineSurfaceAllocator alloc(*this);
+	return _pipelineSurfaces.ensure(specs, alloc);
 }
 
 [[noreturn]] static void glContextHandleOOMError()
@@ -4197,15 +4391,220 @@ void gl_context::beginRenderPass()
 	abort();
 }
 
-void gl_context::endRenderPass()
+static const char *cbframebuffererror(GLenum err);
+
+namespace
 {
-	frameNum = std::max<size_t>(frameNum + 1, 1);
-	backend_impl->swapWindow();
-	glUseProgram(0);
-	current_program = nullptr;
-#if !defined(__EMSCRIPTEN__)
-	_beginRenderPassImpl();
+
+gfx_api::DynamicFBOKey::Slot dynamicFBOKeySlotFromAttachment(const gfx_api::AttachmentDesc& attachment)
+{
+	gfx_api::DynamicFBOKey::Slot slot;
+	if (auto* pipelineSurface = dynamic_cast<gl_pipeline_surface_proxy*>(attachment.texture))
+	{
+		slot.isDefaultFramebuffer = true;
+		slot.objectId = static_cast<uint32_t>(pipelineSurface->kind);
+		return slot;
+	}
+	if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(attachment.texture))
+	{
+		slot.objectId = renderbuffer->id();
+		slot.isRenderbuffer = true;
+		return slot;
+	}
+
+	auto* gpuTexture = dynamic_cast<gl_gpurendered_texture*>(attachment.texture);
+	ASSERT_OR_RETURN(slot, gpuTexture != nullptr, "Dynamic pass attachment must be a GPU-rendered texture or renderbuffer");
+	slot.objectId = gpuTexture->id();
+	slot.arrayLayer = attachment.arrayLayer;
+	return slot;
+}
+
+gfx_api::DynamicFBOKey buildDynamicFBOKey(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight)
+{
+	gfx_api::DynamicFBOKey key;
+	key.width = passWidth;
+	key.height = passHeight;
+	key.colorSlots.reserve(pass.colorAttachments.size());
+	for (const auto& colorAttachment : pass.colorAttachments)
+	{
+		key.colorSlots.push_back(dynamicFBOKeySlotFromAttachment(colorAttachment));
+	}
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
+	{
+		key.depthSlot = dynamicFBOKeySlotFromAttachment(pass.depthAttachment.value());
+		key.depthUsesStencilAttachment = gfx_api::attachmentDepthHasStencil(pass.depthAttachment.value());
+	}
+	return key;
+}
+
+void bindDynamicPassFramebufferAttachments(const gfx_api::RenderPassDesc& pass)
+{
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		const auto& attachment = pass.colorAttachments[i];
+		ASSERT_OR_RETURN(, attachment.texture != nullptr, "Unresolved color attachment in dynamic pass");
+		if (dynamic_cast<gl_pipeline_surface_proxy*>(attachment.texture) != nullptr)
+		{
+			continue;
+		}
+		const GLenum colorAttachment = GL_COLOR_ATTACHMENT0 + static_cast<GLenum>(i);
+		if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(attachment.texture))
+		{
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, colorAttachment, GL_RENDERBUFFER, renderbuffer->id());
+		}
+		else
+		{
+			auto* gpuTexture = dynamic_cast<gl_gpurendered_texture*>(attachment.texture);
+			ASSERT_OR_RETURN(, gpuTexture != nullptr, "Dynamic pass color attachment must be a GPU-rendered texture or renderbuffer");
+			if (gpuTexture->isArray())
+			{
+				glFramebufferTextureLayer(GL_FRAMEBUFFER, colorAttachment, gpuTexture->id(), 0,
+					static_cast<GLint>(attachment.arrayLayer));
+			}
+			else
+			{
+				glFramebufferTexture2D(GL_FRAMEBUFFER, colorAttachment, gpuTexture->target(), gpuTexture->id(), 0);
+			}
+		}
+	}
+
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
+	{
+		if (dynamic_cast<gl_pipeline_surface_proxy*>(pass.depthAttachment->texture) != nullptr)
+		{
+			return;
+		}
+		const GLenum depthAttachmentPoint = gfx_api::attachmentDepthHasStencil(pass.depthAttachment.value())
+			? GL_DEPTH_STENCIL_ATTACHMENT
+			: GL_DEPTH_ATTACHMENT;
+		if (auto* depthRenderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(pass.depthAttachment->texture))
+		{
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, depthAttachmentPoint, GL_RENDERBUFFER, depthRenderbuffer->id());
+		}
+		else
+		{
+			auto* depthTexture = dynamic_cast<gl_gpurendered_texture*>(pass.depthAttachment->texture);
+			ASSERT_OR_RETURN(, depthTexture != nullptr, "Dynamic pass depth attachment must be a GPU-rendered texture or renderbuffer");
+			if (depthTexture->isArray())
+			{
+				glFramebufferTextureLayer(GL_FRAMEBUFFER, depthAttachmentPoint, depthTexture->id(), 0,
+					static_cast<GLint>(pass.depthAttachment->arrayLayer));
+			}
+			else
+			{
+				glFramebufferTexture2D(GL_FRAMEBUFFER, depthAttachmentPoint, depthTexture->target(), depthTexture->id(), 0);
+			}
+		}
+	}
+}
+
+void configureDynamicPassDrawBuffers(const gfx_api::RenderPassDesc& pass)
+{
+	std::vector<GLenum> drawBuffers;
+	drawBuffers.reserve(pass.colorAttachments.size());
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		drawBuffers.push_back(GL_COLOR_ATTACHMENT0 + static_cast<GLenum>(i));
+	}
+
+	if (drawBuffers.size() > 1)
+	{
+		glDrawBuffers(static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+	}
+	else if (drawBuffers.empty())
+	{
+		const GLenum none = GL_NONE;
+		glDrawBuffers(1, &none);
+		glReadBuffer(GL_NONE);
+	}
+}
+
+} // anonymous namespace
+
+void gl_context::beginScreenFrame()
+{
+	if (!uniformBlockAllocators.empty())
+	{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+		if (uniformBlockWriteMethod == UniformBlockWriteMethod::PersistentMap)
+		{
+			// The persistently mapped ring has no per-write synchronization at all, so
+			// the rotation itself must guarantee the GPU is done with a slot before it
+			// is rewritten.
+			//
+			// Fence the slot whose frame just ended, and wait on the incoming slot's
+			// fence (inserted a full rotation ago) before reuse.
+			if (uniformBlockAllocatorFences[currentUniformBlockAllocator] != nullptr)
+			{
+				glDeleteSync(uniformBlockAllocatorFences[currentUniformBlockAllocator]);
+			}
+			uniformBlockAllocatorFences[currentUniformBlockAllocator] = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+			const size_t incoming = (currentUniformBlockAllocator + 1) % uniformBlockAllocators.size();
+			GLsync& incomingFence = uniformBlockAllocatorFences[incoming];
+			if (incomingFence != nullptr)
+			{
+				// With (frames in flight + 1) slots this should already be signaled -
+				// a wait here means the GPU is more than a full rotation behind
+				const GLenum waitResult = glClientWaitSync(incomingFence, GL_SYNC_FLUSH_COMMANDS_BIT, 100 * 1000 * 1000ULL); // 100ms
+				if (waitResult == GL_TIMEOUT_EXPIRED || waitResult == GL_WAIT_FAILED)
+				{
+					debug(LOG_ERROR, "Timed out waiting for the GPU to release a uniform ring slot (result: 0x%x)", waitResult);
+				}
+				glDeleteSync(incomingFence);
+				incomingFence = nullptr;
+			}
+		}
 #endif
+		currentUniformBlockAllocator = (currentUniformBlockAllocator + 1) % uniformBlockAllocators.size();
+		uniformBlockAllocators[currentUniformBlockAllocator].recycle();
+		boundUniformRanges.clear();
+		advanceFrameUniformGeneration();
+	}
+
+	frameHasDrawCommands = false;
+	_dynamicFBOCache.releaseAll();
+
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (_gpuFrameTimingEnabled && gpuTimingQueriesCreated)
+	{
+		pollGpuFrameTimings();
+		auto& slot = gpuTimingSlots[gpuTimingWriteIdx];
+		if (!slot.inFlight)
+		{
+			if (gles) { glQueryCounterEXT(slot.beginQuery, GL_TIMESTAMP_EXT); }
+			else { glQueryCounter(slot.beginQuery, GL_TIMESTAMP); }
+			gpuTimingFrameOpen = true;
+		}
+	}
+#endif
+}
+
+void gl_context::finishScreenFrame()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (gpuTimingFrameOpen)
+	{
+		auto& slot = gpuTimingSlots[gpuTimingWriteIdx];
+		if (gles) { glQueryCounterEXT(slot.endQuery, GL_TIMESTAMP_EXT); }
+		else { glQueryCounter(slot.endQuery, GL_TIMESTAMP); }
+		slot.frameNum = frameNum;
+		slot.inFlight = true;
+		gpuTimingWriteIdx = (gpuTimingWriteIdx + 1) % gpuTimingSlots.size();
+		gpuTimingFrameOpen = false;
+	}
+#endif
+
+	if (frameHasDrawCommands)
+	{
+		backend_impl->swapWindow();
+		glUseProgram(0);
+		current_program = nullptr;
+	}
+
+	frameHasDrawCommands = false;
+	frameNum = std::max<size_t>(frameNum + 1, 1);
+	purgeFrameResources();
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khrCallbackOomDetected.load())
@@ -4213,6 +4612,233 @@ void gl_context::endRenderPass()
 		glContextHandleOOMError();
 	}
 #endif
+}
+
+void gl_context::applyAttachmentClears(const gfx_api::RenderPassDesc& pass)
+{
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glDepthMask(GL_TRUE);
+
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		const auto& colorAttachment = pass.colorAttachments[i];
+		if (!colorAttachment.shouldClear())
+		{
+			continue;
+		}
+		glClearBufferfv(GL_COLOR, static_cast<GLint>(i),
+			colorAttachment.clearValue.color.data());
+	}
+
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->shouldClear())
+	{
+		const gfx_api::ClearValue& clear = pass.depthAttachment->clearValue;
+		if (gfx_api::attachmentDepthHasStencil(pass.depthAttachment.value()))
+		{
+			glClearBufferfi(GL_DEPTH_STENCIL, 0, clear.depth, static_cast<GLint>(clear.stencil));
+		}
+		else
+		{
+			glClearBufferfv(GL_DEPTH, 0, &clear.depth);
+		}
+	}
+}
+
+void gl_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /*passes*/,
+	gfx_api::PassGraphCompileResult& /*compileResult*/)
+{
+}
+
+void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
+{
+	ASSERT_OR_RETURN(, !hasActivePass, "beginPass called while another pass is active");
+	ASSERT_OR_RETURN(, !_dynamicPassFBO, "Stale pass framebuffer binding");
+	ASSERT_OR_RETURN(, pass.viewportSize.has_value(), "Pass requires resolved viewportSize");
+	ASSERT_OR_RETURN(, !pass.colorAttachments.empty()
+		|| (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr),
+		"Pass requires at least one color or depth attachment");
+
+	const uint32_t passWidth = pass.viewportSize->first;
+	const uint32_t passHeight = pass.viewportSize->second;
+
+	set_depth_range(0.f, 1.f);
+
+	const bool usesDefaultFb = gfx_api::passTargetsSwapchainColor(pass);
+	if (usesDefaultFb)
+	{
+		_dynamicPassFBO = 0;
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	else
+	{
+		const gfx_api::DynamicFBOKey fboKey = buildDynamicFBOKey(pass, passWidth, passHeight);
+		_dynamicPassFBO = _dynamicFBOCache.acquire(fboKey, [&]() -> uint32_t {
+			GLuint fbo = 0;
+			glGenFramebuffers(1, &fbo);
+			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+			bindDynamicPassFramebufferAttachments(pass);
+			const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			ASSERT_OR_RETURN(0, fboStatus == GL_FRAMEBUFFER_COMPLETE,
+				"Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
+			return fbo;
+		});
+		ASSERT_OR_RETURN(, _dynamicPassFBO != 0, "Failed to acquire dynamic pass framebuffer");
+		glBindFramebuffer(GL_FRAMEBUFFER, _dynamicPassFBO);
+		configureDynamicPassDrawBuffers(pass);
+
+		const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		ASSERT_OR_RETURN(, fboStatus == GL_FRAMEBUFFER_COMPLETE, "Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
+	}
+
+	glViewport(0, 0, static_cast<GLsizei>(passWidth), static_cast<GLsizei>(passHeight));
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glDepthMask(GL_TRUE);
+	applyAttachmentClears(pass);
+	_activePassDesc = pass;
+	hasActivePass = true;
+	frameHasDrawCommands = true;
+}
+
+void gl_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
+{
+	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
+
+	const uint32_t passWidth = _activePassDesc.viewportSize.has_value()
+		? _activePassDesc.viewportSize->first
+		: sceneFramebufferWidth;
+	const uint32_t passHeight = _activePassDesc.viewportSize.has_value()
+		? _activePassDesc.viewportSize->second
+		: sceneFramebufferHeight;
+
+	applyAttachmentStoreOps(_activePassDesc, passWidth, passHeight);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	_dynamicPassFBO = 0;
+	glViewport(0, 0, static_cast<GLsizei>(viewportWidth), static_cast<GLsizei>(viewportHeight));
+	_activePassDesc = gfx_api::RenderPassDesc();
+	hasActivePass = false;
+}
+
+void gl_context::resolveMsaaColorAttachment(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight)
+{
+	if (!gfx_api::passNeedsMsaaResolve(pass))
+	{
+		return;
+	}
+	auto* resolveTexture = dynamic_cast<gl_gpurendered_texture*>(pass.resolveAttachment->texture);
+	ASSERT_OR_RETURN(, resolveTexture != nullptr, "MSAA resolve attachment must be a GPU-rendered texture");
+
+	// If MSAA is enabled, use glBlitFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
+	GLuint resolveFBO = 0;
+	glGenFramebuffers(1, &resolveFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, resolveTexture->target(), resolveTexture->id(), 0);
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, _dynamicPassFBO);
+	glBlitFramebuffer(0, 0, static_cast<GLint>(passWidth), static_cast<GLint>(passHeight),
+		0, 0, static_cast<GLint>(passWidth), static_cast<GLint>(passHeight),
+		GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glDeleteFramebuffers(1, &resolveFBO);
+}
+
+void gl_context::invalidateDepthStencilAttachment(const gfx_api::RenderPassDesc& pass)
+{
+	if (!pass.depthAttachment.has_value())
+	{
+		return;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, _dynamicPassFBO);
+	GLenum invalid_ap[2];
+	if (gles && GLAD_GL_ES_VERSION_3_0)
+	{
+		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
+	}
+#if !defined(__EMSCRIPTEN__)
+	else
+	{
+		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
+		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
+		if (!gles && GLAD_GL_ARB_invalidate_subdata)
+		{
+		#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (glInvalidateFramebuffer)
+		#endif
+			{
+				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
+			}
+		}
+		else if (gles && GLAD_GL_EXT_discard_framebuffer)
+		{
+		#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (glDiscardFramebufferEXT)
+		#endif
+			{
+				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
+			}
+		}
+	}
+#endif
+}
+
+void gl_context::applyAttachmentStoreOps(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight)
+{
+	const auto storeOpOr = [](const gfx_api::AttachmentDesc& attachment, gfx_api::AttachmentStoreOp defaultOp) {
+		return attachment.storeOp.value_or(defaultOp);
+	};
+
+	// Performance optimization:
+	//
+	// Before switching the draw framebuffer, call glInvalidateFramebuffer on any parts of the scene framebuffer(s) that we can
+	// NOTE: SceneColor remains the resolved color target used by later passes / blits.
+	// However: If using the sceneMsaaRBO, we have to keep that around initially, and only invalidate it after resolving with glBlitFramebuffer
+	//
+	// Support:
+	// - OpenGL:
+	//		- ARB_invalidate_subdata extension provides glInvalidateFramebuffer
+	//			- NOTE: ARB_invalidate_subdata's API does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
+	//		- core in OpenGL 4.3+
+	// - OpenGL ES:
+	//		- EXT_discard_framebuffer provides glDiscardFramebufferEXT
+	//			- NOTE: glDiscardFramebufferEXT does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
+	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
+	//		- core in OpenGL ES 3.0+
+
+	if (gfx_api::passNeedsMsaaResolve(pass)
+		&& pass.resolveAttachment.has_value()
+		&& storeOpOr(pass.resolveAttachment.value(), gfx_api::AttachmentStoreOp::Store) == gfx_api::AttachmentStoreOp::Store)
+	{
+		resolveMsaaColorAttachment(pass, passWidth, passHeight);
+
+		if (!pass.colorAttachments.empty()
+			&& storeOpOr(pass.colorAttachments[0], gfx_api::AttachmentStoreOp::Store) == gfx_api::AttachmentStoreOp::DontCare)
+		{
+			GLenum invalidMsaaColorAp[1];
+			invalidMsaaColorAp[0] = GL_COLOR_ATTACHMENT0;
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, _dynamicPassFBO);
+			if (gles && GLAD_GL_ES_VERSION_3_0)
+			{
+				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalidMsaaColorAp);
+			}
+			else
+			{
+#if defined(GL_ARB_invalidate_subdata)
+				if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
+				{
+					glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalidMsaaColorAp);
+				}
+#endif
+			}
+		}
+	}
+
+	if (pass.depthAttachment.has_value()
+		&& storeOpOr(pass.depthAttachment.value(), gfx_api::AttachmentStoreOp::Store) == gfx_api::AttachmentStoreOp::Invalidate)
+	{
+		invalidateDepthStencilAttachment(pass);
+	}
 }
 
 bool gl_context::supportsInstancedRendering()
@@ -4537,6 +5163,14 @@ void gl_context::initPixelFormatsSupport()
 		}
 	}
 
+	// R16 / RG16
+	// (desktop OpenGL 3.0+ only - not supported on OpenGL ES)
+	if (!gles && GLAD_GL_VERSION_3_0)
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG16_UNORM)
+	}
+
 	// S3TC
 	// Desktop OpenGL: GL_EXT_texture_compression_s3tc
 	// OpenGL ES: (May be supported by the same GL_EXT_texture_compression_s3tc, other extensions)
@@ -4695,6 +5329,451 @@ void gl_context::initPixelFormatsSupport()
 
 #endif
 
+void gl_context::initUniformBufferLimits()
+{
+	maxUniformBlockSize = wz_GetGLIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, 0);
+	maxVertexUniformBlocks = wz_GetGLIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, 0);
+	maxFragmentUniformBlocks = wz_GetGLIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, 0);
+	uniformBufferOffsetAlignment = std::max<GLint>(wz_GetGLIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, 1), 1);
+
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// WebGL 2 has no buffer mapping / buffer storage at all
+	hasBufferMapping = false;
+	hasPersistentBufferStorage = false;
+#else
+	hasBufferMapping = WZ_UNIFORM_BLOCK_USE_MAPPING && (glMapBufferRange != nullptr) && (glUnmapBuffer != nullptr);
+
+	// Immutable + persistently mappable buffer storage:
+	// - Desktop GL: ARB_buffer_storage (Core in 4.4, and a common extension)
+	// - OpenGL ES: EXT_buffer_storage (written against ES 3.1, so also require a 3.1+ context)
+	// The persistent ring also relies on sync objects (core GL 3.2 / GLES 3.0) to
+	// fence the per-frame rotation, so require those too.
+	wz_glBufferStorageUnified = nullptr;
+	if (!gles && GLAD_GL_ARB_buffer_storage && (glBufferStorage != nullptr))
+	{
+		wz_glBufferStorageUnified = glBufferStorage;
+	}
+	else if (gles && GLAD_GL_ES_VERSION_3_1 && GLAD_GL_EXT_buffer_storage && (glBufferStorageEXT != nullptr))
+	{
+		wz_glBufferStorageUnified = reinterpret_cast<PFNGLBUFFERSTORAGEPROC>(glBufferStorageEXT);
+	}
+	const bool hasSyncObjects = (glFenceSync != nullptr) && (glClientWaitSync != nullptr) && (glDeleteSync != nullptr);
+	hasPersistentBufferStorage = (wz_glBufferStorageUnified != nullptr) && hasBufferMapping && hasSyncObjects;
+#endif
+
+	// Preference order:
+	// 1. persistent mapping (no per-write driver calls at all)
+	// 2. transient unsynchronized mapping
+	// 3. glBufferSubData
+	if (hasPersistentBufferStorage)
+	{
+		uniformBlockWriteMethod = UniformBlockWriteMethod::PersistentMap;
+	}
+	else if (hasBufferMapping)
+	{
+		uniformBlockWriteMethod = UniformBlockWriteMethod::MapRange;
+	}
+	else
+	{
+		uniformBlockWriteMethod = UniformBlockWriteMethod::BufferSubData;
+	}
+
+	// Runtime override for testing / driver workarounds, without a rebuild:
+	//   WZ_GL_UBO_WRITE = persistent | map | subdata
+	if (const char* methodOverride = getenv("WZ_GL_UBO_WRITE"))
+	{
+		if (strcmp(methodOverride, "persistent") == 0)
+		{
+			if (hasPersistentBufferStorage)
+			{
+				uniformBlockWriteMethod = UniformBlockWriteMethod::PersistentMap;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_GL_UBO_WRITE=persistent requested, but buffer storage is unavailable on this context - ignoring");
+			}
+		}
+		else if (strcmp(methodOverride, "map") == 0)
+		{
+			if (hasBufferMapping)
+			{
+				uniformBlockWriteMethod = UniformBlockWriteMethod::MapRange;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_GL_UBO_WRITE=map requested, but buffer mapping is unavailable on this context - ignoring");
+			}
+		}
+		else if (strcmp(methodOverride, "subdata") == 0)
+		{
+			uniformBlockWriteMethod = UniformBlockWriteMethod::BufferSubData;
+		}
+		else
+		{
+			debug(LOG_INFO, "Unrecognized WZ_GL_UBO_WRITE value \"%s\" (expected persistent | map | subdata) - ignoring", methodOverride);
+		}
+	}
+
+	// uploadUniformBlock's non-persistent path keys off hasBufferMapping, so make the
+	// flag reflect the selected method.
+	hasBufferMapping = hasBufferMapping && (uniformBlockWriteMethod == UniformBlockWriteMethod::MapRange);
+
+	debug(LOG_INFO, "Uniform block writes use %s", uniformBlockWriteMethodName(uniformBlockWriteMethod));
+
+	debug(LOG_3D, "Uniform blocks: max size %d bytes, %d vertex / %d fragment blocks, offset alignment %d",
+		maxUniformBlockSize, maxVertexUniformBlocks, maxFragmentUniformBlocks, uniformBufferOffsetAlignment);
+
+	const bool persistentAllocators = (uniformBlockWriteMethod == UniformBlockWriteMethod::PersistentMap);
+	uniformBlockAllocators.resize(maxFramesInFlight() + 1);
+	for (auto& allocator : uniformBlockAllocators)
+	{
+		allocator.init(uniformBufferOffsetAlignment, WZ_UNIFORM_BLOCK_MIN_SIZE, persistentAllocators);
+	}
+	currentUniformBlockAllocator = 0;
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	uniformBlockAllocatorFences.assign(uniformBlockAllocators.size(), nullptr);
+#endif
+}
+
+void gl_context::upload_light_data(const void* lights, size_t lightBytes, const void* indices, size_t indexBytes)
+{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	const bool useTexelBuffer = (lightTransport == gfx_api::data_buffer_transport::texel_buffer);
+	const bool useStorageBuffer = (lightTransport == gfx_api::data_buffer_transport::storage_buffer);
+	if (!useTexelBuffer && !useStorageBuffer)
+	{
+		return;
+	}
+	const GLenum target = useTexelBuffer ? GL_TEXTURE_BUFFER : GL_SHADER_STORAGE_BUFFER;
+	if (lightDataBuffer == 0)
+	{
+		glGenBuffers(1, &lightDataBuffer);
+		glGenBuffers(1, &lightIndexBuffer);
+
+		// Size the stores once.
+		// Reallocating a store that a buffer texture is already attached to leaves what the texture reads undefined, so every
+		// later frame writes into the existing store.
+		glBindBuffer(target, lightDataBuffer);
+		glBufferData(target, static_cast<GLsizeiptr>(lightBytes), nullptr, GL_STREAM_DRAW);
+		glBindBuffer(target, lightIndexBuffer);
+		glBufferData(target, static_cast<GLsizeiptr>(indexBytes), nullptr, GL_STREAM_DRAW);
+		glBindBuffer(target, 0);
+
+		if (useTexelBuffer)
+		{
+			glGenTextures(1, &lightDataTexture);
+			glGenTextures(1, &lightIndexTexture);
+			glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
+			glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, lightDataBuffer);
+			glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
+			glTexBuffer(GL_TEXTURE_BUFFER, GL_R32I, lightIndexBuffer);
+			glBindTexture(GL_TEXTURE_BUFFER, 0);
+		}
+		else
+		{
+			// Binding points are program state rather than per draw state,
+			// so like the texture units these are claimed once and held for every draw.
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightDataStorageBinding, lightDataBuffer);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightIndexStorageBinding, lightIndexBuffer);
+		}
+
+		lightDataBufferSize = lightBytes;
+		lightIndexBufferSize = indexBytes;
+	}
+
+	ASSERT(lightBytes <= lightDataBufferSize && indexBytes <= lightIndexBufferSize,
+		"Light data grew after the buffers were sized");
+
+	glBindBuffer(target, lightDataBuffer);
+	glBufferSubData(target, 0, static_cast<GLsizeiptr>(lightBytes), lights);
+	glBindBuffer(target, lightIndexBuffer);
+	glBufferSubData(target, 0, static_cast<GLsizeiptr>(indexBytes), indices);
+	glBindBuffer(target, 0);
+
+	if (useTexelBuffer)
+	{
+		// Nothing else claims these units, so one binding per frame holds for every draw.
+		glActiveTexture(GL_TEXTURE0 + lightDataTextureUnit);
+		glBindTexture(GL_TEXTURE_BUFFER, lightDataTexture);
+		glActiveTexture(GL_TEXTURE0 + lightIndexTextureUnit);
+		glBindTexture(GL_TEXTURE_BUFFER, lightIndexTexture);
+		glActiveTexture(GL_TEXTURE0);
+	}
+#else
+	(void)lights; (void)lightBytes; (void)indices; (void)indexBytes;
+#endif
+}
+
+void gl_context::initLightDataTransport()
+{
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// WebGL has neither of these
+	const bool hasTexelBuffers = false;
+	const bool hasStorageBuffers = false;
+	const bool hasUnitsForLightSamplers = true;
+#else
+	// texelFetch on a samplerBuffer is core in desktop OpenGL 3.1 but absent from OpenGLES and WebGL,
+	// (where the uniform block stays the only option)
+	// NOTE: The two samplers need units of their own, so a context that cannot reach them falls back
+	GLint maxTextureImageUnits = 0;
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
+	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
+	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
+	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding to bind them, so it stays on the uniform block for now
+	const bool hasStorageBuffers = !gles && (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr)
+		&& (GLAD_GL_ARB_program_interface_query != 0) && (glGetProgramResourceIndex != nullptr)
+		// The shader declares its storage buffers readonly, which needs GLSL 420 or this extension
+		&& (GLAD_GL_ARB_shader_image_load_store != 0);
+
+	// Preference order:
+	// 1. storage buffer (spends no sampler, and the index can be scalarized)
+	// 2. texel buffer (wider support, including macOS which stops at OpenGL 4.1)
+	// 3. uniform block
+	if (hasStorageBuffers)
+	{
+		lightTransport = gfx_api::data_buffer_transport::storage_buffer;
+	}
+	else if (hasTexelBuffers)
+	{
+		lightTransport = gfx_api::data_buffer_transport::texel_buffer;
+	}
+	else
+	{
+		lightTransport = gfx_api::data_buffer_transport::uniform_block;
+	}
+
+	// Runtime override for testing:
+	//   WZ_LIGHT_TRANSPORT = uniform | texel | storage
+	if (const char* transportOverride = getenv("WZ_LIGHT_TRANSPORT"))
+	{
+		if (strcmp(transportOverride, "uniform") == 0)
+		{
+			lightTransport = gfx_api::data_buffer_transport::uniform_block;
+		}
+		else if (strcmp(transportOverride, "texel") == 0)
+		{
+			if (hasTexelBuffers)
+			{
+				lightTransport = gfx_api::data_buffer_transport::texel_buffer;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=texel requested, but buffer textures are unavailable on this context - ignoring");
+			}
+		}
+		else if (strcmp(transportOverride, "storage") == 0)
+		{
+			if (hasStorageBuffers)
+			{
+				lightTransport = gfx_api::data_buffer_transport::storage_buffer;
+			}
+			else
+			{
+				debug(LOG_INFO, "WZ_LIGHT_TRANSPORT=storage requested, but storage buffers are unavailable on this context - ignoring");
+			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Unrecognized WZ_LIGHT_TRANSPORT value \"%s\" (expected uniform | texel | storage) - ignoring", transportOverride);
+		}
+	}
+
+	if (!hasUnitsForLightSamplers)
+	{
+		debug(LOG_INFO, "  * Only %d texture image units, too few to spare two for light data samplers", static_cast<int>(maxTextureImageUnits));
+	}
+#endif
+
+	debug(LOG_INFO, "  * Point light data uses the %s (texel buffers %s, storage buffers %s)",
+		gfx_api::to_string(lightTransport),
+		hasTexelBuffers ? "available" : "unavailable",
+		hasStorageBuffers ? "available" : "unavailable");
+}
+
+// Startup micro-benchmark of the available uniform block write methods.
+//
+// Attempts to mimic the shape of typical per-draw traffic: many small writes
+// at rotating aligned offsets into a streaming uniform buffer, including the
+// per-write glBindBuffer(buffer)/glBindBuffer(0) that the SubData and MapRange
+// paths pay in uploadUniformBlock (the PersistentMap path pays neither).
+//
+// A trailing glFinish is included in each measurement to try to ensure that
+// work a driver defers out of the submission calls is still accounted for.
+//
+void gl_context::benchmarkUniformBlockWriteMethods()
+{
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// Only one method exists (glBufferSubData) - nothing to compare
+	return;
+#else
+	if (glGenBuffers == nullptr || glBufferData == nullptr || glBufferSubData == nullptr || glFinish == nullptr)
+	{
+		return;
+	}
+
+	// Typical uniform block payload, written at ring offsets like the real allocator
+	constexpr GLsizeiptr kUploadBytes = 256;
+	constexpr size_t kRingSlots = 256;
+	constexpr size_t kWarmupWrites = 128;
+	constexpr size_t kTimedWrites = 2000;
+
+	const GLsizeiptr stride = ((kUploadBytes + uniformBufferOffsetAlignment - 1) / uniformBufferOffsetAlignment) * uniformBufferOffsetAlignment;
+	const GLsizeiptr bufferSize = stride * static_cast<GLsizeiptr>(kRingSlots);
+
+	std::vector<unsigned char> src(static_cast<size_t>(kUploadBytes));
+	for (size_t i = 0; i < src.size(); ++i)
+	{
+		src[i] = static_cast<unsigned char>(i * 31u + 7u);
+	}
+
+	struct MethodResult
+	{
+		UniformBlockWriteMethod method = UniformBlockWriteMethod::BufferSubData;
+		double totalUs = 0.0;
+	};
+	std::vector<MethodResult> results;
+
+	// Runs one method: creates its buffer flavor, does warmup + timed writes, cleans up.
+	// Returns false if setup failed (result then excluded from the report).
+	const auto runMethod = [&](UniformBlockWriteMethod method, MethodResult& out) -> bool
+	{
+		wzGLClearErrors();
+		GLuint buffer = 0;
+		glGenBuffers(1, &buffer);
+		if (buffer == 0)
+		{
+			return false;
+		}
+		glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+
+		void* persistentPtr = nullptr;
+		if (method == UniformBlockWriteMethod::PersistentMap)
+		{
+			if (wz_glBufferStorageUnified == nullptr)
+			{
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+				glDeleteBuffers(1, &buffer);
+				return false;
+			}
+			wz_glBufferStorageUnified(GL_UNIFORM_BUFFER, bufferSize, nullptr, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+			if (glGetError() == GL_NO_ERROR)
+			{
+				persistentPtr = glMapBufferRange(GL_UNIFORM_BUFFER, 0, bufferSize, WZ_UNIFORM_BLOCK_PERSISTENT_FLAGS);
+			}
+			if (persistentPtr == nullptr)
+			{
+				glBindBuffer(GL_UNIFORM_BUFFER, 0);
+				glDeleteBuffers(1, &buffer);
+				wzGLClearErrors();
+				return false;
+			}
+		}
+		else
+		{
+			glBufferData(GL_UNIFORM_BUFFER, bufferSize, nullptr, GL_STREAM_DRAW);
+		}
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		// One write at a ring offset, matching uploadUniformBlock's call pattern for this method
+		const auto writeOnce = [&](size_t i)
+		{
+			const GLintptr offset = static_cast<GLintptr>((i % kRingSlots) * static_cast<size_t>(stride));
+			switch (method)
+			{
+				case UniformBlockWriteMethod::PersistentMap:
+					memcpy(static_cast<char*>(persistentPtr) + offset, src.data(), src.size());
+					break;
+				case UniformBlockWriteMethod::MapRange:
+				{
+					glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+					void* mapped = glMapBufferRange(GL_UNIFORM_BUFFER, offset, kUploadBytes,
+						GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+					if (mapped != nullptr)
+					{
+						memcpy(mapped, src.data(), src.size());
+						glUnmapBuffer(GL_UNIFORM_BUFFER);
+					}
+					glBindBuffer(GL_UNIFORM_BUFFER, 0);
+					break;
+				}
+				case UniformBlockWriteMethod::BufferSubData:
+					glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+					glBufferSubData(GL_UNIFORM_BUFFER, offset, kUploadBytes, src.data());
+					glBindBuffer(GL_UNIFORM_BUFFER, 0);
+					break;
+			}
+		};
+
+		for (size_t i = 0; i < kWarmupWrites; ++i)
+		{
+			writeOnce(i);
+		}
+		glFinish();
+
+		const auto start = std::chrono::steady_clock::now();
+		for (size_t i = 0; i < kTimedWrites; ++i)
+		{
+			writeOnce(i);
+		}
+		glFinish();
+		const auto end = std::chrono::steady_clock::now();
+
+		if (persistentPtr != nullptr && glUnmapBuffer != nullptr)
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+			glUnmapBuffer(GL_UNIFORM_BUFFER);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+		glDeleteBuffers(1, &buffer);
+		wzGLClearErrors();
+
+		out.method = method;
+		out.totalUs = std::chrono::duration<double, std::micro>(end - start).count();
+		return true;
+	};
+
+	std::vector<UniformBlockWriteMethod> candidates;
+	candidates.push_back(UniformBlockWriteMethod::BufferSubData);
+	if ((glMapBufferRange != nullptr) && (glUnmapBuffer != nullptr))
+	{
+		candidates.push_back(UniformBlockWriteMethod::MapRange);
+	}
+	if (hasPersistentBufferStorage)
+	{
+		candidates.push_back(UniformBlockWriteMethod::PersistentMap);
+	}
+
+	for (const auto method : candidates)
+	{
+		MethodResult result;
+		if (runMethod(method, result))
+		{
+			results.push_back(result);
+		}
+	}
+
+	if (results.empty())
+	{
+		return;
+	}
+
+	debug(LOG_INFO, "UBO write micro-benchmark (%zu x %ld-byte writes at %ld-byte ring offsets):",
+		kTimedWrites, static_cast<long>(kUploadBytes), static_cast<long>(stride));
+	const MethodResult* fastest = nullptr;
+	for (const auto& result : results)
+	{
+		debug(LOG_INFO, "  * %-28s %9.1f us total, %7.1f ns/write",
+			uniformBlockWriteMethodName(result.method), result.totalUs, (result.totalUs * 1000.0) / static_cast<double>(kTimedWrites));
+		if (fastest == nullptr || result.totalUs < fastest->totalUs)
+		{
+			fastest = &result;
+		}
+	}
+	debug(LOG_INFO, "  * fastest: %s (informational only; writes currently use %s)",
+		uniformBlockWriteMethodName(fastest->method), uniformBlockWriteMethodName(uniformBlockWriteMethod));
+#endif
+}
+
 bool gl_context::initInstancedFunctions()
 {
 #if !defined(WZ_STATIC_GL_BINDINGS)
@@ -4757,6 +5836,280 @@ bool gl_context::initInstancedFunctions()
 	return true;
 }
 
+bool gl_context::initTextureGatherSupport()
+{
+#if defined(WZ_STATIC_GL_BINDINGS)
+	return false;
+#else
+	if (gles)
+	{
+		// texture gather is core in GLSL ES 3.10, targeted when the context is OpenGL ES 3.1+
+		// (see program_data::maxShaderVersionES)
+		return GLAD_GL_ES_VERSION_3_1;
+	}
+	// core in GLSL 4.00, otherwise available via the GL_ARB_gpu_shader5 extension
+	return GLAD_GL_VERSION_4_0 || GLAD_GL_ARB_gpu_shader5;
+#endif
+}
+
+// Ask the driver whether a 10 bit scene color target is renderable rather than assuming,
+// by building one and checking the framebuffer is complete with it attached.
+bool gl_context::initTenBitSceneColorSupport()
+{
+	wzGLClearErrors();
+
+	GLuint probeTexture = 0;
+	glGenTextures(1, &probeTexture);
+	glBindTexture(GL_TEXTURE_2D, probeTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB10_A2, 4, 4, 0, GL_RGBA, GL_UNSIGNED_INT_2_10_10_10_REV, nullptr);
+	bool supported = (glGetError() == GL_NO_ERROR);
+
+	GLuint probeFbo = 0;
+	if (supported)
+	{
+		GLint previousFbo = 0;
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFbo);
+		glGenFramebuffers(1, &probeFbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, probeFbo);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, probeTexture, 0);
+		supported = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && (glGetError() == GL_NO_ERROR);
+		glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(previousFbo));
+	}
+
+	if (probeFbo != 0)
+	{
+		glDeleteFramebuffers(1, &probeFbo);
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &probeTexture);
+	wzGLClearErrors();
+	return supported;
+}
+
+// RGB10_A2 is a required color renderable renderbuffer format in both desktop GL and
+// OpenGL ES 3.0, but the sample counts it accepts are not guaranteed to match RGBA8's.
+// Build one at the count we would actually ask for and see whether it is complete, which
+// answers that without needing the per format query that only newer desktop GL has.
+bool gl_context::initTenBitMsaaSupport(GLsizei samples)
+{
+	wzGLClearErrors();
+
+	GLint previousFbo = 0;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFbo);
+
+	GLuint probeRenderbuffer = 0;
+	glGenRenderbuffers(1, &probeRenderbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, probeRenderbuffer);
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_RGB10_A2, 4, 4);
+	bool supported = (glGetError() == GL_NO_ERROR);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	GLuint probeFbo = 0;
+	if (supported)
+	{
+		glGenFramebuffers(1, &probeFbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, probeFbo);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, probeRenderbuffer);
+		supported = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) && (glGetError() == GL_NO_ERROR);
+		glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(previousFbo));
+	}
+
+	if (probeFbo != 0)
+	{
+		glDeleteFramebuffers(1, &probeFbo);
+	}
+	glDeleteRenderbuffers(1, &probeRenderbuffer);
+	wzGLClearErrors();
+	return supported;
+}
+
+bool gl_context::initGpuTimestampSupport()
+{
+#if !defined(WZ_GL_TIMER_QUERY_SUPPORTED) || defined(WZ_STATIC_GL_BINDINGS)
+	return false;
+#else
+	GLint timestampBits = 0;
+	if (gles)
+	{
+		if (GLAD_GL_EXT_disjoint_timer_query == 0
+			|| !glQueryCounterEXT || !glGetQueryObjectui64vEXT || !glGetQueryObjectuivEXT
+			|| !glGenQueriesEXT || !glDeleteQueriesEXT || !glGetQueryivEXT)
+		{
+			return false;
+		}
+		glGetQueryivEXT(GL_TIMESTAMP_EXT, GL_QUERY_COUNTER_BITS_EXT, &timestampBits);
+	}
+	else
+	{
+		if ((!GLAD_GL_VERSION_3_3 && !GLAD_GL_ARB_timer_query)
+			|| !glQueryCounter || !glGetQueryObjectui64v || !glGetQueryObjectuiv
+			|| !glGenQueries || !glDeleteQueries || !glGetQueryiv)
+		{
+			return false;
+		}
+		glGetQueryiv(GL_TIMESTAMP, GL_QUERY_COUNTER_BITS, &timestampBits);
+	}
+	// implementations may accept timestamp queries but report 0 counter bits,
+	// in which case every result is meaningless (always zero)
+	if (timestampBits <= 0)
+	{
+		debug(LOG_3D, "GPU timestamp queries unusable (GL_QUERY_COUNTER_BITS is %d)", timestampBits);
+		return false;
+	}
+	return true;
+#endif
+}
+
+bool gl_context::supportsGpuFrameTiming() const
+{
+	return hasGpuTimestampSupport;
+}
+
+bool gl_context::setGpuFrameTimingEnabled(bool enabled)
+{
+	if (!hasGpuTimestampSupport)
+	{
+		_gpuFrameTimingEnabled = false;
+		return !enabled;
+	}
+	if (enabled == _gpuFrameTimingEnabled)
+	{
+		return true;
+	}
+	if (enabled)
+	{
+		createGpuTimingQueries();
+	}
+	else
+	{
+		destroyGpuTimingQueries();
+	}
+	_gpuFrameTimingEnabled = enabled;
+	return true;
+}
+
+void gl_context::createGpuTimingQueries()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (gpuTimingQueriesCreated)
+	{
+		return;
+	}
+	for (auto& slot : gpuTimingSlots)
+	{
+		GLuint ids[2] = {0, 0};
+		if (gles) { glGenQueriesEXT(2, ids); } else { glGenQueries(2, ids); }
+		slot.beginQuery = ids[0];
+		slot.endQuery = ids[1];
+		slot.inFlight = false;
+	}
+	gpuTimingWriteIdx = 0;
+	gpuTimingReadIdx = 0;
+	gpuTimingFrameOpen = false;
+	gpuTimingQueriesCreated = true;
+#endif
+}
+
+void gl_context::destroyGpuTimingQueries()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (!gpuTimingQueriesCreated)
+	{
+		return;
+	}
+	for (auto& slot : gpuTimingSlots)
+	{
+		GLuint ids[2] = {slot.beginQuery, slot.endQuery};
+		if (gles) { glDeleteQueriesEXT(2, ids); } else { glDeleteQueries(2, ids); }
+		slot = GpuTimingSlot();
+	}
+	gpuTimingFrameOpen = false;
+	gpuTimingQueriesCreated = false;
+#endif
+}
+
+void gl_context::pollGpuFrameTimings()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	while (gpuTimingSlots[gpuTimingReadIdx].inFlight)
+	{
+		auto& slot = gpuTimingSlots[gpuTimingReadIdx];
+		GLuint resultAvailable = 0;
+		if (gles) { glGetQueryObjectuivEXT(slot.endQuery, GL_QUERY_RESULT_AVAILABLE, &resultAvailable); }
+		else { glGetQueryObjectuiv(slot.endQuery, GL_QUERY_RESULT_AVAILABLE, &resultAvailable); }
+		if (!resultAvailable)
+		{
+			// drop very old measurements so a frame that was never flushed cannot wedge the ring
+			if (frameNum > slot.frameNum + 64)
+			{
+				slot.inFlight = false;
+				gpuTimingReadIdx = (gpuTimingReadIdx + 1) % gpuTimingSlots.size();
+				continue;
+			}
+			break;
+		}
+		GLuint64 beginTime = 0;
+		GLuint64 endTime = 0;
+		if (gles)
+		{
+			glGetQueryObjectui64vEXT(slot.beginQuery, GL_QUERY_RESULT, &beginTime);
+			glGetQueryObjectui64vEXT(slot.endQuery, GL_QUERY_RESULT, &endTime);
+		}
+		else
+		{
+			glGetQueryObjectui64v(slot.beginQuery, GL_QUERY_RESULT, &beginTime);
+			glGetQueryObjectui64v(slot.endQuery, GL_QUERY_RESULT, &endTime);
+		}
+		bool validResult = (endTime >= beginTime);
+		if (gles)
+		{
+			// a disjoint event (GPU clock change etc.) invalidates any interval spanning it
+			GLint disjointOccurred = 0;
+			glGetIntegerv(GL_GPU_DISJOINT_EXT, &disjointOccurred);
+			if (disjointOccurred)
+			{
+				validResult = false;
+			}
+		}
+		if (validResult)
+		{
+			_lastGpuFrameTiming = gfx_api::context::GpuFrameTiming{slot.frameNum, static_cast<uint64_t>(endTime - beginTime)};
+		}
+		slot.inFlight = false;
+		gpuTimingReadIdx = (gpuTimingReadIdx + 1) % gpuTimingSlots.size();
+	}
+#endif
+}
+
+bool gl_context::initTessellationSupport()
+{
+#if defined(WZ_OS_MAC)
+	// Apple's OpenGL tessellation implementation is notoriously problematic
+	// macOS gets tessellation via Vulkan (MoltenVK), or falls back
+	return false;
+#elif defined(WZ_STATIC_GL_BINDINGS)
+	return false;
+#else
+	if (gles)
+	{
+		// GLES: excluded (ES 3.2 / EXT_tessellation_shader support with the current loader is unverified)
+		return false;
+	}
+	if (!GLAD_GL_VERSION_4_0 && !GLAD_GL_ARB_tessellation_shader)
+	{
+		return false;
+	}
+	return glPatchParameteri != nullptr;
+#endif
+}
+
+bool gl_context::supportsTessellationShaders() const
+{
+	return hasTessellationSupport;
+}
+
 bool gl_context::initCheckBorderClampSupport()
 {
 	// GL_CLAMP_TO_BORDER is supported on:
@@ -4779,6 +6132,8 @@ bool gl_context::initCheckBorderClampSupport()
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
+	markScreenGeometryDirty();
+
 	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
 	// if SDL's built-in high-DPI support is enabled and functioning).
 	int drawableWidth = 0, drawableHeight = 0;
@@ -4797,14 +6152,17 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 	// Re-create scene FBOs using new size (if drawable size is of reasonable dimensions)
 	if (viewportWidth > 0 && viewportHeight > 0)
 	{
-		uint32_t newSceneFramebufferWidth = std::max<uint32_t>(viewportWidth, 2);
-		uint32_t newSceneFramebufferHeight = std::max<uint32_t>(viewportHeight, 2);
+		uint32_t newSceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+		uint32_t newSceneFramebufferHeight = scaledSceneDimension(viewportHeight);
 
 		if (sceneFramebufferWidth != newSceneFramebufferWidth || sceneFramebufferHeight != newSceneFramebufferHeight)
 		{
 			sceneFramebufferWidth = newSceneFramebufferWidth;
 			sceneFramebufferHeight = newSceneFramebufferHeight;
-			createSceneRenderpass();
+			if (!syncPipelineSurfaces())
+			{
+				debug(LOG_ERROR, "syncPipelineSurfaces failed after window size change");
+			}
 		}
 	}
 	else
@@ -4813,6 +6171,102 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 		// In this case, don't bother recreating the scene framebuffer (until it changes to something sensible)
 		debug(LOG_INFO, "Delaying scene framebuffer recreation (current Drawable Size: %d x %d)", drawableWidth, drawableHeight);
 	}
+}
+
+uint32_t gl_context::scaledSceneDimension(uint32_t drawableDimension) const
+{
+	const uint64_t scaled = static_cast<uint64_t>(drawableDimension) * getSceneRenderScalePercent() / 100u;
+	return std::max<uint32_t>(static_cast<uint32_t>(scaled), 2);
+}
+
+bool gl_context::setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode)
+{
+	if (mode == getSceneUpscalingMode())
+	{
+		return true;
+	}
+	gfx_api::context::setSceneUpscalingMode(mode);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		// no usable drawable right now, the mode applies when the scene framebuffer is next created
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
+bool gl_context::setSmaaEnabled(bool enabled)
+{
+	if (enabled == smaaEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setSmaaEnabled(enabled);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		// no usable drawable right now, the setting applies when the scene framebuffer is next created
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
+bool gl_context::setSceneEffectSurfaces(gfx_api::SceneEffectSurfaces cfg)
+{
+	cfg = normalizeSceneEffectSurfaces(cfg);
+	if (storedSceneEffectSurfaces() == cfg)
+	{
+		return true;
+	}
+	storeSceneEffectSurfaces(cfg);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
+bool gl_context::setSceneDynamicResolution(bool enabled)
+{
+	if (enabled == sceneDynamicResolutionEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setSceneDynamicResolution(enabled);
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		return true;
+	}
+	return syncPipelineSurfaces();
+}
+
+bool gl_context::setSceneRenderScale(uint32_t scalePercent)
+{
+	const uint32_t oldScalePercent = getSceneRenderScalePercent();
+	gfx_api::context::setSceneRenderScale(scalePercent);
+	if (getSceneRenderScalePercent() == oldScalePercent)
+	{
+		return true;
+	}
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		// no usable drawable right now, the scale applies when the scene framebuffer is next created
+		return true;
+	}
+
+	sceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+	sceneFramebufferHeight = scaledSceneDimension(viewportHeight);
+	if (!syncPipelineSurfaces())
+	{
+		debug(LOG_ERROR, "Failed to apply scene render scale %" PRIu32 "%% - restoring %" PRIu32 "%%", getSceneRenderScalePercent(), oldScalePercent);
+		gfx_api::context::setSceneRenderScale(oldScalePercent);
+		sceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+		sceneFramebufferHeight = scaledSceneDimension(viewportHeight);
+		if (!syncPipelineSurfaces())
+		{
+			debug(LOG_ERROR, "Failed to restore previous scene surfaces after sync failure");
+		}
+		return false;
+	}
+	return true;
 }
 
 std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
@@ -4827,6 +6281,22 @@ bool gl_context::shouldDraw()
 
 void gl_context::shutdown()
 {
+	for (auto& allocator : uniformBlockAllocators)
+	{
+		allocator.destroy();
+	}
+	uniformBlockAllocators.clear();
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (glDeleteSync != nullptr)
+	{
+		for (auto& fence : uniformBlockAllocatorFences)
+		{
+			if (fence != nullptr) { glDeleteSync(fence); }
+		}
+	}
+	uniformBlockAllocatorFences.clear();
+#endif
+
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glClear)
 #endif
@@ -4834,24 +6304,7 @@ void gl_context::shutdown()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
-	deleteSceneRenderpass();
-
-#if !defined(WZ_STATIC_GL_BINDINGS)
-	if (glDeleteFramebuffers)
-#endif
-	{
-		if (depthFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(depthFBO.size()), depthFBO.data());
-			depthFBO.clear();
-		}
-	}
-
-	if (depthTexture)
-	{
-		delete depthTexture;
-		depthTexture = nullptr;
-	}
+	resetAllPipelineSurfaceSlots();
 
 	if (pDefaultTexture)
 	{
@@ -4885,6 +6338,9 @@ void gl_context::shutdown()
 		glDeleteQueries(PERF_COUNT, perfpos);
 	}
 #endif
+
+	destroyGpuTimingQueries();
+	_gpuFrameTimingEnabled = false;
 
 #if !defined(__EMSCRIPTEN__)
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
@@ -5018,18 +6474,37 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 		return true;
 	}
 
+	const gfx_api::lighting_constants previousConstants = shadowConstants;
 	shadowConstants = newValues;
 
 	// Must recompile any shaders that used this value
-	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	for (auto& pipelineInfo : createdPipelines)
-	{
-		if (pipelineInfo.pso &&
-			(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
+	const auto recompileAffectedPipelines = [this]() {
+		bool anyBroken = false;
+		for (auto& pipelineInfo : createdPipelines)
 		{
-			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			if (pipelineInfo.pso &&
+				(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
+			{
+				delete pipelineInfo.pso;
+				pipelineInfo.pso = new gl_pipeline_state_object(*this, pipelineInfo.createInfo, shadowConstants);
+				anyBroken = anyBroken || pipelineInfo.pso->broken;
+			}
 		}
+		return !anyBroken;
+	};
+
+	if (!recompileAffectedPipelines())
+	{
+		// A program failed to link, most likely the point light arrays overrunning the
+		// fragment uniform budget. Put the previous constants back rather than leave the
+		// renderer running on broken programs.
+		debug(LOG_ERROR, "Failed to compile shaders for the requested lighting constants, reverting");
+		shadowConstants = previousConstants;
+		if (!recompileAffectedPipelines())
+		{
+			debug(LOG_FATAL, "Failed to restore the previous lighting constants");
+		}
+		return false;
 	}
 
 	return true;
@@ -5037,13 +6512,12 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 
 bool gl_context::debugRecompileAllPipelines()
 {
-	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
 	for (auto& pipelineInfo : createdPipelines)
 	{
 		if (pipelineInfo.pso)
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, pipelineInfo.createInfo, shadowConstants);
 		}
 	}
 	return true;
@@ -5070,378 +6544,291 @@ static const char *cbframebuffererror(GLenum err)
 	}
 }
 
-size_t gl_context::initDepthPasses(size_t resolution)
+void gl_context::clearDynamicFBOCache()
 {
-	depthPassCount = std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES);
+	_dynamicFBOCache.clear([](uint32_t fboHandle) {
+		if (fboHandle == 0)
+		{
+			return;
+		}
+		GLuint fbo = fboHandle;
+		glDeleteFramebuffers(1, &fbo);
+	});
+}
 
+void gl_context::PipelineSurfaceAllocator::destroy(gfx_api::PipelineSurfaceId id, gfx_api::abstract_texture* /*texture*/)
+{
+	ASSERT_OR_RETURN(, id != gfx_api::PipelineSurfaceId::Count, "Invalid pipeline surface id");
+	root._surfaceGpu[static_cast<size_t>(id)].texture.reset();
+}
+
+bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id, const gfx_api::ResolvedSurfaceSpec& createSpec,
+	gfx_api::abstract_texture*& outTexture)
+{
+	outTexture = nullptr;
+	ASSERT_OR_RETURN(false, id != gfx_api::PipelineSurfaceId::Count, "Invalid pipeline surface id");
+	GlSurfaceGpu& gpu = root._surfaceGpu[static_cast<size_t>(id)];
+
+	wzGLClearErrors();
+
+	const GLsizei glSamples = (createSpec.samples > 1) ? static_cast<GLsizei>(createSpec.samples) : 0;
+
+	switch (createSpec.provisionMode)
+	{
+	case gfx_api::SurfaceProvisionMode::WsiPresentColor:
+		gpu.texture = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainColor);
+		break;
+
+	case gfx_api::SurfaceProvisionMode::WsiPresentDepth:
+		gpu.texture = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainDepth);
+		break;
+
+	case gfx_api::SurfaceProvisionMode::Allocate:
+		switch (createSpec.storageKind)
+		{
+		case gfx_api::SurfaceStorageKind::SampledColor2D:
+		{
+			GLenum colorInternalFormat = GL_RGB8;
+			GLenum colorBaseFormat = GL_RGB;
+			GLenum colorType = GL_UNSIGNED_BYTE;
+			switch (createSpec.format)
+			{
+			case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+				colorInternalFormat = GL_RGB10_A2;
+				colorBaseFormat = GL_RGBA;
+				colorType = GL_UNSIGNED_INT_2_10_10_10_REV;
+				break;
+			case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
+				colorInternalFormat = root.multiSampledBufferInternalFormat;
+				colorBaseFormat = root.multiSampledBufferBaseFormat;
+				break;
+			case gfx_api::pixel_format::FORMAT_RG8_UNORM:
+			{
+				// compact two channel target, expanded to RGBA8 where RG8 is not renderable
+				const bool rg8Supported = root.textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d,
+					gfx_api::pixel_format::FORMAT_RG8_UNORM, gfx_api::pixel_format_usage::sampled_image);
+				colorInternalFormat = rg8Supported ? GL_RG8 : GL_RGBA8;
+				colorBaseFormat = rg8Supported ? GL_RG : GL_RGBA;
+				break;
+			}
+			default:
+				break;
+			}
+			auto* sceneTex = root.create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, colorType,
+				createSpec.width, createSpec.height, "<scene texture>");
+			if (!sceneTex)
+			{
+				debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", createSpec.width, createSpec.height);
+				return false;
+			}
+			// Own immediately so any later ASSERT_GL early-return frees the texture.
+			gpu.texture.reset(sceneTex);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			sceneTex->bind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			sceneTex->unbind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::MsaaColorAttachment:
+		{
+			GLenum msaaFormat = GL_RGB8;
+			if (createSpec.format == gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32)
+			{
+				msaaFormat = GL_RGB10_A2;
+			}
+			else if (createSpec.format == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8)
+			{
+				msaaFormat = root.multiSampledBufferInternalFormat;
+			}
+			auto msaa = root.create_framebuffer_renderbuffer(msaaFormat, glSamples,
+				createSpec.width, createSpec.height, "<scene msaa color>");
+			ASSERT_OR_RETURN(false, msaa != nullptr, "Failed to create MSAA color renderbuffer");
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			gpu.texture = std::move(msaa);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::DepthStencilAttachment:
+		{
+			GLenum depthInternalFormat = GL_DEPTH24_STENCIL8;
+			switch (createSpec.format)
+			{
+			case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+				depthInternalFormat = GL_DEPTH24_STENCIL8;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+				depthInternalFormat = GL_DEPTH32F_STENCIL8;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT:
+				depthInternalFormat = GL_DEPTH_COMPONENT32F;
+				break;
+			default:
+				debug(LOG_WARNING, "Unsupported depth/stencil format for GL renderbuffer; using DEPTH24_STENCIL8");
+				depthInternalFormat = GL_DEPTH24_STENCIL8;
+				break;
+			}
+			auto depthRb = root.create_framebuffer_renderbuffer(depthInternalFormat, glSamples,
+				createSpec.width, createSpec.height, "<scene depth stencil>");
+			ASSERT_OR_RETURN(false, depthRb != nullptr, "Failed to create depth/stencil renderbuffer");
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			gpu.texture = std::move(depthRb);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::SampledDepthArray:
+		{
 #if !defined(__EMSCRIPTEN__)
-	if (depthPassCount > 1)
-	{
-		if ((!gles && !GLAD_GL_VERSION_3_0) || (gles && !GLAD_GL_ES_VERSION_3_0))
-		{
-			// glFramebufferTextureLayer requires OpenGL 3.0+ / ES 3.0+
-			debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+ - this will fail");
-		}
-	}
-#endif
-
-	// delete prior depth texture & FBOs (if present)
-#if !defined(WZ_STATIC_GL_BINDINGS)
-	if (glDeleteFramebuffers)
-#endif
-	{
-		if (depthFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(depthFBO.size()), depthFBO.data());
-			depthFBO.clear();
-		}
-	}
-	if (depthTexture)
-	{
-		delete depthTexture;
-		depthTexture = nullptr;
-	}
-
-	if (depthPassCount == 0)
-	{
-		return 0;
-	}
-
-	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<depth map>");
-	if (!pNewDepthTexture)
-	{
-		debug(LOG_ERROR, "Failed to create depth texture");
-		return 0;
-	}
-	depthTexture = pNewDepthTexture;
-
-	GLenum target = depthTexture->target();
-	depthTexture->bind();
-	glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	depthTexture->unbind();
-
-	for (auto i = 0; i < depthPassCount; ++i)
-	{
-		GLuint newFBO = 0;
-		glGenFramebuffers(1, &newFBO);
-		depthFBO.push_back(newFBO);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
-		if (depthTexture->isArray())
-		{
-#if !defined(WZ_STATIC_GL_BINDINGS)
-			ASSERT(glFramebufferTextureLayer != nullptr, "glFramebufferTextureLayer is not available?");
-#endif
-			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->id(), 0, static_cast<GLint>(i)); // OpenGL 3.0+ / ES 3.0+ only
-		}
-		else
-		{
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->id(), 0);
-		}
-		GLenum buf = GL_NONE;
-		glDrawBuffers(1, &buf);
-		glReadBuffer(GL_NONE);
-
-		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (status != GL_FRAMEBUFFER_COMPLETE)
-		{
-			debug(LOG_ERROR, "Failed to create framebuffer with error: %s", cbframebuffererror(status));
-		}
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-
-	return depthPassCount;
-}
-
-void gl_context::deleteSceneRenderpass()
-{
-	// delete prior scene texture & FBOs (if present)
-#if !defined(WZ_STATIC_GL_BINDINGS)
-	if (glDeleteFramebuffers)
-#endif
-	{
-		if (sceneFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(sceneFBO.size()), sceneFBO.data());
-			sceneFBO.clear();
-		}
-		if (sceneResolveFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(sceneResolveFBO.size()), sceneResolveFBO.data());
-			sceneResolveFBO.clear();
-		}
-	}
-	if (sceneMsaaRBO)
-	{
-		glDeleteRenderbuffers(1, &sceneMsaaRBO);
-		sceneMsaaRBO = 0;
-	}
-	if (sceneTexture)
-	{
-		delete sceneTexture;
-		sceneTexture = nullptr;
-	}
-	if (sceneDepthStencilRBO)
-	{
-		glDeleteRenderbuffers(1, &sceneDepthStencilRBO);
-		sceneDepthStencilRBO = 0;
-	}
-}
-
-bool gl_context::createSceneRenderpass()
-{
-	deleteSceneRenderpass();
-
-#if !defined(__EMSCRIPTEN__)
-	if ( ! ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0)) )
-	{
-		// The following requires OpenGL 3.0+ or OpenGL ES 3.0+
-		debug(LOG_ERROR, "Unsupported version of OpenGL / OpenGL ES.");
-		return false;
-	}
-#endif
-
-	wzGLClearErrors(); // clear OpenGL error states
-
-	bool encounteredError = false;
-	GLsizei samples = std::min<GLsizei>(multisamples, maxMultiSampleBufferFormatSamples);
-
-	if (samples > 0)
-	{
-		// If MSAA is enabled, use glRenderbufferStorageMultisample to create an intermediate buffer with MSAA enabled
-		glGenRenderbuffers(1, &sceneMsaaRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glBindRenderbuffer(GL_RENDERBUFFER, sceneMsaaRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferInternalFormat, sceneFramebufferWidth, sceneFramebufferHeight); // OpenGL 3.0+, OpenGL ES 3.0+
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-	}
-
-	// Always create a standard color texture (for the resolved color values)
-	// NOTE:
-	// - OpenGL ES: color texture format must *MATCH* the format used for the multisampled color render buffer
-	GLenum colorInternalFormat = (samples > 0 && gles) ? multiSampledBufferInternalFormat : GL_RGB8;
-	GLenum colorBaseFormat = (samples > 0 && gles) ? multiSampledBufferBaseFormat : GL_RGB;
-	auto pNewSceneTexture = create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE, sceneFramebufferWidth, sceneFramebufferHeight, "<scene texture>");
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	if (!pNewSceneTexture)
-	{
-		debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", sceneFramebufferWidth, sceneFramebufferHeight);
-		return false;
-	}
-	sceneTexture = pNewSceneTexture;
-	sceneTexture->bind();
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	sceneTexture->unbind();
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-	// Create a matching depth/stencil texture
-	sceneDepthStencilRBO = 0;
-	glGenRenderbuffers(1, &sceneDepthStencilRBO);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glBindRenderbuffer(GL_RENDERBUFFER, sceneDepthStencilRBO);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, sceneFramebufferWidth, sceneFramebufferHeight); // OpenGL 3.0+, OpenGL ES 3.0+
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-	const size_t numSceneFBOs = 2;
-	for (auto i = 0; i < numSceneFBOs; ++i)
-	{
-		GLuint newFBO = 0;
-		glGenFramebuffers(1, &newFBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		sceneFBO.push_back(newFBO);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		if (samples > 0)
-		{
-			// use the MSAA renderbuffer as the color attachment
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sceneMsaaRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-		}
-		else
-		{
-			// just directly use the sceneTexture as the color attachment (since no MSAA resolving needs to occur)
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-		}
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (status != GL_FRAMEBUFFER_COMPLETE)
-		{
-			debug(LOG_ERROR, "Failed to create scene framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, sceneFramebufferWidth, sceneFramebufferHeight, static_cast<int>(samples), cbframebuffererror(status));
-			encounteredError = true;
-		}
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-		if (samples > 0)
-		{
-			// Must also create a sceneResolveFBO for resolving MSAA
-			GLuint newResolveRBO = 0;
-			glGenFramebuffers(1, &newResolveRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			sceneResolveFBO.push_back(newResolveRBO);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, newResolveRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			// shouldn't need a depth/stencil buffer
-
-			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-			if (status != GL_FRAMEBUFFER_COMPLETE)
+			if (createSpec.arrayLayers > 1)
 			{
-				debug(LOG_ERROR, "Failed to create scene resolve framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, sceneFramebufferWidth, sceneFramebufferHeight, static_cast<int>(samples), cbframebuffererror(status));
-				encounteredError = true;
-			}
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-		}
-	}
-
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-	return !encounteredError;
-}
-
-void gl_context::beginSceneRenderPass()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
-	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
-	GLbitfield clearFlags = 0;
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glDepthMask(GL_TRUE);
-	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
-	glClear(clearFlags);
-}
-
-void gl_context::endSceneRenderPass()
-{
-	// Performance optimization:
-	//
-	// Before switching the draw framebuffer, call glInvalidateFramebuffer on any parts of the scene framebuffer(s) that we can
-	// NOTE: The only one we need to keep around by the end is sceneTexture, which is bound as GL_COLOR_ATTACHMENT0 on one of the FBOs
-	// However: If using the sceneMsaaRBO, we have to keep that around initially, and only invalidate it after resolving with glBlitFramebuffer
-	//
-	// Support:
-	// - OpenGL:
-	//		- ARB_invalidate_subdata extension provides glInvalidateFramebuffer
-	//			- NOTE: ARB_invalidate_subdata's API does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
-	//		- core in OpenGL 4.3+
-	// - OpenGL ES:
-	//		- EXT_discard_framebuffer provides glDiscardFramebufferEXT
-	//			- NOTE: glDiscardFramebufferEXT does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
-	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
-	//		- core in OpenGL ES 3.0+
-
-	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
-	GLenum invalid_ap[2];
-	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
-	{
-		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
-		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
-	}
-#if !defined(__EMSCRIPTEN__)
-	else
-	{
-		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
-		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
-		if (!gles && GLAD_GL_ARB_invalidate_subdata)
-		{
-		#if !defined(WZ_STATIC_GL_BINDINGS)
-			if (glInvalidateFramebuffer)
-		#endif
-			{
-				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
-			}
-		}
-		else if (gles && GLAD_GL_EXT_discard_framebuffer)
-		{
-		#if !defined(WZ_STATIC_GL_BINDINGS)
-			if (glDiscardFramebufferEXT)
-		#endif
-			{
-				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
-			}
-		}
-	}
-#endif
-
-	// If MSAA is enabled, use glBiltFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
-	bool usingMSAAIntermediate = (sceneMsaaRBO != 0);
-	if (usingMSAAIntermediate)
-	{
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sceneResolveFBO[sceneFBOIdx]);
-		glBlitFramebuffer(0,0, sceneFramebufferWidth, sceneFramebufferHeight,
-						  0,0, sceneFramebufferWidth, sceneFramebufferHeight,
-						  GL_COLOR_BUFFER_BIT,
-						  GL_LINEAR);
-	}
-
-	// after this, sceneTexture should be the (msaa-resolved) color texture of the scene
-
-	if (usingMSAAIntermediate)
-	{
-		// invalidate color0 (sceneMsaaRBO) in sceneFBO[sceneFBOIdx] (which is GL_READ_FRAMEBUFFER at this point)
-		GLenum invalid_msaarbo_ap[1];
-		invalid_msaarbo_ap[0] = GL_COLOR_ATTACHMENT0;
-		if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
-		{
-			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
-		}
-		else
-		{
-#if defined(GL_ARB_invalidate_subdata)
-			if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
-			{
-				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
+				if ((!root.gles && !GLAD_GL_VERSION_3_0) || (root.gles && !GLAD_GL_ES_VERSION_3_0))
+				{
+					// glFramebufferTextureLayer requires OpenGL 3.0+ / ES 3.0+
+					debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+ - this will fail");
+				}
 			}
 #endif
-//			else if (gles && GLAD_GL_EXT_discard_framebuffer && glDiscardFramebufferEXT)
-//			{
-//				// NOTE: glDiscardFramebufferEXT only supports GL_FRAMEBUFFER... but that doesn't work here
-//				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, invalid_msaarbo_ap);
-//			}
+			auto* depthMap = root.create_depthmap_texture(createSpec.arrayLayers, createSpec.width, createSpec.height, "<depth map>");
+			if (!depthMap)
+			{
+				debug(LOG_ERROR, "Failed to create depth texture");
+				return false;
+			}
+			GLenum target = depthMap->target();
+			depthMap->bind();
+			glTexParameteri(target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+			glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+			depthMap->unbind();
+			gpu.texture.reset(depthMap);
+			break;
 		}
+		case gfx_api::SurfaceStorageKind::SampledDepth2D:
+		{
+			GLenum depthInternalFormat = GL_DEPTH_COMPONENT32F;
+			GLenum depthBaseFormat = GL_DEPTH_COMPONENT;
+			GLenum depthType = GL_FLOAT;
+			switch (createSpec.format)
+			{
+			case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+				depthInternalFormat = GL_DEPTH24_STENCIL8;
+				depthBaseFormat = GL_DEPTH_STENCIL;
+				depthType = GL_UNSIGNED_INT_24_8;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT_S8_UINT:
+				depthInternalFormat = GL_DEPTH32F_STENCIL8;
+				depthBaseFormat = GL_DEPTH_STENCIL;
+				depthType = GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
+				break;
+			case gfx_api::pixel_format::FORMAT_D32_SFLOAT:
+				depthInternalFormat = GL_DEPTH_COMPONENT32F;
+				depthBaseFormat = GL_DEPTH_COMPONENT;
+				depthType = GL_FLOAT;
+				break;
+			default:
+				debug(LOG_WARNING, "Unsupported sampled depth format for GL texture; using DEPTH_COMPONENT32F");
+				depthInternalFormat = GL_DEPTH_COMPONENT32F;
+				depthBaseFormat = GL_DEPTH_COMPONENT;
+				depthType = GL_FLOAT;
+				break;
+			}
+			auto* depthTex = root.create_gpurendered_texture(depthInternalFormat, depthBaseFormat, depthType,
+				createSpec.width, createSpec.height, "<scene prepass depth>");
+			if (!depthTex)
+			{
+				debug(LOG_ERROR, "Failed to create sampled depth texture (%" PRIu32 " x %" PRIu32 ")", createSpec.width, createSpec.height);
+				return false;
+			}
+			gpu.texture.reset(depthTex);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			depthTex->bind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			depthTex->unbind();
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			break;
+		}
+		case gfx_api::SurfaceStorageKind::None:
+			debug(LOG_ERROR, "Allocate surface %u has storageKind None", static_cast<unsigned>(id));
+			return false;
+		}
+		break;
 	}
 
-	sceneFBOIdx++;
-	if (sceneFBOIdx >= sceneFBO.size())
-	{
-		sceneFBOIdx = 0;
-	}
-
-	// switch back to default framebuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// Because the scene uses the same viewport, a call to glViewport should not be needed (NOTE: viewport is *not* part of the framebuffer state)
-	if (sceneFramebufferWidth != viewportWidth || sceneFramebufferHeight != viewportHeight)
-	{
-		glViewport(0, 0, viewportWidth, viewportHeight);
-	}
+	outTexture = gpu.texture.get();
+	return outTexture != nullptr;
 }
 
-gfx_api::abstract_texture* gl_context::getSceneTexture()
+void gl_context::PipelineSurfaceAllocator::prepareForSurfaceDestroy()
 {
-	return sceneTexture;
+	root.clearDynamicFBOCache();
+}
+
+void gl_context::PipelineSurfaceAllocator::onChanged()
+{
+	root.clearDynamicFBOCache();
+	root.bumpRenderGraphEpoch();
+}
+
+void gl_context::resetAllPipelineSurfaceSlots()
+{
+	PipelineSurfaceAllocator alloc(*this);
+	_pipelineSurfaces.resetAll(alloc);
+}
+
+void gl_context::purgeFrameResources()
+{
+	_dynamicFBOCache.purgeUnused([](uint32_t fboHandle) {
+		if (fboHandle == 0)
+		{
+			return;
+		}
+		GLuint fbo = fboHandle;
+		glDeleteFramebuffers(1, &fbo);
+	});
+}
+
+optional<std::pair<uint32_t, uint32_t>> gl_context::getRenderTargetDimensions(gfx_api::abstract_texture* texture)
+{
+	if (texture == nullptr)
+	{
+		return nullopt;
+	}
+	if (auto* gpuTexture = dynamic_cast<gl_gpurendered_texture*>(texture))
+	{
+		if (gpuTexture->tex_width > 0 && gpuTexture->tex_height > 0)
+		{
+			return std::make_pair(gpuTexture->tex_width, gpuTexture->tex_height);
+		}
+	}
+	if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(texture))
+	{
+		if (renderbuffer->_width > 0 && renderbuffer->_height > 0)
+		{
+			return std::make_pair(renderbuffer->_width, renderbuffer->_height);
+		}
+	}
+	if (dynamic_cast<gl_pipeline_surface_proxy*>(texture) != nullptr)
+	{
+		if (viewportWidth > 0 && viewportHeight > 0)
+		{
+			return std::make_pair(viewportWidth, viewportHeight);
+		}
+	}
+	if (texture == getPipelineSurface(gfx_api::PipelineSurfaceId::SceneColor)
+		&& sceneFramebufferWidth > 0 && sceneFramebufferHeight > 0)
+	{
+		return std::make_pair(sceneFramebufferWidth, sceneFramebufferHeight);
+	}
+	return nullopt;
 }
 
 #if defined(__EMSCRIPTEN__)

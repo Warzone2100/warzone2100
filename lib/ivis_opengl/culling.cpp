@@ -21,34 +21,46 @@
 #include <array>
 #include <glm/glm.hpp>
 #include <algorithm>
-#include <functional>
+#include <limits>
 
-BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox)
+ClipSpaceBounds clipSpaceBoundsOfBoundingBox(const glm::mat4& worldViewProjectionMatrix,
+	const BoundingBox& worldSpaceBoundingBox)
 {
-	BoundingBox bboxInClipSpace;
-	for (size_t i = 0, end = bboxInClipSpace.size(); i < end; i++)
+	constexpr float inf = std::numeric_limits<float>::infinity();
+	ClipSpaceBounds bounds;
+	bounds.minimum = glm::vec3(inf);
+	bounds.maximum = glm::vec3(-inf);
+
+	for (size_t i = 0, end = worldSpaceBoundingBox.size(); i < end; i++)
 	{
-		glm::vec4 tmp = worldViewProjectionMatrix * glm::vec4(worldSpaceBoundingBox[i], 1.0);
-		tmp = (tmp / tmp.w);
-		bboxInClipSpace[i] = glm::vec3(tmp.x, tmp.y, tmp.z);
+		const glm::vec4 clipPos = worldViewProjectionMatrix * glm::vec4(worldSpaceBoundingBox[i], 1.f);
+		if (!(clipPos.w > 0.f))
+		{
+			// the box reaches the eye plane, so treat it as covering the whole region
+			bounds.minimum = glm::vec3(-inf);
+			bounds.maximum = glm::vec3(inf);
+			return bounds;
+		}
+		const glm::vec3 ndcPos = glm::vec3(clipPos) / clipPos.w;
+		bounds.minimum = glm::min(bounds.minimum, ndcPos);
+		bounds.maximum = glm::max(bounds.maximum, ndcPos);
 	}
-	return bboxInClipSpace;
+	return bounds;
 }
 
-
-bool isBBoxInClipSpace(const IntersectionOfHalfSpace& intersectionOfHalfSpace, const BoundingBox& points)
+bool boundsOverlapClipRegion(const ClipSpaceBounds& bounds, float x0, float x1, float y0, float y1)
 {
-	// We test against the complement of the half space
-	// If all points lies in the complement a half space, it can't be part of the intersection
-	auto CheckAllPointsInSpace = [&points](const HalfSpaceCheck& predicate)
-		{
-			return std::all_of(points.begin(), points.end(), [&predicate](const auto& v) { return !predicate(v); });
-		};
-
-	for (const auto& predicate : intersectionOfHalfSpace)
+	if (bounds.maximum.x < x0 || bounds.minimum.x > x1)
 	{
-		if (CheckAllPointsInSpace(predicate))
-			return false;
+		return false;
+	}
+	if (bounds.maximum.y < y0 || bounds.minimum.y > y1)
+	{
+		return false;
+	}
+	if (bounds.maximum.z < 0.f || bounds.minimum.z > 1.f)
+	{
+		return false;
 	}
 	return true;
 }

@@ -25,6 +25,7 @@
 #include "random.h"
 #include "wzapi.h"
 #include <chrono>
+#include <functional>
 #include <memory>
 #include <unordered_set>
 #include <unordered_map>
@@ -107,12 +108,32 @@ bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
 bool loadGlobalScript(WzString path);
-wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
+wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
+
+// In-memory (JSON) variants, for match-state serialization. Same content as the file-based
+// versions, but to/from a nlohmann::json object instead of a WzConfig file.
+//
+// Unlike the file-based versions (which run against freshly-created instances when loading a
+// savegame), these are designed for snapshotting a *running* match for transfer to another
+// client, where the rules/global script runs in the context of each client's local
+// selectedPlayer and the AI scripts only exist on the host:
+//   - saveScriptStates: when onlyPlayer >= 0, serializes only the instance(s) belonging to that
+//     player (the local rules/global script), excluding host-only AI instances. -1 saves all.
+//   - loadScriptStates: when targetPlayer >= 0, the saved rules/global script is matched to the
+//     live instance by scriptName and rebound onto targetPlayer (remapping the host's
+//     selectedPlayer to this client's), and that instance's existing timers/groups are cleared
+//     first so restoring onto the running match does not duplicate them. -1 matches the saved
+//     "me"/scriptName verbatim (savegame-style).
+bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer = -1);
+bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer = -1);
+
+/// Whether the script subsystem is initialized and scripts are running.
+bool scriptsAreReady();
 
 /// Tell script system that an object has been removed.
 void scriptRemoveObject(const BASE_OBJECT *psObj);
@@ -219,11 +240,9 @@ public:
 	LABEL toNewLabel() const;
 };
 
-/// Load map labels
+/// Load map labels (from a file, or from an already-parsed in-memory JSON document)
 bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
-
-/// Write map labels to savegame
-bool writeLabels(const char *filename);
+bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
 class scripting_engine
 {
@@ -234,7 +253,8 @@ public:
 		typedef std::unordered_map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
 	private:
 		ObjectToGroupMap m_map;
-		typedef std::unordered_set<const BASE_OBJECT *> GroupSet;
+		// Members are kept sorted by object id so enumeration order is deterministic
+		typedef std::vector<const BASE_OBJECT *> GroupSet;
 		std::unordered_map<groupID, GroupSet> m_groups;
 		int lastNewGroupId = 0;
 	protected:
@@ -248,6 +268,9 @@ public:
 		size_t groupSize(groupID groupId) const;
 		optional<groupID> removeObjectFromGroup(const BASE_OBJECT *psObj);
 		std::vector<const BASE_OBJECT *> getGroupObjects(groupID groupId) const;
+		// Drops all group memberships without firing group-loss events. Used to reset an
+		// instance's groups before restoring a match snapshot on top of a running game.
+		void clear() { m_map.clear(); m_groups.clear(); lastNewGroupId = 0; }
 	};
 
 	struct timerNode
@@ -284,7 +307,14 @@ public:
 	};
 private:
 	typedef std::map<std::string, LABEL> LABELMAP;
-	LABELMAP labels;
+	// Label scoping:
+	//
+	// - Map-authored and legacy labels live in the global bucket (visible to every instance)
+	// - Labels a script creates via addLabel are owned by their creating instance
+	// - Lookups for an instance resolve own-first, then global
+	// (ownedLabels is not yet populated - addLabel still targets the global bucket - so behavior is identical to the previous single map)
+	LABELMAP globalLabels;
+	std::map<wzapi::scripting_instance *, LABELMAP> ownedLabels;
 
 	typedef std::map<wzapi::scripting_instance *, GROUPMAP *> ENGINEMAP;
 	ENGINEMAP groups;
@@ -305,30 +335,42 @@ public:
 	bool updateScripts();
 	bool shutdownScripts();
 
-	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
+	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding);
 
 	// Set/write variables in the script's global context, run after loading script,
 	// but before triggering any events.
 	bool loadScriptStates(const char *filename);
 	bool saveScriptStates(const char *filename);
+	// Script-state save format v2: a single structured JSON document (top-level "instances" and "timers" arrays, etc).
+	// The in-memory json overloads are used by the match-state (GameState) serializer, which also drives the
+	// per-client scope: onlyPlayer/targetPlayer >= 0 serialize/rebind just the local rules script (see the free
+	// saveScriptStates(json&, ...)/loadScriptStates(json&, ...) wrappers); -1 saves/restores every instance verbatim.
+	bool saveScriptStates2(const char *filename);
+	bool saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer = -1);
+	bool loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer = -1);
 
 	bool unregisterFunctions(wzapi::scripting_instance *instance);
 	void prepareLabels();
 
 // MARK: LABELS
 public:
-	/// Load map labels
+	/// Loader A - flat labels.json (map/scenario data and old v1 savegames):
+	/// - Applies map->id remapping and UserSaveGame object-existence tolerance
+	/// - All labels are global
 	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
+	bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
-	/// Write map labels to savegame
-	bool writeLabels(const char *filename);
+	/// Loader B / writer for the script-state v2 embedded label format:
+	/// - A JSON array of label objects (each with a "type" field) for one ownership bucket
+	bool writeLabelMap(const LABELMAP& labels, nlohmann::ordered_json& result);
+	bool loadLabelMap(const nlohmann::ordered_json& labelArray, LABELMAP& target);
 
 // MARK: GROUPS
 public:
 	GROUPMAP* getGroupMap(wzapi::scripting_instance *instance);
 
 	bool loadGroup(wzapi::scripting_instance *instance, int groupId, int objId);
-	bool saveGroups(nlohmann::json &result, wzapi::scripting_instance *instance);
+	bool saveGroups(nlohmann::ordered_json &result, wzapi::scripting_instance *instance);
 
 // MARK: TIMERS
 public:
@@ -397,7 +439,7 @@ public:
 	generic_script_object getObjectFromLabel(WZAPI_PARAMS(const std::string& label));
 	wzapi::no_return_value hackMarkTiles_ByLabel(WZAPI_PARAMS(const std::string& label));
 private:
-	static optional<std::string> _findMatchingLabel(wzapi::game_object_identifier obj_id);
+	static optional<std::string> _findMatchingLabel(wzapi::scripting_instance *instance, wzapi::game_object_identifier obj_id);
 public:
 
 	static generic_script_object getObject(WZAPI_PARAMS(wzapi::object_request request));
@@ -480,6 +522,7 @@ public:
 		WzString trigger;
 		WzString owner;
 		WzString subscriber;
+		WzString scope; // owning script for an owned label, or "global"
 	};
 
 	class DebugInterface
@@ -519,6 +562,22 @@ private:
 	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, const BASE_OBJECT *seen, const BASE_OBJECT *viewer);
 	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, const BASE_OBJECT *psObj);
 	bool groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
+
+	// Label-scoping helpers: encode the own-first-then-global resolution in one place
+	// Find a label visible to `instance` (its own bucket first, then global), nullptr if none
+	LABEL* findScopedLabel(wzapi::scripting_instance *instance, const std::string &name);
+	// Erase a label visible to `instance` (own first, then global)
+	// Returns the number erased (0 or 1)
+	size_t eraseScopedLabel(wzapi::scripting_instance *instance, const std::string &name);
+	// The bucket a new label created by 'instance' is stored in (its own bucket, or global if no instance)
+	LABELMAP& labelCreationBucket(wzapi::scripting_instance *instance);
+	// Visit every label visible to 'instance' - its own labels, then global labels not shadowed by an
+	// own label of the same name (own-first / own-shadows-global)
+	//
+	// NOTES:
+	// - `fn` may mutate the LABEL
+	// - `fn` returns true to keep enumerating, false to stop early
+	void forEachScopedLabel(wzapi::scripting_instance *instance, const std::function<bool(const std::string&, LABEL&)>& fn);
 };
 
 /// Clear all map markers (used by label marking, for instance)

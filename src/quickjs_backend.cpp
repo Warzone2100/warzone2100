@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/tex.h"
 
 #include "action.h"
+#include "ordersource.h"
 #include "clparse.h"
 #include "combat.h"
 #include "console.h"
@@ -80,6 +81,7 @@
 #include "lib/framework/file.h"
 #include <unordered_map>
 #include <limits>
+#include <cmath>
 
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic push
@@ -145,11 +147,44 @@ struct JSToJsonContext
 	JSContext *ctx;
 	std::vector<JSValue> stack;
 	bool skip_constructors;
+	// When true, script-defined class instances are serialized with type+identity tags
+	// (so they can be restored as proper instances), and shared object references are
+	// preserved via back-references.
+	// Only enabled for the save/restore path (not for debug display or plain value conversion).
+	bool tag_class_instances;
+	// Maps object identity -> assigned reference id. Deliberately *not* cleared by reset()
+	// so that objects shared across multiple globals keep a single identity in the save.
+	std::unordered_map<const void*, int> refIds;
+	int nextRefId = 0;
+	JSValue cachedObjectProto = JS_UNINITIALIZED;
 
-	JSToJsonContext(JSContext *ctx, bool skip_constructors)
+	JSToJsonContext(JSContext *ctx, bool skip_constructors, bool tag_class_instances = false)
 	: ctx(ctx)
 	, skip_constructors(skip_constructors)
+	, tag_class_instances(tag_class_instances)
 	{ }
+
+	~JSToJsonContext()
+	{
+		if (!JS_IsUninitialized(cachedObjectProto))
+		{
+			JS_FreeValue(ctx, cachedObjectProto);
+		}
+	}
+
+	// Returns Object.prototype for this context (borrowed reference, owned by the context)
+	JSValue objectProto()
+	{
+		if (JS_IsUninitialized(cachedObjectProto))
+		{
+			JSValue g = JS_GetGlobalObject(ctx);
+			JSValue objCtor = JS_GetPropertyStr(ctx, g, "Object");
+			cachedObjectProto = JS_GetPropertyStr(ctx, objCtor, "prototype");
+			JS_FreeValue(ctx, objCtor);
+			JS_FreeValue(ctx, g);
+		}
+		return cachedObjectProto;
+	}
 
 	void reset()
 	{
@@ -160,10 +195,197 @@ struct JSToJsonContext
 	{
 		return stack.empty();
 	}
+
+	// For safety, we really don't want JSToJsonContext to be copied or moved (just passed down through a function hierarchy)
+	JSToJsonContext(const JSToJsonContext&) = delete;
+	JSToJsonContext& operator=(const JSToJsonContext&) = delete;
+	JSToJsonContext(JSToJsonContext&&) = delete;
+	JSToJsonContext& operator=(JSToJsonContext&&) = delete;
 };
 
+// Reserved JSON keys used to encode rich JS values (class instances, shared references) within the otherwise-plain-JSON global save format.
+//
+// NOTES:
+// - Script globals are not expected to use property names beginning with "@@".
+//
+static const char* WZ_JSON_TAG_KEY    = "@@wztype"; // "class" / "object" / "array" / "ref" / "number"
+static const char* WZ_JSON_TAG_CLASS  = "class";
+static const char* WZ_JSON_TAG_OBJECT = "object";
+static const char* WZ_JSON_TAG_ARRAY  = "array";
+static const char* WZ_JSON_TAG_REF    = "ref";
+static const char* WZ_JSON_TAG_NUMBER = "number";   // a non-finite double (NaN / Infinity / -Infinity)
+static const char* WZ_JSON_TAG_UNDEF  = "undef";    // JS undefined (distinct from JSON null == JS null)
+static const char* WZ_JSON_ID_KEY     = "@@id";     // reference identity (int)
+static const char* WZ_JSON_CLASS_KEY  = "@@class";  // class name (string)
+static const char* WZ_JSON_DATA_KEY   = "@@data";   // own data properties (object) / elements (array)
+static const char* WZ_JSON_KIND_KEY   = "@@kind";   // on a "ref": type ("array", possibly others in the future). Absent = object.
+static const char* WZ_JSON_KIND_ARRAY = "array";
+static const char* WZ_JSON_VALUE_KEY  = "@@value";  // on a "number": "NaN" / "Infinity" / "-Infinity"
+static const char* WZ_JSON_PROPS_KEY  = "@@props";  // on an "array": named (non-index) own properties (object)
+
+// NOTE ON SAVE FORMAT COMPATIBILITY:
+// - When tagging is enabled (the save / restore path), *every* object and array is wrapped in a tag object
+//   carrying an "@@id", so that shared references and cycles of any kind round-trip correctly.
+// - Older saves wrote bare objects and arrays with no tags - the loader detects the absence of "@@wztype"
+//   and falls back to the legacy plain-object / plain-array decoding, so old saves continue to load.
+
+// True if `key` is a canonical array index string ("0", "1", ... - no leading zeros, and
+// strictly less than 2^32-1, the max array index). Such keys are array *elements* (already
+// captured in @@data). Everything else on an array (e.g. "length", "meta") is a named
+// property.
+static bool isCanonicalArrayIndexKey(const std::string& key)
+{
+	if (key.empty()) { return false; }
+	if (key == "0") { return true; }
+	if (key[0] < '1' || key[0] > '9') { return false; } // reject leading zero / non-digit
+	unsigned long long v = 0;
+	for (char ch : key)
+	{
+		if (ch < '0' || ch > '9') { return false; }
+		v = v * 10 + static_cast<unsigned long long>(ch - '0');
+		if (v >= 4294967295ULL) { return false; } // >= 2^32-1 -> not a valid array index
+	}
+	return true;
+}
+
+// Built-in global constructors that must never be treated as restorable script classes.
+static bool isBuiltinConstructorName(const std::string& name)
+{
+	static const std::unordered_set<std::string> builtins = {
+		"Object", "Function", "Array", "Number", "Boolean", "String", "Symbol", "BigInt",
+		"Date", "RegExp", "Error", "EvalError", "RangeError", "ReferenceError", "SyntaxError",
+		"TypeError", "URIError", "Map", "Set", "WeakMap", "WeakSet", "Promise", "Proxy",
+		"ArrayBuffer", "SharedArrayBuffer", "DataView",
+		"Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array",
+		"Int32Array", "Uint32Array", "Float32Array", "Float64Array", "BigInt64Array", "BigUint64Array"
+	};
+	return builtins.count(name) != 0;
+}
+
+// Resolves a top-level binding by name through the script's global scope.
+//
+// IMPORTANT: top-level `class` / `let` / `const` declarations are *lexical* bindings stored
+// in the global lexical scope (ctx->global_var_obj) - NOT properties of the global object.
+// So JS_GetGlobalObject()+JS_GetPropertyStr (which only sees `var` / function declarations)
+// cannot find them.
+//
+// JS_GetGlobalLexicalOrVar performs a pure property lookup of the global lexical scope first,
+// then the global object, returning the bound value.
+//
+// Returns JS_UNDEFINED if the name does not resolve.
+static JSValue resolveGlobalBindingByName(JSContext* ctx, const std::string& name)
+{
+	ASSERT_OR_RETURN(JS_UNDEFINED, name.size() < 1024, "Rejecting name that exceeds length limit: \"%s\"", name.c_str());
+	return JS_GetGlobalLexicalOrVar(ctx, name.c_str(), name.size());
+}
+
+// If `value` is an instance of a script-defined (global) class, returns that class's name.
+//
+// The class must round-trip by name through the global scope to the same constructor (so it
+// can be reliably resolved again at restore time). Returns an empty string otherwise (plain
+// objects, built-in exotic objects, anonymous/non-global classes, etc).
+static std::string getSerializableClassName(JSToJsonContext& c, JSValue value)
+{
+	JSContext* ctx = c.ctx;
+	JSValue proto = JS_GetPrototype(ctx, value);
+	if (!JS_IsObject(proto))
+	{
+		JS_FreeValue(ctx, proto);
+		return std::string();
+	}
+	// Plain objects (prototype === Object.prototype) are not class instances.
+	if (JS_SameValueZero(ctx, proto, c.objectProto()))
+	{
+		JS_FreeValue(ctx, proto);
+		return std::string();
+	}
+	std::string result;
+	JSValue ctor = JS_GetPropertyStr(ctx, proto, "constructor");
+	if (JS_IsConstructor(ctx, ctor))
+	{
+		JSValue nameVal = JS_GetPropertyStr(ctx, ctor, "name");
+		const char* nameStr = JS_ToCString(ctx, nameVal);
+		if (nameStr && nameStr[0] != '\0' && !isBuiltinConstructorName(nameStr))
+		{
+			// Round-trip check: the class must be resolvable by this name through the global
+			// scope (including the global lexical scope, where top-level `class` lives) and
+			// resolve to this exact constructor.
+			JSValue resolved = resolveGlobalBindingByName(ctx, nameStr);
+			if (JS_SameValueZero(ctx, resolved, ctor))
+			{
+				result = nameStr;
+			}
+			JS_FreeValue(ctx, resolved);
+		}
+		if (nameStr) { JS_FreeCString(ctx, nameStr); }
+		JS_FreeValue(ctx, nameVal);
+	}
+	JS_FreeValue(ctx, ctor);
+	JS_FreeValue(ctx, proto);
+	return result;
+}
+
+// Returns true if `atom` is an own accessor (getter/setter) property of `obj`.
+//
+// Such properties are skipped when serializing globals: the getter/setter are arbitrary
+// closures that cannot be serialized, and snapshotting the getter's current value as plain
+// data would be misleading (it would mask a prototype accessor of the same name, or freeze
+// derived state).
+//
+// NOTE: class/prototype accessors are not "own" and are unaffected.
+static bool isOwnAccessorProperty(JSContext* ctx, JSValue obj, JSAtom atom)
+{
+	JSPropertyDescriptor desc;
+	int ret = JS_GetOwnProperty(ctx, &desc, obj, atom);
+	if (ret != 1)
+	{
+		return false; // not an own property, or an error occurred
+	}
+	bool isAccessor = (desc.flags & JS_PROP_GETSET) != 0;
+	JS_FreeValue(ctx, desc.value);
+	JS_FreeValue(ctx, desc.getter);
+	JS_FreeValue(ctx, desc.setter);
+	return isAccessor;
+}
+
+// If `value` is an instance of a built-in exotic type (Map/Set/Date/RegExp/typed array/...),
+// this function returns its constructor name.
+//
+// Such objects currently serialize to an essentially empty object (i.e. their contents are lost)
+// because their internal state does not live in own properties, and specialized handling would be
+// required to round-trip them properly.
+//
+// Returns empty for plain objects and script-defined classes (which are handled separately).
+// Used purely to emit a diagnostic for script authors.
+static std::string getBuiltinExoticClassName(JSToJsonContext& c, JSValue value)
+{
+	JSContext* ctx = c.ctx;
+	JSValue proto = JS_GetPrototype(ctx, value);
+	if (!JS_IsObject(proto) || JS_SameValueZero(ctx, proto, c.objectProto()))
+	{
+		JS_FreeValue(ctx, proto);
+		return std::string();
+	}
+	std::string result;
+	JSValue ctor = JS_GetPropertyStr(ctx, proto, "constructor");
+	if (JS_IsConstructor(ctx, ctor))
+	{
+		JSValue nameVal = JS_GetPropertyStr(ctx, ctor, "name");
+		const char* nameStr = JS_ToCString(ctx, nameVal);
+		if (nameStr && nameStr[0] != '\0' && isBuiltinConstructorName(nameStr))
+		{
+			result = nameStr;
+		}
+		if (nameStr) { JS_FreeCString(ctx, nameStr); }
+		JS_FreeValue(ctx, nameVal);
+	}
+	JS_FreeValue(ctx, ctor);
+	JS_FreeValue(ctx, proto);
+	return result;
+}
+
 // NOTE: May throw if there is a circular reference!
-nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
+nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
 bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::function<void (const char *key, JSAtom& atom)>& func, bool enumerableOnly = true); // forward-declare
 
@@ -249,13 +471,16 @@ private:
 
 public:
 	// save / restore state
-	virtual bool saveScriptGlobals(nlohmann::json &result) override;
-	virtual bool loadScriptGlobals(const nlohmann::json &result) override;
+	virtual bool saveScriptGlobals(nlohmann::ordered_json &result) override;
+	virtual bool loadScriptGlobals(const nlohmann::ordered_json &result, bool fixedNulls) override;
 
-	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
+	virtual nlohmann::ordered_json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
 
 	// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
+	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::ordered_json& savedTimerFuncData) override;
+
+	virtual uint64_t saveMathRandomState() const override;
+	virtual void restoreMathRandomState(uint64_t state) override;
 
 public:
 	// get state for debugging
@@ -288,6 +513,23 @@ private:
 	}
 
 public:
+
+	// True if `name` is a reserved engine/native/built-in global - i.e. it was present on the global object
+	// before the script's own top-level code ran (see the internalNamespace snapshot in
+	// prepareInstanceForExecution).
+	bool isReservedGlobalName(const std::string &name) const { return internalNamespace.count(name) != 0; }
+
+	// True if `name` may NOT be used as a setTimer()/queue() callback target: a reserved engine name that
+	// is not one of the small set of built-ins that scripts legitimately schedule. A timer callback is
+	// normally one of the script's own functions; scheduling an arbitrary native binding by name is
+	// rejected, both at live registration and on save-restore.
+	bool isRejectedTimerCallbackName(const std::string &name) const
+	{
+		if (!isReservedGlobalName(name)) { return false; }
+		// Built-ins explicitly allowed as timer/queue targets. Shipped base/MP rules and campaign mods
+		// schedule these by name (e.g. setTimer("autoSave", ...)), so they must remain valid.
+		return name != "autoSave";
+	}
 
 	void doNotSaveGlobal(const std::string &global);
 
@@ -769,6 +1011,227 @@ JSValue mapJsonToQuickJSValue(JSContext *ctx, const nlohmann::json &instance, ui
 		case json::value_t::discarded : return JS_UNDEFINED;
 	}
 	return JS_UNDEFINED; // should never be reached
+}
+
+// Context carried through global restoration to reconstruct class instances and to
+// re-link objects that were shared (the same object referenced from multiple places) at
+// save time. ids map to the (single) restored object for each saved identity.
+struct JsonToJSContext
+{
+	JSContext* ctx;
+	std::unordered_map<int, JSValue> idMap; // reference id -> created object (owned)
+	// When true (save format version >= 2), the save distinguishes null from undefined:
+	// a bare JSON null maps to JS null, and the "undef" tag maps to JS undefined. When
+	// false (older saves, which stored undefined as null), JSON null maps to undefined.
+	bool fixedNulls = false;
+
+	JsonToJSContext(JSContext* ctx, bool fixedNulls = false)
+	: ctx(ctx)
+	, fixedNulls(fixedNulls)
+	{ }
+
+	~JsonToJSContext()
+	{
+		for (auto& kv : idMap)
+		{
+			JS_FreeValue(ctx, kv.second);
+		}
+	}
+
+	JsonToJSContext(const JsonToJSContext&) = delete;
+	JsonToJSContext& operator=(const JsonToJSContext&) = delete;
+	JsonToJSContext(JsonToJSContext&&) = delete;
+	JsonToJSContext& operator=(JsonToJSContext&&) = delete;
+};
+
+// Resolves the prototype object for a script-defined class by name.
+//
+// Resolves through the global scope (including the global lexical scope, where top-level
+// `class` declarations live - they are NOT global-object properties), so it finds classes
+// that a plain global-object lookup would miss.
+//
+// Returns JS_UNINITIALIZED if not resolvable.
+static JSValue resolveClassPrototype(JSContext* ctx, const std::string& className)
+{
+	// Mirror the save side (getSerializableClassName), which only serializes script-defined classes
+	// (and never a built-in constructor name)
+	if (className.empty() || isBuiltinConstructorName(className))
+	{
+		return JS_UNINITIALIZED;
+	}
+	JSValue ctor = resolveGlobalBindingByName(ctx, className);
+	if (!JS_IsConstructor(ctx, ctor))
+	{
+		JS_FreeValue(ctx, ctor);
+		return JS_UNINITIALIZED;
+	}
+	JSValue proto = JS_GetPropertyStr(ctx, ctor, "prototype");
+	JS_FreeValue(ctx, ctor);
+	if (!JS_IsObject(proto))
+	{
+		JS_FreeValue(ctx, proto);
+		return JS_UNINITIALIZED;
+	}
+	return proto; // owned
+}
+
+JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ordered_json& instance, uint8_t prop_flags); // forward-declare
+
+static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nlohmann::ordered_json& obj_json, uint8_t prop_flags)
+{
+	for (auto it = obj_json.begin(); it != obj_json.end(); ++it)
+	{
+		JSValue prop_val = mapJsonToQuickJSValueWithContext(c, it.value(), prop_flags);
+		JS_DefinePropertyValueStr(c.ctx, obj, it.key().c_str(), prop_val, prop_flags);
+	}
+}
+
+// Like mapJsonToQuickJSValue, but additionally decodes the tagged wrappers emitted by
+// wz_qjs_to_json on the save path (class instances, plain objects, arrays and shared
+// references). JSON values without an "@@wztype" tag are decoded the legacy way, so older
+// saves (which wrote bare objects/arrays) continue to load.
+JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ordered_json& instance, uint8_t prop_flags)
+{
+	JSContext* ctx = c.ctx;
+	if (instance.is_object())
+	{
+		auto tagIt = instance.find(WZ_JSON_TAG_KEY);
+		if (tagIt != instance.end() && tagIt->is_string())
+		{
+			const std::string tag = tagIt->get<std::string>();
+
+			// Non-finite number (NaN / Infinity / -Infinity)
+			if (tag == WZ_JSON_TAG_NUMBER)
+			{
+				std::string token;
+				auto valIt = instance.find(WZ_JSON_VALUE_KEY);
+				if (valIt != instance.end() && valIt->is_string()) { token = valIt->get<std::string>(); }
+				double dblVal = std::numeric_limits<double>::quiet_NaN();
+				if (token == "Infinity") { dblVal = std::numeric_limits<double>::infinity(); }
+				else if (token == "-Infinity") { dblVal = -std::numeric_limits<double>::infinity(); }
+				return JS_NewFloat64(ctx, dblVal);
+			}
+
+			// JS undefined (a bare JSON null means JS null in this format - see fixedNulls)
+			if (tag == WZ_JSON_TAG_UNDEF)
+			{
+				return JS_UNDEFINED;
+			}
+
+			int id = -1;
+			auto idIt = instance.find(WZ_JSON_ID_KEY);
+			if (idIt != instance.end() && idIt->is_number_integer()) { id = idIt->get<int>(); }
+
+			// Back-reference to another (already or not-yet decoded) object.
+			if (tag == WZ_JSON_TAG_REF)
+			{
+				auto found = (id >= 0) ? c.idMap.find(id) : c.idMap.end();
+				if (found != c.idMap.end())
+				{
+					return JS_DupValue(ctx, found->second);
+				}
+				// Forward reference: create a placeholder of the correct kind that the
+				// matching definition will populate in-place later, so all holders share one
+				// identity. The kind comes from @@kind ("array"; possibly others later). An
+				// absent @@kind means a plain object.
+				std::string refKind;
+				auto kindIt = instance.find(WZ_JSON_KIND_KEY);
+				if (kindIt != instance.end() && kindIt->is_string()) { refKind = kindIt->get<std::string>(); }
+				JSValue placeholder = (refKind == WZ_JSON_KIND_ARRAY) ? JS_NewArray(ctx) : JS_NewObject(ctx);
+				if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, placeholder); }
+				return placeholder;
+			}
+
+			if (tag == WZ_JSON_TAG_CLASS || tag == WZ_JSON_TAG_OBJECT || tag == WZ_JSON_TAG_ARRAY)
+			{
+				const bool isArray = (tag == WZ_JSON_TAG_ARRAY);
+
+				// Re-use a placeholder created by an earlier forward reference (if any), so
+				// every reference ends up pointing at the same object.
+				JSValue obj;
+				auto existing = (id >= 0) ? c.idMap.find(id) : c.idMap.end();
+				if (existing != c.idMap.end())
+				{
+					obj = JS_DupValue(ctx, existing->second);
+				}
+				else
+				{
+					obj = isArray ? JS_NewArray(ctx) : JS_NewObject(ctx);
+					if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, obj); }
+				}
+
+				if (tag == WZ_JSON_TAG_CLASS)
+				{
+					std::string className;
+					auto classIt = instance.find(WZ_JSON_CLASS_KEY);
+					if (classIt != instance.end() && classIt->is_string()) { className = classIt->get<std::string>(); }
+					// Re-attach the class prototype (the constructor is intentionally not run)
+					JSValue proto = resolveClassPrototype(ctx, className);
+					if (!JS_IsUninitialized(proto))
+					{
+						JS_SetPrototype(ctx, obj, proto);
+						JS_FreeValue(ctx, proto);
+					}
+					else if (!className.empty())
+					{
+						debug(LOG_SCRIPT, "Could not resolve class \"%s\" while restoring globals; restoring as a plain object", className.c_str());
+					}
+				}
+
+				auto dataIt = instance.find(WZ_JSON_DATA_KEY);
+				if (dataIt != instance.end())
+				{
+					if (isArray && dataIt->is_array())
+					{
+						for (size_t i = 0; i < dataIt->size(); i++)
+						{
+							JS_DefinePropertyValueUint32(ctx, obj, static_cast<uint32_t>(i), mapJsonToQuickJSValueWithContext(c, dataIt->at(i), prop_flags), prop_flags);
+						}
+					}
+					else if (!isArray && dataIt->is_object())
+					{
+						populateObjectProperties(c, obj, *dataIt, prop_flags);
+					}
+				}
+
+				// Restore named (non-index) own properties attached to an array
+				if (isArray)
+				{
+					auto propsIt = instance.find(WZ_JSON_PROPS_KEY);
+					if (propsIt != instance.end() && propsIt->is_object())
+					{
+						populateObjectProperties(c, obj, *propsIt, prop_flags);
+					}
+				}
+
+				return obj;
+			}
+			// Unknown tag: fall through and treat as a legacy plain object.
+		}
+
+		// Legacy bare object.
+		JSValue value = JS_NewObject(ctx);
+		populateObjectProperties(c, value, instance, prop_flags);
+		return value;
+	}
+	else if (instance.is_array())
+	{
+		// Legacy bare array.
+		JSValue value = JS_NewArray(ctx);
+		for (size_t i = 0; i < instance.size(); i++)
+		{
+			JS_DefinePropertyValueUint32(ctx, value, static_cast<uint32_t>(i), mapJsonToQuickJSValueWithContext(c, instance.at(i), prop_flags), prop_flags);
+		}
+		return value;
+	}
+	// In the version-2 format, a bare JSON null means JS null (undefined is tagged)
+	// Older saves stored undefined as null, so without fixedNulls a null still maps to undefined
+	if (instance.is_null())
+	{
+		return c.fixedNulls ? JS_NULL : JS_UNDEFINED;
+	}
+	// Scalars (and anything else) cannot carry tags - delegate to the plain mapper.
+	return mapJsonToQuickJSValue(ctx, instance, prop_flags);
 }
 
 int JS_DeletePropertyStr(JSContext *ctx, JSValueConst this_obj,
@@ -1501,7 +1964,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				JSValue droidVal = argv[idx++];
 				int id = QuickJS_GetInt32(ctx, droidVal, "id");
 				int player = QuickJS_GetInt32(ctx, droidVal, "player");
-				DROID *psDroid = IdToDroid(id, player);
+				DROID *psDroid = IdToDroid(gameWorld.objects, id, player);
 				UNBOX_SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
 				return psDroid;
 			}
@@ -2241,6 +2704,10 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		{
 			size_t idx WZ_DECL_UNUSED = 0; // unused when Args... is empty
 			quickjs_execution_context execution_context(context);
+			const wzapi::scripting_instance *orderScopeInstance = execution_context.currentInstance();
+			OrderSourceScope orderScope(OrderSource::script(
+				(orderScopeInstance != nullptr) ? orderScopeInstance->player() : -1,
+				(orderScopeInstance != nullptr) && (orderScopeInstance->binding() == wzapi::ScriptBinding::HostDeclaredGlobal)));
 			return box(applyAndCallF(f, UnboxTuple<Args...>(execution_context, idx, context, argc, argv, wrappedFunctionName)()), context);
 		}
 
@@ -2503,7 +2970,11 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 		{
 			args.push_back(JS_NewStringLen(ctx, pData->stringArg.c_str(), pData->stringArg.length()));
 		}
-		callFunction(ctx, funcName, args, true);
+		// event=false: a setTimer/queue callback invokes only the exact named function, not the
+		// namespace() event variants (fan-out is for event handling; a caller wanting a namespaced
+		// target passes its full name). Must match restoreTimerFunction so live and restored timers behave
+		// identically.
+		callFunction(ctx, funcName, args, false);
 		std::for_each(args.begin(), args.end(), [ctx](JSValue& val) { JS_FreeValue(ctx, val); });
 	}
 	, player, ms, funcName, psObj, type
@@ -2535,6 +3006,7 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
 	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	int32_t ms = JSValueToInt32(ctx, argv[1]);
+	SCRIPT_ASSERT(ctx, ms >= 0, "Timer delay must be non-negative");
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
@@ -2543,6 +3015,8 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
 	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
+	SCRIPT_ASSERT(ctx, !engineToInstanceMap.at(ctx)->isRejectedTimerCallbackName(functionName),
+		"Cannot set a timer on a reserved function: %s", functionName.c_str());
 
 	std::string stringArg;
 	BASE_OBJECT *psObj = nullptr;
@@ -2622,6 +3096,8 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
 	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
+	SCRIPT_ASSERT(ctx, !engineToInstanceMap.at(ctx)->isRejectedTimerCallbackName(functionName),
+		"Cannot queue a reserved function: %s", functionName.c_str());
 
 	int32_t ms = 0;
 	if (argc > 1)
@@ -2836,9 +3312,9 @@ bool quickjs_scripting_instance::readyInstanceForExecution()
 	return true;
 }
 
-bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
+bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::ordered_json &result)
 {
-	auto toJsonContext = JSToJsonContext(ctx, true);
+	auto toJsonContext = JSToJsonContext(ctx, true, /*tag_class_instances=*/true);
 
 	// we save 'scriptName' and 'me' implicitly
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result, &toJsonContext](const char *key, JSAtom &atom) {
@@ -2868,17 +3344,45 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 	return true;
 }
 
-bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result)
+bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::ordered_json &result, bool fixedNulls)
 {
 	ASSERT_OR_RETURN(false, result.is_object(), "Can't load script globals from non-json-object");
+	JsonToJSContext loadCtx(ctx, fixedNulls);
 	for (auto it : result.items())
 	{
-		// IMPORTANT: "null" JSON values *MUST* map to JS_UNDEFINED.
-		//			  If they are set to JS_NULL, it causes issues for libcampaign.js. (As the values become "defined".)
-		//			  (mapJsonToQuickJSValue handles this properly.)
+		const std::string &key = it.key();
+		// Mirror the saveScriptGlobals filter so restored data cannot clobber engine bindings or built-ins:
+		// skip internal-namespace names, and any existing global binding that is a function / constructor,
+		// an accessor, or a non-enumerable built-in (none of which a legitimate save holds)
+		bool skip = (internalNamespace.count(key) != 0);
+		if (!skip)
+		{
+			JSAtom atom = JS_NewAtom(ctx, key.c_str());
+			JSPropertyDescriptor desc;
+			int has = JS_GetOwnProperty(ctx, &desc, global_obj, atom);
+			JS_FreeAtom(ctx, atom);
+			if (has == 1)
+			{
+				// Overwritable only if it is currently an enumerable data property that is not callable
+				skip = JS_IsFunction(ctx, desc.value) || JS_IsConstructor(ctx, desc.value)
+					|| (desc.flags & (JS_PROP_GETSET | JS_PROP_ENUMERABLE)) != JS_PROP_ENUMERABLE;
+				JS_FreeValue(ctx, desc.value);
+				JS_FreeValue(ctx, desc.getter);
+				JS_FreeValue(ctx, desc.setter);
+			}
+			else if (has < 0)
+			{
+				skip = true; // error probing the property - be conservative
+			}
+		}
+		if (skip)
+		{
+			debug(LOG_ERROR, "[script: %s] Skipping restore of protected/internal global: \"%s\"", scriptName().c_str(), key.c_str());
+			continue;
+		}
 		// NOTE: Properties created on the JS global object (as "global variables") should be non-configurable.
 		//		 However *their* properties should probably be C_W_E.
-		int ret = JS_DefinePropertyValueStr(ctx, global_obj, it.key().c_str(), mapJsonToQuickJSValue(ctx, it.value(), JS_PROP_C_W_E), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE | JS_PROP_THROW);
+		int ret = JS_DefinePropertyValueStr(ctx, global_obj, key.c_str(), mapJsonToQuickJSValueWithContext(loadCtx, it.value(), JS_PROP_C_W_E), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE | JS_PROP_THROW);
 		if (ret != 1)
 		{
 			// Failed to load script global
@@ -2897,9 +3401,19 @@ bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result)
 	return true;
 }
 
-nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
+uint64_t quickjs_scripting_instance::saveMathRandomState() const
 {
-	nlohmann::json result = nlohmann::json::object();
+	return JS_GetRandomState(ctx);
+}
+
+void quickjs_scripting_instance::restoreMathRandomState(uint64_t state)
+{
+	JS_SetRandomState(ctx, state);
+}
+
+nlohmann::ordered_json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
+{
+	nlohmann::ordered_json result = nlohmann::ordered_json::object();
 	result["function"] = timerName;
 	const quickjs_timer_additionaldata* pData = static_cast<const quickjs_timer_additionaldata*>(additionalParam);
 	if (pData)
@@ -2910,12 +3424,20 @@ nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timer
 }
 
 // recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
-std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
+std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::ordered_json& savedTimerFuncData)
 {
 	std::string funcName = json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString();
 	if (funcName.empty())
 	{
 		throw std::runtime_error("Invalid timer restore data");
+	}
+	// A legitimate timer callback is one of the script's own functions (or an explicitly-allowed built-in
+	// like autoSave); a reserved engine/native/built-in name is otherwise never a valid target, so reject
+	// it rather than schedule a native binding by name. Mirrors the live-registration check in
+	// js_setTimer / js_queue.
+	if (isRejectedTimerCallbackName(funcName))
+	{
+		throw std::runtime_error("Timer restore names a reserved binding: " + funcName);
 	}
 	std::string stringArg = json_getValue(savedTimerFuncData, WzString::fromUtf8("stringArg")).toWzString().toStdString();
 
@@ -2934,7 +3456,9 @@ std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_in
 			{
 				args.push_back(JS_NewStringLen(pContext, pData->stringArg.c_str(), pData->stringArg.length()));
 			}
-			callFunction(pContext, funcName, args, true);
+			// event=false: match the live SetQuickJSTimer path - invoke only the exact named function, not
+			// the namespace() event variants.
+			callFunction(pContext, funcName, args, false);
 			std::for_each(args.begin(), args.end(), [pContext](JSValue& val) { JS_FreeValue(pContext, val); });
 		}
 		// additionalParams
@@ -3334,6 +3858,7 @@ IMPL_JS_FUNC(transformPlayerToSpectator, wzapi::transformPlayerToSpectator)
 IMPL_JS_FUNC(isSpectator, wzapi::isSpectator)
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
+IMPL_JS_FUNC(benchArrangement, wzapi::benchArrangement)
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
 IMPL_JS_FUNC(getMissionType, wzapi::getMissionType)
 IMPL_JS_FUNC(getRevealStatus, wzapi::getRevealStatus)
@@ -3548,6 +4073,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(useSafetyTransport, 1); // WZAPI
 	JS_REGISTER_FUNC(restoreLimboMissionData, 0); // WZAPI
 	JS_REGISTER_FUNC(getMultiTechLevel, 0); // WZAPI
+	JS_REGISTER_FUNC(benchArrangement, 0); // WZAPI
 	JS_REGISTER_FUNC(setCampaignNumber, 1); // WZAPI
 	JS_REGISTER_FUNC(getMissionType, 0); // WZAPI
 	JS_REGISTER_FUNC(getRevealStatus, 0); // WZAPI
@@ -3637,7 +4163,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(applyLimitSet, 0); // WZAPI
 	JS_REGISTER_FUNC(emitSound, 3); // WZAPI
-	JS_REGISTER_FUNC(setMissionTime, 1); // WZAPI
+	JS_REGISTER_FUNC2(setMissionTime, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(getMissionTime, 0); // WZAPI
 	JS_REGISTER_FUNC2(setReinforcementTime, 1, 2); // WZAPI
 	JS_REGISTER_FUNC2(completeResearch, 1, 3); // WZAPI
@@ -3692,7 +4218,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 // Enable JSON support for custom types
 
 // NOTE: May throw if there is a circular reference!
-nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
+nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 {
 	// IMPORTANT: This largely follows the Qt documentation on QJsonValue::fromVariant
 	// See: http://doc.qt.io/qt-5/qjsonvalue.html#fromVariant
@@ -3705,36 +4231,167 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 	//		 so check value.isNull() instead.
 	if (JS_IsNull(value))
 	{
-		return nlohmann::json(); // null value
+		return nlohmann::ordered_json(); // null value
 	}
 
 	if (JS_IsObject(value))
 	{
 		if (JS_IsConstructor(c.ctx, value))
 		{
-			return (!c.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
+			return (!c.skip_constructors) ? "<constructor>" : nlohmann::ordered_json() /* null value */;
 		}
 
-		if (std::any_of(c.stack.begin(), c.stack.end(), [ctx = c.ctx, &value](JSValue& stackVal) -> bool { return JS_SameValueZero(ctx, stackVal, value) != 0; }))
+		bool isArray = WZ_QJS_IsArray(c.ctx, value) != 0;
+
+		if (c.tag_class_instances)
 		{
-			// circular reference
-			throw std::runtime_error("Circular reference detected!");
+			// If we've already serialized this exact object, emit a back-reference instead
+			// of duplicating it. This preserves shared identity across the whole save and
+			// breaks reference cycles of any kind.
+			auto refIt = c.refIds.find(JS_VALUE_GET_PTR(value));
+			if (refIt != c.refIds.end())
+			{
+				nlohmann::ordered_json ref = nlohmann::ordered_json::object();
+				ref[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_REF;
+				ref[WZ_JSON_ID_KEY] = refIt->second;
+				// Record the targets's kind so a forward reference can build a matching
+				// placeholder. Object is the default (no @@kind).
+				if (isArray) { ref[WZ_JSON_KIND_KEY] = WZ_JSON_KIND_ARRAY; }
+				return ref;
+			}
+		}
+		else
+		{
+			// Legacy / non-tagging path (debug display, value conversion) has no reference
+			// table to break cycles, so guard against them with the recursion stack.
+			if (std::any_of(c.stack.begin(), c.stack.end(), [ctx = c.ctx, &value](JSValue& stackVal) -> bool { return JS_SameValueZero(ctx, stackVal, value) != 0; }))
+			{
+				// circular reference
+				throw std::runtime_error("Circular reference detected!");
+			}
 		}
 
-		nlohmann::json j;
+		nlohmann::ordered_json j;
 		c.stack.push_back(value);
 
-		if (WZ_QJS_IsArray(c.ctx, value))
+		if (c.tag_class_instances)
 		{
-			// Handle array
-			j = nlohmann::json::array();
+			// Assign a reference id *before* recursing into children, so that cyclic or
+			// shared children become back-references to this object.
+			int id = c.nextRefId++;
+			c.refIds[JS_VALUE_GET_PTR(value)] = id;
+
+			j = nlohmann::ordered_json::object();
+			j[WZ_JSON_ID_KEY] = id;
+
+			if (isArray)
+			{
+				nlohmann::ordered_json data = nlohmann::ordered_json::array();
+				uint64_t length = 0;
+				if (QuickJS_GetArrayLength(c.ctx, value, length))
+				{
+					for (uint64_t k = 0; k < length; k++)
+					{
+						JSValue jsVal = JS_GetPropertyUint32(c.ctx, value, k);
+						data.push_back(wz_qjs_to_json(c, jsVal));
+						JS_FreeValue(c.ctx, jsVal);
+					}
+				}
+				j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_ARRAY;
+				j[WZ_JSON_DATA_KEY] = std::move(data);
+
+				// Preserve any *named* (non-index) own properties a script attached to the array (e.g. `arr.meta = ...`).
+				// The 0..length-1 elements above are skipped here ("length" is intrinsic), & own accessors can't be serialized.
+				nlohmann::ordered_json props = nlohmann::ordered_json::object();
+				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &props](const char *key, JSAtom &atom) {
+					std::string nameStr = key;
+					if (nameStr == "length" || isCanonicalArrayIndexKey(nameStr)) { return; }
+					if (isOwnAccessorProperty(c.ctx, value, atom))
+					{
+						debug(LOG_SCRIPT, "Skipping own accessor property \"%s\" when saving script global: getter/setter closures cannot be serialized", key);
+						return;
+					}
+					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+					if (!JS_IsException(jsVal))
+					{
+						if (!JS_IsConstructor(c.ctx, jsVal))
+						{
+							debug(LOG_SCRIPT, "Serializing named property \"%s\" attached to array", nameStr.c_str());
+							props[nameStr] = wz_qjs_to_json(c, jsVal);
+						}
+						else if (!c.skip_constructors)
+						{
+							props[nameStr] = "<constructor>";
+						}
+					}
+					JS_FreeValue(c.ctx, jsVal);
+				}, false);
+				if (!props.empty())
+				{
+					j[WZ_JSON_PROPS_KEY] = std::move(props);
+				}
+			}
+			else
+			{
+				std::string className = getSerializableClassName(c, value);
+				nlohmann::ordered_json data = nlohmann::ordered_json::object();
+				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &data](const char *key, JSAtom &atom) {
+					if (isOwnAccessorProperty(c.ctx, value, atom))
+					{
+						// can't serialize getter/setter closures
+						debug(LOG_SCRIPT, "Skipping own accessor property \"%s\" when saving script global: getter/setter closures cannot be serialized", key);
+						return;
+					}
+					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+					std::string nameStr = key;
+					if (!JS_IsException(jsVal))
+					{
+						if (!JS_IsConstructor(c.ctx, jsVal))
+						{
+							data[nameStr] = wz_qjs_to_json(c, jsVal);
+						}
+						else if (!c.skip_constructors)
+						{
+							data[nameStr] = "<constructor>";
+						}
+					}
+					else
+					{
+						debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
+					}
+					JS_FreeValue(c.ctx, jsVal);
+				}, false);
+				if (!className.empty())
+				{
+					j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_CLASS;
+					j[WZ_JSON_CLASS_KEY] = className;
+				}
+				else
+				{
+					j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_OBJECT;
+					// Warn script authors when a built-in exotic object (Map/Set/Date/...) is
+					// being saved: its internal state lives in internal slots, not own
+					// properties, so it degrades to an (essentially empty) plain object.
+					std::string builtinName = getBuiltinExoticClassName(c, value);
+					if (!builtinName.empty())
+					{
+						debug(LOG_SCRIPT, "Cannot fully save script global of built-in type \"%s\": its internal state is not serializable; it will be restored as a plain object (%zu own propert%s preserved)", builtinName.c_str(), static_cast<size_t>(data.size()), (data.size() == 1) ? "y" : "ies");
+					}
+				}
+				j[WZ_JSON_DATA_KEY] = std::move(data);
+			}
+		}
+		else if (isArray)
+		{
+			// Legacy bare array
+			j = nlohmann::ordered_json::array();
 			uint64_t length = 0;
 			if (QuickJS_GetArrayLength(c.ctx, value, length))
 			{
 				for (uint64_t k = 0; k < length; k++) // TODO: uint64_t isn't correct here, as we call GetUint32...
 				{
 					JSValue jsVal = JS_GetPropertyUint32(c.ctx, value, k);
-					nlohmann::json jsonValue = wz_qjs_to_json(c, jsVal);
+					nlohmann::ordered_json jsonValue = wz_qjs_to_json(c, jsVal);
 					j.push_back(jsonValue);
 					JS_FreeValue(c.ctx, jsVal);
 				}
@@ -3742,8 +4399,8 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 		}
 		else
 		{
-			// Handle actual objects
-			j = nlohmann::json::object();
+			// Legacy bare object
+			j = nlohmann::ordered_json::object();
 			QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &j](const char *key, JSAtom &atom) {
 				JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
 				std::string nameStr = key;
@@ -3793,10 +4450,29 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				// Failed
 				debug(LOG_SCRIPT, "Failed to convert to double");
 			}
+			if (c.tag_class_instances && !std::isfinite(dblVal))
+			{
+				// JSON cannot represent NaN / Infinity (nlohmann::json serializes them as null, which would reload as undefined).
+				// Encode them as a tagged value so they round-trip. (Only done on the tagged save / restore path.)
+				nlohmann::ordered_json num = nlohmann::ordered_json::object();
+				num[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_NUMBER;
+				if (std::isnan(dblVal)) { num[WZ_JSON_VALUE_KEY] = "NaN"; }
+				else { num[WZ_JSON_VALUE_KEY] = (dblVal < 0.0) ? "-Infinity" : "Infinity"; }
+				return num;
+			}
 			return dblVal;
 		}
 		case JS_TAG_UNDEFINED:
-			return nlohmann::json(); // null value // ???
+			if (c.tag_class_instances)
+			{
+				// On the save path, distinguish undefined from null:
+				// - undefined is tagged, so a bare JSON null unambiguously means JS null
+				// - (Legacy/non-tag callers keep collapsing both to JSON null)
+				nlohmann::ordered_json undef = nlohmann::ordered_json::object();
+				undef[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_UNDEF;
+				return undef;
+			}
+			return nlohmann::ordered_json(); // null value
 		case JS_TAG_STRING:
 		{
 			const char* pStr = JS_ToCString(c.ctx, value);
@@ -3809,13 +4485,13 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			// In every other case, a conversion to a string will be attempted
 			const char* pStr = JS_ToCString(c.ctx, value);
 			// If the returned string is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
-			auto j = nlohmann::json();
+			auto j = nlohmann::ordered_json();
 			if (pStr)
 			{
 				std::string str(pStr);
 				if (str.empty())
 				{
-					j = nlohmann::json(); // null value
+					j = nlohmann::ordered_json(); // null value
 				}
 				else
 				{
@@ -3825,7 +4501,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			}
 			else
 			{
-				j = nlohmann::json(); // null value
+				j = nlohmann::ordered_json(); // null value
 			}
 			return j;
 		}

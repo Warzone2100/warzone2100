@@ -185,7 +185,7 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		return;
 	}
-	camSetDroidExperience(droid);
+	camSetEnemyDroidExperience(droid);
 	__camAddDroidToFactoryGroup(droid, structure);
 }
 

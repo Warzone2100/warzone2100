@@ -79,7 +79,7 @@ std::unique_ptr<TerrainTypeData> loadTerrainTypes(const std::string &filename, I
 			return nullptr;
 		}
 
-		if (pType > static_cast<uint16_t>(TER_MAX))
+		if (pType >= static_cast<uint16_t>(TER_MAX))
 		{
 			debug(pCustomLogger, LOG_ERROR, "%s: Terrain type #%" PRIu32 " (value: %" PRIu16 ") out of range", path, i, pType);
 			return nullptr;

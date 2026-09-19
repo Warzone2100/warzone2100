@@ -1701,9 +1701,37 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 	);
 
 	results.emplace_back(
+		"noExp",
+		_("No EXP gain"),
+		_("No experience gained. Relive a semblence of your first playthrough again."),
+		false, true
+	);
+
+	results.emplace_back(
 		"towerWars",
 		_("Tower Wars"),
 		_("Player gets significantly stronger structures."),
+		false, true
+	);
+
+	results.emplace_back(
+		"heavilyDamagedPenalty",
+		_("Heavily Damaged Penalty"),
+		_("ROF and Speed will be reduced when units or structures are below 25% HP."),
+		false, true
+	);
+
+	results.emplace_back(
+		"unexploredMapOpacity",
+		_("Unexplored Map Opacity"),
+		_("Partially reveal the layout of the map without exploration."),
+		false, true
+	);
+
+	results.emplace_back(
+		"noCommander",
+		_("No Commanders"),
+		_("Prevent the production of Commanders to test your multitasking capabilities."),
 		false, true
 	);
 
@@ -2855,12 +2883,15 @@ TITLECODE WzCampaignSelectorTitleUI::run()
 {
 	widgRunScreen(psWScreen);
 
-	widgDisplayScreen(psWScreen); // show the widgets currently running
-
 	if (CancelPressed())
 	{
 		changeTitleUI(parent);
 	}
 
 	return TITLECODE_CONTINUE;
+}
+
+void WzCampaignSelectorTitleUI::render()
+{
+	widgDisplayScreen(psWScreen); // show the widgets currently running
 }

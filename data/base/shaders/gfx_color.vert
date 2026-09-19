@@ -1,7 +1,9 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform mat4 posMatrix;
+layout(std140) uniform cbuffer {
+	mat4 transformationMatrix;
+};
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
@@ -21,6 +23,6 @@ varying vec4 vColour;
 
 void main()
 {
-	gl_Position = posMatrix * vertex;
+	gl_Position = transformationMatrix * vertex;
 	vColour = vertexColor;
 }

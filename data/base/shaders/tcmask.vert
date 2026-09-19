@@ -11,13 +11,42 @@
 #extension GL_EXT_gpu_shader4 : enable
 #endif
 
-uniform mat4 ProjectionMatrix;
-uniform mat4 ModelViewMatrix;
-uniform mat4 NormalMatrix;
-uniform int hasTangents; // whether tangents were calculated for model
-uniform vec4 lightPosition;
-uniform float stretch;
-uniform float animFrameNumber;
+layout(std140) uniform globaluniforms {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
+	vec4 cameraPos;
+	vec4 lightPosition;
+	vec4 sceneColor;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 fogColor;
+	vec4 fogRange;
+	float graphicsCycle;
+	float WZ_MIP_LOAD_BIAS;
+	float pad0;
+	float pad1;
+};
+
+layout(std140) uniform meshuniforms {
+	int tcmask;
+	int normalmap;
+	int specularmap;
+	int hasTangents;
+	int fogOutput;
+};
+
+layout(std140) uniform instanceuniforms {
+	mat4 ModelMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	float animFrameNumber;
+	int ecmEffect;
+	int alphaTest;
+};
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b
@@ -38,14 +67,18 @@ attribute vec4 vertexTangent;
 #endif
 
 #ifdef NEWGL
-out float vertexDistance;
+out vec3 posViewSpace;
 out vec3 normal, lightDir, halfVec;
 out vec2 texCoord;
+out mat3 TangentSpaceMatrix;
 #else
-varying float vertexDistance;
+varying vec3 posViewSpace;
 varying vec3 normal, lightDir, halfVec;
 varying vec2 texCoord;
+varying mat3 TangentSpaceMatrix;
 #endif
+
+#include "mesh_shading_normal.glsl"
 
 float when_gt(float x, float y) {
   return max(sign(x - y), 0.0);
@@ -61,26 +94,23 @@ void main()
 	float vFrame = float(frame / framesPerLine) * vertexTexCoordAndTexAnim.w; // texAnim.y
 	texCoord = vec2(texCoord.x + uFrame, texCoord.y + vFrame);
 
-	// Lighting we pass to the fragment shader
-	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
-	vec3 eyeVec = normalize(-viewVertex.xyz);
-	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	lightDir = normalize(lightPosition.xyz);
+	// Lighting, all in WORLD space
+	vec3 posWorld = (ModelMatrix * vertex).xyz;
+	vec3 cameraVec = normalize(cameraPos.xyz - posWorld);
+
+	normal = wzWorldShadingNormal(mat3(NormalMatrix), vertexNormal, hasTangents);
+	lightDir = -normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
-		// Building the matrix Eye Space -> Tangent Space with handness
+		// Building the World Space -> Tangent Space matrix with handness w to
+		// support uv mirroring. The fragment shader applies it.
 		vec3 t = normalize((NormalMatrix * vertexTangent).xyz);
-		vec3 b = cross (n, t) * vertexTangent.w;
-		mat3 TangentSpaceMatrix = mat3(t, n, b);
-
-		// Transform light and eye direction vectors by tangent basis
-		lightDir *= TangentSpaceMatrix;
-		eyeVec *= TangentSpaceMatrix;
+		vec3 b = cross (normal, t) * vertexTangent.w;
+		TangentSpaceMatrix = mat3(t, b, normal); // conventional (T, B, N)
 	}
 
-	normal = n;
-	halfVec = lightDir + eyeVec;
+	halfVec = lightDir + cameraVec;
 
 	// Implement building stretching to accommodate terrain
 	vec4 position = vertex;
@@ -93,10 +123,9 @@ void main()
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ViewMatrix * ModelMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * position;
 	gl_Position = gposition;
 
-	// Remember vertex distance
-	vertexDistance = gposition.z;
+	posViewSpace = (ViewMatrix * ModelMatrix * position).xyz;
 }

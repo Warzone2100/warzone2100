@@ -781,7 +781,7 @@ static optional<ItemAvailability> getStatPlayerAvailability(int player, BASE_STA
 			{
 				return (ItemAvailability)AVAILABLE;
 			}
-			else if (IsResearchPossible(psRes))
+			else if (researchDiscovered(Stat->index, static_cast<uint32_t>(player)))
 			{
 				return (ItemAvailability)FOUND;
 			}

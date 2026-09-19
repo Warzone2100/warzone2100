@@ -3,15 +3,15 @@
 
 //#pragma debug(on)
 
+#include "tcmask_instanced.glsl"
+
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 #define WZ_POINT_LIGHT_ENABLED 0
 //
 
-#define WZ_MAX_SHADOW_CASCADES 3
 
 uniform sampler2D Texture; // diffuse map
 uniform sampler2D TextureTcmask; // tcmask
@@ -20,30 +20,11 @@ uniform sampler2D TextureSpecular; // specular map
 uniform sampler2DArrayShadow shadowMap; // shadow map
 uniform sampler2D lightmap_tex;
 
-uniform mat4 ViewMatrix;
 
-uniform int tcmask; // whether a tcmask texture exists for the model
-uniform int normalmap; // whether a normal map exists for the model
-uniform int specularmap; // whether a specular map exists for the model
-uniform int hasTangents; // whether tangents were calculated for model
-uniform int shieldEffect;
-uniform float graphicsCycle; // a periodically cycling value for special effects
 
-uniform vec4 cameraPos; // in modelSpace
 
-uniform vec4 sceneColor; //emissive light
-uniform vec4 ambient;
-uniform vec4 diffuse;
-uniform vec4 specular;
 
-uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
-uniform vec4 ShadowMapCascadeSplits;
-uniform int ShadowMapSize;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -78,6 +59,8 @@ out vec4 FragColor;
 #endif
 #include "shadow_mapping.glsl"
 #include "light.glsl"
+#include "tangentspace.glsl"
+#include "distance_fog.glsl"
 
 float random(vec2 uv)
 {
@@ -117,16 +100,7 @@ void main()
 	{
 		vec3 normalFromMap = texture(TextureNormal, texCoord, WZ_MIP_LOAD_BIAS).xyz;
 
-		// transform tangent-space normal map into world space
-		N = normalFromMap.xzy * 2.0 - 1.0;
-		N = TangentSpaceMatrix * N;
-
-		if (hasTangents == 0)
-		{
-			// transform object-space normal map into world space
-			N = normalFromMap.xzy * 2.0 - 1.0;
-			N = NormalMatrix * vec3(-N.x, N.y, -N.z); 
-		}
+		N = wzDecodeNormalMap(normalFromMap, hasTangents, TangentSpaceMatrix, NormalMatrix);
 	}
 	N = normalize(N);
 
@@ -171,7 +145,7 @@ void main()
 
 #if WZ_POINT_LIGHT_ENABLED == 1
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(halfVec - lightDir), diffuseMap, specularMapValue, mat3(1.f));
+	light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(normal), normalize(halfVec - lightDir), diffuseMap, specularMapValue);
 #endif
 
 	light.a = 1.0f;
@@ -194,19 +168,15 @@ void main()
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
-	
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
-
-		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
-	}
 
 	if (shieldEffect != 0)
 	{
 		fragColour = applyShieldFuzzEffect(fragColour);
+	}
+	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
+	{
+		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);
+		fragColour.rgb = wzApplyForwardFog(fragColour.rgb, fragColour.a, fogAmount, fogColor.rgb, fogOutput);
 	}
 
 	#ifdef NEWGL

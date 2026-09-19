@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_MULTIPLAY_H__
 
 #include "lib/framework/frame.h"
+#include "ordersource.h"
 #include "lib/framework/types.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
@@ -56,6 +57,7 @@ struct DROID_TEMPLATE;
 struct FEATURE;
 struct INITIAL_DROID_ORDERS;
 struct STRUCTURE;
+struct WorldObjectState;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in a multiplayer game.
@@ -79,7 +81,9 @@ struct MULTIPLAYERGAME
 	uint32_t	inactivityMinutes;			// The number of minutes without active play before a player should be considered "inactive". (0 = disable activity alerts)
 	uint32_t	gameTimeLimitMinutes;		// The number of minutes before the game automatically ends (0 = disable time limit)
 	PLAYER_LEAVE_MODE	playerLeaveMode;	// The behavior used for when players leave a game
+	uint16_t	playerReconnectWaitSeconds = PLAYER_RECONNECT_WAIT_SECONDS_DEFAULT;	// Max seconds the host holds a dropped player's slot for a mid-match reconnect before declaring them left (0 = do not wait)
 	BLIND_MODE	blindMode = BLIND_MODE::NONE;
+	uint16_t	pathfindingBackend = 8191;	// congestion feature bitmask (PathfindingFeature), every feature on by default, synced, locked before the match starts
 
 	// NOTE: If adding to this struct, a lot of things probably require changing
 	// (send/recvOptions? loadMainFile/writeMainFile? to/from_json in multiint.h.cpp?)
@@ -124,7 +128,6 @@ struct MULTIPLAYERINGAME
 	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> lastNotReadyTimes;
 	std::array<uint64_t, MAX_CONNECTED_PLAYERS> secondsNotReady; // updated when player status switches to ready
 	std::array<optional<uint32_t>, MAX_CONNECTED_PLAYERS> playerLeftGameTime; // records when the player leaves the game (as a player)
-	//
 
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
@@ -246,9 +249,8 @@ constexpr TechLevel TECH_LEVEL_MAX = TechLevel::TECH_4;
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(const WorldObjectState& objState, UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(const WorldObjectState& objState, UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
 const char *getPlayerName(uint32_t player, bool treatAsNonHost = false);
@@ -301,16 +303,16 @@ bool multiplayerWinSequence(bool firstCall);
 bool SendDestroyStructure(const STRUCTURE *s);
 bool SendBuildFinished(const STRUCTURE *psStruct);
 bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj);
-void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl);
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl, const OrderSource &source);
 
 // droids . multibot
 bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
-void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
+void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add, const OrderSource &source);
 
-bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid);
+bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state, const OrderSource &source);
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid, const OrderSource &source);
 
 // Startup. mulitopt
 bool multiShutdown();
@@ -350,7 +352,7 @@ void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
-bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
+bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart, const OrderSource &source);
 
 bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
 

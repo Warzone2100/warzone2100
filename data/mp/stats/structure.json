@@ -372,6 +372,11 @@
 		],
 		"thermal": 10,
 		"type": "COMMAND RELAY",
+		"userLimits": [
+			0,
+			1,
+			1
+		],
 		"width": 2
 	},
 	"A0CommandCentre": {

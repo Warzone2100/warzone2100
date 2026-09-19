@@ -84,6 +84,7 @@ enum DroidOrderType
 	DORDER_HOLD,            /**< hold position until given next order. */
 };
 typedef DroidOrderType DROID_ORDER;
+constexpr DroidOrderType DORDER_MAX = DORDER_HOLD; ///< highest valid DroidOrderType (update when adding entries)
 
 /** All the possible secondary orders for droids. */
 enum SECONDARY_ORDER
@@ -163,6 +164,7 @@ enum RTR_DATA_TYPE
 	RTR_TYPE_HQ,
 	// If modifying, only *add* entries at end! (or savegame loading will break)
 };
+constexpr RTR_DATA_TYPE RTR_DATA_TYPE_MAX = RTR_TYPE_HQ; ///< highest valid RTR_DATA_TYPE (update when adding entries)
 
 /** Struct that stores data of an order.
  * This struct is needed to send orders that comes with information, such as position, target, etc.

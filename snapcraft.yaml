@@ -49,8 +49,8 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-3.4.4/SDL3-3.4.4.tar.gz
-    source-checksum: sha512/2c28a10c49f79efcfbb486156e7271b84cca028b3d6d8b436e99c3be85e5e648aa6543387817b3281ae9f4fcc6cb4046d998c7b273e62d3d9fe76e019ac91b6e
+    source: https://github.com/libsdl-org/SDL/releases/download/release-3.4.16/SDL3-3.4.16.tar.gz
+    source-checksum: sha512/74a5ee1e5bba138a8daa710e200ac3585c60f696311c46252d86bc685c55e8271cd0d68439f8e13ca515b702d46ef58914d0f7b2352019870a5763ed79739e9a
     plugin: cmake
     build-environment:
       - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
@@ -185,6 +185,7 @@ parts:
       - libphysfs-dev
       - libpng-dev
       - libtheora-dev
+      - libvpx-dev
       - libogg-dev
       - libopus-dev
       - libvorbis-dev
@@ -215,6 +216,7 @@ parts:
       - libphysfs1
       - libpng16-16
       - libtheora0
+      - libvpx9
       - libvorbis0a
       - libvorbisenc2
       - libvorbisfile3

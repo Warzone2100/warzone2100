@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,10 +33,14 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
-#include "lib/framework/frameresource.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/loading_task.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "lib/framework/debug.h"
+
+#include "mikktspace.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -59,6 +65,7 @@ static_assert(MAX_PIE_POLYGONS <= ((UINT16_MAX-1) / 3), "MAX_PIE_POLYGONS must n
 
 typedef std::unordered_map<std::string, std::unique_ptr<iIMDBaseShape>> ModelMap;
 static ModelMap models;
+static std::unordered_set<std::string> modelsBeingLoaded;
 static size_t currentTilesetIdx = 0;
 
 static size_t modelLoadingErrors = 0;
@@ -96,6 +103,7 @@ iIMDShape& iIMDShape::operator=(iIMDShape&& other) noexcept
 		std::swap(max, other.max);
 		std::swap(sradius, other.sradius);
 		std::swap(radius, other.radius);
+		std::swap(crossSection, other.crossSection);
 		std::swap(ocen, other.ocen);
 		std::swap(connectors, other.connectors);
 		std::swap(flags, other.flags);
@@ -275,6 +283,7 @@ size_t getModelTextureLoadingFailuresCount()
 void modelShutdown()
 {
 	models.clear();
+	modelsBeingLoaded.clear();
 	modelLoadingErrors = 0;
 	modelTextureLoadingFailures = 0;
 }
@@ -419,10 +428,18 @@ iIMDBaseShape *modelGet(const WzString &filename)
 	{
 		return it->second.get(); // cached
 	}
-	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
+	if (!modelsBeingLoaded.insert(name.toStdString()).second)
+	{
+		debug(LOG_ERROR, "Recursive model reference: %s", name.toUtf8().c_str());
+		++modelLoadingErrors;
+		return nullptr;
+	}
+	const bool loaded = tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
 	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
 	         || tryLoad("components/bodies/", name) || tryLoad("features/", name)
-	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name))
+	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name);
+	modelsBeingLoaded.erase(name.toStdString());
+	if (loaded)
 	{
 		return models.at(name.toStdString()).get();
 	}
@@ -775,6 +792,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 		if (sscanf(pRestOfLine, "%x %u%n", &flags, &npnts, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "(_load_polys) [poly %u] error loading flags and npoints", i);
+			return false;
 		}
 		pRestOfLine += cnt;
 
@@ -1039,6 +1057,15 @@ static void _imd_calc_bounds(iIMDShape &s, bool allLevels = false)
 	s.radius = MAX(xmax, MAX(ymax, zmax));
 	s.sradius = static_cast<int>(sqrtf(xmax * xmax + ymax * ymax + zmax * zmax));
 
+	// the two largest spans
+	const int spanX = s.max.x - s.min.x;
+	const int spanY = s.max.y - s.min.y;
+	const int spanZ = s.max.z - s.min.z;
+	const int longestSpan = MAX(spanX, MAX(spanY, spanZ));
+	const int shortestSpan = MIN(spanX, MIN(spanY, spanZ));
+	const int middleSpan = spanX + spanY + spanZ - longestSpan - shortestSpan;
+	s.crossSection = static_cast<int>(sqrtf(static_cast<float>(longestSpan) * static_cast<float>(MAX(middleSpan, 1))));
+
 // START: tight bounding sphere
 
 	// set xspan = distance between 2 points xmin & xmax (squared)
@@ -1211,67 +1238,180 @@ static void _imd_determine_tileset_texture_files(iIMDShape& s, const LevelSettin
 	}
 }
 
-static bool _imd_load_level_textures(const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output)
+struct ImdResolvedLevelTextureFiles
+{
+	std::string diffuseFile;
+	optional<std::string> tcmaskFile;
+	optional<std::string> normalFile;
+	optional<std::string> specularFile;
+};
+
+static bool imdResolveLevelTextureFiles(const iIMDShape& s, size_t tilesetIdx, ImdResolvedLevelTextureFiles& resolved)
 {
 	const auto& defaultSettings = s.tilesetTextureFiles[0];
 	const auto& tilesetSettings = s.tilesetTextureFiles[tilesetIdx];
 
-	const WzString &filename = s.modelName;
 	const TilesetTextureFiles* pLevelSettingsToUseForTextures = (!tilesetSettings.texfile.empty()) ? &tilesetSettings : &defaultSettings;
-	if (!pLevelSettingsToUseForTextures->texfile.empty())
+	if (pLevelSettingsToUseForTextures->texfile.empty())
 	{
-		optional<size_t> texpage = iV_GetTexture(pLevelSettingsToUseForTextures->texfile.c_str(), gfx_api::texture_type::game_texture);
-		optional<size_t> tcmaskpage;
-		optional<size_t> normalpage;
-		optional<size_t> specpage;
+		return false;
+	}
 
-		ASSERT_OR_RETURN(false, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTextures->texfile.c_str());
+	resolved.diffuseFile = pLevelSettingsToUseForTextures->texfile;
 
-		const TilesetTextureFiles* pLevelSettingsToUseForTCMask = (!tilesetSettings.tcmaskfile.empty()) ? &tilesetSettings : &defaultSettings;
-		if (!pLevelSettingsToUseForTCMask->tcmaskfile.empty())
-		{
-			// load explicitly specified tcmask file
-			debug(LOG_TEXTURE, "Loading tcmask %s for %s", pLevelSettingsToUseForTCMask->tcmaskfile.c_str(), filename.toUtf8().c_str());
-			tcmaskpage = iV_GetTexture(pLevelSettingsToUseForTCMask->tcmaskfile.c_str(), gfx_api::texture_type::alpha_mask);
-			ASSERT_OR_RETURN(false, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTCMask->tcmaskfile.c_str());
-		}
-		else
-		{
-			// BACKWARDS-COMPATIBILITY (PIE 2/3 compatibility)
-			// check if model should use team colour mask
-			if (s.flags & iV_IMD_TCMASK)
-			{
-				std::string tcmask_name = pie_MakeTexPageTCMaskName(pLevelSettingsToUseForTextures->texfile.c_str());
-				tcmask_name += ".png";
-				tcmaskpage = iV_GetTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask);
-				ASSERT_OR_RETURN(false, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
-			}
-		}
+	const TilesetTextureFiles* pLevelSettingsToUseForTCMask = (!tilesetSettings.tcmaskfile.empty()) ? &tilesetSettings : &defaultSettings;
+	if (!pLevelSettingsToUseForTCMask->tcmaskfile.empty())
+	{
+		resolved.tcmaskFile = pLevelSettingsToUseForTCMask->tcmaskfile;
+	}
+	else if (s.flags & iV_IMD_TCMASK)
+	{
+		// BACKWARDS-COMPATIBILITY (PIE 2/3 compatibility)
+		std::string tcmask_name = pie_MakeTexPageTCMaskName(pLevelSettingsToUseForTextures->texfile.c_str());
+		tcmask_name += ".png";
+		resolved.tcmaskFile = std::move(tcmask_name);
+	}
 
-		const TilesetTextureFiles* pLevelSettingsToUseForNormals = (!tilesetSettings.normalfile.empty()) ? &tilesetSettings : &defaultSettings;
-		if (!pLevelSettingsToUseForNormals->normalfile.empty())
-		{
-			debug(LOG_TEXTURE, "Loading normal map %s for %s", pLevelSettingsToUseForNormals->normalfile.c_str(), filename.toUtf8().c_str());
-			normalpage = iV_GetTexture(pLevelSettingsToUseForNormals->normalfile.c_str(), gfx_api::texture_type::normal_map);
-			ASSERT_OR_RETURN(false, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForNormals->normalfile.c_str());
-		}
+	const TilesetTextureFiles* pLevelSettingsToUseForNormals = (!tilesetSettings.normalfile.empty()) ? &tilesetSettings : &defaultSettings;
+	if (!pLevelSettingsToUseForNormals->normalfile.empty())
+	{
+		resolved.normalFile = pLevelSettingsToUseForNormals->normalfile;
+	}
 
-		const TilesetTextureFiles* pLevelSettingsToUseForSpecular = (!tilesetSettings.specfile.empty()) ? &tilesetSettings : &defaultSettings;
-		if (!pLevelSettingsToUseForSpecular->specfile.empty())
-		{
-			debug(LOG_TEXTURE, "Loading specular map %s for %s", pLevelSettingsToUseForSpecular->specfile.c_str(), filename.toUtf8().c_str());
-			specpage = iV_GetTexture(pLevelSettingsToUseForSpecular->specfile.c_str(), gfx_api::texture_type::specular_map);
-			ASSERT_OR_RETURN(false, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForSpecular->specfile.c_str());
-		}
-
-		// assign tex pages and flags for this level
-		output.texpage = texpage.value();
-		output.tcmaskpage = (tcmaskpage.has_value()) ? tcmaskpage.value() : iV_TEX_INVALID;
-		output.normalpage = (normalpage.has_value()) ? normalpage.value() : iV_TEX_INVALID;
-		output.specularpage = (specpage.has_value()) ? specpage.value() : iV_TEX_INVALID;
+	const TilesetTextureFiles* pLevelSettingsToUseForSpecular = (!tilesetSettings.specfile.empty()) ? &tilesetSettings : &defaultSettings;
+	if (!pLevelSettingsToUseForSpecular->specfile.empty())
+	{
+		resolved.specularFile = pLevelSettingsToUseForSpecular->specfile;
 	}
 
 	return true;
+}
+
+static void imdAssignLoadedLevelTexturePages(iIMDShapeTextures& output, size_t texpage, const optional<size_t>& tcmaskpage, const optional<size_t>& normalpage, const optional<size_t>& specpage)
+{
+	output.texpage = texpage;
+	output.tcmaskpage = tcmaskpage.value_or(iV_TEX_INVALID);
+	output.normalpage = normalpage.value_or(iV_TEX_INVALID);
+	output.specularpage = specpage.value_or(iV_TEX_INVALID);
+}
+
+static bool _imd_load_level_textures(const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output)
+{
+	ImdResolvedLevelTextureFiles resolved;
+	if (!imdResolveLevelTextureFiles(s, tilesetIdx, resolved))
+	{
+		return true;
+	}
+
+	const WzString &filename = s.modelName;
+	optional<size_t> texpage = iV_GetTexture(resolved.diffuseFile.c_str(), gfx_api::texture_type::game_texture);
+	ASSERT_OR_RETURN(false, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.diffuseFile.c_str());
+
+	optional<size_t> tcmaskpage;
+	if (resolved.tcmaskFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading tcmask %s for %s", resolved.tcmaskFile->c_str(), filename.toUtf8().c_str());
+		tcmaskpage = iV_GetTexture(resolved.tcmaskFile->c_str(), gfx_api::texture_type::alpha_mask);
+		ASSERT_OR_RETURN(false, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), resolved.tcmaskFile->c_str());
+	}
+
+	optional<size_t> normalpage;
+	if (resolved.normalFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading normal map %s for %s", resolved.normalFile->c_str(), filename.toUtf8().c_str());
+		normalpage = iV_GetTexture(resolved.normalFile->c_str(), gfx_api::texture_type::normal_map);
+		ASSERT_OR_RETURN(false, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.normalFile->c_str());
+	}
+
+	optional<size_t> specpage;
+	if (resolved.specularFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading specular map %s for %s", resolved.specularFile->c_str(), filename.toUtf8().c_str());
+		specpage = iV_GetTexture(resolved.specularFile->c_str(), gfx_api::texture_type::specular_map);
+		ASSERT_OR_RETURN(false, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.specularFile->c_str());
+	}
+
+	imdAssignLoadedLevelTexturePages(output, texpage.value(), tcmaskpage, normalpage, specpage);
+	return true;
+}
+
+LoadingTask<> imdLoadLevelTexturesTask(
+	ResourceLoadingController& controller,
+	const iIMDShape& s,
+	size_t tilesetIdx,
+	iIMDShapeTextures& output)
+{
+	ImdResolvedLevelTextureFiles resolved;
+	if (!imdResolveLevelTextureFiles(s, tilesetIdx, resolved))
+	{
+		co_return load_ok();
+	}
+
+	const WzString &filename = s.modelName;
+	const auto texpageResult = co_await iV_GetTextureTask(controller, resolved.diffuseFile.c_str(), gfx_api::texture_type::game_texture);
+	CORO_ASSERT_OR_RETURN(load_fail(), texpageResult.has_value() && texpageResult->has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.diffuseFile.c_str());
+	optional<size_t> texpage = texpageResult.value();
+	optional<size_t> tcmaskpage;
+	optional<size_t> normalpage;
+	optional<size_t> specpage;
+
+	if (resolved.tcmaskFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading tcmask %s for %s", resolved.tcmaskFile->c_str(), filename.toUtf8().c_str());
+		const auto tcmaskpageResult = co_await iV_GetTextureTask(controller, resolved.tcmaskFile->c_str(), gfx_api::texture_type::alpha_mask);
+		CORO_ASSERT_OR_RETURN(load_fail(), tcmaskpageResult.has_value() && tcmaskpageResult->has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), resolved.tcmaskFile->c_str());
+		tcmaskpage = tcmaskpageResult.value();
+	}
+
+	if (resolved.normalFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading normal map %s for %s", resolved.normalFile->c_str(), filename.toUtf8().c_str());
+		const auto normalpageResult = co_await iV_GetTextureTask(controller, resolved.normalFile->c_str(), gfx_api::texture_type::normal_map);
+		CORO_ASSERT_OR_RETURN(load_fail(), normalpageResult.has_value() && normalpageResult->has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.normalFile->c_str());
+		normalpage = normalpageResult.value();
+	}
+
+	if (resolved.specularFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading specular map %s for %s", resolved.specularFile->c_str(), filename.toUtf8().c_str());
+		const auto specpageResult = co_await iV_GetTextureTask(controller, resolved.specularFile->c_str(), gfx_api::texture_type::specular_map);
+		CORO_ASSERT_OR_RETURN(load_fail(), specpageResult.has_value() && specpageResult->has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.specularFile->c_str());
+		specpage = specpageResult.value();
+	}
+
+	imdAssignLoadedLevelTexturePages(output, texpage.value(), tcmaskpage, normalpage, specpage);
+	co_return load_ok();
+}
+
+LoadingTask<> preloadAllModelTexturesTask(ResourceLoadingController& controller)
+{
+	for (auto& keyvaluepair : models)
+	{
+		iIMDBaseShape& baseModel = *keyvaluepair.second.get();
+		for (iIMDShape *pDisplayShape = baseModel.mutableDisplayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		{
+			if (pDisplayShape->m_textures->initialized)
+			{
+				continue;
+			}
+
+			if (!(co_await imdLoadLevelTexturesTask(controller, *pDisplayShape, currentTilesetIdx, *pDisplayShape->m_textures)))
+			{
+				++modelTextureLoadingFailures;
+				continue;
+			}
+			pDisplayShape->m_textures->initialized = true;
+		}
+
+		co_await controller.yieldFrame();
+	}
+
+	if (modelTextureLoadingFailures > 0)
+	{
+		co_return load_fail();
+	}
+
+	co_return load_ok();
 }
 
 // performance hack
@@ -1279,7 +1419,6 @@ static std::vector<gfx_api::gfxFloat> vertices;
 static std::vector<gfx_api::gfxFloat> normals;
 static std::vector<gfx_api::gfxFloat> texcoords; // texcoords + texAnim
 static std::vector<gfx_api::gfxFloat> tangents;
-static std::vector<gfx_api::gfxFloat> bitangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
 static uint16_t vertexCount = 0;
 
@@ -1321,8 +1460,10 @@ static bool ReadNormals(const char **ppFileData, const char *FileDataEnd, std::v
 
 static bool _imd_load_normals(const char **ppFileData, const char *FileDataEnd, std::vector<Vector3f> &pie_level_normals, uint32_t num_normal_lines)
 {
+   ASSERT_OR_RETURN(false, num_normal_lines <= MAX_PIE_POLYGONS, "'NORMALS' directive count (%" PRIu32") exceeds maximum supported (%" PRIu32")", num_normal_lines, MAX_PIE_POLYGONS);
+
    // We only support triangles!
-   pie_level_normals.resize(static_cast<size_t>(num_normal_lines * 3));
+   pie_level_normals.resize(static_cast<size_t>(num_normal_lines) * 3);
 
    if (ReadNormals(ppFileData, FileDataEnd, pie_level_normals, num_normal_lines) == false)
    {
@@ -1380,77 +1521,112 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, size
 	return vertexCount - 1;
 }
 
-void calculateTangentsForTriangle(const uint16_t ia, const uint16_t ib, const uint16_t ic)
+// MikkTSpace tangent generation
+//
+// MikkTSpace is the reference implementation used by Blender, Substance, xNormal,
+// and Marmoset, so tangent frames now agree between the tools that bake normal
+// maps and the engine that renders them.
+//
+// WZ texture coordinates have V pointing DOWN the image (PNGs are uploaded
+// without a vertical flip - see png_util_*.cpp), while MikkTSpace assumes the
+// standard convention. We therefore hand it V-flipped coordinates below. T is
+// unaffected by that flip, and B = dP/dv changes sign, which reproduces exactly
+// the -dP/dv bitangent the shaders need for ordinary OpenGL-convention
+// ("green up") normal maps. Doing it this way keeps the standard convention
+// end-to-end and lets the shader use the plain
+//     bitangent = w * cross(normal, tangent)
+// reconstruction, with w taken straight from MikkTSpace's fSign.
+
+static inline size_t mikkVertexIndex(int iFace, int iVert)
 {
-   // This will work as long as vecs are packed (which is default in glm)
-   const Vector3f* verticesAsVec3 = reinterpret_cast<const Vector3f*>(vertices.data());
-   const Vector4f* texcoordsAsVec4 = reinterpret_cast<const Vector4f*>(texcoords.data());
-   Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
-   Vector3f* bitangentsAsVec3 = reinterpret_cast<Vector3f*>(bitangents.data());
-
-   // Shortcuts for vertices
-   const Vector3f& va(verticesAsVec3[ia]);
-   const Vector3f& vb(verticesAsVec3[ib]);
-   const Vector3f& vc(verticesAsVec3[ic]);
-
-   // Shortcuts for UVs
-   const Vector2f uva(texcoordsAsVec4[ia].xy());
-   const Vector2f uvb(texcoordsAsVec4[ib].xy());
-   const Vector2f uvc(texcoordsAsVec4[ic].xy());
-
-   // Edges of the triangle : postion delta
-   const Vector3f deltaPos1 = vb - va;
-   const Vector3f deltaPos2 = vc - va;
-
-   // UV delta
-   const Vector2f deltaUV1 = uvb - uva;
-   const Vector2f deltaUV2 = uvc - uva;
-
-   // check for nan
-   float r = deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x;
-   if (r != 0.f)
-	   r = 1.f / r;
-
-   const Vector4f tangent(Vector3f(deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r, 0.f);
-   const Vector3f bitangent(Vector3f(deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r);
-
-   tangentsAsVec4[ia] += tangent;
-   tangentsAsVec4[ib] += tangent;
-   tangentsAsVec4[ic] += tangent;
-
-   bitangentsAsVec3[ia] += bitangent;
-   bitangentsAsVec3[ib] += bitangent;
-   bitangentsAsVec3[ic] += bitangent;
+	return static_cast<size_t>(indices[static_cast<size_t>(iFace) * 3 + static_cast<size_t>(iVert)]);
 }
 
-void finishTangentsGeneration()
+static int mikkGetNumFaces(const SMikkTSpaceContext *)
 {
-   // This will work as long as vecs are packed (which is default in glm)
-   const Vector3f* normalsAsVec3 = reinterpret_cast<const Vector3f*>(normals.data());
-   Vector4f* tangentsAsVec4 = reinterpret_cast<Vector4f*>(tangents.data());
-   const Vector3f* bitangentsAsVec3 = reinterpret_cast<const Vector3f*>(bitangents.data());
+	return static_cast<int>(indices.size() / 3);
+}
 
-   Vector3f t;
+static int mikkGetNumVerticesOfFace(const SMikkTSpaceContext *, const int)
+{
+	return 3; // the loader triangulates on read
+}
 
-   for (auto i = 0; i < vertexCount; ++i)
-   {
-	   const Vector3f& n = normalsAsVec3[i];
-	   const Vector3f& b = bitangentsAsVec3[i];
-	   t = tangentsAsVec4[i].xyz();
+static void mikkGetPosition(const SMikkTSpaceContext *, float fvPosOut[], const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	fvPosOut[0] = vertices[i * 3 + 0];
+	fvPosOut[1] = vertices[i * 3 + 1];
+	fvPosOut[2] = vertices[i * 3 + 2];
+}
 
-	   // Gram-Schmidt orthogonalize
-	   t = glm::normalize(t - n * glm::dot(n, t));
+static void mikkGetNormal(const SMikkTSpaceContext *, float fvNormOut[], const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	fvNormOut[0] = normals[i * 3 + 0];
+	fvNormOut[1] = normals[i * 3 + 1];
+	fvNormOut[2] = normals[i * 3 + 2];
+}
 
-	   // Calculate handedness
-	   if (glm::dot(glm::cross(n, t), b) < 0.f)
-	   {
-		   tangentsAsVec4[i] = Vector4f(t, 1.f);
-	   }
-	   else
-	   {
-		   tangentsAsVec4[i] = Vector4f(t, -1.f);
-	   }
-   }
+static void mikkGetTexCoord(const SMikkTSpaceContext *, float fvTexcOut[], const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	fvTexcOut[0] = texcoords[i * 4 + 0];
+	fvTexcOut[1] = 1.f - texcoords[i * 4 + 1]; // V flip - see the note above
+}
+
+static void mikkSetTSpaceBasic(const SMikkTSpaceContext *, const float fvTangent[], const float fSign, const int iFace, const int iVert)
+{
+	const size_t i = mikkVertexIndex(iFace, iVert);
+	tangents[i * 4 + 0] = fvTangent[0];
+	tangents[i * 4 + 1] = fvTangent[1];
+	tangents[i * 4 + 2] = fvTangent[2];
+	tangents[i * 4 + 3] = fSign;
+}
+
+// Returns false if tangents could not be generated, in which case the caller
+// should not upload a tangent buffer (the model then renders without them)
+static bool generateTangents()
+{
+	if (indices.empty() || vertexCount == 0)
+	{
+		return false;
+	}
+
+	// MikkTSpace returns its results UNINDEXED, and explicitly warns that
+	// writing them through a pre-existing index list is wrong when that list
+	// merges vertices. It is safe here only because addVertex() disables
+	// welding whenever file normals are present, which is exactly the condition
+	// under which tangents are generated - so `indices` is the identity
+	// permutation and each (face, corner) maps to its own unique vertex.
+	// Check it rather than trust it, so that enabling welding later fails
+	// loudly (instead of producing quietly wrong tangent frames).
+	ASSERT_OR_RETURN(false, indices.size() == static_cast<size_t>(vertexCount),
+	                 "Tangent generation requires unwelded vertices (%zu indices, %u vertices)",
+	                 indices.size(), static_cast<unsigned>(vertexCount));
+
+	SMikkTSpaceInterface mikkInterface = {};
+	mikkInterface.m_getNumFaces = mikkGetNumFaces;
+	mikkInterface.m_getNumVerticesOfFace = mikkGetNumVerticesOfFace;
+	mikkInterface.m_getPosition = mikkGetPosition;
+	mikkInterface.m_getNormal = mikkGetNormal;
+	mikkInterface.m_getTexCoord = mikkGetTexCoord;
+	mikkInterface.m_setTSpaceBasic = mikkSetTSpaceBasic;
+
+	SMikkTSpaceContext mikkContext = {};
+	mikkContext.m_pInterface = &mikkInterface;
+	mikkContext.m_pUserData = nullptr;
+
+	// Degenerate triangles (zero area, or collapsed UVs) are handled internally:
+	// their vertices inherit the tangent space of neighbouring good triangles.
+	// (This is why no explicit guard against a zero UV determinant is needed here.)
+	if (!genTangSpaceDefault(&mikkContext))
+	{
+		debug(LOG_WARNING, "MikkTSpace tangent generation failed");
+		return false;
+	}
+
+	return true;
 }
 
 /*!
@@ -1581,7 +1757,11 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 	// It could be optional normals directive
  	if (strcmp(buffer, "NORMALS") == 0)
  	{
- 		_imd_load_normals(&lineToProcess.pNextLineBegin, FileDataEnd, pie_level_normals, npolys);
+		if (!_imd_load_normals(&lineToProcess.pNextLineBegin, FileDataEnd, pie_level_normals, npolys))
+		{
+			debug(LOG_ERROR, "_imd_load_level(3n): file corrupt - invalid normals: %s", filename.toUtf8().c_str());
+			return nullptr;
+		}
 
  		// Attemps to read polys again
 		if (!getNextPossibleCommandLine())
@@ -1595,6 +1775,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 	ASSERT_OR_RETURN(nullptr, npolys <= MAX_PIE_POLYGONS, "'POLYGONS' directive count (%" PRIu32") exceeds maximum supported (%" PRIu32")", npolys, MAX_PIE_POLYGONS);
+	ASSERT_OR_RETURN(nullptr, pie_level_normals.empty() || pie_level_normals.size() == static_cast<size_t>(npolys) * 3, "'NORMALS' count (%zu) does not match 'POLYGONS' count (%" PRIu32") in %s", pie_level_normals.size() / 3, npolys, filename.toUtf8().c_str());
 	s.polys.resize(npolys);
 
 	if (!_imd_load_polys(filename, &lineToProcess.pNextLineBegin, FileDataEnd, &s, pieVersion, npoints))
@@ -1756,14 +1937,12 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		// Tangents are optional, only if normals were loaded and passed sanity check above
 		if (!pie_level_normals.empty())
 		{
-			tangents.resize(vertexCount * 4);
-			bitangents.resize(vertexCount * 3);
+			tangents.clear();
+			tangents.resize(static_cast<size_t>(vertexCount) * 4, 0.f);
 
-			for (size_t i = 0; i < indices.size(); i += 3)
-				calculateTangentsForTriangle(indices[i], indices[i+1], indices[i+2]);
-			finishTangentsGeneration();
+			const bool haveTangents = generateTangents();
 
-			if (!tangents.empty())
+			if (haveTangents && !tangents.empty())
 			{
 				if (!s.buffers[VBO_TANGENT])
 					s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "tangent buffer");
@@ -1809,7 +1988,6 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 	texcoords.resize(0);
 	normals.resize(0);
 	tangents.resize(0);
-	bitangents.resize(0);
 
 	*ppFileData = pFileData;
 
@@ -1910,7 +2088,12 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	{
 		char animpie[PATH_MAX];
 
-		ASSERT(value < ANIM_EVENT_COUNT, "Invalid event type %u", value);
+		if (value >= ANIM_EVENT_COUNT)
+		{
+			debug(LOG_ERROR, "%s: Invalid event type %u", filename.toUtf8().c_str(), value);
+			++modelLoadingErrors;
+			return nullptr;
+		}
 		const char* pRestOfLine = lineToProcess.lineContents.c_str() + cnt;
 		if (sscanf(pRestOfLine, "%255s%n", animpie, &cnt) != 1)
 		{

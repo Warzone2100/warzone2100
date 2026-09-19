@@ -39,6 +39,7 @@
 #include "activity.h"
 #include "multiint.h"
 #include "multiplay.h"
+#include "gamestate_serialize.h"
 
 struct CHEAT_ENTRY
 {
@@ -51,6 +52,7 @@ static CHEAT_ENTRY cheatCodes[] =
 {
 	{"templates", listTemplates}, // print templates
 	{"jsdebug", jsShowDebug}, // show scripting states
+	{"gamestate check", gamestate::runGameStateLiveWriteCheck}, // serialize live match-state (non-destructive)
 	{"teach us", kf_TeachSelected}, // give experience to selected units
 	{"makemehero", kf_MakeMeHero}, // make selected units Heros
 	{"untouchable", kf_Unselectable}, // make selected droids unselectable

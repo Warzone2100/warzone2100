@@ -232,6 +232,25 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(bool inGame, const std::fu
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("interface.game.showUnitRangeRings", N_("Show Unit Range Rings"), "");
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(rangeOnScreen);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				setRangeOnScreen(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
 		auto optionInfo = OptionInfo("interface.game.groupsMenu", N_("Groups Menu"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {

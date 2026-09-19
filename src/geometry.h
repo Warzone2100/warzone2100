@@ -23,6 +23,9 @@
 
 #include "map.h"
 #include "game_world.h"
+#include "world_map_state.h"
+
+struct WorldObjectState;
 
 struct QUAD
 {
@@ -32,12 +35,12 @@ struct QUAD
 uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 bool inQuad(const Vector2i *pt, const QUAD *quad);
 Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad);
-DROID *getNearestDroid(UDWORD x, UDWORD y, bool bSelected);
+DROID *getNearestDroid(WorldObjectState& objState, UDWORD x, UDWORD y, bool bSelected);
 bool objectOnScreen(const BASE_OBJECT *object, SDWORD tolerance);
 
-static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
+static inline STRUCTURE *getTileStructure(WorldMapState& mapState, UDWORD x, UDWORD y)
 {
-	BASE_OBJECT *psObj = mapTile(gameWorld.map, x, y)->psObject;
+	BASE_OBJECT *psObj = mapTile(mapState, x, y)->psObject;
 	if (psObj && psObj->type == OBJ_STRUCTURE)
 	{
 		return (STRUCTURE *)psObj;
@@ -45,9 +48,9 @@ static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 	return nullptr;
 }
 
-static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
+static inline FEATURE *getTileFeature(WorldMapState& mapState, UDWORD x, UDWORD y)
 {
-	BASE_OBJECT *psObj = mapTile(gameWorld.map, x, y)->psObject;
+	BASE_OBJECT *psObj = mapTile(mapState, x, y)->psObject;
 	if (psObj && psObj->type == OBJ_FEATURE)
 	{
 		return (FEATURE *)psObj;
@@ -57,13 +60,13 @@ static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 
 /// WARNING: Returns NULL if tile not visible to selectedPlayer.
 /// Must *NOT* be used for anything game-state/simulation-calculation related
-static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
+static inline BASE_OBJECT *getTileOccupier(WorldMapState& mapState, UDWORD x, UDWORD y)
 {
-	MAPTILE *psTile = mapTile(gameWorld.map, x, y);
+	MAPTILE *psTile = mapTile(mapState, x, y);
 
 	if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 	{
-		return mapTile(gameWorld.map, x, y)->psObject;
+		return mapTile(mapState, x, y)->psObject;
 	}
 	else
 	{

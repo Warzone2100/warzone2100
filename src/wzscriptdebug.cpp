@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020-2021  Warzone 2100 Project
+	Copyright (C) 2020-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -68,6 +70,8 @@
 #include "power.h"
 #include "hci.h"
 #include "display.h"
+#include "input/manager.h"
+#include "input/debugmappings.h"
 #include "keybind.h"
 #include "loop.h"
 #include "mission.h"
@@ -77,6 +81,7 @@
 #include "multiint.h"
 #include "challenge.h"
 #include "multistat.h"
+#include "effectlights.h"
 #include "lighting.h"
 #include "texture.h"
 #include "warzoneconfig.h"
@@ -728,6 +733,12 @@ public:
 			psWidget->setGeometry(x0, bottomOfPowerRow, psWidget->width(), psWidget->height());
 		}));
 		panel->aiAttachButton->addOnClickHandler([](W_BUTTON& button){
+			const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+			if (!dbgInputManager.debugMappingsAllowed())
+			{
+				debug(LOG_INFO, "Cannot attach a script: debug mode is not enabled");
+				return;
+			}
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(button.parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			auto selectedAiButton = psParent->aiDropdown->getSelectedItem();
@@ -1123,7 +1134,7 @@ public:
 
 		auto texturesLabel = panel->createLabel(0, font_regular_bold, "Textures:");
 		auto prevButton = panel->createButton(0, "Reload Terrain & Water", [](){
-			loadTerrainTextures(currentMapTileset);
+			loadTerrainTexturesBlocking(currentMapTileset);
 			debug(LOG_INFO, "Done");
 		}, texturesLabel);
 		prevButton = panel->createButton(0, "Reload Decals", [](){
@@ -1200,6 +1211,11 @@ public:
 			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
+		}, prevButton);
+		prevButton = panel->createButton(3, "Reload Effect Lights", [](){
+			debug(LOG_INFO, "Reloading effect light settings");
+			reloadEffectLights();
+			debug(LOG_INFO, "Done");
 		}, prevButton);
 
 		auto dropdownWidget = panel->makeTerrainQualityDropdown(4);
@@ -2385,12 +2401,14 @@ public:
 		auto triggerLabel = createColHeaderLabel("Trigger");
 		auto ownerLabel = createColHeaderLabel("Owner");
 		auto subscriberLabel = createColHeaderLabel("Subscriber");
+		auto scopeLabel = createColHeaderLabel("Scope");
 		std::vector<TableColumn> columns {
 			{labelLabel, TableColumn::ResizeBehavior::RESIZABLE},
 			{typeLabel, TableColumn::ResizeBehavior::RESIZABLE},
 			{triggerLabel, TableColumn::ResizeBehavior::RESIZABLE},
 			{ownerLabel, TableColumn::ResizeBehavior::RESIZABLE},
-			{subscriberLabel, TableColumn::ResizeBehavior::RESIZABLE}
+			{subscriberLabel, TableColumn::ResizeBehavior::RESIZABLE},
+			{scopeLabel, TableColumn::ResizeBehavior::RESIZABLE}
 		};
 		std::vector<size_t> minimumColumnWidths;
 		for (auto& column : columns)
@@ -2509,11 +2527,11 @@ private:
 	}
 	RowDataModel fillLabelsModel(const std::vector<scripting_engine::LabelInfo>& labels)
 	{
-		RowDataModel result(5);
+		RowDataModel result(6);
 		std::weak_ptr<WzScriptLabelsPanel> psWeakParent = std::dynamic_pointer_cast<WzScriptLabelsPanel>(shared_from_this());
 		for (const auto &label : labels)
 		{
-			std::vector<WzString> columnTexts = {label.label, label.type, label.trigger, label.owner, label.subscriber};
+			std::vector<WzString> columnTexts = {label.label, label.type, label.trigger, label.owner, label.subscriber, label.scope};
 			auto row = result.newRow(columnTexts, SCRIPTDEBUG_ROW_HEIGHT);
 			std::string labelStringCopy = label.label.toStdString();
 			row->addOnClickHandler([labelStringCopy, psWeakParent](W_BUTTON& button) {

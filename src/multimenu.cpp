@@ -1267,13 +1267,6 @@ private:
 	std::vector<PlayerWidgets> playersWidgets;
 };
 
-class WzMultiMenuTabs : public MultichoiceWidget
-{
-public:
-	WzMultiMenuTabs(int value = -1) : MultichoiceWidget(value) { }
-	virtual void display(int xOffset, int yOffset) override { }
-};
-
 constexpr int MULTIMENUFORM_INTERNAL_PADDING = 10;
 constexpr int MULTIMENUFORM_PANEL_TABS_HEIGHT = 20;
 

@@ -36,8 +36,10 @@
 #include "intdisplay.h"
 #include "objmem.h"
 #include "transporter.h"
+#include "ordersource.h"
 #include "group.h"
 #include "move.h"
+#include "pathfinding_backend.h"
 #include "display3d.h"
 #include "mission.h"
 #include "objects.h"
@@ -913,8 +915,10 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 
 	if (bMultiMessages && mode == ModeQueue)
 	{
-		sendDroidDisembark(psTransport, psDroid);
-		psDroid->selected = true;  // Remove from interface.
+		if (sendDroidDisembark(psTransport, psDroid, currentOrderSource()))
+		{
+			psDroid->selected = true;  // Remove from interface.
+		}
 		return;
 	}
 
@@ -938,12 +942,12 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 			//pick a tile because save games won't remember where the droid was when it was loaded
 			droidPos = map_coord(Vector2i(getLandingX(0), getLandingY(0)));
 		}
-		if (!pickATileGen(&droidPos, LOOK_FOR_EMPTY_TILE, zonedPAT))
+		if (!pickATileGen(gameWorld, &droidPos, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
 			ASSERT(false, "Unable to find a valid location");
 		}
-		droidSetPosition(psDroid, world_coord(droidPos.x), world_coord(droidPos.y));
-		updateDroidOrientation(psDroid);
+		droidSetPosition(psDroid, gameWorld.map, world_coord(droidPos.x), world_coord(droidPos.y));
+		updateDroidOrientation(psDroid, gameWorld.map);
 	}
 
 	// remove it from the transporter group
@@ -964,7 +968,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 	{
 		// We can update the orders now, since everyone has been
 		// notified of the droid exiting the transporter
-		updateDroidOrientation(psDroid);
+		updateDroidOrientation(psDroid, gameWorld.map);
 	}
 	//initialise the movement data
 	initDroidMovement(psDroid);
@@ -1099,9 +1103,9 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	}
 	else
 	{
-		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
+		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd, gameWorld.map);
 	}
-	fpathRemoveDroidData(psDroidToAdd->id);
+	fpathActiveBackend().removeDroidData(psDroidToAdd->id);
 
 	// This is called by droidRemove. But we still need to refresh after adding to the transporter group.
 	intRefreshScreen();
@@ -1172,6 +1176,16 @@ UDWORD transporterGetLaunchTime()
 void transporterSetLaunchTime(UDWORD time)
 {
 	g_iLaunchTime = time;
+}
+
+bool transporterGetOnMission()
+{
+	return onMission;
+}
+
+void transporterRestoreOnMission(bool onMissionState)
+{
+	onMission = onMissionState;
 }
 
 /*launches the defined transporter to the offworld map*/
@@ -1257,7 +1271,7 @@ bool updateTransporter(DROID *psTransporter)
 		//Remove visibility so tiles are not bright around where the transporter left the map
 		if (psTransporter->action != DACTION_TRANSPORTIN)
 		{
-			visRemoveVisibility((BASE_OBJECT *) psTransporter);
+			visRemoveVisibility((BASE_OBJECT *) psTransporter, gameWorld.map);
 		}
 
 		// Got to destination

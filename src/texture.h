@@ -53,4 +53,8 @@ int getCurrentTileTextureSize();
 
 bool reloadTileTextures();
 
+// Whether texLoad has loaded a tileset's texture pages (since the last map shutdown)
+bool texTilesetTexturesLoaded();
+void texClearTilesetTexturesLoaded();
+
 #endif // __INCLUDED_SRC_TEXTURE_H__

@@ -28,7 +28,7 @@
 
 static bool isCombination(const KeyMapping& mapping)
 {
-	return mapping.keys.meta != KEY_CODE::KEY_IGNORE;
+	return mapping.keys.meta.source != KeyMappingMetaSource::NONE;
 }
 
 static bool isActiveSingleKey(const KeyMapping& mapping)
@@ -75,9 +75,20 @@ static bool isActiveCombination(const KeyMapping& mapping)
 	ASSERT(mapping.hasMeta(), "isActiveCombination called for non-meta key mapping!");
 
 	const bool bSubKeyIsPressed = mapping.keys.input.isPressed();
-	const bool bMetaIsDown = keyDown(mapping.keys.meta);
 
-	const auto altMeta = getAlternativeForMetaKey(mapping.keys.meta);
+	if (const auto gamepadMeta = mapping.keys.meta.asGamepadInput())
+	{
+		return bSubKeyIsPressed && gamepadButtonDown(gamepadMeta.value());
+	}
+
+	const auto metaKey = mapping.keys.meta.asKeyCode();
+	if (!metaKey.has_value())
+	{
+		return false;
+	}
+	const bool bMetaIsDown = keyDown(metaKey.value());
+
+	const auto altMeta = getAlternativeForMetaKey(metaKey.value());
 	const bool bHasAlt = altMeta != KEY_IGNORE;
 	const bool bAltMetaIsDown = bHasAlt && keyDown(altMeta);
 
@@ -98,7 +109,7 @@ bool KeyMapping::isActivated() const
 
 bool KeyMapping::hasMeta() const
 {
-	return keys.meta != KEY_CODE::KEY_IGNORE;
+	return keys.meta.source != KeyMappingMetaSource::NONE;
 }
 
 std::string KeyMapping::toString() const
@@ -114,6 +125,9 @@ std::string KeyMapping::toString() const
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		mouseKeyCodeToString(keys.input.value.mouseKeyCode, (char*)&asciiSub, 20);
 		break;
+	case KeyMappingInputSource::GAMEPAD:
+		sstrcpy(asciiSub, gamepadButtonName(keys.input.value.gamepadInput));
+		break;
 	default:
 		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", static_cast<unsigned int>(keys.input.source));
 		return std::string("NOT VALID");
@@ -121,8 +135,13 @@ std::string KeyMapping::toString() const
 
 	if (hasMeta())
 	{
+		if (const auto gamepadMeta = keys.meta.asGamepadInput())
+		{
+			return astringf("%s %s", gamepadButtonName(gamepadMeta.value()), asciiSub);
+		}
+
 		char asciiMeta[20] = "\0";
-		keyScanToString(keys.meta, (char*)&asciiMeta, 20);
+		keyScanToString(keys.meta.asKeyCode().value_or(KEY_CODE::KEY_IGNORE), (char*)&asciiMeta, 20);
 
 		return astringf("%s %s", asciiMeta, asciiSub);
 	}
@@ -149,28 +168,26 @@ bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs)
 KeyMapping& KeyMappings::add(const KeyCombination keys, const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
 	/* Make sure the meta key is the left variant */
-	KEY_CODE leftMeta = keys.meta;
-	if (keys.meta == KEY_RCTRL)
+	KeyCombination keysWithLeftMeta = keys;
+	const auto metaKey = keys.meta.asKeyCode();
+	if (metaKey == KEY_RCTRL)
 	{
-		leftMeta = KEY_LCTRL;
+		keysWithLeftMeta.meta = KEY_LCTRL;
 	}
-	else if (keys.meta == KEY_RALT)
+	else if (metaKey == KEY_RALT)
 	{
-		leftMeta = KEY_LALT;
+		keysWithLeftMeta.meta = KEY_LALT;
 	}
-	else if (keys.meta == KEY_RSHIFT)
+	else if (metaKey == KEY_RSHIFT)
 	{
-		leftMeta = KEY_LSHIFT;
+		keysWithLeftMeta.meta = KEY_LSHIFT;
 	}
-	else if (keys.meta == KEY_RMETA)
+	else if (metaKey == KEY_RMETA)
 	{
-		leftMeta = KEY_LMETA;
+		keysWithLeftMeta.meta = KEY_LMETA;
 	}
 
 	/* Create the mapping as the last element in the list */
-	const KeyCombination keysWithLeftMeta = {
-		leftMeta, keys.input, keys.action
-	};
 	keyMappings.push_back({
 		info,
 		gameTime,
@@ -201,7 +218,7 @@ nonstd::optional<std::reference_wrapper<KeyMapping>> KeyMappings::get(const KeyF
 	return get(info.name, slot);
 }
 
-std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::find(const KEY_CODE meta, const KeyMappingInput input)
+std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::find(const KeyMappingMeta meta, const KeyMappingInput input)
 {
 	std::vector<std::reference_wrapper<KeyMapping>> matches;
 	for (KeyMapping& mapping : keyMappings)
@@ -229,7 +246,7 @@ bool KeyMappings::remove(const KeyMapping& mappingToRemove)
 	return false;
 }
 
-std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId contextId, const ContextManager& contexts)
+std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(const KeyMappingMeta meta, const KeyMappingInput input, const ContextId contextId, const ContextManager& contexts)
 {
 	/* Find any mapping with same keys */
 	const auto matches = find(meta, input);
@@ -249,7 +266,7 @@ std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(con
 	return conflicts;
 }
 
-std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId& contextId, const ContextManager& contexts)
+std::vector<KeyMapping> KeyMappings::removeConflicting(const KeyMappingMeta meta, const KeyMappingInput input, const ContextId& contextId, const ContextManager& contexts)
 {
 	/* Find any mapping with same keys */
 	const auto conflicting = findConflicting(meta, input, contextId, contexts);
@@ -270,6 +287,11 @@ std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, cons
 bool KeyMappings::isDirty() const
 {
 	return bDirty;
+}
+
+int KeyMappings::loadedFileVersion() const
+{
+	return fileVersion;
 }
 
 void KeyMappings::clear(nonstd::optional<KeyMappingType> filter)
@@ -315,6 +337,13 @@ static KeyMappingInput createInputForSource(const KeyMappingInputSource source, 
 		return (KEY_CODE)keyCode;
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return (MOUSE_KEY_CODE)keyCode;
+	case KeyMappingInputSource::GAMEPAD:
+		if (keyCode >= static_cast<unsigned int>(GPAD_BTN_MAX))
+		{
+			debug(LOG_WZ, "Encountered invalid gamepad button %u while loading keymap!", keyCode);
+			return KEY_CODE::KEY_MAXSCAN;
+		}
+		return (GAMEPAD_INPUT)keyCode;
 	default:
 		debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", static_cast<unsigned int>(source));
 		return KEY_CODE::KEY_MAXSCAN;
@@ -332,6 +361,8 @@ bool KeyMappings::load(const char* path, const KeyFunctionConfiguration& keyFunc
 		debug(LOG_WZ, "%s not found", path);
 		return false;
 	}
+
+	fileVersion = ini.value("version", 1).toInt();
 
 	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
@@ -359,7 +390,13 @@ bool KeyMappings::load(const char* path, const KeyFunctionConfiguration& keyFunc
 		const WzString slotName = ini.value("slot", "primary").toWzString();
 		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
 
-		add({ meta, input, action }, *info, slot);
+		KeyCombination keys(meta, input, action);
+		const int gamepadMeta = ini.value("gamepadMeta", GPAD_BTN_MAX).toInt();
+		if (gamepadMeta >= 0 && gamepadMeta < GPAD_BTN_MAX)
+		{
+			keys.meta = (GAMEPAD_INPUT)gamepadMeta;
+		}
+		add(keys, *info, slot);
 	}
 	ini.endArray();
 	return true;
@@ -375,7 +412,7 @@ bool KeyMappings::save(const char* path) const
 		return false;
 	}
 
-	ini.setValue("version", 2);
+	ini.setValue("version", KEYMAP_FORMAT_VERSION);
 
 	ini.beginArray("mappings");
 	for (const KeyMapping& mapping : keyMappings)
@@ -387,7 +424,11 @@ bool KeyMappings::save(const char* path) const
 		}
 
 		ini.setValue("name", mapping.info.name);
-		ini.setValue("meta", mapping.keys.meta);
+		ini.setValue("meta", mapping.keys.meta.asKeyCode().value_or(KEY_CODE::KEY_IGNORE));
+		if (const auto gamepadMeta = mapping.keys.meta.asGamepadInput())
+		{
+			ini.setValue("gamepadMeta", gamepadMeta.value());
+		}
 
 		switch (mapping.keys.input.source) {
 		case KeyMappingInputSource::KEY_CODE:
@@ -397,6 +438,10 @@ bool KeyMappings::save(const char* path) const
 		case KeyMappingInputSource::MOUSE_KEY_CODE:
 			ini.setValue("source", "mouse_key");
 			ini.setValue("sub", mapping.keys.input.value.mouseKeyCode);
+			break;
+		case KeyMappingInputSource::GAMEPAD:
+			ini.setValue("source", "gamepad");
+			ini.setValue("sub", mapping.keys.input.value.gamepadInput);
 			break;
 		default:
 			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", static_cast<unsigned int>(mapping.keys.input.source));
@@ -409,6 +454,9 @@ bool KeyMappings::save(const char* path) const
 			break;
 		case KeyMappingSlot::SECONDARY:
 			ini.setValue("slot", "secondary");
+			break;
+		case KeyMappingSlot::GAMEPAD:
+			ini.setValue("slot", "gamepad");
 			break;
 		default:
 			debug(LOG_WZ, "Encountered invalid key mapping slot %u while saving keymap!", static_cast<unsigned int>(mapping.slot));

@@ -12,7 +12,7 @@ function droidReady(droidID)
 
 	return (!repairDroid(droidID) &&
 		_droid.order !== DORDER_ATTACK &&
-		_droid.order !== DORDER_RTR &&
+		(_droid.order !== DORDER_RTR || Math.ceil(_droid.health) >= 100) &&
 		_droid.order !== DORDER_RECYCLE &&
 		vtolReady(droidID) //True for non-VTOL units
 	);

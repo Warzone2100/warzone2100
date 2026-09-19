@@ -52,6 +52,7 @@
 #include "research.h"
 #include "qtscript.h"
 #include "combat.h"
+#include "ordersource_wire.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // structures
@@ -109,7 +110,7 @@ bool recvBuildFinished(NETQUEUE queue)
 		{
 			debug(LOG_SYNC, "Synch error, structure %u was not complete, and should have been.", structId);
 			psStruct->status = SS_BUILT;
-			buildingComplete(psStruct);
+			buildingComplete(psStruct, gameWorld);
 		}
 		debug(LOG_SYNC, "Created normal building %u for player %u", psStruct->id, player);
 		return true;
@@ -121,11 +122,11 @@ bool recvBuildFinished(NETQUEUE queue)
 	for (typeindex = 0; typeindex < numStructureStats && asStructureStats[typeindex].ref != type; typeindex++) {}	// Find structure target
 
 	// Build the structure
-	psStruct = buildStructureDir(&(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId, true);
+	psStruct = buildStructureDir(gameWorld, &(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId, true);
 	if (psStruct)
 	{
 		psStruct->status	= SS_BUILT;
-		buildingComplete(psStruct);
+		buildingComplete(psStruct, gameWorld);
 		debug(LOG_SYNC, "Huge synch error, forced to create building %u for player %u", psStruct->id, player);
 #if defined (DEBUG)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
@@ -179,7 +180,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
-		destroyStruct(psStruct, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+		destroyStruct(psStruct, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 		turnOffMultiMsg(false);
 	}
 
@@ -227,9 +228,8 @@ bool recvLasSat(NETQUEUE queue)
 	{
 		// Lassats have just one weapon
 		unsigned firePause = weaponFirePause(*psStruct->getWeaponStats(0), player);
-		unsigned damLevel = PERCENT(psStruct->body, psStruct->structureBody());
 
-		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		if (objectBelowHealthLevel(psStruct, HEAVY_DAMAGE_LEVEL))
 		{
 			firePause += firePause;
 		}
@@ -252,11 +252,13 @@ bool recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT)
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT, const OrderSource &source)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
 	uint8_t  structureInfo = structureInfo_;
+
+	orderProvenanceRecord(player, source.origin(), false);
 
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_STRUCTUREINFO);
 	NETuint8_t(w, player);
@@ -281,6 +283,10 @@ void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_,
 			NETuint32_t(w, pT->asWeaps[i]);
 		}
 	}
+
+	OrderProvenanceWire provenance = orderProvenanceFromSource(source);
+	NETOrderProvenance(w, provenance);
+
 	NETend(w);
 }
 
@@ -318,9 +324,21 @@ void recvStructureInfo(NETQUEUE queue)
 			NETuint32_t(r, pT->asWeaps[i]);
 		}
 		pT->droidType = (DROID_TYPE)droidType;
-		pT = copyTemplate(player, pT);
+		DROID_TEMPLATE *psExisting = (player < MAX_PLAYERS) ? findPlayerTemplateById(player, pT->multiPlayerID) : nullptr;
+		if (psExisting != nullptr && templatesHaveSameComponents(*psExisting, *pT))
+		{
+			pT = psExisting;
+		}
+		else
+		{
+			pT = copyTemplate(player, pT);
+		}
 	}
+	OrderProvenanceWire provenance;
+	NETOrderProvenance(r, provenance);
 	NETend(r);
+
+	orderProvenanceRecordReported(player, static_cast<OrderOrigin>(provenance.origin));
 
 	psStruct = IdToStruct(structId, player);
 

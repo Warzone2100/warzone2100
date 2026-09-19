@@ -28,13 +28,15 @@
 
 #define LINE_OF_FIRE_MINIMUM 5
 
+struct WorldMapState;
+
 // initialise the visibility stuff
 bool visInitialise();
 
 /* Check which tiles can be seen by an object */
-void visTilesUpdate(BASE_OBJECT *psObj);
+void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState);
 
-void revealAll(UBYTE player);
+void revealAll(WorldMapState& mapState, UBYTE player);
 
 /* Check whether psViewer can see psTarget
  * psViewer should be an object that has some form of sensor,
@@ -62,10 +64,10 @@ void processVisibility();  ///< Calls processVisibilitySelf and processVisibilit
 // update the visibility reduction
 void visUpdateLevel();
 
-void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
+void setUnderTilesVis(BASE_OBJECT *psObj, WorldMapState& mapState, UDWORD player);
 
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
-void visRemoveVisibility(BASE_OBJECT *psObj);
+void visRemoveVisibility(BASE_OBJECT *psObj, WorldMapState& mapState);
 
 // fast test for whether obj2 is in range of obj1
 static inline bool visObjInRange(const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2, SDWORD range)
@@ -115,6 +117,23 @@ static inline int objJammerPower(const BASE_OBJECT *psObj)
 
 void removeSpotters();
 bool removeSpotter(uint32_t id);
-uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry = 0);
+uint32_t addSpotter(WorldMapState& mapState, int x, int y, int player, int radius, bool radar, uint32_t expiry = 0);
+
+/// Plain snapshot of a live script spotter (apsInvisibleViewers) for GameState serialization.
+struct SpotterSaveData
+{
+	int x;
+	int y;
+	int player;
+	int sensorRadius;
+	int sensorType;      ///< 0 = vision, 1 = radar
+	uint32_t expiryTime; ///< when to self-destruct, 0 = never
+	uint32_t id;
+};
+/// Enumerate all live spotters (any player) as plain data, in list order.
+std::vector<SpotterSaveData> spotterEnumerateForSave();
+/// Recreate a spotter from saved data, preserving its synchronised id (the ctor's fresh id-bump of
+/// the object-ID counter is corrected by the counters-restored-last rule). Mirrors addSpotter's watch.
+void spotterRestore(WorldMapState& mapState, const SpotterSaveData& d);
 
 #endif // __INCLUDED_SRC_VISIBILITY__

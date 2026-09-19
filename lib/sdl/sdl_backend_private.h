@@ -23,6 +23,7 @@
 #pragma once
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include <vector>
 #include <memory>
 #include <nonstd/optional.hpp>
@@ -31,6 +32,42 @@ using nonstd::nullopt;
 
 void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 float wzGetDisplayContentScale();
+
+/* The possible states for keys */
+enum KEY_STATE
+{
+	KEY_UP,
+	KEY_PRESSED,
+	KEY_DOWN,
+	KEY_RELEASED,
+	KEY_PRESSRELEASE,	// When a key goes up and down in a frame
+	KEY_DOUBLECLICK,	// Only used by mouse keys
+	KEY_DRAG			// Only used by mouse keys
+};
+
+struct INPUT_STATE
+{
+	KEY_STATE state; /// Last key/mouse state
+	UDWORD lastdown; /// last key/mouse button down timestamp
+	Vector2i pressPos;    ///< Location of last mouse press event.
+	Vector2i releasePos;  ///< Location of last mouse release event.
+};
+
+// Input state setters shared by the SDL event handlers and other backend input sources
+// Positions are in logical screen coordinates - i.e. those returned from mouseX()/mouseY()
+void inputSetKey(KEY_CODE code, bool pressed);
+void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos);
+void inputSetMousePos(int logicalX, int logicalY);
+void inputAddMouseWheelScroll(Vector2i delta);
+
+// Adds an editing key press (enter, escape, arrows, etc) to the text input buffer
+void inputAddEditingKey(KEY_CODE code);
+
+// Initializes an SDL subsystem the first time it is requested
+bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag);
+
+// Moves the system mouse pointer to the given logical screen coordinates
+void wzWarpMouseToLogicalPos(int logicalX, int logicalY);
 
 class VideoInitProgress
 {

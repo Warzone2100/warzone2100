@@ -10,8 +10,8 @@
 _global.MAX_GROUPS = maxPlayers;
 _global.miscGroup = MAX_GROUPS;
 _global.vtolGroup = miscGroup + 1;
-var groupInfo = [];
-var firstTimeHarass = true;
+_global.groupInfo = {};
+_global.firstTimeHarass = true;
 
 function GroupInfo()
 {

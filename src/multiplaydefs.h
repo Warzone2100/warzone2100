@@ -24,6 +24,11 @@
 #include "lib/framework/types.h"
 #include "lib/netplay/nettypes.h"
 
+#include <algorithm>
+#include <cstdint>
+
+// The behavior used once a player is considered to have *left* a game in progress
+// (i.e. after any reconnect window, see PLAYER_RECONNECT_WAIT_* below, has elapsed).
 enum class PLAYER_LEAVE_MODE : uint8_t
 {
 	DESTROY_RESOURCES = 0,
@@ -33,6 +38,17 @@ enum class PLAYER_LEAVE_MODE : uint8_t
 constexpr PLAYER_LEAVE_MODE PLAYER_LEAVE_MODE_MAX = PLAYER_LEAVE_MODE::SPLIT_WITH_TEAM;
 
 constexpr PLAYER_LEAVE_MODE PLAYER_LEAVE_MODE_DEFAULT = PLAYER_LEAVE_MODE::SPLIT_WITH_TEAM;
+
+// The maximum number of seconds the host will hold a dropped player's slot (resources kept
+// intact) waiting for them to reconnect mid-match (via a state snapshot) before declaring them
+// left and applying the configured PLAYER_LEAVE_MODE. 0 = do not wait (declare left immediately).
+constexpr uint16_t PLAYER_RECONNECT_WAIT_SECONDS_MAX = 300;     // 5 minutes
+constexpr uint16_t PLAYER_RECONNECT_WAIT_SECONDS_DEFAULT = 30;
+
+static inline uint16_t clampPlayerReconnectWaitSeconds(uint32_t seconds)
+{
+	return static_cast<uint16_t>(std::min<uint32_t>(seconds, PLAYER_RECONNECT_WAIT_SECONDS_MAX));
+}
 
 enum class BLIND_MODE : uint8_t
 {

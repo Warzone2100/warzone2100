@@ -2,16 +2,12 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
+#include "terrain_water_classic.glsl"
 //
 
 uniform sampler2D lightmap_tex;
 uniform sampler2D tex2;
 
-uniform int fogEnabled; // whether fog is enabled
-uniform float fogEnd;
-uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -49,16 +45,6 @@ vec4 main_legacy()
 void main()
 {
 	vec4 fragColor = main_legacy();
-
-	if (fogEnabled > 0)
-	{
-		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
-
-		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
-	}
 
 	FragColor = fragColor;
 }

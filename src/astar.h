@@ -22,7 +22,33 @@
 #define __INCLUDED_SRC_ASTART_H__
 
 #include "fpath.h"
+#include <cstdint>
 #include <memory>
+
+/** Counts nodes expanded by the search, for the pathfinding benchmark.
+ *
+ *  Node counts are exact and reproducible where wall-clock is not, so a
+ *  benchmark can require them to change by zero rather than a timing staying
+ *  within noise.
+ *
+ *  Two guards, because the cost lands in the search loop. The compile-time one
+ *  takes the counting out of a build entirely, and the pointer is null unless a
+ *  benchmark is running, leaving one predictable not-taken branch per expanded
+ *  node. It counts once per expansion rather than once per neighbour, so it
+ *  fires at a fraction of the rate of the blocking checks beside it.
+ *
+ *  The pointer is written by the benchmark and read by whichever thread is
+ *  searching, so it must only be set while the search is driven from one
+ *  thread. The benchmark leaves it null for its worker-pool measurements, where
+ *  concurrent searches would race on it.
+ */
+#ifndef WZ_PATHFINDING_INSTRUMENTATION
+# define WZ_PATHFINDING_INSTRUMENTATION 1
+#endif
+
+#if WZ_PATHFINDING_INSTRUMENTATION
+extern uint64_t *g_pathNodesExpanded;
+#endif
 
 /** return codes for astar
  *

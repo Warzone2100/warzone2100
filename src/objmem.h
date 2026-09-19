@@ -29,9 +29,24 @@
 
 #include <list>
 
+struct GameWorld;
+struct WorldObjectState;
+
 /* The list of destroyed objects */
 using DestroyedObjectsList = std::list<BASE_OBJECT*>;
 extern DestroyedObjectsList psDestroyedObj;
+
+/* The allocation state for synchronised/unsynchronised object IDs.
+ * Must be snapshotted/restored so a resumed client keeps allocating unique, in-sync IDs. */
+struct ObjectIdState
+{
+	uint32_t synchObjID;
+	uint32_t unsynchObjID;
+};
+
+/* Capture/restore the object ID allocation counters */
+ObjectIdState getObjectIdState();
+void setObjectIdState(const ObjectIdState &s);
 
 /* Initialise the object heaps */
 bool objmemInitialise();
@@ -41,6 +56,10 @@ void objmemShutdown();
 
 /* General housekeeping for the object system */
 void objmemUpdate();
+
+/* Remove tile visibility for objects killed this tick in the given world, against that
+ * world's own map. Safe to call repeatedly; clears the world's pending-removal queue. */
+void flushPendingVisRemoval(GameWorld& world);
 
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
@@ -55,53 +74,48 @@ uint32_t generateSynchronisedObjectId();
 void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList);
 
 /*destroy a droid */
-void killDroid(DROID *psDel);
+void killDroid(DROID *psDel, WorldObjectState& objState);
 
 /* Remove all droids */
-void freeAllDroids();
+void freeAllDroids(GameWorld& world);
 
 /*Remove a single Droid from its list*/
 void removeDroid(DROID *psDroidToRemove, PerPlayerDroidLists& pList);
-
-/*Removes all droids that may be stored in the mission lists*/
-void freeAllMissionDroids();
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids();
 
 /* add the structure to the Structure Lists */
-void addStructure(STRUCTURE *psStructToAdd);
+void addStructure(STRUCTURE *psStructToAdd, WorldObjectState& objState);
 
 /* Destroy a structure */
-void killStruct(STRUCTURE *psDel);
+void killStruct(STRUCTURE *psDel, WorldObjectState& objState);
 
 /* Remove all structures */
-void freeAllStructs();
+void freeAllStructs(GameWorld& world);
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList);
+void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objState);
 
 /* add the feature to the Feature Lists */
-void addFeature(FEATURE *psFeatureToAdd);
+void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState);
 
 /* Destroy a feature */
-void killFeature(FEATURE *psDel);
+void killFeature(FEATURE *psDel, WorldObjectState& objState);
 
 /* Remove all features */
-void freeAllFeatures();
+void freeAllFeatures(GameWorld& world);
 
 /* Create a new Flag Position */
 bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState);
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel);
 /* Transfer a Flag Position to a new player */
-void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
+void transferFlagPositionToPlayer(WorldObjectState& objState, FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
-void freeAllFlagPositions();
-// used to add flag position to a specific list (ex. from assignFactoryCommandDroid)
-void addFlagPositionToList(FLAG_POSITION* psFlagPosToAdd, PerPlayerFlagPositionLists& list);
+void freeAllFlagPositions(WorldObjectState& objState);
 
 // Find a base object from it's id
 template <typename ObjectType>

@@ -27,7 +27,9 @@
 #include "droiddef.h"
 
 #include <memory>
+#include <vector>
 
+struct WorldMapState;
 
 /** Return values for routing
  *
@@ -43,6 +45,7 @@ enum FPATH_MOVETYPE
 };
 
 struct PathBlockingMap;
+struct DynamicCostOverlay;
 
 struct PATHJOB
 {
@@ -55,6 +58,7 @@ struct PATHJOB
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
 	std::shared_ptr<const PathBlockingMap> blockingMap;   ///< Map of blocking tiles.
+	std::shared_ptr<const DynamicCostOverlay> overlay;    ///< Soft occupancy cost, null for the legacy backend.
 	bool		acceptNearest;
 	bool            deleted;        ///< Droid was deleted, so throw away result when complete. Must still process this PATHJOB, since processing order can affect resulting paths (but can't affect the path length).
 };
@@ -66,19 +70,31 @@ enum FPATH_RETVAL
 	FPR_WAIT,       ///< route is being calculated by the path-finding thread
 };
 
-/** Initialise the path-finding module.
- */
-bool fpathInitialise();
+/** A completed pathfinding result captured for GameState serialization. A droid restored in MOVEWAITROUTE
+ *  consumes this directly on its first resumed tick (fpathRoute), reproducing the exact host path without
+ *  re-running the order-/context-sensitive pathfinder. */
+struct FPathPendingResult
+{
+	Vector2i destination = Vector2i(0, 0);   ///< result.sMove.destination (path's actual destination)
+	Vector2i originalDest = Vector2i(0, 0);  ///< result.originalDest (the requested destination)
+	std::vector<Vector2i> path;              ///< result.sMove.asPath (computed waypoints)
+	FPATH_RETVAL retval = FPR_FAILED;        ///< result.retval
+};
 
-/** Shutdown the path-finding module.
- */
-void fpathShutdown();
+/** Serialize side: if droid `droidID` has an in-flight path result, force it to completion and return it
+ *  in `out`, re-populating the stored result so a host that keeps simulating can still consume it.
+ *  Returns false if there is no pending result. Blocks the caller until the worker finishes that job. */
+bool fpathTakePendingResult(uint32_t droidID, FPathPendingResult &out);
+
+/** Restore side: pre-populate droid `droidID`'s path result so its first resumed MOVEWAITROUTE tick
+ *  consumes it directly (no re-derivation). Replaces any existing result/job for that droid. */
+void fpathSetPendingResult(uint32_t droidID, const FPathPendingResult &result);
 
 void fpathUpdate();
 
 /** Find a route for a droid to a location.
  */
-FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
 /// Returns true iff the parameters have equivalent behaviour in fpathBaseBlockingTile.
 bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
@@ -96,13 +112,19 @@ bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_M
  *
  *  @return true if the given tile is blocking for this droid
  */
-bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
-bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
-bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
+bool fpathBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 
-static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion)
+/// Like fpathBlockingTile, but ignoring the scroll limits: they partition a map temporarily
+/// (campaign widens them mid-game and a save restores whatever window was active), so anything
+/// derived once per map must not read them. Sees the whole map, with the outermost ring blocked
+/// exactly as a full-map scroll window blocks it.
+bool fpathBlockingTileScrollIgnored(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+bool fpathDroidBlockingTile(DROID *psDroid, const WorldMapState& mapState, int x, int y, FPATH_MOVETYPE moveType);
+bool fpathBaseBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
+
+static inline bool fpathBlockingTile(const WorldMapState& mapState, Vector2i tile, PROPULSION_TYPE propulsion)
 {
-	return fpathBlockingTile(tile.x, tile.y, propulsion);
+	return fpathBlockingTile(mapState, tile.x, tile.y, propulsion);
 }
 
 /** Set a direct path to position.
@@ -119,7 +141,7 @@ void fpathRemoveDroidData(int id);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */
-bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion);
+bool fpathCheck(WorldMapState& mapState, Position orig, Position dest, PROPULSION_TYPE propulsion);
 
 /** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);
