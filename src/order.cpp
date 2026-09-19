@@ -311,31 +311,38 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 
 	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
 	{
-		unsigned distanceSq = droidSqDist(psDroid, object);  // droidSqDist returns -1 if unreachable, (unsigned)-1 is a big number.
-
 		STRUCTURE *structure = castStructure(object);
 		if (structure == nullptr ||  // Must be a structure.
 		    structure == psFailedTarget ||  // Must not have just failed to reach it.
-		    distanceSq > bestDistanceSq ||  // Must be as close as possible.
+		    !aiCheckAlliances(psDroid->player, structure->player))  // Must be a friendly structure.
+		{
+			continue;
+		}
+
+		DROID_ACTION action = DACTION_NONE;
+		if (structure->status == SS_BUILT && structure->isDamaged())
+		{
+			action = DACTION_REPAIR;
+		}
+		else if (structure->status == SS_BEING_BUILT)
+		{
+			action = DACTION_BUILD;
+		}
+		if (action == DACTION_NONE)
+		{
+			continue;
+		}
+
+		unsigned distanceSq = droidSqDist(psDroid, object);  // droidSqDist returns -1 if unreachable, (unsigned)-1 is a big number.
+		if (distanceSq > bestDistanceSq ||  // Must be as close as possible.
 		    !visibleObject(psDroid, structure, false) ||  // Must be able to sense it.
-		    !aiCheckAlliances(psDroid->player, structure->player) ||  // Must be a friendly structure.
 		    checkDroidsDemolishing(structure))  // Must not be trying to get rid of it.
 		{
 			continue;
 		}
 
-		// Check for structures to repair.
-		if (structure->status == SS_BUILT && structure->isDamaged())
-		{
-			bestDistanceSq = distanceSq;
-			best = {structure, DACTION_REPAIR};
-		}
-		// Check for structures to help build.
-		else if (structure->status == SS_BEING_BUILT)
-		{
-			bestDistanceSq = distanceSq;
-			best = {structure, DACTION_BUILD};
-		}
+		bestDistanceSq = distanceSq;
+		best = {structure, action};
 	}
 
 	return best;
