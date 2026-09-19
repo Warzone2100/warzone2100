@@ -900,34 +900,48 @@ static void corridorFlowCompute(const GameWorld &world, CorridorFlowState &flow,
 	// Flow is aggregated over each chain, with member directions mapped into
 	// chain orientation, so a passage split at junctions still reads as the one
 	// stream of traffic it physically carries.
-	std::vector<int> insideFwd(n, 0);
-	std::vector<int> insideBwd(n, 0);
-	std::vector<uint32_t> lowestId(n, UINT32_MAX);
-	std::vector<int8_t> lowestIdDir(n, 0);
-	std::vector<uint32_t> lowestInsideId(n, UINT32_MAX);
-	std::vector<int8_t> lowestInsideDir(n, 0);
-	std::vector<uint8_t> hasFwd(n, 0);
-	std::vector<uint8_t> hasBwd(n, 0);
-	std::vector<int32_t> occWidthFwd(n, INT32_MAX);   ///< per chain, narrowest member this direction occupies
-	std::vector<int32_t> occWidthBwd(n, INT32_MAX);
-	std::vector<int32_t> maxRadFwd(n, 0);             ///< per chain, largest body of this direction's traffic
-	std::vector<int32_t> maxRadBwd(n, 0);
-	std::vector<uint8_t> stalledFwd(n, 0);            ///< per chain, this direction's flow is stuck, not draining
-	std::vector<uint8_t> stalledBwd(n, 0);
+	//
+	// The scratch below keeps its storage between calls. corridorGateUpdate runs once per update on the
+	// main thread and calls this once per canonical player, so nothing here is re-entrant or shared.
+	static std::vector<int> insideFwd, insideBwd;
+	insideFwd.assign(n, 0);
+	insideBwd.assign(n, 0);
+	static std::vector<uint32_t> lowestId, lowestInsideId;
+	static std::vector<int8_t> lowestIdDir, lowestInsideDir;
+	static std::vector<uint8_t> hasFwd, hasBwd;
+	lowestId.assign(n, UINT32_MAX);
+	lowestIdDir.assign(n, 0);
+	lowestInsideId.assign(n, UINT32_MAX);
+	lowestInsideDir.assign(n, 0);
+	hasFwd.assign(n, 0);
+	hasBwd.assign(n, 0);
+	static std::vector<int32_t> occWidthFwd, occWidthBwd;   ///< per chain, narrowest member a direction occupies
+	static std::vector<int32_t> maxRadFwd, maxRadBwd;       ///< per chain, largest body of a direction's traffic
+	static std::vector<uint8_t> stalledFwd, stalledBwd;     ///< per chain, a direction's flow is stuck, not draining
+	occWidthFwd.assign(n, INT32_MAX);
+	occWidthBwd.assign(n, INT32_MAX);
+	maxRadFwd.assign(n, 0);
+	maxRadBwd.assign(n, 0);
+	stalledFwd.assign(n, 0);
+	stalledBwd.assign(n, 0);
 	// Corridor-local claims for the route-shaping configuration: contest and
 	// direction scoped to the one passage a droid actually transits, so a
 	// queue at one corridor of a chain does not hold entrants of another
 	// across open ground. Presence propagates physically instead, opposing
 	// units near a shared pocket sit in both corridors' capture zones, so
 	// pocket chains still meter, while disjoint corridors flow concurrently.
-	std::vector<uint8_t> cHasFwd(n, 0);
-	std::vector<uint8_t> cHasBwd(n, 0);
-	std::vector<int32_t> cMaxRadFwd(n, 0);
-	std::vector<int32_t> cMaxRadBwd(n, 0);
-	std::vector<uint32_t> cLowestId(n, UINT32_MAX);
-	std::vector<int8_t>  cLowestIdDir(n, 0);
-	std::vector<uint32_t> cLowestInsideId(n, UINT32_MAX);
-	std::vector<int8_t>  cLowestInsideDir(n, 0);
+	static std::vector<uint8_t> cHasFwd, cHasBwd;
+	static std::vector<int32_t> cMaxRadFwd, cMaxRadBwd;
+	static std::vector<uint32_t> cLowestId, cLowestInsideId;
+	static std::vector<int8_t> cLowestIdDir, cLowestInsideDir;
+	cHasFwd.assign(n, 0);
+	cHasBwd.assign(n, 0);
+	cMaxRadFwd.assign(n, 0);
+	cMaxRadBwd.assign(n, 0);
+	cLowestId.assign(n, UINT32_MAX);
+	cLowestIdDir.assign(n, 0);
+	cLowestInsideId.assign(n, UINT32_MAX);
+	cLowestInsideDir.assign(n, 0);
 	flow.useLoFwd.assign(n, INT32_MAX);
 	flow.useHiFwd.assign(n, INT32_MIN);
 	flow.useLoBwd.assign(n, INT32_MAX);
@@ -946,7 +960,9 @@ static void corridorFlowCompute(const GameWorld &world, CorridorFlowState &flow,
 		int32_t prog = INT32_MIN;   ///< centerline index signed by direction, larger is further along
 		uint8_t stalled = 0;
 	};
-	std::vector<ColumnHead> headFwd(n), headBwd(n);   ///< per corridor and direction
+	static std::vector<ColumnHead> headFwd, headBwd;   ///< per corridor and direction
+	headFwd.assign(n, ColumnHead());
+	headBwd.assign(n, ColumnHead());
 
 	struct Approacher
 	{
@@ -955,7 +971,8 @@ static void corridorFlowCompute(const GameWorld &world, CorridorFlowState &flow,
 		int dir;
 		int32_t along;
 	};
-	std::vector<Approacher> approachers;
+	static std::vector<Approacher> approachers;
+	approachers.clear();
 
 	// Turn-side preference per corridor and direction, anchored to the oldest
 	// member that expresses one. The vote is route-intrinsic, so the same droid
@@ -982,7 +999,9 @@ static void corridorFlowCompute(const GameWorld &world, CorridorFlowState &flow,
 			return static_cast<int8_t>(left > right ? -1 : (right > left ? 1 : 0));
 		}
 	};
-	std::vector<SidePref> prefFwd(n), prefBwd(n);
+	static std::vector<SidePref> prefFwd, prefBwd;
+	prefFwd.assign(n, SidePref());
+	prefBwd.assign(n, SidePref());
 
 	for (unsigned owner = 0; owner < MAX_PLAYERS; ++owner)
 	{
