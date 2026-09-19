@@ -168,7 +168,7 @@ bool CollisionAvoidanceBehavior::isEnabled(const SteeringContext& ctx) const
 	return !ctx.droid->isTransporter();
 }
 
-Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(DROID* obstacle)
+Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(const DROID* obstacle)
 {
 	// Velocity guess 1: Guess the velocity the droid is actually moving at.
 	Vector2i velocityGuess1 = iSinCosR(obstacle->sMove.moveDir, obstacle->sMove.speed);
@@ -184,12 +184,6 @@ Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(DROID* obstacle)
 	// Scale intended speed by distance (slower when close to target)
 	int32_t intendedSpeed = maxSpeed * std::min(targetDist, OBSTACLE_SCAN_RADIUS) / OBSTACLE_SCAN_RADIUS;
 	Vector2i velocityGuess2 = iSinCosR(iAtan2(targetDiff), intendedSpeed);
-
-	// If blocked, assume no intended movement
-	if (moveBlocked(obstacle))
-	{
-		velocityGuess2 = Vector2i(0, 0);
-	}
 
 	// Average the two guesses
 	return (velocityGuess1 + velocityGuess2) / 2;
