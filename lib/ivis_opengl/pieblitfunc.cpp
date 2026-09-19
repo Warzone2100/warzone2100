@@ -696,6 +696,12 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f o
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
+void iV_DrawTextureTinted(gfx_api::texture& TextureID, Vector2f position, Vector2f size, PIELIGHT colour)
+{
+	const glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(position.x, position.y, 0.f));
+	iv_DrawImageImpl<gfx_api::DrawImagePSO>(TextureID, Vector2f(0.f, 0.f), size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
+}
+
 void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, const WzClippingRectF& clippingRect)
 {
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
