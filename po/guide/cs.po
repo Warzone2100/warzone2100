@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-08-14 02:55\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "Prostřední tlačítko zavře jakékoli otevřené příkazové rozhraní."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Brání Tvou Základnu"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "Ve Warzone 2100, tvoje domovská základna zůstává v průběhu kampaně zachována."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Příprava na budoucí obranu vaší domovské základny je tedy nezbytná."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Zatímco jednotky jsou samozřejmě užitečné k obraně vaší základny, design vaší základny je také kritický."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Vybudujte obranné struktury, které poskytují krytí, omezují přístup, odhalí nepřátele a udělují poškození, abyste mohli lépe čelit nepřátelským útokům."
 
 msgid "Intelligence Display"
 msgstr "Zpravodajské okno"
@@ -207,16 +207,16 @@ msgid "Tip: To build \"walls\" (once they are available), you can click and drag
 msgstr "Tip: Chceš-li zdi (jakmile budou přístupné), můžeš kliknout, podržet a poté posunout kurzor abys udělal řadu."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Továrna na Kyborgy"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Továrna na Kyborgy funguje podobně jako standardní továrna, ale staví pouze Kyborgy."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Každá továrna může v jednu chvíli stavět jednoho Kyborga, ale do fronty na výrobu můžeš Kyborgů přidat víc."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Jakmile je Kyborg vyroben, dostane od Továrny na Kyborgy příkaz a přesune se na Shromažďovací Místo továrny."
 
 msgid "Demolishing Structures"
 msgstr "Rozebírání staveb"
@@ -414,16 +414,16 @@ msgid "Recycling"
 msgstr "Recyklování"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Recyklace jednotky ji odešle do nejbližší Továrny nebo Opravárenského Zařízení, kde bude odstraněna ze hry."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "Polovina energie spotřebovaná na výrobu jednotky bude vrácena. Pokud je jednotka poškozená, bude vráceno méně energie."
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "Body zkušeností recyklované jednotky budou převedeny do následující vyrobené jednotky."
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Když je recyklováno více zkušených jednotek, jako první se přenese nejvyšší množství bodů zkušenosti."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr "Příkaz k recyklacy vydáš skrze příkazové menu jednotky nebo pomocí klávesové zkratky pro recyklaci."
@@ -501,16 +501,16 @@ msgid "Attaching Units"
 msgstr "Přiřazování jednotek"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "Pro přiřazení označené jednotky (jednotek) k veliteli, klikni levým tlačítkem na Velitele, ke kterému chceš jednotku přiřadit. U jednotky se zobrazí ukazatel toho, že je přiřazená."
 
 msgid "## Limits:"
 msgstr "## Limity:"
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "Limit počtu jednotek, které mohou Velitelé ovládat, je ovlivněn jejich hodností. Velitel získává Povýšení dosažením určeného množství zkušeností."
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "Každé povýšení umožní Veliteli kontrolovat další 2 jednotky."
 
 msgid "Detaching Units"
 msgstr "Odebírání jednotek"
@@ -537,7 +537,7 @@ msgid "Targeting"
 msgstr "Zaměřování"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "Když vybereš Velitele a označíš jako cíl nepřátelskou budovu nebo jednotku, připojené jednotky se přesunou k palbě na cíl."
 
 msgid "The attached units will have greater accuracy when firing."
 msgstr "Budou také přesnější."
@@ -552,7 +552,7 @@ msgid "Commanders provide an accuracy, armor, and movement speed bonus to all un
 msgstr "Velitelé zlepšují přesnost, odolnost, a rychlost všech jednotek k nim přiřazených. Tyto bonusy se zvyšují s úrovní velitele."
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "Velitel má v základu limit 6 útočných jednotek, ale s každým povýšením velitele se limit zvedá o další 2 jednotky."
 
 msgid "Designing Units"
 msgstr "Navrhování šablon jednotek"
@@ -588,76 +588,76 @@ msgid "Units with higher experience levels can make all the difference in battle
 msgstr "Zkušenost jednotek může být rozhodující faktor bitvy!"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Kyborgové"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "Kyborgy jsou tvoje hlavní jednotky pěchoty."
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "Jsou rychlé a spolehlivé jednotky a jsou mimořádně odolné vůči Protitankovým zbraním."
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "Jsou však více zranitelnější vůči protipěchotním a dělostřeleckým zbraním."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "Všimněte si, že Kyborgy nelze navrhovat. Šablony kyborgů jsou zkoumány nezávisle a k výrobě vyžadují Továrnu na Kyborgy."
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "Polopásy"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "Polopásy jsou hybridní pohon mezi koly a pásy."
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "Mají střední cenu a rychlost a poskytují střední množství bodů výdrže."
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Také poskytují odolnost proti Protipěchotnímu a Dělostřeleckému poškození, ale jsou zranitelné proti Protitankovým zbraním."
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "Polopásy jsou výborné pro univerzální jednotky, ale neposkytují vysokou odolnost Pásů, nebo vyšší rychlost Kol."
 
 msgid "Hover"
-msgstr ""
+msgstr "Vznášedlo"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "Vznášedlo je rychlý, obojživelný pohon pro vozidla."
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "Vznášedlový pohon poskytuje velmi vysokou maximální rychlost a schopnost volně překonat vodu, což může být nezbytné pro nalezení jedinečných útočných cest."
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "Nicméně jeho cena produkce je vysoká, poskytuje málo bodů odolnosti a jsou zranitelné vůči většině typů poškození."
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "Vysoká rychlost vznášedel a schopnost procházet vodou je činí ideální pro taktiku zasáhni a uteč."
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "Stejně jako kola nejsou vhodná pro dlouhotrvající boje na přední linii."
 
 msgid "Tracks"
-msgstr ""
+msgstr "Pásy"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "Pásy jsou silně obrněný pohon pro vozidla."
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "Poskytují jak velké množství bodů odolnosti, tak i vysokou obranu proti Protipěchotnímu a Dělostřeleckému poškození."
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Jejich cena produkce je však vyšší, mají delší dobu výroby a jsou zranitelné vůči Protitankovým zbraním."
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "Navíc je maximální rychlost Pásů velmi snížena."
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "Díky vysoké odolnosti se Pásy perfektně hodí pro vozidla určená pro boj v předních liniích."
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "Je ale třeba opatrnost. Ústup z nevýhodných situací může být díky pomalému pohybu velmi obtížný."
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "Útočení s VTOLs"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
 msgstr "Útočení s VTOLem je stejné jako s pozemními jednotkami - stačí jednotku vybrat a kliknout na nepřítele."
@@ -678,16 +678,16 @@ msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB To
 msgstr "VTOLy také mohou být přiřazeny k VTOL radarům a VTOL PB senzorům, a budou se chovat podobně jako pozemní jednotky přiřazené k normálním radarům a PB senzorům."
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "Obrana s VTOLs"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "Jednotky VTOL mohou být také použity k obraně oblastí mapy."
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "VTOL jednotky mohou být přiřazeny k VTOL Útočné Věži nebo VTOL Radarové Věži a automaticky zaútočí na vše, co bude senzorem věže zaměřeno (podobně jako dělostřelectvo přiřazené ke standardnímu senzoru)."
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "VTOL jednotky také mohou Hlídkovat nebo Kroužit v oblasti. V takovém případě automaticky zaútočí na jakéhokoliv nepřítele na jejich cestě."
 
 msgid "Defending Against VTOLs"
 msgstr "Obrana proti VTOLům"
@@ -711,7 +711,7 @@ msgid "In addition to being uncommon, versatile weapons do not do as much damage
 msgstr "Univerzální zbraně navíc nepoškozují VTOLy tolik jako protivzdušné zbraně, takže není dobré na ně spoléhat a vždycky mít i protivzdušné zbraně."
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "Použití VTOL jednotek"
 
 msgid "Designing VTOL units is similar to designing ground units."
 msgstr "Šablony VTOLů se dělají podobně jako šablony pozemních jednotek."
@@ -723,16 +723,16 @@ msgid "You will then be able to select from the available VTOL Weapons."
 msgstr "Poté si budeš moci vybrat ze zbraní pro VTOLy."
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "Abyste mohli vyrábět své VTOL výtvory, musíte postavit VTOL Továrnu."
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "Abyste mohli opravit, dozbrojit a udržovat své jednotky VTOL, musíte postavit jeden nebo více VTOL Přezbrojovací plochu."
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "VTOL Zbraně"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "Většina zbraní má ekvivalent pro VTOL, který má vyšší poškožení, ale omezenou munici."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
 msgstr "Tyto verze budou přístupné automaticky po vyzkoumání jejich pozemních verzí."
@@ -741,7 +741,7 @@ msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can al
 msgstr "VTOLy také mohou používat bomby. Bomby jsou ekvivalent artilerie a jsou velmi silné."
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
 msgstr "VTOLy (z anglického Vertical Take-Off and Landing, Svislý vzlet a přistání) jsou hlavní nástroj používaný k získání kontroly nad vzdušným prostorem."
@@ -1002,37 +1002,37 @@ msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types
 msgstr ""
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "Pumovnice"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "Pumovnice jsou unikátním typem zbraně, kterým mohou být vybaveny pouze VTOL jednotky."
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "Ačkoli mají krátký dostřel a nízkou kapacitu munice, pumovnice poskytují bonusové životy a obvykle nesou silnější nálož než ostatní VTOL zbraně."
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "Stejně jako všechny ostatní zbraně mají různé typy bomb odlišné účinky, sílu a použití."
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Drtič Bunkrů"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "Drtič Bunkrů je je jedinečná zbraň, která je mimořádně účinná proti všem stavbám."
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "Nicméně Drtič Bunkrů je mimořádně slabý proti jakémukoli cíli, který není stavbou."
 
 msgid "Flamer"
-msgstr ""
+msgstr "Plamenomet"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "Zápalné zbraně typu „Plamenomet“ jsou účinné proti pěchotě a tankům se slabším pohonem."
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "Plamenometné zbraně jsou také vynikající proti bunkrům a stavbám Scavengerů, ale slabší proti ostatním stavbám."
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "Plamenomety mohou „pronikat“ skrz jednotky, poškozovat a případně zapalovat více cílů jedním výbojem, což z nich dělá vynikající zbraně proti skupinám nepřátel."
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "Nicméně kvůli svému krátkému dostřelu mohou být plamenometné zbraně riskantní na použití."
