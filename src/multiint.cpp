@@ -355,6 +355,7 @@ public:
 	{
 		DISABLED,
 		HOSTMSG_ONLY,
+		LOCAL_QUICKCHAT_ONLY,
 		ENABLED
 	};
 protected:
@@ -4075,6 +4076,7 @@ void ChatBoxWidget::initialize()
 				displayRoomSystemMessage(_("The host has disabled free chat. Please use Quick Chat."));
 				return;
 			case ChatBoxWidget::ChatBoxSendMode::HOSTMSG_ONLY:
+			case ChatBoxWidget::ChatBoxSendMode::LOCAL_QUICKCHAT_ONLY:
 				// Always ensure sent message starts with /hostmsg
 				if (!str.startsWith(LOBBY_COMMAND_PREFIX "hostmsg"))
 				{
@@ -4187,6 +4189,12 @@ void ChatBoxWidget::setEditBoxDisplay()
 			editBox->setTip(_("The host has disabled free chat. Please use Quick Chat or /hostmsg commands."));
 			editBox->setState(0);
 			break;
+		case ChatBoxSendMode::LOCAL_QUICKCHAT_ONLY:
+			editBox->setPlaceholder(_("Press the Tab key to open Quick Chat."));
+			editBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
+			editBox->setTip(_("Free chat is set to \"Quick Chat Only\" in your Options. Please use Quick Chat or /hostmsg commands."));
+			editBox->setState(0);
+			break;
 		case ChatBoxSendMode::ENABLED:
 			editBox->setPlaceholder("");
 			editBox->setPlaceholderTextColor(nullopt);
@@ -4202,6 +4210,7 @@ void ChatBoxWidget::setSendMode(ChatBoxSendMode mode)
 	{
 		return;
 	}
+	const auto priorMode = currentMode;
 	currentMode = mode;
 	// Update UI
 	setQuickChatButtonDisplay();
@@ -4216,8 +4225,18 @@ void ChatBoxWidget::setSendMode(ChatBoxSendMode mode)
 		case ChatBoxSendMode::HOSTMSG_ONLY:
 			displayRoomSystemMessage(_("The host has disabled free chat. Please use Quick Chat or /hostmsg commands."));
 			break;
+		case ChatBoxSendMode::LOCAL_QUICKCHAT_ONLY:
+			displayRoomSystemMessage(_("Free chat is set to \"Quick Chat Only\" in your Options. Incoming free chat is hidden. Please use Quick Chat or /hostmsg commands."));
+			break;
 		case ChatBoxSendMode::ENABLED:
-			displayRoomSystemMessage(_("The host has enabled free chat for you."));
+			if (priorMode == ChatBoxSendMode::LOCAL_QUICKCHAT_ONLY)
+			{
+				displayRoomSystemMessage(_("Free chat is enabled."));
+			}
+			else
+			{
+				displayRoomSystemMessage(_("The host has enabled free chat for you."));
+			}
 			break;
 	}
 }
@@ -4687,7 +4706,15 @@ static void addChatBox(bool preserveOldChat)
 		return;
 	}
 
-	auto desiredSendMode = (selectedPlayer < MAX_CONNECTED_PLAYERS && ingame.hostChatPermissions[selectedPlayer]) ? ChatBoxWidget::ChatBoxSendMode::ENABLED : ChatBoxWidget::ChatBoxSendMode::HOSTMSG_ONLY;
+	auto desiredSendMode = ChatBoxWidget::ChatBoxSendMode::ENABLED;
+	if (selectedPlayer >= MAX_CONNECTED_PLAYERS || !ingame.hostChatPermissions[selectedPlayer])
+	{
+		desiredSendMode = ChatBoxWidget::ChatBoxSendMode::HOSTMSG_ONLY;
+	}
+	else if (isLocalQuickChatOnlyMode())
+	{
+		desiredSendMode = ChatBoxWidget::ChatBoxSendMode::LOCAL_QUICKCHAT_ONLY;
+	}
 
 	auto psExistingChatBoxWidget = widgGetFromID(psWScreen, MULTIOP_CHATBOX);
 	if (psExistingChatBoxWidget)
@@ -6409,7 +6436,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				if (message.receive(queue)) {
 
 					bool displayedMessage = false;
-					if (message.sender < 0 || (!isPlayerMuted(message.sender) && !playerSpamMutedUntil(message.sender).has_value()))
+					if (message.sender < 0 || (!shouldHideFreeChatFrom(message.sender) && !playerSpamMutedUntil(message.sender).has_value()))
 					{
 						displayRoomMessage(buildMessage(message.sender, message.text));
 						audio_PlayTrack(FE_AUDIO_MESSAGEEND);

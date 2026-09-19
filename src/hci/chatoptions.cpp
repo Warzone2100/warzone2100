@@ -1266,7 +1266,14 @@ void WzChatOptionsForm::initialize(bool showHostOptions)
 
 	chatOptionsDescriptionLabel = std::make_shared<W_LABEL>();
 	chatOptionsDescriptionLabel->setFont(font_regular, WZCOL_TEXT_MEDIUM);
-	chatOptionsDescriptionLabel->setString(_("Mute or configure player free chat."));
+	if (isLocalQuickChatOnlyMode())
+	{
+		chatOptionsDescriptionLabel->setString(_("Free chat is set to \"Quick Chat Only\" in your Options. All incoming free chat is hidden."));
+	}
+	else
+	{
+		chatOptionsDescriptionLabel->setString(_("Mute or configure player free chat."));
+	}
 	chatOptionsDescriptionLabel->setCanTruncate(true);
 	attach(chatOptionsDescriptionLabel);
 	chatOptionsDescriptionLabel->setGeometry(CHATOPT_FORM_EXTERNAL_PADDING, currentY0 + CHATOPT_FORM_INTERNAL_PADDING, chatOptionsDescriptionLabel->getMaxLineWidth(), chatOptionsDescriptionLabel->requiredHeight());

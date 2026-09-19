@@ -2042,6 +2042,21 @@ bool isPlayerMuted(uint32_t sender)
 	return ingame.muteChat[sender] || !ingame.hostChatPermissions[sender];
 }
 
+bool isLocalQuickChatOnlyMode()
+{
+	if (!bMultiPlayer || !NetPlay.bComms)
+	{
+		return false;
+	}
+	return war_getMPChatMode() == MP_CHAT_MODE::QUICK_CHAT_ONLY;
+}
+
+bool shouldHideFreeChatFrom(uint32_t sender)
+{
+	ASSERT_OR_RETURN(false, sender < MAX_CONNECTED_PLAYERS, "Invalid sender: %" PRIu32, sender);
+	return isPlayerMuted(sender) || isLocalQuickChatOnlyMode();
+}
+
 NetworkTextMessage::NetworkTextMessage(int32_t messageSender, char const *messageText)
 {
 	sender = messageSender;
@@ -2180,7 +2195,7 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 		return false;
 	}
 
-	if (message.sender >= 0 && isPlayerMuted(message.sender))
+	if (message.sender >= 0 && shouldHideFreeChatFrom(message.sender))
 	{
 		return false;
 	}
@@ -2279,7 +2294,7 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 	}
 	auto& message = messageOpt.value();
 
-	if (isPlayerMuted(message.sender))
+	if (shouldHideFreeChatFrom(message.sender))
 	{
 		return false;
 	}

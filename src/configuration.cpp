@@ -549,6 +549,15 @@ bool loadConfig()
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
 	war_setMPPlayerReconnectWaitSeconds(iniGetInteger("playerReconnectWaitSecondsMP", war_getMPPlayerReconnectWaitSeconds()).value());
 	game.playerReconnectWaitSeconds = war_getMPPlayerReconnectWaitSeconds();
+	{
+		int chatModeMP = iniGetInteger("chatModeMP", static_cast<int>(war_getMPChatMode())).value();
+		if (chatModeMP < static_cast<int>(MP_CHAT_MODE::ON) || chatModeMP > static_cast<int>(MP_CHAT_MODE::QUICK_CHAT_ONLY))
+		{
+			debug(LOG_WARNING, "Unsupported / invalid chatModeMP value: %d; defaulting to: %d", chatModeMP, static_cast<int>(MP_CHAT_MODE::ON));
+			chatModeMP = static_cast<int>(MP_CHAT_MODE::ON);
+		}
+		war_setMPChatMode(static_cast<MP_CHAT_MODE>(chatModeMP));
+	}
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -1082,6 +1091,7 @@ bool saveConfig()
 	iniSetInteger("playerLeaveModeMP", (int)war_getMPPlayerLeaveMode());
 	iniSetInteger("playerReconnectWaitSecondsMP", (int)war_getMPPlayerReconnectWaitSeconds());
 	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
+	iniSetInteger("chatModeMP", static_cast<int>(war_getMPChatMode()));
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
 	iniSetInteger("altEnterToggleMode", war_getToggleFullscreenMode());
