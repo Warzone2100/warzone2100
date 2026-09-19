@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-08-10 02:49\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -39,7 +39,7 @@ msgid "In the late 21st century, NASDA (the North American Strategic Defense Age
 msgstr "21世紀後半、NASDA(北米戦略防衛庁)は大規模なミサイル防衛システムを開発・展開した。 原子力を搭載した衛星や地上の打ち上げ現場のネットワークを含む。"
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr "しかし、定期的なメンテナンスチェックでは、何かがひどく間違っていました。"
+msgstr "しかし、定期的なメンテナンスチェックでは、何かがひどく間違っていました…"
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
 msgstr "衛星防衛システムの技術的なエラーに続いて、世界中の主要都市で核弾頭が発射された。"
@@ -48,13 +48,13 @@ msgid "Minutes later, ground based sites ﬁred in response to the launch. Milli
 msgstr "数分後、発射に応じて発射された地上基地。世界の都市を一掃した核の火災によって数百万人が死亡しました。 疫病と疫病が文明にとどまったままになったので、数十億人が亡くなりました。"
 
 msgid "Less than a million people survived the Collapse."
-msgstr "100万人未満の人々が崩壊を生き延びました"
+msgstr "１００万人未満の人々が崩壊を生き延びました。"
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
 msgstr "地球は、かつての文明の残党のために互いに戦っている何百もの小さなスカベンジャーバンドに侵入しました。 ほんの数人だけが、灰から新しい世界を再建しようとするビジョンを持っていました。"
 
 msgid "## Present Day:"
-msgstr "## 現在の日:"
+msgstr "## 現在の日："
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
 msgstr "プレイヤー(「司令官」と呼ばれる)は、ロッキー山脈の軍事基地に避難を求めた生存者のグループの一部です。"
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "中央/中央のボタンは、開かれたコマンドインターフェイスを閉じます。"
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "拠点を防衛する"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "Warzone 2100では、あなたの本拠地はキャンペーンを通して存続します。"
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "そのため、将来の本拠地防衛に備えることが不可欠です。"
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "ユニットが拠点防衛に役立つのは明らかですが、拠点自体の設計も重要です。"
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "遮蔽を提供し、侵入経路を制限し、敵を感知し、ダメージを与える防御構造物を建設することで、敵の攻撃により効果的に対抗できます。"
 
 msgid "Intelligence Display"
 msgstr "Intelligence Display"
@@ -153,7 +153,7 @@ msgid "But research progress is never lost, even if the Research Facility is des
 msgstr "しかし、研究施設が破壊されても、研究の進歩は決して失われません - プロジェクトは別の施設に再割り当てする必要があります。"
 
 msgid "Completing research of a new technology may:"
-msgstr "新しい技術の研究を完了する可能性があります:"
+msgstr "新しい技術の研究を完了する可能性があります："
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
 msgstr "－新しい武器、建造物、ユニットボディ、推進力などを利用できるようにする"
@@ -165,7 +165,7 @@ msgid "- Enable the research of additional technologies"
 msgstr "- 追加技術の研究を可能にする"
 
 msgid "General"
-msgstr ""
+msgstr "概要"
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
 msgstr "ウォーゾーン2100では、世界再建のための戦いで「プロジェクト」の軍隊を指揮します。 人類が核ミサイルによって滅ぼされかけた後"
@@ -201,22 +201,22 @@ msgid "Once you've chosen a viable location, select to confirm the placement of 
 msgstr "実行可能な場所を選択したら、建設現場の配置を確認することを選択します。トラックは場所に移動し、建設を開始します。"
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr "追加のトラックを注文して、それらを選択し、建設中の建造物をターゲットにすることで、より迅速に建造することができます。"
+msgstr "追加のトラックを注文して、それらを選択し、建設中の建造物をターゲットにすることで、（より迅速に）建造することができます。"
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
 msgstr "ヒント: 「壁」を作成するには(利用可能な場合)、クリックしてドラッグして線に壁を描くことができます。"
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "サイボーグ工場"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "サイボーグ工場は通常の工場と同様に機能しますが、サイボーグのみを建造します。"
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "各工場は一度に１体のサイボーグしか建造できませんが、複数のサイボーグを生産キューに入れることができます。"
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "サイボーグが生産されると、サイボーグ工場のユニット命令を受け取り、工場のラリーポイントへ向かいます。"
 
 msgid "Demolishing Structures"
 msgstr "構造物の解体"
@@ -282,10 +282,10 @@ msgid "- Power Generator modules increase the rate of power generation"
 msgstr "- 発電機モジュールが発電速度を上げます"
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr "- 工場モジュールを使用すると、中や重のユニットの生産時間を短縮できます。"
+msgstr "- 工場モジュールを使用すると、中や重のユニットの生産時間を短縮できます"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr "- 研究施設モジュールは、割り当てられた研究プロジェクトを完了するのに必要な時間を短縮します。"
+msgstr "- 研究施設モジュールは、割り当てられた研究プロジェクトを完了するのに必要な時間を短縮します"
 
 msgid "Oil Derrick"
 msgstr "採油機"
@@ -303,10 +303,10 @@ msgid "Power Generator"
 msgstr "発電機"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr "各発電機は最大4つの採油機を使用します。 例えば オイルデリックが10個ある場合は、すべてのオイルデリックを利用し、最大電力を発生させるために3つの発電機が必要です。"
+msgstr "各発電機は最大 4 つの採油機を使用します。 例えば オイルデリックが 10 個ある場合は、すべてのオイルデリックを利用し、最大電力を発生させるために 3 つの発電機が必要です。"
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr "採油機は石油資源で作る必要がありますが、発電機は地図上のどこにでも作ることができます。 しかし、心に留めておいてください:4採油機ごとに1を超える追加の発電機は利点を提供しません。"
+msgstr "採油機は石油資源で作る必要がありますが、発電機は地図上のどこにでも作ることができます。 しかし、心に留めておいてください: 4採油機ごとに１を超える追加の発電機は利点を提供しません。"
 
 msgid "Rally Point"
 msgstr "ラリーポイント"
@@ -396,13 +396,13 @@ msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
 msgstr "ユニット命令メニューを使用して、ユニットの移動を設定できます。"
 
 msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
-msgstr "- パトロール: 2つの点の間を移動します。選択した後、地図上の点をクリックするだけです。"
+msgstr "- パトロール: ２つの点の間を移動します。選択した後、地図上の点をクリックするだけです"
 
 msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
-msgstr "- 円: (VTOLのみ) 位置に円を描いて移動します。選択した領域をクリックするだけです。"
+msgstr "- 円: (VTOLのみ) 位置に円を描いて移動します。選択した領域をクリックするだけです"
 
 msgid "- Pursue: Pursue enemy"
-msgstr "-追善：敵を追う。"
+msgstr "-追善：敵を追う"
 
 msgid "- Guard: Stay near an area or structure. (default)"
 msgstr "- 守る：エリアまたはストラクチャーの近くに滞在します。（デフォルト）"
@@ -414,16 +414,16 @@ msgid "Recycling"
 msgstr "リサイクル"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "ユニットをリサイクルすると、最寄りの工場または修理施設に送られ、そこでプレイから除外されます。"
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "ユニットの製造に使用される電力の半分は返金されます(ユニットが破損している場合は削減されます)。"
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "リサイクルされたユニットの経験値は、次に製造されるユニットに引き継がれます。"
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "経験を積んだ複数のユニットがリサイクルされた場合、経験値が最も高いものから優先的に引き継がれます。"
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr "選択したユニットは、ユニット注文メニューまたは「リサイクルのためのリターン」キーバインドを介してリサイクルのために返却するように注文できます。"
@@ -435,16 +435,16 @@ msgid "Losing units (especially units with experience levels) can be a real hit 
 msgstr "ユニット(特に経験値レベルのユニット)を失うことは、戦闘を成功させる力に本当のヒットとなり得ます。"
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
-msgstr "「ユニット命令」メニューを使用して「リトリートのしきい値」を選択できます。 与えられたダメージレベルに達すると自動的に退却する"
+msgstr "「ユニット命令」メニューを使用して「リトリートのしきい値」を選択できます。 与えられたダメージレベルに達すると自動的に退却する。"
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
 msgstr "- 命令がない限り、部隊は退却しません。（デフォルト）"
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
-msgstr "- 中ダメージ時のリトリート：中ダメージ時に部隊が後退します。"
+msgstr "- 中ダメージ時のリトリート：中ダメージ時（黄）に部隊が後退します"
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr "- 大ダメージ時のリトリート：部隊は重いダメージで後退します。"
+msgstr "- 大ダメージ時のリトリート：部隊は重いダメージ（赤）で後退します"
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
 msgstr "退却するユニットは、最寄りの修理施設、修理ユニット、本部、または上陸地点に戻る。"
@@ -501,22 +501,22 @@ msgid "Attaching Units"
 msgstr "ユニットをアタッチ"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "ユニットを指揮官に配属するには、ユニット（郡）を選択してから、配属したい指揮官を左クリックします。配属されたユニット（郡）の横にはシンボルが表示され、配属されたことを示します。"
 
 msgid "## Limits:"
-msgstr "## 制限:"
+msgstr "## 制限："
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "指揮官が指揮できるユニット数には上限があり、これは階級によって変化します。指揮官は一定の経験値に達すると昇進します。"
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "昇進するごとに、指揮官はさらに2体多くのユニットを指揮できるようになります。"
 
 msgid "Detaching Units"
 msgstr "ユニットの取り外し中"
 
 msgid "To detach a unit from a Commander:"
-msgstr "指揮官からユニットを切り離すには:"
+msgstr "指揮官からユニットを切り離すには："
 
 msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
 msgstr "1. ユニットを右クリック（または「シフト」キーを押しながらユニットを選択）し、そのユニットのみを選択します (司令官グループ全体の代わりに)"
@@ -525,7 +525,7 @@ msgid "2. Give the unit a new order (eg. move)"
 msgstr "2. ユニットに新しい注文を与えます（例：移動）"
 
 msgid "Going for repairs, BRB"
-msgstr "修理に行ってくる。"
+msgstr "修理に行ってくる"
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
 msgstr "戦場から撤退して修理施設に向かう部隊はコマンダー団とつながりを保ちます。"
@@ -534,505 +534,505 @@ msgid "When it is done repairing, it will return to its Commander."
 msgstr "修理が完了すると、コマンダーに戻ります。"
 
 msgid "Targeting"
-msgstr ""
+msgstr "ターゲティング"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "指揮官を選択して敵ユニットまたは建造物をターゲットにすると、配属されたユニットが目標に向けて移動し、射撃します。"
 
 msgid "The attached units will have greater accuracy when firing."
-msgstr ""
+msgstr "配属されたユニットは、射撃時の命中率が向上します。"
 
 msgid "Commanders"
-msgstr ""
+msgstr "指揮官"
 
 msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
-msgstr ""
+msgstr "コマンドタレットはセンサーとほぼ同様に使用されますが、大砲だけでなくあらゆる攻撃ユニットを指揮できる点が異なります。"
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr ""
+msgstr "指揮官は配属された全ユニットに命中率、装甲、移動速度のボーナスを与え、これは指揮官の階級が上がるほど増加します。"
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "最初は6体の攻撃ユニットしか配属できませんが、指揮官が昇進するたびにこの上限は2体ずつ増えていきます。"
 
 msgid "Designing Units"
-msgstr ""
+msgstr "ユニットの設計"
 
 msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
-msgstr ""
+msgstr "敵を圧倒し、勝利の味を味わうためには、新しいユニットを設計する必要があります。これはWarzone 2100のゲームプレイにおける重要な要素です。"
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr ""
+msgstr "ユニットの設計を始めるには、コマンドパネルのデザインボタンを選択します。すると画面左側に二つの列が表示されます。"
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
-msgstr ""
+msgstr "新しいデザインを作成するには、左上にある「空白」の緑色のボディを選択します。既存のユニットデザインを編集するには、代わりにそれを選択してください。"
 
 msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
-msgstr ""
+msgstr "新しいユニットの設計は、ボディ、推進装置、タレットを選択するという簡単な３ステップの手順です。この３つを選択することで新しいユニットが完成します。"
 
 msgid "Once you have designed a unit, you will need a Factory to build it."
-msgstr ""
+msgstr "ユニットを設計したら、それを建造するための工場が必要になります。"
 
 msgid "Experience & Ranks"
-msgstr ""
+msgstr "経験値と階級"
 
 msgid "Units gain experience when they successfully dispatch enemies."
-msgstr ""
+msgstr "ユニットは敵を倒すことに成功すると経験値を得ます。"
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
-msgstr ""
+msgstr "経験値レベルが高いほど、ユニットの命中率が上がり、移動速度が速くなり、受けるダメージが減少します。"
 
 msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
-msgstr ""
+msgstr "ユニットの階級を表すアイコンは、ユニットのヘルスバーの横に表示されます。"
 
 msgid "Units with higher experience levels can make all the difference in battle!"
-msgstr ""
+msgstr "経験値レベルの高いユニットは、戦闘の勝敗を大きく左右することがあります！"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "サイボーグ"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "サイボーグは主力となる歩兵ユニットです。"
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "移動速度が速く信頼性の高いユニットで、対戦車兵器に対して非常に高い耐性を持っています。"
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "しかし、対人兵器や大砲に対しては脆弱です。"
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "サイボーグは設計することができない点に注意してください。サイボーグのテンプレートは個別に研究され、生産にはサイボーグ工場が必要です。"
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "ハーフトラック"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "ハーフトラックは、車輪と履帯の中間に位置するハイブリッド推進装置です。"
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "コストと速度は中程度で、ヒットポイントも中程度です。"
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "対人ダメージと大砲ダメージに対する耐性もありますが、対戦車兵器に対してはまだかなり脆弱です。"
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "ハーフトラックは汎用ユニットに最適ですが、履帯ほどの高い耐久性や車輪ほどの高速性はありません。"
 
 msgid "Hover"
-msgstr ""
+msgstr "ホバー"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "ホバーは、車両用の高速で水陸両用の推進装置です。"
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "ホバー推進は非常に高い最高速度と、水上を自由に移動できる能力を提供し、独自の攻撃経路を見つける上で不可欠となることがあります。"
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "しかし、生産コストが高く、ヒットポイントもわずかで、ほとんどの種類のダメージに対して脆弱です。"
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "ホバーの高速性と水上を移動できる能力は、ヒット・アンド・ラン戦術に適しています。"
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "しかし、車輪と同様に、前線での長期戦にはあまり向いていません。"
 
 msgid "Tracks"
-msgstr ""
+msgstr "履帯"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "履帯は、車両用の高装甲な推進装置です。"
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "多くのヒットポイントを提供するだけでなく、対人ダメージと大砲ダメージに対しても高い耐性を持ちます。"
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "しかし、生産コストが高く、建造時間も長くなり、対戦車兵器に対しては依然として非常に脆弱です。"
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "さらに、履帯は最高速度に大きなペナルティが課されます。"
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "高い耐久性を持つため、履帯は前線での戦闘用に設計された車両に最適です。"
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "ただし注意が必要です。移動速度が遅いため、不利な状況からの脱出が非常に困難になることがあります。"
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "VTOLでの攻撃"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr ""
+msgstr "VTOLで攻撃するには、それを選択し、通常通り敵をクリックします。"
 
 msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
-msgstr ""
+msgstr "しかし、攻撃を開始すると、ヘルスバーの下に白い弾薬バーがあることに気づくでしょう。"
 
 msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr ""
+msgstr "自動的に再装填される地上ユニットとは異なり、VTOLは限られた量の弾薬しか搭載していません。弾薬が尽きると、VTOLは補給するまで攻撃できなくなります。"
 
 msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr ""
+msgstr "弾薬切れになったVTOLは、自動的にVTOL再武装パッドを見つけて再武装と修理を行います(完全に再武装すると攻撃を再開します)。または、それを選択して再武装パッドをクリックすることで、手動で再武装させることもできます。"
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
+msgstr "通常は最も近い目標を攻撃する他のユニットとは異なり、VTOLは自動的には何も攻撃しません。しかし、VTOLを選択してエリアをAlt+クリックすると、VTOLは現在の位置とクリックした位置の間を巡回し、付近にいるものを攻撃します。"
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr ""
+msgstr "CBタワーに配属することもでき、これによりセンサータワーに配属された大砲と同様に機能するようになります。"
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "VTOLでの防衛"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "VTOLユニットは、マップ上の特定のエリアを防衛するためにも使用できます。"
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "VTOLはVTOLストライクタレットまたはVTOLレーダータワーに配属することができ、センサーによってターゲットされたものを自動的に攻撃します(通常のセンサーに配属された大砲とほぼ同様です)。"
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "VTOLはエリアの巡回や周回を命令することもできます。その場合、進路上で遭遇した敵を自動的に攻撃します。"
 
 msgid "Defending Against VTOLs"
-msgstr ""
+msgstr "VTOLへの対抗"
 
 msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr ""
+msgstr "空にあるあれは何だ? ...VTOLユニットです"
 
 msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr ""
+msgstr "VTOLは地上ユニットではないため、ほとんどの地上兵器では命中させることができません。"
 
 msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr ""
+msgstr "VTOLに命中させられるのは、対空兵器(しばしば「AA」と略される)、または汎用兵器(空中・地上両方に命中可能)のみです。"
 
 msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr ""
+msgstr "汎用兵器はごくわずかしかありません: マシンガン、レーザー、ミニロケットポッドです。"
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(ロケットとミサイルも汎用兵器ですが、サイボーグまたはVTOLに搭載された場合に限ります。)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "汎用兵器は数が少ないことに加え、専用の対空兵器ほどVTOLに大きなダメージを与えられないため、VTOLに対しては対空兵器をいくらか保有しておくことが推奨されます。"
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "VTOLの使用"
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "VTOLユニットの設計は、地上ユニットの設計と似ています。"
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "推進装置を選ぶ際には、「VTOL」推進装置を選択するだけです。"
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr ""
+msgstr "その後、利用可能なVTOL兵器の中から選択できるようになります。"
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "VTOLのデザインを生産するには、VTOL工場を建設する必要があります。"
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "VTOLユニットを修理・再武装・維持するには、１つ以上のVTOL再武装パッドを建設する必要があります。"
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "VTOL兵器"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "ほとんどの兵器にはVTOL版が存在し、ダメージは増加しますが弾薬数は限られています。"
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "通常兵器のVTOL版は、別途研究する必要はありません。"
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr "地上直接射撃兵器のVTOL版に加え、VTOLは爆弾兵器も使用できます。これらの兵器は大砲に相当し、非常に強力です。"
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr ""
+msgstr "VTOL(垂直離着陸)ユニットは、制空権を握るための主要な航空戦力です。"
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
-msgstr ""
+msgstr "VTOLは非常に高い最高速度を持ち、あらゆる種類の地形を移動できます。"
 
 msgid "Additionally, they cannot be targeted by most weapons while airborne."
-msgstr ""
+msgstr "さらに、飛行中はほとんどの兵器からターゲットにされません。"
 
 msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
-msgstr ""
+msgstr "VTOLユニットは他の車両と同様に設計できますが、生産には専用のVTOL工場が必要である点に注意してください。"
 
 msgid "Wheels"
-msgstr ""
+msgstr "車輪"
 
 msgid "Wheels are the most basic vehicle propulsion."
-msgstr ""
+msgstr "車輪は最も基本的な車両推進装置です。"
 
 msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
-msgstr ""
+msgstr "低コストで生産も速く、最高速度も高いです。"
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "しかし、ほとんどの種類のダメージに対して脆弱で、ヒットポイントもあまり多くありません。"
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
-msgstr ""
+msgstr "車輪は、前線の後方で活動する車両や、高速性を活かしたヒット・アンド・ラン攻撃を行う車両に最適です。"
 
 msgid "Propulsions"
-msgstr ""
+msgstr "推進装置"
 
 msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
-msgstr ""
+msgstr "兵器と同様に、デザインに使用できる新しい種類の車両推進装置を発見することもあります。"
 
 msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "新しい推進装置の研究を完了すると、Intelligence Displayのメッセージでその特性に関する情報が提供されます。"
 
 msgid "Additionally, you can find descriptions of each propulsion in this guide."
-msgstr ""
+msgstr "さらに、このガイドには各推進装置の説明も記載されています。"
 
 msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
-msgstr ""
+msgstr "各推進装置の長所と短所を理解することは、自分のユニットを設計する上でも、敵ユニットと戦う上でも不可欠です。"
 
 msgid "Repairing Units"
-msgstr ""
+msgstr "ユニットの修理"
 
 msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
-msgstr ""
+msgstr "兵器の代わりに修理タレットを備えたユニットを設計することができ、他のユニットを修理するよう命令できます。"
 
 msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
-msgstr ""
+msgstr "修理ユニットを戦闘から離れた場所に待機させ、退却オプションを使用して攻撃ユニットが一定のダメージレベルに達した際に修理のため退却するよう設定することもできます。"
 
 msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
-msgstr ""
+msgstr "ユニットを退却させ修理することは、経験を積んだユニットを戦場で失うよりもはるかに望ましい場合が多いです。"
 
 msgid "CB Sensors"
-msgstr ""
+msgstr "CBセンサー"
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
-msgstr ""
+msgstr "対砲兵(CB)センサーは、射程が十分であれば大砲ユニットが遠方の敵大砲陣地を直接ターゲットできるようにすることで、戦場を劇的に変化させます。"
 
 msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
-msgstr ""
+msgstr "CBセンサーが敵の大砲の発射を検知すると、識別された建造物やユニットは戦場の霧の中で赤く表示されるようになります。"
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr ""
+msgstr "有効な場合、大砲ユニットは通常のセンサーによって発見された目標よりも、CBセンサーの目標を優先します。"
 
 msgid "Un-Assigning"
-msgstr ""
+msgstr "配属の解除"
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr ""
+msgstr "ユニットのセンサーへの配属を解除する最も簡単な方法は、ユニットを右クリックし、どこかへ移動するよう命令することです。"
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
-msgstr ""
+msgstr "CTRLキーを押しながらクリックすることで、複数のユニットを選択できます。"
 
 msgid "Using Sensors"
-msgstr ""
+msgstr "センサーの使用"
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr ""
+msgstr "大砲の建造物が最も簡単です。センサータワーを建設するだけで、センサータワーが大砲建造物の射程内にある何かをターゲットしていれば、それに向けて発砲します。"
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
-msgstr ""
+msgstr "しかし、大砲戦車が機能するにはセンサーに明示的に配属される必要があります。大砲戦車を選択してからセンサーをクリックし、戦車をセンサーに配属します。"
 
 msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
-msgstr ""
+msgstr "大砲が配属されると、それがセンサータワーに配属されている場合、そのタワーは射程内に入った敵を自動的にターゲットします。"
 
 msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
-msgstr ""
+msgstr "センサー戦車に配属されている場合、センサーを選択して敵をターゲットすることで、敵を攻撃するためにセンサーを使用できます。センサーに配属されたすべての大砲は、その目標を攻撃します。"
 
 msgid "Sensors"
-msgstr ""
+msgstr "センサー"
 
 msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
-msgstr ""
+msgstr "センサーは偵察や監視に使用できますが、大砲の照準を合わせるというより重要な用途もあります。"
 
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
-msgstr ""
+msgstr "大砲兵器は単体では、自身のセンサー範囲(アップグレードなしでは8タイル)を超えて発射することができません。"
 
 msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "しかし、最も基本的な大砲兵器でさえ、内蔵センサー範囲を超える射程を持っています。それを活用するには、戦場にセンサー(センサータワーやセンサータレットを備えた戦車)を建設・配置する必要があります。"
 
 msgid "Kinetic & Thermal Damage"
-msgstr ""
+msgstr "運動エネルギーダメージと熱ダメージ"
 
 msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
-msgstr ""
+msgstr "ほとんどの兵器は運動エネルギー(弾丸、ロケットなど)によってダメージを与えるため、標準的な運動装甲の影響を受けます。"
 
 msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
-msgstr ""
+msgstr "しかし、一部の兵器は代わりに熱ダメージを与え、これは目標の運動装甲の影響を受けません。"
 
 msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
-msgstr ""
+msgstr "その代わり、熱兵器は目標の熱装甲によって軽減されます。"
 
 msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
-msgstr ""
+msgstr "ユニットの運動装甲と熱装甲は、デザインメニューのボディ選択画面で確認できます。"
 
 msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
-msgstr ""
+msgstr "すべてのユニットは運動装甲よりも熱装甲の方が低いことに注意してください。つまり、熱ダメージは運動ダメージほど軽減されないということです！"
 
 msgid "Attacking"
-msgstr ""
+msgstr "攻撃"
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "VTOLの設計"
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "注意: VTOLユニットのデザインを実際に建造するには、「VTOL工場」が必要です。"
 
 msgid "Weapons"
-msgstr ""
+msgstr "兵器"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "ほとんどの兵器にはVTOL版が存在し、少なくとも２倍のダメージを与えますが、弾薬数は限られています。"
 
 msgid "VTOLs"
-msgstr ""
+msgstr "VTOL"
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "VTOLユニットを生産するには、「VTOL推進装置」と「VTOL工場」を発見して研究しておく必要があります。"
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "また、VTOLユニットが弾薬を再装填できるように、いくつかの「VTOL再武装パッド」を研究・建設しておくとよいでしょう。"
 
 msgid "Weapon Selection"
-msgstr ""
+msgstr "兵器の選択"
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr ""
+msgstr "より多くの兵器を発見・研究するにつれて、特定の兵器が特定の状況(または特定の敵ユニットや建造物)に対して他の兵器よりも劇的に効果的であることに気づくでしょう。"
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "新しい兵器の研究を完了すると、Intelligence Displayのメッセージでその特性に関する情報が提供されます。"
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr ""
+msgstr "さまざまな種類の兵器を試してみることは有利に働きます。もし苦戦していて、しばらく部隊編成を見直していないのであれば、より強力な兵器や新しい種類の兵器への変更を検討する時期かもしれません！"
 
 msgid "Units"
-msgstr ""
+msgstr "ユニット"
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr ""
+msgstr "敵を圧倒し、勝利の味を味わうためには、新しいユニットを設計・建造する必要があります。"
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr ""
+msgstr "このゲームのこの要素こそが、Warzone 2100を独自の存在にしています。"
 
 msgid "To be able to design units, a Command Center is required."
-msgstr ""
+msgstr "ユニットを設計できるようにするには、コマンドセンターが必要です。"
 
 msgid "All-Rounder"
-msgstr ""
+msgstr "オールラウンダー"
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr ""
+msgstr "「オールラウンダー」兵器は、専用兵器に比べて効果が劣ります。"
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr ""
+msgstr "しかし、専用兵器とは異なり、オールラウンダー兵器はあらゆる種類の目標に対してそこそこの効果を発揮します。"
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr ""
+msgstr "また、オールラウンダー兵器は装備したユニットに大幅なヒットポイントのボーナスを与えますが、その代償として重量値が高くなります。"
 
 msgid "Anti-Air"
-msgstr ""
+msgstr "対空"
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr ""
+msgstr "対空(またはAA)兵器は、あらゆる種類の飛行ユニットに対して特化しています。"
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr ""
+msgstr "しかし、AA兵器は建造物や地上のユニットを攻撃することができません。"
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr ""
+msgstr "AA兵器は空中の脅威に対処するのに優れていますが、地上の脅威から守られる必要があります。"
 
 msgid "Anti-Personnel"
-msgstr ""
+msgstr "対人"
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr ""
+msgstr "対人兵器は、敵の歩兵や軽車両をなぎ倒すのに非常に効果的です。"
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr ""
+msgstr "しかし、これらの兵器は建造物や重装甲の目標に対しては効果が劣ります。"
 
 msgid "Anti-Tank"
-msgstr ""
+msgstr "対戦車"
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr ""
+msgstr "対戦車兵器は、あらゆる種類の敵車両に対して特化しています。"
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr ""
+msgstr "しかし、対戦車兵器は建造物に対して効果が劣り、特に歩兵に対してはほとんど効果がありません。"
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr ""
+msgstr "一般的に、対戦車兵器は軽量ですが、ヒットポイントはほとんど提供しません。これらの兵器を搭載した車両は、他のほとんどの兵器タイプを搭載した車両よりも脆弱になります。"
 
 msgid "Artillery"
-msgstr ""
+msgstr "大砲"
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr ""
+msgstr "大砲は歩兵やほとんどの建造物に対して壊滅的な効果を発揮します。"
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr ""
+msgstr "しかし、大砲は掩体壕や履帯車両に対しては効果が劣ります。"
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr ""
+msgstr "ほとんど(すべてではありません)の大砲は、発射するために静止している必要があります。これに加えて大砲が提供するヒットポイントが非常に少ないことから、大砲を装備したユニットは単独では脆弱です。"
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr ""
+msgstr "そのため、大砲は直接の対決を避けながら、他のユニットや建造物を支援するために使用するのが最善です。"
 
 msgid "High-Explosive Bombs"
-msgstr ""
+msgstr "高性能爆薬爆弾"
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr ""
+msgstr "爆発物系の爆弾は、地上の大砲兵器(迫撃砲など)と同様に機能します。"
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr ""
+msgstr "これらの爆弾は着弾時に爆発し、爆風に巻き込まれたすべてのものにダメージを与えます。"
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr ""
+msgstr "大砲と同様に、爆発物系の爆弾はほとんどの建造物や歩兵集団、軽車両の破壊に優れていますが、掩体壕や重装甲戦車に対しては苦戦します。"
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr ""
+msgstr "自分のユニットや建造物が爆風に巻き込まれないよう注意してください！"
 
 msgid "Incendiary Bombs"
-msgstr ""
+msgstr "焼夷爆弾"
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr ""
+msgstr "焼夷爆弾は、地上のフレイマー兵器といくぶん似た働きをします。"
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr ""
+msgstr "焼夷爆弾は着弾時のダメージは低いですが、着弾地点周辺の広い範囲を瞬時に発火させます。"
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr ""
+msgstr "この範囲内に留まる敵ユニットや建造物は、時間の経過とともに大きなダメージを受けます。"
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr ""
+msgstr "フレイマー兵器と同様に、焼夷爆弾はあらゆる種類のユニットや掩体壕に対して優れていますが、強化建造物に対しては効果が弱いです。"
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "爆弾倉"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "爆弾倉は、VTOLにのみ装備できる特殊な兵器タイプです。"
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "攻撃範囲は短く弾薬数も少ないですが、爆弾倉はヒットポイントのボーナスを与え、他のVTOL兵器と比べて一般的により強力な攻撃力を持っています。"
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "他のすべての兵器と同様に、爆弾の種類によって効果、威力、用途はそれぞれ異なります。"
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "バンカーバスター"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "バンカーバスターは、あらゆる建造物に対して極めて効果的な特殊兵器です。"
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "しかし、バンカーバスターは建造物以外の目標に対しては非常に弱いです。"
 
 msgid "Flamer"
-msgstr ""
+msgstr "フレイマー"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "焼夷「フレイマー」兵器は、歩兵や装甲の弱い戦車に対して効果的です。"
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "フレイマー兵器は掩体壕やスカベンジャーの建造物に対しても優れていますが、他の建造物に対しては効果が劣ります。"
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "フレイマーはユニットを「貫通」することができ、一度の発射で複数のユニットにダメージを与え、発火させることもあるため、集団を殲滅するのに優れた兵器となっています。"
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "しかし、攻撃範囲が短いため、フレイマー兵器の使用にはリスクが伴います。"
