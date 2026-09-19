@@ -2095,6 +2095,11 @@ bool NetworkTextMessage::decode(MessageReader& r, uint8_t senderIdx)
 	NETstring(r, text, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
+	if (sender < 0 && sender != SYSTEM_MESSAGE && sender != NOTIFY_MESSAGE)
+	{
+		return false;
+	}
+
 	if (whosResponsible(sender) != senderIdx)
 	{
 		sender = senderIdx;  // Fix corrupted sender.
