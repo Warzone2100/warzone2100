@@ -26,11 +26,15 @@
 #include "multiint.h"
 #include "stdinreader.h"
 #include "clparse.h"
+#include "hci/quickchat.h"
 
 #include <cstring>
 #include <unordered_set>
 
 #define PREFIXED_LOBBY_COMMAND(x) LOBBY_COMMAND_PREFIX x
+
+using WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Command;
+using WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Context;
 
 static std::unordered_set<std::string> lobbyAdminPublicHashStrings;
 static std::unordered_set<std::string> lobbyAdminPublicKeys;
@@ -99,7 +103,7 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx, bool quiet = fal
 			auto& identity = getOutputPlayerIdentity(playerIdx);
 			std::string senderIdentityHash = identity.publicHashString();
 			std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-			sendRoomSystemMessageToSingleReceiver("Waiting for sync (admin privileges not yet enabled)", playerIdx, true);
+			sendLobbyCommandResponse(playerIdx, Context::WaitingForSync);
 			if (lobbyAdminPublicKeys.count(senderPublicKeyB64) > 0)
 			{
 				debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public key: %s), but they have not yet verified their identity", playerIdx, senderPublicKeyB64.c_str());
@@ -116,25 +120,7 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx, bool quiet = fal
 
 static void lobbyCommand_PrintHelp(uint32_t receiver)
 {
-	sendRoomSystemMessageToSingleReceiver("Command list:", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "help - Get this message", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "admin - Display currently-connected admin players", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "me - Display your information", receiver, true);
-	if (!senderHasLobbyCommandAdminPrivs(receiver, true))
-	{
-		sendRoomSystemMessageToSingleReceiver("(Additional commands are available for admins)", receiver, true);
-		return;
-	}
-	// admin-only commands
-	sendRoomSystemMessageToSingleReceiver("Admin-only commands: (All slots count from 0)", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to> - Swap player/slot positions", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makespec <slot> - Move a player to spectators", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makeplayer s<slot> - Request to move a spectator to players", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "alliance <alliance type> - Change alliance setting (0, 1, 2, 3)", receiver, true);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "scav <scav level> - Change scav setting (0=off, 1=on, 2=ultimate)", receiver, true);
+	sendLobbyCommandResponse(receiver, Context::Help, Command::Help, senderHasLobbyCommandAdminPrivs(receiver, true) ? 1 : 0);
 }
 
 static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
@@ -152,38 +138,23 @@ static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
 
 static void lobbyCommand_Admin()
 {
-	// get list of connected admins
-	auto adminPlayerIndexes = getConnectedAdminPlayerIndexes();
-	if (adminPlayerIndexes.empty())
+	uint32_t adminPlayerBitmask = 0;
+	for (const auto adminPlayerIdx : getConnectedAdminPlayerIndexes())
 	{
-		sendRoomSystemMessage("No room admins currently connected");
-		return;
-	}
-	std::string msg = "Currently connected room admins:";
-	size_t currNum = 0;
-	for (const auto adminPlayerIdx : adminPlayerIndexes)
-	{
-		if (adminPlayerIdx > MAX_CONNECTED_PLAYERS)
+		if (adminPlayerIdx >= MAX_CONNECTED_PLAYERS)
 		{
 			debug(LOG_ERROR, "Invalid admin index?? %zu", adminPlayerIdx);
 			continue;
 		}
-		if (currNum > 0)
-		{
-			msg += ",";
-		}
-		msg += " [";
-		msg += std::to_string(adminPlayerIdx) + "] ";
-		msg += getPlayerName(adminPlayerIdx, true);
-		++currNum;
+		adminPlayerBitmask |= (1u << adminPlayerIdx);
 	}
-	sendRoomSystemMessage(msg.c_str());
+	sendLobbyCommandResponse(nullopt, Context::AdminList, Command::Admin, adminPlayerBitmask);
 }
 
 #define ADMIN_REQUIRED_FOR_COMMAND(command) \
 if (!senderHasLobbyCommandAdminPrivs(message.sender)) \
 { \
-	sendRoomSystemMessageToSingleReceiver("Only admin can use the \"" command "\" command", static_cast<uint32_t>(message.sender), true); \
+	sendLobbyCommandResponse(static_cast<uint32_t>(message.sender), Context::AdminOnly, command); \
 	return false; \
 }
 
@@ -266,40 +237,32 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	}
 	else if (strcmp(&message.text[startingCommandPosition], "me") == 0)
 	{
-		std::string msg = astringf("Your player information:\nidentity: %s\nhash: %s\nsender [%d] position [%d] name [%s]",
-								senderPublicKeyB64.c_str(),
-								senderhash.c_str(),
-								message.sender,
-								NetPlay.players[message.sender].position,
-								getPlayerName(message.sender, true));
-		sendRoomSystemMessageToSingleReceiver(msg.c_str(), message.sender, true);
+		sendLobbyCommandResponse(static_cast<uint32_t>(message.sender), Context::MyInfo, Command::Me);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "team ", 5) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("team");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::Team);
 		unsigned int s1 = 0, s2 = 0;
 		int r = sscanf(&message.text[startingCommandPosition], "team %u %u", &s1, &s2);
 		if (r != 2 || s1 >= MAX_PLAYERS || s2 >= MAX_PLAYERS)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "team <slot> <team>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::Team);
 			return false;
 		}
 		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2, message.sender))
 		{
-			std::string msg = astringf("Unable to change player %u team to %u", s1, s2);
-			sendRoomNotifyMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::Team, (s1 << 16) | s2);
 			return false;
 		}
 
-		std::string msg = astringf("Changed player %u team to %u", s1, s2);
-		sendRoomSystemMessage(msg.c_str());
+		sendLobbyCommandResponse(nullopt, Context::TeamChanged, Command::Team, (s1 << 16) | s2);
 	}
 	else if (strcmp(&message.text[startingCommandPosition], "hostexit") == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("hostexit");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::HostExit);
 		if (message.sender != NetPlay.hostPlayer && !lobby_slashcommands_hostexit_enabled())
 		{
-			sendRoomSystemMessageToSingleReceiver("Only host can use the \"hostexit\" command", static_cast<uint32_t>(message.sender), true);
+			sendLobbyCommandResponse(static_cast<uint32_t>(message.sender), Context::HostOnly, Command::HostExit);
 			return false;
 		}
 		cmdInterface.quitGame(5);
@@ -307,14 +270,8 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	else if (strncmp(&message.text[startingCommandPosition], "kick ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "ban ", 4) == 0)
 	{
 		bool isBan = strncmp(&message.text[startingCommandPosition], "ban", 3) == 0;
-		if (!isBan)
-		{
-			ADMIN_REQUIRED_FOR_COMMAND("kick");
-		}
-		else
-		{
-			ADMIN_REQUIRED_FOR_COMMAND("ban");
-		}
+		Command cmd = (!isBan) ? Command::Kick : Command::Ban;
+		ADMIN_REQUIRED_FOR_COMMAND(cmd);
 		std::string command = (!isBan) ? "kick" : "ban";
 		unsigned int playerPos = MAX_PLAYERS + 1;
 		unsigned int playerIdx = MAX_CONNECTED_PLAYERS + 1;
@@ -325,8 +282,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			playerIdx = posToNetPlayer(playerPos);
 			if (playerIdx >= MAX_PLAYERS)
 			{
-				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
-				sendRoomNotifyMessage(msg.c_str());
+				sendLobbyCommandResponse(nullopt, Context::Usage, cmd);
 				return false;
 			}
 		}
@@ -336,8 +292,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			r = sscanf(&message.text[startingCommandPosition], commandParse.c_str(), &playerPos);
 			if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
 			{
-				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
-				sendRoomNotifyMessage(msg.c_str());
+				sendLobbyCommandResponse(nullopt, Context::Usage, cmd);
 				return false;
 			}
 			playerIdx = MAX_PLAYER_SLOTS + playerPos;
@@ -346,90 +301,85 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		if (playerIdx == NetPlay.hostPlayer)
 		{
 			// Can't kick the host...
-			sendRoomSystemMessage("Can't kick the host.");
+			sendLobbyCommandResponse(nullopt, Context::CannotTargetHost, cmd);
 			return false;
 		}
 		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game."), isBan, message.sender))
 		{
-			std::string msg = astringf("Failed to kick %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
-			sendRoomSystemMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, cmd, ((playerIdx < MAX_PLAYER_SLOTS) ? 0 : (1u << 16)) | playerPos);
 			return false;
 		}
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "swap ", 5) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("swap");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::Swap);
 		unsigned int s1, s2;
 		int r = sscanf(&message.text[startingCommandPosition], "swap %u %u", &s1, &s2);
 		int playerIdxA = posToNetPlayer(s1);
 		if (r != 2)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::Swap);
 			return false;
 		}
 
 		if (playerIdxA >= std::min<int>(game.maxPlayers, MAX_PLAYERS))
 		{
-			std::string msg = astringf("Swap - invalid player 1: %" PRIu32, playerIdxA);
-			sendRoomNotifyMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::InvalidValue, Command::Swap, (1u << 16) | (static_cast<uint32_t>(playerIdxA) & 0xFFFF));
 			return false;
 		}
 		if (s2 >= game.maxPlayers)
 		{
-			std::string msg = astringf("Swap - invalid player 2: %" PRIu32, s2);
-			sendRoomNotifyMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::InvalidValue, Command::Swap, (2u << 16) | (s2 & 0xFFFF));
 			return false;
 		}
 
 		if (!cmdInterface.changePosition(playerIdxA, s2, message.sender))
 		{
-			std::string msg = astringf("Unable to swap players %" PRIu8 " and %" PRIu8, s1, s2);
-			sendRoomNotifyMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::Swap, (s1 << 16) | s2);
 			return false;
 		}
 
-		sendRoomSystemMessage((std::string("Swapping player ")+std::to_string(s1)+" and "+std::to_string(s2)).c_str());
+		sendLobbyCommandResponse(nullopt, Context::Swapped, Command::Swap, (s1 << 16) | s2);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "base ", 5) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("base");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::Base);
 		int s1;
 		int r = sscanf(&message.text[startingCommandPosition], "base %d", &s1);
 		if(r != 1)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "base <base level>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::Base);
 			return false;
 		}
 
 		if (s1 < 0 || s1 > 2)
 		{
-			sendRoomNotifyMessage("Base level must be between [0 - 2]");
+			sendLobbyCommandResponse(nullopt, Context::InvalidValue, Command::Base);
 			return false;
 		}
 		if (!cmdInterface.changeBase(static_cast<uint8_t>(s1)))
 		{
-			std::string msg = astringf("Unable to change base to: %" PRIu8, s1);
-			sendRoomNotifyMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::Base, s1);
 			return false;
 		}
 
-		sendRoomSystemMessage((std::string("Starting base set to ")+std::to_string(s1)).c_str());
+		sendLobbyCommandResponse(nullopt, Context::BaseSet, Command::Base, s1);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "alliance ", 9) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("alliance");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::Alliance);
 		int s1;
 		int r = sscanf(&message.text[startingCommandPosition], "alliance %d", &s1);
 		if (r != 1)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "alliance <alliance type>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::Alliance);
 			return false;
 		}
 		else
 		{
 			if (s1 < 0 || s1 > 3)
 			{
-				sendRoomNotifyMessage("Alliance type must be in range [0 - 3]");
+				sendLobbyCommandResponse(nullopt, Context::InvalidValue, Command::Alliance);
 				return false;
 			}
 
@@ -445,78 +395,75 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			}
 			if (!cmdInterface.changeAlliances(alliancesType))
 			{
-				std::string msg = astringf("Unable to set alliances to: %u", static_cast<unsigned>(alliancesType));
-				sendRoomNotifyMessage(msg.c_str());
+				sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::Alliance, alliancesType);
 				return false;
 			}
 
-			sendRoomSystemMessage((std::string("Alliance type set to ")+std::to_string(s1)).c_str());
+			sendLobbyCommandResponse(nullopt, Context::AllianceSet, Command::Alliance, s1);
 		}
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "scav ", 5) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("scav");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::Scav);
 		int scavsValue;
 		int r = sscanf(&message.text[startingCommandPosition], "scav %d", &scavsValue);
 		if (r != 1)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "scav <0/1/2>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::Scav);
 			return false;
 		}
 
 		if (!(scavsValue == NO_SCAVENGERS || scavsValue == SCAVENGERS || scavsValue == ULTIMATE_SCAVENGERS))
 		{
-			sendRoomNotifyMessage("Scavs must be off, on, or ultimate: (0, 1, or 2)");
+			sendLobbyCommandResponse(nullopt, Context::InvalidValue, Command::Scav);
 			return false;
 		}
 
 		if (!cmdInterface.changeScavengers(static_cast<uint8_t>(scavsValue)))
 		{
-			std::string msg = astringf("Unable to set scavs to: %d", scavsValue);
-			sendRoomNotifyMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::Scav, scavsValue);
 			return false;
 		}
 
-		sendRoomSystemMessage((std::string("Scavangers set to ")+std::to_string(scavsValue)).c_str());
+		sendLobbyCommandResponse(nullopt, Context::ScavSet, Command::Scav, scavsValue);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "makespec ", 9) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("makespec");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::MakeSpec);
 		unsigned int playerPos = MAX_PLAYERS + 1;
 		int r = sscanf(&message.text[startingCommandPosition], "makespec %u", &playerPos);
 		unsigned int playerIdx = posToNetPlayer(playerPos);
 		if (r != 1 || playerPos >= MAX_PLAYERS)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "makespec <slot>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::MakeSpec);
 			return false;
 		}
 		if (playerIdx == NetPlay.hostPlayer)
 		{
 			// Can't move the host...
-			sendRoomSystemMessage("Can't move the host.");
+			sendLobbyCommandResponse(nullopt, Context::CannotTargetHost, Command::MakeSpec);
 			return false;
 		}
 		if (playerIdx == message.sender)
 		{
 			// Can't move self this way (or it'll prevent us from moving back) - use the UI!
-			sendRoomSystemMessageToSingleReceiver("Use the UI to move yourself.", static_cast<uint32_t>(message.sender), true);
+			sendLobbyCommandResponse(static_cast<uint32_t>(message.sender), Context::UseUIToMoveSelf, Command::MakeSpec);
 			return false;
 		}
 		if (!cmdInterface.movePlayerToSpectators(playerIdx))
 		{
-			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
-			sendRoomSystemMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::MakeSpec, playerPos);
 			return false;
 		}
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "makeplayer ", 11) == 0)
 	{
-		ADMIN_REQUIRED_FOR_COMMAND("makeplayer");
+		ADMIN_REQUIRED_FOR_COMMAND(Command::MakePlayer);
 		unsigned int playerPos = MAX_PLAYERS + 1;
 		int r = sscanf(&message.text[startingCommandPosition], "makeplayer s%u", &playerPos);
 		if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
 		{
-			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "makeplayer s<spectator slot>");
+			sendLobbyCommandResponse(nullopt, Context::Usage, Command::MakePlayer);
 			return false;
 		}
 		unsigned int playerIdx = MAX_PLAYER_SLOTS + playerPos;
@@ -524,27 +471,20 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		if (playerIdx == NetPlay.hostPlayer)
 		{
 			// Can't move the host...
-			sendRoomSystemMessage("Can't move the host.");
+			sendLobbyCommandResponse(nullopt, Context::CannotTargetHost, Command::MakePlayer);
 			return false;
 		}
 		if (!cmdInterface.requestMoveSpectatorToPlayers(playerIdx))
 		{
-			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
-			sendRoomSystemMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, Command::MakePlayer, playerPos);
 			return false;
 		}
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "mute ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "unmute ", 7) == 0)
 	{
 		bool isMute = strncmp(&message.text[startingCommandPosition], "mute", 4) == 0;
-		if (!isMute)
-		{
-			ADMIN_REQUIRED_FOR_COMMAND("mute");
-		}
-		else
-		{
-			ADMIN_REQUIRED_FOR_COMMAND("unmute");
-		}
+		Command cmd = (isMute) ? Command::Mute : Command::Unmute;
+		ADMIN_REQUIRED_FOR_COMMAND(cmd);
 		std::string command = (isMute) ? "mute" : "unmute";
 		unsigned int playerPos = MAX_PLAYERS + 1;
 		unsigned int playerIdx = MAX_CONNECTED_PLAYERS + 1;
@@ -555,8 +495,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			playerIdx = posToNetPlayer(playerPos);
 			if (playerIdx >= MAX_PLAYERS)
 			{
-				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
-				sendRoomNotifyMessage(msg.c_str());
+				sendLobbyCommandResponse(nullopt, Context::Usage, cmd);
 				return false;
 			}
 		}
@@ -566,8 +505,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			r = sscanf(&message.text[startingCommandPosition], commandParse.c_str(), &playerPos);
 			if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
 			{
-				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
-				sendRoomNotifyMessage(msg.c_str());
+				sendLobbyCommandResponse(nullopt, Context::Usage, cmd);
 				return false;
 			}
 			playerIdx = MAX_PLAYER_SLOTS + playerPos;
@@ -576,13 +514,12 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		if (playerIdx == NetPlay.hostPlayer)
 		{
 			// Can't mute the host...
-			sendRoomSystemMessage("Can't mute the host.");
+			sendLobbyCommandResponse(nullopt, Context::CannotTargetHost, cmd);
 			return false;
 		}
 		if (!cmdInterface.changeHostChatPermissions(playerIdx, !isMute))
 		{
-			std::string msg = astringf("Failed to mute / unmute %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
-			sendRoomSystemMessage(msg.c_str());
+			sendLobbyCommandResponse(nullopt, Context::CommandFailed, cmd, ((playerIdx < MAX_PLAYER_SLOTS) ? 0 : (1u << 16)) | playerPos);
 			return false;
 		}
 	}

@@ -605,8 +605,8 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 			wz_command_interface_output("WZCMD error: Can't kick host!\n");
 			return;
 		}
-		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AdminKickedPlayer, 0, i);
 		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AdminKickedPlayer, 0, i);
 	});
 }
 
@@ -1041,8 +1041,8 @@ int cmdInputThreadFunc(void *)
 						}
 						if (!strcmp(player.IPtextAddress, banIPStrCopy.c_str()))
 						{
-							sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AdminBannedPlayer, 0, i);
 							kickPlayer(i, banReasonStrCopy.c_str(), ERROR_INVALID, true);
+							sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AdminBannedPlayer, 0, i);
 							foundActivePlayer = true;
 						}
 					}

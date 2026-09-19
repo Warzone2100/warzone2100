@@ -2177,8 +2177,8 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostKickedPlayer, 0, player);
 			kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostKickedPlayer, 0, player);
 			resetReadyStatus(true);		//reset and send notification to all clients
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeTeamChooser();
@@ -2196,8 +2196,8 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostBannedPlayer, 0, player);
 			kickPlayer(player, _("The host has banned you from the game."), ERROR_KICKED, true);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostBannedPlayer, 0, player);
 			resetReadyStatus(true);		//reset and send notification to all clients
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeTeamChooser();
