@@ -919,11 +919,8 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
 
 	/* Check nearby objects for possible collisions */
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psTempObj : gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE))
 	{
-		BASE_OBJECT *psTempObj = *gi;
 		CHECK_OBJECT(psTempObj);
 
 		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
@@ -1073,12 +1070,8 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 
 static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i &targetPos, bool empRadius)
 {
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(targetPos.x, targetPos.y, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius);
-
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psCurr : gridStartIterate(targetPos.x, targetPos.y, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius))
 	{
-		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->died)
 		{
 			ASSERT(psCurr->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psCurr->type);
@@ -1551,11 +1544,8 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 
 	WEAPON_STATS *psStats = psProj->psWStats;
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->upgrade[psProj->player].periodicalDamageRadius);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psCurr : gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->upgrade[psProj->player].periodicalDamageRadius))
 	{
-		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->died)
 		{
 			syncDebugObject(psCurr, '-');

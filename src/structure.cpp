@@ -3873,11 +3873,13 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 		{
 			bool		found = false;
 
-			static GridList gridList;  // static to avoid allocations.
-			gridList = gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS);
-			for (GridIterator gi = gridList.begin(); !found && gi != gridList.end(); ++gi)
+			for (BASE_OBJECT *gridObj : gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS))
 			{
-				found = isDroid(*gi);
+				if (isDroid(gridObj))
+				{
+					found = true;
+					break;
+				}
 			}
 
 			if (!found)	// no droids on our tile, safe to close

@@ -62,12 +62,8 @@ SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 	Vector2i toTarget = ctx.targetPos - ctx.currentPos;
 
 	// Scan nearby objects for obstacles
-	static GridList gridList;  // static to avoid allocations
-	gridList = gridStartIterate(ctx.currentPos.x, ctx.currentPos.y, OBSTACLE_SCAN_RADIUS);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT* obj : gridStartIterate(ctx.currentPos.x, ctx.currentPos.y, OBSTACLE_SCAN_RADIUS))
 	{
-		BASE_OBJECT* obj = *gi;
-
 		// Skip invalid obstacles
 		if (!isValidObstacle(obj, ctx.droid))
 		{

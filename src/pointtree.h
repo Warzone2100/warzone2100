@@ -73,8 +73,9 @@ private:
 	typedef std::pair<uint64_t, void *> Point;
 	typedef std::vector<Point> Vector;
 
+	/// filter is null exactly when !IsFiltered.
 	template<bool IsFiltered>
-	ResultVector &queryMaybeFilter(Filter &filter, int32_t minXo, int32_t maxXo, int32_t minYo, int32_t maxYo);
+	ResultVector &queryMaybeFilter(Filter *filter, int32_t minXo, int32_t maxXo, int32_t minYo, int32_t maxYo);
 
 	Vector points;
 };

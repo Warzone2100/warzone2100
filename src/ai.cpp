@@ -617,12 +617,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	// Range was previously 9*TILE_UNITS. Increasing this doesn't seem to help much, though. Not sure why.
 	int droidRange = std::min(aiDroidRange(psDroid, weapon_slot) + extraRange, objSensorRange(psDroid) + 6 * TILE_UNITS);
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange))
 	{
 		BASE_OBJECT *friendlyObj = nullptr;
-		BASE_OBJECT *targetInQuestion = *gi;
+		BASE_OBJECT *targetInQuestion = gridObj;
 
 		if (targetInQuestion == nullptr || isDead(targetInQuestion))
 		{
@@ -977,11 +975,8 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				srange = objSensorRange(psObj);
 			}
 
-			static GridList gridList;  // static to avoid allocations.
-			gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, srange);
-			for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+			for (BASE_OBJECT *psCurr : gridStartIterate(psObj->pos.x, psObj->pos.y, srange))
 			{
-				BASE_OBJECT *psCurr = *gi;
 				/* Check that it is a valid target */
 				if (psCurr->type != OBJ_FEATURE && !psCurr->died
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
@@ -1060,11 +1055,8 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		BASE_OBJECT    *psTemp = nullptr;
 		unsigned tarDist = UINT32_MAX;
 
-		static GridList gridList;  // static to avoid allocations.
-		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, objSensorRange(psObj));
-		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+		for (BASE_OBJECT *psCurr : gridStartIterate(psObj->pos.x, psObj->pos.y, objSensorRange(psObj)))
 		{
-			BASE_OBJECT *psCurr = *gi;
 			if (psCurr == nullptr)
 			{
 				continue;

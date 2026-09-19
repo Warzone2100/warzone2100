@@ -1310,12 +1310,9 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Filter player index out of range: %d", playerFilter);
 
-	static GridList gridList;  // static to avoid allocations. // WARNING: THREAD-SAFETY
-	gridList = gridStartIterate(x, y, range);
 	std::vector<const BASE_OBJECT *> list;
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (const BASE_OBJECT *psObj : gridStartIterate(x, y, range))
 	{
-		const BASE_OBJECT *psObj = *gi;
 		if ((!seen || (player < MAX_PLAYERS && psObj->visible[player])) && !psObj->died)
 		{
 			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS
