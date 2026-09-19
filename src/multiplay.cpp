@@ -2049,6 +2049,11 @@ bool shouldHideFreeChatFrom(uint32_t sender)
 	return isPlayerMuted(sender) || isLocalQuickChatOnlyMode();
 }
 
+bool shouldHideHostFreeText()
+{
+	return ingame.muteChat[NetPlay.hostPlayer] || isLocalQuickChatOnlyMode();
+}
+
 NetworkTextMessage::NetworkTextMessage(int32_t messageSender, char const *messageText)
 {
 	sender = messageSender;
@@ -2192,13 +2197,22 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 		return false;
 	}
 
-	if (message.sender >= 0 && shouldHideFreeChatFrom(message.sender))
+	if (message.sender < 0)
 	{
-		return false;
+		if (shouldHideHostFreeText())
+		{
+			return false;
+		}
+		std::string hostText = astringf("%s: %s", getPlayerName(NetPlay.hostPlayer), message.text);
+		message = NetworkTextMessage(NetPlay.hostPlayer, hostText.c_str());
 	}
-
-	if (message.sender >= 0)
+	else
 	{
+		if (shouldHideFreeChatFrom(message.sender))
+		{
+			return false;
+		}
+
 		if (playerSpamMutedUntil(message.sender).has_value())
 		{
 			// discard messages from sender while spam-muted
