@@ -24,18 +24,12 @@
 #include <functional>
 #include <memory>
 #include "lib/ivis_opengl/pietypes.h"
+#include "console_history.h"
 
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
-
-enum CONSOLE_TEXT_JUSTIFICATION
-{
-	LEFT_JUSTIFY,
-	DEFAULT_JUSTIFY = LEFT_JUSTIFY,
-	RIGHT_JUSTIFY,
-	CENTRE_JUSTIFY
-};
+#define MAX_CONSOLE_HISTORY				(500)
 
 // Declare any messages that you want to be debounced here, along with their debounce time.
 // This has to be done as a 1-member struct rather than an enum to allow distinguishing
@@ -56,12 +50,6 @@ struct ConsoleMessage
 
 const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING = {2500};
 
-
-/* ID to use for addConsoleMessage() in case of a system message */
-#define	SYSTEM_MESSAGE				(-1)
-#define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
-#define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
-
 #define MAX_CONSOLE_MESSAGE_DURATION	((UDWORD)-1)
 #define DEFAULT_CONSOLE_MESSAGE_DURATION	0
 
@@ -74,7 +62,6 @@ void initConsoleMessages();
 void shutdownConsoleMessages();
 void removeTopConsoleMessage();
 void displayConsoleMessages();
-void displayOldMessages();
 void flushConsoleMessages();
 void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
@@ -89,7 +76,7 @@ void setConsoleLineInfo(UDWORD vis);
 UDWORD getConsoleLineInfo();
 void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop();
-void setHistoryMode(bool mode);
+void setConsoleHistoryFilter(ConsoleHistoryFilter filter);
 void clearInfoMessages();
 PIELIGHT getConsoleTextColor(int player);
 

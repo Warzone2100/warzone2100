@@ -45,6 +45,7 @@
 #include <deque>
 #include <chrono>
 #include <set>
+#include <vector>
 
 // FIXME: When we switch over to full JS, use class version of this file
 
@@ -88,20 +89,12 @@ struct CONSOLE_MESSAGE
 
 };
 
-struct CONSOLE_HISTORY_MESSAGE
-{
-	WzString text;
-	CONSOLE_TEXT_JUSTIFICATION JustifyType;
-	int player;
-};
-
 static std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
-static std::deque<CONSOLE_HISTORY_MESSAGE> TeamMessages;		// history of team/private communications
-static std::deque<CONSOLE_HISTORY_MESSAGE> HistoryMessages;	// history of all other communications
+static ConsoleHistory history(MAX_CONSOLE_HISTORY);	// every stored message, team and private ones included
 static std::deque<CONSOLE_MESSAGE> InfoMessages;
 static std::array<WzText, NumDisplayLines> historyDisplayLines;
 static bool	bConsoleDropped = false;			// Is the console history on or off?
-static bool HistoryMode = false;				// toggle between team & global history
+static ConsoleHistoryFilter historyFilter = ConsoleHistoryFilter::All;	// which of the history's messages are shown
 static int updatepos = 0;						// if user wants to scroll back the history log
 static int linePitch = 0;						// the pitch of a line
 static bool showBackgroundColor = false;		// if user wants to add more contrast to the history display
@@ -181,10 +174,9 @@ void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, u
 	calcLayoutFunc();
 }
 
-// toggle between team & global history
-void setHistoryMode(bool mode)
+void setConsoleHistoryFilter(ConsoleHistoryFilter filter)
 {
-	HistoryMode = mode;
+	historyFilter = filter;
 }
 
 /** Open the console when it's closed and close it when it's open. */
@@ -268,11 +260,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		else
 		{
 			ActiveMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// everything gets logged here for a specific period of time
-			if (team)
-			{
-				TeamMessages.push_back({WzString::fromUtf8(FitText), jusType, player});	// persistent team specific logs
-			}
-			HistoryMessages.push_back({WzString::fromUtf8(FitText), jusType, player});	// persistent messages (all types)
+			history.add(WzString::fromUtf8(FitText), jusType, player, team, gameTime);
 		}
 	}
 
@@ -344,8 +332,7 @@ void clearActiveConsole()
 void	flushConsoleMessages()
 {
 	ActiveMessages.clear();
-	TeamMessages.clear();
-	HistoryMessages.clear();
+	history.clear();
 	for (auto &line : historyDisplayLines)
 	{
 		line = WzText();
@@ -415,23 +402,23 @@ static void console_drawtext(WzText &display, PIELIGHT colour, int x, int y, CON
 	display.render(x, y, colour);
 }
 
-// Show global (mode=false) or team (mode=true) history messages
-void displayOldMessages(bool mode)
+// Show the history's messages that pass the filter
+static void displayOldMessages(ConsoleHistoryFilter filter)
 {
 	int startpos = 0;
-	std::deque<CONSOLE_HISTORY_MESSAGE> *WhichMessages;
+	static std::vector<const ConsoleHistoryEntry *> filteredMessages;
 
-	if (mode)
+	filteredMessages.clear();
+	for (const auto &entry : history.entries())
 	{
-		WhichMessages = &TeamMessages;
+		if (consoleHistoryFilterIncludes(filter, entry.channel))
+		{
+			filteredMessages.push_back(&entry);
+		}
 	}
-	else
+	if (!filteredMessages.empty())
 	{
-		WhichMessages = &HistoryMessages;
-	}
-	if (!WhichMessages->empty())
-	{
-		unsigned int count = WhichMessages->size();	// total number of messages
+		unsigned int count = filteredMessages.size();	// total number of messages
 		if (count > NumDisplayLines)	// if we have more than we can display
 		{
 			startpos = count - NumDisplayLines;	// show last X lines
@@ -449,7 +436,7 @@ void displayOldMessages(bool mode)
 			else
 			{
 				// reset all, we got overflow
-				count = WhichMessages->size();
+				count = filteredMessages.size();
 				updatepos = 0;
 				startpos = count - NumDisplayLines;
 			}
@@ -470,11 +457,11 @@ void displayOldMessages(bool mode)
 		}
 		for (int i = startpos; i < count && static_cast<size_t>(i - startpos) < historyDisplayLines.size(); ++i)
 		{
-			const CONSOLE_HISTORY_MESSAGE &message = (*WhichMessages)[i];
+			const ConsoleHistoryEntry &message = *filteredMessages[i];
 			WzText &display = historyDisplayLines[i - startpos];
 			display.setText(message.text, font_regular);
-			PIELIGHT colour = mode ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor(message.player);
-			console_drawtext(display, colour, historyConsole.topX + nudgeright, TextYpos, message.JustifyType, historyConsole.width);
+			PIELIGHT colour = (filter == ConsoleHistoryFilter::Team) ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor(message.player);
+			console_drawtext(display, colour, historyConsole.topX + nudgeright, TextYpos, message.justification, historyConsole.width);
 			TextYpos += display.lineSize();
 		}
 	}
@@ -499,7 +486,7 @@ void	displayConsoleMessages()
 
 	if (bConsoleDropped)
 	{
-		displayOldMessages(HistoryMode);
+		displayOldMessages(historyFilter);
 	}
 
 	if (!InfoMessages.empty())
