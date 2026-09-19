@@ -61,7 +61,7 @@ const float THICKNESS_RELATIVE = 0.01;
 const float THICKNESS_MIN = 8.0;
 // Fewer than half a generate pixel of UV travel => no screen-space walk.
 const float MIN_SCREEN_TRAVEL_PX = 0.5;
-// Refine the last segment 16x via 3D mix(lastMiss, hitView), not a second DDA.
+// Refine the last segment 16x by bisecting homogeneous t, not a second DDA.
 const int BINARY_SEARCH_STEPS = 4;
 
 // Hit 0.75-1.0 vs miss 0.3-0.65: the gap is the blur classifier
@@ -230,10 +230,13 @@ void main()
 
 	float thicknessCap = max(params.y, THICKNESS_MIN);
 	float prevZ = rayOrig.z;
-	// lastMiss and hitView form the bracket later refined by binary search.
-	vec3 lastMiss = rayOrig;
-	vec2 lastMissUV = uv0;
-	vec3 hitView = rayOrig;
+	// lastMissT and hitDdaT bracket the first crossing in homogeneous t.
+	// The refinement below derives position and UV from that one parameter, exactly
+	// as the DDA does, so the depth sample and the Z interval describe the same
+	// point on the ray (screen space is linear in t, not in view-space distance).
+	float lastMissT = 0.0;
+	float lastMissZ = rayOrig.z;
+	float hitDdaT = 0.0;
 	vec2 hitUV = uv;
 	float hitT = MIN_RAY_START_ABS;
 	bool hit = false;
@@ -262,27 +265,27 @@ void main()
 		float sampleDepth = texture(depthTexture, sampleUV).r;
 		if (sampleDepth >= SKY_DEPTH_THRESHOLD)
 		{
-			lastMiss = rayView;
-			lastMissUV = sampleUV;
+			lastMissT = ddaT;
+			lastMissZ = rayView.z;
 			continue;
 		}
 		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
 		if (!ssrRayOverlapsSurface(rayZMin, rayZMax, surfZ, ssrViewThickness(surfZ, thicknessCap)))
 		{
-			lastMiss = rayView;
-			lastMissUV = sampleUV;
+			lastMissT = ddaT;
+			lastMissZ = rayView.z;
 			continue;
 		}
 		// Water is the reflector, not a reflectee. After the slab test so sky
 		// and Z-misses skip the normals fetch.
 		if (ssrIsReflectorPixel(sampleUV))
 		{
-			lastMiss = rayView;
-			lastMissUV = sampleUV;
+			lastMissT = ddaT;
+			lastMissZ = rayView.z;
 			continue;
 		}
 		hit = true;
-		hitView = rayView;
+		hitDdaT = ddaT;
 		hitUV = sampleUV;
 		hitT = length(rayView - origin);
 		break;
@@ -297,30 +300,32 @@ void main()
 	// Refine the coarse first crossing without increasing the primary step count.
 	for (int b = 0; b < BINARY_SEARCH_STEPS; ++b)
 	{
-		vec3 midView = mix(lastMiss, hitView, 0.5);
-		vec2 sampleUV = clamp(mix(lastMissUV, hitUV, 0.5), vec2(0.0), prepassUvScaleClamp.zw);
+		float midT = 0.5 * (lastMissT + hitDdaT);
+		float k = mix(k0, k1, midT);
+		vec3 midView = mix(Q0, Q1, midT) / max(k, 1e-8);
+		vec2 sampleUV = clamp(mix(uv0, uv1, midT), vec2(0.0), prepassUvScaleClamp.zw);
 		float sampleDepth = texture(depthTexture, sampleUV).r;
 		if (sampleDepth >= SKY_DEPTH_THRESHOLD)
 		{
-			lastMiss = midView;
-			lastMissUV = sampleUV;
+			lastMissT = midT;
+			lastMissZ = midView.z;
 			continue;
 		}
 		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
-		if (!ssrRayOverlapsSurface(min(lastMiss.z, midView.z), max(lastMiss.z, midView.z),
+		if (!ssrRayOverlapsSurface(min(lastMissZ, midView.z), max(lastMissZ, midView.z),
 			surfZ, ssrViewThickness(surfZ, thicknessCap)))
 		{
-			lastMiss = midView;
-			lastMissUV = sampleUV;
+			lastMissT = midT;
+			lastMissZ = midView.z;
 			continue;
 		}
 		if (ssrIsReflectorPixel(sampleUV))
 		{
-			lastMiss = midView;
-			lastMissUV = sampleUV;
+			lastMissT = midT;
+			lastMissZ = midView.z;
 			continue;
 		}
-		hitView = midView;
+		hitDdaT = midT;
 		hitUV = sampleUV;
 		hitT = length(midView - origin);
 	}
