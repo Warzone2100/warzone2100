@@ -348,14 +348,14 @@ bool NETplayerHasConnection(uint32_t index);
 
 bool NETcanOpenNewSpectatorSlot();
 bool NETopenNewSpectatorSlot();
-bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride = false);
+optional<uint32_t> NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride = false);
 enum class SpectatorToPlayerMoveResult
 {
 	SUCCESS,
 	NEEDS_SLOT_SELECTION,
 	FAILED
 };
-SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t> newPlayerIdx, bool hostOverride = false);
+SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t>& newPlayerIdx, bool hostOverride = false);
 
 struct SpectatorInfo
 {

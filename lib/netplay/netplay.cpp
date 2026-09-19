@@ -2035,12 +2035,12 @@ bool NETopenNewSpectatorSlot()
 	return _NET_openNewSpectatorSlot_internal(true).has_value();
 }
 
-bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= false*/)
+optional<uint32_t> NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= false*/)
 {
-	ASSERT_HOST_ONLY(return false);
-	ASSERT_OR_RETURN(false, playerIdx < MAX_CONNECTED_PLAYERS, "playerIdx out of bounds: %" PRIu32 "", playerIdx);
+	ASSERT_HOST_ONLY(return nullopt);
+	ASSERT_OR_RETURN(nullopt, playerIdx < MAX_CONNECTED_PLAYERS, "playerIdx out of bounds: %" PRIu32 "", playerIdx);
 	// Verify it's a human player
-	ASSERT_OR_RETURN(false, isHumanPlayer(playerIdx) && !NetPlay.players[playerIdx].isSpectator, "playerIdx is not a currently-connected human player: %" PRIu32 "", playerIdx);
+	ASSERT_OR_RETURN(nullopt, isHumanPlayer(playerIdx) && !NetPlay.players[playerIdx].isSpectator, "playerIdx is not a currently-connected human player: %" PRIu32 "", playerIdx);
 
 	// Try to grab a new spectator-only slot index
 	optional<uint32_t> availableSpectatorIndex = NET_FindOpenSlotForPlayer(false, true);
@@ -2052,7 +2052,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 	if (!availableSpectatorIndex.has_value())
 	{
 		debug(LOG_ERROR, "No available spectator slots to move player %" PRIu32 " to", playerIdx);
-		return false;
+		return nullopt;
 	}
 
 	// Backup the player's identity for later recording
@@ -2062,7 +2062,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 	if (!swapPlayerIndexes(playerIdx, availableSpectatorIndex.value()))
 	{
 		debug(LOG_ERROR, "Failed to swap player indexes: %" PRIu32 ", %" PRIu32 "", playerIdx, availableSpectatorIndex.value());
-		return false;
+		return nullopt;
 	}
 	ASSERT(NetPlay.players[availableSpectatorIndex.value()].isSpectator, "New slot doesn't have spectator set??");
 
@@ -2083,7 +2083,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 	// Broadcast the swapped player info
 	NETBroadcastTwoPlayerInfo(playerIdx, availableSpectatorIndex.value());
 
-	return true;
+	return availableSpectatorIndex;
 }
 
 static bool wasAlreadyMovedToSpectatorsByHost(uint32_t playerIdx)
@@ -2092,7 +2092,7 @@ static bool wasAlreadyMovedToSpectatorsByHost(uint32_t playerIdx)
 		|| playerManagementRecord.hostMovedPlayerToSpectators(getTruePlayerIdentity(playerIdx).identity.toBytes(EcKey::Privacy::Public));
 }
 
-SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t> newPlayerIdx, bool hostOverride /*= false*/)
+SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t>& newPlayerIdx, bool hostOverride /*= false*/)
 {
 	ASSERT_HOST_ONLY(return SpectatorToPlayerMoveResult::FAILED);
 	ASSERT_OR_RETURN(SpectatorToPlayerMoveResult::FAILED, playerIdx < MAX_CONNECTED_PLAYERS, "playerIdx out of bounds: %" PRIu32 "", playerIdx);
@@ -2172,11 +2172,9 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	if ((realTime - NET_waitingForIndexChangeAckSince.at(sender).value_or(realTime)) > INDEX_CHANGE_ACK_TIMEOUT)
 	{
 		// this client did not acknowledge the player index change before the timeout - kick them
-		char msg[256] = {'\0'};
 		if (NETplayerHasConnection(sender) || NetPlay.players[sender].allocated)
 		{
-			ssprintf(msg, "Auto-kicking player %u, did not ack player index change within required timeframe.", (unsigned int)sender);
-			sendInGameSystemMessage(msg);
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::IndexChangeNotAckedKicked, 0, sender);
 			debug(LOG_INFO, "Client (player: %u) failed to ack player index swap (ignoring message type: %" PRIu8 ")", sender, type);
 			kickPlayer(sender, _("Client failed to ack player index swap"), ERROR_INVALID, false);
 		}
@@ -2351,9 +2349,8 @@ static void NETkickSenderOfInvalidMessage(NETQUEUE playerQueue, const char *mess
 	ssprintf(msg, "Auto-kicking player %u - invalid or corrupt message received: %s", (unsigned int)playerQueue.index, messageName);
 	NETlogEntry(msg, SYNC_FLAG, playerQueue.index);
 
-	ssprintf(msg, "Auto-kicking player %u - invalid or corrupt message received.", (unsigned int)playerQueue.index);
-	sendRoomSystemMessage(msg);
-	debug(LOG_ERROR, "%s", msg);
+	sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::InvalidMessageKicked, 0, playerQueue.index);
+	debug(LOG_ERROR, "Auto-kicking player %u - invalid or corrupt message received.", (unsigned int)playerQueue.index);
 	kickPlayer(playerQueue.index, "Invalid or corrupt message", ERROR_INVALID, true);
 }
 
@@ -2453,7 +2450,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 
 					if (NETplayerHasConnection(sender))
 					{
-						sendRoomSystemMessage(msg);
+						sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AccessLevelKicked, message->type(), sender);
 						debug(LOG_ERROR, "%s", msg);
 						kickPlayer(sender, "Invalid command attempted", ERROR_INVALID, true);
 					}

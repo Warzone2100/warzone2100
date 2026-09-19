@@ -59,6 +59,7 @@
 #include "objmem.h"
 #include "titleui/titleui.h"
 #include "game_world.h"
+#include "hci/quickchat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -293,7 +294,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 			}
 			else
 			{
-				sendRoomSystemMessage(_("Limits Reset To Default Values"));
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::LimitsReset);
 			}
 
 			resetReadyStatus(false);

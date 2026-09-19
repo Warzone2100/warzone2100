@@ -32,6 +32,7 @@
 #include "wzjsonhelpers.h"
 #include "main.h"
 #include "stdinreader.h"
+#include "hci/quickchat.h"
 
 #include <array>
 #include <unordered_map>
@@ -803,9 +804,7 @@ static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 
 	// there is no "votes" that disallows map change so assume they are all allowing
 	if(newVote == 1) {
-		char msg[128] = {0};
-		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), getPlayerName(player, true), player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
-		sendRoomSystemMessage(msg);
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::MapChangeVoteAllowed, (static_cast<uint32_t>(getLobbyChangeVoteTotal()) << 16) | (static_cast<uint32_t>(NET_numHumanPlayers()) & 0xFFFF), player);
 	}
 }
 
@@ -836,24 +835,21 @@ static void recvPlayerKickVote(uint32_t voteID, uint32_t sender, uint8_t newVote
 	bool voteToKick = (newVote == 1);
 	if (it->setPlayerVote(sender, voteToKick))
 	{
-		std::string outputMsg;
 		if (voteToKick)
 		{
-			outputMsg = astringf(_("A player voted FOR kicking: %s"), getPlayerName(it->target_player_id, true));
-			sendInGameSystemMessage(outputMsg.c_str());
+			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::VoteKickFor, 0, it->target_player_id);
 			debug(LOG_INFO, "Player [%" PRIu32 "] %s voted FOR kicking player: %s", sender, getPlayerName(sender, true), getPlayerName(it->target_player_id, true));
 		}
 		else
 		{
 			if (newVote == 0)
 			{
-				outputMsg = astringf(_("A player voted AGAINST kicking: %s"), getPlayerName(it->target_player_id, true));
-				sendInGameSystemMessage(outputMsg.c_str());
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::VoteKickAgainst, 0, it->target_player_id);
 				debug(LOG_INFO, "Player [%" PRIu32 "] %s voted AGAINST kicking player: %s", sender, getPlayerName(sender, true), getPlayerName(it->target_player_id, true));
 			}
 			else
 			{
-				outputMsg = astringf(_("A player's client ignored your vote to kick request (too frequent): %s"), getPlayerName(it->target_player_id, true));
+				std::string outputMsg = astringf(_("A player's client ignored your vote to kick request (too frequent): %s"), getPlayerName(it->target_player_id, true));
 				addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false); // only display to the host
 				debug(LOG_INFO, "Player [%" PRIu32 "] %s ignored vote to kick request for player: %s - (too frequent)", sender, getPlayerName(sender, true), getPlayerName(it->target_player_id, true));
 			}
@@ -1324,8 +1320,7 @@ static bool handleVoteKickResult(PendingVoteKick& pendingVote)
 
 	if (currentResult.value())
 	{
-		std::string outputMsg = astringf(_("The vote to kick player %s succeeded (sufficient votes in favor) - kicking"), getPlayerName(pendingVote.target_player_id, true));
-		sendInGameSystemMessage(outputMsg.c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::VoteKickSucceeded, 0, pendingVote.target_player_id);
 		std::string logMsg = astringf("kicked %s : %s from the game", getPlayerName(pendingVote.target_player_id), NetPlay.players[pendingVote.target_player_id].IPtextAddress);
 		NETlogEntry(logMsg.c_str(), SYNC_FLAG, pendingVote.target_player_id);
 
@@ -1334,8 +1329,7 @@ static bool handleVoteKickResult(PendingVoteKick& pendingVote)
 	else
 	{
 		// Vote failed - message all players
-		std::string outputMsg = astringf(_("The vote to kick player %s failed (insufficient votes in favor)"), getPlayerName(pendingVote.target_player_id, true));
-		sendInGameSystemMessage(outputMsg.c_str());
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::VoteKickFailed, 0, pendingVote.target_player_id);
 	}
 	return true;
 }
@@ -1358,9 +1352,8 @@ void processPendingKickVotes()
 			if (!handleVoteKickResult(*it))
 			{
 				// dismiss the pending vote
-				std::string outputMsg = astringf(_("The vote to kick player %s failed (insufficient votes before timeout)"), getPlayerName(it->target_player_id, true));
-				sendInGameSystemMessage(outputMsg.c_str());
-				debug(LOG_INFO, "%s", outputMsg.c_str());
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::VoteKickTimedOut, 0, it->target_player_id);
+				debug(LOG_INFO, "The vote to kick player %s failed (insufficient votes before timeout)", getPlayerName(it->target_player_id, true));
 			}
 
 			it = pendingKickVotes.erase(it);

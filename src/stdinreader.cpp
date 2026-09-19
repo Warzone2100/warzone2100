@@ -31,6 +31,7 @@
 #include "main.h"
 #include "multivote.h"
 #include "hci/teamstrategy.h"
+#include "hci/quickchat.h"
 
 #include <string>
 #include <atomic>
@@ -604,11 +605,8 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 			wz_command_interface_output("WZCMD error: Can't kick host!\n");
 			return;
 		}
-		const char *pPlayerName = getPlayerName(i, true);
-		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(i) + "]");
+		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AdminKickedPlayer, 0, i);
 		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
-		auto KickMessage = astringf("Player %s was kicked by the administrator.", playerNameStr.c_str());
-		sendRoomSystemMessage(KickMessage.c_str());
 	});
 }
 
@@ -1043,9 +1041,8 @@ int cmdInputThreadFunc(void *)
 						}
 						if (!strcmp(player.IPtextAddress, banIPStrCopy.c_str()))
 						{
+							sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::AdminBannedPlayer, 0, i);
 							kickPlayer(i, banReasonStrCopy.c_str(), ERROR_INVALID, true);
-							auto KickMessage = astringf("Player %s was banned by the administrator.", player.name);
-							sendRoomSystemMessage(KickMessage.c_str());
 							foundActivePlayer = true;
 						}
 					}
