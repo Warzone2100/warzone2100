@@ -877,6 +877,7 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 void droidUpdate(DROID *psDroid)
 {
 	WZ_PERF_SCOPE(T_droidUpdate);
+	FPathDroidUpdateScope pathScope;
 	Vector3i        dv;
 	UDWORD          percentDamage, emissionInterval;
 	BASE_OBJECT     *psBeingTargetted = nullptr;
