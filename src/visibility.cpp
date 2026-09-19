@@ -715,6 +715,17 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 		return;
 	}
 
+	// visibleObject() returns 0 for these viewers before it reads anything else.
+	const STRUCTURE *psStruct = castStructure(psViewer);
+	if (psStruct != nullptr
+	    && (psStruct->status != SS_BUILT
+	        || psStruct->pStructureType->type == REF_WALL
+	        || psStruct->pStructureType->type == REF_GATE
+	        || psStruct->pStructureType->type == REF_WALLCORNER))
+	{
+		return;
+	}
+
 	// get all the objects from the grid the droid is in
 	// Will give inconsistent results if hasSharedVision is not an equivalence relation.
 	static GridList gridList;  // static to avoid allocations.
