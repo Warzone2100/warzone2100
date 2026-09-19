@@ -48,6 +48,7 @@
 #include "../main.h"
 #include "../faction.h"
 #include "../multilobbycommands.h"
+#include "../multistat.h"
 
 #include <array>
 #include <chrono>
@@ -144,6 +145,7 @@ static bool isHostOnlyInternalMessage(WzQuickChatMessage msg)
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
 			return true;
 		default:
 			return false;
@@ -2667,6 +2669,258 @@ namespace INTERNAL_LOCALIZED_HOST_NOTICE {
 	}
 } // namespace INTERNAL_LOCALIZED_HOST_NOTICE
 
+// - INTERNAL_LOBBY_COMMAND_RESPONSE
+namespace INTERNAL_LOBBY_COMMAND_RESPONSE {
+	WzQuickChatMessageData constructMessageData(Context ctx, Command cmd, uint32_t additionalData)
+	{
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), static_cast<uint32_t>(cmd), additionalData };
+	}
+
+	static const char* commandName(Command cmd)
+	{
+		switch (cmd)
+		{
+			case Command::None: return "";
+			case Command::Help: return "help";
+			case Command::Admin: return "admin";
+			case Command::Me: return "me";
+			case Command::Team: return "team";
+			case Command::HostExit: return "hostexit";
+			case Command::Kick: return "kick";
+			case Command::Ban: return "ban";
+			case Command::Swap: return "swap";
+			case Command::Base: return "base";
+			case Command::Alliance: return "alliance";
+			case Command::Scav: return "scav";
+			case Command::MakeSpec: return "makespec";
+			case Command::MakePlayer: return "makeplayer";
+			case Command::Mute: return "mute";
+			case Command::Unmute: return "unmute";
+		}
+		return "";
+	}
+
+	static const char* commandUsageArgs(Command cmd)
+	{
+		switch (cmd)
+		{
+			case Command::Team: return "<slot> <team>";
+			case Command::Kick:
+			case Command::Ban:
+			case Command::MakeSpec:
+			case Command::Mute:
+			case Command::Unmute: return "<slot>";
+			case Command::Swap: return "<slot-from> <slot-to>";
+			case Command::Base: return "<base level>";
+			case Command::Alliance: return "<alliance type>";
+			case Command::Scav: return "<0/1/2>";
+			case Command::MakePlayer: return "s<spectator slot>";
+			default: return "";
+		}
+	}
+
+	static std::string helpCommandLine(const char* commandExample, const char* translatedDescription)
+	{
+		std::string result = LOBBY_COMMAND_PREFIX;
+		result += commandExample;
+		result += " - ";
+		result += translatedDescription;
+		return result;
+	}
+
+	static std::string helpText(bool isAdmin)
+	{
+		std::string result = _("Command list:");
+		result += "\n";
+		result += helpCommandLine("help", _("Get this message"));
+		result += "\n";
+		result += helpCommandLine("admin", _("Display currently-connected admin players"));
+		result += "\n";
+		result += helpCommandLine("me", _("Display your information"));
+		if (!isAdmin)
+		{
+			result += "\n";
+			result += _("(Additional commands are available for admins)");
+			return result;
+		}
+		result += "\n";
+		result += _("Admin-only commands: (All slots count from 0)");
+		result += "\n";
+		result += helpCommandLine("swap <slot-from> <slot-to>", _("Swap player/slot positions"));
+		result += "\n";
+		result += helpCommandLine("makespec <slot>", _("Move a player to spectators"));
+		result += "\n";
+		result += helpCommandLine("makeplayer s<slot>", _("Request to move a spectator to players"));
+		result += "\n";
+		result += helpCommandLine("kick <slot>", _("Kick a player; (or s<slot> for spectator - ex. s0)"));
+		result += "\n";
+		result += helpCommandLine("team <slot> <team>", _("Change team for player/slot"));
+		result += "\n";
+		result += helpCommandLine("base <base level>", _("Change base level (0, 1, 2)"));
+		result += "\n";
+		result += helpCommandLine("alliance <alliance type>", _("Change alliance setting (0, 1, 2, 3)"));
+		result += "\n";
+		result += helpCommandLine("scav <scav level>", _("Change scav setting (0=off, 1=on, 2=ultimate)"));
+		return result;
+	}
+
+	static std::string adminList(uint32_t adminPlayerBitmask)
+	{
+		if (adminPlayerBitmask == 0)
+		{
+			return _("No room admins currently connected");
+		}
+		std::string result = _("Currently connected room admins:");
+		size_t currNum = 0;
+		for (uint32_t playerIdx = 0; playerIdx < MAX_CONNECTED_PLAYERS; ++playerIdx)
+		{
+			if (!(adminPlayerBitmask & (1u << playerIdx)))
+			{
+				continue;
+			}
+			if (currNum > 0)
+			{
+				result += ",";
+			}
+			result += " [";
+			result += std::to_string(playerIdx) + "] ";
+			result += getPlayerName(playerIdx);
+			++currNum;
+		}
+		return result;
+	}
+
+	static std::string myInfo()
+	{
+		const auto& identity = getOutputPlayerIdentity(selectedPlayer);
+		std::string publicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+		std::string hash = identity.publicHashString(64);
+		return astringf(_("Your player information:\nidentity: %s\nhash: %s\nsender [%u] position [%u] name [%s]"), publicKeyB64.c_str(), hash.c_str(), selectedPlayer, NetPlay.players[selectedPlayer].position, getPlayerName(selectedPlayer));
+	}
+
+	static std::string commandFailed(Command cmd, uint32_t additionalData)
+	{
+		uint32_t high = additionalData >> 16;
+		uint32_t low = additionalData & 0xFFFF;
+		switch (cmd)
+		{
+			case Command::Team:
+				return astringf(_("Unable to change player %u team to %u"), high, low);
+			case Command::Kick:
+			case Command::Ban:
+				return astringf(_("Failed to kick %s: %u"), (high) ? _("spectator") : _("player"), low);
+			case Command::Swap:
+				return astringf(_("Unable to swap players %u and %u"), high, low);
+			case Command::Base:
+				return astringf(_("Unable to change base to: %u"), low);
+			case Command::Alliance:
+				return astringf(_("Unable to set alliances to: %u"), low);
+			case Command::Scav:
+				return astringf(_("Unable to set scavs to: %u"), low);
+			case Command::MakeSpec:
+				return astringf(_("Failed to move player to spectators: %u"), low);
+			case Command::MakePlayer:
+				return astringf(_("Failed to move spectator to players: %u"), low);
+			case Command::Mute:
+			case Command::Unmute:
+				return astringf(_("Failed to mute / unmute %s: %u"), (high) ? _("spectator") : _("player"), low);
+			default:
+				return astringf(_("Command failed: %s"), commandName(cmd));
+		}
+	}
+
+	static std::string invalidValue(Command cmd, uint32_t additionalData)
+	{
+		switch (cmd)
+		{
+			case Command::Swap:
+				return astringf(_("Swap - invalid player %u: %u"), additionalData >> 16, additionalData & 0xFFFF);
+			case Command::Base:
+				return _("Base level must be between [0 - 2]");
+			case Command::Alliance:
+				return _("Alliance type must be in range [0 - 3]");
+			case Command::Scav:
+				return _("Scavs must be off, on, or ultimate: (0, 1, or 2)");
+			default:
+				return astringf(_("Invalid value for command: %s"), commandName(cmd));
+		}
+	}
+
+	static std::string cannotTargetHost(Command cmd)
+	{
+		switch (cmd)
+		{
+			case Command::MakeSpec:
+			case Command::MakePlayer:
+				return _("Can't move the host.");
+			case Command::Mute:
+			case Command::Unmute:
+				return _("Can't mute the host.");
+			default:
+				return _("Can't kick the host.");
+		}
+	}
+
+	std::string to_output_string(WzQuickChatMessageData messageData)
+	{
+		Command cmd = static_cast<Command>(messageData.dataA);
+		uint32_t additionalData = messageData.dataB;
+
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::Invalid):
+				return "";
+			case static_cast<uint32_t>(Context::Help):
+				return helpText(additionalData != 0);
+			case static_cast<uint32_t>(Context::AdminList):
+				return adminList(additionalData);
+			case static_cast<uint32_t>(Context::MyInfo):
+				return myInfo();
+			case static_cast<uint32_t>(Context::WaitingForSync):
+				return _("Waiting for sync (admin privileges not yet enabled)");
+			case static_cast<uint32_t>(Context::AdminOnly):
+				return astringf(_("Only admin can use the \"%s\" command"), commandName(cmd));
+			case static_cast<uint32_t>(Context::HostOnly):
+				return astringf(_("Only host can use the \"%s\" command"), commandName(cmd));
+			case static_cast<uint32_t>(Context::Usage):
+				return astringf(_("Usage: %s%s %s"), LOBBY_COMMAND_PREFIX, commandName(cmd), commandUsageArgs(cmd));
+			case static_cast<uint32_t>(Context::InvalidValue):
+				return invalidValue(cmd, additionalData);
+			case static_cast<uint32_t>(Context::CannotTargetHost):
+				return cannotTargetHost(cmd);
+			case static_cast<uint32_t>(Context::UseUIToMoveSelf):
+				return _("Use the UI to move yourself.");
+			case static_cast<uint32_t>(Context::CommandFailed):
+				return commandFailed(cmd, additionalData);
+			case static_cast<uint32_t>(Context::TeamChanged):
+				return astringf(_("Changed player %u team to %u"), additionalData >> 16, additionalData & 0xFFFF);
+			case static_cast<uint32_t>(Context::Swapped):
+				return astringf(_("Swapping player %u and %u"), additionalData >> 16, additionalData & 0xFFFF);
+			case static_cast<uint32_t>(Context::BaseSet):
+				return astringf(_("Starting base set to %u"), additionalData);
+			case static_cast<uint32_t>(Context::AllianceSet):
+				return astringf(_("Alliance type set to %u"), additionalData);
+			case static_cast<uint32_t>(Context::ScavSet):
+				return astringf(_("Scavengers set to %u"), additionalData);
+		}
+
+		return ""; // Silence compiler warning
+	}
+
+	int32_t to_output_sender(WzQuickChatMessageData messageData)
+	{
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::Usage):
+			case static_cast<uint32_t>(Context::InvalidValue):
+			case static_cast<uint32_t>(Context::CommandFailed):
+				return NOTIFY_MESSAGE;
+			default:
+				return SYSTEM_MESSAGE;
+		}
+	}
+} // namespace INTERNAL_LOBBY_COMMAND_RESPONSE
+
 } // namespace WzQuickChatDataContexts
 
 // MARK: - Public functions
@@ -2679,6 +2933,7 @@ bool quickChatMessageExpectsExtraData(WzQuickChatMessage msg)
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
 			return true;
 
 		default:
@@ -2686,7 +2941,7 @@ bool quickChatMessageExpectsExtraData(WzQuickChatMessage msg)
 	}
 }
 
-int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender)
+int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender, const optional<WzQuickChatMessageData>& messageData)
 {
 	// Certain internal messages override the sender for display purposes
 	switch (msg)
@@ -2698,6 +2953,8 @@ int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender)
 			return SYSTEM_MESSAGE;
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 			return NOTIFY_MESSAGE;
+		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
+			return WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::to_output_sender(messageData.value());
 
 		default:
 			return sender;
@@ -2755,6 +3012,8 @@ std::string to_output_string(WzQuickChatMessage msg, const optional<WzQuickChatM
 			return WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::to_output_string(messageData.value());
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
 			return WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::to_output_string(messageData.value());
+		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
+			return WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::to_output_string(messageData.value());
 
 		default:
 			return to_display_string(msg);
@@ -2923,6 +3182,7 @@ const char* to_display_string(WzQuickChatMessage msg)
 			return _("Admin modified a setting");
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
 			return "";
 
 		// not a valid message
@@ -3093,7 +3353,7 @@ static std::string formatReceivers(uint32_t senderIdx, const WzQuickChatTargetin
 void addQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
 	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
-	auto outputSender = to_output_sender(message, sender);
+	auto outputSender = to_output_sender(message, sender, messageData);
 	if (outputSender < 0)
 	{
 		auto outputMsg = to_output_string(message, messageData);
@@ -3117,7 +3377,7 @@ void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t send
 	{
 		return;
 	}
-	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
+	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender, messageData), teamSpecific);
 }
 
 bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message, const WzQuickChatTargeting& targeting)
@@ -3132,7 +3392,8 @@ bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message, cons
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return false;
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
-			return !targeting.all;
+		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
+			return !targeting.all && targeting.specificPlayers.count(selectedPlayer) == 0;
 		default:
 			break;
 	}
@@ -3336,6 +3597,21 @@ void sendHostNoticeToPlayer(uint32_t receiver, WzQuickChatDataContexts::INTERNAL
 	WzQuickChatTargeting targeting;
 	targeting.specificPlayers.insert(receiver);
 	sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::constructMessageData(ctx, additionalData, targetPlayerIdx));
+}
+
+void sendLobbyCommandResponse(optional<uint32_t> receiver, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Context ctx, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Command cmd, uint32_t additionalData)
+{
+	ASSERT_HOST_ONLY(return);
+	WzQuickChatTargeting targeting;
+	if (receiver.has_value())
+	{
+		targeting.specificPlayers.insert(receiver.value());
+	}
+	else
+	{
+		targeting.all = true;
+	}
+	sendQuickChat(WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::constructMessageData(ctx, cmd, additionalData));
 }
 
 bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuickChatMessage message, uint32_t sender, uint32_t recipient, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
