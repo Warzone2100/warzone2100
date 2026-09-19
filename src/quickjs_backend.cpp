@@ -1687,7 +1687,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			JSValue value = JS_GetPropertyStr(ctx, global_obj, funcName.c_str());
 			if (JS_IsFunction(ctx, value))
 			{
-				callFunction(ctx, funcName, args, event);
+				JS_FreeValue(ctx, callFunction(ctx, funcName, args, event));
 			}
 			JS_FreeValue(ctx, value);
 		}
@@ -1773,7 +1773,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			return [pCtx, func](const int player) {
 				std::vector<JSValue> args;
 				args.push_back(JS_NewInt32(pCtx, player));
-				callFunction(pCtx, func.toUtf8(), args);
+				JS_FreeValue(pCtx, callFunction(pCtx, func.toUtf8(), args));
 				std::for_each(args.begin(), args.end(), [pCtx](JSValue& val) { JS_FreeValue(pCtx, val); });
 			};
 		}
@@ -2749,9 +2749,9 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 //			WZ_DECL_UNUSED int dummy[] = { 0, ((void) append_value_list(args_list, std::forward<Args>(args), engine),0)... };
 			// Left-most void to avoid `expression result unused [-Wunused-value]`
 			(void)expander{ 0, ((void) append_value_list(args_list, std::forward<Args>(args), context),0)... };
-			/*JSValue result =*/ callFunction(context, functionName, args_list);
+			JS_FreeValue(context, callFunction(context, functionName, args_list));
 			std::for_each(args_list.begin(), args_list.end(), [context](JSValue& val) { JS_FreeValue(context, val); });
-			return true; //nlohmann::json(result.toVariant());
+			return true;
 		}
 
 		/* PP_NARG returns the number of arguments that have been passed to it.
@@ -2974,7 +2974,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 		// namespace() event variants (fan-out is for event handling; a caller wanting a namespaced
 		// target passes its full name). Must match restoreTimerFunction so live and restored timers behave
 		// identically.
-		callFunction(ctx, funcName, args, false);
+		JS_FreeValue(ctx, callFunction(ctx, funcName, args, false));
 		std::for_each(args.begin(), args.end(), [ctx](JSValue& val) { JS_FreeValue(ctx, val); });
 	}
 	, player, ms, funcName, psObj, type
@@ -3458,7 +3458,7 @@ std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_in
 			}
 			// event=false: match the live SetQuickJSTimer path - invoke only the exact named function, not
 			// the namespace() event variants.
-			callFunction(pContext, funcName, args, false);
+			JS_FreeValue(pContext, callFunction(pContext, funcName, args, false));
 			std::for_each(args.begin(), args.end(), [pContext](JSValue& val) { JS_FreeValue(pContext, val); });
 		}
 		// additionalParams
@@ -3646,7 +3646,7 @@ bool quickjs_scripting_instance::handle_eventArea(const std::string& label, cons
 	args.push_back(convDroid(psDroid, ctx));
 	std::string funcname = std::string("eventArea") + label;
 	debug(LOG_SCRIPT, "Triggering %s for %s", funcname.c_str(), scriptName().c_str());
-	callFunction(ctx, funcname, args);
+	JS_FreeValue(ctx, callFunction(ctx, funcname, args));
 	std::for_each(args.begin(), args.end(), [this](JSValue& val) { JS_FreeValue(ctx, val); });
 	return true;
 }
