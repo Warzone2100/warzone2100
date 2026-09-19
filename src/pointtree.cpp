@@ -109,19 +109,19 @@ struct PointTreeRange
 	uint64_t a, z;
 };
 
-// If !IsFiltered, function is trivially optimised to "return i;".
+// If !IsFiltered, function is trivially optimised to "return i;", and filterData is null.
 template<bool IsFiltered>
-static unsigned current(std::vector<unsigned> &filterData, unsigned i)
+static unsigned current(std::vector<unsigned> *filterData, unsigned i)
 {
 	unsigned ret = i;
-	while (IsFiltered && filterData[ret])
+	while (IsFiltered && (*filterData)[ret])
 	{
-		ret += filterData[ret];
+		ret += (*filterData)[ret];
 	}
-	while (IsFiltered && filterData[i])
+	while (IsFiltered && (*filterData)[i])
 	{
-		unsigned next = i + filterData[i];
-		filterData[i] = ret - i;
+		unsigned next = i + (*filterData)[i];
+		(*filterData)[i] = ret - i;
 		i = next;
 	}
 
@@ -129,8 +129,9 @@ static unsigned current(std::vector<unsigned> &filterData, unsigned i)
 }
 
 template<bool IsFiltered>
-PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t minXo, int32_t minYo, int32_t maxXo, int32_t maxYo)
+PointTree::ResultVector &PointTree::queryMaybeFilter(Filter *filter, int32_t minXo, int32_t minYo, int32_t maxXo, int32_t maxYo)
 {
+	std::vector<unsigned> *filterData = IsFiltered ? &filter->data : nullptr;
 	uint64_t minX = expandX(minXo);
 	uint64_t maxX = expandX(maxXo);
 	uint64_t minY = expandY(minYo);
@@ -236,7 +237,7 @@ PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t min
 		unsigned i1 = std::lower_bound(points.begin(),      points.end(), Point(ranges[r].a, (void *)nullptr), pointTreeSortFunction) - points.begin();
 		unsigned i2 = std::upper_bound(points.begin() + i1, points.end(), Point(ranges[r].z, (void *)nullptr), pointTreeSortFunction) - points.begin();
 
-		for (unsigned i = current<IsFiltered>(filter.data, i1); i < i2; i = current<IsFiltered>(filter.data, i + 1))
+		for (unsigned i = current<IsFiltered>(filterData, i1); i < i2; i = current<IsFiltered>(filterData, i + 1))
 		{
 			uint64_t px = points[i].first & 0xAAAAAAAAAAAAAAAAULL;
 			uint64_t py = points[i].first & 0x5555555555555555ULL;
@@ -272,18 +273,16 @@ PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t min
 
 PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
 {
-	Filter unused;
-	return queryMaybeFilter<false>(unused, x, y, x2, y2);
+	return queryMaybeFilter<false>(nullptr, x, y, x2, y2);
 }
 
 PointTree::ResultVector &PointTree::query(int32_t x, int32_t y, uint32_t radius)
 {
-	Filter unused;
 	int32_t minXo = x - radius;
 	int32_t maxXo = x + radius;
 	int32_t minYo = y - radius;
 	int32_t maxYo = y + radius;
-	return queryMaybeFilter<false>(unused, minXo, minYo, maxXo, maxYo);
+	return queryMaybeFilter<false>(nullptr, minXo, minYo, maxXo, maxYo);
 }
 
 PointTree::ResultVector &PointTree::query(Filter &filter, int32_t x, int32_t y, uint32_t radius)
@@ -292,5 +291,5 @@ PointTree::ResultVector &PointTree::query(Filter &filter, int32_t x, int32_t y, 
 	int32_t maxXo = x + radius;
 	int32_t minYo = y - radius;
 	int32_t maxYo = y + radius;
-	return queryMaybeFilter<true>(filter, minXo, minYo, maxXo, maxYo);
+	return queryMaybeFilter<true>(&filter, minXo, minYo, maxXo, maxYo);
 }

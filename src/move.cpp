@@ -449,11 +449,9 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 
 	// find any droids that could block the shuffle
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST))
 	{
-		DROID *psCurr = castDroid(*gi);
+		DROID *psCurr = castDroid(gridObj);
 		if (psCurr == nullptr || psCurr->died || psCurr == psDroid)
 		{
 			continue;
@@ -772,11 +770,8 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 	const int32_t   mx = gameTimeAdjustedAverage(emx, EXTRA_PRECISION);
 	const int32_t   my = gameTimeAdjustedAverage(emy, EXTRA_PRECISION);
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS))
 	{
-		BASE_OBJECT *psObj = *gi;
 		if (psObj->type != OBJ_DROID || ((DROID *)psObj)->droidType != DROID_PERSON)
 		{
 			// ignore everything but people
@@ -832,11 +827,9 @@ static bool moveSettledPackAtDestination(const DROID *psDroid)
 	{
 		return false;
 	}
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, TILE_UNITS * 2);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, TILE_UNITS * 2))
 	{
-		const DROID *psOther = castDroid(*gi);
+		const DROID *psOther = castDroid(gridObj);
 		if (psOther == nullptr || psOther == psDroid || psOther->died
 		    || psOther->player != psDroid->player
 		    || psOther->sMove.Status != MOVEINACTIVE
@@ -1318,11 +1311,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 	BASE_OBJECT *psObst = nullptr;
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS))
 	{
-		BASE_OBJECT *psObj = *gi;
 		if (psObj->died)
 		{
 			ASSERT(psObj->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psObj->type);
@@ -2390,11 +2380,8 @@ static void checkLocalFeatures(DROID *psDroid)
 	// scan the neighbours
 #define DROIDDIST ((TILE_UNITS*5)/2)
 	constexpr int MAX_PICKUP_DISTANCE = (TILE_UNITS / 2);
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST))
 	{
-		BASE_OBJECT *psObj = *gi;
 		bool pickedUp = false;
 
 		if (psObj->type == OBJ_FEATURE && !psObj->died)

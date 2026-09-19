@@ -254,11 +254,9 @@ static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
 				std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue,
 				int x, int y, int radius, int player)
 {
-	GridList gridList;
-	gridList = gridStartIterateRepairCandidates(x, y, radius, player);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterateRepairCandidates(x, y, radius, player))
 	{
-		DROID *psDroid = (DROID*) *gi;
+		DROID *psDroid = (DROID*) gridObj;
 		if (psDroid->isDamaged())
 		{
 			queue.push(psDroid);

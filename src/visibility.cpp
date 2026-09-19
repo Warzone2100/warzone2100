@@ -209,7 +209,6 @@ void removeSpotters()
 
 static void updateSpotters()
 {
-	static GridList gridList;  // static to avoid allocations.
 	for (unsigned i = 0; i < apsInvisibleViewers.size(); i++)
 	{
 		SPOTTER *psSpot = apsInvisibleViewers.at(i);
@@ -220,11 +219,8 @@ static void updateSpotters()
 			continue;
 		}
 		// else, ie if not expired, show objects around it
-		gridList = gridStartIterateUnseen(world_coord(psSpot->pos.x), world_coord(psSpot->pos.y), psSpot->sensorRadius, psSpot->player);
-		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+		for (BASE_OBJECT *psObj : gridStartIterateUnseen(world_coord(psSpot->pos.x), world_coord(psSpot->pos.y), psSpot->sensorRadius, psSpot->player))
 		{
-			BASE_OBJECT *psObj = *gi;
-
 			// Tell system that this side can see this object
 			setSeenBy(psObj, psSpot->player, UBYTE_MAX);
 		}
@@ -728,12 +724,8 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 
 	// get all the objects from the grid the droid is in
 	// Will give inconsistent results if hasSharedVision is not an equivalence relation.
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, objSensorRange(psViewer), psViewer->player);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, objSensorRange(psViewer), psViewer->player))
 	{
-		BASE_OBJECT *psObj = *gi;
-
 		int val = visibleObject(psViewer, psObj, false);
 
 		// If we've got ranged line of sight...
