@@ -29,6 +29,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/sync_debug.h"
 
 #include "perfcounters.h"
 
@@ -139,6 +140,23 @@ const BenchScenario scenarios[] =
 	// Guards the coordination scope: the counterflow conflict across enemy lines,
 	// where neither side may lane up with or wait for the other.
 	{ "counterflow_hostile", "movebench_counterflow_hostile.json",  5000, 0x5EEDBEEF },
+	// Performance scenarios, read through the per-tick counters rather than the
+	// scorecard - units die and re-order, so they always run their whole budget.
+	// The scenarios above fire no shot and never crowd units into one collision
+	// radius, so these cover visibility, targeting, line of fire, projectiles,
+	// rearm pads and the neighbor queries.
+	// Their challenge files give the hostile player "ai": "none". The skirmish AIs
+	// call Math.random() rather than the synchronized random(), so an AI with armed
+	// units to command makes the run differ tick by tick between two runs of the
+	// same binary.
+	{ "perf_cyborg_blob",    "movebench_perf_cyborg_blob.json",     3000, 0x5EEDBEEF, false },
+	{ "perf_battle",         "movebench_perf_battle.json",          1000, 0x5EEDBEEF, false },
+	{ "perf_walled_assault", "movebench_perf_walled_assault.json",  3000, 0x5EEDBEEF, false },
+	{ "perf_artillery",      "movebench_perf_artillery.json",       2000, 0x5EEDBEEF, false },
+	{ "perf_vtol_rearm",     "movebench_perf_vtol_rearm.json",      3000, 0x5EEDBEEF, false },
+	{ "perf_scout_patrol",   "movebench_perf_scout_patrol.json",    1500, 0x5EEDBEEF, false },
+	{ "perf_repair_search",  "movebench_perf_repair_search.json",   2000, 0x5EEDBEEF, false },
+	{ "perf_repair_facility","movebench_perf_repair_facility.json", 2000, 0x5EEDBEEF, false },
 };
 
 optional<uint32_t> seedOverride;
@@ -648,6 +666,10 @@ void movementBenchUpdate()
 
 	runFinished = true;
 	writeScorecard(completed);
+	// wzQuit takes a few more ticks to land, and how many depends on wall clock. Stop writing here so
+	// two runs of the same scenario produce the same number of lines. A watched run keeps its counters
+	// open, since the point of watching is to go on measuring past the budget.
+	setSyncCrcTraceFile("");
 	if (!watching)
 	{
 		perf::close();
