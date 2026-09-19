@@ -138,8 +138,9 @@ struct PathBlockingMap
 	}
 
 	PathBlockingType type;
-	std::vector<bool> map;
-	std::vector<bool> dangerMap;	// using threatBits
+	/// One byte per tile, each holding 0 or 1, which the checksum below relies on.
+	std::vector<uint8_t> map;
+	std::vector<uint8_t> dangerMap;	// using threatBits
 };
 
 struct PathNonblockingArea
@@ -1171,7 +1172,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 
 		// blockMap now points to an empty map with no data. Fill the map.
 		blockMap->type = type;
-		std::vector<bool> &map = blockMap->map;
+		std::vector<uint8_t> &map = blockMap->map;
 		map.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));
 		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < gameWorld.map.height; ++y)
@@ -1182,12 +1183,12 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 			}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
-			std::vector<bool> &dangerMap = blockMap->dangerMap;
+			std::vector<uint8_t> &dangerMap = blockMap->dangerMap;
 			dangerMap.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));
 			for (int y = 0; y < gameWorld.map.height; ++y)
 				for (int x = 0; x < gameWorld.map.width; ++x)
 				{
-					dangerMap[x + y * gameWorld.map.width] = auxTile(gameWorld.map, x, y, type.owner) & AUXBITS_THREAT;
+					dangerMap[x + y * gameWorld.map.width] = (auxTile(gameWorld.map, x, y, type.owner) & AUXBITS_THREAT) != 0;
 					checksumDangerMap ^= dangerMap[x + y * gameWorld.map.width] * (factor = 3 * factor + 1);
 				}
 		}
