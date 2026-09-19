@@ -1517,6 +1517,27 @@ static bool moveBackoffActive(DROID *psDroid)
 	return false;
 }
 
+// The gap between re-requests widens with each failure in a row, in game time so that every client paces
+// it the same way, and is capped short because the gap is also how long a droid waits before a better
+// route can reach it.
+const unsigned ROUTE_RETRY_BASE = 200;
+const unsigned ROUTE_RETRY_MAX_SHIFT = 2;
+
+static bool moveRouteRetryDue(DROID *psDroid)
+{
+	MOVE_CONTROL &m = psDroid->sMove;
+	if (m.routeRetryUntil != 0 && gameTime < m.routeRetryUntil)
+	{
+		return false;
+	}
+	m.routeRetryUntil = gameTime + (ROUTE_RETRY_BASE << std::min<unsigned>(m.routeRetryStreak, ROUTE_RETRY_MAX_SHIFT));
+	if (m.routeRetryStreak < ROUTE_RETRY_MAX_SHIFT)
+	{
+		++m.routeRetryStreak;
+	}
+	return true;
+}
+
 /*!
  * Get a direction for a droid to avoid obstacles etc.
  * \param psDroid Which droid to examine
@@ -2561,7 +2582,16 @@ void moveUpdateDroid(DROID *psDroid)
 		if (psDroid->sMove.asPath.size() == 0 || !moveBestTarget(psDroid))
 		{
 			// Got stuck somewhere, can't find the path.
-			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+			if (moveRouteRetryDue(psDroid))
+			{
+				moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+			}
+		}
+		else
+		{
+			// The droid is moving again, so the next failure starts a fresh episode.
+			psDroid->sMove.routeRetryUntil = 0;
+			psDroid->sMove.routeRetryStreak = 0;
 		}
 
 		// See if the target point has been reached

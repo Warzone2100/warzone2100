@@ -2112,6 +2112,8 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 	mv["settleTime"] = d->sMove.settleTime;
 	mv["settleBest"] = d->sMove.settleBest;
 	// The backoff stall clock.
+	mv["routeRetryUntil"] = d->sMove.routeRetryUntil;
+	mv["routeRetryStreak"] = d->sMove.routeRetryStreak;
 	mv["backoffPos"] = writeVector2i(d->sMove.backoffPos);
 	mv["backoffTime"] = d->sMove.backoffTime;
 	mv["backoffUntil"] = d->sMove.backoffUntil;
@@ -2351,6 +2353,8 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	d->sMove.tolerance = mv.at("tolerance").get<uint32_t>();
 	d->sMove.settleTime = mv.value("settleTime", static_cast<uint32_t>(0));
 	d->sMove.settleBest = mv.value("settleBest", static_cast<int32_t>(0));
+	d->sMove.routeRetryUntil = mv.value("routeRetryUntil", static_cast<uint32_t>(0));
+	d->sMove.routeRetryStreak = static_cast<uint16_t>(mv.value("routeRetryStreak", static_cast<uint32_t>(0)));
 	if (mv.contains("backoffPos"))
 	{
 		d->sMove.backoffPos = readVector2i(mv.at("backoffPos"));
