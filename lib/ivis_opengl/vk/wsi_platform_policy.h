@@ -30,7 +30,7 @@ namespace gfx_api::vk
 enum class SuboptimalAcquireAction
 {
 	DeferToNextBegin,       // non-macOS: request recreate already done by caller; fail acquire
-	RecreateAndRetryOnce    // macOS/MoltenVK: recreate then one retry acquire
+	RecreateAndSkipFrame    // macOS/MoltenVK: recreate now, this frame draws nothing
 };
 
 enum class SuboptimalPresentAction

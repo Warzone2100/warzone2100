@@ -33,7 +33,7 @@ SuboptimalAcquireAction WsiPlatformPolicy::suboptimalAcquireAction()
 {
 #if defined(WZ_OS_MAC)
 	// Workaround MoltenVK issue: https://github.com/KhronosGroup/MoltenVK/issues/2542
-	return SuboptimalAcquireAction::RecreateAndRetryOnce;
+	return SuboptimalAcquireAction::RecreateAndSkipFrame;
 #else
 	return SuboptimalAcquireAction::DeferToNextBegin;
 #endif
