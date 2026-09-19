@@ -1935,7 +1935,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
 	moveOpenGates(psDroid);
-	moveCheckSquished(psDroid, dx, dy);
+	if (gridLivePersonCount() > 0)
+	{
+		moveCheckSquished(psDroid, dx, dy);
+	}
 	moveCalcDroidSlide(psDroid, &dx, &dy);
 	if (pathfindingCorridorLanesEnabled())
 	{

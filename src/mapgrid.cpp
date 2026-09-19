@@ -35,6 +35,7 @@
 
 
 static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
+static unsigned gridPersonCount = 0;
 static PointTree::Filter *gridFiltersUnseen;
 static PointTree::Filter *gridFiltersDroidsByPlayer;
 static PointTree::Filter *gridFiltersDroidsRepairCandidates;
@@ -68,15 +69,17 @@ bool gridInitialise()
 void gridReset(GameWorld& world)
 {
 	gridPointTree->clear();
+	gridPersonCount = 0;
 
 	// Put all existing objects into the point tree.
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (BASE_OBJECT* psObj : world.objects.droids[player])
+		for (DROID* psObj : world.objects.droids[player])
 		{
 			if (!psObj->died)
 			{
 				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				gridPersonCount += psObj->droidType == DROID_PERSON;
 				for (unsigned char& viewer : psObj->seenThisTick)
 				{
 					viewer = 0;
@@ -115,6 +118,11 @@ void gridReset(GameWorld& world)
 		gridFiltersDroidsByPlayer[player].reset(*gridPointTree);
 		gridFiltersDroidsRepairCandidates[player].reset(*gridPointTree);
 	}
+}
+
+unsigned gridLivePersonCount()
+{
+	return gridPersonCount;
 }
 
 // shutdown the grid system

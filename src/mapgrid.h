@@ -39,6 +39,10 @@ void gridShutDown();
 // Resets seenThisTick[] to false.
 void gridReset(GameWorld& world);
 
+/// How many live DROID_PERSON droids gridReset() put in the grid. Nothing is added to the grid between
+/// one reset and the next, so a zero here means no query this update can return a person.
+unsigned gridLivePersonCount();
+
 /// A query's results, held in a pooled buffer for the handle's lifetime. Handles are strictly LIFO, so a
 /// query made from inside a loop over another query's results has a buffer of its own and neither one
 /// disturbs the other.
