@@ -67,7 +67,7 @@ WZ=${WZ:-build/src/warzone2100}
 # (nine placements per block), so ARRANGEMENTS evenly strides that space. Use 81
 # for exhaustive coverage when a decision rests on the result.
 ARRANGEMENTS=${ARRANGEMENTS:-27}
-SCENARIOS=${SCENARIOS:-"counterflow_tracked oneway_tracked counterflow_cyborg counterflow_w1 counterflow_w3 counterflow_w4 counterflow_w6 counterflow_w8 tworoute crossing separating corner corner_mixed blob parking openfield strafe enemyblock enemyblock_press counterflow_hostile"}
+SCENARIOS=${SCENARIOS:-"counterflow_tracked oneway_tracked counterflow_cyborg counterflow_w1 counterflow_w3 counterflow_w4 counterflow_w6 counterflow_w8 tworoute crossing separating corner corner_mixed blob parking openfield strafe enemyblock enemyblock_press counterflow_hostile mountain_chain mountain_chain_cross rush_turn rush_corner open_corner"}
 HERE=$(dirname "$0")
 
 if [ ! -x "$WZ" ]; then
