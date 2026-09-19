@@ -6423,14 +6423,19 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				NetworkTextMessage message;
 				if (message.receive(queue)) {
 
+					bool isHostFreeText = (message.sender < 0);
+					if (isHostFreeText)
+					{
+						message.sender = NetPlay.hostPlayer;
+					}
+
 					bool displayedMessage = false;
-					if (message.sender < 0 || (!shouldHideFreeChatFrom(message.sender) && !playerSpamMutedUntil(message.sender).has_value()))
+					if (isHostFreeText ? !shouldHideHostFreeText() : (!shouldHideFreeChatFrom(message.sender) && !playerSpamMutedUntil(message.sender).has_value()))
 					{
 						displayRoomMessage(buildMessage(message.sender, message.text));
 						audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 						displayedMessage = true;
-
-						if (message.sender >= 0)
+						if (!isHostFreeText)
 						{
 							recordPlayerMessageSent(message.sender);
 						}
