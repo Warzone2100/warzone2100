@@ -84,6 +84,7 @@
 #include "profiling.h"
 #include "game_world.h"
 #include "wrappers.h"
+#include "perfcounters.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -490,6 +491,8 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 void processEffects(const glm::mat4 &perspectiveViewMatrix, LightingData& lightData)
 {
 	WZ_PROFILE_SCOPE(processEffects);
+	WZ_PERF_SCOPE(T_processEffects);
+	WZ_PERF_COUNT(C_effectsAlive, gActiveEffects.size());
 	for (auto it = gActiveEffects.begin(); it != gActiveEffects.end(); ++it)
 	{
 		EFFECT& e = *it;
@@ -1398,6 +1401,7 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 /** Calls the appropriate render routine for each type of effect */
 void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
+	WZ_PERF_SCOPE(T_renderEffects);
 	/* What type of effect are we dealing with? */
 	switch (psEffect->group)
 	{
@@ -1461,6 +1465,21 @@ static void renderWaypointEffect(const EFFECT *psEffect, const glm::mat4 &viewMa
 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, positionEffect(psEffect), viewMatrix);
 }
 
+/// The billboard rotation that turns a flat effect to face the camera. It reads nothing but the camera
+/// rotation, so it is held until the camera moves.
+static const glm::mat4 &effectBillboardRotation()
+{
+	static Vector3i cachedRot(INT32_MIN, INT32_MIN, INT32_MIN);
+	static glm::mat4 cached(1.f);
+	if (cachedRot.x != playerPos.r.x || cachedRot.y != playerPos.r.y)
+	{
+		cachedRot = playerPos.r;
+		cached = glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f))
+		         * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
+	}
+	return cached;
+}
+
 static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	/* these don't get rendered */
@@ -1470,8 +1489,7 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 	}
 
 	glm::mat4 modelMatrix = positionEffect(psEffect);
-	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
-	               * glm::scale(glm::vec3(psEffect->size / 100.f));
+	modelMatrix *= effectBillboardRotation() * glm::scale(glm::vec3(psEffect->size / 100.f));
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE | pie_NODEPTHWRITE, EFFECT_EXPLOSION_ADDITIVE, modelMatrix, viewMatrix);
 }
@@ -1480,8 +1498,7 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	glm::mat4 modelMatrix = positionEffect(psEffect);
-	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
-	               * glm::scale(glm::vec3(psEffect->size / 100.f));
+	modelMatrix *= effectBillboardRotation() * glm::scale(glm::vec3(psEffect->size / 100.f));
 
 	pie_Draw3DShape(getDisplayImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_BLOOD_TRANSPARENCY, modelMatrix, viewMatrix);
 }
@@ -1569,9 +1586,7 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 	{
 		/* Always face the viewer! */
 		// TODO This only faces towards the viewer, if the effect is in the middle of the screen... It draws the effect parallel with the screens near/far planes.
-		modelMatrix *=
-			glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
+		modelMatrix *= effectBillboardRotation();
 	}
 
 	/* Tesla explosions diminish in size */
@@ -1655,9 +1670,7 @@ static void renderConstructionEffect(const EFFECT *psEffect, const glm::mat4 &vi
 	/* Bit in comments doesn't quite work yet? */
 	if (TEST_FACING(psEffect))
 	{
-		modelMatrix *=
-			glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
+		modelMatrix *= effectBillboardRotation();
 	}
 
 	/* Scale size according to age */
@@ -1699,8 +1712,7 @@ static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	if (TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
-		modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
+		modelMatrix *= effectBillboardRotation();
 	}
 
 	if (TEST_SCALED(psEffect))

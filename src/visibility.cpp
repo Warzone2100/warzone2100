@@ -49,9 +49,7 @@
 #include "qtscript.h"
 #include "wavecast.h"
 #include "profiling.h"
-
-// accuracy for the height gradient
-#define GRAD_MUL 10000
+#include "perfcounters.h"
 
 // rate to change visibility level
 static const int VIS_LEVEL_INC = 255 * 2;
@@ -86,18 +84,14 @@ static std::vector<SPOTTER *> apsInvisibleViewers;
 
 struct VisibleObjectHelp_t
 {
-	bool rayStart; // Whether this is the first point on the ray
-	const bool wallsBlock; // Whether walls block line of sight
-	const int startHeight; // The height at the view point
-	const Vector2i final; // The final tile of the ray cast
-	int lastHeight, lastDist; // The last height and distance
-	int currGrad; // The current obscuring gradient
-	int numWalls; // Whether the LOS has hit a wall
-	Vector2i wall; // The position of a wall if it is on the LOS
+	const bool wallsBlock;  // Whether walls block line of sight
+	const Vector2i final;   // The final tile of the ray cast
+	int numWalls;           // How many walls the LOS has hit
+	STRUCTURE *wall;        // The last wall on the LOS, null if it did not sit on its own center tile
 };
 
 static int *gNumWalls = nullptr;
-static Vector2i *gWall = nullptr;
+static STRUCTURE **gWall = nullptr;
 
 // forward declarations
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
@@ -215,7 +209,6 @@ void removeSpotters()
 
 static void updateSpotters()
 {
-	static GridList gridList;  // static to avoid allocations.
 	for (unsigned i = 0; i < apsInvisibleViewers.size(); i++)
 	{
 		SPOTTER *psSpot = apsInvisibleViewers.at(i);
@@ -226,11 +219,8 @@ static void updateSpotters()
 			continue;
 		}
 		// else, ie if not expired, show objects around it
-		gridList = gridStartIterateUnseen(world_coord(psSpot->pos.x), world_coord(psSpot->pos.y), psSpot->sensorRadius, psSpot->player);
-		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+		for (BASE_OBJECT *psObj : gridStartIterateUnseen(world_coord(psSpot->pos.x), world_coord(psSpot->pos.y), psSpot->sensorRadius, psSpot->player))
 		{
-			BASE_OBJECT *psObj = *gi;
-
 			// Tell system that this side can see this object
 			setSeenBy(psObj, psSpot->player, UBYTE_MAX);
 		}
@@ -374,26 +364,8 @@ static bool rayLOSCallback(WorldMapState& mapState, Vector2i pos, int32_t dist, 
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapState.width) && pos.y >= 0 && pos.y < world_coord(mapState.height), "rayLOSCallback: coords off map");
 
-	if (help->rayStart)
-	{
-		help->rayStart = false;
-	}
-	else
-	{
-		// Calculate the current LOS gradient
-		int newGrad = (help->lastHeight - help->startHeight) * GRAD_MUL / MAX(1, help->lastDist);
-		if (newGrad >= help->currGrad)
-		{
-			help->currGrad = newGrad;
-		}
-	}
-
-	help->lastDist = dist;
-	help->lastHeight = map_Height(mapState, pos.x, pos.y);
-
 	if (help->wallsBlock)
 	{
-		// Store the height at this tile for next time round
 		Vector2i tile = map_coord(pos.xy());
 
 		if (tile != help->final)
@@ -404,8 +376,9 @@ static bool rayLOSCallback(WorldMapState& mapState, Vector2i pos, int32_t dist, 
 				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
 				if (psStruct->pStructureType->type != REF_GATE || psStruct->state != SAS_OPEN)
 				{
-					help->lastHeight = 2 * TILE_MAX_HEIGHT;
-					help->wall = pos.xy();
+					// A structure occupies every tile it covers, but only its centre tile carries its pos,
+					// so a hit on any other tile of a multi-tile one reports no wall.
+					help->wall = map_coord(psStruct->pos.xy()) == tile ? psStruct : nullptr;
 					help->numWalls++;
 				}
 			}
@@ -511,6 +484,7 @@ void revealAll(WorldMapState& mapState, UBYTE player)
  */
 int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock)
 {
+	WZ_PERF_SCOPE(T_visibleObject);
 	ASSERT_OR_RETURN(0, psViewer != nullptr, "Invalid viewer pointer!");
 	ASSERT_OR_RETURN(0, psTarget != nullptr, "Invalid viewed pointer!");
 
@@ -592,24 +566,20 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 		return UBYTE_MAX;
 	}
 
-	// initialise the callback variables
-	VisibleObjectHelp_t help = {
-		true,
-		wallsBlock,
-		psViewer->pos.z + map_Height(gameWorld.map, psViewer->pos.x, psViewer->pos.y),
-		map_coord(psTarget->pos.xy()),
-		0,
-		0,
-		-UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE,
-		0,
-		Vector2i(0, 0)
-	};
-
-	// Cast a ray from the viewer to the target
-	rayCast(gameWorld.map, psViewer->pos.xy(), psTarget->pos.xy(), rayLOSCallback, &help);
-
-	if (gWall != nullptr && gNumWalls != nullptr) // Out globals are set
+	// All the ray produces is the blocking wall, and nothing below reads it: what is returned comes from
+	// the target tile's per-player watcher, sensor and jammer counts, which visTilesUpdate() maintains.
+	if (gWall != nullptr && gNumWalls != nullptr)
 	{
+		VisibleObjectHelp_t help = {
+			wallsBlock,
+			map_coord(psTarget->pos.xy()),
+			0,
+			nullptr
+		};
+
+		WZ_PERF_COUNT(C_rayCasts, 1);
+		rayCast(gameWorld.map, psViewer->pos.xy(), psTarget->pos.xy(), rayLOSCallback, &help);
+
 		*gWall = help.wall;
 		*gNumWalls = help.numWalls;
 	}
@@ -643,7 +613,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget)
 {
 	int numWalls = 0;
-	Vector2i wall;
+	STRUCTURE *wall = nullptr;
 
 	// HACK Using globals to not clutter visibleObject() interface too much
 	gNumWalls = &numWalls;
@@ -654,24 +624,7 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 	gNumWalls = nullptr;
 	gWall = nullptr;
 
-	// see if there was a wall in the way
-	if (numWalls > 0)
-	{
-		Vector2i tile = map_coord(wall);
-		unsigned int player;
-
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			for (STRUCTURE* psWall : gameWorld.objects.structures[player])
-			{
-				if (map_coord(psWall->pos) == tile)
-				{
-					return psWall;
-				}
-			}
-		}
-	}
-	return nullptr;
+	return numWalls > 0 ? wall : nullptr;
 }
 
 bool hasSharedVision(unsigned viewer, unsigned ally)
@@ -758,14 +711,21 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 		return;
 	}
 
+	// visibleObject() returns 0 for these viewers before it reads anything else.
+	const STRUCTURE *psStruct = castStructure(psViewer);
+	if (psStruct != nullptr
+	    && (psStruct->status != SS_BUILT
+	        || psStruct->pStructureType->type == REF_WALL
+	        || psStruct->pStructureType->type == REF_GATE
+	        || psStruct->pStructureType->type == REF_WALLCORNER))
+	{
+		return;
+	}
+
 	// get all the objects from the grid the droid is in
 	// Will give inconsistent results if hasSharedVision is not an equivalence relation.
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, objSensorRange(psViewer), psViewer->player);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, objSensorRange(psViewer), psViewer->player))
 	{
-		BASE_OBJECT *psObj = *gi;
-
 		int val = visibleObject(psViewer, psObj, false);
 
 		// If we've got ranged line of sight...
@@ -862,6 +822,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 void processVisibility()
 {
 	WZ_PROFILE_SCOPE(processVisibility);
+	WZ_PERF_SCOPE(T_processVisibility);
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
@@ -1077,6 +1038,8 @@ static inline void angle_check(int64_t *angletan, int positionSq, int height, in
  */
 static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock, bool direct)
 {
+	WZ_PERF_SCOPE(T_checkFireLine);
+	WZ_PERF_COUNT(C_fireLineTraces, 1);
 	Vector3i pos(0, 0, 0), dest(0, 0, 0);
 	Vector2i start(0, 0), diff(0, 0), current(0, 0), halfway(0, 0), next(0, 0), part(0, 0);
 	Vector3i muzzle(0, 0, 0);

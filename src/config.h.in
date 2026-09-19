@@ -183,6 +183,9 @@
 /* Enables usage of VTune-based instrumentation backend. */
 #cmakedefine WZ_PROFILING_VTUNE
 
+/* Enables the per-tick performance counters written by --perfcounters. */
+#cmakedefine WZ_PERF_COUNTERS
+
 /* Enables Valve GNS network backend support. */
 #cmakedefine WZ_GNS_NETWORK_BACKEND_ENABLED
 

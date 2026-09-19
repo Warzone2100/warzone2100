@@ -3440,12 +3440,9 @@ std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PA
 	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
 	bool seen = _seen.value_or(true);
 
-	static GridList gridList;  // static to avoid allocations. // not thread-safe
-	gridList = gridStartIterateArea(x1, y1, x2, y2);
 	std::vector<const BASE_OBJECT *> list;
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterateArea(x1, y1, x2, y2))
 	{
-		BASE_OBJECT *psObj = *gi;
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
 			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS

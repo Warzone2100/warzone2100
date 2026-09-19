@@ -38,6 +38,7 @@
 #include "order.h"
 #include "visibility.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
@@ -275,7 +276,9 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 // Calculates attack priority for a certain target
 // Returns the target attack weight if it's greater than currentBest
 // (otherwise, may shortcut various costly calculations, and returns <= 0)
-static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
+/// lineOfFireAlreadyVerified says the caller runs lineOfFire(..., wallsBlock = true) before accepting a
+/// candidate, which implies the unblocked trace below.
+static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot, bool lineOfFireAlreadyVerified = false)
 {
 	SDWORD			targetTypeBonus = 0, damageRatio = 0, attackWeight = 0, noTarget = -1;
 	UDWORD			weaponSlot;
@@ -550,7 +553,7 @@ static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *p
 		{
 			return std::min<int>(0, attackWeight);
 		}
-		if (!lineOfFire(psAttacker, psTarget, weapon_slot, false))
+		if (!lineOfFireAlreadyVerified && !lineOfFire(psAttacker, psTarget, weapon_slot, false))
 		{
 			attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain
 		}
@@ -572,6 +575,7 @@ size_t getCountNearestTargetChecks()
 // Returns integer representing target priority, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
+	WZ_PERF_SCOPE(T_aiBestNearestTarget);
 	int failure = -1;
 	int bestMod = 0;
 	BASE_OBJECT                     *psTarget = nullptr, *bestTarget = nullptr, *tempTarget;
@@ -615,12 +619,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	// Range was previously 9*TILE_UNITS. Increasing this doesn't seem to help much, though. Not sure why.
 	int droidRange = std::min(aiDroidRange(psDroid, weapon_slot) + extraRange, objSensorRange(psDroid) + 6 * TILE_UNITS);
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange))
 	{
 		BASE_OBJECT *friendlyObj = nullptr;
-		BASE_OBJECT *targetInQuestion = *gi;
+		BASE_OBJECT *targetInQuestion = gridObj;
 
 		if (targetInQuestion == nullptr || isDead(targetInQuestion))
 		{
@@ -888,6 +890,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
 	{
+		WZ_PERF_SCOPE(T_aiChooseTargetDroid);
 		BASE_OBJECT *psCurrTarget = ((DROID *)psObj)->psActionTarget[0];
 
 		/* find a new target */
@@ -962,6 +965,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		if (psTarget == nullptr && !bCommanderBlock)
 		{
+			WZ_PERF_SCOPE(T_aiChooseTargetStruct);
 			int targetValue = -1;
 			int tarDist = INT32_MAX;
 			int srange = longRange;
@@ -973,21 +977,26 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				srange = objSensorRange(psObj);
 			}
 
-			static GridList gridList;  // static to avoid allocations.
-			gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, srange);
-			for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+			const STRUCTURE *psStructAttacker = (const STRUCTURE *)psObj;
+			const bool canAttack = psStructAttacker->numWeaps > 0 && psStructAttacker->asWeaps[0].nStat != 0;
+
+			for (BASE_OBJECT *psCurr : gridStartIterate(psObj->pos.x, psObj->pos.y, srange))
 			{
-				BASE_OBJECT *psCurr = *gi;
 				/* Check that it is a valid target */
-				if (psCurr->type != OBJ_FEATURE && !psCurr->died
+				if (canAttack && psCurr->type != OBJ_FEATURE && !psCurr->died
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX
-				    && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot))
+				    && objPosDiffSq(psObj, psCurr) < longRange * longRange)
 				{
-					int newTargetValue = targetAttackWeightIfGreaterThan(targetValue - 1, psCurr, psObj, weapon_slot);
+					int newTargetValue = targetAttackWeightIfGreaterThan(targetValue - 1, psCurr, psObj, weapon_slot, true);
 					// See if in sensor range and visible
 					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
 					if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))
+					{
+						continue;
+					}
+					// The expensive test, run only for a candidate that has already beaten the best so far.
+					if (!lineOfFire(psObj, psCurr, weapon_slot, true))
 					{
 						continue;
 					}
@@ -1056,11 +1065,8 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		BASE_OBJECT    *psTemp = nullptr;
 		unsigned tarDist = UINT32_MAX;
 
-		static GridList gridList;  // static to avoid allocations.
-		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, objSensorRange(psObj));
-		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+		for (BASE_OBJECT *psCurr : gridStartIterate(psObj->pos.x, psObj->pos.y, objSensorRange(psObj)))
 		{
-			BASE_OBJECT *psCurr = *gi;
 			if (psCurr == nullptr)
 			{
 				continue;

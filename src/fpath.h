@@ -79,6 +79,8 @@ struct FPathPendingResult
 	Vector2i originalDest = Vector2i(0, 0);  ///< result.originalDest (the requested destination)
 	std::vector<Vector2i> path;              ///< result.sMove.asPath (computed waypoints)
 	FPATH_RETVAL retval = FPR_FAILED;        ///< result.retval
+	uint32_t queuedTime = 0;                 ///< game time the request was queued at
+	bool queuedInDroidUpdate = false;        ///< whether a droid's own update queued it
 };
 
 /** Serialize side: if droid `droidID` has an in-flight path result, force it to completion and return it
@@ -138,6 +140,24 @@ void fpathSetDirectRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY);
 
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 void fpathRemoveDroidData(int id);
+
+/// Marks a droid's own update. A path asked for inside one is collected by a later update rather than by
+/// the update that asked. A request made outside one, ex. from a network or script order handled before
+/// the droid loop, is collected on the update that asks.
+///
+/// NOTE: droidUpdate returns early when an order handler moves the droid to another list, so the mark has
+/// to be scoped rather than assigned and cleared, and counted rather than set, in case one update ever
+/// nests inside another.
+class FPathDroidUpdateScope
+{
+public:
+	FPathDroidUpdateScope();
+	~FPathDroidUpdateScope();
+	FPathDroidUpdateScope(const FPathDroidUpdateScope &) = delete;
+	FPathDroidUpdateScope &operator=(const FPathDroidUpdateScope &) = delete;
+	FPathDroidUpdateScope(FPathDroidUpdateScope &&) = delete;
+	FPathDroidUpdateScope &operator=(FPathDroidUpdateScope &&) = delete;
+};
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */

@@ -44,6 +44,7 @@
 #include "congestion_overlay.h"
 #include "profiling.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -92,7 +93,31 @@ public:
 
 static std::vector<WZ_THREAD *> fpathThreads;
 static std::vector<std::unique_ptr<FpathThreadInfo>> fpathThreadsInfo;
-static std::unordered_map<uint32_t, wz::future<PATHRESULT>> pathResults;
+/// A queued search, with the game time it was queued at. The collection is deferred to a later update
+/// than the request, so that time is what decides when the result may be taken rather than whether the
+/// worker happens to have finished. Reading readiness instead would make the arrival tick depend on the
+/// wall clock.
+struct PendingPath
+{
+	wz::future<PATHRESULT> future;
+	uint32_t queuedTime = 0;
+	bool queuedInDroidUpdate = false;
+};
+
+/// How many droid updates are on the stack. See FPathDroidUpdateScope.
+static unsigned fpathDroidUpdateDepth = 0;
+
+FPathDroidUpdateScope::FPathDroidUpdateScope() { ++fpathDroidUpdateDepth; }
+
+FPathDroidUpdateScope::~FPathDroidUpdateScope()
+{
+	ASSERT(fpathDroidUpdateDepth > 0, "Droid update scope closed without a matching open");
+	if (fpathDroidUpdateDepth > 0)
+	{
+		--fpathDroidUpdateDepth;
+	}
+}
+static std::unordered_map<uint32_t, PendingPath> pathResults;
 
 #ifdef DEBUG
 static std::vector<size_t> numJobsPerThreadThisTick;
@@ -468,13 +493,17 @@ bool fpathTakePendingResult(uint32_t droidID, FPathPendingResult &out)
 	}
 	// Force the in-flight job to completion (blocks until the worker posts) and consume the future. The
 	// value is already determined by the frozen end-of-tick context, so this is deterministic.
-	PATHRESULT r = I->second.get();
+	PATHRESULT r = I->second.future.get();
 	// Re-populate so a host that keeps simulating after serializing can still consume the same result.
-	I->second = fpathMakeReadyResult(r);
+	// The queued time is left alone, so forcing the job for serialization does not change the update on
+	// which the droid collects it.
+	I->second.future = fpathMakeReadyResult(r);
 	out.destination = r.sMove.destination;
 	out.originalDest = r.originalDest;
 	out.path = r.sMove.asPath;
 	out.retval = r.retval;
+	out.queuedTime = I->second.queuedTime;
+	out.queuedInDroidUpdate = I->second.queuedInDroidUpdate;
 	return true;
 }
 
@@ -489,12 +518,16 @@ void fpathSetPendingResult(uint32_t droidID, const FPathPendingResult &in)
 	// Only sMove.destination, sMove.asPath, originalDest and retval are read back by fpathRoute; the rest
 	// of the MOVE_CONTROL is left default. Replace any existing job/result so there is exactly one.
 	fpathRemoveDroidData(static_cast<int>(droidID));
-	pathResults[droidID] = fpathMakeReadyResult(r);
+	// The request's own queue time and origin are restored with it, so the droid waits exactly as long
+	// as it would have without the save.
+	pathResults[droidID] = PendingPath{fpathMakeReadyResult(r), in.queuedTime, in.queuedInDroidUpdate};
 }
 
 static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
-                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
+                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure,
+                               bool collectImmediately = false)
 {
+	WZ_PERF_SCOPE(T_fpathRoute);
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
 #ifdef DEBUG
@@ -542,7 +575,22 @@ static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMo
 
 		auto const I = pathResults.find(id);
 		ASSERT_OR_RETURN(FPR_FAILED, I != pathResults.end(), "Missing path result promise");
-		PATHRESULT result = I->second.get();
+		if (!collectImmediately && I->second.queuedInDroidUpdate && gameTime <= I->second.queuedTime)
+		{
+			// The droid's own update queued this search moments ago, so collecting it now would wait on a
+			// worker that has barely started. Leave the result with the worker until the next update.
+			objTrace(id, "Path requested by this update, collecting on the next one");
+			return FPR_WAIT;
+		}
+		PATHRESULT result;
+		{
+			WZ_PERF_SCOPE(T_fpathRouteWait);
+			if (perf::g_enabled && I->second.future.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+			{
+				WZ_PERF_COUNT(C_pathPollsNotReady, 1);
+			}
+			result = I->second.future.get();
+		}
 		ASSERT(result.retval != FPR_OK || result.sMove.asPath.size() > 0, "Ok result but no path in list");
 
 		// Copy over select fields - preserve others
@@ -598,7 +646,7 @@ queuePathfinding:
 	fpathRemoveDroidData(id);
 
 	packagedPathJob task([job](const std::shared_ptr<FPathExecuteContext>& ctx) { return fpathExecute(ctx, job); });
-	pathResults[id] = task.get_future();
+	pathResults[id] = PendingPath{task.get_future(), gameTime, fpathDroidUpdateDepth > 0};
 
 	// Get target thread for job
 	auto targetThreadId = fpathJobDispatchThreadId(job, fpathThreads.size());
@@ -610,6 +658,7 @@ queuePathfinding:
 	threadInfo.pathJobs.push_back(std::move(task));
 	wzMutexUnlock(threadInfo.mutex);
 
+	WZ_PERF_COUNT(C_pathJobsQueued, 1);
 	wzSemaphorePost(threadInfo.semaphore);  // Increment semaphore
 
 #ifdef DEBUG
@@ -638,6 +687,15 @@ public:
 	void updateTick(const WorldMapState&) override { fpathUpdate(); }
 
 	FPATH_RETVAL route(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
+	{
+		return routeInternal(psDroid, mapState, tX, tY, moveType, false);
+	}
+
+protected:
+	/// Shared by route() and routeSynchronous(), which is the only caller allowed to collect a result on
+	/// the same update that requested it.
+	FPATH_RETVAL routeInternal(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType,
+	                           bool collectImmediately)
 	{
 		bool acceptNearest;
 		PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
@@ -678,23 +736,25 @@ public:
 			break;
 		}
 		return fpathRoute(mapState, &psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
-		                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
+		                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure, collectImmediately);
 	}
 
+public:
 	FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
 	{
 		// Force a synchronous resolve out of the async planner by driving both
 		// halves of its request-then-poll protocol back to back. The first call
 		// must queue rather than poll, so the droid has to be out of
 		// MOVEWAITROUTE for it (a poll with no pending result asserts). The second
-		// must poll, so it has to be in MOVEWAITROUTE. The poll blocks on
-		// the worker's future, so by the time it returns the route is resolved
-		// and it has copied the path into sMove and set MOVENAVIGATE. The caller
-		// owns what happens to the droid from there.
+		// must poll, so it has to be in MOVEWAITROUTE, and it has to be told to
+		// collect on the same update rather than leaving the result for the next one.
+		// The poll blocks on the worker's future, so by the time it returns the
+		// route is resolved and it has copied the path into sMove and set
+		// MOVENAVIGATE. The caller owns what happens to the droid from there.
 		psDroid->sMove.Status = MOVEINACTIVE;
 		route(psDroid, mapState, tX, tY, moveType);
 		psDroid->sMove.Status = MOVEWAITROUTE;
-		return route(psDroid, mapState, tX, tY, moveType);
+		return routeInternal(psDroid, mapState, tX, tY, moveType, true);
 	}
 
 	void removeDroidData(int droidID) override { fpathRemoveDroidData(droidID); }

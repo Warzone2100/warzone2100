@@ -36,6 +36,7 @@
 #include "corridor_map.h"
 #include "corridor_gate.h"
 #include "pathfinding_backend.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -58,17 +59,38 @@ const int32_t FLOW_UNIT = 64;
 // canceled occupants leave it far below.
 const int32_t MASS_UNIT = 64;
 
+// The multiplier the fold applies to each value it visits, in visit order. The sequence depends only on
+// the position in that order, never on the values, so it is built once per map size and reused. The
+// overlays are built on the main thread, so the cache needs no guard.
+const std::vector<uint32_t> &checksumFactors(size_t count)
+{
+	static std::vector<uint32_t> factors;
+	if (factors.size() != count)
+	{
+		factors.resize(count);
+		uint32_t factor = 0;
+		for (size_t i = 0; i < count; ++i)
+		{
+			factors[i] = (factor = 3 * factor + 1);
+		}
+	}
+	return factors;
+}
+
 uint32_t foldChecksum(const DynamicCostOverlay &overlay)
 {
-	uint32_t checksum = 0, factor = 0;
-	for (size_t i = 0; i < overlay.flowX.size(); ++i)
+	const size_t flowCells = overlay.flowX.size();
+	const size_t massCells = overlay.mass.size();
+	const std::vector<uint32_t> &factors = checksumFactors(2 * flowCells + massCells);
+	uint32_t checksum = 0;
+	for (size_t i = 0; i < flowCells; ++i)
 	{
-		checksum ^= static_cast<uint16_t>(overlay.flowX[i]) * (factor = 3 * factor + 1);
-		checksum ^= static_cast<uint16_t>(overlay.flowY[i]) * (factor = 3 * factor + 1);
+		checksum ^= static_cast<uint16_t>(overlay.flowX[i]) * factors[2 * i];
+		checksum ^= static_cast<uint16_t>(overlay.flowY[i]) * factors[2 * i + 1];
 	}
-	for (size_t i = 0; i < overlay.mass.size(); ++i)
+	for (size_t i = 0; i < massCells; ++i)
 	{
-		checksum ^= overlay.mass[i] * (factor = 3 * factor + 1);
+		checksum ^= overlay.mass[i] * factors[2 * flowCells + i];
 	}
 	return checksum;
 }
@@ -77,6 +99,7 @@ uint32_t foldChecksum(const DynamicCostOverlay &overlay)
 
 std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(uint32_t buildTime, bool consumeFlow, bool consumeMass)
 {
+	WZ_PERF_SCOPE(T_congestionOverlay);
 	const int width = gameWorld.map.width;
 	const int height = gameWorld.map.height;
 	const size_t cells = static_cast<size_t>(width) * static_cast<size_t>(height);

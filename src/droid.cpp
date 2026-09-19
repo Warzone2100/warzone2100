@@ -78,6 +78,7 @@
 #include "template.h"
 #include "qtscript.h"
 #include "campaigninfo.h"
+#include "perfcounters.h"
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -875,6 +876,8 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {
+	WZ_PERF_SCOPE(T_droidUpdate);
+	FPathDroidUpdateScope pathScope;
 	Vector3i        dv;
 	UDWORD          percentDamage, emissionInterval;
 	BASE_OBJECT     *psBeingTargetted = nullptr;

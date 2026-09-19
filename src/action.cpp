@@ -581,11 +581,9 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 	Vector2i structureCentre = world_coord(b.map) + world_coord(b.size) / 2;
 	unsigned structureMaxRadius = iHypot(world_coord(b.size) / 2) + 1; // +1 since iHypot rounds down.
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(structureCentre.x, structureCentre.y, structureMaxRadius);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(structureCentre.x, structureCentre.y, structureMaxRadius))
 	{
-		DROID *droid = castDroid(*gi);
+		DROID *droid = castDroid(gridObj);
 		if (droid == nullptr)
 		{
 			continue;  // Only looking for droids.

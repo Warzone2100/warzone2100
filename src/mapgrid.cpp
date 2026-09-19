@@ -31,12 +31,27 @@
 #include "mapgrid.h"
 #include "pointtree.h"
 #include "game_world.h"
+#include "perfcounters.h"
 
 
 static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
+static unsigned gridPersonCount = 0;
 static PointTree::Filter *gridFiltersUnseen;
 static PointTree::Filter *gridFiltersDroidsByPlayer;
 static PointTree::Filter *gridFiltersDroidsRepairCandidates;
+
+/// One result buffer per live GridQuery. The deepest nesting in the game is a query made from inside a
+/// loop over another query's results.
+static const unsigned MAX_GRID_QUERY_DEPTH = 8;
+static GridList gridQueryBuffers[MAX_GRID_QUERY_DEPTH];
+static unsigned gridQueryDepth = 0;
+
+/// The slot is clamped, so nesting past the pool gives wrong results rather than writing off the end.
+/// The ASSERT in gridClaimBuffer is what reports the overrun.
+static GridList &gridBufferFor(unsigned slot)
+{
+	return gridQueryBuffers[std::min(slot, MAX_GRID_QUERY_DEPTH - 1)];
+}
 
 // initialise the grid system
 bool gridInitialise()
@@ -54,15 +69,17 @@ bool gridInitialise()
 void gridReset(GameWorld& world)
 {
 	gridPointTree->clear();
+	gridPersonCount = 0;
 
 	// Put all existing objects into the point tree.
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (BASE_OBJECT* psObj : world.objects.droids[player])
+		for (DROID* psObj : world.objects.droids[player])
 		{
 			if (!psObj->died)
 			{
 				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				gridPersonCount += psObj->droidType == DROID_PERSON;
 				for (unsigned char& viewer : psObj->seenThisTick)
 				{
 					viewer = 0;
@@ -103,6 +120,11 @@ void gridReset(GameWorld& world)
 	}
 }
 
+unsigned gridLivePersonCount()
+{
+	return gridPersonCount;
+}
+
 // shutdown the grid system
 void gridShutDown()
 {
@@ -122,26 +144,56 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 	return ((int64_t)x * (int64_t)x + (int64_t)y * (int64_t)y) <= ((int64_t)radius * (int64_t)radius);
 }
 
+/// Claims the next result buffer. It stays claimed until the GridQuery built from the returned slot is
+/// destroyed. The buffer keeps the capacity its last use grew it to.
+static GridList &gridClaimBuffer(unsigned &slot)
+{
+	slot = gridQueryDepth;
+	ASSERT(slot < MAX_GRID_QUERY_DEPTH, "Grid queries nested %u deep, deeper than the buffer pool", slot + 1);
+	return gridBufferFor(slot);
+}
+
+GridQuery::~GridQuery()
+{
+	ASSERT(gridQueryDepth == slot + 1, "GridQuery released out of order, expected slot %u but this is %u", gridQueryDepth - 1, slot);
+	gridQueryDepth = slot;
+}
+
+const GridList &GridQuery::results() const &
+{
+	return gridBufferFor(slot);
+}
+
+GridList::const_iterator GridQuery::begin() const &
+{
+	return gridBufferFor(slot).begin();
+}
+
+GridList::const_iterator GridQuery::end() const &
+{
+	return gridBufferFor(slot).end();
+}
+
 // initialise the grid system to start iterating through units that
 // could affect a location (x,y in world coords)
 template<class Condition>
-static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
+static unsigned gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
-	if (filter == nullptr)
-	{
-		gridPointTree->query(x, y, radius);
-	}
-	else
-	{
-		gridPointTree->query(*filter, x, y, radius);
-	}
-	PointTree::ResultVector::iterator w = gridPointTree->lastQueryResults.begin(), i;
-	for (i = w; i != gridPointTree->lastQueryResults.end(); ++i)
+	WZ_PERF_SCOPE(T_gridQuery);
+	WZ_PERF_COUNT(C_gridQueries, 1);
+	PointTree::ResultVector &found = (filter == nullptr)
+	                                 ? gridPointTree->query(x, y, radius)
+	                                 : gridPointTree->query(*filter, x, y, radius);
+
+	// The results are compacted in place first and copied out second - tested faster than filtering
+	// straight into the result buffer, due to compiler handling of possible aliasing.
+	PointTree::ResultVector::iterator w = found.begin(), i;
+	for (i = w; i != found.end(); ++i)
 	{
 		BASE_OBJECT *obj = static_cast<BASE_OBJECT *>(*i);
 		if (!condition.test(obj))  // Check if we should skip this object.
 		{
-			filter->erase(gridPointTree->lastFilteredQueryIndices[i - gridPointTree->lastQueryResults.begin()]);  // Stop the object from appearing in future searches.
+			filter->erase(gridPointTree->lastFilteredQueryIndices[i - found.begin()]);  // Stop the object from appearing in future searches.
 		}
 		else if (isInRadius(obj->pos.x - x, obj->pos.y - y, radius))  // Check that search result is less than radius (since they can be up to a factor of sqrt(2) more).
 		{
@@ -149,32 +201,37 @@ static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t r
 			++w;
 		}
 	}
-	gridPointTree->lastQueryResults.erase(w, i);  // Erase all points that were a bit too far.
+	found.erase(w, i);  // Erase all points that were a bit too far.
 
-	// In case you are curious.
-	//debug(LOG_WARNING, "gridStartIterateFiltered(%d, %d, %u) found %u objects", x, y, radius, (unsigned)gridPointTree->lastQueryResults.size());
-
-	static GridList gridList;
-	gridList.resize(gridPointTree->lastQueryResults.size());
+	unsigned slot;
+	GridList &gridList = gridClaimBuffer(slot);
+	gridList.resize(found.size());
 	for (unsigned n = 0; n < gridList.size(); ++n)
 	{
-		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
+		gridList[n] = (BASE_OBJECT *)found[n];
 	}
-	return gridList;
+	WZ_PERF_COUNT(C_gridResultsReturned, gridList.size());
+	++gridQueryDepth;
+	return slot;
 }
 
 template<class Condition>
-static GridList const &gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
+static unsigned gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
 {
-	gridPointTree->query(x, y, x2, y2);
+	WZ_PERF_SCOPE(T_gridQuery);
+	WZ_PERF_COUNT(C_gridQueries, 1);
+	PointTree::ResultVector &found = gridPointTree->query(x, y, x2, y2);
 
-	static GridList gridList;
-	gridList.resize(gridPointTree->lastQueryResults.size());
+	unsigned slot;
+	GridList &gridList = gridClaimBuffer(slot);
+	gridList.resize(found.size());
 	for (unsigned n = 0; n < gridList.size(); ++n)
 	{
-		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
+		gridList[n] = (BASE_OBJECT *)found[n];
 	}
-	return gridList;
+	WZ_PERF_COUNT(C_gridResultsReturned, gridList.size());
+	++gridQueryDepth;
+	return slot;
 }
 
 struct ConditionTrue
@@ -185,14 +242,14 @@ struct ConditionTrue
 	}
 };
 
-GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius)
+GridQuery gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
-	return gridStartIterateFiltered(x, y, radius, nullptr, ConditionTrue());
+	return GridQuery(gridStartIterateFiltered(x, y, radius, nullptr, ConditionTrue()));
 }
 
-GridList const &gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
+GridQuery gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
 {
-	return gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue());
+	return GridQuery(gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue()));
 }
 
 struct ConditionDroidsByPlayer
@@ -205,9 +262,9 @@ struct ConditionDroidsByPlayer
 	int player;
 };
 
-GridList const &gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player)
+GridQuery gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	return gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsByPlayer[player], ConditionDroidsByPlayer(player));
+	return GridQuery(gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsByPlayer[player], ConditionDroidsByPlayer(player)));
 }
 
 struct ConditionDroidCandidateForRepair
@@ -227,9 +284,9 @@ struct ConditionDroidCandidateForRepair
 	int player;
 };
 
-GridList const &gridStartIterateRepairCandidates(int32_t x, int32_t y, uint32_t radius, int player)
+GridQuery gridStartIterateRepairCandidates(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	return gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsRepairCandidates[player], ConditionDroidCandidateForRepair(player));
+	return GridQuery(gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsRepairCandidates[player], ConditionDroidCandidateForRepair(player)));
 }
 
 struct ConditionUnseen
@@ -242,15 +299,7 @@ struct ConditionUnseen
 	int player;
 };
 
-GridList const &gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player)
+GridQuery gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	return gridStartIterateFiltered(x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player));
-}
-
-BASE_OBJECT **gridIterateDup()
-{
-	size_t bytes = gridPointTree->lastQueryResults.size() * sizeof(void *);
-	BASE_OBJECT **ret = (BASE_OBJECT **)malloc(bytes);
-	memcpy(ret, &gridPointTree->lastQueryResults[0], bytes);
-	return ret;
+	return GridQuery(gridStartIterateFiltered(x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player)));
 }

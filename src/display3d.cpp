@@ -100,6 +100,7 @@
 #include "profiling.h"
 #include "game_world.h"
 #include "corridor_map.h"
+#include "perfcounters.h"
 
 
 /********************  Prototypes  ********************/
@@ -1146,6 +1147,8 @@ void draw3DScene()
 	structureEffects(); // add fancy effects to structures
 
 	wzPerfEnd(PERF_MISC);
+
+	perf::endOfFrame();
 }
 
 
@@ -1796,6 +1799,7 @@ static bool projectileIsShowing(const PROJECTILE *psObj)
 static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	WZ_PROFILE_SCOPE(display3DProjectiles);
+	WZ_PERF_SCOPE(T_display3DProjectiles);
 	PROJECTILE *psObj = proj_GetFirst();
 	while (psObj != nullptr)
 	{
@@ -2427,6 +2431,7 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix, const glm::mat4 &p
 static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	WZ_PROFILE_SCOPE(displayDynamicObjects);
+	WZ_PERF_SCOPE(T_displayDynamicObjects);
 	/* Need to go through all the droid lists */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{

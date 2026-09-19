@@ -38,6 +38,7 @@
 #include "src/move.h"
 #include "src/objects.h"
 #include "src/game_world.h"
+#include "src/perfcounters.h"
 
 #include <algorithm>
 
@@ -46,6 +47,7 @@ namespace steering
 
 SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 {
+	WZ_PERF_SCOPE(T_steeringScan);
 	int32_t numObstacles = 0;
 	int32_t distTotal = 0;
 	Vector2i totalDir(0, 0);
@@ -60,12 +62,8 @@ SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 	Vector2i toTarget = ctx.targetPos - ctx.currentPos;
 
 	// Scan nearby objects for obstacles
-	static GridList gridList;  // static to avoid allocations
-	gridList = gridStartIterate(ctx.currentPos.x, ctx.currentPos.y, OBSTACLE_SCAN_RADIUS);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT* obj : gridStartIterate(ctx.currentPos.x, ctx.currentPos.y, OBSTACLE_SCAN_RADIUS))
 	{
-		BASE_OBJECT* obj = *gi;
-
 		// Skip invalid obstacles
 		if (!isValidObstacle(obj, ctx.droid))
 		{
@@ -170,7 +168,7 @@ bool CollisionAvoidanceBehavior::isEnabled(const SteeringContext& ctx) const
 	return !ctx.droid->isTransporter();
 }
 
-Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(DROID* obstacle)
+Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(const DROID* obstacle)
 {
 	// Velocity guess 1: Guess the velocity the droid is actually moving at.
 	Vector2i velocityGuess1 = iSinCosR(obstacle->sMove.moveDir, obstacle->sMove.speed);
@@ -186,12 +184,6 @@ Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(DROID* obstacle)
 	// Scale intended speed by distance (slower when close to target)
 	int32_t intendedSpeed = maxSpeed * std::min(targetDist, OBSTACLE_SCAN_RADIUS) / OBSTACLE_SCAN_RADIUS;
 	Vector2i velocityGuess2 = iSinCosR(iAtan2(targetDiff), intendedSpeed);
-
-	// If blocked, assume no intended movement
-	if (moveBlocked(obstacle))
-	{
-		velocityGuess2 = Vector2i(0, 0);
-	}
 
 	// Average the two guesses
 	return (velocityGuess1 + velocityGuess2) / 2;

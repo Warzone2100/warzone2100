@@ -81,7 +81,7 @@ private:
 	/// </summary>
 	/// <param name="obstacle">The obstacle droid</param>
 	/// <returns>Estimated velocity vector</returns>
-	static Vector2i estimateObstacleVelocity(DROID* obstacle);
+	static Vector2i estimateObstacleVelocity(const DROID* obstacle);
 
 	/// <summary>
 	/// Check if an object is a valid obstacle for collision avoidance.

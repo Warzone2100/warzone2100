@@ -85,6 +85,7 @@
 #include "keybind.h"
 
 #include "random.h"
+#include "perfcounters.h"
 #include <functional>
 #include <unordered_map>
 
@@ -3850,6 +3851,7 @@ int gateCurrentOpenHeight(const STRUCTURE *psStructure, uint32_t time, int minim
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 {
+	WZ_PERF_SCOPE(T_structureUpdate);
 	UDWORD widthScatter, breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
@@ -3871,11 +3873,13 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 		{
 			bool		found = false;
 
-			static GridList gridList;  // static to avoid allocations.
-			gridList = gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS);
-			for (GridIterator gi = gridList.begin(); !found && gi != gridList.end(); ++gi)
+			for (BASE_OBJECT *gridObj : gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS))
 			{
-				found = isDroid(*gi);
+				if (isDroid(gridObj))
+				{
+					found = true;
+					break;
+				}
 			}
 
 			if (!found)	// no droids on our tile, safe to close

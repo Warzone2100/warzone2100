@@ -61,6 +61,7 @@
 #include "profiling.h"
 #include "game_world.h"
 #include "wrappers.h"
+#include "perfcounters.h"
 
 #include <algorithm>
 #include <functional>
@@ -290,6 +291,13 @@ proj_GetNext()
 {
 	++psProjectileNext;
 	return psProjectileNext != psProjectileList.end() ? *psProjectileNext : nullptr;
+}
+
+/***************************************************************************/
+
+size_t proj_Count()
+{
+	return psProjectileList.size();
 }
 
 /***************************************************************************/
@@ -790,6 +798,7 @@ static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t
 
 static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 {
+	WZ_PERF_SCOPE(T_projInFlight);
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
@@ -910,41 +919,38 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
 
 	/* Check nearby objects for possible collisions */
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psTempObj : gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE))
 	{
-		BASE_OBJECT *psTempObj = *gi;
 		CHECK_OBJECT(psTempObj);
 
-		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
-		{
-			// Dont damage one target twice
-			continue;
-		}
-		else if (psTempObj->died)
+		if (psTempObj->died)
 		{
 			// Do not damage dead objects further
 			ASSERT(psTempObj->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psTempObj->type);
 			continue;
 		}
-		else if (psTempObj->type == OBJ_FEATURE && !((FEATURE *)psTempObj)->psStats->damageable)
+		if (psTempObj->type == OBJ_FEATURE && !((FEATURE *)psTempObj)->psStats->damageable)
 		{
 			// Ignore oil resources, artifacts and other pickups
 			continue;
 		}
-		else if (aiCheckAlliances(psTempObj->player, psProj->player) && psTempObj != psProj->psDest)
+		if (aiCheckAlliances(psTempObj->player, psProj->player) && psTempObj != psProj->psDest)
 		{
 			// No friendly fire unless intentional
 			continue;
 		}
-		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
-		         (psTempObj->type == OBJ_STRUCTURE ||
-		          psTempObj->type == OBJ_FEATURE ||
-		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlightBasedTransporter() && !((DROID*)psTempObj)->isFlying())
-		         ))
+		if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
+		    (psTempObj->type == OBJ_STRUCTURE ||
+		     psTempObj->type == OBJ_FEATURE ||
+		     (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlightBasedTransporter() && !((DROID*)psTempObj)->isFlying())
+		    ))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
+			continue;
+		}
+		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
+		{
+			// Dont damage one target twice
 			continue;
 		}
 
@@ -953,6 +959,12 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 		const Vector3i diff = psProj->pos - psTempObj->pos;
 		const Vector3i prevDiff = psProj->prevSpacetime.pos - psTempObjPrevPos;
 		const unsigned int targetHeight = establishTargetHeight(psTempObj);
+		if (intervalEmpty(collisionZ(prevDiff.z, diff.z, targetHeight)))
+		{
+			// collisionXYZ() starts with this same test and reports no collision when it fails, without
+			// ever reading the shape.
+			continue;
+		}
 		const ObjectShape targetShape = establishTargetShape(psTempObj);
 		const int32_t collision = collisionXYZ(prevDiff, diff, targetShape, targetHeight);
 		const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time) * collision / 1024;
@@ -1064,12 +1076,8 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 
 static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i &targetPos, bool empRadius)
 {
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(targetPos.x, targetPos.y, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius);
-
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psCurr : gridStartIterate(targetPos.x, targetPos.y, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius))
 	{
-		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->died)
 		{
 			ASSERT(psCurr->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psCurr->type);
@@ -1492,6 +1500,7 @@ PROJECTILE* PROJECTILE::update()
 void proj_UpdateAll()
 {
 	WZ_PROFILE_SCOPE(proj_UpdateAll);
+	WZ_PERF_SCOPE(T_projUpdateAll);
 
 	static std::vector<PROJECTILE*> spawnedProjectiles;
 	spawnedProjectiles.reserve(psProjectileList.size());
@@ -1541,11 +1550,8 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 
 	WEAPON_STATS *psStats = psProj->psWStats;
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->upgrade[psProj->player].periodicalDamageRadius);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psCurr : gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->upgrade[psProj->player].periodicalDamageRadius))
 	{
-		BASE_OBJECT *psCurr = *gi;
 		if (psCurr->died)
 		{
 			syncDebugObject(psCurr, '-');

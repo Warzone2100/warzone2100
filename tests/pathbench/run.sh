@@ -52,6 +52,11 @@ q = card["queued"]
 print("\nqueued through the worker pool: %d requests drained in %d ticks, %d us"
       % (q["requests"], q["drainTicks"], q["drainMicros"]))
 
+t = card.get("unreachable_ticks")
+if t:
+    print("unreachable, one request per tick: %d requests over %d ticks, %d us"
+          % (t["requests"], t["ticks"], t["micros"]))
+
 direct = card["direct"]
 if "reuse" in direct and "distinct" in direct and direct["reuse"]["nodesExpanded"]:
     ratio = direct["distinct"]["nodesExpanded"] / direct["reuse"]["nodesExpanded"]

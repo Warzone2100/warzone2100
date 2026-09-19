@@ -590,10 +590,8 @@ static void handleAreaDemolition()
 	worldCoord2.y = worldCoord2.y > tmp.y ? worldCoord2.y : tmp.y;
 
 	debug(LOG_INFO, "demolish everything in the area (%i %i) -> (%i %i)", worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y);
-	std::vector<BASE_OBJECT *> gridList = gridStartIterateArea(worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterateArea(worldCoord1.x, worldCoord1.y, worldCoord2.x, worldCoord2.y))
 	{
-		BASE_OBJECT *psObj = *gi;
 		if (psObj->type == OBJ_STRUCTURE && psObj->player == selectedPlayer)
 		{
 			// add demolish order to queue for every selected unit

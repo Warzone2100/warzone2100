@@ -63,6 +63,7 @@
 #include "steering/collision_avoidance_behavior.h"
 #include "combat.h"
 #include "movebench.h"
+#include "perfcounters.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -448,11 +449,9 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	}
 
 	// find any droids that could block the shuffle
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, SHUFFLE_DIST))
 	{
-		DROID *psCurr = castDroid(*gi);
+		DROID *psCurr = castDroid(gridObj);
 		if (psCurr == nullptr || psCurr->died || psCurr == psDroid)
 		{
 			continue;
@@ -765,16 +764,14 @@ SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 // see if a Droid has run over a person
 static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 {
+	WZ_PERF_SCOPE(T_moveCheckSquished);
 	int32_t		rad, radSq, objR, xdiff, ydiff, distSq;
 	const int32_t	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 	const int32_t   mx = gameTimeAdjustedAverage(emx, EXTRA_PRECISION);
 	const int32_t   my = gameTimeAdjustedAverage(emy, EXTRA_PRECISION);
 
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS))
 	{
-		BASE_OBJECT *psObj = *gi;
 		if (psObj->type != OBJ_DROID || ((DROID *)psObj)->droidType != DROID_PERSON)
 		{
 			// ignore everything but people
@@ -830,11 +827,9 @@ static bool moveSettledPackAtDestination(const DROID *psDroid)
 	{
 		return false;
 	}
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, TILE_UNITS * 2);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *gridObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, TILE_UNITS * 2))
 	{
-		const DROID *psOther = castDroid(*gi);
+		const DROID *psOther = castDroid(gridObj);
 		if (psOther == nullptr || psOther == psDroid || psOther->died
 		    || psOther->player != psDroid->player
 		    || psOther->sMove.Status != MOVEINACTIVE
@@ -1300,6 +1295,7 @@ static bool moveSoftPass(const DROID *self, const DROID *other)
 // Only consider stationery droids
 static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 {
+	WZ_PERF_SCOPE(T_moveCalcDroidSlide);
 	int32_t		droidR, rad, radSq, objR, xdiff, ydiff, distSq, spmx, spmy;
 	bool            bLegs;
 	ASSERT_OR_RETURN(, psDroid != nullptr, "Bad droid");
@@ -1314,12 +1310,20 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	spmy = gameTimeAdjustedAverage(*pmy, EXTRA_PRECISION);
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
+
+	// Everything the loop needs that does not vary with the neighbor.
+	// The body writes psDroid->sMove bump fields and shuffles other droids, so none of these can change under it.
+	const bool selfFlying = psDroid->isFlying();
+	const bool softCollision = pathfindingSoftCollisionEnabled();
+	const bool frustrated = psDroid->lastFrustratedTime > 0
+	                        && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME;
+	const int32_t selfZ = psDroid->pos.z;
+	const int32_t steppedX = psDroid->pos.x + spmx;
+	const int32_t steppedY = psDroid->pos.y + spmy;
+
 	BASE_OBJECT *psObst = nullptr;
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS))
 	{
-		BASE_OBJECT *psObj = *gi;
 		if (psObj->died)
 		{
 			ASSERT(psObj->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psObj->type);
@@ -1328,14 +1332,15 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		if (psObj->type == OBJ_DROID)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
-			objR = moveObjRadius(psObj);
 			if (psObjcast->isFlightBasedTransporter())
 			{
 				// ignore transporters
 				continue;
 			}
-			if ((!psDroid->isFlying() && psObjcast->isFlying() && psObjcast->pos.z > (psDroid->pos.z + droidR)) ||
-			    (!psObjcast->isFlying() && psDroid->isFlying() && psDroid->pos.z > (psObjcast->pos.z + objR)))
+			objR = moveObjRadius(psObj);
+			const bool objFlying = psObjcast->isFlying();
+			if ((!selfFlying && objFlying && psObjcast->pos.z > (selfZ + droidR)) ||
+			    (!objFlying && selfFlying && selfZ > (psObjcast->pos.z + objR)))
 			{
 				// ground unit can't bump into a flying saucer..
 				continue;
@@ -1346,9 +1351,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				// everything else doesn't avoid people
 				continue;
 			}
-			if (psObjcast->player == psDroid->player
-			    && psDroid->lastFrustratedTime > 0
-			    && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME)
+			if (frustrated && psObjcast->player == psDroid->player)
 			{
 				continue; // clip straight through own units when sufficient frustrated -- using cheat codes!
 			}
@@ -1359,9 +1362,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 			continue;
 		}
 
-		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
-		if (pathfindingSoftCollisionEnabled())
+		if (softCollision)
 		{
 			const bool allied = psObj->player == psDroid->player || aiCheckAlliances(psObj->player, psDroid->player);
 			if (allied && moveSoftPass(psDroid, static_cast<const DROID *>(psObj)))
@@ -1371,8 +1373,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		}
 		radSq = rad * rad;
 
-		xdiff = psDroid->pos.x + spmx - psObj->pos.x;
-		ydiff = psDroid->pos.y + spmy - psObj->pos.y;
+		xdiff = steppedX - psObj->pos.x;
+		ydiff = steppedY - psObj->pos.y;
 		distSq = xdiff * xdiff + ydiff * ydiff;
 		if (xdiff * spmx + ydiff * spmy >= 0)
 		{
@@ -1513,6 +1515,27 @@ static bool moveBackoffActive(DROID *psDroid)
 		return true;
 	}
 	return false;
+}
+
+// The gap between re-requests widens with each failure in a row, in game time so that every client paces
+// it the same way, and is capped short because the gap is also how long a droid waits before a better
+// route can reach it.
+const unsigned ROUTE_RETRY_BASE = 200;
+const unsigned ROUTE_RETRY_MAX_SHIFT = 2;
+
+static bool moveRouteRetryDue(DROID *psDroid)
+{
+	MOVE_CONTROL &m = psDroid->sMove;
+	if (m.routeRetryUntil != 0 && gameTime < m.routeRetryUntil)
+	{
+		return false;
+	}
+	m.routeRetryUntil = gameTime + (ROUTE_RETRY_BASE << std::min<unsigned>(m.routeRetryStreak, ROUTE_RETRY_MAX_SHIFT));
+	if (m.routeRetryStreak < ROUTE_RETRY_MAX_SHIFT)
+	{
+		++m.routeRetryStreak;
+	}
+	return true;
 }
 
 /*!
@@ -1942,7 +1965,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
 	moveOpenGates(psDroid);
-	moveCheckSquished(psDroid, dx, dy);
+	if (gridLivePersonCount() > 0)
+	{
+		moveCheckSquished(psDroid, dx, dy);
+	}
 	moveCalcDroidSlide(psDroid, &dx, &dy);
 	if (pathfindingCorridorLanesEnabled())
 	{
@@ -2387,11 +2413,8 @@ static void checkLocalFeatures(DROID *psDroid)
 	// scan the neighbours
 #define DROIDDIST ((TILE_UNITS*5)/2)
 	constexpr int MAX_PICKUP_DISTANCE = (TILE_UNITS / 2);
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST))
 	{
-		BASE_OBJECT *psObj = *gi;
 		bool pickedUp = false;
 
 		if (psObj->type == OBJ_FEATURE && !psObj->died)
@@ -2432,6 +2455,7 @@ static void checkLocalFeatures(DROID *psDroid)
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
 {
+	WZ_PERF_SCOPE(T_moveUpdateDroid);
 	UDWORD				oldx, oldy;
 	UBYTE				oldStatus = psDroid->sMove.Status;
 	SDWORD				moveSpeed;
@@ -2453,6 +2477,15 @@ void moveUpdateDroid(DROID *psDroid)
 			// Get out without updating
 			return;
 		}
+	}
+
+	// Run the blocked watchdog before this update's movement as well as after it, so a block whose time
+	// has already run out reroutes the droid before it moves.
+	// NOTE: the result is dropped on purpose. Only the clearing and the reroute are wanted here, and the
+	// status change belongs to the check at the end of the update.
+	if (psPropStats->propulsionType != PROPULSION_TYPE_LIFT)
+	{
+		moveBlocked(psDroid);
 	}
 
 	/* save current motion status of droid */
@@ -2549,7 +2582,16 @@ void moveUpdateDroid(DROID *psDroid)
 		if (psDroid->sMove.asPath.size() == 0 || !moveBestTarget(psDroid))
 		{
 			// Got stuck somewhere, can't find the path.
-			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+			if (moveRouteRetryDue(psDroid))
+			{
+				moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+			}
+		}
+		else
+		{
+			// The droid is moving again, so the next failure starts a fresh episode.
+			psDroid->sMove.routeRetryUntil = 0;
+			psDroid->sMove.routeRetryStreak = 0;
 		}
 
 		// See if the target point has been reached

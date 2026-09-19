@@ -2112,6 +2112,8 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 	mv["settleTime"] = d->sMove.settleTime;
 	mv["settleBest"] = d->sMove.settleBest;
 	// The backoff stall clock.
+	mv["routeRetryUntil"] = d->sMove.routeRetryUntil;
+	mv["routeRetryStreak"] = d->sMove.routeRetryStreak;
 	mv["backoffPos"] = writeVector2i(d->sMove.backoffPos);
 	mv["backoffTime"] = d->sMove.backoffTime;
 	mv["backoffUntil"] = d->sMove.backoffUntil;
@@ -2351,6 +2353,8 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	d->sMove.tolerance = mv.at("tolerance").get<uint32_t>();
 	d->sMove.settleTime = mv.value("settleTime", static_cast<uint32_t>(0));
 	d->sMove.settleBest = mv.value("settleBest", static_cast<int32_t>(0));
+	d->sMove.routeRetryUntil = mv.value("routeRetryUntil", static_cast<uint32_t>(0));
+	d->sMove.routeRetryStreak = static_cast<uint16_t>(mv.value("routeRetryStreak", static_cast<uint32_t>(0)));
 	if (mv.contains("backoffPos"))
 	{
 		d->sMove.backoffPos = readVector2i(mv.at("backoffPos"));
@@ -2902,7 +2906,11 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 //
 // fpathTakePendingResult force-completes the still-pending future (deterministic: the value is fixed by
 // the frozen end-of-tick context) and re-populates it so a host that keeps simulating is unaffected.
-constexpr uint32_t PENDING_ROUTES_VERSION = 1;
+// Version 2 added the request's queue time and whether a droid's own update made it. A version 1 section
+// was written by a build that collected every result on the update that asked for it, so defaulting both
+// fields reproduces what that build would have done.
+constexpr uint32_t PENDING_ROUTES_VERSION = 2;
+constexpr uint32_t PENDING_ROUTES_VERSION_MIN = 1;
 
 static nlohmann::ordered_json writePendingRoutes()
 {
@@ -2936,6 +2944,8 @@ static nlohmann::ordered_json writePendingRoutes()
 				path.push_back(writeVector2i(pt));
 			}
 			e["path"] = std::move(path);
+			e["queuedTime"] = r.queuedTime;
+			e["queuedInDroidUpdate"] = r.queuedInDroidUpdate;
 			routes.push_back(std::move(e));
 		}
 	}
@@ -2949,7 +2959,7 @@ static nlohmann::ordered_json writePendingRoutes()
 static std::unordered_set<uint32_t> readPendingRoutes(const nlohmann::ordered_json &j, uint32_t version)
 {
 	std::unordered_set<uint32_t> restored;
-	if (version != PENDING_ROUTES_VERSION)
+	if (version < PENDING_ROUTES_VERSION_MIN || version > PENDING_ROUTES_VERSION)
 	{
 		throw StateError("unsupported pendingRoutes section version");
 	}
@@ -2969,6 +2979,11 @@ static std::unordered_set<uint32_t> readPendingRoutes(const nlohmann::ordered_js
 		for (const nlohmann::ordered_json &pt : path)
 		{
 			r.path.push_back(readVector2i(pt));
+		}
+		if (version >= 2)
+		{
+			r.queuedTime = e.at("queuedTime").get<uint32_t>();
+			r.queuedInDroidUpdate = e.at("queuedInDroidUpdate").get<bool>();
 		}
 		const uint32_t id = e.at("id").get<uint32_t>();
 		fpathSetPendingResult(id, r);

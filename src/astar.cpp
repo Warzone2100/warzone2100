@@ -59,6 +59,7 @@
 #include "congestion_overlay.h"
 #include "pathfinding_backend.h"
 #include "corridor_map.h"
+#include "perfcounters.h"
 
 #if WZ_PATHFINDING_INSTRUMENTATION
 uint64_t *g_pathNodesExpanded = nullptr;
@@ -137,8 +138,9 @@ struct PathBlockingMap
 	}
 
 	PathBlockingType type;
-	std::vector<bool> map;
-	std::vector<bool> dangerMap;	// using threatBits
+	/// One byte per tile, each holding 0 or 1, which the checksum below relies on.
+	std::vector<uint8_t> map;
+	std::vector<uint8_t> dangerMap;	// using threatBits
 };
 
 struct PathNonblockingArea
@@ -975,6 +977,7 @@ static void fpathKeepRightOffset(const PATHJOB *psJob, MOVE_CONTROL *psMove)
 
 ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
+	WZ_PERF_SCOPE(T_fpathAStarRoute);
 	ASR_RETVAL      retval = ASR_OK;
 
 	bool            mustReverse = true;
@@ -1026,6 +1029,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	if (contextIterator == fpathContexts.end())
 	{
 		// We did not find an appropriate context. Make one.
+		WZ_PERF_COUNT(C_pathContextsAllocated, 1);
 		contextIterator = fpathContexts.push_back(PathfindContext());
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
@@ -1140,6 +1144,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 
 void fpathSetBlockingMap(PATHJOB *psJob)
 {
+	WZ_PERF_SCOPE(T_fpathSetBlockingMap);
 	if (fpathCurrentGameTime != gameTime)
 	{
 		// New tick, remove maps which are no longer needed.
@@ -1161,12 +1166,13 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 	if (i == fpathBlockingMaps.end())
 	{
 		// Didn't find the map, so i does not point to a map.
+		WZ_PERF_COUNT(C_blockingMapsBuilt, 1);
 		auto blockMap = std::make_shared<PathBlockingMap>();
 		fpathBlockingMaps.push_back(blockMap);
 
 		// blockMap now points to an empty map with no data. Fill the map.
 		blockMap->type = type;
-		std::vector<bool> &map = blockMap->map;
+		std::vector<uint8_t> &map = blockMap->map;
 		map.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));
 		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < gameWorld.map.height; ++y)
@@ -1177,12 +1183,12 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 			}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
-			std::vector<bool> &dangerMap = blockMap->dangerMap;
+			std::vector<uint8_t> &dangerMap = blockMap->dangerMap;
 			dangerMap.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));
 			for (int y = 0; y < gameWorld.map.height; ++y)
 				for (int x = 0; x < gameWorld.map.width; ++x)
 				{
-					dangerMap[x + y * gameWorld.map.width] = auxTile(gameWorld.map, x, y, type.owner) & AUXBITS_THREAT;
+					dangerMap[x + y * gameWorld.map.width] = (auxTile(gameWorld.map, x, y, type.owner) & AUXBITS_THREAT) != 0;
 					checksumDangerMap ^= dangerMap[x + y * gameWorld.map.width] * (factor = 3 * factor + 1);
 				}
 		}
