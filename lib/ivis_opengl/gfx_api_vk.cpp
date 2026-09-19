@@ -6694,6 +6694,9 @@ void perFrameResources_t::flushMappedAllocators()
 	uniformBufferAllocator.unmapAutomappedMemory();
 	streamedVertexBufferAllocator.flushAutomappedMemory();
 	streamedVertexBufferAllocator.unmapAutomappedMemory();
+
+	// Stays mapped until the ring slot is cleaned, so it is flushed but *not* unmapped here
+	lightDataBufferAllocator.flushAutomappedMemory();
 }
 
 void perFrameResources_t::ensureTransferRecordingBegun(const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
