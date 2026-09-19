@@ -53,6 +53,9 @@ const int CHAMBER_INSIDE = 220;   // a tile sealed inside the ring
 /// averages out, small enough that the run stays short.
 const uint32_t BATCH_SIZE = 32;
 
+/// How many owners distinct_owners cycles through.
+const uint32_t NUM_BENCH_OWNERS = 8;
+
 /// Ticks to let the game settle before measuring, so map load and the first
 /// visibility passes are not caught in the timings.
 const uint32_t WARMUP_TICKS = 20;
@@ -64,6 +67,7 @@ enum class Shape
 	Single,     ///< one request, timed on a context that has never seen it
 	SharedDest, ///< a batch to one destination, so the context is reused
 	SplitDest,  ///< a batch to distinct destinations, so a context is built each time
+	SplitOwner, ///< as SplitDest, with the owner cycling, so a blocking map is built per owner
 };
 
 struct BenchCase
@@ -101,6 +105,11 @@ const BenchCase benchCases[] =
 	// what that would cost.
 	{ "distinct", Shape::SplitDest, 8, 4, 8, BAND_LAST_Y + 12,
 	  "batch with a destination each" },
+	// The same batch again with the owner cycling. Blocking maps are cached per
+	// owner as well as per tick, so this is what a tick with every player moving
+	// costs over one where they all belong to the same player.
+	{ "distinct_owners", Shape::SplitOwner, 8, 4, 8, BAND_LAST_Y + 12,
+	  "batch with a destination and an owner each" },
 };
 
 struct CaseResult
@@ -129,6 +138,13 @@ uint32_t queuedRequests = 0;
 std::chrono::steady_clock::time_point queuedStart;
 std::vector<DROID *> queuedDroids;
 bool queuedIssued = false;
+bool queuedDrained = false;
+
+uint64_t tickedMicros = 0;
+uint32_t tickedTicks = 0;
+uint32_t tickedRequests = 0;
+size_t tickedNext = 0;
+std::vector<DROID *> tickedDroids;
 
 int64_t worldOf(int tile)
 {
@@ -137,7 +153,7 @@ int64_t worldOf(int tile)
 
 /// Builds one request. Mirrors what fpathDroidRoute settles on for a plain move
 /// order, so the search sees the same kind of job the game gives it.
-PATHJOB makeJob(int origTileX, int origTileY, int destTileX, int destTileY, uint32_t id)
+PATHJOB makeJob(int origTileX, int origTileY, int destTileX, int destTileY, uint32_t id, int owner)
 {
 	PATHJOB job;
 	job.origX = static_cast<int>(worldOf(origTileX));
@@ -149,7 +165,7 @@ PATHJOB makeJob(int origTileX, int origTileY, int destTileX, int destTileY, uint
 	job.droidType = DROID_WEAPON;
 	job.propulsion = PROPULSION_TYPE_WHEELED;
 	job.moveType = FMT_MOVE;
-	job.owner = 0;
+	job.owner = owner;
 	job.acceptNearest = true;
 	job.deleted = false;
 	fpathSetBlockingMap(&job);   // main thread, as the planner requires
@@ -163,7 +179,7 @@ std::vector<Vector2i> destinationsFor(const BenchCase &c, uint32_t count)
 	std::vector<Vector2i> dests;
 	for (uint32_t i = 0; i < count; ++i)
 	{
-		if (c.shape == Shape::SplitDest)
+		if (c.shape == Shape::SplitDest || c.shape == Shape::SplitOwner)
 		{
 			// Spread along the row below the serpentine, far enough apart that
 			// no two share a destination tile.
@@ -202,7 +218,8 @@ uint64_t runPass(const BenchCase &c, uint32_t count, CaseResult *tally)
 	const auto started = std::chrono::steady_clock::now();
 	for (uint32_t i = 0; i < count; ++i)
 	{
-		PATHJOB job = makeJob(origins[i].x, origins[i].y, dests[i].x, dests[i].y, i + 1);
+		const int owner = (c.shape == Shape::SplitOwner) ? static_cast<int>(i % NUM_BENCH_OWNERS) : 0;
+		PATHJOB job = makeJob(origins[i].x, origins[i].y, dests[i].x, dests[i].y, i + 1, owner);
 		MOVE_CONTROL move;
 		const ASR_RETVAL r = fpathAStarRoute(ctx, &move, &job);
 		if (tally != nullptr)
@@ -307,6 +324,52 @@ bool pollQueued()
 	return false;
 }
 
+/// Collects the droids the unreachable request is spread over, one per tick. The direct cases all
+/// run inside one tick, where the blocking map is cached after the first request and a context
+/// carries over from the one before, so neither per-tick cost is visible there.
+void startTicked()
+{
+	tickedDroids.clear();
+	for (DROID *psDroid : gameWorld.objects.droids[0])
+	{
+		tickedDroids.push_back(psDroid);
+	}
+}
+
+/// Issues one request and drains whatever is outstanding. True once the last droid has its answer.
+bool stepTicked()
+{
+	const auto started = std::chrono::steady_clock::now();
+	const int destX = static_cast<int>(worldOf(CHAMBER_INSIDE));
+	const int destY = static_cast<int>(worldOf(CHAMBER_INSIDE));
+
+	if (tickedNext < tickedDroids.size())
+	{
+		DROID *psDroid = tickedDroids[tickedNext++];
+		fpathDroidRoute(psDroid, gameWorld.map, destX, destY, FMT_MOVE);
+		psDroid->sMove.Status = MOVEWAITROUTE;
+		++tickedRequests;
+	}
+
+	uint32_t outstanding = 0;
+	for (DROID *psDroid : tickedDroids)
+	{
+		if (psDroid->sMove.Status != MOVEWAITROUTE)
+		{
+			continue;
+		}
+		if (fpathDroidRoute(psDroid, gameWorld.map, destX, destY, FMT_MOVE) == FPR_WAIT)
+		{
+			++outstanding;
+		}
+	}
+
+	const auto ended = std::chrono::steady_clock::now();
+	tickedMicros += static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::microseconds>(ended - started).count());
+	++tickedTicks;
+	return tickedNext >= tickedDroids.size() && outstanding == 0;
+}
+
 void writeScorecard()
 {
 	nlohmann::json card = nlohmann::json::object();
@@ -334,6 +397,12 @@ void writeScorecard()
 	queued["drainTicks"] = queuedDrainTicks;
 	queued["drainMicros"] = queuedDrainMicros;
 	card["queued"] = queued;
+
+	nlohmann::json ticked = nlohmann::json::object();
+	ticked["requests"] = tickedRequests;
+	ticked["ticks"] = tickedTicks;
+	ticked["micros"] = tickedMicros;
+	card["unreachable_ticks"] = ticked;
 
 	const std::string dumped = card.dump(4);
 	fprintf(stdout, "%s\n", dumped.c_str());
@@ -401,7 +470,17 @@ void pathBenchUpdate()
 		issueQueued();
 		return;
 	}
-	if (!pollQueued())
+	if (!queuedDrained)
+	{
+		if (!pollQueued())
+		{
+			return;
+		}
+		queuedDrained = true;
+		startTicked();
+		return;
+	}
+	if (!stepTicked())
 	{
 		return;
 	}
