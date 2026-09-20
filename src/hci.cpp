@@ -2843,9 +2843,22 @@ void chatDialog(int mode, bool startWithQuickChatFocused)
 		ChatDialogUp = true;
 
 		WzChatMode initialChatMode = (mode == CHAT_GLOB) ? WzChatMode::Glob : WzChatMode::Team;
-		createChatScreen([]() {
+
+		// Chat docks under the console's history, which shows the chat's own messages while it's open
+		const bool consoleWasExpanded = inGameConsoleIsExpanded();
+		const ConsoleHistoryFilter previousFilter = inGameConsoleFilter();
+		inGameConsoleExpand((mode == CHAT_GLOB) ? ConsoleHistoryFilter::All : ConsoleHistoryFilter::Team);
+		createChatScreen([consoleWasExpanded, previousFilter]() {
 			ChatDialogUp = false;
-		}, initialChatMode, startWithQuickChatFocused);
+			if (consoleWasExpanded)
+			{
+				inGameConsoleExpand(previousFilter);
+			}
+			else
+			{
+				inGameConsoleCollapse();
+			}
+		}, initialChatMode, startWithQuickChatFocused, inGameConsolePanel());
 	}
 	else
 	{

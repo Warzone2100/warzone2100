@@ -30,5 +30,6 @@ enum class WzChatMode
 	Glob
 };
 
-std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused);
+/// The chat screen closes on a click outside its widgets, except inside the cutout, which it leaves to the screens below
+std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused, const std::shared_ptr<WIDGET> &cutout = nullptr);
 void shutdownChatScreen();

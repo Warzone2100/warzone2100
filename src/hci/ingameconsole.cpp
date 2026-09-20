@@ -577,6 +577,10 @@ public:
 	{
 		panel->scroll(scroll);
 	}
+	std::shared_ptr<WIDGET> historyPanel() const
+	{
+		return panel;
+	}
 
 	bool hitTest(int x, int y) const override;
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
@@ -871,4 +875,10 @@ void inGameConsoleScroll(ConsoleScroll scroll)
 	{
 		console->scroll(scroll);
 	}
+}
+
+std::shared_ptr<WIDGET> inGameConsolePanel()
+{
+	auto console = currentConsole.lock();
+	return console ? console->historyPanel() : nullptr;
 }
