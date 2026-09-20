@@ -43,7 +43,7 @@
 #include "message.h"        // releaseAllProxDisp
 #include "display3d.h"      // playerPos (camera) - local view state
 #include "radar.h"          // Get/SetRadarZoom - local view state
-#include "mission.h"        // Cheated - local meta flag
+#include "mission.h"        // Cheated - local meta flag, clear/resetMissionWidgets
 #include "effects.h"        // serialize/restoreActiveEffects - local display state
 #include "multistat.h"      // loadMultiStats, setMultiStats, getMultiStats
 #include "modding.h"        // getLoadedMods, setOverrideMods, clearOverrideMods
@@ -1432,6 +1432,13 @@ bool coldLoadRestoreWorld()
 		applyPendingResume(*g_coldLoadPendingResumeDoc);
 		g_coldLoadPendingResumeDoc.reset();
 	}
+
+	// Rebuild the mission HUD against the restored state, where the legacy load rebuilds it (the tail of loadGame,
+	// before the level's remaining data files and stageThreeInitialise).
+	//
+	// mission.type, mission.ETA and the off-world droid lists are only back now, so the decision must be refreshed here.
+	clearMissionWidgets();
+	resetMissionWidgets();
 
 	// Arm the CRC-trace detail auto-dump (no-op unless --gamestate-crc-detail-on-save): gameTime is now
 	// restored to the save tick, so the loaded run's first traced ticks get their full sync logs dumped
