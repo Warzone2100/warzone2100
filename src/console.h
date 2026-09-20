@@ -77,7 +77,6 @@ void displayConsoleMessages();
 void flushConsoleMessages();
 void enableConsoleDisplay(bool state);
 bool getConsoleDisplayStatus();
-void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 void clearActiveConsole();
 int getNumberConsoleMessages();
@@ -130,14 +129,6 @@ static inline void CONPRINTF(char const *format, P &&... params) WZ_DECL_FORMAT_
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
-
-
-#include <functional>
-
-typedef std::function<void ()> CONSOLE_CALC_LAYOUT_FUNC;
-void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc);
-
-void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

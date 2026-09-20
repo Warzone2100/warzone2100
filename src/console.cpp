@@ -35,8 +35,7 @@
 #include "main.h"
 #include "radar.h"
 #include "hci.h"
-#include "mission.h" //for TIMER_Y
-#include "challenge.h" //for challengeActive
+#include "multiplay.h" //for game
 #include <string>
 #include <sstream>
 #include <deque>
@@ -50,10 +49,6 @@
 
 struct CONSOLE
 {
-	UDWORD	topX;
-	UDWORD	topY;
-	UDWORD	width;
-	UDWORD	textDepth;
 	bool	permanent;
 };
 
@@ -104,23 +99,12 @@ void consoleRemoveMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER
 	messageListeners.erase(listener);
 }
 
-static CONSOLE_CALC_LAYOUT_FUNC calcLayoutFunc;
-
 /**
 	Specify how long messages will stay on screen.
 */
 static void	setConsoleMessageDuration(UDWORD time)
 {
 	messageDuration = time;
-}
-
-void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc)
-{
-	calcLayoutFunc = layoutFunc;
-	if (calcLayoutFunc != nullptr)
-	{
-		calcLayoutFunc();
-	}
 }
 
 /** Sets the system up */
@@ -130,11 +114,6 @@ void	initConsoleMessages()
 	linePitch = iV_GetTextLineSize(font_regular);
 	setConsoleMessageDuration(duration);					// Setup how long messages are displayed for
 	enableConsoleDisplay(true);								// Turn on the console display
-
-	//	Set up the main console size and position x,y,width
-	setConsoleCalcLayout([]() {
-		setConsoleSizePos(16, (!challengeActive && (game.type == LEVEL_TYPE::SKIRMISH)) ? 32 : (32 + TIMER_Y), pie_GetVideoBufferWidth() - 32);
-	});
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES / 4 + 4);
 	setConsolePermanence(false, true);						// We're not initially having permanent messages
 	permitNewConsoleMessages(true);							// Allow new messages
@@ -145,12 +124,6 @@ void shutdownConsoleMessages()
 	permitNewConsoleMessages(false);
 	flushConsoleMessages();
 	clearInfoMessages();
-}
-
-void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
-{
-	if (calcLayoutFunc == nullptr) return;
-	calcLayoutFunc();
 }
 
 bool addConsoleMessageDebounced(const char * Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, const DEBOUNCED_MESSAGE & message, bool team, UDWORD duration)
@@ -200,11 +173,12 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		if (player == INFO_MESSAGE)
 		{
 			// The info bar has room for one line, so truncate it to fit
+			const unsigned maxWidth = pie_GetVideoBufferWidth() - 32;
 			std::string FitText(lines);
 			while (!FitText.empty())
 			{
 				unsigned pixelWidth = iV_GetTextWidth(FitText.c_str(), font_regular);
-				if (pixelWidth <= mainConsole.width)
+				if (pixelWidth <= maxWidth)
 				{
 					break;
 				}
@@ -407,20 +381,6 @@ void clearInfoMessages()
 void	enableConsoleDisplay(bool state)
 {
 	bConsoleDisplayEnabled = state;
-}
-
-/** Allows positioning of the console on screen */
-void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
-{
-	mainConsole.topX = x;
-	mainConsole.topY = y;
-	mainConsole.width = width;
-
-	/* Should be done below */
-	mainConsole.textDepth = 8;
-
-	// Do not call flushConsoleMessages() when simply changing console size/position -
-	// it is possible for the console size/pos to change during display.
 }
 
 /**	Establishes whether the console messages stay there */
