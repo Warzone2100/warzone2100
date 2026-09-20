@@ -26,8 +26,8 @@ layout(location = 0) out vec4 FragColor;
 #include "sky_radiance.glsl"
 
 // Water SSR: march reflect(V, N) with homogeneous (1/w) steps. A hit is the ray's
-// view-Z interval overlapping a finite depth voxel. Toward-camera bounces that
-// do not travel on screen miss to the skybox.
+// view-Z interval overlapping a finite depth voxel. Toward-camera bounces miss to
+// the skybox. Receding rays that cover less than half a generate pixel also miss.
 //
 // McGuire & Mara, "Efficient GPU Screen-Space Ray Tracing", JCGT 3(4), 2014
 //   https://jcgt.org/published/0003/04/04/
@@ -37,8 +37,9 @@ layout(location = 0) out vec4 FragColor;
 //   Finite thickness: the ray must meet the surface slab, not only share a UV.
 //
 // View space is +Z into the scene (pie_PerspectiveGet). The voxel extends away
-// from the camera: [surfZ, surfZ + thickness]. Water (1 - normals.a) and sky
-// (depth >= 0.9999) are skipped before the overlap test.
+// from the camera: [surfZ, surfZ + thickness]. Sky (depth >= 0.9999) is skipped
+// before the overlap test. Water (1 - normals.a) is skipped after it, so Z-misses
+// do not fetch normals.
 //
 // Output is premultiplied: vec4(rgb * confidence, confidence). Empty is (0,0,0,0).
 // Alpha is still the hit/miss classifier (HIT_CONFIDENCE_MIN). Compose unpremultiplies.
@@ -51,9 +52,10 @@ const float UV_EPSILON = 1e-6;
 const float EDGE_FADE_WIDTH = 0.05;
 
 // Compile-time loop bound. McGuire's quality floor is ~25 steps at 1080p.
-// Runtime n = min(pixelCount, stepCount) keeps stride bounded on a mirror.
+// Runtime n = min(pixelCount, stepCount), clamped to MAX_STEPS. Short rays do
+// not oversample; long mirrors cap the step count.
 const int MAX_STEPS = 64;
-// First sample sits this far along R so it is not the reflector texel.
+// March origin is this far along R so the first texel is not the reflector.
 const float MIN_RAY_START_ABS = 0.25;
 // Slab min(cpuCap, max(MIN, REL * |surfZ|)). At view-Z ~2000 that is ~20 map
 // units (droid/hover scale). McGuire Fig. 3: small thickness is strict.
