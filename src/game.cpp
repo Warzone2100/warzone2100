@@ -171,7 +171,6 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 	challengesScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	multiMenuScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
-	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);
 	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	widgOverlaysScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight); // must be last!
 }

@@ -547,6 +547,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/wzjsonhelpers.*
        src/wzphysfszipioprovider.*
        src/wzpropertyproviders.*
+       tests/console_test.cpp
        tests/framepacer_test.cpp
 Copyright: 2020-2026, Warzone 2100 Project
 License: GPL-3+-WZ2100-Section-7-1.0+
