@@ -80,19 +80,17 @@ bool getConsoleDisplayStatus();
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 void clearActiveConsole();
-bool mouseOverHistoryConsoleBox();
 int getNumberConsoleMessages();
 void setConsoleLineInfo(UDWORD vis);
 UDWORD getConsoleLineInfo();
 void permitNewConsoleMessages(bool allow);
-void toggleConsoleDrop();
-void setConsoleHistoryFilter(ConsoleHistoryFilter filter);
 void clearInfoMessages();
 PIELIGHT getConsoleTextColor(int player);
 
 const std::deque<ConsoleFeedMessage> &getConsoleFeed();
 /// Changes whenever the feed does
 uint32_t getConsoleFeedRevision();
+const ConsoleHistory &getConsoleHistory();
 
 typedef std::function<void(ConsoleMessage const &)> CONSOLE_MESSAGE_LISTENER;
 void consoleAddMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER>& listener);
