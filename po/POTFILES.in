@@ -464,6 +464,7 @@ src/hci/build.cpp
 src/hci/chatoptions.cpp
 src/hci/commander.cpp
 src/hci/groups.cpp
+src/hci/ingameconsole.cpp
 src/hci/manufacture.cpp
 src/hci/objects_stats.cpp
 src/hci/quickchat.cpp

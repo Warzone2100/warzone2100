@@ -58,6 +58,8 @@ struct InputContext
 	static const ContextId RADAR;
 	/* Active only while the research tree is open, where nothing else is. */
 	static const ContextId RESEARCH_TREE;
+	/* Active only while the console history is open. */
+	static const ContextId CONSOLE;
 
 	/* Debug only, "level editor" mappings */
 	static const ContextId DEBUG_LEVEL_EDITOR;

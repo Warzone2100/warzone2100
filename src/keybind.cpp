@@ -37,6 +37,7 @@
 #include "edit3d.h"
 #include "keybind.h"
 #include "screens/researchtreescreen.h"
+#include "hci/ingameconsole.h"
 #include "mechanics.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -575,9 +576,35 @@ void	kf_ToggleConsoleDrop()
 {
 	if (!bInTutorial)
 	{
-		setConsoleHistoryFilter(ConsoleHistoryFilter::All);
-		toggleConsoleDrop();
+		inGameConsoleToggle(ConsoleHistoryFilter::All);
 	}
+}
+
+// The rest of these run only while the console history is open
+
+void	kf_ConsoleHistoryPageUp()
+{
+	inGameConsoleScroll(ConsoleScroll::PageUp);
+}
+
+void	kf_ConsoleHistoryPageDown()
+{
+	inGameConsoleScroll(ConsoleScroll::PageDown);
+}
+
+void	kf_ConsoleHistoryOldest()
+{
+	inGameConsoleScroll(ConsoleScroll::Oldest);
+}
+
+void	kf_ConsoleHistoryNewest()
+{
+	inGameConsoleScroll(ConsoleScroll::Newest);
+}
+
+void	kf_ConsoleHistoryClose()
+{
+	inGameConsoleCollapse();
 }
 
 void	kf_ToggleResearchTree()
@@ -637,8 +664,7 @@ void kf_ToggleTeamChat()
 {
 	if (!bInTutorial)
 	{
-		setConsoleHistoryFilter(ConsoleHistoryFilter::Team);
-		toggleConsoleDrop();
+		inGameConsoleToggle(ConsoleHistoryFilter::Team);
 	}
 }
 // --------------------------------------------------------------------------

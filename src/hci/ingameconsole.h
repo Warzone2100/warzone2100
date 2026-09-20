@@ -25,13 +25,16 @@
 	along with Warzone 2100. If not, see <https://www.gnu.org/licenses/>.
 */
 /** \file
-	The in-game console: the feed of recent messages at the top of the screen.
+	The in-game console: the feed of recent messages at the top of the screen,
+	and the history, which expands down from the top.
 */
 
 #ifndef __INCLUDED_SRC_HCI_INGAMECONSOLE_H__
 #define __INCLUDED_SRC_HCI_INGAMECONSOLE_H__
 
 #include "lib/widget/widget.h"
+#include "../console_history.h"
+#include "ingameconsole_layout.h"
 
 #include <memory>
 
@@ -39,5 +42,25 @@
 void inGameConsoleAdd(const std::shared_ptr<W_SCREEN> &screen);
 /// Moves the console back above any form attached after it (ex. the HUD's)
 void inGameConsoleKeepOnTop();
+
+/// Where the expanded console goes on the current screen (see consoleExpandedRect())
+ConsoleRect inGameConsoleExpandedRect();
+
+bool inGameConsoleIsExpanded();
+ConsoleHistoryFilter inGameConsoleFilter();
+/// Shows the history with the filter, without a sound
+void inGameConsoleExpand(ConsoleHistoryFilter filter);
+void inGameConsoleCollapse();
+/// Opens the history with the filter, switches to the filter if it's open with another one, or closes it
+void inGameConsoleToggle(ConsoleHistoryFilter filter);
+
+enum class ConsoleScroll
+{
+	PageUp,
+	PageDown,
+	Oldest,
+	Newest
+};
+void inGameConsoleScroll(ConsoleScroll scroll);
 
 #endif // __INCLUDED_SRC_HCI_INGAMECONSOLE_H__

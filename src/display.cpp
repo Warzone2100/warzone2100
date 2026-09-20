@@ -37,6 +37,7 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp.h"
 #include "lib/widget/virtualkeyboard.h"
+#include "lib/widget/widget.h"
 #include "profiling.h"
 
 #include "action.h"
@@ -159,7 +160,6 @@ static double	scrollRemainderZ = 0.0;      ///< sub-unit scroll movement along z
 static Vector2i	scrollLastCommitted(0, 0);   ///< camera position after the last scroll step
 static bool	scrollStepPending = false;   ///< next scroll step uses a dt of 0 (set by resetScroll())
 static UDWORD	scrollLastFrame = UDWORD_MAX; ///< frame number of the last scroll step
-static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
 static bool	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
@@ -503,8 +503,6 @@ void processInput()
 
 	if (!mouseIsOverScreenOverlayChild)
 	{
-		mouseOverConsole = mouseOverHistoryConsoleBox();
-
 		/* Process all of our key mappings */
 		if (mOverConstruction)
 		{
@@ -528,7 +526,8 @@ void processInput()
 
 	if (!isInTextInputMode())
 	{
-		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction && !gestureActive;
+		// A widget that scrolls with the wheel, like the console history, keeps it from zooming the camera
+		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !isMouseOverWheelScrollConsumingWidget() && !mOverConstruction && !gestureActive;
 		gInputManager.processMappings(allowMouseWheelEvents);
 		gamepadProcessBindings();
 	}
@@ -869,7 +868,7 @@ void processMouseClickInput()
 		return;
 	}
 
-	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
+	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !bDisplayMultiJoiningStatus)
 	{
 		OrderSourceScope orderScope(pointerOrderSource());
 		if (bEffectiveRightClickOrders)
