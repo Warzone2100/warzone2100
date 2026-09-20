@@ -38,6 +38,9 @@
 #include "../cheat.h"
 #include "../hci/quickchat.h"
 #include "../hci/chatoptions.h"
+#include "../hci/ingameconsole.h"
+
+#include <array>
 
 class WzInGameChatScreen_CLICKFORM;
 struct WzInGameChatScreen;
@@ -45,6 +48,9 @@ struct WzInGameChatScreen;
 // MARK: - Globals
 
 static std::weak_ptr<WzInGameChatScreen> psCurrentChatScreen;
+
+// The space between the expanded console, the chat box and quick chat, which are stacked in that order
+static constexpr int CHAT_DOCK_GAP = 4;
 
 // MARK: - Helpers
 
@@ -71,7 +77,7 @@ protected:
 
 public:
 	typedef std::function<void ()> OnCloseFunc;
-	static std::shared_ptr<WzInGameChatScreen> make(const OnCloseFunc& onCloseFunction, WzChatMode initialChatMode, bool startWithQuickChatFocused);
+	static std::shared_ptr<WzInGameChatScreen> make(const OnCloseFunc& onCloseFunction, WzChatMode initialChatMode, bool startWithQuickChatFocused, const std::shared_ptr<WIDGET> &cutout);
 
 public:
 	void closeScreen();
@@ -502,6 +508,7 @@ public:
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void display(int xOffset, int yOffset) override;
 	void run(W_CONTEXT *psContext) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void geometryChanged() override
 	{
 		recalcLayout();
@@ -510,6 +517,8 @@ public:
 private:
 	void clearFocusAndEditing();
 	void handleClickOnForm();
+	/// The cutout's rectangle on the screen, when it's showing
+	optional<WzRect> visibleCutout() const;
 
 protected:
 	friend struct WzInGameChatScreen;
@@ -520,6 +529,7 @@ public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 80);
 	std::function<void ()> onClickedFunc;
 	std::function<void ()> onCancelPressed;
+	std::weak_ptr<WIDGET> cutoutWidget;
 private:
 	std::shared_ptr<WzInGameChatBoxForm> consoleBox;
 	std::shared_ptr<W_FORM> quickChatForm;
@@ -602,10 +612,10 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 	});
 	attach(consoleBox);
 	consoleBox->id = CHAT_CONSOLEBOX;
+	// Docked under where the expanded console goes, whether or not it's expanded
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		int desiredWidth = CHAT_CONSOLEBOXW;
-		int x0 = (screenWidth - desiredWidth) / 2;
-		psWidget->setGeometry(x0, CHAT_CONSOLEBOXY, desiredWidth, CHAT_CONSOLEBOXH);
+		const ConsoleRect console = inGameConsoleExpandedRect();
+		psWidget->setGeometry(console.x, console.bottom() + CHAT_DOCK_GAP, console.width, CHAT_CONSOLEBOXH);
 	}));
 	consoleBox->setChatBoxEnabledStatus(freeChatEnabled, quickChatEnabled);
 
@@ -629,7 +639,14 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 			constexpr int MAX_QUICKCHAT_WIDTH = 1200;
 			int quickChatWidth = std::min<int32_t>(screenWidth - 40, MAX_QUICKCHAT_WIDTH);
 			int x0 = std::max<int32_t>((screenWidth - quickChatWidth) / 2, 20);
-			psWidget->setGeometry(x0, CHAT_CONSOLEBOXY + CHAT_CONSOLEBOXH + 100, quickChatWidth, psWidget->idealHeight());
+			int y0 = inGameConsoleExpandedRect().bottom() + CHAT_DOCK_GAP + CHAT_CONSOLEBOXH + CHAT_DOCK_GAP;
+			psWidget->setGeometry(x0, y0, quickChatWidth, psWidget->idealHeight());
+			// NOTE: CONSOLE_CHAT_RESERVE is the room the console leaves for this,
+			// so it has to change if quick chat grows
+			if (y0 + psWidget->height() > screenHeight)
+			{
+				debug(LOG_WARNING, "Quick chat ends at %d, below the screen's height of %d", y0 + psWidget->height(), static_cast<int>(screenHeight));
+			}
 		}));
 	}
 
@@ -670,6 +687,32 @@ void WzInGameChatScreen_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 	handleClickOnForm();
 }
 
+optional<WzRect> WzInGameChatScreen_CLICKFORM::visibleCutout() const
+{
+	auto strongCutout = cutoutWidget.lock();
+	if (!strongCutout || !strongCutout->visible())
+	{
+		return nullopt;
+	}
+	return strongCutout->screenGeometry();
+}
+
+std::shared_ptr<WIDGET> WzInGameChatScreen_CLICKFORM::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+{
+	auto result = W_CLICKFORM::findMouseTargetRecursive(psContext, key, wasPressed);
+	if (result.get() != this)
+	{
+		return result;
+	}
+	// As the screen's root form, this is only hit-tested here, and the cutout's clicks and wheel go to the screen below
+	auto cutout = visibleCutout();
+	if (cutout.has_value() && cutout->contains(psContext->xOffset + psContext->mx, psContext->yOffset + psContext->my))
+	{
+		return nullptr;
+	}
+	return result;
+}
+
 void WzInGameChatScreen_CLICKFORM::display(int xOffset, int yOffset)
 {
 	if (!visible())
@@ -685,8 +728,30 @@ void WzInGameChatScreen_CLICKFORM::display(int xOffset, int yOffset)
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
 
-	// draw background over everything
-	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+	auto cutout = visibleCutout();
+	if (!cutout.has_value())
+	{
+		// draw background over everything
+		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+		return;
+	}
+
+	// draw background around the cutout
+	const WzRect screenRect = screenGeometry();
+	const WzRect cutoutRect = screenRect.intersectionWith(*cutout);
+	const std::array<WzRect, 4> surroundingRects = {
+		WzRect({screenRect.left(), screenRect.top()}, {cutoutRect.left(), screenRect.bottom()}),
+		WzRect({cutoutRect.left(), screenRect.top()}, {cutoutRect.right(), cutoutRect.top()}),
+		WzRect({cutoutRect.right(), screenRect.top()}, {screenRect.right(), screenRect.bottom()}),
+		WzRect({cutoutRect.left(), cutoutRect.bottom()}, {cutoutRect.right(), screenRect.bottom()})
+	};
+	for (const auto &rect : surroundingRects)
+	{
+		if (rect.width() > 0 && rect.height() > 0)
+		{
+			pie_UniTransBoxFill(rect.left(), rect.top(), rect.right(), rect.bottom(), backgroundColor);
+		}
+	}
 }
 
 void WzInGameChatScreen_CLICKFORM::run(W_CONTEXT *psContext)
@@ -735,10 +800,11 @@ void WzInGameChatScreen_CLICKFORM::run(W_CONTEXT *psContext)
 
 // MARK: - WzGameStartOverlayScreen
 
-std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& _onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused)
+std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& _onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused, const std::shared_ptr<WIDGET> &cutout)
 {
 	class make_shared_enabler: public WzInGameChatScreen {};
 	auto newRootFrm = WzInGameChatScreen_CLICKFORM::make(initialChatMode);
+	newRootFrm->cutoutWidget = cutout;
 	auto screen = std::make_shared<make_shared_enabler>();
 	screen->initialize(newRootFrm);
 	screen->onCloseFunc = _onCloseFunc;
@@ -782,9 +848,9 @@ void WzInGameChatScreen::closeScreen()
 	}
 }
 
-std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused)
+std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused, const std::shared_ptr<WIDGET> &cutout)
 {
-	auto screen = WzInGameChatScreen::make(onCloseFunc, initialChatMode, startWithQuickChatFocused);
+	auto screen = WzInGameChatScreen::make(onCloseFunc, initialChatMode, startWithQuickChatFocused, cutout);
 	widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
 	psCurrentChatScreen = screen;
 	return screen;

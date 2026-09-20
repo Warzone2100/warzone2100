@@ -63,4 +63,7 @@ enum class ConsoleScroll
 };
 void inGameConsoleScroll(ConsoleScroll scroll);
 
+/// The expanded history's panel, or nullptr when there's no console
+std::shared_ptr<WIDGET> inGameConsolePanel();
+
 #endif // __INCLUDED_SRC_HCI_INGAMECONSOLE_H__
