@@ -67,7 +67,7 @@ public:
 
 	const char* name() const override { return "CollisionAvoidance"; }
 
-	// Disabled for transporters (they have their own movement logic).
+	// Enabled for every droid; obstacle selection is left to isValidObstacle().
 	bool isEnabled(const SteeringContext& ctx) const override;
 
 private:
