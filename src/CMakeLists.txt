@@ -88,8 +88,8 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h" "3rdparty/*.h" "buildprovenance/*.h" "titleui/*.h" "titleui/*/*.h" "hci/*.h" "input/*.h" "researchtree/*.h" "screens/*.h" "steering/*.h")
-file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "buildprovenance/*.cpp" "titleui/*.cpp" "titleui/*/*.cpp" "hci/*.cpp" "input/*.cpp" "researchtree/*.cpp" "screens/*.cpp" "steering/*.cpp")
+file(GLOB HEADERS "*.h" "3rdparty/*.h" "buildprovenance/*.h" "titleui/*.h" "titleui/*/*.h" "hci/*.h" "hud/*.h" "input/*.h" "researchtree/*.h" "screens/*.h" "steering/*.h")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "buildprovenance/*.cpp" "titleui/*.cpp" "titleui/*/*.cpp" "hci/*.cpp" "hud/*.cpp" "input/*.cpp" "researchtree/*.cpp" "screens/*.cpp" "steering/*.cpp")
 
 set(_additionalSourceFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

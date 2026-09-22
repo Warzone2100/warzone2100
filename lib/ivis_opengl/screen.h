@@ -57,6 +57,8 @@ void screen_Display();
 
 /* screendump */
 void screenDumpToDisk(const char *path, const char *level);
+/// Save a screenshot of the next frame to the given file (in the write directory), replacing it
+void screenDumpToFile(const char *filename);
 
 extern bool wz_texture_compression;
 extern bool uses_gfx_debug;
