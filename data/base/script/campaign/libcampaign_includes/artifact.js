@@ -228,7 +228,7 @@ function __camPickupArtifact(artifact)
 	}
 	ai.pickedUp = true;
 	camTrace("Picked up", ai.tech);
-	playSound(cam_sounds.artifactRecovered, artifact.x, artifact.y, artifact.z);
+	playSound(cam_sounds.artifactRecovered);
 	// artifacts are not self-removing...
 	camSafeRemoveObject(artifact);
 	if (ai.tech instanceof Array)

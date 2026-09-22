@@ -179,7 +179,7 @@ function camDetectEnemyBase(baseLabel)
 		}
 		if (camDef(pos))
 		{
-			playSound(bi.detectSnd, pos.x, pos.y, 0);
+			playSound(bi.detectSnd);
 		}
 	}
 	if (camDef(bi.detectMsg))
@@ -304,7 +304,7 @@ function __camCheckBaseEliminated(group)
 			{
 				// play sound
 				const pos = camMakePos(bi.cleanup);
-				playSound(bi.eliminateSnd, pos.x, pos.y, 0);
+				playSound(bi.eliminateSnd);
 			}
 		}
 		else

@@ -434,7 +434,7 @@ function __camVictoryOffworld()
 					if (!__USED_REMIND || (__USED_REMIND && __camVictoryData.playLzReminder))
 					{
 						const pos = camMakePos(lz);
-						playSound(cam_sounds.lz.returnToLZ, pos.x, pos.y, 0);
+						playSound(cam_sounds.lz.returnToLZ);
 						console(_("Return to LZ"));
 					}
 				}
@@ -469,7 +469,7 @@ function __camVictoryOffworld()
 	{
 		camTrace("LZ clear");
 		const pos = camMakePos(lz);
-		playSound(cam_sounds.lz.LZClear, pos.x, pos.y, 0);
+		playSound(cam_sounds.lz.LZClear);
 		setReinforcementTime(__camVictoryData.reinforcements, false);
 		__camLZCompromisedTicker = 0;
 		if (__camRTLZTicker === 0)
