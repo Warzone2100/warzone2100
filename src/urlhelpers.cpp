@@ -59,6 +59,11 @@
 
 #include <vector>
 
+#if !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC)
+# include <climits> /* For PATH_MAX */
+# include <cstdlib> /* For realpath */
+#endif
+
 #if defined(WZ_OS_WIN)
 static const std::vector<std::string> validLinkPrefixes = { "http://", "https://", "ms-windows-store://" };
 #else
@@ -124,6 +129,59 @@ bool xdg_open(const char *url)
 	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
 	return true;
 # endif
+}
+
+// Converts an absolute local filesystem path to a "file://" URI (RFC 8089)
+// - percent-encodes every byte that is not a RFC 3986 "unreserved" character or a path separator
+//
+// Relative paths are resolved via realpath() first (since a file URI must be absolute).
+// Returns an empty string on failure.
+static std::string localPathToFileURI(const char *path)
+{
+	if (!path || !*path)
+	{
+		return std::string();
+	}
+
+	std::string absolutePath;
+	if (path[0] == '/')
+	{
+		absolutePath = path;
+	}
+	else
+	{
+		char resolved[PATH_MAX];
+		if (realpath(path, resolved) == nullptr)
+		{
+			debug(LOG_INFO, "Unable to resolve path to an absolute path: %s", path);
+			return std::string();
+		}
+		absolutePath = resolved;
+	}
+
+	static const char hexDigits[] = "0123456789ABCDEF";
+	std::string uri = "file://";
+	uri.reserve(uri.size() + (absolutePath.size() * 3));
+	for (const char c : absolutePath)
+	{
+		const unsigned char byte = static_cast<unsigned char>(c);
+		const bool isUnreservedChar =
+			(byte >= 'A' && byte <= 'Z') ||
+			(byte >= 'a' && byte <= 'z') ||
+			(byte >= '0' && byte <= '9') ||
+			byte == '-' || byte == '.' || byte == '_' || byte == '~';
+		if (isUnreservedChar || byte == '/')
+		{
+			uri.push_back(c);
+		}
+		else
+		{
+			uri.push_back('%');
+			uri.push_back(hexDigits[byte >> 4]);
+			uri.push_back(hexDigits[byte & 0x0F]);
+		}
+	}
+	return uri;
 }
 #endif
 
@@ -283,6 +341,18 @@ bool openFolderInDefaultFileManager(const char* path)
 #elif defined (WZ_OS_MAC)
 	return cocoaSelectFolderInFinder(path);
 #else
+	// Attempt the SDL backend's "open URL" support, passing a file:// URI
+	//
+	// With SDL >= 3.4.6: On Linux, SDL_OpenURL handles local file:// paths
+	// via multiple methods, including the org.freedesktop.portal.OpenURI portal,
+	// (which has a better chance of working if the WZ process is sandboxed).
+	//
+	const std::string fileURI = localPathToFileURI(path);
+	if (!fileURI.empty() && wzBackendAttemptOpenURL(fileURI.c_str()))
+	{
+		return true;
+	}
+	// Fall back to spawning xdg-open, with the raw path
 	return xdg_open(path);
 #endif
 	return false;
