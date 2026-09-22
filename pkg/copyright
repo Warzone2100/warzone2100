@@ -505,6 +505,8 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/hci/ingameconsole_layout.h
        src/hci/quickchat.*
        src/hci/teamstrategy.*
+       src/hud/hudgeometrydump.*
+       src/hud/hudids.h
        src/input/gamepadbindings.*
        src/input/gamepadcursor.*
        src/movebench.*
@@ -549,6 +551,10 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/wzpropertyproviders.*
        tests/console_test.cpp
        tests/framepacer_test.cpp
+       tests/hud/contract.py
+       tests/hud/contract.sh
+       tests/hud/geometry.sh
+       tests/hud/imgcmp.py
 Copyright: 2020-2026, Warzone 2100 Project
 License: GPL-3+-WZ2100-Section-7-1.0+
 
