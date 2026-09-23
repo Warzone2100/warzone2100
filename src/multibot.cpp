@@ -547,6 +547,13 @@ bool recvDroidInfo(NETQUEUE queue)
 
 		uint32_t num = 0;
 		NETuint32_t(r, num);
+		constexpr size_t maxVarintBytes = 5;
+		constexpr uint32_t maxDroidInfoEntries = static_cast<uint32_t>((MaxMsgSize - NetMessage::HEADER_LENGTH - maxVarintBytes) / maxVarintBytes);
+		if (num > maxDroidInfoEntries)
+		{
+			debug(LOG_WARNING, "Ignoring GAME_DROIDINFO with too many droids: %" PRIu32, num);
+			return false;
+		}
 
 		for (unsigned n = 0; n < num; ++n)
 		{
