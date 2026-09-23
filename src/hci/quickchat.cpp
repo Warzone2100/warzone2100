@@ -3695,6 +3695,11 @@ bool recvQuickChat(NETQUEUE queue)
 	NETbool(rref, targeting.aiTeammates);
 	uint32_t numSpecificRecipients = 0;
 	NETuint32_t(rref, numSpecificRecipients);
+	if (numSpecificRecipients > MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_WARNING, "Ignoring quick-chat message with too many recipients: %" PRIu32, numSpecificRecipients);
+		return false;
+	}
 	for (uint32_t i = 0; i < numSpecificRecipients; ++i)
 	{
 		uint32_t tmp_playerIdx = std::numeric_limits<uint32_t>::max();
