@@ -144,10 +144,11 @@ public:
 	// Allows queueing requests for video data
 	// Returns true if the request was queued (either with the current call or previously)
 	// Returns false if an error with a prior request for this video data occurred, or the request cannot be satisfied
-	bool requestVideoData(const WzString& videoName);
+	// quietFailure: the file is optional (ex. an edit list), so a failed download is only logged at LOG_VIDEO
+	bool requestVideoData(const WzString& videoName, bool quietFailure = false);
 
 	// Obtains a pointer to the video data (if available), queues a download if not (unless an error has occurred previously trying to obtain it - see getVideoDataError)
-	std::shared_ptr<const std::vector<char>> getVideoData(const WzString& videoName);
+	std::shared_ptr<const std::vector<char>> getVideoData(const WzString& videoName, bool quietFailure = false);
 
 	uint32_t getVideoDataRequestProgress(const WzString& videoName);
 
@@ -188,7 +189,7 @@ private:
 		uint32_t progressPercentage = 0;
 	private:
 		AsyncURLRequestHandle requestHandle;
-		friend bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName);
+		friend bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName, bool quietFailure);
 		friend bool OnDemandVideoDownloader::cancelDownloadRequest(const WzString& videoName);
 	};
 	std::unordered_map<WzString, std::shared_ptr<RequestDetails>> priorRequests;
@@ -212,7 +213,7 @@ static WzString urlEncodeVideoPathComponents(const WzString& partialPath)
 	return result;
 }
 
-bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
+bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName, bool quietFailure)
 {
 	auto it = priorRequests.find(videoName);
 	if (it != priorRequests.end())
@@ -234,13 +235,13 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 
 	URLDataRequest urlRequest;
 	urlRequest.url = baseURLPath.value().toUtf8() + urlEncodeVideoPathComponents(videoName).toUtf8();
-	urlRequest.onResponse = [requestDetails](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
+	urlRequest.onResponse = [requestDetails, quietFailure](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode >= 400)
 		{
-			wzAsyncExecOnMainThread([requestDetails, urlCopy, httpStatusCode]{
-				debug(LOG_WARNING, "Query for %s returned HTTP status code: %ld", urlCopy.c_str(), httpStatusCode);
+			wzAsyncExecOnMainThread([requestDetails, urlCopy, httpStatusCode, quietFailure]{
+				debug(quietFailure ? LOG_VIDEO : LOG_WARNING, "Query for %s returned HTTP status code: %ld", urlCopy.c_str(), httpStatusCode);
 				requestDetails->status = RequestDetails::RequestStatus::Failure;
 			});
 			return URLRequestHandlingBehavior::Done();
@@ -255,8 +256,8 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 		if (!data || data->memory == nullptr || data->size == 0)
 		{
 			// Invalid data response
-			wzAsyncExecOnMainThread([requestDetails, urlCopy]{
-				debug(LOG_INFO, "Failed to load video: %s (no data)", urlCopy.c_str());
+			wzAsyncExecOnMainThread([requestDetails, urlCopy, quietFailure]{
+				debug(quietFailure ? LOG_VIDEO : LOG_INFO, "Failed to load video: %s (no data)", urlCopy.c_str());
 				requestDetails->status = RequestDetails::RequestStatus::Failure;
 			});
 			return URLRequestHandlingBehavior::Done();
@@ -270,10 +271,10 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 		});
 		return URLRequestHandlingBehavior::Done();
 	};
-	urlRequest.onFailure = [requestDetails](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
+	urlRequest.onFailure = [requestDetails, quietFailure](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string urlCopy = url;
-		wzAsyncExecOnMainThread([requestDetails, urlCopy]{
-			debug(LOG_INFO, "Failed to load video: %s", urlCopy.c_str());
+		wzAsyncExecOnMainThread([requestDetails, urlCopy, quietFailure]{
+			debug(quietFailure ? LOG_VIDEO : LOG_INFO, "Failed to load video: %s", urlCopy.c_str());
 			requestDetails->status = RequestDetails::RequestStatus::Failure;
 		});
 	};
@@ -298,7 +299,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 	return true;
 }
 
-std::shared_ptr<const std::vector<char>> OnDemandVideoDownloader::getVideoData(const WzString& videoName)
+std::shared_ptr<const std::vector<char>> OnDemandVideoDownloader::getVideoData(const WzString& videoName, bool quietFailure)
 {
 	auto it = priorRequests.find(videoName);
 	if (it != priorRequests.end())
@@ -314,7 +315,7 @@ std::shared_ptr<const std::vector<char>> OnDemandVideoDownloader::getVideoData(c
 		}
 	}
 
-	requestVideoData(videoName);
+	requestVideoData(videoName, quietFailure);
 	return nullptr;
 }
 
@@ -499,16 +500,34 @@ static std::vector<WzString> videoNameCandidates(const WzString& videoName)
 	return candidates;
 }
 
-// The edit list next to a local WebM video ("<name>.edits.json"), if there is one
-static std::shared_ptr<const WZVideoEditList> loadVideoEdits(const WzString& videoName)
+// The edit list of a WebM video: "<name>.webm" -> "<name>.edits.json" (empty for other videos)
+static WzString videoEditListName(const WzString& videoName)
 {
 	if (!videoName.endsWith(".webm"))
 	{
-		return nullptr;
+		return WzString();
 	}
 	WzString editsName = videoName;
 	editsName.truncate(editsName.length() - 5);
-	editsName = "sequences/" + editsName + ".edits.json";
+	return editsName + ".edits.json";
+}
+
+static WzString siblingVideoName(const WzString& videoName, const WzString& fileName)
+{
+	const std::string name = videoName.toUtf8();
+	const size_t slash = name.rfind('/');
+	return WzString::fromUtf8((slash != std::string::npos) ? name.substr(0, slash + 1) : std::string()) + fileName;
+}
+
+// The edit list next to a local WebM video, if there is one
+static std::shared_ptr<const WZVideoEditList> loadVideoEdits(const WzString& videoName)
+{
+	const WzString listName = videoEditListName(videoName);
+	if (listName.isEmpty())
+	{
+		return nullptr;
+	}
+	const WzString editsName = "sequences/" + listName;
 	if (!PHYSFS_exists(editsName.toUtf8().c_str()))
 	{
 		return nullptr;
@@ -554,9 +573,7 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 		const WZVideoEditTrack *editTrack = aVideoEdits ? aVideoEdits->findTrack(seq_GetPreferredAudioLanguage()) : nullptr;
 		if (editTrack && !editTrack->videoName.isEmpty())
 		{
-			const std::string shared = openedName.toUtf8();
-			const size_t slash = shared.rfind('/');
-			const WzString languageVideoName = WzString::fromUtf8((slash != std::string::npos) ? shared.substr(0, slash + 1) : std::string()) + editTrack->videoName;
+			const WzString languageVideoName = siblingVideoName(openedName, editTrack->videoName);
 			PHYSFS_file *languageFile = PHYSFS_openRead(("sequences/" + languageVideoName).toUtf8().c_str());
 			if (languageFile != nullptr)
 			{
@@ -588,25 +605,60 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 			return false;
 		}
 
-		// Try to download video from on-demand provider, walking the candidate
-		// list (a failed download of a preferred variant falls back to the next)
+		// Try to download video from on-demand provider, walking the candidate list
+		// (a failed download of a preferred variant falls back to the next)
+		//
+		// A WebM video's edit list is requested along with it, and playback waits until the edit list has arrived (or failed).
+		// If it names the preferred language's own video, that video is fetched instead (falling back to the shared one on failure).
 		std::shared_ptr<const std::vector<char>> videoData;
 		WzString fetchedName;
 		bool requestPending = false;
 		for (const auto& name : candidates)
 		{
-			videoData = onDemandVideoProvider.getVideoData(name);
-			if (videoData)
+			std::shared_ptr<const WZVideoEditList> edits;
+			bool editsPending = false;
+			const WzString editsName = videoEditListName(name);
+			if (!editsName.isEmpty())
 			{
-				fetchedName = name;
+				auto editsData = onDemandVideoProvider.getVideoData(editsName, true);
+				if (editsData)
+				{
+					edits = videoEditListParse(editsData->data(), editsData->size(), editsName);
+				}
+				else
+				{
+					editsPending = !onDemandVideoProvider.getVideoDataError(editsName);
+				}
+			}
+
+			WzString wantedName = name;
+			WzString wantedLanguage;
+			const WZVideoEditTrack *editTrack = edits ? edits->findTrack(seq_GetPreferredAudioLanguage()) : nullptr;
+			if (editTrack && !editTrack->videoName.isEmpty())
+			{
+				const WzString languageVideoName = siblingVideoName(name, editTrack->videoName);
+				if (!onDemandVideoProvider.getVideoDataError(languageVideoName))
+				{
+					wantedName = languageVideoName;
+					wantedLanguage = editTrack->languageCode;
+				}
+			}
+
+			videoData = onDemandVideoProvider.getVideoData(wantedName);
+			if (videoData && !editsPending)
+			{
+				fetchedName = wantedName;
+				aVideoEdits = edits;
+				aVideoLanguage = wantedLanguage;
 				break;
 			}
-			if (!onDemandVideoProvider.getVideoDataError(name))
+			if (videoData || !onDemandVideoProvider.getVideoDataError(wantedName))
 			{
 				// Request is queued
 				// Return true and handle waiting inside seq_UpdateFullScreenVideo
 				// (Each later call to seq_UpdateFullScreenVideo will check if still waiting, and then display the download progress before itself kicking off seq_Play once the buffer is ready)
-				currFetchName = name;
+				videoData.reset();
+				currFetchName = wantedName;
 				requestPending = true;
 				break;
 			}
