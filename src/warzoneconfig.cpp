@@ -439,6 +439,16 @@ SCANLINE_MODE war_getScanlineMode()
 	return seq_getScanlineMode();
 }
 
+void war_setFMVGamma(float gamma)
+{
+	seq_setDisplayGamma(gamma);
+}
+
+float war_getFMVGamma()
+{
+	return seq_getDisplayGamma();
+}
+
 void war_SetPauseOnFocusLoss(bool enabled)
 {
 	warGlobs.pauseOnFocusLoss = enabled;

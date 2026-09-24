@@ -69,6 +69,7 @@ typedef void (AL_APIENTRY *GetSourcedvSOFTProc)(ALuint source, ALenum param, ALd
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <deque>
 #include <chrono>
 #include <limits>
@@ -84,6 +85,23 @@ static iV_Image VideoFrameBitmap;			// RGBA frame buffer
 static SCANLINE_MODE scanMode = SCANLINES_OFF;
 static SCANLINE_MODE use_scanlines = SCANLINES_OFF;
 static bool scanlinesDisabled = false;
+
+static constexpr float NATIVE_DISPLAY_GAMMA = 2.2f;		// unchanged decoded video values
+static constexpr float DEFAULT_DISPLAY_GAMMA = 2.4f;	// emulate the BT.1886 look of classic studio video displays
+
+static constexpr std::array<uint8_t, 256> makeGammaTable(float gamma)
+{
+	std::array<uint8_t, 256> table;
+	const double exponent = static_cast<double>(gamma) / NATIVE_DISPLAY_GAMMA;
+	for (size_t i = 0; i < table.size(); ++i)
+	{
+		table[i] = static_cast<uint8_t>(std::lround(255.0 * std::pow(static_cast<double>(i) / 255.0, exponent)));
+	}
+	return table;
+}
+
+static float displayGamma = DEFAULT_DISPLAY_GAMMA;
+static std::array<uint8_t, 256> gammaTable = makeGammaTable(DEFAULT_DISPLAY_GAMMA);
 
 // dimensions of the video texture (allocated to fit the current video)
 static unsigned videoTextureWidth = 0;
@@ -581,9 +599,9 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 			const int G_UV = k.gu * U + ((k.gvTimes2 * V) >> 1);
 			const int B_U = k.bu * U;
 
-			int R = Vclip((A + C + 128) >> 8);
-			int G = Vclip((A - G_UV + 128) >> 8);
-			int B = Vclip((A + B_U + 128) >> 8);
+			int R = gammaTable[Vclip((A + C + 128) >> 8)];
+			int G = gammaTable[Vclip((A - G_UV + 128) >> 8)];
+			int B = gammaTable[Vclip((A + B_U + 128) >> 8)];
 
 			uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 
@@ -603,9 +621,9 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 			Y = frame.y[y_offset++] - k.yOffset;
 			A = k.y * Y;
 
-			R = Vclip((A + C + 128) >> 8);
-			G = Vclip((A - G_UV + 128) >> 8);
-			B = Vclip((A + B_U + 128) >> 8);
+			R = gammaTable[Vclip((A + C + 128) >> 8)];
+			G = gammaTable[Vclip((A - G_UV + 128) >> 8)];
+			B = gammaTable[Vclip((A + B_U + 128) >> 8)];
 
 			rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 			setRGBAFramePixel(rgb_offset, rgba);
@@ -947,4 +965,15 @@ void seq_setScanlineMode(SCANLINE_MODE mode)
 SCANLINE_MODE seq_getScanlineMode(void)
 {
 	return use_scanlines;
+}
+
+void seq_setDisplayGamma(float gamma)
+{
+	displayGamma = clip(gamma, 1.8f, 3.f);
+	gammaTable = makeGammaTable(displayGamma);
+}
+
+float seq_getDisplayGamma()
+{
+	return displayGamma;
 }

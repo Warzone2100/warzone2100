@@ -510,6 +510,7 @@ bool loadConfig()
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
+	war_setFMVGamma(iniSectionGetFloat(iniGeneral, "fmvGamma", war_getFMVGamma()).value());
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
 	if (!createdConfigFile && configVersion < 2)
@@ -1017,6 +1018,7 @@ bool saveConfig()
 	iniSetInteger("sound", (int)war_getSoundEnabled());
 	iniSetInteger("FMVmode", (int)(war_GetFMVmode()));		// sequences
 	iniSetInteger("scanlines", (int)war_getScanlineMode());
+	iniSetFloat("fmvGamma", war_getFMVGamma());
 	iniSetInteger("subtitles", (int)(seq_GetSubtitles()));		// subtitles
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
