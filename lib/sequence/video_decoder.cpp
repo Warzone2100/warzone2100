@@ -141,6 +141,11 @@ size_t videoDecoderChooseAudioTrack(const std::vector<WZAudioTrackMetadata>& tra
 	return 0;
 }
 
+bool videoDecoderLanguageMatches(const WzString& a, const WzString& b)
+{
+	return languageMatches(a, b);
+}
+
 bool videoDecoderWebmSupported()
 {
 #if defined(WZ_ENABLE_WEBM)
