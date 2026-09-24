@@ -465,12 +465,37 @@ const int Amask = 0x000000ff;
 #endif
 #define Vclip( x )	( (x > 0) ? ((x < 255) ? x : 255) : 0 )
 
+/** Fixed-point (x 256) YUV to RGB conversion coefficients */
+struct YUVToRGBCoefficients
+{
+	int y;			// luma scale
+	int yOffset;	// luma black level
+	int rv;			// V contribution to red
+	int gu;			// U contribution to green (subtracted)
+	int gvTimes2;	// twice the V contribution to green (subtracted)
+	int bu;			// U contribution to blue
+};
+
+static const YUVToRGBCoefficients& yuvToRGBCoefficients(const WZVideoFrameYUV& frame)
+{
+	static const YUVToRGBCoefficients bt601Studio = {298, 16, 409, 100, 409, 516};
+	static const YUVToRGBCoefficients bt709Studio = {298, 16, 459, 55, 273, 541};
+	static const YUVToRGBCoefficients bt601Full = {256, 0, 359, 88, 366, 454};
+	static const YUVToRGBCoefficients bt709Full = {256, 0, 403, 48, 240, 475};
+	if (frame.colorMatrix == WZVideoColorMatrix::BT709)
+	{
+		return frame.fullRange ? bt709Full : bt709Studio;
+	}
+	return frame.fullRange ? bt601Full : bt601Studio;
+}
+
 /** Convert a decoded YUV420 frame to RGBA (with optional scanline emulation) and upload it */
 static void video_upload_frame(const WZVideoFrameYUV& frame)
 {
 	const int video_width = static_cast<int>(frame.width);
 	const int video_height = static_cast<int>(frame.height);
 	const int half_width = video_width / 2;
+	const YUVToRGBCoefficients& k = yuvToRGBCoefficients(frame);
 	unsigned char *pRGBABitmapData = VideoFrameBitmap.bmp_w();
 
 	auto setRGBAFramePixel = [pRGBABitmapData](int pixelOffset, uint32_t rgbaValue) {
@@ -485,16 +510,18 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 
 		for (int x = 0; x < half_width; x++)
 		{
-			int Y = frame.y[y_offset++] - 16;
+			int Y = frame.y[y_offset++] - k.yOffset;
 			const int U = frame.u[uv_offset] - 128;
 			const int V = frame.v[uv_offset++] - 128;
 
-			int A = 298 * Y;
-			const int C = 409 * V;
+			int A = k.y * Y;
+			const int C = k.rv * V;
+			const int G_UV = k.gu * U + ((k.gvTimes2 * V) >> 1);
+			const int B_U = k.bu * U;
 
 			int R = Vclip((A + C + 128) >> 8);
-			int G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
-			int B = Vclip((A + 516 * U + 128) >> 8);
+			int G = Vclip((A - G_UV + 128) >> 8);
+			int B = Vclip((A + B_U + 128) >> 8);
 
 			uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 
@@ -510,13 +537,13 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 			}
 			rgb_offset++;
 
-			// second pixel, U and V (and thus C) are the same as before.
-			Y = frame.y[y_offset++] - 16;
-			A = 298 * Y;
+			// second pixel, U and V (and thus chroma terms) are the same as before.
+			Y = frame.y[y_offset++] - k.yOffset;
+			A = k.y * Y;
 
 			R = Vclip((A + C + 128) >> 8);
-			G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
-			B = Vclip((A + 516 * U + 128) >> 8);
+			G = Vclip((A - G_UV + 128) >> 8);
+			B = Vclip((A + B_U + 128) >> 8);
 
 			rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 			setRGBAFramePixel(rgb_offset, rgba);
