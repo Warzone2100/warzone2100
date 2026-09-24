@@ -60,16 +60,17 @@ public:
 	// The accessors are ref-qualified, so `const GridList &r = gridStartIterate(...).results();` does not
 	// compile: the buffer is released at the end of that full expression. Range-for over a factory call is
 	// fine, since it names the temporary for the length of the loop.
-	const GridList &results() const &;
+	const GridList &results() const & { return *buffer; }
 	const GridList &results() const && = delete;
-	GridList::const_iterator begin() const &;
-	GridList::const_iterator end() const &;
+	GridList::const_iterator begin() const & { return buffer->begin(); }
+	GridList::const_iterator end() const & { return buffer->end(); }
 	GridList::const_iterator begin() const && = delete;
 	GridList::const_iterator end() const && = delete;
 
 private:
-	explicit GridQuery(unsigned slot_) : slot(slot_) {}
-	unsigned slot;
+	GridQuery(unsigned slot_, const GridList *buffer_) : slot(slot_), buffer(buffer_) {}
+	unsigned slot;              // Pool slot (released in LIFO order by the destructor)
+	const GridList *buffer;     // The slot's buffer - (pool buffers never move, so this stays valid)
 
 	friend GridQuery gridStartIterate(int32_t x, int32_t y, uint32_t radius);
 	friend GridQuery gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2);
