@@ -33,6 +33,8 @@
 #include "game_world.h"
 #include "perfcounters.h"
 
+#include <memory>
+
 
 static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
 static unsigned gridPersonCount = 0;
@@ -40,18 +42,16 @@ static PointTree::Filter *gridFiltersUnseen;
 static PointTree::Filter *gridFiltersDroidsByPlayer;
 static PointTree::Filter *gridFiltersDroidsRepairCandidates;
 
-/// One result buffer per live GridQuery. The deepest nesting in the game is a query made from inside a
-/// loop over another query's results.
-static const unsigned MAX_GRID_QUERY_DEPTH = 8;
-static GridList gridQueryBuffers[MAX_GRID_QUERY_DEPTH];
+/// One result buffer per live GridQuery, indexed by nesting depth.
+/// The pool grows on-demand. Each buffer is its own allocation, so growing the pool never moves a buffer that a live GridQuery points at.
+static std::vector<std::unique_ptr<GridList>> gridQueryBuffers;
 static unsigned gridQueryDepth = 0;
 
-/// The slot is clamped, so nesting past the pool gives wrong results rather than writing off the end.
-/// The ASSERT in gridClaimBuffer is what reports the overrun.
-static GridList &gridBufferFor(unsigned slot)
-{
-	return gridQueryBuffers[std::min(slot, MAX_GRID_QUERY_DEPTH - 1)];
-}
+/// Buffers allocated at init by gridInitialise(). Normal play nests only a few deep, so the pool is not expected to grow past this.
+static const unsigned GRID_QUERY_BUFFERS_PREALLOCATED = 8;
+
+/// Nesting past the preallocated buffers is logged, and nesting to this depth ASSERTs (to help track down perf or logic issues - normal depth should be substantially less).
+static const unsigned GRID_QUERY_DEPTH_SUSPICIOUS = 16;
 
 // initialise the grid system
 bool gridInitialise()
@@ -61,6 +61,14 @@ bool gridInitialise()
 	gridFiltersUnseen = new PointTree::Filter[MAX_PLAYERS];
 	gridFiltersDroidsByPlayer = new PointTree::Filter[MAX_PLAYERS];
 	gridFiltersDroidsRepairCandidates = new PointTree::Filter[MAX_PLAYERS];
+
+	ASSERT(gridQueryDepth == 0, "gridInitialise called with %u grid queries still live", gridQueryDepth);
+	gridQueryBuffers.clear();
+	gridQueryBuffers.reserve(GRID_QUERY_BUFFERS_PREALLOCATED);
+	for (unsigned i = 0; i < GRID_QUERY_BUFFERS_PREALLOCATED; ++i)
+	{
+		gridQueryBuffers.push_back(std::make_unique<GridList>());
+	}
 
 	return true;  // Yay, nothing failed!
 }
@@ -136,6 +144,9 @@ void gridShutDown()
 	gridFiltersDroidsByPlayer = nullptr;
 	delete[] gridFiltersDroidsRepairCandidates;
 	gridFiltersDroidsRepairCandidates = nullptr;
+
+	ASSERT(gridQueryDepth == 0, "gridShutDown called with %u grid queries still live", gridQueryDepth);
+	gridQueryBuffers.clear();
 }
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
@@ -144,13 +155,22 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 	return ((int64_t)x * (int64_t)x + (int64_t)y * (int64_t)y) <= ((int64_t)radius * (int64_t)radius);
 }
 
-/// Claims the next result buffer. It stays claimed until the GridQuery built from the returned slot is
-/// destroyed. The buffer keeps the capacity its last use grew it to.
+/// Claims the next result buffer, adding one to the pool if every existing buffer is in use.
+/// It stays claimed until the GridQuery built from the returned slot is destroyed.
+/// The buffer keeps the capacity its last use grew it to.
 static GridList &gridClaimBuffer(unsigned &slot)
 {
 	slot = gridQueryDepth;
-	ASSERT(slot < MAX_GRID_QUERY_DEPTH, "Grid queries nested %u deep, deeper than the buffer pool", slot + 1);
-	return gridBufferFor(slot);
+	if (slot == gridQueryBuffers.size())
+	{
+		if (slot < GRID_QUERY_DEPTH_SUSPICIOUS)
+		{
+			debug(LOG_INFO, "Grid queries nested %u deep, growing the buffer pool beyond its preallocated %u", slot + 1, GRID_QUERY_BUFFERS_PREALLOCATED);
+		}
+		ASSERT(slot != GRID_QUERY_DEPTH_SUSPICIOUS, "Grid queries nested %u deep - check the code!", slot + 1);
+		gridQueryBuffers.push_back(std::make_unique<GridList>());
+	}
+	return *gridQueryBuffers[slot];
 }
 
 GridQuery::~GridQuery()
@@ -159,25 +179,10 @@ GridQuery::~GridQuery()
 	gridQueryDepth = slot;
 }
 
-const GridList &GridQuery::results() const &
-{
-	return gridBufferFor(slot);
-}
-
-GridList::const_iterator GridQuery::begin() const &
-{
-	return gridBufferFor(slot).begin();
-}
-
-GridList::const_iterator GridQuery::end() const &
-{
-	return gridBufferFor(slot).end();
-}
-
 // initialise the grid system to start iterating through units that
 // could affect a location (x,y in world coords)
 template<class Condition>
-static unsigned gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
+static const GridList *gridStartIterateFiltered(unsigned &slot, int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
 	WZ_PERF_SCOPE(T_gridQuery);
 	WZ_PERF_COUNT(C_gridQueries, 1);
@@ -203,7 +208,6 @@ static unsigned gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, 
 	}
 	found.erase(w, i);  // Erase all points that were a bit too far.
 
-	unsigned slot;
 	GridList &gridList = gridClaimBuffer(slot);
 	gridList.resize(found.size());
 	for (unsigned n = 0; n < gridList.size(); ++n)
@@ -212,17 +216,16 @@ static unsigned gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, 
 	}
 	WZ_PERF_COUNT(C_gridResultsReturned, gridList.size());
 	++gridQueryDepth;
-	return slot;
+	return &gridList;
 }
 
 template<class Condition>
-static unsigned gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
+static const GridList *gridStartIterateFilteredArea(unsigned &slot, int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
 {
 	WZ_PERF_SCOPE(T_gridQuery);
 	WZ_PERF_COUNT(C_gridQueries, 1);
 	PointTree::ResultVector &found = gridPointTree->query(x, y, x2, y2);
 
-	unsigned slot;
 	GridList &gridList = gridClaimBuffer(slot);
 	gridList.resize(found.size());
 	for (unsigned n = 0; n < gridList.size(); ++n)
@@ -231,7 +234,7 @@ static unsigned gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, i
 	}
 	WZ_PERF_COUNT(C_gridResultsReturned, gridList.size());
 	++gridQueryDepth;
-	return slot;
+	return &gridList;
 }
 
 struct ConditionTrue
@@ -244,12 +247,16 @@ struct ConditionTrue
 
 GridQuery gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
-	return GridQuery(gridStartIterateFiltered(x, y, radius, nullptr, ConditionTrue()));
+	unsigned slot;
+	const GridList *results = gridStartIterateFiltered(slot, x, y, radius, nullptr, ConditionTrue());
+	return GridQuery(slot, results);
 }
 
 GridQuery gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
 {
-	return GridQuery(gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue()));
+	unsigned slot;
+	const GridList *results = gridStartIterateFilteredArea(slot, x, y, x2, y2, ConditionTrue());
+	return GridQuery(slot, results);
 }
 
 struct ConditionDroidsByPlayer
@@ -264,7 +271,9 @@ struct ConditionDroidsByPlayer
 
 GridQuery gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	return GridQuery(gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsByPlayer[player], ConditionDroidsByPlayer(player)));
+	unsigned slot;
+	const GridList *results = gridStartIterateFiltered(slot, x, y, radius, &gridFiltersDroidsByPlayer[player], ConditionDroidsByPlayer(player));
+	return GridQuery(slot, results);
 }
 
 struct ConditionDroidCandidateForRepair
@@ -286,7 +295,9 @@ struct ConditionDroidCandidateForRepair
 
 GridQuery gridStartIterateRepairCandidates(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	return GridQuery(gridStartIterateFiltered(x, y, radius, &gridFiltersDroidsRepairCandidates[player], ConditionDroidCandidateForRepair(player)));
+	unsigned slot;
+	const GridList *results = gridStartIterateFiltered(slot, x, y, radius, &gridFiltersDroidsRepairCandidates[player], ConditionDroidCandidateForRepair(player));
+	return GridQuery(slot, results);
 }
 
 struct ConditionUnseen
@@ -301,5 +312,7 @@ struct ConditionUnseen
 
 GridQuery gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player)
 {
-	return GridQuery(gridStartIterateFiltered(x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player)));
+	unsigned slot;
+	const GridList *results = gridStartIterateFiltered(slot, x, y, radius, &gridFiltersUnseen[player], ConditionUnseen(player));
+	return GridQuery(slot, results);
 }
