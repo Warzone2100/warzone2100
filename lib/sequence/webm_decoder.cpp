@@ -114,6 +114,10 @@ public:
 	/** Get the (borrowed) displayable frame from the last decode; false if none
 	 * (e.g. an invisible alt-ref frame). Planes are valid until the next decode(). */
 	virtual bool getFrame(WZVideoFrameYUV& out) = 0;
+
+	/** Color description from the container - used where the bitstream lacks one */
+	WZVideoColorMatrix containerColorMatrix = WZVideoColorMatrix::BT601;
+	bool containerFullRange = false;
 };
 
 class VpxVideoCodec final : public WebmVideoCodec
@@ -191,6 +195,21 @@ public:
 		out.uvStride = img->stride[VPX_PLANE_U];
 		out.width = img->d_w;
 		out.height = img->d_h;
+		switch (img->cs)
+		{
+		case VPX_CS_BT_709:
+			out.colorMatrix = WZVideoColorMatrix::BT709;
+			break;
+		case VPX_CS_BT_601:
+		case VPX_CS_SMPTE_170:
+			out.colorMatrix = WZVideoColorMatrix::BT601;
+			break;
+		default:	// unknown (VP8 has no color space field) or unsupported
+			out.colorMatrix = containerColorMatrix;
+			break;
+		}
+		// VP8 streams always report studio range
+		out.fullRange = (img->range == VPX_CR_FULL_RANGE) || (img->cs == VPX_CS_UNKNOWN && containerFullRange);
 		return true;
 	}
 
@@ -383,6 +402,12 @@ bool WebmVideoDecoder::open()
 			m_videoMetadata.height = static_cast<unsigned>(videoTrack->GetHeight());
 			const unsigned long long defaultDurationNs = track->GetDefaultDuration();
 			m_videoMetadata.fps = (defaultDurationNs > 0) ? 1e9 / static_cast<double>(defaultDurationNs) : 0.0;
+			if (const mkvparser::Colour *colour = videoTrack->GetColour())
+			{
+				// Matroska MatrixCoefficients (ISO/IEC 23091-4): 1 = BT.709, 5 and 6 = BT.601
+				m_videoCodec->containerColorMatrix = (colour->matrix_coefficients == 1) ? WZVideoColorMatrix::BT709 : WZVideoColorMatrix::BT601;
+				m_videoCodec->containerFullRange = (colour->range == 2);
+			}
 			debug(LOG_VIDEO, "WebM video track %lld: %s %ux%u %.02f fps",
 			      m_videoTrackNumber, codecId, m_videoMetadata.width, m_videoMetadata.height, m_videoMetadata.fps);
 		}

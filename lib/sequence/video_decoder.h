@@ -28,6 +28,12 @@
 #include <memory>
 #include <vector>
 
+enum class WZVideoColorMatrix
+{
+	BT601,
+	BT709,
+};
+
 /** One decoded video frame, as YUV 4:2:0 planes.
  *
  * The plane pointers are *borrowed* from the decoder: they remain valid only
@@ -43,6 +49,8 @@ struct WZVideoFrameYUV
 	unsigned width = 0;			// visible frame dimensions
 	unsigned height = 0;
 	double pts = 0.0;			// presentation time, in seconds
+	WZVideoColorMatrix colorMatrix = WZVideoColorMatrix::BT601;
+	bool fullRange = false;		// false: studio range (Y 16-235, UV 16-240)
 };
 
 struct WZVideoTrackMetadata
