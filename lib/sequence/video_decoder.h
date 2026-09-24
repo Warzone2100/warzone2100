@@ -126,3 +126,6 @@ bool videoDecoderWebmSupported();
  * case-insensitively, on the primary language subtag.
  * \returns an index into tracks (0 if tracks is empty) */
 size_t videoDecoderChooseAudioTrack(const std::vector<WZAudioTrackMetadata>& tracks, const WzString& preferredLanguage);
+
+/** Whether two language codes name the same language */
+bool videoDecoderLanguageMatches(const WzString& a, const WzString& b);
