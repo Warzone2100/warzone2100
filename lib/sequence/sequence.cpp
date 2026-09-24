@@ -34,6 +34,8 @@
  * stuttering audio device) the sink skips ahead in the audio to re-align, if
  * it gets ahead (audio kept playing through a main-loop stall) the sink holds
  * off queueing until the clock catches up
+ * - the picture runs behind this clock by the audio output latency when OpenAL
+ * reports it
  */
 
 #include "lib/framework/frame.h"
@@ -57,6 +59,13 @@
 #include "lib/ivis_opengl/pieclip.h"
 
 #include <AL/al.h>
+
+// AL_SOFT_source_latency
+#ifndef AL_APIENTRY
+#define AL_APIENTRY
+#endif
+static constexpr ALenum SEC_OFFSET_LATENCY_SOFT = 0x1201;
+typedef void (AL_APIENTRY *GetSourcedvSOFTProc)(ALuint source, ALenum param, ALdouble *values);
 
 #include <algorithm>
 #include <array>
@@ -121,6 +130,11 @@ public:
 		// set the volume of the FMV based on the user's preferences
 		alSourcef(sink->m_source, AL_GAIN, sound_GetUIVolume());
 		sound_GetError();
+
+		if (alIsExtensionPresent("AL_SOFT_source_latency"))
+		{
+			sink->m_getSourcedv = reinterpret_cast<GetSourcedvSOFTProc>(alGetProcAddress("alGetSourcedvSOFT"));
+		}
 
 		return sink;
 	}
@@ -231,6 +245,18 @@ public:
 	}
 
 	bool started() const { return m_started; }
+
+	/** Seconds between the source's playback position and what the device outputs (negative if unknown) */
+	double outputLatency()
+	{
+		if (!m_getSourcedv)
+		{
+			return -1.0;
+		}
+		ALdouble values[2] = {0.0, -1.0};	// offset, latency
+		m_getSourcedv(m_source, SEC_OFFSET_LATENCY_SOFT, values);
+		return (sound_GetError() == AL_NO_ERROR) ? values[1] : -1.0;
+	}
 
 	/** All input decoded, queued and played out? */
 	bool finished()
@@ -347,6 +373,7 @@ private:
 
 private:
 	ALuint m_source = 0;
+	GetSourcedvSOFTProc m_getSourcedv = nullptr;
 	std::array<ALuint, NUM_BUFFERS> m_buffers;
 	std::vector<ALuint> m_freeBuffers;
 	std::deque<QueuedBuffer> m_queued;	// in-flight buffers, oldest first (always contiguous stream data)
@@ -427,10 +454,34 @@ struct VideoPlayback
 	double subtitleTime = 0.0;			// the furthest video time shown (paused by holds and repeats)
 	double lastDisplayClockTime = 0.0;	// clock time when we last put a frame on screen
 
+	// the picture is held back by the audio output latency, so picture and sound arrive together
+	double pictureDelay = 0.0;			// seconds (smoothed audio output latency)
+	bool havePictureDelay = false;
+	double videoTime = -std::numeric_limits<double>::infinity();	// the clock minus pictureDelay (never decreasing)
+
 	// frame & dropped frame counters
 	int frames = 0;
 	int dropped = 0;
 };
+
+static constexpr double MAX_PICTURE_DELAY = 0.5;		// seconds
+static constexpr double PICTURE_DELAY_SMOOTHING = 0.02;	// per tick (reported latency may jitter by ~10 ms)
+
+/** Follow the audio output latency and advance the picture's presentation time */
+static void updateVideoTime(VideoPlayback& pb, double now)
+{
+	if (pb.audioSink && pb.audioSink->started())
+	{
+		const double latency = pb.audioSink->outputLatency();
+		if (latency >= 0.0)
+		{
+			const double target = std::min(latency, MAX_PICTURE_DELAY);
+			pb.pictureDelay = pb.havePictureDelay ? pb.pictureDelay + (target - pb.pictureDelay) * PICTURE_DELAY_SMOOTHING : target;
+			pb.havePictureDelay = true;
+		}
+	}
+	pb.videoTime = std::max(pb.videoTime, now - pb.pictureDelay);
+}
 
 static std::unique_ptr<VideoPlayback> playback;
 
@@ -762,6 +813,8 @@ bool seq_Update()
 	{
 		pb.audioSink->update(*pb.decoder, now);
 	}
+	updateVideoTime(pb, now);
+	const double videoTime = pb.videoTime;
 
 	/* make sure an item is pending */
 	if (!pb.havePendingItem && !pb.videoExhausted && pb.video)
@@ -773,7 +826,7 @@ bool seq_Update()
 	/* running slow? skip frames that are late by more than a frame period,
 	   but always show at least one frame per second */
 	while (pb.havePendingItem && pb.pendingItem.droppable
-	       && (now - pb.pendingItem.time) > pb.frameDuration
+	       && (videoTime - pb.pendingItem.time) > pb.frameDuration
 	       && (now - pb.lastDisplayClockTime) < 1.0)
 	{
 		pb.dropped++;
@@ -783,7 +836,7 @@ bool seq_Update()
 
 	/* are we done? */
 	const bool audioDone = !pb.audioSink || pb.audioSink->finished();
-	if (!pb.havePendingItem && pb.videoExhausted && now >= pb.timelineEnd && audioDone)
+	if (!pb.havePendingItem && pb.videoExhausted && videoTime >= pb.timelineEnd && audioDone)
 	{
 		video_draw();
 		seq_Shutdown();
@@ -792,7 +845,7 @@ bool seq_Update()
 	}
 
 	/* at or past time for the pending item? */
-	if (pb.havePendingItem && pb.pendingItem.time <= now)
+	if (pb.havePendingItem && pb.pendingItem.time <= videoTime)
 	{
 		const TimelineVideoSource::Item& item = pb.pendingItem;
 		switch (item.kind)
