@@ -471,6 +471,7 @@ src/hci/quickchat.cpp
 src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
+src/hud/hudreticule.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp
@@ -544,6 +545,7 @@ src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
 src/screens/researchtreescreen.cpp
 src/selection.cpp
+src/selectionidle.cpp
 src/seqdisp.cpp
 src/shadowcascades.cpp
 src/spectatorwidgets.cpp

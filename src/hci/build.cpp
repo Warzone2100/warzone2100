@@ -29,6 +29,8 @@
 #include "../power.h"
 #include "../map.h"
 #include "../game_world.h"
+#include "../stats.h"
+#include "../hud/hudtext.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
 
@@ -68,6 +70,24 @@ void BuildController::updateBuildOptionsList()
 	auto newBuildOptions = fillStructureList(gameWorld.objects, selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
 
 	stats = std::vector<STRUCTURE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
+}
+
+unsigned BuildController::constructionPointsPerSecond() const
+{
+	unsigned selectedPoints = 0;
+	for (DROID *droid : builders)
+	{
+		if (droid->selected && droid->died == 0 && droid->getConstructStats() != nullptr)
+		{
+			selectedPoints += constructorPoints(*droid->getConstructStats(), droid->player);
+		}
+	}
+	if (selectedPoints > 0)
+	{
+		return selectedPoints;
+	}
+	auto builder = getHighlightedObject();
+	return builder != nullptr && builder->getConstructStats() != nullptr ? constructorPoints(*builder->getConstructStats(), builder->player) : 0;
 }
 
 STRUCTURE_STATS *BuildController::getObjectStatsAt(size_t objectIndex) const
@@ -502,6 +522,18 @@ private:
 	{
 		STRUCTURE_STATS * psStats = getStats();
 		return psStats ? psStats->powerToBuild : 0;
+	}
+
+	std::string getTip() override
+	{
+		std::string tip = BaseWidget::getTip();
+		STRUCTURE_STATS *psStats = getStats();
+		const unsigned rate = controller->constructionPointsPerSecond();
+		if (psStats != nullptr && rate > 0 && psStats != structGetDemolishStat())
+		{
+			tip += "\n" + astringf(_("Build Time: %s"), hudFormatDuration(hudWorkSeconds(psStats->buildPoints, rate)).c_str());
+		}
+		return tip;
 	}
 
 	void clickPrimary() override

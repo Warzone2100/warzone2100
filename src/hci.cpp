@@ -93,6 +93,9 @@
 #include "hci/quickchat.h"
 #include "hci/replay_controller.h"
 #include "warzoneconfig.h"
+#include "hud/hudkeys.h"
+#include "hud/hudreticule.h"
+#include "hud/hudmodel.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -694,6 +697,11 @@ bool intInitialise()
 		});
 	}, GAME_TICKS_PER_SEC + GAME_TICKS_PER_SEC);
 
+	hudModel().reset();
+	intUpdateFuncs.emplace_back([]() {
+		hudModel().update();
+	}, HudModel::REFRESH_INTERVAL_MS);
+
 	// refresh defaults for quick chat
 	quickChatInitInGame();
 
@@ -708,6 +716,7 @@ void interfaceShutDown()
 
 	destroyReplayControllerOverlay();
 
+	intUpdateFuncs.clear();
 	groupsUI = nullptr;
 
 	psWScreen = nullptr;
@@ -2004,7 +2013,7 @@ std::string W_INGAMEOPTIONS_BUTTON::getTip()
 {
 	if (!InGameOpUp)
 	{
-		return  _("Open In-Game Options");
+		return hudTipWithKeyBinding(_("Open In-Game Options"), "addInGameOptions");
 	}
 	else
 	{
@@ -2039,6 +2048,10 @@ bool intAddInGameOptionsButton()
 	{
 		psWScreen->psForm->attach(button);
 		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
+		button->setHelp(WidgetHelp()
+			.setTitle(_("In-Game Options"))
+			.setDescription(_("Opens the in-game menu: options, saving and loading, and quitting."))
+			.addRelatedKeybinding("addInGameOptions"));
 		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			auto psIngameOptButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(psWidget->shared_from_this());
 			ASSERT_OR_RETURN(, psIngameOptButton != nullptr, "Wrong button type?");
@@ -2110,16 +2123,11 @@ bool intAddReticule()
 		retbutstats[i].downTime = 0;
 		retbutstats[i].flashing = false;
 		retbutstats[i].flashTime = 0;
-		auto pButton = widgAddButton(psWScreen, &sButInit);
-		retbutstats[i].button = (pButton) ? std::dynamic_pointer_cast<W_BUTTON>(pButton->shared_from_this()) : nullptr;
-		if (!retbutstats[i].button)
-		{
-			debug(LOG_ERROR, "Failed to add reticule button");
-		}
-		else
-		{
-			setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
-		}
+		auto button = makeReticuleButton(&sButInit);
+		retForm->attach(button);
+		retbutstats[i].button = button;
+		setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
+		button->setHelp(reticuleButtonHelp(i));
 	}
 	ReticuleUp = true;
 	return true;
@@ -2167,6 +2175,10 @@ bool intAddPower()
 	psBarGraph->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 	}));
+
+	psBarGraph->setHelp(WidgetHelp()
+		.setTitle(_("Power"))
+		.setDescription(_("The power you have left once everything queued is paid for. Pointing at something to build shows its cost on the bar. It turns red when the queue costs more than you have.")));
 
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen);
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen->psForm);

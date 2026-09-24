@@ -23,6 +23,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "manufacture.h"
+#include "../hud/hudtext.h"
 #include "../mission.h"
 #include "../qtscript.h"
 #include "../display3d.h"
@@ -585,6 +586,19 @@ private:
 		return psTemplate ? calcTemplatePower(psTemplate) : 0;
 	}
 
+	std::string getTip() override
+	{
+		std::string tip = BaseWidget::getTip();
+		DROID_TEMPLATE *psTemplate = getStats();
+		STRUCTURE *factory = controller->getHighlightedObject();
+		const int rate = factory != nullptr ? getBuildingProductionPoints(factory) : 0;
+		if (psTemplate != nullptr && rate > 0)
+		{
+			tip += "\n" + astringf(_("Production Time: %s"), hudFormatDuration(hudWorkSeconds(calcTemplateBuild(psTemplate), rate)).c_str());
+		}
+		return tip;
+	}
+
 	void clickPrimary() override
 	{
 		adjustFactoryProduction(true);
@@ -713,7 +727,7 @@ private:
 		attach(loopProductionButton);
 		loopProductionButton->move(STAT_SLDX + STAT_SLDWIDTH + 2, STAT_SLDY);
 
-		auto loopProductionLabel = std::make_shared<LoopProductionLabel>(controller);
+		auto loopProductionLabel = std::make_shared<LoopProductionLabel>(controller, loopProductionButton->height());
 		attach(loopProductionLabel);
 		loopProductionLabel->setGeometry(loopProductionButton->x() - 15, loopProductionButton->y(), 12, 15);
 	}
@@ -812,7 +826,7 @@ protected:
 		typedef W_LABEL BaseWidget;
 
 	public:
-		LoopProductionLabel(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
+		LoopProductionLabel(const std::shared_ptr<ManufactureController> &controller, int buttonHeight): BaseWidget(), controller(controller), buttonHeight(buttonHeight)
 		{
 		}
 
@@ -820,7 +834,11 @@ protected:
 		void display(int xOffset, int yOffset) override
 		{
 			updateLayout();
-			BaseWidget::display(xOffset, yOffset);
+			// Centered on the loop button, which is shorter than the label (the label keeps its area, for hit tests)
+			if (!text.getText().isEmpty())
+			{
+				text.render(xOffset + x(), yOffset + y() + (buttonHeight - text.lineSize()) / 2 - text.aboveBase(), WZCOL_FORM_TEXT);
+			}
 		}
 
 		void updateLayout()
@@ -830,6 +848,7 @@ protected:
 			{
 				lastProductionLoop = productionLoops;
 				setString(WzString::fromUtf8(getNewString()));
+				text.setText(WzString::fromUtf8(getNewString()), font_regular);
 			}
 		}
 
@@ -849,6 +868,8 @@ protected:
 
 		uint8_t lastProductionLoop = 0;
 		std::shared_ptr<ManufactureController> controller;
+		int buttonHeight;
+		WzText text;
 	};
 };
 
