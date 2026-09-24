@@ -38,6 +38,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sequence/sequence.h"
 #include "lib/sequence/video_decoder.h"
+#include "lib/sequence/video_edits.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 
@@ -114,6 +115,8 @@ static WzString currVideoName;
 static WzString currAudioName;
 static WzString currFetchName;	// the candidate name currently being downloaded (for progress display)
 static std::shared_ptr<VideoProvider> aVideoProvider;
+static std::shared_ptr<const WZVideoEditList> aVideoEdits;	// the playing video's edit list, if it has one
+static WzString aVideoLanguage;	// the edit-list language whose "own" (language-specific) video is playing (empty = the shared video)
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
@@ -488,9 +491,33 @@ static std::vector<WzString> videoNameCandidates(const WzString& videoName)
 	return candidates;
 }
 
+// The edit list next to a local WebM video ("<name>.edits.json"), if there is one
+static std::shared_ptr<const WZVideoEditList> loadVideoEdits(const WzString& videoName)
+{
+	if (!videoName.endsWith(".webm"))
+	{
+		return nullptr;
+	}
+	WzString editsName = videoName;
+	editsName.truncate(editsName.length() - 5);
+	editsName = "sequences/" + editsName + ".edits.json";
+	if (!PHYSFS_exists(editsName.toUtf8().c_str()))
+	{
+		return nullptr;
+	}
+	std::vector<char> data;
+	if (!loadFileToBufferVector(editsName.toUtf8().c_str(), data, false, false))
+	{
+		return nullptr;
+	}
+	return videoEditListParse(data.data(), data.size(), editsName);
+}
+
 static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audioName)
 {
 	aVideoProvider.reset();
+	aVideoEdits.reset();
+	aVideoLanguage.clear();
 	currVideoName = videoName;
 	currAudioName = audioName;
 
@@ -513,6 +540,26 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 	if (fpInfile != nullptr)
 	{
 		aVideoProvider = makeVideoProvider(fpInfile, openedName);
+		aVideoEdits = loadVideoEdits(openedName);
+
+		// the preferred language may have its own video, next to the shared one
+		const WZVideoEditTrack *editTrack = aVideoEdits ? aVideoEdits->findTrack(seq_GetPreferredAudioLanguage()) : nullptr;
+		if (editTrack && !editTrack->videoName.isEmpty())
+		{
+			const std::string shared = openedName.toUtf8();
+			const size_t slash = shared.rfind('/');
+			const WzString languageVideoName = WzString::fromUtf8((slash != std::string::npos) ? shared.substr(0, slash + 1) : std::string()) + editTrack->videoName;
+			PHYSFS_file *languageFile = PHYSFS_openRead(("sequences/" + languageVideoName).toUtf8().c_str());
+			if (languageFile != nullptr)
+			{
+				aVideoProvider = makeVideoProvider(languageFile, languageVideoName);
+				aVideoLanguage = editTrack->languageCode;
+			}
+			else
+			{
+				debug(LOG_WARNING, "unable to open 'sequences/%s' - playing the shared video", languageVideoName.toUtf8().c_str());
+			}
+		}
 	}
 	else
 	{
@@ -570,7 +617,7 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 		aVideoProvider = makeVideoProvider(videoData, fetchedName);
 	}
 
-	if (!seq_Play(aVideoProvider))
+	if (!seq_Play(aVideoProvider, aVideoEdits, aVideoLanguage))
 	{
 		seq_Shutdown();
 		return false;
@@ -762,7 +809,7 @@ bool seq_UpdateFullScreenVideo()
 			{
 				seq_Shutdown();
 
-				if (!seq_Play(aVideoProvider))
+				if (!seq_Play(aVideoProvider, aVideoEdits, aVideoLanguage))
 				{
 					bHoldSeqForAudio = true;
 				}
@@ -786,6 +833,8 @@ void seqReleaseAll()
 {
 	seq_Shutdown();
 	aVideoProvider.reset();
+	aVideoEdits.reset();
+	aVideoLanguage.clear();
 	wzCachedSeqText.clear();
 }
 
@@ -801,6 +850,8 @@ bool seq_StopFullScreenVideo()
 	seq_Shutdown();
 
 	aVideoProvider.reset();
+	aVideoEdits.reset();
+	aVideoLanguage.clear();
 	wzCachedSeqText.clear();
 
 	return true;
