@@ -237,6 +237,14 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 	urlRequest.onResponse = [requestDetails](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
+		if (httpStatusCode >= 400)
+		{
+			wzAsyncExecOnMainThread([requestDetails, urlCopy, httpStatusCode]{
+				debug(LOG_WARNING, "Query for %s returned HTTP status code: %ld", urlCopy.c_str(), httpStatusCode);
+				requestDetails->status = RequestDetails::RequestStatus::Failure;
+			});
+			return URLRequestHandlingBehavior::Done();
+		}
 		if (httpStatusCode != 200)
 		{
 			wzAsyncExecOnMainThread([httpStatusCode]{
