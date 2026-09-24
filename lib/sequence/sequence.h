@@ -26,6 +26,8 @@
 #include "video_provider.h"
 #include <memory>
 
+struct WZVideoEditList;
+
 typedef enum
 {
 	SCANLINES_OFF,
@@ -33,13 +35,19 @@ typedef enum
 	SCANLINES_BLACK
 } SCANLINE_MODE;
 
-bool seq_Play(std::shared_ptr<VideoProvider> video);
+/** Start playing a video.
+ * \param edits the video's edit list (optional): the timeline for the chosen audio language is applied
+ * \param videoLanguage the edit-list language whose "own" video this is (empty for the shared video) */
+bool seq_Play(std::shared_ptr<VideoProvider> video, std::shared_ptr<const WZVideoEditList> edits = nullptr,
+              const WzString& videoLanguage = WzString());
 bool seq_Playing();
 /** Set the preferred FMV audio-track language (a WZ locale code, e.g. "de").
  * Empty / nullptr (the default) = automatic: follow the game language.
  * Takes effect from the next seq_Play(). Videos without a matching track
  * fall back to their English track. */
 void seq_SetPreferredAudioLanguage(const char *languageCode);
+/** The preferred FMV audio language in effect: the override if set, else the game language */
+WzString seq_GetPreferredAudioLanguage();
 bool seq_Update();
 void seq_Shutdown();
 int seq_GetFrameNumber();

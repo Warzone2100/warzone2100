@@ -40,6 +40,8 @@
 #include "lib/ivis_opengl/gfx_api.h"
 #include "sequence.h"
 #include "video_decoder.h"
+#include "video_edits.h"
+#include "video_timeline.h"
 #include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -410,15 +412,19 @@ struct VideoPlayback
 	std::shared_ptr<VideoProvider> provider;
 	std::unique_ptr<WZVideoDecoder> decoder;
 	std::unique_ptr<VideoAudioSink> audioSink;
+	std::unique_ptr<TimelineVideoSource> video;
+	std::shared_ptr<const WZVideoEditList> edits;
 	PlaybackClock clock;
 
-	// the next decoded-but-not-yet-displayed frame (planes borrowed from the decoder)
-	WZVideoFrameYUV pendingFrame;
-	bool havePendingFrame = false;
+	// the next item to display (a frame's planes are borrowed from the decoder)
+	TimelineVideoSource::Item pendingItem;
+	bool havePendingItem = false;
 	bool videoExhausted = false;
+	double timelineEnd = 0.0;			// output time the edit-list timeline ends (0 = no timeline)
+	std::vector<uint8_t> fadeBase;		// the frame bitmap a hold_fade starts from
 
 	double frameDuration = 1.0 / 25.0;
-	double displayedFrameTime = 0.0;	// pts of the frame currently on screen
+	double subtitleTime = 0.0;			// the furthest video time shown (paused by holds and repeats)
 	double lastDisplayClockTime = 0.0;	// clock time when we last put a frame on screen
 
 	// frame & dropped frame counters
@@ -434,6 +440,11 @@ static WzString preferredAudioLanguage;
 void seq_SetPreferredAudioLanguage(const char *languageCode)
 {
 	preferredAudioLanguage = (languageCode != nullptr) ? languageCode : "";
+}
+
+WzString seq_GetPreferredAudioLanguage()
+{
+	return !preferredAudioLanguage.isEmpty() ? preferredAudioLanguage : WzString(getLanguage());
 }
 
 /** Allocates memory to hold the decoded video frame */
@@ -567,6 +578,23 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 	videoGfx->updateTexture(VideoFrameBitmap);
 }
 
+/** Upload a copy of fadeBase (an earlier frame bitmap) with its color scaled by level (0 = black, 1 = unchanged) */
+static void video_upload_faded(const std::vector<uint8_t>& fadeBase, float level)
+{
+	unsigned char *dest = VideoFrameBitmap.bmp_w();
+	const size_t size = std::min(fadeBase.size(), VideoFrameBitmap.data_size());
+	const unsigned scale = static_cast<unsigned>(clip(level, 0.f, 1.f) * 256.f + 0.5f);
+	for (size_t i = 0; i + 3 < size; i += 4)
+	{
+		// RGBA byte order
+		dest[i] = static_cast<unsigned char>((fadeBase[i] * scale) >> 8);
+		dest[i + 1] = static_cast<unsigned char>((fadeBase[i + 1] * scale) >> 8);
+		dest[i + 2] = static_cast<unsigned char>((fadeBase[i + 2] * scale) >> 8);
+		dest[i + 3] = fadeBase[i + 3];
+	}
+	videoGfx->updateTexture(VideoFrameBitmap);
+}
+
 /** Draw the current video texture to the screen */
 static void video_draw()
 {
@@ -600,7 +628,7 @@ void update_buffers()
 	videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 }
 
-bool seq_Play(std::shared_ptr<VideoProvider> video)
+bool seq_Play(std::shared_ptr<VideoProvider> video, std::shared_ptr<const WZVideoEditList> edits, const WzString& videoLanguage)
 {
 	debug(LOG_VIDEO, "starting playback of: %s", (video) ? video->filename().toUtf8().c_str() : "");
 
@@ -627,11 +655,12 @@ bool seq_Play(std::shared_ptr<VideoProvider> video)
 	session->videoExhausted = !session->decoder->hasVideo();	// audio-only: end when audio ends
 
 	/* open audio */
+	// pick the audio track by language: the explicit preference if set, else the game language
+	const WzString preferredLang = seq_GetPreferredAudioLanguage();
+	const size_t chosenTrack = videoDecoderChooseAudioTrack(session->decoder->audioTracks(), preferredLang);
+	const WzString audioLanguage = session->decoder->hasAudio() ? session->decoder->audioTracks()[chosenTrack].languageCode : preferredLang;
 	if (session->decoder->hasAudio() && !audio_Disabled())
 	{
-		// pick the audio track by language: the explicit preference if set, else the game language
-		const WzString preferredLang = !preferredAudioLanguage.isEmpty() ? preferredAudioLanguage : WzString(getLanguage());
-		const size_t chosenTrack = videoDecoderChooseAudioTrack(session->decoder->audioTracks(), preferredLang);
 		if (chosenTrack != session->decoder->selectedAudioTrack() && !session->decoder->selectAudioTrack(chosenTrack))
 		{
 			debug(LOG_WARNING, "Failed to select audio track %zu; using track %zu", chosenTrack, session->decoder->selectedAudioTrack());
@@ -687,6 +716,19 @@ bool seq_Play(std::shared_ptr<VideoProvider> video)
 		{
 			session->frameDuration = 1.0 / vmeta.fps;
 		}
+
+		std::vector<WZVideoTimelineOp> timeline;
+		if (edits)
+		{
+			timeline = videoEditListChooseTimeline(*edits, videoLanguage, audioLanguage, vmeta, video->filename(), session->timelineEnd);
+			if (!timeline.empty())
+			{
+				debug(LOG_VIDEO, "playing %s through its \"%s\" edit list (%zu ops, %.3fs)", video->filename().toUtf8().c_str(),
+				      audioLanguage.toUtf8().c_str(), timeline.size(), session->timelineEnd);
+			}
+		}
+		session->edits = std::move(edits);
+		session->video = std::make_unique<TimelineVideoSource>(*session->decoder, std::move(timeline), session->frameDuration);
 	}
 
 	playback = std::move(session);
@@ -721,27 +763,27 @@ bool seq_Update()
 		pb.audioSink->update(*pb.decoder, now);
 	}
 
-	/* make sure a decoded frame is pending */
-	if (!pb.havePendingFrame && !pb.videoExhausted && pb.decoder->hasVideo())
+	/* make sure an item is pending */
+	if (!pb.havePendingItem && !pb.videoExhausted && pb.video)
 	{
-		pb.havePendingFrame = pb.decoder->nextVideoFrame(pb.pendingFrame);
-		pb.videoExhausted = !pb.havePendingFrame;
+		pb.havePendingItem = pb.video->next(pb.pendingItem);
+		pb.videoExhausted = !pb.havePendingItem;
 	}
 
 	/* running slow? skip frames that are late by more than a frame period,
 	   but always show at least one frame per second */
-	while (pb.havePendingFrame
-	       && (now - pb.pendingFrame.pts) > pb.frameDuration
+	while (pb.havePendingItem && pb.pendingItem.droppable
+	       && (now - pb.pendingItem.time) > pb.frameDuration
 	       && (now - pb.lastDisplayClockTime) < 1.0)
 	{
 		pb.dropped++;
-		pb.havePendingFrame = pb.decoder->nextVideoFrame(pb.pendingFrame);
-		pb.videoExhausted = !pb.havePendingFrame;
+		pb.havePendingItem = pb.video->next(pb.pendingItem);
+		pb.videoExhausted = !pb.havePendingItem;
 	}
 
 	/* are we done? */
 	const bool audioDone = !pb.audioSink || pb.audioSink->finished();
-	if (!pb.havePendingFrame && pb.videoExhausted && audioDone)
+	if (!pb.havePendingItem && pb.videoExhausted && now >= pb.timelineEnd && audioDone)
 	{
 		video_draw();
 		seq_Shutdown();
@@ -749,14 +791,31 @@ bool seq_Update()
 		return false;
 	}
 
-	/* at or past time for the pending video frame? */
-	if (pb.havePendingFrame && pb.pendingFrame.pts <= now)
+	/* at or past time for the pending item? */
+	if (pb.havePendingItem && pb.pendingItem.time <= now)
 	{
-		video_upload_frame(pb.pendingFrame);
+		const TimelineVideoSource::Item& item = pb.pendingItem;
+		switch (item.kind)
+		{
+		case TimelineVideoSource::Item::Kind::Frame:
+			video_upload_frame(item.frame);
+			pb.subtitleTime = std::max(pb.subtitleTime, item.sourcePts);
+			break;
+		case TimelineVideoSource::Item::Kind::Black:
+			pb.fadeBase.assign(VideoFrameBitmap.data_size(), 0);
+			video_upload_faded(pb.fadeBase, 0.f);
+			break;
+		case TimelineVideoSource::Item::Kind::Fade:
+			if (item.fadeStep == 0)
+			{
+				pb.fadeBase.assign(VideoFrameBitmap.bmp_w(), VideoFrameBitmap.bmp_w() + VideoFrameBitmap.data_size());
+			}
+			video_upload_faded(pb.fadeBase, item.fadeLevel);
+			break;
+		}
 		pb.frames++;
-		pb.displayedFrameTime = pb.pendingFrame.pts;
 		pb.lastDisplayClockTime = now;
-		pb.havePendingFrame = false;	// consumed; the next tick pulls the next frame
+		pb.havePendingItem = false;	// consumed (the next tick pulls the next item)
 	}
 	video_draw();
 
@@ -794,8 +853,8 @@ int seq_GetFrameNumber()
 
 double seq_GetFrameTime()
 {
-	// presentation time of the frame currently on screen (drives subtitle timing)
-	return playback ? playback->displayedFrameTime : 0.0;
+	// the video time subtitles follow
+	return playback ? playback->subtitleTime : 0.0;
 }
 
 // this controls the size of the video to display on screen
