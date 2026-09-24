@@ -24,6 +24,8 @@
 #include "statsdef.h"
 #include "structuredef.h"
 
+#include <functional>
+
 enum SELECTION_CLASS
 {
 	DS_ALL_UNITS,
@@ -55,12 +57,16 @@ enum SELECTIONTYPE
 };
 
 struct WorldObjectState;
+struct DROID;
 
 unsigned int selDroidSelection(WorldObjectState& objState, unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
 unsigned int selDroidDeselect(WorldObjectState& objState, unsigned int player);
 unsigned int selNumSelected(const WorldObjectState& objState, unsigned int player);
 void selNextUnassignedUnit(WorldObjectState& objState);
 void selNextSpecifiedBuilding(WorldObjectState& objState, STRUCTURE_TYPE structType, bool jump);
+/// Select exactly the player's droids that shouldSelect() picks (and can be selected), in one change:
+/// the interface is refreshed and the scripts told once. Returns how many are selected
+unsigned selSetDroidSelection(WorldObjectState& objState, unsigned player, const std::function<bool (const DROID *)> &shouldSelect);
 void selNextSpecifiedUnit(WorldObjectState& objState, DROID_TYPE unitType);
 // select the n'th command droid
 void selCommander(int n);

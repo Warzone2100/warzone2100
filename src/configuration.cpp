@@ -439,6 +439,7 @@ bool loadConfig()
 	atmosSetWeatherEnabled(iniGetBool("weather", true).value());
 	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());
+	barMode = static_cast<UWORD>(std::max<int>(BAR_SELECTED, std::min<int>(iniGetInteger("healthBarMode", BAR_SELECTED).value(), BAR_LAST - 1)));
 	war_setOptionsButtonVisibility(iniGetInteger("optionsButtonVisibility", war_getOptionsButtonVisibility()).value());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
 	setDrawShadows(iniGetBool("shadows", true).value());
@@ -1049,6 +1050,7 @@ bool saveConfig()
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
 	iniSetBool("weather", atmosGetWeatherEnabled());
 	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
+	iniSetInteger("healthBarMode", static_cast<int>(barMode));
 	iniSetInteger("optionsButtonVisibility", (int)war_getOptionsButtonVisibility());
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp

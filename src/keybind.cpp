@@ -71,6 +71,7 @@
 #include "loop.h"
 #include "mission.h"
 #include "selection.h"
+#include "selectionidle.h"
 #include "difficulty.h"
 #include "research.h"
 #include "template.h"
@@ -1873,6 +1874,15 @@ void	kf_ToggleOverlays()
 }
 
 // --------------------------------------------------------------------------
+void kf_ShowHudHelp()
+{
+	if (getWidgetsStatus() && !intHelpOverlayIsUp() && intMode != INT_DESIGN && intMode != INT_INGAMEOP)
+	{
+		intShowWidgetHelp();
+	}
+}
+
+// --------------------------------------------------------------------------
 void	kf_ChooseCommand()
 {
 	/* not supported if a spectator */
@@ -2065,6 +2075,47 @@ MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 		}
 		triggerEventSelected();
 	};
+}
+
+// --------------------------------------------------------------------------
+MappableFunction kf_SelectNextIdleFactory(const bool bJumpToSelected)
+{
+	return [bJumpToSelected]() {
+		SPECTATOR_NO_OP();
+
+		if (selNextIdleBuilding(gameWorld.objects, REF_FACTORY, bJumpToSelected) && intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+		{
+			setKeyButtonMapping(IDRET_MANUFACTURE);
+		}
+	};
+}
+
+MappableFunction kf_SelectNextIdleResearch(const bool bJumpToSelected)
+{
+	return [bJumpToSelected]() {
+		SPECTATOR_NO_OP();
+
+		if (selNextIdleBuilding(gameWorld.objects, REF_RESEARCH, bJumpToSelected) && intCheckReticuleButEnabled(IDRET_RESEARCH))
+		{
+			setKeyButtonMapping(IDRET_RESEARCH);
+		}
+	};
+}
+
+MappableFunction kf_SelectNextIdleTruck(const bool bJumpToSelected)
+{
+	return [bJumpToSelected]() {
+		SPECTATOR_NO_OP();
+
+		selNextIdleTruck(gameWorld.objects, bJumpToSelected);
+	};
+}
+
+void kf_SelectAllIdleTrucks()
+{
+	SPECTATOR_NO_OP();
+
+	selAllIdleTrucks(gameWorld.objects);
 }
 
 // --------------------------------------------------------------------------

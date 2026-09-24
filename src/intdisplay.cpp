@@ -72,6 +72,7 @@
 
 #include "multiplay.h"
 #include "qtscript.h"
+#include "hud/hudmodel.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
@@ -170,7 +171,13 @@ void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 std::string PowerBar::getTip()
 {
 	auto income = getApproxPowerGeneratedPerSecForDisplay(selectedPlayer);
-	return astringf("%s\n%s: %s", _("Power"), _("Power Per Second"), income.c_str());
+	std::string tip = astringf("%s\n%s: %s", _("Power"), _("Power Per Second"), income.c_str());
+	const auto &power = hudModel().power();
+	if (power.incomePerMinute.has_value())
+	{
+		tip += "\n" + astringf(_("Income: %d per minute"), power.incomePerMinute.value());
+	}
+	return tip;
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
