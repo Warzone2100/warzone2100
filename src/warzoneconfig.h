@@ -176,6 +176,8 @@ void war_setMPcolour(int colour);
 int war_getMPcolour();
 void war_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE war_getScanlineMode();
+void war_setFMVGamma(float gamma);
+float war_getFMVGamma();
 video_backend war_getGfxBackend();
 void war_setGfxBackend(video_backend backend);
 JS_BACKEND war_getJSBackend();

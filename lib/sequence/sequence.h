@@ -56,6 +56,11 @@ void seq_setScanlinesDisabled(bool flag);
 bool seq_getScanlinesDisabled();
 void seq_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE seq_getScanlineMode();
+/** The display gamma the video is adjusted for (clamped to [1.8, 3.0]).
+ * The default is 2.4, emulating the BT.1886 look of classic studio video displays. */
+void seq_setDisplayGamma(float gamma);
+float seq_getDisplayGamma();
+/** The video time subtitles follow: the furthest point of the video shown so far */
 double seq_GetFrameTime();
 
 #endif // __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__
