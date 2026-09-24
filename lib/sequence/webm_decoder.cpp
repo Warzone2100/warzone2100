@@ -244,6 +244,17 @@ struct DemuxedPacket
 	double pts;	// seconds
 };
 
+/** A read position in the file for one track: video and audio are demuxed independently,
+ * so the video can seek while the audio plays on */
+struct TrackCursor
+{
+	long long trackNumber = -1;
+	const mkvparser::Cluster *cluster = nullptr;
+	const mkvparser::BlockEntry *entry = nullptr;	// the last block read (nullptr = none yet in this cluster)
+	bool resumeAtEntry = false;						// the next read returns entry itself (after a seek)
+	std::deque<DemuxedPacket> queue;
+};
+
 class WebmVideoDecoder final : public WZVideoDecoder
 {
 public:
@@ -277,21 +288,24 @@ public:
 	bool selectAudioTrack(size_t index) override;
 
 	bool nextVideoFrame(WZVideoFrameYUV& out) override;
+	bool seekVideo(double pts) override;
 	size_t decodeAudio(int16_t *dest, size_t maxSamplesPerChannel, double& firstSamplePts) override;
 
 private:
 	bool createAudioDecoderFor(const WZAudioTrackMetadata& trackMeta);
-	/** Demux the next block in file order into the per-track packet queues.
+	/** Demux the cursor's next block (of its own track, in file order) into its packet queue.
 	 * \returns false when the input is exhausted (or on parse error) */
-	bool demuxNextBlock();
+	bool demuxNextBlock(TrackCursor& cursor);
+	/** The end time of the last video frame, found from the last cue point (or a full scan without cues) */
+	double findVideoDuration() const;
 
 private:
 	std::shared_ptr<VideoProvider> m_provider;
 	MkvReaderAdapter m_reader;
 
 	std::unique_ptr<mkvparser::Segment, void(*)(mkvparser::Segment*)> m_segment{nullptr, [](mkvparser::Segment *s) { delete s; }};
-	const mkvparser::Cluster *m_cluster = nullptr;
-	const mkvparser::BlockEntry *m_currentEntry = nullptr;
+	TrackCursor m_video;
+	TrackCursor m_audio;
 
 	std::unique_ptr<WebmVideoCodec> m_videoCodec;
 	long long m_videoTrackNumber = -1;
@@ -304,8 +318,6 @@ private:
 	std::unique_ptr<WZPacketAudioDecoder> m_audioDecoder;
 	bool m_audioDecodeStarted = false;
 
-	std::deque<DemuxedPacket> m_videoQueue;
-	std::deque<DemuxedPacket> m_audioQueue;
 	unsigned m_consecutiveNoOutput = 0;
 
 	uint64_t m_audioSamplesOut = 0;
@@ -409,14 +421,70 @@ bool WebmVideoDecoder::open()
 		return false;
 	}
 
+	m_video.trackNumber = m_videoTrackNumber;
+	m_video.cluster = m_segment->GetFirst();
+
 	// select the default audio track
 	if (!m_audioTracks.empty() && !selectAudioTrack(0))
 	{
 		return false;
 	}
 
-	m_cluster = m_segment->GetFirst();
+	if (m_videoCodec)
+	{
+		m_videoMetadata.duration = findVideoDuration();
+		debug(LOG_VIDEO, "WebM video duration: %.3fs", m_videoMetadata.duration);
+	}
 	return true;
+}
+
+double WebmVideoDecoder::findVideoDuration() const
+{
+	const mkvparser::Cluster *cluster = m_segment->GetFirst();
+	const mkvparser::Cues *cues = m_segment->GetCues();
+	const mkvparser::Track *track = m_segment->GetTracks()->GetTrackByNumber(static_cast<long>(m_videoTrackNumber));
+	if (cues && track)
+	{
+		while (!cues->DoneParsing())
+		{
+			cues->LoadCuePoint();
+		}
+		const mkvparser::CuePoint *lastCue = cues->GetLast();
+		const mkvparser::CuePoint::TrackPosition *position = lastCue ? lastCue->Find(track) : nullptr;
+		const mkvparser::BlockEntry *entry = position ? cues->GetBlock(lastCue, position) : nullptr;
+		if (entry && !entry->EOS())
+		{
+			cluster = entry->GetCluster();
+		}
+	}
+
+	long long lastTimeNs = -1;
+	for (; cluster && !cluster->EOS(); cluster = m_segment->GetNext(cluster))
+	{
+		const mkvparser::BlockEntry *entry = nullptr;
+		if (cluster->GetFirst(entry) < 0)
+		{
+			break;
+		}
+		while (entry && !entry->EOS())
+		{
+			const mkvparser::Block *block = entry->GetBlock();
+			if (block && block->GetTrackNumber() == m_videoTrackNumber)
+			{
+				lastTimeNs = std::max(lastTimeNs, block->GetTime(cluster));
+			}
+			if (cluster->GetNext(entry, entry) < 0)
+			{
+				break;
+			}
+		}
+	}
+	if (lastTimeNs < 0)
+	{
+		return 0.0;
+	}
+	const double frameDuration = (m_videoMetadata.fps > 0.0) ? 1.0 / m_videoMetadata.fps : 0.0;
+	return static_cast<double>(lastTimeNs) / 1e9 + frameDuration;
 }
 
 bool WebmVideoDecoder::createAudioDecoderFor(const WZAudioTrackMetadata& trackMeta)
@@ -472,53 +540,55 @@ bool WebmVideoDecoder::selectAudioTrack(size_t index)
 	}
 	m_selectedAudioIdx = index;
 	m_selectedAudioTrackNumber = m_audioTrackNumbers[index];
-	m_audioQueue.clear();
+	m_audio = TrackCursor();
+	m_audio.trackNumber = m_selectedAudioTrackNumber;
+	m_audio.cluster = m_segment->GetFirst();
 	m_audioSamplesOut = 0;
 	m_haveAudioBasePts = false;
 	return true;
 }
 
-bool WebmVideoDecoder::demuxNextBlock()
+bool WebmVideoDecoder::demuxNextBlock(TrackCursor& cursor)
 {
 	for (;;)
 	{
-		if (!m_cluster || m_cluster->EOS())
+		if (!cursor.cluster || cursor.cluster->EOS())
 		{
 			return false;
 		}
 
 		const mkvparser::BlockEntry *entry = nullptr;
-		long status = (m_currentEntry == nullptr) ? m_cluster->GetFirst(entry)
-		                                          : m_cluster->GetNext(m_currentEntry, entry);
-		if (status < 0)
+		if (cursor.resumeAtEntry)
 		{
-			debug(LOG_ERROR, "Error parsing WebM cluster: %s", m_provider->filename().toUtf8().c_str());
-			return false;
+			entry = cursor.entry;
+			cursor.resumeAtEntry = false;
+		}
+		else
+		{
+			long status = (cursor.entry == nullptr) ? cursor.cluster->GetFirst(entry)
+			                                        : cursor.cluster->GetNext(cursor.entry, entry);
+			if (status < 0)
+			{
+				debug(LOG_ERROR, "Error parsing WebM cluster: %s", m_provider->filename().toUtf8().c_str());
+				return false;
+			}
 		}
 
 		if (!entry || entry->EOS())
 		{
-			m_cluster = m_segment->GetNext(m_cluster);
-			m_currentEntry = nullptr;
+			cursor.cluster = m_segment->GetNext(cursor.cluster);
+			cursor.entry = nullptr;
 			continue;
 		}
-		m_currentEntry = entry;
+		cursor.entry = entry;
 
 		const mkvparser::Block *block = entry->GetBlock();
-		if (!block)
+		if (!block || block->GetTrackNumber() != cursor.trackNumber)
 		{
-			continue;
+			continue;	// another track's block: skip without copying
 		}
 
-		const long long trackNumber = block->GetTrackNumber();
-		const bool isVideo = (trackNumber == m_videoTrackNumber);
-		const bool isSelectedAudio = (trackNumber == m_selectedAudioTrackNumber);
-		if (!isVideo && !isSelectedAudio)
-		{
-			continue;	// unselected/unknown track: skip without copying
-		}
-
-		const double pts = static_cast<double>(block->GetTime(m_cluster)) / 1e9;
+		const double pts = static_cast<double>(block->GetTime(cursor.cluster)) / 1e9;
 		for (int i = 0; i < block->GetFrameCount(); ++i)
 		{
 			const mkvparser::Block::Frame& frame = block->GetFrame(i);
@@ -530,7 +600,7 @@ bool WebmVideoDecoder::demuxNextBlock()
 				return false;
 			}
 			packet.pts = pts;
-			(isVideo ? m_videoQueue : m_audioQueue).push_back(std::move(packet));
+			cursor.queue.push_back(std::move(packet));
 		}
 		return true;
 	}
@@ -545,10 +615,10 @@ bool WebmVideoDecoder::nextVideoFrame(WZVideoFrameYUV& out)
 
 	for (;;)
 	{
-		if (!m_videoQueue.empty())
+		if (!m_video.queue.empty())
 		{
-			DemuxedPacket packet = std::move(m_videoQueue.front());
-			m_videoQueue.pop_front();
+			DemuxedPacket packet = std::move(m_video.queue.front());
+			m_video.queue.pop_front();
 			// a failed decode (corrupt packet) or missing output (invisible
 			// alt-ref frame) is skippable - but a stream where *every* packet
 			// produces nothing (e.g. an unsupported VP9 profile) must fail
@@ -568,11 +638,27 @@ bool WebmVideoDecoder::nextVideoFrame(WZVideoFrameYUV& out)
 			return true;
 		}
 
-		if (!demuxNextBlock())
+		if (!demuxNextBlock(m_video))
 		{
 			return false;
 		}
 	}
+}
+
+bool WebmVideoDecoder::seekVideo(double pts)
+{
+	const mkvparser::Track *track = m_videoCodec ? m_segment->GetTracks()->GetTrackByNumber(static_cast<long>(m_videoTrackNumber)) : nullptr;
+	const mkvparser::BlockEntry *entry = nullptr;
+	if (!track || track->Seek(static_cast<long long>(std::max(pts, 0.0) * 1e9 + 0.5), entry) < 0 || !entry || entry->EOS())
+	{
+		return false;
+	}
+	m_video.cluster = entry->GetCluster();
+	m_video.entry = entry;
+	m_video.resumeAtEntry = true;
+	m_video.queue.clear();
+	m_consecutiveNoOutput = 0;
+	return true;
 }
 
 size_t WebmVideoDecoder::decodeAudio(int16_t *dest, size_t maxSamplesPerChannel, double& firstSamplePts)
@@ -593,10 +679,10 @@ size_t WebmVideoDecoder::decodeAudio(int16_t *dest, size_t maxSamplesPerChannel,
 			return samples;
 		}
 
-		if (!m_audioQueue.empty())
+		if (!m_audio.queue.empty())
 		{
-			DemuxedPacket packet = std::move(m_audioQueue.front());
-			m_audioQueue.pop_front();
+			DemuxedPacket packet = std::move(m_audio.queue.front());
+			m_audio.queue.pop_front();
 			if (!m_haveAudioBasePts)
 			{
 				m_audioBasePts = packet.pts;
@@ -606,7 +692,7 @@ size_t WebmVideoDecoder::decodeAudio(int16_t *dest, size_t maxSamplesPerChannel,
 			continue;
 		}
 
-		if (!demuxNextBlock())
+		if (!demuxNextBlock(m_audio))
 		{
 			return 0;
 		}

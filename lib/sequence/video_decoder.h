@@ -50,6 +50,7 @@ struct WZVideoTrackMetadata
 	unsigned width = 0;
 	unsigned height = 0;
 	double fps = 0.0;			// informational; frame scheduling should use per-frame pts
+	double duration = 0.0;		// seconds from the first frame to the end of the last (0 = unknown)
 };
 
 struct WZAudioTrackMetadata
@@ -87,6 +88,12 @@ public:
 	/** Decode the next video frame (in presentation order).
 	 * \returns false when the video stream is exhausted (or on unrecoverable error) */
 	virtual bool nextVideoFrame(WZVideoFrameYUV& out) = 0;
+
+	/** Reposition the video stream (only) at the last keyframe at or before pts.
+	 * The following nextVideoFrame() calls decode forward from that keyframe, so frames before pts may be returned first.
+	 * Audio decoding is unaffected.
+	 * \returns false if the decoder can't seek (the position is then unchanged) */
+	virtual bool seekVideo(double pts) { return false; }
 
 	/** Decode more audio from the selected track: writes up to
 	 * maxSamplesPerChannel interleaved int16 samples to dest.
