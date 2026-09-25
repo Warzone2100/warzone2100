@@ -147,6 +147,12 @@ public:
 
 		// set the volume of the FMV based on the user's preferences
 		alSourcef(sink->m_source, AL_GAIN, sound_GetUIVolume());
+
+		// center on the listener
+		alSourcei(sink->m_source, AL_SOURCE_RELATIVE, AL_TRUE);
+		alSource3f(sink->m_source, AL_POSITION, 0.f, 0.f, 0.f);
+		alSource3f(sink->m_source, AL_VELOCITY, 0.f, 0.f, 0.f);
+
 		sound_GetError();
 
 		if (alIsExtensionPresent("AL_SOFT_source_latency"))
