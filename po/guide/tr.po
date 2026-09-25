@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-09-12 02:17\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -27,10 +27,10 @@ msgid "These will unlock valuable technologies that you can research in a Resear
 msgstr "Bunlar, bir araştırma tesisinde araştırabileceğiniz değerli teknolojilerin kilidini açacaktır."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr "Eserler, üzerinde yeşil bir gösterge bulunan küçük beyaz kutulardır ve herhangi bir birimi yeterince yakın hareket ettirerek alınabilir."
+msgstr "Kalıntılar, üzerinde yeşil bir gösterge bulunan küçük beyaz kutulardır ve herhangi bir birimi yeterince yakın hareket ettirerek alınabilir."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr "Tüm eserler, her seviyenin zafer koşullarının bir parçası olarak alınmalıdır."
+msgstr "Tüm kalıntılar, her seviyenin zafer koşullarının bir parçası olarak alınmalıdır."
 
 msgid "Backstory"
 msgstr "Geçmişin Hikayesi"
@@ -45,7 +45,7 @@ msgid "The Collapse came fast and hard. Following a technical error in the satel
 msgstr "Yıkım hızlı ve sert geldi. Uydu savunma sistemindeki teknik bir hatanın ardından, dünyanın dört bir yanındaki büyük şehirlere nükleer savaş başlıkları ateşlendi."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr "Dakikalar sonra, fırlatmaya yanıt olarak yer tabanlı sahalar ateşlendi. Nükleer fırtınalar dünya şehirlerini yok ederken milyonlarca insan öldü. Vebalar ve salgın hastalıklar medeniyetten geriye kalanları süpürürken milyarlarca kişi daha öldü."
+msgstr "Dakikalar sonra, yerdeki üsler bu fırlatmaya karşılık olarak ateş açtı. Nükleer ateş fırtınaları dünyanın şehirlerini yerle bir ederken milyonlarca insan hayatını kaybetti. Salgın hastalıklar ve vebalar, medeniyetten geriye kalanları da silip süpürürken milyarlarca insan daha hayatını kaybetti."
 
 msgid "Less than a million people survived the Collapse."
 msgstr "Yıkımdan bir milyondan az insan hayatta kaldı."
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "Orta / Merkezi buton açık bütün komut arayüzlerini kapatır."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Üssünüzü Savunmak"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "Warzone 2100'de ana üssünüz, seferberlik boyunca varlıklarını sürdürür."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Bu nedenle, ana üssünüzün gelecekteki savunması için hazırlık yapmak hayati önem taşımaktadır."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Birimler üssünüzü savunmak için elbette yararlı olsa da, üssünüzün tasarımı da hayati önem taşır."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Düşman saldırılarına daha etkili bir şekilde karşı koyabilmek için, siper sağlayan, erişimi kısıtlayan, düşmanları tespit eden ve hasar veren savunma yapıları inşa et."
 
 msgid "Intelligence Display"
 msgstr "İstihbarat Ekranı"
@@ -186,853 +186,853 @@ msgid "This will open the Structures menu on the left side of screen, with a but
 msgstr "Bu, oluşturabileceğiniz her yapı için bir düğme ile ekranın sol tarafındaki Yapılar menüsünü açacaktır."
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr ""
+msgstr "İstediğiniz yapı düğmesini seçin. Oyun dünyasında bir silüet belirecektir - onayladıktan sonra yapınız buraya yerleştirilecektir."
 
 msgid "Move the silhouette by moving the input device."
-msgstr ""
+msgstr "Giriş aygıtını hareket ettirerek silueti hareket ettirin."
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
-msgstr ""
+msgstr "- Bir konumda yapı inşa edilebiliyorsa, fareyi o konumun üzerine getirdiğinizde yapının silüeti yeşil renkte görünecektir."
 
 msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
-msgstr ""
+msgstr "- Bir yapının bir yerde inşa edilememesi durumunda, silüeti kırmızı renkle gösterilecektir."
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr ""
+msgstr "Uygun bir yer seçtikten sonra, inşaat alanının yerini onaylamak için işlemi tamamlayın. Bir kamyon belirtilen yere hareket edecek ve inşaata başlayacaktır."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "İnşaat halindeki yapıya yönelik olarak diğer kamyonlarla (ve yapıyı daha hızlı inşa ederek) yardımcı olabilirsiniz."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr ""
+msgstr "İpucu: \"Duvarlar\" inşa etmek için (kullanıma sunulduktan sonra), tıklayıp sürükleyerek bir çizgi üzerinde duvar çizebilirsiniz."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Sayborg Fabrikası"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Bir Sayborg Fabrikası, standart bir Fabrikaya benzer şekilde çalışır, ancak yalnızca Sayborglar üretir."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Her fabrika aynı anda yalnızca bir sayborg üretebilir, ancak üretim için birden fazla sayborg sıraya koyabilirsiniz."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Bir sayborg üretildiğinde, Sayborg Fabrikası'nın Birim Emirlerini alır ve fabrikanın Toplanma Noktasına doğru ilerler."
 
 msgid "Demolishing Structures"
 msgstr "Binalar yıkılıyor"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Bir binayı yıkmak, neredeyse bir bina inşa etmek kadar kolaydır."
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Yapılar menüsünden \"Yapıyı Yık\" seçeneğini seçin ve yıkmak istediğiniz binaya tıklayın."
 
 msgid "A unit will move to the building and destroy it."
-msgstr ""
+msgstr "Birimlerden biri binaya gidip onu yıkacak."
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr ""
+msgstr "Yıkılan yapılar, yapının inşası için kullanılan enerjinin yarısını geri kazandırır."
 
 msgid "Factory"
 msgstr "Fabrika"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Fabrika, birim üretmek için kullanılır. Her fabrika aynı anda yalnızca bir birim üretebilir, ancak üretim için birden fazla birimi sıraya koyabilirsiniz."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Birim üretildiğinde, fabrikanın birim siparişlerini alır ve fabrikanın toplanma noktasına doğru ilerler."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Not: Temel Fabrika yalnızca Hafif gövdeli birimler üretebilir. Fabrika üretim kapasitesini yükseltmek için Fabrika modüllerinin keşfedilmesi ve inşa edilmesi gerekmektedir."
 
 msgid "Command Center"
 msgstr "Komuta Merkezi"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr ""
+msgstr "Komuta Merkezi, üssünüzün karargahıdır."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr ""
+msgstr "Bu, mini harita/radara erişim ve birim tasarlama olanağı sağlar."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr ""
+msgstr "Komuta Merkezi oluşturmak için, komuta panelindeki \"İnşa\" düğmesine tıklayın ve Komuta Merkezi yapısını seçin."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr ""
+msgstr "Ardından inşaatçılarınızın inşa etmesini istediğiniz yeri tıklayın."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Yapı Modülleri"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Enerji Üretim Tesisleri, Fabrikalar ve Araştırma Tesisleri, ilgili yapı modülleriyle yükseltilebilir."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Araştırmayı tamamladıktan sonra, bu modüllere Yapı menüsünden erişebilir ve söz konusu yapılara uygulayabilirsiniz."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr ""
+msgstr "Alternatif olarak, bir Kamyon veya Savaş Mühendisi seçebilir ve yapının üzerine tıklayarak inşaatına başlayabilirsiniz."
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Not: Bu yapılardan birinin yükseltme çalışmaları devam ederken, yükseltme tamamlanana kadar geçici olarak kullanılamayacaktır."
 
 msgid "Upgrade Effects:"
-msgstr ""
+msgstr "Yükseltme Etkileri:"
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr ""
+msgstr "- Güç jeneratörü modülleri, güç üretim hızını artırır"
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- Fabrika modülleri, orta ve ağır birimlerin üretimini mümkün kılmanın yanı sıra, birim üretim süresini de kısaltır"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr ""
+msgstr "- Araştırma tesisi modülleri, verilen araştırma projelerinin tamamlanması için gereken süreyi azaltır"
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Petrol Kuyusu"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "Bir petrol sondaj kulesi, bir kamyon seçilerek ve mevcut bir petrol kaynağı hedeflenerek inşa edilebilir."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "Petrol sondaj kulesinin yıkılması, yangın sönene kadar aynı yere başka bir kule inşa edilmesini geçici olarak engelleyecektir."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr ""
+msgstr "Petrol sondaj kulesini kullanmak ve enerji üretmek için bir jeneratöre ihtiyaç vardır."
 
 msgid "Power Generator"
 msgstr "Güç Jeneratörü"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr ""
+msgstr "Her bir güç jeneratörü 4 adede kadar petrol kulesi kullanır. Dolayısıyla, örneğin 10 petrol kuleniz varsa, tüm kulelerden faydalanmak ve maksimum güç üretmek için 3 güç jeneratörüne ihtiyacınız olacaktır."
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr ""
+msgstr "Petrol kuleleri petrol kaynakları üzerine inşa edilmek zorundayken, enerji jeneratörleri haritanın herhangi bir yerine inşa edilebilir. Ancak şunu unutmayın: her 4 kule için bir jeneratörden fazlasının kurulması hiçbir fayda sağlamayacaktır."
 
 msgid "Rally Point"
-msgstr ""
+msgstr "Toplanma Noktası"
 
 msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
-msgstr ""
+msgstr "Bir fabrika bir birimi üretmeyi bitirdiğinde, birim fabrikanın yanında belirecek ve ardından fabrikanın belirlenmiş toplanma noktasına doğru ilerleyecektir."
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr ""
+msgstr "Varsayılan olarak, Toplanma Noktası Fabrikanın yanına yerleştirilir. Toplanma Noktasına tıklayarak onu taşıyabilirsiniz."
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
-msgstr ""
+msgstr "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
 
 msgid "Repair Facility"
-msgstr "Onarım Tesisi"
+msgstr "Tamir Tesisi"
 
 msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
-msgstr ""
+msgstr "Bir onarım tesisi inşa etmek, ünitelerin onarım için geri çekilebileceği sabit bir yapı oluşturur."
 
 msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
-msgstr ""
+msgstr "Onarım tesisleri, onarım kulelerine sahip mobil birliklere göre birimleri daha hızlı onarabilir."
 
 msgid "Research Facility"
 msgstr "Araştırma Tesisi"
 
 msgid "Research Facilities are required in order to research new technologies."
-msgstr ""
+msgstr "Yeni teknolojileri araştırmak için araştırma tesislerine ihtiyaç duyulmaktadır."
 
 msgid "Each Research Facility can research one technology at a time."
-msgstr ""
+msgstr "Her araştırma tesisi aynı anda yalnızca bir teknoloji üzerinde araştırma yapabilir."
 
 msgid "VTOL Factory"
 msgstr "DİvK Fabrikası"
 
 msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
-msgstr ""
+msgstr "VTOL fabrikası, VTOL itiş gücüne sahip (yani uçan) ünitelerin üretimi için kullanılır."
 
 msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Her VTOL fabrikası aynı anda yalnızca bir ünite üretebilir, ancak üretim için birden fazla üniteyi sıraya koyabilirsiniz."
 
 msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
-msgstr ""
+msgstr "Bir VTOL fabrikası bir üniteyi üretmeyi tamamladığında, ünitenin uçmasını ve fabrikanın toplanma noktasına yakın bir yere inmesini emreder."
 
 msgid "Structures"
 msgstr "Yapılar"
 
 msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
-msgstr ""
+msgstr "Warzone 2100'de yapı inşa etmek kesinlikle hayati önem taşıyor; birim üreten fabrikalardan, yeni teknolojileri araştıran araştırma tesislerine kadar her şey önemli."
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
-msgstr ""
+msgstr "İnşaat, taret olarak kamyon ve/veya savaş mühendisleri bulunan birimlerle yapılabilir."
 
 msgid "Attack Range"
 msgstr "Saldırı Menzili"
 
 msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
-msgstr ""
+msgstr "Birim Emirleri menüsünü kullanarak birimlerin \"Saldırı Menzili\"ni yapılandırabilirsiniz."
 
 msgid "- Optimum Range: Fires at the most accurate range"
-msgstr ""
+msgstr "- Optimum Menzil: En isabetli menzilde atış yapar"
 
 msgid "- Short Range: Moves to short range and attacks"
-msgstr ""
+msgstr "- Kısa Menzil: Kısa menzile hareket eder ve saldırır"
 
 msgid "- Long Range: Attacks at long range (default)"
-msgstr ""
+msgstr "- Uzun Menzil: Uzun menzilden saldırır (varsayılan)"
 
 msgid "Firing Mode"
 msgstr "Atış Modu"
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
-msgstr ""
+msgstr "Birim Emirleri menüsünü kullanarak birimin \"Ateşleme Modu\"nu yapılandırabilirsiniz."
 
 msgid "- Fire At Will: Fires at any enemy (default)"
-msgstr ""
+msgstr "- Ateş Aç: Herhangi bir düşmana ateş eder (varsayılan)"
 
 msgid "- Return Fire: Only fire if fired at"
-msgstr ""
+msgstr "- Karşılık Ver: Sadece size ateş açılırsa karşılık verir"
 
 msgid "- Do Not Fire: Units will not fire"
-msgstr ""
+msgstr "- Ateş Etme: Birimler ateş etmeyecektir"
 
 msgid "Movement"
-msgstr ""
+msgstr "Hareket"
 
 msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
-msgstr ""
+msgstr "Birim \"Hareketini\" yapılandırmak için Birim Emirleri menüsünü kullanabilirsiniz."
 
 msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
-msgstr ""
+msgstr "- Devriye: İki nokta arasında hareket edin. Haritada bir nokta seçtikten sonra üzerine tıklamanız yeterlidir"
 
 msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
-msgstr ""
+msgstr "- Daire: (Sadece VTOL'ler için) Bir konumun üzerinde daire çizerek hareket edin. Seçtikten sonra bir alana tıklamanız yeterlidir"
 
 msgid "- Pursue: Pursue enemy"
-msgstr ""
+msgstr "- Takip Et: Düşmanı takip et"
 
 msgid "- Guard: Stay near an area or structure. (default)"
-msgstr ""
+msgstr "- Koruma: Bir alanın veya yapının yakınında durun. (varsayılan)"
 
 msgid "- Hold Position: Do not move under any circumstances"
-msgstr ""
+msgstr "- Pozisyonunu koru: Hiçbir koşulda hareket etmez"
 
 msgid "Recycling"
-msgstr ""
+msgstr "Geri Dönüşüm"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Geri dönüştürülen bir birim, en yakın Fabrika veya Onarım Tesisine gönderilecek ve orada oyun dışı bırakılacaktır."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
-msgstr ""
+msgstr "Cihazın üretiminde kullanılan enerjinin yarısı size iade edilecektir (ancak cihaz hasar görürse bu miktar azalacaktır)."
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "Geri dönüştürülen ünitenin deneyim puanları, üretilen bir sonraki üniteye aktarılacaktır."
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Birden fazla deneyimli birim geri dönüştürüldüğünde, en yüksek deneyim puanı miktarına sahip olan birim önce aktarılır."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
-msgstr ""
+msgstr "Seçili birimlere, Birim Emirleri menüsü veya \"Geri Dönüşüm İçin İade Et\" tuş ataması aracılığıyla geri dönüşüm için geri dönme emri verebilirsiniz."
 
 msgid "Retreating"
 msgstr "Geri Çekiliniyor"
 
 msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
-msgstr ""
+msgstr "Birliklerin kaybedilmesi (özellikle deneyim seviyesine sahip birliklerin), bir ordunun savaşı başarıyla yürütme kabiliyetine ciddi bir darbe vurabilir."
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
-msgstr ""
+msgstr "“Birim Emirleri” menüsünü kullanarak bir “Geri Çekilme Eşiği” belirleyebilirsiniz; bu ayar, birimlerin belirli bir hasar seviyesine ulaştıklarında savaştan otomatik olarak geri çekilmesini sağlar."
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
-msgstr ""
+msgstr "- Yap yada Öl: Biriminize geri çekilme emri verilmedikçe geri çekilmeyecektir. (varsayılan)"
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
-msgstr ""
+msgstr "- Orta Seviye Hasarda Geri Çekilme: Birliğiniz, orta seviye (sarı) hasar aldığında geri çekilecektir"
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr ""
+msgstr "- Ağır Hasarda Geri Çekilme: Birliğiniz, ağır (kırmızı) hasar aldığında geri çekilecektir"
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
-msgstr ""
+msgstr "Geri çekilen birlikler en yakın onarım tesisine, onarım birimine, karargaha veya iniş bölgesine dönecektir."
 
 msgid "Return To"
-msgstr ""
+msgstr "Geri Dön"
 
 msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
-msgstr ""
+msgstr "“Birim Emirleri” menüsünü kullanarak, birimlerin belirli bir konuma geri dönmelerini hızlı bir şekilde emredebilirsiniz."
 
 msgid "- Return for Repair: Unit will return to a Repair Facility"
-msgstr ""
+msgstr "-Onarım için Geri Dön: Birim bir onarım tesisine gönderilecektir"
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr ""
+msgstr "- Karargaha Geri Dön: Birim, Komuta Merkezine veya İniş Bölgesine dönecektir (seferberlik)"
 
 msgid "- Go To Transport: Unit will go to and board transport"
-msgstr ""
+msgstr "- Transfer Aracına Git: Birim transfer aracına gidecek ve binecektir"
 
 msgid "Unit Orders"
-msgstr ""
+msgstr "Birim Emirleri"
 
 msgid "Right-click a unit or group of units to show their current Unit Orders."
-msgstr ""
+msgstr "Bir birime veya birim grubuna sağ tıklayarak mevcut Birim Emirlerini görüntüleyebilirsiniz."
 
 msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
-msgstr ""
+msgstr "“Birim Emirleri” paneli, bir bölgede devriye gezmekten sağlık seviyesi düştüğünde geri çekilmeye kadar, birimlerinizin davranışlarını özelleştirmenize olanak tanır."
 
 msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
-msgstr ""
+msgstr "Bir fabrikaya sağ tıklayarak, o fabrika tarafından gelecekte üretilecek tüm birimlerin birim emirlerini ayarlayabilirsiniz."
 
 msgid "Building Units"
 msgstr "Birimler inşa ediliyor"
 
 msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
-msgstr ""
+msgstr "Birimler oluşturmak için ya bir Fabrika seçin ya da Komuta Paneli'ndeki “Üretim” düğmesine tıklayın; bu işlem, ekranın sol tarafında Üretim panelini açacaktır."
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
-msgstr ""
+msgstr "“Üretim” paneli, o anda seçili olan Fabrika tarafından üretilebilen birim tasarımlarını gösterecektir. Fabrikalar, belirli birim türlerini üretmekle sınırlı olabilir (ya da modüllerle yükseltildikleri takdirde yalnızca belirli birimleri üretebilirler)."
 
 msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
-msgstr ""
+msgstr "Farklı bir Fabrika seçmek için, oyun dünyasındaki Fabrikaya tıklayabilir veya ekranın alt orta kısmındaki Fabrikalar panelinde bulunan ilgili düğmeye tıklayabilirsiniz."
 
 msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
-msgstr ""
+msgstr "Bir Fabrikada bir birim üretmek için, Üretim panelinde istediğiniz birim tasarım düğmesine tıklayın. Birim tasarım düğmesine tekrar tekrar tıklayarak aynı birimden birden fazlasını kuyruğa ekleyebilirsiniz."
 
 msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
-msgstr ""
+msgstr "Bir birim inşa edilirken, bu birim onu inşa eden Fabrikanın üstündeki Fabrikalar panelinde gösterilir. Çubuk yeşil renkteyse, Fabrika birimi inşa etmek için güç topluyor demektir. Çubuk sarı renkteyse, birim inşa ediliyor demektir."
 
 msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
-msgstr ""
+msgstr "Bir Fabrika bir birimin yapımını tamamladığında, o birime Fabrikanın Toplanma Noktasına gitmesini emreder."
 
 msgid "Attaching Units"
-msgstr ""
+msgstr "Birimleri Bağlama"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "Birimleri bir Komutana bağlamak için ilgili birim(ler)i seçin ve ardından bağlamak istediğiniz Komutanın üzerine sol tıklayın. Bağlantıyı belirtmek üzere, atanan birliğin veya birliklerin yanında bir simge belirecektir."
 
 msgid "## Limits:"
-msgstr ""
+msgstr "## Limitler:"
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "Komutanların kontrol edebilecekleri birim sayısında bir sınır vardır ve bu sınır, komutanın rütbesine bağlıdır. Komutan, belirli bir deneyim puanı miktarına ulaşarak terfi alır."
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "Her terfiden sonra Komutan, 2 birim daha kontrol edebilmektedir."
 
 msgid "Detaching Units"
-msgstr ""
+msgstr "Birimleri Ayırma"
 
 msgid "To detach a unit from a Commander:"
-msgstr ""
+msgstr "Bir birimi Komutan'dan ayırmak için:"
 
 msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
-msgstr ""
+msgstr "1. Yalnızca o birimi seçmek(komutan grubunun tamamı yerine) için birime sağ tıklayın(veya birimi seçerken “Shift” tuşunu basılı tutun)"
 
 msgid "2. Give the unit a new order (eg. move)"
-msgstr ""
+msgstr "2. Üniteye yeni bir emir verin (örn. hareket et)"
 
 msgid "Going for repairs, BRB"
-msgstr ""
+msgstr "Tamir için gidiyorum, hemen dönerim"
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
-msgstr ""
+msgstr "Savaştan çekilip onarım tesisine giden bir birim, Komutan grubuyla bağlantısını sürdürecektir."
 
 msgid "When it is done repairing, it will return to its Commander."
-msgstr ""
+msgstr "Onarım tamamlandığında, Komutanına geri dönecektir."
 
 msgid "Targeting"
 msgstr "Hedefleniyor"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "Bir Komutan seçip bir düşman birimini veya yapısını hedeflediğinizde, ona bağlı birimler hedefe ateş etmek üzere hareket eder."
 
 msgid "The attached units will have greater accuracy when firing."
-msgstr ""
+msgstr "Bağlı birimler ateş ederken daha yüksek isabet oranına sahip olacaklar."
 
 msgid "Commanders"
 msgstr "Komutanlar"
 
 msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
-msgstr ""
+msgstr "Komuta taretleri büyük ölçüde sensörlere benzer şekilde kullanılır; ancak bunlar yalnızca topçuları değil, herhangi bir saldırı birimini komuta edebilirler."
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr ""
+msgstr "Komutanlar, kendilerine atanan tüm birimlere isabet oranı, zırh ve hareket hızı bonusu sağlar; bu bonuslar komutanın rütbesi yükseldikçe artar."
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "Başlangıçta kendilerine atanmış 6 saldırı birimiyle sınırlıdırlar, ancak komutan her rütbe atladığında bu sınır 2 artar."
 
 msgid "Designing Units"
-msgstr ""
+msgstr "Birimlerin Tasarımı"
 
 msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
-msgstr ""
+msgstr "Düşmanlarınıza üstünlük sağlamak ve o tatlı zafer duygusunu tatmak istiyorsanız, yeni birimler tasarlamanız gerekecek. Bu, Warzone 2100'ün oynanışının temel bir unsurudur."
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr ""
+msgstr "Bir birimin tasarımına başlamak için Yönetim Paneli'ndeki Tasarım düğmesini seçin. Bu işlem, ekranın sol tarafında iki sütunun görünmesini sağlayacaktır."
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
-msgstr ""
+msgstr "Yeni bir tasarım oluşturmak için sol üst köşedeki “boş” yeşil gövdeyi seçin. Mevcut bir birim tasarımını düzenlemek için ise ilgili tasarımı seçmeniz yeterlidir."
 
 msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
-msgstr ""
+msgstr "Yeni bir birim tasarlamak, üç adımdan oluşan basit bir işlemdir: gövde, itiş sistemi ve taret seçimi. Bu üç seçim sonucunda yeni bir birim ortaya çıkar."
 
 msgid "Once you have designed a unit, you will need a Factory to build it."
-msgstr ""
+msgstr "Bir birim tasarladıktan sonra, onu üretmek için bir Fabrikaya ihtiyacınız olacak."
 
 msgid "Experience & Ranks"
 msgstr "Tecrübe ve Dereceler"
 
 msgid "Units gain experience when they successfully dispatch enemies."
-msgstr ""
+msgstr "Birimler, düşmanları başarıyla ortadan kaldırdıklarında deneyim kazanır."
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
-msgstr ""
+msgstr "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
 
 msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
-msgstr ""
+msgstr "Bir birimin rütbesini gösteren bir simge, birimin can çubuğunun yanında görüntülenir."
 
 msgid "Units with higher experience levels can make all the difference in battle!"
-msgstr ""
+msgstr "Deneyim seviyesi daha yüksek olan birimler, savaşın gidişatını tamamen değiştirebilir!"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Sayborglar"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "Sayborglar, ana piyade birimlerinizdir."
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "Bu birimler hızlı ve güvenilirdir ve tanksavar silahlarına karşı son derece dayanıklıdır."
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "Ancak, bu silahlar, anti-personel ve topçu silahlarına karşı daha savunmasızdır."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "Sayborg'ların tasarlanamayacağını unutmayın. Sayborg şablonları bağımsız olarak araştırılır ve üretilebilmeleri için bir Sayborg Fabrikası gerektirir."
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "Yarı paletli araçlar"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "Yarı paletli araçlar, tekerlekler ve paletler arasında bir melez tahrik sistemidir."
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "Maliyetleri ve hızları orta düzeydedir ve orta düzeyde can puanı sağlarlar."
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Ayrıca, anti-personel ve topçu saldırılarına karşı direnç sağlarlar, ancak tanksavar silahlarına karşı hâlâ oldukça savunmasızdırlar."
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "Yarı paletli araçlar, genel amaçlı birimler için mükemmeldir; ancak paletli araçların yüksek dayanıklılığını ya da tekerlekli araçların yüksek hızlarını tam olarak sunmazlar."
 
 msgid "Hover"
-msgstr ""
+msgstr "Hover"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "Hover, araçlar için hızlı, amfibi bir tahrik sistemidir."
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "Hover tahrik sistemi, çok yüksek azami hızlar ve suda serbestçe hareket etme imkânı sunar; bu da benzersiz saldırı rotaları bulmak için vazgeçilmez olabilir."
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "Ancak, üretim maliyetleri daha yüksektir, sağladıkları can değeri azdır ve çoğu hasar türüne karşı savunmasızdırlar."
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "Hover'ın yüksek hızı ve su üzerinde ilerleyebilme özelliği, onu “vur-kaç” taktiklerine uygun hale getirir."
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "Ancak, Tekerlekler gibi, bunlar da cephede uzun süreli çatışmalar için pek uygun değildir."
 
 msgid "Tracks"
-msgstr ""
+msgstr "Paletler"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "Paletler, araçlar için yüksek zırhlı bir tahrik sistemidir."
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "Bu birimler, yüksek miktarda can puanı sağlamanın yanı sıra, Anti-Personel ve Topçu hasarına karşı yüksek dirençler de sunarlar."
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Ancak, üretim maliyetleri daha yüksek, üretim süreleri daha uzun ve Anti-tank silahlara karşı hâlâ oldukça savunmasızlar."
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "Buna ek olarak, Paletli birimlerde azami hıza ilişkin ciddi bir kısıtlama bulunmaktadır."
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "Yüksek dayanıklılıkları sayesinde paletler, cephede savaşmak üzere tasarlanmış araçlar için idealdir."
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "Ancak dikkatli olunmalıdır. Yavaş hareket hızları, olumsuz durumlardan kaçmayı oldukça zor hale getirebilir."
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "VTOL’larla saldırı"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr ""
+msgstr "Bir VTOL ile saldırmak için, onu seçin ve her zamanki gibi bir düşmana tıklayın."
 
 msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
-msgstr ""
+msgstr "Ancak saldırmaya başladığınızda, can çubuğunun altında beyaz bir mühimmat göstergesi olduğunu fark etmişsinizdir."
 
 msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr ""
+msgstr "Yere konuşlandırılmış birliklerin aksine, otomatik olarak yeniden mühimmat dolduran VTOL'ler sınırlı miktarda mühimmat taşır. Bu mühimmat tükendiğinde, VTOL yakıt ikmali yapana kadar saldırı gerçekleştiremez."
 
 msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr ""
+msgstr "Mühimmatı biten bir VTOL, yeniden mühimmat doldurmak ve kendini onarmak için otomatik olarak bir VTOL yeniden silahlandırma platformu bulur (tamamen yeniden mühimmat doldurduğunda saldırmaya devam eder) veya VTOL’ü seçip bir yeniden silahlandırma platformuna tıklayarak manuel olarak yeniden mühimmat doldurabilirsiniz."
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
+msgstr "Genellikle en yakın hedefe saldıran diğer birliklerin aksine, VTOL’ler hiçbir şeye otomatik olarak saldırmaz. Ancak bir VTOL’ü seçip bir bölgeye Alt+tıklama yaptığınızda, VTOL mevcut konumu ile tıklanan konum arasındaki bölgede devriye gezer ve çevredeki her şeye saldırır."
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr ""
+msgstr "Alternatif olarak VTOL’ler, VTOL Taarruz Kulelerine ve VTOL CB Kulelerine atanabilir. Bu durumda, sensör kulelerine atanmış topçulara benzer şekilde çalışırlar."
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "VTOL’larla Savunma"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "VTOL birlikleri haritadaki bölgeleri savunmak için de kullanılabilir."
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "VTOL’ler bir VTOL Taarruz Taretine veya VTOL Radar Kulesine atanabilir ve sensör tarafından hedeflenen her şeye otomatik olarak saldırırlar (tıpkı standart bir sensöre atanmış topçular gibi)."
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "VTOL’lere bir bölgeyi Devriye Gezmeleri veya Daire Çiz emri de verilebilir. Bunu yaptıklarında, güzergâhları boyunca karşılaştıkları düşmanlara otomatik olarak saldırırlar."
 
 msgid "Defending Against VTOLs"
 msgstr "DİvKlere karşı savunulunuyor"
 
 msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr ""
+msgstr "Gökyüzündeki o şey de ne? ... Bu bir VTOL birimi"
 
 msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr ""
+msgstr "VTOL’ler kara birlikleri olmadığından, çoğu kara silahı onlara isabet ettiremez."
 
 msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr ""
+msgstr "Onlara yalnızca hava savunma (genellikle ‘AA’ olarak kısaltılır) veya çok amaçlı (hem hava hem de kara hedeflerini vurabilen) silahlarla isabet ettirilebilir."
 
 msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr ""
+msgstr "Çok amaçlı olan yalnızca birkaç silah vardır: makineli tüfekler, lazerler ve Mini-Roket Podu."
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(Roketler ve füzeler de çok amaçlıdır, ancak yalnızca bir sayborg veya VTOL üzerine monte edildiklerinde.)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "Çok yönlü silahlar, nadir bulunmalarının yanı sıra, VTOL’lere özel hava savunma silahları kadar fazla hasar vermez; bu nedenle VTOL’lere karşı bir miktar hava savunma silahına sahip olmanız tavsiye edilir."
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "VTOL'lerin kullanımı"
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "VTOL birimlerinin tasarımı, kara birimlerinin tasarımına benzer."
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "Bir itiş sistemi seçerken, “VTOL” itiş sistemini seçmeniz yeterlidir."
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr ""
+msgstr "Ardından, mevcut VTOL silahları arasından seçim yapabileceksiniz."
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "VTOL tasarımlarınızı üretmek için bir VTOL Fabrikası inşa etmeniz gerekecektir."
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "VTOL birimlerinizi onarmak, yeniden silahlandırmak ve bakımını yapmak için bir veya daha fazla VTOL Yeniden Silahlandırma Alanı inşa etmeniz gerekecektir."
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "VTOL Silahları"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "Çoğu silahın, daha fazla hasar veren ancak sınırlı cephaneye sahip bir VTOL karşılığı vardır."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "Sıradan silahların VTOL versiyonlarının ayrı olarak araştırılmasına gerek yoktur."
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr "Kara tabanlı doğrudan ateşleme silahlarının VTOL versiyonlarının yanı sıra, VTOL’ler bomba silahlarını da kullanabilir. Bu silahlar topçu silahlarına eşdeğerdir ve oldukça güçlüdür."
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr ""
+msgstr "VTOL (Dikey Kalkış ve İniş) araçları, gökyüzüne hakim olmanın temel hava araçlarıdır."
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
-msgstr ""
+msgstr "VTOL'ler son derece yüksek bir azami hıza sahiptir ve her türlü arazide ilerleyebilir."
 
 msgid "Additionally, they cannot be targeted by most weapons while airborne."
-msgstr ""
+msgstr "Ayrıca, havadayken çoğu silahın hedefi olamazlar."
 
 msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
-msgstr ""
+msgstr "VTOL birimlerinin diğer araçlar gibi tasarlanabilmesine rağmen, yalnızca özel bir VTOL Fabrikasında üretilebileceğini unutmayın."
 
 msgid "Wheels"
-msgstr ""
+msgstr "Tekerlekler"
 
 msgid "Wheels are the most basic vehicle propulsion."
-msgstr ""
+msgstr "Tekerlekler, bir aracın hareket etmesini sağlayan en temel unsurdur."
 
 msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
-msgstr ""
+msgstr "Üretimleri ucuz ve hızlıdır; ayrıca yüksek bir azami hıza sahiptirler."
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "Ancak, çoğu hasar türüne karşı savunmasızdırlar ve çok fazla can puanı sağlamazlar."
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
-msgstr ""
+msgstr "Tekerlekler, en çok ön cephenin gerisinde görev yapan araçlarda ya da yüksek hızlarını vur-kaç saldırılarında kullanan araçlarda kullanılır."
 
 msgid "Propulsions"
-msgstr ""
+msgstr "İtki Sistemleri"
 
 msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
-msgstr ""
+msgstr "Tıpkı silahlarda olduğu gibi, tasarımlarda kullanılabilecek yeni araç tahrik sistemleri de keşfedebilirsiniz."
 
 msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Yeni bir itiş sistemi üzerine araştırmanızı tamamladığınızda, İstihbarat Ekranı'nda bu sistemin özelliklerine ilişkin bazı bilgiler içeren bir mesaj görüntülenecektir."
 
 msgid "Additionally, you can find descriptions of each propulsion in this guide."
-msgstr ""
+msgstr "Ayrıca, bu kılavuzda her bir tahrik sistemine ilişkin açıklamaları bulabilirsiniz."
 
 msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
-msgstr ""
+msgstr "Her bir itiş sisteminin avantaj ve dezavantajlarını anlamak, hem kendi birimlerinizi tasarlamak hem de düşman birimleriyle mücadele etmek açısından hayati önem taşır."
 
 msgid "Repairing Units"
-msgstr ""
+msgstr "Birimleri Onarma"
 
 msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
-msgstr ""
+msgstr "Silah yerine onarım kulesi bulunan bir birim tasarlayabilirsiniz ve bu birime diğer birimlerinizi onarması emri verilebilir."
 
 msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
-msgstr ""
+msgstr "Ayrıca onarım birimlerini savaşın gerisinde tutabilir ve Geri Çekilme Seçeneklerini kullanarak, saldırı birimlerinizin belirli bir hasar seviyesine ulaştığında onarım için bu birimlere geri çekilmesini ayarlayabilirsiniz."
 
 msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
-msgstr ""
+msgstr "Birlikleri geri çekmek ve onarmak, savaş alanında deneyimli birlikleri kaybetmekten genellikle çok daha tercih edilebilir bir seçenektir."
 
 msgid "CB Sensors"
-msgstr ""
+msgstr "CB Sensörleri"
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
-msgstr ""
+msgstr "Karşı Batarya (CB) sensörleri, menzilleri yettiği takdirde topçu birliklerinin uzaktaki topçu platformlarını doğrudan hedef alabilmesini sağlayarak muharebe sahasını önemli ölçüde değiştirmektedir."
 
 msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
-msgstr ""
+msgstr "Bir CB Sensörü herhangi bir düşman topçu saldırısının başlatıldığını tespit ettiğinde, tespit edilen yapılar veya birimler savaş sisinde kırmızı renkle gösterilecektir."
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr ""
+msgstr "Etkin durumdayken, topçu birlikleri normal sensörler tarafından tespit edilen hedefler yerine CB sensör hedeflerine öncelik verir."
 
 msgid "Un-Assigning"
-msgstr ""
+msgstr "Atamayı Kaldırma"
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr ""
+msgstr "Bir birimi sensörden ayırmanın en kolay yolu, birime sağ tıklayıp onu başka bir yere taşımasını emretmektir."
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
-msgstr ""
+msgstr "CTRL tuşunu basılı tutup tıklayarak birden fazla birim seçilebilir."
 
 msgid "Using Sensors"
-msgstr ""
+msgstr "Sensörlerin Kullanımı"
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr ""
+msgstr "Topçu yapıları en kolayıdır. Bir sensör kulesi inşa etmeniz yeterlidir; sensör kulesi, topçu yapılarınızın menzilinde bulunan bir hedefi tespit ederse, bu yapılar o hedefe ateş açar."
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
-msgstr ""
+msgstr "Ancak bir topçu tankının çalışabilmesi için bir sensöre açıkça atanması gerekir. Topçu tanklarını seçin, ardından bir sensöre tıklayarak tankları o sensöre atayın."
 
 msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
-msgstr ""
+msgstr "Topçu birimi atandıktan sonra, eğer bir sensör kulesine atanmışsa, o kule menziline giren düşmanları otomatik olarak hedef alacaktır."
 
 msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
-msgstr ""
+msgstr "Eğer bir sensör tankına atanmışsa, sensör seçilip bir düşman hedeflendiğinde bu sensör düşmanlara saldırmak için kullanılabilir. Sensöre atanan tüm topçu birimleri hedefine saldırır."
 
 msgid "Sensors"
-msgstr ""
+msgstr "Sensörler"
 
 msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
-msgstr ""
+msgstr "Sensörler keşif ve gözetleme amacıyla kullanılabilir, ancak daha önemli bir işlevleri de vardır: topçu ateşine hedef belirlemek."
 
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
-msgstr ""
+msgstr "Topçu silahları, tek başlarına, kendi sensör menzilinden (yükseltme yapılmadığında 8 karo) daha uzağa ateş edemezler."
 
 msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "Ancak, en basit topçu silahının bile menzili, yerleşik sensörünün menzilini aşmaktadır. Bu silahı kullanmak için, savaş alanında sensörler (sensör kuleleri ya da sensör kuleli tanklar) inşa etmeniz ve konuşlandırmanız gerekecektir."
 
 msgid "Kinetic & Thermal Damage"
-msgstr ""
+msgstr "Kinetik ve Termal Hasar"
 
 msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
-msgstr ""
+msgstr "Çoğu silah, kinetik yöntemlerle (mermi, roket vb.) hasar verir ve bu nedenle standart kinetik zırh kaplamasından etkilenir."
 
 msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
-msgstr ""
+msgstr "Ancak bazı silahlar, hedefin kinetik zırhından etkilenmeyen termal hasar verir."
 
 msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
-msgstr ""
+msgstr "Bunun yerine, termal silahların etkisi, hedefin termal zırhı tarafından azaltılır."
 
 msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
-msgstr ""
+msgstr "Bir birimin kinetik ve termal zırhı, tasarım menüsündeki gövde seçim ekranında görülebilir."
 
 msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
-msgstr ""
+msgstr "Tüm birimlerin termal zırhının kinetik zırhtan daha zayıf olduğunu unutmayın. Bu, termal hasarın kinetik hasara kıyasla daha az azaltılacağı anlamına gelir!"
 
 msgid "Attacking"
 msgstr "Saldırılıyor"
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "VTOL'lerin Tasarımı"
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "Unutmayın: VTOL birim tasarımlarını gerçekten oluşturabilmek için bir “VTOL Fabrikası”na ihtiyacınız olacak."
 
 msgid "Weapons"
 msgstr "Silahlar"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "Çoğu silahın, en az iki kat daha fazla hasar veren ancak sınırlı cephaneye sahip bir VTOL karşılığı vardır."
 
 msgid "VTOLs"
 msgstr "DİvKler"
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "VTOL birimleri üretebilmek için \"VTOL İtki Sistemi\"ni ve \"VTOL Fabrikası\"nı keşfetmiş ve araştırmış olmanız gerekecektir."
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "Ayrıca VTOL birimlerinizin cephaneyi yeniden doldurabilmesi için birkaç \"VTOL Yeniden Silahlandırma Alanı\" araştırıp inşa etmelisiniz."
 
 msgid "Weapon Selection"
 msgstr "Silah seçimi"
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr ""
+msgstr "Daha fazla silah keşfedip araştırdıkça, belirli silahların bazı durumlarda (ya da belirli düşman birimleri veya yapılarına karşı) diğerlerine kıyasla çok daha etkili olabileceğini de fark edeceksiniz."
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Yeni bir silahla ilgili araştırmayı tamamladığınızda, bir İstihbarat Ekranı mesajı bu silahın özellikleri hakkında bazı bilgiler verecektir."
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr ""
+msgstr "Farklı silah türlerini denemek sizin yararınıza olacaktır. Eğer zorlanıyorsanız ve bir süredir birliğinizin yapısını gözden geçirmediyseniz, silahlarınızı daha güçlü olanlarla veya yeni çeşitlerle değiştirmeyi düşünmenin vakti gelmiş olabilir!"
 
 msgid "Units"
 msgstr "Birimler"
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr ""
+msgstr "Düşmanlarınıza üstünlük sağlamak ve o tatlı zafer hissini tatmak istiyorsanız, yeni birimler tasarlayıp inşa etmeniz gerekecek."
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr ""
+msgstr "Oyunun bu yönü, Warzone 2100’ü kendine özgü bir şekilde benzersiz kılan unsurdur."
 
 msgid "To be able to design units, a Command Center is required."
-msgstr ""
+msgstr "Birimler tasarlayabilmek için bir Komuta Merkezi gereklidir."
 
 msgid "All-Rounder"
-msgstr ""
+msgstr "Çok Yönlü"
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr ""
+msgstr "“Çok Yönlü” silahlar, uzmanlaşmış silahlardan daha az etkilidir."
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr ""
+msgstr "Bununla birlikte, çok yönlü silahlar, özel amaçlı silahların aksine tüm hedef türlerine karşı orta derecede etkilidir."
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr ""
+msgstr "Çok Yönlü silahlar, daha yüksek ağırlık değerlerine sahip olmalarına karşın, donatıldıkları birime önemli miktarda ilave can puanı sağlar."
 
 msgid "Anti-Air"
-msgstr ""
+msgstr "Hava Savunma AA"
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr ""
+msgstr "Hava Savunma (veya AA) silahları, her tür hava birliğine karşı uzmanlaşmıştır."
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr ""
+msgstr "Ancak AA silahları yapılara veya kara birliklerine saldıramaz."
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr ""
+msgstr "AA silahları havadan gelen tehditlerle başa çıkmak için mükemmel olsa da, yerdeki tehditlere karşı korunmaları gerekir."
 
 msgid "Anti-Personnel"
-msgstr ""
+msgstr "Anti-Personel"
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr ""
+msgstr "Personel Karşıtı silahlar, düşman piyadelerini ve hafif araçlarını biçip yok etmede son derece etkilidir."
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr ""
+msgstr "Ancak bu silahlar, binalara ve ağır zırhlı hedeflere karşı daha az etkilidir."
 
 msgid "Anti-Tank"
-msgstr ""
+msgstr "Tank Avcısı"
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr ""
+msgstr "Tank avcı silahları, her tür düşman aracına karşı özel olarak tasarlanmıştır."
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr ""
+msgstr "Bununla birlikte, tanksavar silahları binalara karşı daha az etkilidir ve özellikle piyadelere karşı hiç etkili değildir."
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr ""
+msgstr "Genel olarak, Tank Avcısı silahları hafiftir, ancak sağladıkları can değeri oldukça düşüktür. Bu silahlarla donatılmış araçlar, diğer silah türlerinin çoğuyla donatılmış araçlara kıyasla daha kırılgandır."
 
 msgid "Artillery"
-msgstr ""
+msgstr "Topçu"
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr ""
+msgstr "Topçu silahları, piyadelere ve çoğu yapıya karşı yıkıcı bir etkiye sahiptir."
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr ""
+msgstr "Bununla birlikte, topçu silahları sığınaklara ve paletli araçlara karşı daha az etkilidir."
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr ""
+msgstr "Topçu silahlarının çoğu (hepsi değil), ateş edebilmek için sabit konumda olmalıdır. Bu durum, topçu silahlarının sağladığı çok düşük can puanıyla birleştiğinde, topçu silahlarıyla donatılmış birimlerin tek başlarına savunmasız kaldığı anlamına gelir."
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr ""
+msgstr "Bu nedenle, topçu silahları en iyi şekilde, doğrudan çatışmadan kaçınarak diğer birimleri veya yapıları desteklemek amacıyla kullanılır."
 
 msgid "High-Explosive Bombs"
-msgstr ""
+msgstr "Yüksek Patlayıcı Bombalar"
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr ""
+msgstr "Patlayıcı bombalar, kara tabanlı topçu silahlarına (örneğin havan topları) benzer şekilde çalışır."
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr ""
+msgstr "Bu bombalar çarpma anında patlayarak patlamanın etkisine maruz kalan her şeye zarar verir."
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr ""
+msgstr "Topçu silahları gibi, patlayıcı bombalar da çoğu yapıyı, piyade gruplarını ve hafif araçları yok etmede son derece etkilidir; ancak sığınaklara ve ağır zırhlı tanklara karşı zorlanır."
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr ""
+msgstr "Sadece kendi birimlerinizin ve yapılarınızın patlamanın etkisine maruz kalmadığından emin olun!"
 
 msgid "Incendiary Bombs"
-msgstr ""
+msgstr "Yangın Bombaları"
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr ""
+msgstr "Yangın bombaları, kara tabanlı alev makinesi silahlarına bir bakıma benzer şekilde çalışır."
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr ""
+msgstr "Yangın bombaları çarpma anında düşük hasar verir, ancak çarpma noktasının çevresindeki geniş bir alanı anında tutuşturur."
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr ""
+msgstr "Bu bölgede kalan düşman birimleri ve yapıları, zamanla büyük miktarda hasar alacaktır."
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr ""
+msgstr "Alev silahları gibi, yangın bombaları da tüm birim türlerine ve sığınaklara karşı son derece etkilidir, ancak sağlam yapılara karşı zayıftır."
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "Bomba Bölmeleri"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "Saldırı menzilleri kısa ve mühimmat kapasiteleri düşük olsa da, bomba bölmeleri ek can puanı sağlar ve genellikle diğer VTOL silahlarına kıyasla daha güçlü bir yük taşır."
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "Diğer tüm silahlar gibi, farklı bombaların da farklı etkileri, güçleri ve kullanım alanları vardır."
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Sığınak Yokedici"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "Sığınak Yokedici, tüm yapılara karşı olağanüstü etkili olan benzersiz bir silahtır."
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "Ancak, Sığınak Yokedici, yapı niteliği taşımayan herhangi bir hedefe karşı son derece zayıftır."
 
 msgid "Flamer"
-msgstr ""
+msgstr "Alev Makinesi"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "Yangın çıkaran “Alev Makinesi” silahları, piyadeler ve itiş gücü daha zayıf tanklara karşı etkilidir."
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "Alev silahları, sığınaklara ve çöpçü yapılarına karşı da son derece etkilidir, ancak diğer yapılara karşı daha zayıftır."
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "Alev silahları birliklerin içinden ‘geçebilir’; tek bir atışta birden fazla birliğe hasar verebilir ve onları tutuşturabilir. Bu nedenle Alev Silahları, kalabalık düşman gruplarını etkisiz hâle getirmede oldukça etkilidir."
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "Ancak kısa saldırı menzilleri nedeniyle Alev Silahlarını kullanmak riskli olabilir."

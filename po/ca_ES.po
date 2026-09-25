@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-05 03:16\n"
+"PO-Revision-Date: 2026-06-10 03:13\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -2979,7 +2979,7 @@ msgstr "Configuri manualment el seu router/tallafocs per obrir el port %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "Port extern obert per a mapeig de ports: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -3298,7 +3298,7 @@ msgid "All rail guns upgraded automatically"
 msgstr "S'han actualitzat automàticament tots els llançadors de raïls"
 
 msgid "All Ripple Rockets upgraded automatically"
-msgstr ""
+msgstr "Tots els coets Ripple s'actualitzen automàticament"
 
 msgid "All sensors upgraded automatically"
 msgstr "S'han actualitzat automàticament tots els sensors"
@@ -3990,10 +3990,10 @@ msgid "Complete battlefield visibility"
 msgstr "Visibilitat del camp de batalla completa"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Aliatges compostos Buff AI Mk2"
 
 msgid "Composite Alloys Buff AI"
-msgstr ""
+msgstr "Aliatges compostos Buff AI"
 
 msgid "Composite Alloys Mk2"
 msgstr "Aliatge de compòsit Mk2"
@@ -4058,10 +4058,10 @@ msgid "Cyborg Alloys"
 msgstr "Aliatges cíborgs"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Aliatges compostos Cyborg Buff AI Mk2"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr ""
+msgstr "Aliatges compostos Cyborg Buff AI"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Aliatge de compòsit cíborg Mk2"
@@ -4130,10 +4130,10 @@ msgid "Cyborg Tank Killer"
 msgstr "Cíborg Mata-Tancs"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Millora de l'armadura tèrmica cíborg IA Mk2"
 
 msgid "Cyborg Thermal Armor Buff AI"
-msgstr ""
+msgstr "Millora de l'armadura tèrmica cíborg IA"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Armadura tèrmica per cíborg Mk2"
@@ -4145,7 +4145,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Armadura tèrmica per cíborg"
 
 msgid "Cyborg Thermal"
-msgstr ""
+msgstr "Tèrmica cíborg"
 
 msgid "Cyborg Thermite"
 msgstr "Cíborg termita"
@@ -4832,22 +4832,22 @@ msgid "Hero and Special rank units are protected"
 msgstr "Les unitats de rang heroi i especial estan protegides"
 
 msgid "HESC Mortar Shells Mk2"
-msgstr ""
+msgstr "Cartutxos de morter HESC Mk2"
 
 msgid "HESC Mortar Shells Mk3"
-msgstr ""
+msgstr "Cartutxos de morter HESC"
 
 msgid "HESC Mortar Shells"
-msgstr ""
+msgstr "Cartutxos de morter HESCHC"
 
 msgid "HESCHC Mortar Shells Mk2"
-msgstr ""
+msgstr "Cartutxos de morter HESCHC Mk2"
 
 msgid "HESCHC Mortar Shells Mk3"
-msgstr ""
+msgstr "Cartutxos de morter HESCHC Mk3"
 
 msgid "HESCHC Mortar Shells"
-msgstr ""
+msgstr "Cartutxos de morter HESCHC"
 
 msgid "HESH Rocket Warhead Mk2"
 msgstr "Míssil amb cap nuclear MEEX Mk2"
@@ -4898,10 +4898,10 @@ msgid "High explosive shaped charge missile"
 msgstr "Càrrega en forma de míssil molt explosiva"
 
 msgid "High Explosive Soft Casing High Capacity Shells"
-msgstr ""
+msgstr "Cartutxos d'alta capacitat amb carcassa tova d'alt poder explosiu"
 
 msgid "High Explosive Soft Casing Shells"
-msgstr ""
+msgstr "Cartutxos tous d'alt poder explosiu"
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Armadura tèrmica d'alta intensitat Mk2"
@@ -4969,13 +4969,13 @@ msgid "Howitzer damage +25%"
 msgstr "+25% de danys dels Howitzers"
 
 msgid "Howitzer Damage Buff AI Mk2"
-msgstr ""
+msgstr "Millora de danys de l'obús IA Mk2"
 
 msgid "Howitzer Damage Buff AI Mk3"
-msgstr ""
+msgstr "Millora de danys de l'obús IA Mk3"
 
 msgid "Howitzer Damage Buff AI"
-msgstr ""
+msgstr "Millora de danys de l'obús IA"
 
 msgid "Howitzer Fast Loader"
 msgstr "Carregador ràpid de Howitzer"
@@ -5198,7 +5198,7 @@ msgid "Increases Rail Gun ROF"
 msgstr "Incrementa la CDT dels llançadors de raïl"
 
 msgid "Increases Ripple Rocket ROF"
-msgstr ""
+msgstr "Augmenta la ROF del coet Ripple"
 
 msgid "Increases Rocket accuracy"
 msgstr "Incrementa la precisió dels míssils"
@@ -5646,10 +5646,10 @@ msgid "Mortar Damage"
 msgstr "Danys del morter"
 
 msgid "Mortar Fast Loader Mk2"
-msgstr ""
+msgstr "Carregador ràpid de morter Mk2"
 
 msgid "Mortar Fast Loader Mk3"
-msgstr ""
+msgstr "Carregador ràpid de morter Mk3"
 
 msgid "Mortar Fast Loader"
 msgstr "Carregador ràpid de morter"
@@ -6742,7 +6742,7 @@ msgid "Target Acquisition Artillery Shells"
 msgstr "Munició d'artilleria seguidora d'objectius"
 
 msgid "Target Acquisition Mortar Shells Mk2"
-msgstr ""
+msgstr "Morters d'adquisició d'objectius Mk2"
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "Munició de morter seguidora d'objectius Mk2"
@@ -7360,7 +7360,7 @@ msgid "You have sent too many messages in the last few seconds. Please wait and 
 msgstr "Ha enviat massa missatges. Esperi i torni-ho a intentar."
 
 msgid "The host has disabled debug mode / cheats for this game."
-msgstr ""
+msgstr "L'amfitrió ha desactivat el mode de depuració / trucs per a aquest joc."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8064,15 +8064,15 @@ msgstr "Selecciona / Assigna un número de grup: "
 
 #, c-format
 msgid "Group %zu"
-msgstr ""
+msgstr "Agrupar %zu"
 
 #, c-format
 msgid "Select the Units in Group %zu"
-msgstr ""
+msgstr "Seleccioneu les unitats del grup %zu"
 
 #, c-format
 msgid "Assign Selected Units to Group %zu"
-msgstr ""
+msgstr "Assignar unitats seleccionades al grup %zu"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Centra la càmera en aquest grup clicant o tocant dos cops"
@@ -9102,7 +9102,7 @@ msgstr "Energia per segon"
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "%u torre(s) inactiva(des)"
 
 msgid "Need more resources!"
 msgstr "Necessiteu més recursos!"
@@ -10228,7 +10228,7 @@ msgstr "[%d] Límit [%s]: %u (per defecte: cap)"
 
 #, c-format
 msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%zu] Límit més gran que numStructureStats (%u): %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -11081,22 +11081,22 @@ msgid "Balance"
 msgstr "Balanç"
 
 msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
-msgstr ""
+msgstr "Warzone 2100 ofereix múltiples opcions d'equilibri per a la campanya original, reflectint diferents experiències al llarg de la seva llarga història."
 
 msgid "The remastered campaign experience"
 msgstr "L'experiència de la campanya remasteritzada"
 
 msgid "Increases the viability of weaponry and designs on a per mission basis."
-msgstr ""
+msgstr "Augmenta la viabilitat de l'armament i els dissenys per missió."
 
 msgid "Stats of game versions ~2.x - 3.x."
-msgstr ""
+msgstr "Estadístiques de les versions del joc ~2.x - 3.x."
 
 msgid "Unintentionally affected by game patches over the years."
-msgstr ""
+msgstr "Afectat involuntàriament per pegats de joc al llarg dels anys."
 
 msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
-msgstr ""
+msgstr "Versió 1.10 del joc de coincidències, aquesta és la representació més fidel de les estadístiques que pretenien els desenvolupadors originals (Pumpkin Studios)."
 
 msgid "Remastered"
 msgstr "Remasteritzat"
@@ -11348,13 +11348,13 @@ msgid "Terrain Appearance"
 msgstr "Aparença del terreny"
 
 msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
-msgstr ""
+msgstr "L'aspecte clàssic del terreny de la versió inicial. Textures de baixa resolució i pixel art."
 
 msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
-msgstr ""
+msgstr "L'aspecte normal del terreny utilitzat per defecte durant més d'una dècada. Textures recreades de més alta resolució."
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr ""
+msgstr "L'aspecte del terreny remasteritzat i d'alta qualitat. Alta resolució, amb un mapatge especular i de revolts modern. Requereix més memòria i una GPU millor."
 
 msgid "Terrain Shading Quality"
 msgstr "Qualitat d'ombratge del terreny"
@@ -11393,7 +11393,7 @@ msgid "Shadow Filtering"
 msgstr "Filtratge de les ombres"
 
 msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
-msgstr ""
+msgstr "Quant de filtratge/suavitzat s'aplica a l'aspecte de l'ombra. Una configuració més alta suavitza més les ombres a costa del rendiment."
 
 msgid "Low"
 msgstr "Baix"
@@ -11411,16 +11411,16 @@ msgid "Lightmap"
 msgstr "Mapa de llum"
 
 msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
-msgstr ""
+msgstr "Utilitzeu un mapa de llums clàssic per calcular les llums puntuals que impacten sobre objectes i mosaics. (Per defecte clàssic i normal. Rendiment més ràpid.)"
 
 msgid "Per-Pixel (HQ)"
-msgstr ""
+msgstr "Per píxel (HQ)"
 
 msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
-msgstr ""
+msgstr "Utilitzeu la il·luminació puntual per píxel avançada per millorar els gràfics. (Pot afectar el rendiment. Requereix una GPU més potent.)"
 
 msgid "Effects"
-msgstr ""
+msgstr "Efectes"
 
 msgid "Fog"
 msgstr "Boira"
@@ -11429,7 +11429,7 @@ msgid "Screen Shake"
 msgstr "Sacsejada de pantalla"
 
 msgid "Textures"
-msgstr ""
+msgstr "Textures"
 
 msgid "Texture Size Limit"
 msgstr "Mida límit de textures"
@@ -11727,7 +11727,7 @@ msgid "There appears to be a game update available!"
 msgstr "Sembla que hi ha una nova versió del joc!"
 
 msgid "Error dispatching request"
-msgstr ""
+msgstr "Error en enviar la sol·licitud"
 
 msgid "Failed to connect to lobby server"
 msgstr "Connexió fallida al servidor de lobbys"
@@ -11799,10 +11799,10 @@ msgid "Awaiting lobby information..."
 msgstr "Esperant la informació de la sala..."
 
 msgid "Slot Options"
-msgstr ""
+msgstr "Opcions de ranura"
 
 msgid "Spectator Join"
-msgstr ""
+msgstr "Uneix-te d'espectador"
 
 msgid "Locked"
 msgstr "Bloquejat"
@@ -11817,70 +11817,70 @@ msgid "Game Options"
 msgstr "Opcions de la partida"
 
 msgid "Lobby Join Options"
-msgstr ""
+msgstr "Opcions d'unió al vestíbul"
 
 msgid "Bot Protection"
-msgstr ""
+msgstr "Protecció de Bots"
 
 msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
-msgstr ""
+msgstr "Si els bots o eines automatitzades poden unir-se o recopilar informació de connexió de l'amfitrió (inclosa la vostra adreça IP). Si us trobeu amb unions no desitjades, spammers o altres abusos, podeu habilitar aquesta opció."
 
 msgid "Block Known Bots"
-msgstr ""
+msgstr "Bloqueja els bots coneguts"
 
 msgid "Block known bots or automated tools."
-msgstr ""
+msgstr "Bloqueja els bots o les eines automatitzades coneguts."
 
 msgid "Proxy / VPN Connections"
-msgstr ""
+msgstr "Connexions de proxy / VPN"
 
 msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
-msgstr ""
+msgstr "Els proxies/VPN amaguen la veritable font de les connexions. Els jugadors que intenten evadir prohibicions o amagar la seva identitat poden utilitzar-los."
 
 msgid "Block suspicious connections from proxies / VPNs."
-msgstr ""
+msgstr "Bloqueja connexions sospitoses de proxies / VPNs"
 
 msgid "(Recommended)"
-msgstr ""
+msgstr "(Recomanat)"
 
 msgid "Block All"
-msgstr ""
+msgstr "Blocar totes"
 
 msgid "Block all connections from proxies / VPNs."
-msgstr ""
+msgstr "Bloqueja totes les connexions des de proxis / VPN."
 
 msgid "Block Suspicious"
-msgstr ""
+msgstr "Bloquejar sospitoses"
 
 msgid "Hosting Provider IPs"
-msgstr ""
+msgstr "IPs del proveïdor d'allotjament"
 
 msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
-msgstr ""
+msgstr "Proveïdors d'allotjament de servidors. Pot ser utilitzat per eines automatitzades, escàners de ports o jugadors que intenten evadir prohibicions."
 
 msgid "Block all connections from hosting provider IPs."
-msgstr ""
+msgstr "Bloqueja totes les connexions des de les IP dels proveïdors d'allotjament."
 
 msgid "Block suspicious connections from hosting provider IPs."
-msgstr ""
+msgstr "Bloqueja les connexions sospitoses des de les IP dels proveïdors d'allotjament."
 
 msgid "Lobby Join Bypass"
-msgstr ""
+msgstr "Evita l'unió a vestíbul"
 
 msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
-msgstr ""
+msgstr "Permet que els clients evitin la unió al lobby mitjançant una connexió directa port:ip. (Pot permetre que els trolls evitin les proteccions antiabús del lobby.)"
 
 msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
-msgstr ""
+msgstr "Permet que qualsevol IP s'uneixi directament. Eviteu les proteccions antiabús del lobby."
 
 msgid "(Not Recommended)"
-msgstr ""
+msgstr "(No recomanat)"
 
 msgid "Do not allow direct joins. Require joining through the lobby."
-msgstr ""
+msgstr "No permeteu unions directes. Cal unir-se a través del vestíbul."
 
 msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
-msgstr ""
+msgstr "Permet que les IP locals/LAN s'uneixin directament. Exigeix ​​que altres persones s'hi uneixin a través del vestíbul."
 
 msgid "Joined:"
 msgstr "S'ha unit:"
