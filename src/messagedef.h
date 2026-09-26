@@ -82,6 +82,7 @@ struct SEQ_DISPLAY
 	UBYTE					flag;		//flag data to control video playback 1 = loop till audio finish
 	std::vector<WzString>	textMsg;	//Text messages - if any
 	WzString				audio;		// name of audio track to play (for this seq)
+	WzString				textFile;	// text file shown over the video, in sequenceaudio/ (empty: the video's name with .txt)
 };
 
 //info required to view a flic in Intelligence Screen

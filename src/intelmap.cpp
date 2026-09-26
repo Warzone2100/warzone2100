@@ -868,7 +868,8 @@ static bool StartMessageSequences(MESSAGE *psMessage, bool Start)
 				bLoop = false;
 			}
 
-			seq_AddSeqToList(psViewReplay->seqList.at(Sequence).sequenceName, psViewReplay->seqList.at(Sequence).audio, nullptr, bLoop);
+			const SEQ_DISPLAY &seq = psViewReplay->seqList.at(Sequence);
+			seq_AddSeqToList(seq.sequenceName, seq.audio, nullptr, bLoop, seq.textFile);
 
 			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
 			addVideoText(&psViewReplay->seqList.at(Sequence), Sequence);
