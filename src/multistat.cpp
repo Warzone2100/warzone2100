@@ -885,7 +885,7 @@ public:
 		query_updateKnownPlayerKey = std::make_unique<SQLite::Statement>(*db, "UPDATE known_players SET pk = ? WHERE name = ?");
 		query_findPlayerOptionsByPK = std::make_unique<SQLite::Statement>(*db, "SELECT name, muted, banned FROM player_options WHERE pk = ?");
 		query_insertNewPlayerOptions = std::make_unique<SQLite::Statement>(*db, "INSERT OR IGNORE INTO player_options(pk, name, muted, banned) VALUES(?, ?, ?, ?)");
-		query_updatePlayerOptionsMuted = std::make_unique<SQLite::Statement>(*db, "UPDATE player_options SET muted = ? WHERE pk = ? AND name = ?");
+		query_updatePlayerOptionsMuted = std::make_unique<SQLite::Statement>(*db, "UPDATE player_options SET muted = ? WHERE pk = ?");
 	}
 
 public:
@@ -981,15 +981,30 @@ public:
 				PlayerOptions data;
 				data.name = query_findPlayerOptionsByPK->getColumn(0).getString();
 				data.pk = key.toBytes(EcKey::Public);
-				auto mutedTime = std::chrono::seconds(query_findPlayerOptionsByPK->getColumn(1).getInt64());
-				if (mutedTime.count() > 0)
+				int64_t rawMutedTime = query_findPlayerOptionsByPK->getColumn(1).getInt64();
+				if (rawMutedTime > 0)
 				{
-					data.mutedTime = std::chrono::system_clock::time_point(mutedTime);
+					// Handle legacy database entries that might have been stored as raw clock ticks (> 1 trillion)
+					if (rawMutedTime > 1000000000000LL)
+					{
+						data.mutedTime = std::chrono::system_clock::now();
+					}
+					else
+					{
+						data.mutedTime = std::chrono::system_clock::time_point(std::chrono::seconds(rawMutedTime));
+					}
 				}
-				auto bannedTime = std::chrono::seconds(query_findPlayerOptionsByPK->getColumn(2).getInt64());
-				if (bannedTime.count() > 0)
+				int64_t rawBannedTime = query_findPlayerOptionsByPK->getColumn(2).getInt64();
+				if (rawBannedTime > 0)
 				{
-					data.bannedTime = std::chrono::system_clock::time_point(bannedTime);
+					if (rawBannedTime > 1000000000000LL)
+					{
+						data.bannedTime = std::chrono::system_clock::now();
+					}
+					else
+					{
+						data.bannedTime = std::chrono::system_clock::time_point(std::chrono::seconds(rawBannedTime));
+					}
 				}
 				if (data.name == name)
 				{
@@ -1027,24 +1042,30 @@ public:
 		// Begin transaction
 		SQLite::Transaction transaction(*db);
 
-		int64_t mutedTimeValue = static_cast<int64_t>(mutedTime.has_value() ? mutedTime.value().time_since_epoch().count() : 0);
+		int64_t mutedTimeValue = 0;
+		if (mutedTime.has_value())
+		{
+			mutedTimeValue = static_cast<int64_t>(std::chrono::duration_cast<std::chrono::seconds>(mutedTime.value().time_since_epoch()).count());
+			if (mutedTimeValue <= 0)
+			{
+				mutedTimeValue = 1;
+			}
+		}
 
 		query_insertNewPlayerOptions->bind(1, publicKeyb64);
 		query_insertNewPlayerOptions->bind(2, name);
 		query_insertNewPlayerOptions->bind(3, mutedTimeValue);
 		query_insertNewPlayerOptions->bind(4, -1); // default "never set" is -1, not 0
-		if (query_insertNewPlayerOptions->exec() == 0)
-		{
-			query_updatePlayerOptionsMuted->bind(1, mutedTimeValue);
-			query_updatePlayerOptionsMuted->bind(2, publicKeyb64);
-			query_updatePlayerOptionsMuted->bind(3, name);
-			if (query_updatePlayerOptionsMuted->exec() == 0)
-			{
-				debug(LOG_WARNING, "Failed to update player_options (%s)", name.c_str());
-			}
-			query_updatePlayerOptionsMuted->reset();
-		}
+		query_insertNewPlayerOptions->exec();
 		query_insertNewPlayerOptions->reset();
+
+		query_updatePlayerOptionsMuted->bind(1, mutedTimeValue);
+		query_updatePlayerOptionsMuted->bind(2, publicKeyb64);
+		if (query_updatePlayerOptionsMuted->exec() == 0)
+		{
+			debug(LOG_WARNING, "Failed to update player_options (%s)", name.c_str());
+		}
+		query_updatePlayerOptionsMuted->reset();
 
 		// Commit transaction
 		transaction.commit();

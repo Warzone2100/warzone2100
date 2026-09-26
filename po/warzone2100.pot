@@ -17120,6 +17120,10 @@ msgstr ""
 msgid "Barely a scratch!"
 msgstr ""
 
+#: src/hci/quickchat.cpp:2674
+msgid "See you again, have a good game everyone!"
+msgstr ""
+
 #: src/hci/quickchat.cpp:2727
 msgid "Attack now?"
 msgstr ""
