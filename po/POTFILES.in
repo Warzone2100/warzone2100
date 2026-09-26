@@ -472,6 +472,7 @@ src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
 src/hud/hudreticule.cpp
+src/hud/hudsettings.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp
@@ -565,6 +566,7 @@ src/titleui/options/audiooptions.cpp
 src/titleui/options/controlsoptions.cpp
 src/titleui/options/defaultsoptions.cpp
 src/titleui/options/graphicsoptions.cpp
+src/titleui/options/hudoptions.cpp
 src/titleui/options/interfaceoptions.cpp
 src/titleui/options/optionsforms.cpp
 src/titleui/options/windowoptions.cpp

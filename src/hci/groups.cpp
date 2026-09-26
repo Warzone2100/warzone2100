@@ -264,6 +264,7 @@ void GroupsForum::display(int xOffset, int yOffset)
 
 void GroupsForum::initialize()
 {
+	setHudSkinned(true);
 	groupsUIController = std::make_shared<GroupsUIController>();
 
 	// the layout should be like this when the build menu is open

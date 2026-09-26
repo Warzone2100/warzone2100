@@ -35,7 +35,8 @@
 #include <string>
 
 /* Time (in milliseconds) after pointing widget required to show the tool tip */
-const auto TIP_PAUSE = 200;
+const uint32_t DEFAULT_TIP_PAUSE = 200;
+static uint32_t tipPause = DEFAULT_TIP_PAUSE;
 
 /* Time (in milliseconds) required for a tip to be refreshed since the last refresh */
 const auto TIP_REFRESH_COOLDOWN = 500;
@@ -43,6 +44,9 @@ const auto TIP_REFRESH_COOLDOWN = 500;
 /* Size of border around tip text */
 const auto TIP_HGAP = 6;
 const auto TIP_VGAP = 3;
+
+static optional<WzTipStyle> tipStyle;
+static std::function<bool (const WIDGET &)> tipSuppressed;
 
 static enum
 {
@@ -84,6 +88,23 @@ void widgSetTipColour(PIELIGHT colour)
 	TipColour = colour;
 }
 
+void widgSetTipStyle(const optional<WzTipStyle> &style)
+{
+	tipStyle = style;
+	tipText.clear();
+	lastRefreshTime = nonstd::nullopt;
+}
+
+void widgSetTipDelay(uint32_t milliseconds)
+{
+	tipPause = milliseconds;
+}
+
+void widgSetTipSuppressed(const std::function<bool (const WIDGET &)> &predicate)
+{
+	tipSuppressed = predicate;
+}
+
 static std::vector<std::string> splitString(const std::string& str, char delimiter)
 {
 	std::vector<std::string> strings;
@@ -122,7 +143,7 @@ static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 		return;
 	}
 
-	auto newTip = mouseOverWidget->getTip();
+	auto newTip = (tipSuppressed && tipSuppressed(*mouseOverWidget)) ? std::string() : mouseOverWidget->getTip();
 	lastRefreshTime = wzGetTicks();
 	if (newTip == tipText)
 	{
@@ -139,6 +160,12 @@ static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 	if (auto lockedScreen = mouseOverWidget->screenPointer.lock()) {
 		fontId = lockedScreen->TipFontID;
 	}
+	if (tipStyle.has_value() && tipStyle->font.has_value())
+	{
+		fontId = tipStyle->font.value();
+	}
+	const int hgap = tipStyle.has_value() ? tipStyle->horizontalGap : TIP_HGAP;
+	const int vgap = tipStyle.has_value() ? tipStyle->verticalGap : TIP_VGAP;
 
 	auto maxLineWidth = 0;
 	auto lines = splitString(tipText, '\n');
@@ -154,18 +181,18 @@ static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 	}
 
 	/* Position the tip box */
-	auto width = maxLineWidth + TIP_HGAP * 2;
-	int32_t height = TIP_VGAP * 2 + totalLineSize;
+	auto width = maxLineWidth + hgap * 2;
+	int32_t height = vgap * 2 + totalLineSize;
 	if (!lines.empty())
 	{
 		height += displayCache.wzTip.back().belowBase();
 	}
 	auto x = clip<SDWORD>(mouseOverWidget->screenPosX() + mouseOverWidget->width() / 2, 0, screenWidth - width - 1);
-	auto y = std::min(mouseOverWidget->screenPosY() - height - TIP_VGAP, (int)screenHeight);
+	auto y = std::min(mouseOverWidget->screenPosY() - height - vgap, (int)screenHeight);
 	if (y < 0)
 	{
 		/* Position the tip below the button */
-		y = std::max(mouseOverWidget->screenPosY() + mouseOverWidget->height() + TIP_VGAP, 0);
+		y = std::max(mouseOverWidget->screenPosY() + mouseOverWidget->height() + vgap, 0);
 	}
 	tipRect = WzRect(x - 1, y - 1, width + 2, height + 2);
 
@@ -176,7 +203,7 @@ static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 		yOffset -=  displayCache.wzTip.front().aboveBase();
 	}
 	textOffset = Vector2i(
-		x + TIP_HGAP,
+		x + hgap,
 		y + yOffset
 	);
 }
@@ -192,7 +219,7 @@ static void handleTipInactive()
 		return;
 	}
 
-	if (wzGetTicks() - startTime > TIP_PAUSE)
+	if (wzGetTicks() - startTime > static_cast<int32_t>(tipPause))
 	{
 		tipState = TIP_ACTIVE;
 		lastRefreshTime = nonstd::nullopt;
@@ -216,12 +243,20 @@ static void handleTipActive()
 	}
 
 	/* Draw the tool tip */
-	iV_ShadowBox(tipRect.x(), tipRect.y(), tipRect.right(), tipRect.bottom(), 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
+	if (tipStyle.has_value() && tipStyle->drawFrame)
+	{
+		tipStyle->drawFrame(tipRect);
+	}
+	else
+	{
+		iV_ShadowBox(tipRect.x(), tipRect.y(), tipRect.right(), tipRect.bottom(), 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
+	}
 
+	const PIELIGHT textColor = (tipStyle.has_value() && tipStyle->textColor.has_value()) ? tipStyle->textColor.value() : TipColour;
 	size_t n = 0;
 	for (auto &line: displayCache.wzTip)
 	{
-		line.render(textOffset.x, textOffset.y + displayCache.wzTipYStart[n], TipColour);
+		line.render(textOffset.x, textOffset.y + displayCache.wzTipYStart[n], textColor);
 		++n;
 	}
 }

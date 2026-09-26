@@ -103,6 +103,9 @@ void SetFormAudioIDs(int OpenID, int CloseID);
 // Initialise interface graphics.
 bool intInitialiseGraphics();
 
+struct HudFancyButtonLook;
+class HudSkin;
+
 class PowerBar: public W_BARGRAPH
 {
 	public:
@@ -110,8 +113,21 @@ class PowerBar: public W_BARGRAPH
 
 		std::string getTip() override;
 		void display(int xOffset, int yOffset) override;
+		/// The look the Classic skin gives it
+		void displayClassic(int xOffset, int yOffset);
+
+		struct DisplayValues
+		{
+			double power = 0;        ///< after what is queued, smoothed
+			int hoverCost = 0;       ///< of what the pointer is on, if anything
+			unsigned unusedDerricks = 0;
+		};
+		/// What the bar shows this frame (once a frame: it takes the hovered cost)
+		DisplayValues takeDisplayValues();
 
 	private:
+		static double smoothedPower();
+
 		struct DisplayPowerBarCache
 		{
 			WzText wzText;
@@ -134,6 +150,7 @@ protected:
 	void displayImage(AtlasImage image, int xOffset, int yOffset);
 	void displayBlank(int xOffset, int yOffset, bool withQuestionMark = true);
 	void displayIfHighlight(int xOffset, int yOffset);
+	HudFancyButtonLook hudLook(int xOffset, int yOffset) const;
 
 	struct
 	{
@@ -144,6 +161,14 @@ protected:
 	} model;
 	ButtonType buttonType;  // TOPBUTTON is square, BTMBUTTON has a little up arrow.
 	bool buttonBackgroundEmpty = false;
+
+public:
+	/// Drawn by the HUD skin (the HUD's buttons, others keep the Classic look)
+	void setHudSkinned(bool skinned) { hudSkinned = skinned; }
+protected:
+	HudSkin &hudSkin() const;
+private:
+	bool hudSkinned = false;
 };
 
 class IntObjectButton : public IntFancyButton
@@ -231,8 +256,11 @@ public:
 	typedef std::function<void (IntFormAnimated&)> W_ANIMATED_ON_CLOSE_FUNC;
 	void closeAnimateDelete(const W_ANIMATED_ON_CLOSE_FUNC& onCloseAnimateFinished = nullptr);              ///< Animates the form closing, and deletes itself when done.
 	bool isClosing() const;
+	/// Framed by the HUD skin (the HUD's panels, other forms keep the Classic frame)
+	void setHudSkinned(bool skinned) { hudSkinned = skinned; }
 
 private:
+	bool            hudSkinned = false;
 	unsigned        startTime;              ///< Animation start time
 	int             currentAction;          ///< Opening/open/closing/closed.
 	W_ANIMATED_ON_CLOSE_FUNC	onCloseAnimFinished;
@@ -241,6 +269,16 @@ private:
 void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+/// A HUD panel's close button, drawn by the HUD skin
+void intDisplayHudCloseButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+/// A progress or cost bar inside an object or stats button, drawn by the HUD skin
+class HudButtonBar : public W_BARGRAPH
+{
+public:
+	using W_BARGRAPH::W_BARGRAPH;
+	void display(int xOffset, int yOffset) override;
+};
 
 void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 

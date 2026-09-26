@@ -30,7 +30,8 @@
 # <out>.shots/.
 #
 # usage: geometry.sh <warzone2100 binary> <out> <logical WxH> <display scale %> [<config line>...]
-#   <config line>: a line for the [General] section of the config file, ex. groupmenu=0, hudSkin=1
+#   <config line>: a line for the [General] section of the config file (over the Classic HUD's settings), ex.
+#   groupmenu=0, hudSkin=1
 # Environment: TEST (default highground), AT (game time in ms, default 3000), STATES (default: the panel states),
 #   SEED (default 1), RENDER_RESOLUTION (the 3D view, in % of the window, default 50), HDR (HDR lighting: off, on or
 #   auto, default off), RUN_TIMEOUT (default 600 seconds).
@@ -68,6 +69,15 @@ mkdir -p "$CFG" "$OUTBASE.shots"
 	echo "renderResolution=${RENDER_RESOLUTION:-50}"
 	echo "vsync=0"
 	echo "hdrLighting=${HDR:-off}"
+	# The Classic HUD's settings, except those the config lines set
+	for line in hudSkin=0 hudTooltips=0 hudTextOutline=0 hud.powerDetails=0 hud.statusLine=0 hud.objectBadges=0 \
+		hud.idleIndicators=0 hud.rowSummary=0 hud.selectionReadout=0 hud.readableBars=0 hud.panelFilters=0 \
+		hud.spectatorStrip=0; do
+		case " $* " in
+		*" ${line%%=*}="*) ;;
+		*) echo "$line" ;;
+		esac
+	done
 	for line in "$@"; do
 		echo "$line"
 	done

@@ -73,6 +73,7 @@
 #include "multiplay.h"
 #include "qtscript.h"
 #include "hud/hudmodel.h"
+#include "hud/hudskin.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
@@ -180,19 +181,40 @@ std::string PowerBar::getTip()
 	return tip;
 }
 
-// !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
 void PowerBar::display(int xOffset, int yOffset)
+{
+	currentHudSkin().drawPowerBar(*this, xOffset, yOffset);
+}
+
+double PowerBar::smoothedPower()
+{
+	double desiredPower = getPowerMinusQueued(selectedPlayer);
+	static double displayPower;
+	static unsigned lastRealTime;
+	displayPower = desiredPower + (displayPower - desiredPower) * exp((realTime - lastRealTime) / -80.); // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
+	lastRealTime = realTime;
+	return displayPower;
+}
+
+PowerBar::DisplayValues PowerBar::takeDisplayValues()
+{
+	DisplayValues values;
+	values.power = smoothedPower();
+	values.hoverCost = static_cast<int>(ManuPower);
+	ManuPower = 0;
+	values.unusedDerricks = countPlayerUnusedDerricks(gameWorld.objects);
+	return values;
+}
+
+// !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
+void PowerBar::displayClassic(int xOffset, int yOffset)
 {
 	SDWORD		Avail, ManPow, realPower;
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
 	SDWORD		iX, iY;
 
-	double desiredPower = getPowerMinusQueued(selectedPlayer);
-	static double displayPower;
-	static unsigned lastRealTime;
-	displayPower = desiredPower + (displayPower - desiredPower) * exp((realTime - lastRealTime) / -80.); // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
-	lastRealTime = realTime;
+	double displayPower = smoothedPower();
 
 	ManPow = ManuPower / POWERBAR_SCALE;
 	Avail = static_cast<SDWORD>((displayPower + 1e-8) / POWERBAR_SCALE);
@@ -368,11 +390,30 @@ void IntFancyButton::initDisplay()
 	}
 }
 
+HudSkin &IntFancyButton::hudSkin() const
+{
+	return hudSkinned ? currentHudSkin() : classicHudSkin();
+}
+
+HudFancyButtonLook IntFancyButton::hudLook(int xOffset, int yOffset) const
+{
+	HudFancyButtonLook look;
+	look.x = xOffset + x();
+	look.y = yOffset + y();
+	look.width = width();
+	look.height = height();
+	look.bottomButton = buttonType == BTMBUTTON;
+	look.down = isDown();
+	look.hovered = (getState() & WBUT_HIGHLIGHT) != 0;
+	look.emptyBackground = buttonBackgroundEmpty;
+	return look;
+}
+
 void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
 {
 	if (isHighlighted())
 	{
-		iV_DrawImage(IntImages, buttonType == TOPBUTTON ? IMAGE_BUT_HILITE : IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
+		hudSkin().drawFancyButtonHighlight(hudLook(xOffset, yOffset));
 	}
 }
 
@@ -518,7 +559,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
-		iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+		hudSkin().drawFancyButtonOnHold(hudLook(xOffset, yOffset));
 	}
 	else
 	{
@@ -751,7 +792,7 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) * num / den,
 	                   aBegin.height() + (aEnd.height() - aBegin.height()) * num / den);
 
-	RenderWindowFrame(FRAME_NORMAL, aCur.x(), aCur.y(), aCur.width(), aCur.height());
+	(hudSkinned ? currentHudSkin() : classicHudSkin()).drawPanelFrame(aCur, aOpen);
 }
 
 // Display an image for a widget.
@@ -784,6 +825,17 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
+void intDisplayHudCloseButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	currentHudSkin().drawCloseButton(xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height(),
+	                                 (psWidget->getState() & WBUT_HIGHLIGHT) != 0);
+}
+
+void HudButtonBar::display(int xOffset, int yOffset)
+{
+	currentHudSkin().drawButtonBar(*this, xOffset, yOffset);
+}
+
 void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
@@ -953,24 +1005,7 @@ bool intInitialiseGraphics()
 // Clear a button bitmap. ( copy the button background ).
 void IntFancyButton::displayClear(int xOffset, int yOffset)
 {
-	UWORD buttonId = 0;
-	switch (buttonType)
-	{
-		case IntFancyButton::ButtonType::TOPBUTTON:
-			if (buttonBackgroundEmpty)
-			{
-				buttonId = (isDown() ? IMAGE_BUT_EMPTY_DOWN : IMAGE_BUT_EMPTY_UP);
-			}
-			else
-			{
-				buttonId = (isDown() ? IMAGE_BUT0_DOWN : IMAGE_BUT0_UP);
-			}
-			break;
-		case IntFancyButton::ButtonType::BTMBUTTON:
-			buttonId = (isDown() ? IMAGE_BUTB0_DOWN : IMAGE_BUTB0_UP);
-			break;
-	}
-	iV_DrawImage(IntImages, buttonId, xOffset + x(), yOffset + y());
+	hudSkin().drawFancyButtonBackground(hudLook(xOffset, yOffset));
 }
 
 // Create a button by rendering an IMD object into it.

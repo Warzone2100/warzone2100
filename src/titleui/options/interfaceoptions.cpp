@@ -37,6 +37,7 @@
 #include "../../clparse.h"
 #include "../../frend.h"
 #include "../../main.h"
+#include "hudoptions.h"
 
 // MARK: -
 
@@ -300,6 +301,8 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(bool inGame, const std::fu
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
+
+	addHudOptions(result);
 
 	result->addSection(OptionsSection(N_("Radar"), ""), true);
 	{
