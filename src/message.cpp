@@ -781,6 +781,12 @@ inline void from_json(const nlohmann::json& j, SEQ_DISPLAY& v)
 	debug(LOG_WZ, "Sequence name: %s", v.sequenceName.toUtf8().c_str());
 	v.flag = j["loop"].get<uint32_t>();
 	debug(LOG_WZ, "Sequence loop: %d", v.flag);
+	auto textFile = j.find("textFile");
+	if (textFile != j.end())
+	{
+		v.textFile = WzString::fromUtf8(textFile->get<std::string>());
+		debug(LOG_WZ, "Sequence text file: %s", v.textFile.toUtf8().c_str());
+	}
 	// Set the subtitle string for the sequence.
 	const nlohmann::json& subtitles = j["subtitles"];
 	if (!subtitles.is_null() && subtitles.is_array())

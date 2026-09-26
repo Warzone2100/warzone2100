@@ -51,3 +51,4 @@ Within each briefing, there will be:
   - loop: An integer between 0-1 to loop the entire video until its audio stops playing. Will always display subtitles every frame if set to 1.
   - subtitles: String or array of string translation references for the video. These are added to the Intel menu icon text messages.
   - video: The actual video file to display. Note the directory starts at "data/[base|mp]/sequences/".
+  - textFile (optional): The text file to show over the video when subtitles are on. Note the directory starts at "data/[base|mp]/sequenceaudio/". By default this is the video's name with ".txt" in place of its extension, so setting it lets several briefings share one video while each shows its own text.

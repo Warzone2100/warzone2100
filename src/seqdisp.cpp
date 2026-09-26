@@ -1072,7 +1072,7 @@ void seq_ClearSeqList()
 }
 
 //add a sequence to the list to be played
-void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop)
+void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop, const WzString &subtitleName)
 {
 	currentSeq++;
 
@@ -1096,15 +1096,22 @@ void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const
 	if (bSeqSubtitles)
 	{
 		char aSubtitleName[MAX_STR_LENGTH];
-		sstrcpy(aSubtitleName, pSeqName.toUtf8().c_str());
-
-		// check for a subtitle file
-		char *extension = strrchr(aSubtitleName, '.');
-		if (extension)
+		if (!subtitleName.isEmpty())
 		{
-			*extension = '\0';
+			sstrcpy(aSubtitleName, subtitleName.toUtf8().c_str());
 		}
-		sstrcat(aSubtitleName, ".txt");
+		else
+		{
+			sstrcpy(aSubtitleName, pSeqName.toUtf8().c_str());
+
+			// check for a subtitle file
+			char *extension = strrchr(aSubtitleName, '.');
+			if (extension)
+			{
+				*extension = '\0';
+			}
+			sstrcat(aSubtitleName, ".txt");
+		}
 
 		// Subtitles should be center justified
 		seq_AddTextFromFile(aSubtitleName, SEQ_TEXT_JUSTIFY);
