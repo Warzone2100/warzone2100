@@ -648,6 +648,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	/* Create the basic form */
 	auto orderForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	orderForm->setHudSkinned(true);
 	parent->attach(orderForm);
 	orderForm->id = IDORDER_FORM;
 	orderForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({

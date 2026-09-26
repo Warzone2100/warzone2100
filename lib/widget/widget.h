@@ -370,6 +370,21 @@ enum _w_colour
 /** Set the global toop tip text colour. */
 void widgSetTipColour(PIELIGHT colour);
 
+/** How tooltips look (by default, as they always have). */
+struct WzTipStyle
+{
+	optional<iV_fonts> font;          ///< (default: the screen's tip font)
+	optional<PIELIGHT> textColor;     ///< (default: the color from widgSetTipColour)
+	int horizontalGap = 6;
+	int verticalGap = 3;
+	std::function<void (const WzRect &rect)> drawFrame;  ///< (default: the shadow box)
+};
+void widgSetTipStyle(const optional<WzTipStyle> &style);
+/** Time the pointer must rest on a widget before its tip shows (default 200 ms) */
+void widgSetTipDelay(uint32_t milliseconds);
+/** Widgets the predicate picks show no tip, ex. while something else describes them */
+void widgSetTipSuppressed(const std::function<bool (const WIDGET &widget)> &predicate);
+
 void widgSetButtonFlash(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 void widgClearButtonFlash(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 

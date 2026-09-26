@@ -135,6 +135,7 @@ void BaseStatsController::scheduleDisplayStatsForm(const std::shared_ptr<BaseSta
 DynamicIntFancyButton::DynamicIntFancyButton()
 {
 	style |= WFORM_SECONDARY;
+	setHudSkinned(true);
 }
 
 void DynamicIntFancyButton::updateLayout()
@@ -186,7 +187,7 @@ void StatsButton::addProgressBar()
 	init.pTip = _("Progress Bar");
 	init.style = WBAR_TROUGH | WIDG_HIDDEN;
 	init.iRange = GAME_TICKS_PER_SEC;
-	attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
+	attach(progressBar = std::make_shared<HudButtonBar>(&init));
 	progressBar->setBackgroundColour(WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 }
 
@@ -219,7 +220,7 @@ void StatsFormButton::addCostBar()
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	sBarInit.iRange = GAME_TICKS_PER_SEC;
-	attach(costBar = std::make_shared<W_BARGRAPH>(&sBarInit));
+	attach(costBar = std::make_shared<HudButtonBar>(&sBarInit));
 	costBar->setBackgroundColour(WZCOL_BLACK);
 	costBar->setTransparentToMouse(true);
 }
@@ -265,6 +266,7 @@ void ObjectsForm::initialize()
 {
 	// creating an obj stat form
 	id = IDOBJ_FORM;
+	setHudSkinned(true);
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - (getGroupButtonEnabled() ? 80 : 0), OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
 	}));
@@ -280,7 +282,7 @@ void ObjectsForm::addCloseButton()
 		psWidget->setGeometry(OBJ_BACKWIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	});
 	init.pTip = _("Close");
-	init.pDisplay = intDisplayImageHilight;
+	init.pDisplay = intDisplayHudCloseButton;
 	init.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	auto button = std::make_shared<W_BUTTON>(&init);
 	attach(button);
@@ -349,6 +351,7 @@ void ObjectsForm::removeLastButton()
 void StatsForm::initialize()
 {
 	id = IDSTAT_FORM;
+	setHudSkinned(true);
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 	}));
@@ -365,7 +368,7 @@ void StatsForm::addCloseButton()
 	init.width = CLOSE_WIDTH;
 	init.height = CLOSE_HEIGHT;
 	init.pTip = _("Close");
-	init.pDisplay = intDisplayImageHilight;
+	init.pDisplay = intDisplayHudCloseButton;
 	init.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	auto button = std::make_shared<W_BUTTON>(&init);
 	attach(button);

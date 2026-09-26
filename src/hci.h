@@ -384,6 +384,10 @@ void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHe
 void intRefreshScreen();
 /// Test-only (--gamestate-ui-stress): open the build, manufacture, research, commander or order form, or close them
 bool intTestShowForm(unsigned which);
+/// Which of the build, manufacture, research or commander panels is open (IOBJ_NONE: none)
+OBJECT_MODE intOpenObjectPanel();
+/// Open one of them again, as its reticule button does (after the HUD was rebuilt)
+bool intReopenObjectPanel(OBJECT_MODE mode);
 
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats();

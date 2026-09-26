@@ -96,6 +96,8 @@
 #include "hud/hudkeys.h"
 #include "hud/hudreticule.h"
 #include "hud/hudmodel.h"
+#include "hud/hudskin.h"
+#include "hud/hud.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -528,8 +530,6 @@ void setReticulesEnabled(bool enabled)
 
 static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
 	int DownTime = retbutstats[psWidget->UserData].downTime;
 	bool flashing = retbutstats[psWidget->UserData].flashing;
 	int flashTime = retbutstats[psWidget->UserData].flashTime;
@@ -543,30 +543,30 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		retbutstats[psWidget->UserData].button->setState(WBUT_DISABLE);
 	}
 
+	HudReticuleButtonLook look;
+	look.slot = psWidget->UserData;
+	look.x = xOffset + psWidget->x();
+	look.y = yOffset + psWidget->y();
+	look.width = psWidget->width();
+	look.height = psWidget->height();
+	look.upImage = retbutstats[psWidget->UserData].filename;
+	look.downImage = retbutstats[psWidget->UserData].filenameDown;
+	look.isCancel = psWidget->UserData == RETBUT_CANCEL;
+	look.paused = gamePaused();
+	look.panelOpen = (psButton->state & WBUT_CLICKLOCK) != 0;
+
 	if (butDisabled)
 	{
-		if (psWidget->UserData != RETBUT_CANCEL)
-		{
-			iV_DrawImage2("image_reticule_grey.png", x, y, psWidget->width(), psWidget->height());
-		}
-		else
-		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
-		}
+		look.disabled = true;
+		currentHudSkin().drawReticuleButton(look);
 		return;
 	}
 
 	bool Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
 	if (Down && buttonIsClickable(psButton->id))
 	{
-		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
-		{
-			iV_DrawImage2("image_reticule_butdown.png", x, y, psWidget->width(), psWidget->height());
-		}
-		else
-		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
-		}
+		look.pressed = true;
+		look.firstPressedFrame = DownTime < 1;
 		DownTime++;
 		flashing = false;	// stop the reticule from flashing if it was
 	}
@@ -576,34 +576,19 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		{
 			if (((realTime / 250) % 2) != 0)
 			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
 				flashTime = 0;
-			}
-			else
-			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
 			}
 			flashTime++;
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
 			DownTime = 0;
 		}
+		look.flashing = flashing;
 	}
 
-	bool highlighted = buttonIsHighlighted(psButton);
-	if (highlighted)
-	{
-		if (psWidget->UserData == RETBUT_CANCEL)
-		{
-			iV_DrawImage2("image_cancel_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
-		}
-		else
-		{
-			iV_DrawImage2("image_reticule_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
-		}
-	}
+	look.highlighted = buttonIsHighlighted(psButton);
+	currentHudSkin().drawReticuleButton(look);
 	retbutstats[psWidget->UserData].flashTime = flashTime;
 	retbutstats[psWidget->UserData].flashing = flashing;
 	retbutstats[psWidget->UserData].downTime = DownTime;
@@ -700,7 +685,9 @@ bool intInitialise()
 	hudModel().reset();
 	intUpdateFuncs.emplace_back([]() {
 		hudModel().update();
+		hudUpdate();
 	}, HudModel::REFRESH_INTERVAL_MS);
+	hudInitialize();
 
 	// refresh defaults for quick chat
 	quickChatInitInGame();
@@ -716,6 +703,7 @@ void interfaceShutDown()
 
 	destroyReplayControllerOverlay();
 
+	hudShutdown();
 	intUpdateFuncs.clear();
 	groupsUI = nullptr;
 
@@ -2099,6 +2087,7 @@ bool intAddReticule()
 	}
 	auto const &parent = psWScreen->psForm;
 	auto retForm = std::make_shared<IntFormAnimated>(false);
+	retForm->setHudSkinned(true);
 	parent->attach(retForm);
 	retForm->id = IDRET_FORM;
 	retForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -2444,6 +2433,45 @@ static bool intAddCommand()
 {
 	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<CommanderController>(), INT_CMDORDER, IOBJ_COMMAND);
+}
+
+OBJECT_MODE intOpenObjectPanel()
+{
+	if (intMode != INT_OBJECT && intMode != INT_STAT && intMode != INT_CMDORDER)
+	{
+		return IOBJ_NONE;
+	}
+	switch (objMode)
+	{
+	case IOBJ_BUILD:
+	case IOBJ_MANUFACTURE:
+	case IOBJ_RESEARCH:
+	case IOBJ_COMMAND:
+		return objMode;
+	default:
+		return IOBJ_NONE;
+	}
+}
+
+bool intReopenObjectPanel(OBJECT_MODE mode)
+{
+	switch (mode)
+	{
+	case IOBJ_BUILD:
+		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
+		return intAddBuild();
+	case IOBJ_MANUFACTURE:
+		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
+		return intAddManufacture();
+	case IOBJ_RESEARCH:
+		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
+		return intAddResearch();
+	case IOBJ_COMMAND:
+		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
+		return intAddCommand();
+	default:
+		return false;
+	}
 }
 
 bool intTestShowForm(unsigned which)
@@ -2910,6 +2938,7 @@ void intShowInterface()
 	intAddReticule();
 	intShowPowerBar();
 	intShowGroupSelectionMenu();
+	hudInterfaceShown(true);
 }
 
 ScriptInterfaceRequest getScriptInterfaceRequest()
@@ -2942,4 +2971,5 @@ void intHideInterface(bool forceHidePowerbar)
 		intHidePowerBar();
 	}
 	intHideGroupSelectionMenu();
+	hudInterfaceShown(false);
 }
