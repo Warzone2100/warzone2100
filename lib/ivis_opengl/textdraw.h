@@ -91,6 +91,7 @@ private:
 	float mRenderingHorizScaleFactor = 0.f;
 	float mRenderingVertScaleFactor = 0.f;
 	iV_fonts mFontID = font_count;
+	uint32_t mFontGeneration = 0;
 	Vector2i layoutMetrics = Vector2i(0, 0);
 };
 
