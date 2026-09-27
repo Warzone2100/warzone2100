@@ -83,6 +83,10 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 float _horizScaleFactor = 1.0f;
 float _vertScaleFactor = 1.0f;
 
+// Changes whenever a font's faces are recreated (cached WzText renders of that font are then stale)
+static uint32_t fontGeneration[font_count] = {};
+static uint32_t lastFontGeneration = 0;
+
 /***************************************************************************
  *
  *	Internal classes
@@ -1329,6 +1333,11 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 	// hb_language_get_default: "To avoid problems, call this function once before multiple threads can call it."
 	hb_language_get_default();
 
+	for (auto &generation : fontGeneration)
+	{
+		generation = ++lastFontGeneration;
+	}
+
 	bLoadedTextSystem = true;
 }
 
@@ -1804,6 +1813,12 @@ int WzText::lineSize()
 	return mPtsLineSize;
 }
 
+static uint32_t getFontGeneration(iV_fonts fontID)
+{
+	ASSERT_OR_RETURN(0, fontID < font_count, "Invalid font: %d", static_cast<int>(fontID));
+	return fontGeneration[fontID];
+}
+
 void WzText::setText(const WzString &text, iV_fonts fontID/*, bool delayRender*/)
 {
 	if (mText == text && fontID == mFontID)
@@ -1817,6 +1832,7 @@ void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
 {
 	mFontID = fontID;
 	mText = string;
+	mFontGeneration = getFontGeneration(fontID);
 	mRenderingHorizScaleFactor = iV_GetHorizScaleFactor();
 	mRenderingVertScaleFactor = iV_GetVertScaleFactor();
 
@@ -1881,6 +1897,7 @@ WzText& WzText::operator=(WzText&& other)
 		mPtsLineSize = other.mPtsLineSize;
 		offsets = other.offsets;
 		dimensions = other.dimensions;
+		mFontGeneration = other.mFontGeneration;
 		mRenderingHorizScaleFactor = other.mRenderingHorizScaleFactor;
 		mRenderingVertScaleFactor = other.mRenderingVertScaleFactor;
 		layoutMetrics = other.layoutMetrics;
@@ -1902,11 +1919,10 @@ inline void WzText::updateCacheIfNecessary()
 	{
 		return; // string is empty (or hasn't yet been set), thus changes have no effect
 	}
-	if (mRenderingHorizScaleFactor != iV_GetHorizScaleFactor() || mRenderingVertScaleFactor != iV_GetVertScaleFactor())
+	if (mFontGeneration != getFontGeneration(mFontID))
 	{
-		// The text rendering subsystem's scale factor has changed, so the rendered (cached) text must be re-rendered.
+		// The font's faces were recreated (ex. the text rendering scale factor changed), so the rendered (cached) text must be re-rendered.
 		redrawAndCacheText();
-		// debug(LOG_WZ, "Redrawing / re-calculating WzText text - scale factor has changed.");
 	}
 }
 
