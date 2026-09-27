@@ -1165,6 +1165,24 @@ static WZFontCollection* baseFonts = nullptr;
 static WZFontCollection* cjkFonts = nullptr;
 static bool failedToLoadCJKFonts = false;
 
+// Video text fonts: faces are created on demand at the bound size (a char size of 0 is unbound)
+struct VideoFontSlot
+{
+	int32_t charSize = 0; // 26.6 points
+	std::unique_ptr<FTFace> base;
+	std::unique_ptr<FTFace> cjk;
+};
+static VideoFontSlot videoFontSlots[font_video_4 - font_video_1 + 1];
+
+static optional<size_t> videoFontSlotIndex(iV_fonts fontID)
+{
+	if (fontID < font_video_1 || fontID > font_video_4)
+	{
+		return nullopt;
+	}
+	return static_cast<size_t>(fontID - font_video_1);
+}
+
 struct iVFontsHash
 {
     std::size_t operator()(iV_fonts FontID) const
@@ -1206,7 +1224,7 @@ static bool inline initializeCJKFontsIfNeeded()
 	return true;
 }
 
-static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
+static bool usesCJKFont(hb_script_t script)
 {
 	switch (script)
 	{
@@ -1215,30 +1233,69 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 		case HB_SCRIPT_HANGUL:
 		case HB_SCRIPT_HIRAGANA:
 		case HB_SCRIPT_KATAKANA:
-			if (initializeCJKFontsIfNeeded())
-			{
-				switch (FontID)
-				{
-				default:
-				case font_regular:
-					return *(cjkFonts->regular);
-				case font_regular_bold:
-					return *(cjkFonts->regularBold);
-				case font_large:
-					return *(cjkFonts->bold);
-				case font_medium:
-					return *(cjkFonts->medium);
-				case font_medium_bold:
-					return *(cjkFonts->mediumBold);
-				case font_small:
-					return *(cjkFonts->small);
-				case font_bar:
-					return *(cjkFonts->smallBold);
-				}
-			}
-			break;
+			return true;
 		default:
-			break;
+			return false;
+	}
+}
+
+static FTFace *getVideoFontFace(size_t index, hb_script_t script)
+{
+	VideoFontSlot &slot = videoFontSlots[index];
+	ASSERT_OR_RETURN(nullptr, slot.charSize > 0, "Video font %zu is not bound", index + 1);
+	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
+	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
+	try {
+		if (usesCJKFont(script) && initializeCJKFontsIfNeeded())
+		{
+			if (!slot.cjk)
+			{
+				slot.cjk = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, slot.charSize, horizDPI, vertDPI, 400);
+			}
+			return slot.cjk.get();
+		}
+		if (!slot.base)
+		{
+			slot.base = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", slot.charSize, horizDPI, vertDPI);
+		}
+	}
+	catch (const std::exception &e) {
+		debug(LOG_ERROR, "Failed to load video font:\n%s", e.what());
+		return nullptr;
+	}
+	return slot.base.get();
+}
+
+static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
+{
+	if (auto index = videoFontSlotIndex(FontID))
+	{
+		if (FTFace *face = getVideoFontFace(index.value(), script))
+		{
+			return *face;
+		}
+		FontID = font_regular;
+	}
+	if (usesCJKFont(script) && initializeCJKFontsIfNeeded())
+	{
+		switch (FontID)
+		{
+		default:
+		case font_regular:
+			return *(cjkFonts->regular);
+		case font_regular_bold:
+			return *(cjkFonts->regularBold);
+		case font_large:
+			return *(cjkFonts->bold);
+		case font_medium:
+			return *(cjkFonts->medium);
+		case font_medium_bold:
+			return *(cjkFonts->mediumBold);
+		case font_small:
+			return *(cjkFonts->small);
+		case font_bar:
+			return *(cjkFonts->smallBold);
+		}
 	}
 	switch (FontID)
 	{
@@ -1350,6 +1407,12 @@ void iV_TextShutdown()
 	baseFonts = nullptr;
 	delete cjkFonts;
 	cjkFonts = nullptr;
+	for (auto &slot : videoFontSlots)
+	{
+		// the bound size stays: the faces are recreated on demand at the new DPI
+		slot.base.reset();
+		slot.cjk.reset();
+	}
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
@@ -1365,6 +1428,53 @@ void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int ve
 	}
 	iV_TextShutdown();
 	iV_TextInit(horizScalePercentage, vertScalePercentage);
+}
+
+// The glyph cache is keyed by face pointer, so it is cleared whenever video font faces are freed
+static void releaseVideoFontFaces(VideoFontSlot &slot)
+{
+	if (!slot.base && !slot.cjk)
+	{
+		return;
+	}
+	slot.base.reset();
+	slot.cjk.reset();
+	if (glyphCache)
+	{
+		glyphCache->clear();
+	}
+}
+
+bool iV_BindVideoFont(iV_fonts fontID, float pointSize)
+{
+	auto index = videoFontSlotIndex(fontID);
+	ASSERT_OR_RETURN(false, index.has_value(), "Not a video font: %d", static_cast<int>(fontID));
+	ASSERT_OR_RETURN(false, pointSize > 0.f, "Invalid video font size: %f", pointSize);
+	int32_t charSize = std::max<int32_t>(1, static_cast<int32_t>(std::lround(pointSize * 64.f)));
+	VideoFontSlot &slot = videoFontSlots[index.value()];
+	if (slot.charSize == charSize)
+	{
+		return true;
+	}
+	releaseVideoFontFaces(slot);
+	slot.charSize = charSize;
+	fontGeneration[fontID] = ++lastFontGeneration;
+	return true;
+}
+
+void iV_UnbindVideoFonts()
+{
+	for (size_t i = 0; i < ARRAY_SIZE(videoFontSlots); ++i)
+	{
+		VideoFontSlot &slot = videoFontSlots[i];
+		if (slot.charSize == 0)
+		{
+			continue;
+		}
+		releaseVideoFontFaces(slot);
+		slot.charSize = 0;
+		fontGeneration[font_video_1 + i] = ++lastFontGeneration;
+	}
 }
 
 static WzText& iV_Internal_GetEllipsis(iV_fonts fontID)
@@ -1513,6 +1623,10 @@ optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
 			case font_small:
 				return font_bar;
 
+			case font_video_1:
+			case font_video_2:
+			case font_video_3:
+			case font_video_4:
 			case font_count:
 				return nullopt;
 		}
@@ -1536,6 +1650,10 @@ optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
 			case font_scaled: // treated the same as font_regular
 			case font_regular:
 			case font_small:
+			case font_video_1:
+			case font_video_2:
+			case font_video_3:
+			case font_video_4:
 				return fontID; // already non-bolded
 
 			case font_count:
@@ -1569,6 +1687,11 @@ optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID)
 		case font_small:
 			return nullopt;
 
+		// video fonts are sized by their caller
+		case font_video_1:
+		case font_video_2:
+		case font_video_3:
+		case font_video_4:
 		case font_count:
 			return nullopt;
 	}
