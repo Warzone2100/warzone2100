@@ -144,6 +144,17 @@ struct FlowLayoutFragment
     unsigned int offset;
 };
 
+/// A piece of a line from wzLayoutTextLines: its text, and its offset and width in the line (in points)
+struct WzTextLayoutFragment
+{
+	WzString text;
+	unsigned int offset;
+	unsigned int width;
+};
+
+/// Word-wraps text to a width (in points), split into bidirectional runs as Paragraph text is
+std::vector<std::vector<WzTextLayoutFragment>> wzLayoutTextLines(const WzString &text, iV_fonts font, unsigned int maxWidth);
+
 class Paragraph : public WIDGET
 {
 public:

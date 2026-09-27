@@ -298,6 +298,41 @@ public:
 	}
 };
 
+std::vector<std::vector<WzTextLayoutFragment>> wzLayoutTextLines(const WzString &text, iV_fonts font, unsigned int maxWidth)
+{
+	std::vector<FlowLayoutStringDescriptor> runs;
+	auto textRuns = iV_SplitTextParagraphIntoRuns(text, font);
+	if (textRuns.size() > 1)
+	{
+		for (const auto& run : textRuns)
+		{
+			runs.emplace_back(text.substr(run.startOffset, run.endOffset - run.startOffset), font, run.rightToLeft);
+		}
+	}
+	else
+	{
+		runs.emplace_back(text, font);
+	}
+
+	FlowLayout flowLayout(maxWidth);
+	for (const auto &run : runs)
+	{
+		flowLayout.append(run);
+	}
+	flowLayout.end();
+
+	std::vector<std::vector<WzTextLayoutFragment>> lines;
+	for (const auto &line : flowLayout.getLines())
+	{
+		lines.emplace_back();
+		for (const auto &fragment : line)
+		{
+			lines.back().push_back({runs[fragment.elementId].getText().substr(fragment.begin, fragment.length), fragment.offset, fragment.width});
+		}
+	}
+	return lines;
+}
+
 struct ParagraphTextElement: public ParagraphElement
 {
 	ParagraphTextElement(WzString const &newText, ParagraphTextStyle const &style, bool rtl = false): style(style)

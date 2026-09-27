@@ -43,6 +43,7 @@
 #include "lib/sound/cdaudio.h"
 
 #include "seqdisp.h"
+#include "seqsubtitles.h"
 
 #include "warzoneconfig.h"
 #include "hci.h"//for font
@@ -87,6 +88,7 @@ struct SEQLIST
 	bool		bSeqLoop;					//loop this sequence
 	int             currentText;			// current number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
+	std::shared_ptr<SeqSubtitles> areaSubtitles;	// text in areas of the video, if its subtitle file is a JSON one
 
 	SEQLIST() : bSeqLoop(false), currentText(0)
 	{
@@ -97,6 +99,7 @@ struct SEQLIST
 		bSeqLoop = false;
 		currentText = 0;
 		memset(aText, 0, sizeof(aText));
+		areaSubtitles.reset();
 		pSeq.clear();
 		pAudio.clear();
 	}
@@ -123,6 +126,12 @@ static SDWORD currentPlaySeq = -1;
 
 // local rendered text cache
 static std::vector<WzText> wzCachedSeqText;
+
+// the full-screen video's rectangle on screen
+static int videoRectX = 0;
+static int videoRectY = 0;
+static int videoRectWidth = 0;
+static int videoRectHeight = 0;
 
 /***************************************************************************/
 /*
@@ -481,6 +490,10 @@ static void seq_SetUserResolution()
 	const int x = (screenWidth - video_size.x) / 2;
 	const int y = (screenHeight - video_size.y) / 2;
 	seq_SetDisplaySize(video_size.x, video_size.y, x, y);
+	videoRectX = x;
+	videoRectY = y;
+	videoRectWidth = static_cast<int>(video_size.x);
+	videoRectHeight = static_cast<int>(video_size.y);
 }
 
 // The list of names to try for a video, in priority order: when this build has
@@ -861,6 +874,10 @@ bool seq_UpdateFullScreenVideo()
 			}
 		}
 	}
+	if (aSeqList[currentPlaySeq].areaSubtitles)
+	{
+		seqSubtitles_Draw(*aSeqList[currentPlaySeq].areaSubtitles, frameTime, bSeqSubtitles, videoRectX, videoRectY, videoRectWidth, videoRectHeight);
+	}
 	if (!stillPlaying || bHoldSeqForAudio)
 	{
 		if (bAudioPlaying)
@@ -896,6 +913,7 @@ void seqReleaseAll()
 	aVideoEdits.reset();
 	aVideoLanguage.clear();
 	wzCachedSeqText.clear();
+	seqSubtitles_ReleaseLayout();
 }
 
 bool seq_StopFullScreenVideo()
@@ -913,6 +931,7 @@ bool seq_StopFullScreenVideo()
 	aVideoEdits.reset();
 	aVideoLanguage.clear();
 	wzCachedSeqText.clear();
+	seqSubtitles_ReleaseLayout();
 
 	return true;
 }
@@ -1064,6 +1083,7 @@ void seq_ClearSeqList()
 {
 	currentSeq = -1;
 	currentPlaySeq = -1;
+	seqSubtitles_ReleaseLayout();
 	for (int i = 0; i < MAX_SEQ_LIST; ++i)
 	{
 		aSeqList[i].reset();
@@ -1093,28 +1113,28 @@ void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const
 		seq_AddTextFromFile(pTextName, SEQ_TEXT_POSITION);
 	}
 
-	if (bSeqSubtitles)
+	// The subtitle file: named, or the video's name with .json (if present) or .txt. A JSON file is loaded
+	// whatever the subtitles setting (its areas can always show), a text file only with subtitles on.
+	WzString subtitleFile = subtitleName;
+	if (subtitleFile.isEmpty())
 	{
-		char aSubtitleName[MAX_STR_LENGTH];
-		if (!subtitleName.isEmpty())
+		std::string baseName = pSeqName.toUtf8();
+		const size_t extension = baseName.rfind('.');
+		if (extension != std::string::npos)
 		{
-			sstrcpy(aSubtitleName, subtitleName.toUtf8().c_str());
+			baseName.resize(extension);
 		}
-		else
-		{
-			sstrcpy(aSubtitleName, pSeqName.toUtf8().c_str());
-
-			// check for a subtitle file
-			char *extension = strrchr(aSubtitleName, '.');
-			if (extension)
-			{
-				*extension = '\0';
-			}
-			sstrcat(aSubtitleName, ".txt");
-		}
-
+		const bool haveJson = PHYSFS_exists(("sequenceaudio/" + baseName + ".json").c_str());
+		subtitleFile = WzString::fromUtf8(baseName + (haveJson ? ".json" : ".txt"));
+	}
+	if (subtitleFile.endsWith(".json"))
+	{
+		aSeqList[currentSeq].areaSubtitles = seqSubtitles_Load(subtitleFile);
+	}
+	else if (bSeqSubtitles)
+	{
 		// Subtitles should be center justified
-		seq_AddTextFromFile(aSubtitleName, SEQ_TEXT_JUSTIFY);
+		seq_AddTextFromFile(subtitleFile.toUtf8().c_str(), SEQ_TEXT_JUSTIFY);
 	}
 }
 
