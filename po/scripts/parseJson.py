@@ -1,6 +1,6 @@
 import json, sys, re
 
-IGNORED_WZ_JSON_FILE_TYPES = {'wz2100.proxmsgs.v1', 'wz2100.briefs.v1'}
+IGNORED_WZ_JSON_FILE_TYPES = {'wz2100.proxmsgs.v1', 'wz2100.briefs.v1', 'wz2100.subtitleareas.v1'}
 
 def printString(s, begin, end, filename, jsonPath):
 	if not re.match(r'^(\*.*\*|CAM[0-9] .*|Z ?NULL.*)$', s):
@@ -30,6 +30,15 @@ def parse(obj, filename):
 		if 'type' in obj:
 			if obj['type'] in IGNORED_WZ_JSON_FILE_TYPES:
 				#sys.stderr.write('// IGNORING: {}\n'.format(filename))
+				return
+			# subtitle files: each line's text, and its speaker's name (translated with the "speaker" context)
+			if obj['type'] == 'wz2100.subtitles.v1':
+				for idx, line in enumerate(obj.get('lines', [])):
+					if isinstance(line, dict):
+						if isinstance(line.get('text'), str):
+							printString(line['text'], '_(', '\n', filename, '$.lines[{}].text'.format(idx))
+						if isinstance(line.get('speaker'), str):
+							printString(line['speaker'], 'NP_("speaker", ', '\n', filename, '$.lines[{}].speaker'.format(idx))
 				return
 	
 	_parse(obj, filename);
