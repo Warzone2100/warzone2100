@@ -54,11 +54,11 @@ if [[ $DISTRO == "raspberrypios" || $DISTRO == "debian" ]]; then
 
   if [[ "${VERSION_PARTS[0]}" == "12" || "${VERSION_PARTS[0]}" == "13" ]]; then
     echo "Installing build-dependencies for Debian 12 / 13"
-    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libvpx-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
+    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip 7zip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libvpx-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
   elif [ "${VERSION_PARTS[0]}" -ge "14" ]; then
     echo "Installing build-dependencies for Debian 14+"
-    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libvpx-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
+    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip 7zip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libvpx-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
   else
     echo "Script does not currently support Debian ${VERSION_PARTS[0]} (${VERSION})"
     exit 1
@@ -107,6 +107,11 @@ if [ "${DISTRO}" == "ubuntu" ]; then
     exit 1
   fi
 
+  if [ "${VERSION_PARTS[0]}" -ge "24" ]; then
+    # Ubuntu 24.04+ packages 7-Zip 22.00+, which can leave timestamps out of the data archives
+    DEBIAN_FRONTEND=noninteractive apt-get -y install 7zip
+  fi
+
   # Required because of broken CMake config files installed by libzip-dev:
   DEBIAN_FRONTEND=noninteractive apt-get -y install zipcmp zipmerge ziptool
 fi
@@ -153,7 +158,7 @@ if [ "${DISTRO}" == "alpine" ]; then
   fi
 
   echo "Installing build-dependencies for Alpine"
-  apk add --no-cache cmake git p7zip gettext asciidoctor sdl3-dev physfs-dev libpng-dev openal-soft-dev libvorbis-dev libogg-dev opus-dev libtheora-dev libvpx-dev freetype-dev fribidi-dev harfbuzz-dev curl-dev libsodium-dev sqlite-dev protobuf-dev libzip-dev libjpeg-turbo-dev
+  apk add --no-cache cmake git 7zip gettext asciidoctor sdl3-dev physfs-dev libpng-dev openal-soft-dev libvorbis-dev libogg-dev opus-dev libtheora-dev libvpx-dev freetype-dev fribidi-dev harfbuzz-dev curl-dev libsodium-dev sqlite-dev protobuf-dev libzip-dev libjpeg-turbo-dev
 fi
 
 ##################
@@ -169,7 +174,7 @@ if [ "${DISTRO}" == "archlinux" ]; then
   fi
 
   echo "Installing build-dependencies for ArchLinux"
-  pacman -S --noconfirm cmake git p7zip gettext asciidoctor sdl3 physfs libpng openal libvorbis libogg opus libtheora libvpx xorg-xrandr freetype2 fribidi harfbuzz curl libsodium sqlite protobuf libzip libjpeg-turbo
+  pacman -S --noconfirm cmake git 7zip gettext asciidoctor sdl3 physfs libpng openal libvorbis libogg opus libtheora libvpx xorg-xrandr freetype2 fribidi harfbuzz curl libsodium sqlite protobuf libzip libjpeg-turbo
 fi
 
 ##################
@@ -181,7 +186,7 @@ if [ "${DISTRO}" == "opensuse-tumbleweed" ]; then
 
   if [ "${MODE}" == "build-all" ]; then
     echo "Installing build-all for OpenSUSE Tumbleweed"
-    zypper install -y gcc-c++ libc++-devel ninja pkgconf-pkg-config cmake zip git libcurl-devel
+    zypper install -y gcc-c++ libc++-devel ninja pkgconf-pkg-config cmake zip 7zip git libcurl-devel
   fi
 
   echo "Installing build-dependencies for OpenSUSE Tumbleweed"
