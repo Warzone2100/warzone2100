@@ -671,6 +671,70 @@ jobs:
         path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
         retention-days: 1
         if-no-files-found: 'warn'
+  normalize-archives:
+    name: 'Normalize Archive (${{ matrix.architecture }})'
+    permissions:
+      contents: read
+      # Rebuilding an archive changes its digest, so it needs a new attestation
+      id-token: write
+      attestations: write
+    needs: windows-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Every deploy_release architecture except x64 (which is used as the base for all data files)
+        architecture: ['x86', 'arm64']
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          path: 'src'
+      - name: Download x64 Archive
+        uses: actions/download-artifact@v8
+        with:
+          name: 'warzone2100_win_x64_archive'
+          path: ./dl-x64
+      - name: Download Architecture Archive
+        uses: actions/download-artifact@v8
+        with:
+          name: 'warzone2100_win_${{ matrix.architecture }}_archive'
+          path: ./dl-arch
+      - name: Rebuild Archive Using x64 Data Files
+        env:
+          WZ_ARCHIVE_NAME: 'warzone2100_win_${{ matrix.architecture }}_archive.zip'
+        run: |
+          # Every archive ships the same files outside bin/, so the installer and any other repackaging of them agree
+          x64_zip="./dl-x64/warzone2100_win_x64_archive.zip"
+          arch_zip="./dl-arch/${WZ_ARCHIVE_NAME}"
+          python3 "${GITHUB_WORKSPACE}/src/pkg/win_combined_archive/check_shared_files.py" "${x64_zip}" "${arch_zip}"
+          work="$(mktemp -d)"
+          unzip -q "${x64_zip}" 'data/*' -d "${work}/x64"
+          unzip -q "${arch_zip}" 'bin/*' -d "${work}/arch"
+          manifest="$(find "${work}/arch/bin" -maxdepth 1 -name '*.buildmanifest' | head -n 1)"
+          if [ -n "${manifest}" ]; then
+            cmake -DWZBM_SOURCE_MANIFEST="${manifest}" -DWZBM_EXE="${manifest%.buildmanifest}.exe" -DWZBM_DATA_DIR="${work}/x64/data" -DWZBM_OUTPUT="${manifest}" -P "${GITHUB_WORKSPACE}/src/pkg/buildmanifest_rebase.cmake"
+          fi
+          mkdir -p "${GITHUB_WORKSPACE}/normalized"
+          out="${GITHUB_WORKSPACE}/normalized/${WZ_ARCHIVE_NAME}"
+          cp "${x64_zip}" "${out}"
+          zip -q -d "${out}" 'bin/*'
+          (cd "${work}/arch" && zip -q -r -X "${out}" bin)
+          rm -rf "${work}"
+          ls -l "${GITHUB_WORKSPACE}/normalized"
+      - name: 'Upload Artifact - (Archive)'
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'warzone2100_win_${{ matrix.architecture }}_archive'
+          path: '${{ github.workspace }}/normalized'
+          overwrite: true
+          if-no-files-found: 'error'
+      - name: 'Generate artifact attestation - (Archive)'
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}/normalized/*'
   sign-build-manifest:
     name: 'Sign Build Manifests'
     permissions:
@@ -678,7 +742,7 @@ jobs:
       # Signing rewrites the archives, so they need an attestation for their new digest
       id-token: write
       attestations: write
-    needs: windows-build
+    needs: normalize-archives
     runs-on: ubuntu-latest
     # For this job to work, the following must be set in the 'sign_buildmanifest' environment:
     # WZ_BUILDMANIFEST_KEY (secret), WZ_BUILDMANIFEST_KEY_ID (variable)
@@ -735,41 +799,6 @@ jobs:
             echo "::endgroup::"
           done
           ls -l "${GITHUB_WORKSPACE}/signed-archives"
-      - name: Sign Installer Manifests
-        id: sign-installer
-        if: (steps.sign.outcome == 'success')
-        env:
-          WZ_BUILDMANIFEST_KEY: ${{ secrets.WZ_BUILDMANIFEST_KEY }}
-          WZ_BUILDMANIFEST_KEY_ID: ${{ vars.WZ_BUILDMANIFEST_KEY_ID }}
-        run: |
-          # The installer pairs every architecture's executable with the x64 data archives
-          # (see pkg/win_combined_archive/build_win_combined_arch.ps1)
-          data_dir="$(mktemp -d)"
-          unzip -q ./dl-archives/warzone2100_win_x64_archive.zip 'data/*' -d "${data_dir}"
-          for zip in ./dl-archives/warzone2100_win_*_archive.zip; do
-            arch="$(basename "${zip}" _archive.zip)"
-            arch="${arch#warzone2100_win_}"
-            if [ "${arch}" == "x64" ]; then
-              continue
-            fi
-            echo "::group::${arch}"
-            bin_dir="$(mktemp -d)"
-            unzip -q "${zip}" 'bin/*' -d "${bin_dir}"
-            manifest="$(ls "${bin_dir}"/bin/*.buildmanifest)"
-            mkdir -p "${GITHUB_WORKSPACE}/installer-manifests/${arch}"
-            cmake -DWZBM_TOOL="${WZ_BUILDMANIFEST_TOOL}" -DWZBM_SOURCE_MANIFEST="${manifest}" -DWZBM_EXE="${manifest%.buildmanifest}.exe" -DWZBM_DATA_DIR="${data_dir}/data" -DWZBM_OUTPUT="${GITHUB_WORKSPACE}/installer-manifests/${arch}/$(basename "${manifest}")" -DWZBM_KEY_ENV=WZ_BUILDMANIFEST_KEY -DWZBM_KEY_ID="${WZ_BUILDMANIFEST_KEY_ID}" -P "${GITHUB_WORKSPACE}/src/pkg/buildmanifest_rebase.cmake"
-            rm -rf "${bin_dir}"
-            echo "::endgroup::"
-          done
-          rm -rf "${data_dir}"
-          find "${GITHUB_WORKSPACE}/installer-manifests" -type f
-      - name: 'Upload Artifact - Installer Manifests'
-        if: (steps.sign-installer.outcome == 'success')
-        uses: actions/upload-artifact@v7
-        with:
-          name: 'wz_installer_manifests'
-          path: '${{ github.workspace }}/installer-manifests/'
-          if-no-files-found: 'error'
       - name: 'Generate artifact attestations - (Manifest-Signed Archives)'
         if: (steps.sign.outcome == 'success')
         uses: actions/attest-build-provenance@v3
@@ -803,10 +832,10 @@ jobs:
       id-token: write
       attestations: write
     runs-on: windows-latest
-    needs: [windows-build, sign-build-manifest]
+    needs: [normalize-archives, sign-build-manifest]
     # sign-build-manifest only runs for release builds, so tolerate it being skipped -
     # but do not build an installer from archives whose signing failed
-    if: ${{ !cancelled() && needs.windows-build.result == 'success' && (needs.sign-build-manifest.result == 'success' || needs.sign-build-manifest.result == 'skipped') }}
+    if: ${{ !cancelled() && needs.normalize-archives.result == 'success' && (needs.sign-build-manifest.result == 'success' || needs.sign-build-manifest.result == 'skipped') }}
     outputs:
       combined-installer-artifact-id: ${{ steps.upload-combined-installer-artifact.outputs.artifact-id }}
     steps:
@@ -948,36 +977,6 @@ jobs:
           . "src\pkg\win_combined_archive\build_win_combined_arch.ps1"
           Build-WinCombinedArchDir -InputArchivesDir "${env:BASE_WORKING_PATH}\built-archives" -TmpExtractDir "${env:BASE_WORKING_PATH}\tmp" -BuildDir "${env:BASE_WORKING_PATH}\combined-staging"
           Get-ChildItem -Path "${env:BASE_WORKING_PATH}\combined-staging" -Recurse -File
-      - name: Download Installer Manifests
-        if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
-        uses: actions/download-artifact@v8
-        with:
-          name: 'wz_installer_manifests'
-          path: .\installer-manifests
-      - name: Match Build Manifests to the Installer Data
-        env:
-          BASE_WORKING_PATH: '${{ github.workspace }}'
-          SIGNED_FILES: ${{ needs.sign-build-manifest.outputs.signedfiles }}
-        run: |
-          # Every architecture's executable ships with the x64 data archives, which only the x64 manifest describes
-          $StagingDir = "${env:BASE_WORKING_PATH}\combined-staging"
-          Get-ChildItem -Path "$StagingDir\bin" -Directory | Where-Object { $_.Name -ne "x64" } | ForEach-Object {
-            $Arch = $_.Name
-            $Manifest = Get-ChildItem -Path $_.FullName -Filter *.buildmanifest | Select-Object -First 1
-            if (-not $Manifest) {
-              return
-            }
-            if ("${env:SIGNED_FILES}" -eq "true") {
-              Write-Host "Using the signed installer manifest for: $Arch"
-              Copy-Item -Path "${env:BASE_WORKING_PATH}\installer-manifests\$Arch\$($Manifest.Name)" -Destination $Manifest.FullName -Force -ErrorAction Stop
-            }
-            else {
-              Write-Host "Regenerating the manifest for: $Arch"
-              $Exe = [IO.Path]::ChangeExtension($Manifest.FullName, ".exe")
-              & cmake "-DWZBM_SOURCE_MANIFEST=$($Manifest.FullName)" "-DWZBM_EXE=$Exe" "-DWZBM_DATA_DIR=$StagingDir\data" "-DWZBM_OUTPUT=$($Manifest.FullName)" -P "src\pkg\buildmanifest_rebase.cmake"
-              if ($LastExitCode -ne 0) { throw "Failed to regenerate the build manifest for: $Arch" }
-            }
-          }
       - name: Build Combined Installer
         id: build-installer
         env:
@@ -1130,7 +1129,7 @@ jobs:
     runs-on: ubuntu-latest
     # Run on tag release automation build
     if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
-    needs: [windows-build, combined-installer-build, sign-release-installers, sign-build-manifest]
+    needs: [windows-build, normalize-archives, combined-installer-build, sign-release-installers, sign-build-manifest]
     env:
       WZ_GITHUB_REF: ${{needs.windows-build.outputs.WZ_GITHUB_REF}}
     steps:
@@ -1197,7 +1196,7 @@ jobs:
     runs-on: ubuntu-latest
     # Run on push to master branch (development build), or tag release automation build
     if: (github.repository == 'Warzone2100/warzone2100') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-    needs: windows-build
+    needs: [windows-build, normalize-archives]
     environment: upload_symbols
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
