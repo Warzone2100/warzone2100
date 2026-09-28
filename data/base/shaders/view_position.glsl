@@ -1,6 +1,11 @@
 #ifndef WZ_VIEW_POSITION_GLSL
 #define WZ_VIEW_POSITION_GLSL
 
+// `uv` is the logical screen position in [0, 1] over the pass's write viewport
+// (texCoords of the fullscreen triangle, or a projected NDC mapped to 0..1).
+// It is NOT a texel coordinate: with dynamic resolution the scene is rendered
+// into a sub-rectangle of a native-sized allocation, so texel = uv * uvScaleClamp.xy.
+// Feeding the scaled texel coordinate here reconstructs x/y at the wrong place.
 vec3 wzGetViewPosition(vec2 uv, float depth, mat4 invProjectionMatrix)
 {
 	// OpenGL depth buffer stores NDC Z mapped from [-1, 1] to [0, 1].

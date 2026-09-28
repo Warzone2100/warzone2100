@@ -70,7 +70,7 @@ void main()
 	}
 
 	float depth = texture(prepassDepth, dUv).r;
-	vec3 viewPos = wzGetViewPosition(dUv, depth, invProjectionMatrix);
+	vec3 viewPos = wzGetViewPosition(texCoords, depth, invProjectionMatrix);
 	vec3 N = texture(prepassNormals, nUv).xyz * 2.0 - 1.0;
 	float nLen = length(N);
 	N = (nLen < NORMAL_LENGTH_EPSILON) ? vec3(0.0, 0.0, -1.0) : (N / nLen);

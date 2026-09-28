@@ -44,7 +44,7 @@ void main()
 	float depth = texture(prepassDepth, uv).r;
 	if (depth < SKY_DEPTH_THRESHOLD)
 	{
-		float viewDist = length(wzGetViewPosition(uv, depth, invProjectionMatrix));
+		float viewDist = length(wzGetViewPosition(texCoords, depth, invProjectionMatrix));
 		result = mix(lit, fogColor.rgb, wzDistanceFogAmount(viewDist, fogBegin, fogEnd));
 	}
 	// Sky / no prepass geometry: skybox already applied its own fog in ScenePass.

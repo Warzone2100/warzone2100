@@ -49,7 +49,8 @@ void main()
 		return;
 	}
 
-	vec3 origin = wzGetViewPosition(uv, depth, invProjectionMatrix);
+	// texCoords is the logical position over the used viewport; uv is the prepass texel.
+	vec3 origin = wzGetViewPosition(texCoords, depth, invProjectionMatrix);
 	vec3 normal = getViewNormal(uv);
 
 	vec2 noiseUV = uv * noiseScale;
@@ -75,7 +76,9 @@ void main()
 
 		vec4 offset = projectionMatrix * vec4(samplePos, 1.0);
 		offset.xyz /= offset.w;
-		vec2 sampleUV = vec2(offset.x, -offset.y) * 0.5 + 0.5;
+		// NDC -> logical [0,1] over the used viewport, then -> prepass texel coordinate.
+		vec2 sampleLogicalUV = vec2(offset.x, -offset.y) * 0.5 + 0.5;
+		vec2 sampleUV = sampleLogicalUV * uvScaleClamp.xy;
 
 		if (sampleUV.x < 0.0 || sampleUV.x > uvScaleClamp.z || sampleUV.y < 0.0 || sampleUV.y > uvScaleClamp.w)
 		{
@@ -89,7 +92,7 @@ void main()
 			continue;
 		}
 
-		vec3 sampleViewPos = wzGetViewPosition(sampleUV, sampleDepth, invProjectionMatrix);
+		vec3 sampleViewPos = wzGetViewPosition(sampleLogicalUV, sampleDepth, invProjectionMatrix);
 		float depthDiff = abs(origin.z - sampleViewPos.z);
 		float rangeCheck = 1.0 - smoothstep(0.0, maxDepthDiff, depthDiff);
 
