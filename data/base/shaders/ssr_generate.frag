@@ -200,7 +200,8 @@ void main()
 		return;
 	}
 
-	vec3 origin = wzGetViewPosition(uv, depth, invProjectionMatrix);
+	// texCoords is the logical position over the used viewport; uv is the prepass texel.
+	vec3 origin = wzGetViewPosition(texCoords, depth, invProjectionMatrix);
 	vec3 N = getViewNormal(uv);
 	// In view space the camera is at the origin, so V points camera -> surface.
 	vec3 V = normalize(origin);
@@ -246,6 +247,11 @@ void main()
 		writeMiss(ssrWeight, N, V, R);
 		return;
 	}
+
+	// uv0/uv1 are logical (NDC mapped to 0..1 over the used viewport).
+	// The march samples the prepass allocation, so convert once here - the DDA stays linear.
+	uv0 *= prepassUvScaleClamp.xy;
+	uv1 *= prepassUvScaleClamp.xy;
 
 	int n = int(min(pixelCount + 0.5, stepCount));
 	n = clamp(n, 1, MAX_STEPS);

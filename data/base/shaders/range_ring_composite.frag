@@ -74,7 +74,7 @@ void main()
 	float depth = texture(prepassDepth, uv).r;
 	if (depth < SKY_DEPTH_THRESHOLD)
 	{
-		vec3 viewPos = wzGetViewPosition(uv, depth, invProjectionMatrix);
+		vec3 viewPos = wzGetViewPosition(texCoords, depth, invProjectionMatrix);
 		vec3 worldPos = (invViewMatrix * vec4(viewPos, 1.0)).xyz;
 		// Map terrain XZ into the frustum-fitted SDF atlas (same space as generate).
 		vec2 sdfUv = (worldPos.xz - sdfOriginExtent.xy) / max(sdfOriginExtent.zw, vec2(1e-3));
