@@ -283,7 +283,7 @@ private:
 	BatchedMultiRectRenderer m_rectBatch;
 	std::shared_ptr<WIDGET> m_detailAnchor;
 	std::shared_ptr<PopoverWidget> m_detailPopover;
-	std::shared_ptr<WzResearchDetailContents> m_detailContents;
+	std::shared_ptr<DetailPanelContents> m_detailContents;
 	std::shared_ptr<PopoverWidget> m_labPicker;
 	uint32_t m_lastCanvasMoveTime = 0;
 	uint32_t m_lastStateRefresh = 0;

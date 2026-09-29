@@ -1997,7 +1997,7 @@ void WzResearchTreeCanvas::openDetail(TreePick pick, bool pinned, const std::sha
 		return;
 	}
 	// No more than half the canvas height
-	contents->setMaxHeight(std::min<int32_t>(WzResearchDetailContents::MAX_PANEL_HEIGHT, height() / 2));
+	contents->setMaxHeight(std::min<int32_t>(DetailPanelContents::MAX_PANEL_HEIGHT, height() / 2));
 
 	// Park an empty widget over the node so the popover has something to anchor to,
 	// since it aligns to a widget (and a node is only a rectangle).

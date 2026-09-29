@@ -30,8 +30,8 @@
 
 #include "researcheffecttext.h"
 
-#include "../stats.h"
-#include "../structure.h"
+#include "../../../stats.h"
+#include "../../../structure.h"
 
 #include <algorithm>
 #include <cstring>

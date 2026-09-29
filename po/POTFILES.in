@@ -534,7 +534,6 @@ src/raycast.cpp
 src/research.cpp
 src/researchtree/researchdetailpopover.cpp
 src/researchtree/researchtracks.cpp
-src/researchtree/researcheffecttext.cpp
 src/researchtree/researchtreecanvas.cpp
 src/researchtree/researchtreeview.cpp
 src/scores.cpp
@@ -594,6 +593,9 @@ src/visibility.cpp
 src/warcam.cpp
 src/warzoneconfig.cpp
 src/wavecast.cpp
+src/widgets/detailpanel/detailpanel.cpp
+src/widgets/detailpanel/research/researchdetail.cpp
+src/widgets/detailpanel/research/researcheffecttext.cpp
 src/wrappers.cpp
 src/wzapi.cpp
 src/wzcrashhandlingproviders.cpp

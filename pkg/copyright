@@ -557,6 +557,9 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/urlrequest_emscripten.cpp
        src/urlrequest_private.h
        src/vectorimageloader.*
+       src/widgets/detailpanel/detailpanel.*
+       src/widgets/detailpanel/research/researchdetail.*
+       src/widgets/detailpanel/research/researcheffecttext.*
        src/wzcrashhandlingproviders.*
        src/wzjsonhelpers.*
        src/wzphysfszipioprovider.*
