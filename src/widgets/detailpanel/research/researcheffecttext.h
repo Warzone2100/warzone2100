@@ -30,12 +30,12 @@
  *  Nothing here may depend on lib/widget.
  */
 
-#ifndef __INCLUDED_SRC_RESEARCHTREE_RESEARCHEFFECTTEXT_H__
-#define __INCLUDED_SRC_RESEARCHTREE_RESEARCHEFFECTTEXT_H__
+#ifndef __INCLUDED_SRC_WIDGETS_DETAILPANEL_RESEARCH_RESEARCHEFFECTTEXT_H__
+#define __INCLUDED_SRC_WIDGETS_DETAILPANEL_RESEARCH_RESEARCHEFFECTTEXT_H__
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzstring.h"
-#include "../researchdef.h"
+#include "../../../researchdef.h"
 
 #include <vector>
 
@@ -53,4 +53,4 @@ std::vector<EffectPhrase> describeResearchEffects(const RESEARCH& research);
 // ex. "Cannon Damage". Empty when the topic changes nothing describable.
 WzString nameResearchProgression(const RESEARCH& research);
 
-#endif // __INCLUDED_SRC_RESEARCHTREE_RESEARCHEFFECTTEXT_H__
+#endif // __INCLUDED_SRC_WIDGETS_DETAILPANEL_RESEARCH_RESEARCHEFFECTTEXT_H__

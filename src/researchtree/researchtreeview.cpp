@@ -834,7 +834,7 @@ void WzResearchTreeView::addSearch()
 		}
 	});
 
-	m_names = makeResearchActionButton(_("Names"), _("Show a name on every topic"));
+	m_names = makeDetailPanelActionButton(_("Names"), _("Show a name on every topic"));
 	attach(m_names);
 	m_names->addOnClickHandler([](W_BUTTON& button) {
 		auto view = std::dynamic_pointer_cast<WzResearchTreeView>(button.parent());
@@ -847,7 +847,7 @@ void WzResearchTreeView::addSearch()
 	if (m_ownSeat.has_value())
 	{
 		// Beside the switcher on the title bar, so not attached here
-		m_ownSeatChip = makeResearchActionButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("My tree")),
+		m_ownSeatChip = makeDetailPanelActionButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("My tree")),
 		                                         WzString::fromUtf8(_("Go back to your own research")));
 		m_ownSeatChip->hide();
 		std::weak_ptr<WzResearchTreeView> weakSelf = std::dynamic_pointer_cast<WzResearchTreeView>(shared_from_this());
@@ -879,7 +879,7 @@ void WzResearchTreeView::addSearch()
 			}
 		});
 
-		m_idleChip = makeResearchActionButton(WzString(), WzString());
+		m_idleChip = makeDetailPanelActionButton(WzString(), WzString());
 		attach(m_idleChip);
 		m_idleChip->hide();
 		m_idleChip->addOnClickHandler([](W_BUTTON& button) {
@@ -890,7 +890,7 @@ void WzResearchTreeView::addSearch()
 			}
 		});
 
-		m_wasteChip = makeResearchActionButton(WzString(), WzString());
+		m_wasteChip = makeDetailPanelActionButton(WzString(), WzString());
 		attach(m_wasteChip);
 		m_wasteChip->hide();
 		m_wasteChip->addOnClickHandler([](W_BUTTON& button) {
@@ -906,7 +906,7 @@ void WzResearchTreeView::addSearch()
 	attach(m_traceBar);
 	m_traceBar->hide();
 
-	m_traceExit = makeResearchQuietButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("Tree View")),
+	m_traceExit = makeDetailPanelQuietButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("Tree View")),
 	                                       WzString::fromUtf8(_("Go back to the whole tree")));
 	attach(m_traceExit);
 	m_traceExit->hide();
