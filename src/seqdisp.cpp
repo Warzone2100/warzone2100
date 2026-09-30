@@ -733,24 +733,30 @@ static bool seq_StartFullScreenVideo(const WzString& videoName, const WzString& 
 		seq_SetUserResolution();
 	}
 
+	// We do not want to enter loop_SetVideoPlaybackMode() when we are doing intelligence videos.
+	const bool enterVideoMode = (resolution == VIDEO_USER_CHOSEN_RESOLUTION) && (loop_GetVideoMode() == 0);
+
+	// Silence the music *before* opening the video:
+	// - opening can take enough time when parsing large files that the music could later cut off abruptly with an audible click
+	if (enterVideoMode)
+	{
+		cdAudio_Pause();
+	}
+
 	if (!seqPlayOrQueueFetch(videoName, audioName))
 	{
+		if (enterVideoMode)
+		{
+			cdAudio_Resume();
+		}
 		return false;
 	}
 
-	/* We do not want to enter loop_SetVideoPlaybackMode() when we are
-	 * doing intelligence videos.
-	 */
-	if (resolution == VIDEO_USER_CHOSEN_RESOLUTION)
+	if (enterVideoMode)
 	{
 		//start video mode
-		if (loop_GetVideoMode() == 0)
-		{
-			// check to see if we need to pause, and set font each time
-			cdAudio_Pause();
-			loop_SetVideoPlaybackMode();
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		}
+		loop_SetVideoPlaybackMode();
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	}
 
 	return true;

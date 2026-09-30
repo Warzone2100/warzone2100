@@ -829,6 +829,14 @@ void videoLoop()
 			}
 			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_VIDEO_QUIT); });
 		}
+
+		// Only resume the music once the video quit handlers have run
+		// (Scripts may chain the next video via eventVideoDone, and resuming in-between could let the music
+		// briefly interrupt - and potentially cause audio glitches / clicks.)
+		if (videoMode == 0)
+		{
+			cdAudio_Resume();
+		}
 	}
 }
 
@@ -856,7 +864,7 @@ void loop_ClearVideoPlaybackMode()
 	resetVideoSkipStates();
 	gameTimeStart();
 	pie_SetFogStatus(true);
-	cdAudio_Resume();
+	// NOTE: The music is resumed by videoLoop(), once it's known that no other video follows
 	wzShowMouse(!isGamepadActiveInput());
 	ASSERT(videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync.");
 	if (backdropWasActiveBeforeVideo)
