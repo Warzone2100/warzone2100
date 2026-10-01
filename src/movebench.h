@@ -57,7 +57,10 @@ struct MovementMetrics
 	uint64_t hardStopsTransit = 0; ///< of those, the droid was outside NEAR_RADIUS of its destination
 	uint64_t hardStopsNear = 0;    ///< of those, it was already within NEAR_RADIUS of its destination
 	uint64_t giveUps = 0;       ///< moveBlocked gave up on the move entirely
+	uint64_t giveUpsApplied = 0; ///< of those, the give-up actually changed the droid's move status
 	uint64_t repaths = 0;       ///< moveBlocked rerouted to the same destination
+	uint64_t shuffles = 0;      ///< moveShuffleDroid put a parked droid into MOVESHUFFLE
+	uint64_t shufflesNowhere = 0; ///< moveShuffleDroid found nowhere for the parked droid to go
 	std::map<uint32_t, uint32_t> hardStopsByDroid; ///< per-droid hard stops, feeds the concentration fields
 };
 

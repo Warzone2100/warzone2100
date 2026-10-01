@@ -50,6 +50,11 @@ const ROSTER = {
 	vtol:    { name: "Bench VTOL", body: "Body5REC", prop: "V-Tol", weap: "Rocket-VTOL-LtA-T" },
 	// The only DROID_REPAIR in the suite, for the repair-facility scenario.
 	repair:  { name: "Bench Repair Turret", body: "Body1REC", prop: "wheeled01", weap: "LightRepair1" },
+	// Hover, for its low skid deceleration.
+	hover:  { name: "Bench Hover Tank", body: "Body5REC", prop: "hover01", weap: "MG1Mk1" },
+	// Trucks for the help-build scenarios, on one body so only the propulsion differs.
+	hovertruck:   { name: "Bench Hover Truck",   body: "Body1REC", prop: "hover01",   weap: "Spade1Mk1" },
+	trackedtruck: { name: "Bench Tracked Truck", body: "Body1REC", prop: "tracked01", weap: "Spade1Mk1" },
 };
 
 function benchEnable(player, kind)
@@ -235,4 +240,95 @@ function benchOrderAllTo(droids, x, y)
 	{
 		orderDroidLoc(droids[i], DORDER_MOVE, x, y);
 	}
+}
+
+// The parking scenario's column through a field of parked units. With `stale` the parked units are
+// first sent south and stopped a second later, so each carries a stale sMove.target ahead of the column.
+const PARK_N_COLUMN = 8;
+const PARK_N_PARKED = 24;
+const PARK_PITCH = 2;
+const PARK_Y_COLUMN = 8;
+const PARK_Y_PARKED = 18;
+const PARK_Y_GOAL = 28;
+const PARK_SETTLE_MS = 1000;
+
+var benchParkColumnIds = [];
+
+function benchParkingRelease()
+{
+	var droids = enumDroid(0);
+	var column = [];
+	for (var i = 0; i < droids.length; i++)
+	{
+		if (benchParkColumnIds.indexOf(droids[i].id) >= 0)
+		{
+			column.push(droids[i]);
+		}
+		else
+		{
+			orderDroid(droids[i], DORDER_STOP);
+		}
+	}
+	benchOrderFanOut(column, X_GAP - 4, PARK_Y_GOAL, 8, +1);
+}
+
+function benchParkingStart(columnKind, stale)
+{
+	hackNetOff();
+	benchEnable(0, "medium");
+	benchEnable(0, columnKind);
+	var parked = benchSpawnBlock(0, "medium", X_GAP - 11, PARK_Y_PARKED, 12, +1, PARK_N_PARKED, PARK_PITCH);
+	var column = benchSpawnBlock(0, columnKind, X_GAP - 2, PARK_Y_COLUMN, 4, -1, PARK_N_COLUMN);
+	hackNetOn();
+
+	benchParkColumnIds = [];
+	for (var i = 0; i < column.length; i++)
+	{
+		benchParkColumnIds.push(column[i].id);
+	}
+	if (stale)
+	{
+		for (var j = 0; j < parked.length; j++)
+		{
+			orderDroidLoc(parked[j], DORDER_SCOUT, parked[j].x, PARK_Y_GOAL + 12);
+		}
+	}
+	queue("benchParkingRelease", PARK_SETTLE_MS);
+
+	debug("movebench: parking " + columnKind + (stale ? " stale" : "") + ", " + column.length
+	      + " moving past " + parked.length + " idle");
+}
+
+// Two trucks ordered to build the same structure, A from six tiles off and B from thirteen down the same
+// line, so B joins A as a helper. `slot` swaps the factory for a one-tile tower walled in on every side
+// but the approach, so the only tile to build from is the one A stands on.
+const HELP_X_SITE = X_GAP;
+const HELP_Y_SITE = Y_OPEN + 4;
+const HELP_STRUCT = "A0LightFactory";
+const HELP_SLOT_STRUCT = "GuardTower1";
+const HELP_WALL = "A0HardcreteMk1Wall";
+
+function benchHelpBuildStart(truckKind, slot)
+{
+	hackNetOff();
+	benchEnable(0, truckKind);
+	var structName = slot ? HELP_SLOT_STRUCT : HELP_STRUCT;
+	enableStructure(structName, 0);
+	if (slot)
+	{
+		enableStructure(HELP_WALL, 0);
+		var ring = [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+		for (var i = 0; i < ring.length; i++)
+		{
+			addStructure(HELP_WALL, 0, (HELP_X_SITE + ring[i][0]) * 128, (HELP_Y_SITE + ring[i][1]) * 128);
+		}
+	}
+	var a = benchSpawnBlock(0, truckKind, HELP_X_SITE, HELP_Y_SITE - 6, 1, -1, 1);
+	var b = benchSpawnBlock(0, truckKind, HELP_X_SITE, HELP_Y_SITE - 13, 1, -1, 1);
+	hackNetOn();
+
+	orderDroidBuild(a[0], DORDER_BUILD, structName, HELP_X_SITE, HELP_Y_SITE);
+	orderDroidBuild(b[0], DORDER_BUILD, structName, HELP_X_SITE, HELP_Y_SITE);
+
+	debug("movebench: helpbuild " + truckKind + (slot ? " slot" : ""));
 }

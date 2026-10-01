@@ -33,19 +33,44 @@
   "scenarios": {
     "blob": {
       "arrival_p50": {
-        "max": 300,
-        "median": 269,
-        "min": 245
+        "max": 312,
+        "median": 273,
+        "min": 246
       },
       "arrival_p95": {
-        "max": 2482,
-        "median": 1399,
-        "min": 528
+        "max": 2535,
+        "median": 1760,
+        "min": 1526
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 5910,
+        "median": 5753,
+        "min": 5430
+      },
+      "bumpsRepeat": {
+        "max": 159859,
+        "median": 155710,
+        "min": 149976
       },
       "density_p95": {
-        "max": 15,
+        "max": 14,
         "median": 14,
-        "min": 13
+        "min": 14
       },
       "formationSpreadTiles": {
         "max": 2,
@@ -53,65 +78,135 @@
         "min": 2
       },
       "giveUps": {
-        "max": 3045,
-        "median": 2789,
-        "min": 2538
+        "max": 4343,
+        "median": 4256,
+        "min": 3953
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 89926,
-        "median": 67743,
-        "min": 60613
+        "max": 126199,
+        "median": 116433,
+        "min": 108916
       },
       "hardStopsNear": {
-        "max": 82532,
-        "median": 59458,
-        "min": 54773
+        "max": 121348,
+        "median": 113948,
+        "min": 106433
       },
       "hardStopsTransit": {
-        "max": 8285,
-        "median": 7394,
-        "min": 5840
+        "max": 4851,
+        "median": 2485,
+        "min": 2483
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 18212,
+        "median": 16291,
+        "min": 4285
+      },
+      "pauseTicks": {
+        "max": 91309,
+        "median": 89953,
+        "min": 86076
       },
       "peakDensity": {
-        "max": 15,
+        "max": 14,
         "median": 14,
         "min": 14
       },
       "repaths": {
-        "max": 423,
-        "median": 403,
-        "min": 324
+        "max": 268,
+        "median": 200,
+        "min": 176
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 20.68,
-        "median": 10.76,
-        "min": 2.7
+        "max": 15.84,
+        "median": 13.7,
+        "min": 8.0
+      },
+      "shuffles": {
+        "max": 15728,
+        "median": 13230,
+        "min": 9341
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 3026,
+        "median": 1807,
+        "min": 1067
       },
       "unitsArrived": {
-        "max": 12,
+        "max": 14,
         "median": 12,
-        "min": 10
+        "min": 12
       },
       "unitsNear": {
-        "max": 98,
-        "median": 98,
-        "min": 95
+        "max": 100,
+        "median": 100,
+        "min": 99
+      },
+      "unitsStillOrdered": {
+        "max": 65,
+        "median": 63,
+        "min": 61
+      },
+      "worstOverlapPct": {
+        "max": 91,
+        "median": 77,
+        "min": 68
       }
     },
     "corner": {
       "arrival_p50": {
-        "max": 990,
-        "median": 924,
-        "min": 922
+        "max": 975,
+        "median": 954,
+        "min": 916
       },
       "arrival_p95": {
-        "max": 1450,
-        "median": 1349,
-        "min": 1280
+        "max": 1539,
+        "median": 1515,
+        "min": 1459
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 214,
+        "median": 197,
+        "min": 178
+      },
+      "bumpsRepeat": {
+        "max": 3378,
+        "median": 2865,
+        "min": 2005
       },
       "density_p95": {
         "max": 8,
@@ -124,69 +219,139 @@
         "min": 2
       },
       "giveUps": {
-        "max": 32,
-        "median": 30,
-        "min": 20
+        "max": 69,
+        "median": 54,
+        "min": 43
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 384,
-        "median": 239,
-        "min": 74
+        "max": 1250,
+        "median": 447,
+        "min": 345
       },
       "hardStopsNear": {
-        "max": 190,
-        "median": 152,
-        "min": 21
+        "max": 1060,
+        "median": 276,
+        "min": 273
       },
       "hardStopsTransit": {
-        "max": 194,
-        "median": 87,
-        "min": 53
+        "max": 190,
+        "median": 174,
+        "min": 69
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 1229,
+        "median": 226,
+        "min": 45
+      },
+      "pauseTicks": {
+        "max": 8553,
+        "median": 5364,
+        "min": 4869
       },
       "peakDensity": {
         "max": 10,
-        "median": 9,
+        "median": 10,
         "min": 9
       },
       "repaths": {
-        "max": 44,
-        "median": 28,
-        "min": 23
+        "max": 48,
+        "median": 24,
+        "min": 13
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.53,
-        "median": 4.21,
-        "min": 4.12
+        "max": 4.96,
+        "median": 4.88,
+        "min": 4.55
+      },
+      "shuffles": {
+        "max": 312,
+        "median": 281,
+        "min": 89
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 5216,
+        "median": 3120,
+        "min": 1957
       },
       "unitsArrived": {
-        "max": 23,
-        "median": 20,
-        "min": 20
+        "max": 20,
+        "median": 19,
+        "min": 18
       },
       "unitsNear": {
         "max": 24,
         "median": 24,
         "min": 23
+      },
+      "unitsStillOrdered": {
+        "max": 4,
+        "median": 2,
+        "min": 2
+      },
+      "worstOverlapPct": {
+        "max": 60,
+        "median": 40,
+        "min": 33
       }
     },
     "corner_mixed": {
       "arrival_p50": {
-        "max": 1285,
-        "median": 1236,
-        "min": 1091
+        "max": 1308,
+        "median": 1255,
+        "min": 1176
       },
       "arrival_p95": {
-        "max": 2027,
-        "median": 2015,
-        "min": 1318
+        "max": 2254,
+        "median": 1945,
+        "min": 1666
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 434,
+        "median": 360,
+        "min": 295
+      },
+      "bumpsRepeat": {
+        "max": 5487,
+        "median": 5229,
+        "min": 3096
       },
       "density_p95": {
-        "max": 7,
-        "median": 7,
+        "max": 9,
+        "median": 8,
         "min": 7
       },
       "formationSpreadTiles": {
@@ -195,70 +360,140 @@
         "min": 2
       },
       "giveUps": {
-        "max": 149,
-        "median": 73,
-        "min": 45
+        "max": 208,
+        "median": 163,
+        "min": 73
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 1133,
-        "median": 675,
-        "min": 233
+        "max": 1726,
+        "median": 1232,
+        "min": 395
       },
       "hardStopsNear": {
-        "max": 762,
-        "median": 286,
-        "min": 13
+        "max": 1093,
+        "median": 848,
+        "min": 203
       },
       "hardStopsTransit": {
-        "max": 389,
-        "median": 371,
-        "min": 220
+        "max": 633,
+        "median": 384,
+        "min": 192
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 270,
+        "median": 70,
+        "min": 10
+      },
+      "pauseTicks": {
+        "max": 8056,
+        "median": 7676,
+        "min": 4769
       },
       "peakDensity": {
-        "max": 8,
+        "max": 10,
         "median": 8,
         "min": 8
       },
       "repaths": {
-        "max": 72,
-        "median": 62,
-        "min": 30
+        "max": 57,
+        "median": 56,
+        "min": 52
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 6.53,
-        "median": 6.29,
-        "min": 4.25
+        "max": 7.04,
+        "median": 6.27,
+        "min": 5.2
+      },
+      "shuffles": {
+        "max": 1405,
+        "median": 851,
+        "min": 496
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 3202,
+        "median": 2489,
+        "min": 1268
       },
       "unitsArrived": {
-        "max": 20,
-        "median": 19,
-        "min": 13
+        "max": 19,
+        "median": 17,
+        "min": 16
       },
       "unitsNear": {
         "max": 24,
-        "median": 23,
+        "median": 24,
         "min": 23
+      },
+      "unitsStillOrdered": {
+        "max": 5,
+        "median": 4,
+        "min": 1
+      },
+      "worstOverlapPct": {
+        "max": 40,
+        "median": 30,
+        "min": 26
       }
     },
     "counterflow_cyborg": {
       "arrival_p50": {
-        "max": 1084,
-        "median": 640,
-        "min": 309
+        "max": 1054,
+        "median": 574,
+        "min": 182
       },
       "arrival_p95": {
-        "max": 3325,
-        "median": 863,
-        "min": 474
+        "max": 2129,
+        "median": 735,
+        "min": 491
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 8104,
+        "median": 905,
+        "min": 492
+      },
+      "bumpsRepeat": {
+        "max": 179362,
+        "median": 14142,
+        "min": 6528
       },
       "density_p95": {
-        "max": 38,
-        "median": 32,
-        "min": 29
+        "max": 34,
+        "median": 31,
+        "min": 28
       },
       "formationSpreadTiles": {
         "max": 11,
@@ -266,69 +501,139 @@
         "min": 3
       },
       "giveUps": {
-        "max": 8,
+        "max": 7,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 159158,
-        "median": 9858,
-        "min": 2944
+        "max": 150376,
+        "median": 7082,
+        "min": 3238
       },
       "hardStopsNear": {
-        "max": 1,
+        "max": 4,
         "median": 0,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 159158,
-        "median": 9858,
-        "min": 2944
+        "max": 150376,
+        "median": 7078,
+        "min": 3238
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 105974,
+        "median": 4167,
+        "min": 1435
+      },
+      "pauseTicks": {
+        "max": 85943,
+        "median": 6879,
+        "min": 2962
       },
       "peakDensity": {
-        "max": 39,
-        "median": 33,
+        "max": 36,
+        "median": 32,
         "min": 29
       },
       "repaths": {
-        "max": 2835,
-        "median": 213,
-        "min": 53
+        "max": 2893,
+        "median": 162,
+        "min": 51
       },
       "resolved": {
         "count": 23,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 13.3,
-        "median": 3.93,
-        "min": 2.25
+        "max": 10.13,
+        "median": 3.43,
+        "min": 2.23
+      },
+      "shuffles": {
+        "max": 19,
+        "median": 7,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
         "max": 48,
         "median": 48,
-        "min": 12
+        "min": 9
       },
       "unitsNear": {
         "max": 48,
         "median": 48,
-        "min": 12
+        "min": 9
+      },
+      "unitsStillOrdered": {
+        "max": 39,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 100,
+        "min": 99
       }
     },
     "counterflow_hostile": {
       "arrival_p50": {
-        "max": 4578,
-        "median": 1150,
-        "min": 314
+        "max": 3512,
+        "median": 675,
+        "min": 316
       },
       "arrival_p95": {
-        "max": 4665,
-        "median": 1214,
-        "min": 314
+        "max": 3615,
+        "median": 1069,
+        "min": 347
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4922,
+        "median": 1049,
+        "min": 242
+      },
+      "bumpsRepeat": {
+        "max": 145557,
+        "median": 27958,
+        "min": 4130
       },
       "density_p95": {
-        "max": 29,
-        "median": 25,
+        "max": 30,
+        "median": 26,
         "min": 21
       },
       "formationSpreadTiles": {
@@ -337,43 +642,78 @@
         "min": 1
       },
       "giveUps": {
-        "max": 12,
-        "median": 3,
+        "max": 9,
+        "median": 4,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 101755,
-        "median": 15863,
-        "min": 2062
+        "max": 116260,
+        "median": 15428,
+        "min": 1860
       },
       "hardStopsNear": {
-        "max": 28,
+        "max": 3,
         "median": 0,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 101755,
-        "median": 15857,
-        "min": 2061
+        "max": 116260,
+        "median": 15428,
+        "min": 1859
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 208968,
+        "median": 34313,
+        "min": 1955
+      },
+      "pauseTicks": {
+        "max": 70563,
+        "median": 13060,
+        "min": 1863
       },
       "peakDensity": {
-        "max": 29,
+        "max": 30,
         "median": 27,
-        "min": 22
+        "min": 23
       },
       "repaths": {
-        "max": 2425,
-        "median": 345,
-        "min": 50
+        "max": 2400,
+        "median": 386,
+        "min": 45
       },
       "resolved": {
-        "count": 22,
+        "count": 20,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 27.31,
-        "median": 6.82,
-        "min": 1.74
+        "max": 18.83,
+        "median": 5.33,
+        "min": 1.92
+      },
+      "shuffles": {
+        "max": 47,
+        "median": 15,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
         "max": 32,
@@ -384,23 +724,58 @@
         "max": 32,
         "median": 32,
         "min": 1
+      },
+      "unitsStillOrdered": {
+        "max": 31,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 100,
+        "min": 100
       }
     },
     "counterflow_tracked": {
       "arrival_p50": {
-        "max": 4137,
+        "max": 4598,
         "median": 0,
         "min": 0
       },
       "arrival_p95": {
-        "max": 4587,
+        "max": 4706,
         "median": 0,
         "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4806,
+        "median": 4566,
+        "min": 1807
+      },
+      "bumpsRepeat": {
+        "max": 135505,
+        "median": 125103,
+        "min": 46185
       },
       "density_p95": {
         "max": 16,
         "median": 14,
-        "min": 13
+        "min": 12
       },
       "formationSpreadTiles": {
         "max": 9,
@@ -408,46 +783,81 @@
         "min": 1
       },
       "giveUps": {
-        "max": 20,
+        "max": 16,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 100383,
-        "median": 80681,
-        "min": 25664
+        "max": 108760,
+        "median": 84670,
+        "min": 24178
       },
       "hardStopsNear": {
-        "max": 8,
+        "max": 29,
         "median": 0,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 100383,
-        "median": 80681,
-        "min": 25656
+        "max": 108760,
+        "median": 84670,
+        "min": 24149
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 37447,
+        "median": 22334,
+        "min": 388
+      },
+      "pauseTicks": {
+        "max": 70211,
+        "median": 68839,
+        "min": 29560
       },
       "peakDensity": {
         "max": 17,
         "median": 15,
-        "min": 13
+        "min": 12
       },
       "repaths": {
-        "max": 2365,
-        "median": 2271,
-        "min": 828
+        "max": 2363,
+        "median": 2242,
+        "min": 838
       },
       "resolved": {
         "count": 1,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 24.58,
+        "max": 25.63,
         "median": 0.0,
         "min": 0.0
       },
+      "shuffles": {
+        "max": 52,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 1940,
+        "median": 0,
+        "min": 0
+      },
       "unitsArrived": {
-        "max": 24,
+        "max": 26,
         "median": 0,
         "min": 0
       },
@@ -455,6 +865,16 @@
         "max": 32,
         "median": 0,
         "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 32,
+        "median": 32,
+        "min": 1
+      },
+      "worstOverlapPct": {
+        "max": 99,
+        "median": 75,
+        "min": 50
       }
     },
     "counterflow_w1": {
@@ -468,8 +888,33 @@
         "median": 0,
         "min": 0
       },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4744,
+        "median": 4619,
+        "min": 4476
+      },
+      "bumpsRepeat": {
+        "max": 133317,
+        "median": 125571,
+        "min": 119727
+      },
       "density_p95": {
-        "max": 16,
+        "max": 15,
         "median": 13,
         "min": 12
       },
@@ -483,10 +928,15 @@
         "median": 0,
         "min": 0
       },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
       "hardStops": {
-        "max": 100372,
-        "median": 79848,
-        "min": 67033
+        "max": 102119,
+        "median": 82866,
+        "min": 70924
       },
       "hardStopsNear": {
         "max": 0,
@@ -494,9 +944,24 @@
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 100372,
-        "median": 79848,
-        "min": 67033
+        "max": 102119,
+        "median": 82866,
+        "min": 70924
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 52239,
+        "median": 35553,
+        "min": 27241
+      },
+      "pauseTicks": {
+        "max": 69903,
+        "median": 69349,
+        "min": 68710
       },
       "peakDensity": {
         "max": 16,
@@ -504,9 +969,9 @@
         "min": 12
       },
       "repaths": {
-        "max": 2351,
-        "median": 2290,
-        "min": 2202
+        "max": 2308,
+        "median": 2249,
+        "min": 2201
       },
       "resolved": {
         "count": 0,
@@ -517,6 +982,21 @@
         "median": 0.0,
         "min": 0.0
       },
+      "shuffles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
       "unitsArrived": {
         "max": 0,
         "median": 0,
@@ -526,89 +1006,194 @@
         "max": 0,
         "median": 0,
         "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 32,
+        "median": 32,
+        "min": 32
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 93,
+        "min": 60
       }
     },
     "counterflow_w3": {
       "arrival_p50": {
-        "max": 3453,
-        "median": 1356,
+        "max": 3842,
+        "median": 1417,
         "min": 0
       },
       "arrival_p95": {
-        "max": 4980,
-        "median": 2417,
+        "max": 4917,
+        "median": 1827,
         "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4671,
+        "median": 3731,
+        "min": 624
+      },
+      "bumpsRepeat": {
+        "max": 129618,
+        "median": 102454,
+        "min": 13844
       },
       "density_p95": {
         "max": 15,
-        "median": 14,
+        "median": 13,
         "min": 11
       },
       "formationSpreadTiles": {
         "max": 10,
-        "median": 2,
+        "median": 3,
         "min": 1
       },
       "giveUps": {
-        "max": 25,
+        "max": 38,
+        "median": 2,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 103491,
-        "median": 73128,
-        "min": 5914
+        "max": 99090,
+        "median": 66829,
+        "min": 4507
       },
       "hardStopsNear": {
-        "max": 691,
+        "max": 88,
         "median": 0,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 103491,
-        "median": 73128,
-        "min": 5911
+        "max": 99090,
+        "median": 66829,
+        "min": 4419
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 37501,
+        "median": 17482,
+        "min": 1722
+      },
+      "pauseTicks": {
+        "max": 69793,
+        "median": 55704,
+        "min": 13292
       },
       "peakDensity": {
-        "max": 15,
+        "max": 16,
         "median": 14,
         "min": 12
       },
       "repaths": {
-        "max": 2352,
-        "median": 1934,
-        "min": 293
+        "max": 2322,
+        "median": 1820,
+        "min": 270
       },
       "resolved": {
-        "count": 9,
+        "count": 11,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 31.12,
-        "median": 13.16,
+        "max": 28.69,
+        "median": 9.35,
         "min": 0.0
       },
+      "shuffles": {
+        "max": 149,
+        "median": 3,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 5116,
+        "median": 0,
+        "min": 0
+      },
       "unitsArrived": {
-        "max": 30,
-        "median": 5,
+        "max": 31,
+        "median": 9,
         "min": 0
       },
       "unitsNear": {
         "max": 32,
-        "median": 5,
+        "median": 9,
         "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 32,
+        "median": 23,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 96,
+        "median": 75,
+        "min": 53
       }
     },
     "counterflow_w4": {
       "arrival_p50": {
-        "max": 3704,
-        "median": 862,
-        "min": 0
+        "max": 2226,
+        "median": 851,
+        "min": 640
       },
       "arrival_p95": {
-        "max": 3899,
-        "median": 1201,
+        "max": 2226,
+        "median": 1221,
+        "min": 833
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
         "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4531,
+        "median": 429,
+        "min": 252
+      },
+      "bumpsRepeat": {
+        "max": 127111,
+        "median": 9212,
+        "min": 4546
       },
       "density_p95": {
         "max": 14,
@@ -618,27 +1203,47 @@
       "formationSpreadTiles": {
         "max": 10,
         "median": 9,
-        "min": 1
+        "min": 2
       },
       "giveUps": {
-        "max": 37,
-        "median": 23,
+        "max": 153,
+        "median": 29,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 98718,
-        "median": 3076,
-        "min": 691
+        "max": 94046,
+        "median": 3105,
+        "min": 1042
       },
       "hardStopsNear": {
-        "max": 52,
-        "median": 11,
+        "max": 850,
+        "median": 10,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 98718,
-        "median": 3070,
-        "min": 679
+        "max": 94046,
+        "median": 3102,
+        "min": 825
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 27179,
+        "median": 817,
+        "min": 371
+      },
+      "pauseTicks": {
+        "max": 67163,
+        "median": 9383,
+        "min": 3867
       },
       "peakDensity": {
         "max": 14,
@@ -646,44 +1251,94 @@
         "min": 10
       },
       "repaths": {
-        "max": 2415,
-        "median": 185,
-        "min": 65
+        "max": 2229,
+        "median": 176,
+        "min": 71
       },
       "resolved": {
-        "count": 25,
+        "count": 26,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 21.66,
-        "median": 5.73,
-        "min": 0.0
+        "max": 13.09,
+        "median": 5.72,
+        "min": 4.16
+      },
+      "shuffles": {
+        "max": 909,
+        "median": 75,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 8131,
+        "median": 3207,
+        "min": 0
       },
       "unitsArrived": {
         "max": 29,
-        "median": 25,
-        "min": 0
+        "median": 27,
+        "min": 2
       },
       "unitsNear": {
         "max": 32,
         "median": 32,
+        "min": 2
+      },
+      "unitsStillOrdered": {
+        "max": 30,
+        "median": 1,
         "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 83,
+        "median": 56,
+        "min": 40
       }
     },
     "counterflow_w6": {
       "arrival_p50": {
-        "max": 619,
-        "median": 498,
-        "min": 421
+        "max": 609,
+        "median": 504,
+        "min": 437
       },
       "arrival_p95": {
-        "max": 941,
-        "median": 744,
-        "min": 633
+        "max": 896,
+        "median": 753,
+        "min": 627
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 275,
+        "median": 146,
+        "min": 102
+      },
+      "bumpsRepeat": {
+        "max": 5059,
+        "median": 1992,
+        "min": 1122
       },
       "density_p95": {
-        "max": 11,
-        "median": 8,
+        "max": 10,
+        "median": 9,
         "min": 8
       },
       "formationSpreadTiles": {
@@ -692,65 +1347,135 @@
         "min": 9
       },
       "giveUps": {
-        "max": 35,
-        "median": 19,
-        "min": 10
+        "max": 95,
+        "median": 23,
+        "min": 5
       },
-      "hardStops": {
-        "max": 1214,
-        "median": 367,
-        "min": 91
-      },
-      "hardStopsNear": {
-        "max": 68,
-        "median": 7,
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
         "min": 0
       },
+      "hardStops": {
+        "max": 1898,
+        "median": 399,
+        "min": 83
+      },
+      "hardStopsNear": {
+        "max": 207,
+        "median": 11,
+        "min": 1
+      },
       "hardStopsTransit": {
-        "max": 1160,
-        "median": 359,
-        "min": 89
+        "max": 1895,
+        "median": 376,
+        "min": 67
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 601,
+        "median": 93,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 3799,
+        "median": 2095,
+        "min": 1230
       },
       "peakDensity": {
-        "max": 13,
-        "median": 9,
-        "min": 8
+        "max": 12,
+        "median": 10,
+        "min": 9
       },
       "repaths": {
-        "max": 63,
-        "median": 37,
-        "min": 15
+        "max": 83,
+        "median": 33,
+        "min": 20
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.09,
-        "median": 3.46,
-        "min": 2.87
+        "max": 4.07,
+        "median": 3.37,
+        "min": 2.84
+      },
+      "shuffles": {
+        "max": 433,
+        "median": 62,
+        "min": 12
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 1118,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 28,
-        "median": 25,
-        "min": 21
+        "max": 30,
+        "median": 26,
+        "min": 20
       },
       "unitsNear": {
         "max": 32,
         "median": 32,
         "min": 32
+      },
+      "unitsStillOrdered": {
+        "max": 2,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 65,
+        "median": 37,
+        "min": 0
       }
     },
     "counterflow_w8": {
       "arrival_p50": {
-        "max": 495,
+        "max": 488,
         "median": 445,
         "min": 385
       },
       "arrival_p95": {
-        "max": 814,
-        "median": 636,
-        "min": 516
+        "max": 774,
+        "median": 606,
+        "min": 456
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 123,
+        "median": 88,
+        "min": 65
+      },
+      "bumpsRepeat": {
+        "max": 1331,
+        "median": 902,
+        "min": 438
       },
       "density_p95": {
         "max": 8,
@@ -763,24 +1488,44 @@
         "min": 9
       },
       "giveUps": {
-        "max": 25,
-        "median": 13,
-        "min": 6
+        "max": 35,
+        "median": 14,
+        "min": 4
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 389,
-        "median": 101,
-        "min": 21
+        "max": 220,
+        "median": 119,
+        "min": 23
       },
       "hardStopsNear": {
-        "max": 51,
-        "median": 6,
+        "max": 112,
+        "median": 4,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 367,
-        "median": 90,
-        "min": 14
+        "max": 218,
+        "median": 91,
+        "min": 18
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 542,
+        "median": 23,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 2371,
+        "median": 952,
+        "min": 654
       },
       "peakDensity": {
         "max": 10,
@@ -789,7 +1534,7 @@
       },
       "repaths": {
         "max": 22,
-        "median": 13,
+        "median": 12,
         "min": 2
       },
       "resolved": {
@@ -797,36 +1542,86 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 3.7,
-        "median": 3.0,
-        "min": 2.63
+        "max": 3.68,
+        "median": 2.87,
+        "min": 2.48
+      },
+      "shuffles": {
+        "max": 114,
+        "median": 33,
+        "min": 7
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 1236,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
         "max": 30,
-        "median": 28,
-        "min": 25
+        "median": 27,
+        "min": 24
       },
       "unitsNear": {
         "max": 32,
         "median": 32,
         "min": 32
+      },
+      "unitsStillOrdered": {
+        "max": 2,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 51,
+        "median": 27,
+        "min": 0
       }
     },
     "crossing": {
       "arrival_p50": {
-        "max": 4715,
+        "max": 4606,
         "median": 0,
         "min": 0
       },
       "arrival_p95": {
-        "max": 4966,
+        "max": 4810,
         "median": 0,
         "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4736,
+        "median": 4658,
+        "min": 3285
+      },
+      "bumpsRepeat": {
+        "max": 132349,
+        "median": 126919,
+        "min": 87314
       },
       "density_p95": {
         "max": 16,
         "median": 14,
-        "min": 13
+        "min": 12
       },
       "formationSpreadTiles": {
         "max": 10,
@@ -834,24 +1629,44 @@
         "min": 1
       },
       "giveUps": {
-        "max": 4,
+        "max": 15,
         "median": 0,
         "min": 0
       },
-      "hardStops": {
-        "max": 111635,
-        "median": 96731,
-        "min": 48467
-      },
-      "hardStopsNear": {
+      "giveUpsApplied": {
         "max": 0,
         "median": 0,
         "min": 0
       },
+      "hardStops": {
+        "max": 115321,
+        "median": 95701,
+        "min": 62168
+      },
+      "hardStopsNear": {
+        "max": 6,
+        "median": 0,
+        "min": 0
+      },
       "hardStopsTransit": {
-        "max": 111635,
-        "median": 96731,
-        "min": 48467
+        "max": 115321,
+        "median": 95701,
+        "min": 62162
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 36309,
+        "median": 25586,
+        "min": 5082
+      },
+      "pauseTicks": {
+        "max": 69210,
+        "median": 68564,
+        "min": 48726
       },
       "peakDensity": {
         "max": 16,
@@ -859,21 +1674,36 @@
         "min": 13
       },
       "repaths": {
-        "max": 2357,
-        "median": 2275,
-        "min": 1269
+        "max": 2301,
+        "median": 2240,
+        "min": 1524
       },
       "resolved": {
         "count": 1,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 21.59,
+        "max": 20.04,
         "median": 0.0,
         "min": 0.0
       },
+      "shuffles": {
+        "max": 45,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
       "unitsArrived": {
-        "max": 29,
+        "max": 28,
         "median": 0,
         "min": 0
       },
@@ -881,18 +1711,53 @@
         "max": 32,
         "median": 0,
         "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 32,
+        "median": 32,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 79,
+        "min": 38
       }
     },
     "enemyblock": {
       "arrival_p50": {
-        "max": 592,
-        "median": 397,
-        "min": 0
+        "max": 529,
+        "median": 297,
+        "min": 295
       },
       "arrival_p95": {
-        "max": 592,
-        "median": 397,
+        "max": 529,
+        "median": 297,
+        "min": 295
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
         "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 79,
+        "median": 79,
+        "min": 71
+      },
+      "bumpsRepeat": {
+        "max": 1819,
+        "median": 1654,
+        "min": 1554
       },
       "density_p95": {
         "max": 3,
@@ -900,19 +1765,24 @@
         "min": 3
       },
       "formationSpreadTiles": {
-        "max": 5,
-        "median": 4,
-        "min": 0
+        "max": 4,
+        "median": 3,
+        "min": 3
       },
       "giveUps": {
         "max": 0,
         "median": 0,
         "min": 0
       },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
       "hardStops": {
-        "max": 630,
-        "median": 355,
-        "min": 288
+        "max": 271,
+        "median": 159,
+        "min": 129
       },
       "hardStopsNear": {
         "max": 0,
@@ -920,9 +1790,24 @@
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 630,
-        "median": 355,
-        "min": 288
+        "max": 271,
+        "median": 159,
+        "min": 129
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 36,
+        "median": 25,
+        "min": 24
+      },
+      "pauseTicks": {
+        "max": 929,
+        "median": 826,
+        "min": 702
       },
       "peakDensity": {
         "max": 3,
@@ -930,60 +1815,256 @@
         "min": 3
       },
       "repaths": {
-        "max": 32,
-        "median": 25,
-        "min": 20
+        "max": 28,
+        "median": 24,
+        "min": 18
       },
       "resolved": {
         "count": 0,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 3.48,
-        "median": 2.48,
-        "min": 0.0
+        "max": 3.3,
+        "median": 1.74,
+        "min": 1.63
+      },
+      "shuffles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 2,
+        "max": 1,
         "median": 1,
-        "min": 0
+        "min": 1
       },
       "unitsNear": {
-        "max": 2,
+        "max": 1,
         "median": 1,
-        "min": 0
+        "min": 1
+      },
+      "unitsStillOrdered": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "worstOverlapPct": {
+        "max": 42,
+        "median": 41,
+        "min": 36
       }
     },
     "enemyblock_press": {
       "arrival_p50": {
-        "max": 670,
-        "median": 545,
-        "min": 462
+        "max": 609,
+        "median": 465,
+        "min": 365
       },
       "arrival_p95": {
-        "max": 883,
-        "median": 832,
-        "min": 824
+        "max": 863,
+        "median": 827,
+        "min": 365
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 423,
+        "median": 373,
+        "min": 361
+      },
+      "bumpsRepeat": {
+        "max": 12059,
+        "median": 10102,
+        "min": 9433
       },
       "density_p95": {
-        "max": 12,
+        "max": 13,
         "median": 12,
         "min": 11
       },
       "formationSpreadTiles": {
         "max": 5,
         "median": 5,
-        "min": 5
+        "min": 1
       },
       "giveUps": {
-        "max": 2,
-        "median": 1,
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 5519,
-        "median": 5400,
-        "min": 4044
+        "max": 8930,
+        "median": 6334,
+        "min": 5583
+      },
+      "hardStopsNear": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 8930,
+        "median": 6334,
+        "min": 5582
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 1376,
+        "median": 791,
+        "min": 644
+      },
+      "pauseTicks": {
+        "max": 5665,
+        "median": 4575,
+        "min": 4290
+      },
+      "peakDensity": {
+        "max": 13,
+        "median": 13,
+        "min": 12
+      },
+      "repaths": {
+        "max": 181,
+        "median": 126,
+        "min": 117
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.86,
+        "median": 4.3,
+        "min": 2.02
+      },
+      "shuffles": {
+        "max": 4,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 7,
+        "median": 7,
+        "min": 1
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 7,
+        "min": 1
+      },
+      "unitsStillOrdered": {
+        "max": 15,
+        "median": 9,
+        "min": 9
+      },
+      "worstOverlapPct": {
+        "max": 99,
+        "median": 68,
+        "min": 42
+      }
+    },
+    "helpbuild_hover": {
+      "arrival_p50": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 7.2,
+        "median": 6.6,
+        "min": 6.0
+      },
+      "buildersOrdered": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "buildersStarted": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "bumps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumpsRepeat": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStopsNear": {
         "max": 0,
@@ -991,50 +2072,820 @@
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 5519,
-        "median": 5400,
-        "min": 4044
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 100,
+        "median": 89,
+        "min": 77
+      },
+      "overlapPairTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "peakDensity": {
-        "max": 13,
-        "median": 12,
-        "min": 12
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "repaths": {
-        "max": 117,
-        "median": 116,
-        "min": 96
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "resolved": {
         "count": 0,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.84,
-        "median": 4.41,
-        "min": 3.97
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "shuffles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 10,
-        "median": 8,
-        "min": 7
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "helpbuild_hover_slot": {
+      "arrival_p50": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 9.9,
+        "median": 7.9,
+        "min": 7.1
+      },
+      "buildersOrdered": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "buildersStarted": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "bumps": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "bumpsRepeat": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 137,
+        "median": 110,
+        "min": 97
+      },
+      "overlapPairTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "shuffles": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "helpbuild_tracked": {
+      "arrival_p50": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 20.6,
+        "median": 18.7,
+        "min": 16.8
+      },
+      "buildersOrdered": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "buildersStarted": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "bumps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumpsRepeat": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 285,
+        "median": 249,
+        "min": 212
+      },
+      "overlapPairTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "shuffles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "helpbuild_tracked_slot": {
+      "arrival_p50": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildStartLast_s": {
+        "max": 90.0,
+        "median": 30.8,
+        "min": 19.9
+      },
+      "buildersOrdered": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "buildersStarted": {
+        "max": 2,
+        "median": 2,
+        "min": 1
+      },
+      "bumps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumpsRepeat": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "density_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 519,
+        "median": 407,
+        "min": 271
+      },
+      "overlapPairTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "shuffles": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsNear": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "mountain_chain": {
+      "arrival_p50": {
+        "max": 2016,
+        "median": 521,
+        "min": 335
+      },
+      "arrival_p95": {
+        "max": 3799,
+        "median": 1155,
+        "min": 335
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 11356,
+        "median": 8113,
+        "min": 5334
+      },
+      "bumpsRepeat": {
+        "max": 293025,
+        "median": 197675,
+        "min": 63155
+      },
+      "density_p95": {
+        "max": 33,
+        "median": 30,
+        "min": 25
+      },
+      "formationSpreadTiles": {
         "max": 11,
+        "median": 6,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 3880,
+        "median": 121,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 257380,
+        "median": 171121,
+        "min": 42854
+      },
+      "hardStopsNear": {
+        "max": 43336,
+        "median": 415,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 257380,
+        "median": 171031,
+        "min": 13285
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 90127,
+        "median": 47447,
+        "min": 10217
+      },
+      "pauseTicks": {
+        "max": 140548,
+        "median": 95256,
+        "min": 29528
+      },
+      "peakDensity": {
+        "max": 34,
+        "median": 31,
+        "min": 26
+      },
+      "repaths": {
+        "max": 4633,
+        "median": 3075,
+        "min": 349
+      },
+      "resolved": {
+        "count": 8,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 19.08,
+        "median": 4.94,
+        "min": 1.76
+      },
+      "shuffles": {
+        "max": 27124,
+        "median": 459,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 10,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 2977,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 46,
+        "median": 22,
+        "min": 1
+      },
+      "unitsNear": {
+        "max": 82,
+        "median": 29,
+        "min": 1
+      },
+      "unitsStillOrdered": {
+        "max": 81,
+        "median": 53,
+        "min": 3
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 100,
+        "min": 95
+      }
+    },
+    "mountain_chain_cross": {
+      "arrival_p50": {
+        "max": 2077,
+        "median": 492,
+        "min": 367
+      },
+      "arrival_p95": {
+        "max": 3748,
+        "median": 1852,
+        "min": 473
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 9795,
+        "median": 8144,
+        "min": 6106
+      },
+      "bumpsRepeat": {
+        "max": 248817,
+        "median": 175526,
+        "min": 61915
+      },
+      "density_p95": {
+        "max": 38,
+        "median": 29,
+        "min": 23
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 7,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 4628,
+        "median": 791,
+        "min": 25
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 231739,
+        "median": 150289,
+        "min": 44052
+      },
+      "hardStopsNear": {
+        "max": 57568,
+        "median": 4666,
+        "min": 3
+      },
+      "hardStopsTransit": {
+        "max": 231736,
+        "median": 143730,
+        "min": 5928
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 92043,
+        "median": 37936,
+        "min": 10773
+      },
+      "pauseTicks": {
+        "max": 119102,
+        "median": 83480,
+        "min": 29910
+      },
+      "peakDensity": {
+        "max": 39,
+        "median": 30,
+        "min": 26
+      },
+      "repaths": {
+        "max": 3906,
+        "median": 2594,
+        "min": 192
+      },
+      "resolved": {
+        "count": 9,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 18.16,
+        "median": 8.41,
+        "min": 2.35
+      },
+      "shuffles": {
+        "max": 28213,
+        "median": 4411,
+        "min": 49
+      },
+      "shufflesNowhere": {
+        "max": 34,
         "median": 8,
-        "min": 7
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 2629,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 45,
+        "median": 25,
+        "min": 13
+      },
+      "unitsNear": {
+        "max": 82,
+        "median": 38,
+        "min": 14
+      },
+      "unitsStillOrdered": {
+        "max": 68,
+        "median": 47,
+        "min": 5
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 100,
+        "min": 89
       }
     },
     "oneway_tracked": {
       "arrival_p50": {
-        "max": 428,
+        "max": 411,
         "median": 406,
-        "min": 368
+        "min": 351
       },
       "arrival_p95": {
-        "max": 682,
-        "median": 663,
-        "min": 608
+        "max": 643,
+        "median": 642,
+        "min": 593
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 51,
+        "median": 50,
+        "min": 46
+      },
+      "bumpsRepeat": {
+        "max": 302,
+        "median": 300,
+        "min": 252
       },
       "density_p95": {
         "max": 7,
@@ -1047,24 +2898,44 @@
         "min": 2
       },
       "giveUps": {
-        "max": 29,
-        "median": 19,
-        "min": 13
+        "max": 20,
+        "median": 18,
+        "min": 12
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 42,
-        "median": 9,
-        "min": 9
+        "max": 28,
+        "median": 24,
+        "min": 17
       },
       "hardStopsNear": {
-        "max": 20,
-        "median": 9,
-        "min": 5
+        "max": 24,
+        "median": 17,
+        "min": 2
       },
       "hardStopsTransit": {
         "max": 22,
         "median": 4,
         "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 1803,
+        "median": 1245,
+        "min": 697
       },
       "peakDensity": {
         "max": 8,
@@ -1072,28 +2943,194 @@
         "min": 8
       },
       "repaths": {
-        "max": 8,
+        "max": 7,
         "median": 7,
-        "min": 5
+        "min": 4
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 3.24,
-        "median": 3.01,
-        "min": 2.9
+        "max": 3.05,
+        "median": 2.82,
+        "min": 2.79
+      },
+      "shuffles": {
+        "max": 41,
+        "median": 30,
+        "min": 23
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 1241,
+        "median": 692,
+        "min": 23
       },
       "unitsArrived": {
         "max": 12,
         "median": 11,
-        "min": 11
+        "min": 9
       },
       "unitsNear": {
         "max": 16,
         "median": 16,
         "min": 16
+      },
+      "unitsStillOrdered": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "open_corner": {
+      "arrival_p50": {
+        "max": 1753,
+        "median": 633,
+        "min": 282
+      },
+      "arrival_p95": {
+        "max": 3408,
+        "median": 1209,
+        "min": 614
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 36918,
+        "median": 35676,
+        "min": 33365
+      },
+      "bumpsRepeat": {
+        "max": 1006016,
+        "median": 954385,
+        "min": 848218
+      },
+      "density_p95": {
+        "max": 52,
+        "median": 43,
+        "min": 39
+      },
+      "formationSpreadTiles": {
+        "max": 6,
+        "median": 4,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 731,
+        "median": 27,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 960943,
+        "median": 897696,
+        "min": 770132
+      },
+      "hardStopsNear": {
+        "max": 2053,
+        "median": 6,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 960943,
+        "median": 897543,
+        "min": 768079
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 441612,
+        "median": 342783,
+        "min": 249037
+      },
+      "pauseTicks": {
+        "max": 481812,
+        "median": 455891,
+        "min": 403917
+      },
+      "peakDensity": {
+        "max": 52,
+        "median": 44,
+        "min": 40
+      },
+      "repaths": {
+        "max": 16201,
+        "median": 15285,
+        "min": 13353
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 10.99,
+        "median": 4.32,
+        "min": 1.83
+      },
+      "shuffles": {
+        "max": 2707,
+        "median": 49,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 41,
+        "median": 16,
+        "min": 4
+      },
+      "unitsNear": {
+        "max": 59,
+        "median": 18,
+        "min": 4
+      },
+      "unitsStillOrdered": {
+        "max": 268,
+        "median": 254,
+        "min": 213
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 100,
+        "min": 100
       }
     },
     "openfield": {
@@ -1106,6 +3143,31 @@
         "max": 774,
         "median": 740,
         "min": 738
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 12,
+        "median": 11,
+        "min": 4
+      },
+      "bumpsRepeat": {
+        "max": 12,
+        "median": 7,
+        "min": 5
       },
       "density_p95": {
         "max": 6,
@@ -1122,6 +3184,11 @@
         "median": 0,
         "min": 0
       },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
       "hardStops": {
         "max": 0,
         "median": 0,
@@ -1135,6 +3202,21 @@
       "hardStopsTransit": {
         "max": 0,
         "median": 0,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 16,
+        "median": 16,
         "min": 0
       },
       "peakDensity": {
@@ -1156,6 +3238,21 @@
         "median": 1.94,
         "min": 1.94
       },
+      "shuffles": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
       "unitsArrived": {
         "max": 40,
         "median": 40,
@@ -1165,18 +3262,53 @@
         "max": 40,
         "median": 40,
         "min": 40
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       }
     },
     "parking": {
       "arrival_p50": {
-        "max": 600,
-        "median": 489,
+        "max": 614,
+        "median": 479,
         "min": 425
       },
       "arrival_p95": {
-        "max": 884,
-        "median": 634,
-        "min": 493
+        "max": 866,
+        "median": 644,
+        "min": 491
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 41,
+        "median": 22,
+        "min": 9
+      },
+      "bumpsRepeat": {
+        "max": 362,
+        "median": 133,
+        "min": 11
       },
       "density_p95": {
         "max": 5,
@@ -1184,18 +3316,23 @@
         "min": 3
       },
       "formationSpreadTiles": {
-        "max": 3,
+        "max": 2,
         "median": 2,
         "min": 1
       },
       "giveUps": {
-        "max": 8,
-        "median": 3,
+        "max": 9,
+        "median": 2,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 166,
-        "median": 3,
+        "max": 137,
+        "median": 2,
         "min": 0
       },
       "hardStopsNear": {
@@ -1204,9 +3341,24 @@
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 166,
-        "median": 3,
+        "max": 137,
+        "median": 2,
         "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 95,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 394,
+        "median": 187,
+        "min": 32
       },
       "peakDensity": {
         "max": 5,
@@ -1223,9 +3375,729 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.64,
-        "median": 3.34,
-        "min": 2.59
+        "max": 4.33,
+        "median": 3.22,
+        "min": 2.52
+      },
+      "shuffles": {
+        "max": 64,
+        "median": 10,
+        "min": 3
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
+      "unitsStillOrdered": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 46,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "parking_hover": {
+      "arrival_p50": {
+        "max": 127,
+        "median": 111,
+        "min": 102
+      },
+      "arrival_p95": {
+        "max": 153,
+        "median": 130,
+        "min": 117
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 54,
+        "median": 31,
+        "min": 18
+      },
+      "bumpsRepeat": {
+        "max": 124,
+        "median": 48,
+        "min": 20
+      },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 4
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 16,
+        "median": 3,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 7,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 16,
+        "median": 2,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 15,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 11,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 6,
+        "median": 5,
+        "min": 5
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.71,
+        "median": 0.64,
+        "min": 0.59
+      },
+      "shuffles": {
+        "max": 26,
+        "median": 8,
+        "min": 4
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 52,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "parking_hover_stale": {
+      "arrival_p50": {
+        "max": 136,
+        "median": 113,
+        "min": 103
+      },
+      "arrival_p95": {
+        "max": 180,
+        "median": 133,
+        "min": 116
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 51,
+        "median": 33,
+        "min": 25
+      },
+      "bumpsRepeat": {
+        "max": 205,
+        "median": 55,
+        "min": 25
+      },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 4
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 5,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 35,
+        "median": 4,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 21,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 35,
+        "median": 4,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 15,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 28,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 6,
+        "median": 5,
+        "min": 5
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.9,
+        "median": 0.64,
+        "min": 0.6
+      },
+      "shuffles": {
+        "max": 62,
+        "median": 8,
+        "min": 4
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 74,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "parking_light": {
+      "arrival_p50": {
+        "max": 207,
+        "median": 190,
+        "min": 176
+      },
+      "arrival_p95": {
+        "max": 368,
+        "median": 216,
+        "min": 191
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 36,
+        "median": 20,
+        "min": 13
+      },
+      "bumpsRepeat": {
+        "max": 190,
+        "median": 31,
+        "min": 7
+      },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 4
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 13,
+        "median": 1,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 40,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 40,
+        "median": 0,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 12,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 74,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
+      "repaths": {
+        "max": 2,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 1.75,
+        "median": 1.05,
+        "min": 0.99
+      },
+      "shuffles": {
+        "max": 130,
+        "median": 5,
+        "min": 2
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 35,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "parking_light_stale": {
+      "arrival_p50": {
+        "max": 206,
+        "median": 191,
+        "min": 174
+      },
+      "arrival_p95": {
+        "max": 247,
+        "median": 211,
+        "min": 189
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 35,
+        "median": 25,
+        "min": 19
+      },
+      "bumpsRepeat": {
+        "max": 110,
+        "median": 42,
+        "min": 16
+      },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 4
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 5,
+        "median": 1,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 8,
+        "median": 1,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 2,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 7,
+        "median": 1,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 11,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 37,
+        "median": 0,
+        "min": 0
+      },
+      "peakDensity": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 1.23,
+        "median": 1.05,
+        "min": 1.01
+      },
+      "shuffles": {
+        "max": 53,
+        "median": 6,
+        "min": 4
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "unitsNear": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
+      "unitsStillOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 48,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "parking_stale": {
+      "arrival_p50": {
+        "max": 510,
+        "median": 437,
+        "min": 382
+      },
+      "arrival_p95": {
+        "max": 852,
+        "median": 521,
+        "min": 438
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 74,
+        "median": 31,
+        "min": 17
+      },
+      "bumpsRepeat": {
+        "max": 342,
+        "median": 126,
+        "min": 41
+      },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 4
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 45,
+        "median": 7,
+        "min": 3
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 70,
+        "median": 6,
+        "min": 0
+      },
+      "hardStopsNear": {
+        "max": 9,
+        "median": 0,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 70,
+        "median": 6,
+        "min": 0
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 49,
+        "median": 0,
+        "min": 0
+      },
+      "pauseTicks": {
+        "max": 313,
+        "median": 150,
+        "min": 24
+      },
+      "peakDensity": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
+      "repaths": {
+        "max": 6,
+        "median": 1,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.26,
+        "median": 2.61,
+        "min": 2.19
+      },
+      "shuffles": {
+        "max": 279,
+        "median": 35,
+        "min": 7
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
         "max": 8,
@@ -1235,19 +4107,336 @@
       "unitsNear": {
         "max": 8,
         "median": 8,
-        "min": 7
+        "min": 8
+      },
+      "unitsStillOrdered": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 46,
+        "median": 0,
+        "min": 0
+      }
+    },
+    "rush_corner": {
+      "arrival_p50": {
+        "max": 1608,
+        "median": 814,
+        "min": 441
+      },
+      "arrival_p95": {
+        "max": 3247,
+        "median": 1058,
+        "min": 493
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 37960,
+        "median": 36129,
+        "min": 34323
+      },
+      "bumpsRepeat": {
+        "max": 1014660,
+        "median": 964486,
+        "min": 867120
+      },
+      "density_p95": {
+        "max": 48,
+        "median": 43,
+        "min": 40
+      },
+      "formationSpreadTiles": {
+        "max": 5,
+        "median": 4,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 393,
+        "median": 21,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 1006702,
+        "median": 931299,
+        "min": 826703
+      },
+      "hardStopsNear": {
+        "max": 427,
+        "median": 1,
+        "min": 0
+      },
+      "hardStopsTransit": {
+        "max": 1006702,
+        "median": 931289,
+        "min": 826276
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 425015,
+        "median": 333811,
+        "min": 206183
+      },
+      "pauseTicks": {
+        "max": 485380,
+        "median": 460948,
+        "min": 411754
+      },
+      "peakDensity": {
+        "max": 48,
+        "median": 44,
+        "min": 40
+      },
+      "repaths": {
+        "max": 16349,
+        "median": 15418,
+        "min": 13559
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 10.26,
+        "median": 3.79,
+        "min": 1.72
+      },
+      "shuffles": {
+        "max": 1125,
+        "median": 27,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 63,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 38,
+        "median": 13,
+        "min": 1
+      },
+      "unitsNear": {
+        "max": 51,
+        "median": 13,
+        "min": 1
+      },
+      "unitsStillOrdered": {
+        "max": 271,
+        "median": 257,
+        "min": 217
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 100,
+        "min": 100
+      }
+    },
+    "rush_turn": {
+      "arrival_p50": {
+        "max": 322,
+        "median": 267,
+        "min": 217
+      },
+      "arrival_p95": {
+        "max": 3783,
+        "median": 1484,
+        "min": 472
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 6430,
+        "median": 5342,
+        "min": 3892
+      },
+      "bumpsRepeat": {
+        "max": 93011,
+        "median": 69182,
+        "min": 42078
+      },
+      "density_p95": {
+        "max": 35,
+        "median": 31,
+        "min": 29
+      },
+      "formationSpreadTiles": {
+        "max": 9,
+        "median": 9,
+        "min": 8
+      },
+      "giveUps": {
+        "max": 4286,
+        "median": 3382,
+        "min": 2394
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 76868,
+        "median": 57164,
+        "min": 32208
+      },
+      "hardStopsNear": {
+        "max": 63587,
+        "median": 48355,
+        "min": 30558
+      },
+      "hardStopsTransit": {
+        "max": 16045,
+        "median": 6789,
+        "min": 1650
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 25957,
+        "median": 11669,
+        "min": 3005
+      },
+      "pauseTicks": {
+        "max": 45170,
+        "median": 33924,
+        "min": 21442
+      },
+      "peakDensity": {
+        "max": 35,
+        "median": 32,
+        "min": 29
+      },
+      "repaths": {
+        "max": 373,
+        "median": 203,
+        "min": 31
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 23.53,
+        "median": 6.33,
+        "min": 2.04
+      },
+      "shuffles": {
+        "max": 28019,
+        "median": 22020,
+        "min": 13713
+      },
+      "shufflesNowhere": {
+        "max": 139,
+        "median": 6,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 3559,
+        "median": 14,
+        "min": 0
+      },
+      "unitsArrived": {
+        "max": 43,
+        "median": 34,
+        "min": 30
+      },
+      "unitsNear": {
+        "max": 82,
+        "median": 82,
+        "min": 82
+      },
+      "unitsStillOrdered": {
+        "max": 20,
+        "median": 14,
+        "min": 8
+      },
+      "worstOverlapPct": {
+        "max": 100,
+        "median": 99,
+        "min": 84
       }
     },
     "separating": {
       "arrival_p50": {
-        "max": 3235,
-        "median": 1137,
-        "min": 778
+        "max": 1785,
+        "median": 1116,
+        "min": 416
       },
       "arrival_p95": {
-        "max": 3450,
-        "median": 1523,
-        "min": 1024
+        "max": 4457,
+        "median": 1535,
+        "min": 1131
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 4316,
+        "median": 563,
+        "min": 313
+      },
+      "bumpsRepeat": {
+        "max": 118970,
+        "median": 12254,
+        "min": 5185
       },
       "density_p95": {
         "max": 14,
@@ -1257,72 +4446,142 @@
       "formationSpreadTiles": {
         "max": 12,
         "median": 12,
-        "min": 12
+        "min": 2
       },
       "giveUps": {
-        "max": 28,
-        "median": 16,
-        "min": 6
+        "max": 42,
+        "median": 18,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 41615,
-        "median": 4053,
-        "min": 623
+        "max": 84837,
+        "median": 3723,
+        "min": 836
       },
       "hardStopsNear": {
-        "max": 59,
-        "median": 6,
+        "max": 114,
+        "median": 8,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 41613,
-        "median": 3994,
-        "min": 619
+        "max": 84837,
+        "median": 3691,
+        "min": 824
       },
-      "peakDensity": {
-        "max": 15,
-        "median": 12,
-        "min": 9
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
-      "repaths": {
-        "max": 1148,
-        "median": 237,
+      "overlapPairTicks": {
+        "max": 18533,
+        "median": 1543,
         "min": 73
       },
+      "pauseTicks": {
+        "max": 63633,
+        "median": 9186,
+        "min": 4790
+      },
+      "peakDensity": {
+        "max": 14,
+        "median": 12,
+        "min": 10
+      },
+      "repaths": {
+        "max": 2069,
+        "median": 221,
+        "min": 93
+      },
       "resolved": {
-        "count": 27,
+        "count": 26,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 18.01,
-        "median": 7.96,
-        "min": 5.12
+        "max": 23.45,
+        "median": 8.03,
+        "min": 5.76
+      },
+      "shuffles": {
+        "max": 227,
+        "median": 53,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 6803,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 31,
+        "max": 32,
         "median": 28,
-        "min": 25
+        "min": 3
       },
       "unitsNear": {
         "max": 32,
         "median": 32,
-        "min": 32
+        "min": 3
+      },
+      "unitsStillOrdered": {
+        "max": 29,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 88,
+        "median": 65,
+        "min": 27
       }
     },
     "strafe": {
       "arrival_p50": {
-        "max": 106,
-        "median": 104,
-        "min": 94
+        "max": 124,
+        "median": 121,
+        "min": 80
       },
       "arrival_p95": {
-        "max": 149,
-        "median": 144,
-        "min": 142
+        "max": 146,
+        "median": 146,
+        "min": 145
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 950,
+        "median": 816,
+        "min": 765
+      },
+      "bumpsRepeat": {
+        "max": 11546,
+        "median": 10389,
+        "min": 8165
       },
       "density_p95": {
-        "max": 11,
-        "median": 11,
+        "max": 12,
+        "median": 12,
         "min": 11
       },
       "formationSpreadTiles": {
@@ -1331,24 +4590,44 @@
         "min": 3
       },
       "giveUps": {
-        "max": 39,
-        "median": 38,
-        "min": 35
+        "max": 57,
+        "median": 48,
+        "min": 26
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "hardStops": {
-        "max": 2207,
-        "median": 1944,
-        "min": 1651
+        "max": 2599,
+        "median": 2457,
+        "min": 1706
       },
       "hardStopsNear": {
-        "max": 701,
-        "median": 474,
-        "min": 416
+        "max": 872,
+        "median": 469,
+        "min": 411
       },
       "hardStopsTransit": {
-        "max": 1528,
-        "median": 1506,
-        "min": 1177
+        "max": 2130,
+        "median": 1585,
+        "min": 1295
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 495,
+        "median": 286,
+        "min": 123
+      },
+      "pauseTicks": {
+        "max": 8278,
+        "median": 7329,
+        "min": 6204
       },
       "peakDensity": {
         "max": 12,
@@ -1356,99 +4635,194 @@
         "min": 12
       },
       "repaths": {
-        "max": 43,
-        "median": 41,
-        "min": 38
+        "max": 65,
+        "median": 53,
+        "min": 36
       },
       "resolved": {
         "count": 0,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 8.5,
-        "median": 3.9,
-        "min": 3.03
+        "max": 7.25,
+        "median": 4.0,
+        "min": 3.8
+      },
+      "shuffles": {
+        "max": 370,
+        "median": 329,
+        "min": 129
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 137,
+        "median": 54,
+        "min": 49
       },
       "unitsArrived": {
-        "max": 7,
-        "median": 4,
+        "max": 6,
+        "median": 6,
         "min": 3
       },
       "unitsNear": {
-        "max": 26,
-        "median": 18,
-        "min": 17
+        "max": 27,
+        "median": 23,
+        "min": 21
+      },
+      "unitsStillOrdered": {
+        "max": 57,
+        "median": 54,
+        "min": 54
+      },
+      "worstOverlapPct": {
+        "max": 51,
+        "median": 43,
+        "min": 27
       }
     },
     "tworoute": {
       "arrival_p50": {
-        "max": 870,
-        "median": 697,
-        "min": 559
+        "max": 4391,
+        "median": 710,
+        "min": 622
       },
       "arrival_p95": {
-        "max": 4896,
-        "median": 1101,
-        "min": 791
+        "max": 4973,
+        "median": 1245,
+        "min": 846
+      },
+      "buildStartLast_s": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      },
+      "buildersOrdered": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "buildersStarted": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "bumps": {
+        "max": 2454,
+        "median": 326,
+        "min": 132
+      },
+      "bumpsRepeat": {
+        "max": 63916,
+        "median": 6385,
+        "min": 2056
       },
       "density_p95": {
-        "max": 14,
-        "median": 9,
-        "min": 7
+        "max": 13,
+        "median": 10,
+        "min": 6
       },
       "formationSpreadTiles": {
         "max": 10,
         "median": 10,
-        "min": 6
+        "min": 8
       },
       "giveUps": {
-        "max": 8,
-        "median": 1,
+        "max": 26,
+        "median": 0,
+        "min": 0
+      },
+      "giveUpsApplied": {
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 61335,
-        "median": 1000,
-        "min": 253
+        "max": 39914,
+        "median": 1304,
+        "min": 192
       },
       "hardStopsNear": {
-        "max": 22,
+        "max": 81,
         "median": 0,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 61335,
-        "median": 999,
-        "min": 253
+        "max": 39914,
+        "median": 1304,
+        "min": 192
+      },
+      "moveToBuildTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "overlapPairTicks": {
+        "max": 14027,
+        "median": 362,
+        "min": 43
+      },
+      "pauseTicks": {
+        "max": 36881,
+        "median": 4499,
+        "min": 2152
       },
       "peakDensity": {
-        "max": 15,
-        "median": 10,
-        "min": 8
+        "max": 14,
+        "median": 11,
+        "min": 9
       },
       "repaths": {
-        "max": 1438,
-        "median": 89,
-        "min": 50
+        "max": 1121,
+        "median": 120,
+        "min": 38
       },
       "resolved": {
-        "count": 24,
+        "count": 26,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 30.28,
-        "median": 5.96,
-        "min": 4.75
+        "max": 30.56,
+        "median": 6.78,
+        "min": 4.7
+      },
+      "shuffles": {
+        "max": 185,
+        "median": 0,
+        "min": 0
+      },
+      "shufflesNowhere": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "strandedPauseTicks": {
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
         "max": 32,
-        "median": 31,
-        "min": 12
+        "median": 32,
+        "min": 19
       },
       "unitsNear": {
         "max": 32,
         "median": 32,
-        "min": 12
+        "min": 21
+      },
+      "unitsStillOrdered": {
+        "max": 13,
+        "median": 0,
+        "min": 0
+      },
+      "worstOverlapPct": {
+        "max": 99,
+        "median": 50,
+        "min": 33
       }
     }
   }
