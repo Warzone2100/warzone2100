@@ -67,7 +67,7 @@ WZ=${WZ:-build/src/warzone2100}
 # (nine placements per block), so ARRANGEMENTS evenly strides that space. Use 81
 # for exhaustive coverage when a decision rests on the result.
 ARRANGEMENTS=${ARRANGEMENTS:-27}
-SCENARIOS=${SCENARIOS:-"counterflow_tracked oneway_tracked counterflow_cyborg counterflow_w1 counterflow_w3 counterflow_w4 counterflow_w6 counterflow_w8 tworoute crossing separating corner corner_mixed blob parking openfield strafe enemyblock enemyblock_press counterflow_hostile mountain_chain mountain_chain_cross rush_turn rush_corner open_corner"}
+SCENARIOS=${SCENARIOS:-"counterflow_tracked oneway_tracked counterflow_cyborg counterflow_w1 counterflow_w3 counterflow_w4 counterflow_w6 counterflow_w8 tworoute crossing separating corner corner_mixed blob parking parking_stale parking_light parking_light_stale parking_hover parking_hover_stale helpbuild_hover helpbuild_tracked helpbuild_hover_slot helpbuild_tracked_slot openfield strafe enemyblock enemyblock_press counterflow_hostile mountain_chain mountain_chain_cross rush_turn rush_corner open_corner"}
 HERE=$(dirname "$0")
 
 if [ ! -x "$WZ" ]; then
@@ -162,12 +162,15 @@ n = max(1, min(int(arrangements), TOTAL_ARRANGEMENTS))
 indices = [i * TOTAL_ARRANGEMENTS // n for i in range(n)]
 FIELDS = ["unitsArrived", "unitsNear", "arrival_p50", "arrival_p95", "hardStops",
           "hardStopsTransit", "hardStopsNear",
-          "repaths", "giveUps", "formationSpreadTiles",
-          "peakDensity", "density_p95"]
+          "repaths", "giveUps", "giveUpsApplied", "formationSpreadTiles",
+          "peakDensity", "density_p95",
+          "bumps", "bumpsRepeat", "shuffles", "shufflesNowhere",
+          "pauseTicks", "strandedPauseTicks", "overlapPairTicks", "worstOverlapPct",
+          "unitsStillOrdered", "buildersOrdered", "buildersStarted", "moveToBuildTicks"]
 # Reported as a float, so kept out of FIELDS above, which casts its medians to
 # int. secPerTile is arrival normalized by leg distance, the number the grind
 # column scores against the open-field floor.
-FLOAT_FIELDS = ["secPerTile_p95"]
+FLOAT_FIELDS = ["secPerTile_p95", "buildStartLast_s"]
 
 # Share of a cell's ordered units that must arrive for that arrangement to count
 # as resolved rather than jammed.

@@ -488,6 +488,10 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	else
 	{
 		// nowhere to shuffle to, quit
+		if (g_moveMetrics)
+		{
+			g_moveMetrics->shufflesNowhere++;
+		}
 		return;
 	}
 
@@ -503,6 +507,10 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	if (psDroid->sMove.Status != MOVESHUFFLE)
 	{
 		psDroid->sMove.shuffleStart = gameTime;
+		if (g_moveMetrics)
+		{
+			g_moveMetrics->shuffles++;
+		}
 	}
 	psDroid->sMove.Status = MOVESHUFFLE;
 	psDroid->sMove.src = psDroid->pos.xy();
@@ -2757,6 +2765,10 @@ void moveUpdateDroid(DROID *psDroid)
 	{
 		objTrace(psDroid->id, "status: id %d blocked", (int)psDroid->id);
 		psDroid->sMove.Status = MOVETURN;
+		if (g_moveMetrics)
+		{
+			g_moveMetrics->giveUpsApplied++;
+		}
 	}
 
 //	// If were in drive mode and the droid is a follower then stop it when it gets within

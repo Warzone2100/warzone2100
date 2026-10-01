@@ -33,9 +33,12 @@
 
 #include "perfcounters.h"
 
+#include "action.h"
 #include "droid.h"
 #include "game_world.h"
 #include "map.h"
+#include "mapgrid.h"
+#include "move.h"
 #include "order.h"
 
 #include <algorithm>
@@ -93,6 +96,17 @@ const BenchScenario scenarios[] =
 	// Congestion. One destination for everyone, and a column past parked allies.
 	{ "blob",                "movebench_blob.json",                3000, 0x5EEDBEEF },
 	{ "parking",             "movebench_parking.json",              900, 0x5EEDBEEF },
+	// The parking column past a field carrying stale move targets, and on lighter or lower-skid propulsion.
+	{ "parking_stale",       "movebench_parking_stale.json",        900, 0x5EEDBEEF },
+	{ "parking_light",       "movebench_parking_light.json",        900, 0x5EEDBEEF },
+	{ "parking_light_stale", "movebench_parking_light_stale.json",  900, 0x5EEDBEEF },
+	{ "parking_hover",       "movebench_parking_hover.json",        900, 0x5EEDBEEF },
+	{ "parking_hover_stale", "movebench_parking_hover_stale.json",  900, 0x5EEDBEEF },
+	// A second truck joining the first's build, on open ground and walled in to a single build tile.
+	{ "helpbuild_hover",     "movebench_helpbuild_hover.json",      900, 0x5EEDBEEF },
+	{ "helpbuild_tracked",   "movebench_helpbuild_tracked.json",    900, 0x5EEDBEEF },
+	{ "helpbuild_hover_slot",   "movebench_helpbuild_hover_slot.json",   900, 0x5EEDBEEF },
+	{ "helpbuild_tracked_slot", "movebench_helpbuild_tracked_slot.json", 900, 0x5EEDBEEF },
 	// The same conflict at other gap widths. Tracked units do not start
 	// resolving it until 4 tiles, so w3 sits just below the threshold and w4
 	// has room to move in both directions.
@@ -174,6 +188,18 @@ std::vector<uint32_t> arrivalDistTiles;     ///< leg distance for each arrival, 
 std::vector<uint32_t> tickPeakDensity;      ///< per tick, the size of the largest cluster of tracked droids
 bool     runFinished = false;
 
+/// Sampled over every live droid, ordered or not.
+uint64_t pauseTicks = 0;           ///< droid-ticks spent in MOVEPAUSE
+uint64_t strandedPauseTicks = 0;   ///< droid-ticks in MOVEPAUSE with no bump clock, which nothing releases
+uint64_t overlapPairTicks = 0;     ///< pair-ticks with two hulls closer than OVERLAP_FRACTION of their combined radius
+uint32_t worstOverlapPct = 0;      ///< deepest penetration seen, as a percentage of the combined radius
+std::map<uint32_t, uint32_t> builderFirstBuildTick; ///< construct droids under a build order -> tick they first reached DACTION_BUILD, 0 until then
+uint64_t moveToBuildTicks = 0;     ///< droid-ticks builders spent in DACTION_MOVETOBUILD
+
+/// Two hulls closer than this share of their combined collision radius count as overlapping.
+/// The slide and soft-pass paths allow some contact by design, so this sits below touching.
+const int32_t OVERLAP_FRACTION_PCT = 80;
+
 /// Two tracked droids within this of each other count as packed together. At a
 /// tile and a half it catches touching neighbours without counting a whole open
 /// field, so a tight blob reads high and two clean lanes read low.
@@ -209,6 +235,64 @@ const BenchScenario *findScenario(const std::string &name)
 		}
 	}
 	return nullptr;
+}
+
+void sampleMovementState()
+{
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (const DROID *psDroid : gameWorld.objects.droids[player])
+		{
+			if (psDroid->died)
+			{
+				continue;
+			}
+			if (psDroid->sMove.Status == MOVEPAUSE)
+			{
+				++pauseTicks;
+				if (psDroid->sMove.bumpTime == 0)
+				{
+					++strandedPauseTicks;
+				}
+			}
+			if (psDroid->isConstructionDroid()
+			    && (psDroid->order.type == DORDER_BUILD || psDroid->order.type == DORDER_HELPBUILD
+			        || psDroid->order.type == DORDER_LINEBUILD))
+			{
+				uint32_t &first = builderFirstBuildTick[psDroid->id];
+				if (psDroid->action == DACTION_MOVETOBUILD)
+				{
+					++moveToBuildTicks;
+				}
+				else if (psDroid->action == DACTION_BUILD && first == 0)
+				{
+					first = tickCount;
+				}
+			}
+			if (psDroid->isFlying() || psDroid->isTransporter())
+			{
+				continue;
+			}
+			const int32_t selfR = moveObjRadius(psDroid);
+			for (BASE_OBJECT *psObj : gridStartIterate(psDroid->pos.x, psDroid->pos.y, 2 * TILE_UNITS))
+			{
+				const DROID *psOther = castDroid(psObj);
+				// Each pair once, by id order.
+				if (psOther == nullptr || psOther->died || psOther->id <= psDroid->id
+				    || psOther->isFlying() || psOther->isTransporter())
+				{
+					continue;
+				}
+				const int32_t combined = selfR + moveObjRadius(psOther);
+				const int32_t dist = iHypot(psOther->pos.xy() - psDroid->pos.xy());
+				if (dist * 100 < combined * OVERLAP_FRACTION_PCT)
+				{
+					++overlapPairTicks;
+					worstOverlapPct = std::max<uint32_t>(worstOverlapPct, 100 - dist * 100 / combined);
+				}
+			}
+		}
+	}
 }
 
 /// Picks up any droid that has been given a move order, and notes when it arrives.
@@ -560,7 +644,48 @@ void writeScorecard(bool completed)
 	card["hardStopsTop"] = topStops;
 	card["hardStopsTopSharePct"] = metrics.hardStops > 0 ? static_cast<uint64_t>(topStops) * 100 / metrics.hardStops : 0;
 	card["giveUps"] = metrics.giveUps;
+	card["giveUpsApplied"] = metrics.giveUpsApplied;
 	card["repaths"] = metrics.repaths;
+	card["shuffles"] = metrics.shuffles;
+	card["shufflesNowhere"] = metrics.shufflesNowhere;
+	card["pauseTicks"] = pauseTicks;
+	card["strandedPauseTicks"] = strandedPauseTicks;
+	card["overlapPairTicks"] = overlapPairTicks;
+	card["worstOverlapPct"] = worstOverlapPct;
+	// Tracked droids that ended the run still carrying their move order without having arrived.
+	uint32_t stillOrdered = 0;
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (const DROID *psDroid : gameWorld.objects.droids[player])
+		{
+			const auto it = tracked.find(psDroid->id);
+			if (it != tracked.end() && !it->second.arrived && psDroid->order.type == DORDER_MOVE)
+			{
+				++stillOrdered;
+			}
+		}
+	}
+	card["unitsStillOrdered"] = stillOrdered;
+	// Builders: how many were under a build order, how many got to build, and when the last of them
+	// started (one that never started counts as the whole run).
+	uint32_t buildersStarted = 0;
+	uint32_t lastBuildStart = 0;
+	for (const auto &kv : builderFirstBuildTick)
+	{
+		if (kv.second != 0)
+		{
+			++buildersStarted;
+			lastBuildStart = std::max(lastBuildStart, kv.second);
+		}
+		else
+		{
+			lastBuildStart = tickCount;
+		}
+	}
+	card["buildersOrdered"] = static_cast<uint32_t>(builderFirstBuildTick.size());
+	card["buildersStarted"] = buildersStarted;
+	card["buildStartLast_s"] = lastBuildStart / static_cast<double>(GAME_UPDATES_PER_SEC);
+	card["moveToBuildTicks"] = moveToBuildTicks;
 	card["finalPositionsCrc"] = finalPositionsCrc();
 
 	const std::string dumped = card.dump(4);
@@ -649,16 +774,23 @@ void movementBenchUpdate()
 
 	++tickCount;
 	sampleDroids();
+	sampleMovementState();
 	sampleDensity();
 
 	// Finish early once everything ordered has arrived, so easy scenarios stay
 	// quick, but always stop at the budget so a jammed one still terminates.
-	const bool completed = activeScenario->endOnCompletion
-	                       && !tracked.empty()
+	// A scenario that orders builds instead of moves is complete once every builder has started building.
+	const bool movesDone = !tracked.empty()
 	                       && std::all_of(tracked.begin(), tracked.end(),
 	                                      [](const std::pair<const uint32_t, TrackedDroid> &e) {
 	                                          return e.second.arrived;
 	                                      });
+	const bool buildsDone = tracked.empty() && !builderFirstBuildTick.empty()
+	                        && std::all_of(builderFirstBuildTick.begin(), builderFirstBuildTick.end(),
+	                                       [](const std::pair<const uint32_t, uint32_t> &e) {
+	                                           return e.second != 0;
+	                                       });
+	const bool completed = activeScenario->endOnCompletion && (movesDone || buildsDone);
 	if (!completed && tickCount < activeScenario->tickBudget)
 	{
 		return;
