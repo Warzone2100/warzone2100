@@ -164,7 +164,7 @@ FIELDS = ["unitsArrived", "unitsNear", "arrival_p50", "arrival_p95", "hardStops"
           "hardStopsTransit", "hardStopsNear",
           "repaths", "giveUps", "giveUpsApplied", "formationSpreadTiles",
           "peakDensity", "density_p95",
-          "bumps", "bumpsRepeat", "shuffles", "shufflesNowhere",
+          "bumps", "bumpsRepeat", "shuffles", "shufflesNowhere", "stillBumps",
           "pauseTicks", "strandedPauseTicks", "overlapPairTicks", "worstOverlapPct",
           "unitsStillOrdered", "buildersOrdered", "buildersStarted", "moveToBuildTicks"]
 # Reported as a float, so kept out of FIELDS above, which casts its medians to

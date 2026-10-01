@@ -77,6 +77,7 @@ enum PathfindingFeature : uint16_t
 	PF_SETTLE_TIME       = 1 << 11,  ///< settle for what is reachable by time tried, not by nearness
 	PF_BACKOFF           = 1 << 12,  ///< back a droid that has gained no ground out of the press holding it
 	PF_PARKED_OBSTACLE   = 1 << 13,  ///< avoidance treats a droid with no move in progress as stationary
+	PF_STILL_BUMP        = 1 << 14,  ///< start a bump clock for a droid moving to work that makes no progress
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -116,6 +117,9 @@ bool pathfindingBackoffEnabled();
 /// True if the avoidance steering should treat a droid with no move in progress as stationary
 /// instead of guessing a velocity from its move fields.
 bool pathfindingParkedObstacleEnabled();
+/// True if a droid moving to work that makes no progress with no bump clock running
+/// should be given one.
+bool pathfindingStillBumpEnabled();
 
 class IPathfindingBackend
 {
