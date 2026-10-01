@@ -2489,11 +2489,16 @@ void moveUpdateDroid(DROID *psDroid)
 
 	// Run the blocked watchdog before this update's movement as well as after it, so a block whose time
 	// has already run out reroutes the droid before it moves.
-	// NOTE: the result is dropped on purpose. Only the clearing and the reroute are wanted here, and the
-	// status change belongs to the check at the end of the update.
-	if (psPropStats->propulsionType != PROPULSION_TYPE_LIFT)
+	// NOTE: gameTime is fixed for the whole update, so this call is the first to see the block time run
+	// out, and its timeout clears the bump clock (the check at the end of the update then sees no bump).
+	if (psPropStats->propulsionType != PROPULSION_TYPE_LIFT && moveBlocked(psDroid))
 	{
-		moveBlocked(psDroid);
+		objTrace(psDroid->id, "status: id %d blocked", (int)psDroid->id);
+		psDroid->sMove.Status = MOVETURN;
+		if (g_moveMetrics)
+		{
+			g_moveMetrics->giveUpsApplied++;
+		}
 	}
 
 	/* save current motion status of droid */

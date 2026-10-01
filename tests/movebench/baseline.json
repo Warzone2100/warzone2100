@@ -33,14 +33,14 @@
   "scenarios": {
     "blob": {
       "arrival_p50": {
-        "max": 312,
-        "median": 273,
-        "min": 246
+        "max": 313,
+        "median": 268,
+        "min": 236
       },
       "arrival_p95": {
-        "max": 2535,
-        "median": 1760,
-        "min": 1526
+        "max": 832,
+        "median": 818,
+        "min": 588
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -58,19 +58,19 @@
         "min": 0
       },
       "bumps": {
-        "max": 5910,
-        "median": 5753,
-        "min": 5430
+        "max": 3356,
+        "median": 3140,
+        "min": 3072
       },
       "bumpsRepeat": {
-        "max": 159859,
-        "median": 155710,
-        "min": 149976
+        "max": 60436,
+        "median": 48355,
+        "min": 41000
       },
       "density_p95": {
         "max": 14,
-        "median": 14,
-        "min": 14
+        "median": 13,
+        "min": 13
       },
       "formationSpreadTiles": {
         "max": 2,
@@ -78,29 +78,29 @@
         "min": 2
       },
       "giveUps": {
-        "max": 4343,
-        "median": 4256,
-        "min": 3953
+        "max": 1190,
+        "median": 1064,
+        "min": 718
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 1190,
+        "median": 1064,
+        "min": 718
       },
       "hardStops": {
-        "max": 126199,
-        "median": 116433,
-        "min": 108916
+        "max": 50741,
+        "median": 35001,
+        "min": 26994
       },
       "hardStopsNear": {
-        "max": 121348,
-        "median": 113948,
-        "min": 106433
+        "max": 12581,
+        "median": 9660,
+        "min": 7633
       },
       "hardStopsTransit": {
-        "max": 4851,
-        "median": 2485,
-        "min": 2483
+        "max": 43108,
+        "median": 22420,
+        "min": 17334
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -108,38 +108,38 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 18212,
-        "median": 16291,
-        "min": 4285
+        "max": 13580,
+        "median": 9164,
+        "min": 3853
       },
       "pauseTicks": {
-        "max": 91309,
-        "median": 89953,
-        "min": 86076
+        "max": 31312,
+        "median": 26952,
+        "min": 22786
       },
       "peakDensity": {
         "max": 14,
         "median": 14,
-        "min": 14
+        "min": 13
       },
       "repaths": {
-        "max": 268,
-        "median": 200,
-        "min": 176
+        "max": 896,
+        "median": 712,
+        "min": 559
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 15.84,
-        "median": 13.7,
-        "min": 8.0
+        "max": 6.29,
+        "median": 4.76,
+        "min": 4.12
       },
       "shuffles": {
-        "max": 15728,
-        "median": 13230,
-        "min": 9341
+        "max": 8379,
+        "median": 8322,
+        "min": 6989
       },
       "shufflesNowhere": {
         "max": 0,
@@ -147,41 +147,41 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 3026,
-        "median": 1807,
-        "min": 1067
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 14,
-        "median": 12,
-        "min": 12
+        "max": 12,
+        "median": 11,
+        "min": 10
       },
       "unitsNear": {
-        "max": 100,
-        "median": 100,
-        "min": 99
+        "max": 91,
+        "median": 86,
+        "min": 81
       },
       "unitsStillOrdered": {
-        "max": 65,
-        "median": 63,
-        "min": 61
+        "max": 21,
+        "median": 16,
+        "min": 12
       },
       "worstOverlapPct": {
-        "max": 91,
-        "median": 77,
-        "min": 68
+        "max": 62,
+        "median": 62,
+        "min": 44
       }
     },
     "corner": {
       "arrival_p50": {
-        "max": 975,
-        "median": 954,
+        "max": 981,
+        "median": 975,
         "min": 916
       },
       "arrival_p95": {
-        "max": 1539,
-        "median": 1515,
-        "min": 1459
+        "max": 1379,
+        "median": 1338,
+        "min": 1333
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -199,19 +199,19 @@
         "min": 0
       },
       "bumps": {
-        "max": 214,
-        "median": 197,
-        "min": 178
+        "max": 221,
+        "median": 148,
+        "min": 138
       },
       "bumpsRepeat": {
-        "max": 3378,
-        "median": 2865,
-        "min": 2005
+        "max": 2192,
+        "median": 1538,
+        "min": 1324
       },
       "density_p95": {
         "max": 8,
         "median": 8,
-        "min": 7
+        "min": 8
       },
       "formationSpreadTiles": {
         "max": 2,
@@ -219,29 +219,29 @@
         "min": 2
       },
       "giveUps": {
-        "max": 69,
-        "median": 54,
-        "min": 43
+        "max": 95,
+        "median": 33,
+        "min": 19
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 95,
+        "median": 33,
+        "min": 19
       },
       "hardStops": {
-        "max": 1250,
-        "median": 447,
-        "min": 345
+        "max": 669,
+        "median": 271,
+        "min": 220
       },
       "hardStopsNear": {
-        "max": 1060,
-        "median": 276,
-        "min": 273
+        "max": 582,
+        "median": 72,
+        "min": 24
       },
       "hardStopsTransit": {
-        "max": 190,
-        "median": 174,
-        "min": 69
+        "max": 199,
+        "median": 196,
+        "min": 87
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -249,14 +249,14 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 1229,
-        "median": 226,
-        "min": 45
+        "max": 107,
+        "median": 68,
+        "min": 21
       },
       "pauseTicks": {
-        "max": 8553,
-        "median": 5364,
-        "min": 4869
+        "max": 2307,
+        "median": 1873,
+        "min": 1770
       },
       "peakDensity": {
         "max": 10,
@@ -264,23 +264,23 @@
         "min": 9
       },
       "repaths": {
-        "max": 48,
+        "max": 29,
         "median": 24,
-        "min": 13
+        "min": 15
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.96,
-        "median": 4.88,
-        "min": 4.55
+        "max": 4.4,
+        "median": 4.3,
+        "min": 4.18
       },
       "shuffles": {
-        "max": 312,
-        "median": 281,
-        "min": 89
+        "max": 573,
+        "median": 203,
+        "min": 71
       },
       "shufflesNowhere": {
         "max": 0,
@@ -288,24 +288,24 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 5216,
-        "median": 3120,
-        "min": 1957
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 20,
-        "median": 19,
+        "max": 22,
+        "median": 20,
         "min": 18
       },
       "unitsNear": {
         "max": 24,
         "median": 24,
-        "min": 23
+        "min": 24
       },
       "unitsStillOrdered": {
-        "max": 4,
-        "median": 2,
-        "min": 2
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "worstOverlapPct": {
         "max": 60,
@@ -317,12 +317,12 @@
       "arrival_p50": {
         "max": 1308,
         "median": 1255,
-        "min": 1176
+        "min": 1218
       },
       "arrival_p95": {
-        "max": 2254,
-        "median": 1945,
-        "min": 1666
+        "max": 2827,
+        "median": 1768,
+        "min": 1700
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -340,19 +340,19 @@
         "min": 0
       },
       "bumps": {
-        "max": 434,
-        "median": 360,
-        "min": 295
+        "max": 516,
+        "median": 356,
+        "min": 207
       },
       "bumpsRepeat": {
-        "max": 5487,
-        "median": 5229,
-        "min": 3096
+        "max": 5702,
+        "median": 2811,
+        "min": 1757
       },
       "density_p95": {
-        "max": 9,
-        "median": 8,
-        "min": 7
+        "max": 7,
+        "median": 7,
+        "min": 6
       },
       "formationSpreadTiles": {
         "max": 2,
@@ -360,29 +360,29 @@
         "min": 2
       },
       "giveUps": {
-        "max": 208,
-        "median": 163,
-        "min": 73
+        "max": 205,
+        "median": 135,
+        "min": 38
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 205,
+        "median": 135,
+        "min": 38
       },
       "hardStops": {
-        "max": 1726,
-        "median": 1232,
-        "min": 395
+        "max": 3256,
+        "median": 353,
+        "min": 60
       },
       "hardStopsNear": {
-        "max": 1093,
-        "median": 848,
-        "min": 203
+        "max": 197,
+        "median": 36,
+        "min": 3
       },
       "hardStopsTransit": {
-        "max": 633,
-        "median": 384,
-        "min": 192
+        "max": 3059,
+        "median": 317,
+        "min": 57
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -390,38 +390,38 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 270,
-        "median": 70,
-        "min": 10
+        "max": 109,
+        "median": 105,
+        "min": 20
       },
       "pauseTicks": {
-        "max": 8056,
-        "median": 7676,
-        "min": 4769
+        "max": 4857,
+        "median": 3214,
+        "min": 2531
       },
       "peakDensity": {
-        "max": 10,
+        "max": 8,
         "median": 8,
         "min": 8
       },
       "repaths": {
-        "max": 57,
-        "median": 56,
-        "min": 52
+        "max": 120,
+        "median": 63,
+        "min": 40
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 7.04,
-        "median": 6.27,
-        "min": 5.2
+        "max": 8.83,
+        "median": 5.7,
+        "min": 5.31
       },
       "shuffles": {
-        "max": 1405,
-        "median": 851,
-        "min": 496
+        "max": 1996,
+        "median": 1167,
+        "min": 184
       },
       "shufflesNowhere": {
         "max": 0,
@@ -429,29 +429,29 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 3202,
-        "median": 2489,
-        "min": 1268
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
         "max": 19,
-        "median": 17,
+        "median": 16,
         "min": 16
       },
       "unitsNear": {
         "max": 24,
-        "median": 24,
-        "min": 23
+        "median": 23,
+        "min": 20
       },
       "unitsStillOrdered": {
-        "max": 5,
-        "median": 4,
-        "min": 1
+        "max": 4,
+        "median": 2,
+        "min": 0
       },
       "worstOverlapPct": {
         "max": 40,
-        "median": 30,
-        "min": 26
+        "median": 35,
+        "min": 25
       }
     },
     "counterflow_cyborg": {
@@ -506,7 +506,7 @@
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 7,
         "median": 0,
         "min": 0
       },
@@ -560,7 +560,7 @@
         "min": 2.23
       },
       "shuffles": {
-        "max": 19,
+        "max": 20,
         "median": 7,
         "min": 0
       },
@@ -624,12 +624,12 @@
       "bumps": {
         "max": 4922,
         "median": 1049,
-        "min": 242
+        "min": 241
       },
       "bumpsRepeat": {
         "max": 145557,
         "median": 27958,
-        "min": 4130
+        "min": 4131
       },
       "density_p95": {
         "max": 30,
@@ -647,14 +647,14 @@
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 9,
+        "median": 4,
         "min": 0
       },
       "hardStops": {
         "max": 116260,
         "median": 15428,
-        "min": 1860
+        "min": 1859
       },
       "hardStopsNear": {
         "max": 3,
@@ -674,7 +674,7 @@
       "overlapPairTicks": {
         "max": 208968,
         "median": 34313,
-        "min": 1955
+        "min": 1959
       },
       "pauseTicks": {
         "max": 70563,
@@ -701,8 +701,8 @@
         "min": 1.92
       },
       "shuffles": {
-        "max": 47,
-        "median": 15,
+        "max": 52,
+        "median": 16,
         "min": 0
       },
       "shufflesNowhere": {
@@ -765,12 +765,12 @@
       "bumps": {
         "max": 4806,
         "median": 4566,
-        "min": 1807
+        "min": 1802
       },
       "bumpsRepeat": {
         "max": 135505,
         "median": 125103,
-        "min": 46185
+        "min": 46026
       },
       "density_p95": {
         "max": 16,
@@ -783,22 +783,22 @@
         "min": 1
       },
       "giveUps": {
-        "max": 16,
+        "max": 14,
         "median": 0,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 14,
         "median": 0,
         "min": 0
       },
       "hardStops": {
         "max": 108760,
         "median": 84670,
-        "min": 24178
+        "min": 24163
       },
       "hardStopsNear": {
-        "max": 29,
+        "max": 14,
         "median": 0,
         "min": 0
       },
@@ -820,7 +820,7 @@
       "pauseTicks": {
         "max": 70211,
         "median": 68839,
-        "min": 29560
+        "min": 27516
       },
       "peakDensity": {
         "max": 17,
@@ -842,7 +842,7 @@
         "min": 0.0
       },
       "shuffles": {
-        "max": 52,
+        "max": 58,
         "median": 0,
         "min": 0
       },
@@ -852,12 +852,12 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 1940,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
-        "max": 26,
+        "max": 25,
         "median": 0,
         "min": 0
       },
@@ -869,7 +869,7 @@
       "unitsStillOrdered": {
         "max": 32,
         "median": 32,
-        "min": 1
+        "min": 0
       },
       "worstOverlapPct": {
         "max": 99,
@@ -1021,12 +1021,12 @@
     "counterflow_w3": {
       "arrival_p50": {
         "max": 3842,
-        "median": 1417,
+        "median": 1397,
         "min": 0
       },
       "arrival_p95": {
         "max": 4917,
-        "median": 1827,
+        "median": 1770,
         "min": 0
       },
       "buildStartLast_s": {
@@ -1047,12 +1047,12 @@
       "bumps": {
         "max": 4671,
         "median": 3731,
-        "min": 624
+        "min": 611
       },
       "bumpsRepeat": {
         "max": 129618,
-        "median": 102454,
-        "min": 13844
+        "median": 102455,
+        "min": 13664
       },
       "density_p95": {
         "max": 15,
@@ -1065,22 +1065,22 @@
         "min": 1
       },
       "giveUps": {
-        "max": 38,
+        "max": 37,
         "median": 2,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 37,
+        "median": 2,
         "min": 0
       },
       "hardStops": {
         "max": 99090,
         "median": 66829,
-        "min": 4507
+        "min": 4447
       },
       "hardStopsNear": {
-        "max": 88,
+        "max": 54,
         "median": 0,
         "min": 0
       },
@@ -1102,7 +1102,7 @@
       "pauseTicks": {
         "max": 69793,
         "median": 55704,
-        "min": 13292
+        "min": 9552
       },
       "peakDensity": {
         "max": 16,
@@ -1124,7 +1124,7 @@
         "min": 0.0
       },
       "shuffles": {
-        "max": 149,
+        "max": 150,
         "median": 3,
         "min": 0
       },
@@ -1134,12 +1134,12 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 5116,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
-        "max": 31,
+        "max": 29,
         "median": 9,
         "min": 0
       },
@@ -1162,12 +1162,12 @@
     "counterflow_w4": {
       "arrival_p50": {
         "max": 2226,
-        "median": 851,
-        "min": 640
+        "median": 830,
+        "min": 634
       },
       "arrival_p95": {
         "max": 2226,
-        "median": 1221,
+        "median": 1182,
         "min": 833
       },
       "buildStartLast_s": {
@@ -1187,13 +1187,13 @@
       },
       "bumps": {
         "max": 4531,
-        "median": 429,
-        "min": 252
+        "median": 428,
+        "min": 224
       },
       "bumpsRepeat": {
         "max": 127111,
-        "median": 9212,
-        "min": 4546
+        "median": 9200,
+        "min": 4086
       },
       "density_p95": {
         "max": 14,
@@ -1201,28 +1201,28 @@
         "min": 8
       },
       "formationSpreadTiles": {
-        "max": 10,
+        "max": 9,
         "median": 9,
         "min": 2
       },
       "giveUps": {
-        "max": 153,
-        "median": 29,
+        "max": 33,
+        "median": 20,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 33,
+        "median": 20,
         "min": 0
       },
       "hardStops": {
         "max": 94046,
-        "median": 3105,
-        "min": 1042
+        "median": 3135,
+        "min": 891
       },
       "hardStopsNear": {
-        "max": 850,
-        "median": 10,
+        "max": 70,
+        "median": 11,
         "min": 0
       },
       "hardStopsTransit": {
@@ -1237,13 +1237,13 @@
       },
       "overlapPairTicks": {
         "max": 27179,
-        "median": 817,
+        "median": 869,
         "min": 371
       },
       "pauseTicks": {
         "max": 67163,
-        "median": 9383,
-        "min": 3867
+        "median": 6354,
+        "min": 3242
       },
       "peakDensity": {
         "max": 14,
@@ -1261,12 +1261,12 @@
       },
       "secPerTile_p95": {
         "max": 13.09,
-        "median": 5.72,
+        "median": 5.55,
         "min": 4.16
       },
       "shuffles": {
-        "max": 909,
-        "median": 75,
+        "max": 199,
+        "median": 63,
         "min": 0
       },
       "shufflesNowhere": {
@@ -1275,13 +1275,13 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 8131,
-        "median": 3207,
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "unitsArrived": {
         "max": 29,
-        "median": 27,
+        "median": 26,
         "min": 2
       },
       "unitsNear": {
@@ -1291,7 +1291,7 @@
       },
       "unitsStillOrdered": {
         "max": 30,
-        "median": 1,
+        "median": 0,
         "min": 0
       },
       "worstOverlapPct": {
@@ -1303,13 +1303,13 @@
     "counterflow_w6": {
       "arrival_p50": {
         "max": 609,
-        "median": 504,
-        "min": 437
+        "median": 497,
+        "min": 441
       },
       "arrival_p95": {
-        "max": 896,
-        "median": 753,
-        "min": 627
+        "max": 986,
+        "median": 745,
+        "min": 603
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -1327,14 +1327,14 @@
         "min": 0
       },
       "bumps": {
-        "max": 275,
-        "median": 146,
-        "min": 102
+        "max": 266,
+        "median": 142,
+        "min": 100
       },
       "bumpsRepeat": {
-        "max": 5059,
-        "median": 1992,
-        "min": 1122
+        "max": 5017,
+        "median": 2034,
+        "min": 1093
       },
       "density_p95": {
         "max": 10,
@@ -1347,23 +1347,23 @@
         "min": 9
       },
       "giveUps": {
-        "max": 95,
-        "median": 23,
-        "min": 5
+        "max": 29,
+        "median": 19,
+        "min": 6
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 29,
+        "median": 19,
+        "min": 6
       },
       "hardStops": {
-        "max": 1898,
-        "median": 399,
+        "max": 1896,
+        "median": 409,
         "min": 83
       },
       "hardStopsNear": {
-        "max": 207,
-        "median": 11,
+        "max": 110,
+        "median": 14,
         "min": 1
       },
       "hardStopsTransit": {
@@ -1382,9 +1382,9 @@
         "min": 0
       },
       "pauseTicks": {
-        "max": 3799,
-        "median": 2095,
-        "min": 1230
+        "max": 3762,
+        "median": 1955,
+        "min": 1232
       },
       "peakDensity": {
         "max": 12,
@@ -1401,14 +1401,14 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.07,
-        "median": 3.37,
-        "min": 2.84
+        "max": 4.69,
+        "median": 3.31,
+        "min": 2.85
       },
       "shuffles": {
-        "max": 433,
-        "median": 62,
-        "min": 12
+        "max": 159,
+        "median": 48,
+        "min": 13
       },
       "shufflesNowhere": {
         "max": 0,
@@ -1416,13 +1416,13 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 1118,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
         "max": 30,
-        "median": 26,
+        "median": 25,
         "min": 20
       },
       "unitsNear": {
@@ -1431,7 +1431,7 @@
         "min": 32
       },
       "unitsStillOrdered": {
-        "max": 2,
+        "max": 1,
         "median": 0,
         "min": 0
       },
@@ -1443,14 +1443,14 @@
     },
     "counterflow_w8": {
       "arrival_p50": {
-        "max": 488,
+        "max": 493,
         "median": 445,
         "min": 385
       },
       "arrival_p95": {
-        "max": 774,
+        "max": 748,
         "median": 606,
-        "min": 456
+        "min": 517
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -1468,14 +1468,14 @@
         "min": 0
       },
       "bumps": {
-        "max": 123,
-        "median": 88,
+        "max": 115,
+        "median": 87,
         "min": 65
       },
       "bumpsRepeat": {
-        "max": 1331,
-        "median": 902,
-        "min": 438
+        "max": 1360,
+        "median": 859,
+        "min": 425
       },
       "density_p95": {
         "max": 8,
@@ -1488,23 +1488,23 @@
         "min": 9
       },
       "giveUps": {
-        "max": 35,
-        "median": 14,
-        "min": 4
+        "max": 27,
+        "median": 13,
+        "min": 3
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 27,
+        "median": 13,
+        "min": 3
       },
       "hardStops": {
         "max": 220,
-        "median": 119,
+        "median": 116,
         "min": 23
       },
       "hardStopsNear": {
-        "max": 112,
-        "median": 4,
+        "max": 78,
+        "median": 2,
         "min": 0
       },
       "hardStopsTransit": {
@@ -1518,14 +1518,14 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 542,
-        "median": 23,
+        "max": 484,
+        "median": 18,
         "min": 0
       },
       "pauseTicks": {
-        "max": 2371,
-        "median": 952,
-        "min": 654
+        "max": 1324,
+        "median": 944,
+        "min": 628
       },
       "peakDensity": {
         "max": 10,
@@ -1542,13 +1542,13 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 3.68,
-        "median": 2.87,
-        "min": 2.48
+        "max": 3.4,
+        "median": 2.89,
+        "min": 2.63
       },
       "shuffles": {
-        "max": 114,
-        "median": 33,
+        "max": 105,
+        "median": 36,
         "min": 7
       },
       "shufflesNowhere": {
@@ -1557,14 +1557,14 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 1236,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
         "max": 30,
         "median": 27,
-        "min": 24
+        "min": 25
       },
       "unitsNear": {
         "max": 32,
@@ -1572,7 +1572,7 @@
         "min": 32
       },
       "unitsStillOrdered": {
-        "max": 2,
+        "max": 0,
         "median": 0,
         "min": 0
       },
@@ -1611,12 +1611,12 @@
       "bumps": {
         "max": 4736,
         "median": 4658,
-        "min": 3285
+        "min": 3279
       },
       "bumpsRepeat": {
         "max": 132349,
         "median": 126919,
-        "min": 87314
+        "min": 87292
       },
       "density_p95": {
         "max": 16,
@@ -1629,22 +1629,22 @@
         "min": 1
       },
       "giveUps": {
-        "max": 15,
+        "max": 10,
         "median": 0,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 10,
         "median": 0,
         "min": 0
       },
       "hardStops": {
         "max": 115321,
         "median": 95701,
-        "min": 62168
+        "min": 62167
       },
       "hardStopsNear": {
-        "max": 6,
+        "max": 5,
         "median": 0,
         "min": 0
       },
@@ -1666,7 +1666,7 @@
       "pauseTicks": {
         "max": 69210,
         "median": 68564,
-        "min": 48726
+        "min": 48676
       },
       "peakDensity": {
         "max": 16,
@@ -1688,7 +1688,7 @@
         "min": 0.0
       },
       "shuffles": {
-        "max": 45,
+        "max": 23,
         "median": 0,
         "min": 0
       },
@@ -1703,7 +1703,7 @@
         "min": 0
       },
       "unitsArrived": {
-        "max": 28,
+        "max": 29,
         "median": 0,
         "min": 0
       },
@@ -1916,7 +1916,7 @@
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 1,
         "median": 0,
         "min": 0
       },
@@ -2571,13 +2571,13 @@
     },
     "mountain_chain": {
       "arrival_p50": {
-        "max": 2016,
+        "max": 1357,
         "median": 521,
         "min": 335
       },
       "arrival_p95": {
-        "max": 3799,
-        "median": 1155,
+        "max": 2636,
+        "median": 1017,
         "min": 335
       },
       "buildStartLast_s": {
@@ -2597,48 +2597,48 @@
       },
       "bumps": {
         "max": 11356,
-        "median": 8113,
-        "min": 5334
+        "median": 8121,
+        "min": 2637
       },
       "bumpsRepeat": {
         "max": 293025,
-        "median": 197675,
-        "min": 63155
+        "median": 196603,
+        "min": 37018
       },
       "density_p95": {
         "max": 33,
-        "median": 30,
-        "min": 25
+        "median": 28,
+        "min": 23
       },
       "formationSpreadTiles": {
-        "max": 11,
+        "max": 10,
         "median": 6,
         "min": 3
       },
       "giveUps": {
-        "max": 3880,
-        "median": 121,
+        "max": 794,
+        "median": 100,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 794,
+        "median": 100,
         "min": 0
       },
       "hardStops": {
         "max": 257380,
-        "median": 171121,
-        "min": 42854
+        "median": 171184,
+        "min": 21036
       },
       "hardStopsNear": {
-        "max": 43336,
-        "median": 415,
+        "max": 10641,
+        "median": 241,
         "min": 0
       },
       "hardStopsTransit": {
         "max": 257380,
         "median": 171031,
-        "min": 13285
+        "min": 12596
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -2647,79 +2647,79 @@
       },
       "overlapPairTicks": {
         "max": 90127,
-        "median": 47447,
-        "min": 10217
+        "median": 45505,
+        "min": 8403
       },
       "pauseTicks": {
         "max": 140548,
-        "median": 95256,
-        "min": 29528
+        "median": 94201,
+        "min": 16610
       },
       "peakDensity": {
         "max": 34,
-        "median": 31,
-        "min": 26
+        "median": 29,
+        "min": 25
       },
       "repaths": {
         "max": 4633,
-        "median": 3075,
-        "min": 349
+        "median": 3068,
+        "min": 356
       },
       "resolved": {
-        "count": 8,
+        "count": 6,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 19.08,
-        "median": 4.94,
+        "max": 13.76,
+        "median": 4.62,
         "min": 1.76
       },
       "shuffles": {
-        "max": 27124,
-        "median": 459,
+        "max": 7296,
+        "median": 558,
         "min": 0
       },
       "shufflesNowhere": {
-        "max": 10,
+        "max": 4,
         "median": 0,
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 2977,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
-        "max": 46,
+        "max": 34,
         "median": 22,
         "min": 1
       },
       "unitsNear": {
         "max": 82,
-        "median": 29,
+        "median": 30,
         "min": 1
       },
       "unitsStillOrdered": {
         "max": 81,
-        "median": 53,
-        "min": 3
+        "median": 52,
+        "min": 0
       },
       "worstOverlapPct": {
         "max": 100,
         "median": 100,
-        "min": 95
+        "min": 90
       }
     },
     "mountain_chain_cross": {
       "arrival_p50": {
-        "max": 2077,
-        "median": 492,
-        "min": 367
+        "max": 810,
+        "median": 457,
+        "min": 378
       },
       "arrival_p95": {
-        "max": 3748,
-        "median": 1852,
-        "min": 473
+        "max": 3649,
+        "median": 899,
+        "min": 474
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -2737,49 +2737,49 @@
         "min": 0
       },
       "bumps": {
-        "max": 9795,
-        "median": 8144,
-        "min": 6106
+        "max": 9815,
+        "median": 7692,
+        "min": 2689
       },
       "bumpsRepeat": {
         "max": 248817,
-        "median": 175526,
-        "min": 61915
+        "median": 175729,
+        "min": 31778
       },
       "density_p95": {
         "max": 38,
         "median": 29,
-        "min": 23
+        "min": 25
       },
       "formationSpreadTiles": {
-        "max": 10,
-        "median": 7,
+        "max": 9,
+        "median": 6,
         "min": 3
       },
       "giveUps": {
-        "max": 4628,
-        "median": 791,
-        "min": 25
+        "max": 841,
+        "median": 324,
+        "min": 32
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 841,
+        "median": 324,
+        "min": 32
       },
       "hardStops": {
         "max": 231739,
-        "median": 150289,
-        "min": 44052
+        "median": 150294,
+        "min": 17405
       },
       "hardStopsNear": {
-        "max": 57568,
-        "median": 4666,
+        "max": 12239,
+        "median": 3243,
         "min": 3
       },
       "hardStopsTransit": {
         "max": 231736,
-        "median": 143730,
-        "min": 5928
+        "median": 150118,
+        "min": 5944
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -2788,13 +2788,13 @@
       },
       "overlapPairTicks": {
         "max": 92043,
-        "median": 37936,
-        "min": 10773
+        "median": 42475,
+        "min": 5101
       },
       "pauseTicks": {
         "max": 119102,
-        "median": 83480,
-        "min": 29910
+        "median": 83573,
+        "min": 14026
       },
       "peakDensity": {
         "max": 39,
@@ -2803,63 +2803,63 @@
       },
       "repaths": {
         "max": 3906,
-        "median": 2594,
-        "min": 192
+        "median": 2597,
+        "min": 253
       },
       "resolved": {
-        "count": 9,
+        "count": 8,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 18.16,
-        "median": 8.41,
-        "min": 2.35
+        "max": 15.2,
+        "median": 4.28,
+        "min": 2.36
       },
       "shuffles": {
-        "max": 28213,
-        "median": 4411,
-        "min": 49
+        "max": 8107,
+        "median": 3442,
+        "min": 68
       },
       "shufflesNowhere": {
-        "max": 34,
-        "median": 8,
+        "max": 20,
+        "median": 4,
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 2629,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
-        "max": 45,
-        "median": 25,
-        "min": 13
+        "max": 32,
+        "median": 23,
+        "min": 11
       },
       "unitsNear": {
         "max": 82,
-        "median": 38,
+        "median": 35,
         "min": 14
       },
       "unitsStillOrdered": {
         "max": 68,
         "median": 47,
-        "min": 5
+        "min": 1
       },
       "worstOverlapPct": {
         "max": 100,
         "median": 100,
-        "min": 89
+        "min": 92
       }
     },
     "oneway_tracked": {
       "arrival_p50": {
-        "max": 411,
-        "median": 406,
+        "max": 406,
+        "median": 399,
         "min": 351
       },
       "arrival_p95": {
-        "max": 643,
-        "median": 642,
+        "max": 653,
+        "median": 644,
         "min": 593
       },
       "buildStartLast_s": {
@@ -2878,14 +2878,14 @@
         "min": 0
       },
       "bumps": {
-        "max": 51,
-        "median": 50,
-        "min": 46
+        "max": 57,
+        "median": 48,
+        "min": 40
       },
       "bumpsRepeat": {
-        "max": 302,
-        "median": 300,
-        "min": 252
+        "max": 325,
+        "median": 307,
+        "min": 290
       },
       "density_p95": {
         "max": 7,
@@ -2898,24 +2898,24 @@
         "min": 2
       },
       "giveUps": {
-        "max": 20,
-        "median": 18,
-        "min": 12
+        "max": 16,
+        "median": 16,
+        "min": 14
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 16,
+        "median": 16,
+        "min": 14
       },
       "hardStops": {
-        "max": 28,
-        "median": 24,
-        "min": 17
+        "max": 53,
+        "median": 25,
+        "min": 15
       },
       "hardStopsNear": {
-        "max": 24,
-        "median": 17,
-        "min": 2
+        "max": 49,
+        "median": 15,
+        "min": 3
       },
       "hardStopsTransit": {
         "max": 22,
@@ -2933,9 +2933,9 @@
         "min": 0
       },
       "pauseTicks": {
-        "max": 1803,
-        "median": 1245,
-        "min": 697
+        "max": 676,
+        "median": 597,
+        "min": 561
       },
       "peakDensity": {
         "max": 8,
@@ -2952,14 +2952,14 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 3.05,
+        "max": 2.96,
         "median": 2.82,
-        "min": 2.79
+        "min": 2.8
       },
       "shuffles": {
-        "max": 41,
-        "median": 30,
-        "min": 23
+        "max": 74,
+        "median": 56,
+        "min": 45
       },
       "shufflesNowhere": {
         "max": 0,
@@ -2967,12 +2967,12 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 1241,
-        "median": 692,
-        "min": 23
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 12,
+        "max": 11,
         "median": 11,
         "min": 9
       },
@@ -2982,8 +2982,8 @@
         "min": 16
       },
       "unitsStillOrdered": {
-        "max": 2,
-        "median": 1,
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "worstOverlapPct": {
@@ -2994,13 +2994,13 @@
     },
     "open_corner": {
       "arrival_p50": {
-        "max": 1753,
+        "max": 1502,
         "median": 633,
         "min": 282
       },
       "arrival_p95": {
         "max": 3408,
-        "median": 1209,
+        "median": 1058,
         "min": 614
       },
       "buildStartLast_s": {
@@ -3020,13 +3020,13 @@
       },
       "bumps": {
         "max": 36918,
-        "median": 35676,
-        "min": 33365
+        "median": 35636,
+        "min": 32761
       },
       "bumpsRepeat": {
         "max": 1006016,
-        "median": 954385,
-        "min": 848218
+        "median": 954401,
+        "min": 846755
       },
       "density_p95": {
         "max": 52,
@@ -3039,22 +3039,22 @@
         "min": 3
       },
       "giveUps": {
-        "max": 731,
-        "median": 27,
+        "max": 356,
+        "median": 38,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 356,
+        "median": 38,
         "min": 0
       },
       "hardStops": {
         "max": 960943,
-        "median": 897696,
-        "min": 770132
+        "median": 897624,
+        "min": 768921
       },
       "hardStopsNear": {
-        "max": 2053,
+        "max": 842,
         "median": 6,
         "min": 0
       },
@@ -3070,13 +3070,13 @@
       },
       "overlapPairTicks": {
         "max": 441612,
-        "median": 342783,
+        "median": 344276,
         "min": 249037
       },
       "pauseTicks": {
         "max": 481812,
         "median": 455891,
-        "min": 403917
+        "min": 403242
       },
       "peakDensity": {
         "max": 52,
@@ -3094,12 +3094,12 @@
       },
       "secPerTile_p95": {
         "max": 10.99,
-        "median": 4.32,
-        "min": 1.83
+        "median": 3.43,
+        "min": 1.86
       },
       "shuffles": {
-        "max": 2707,
-        "median": 49,
+        "max": 1620,
+        "median": 84,
         "min": 0
       },
       "shufflesNowhere": {
@@ -3113,7 +3113,7 @@
         "min": 0
       },
       "unitsArrived": {
-        "max": 41,
+        "max": 31,
         "median": 16,
         "min": 4
       },
@@ -3185,7 +3185,7 @@
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 3,
         "median": 0,
         "min": 0
       },
@@ -3306,8 +3306,8 @@
         "min": 9
       },
       "bumpsRepeat": {
-        "max": 362,
-        "median": 133,
+        "max": 375,
+        "median": 132,
         "min": 11
       },
       "density_p95": {
@@ -3321,18 +3321,18 @@
         "min": 1
       },
       "giveUps": {
-        "max": 9,
+        "max": 8,
         "median": 2,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 8,
+        "median": 2,
         "min": 0
       },
       "hardStops": {
-        "max": 137,
-        "median": 2,
+        "max": 80,
+        "median": 1,
         "min": 0
       },
       "hardStopsNear": {
@@ -3341,8 +3341,8 @@
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 137,
-        "median": 2,
+        "max": 80,
+        "median": 1,
         "min": 0
       },
       "moveToBuildTicks": {
@@ -3351,12 +3351,12 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 95,
+        "max": 94,
         "median": 0,
         "min": 0
       },
       "pauseTicks": {
-        "max": 394,
+        "max": 433,
         "median": 187,
         "min": 32
       },
@@ -3375,12 +3375,12 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.33,
-        "median": 3.22,
+        "max": 4.41,
+        "median": 3.24,
         "min": 2.52
       },
       "shuffles": {
-        "max": 64,
+        "max": 65,
         "median": 10,
         "min": 3
       },
@@ -3467,8 +3467,8 @@
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 2,
+        "median": 1,
         "min": 0
       },
       "hardStops": {
@@ -3603,12 +3603,12 @@
         "min": 1
       },
       "giveUps": {
-        "max": 5,
+        "max": 4,
         "median": 0,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 4,
         "median": 0,
         "min": 0
       },
@@ -3662,7 +3662,7 @@
         "min": 0.6
       },
       "shuffles": {
-        "max": 62,
+        "max": 43,
         "median": 8,
         "min": 4
       },
@@ -3704,7 +3704,7 @@
         "min": 176
       },
       "arrival_p95": {
-        "max": 368,
+        "max": 456,
         "median": 216,
         "min": 191
       },
@@ -3724,12 +3724,12 @@
         "min": 0
       },
       "bumps": {
-        "max": 36,
+        "max": 51,
         "median": 20,
         "min": 13
       },
       "bumpsRepeat": {
-        "max": 190,
+        "max": 289,
         "median": 31,
         "min": 7
       },
@@ -3744,17 +3744,17 @@
         "min": 1
       },
       "giveUps": {
-        "max": 13,
+        "max": 19,
         "median": 1,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 19,
+        "median": 1,
         "min": 0
       },
       "hardStops": {
-        "max": 40,
+        "max": 84,
         "median": 0,
         "min": 0
       },
@@ -3764,7 +3764,7 @@
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 40,
+        "max": 84,
         "median": 0,
         "min": 0
       },
@@ -3779,7 +3779,7 @@
         "min": 0
       },
       "pauseTicks": {
-        "max": 74,
+        "max": 116,
         "median": 0,
         "min": 0
       },
@@ -3789,7 +3789,7 @@
         "min": 5
       },
       "repaths": {
-        "max": 2,
+        "max": 4,
         "median": 0,
         "min": 0
       },
@@ -3798,12 +3798,12 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 1.75,
+        "max": 2.2,
         "median": 1.05,
         "min": 0.99
       },
       "shuffles": {
-        "max": 130,
+        "max": 238,
         "median": 5,
         "min": 2
       },
@@ -3845,8 +3845,8 @@
         "min": 174
       },
       "arrival_p95": {
-        "max": 247,
-        "median": 211,
+        "max": 249,
+        "median": 212,
         "min": 189
       },
       "buildStartLast_s": {
@@ -3881,17 +3881,17 @@
       },
       "formationSpreadTiles": {
         "max": 2,
-        "median": 1,
+        "median": 2,
         "min": 1
       },
       "giveUps": {
-        "max": 5,
+        "max": 4,
         "median": 1,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 4,
+        "median": 1,
         "min": 0
       },
       "hardStops": {
@@ -3920,7 +3920,7 @@
         "min": 0
       },
       "pauseTicks": {
-        "max": 37,
+        "max": 36,
         "median": 0,
         "min": 0
       },
@@ -3939,12 +3939,12 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 1.23,
+        "max": 1.24,
         "median": 1.05,
         "min": 1.01
       },
       "shuffles": {
-        "max": 53,
+        "max": 51,
         "median": 6,
         "min": 4
       },
@@ -3981,14 +3981,14 @@
     },
     "parking_stale": {
       "arrival_p50": {
-        "max": 510,
+        "max": 479,
         "median": 437,
-        "min": 382
+        "min": 381
       },
       "arrival_p95": {
-        "max": 852,
-        "median": 521,
-        "min": 438
+        "max": 758,
+        "median": 510,
+        "min": 451
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -4006,13 +4006,13 @@
         "min": 0
       },
       "bumps": {
-        "max": 74,
-        "median": 31,
+        "max": 47,
+        "median": 30,
         "min": 17
       },
       "bumpsRepeat": {
-        "max": 342,
-        "median": 126,
+        "max": 329,
+        "median": 123,
         "min": 41
       },
       "density_p95": {
@@ -4026,28 +4026,28 @@
         "min": 1
       },
       "giveUps": {
-        "max": 45,
-        "median": 7,
-        "min": 3
+        "max": 19,
+        "median": 6,
+        "min": 2
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 19,
+        "median": 6,
+        "min": 2
       },
       "hardStops": {
-        "max": 70,
-        "median": 6,
+        "max": 40,
+        "median": 7,
         "min": 0
       },
       "hardStopsNear": {
-        "max": 9,
+        "max": 4,
         "median": 0,
         "min": 0
       },
       "hardStopsTransit": {
-        "max": 70,
-        "median": 6,
+        "max": 38,
+        "median": 7,
         "min": 0
       },
       "moveToBuildTicks": {
@@ -4056,14 +4056,14 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 49,
+        "max": 30,
         "median": 0,
         "min": 0
       },
       "pauseTicks": {
-        "max": 313,
-        "median": 150,
-        "min": 24
+        "max": 252,
+        "median": 149,
+        "min": 40
       },
       "peakDensity": {
         "max": 5,
@@ -4071,7 +4071,7 @@
         "min": 5
       },
       "repaths": {
-        "max": 6,
+        "max": 5,
         "median": 1,
         "min": 0
       },
@@ -4080,13 +4080,13 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 4.26,
-        "median": 2.61,
-        "min": 2.19
+        "max": 3.98,
+        "median": 2.57,
+        "min": 2.34
       },
       "shuffles": {
-        "max": 279,
-        "median": 35,
+        "max": 178,
+        "median": 41,
         "min": 7
       },
       "shufflesNowhere": {
@@ -4102,7 +4102,7 @@
       "unitsArrived": {
         "max": 8,
         "median": 8,
-        "min": 6
+        "min": 7
       },
       "unitsNear": {
         "max": 8,
@@ -4110,24 +4110,24 @@
         "min": 8
       },
       "unitsStillOrdered": {
-        "max": 1,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "worstOverlapPct": {
-        "max": 46,
+        "max": 35,
         "median": 0,
         "min": 0
       }
     },
     "rush_corner": {
       "arrival_p50": {
-        "max": 1608,
+        "max": 1515,
         "median": 814,
         "min": 441
       },
       "arrival_p95": {
-        "max": 3247,
+        "max": 3249,
         "median": 1058,
         "min": 493
       },
@@ -4148,13 +4148,13 @@
       },
       "bumps": {
         "max": 37960,
-        "median": 36129,
-        "min": 34323
+        "median": 36136,
+        "min": 34349
       },
       "bumpsRepeat": {
         "max": 1014660,
-        "median": 964486,
-        "min": 867120
+        "median": 964485,
+        "min": 867338
       },
       "density_p95": {
         "max": 48,
@@ -4167,22 +4167,22 @@
         "min": 3
       },
       "giveUps": {
-        "max": 393,
+        "max": 354,
         "median": 21,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 354,
+        "median": 21,
         "min": 0
       },
       "hardStops": {
         "max": 1006702,
-        "median": 931299,
-        "min": 826703
+        "median": 931289,
+        "min": 826954
       },
       "hardStopsNear": {
-        "max": 427,
+        "max": 678,
         "median": 1,
         "min": 0
       },
@@ -4198,13 +4198,13 @@
       },
       "overlapPairTicks": {
         "max": 425015,
-        "median": 333811,
+        "median": 335313,
         "min": 206183
       },
       "pauseTicks": {
         "max": 485380,
         "median": 460948,
-        "min": 411754
+        "min": 411911
       },
       "peakDensity": {
         "max": 48,
@@ -4221,17 +4221,17 @@
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 10.26,
+        "max": 10.48,
         "median": 3.79,
         "min": 1.72
       },
       "shuffles": {
-        "max": 1125,
-        "median": 27,
+        "max": 1347,
+        "median": 26,
         "min": 0
       },
       "shufflesNowhere": {
-        "max": 63,
+        "max": 50,
         "median": 0,
         "min": 0
       },
@@ -4241,7 +4241,7 @@
         "min": 0
       },
       "unitsArrived": {
-        "max": 38,
+        "max": 30,
         "median": 13,
         "min": 1
       },
@@ -4263,14 +4263,14 @@
     },
     "rush_turn": {
       "arrival_p50": {
-        "max": 322,
-        "median": 267,
-        "min": 217
+        "max": 319,
+        "median": 255,
+        "min": 215
       },
       "arrival_p95": {
-        "max": 3783,
-        "median": 1484,
-        "min": 472
+        "max": 2372,
+        "median": 604,
+        "min": 419
       },
       "buildStartLast_s": {
         "max": 0.0,
@@ -4288,49 +4288,49 @@
         "min": 0
       },
       "bumps": {
-        "max": 6430,
-        "median": 5342,
-        "min": 3892
+        "max": 3254,
+        "median": 2455,
+        "min": 2032
       },
       "bumpsRepeat": {
-        "max": 93011,
-        "median": 69182,
-        "min": 42078
+        "max": 33266,
+        "median": 23428,
+        "min": 15120
       },
       "density_p95": {
-        "max": 35,
-        "median": 31,
-        "min": 29
+        "max": 34,
+        "median": 30,
+        "min": 26
       },
       "formationSpreadTiles": {
         "max": 9,
-        "median": 9,
+        "median": 8,
         "min": 8
       },
       "giveUps": {
-        "max": 4286,
-        "median": 3382,
-        "min": 2394
+        "max": 1256,
+        "median": 780,
+        "min": 364
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 1256,
+        "median": 780,
+        "min": 364
       },
       "hardStops": {
-        "max": 76868,
-        "median": 57164,
-        "min": 32208
+        "max": 21118,
+        "median": 11664,
+        "min": 6849
       },
       "hardStopsNear": {
-        "max": 63587,
-        "median": 48355,
-        "min": 30558
+        "max": 9886,
+        "median": 4667,
+        "min": 1808
       },
       "hardStopsTransit": {
-        "max": 16045,
-        "median": 6789,
-        "min": 1650
+        "max": 17340,
+        "median": 7102,
+        "min": 1846
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -4338,53 +4338,53 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 25957,
-        "median": 11669,
-        "min": 3005
+        "max": 16291,
+        "median": 9136,
+        "min": 2242
       },
       "pauseTicks": {
-        "max": 45170,
-        "median": 33924,
-        "min": 21442
+        "max": 14578,
+        "median": 9819,
+        "min": 5963
       },
       "peakDensity": {
-        "max": 35,
-        "median": 32,
-        "min": 29
+        "max": 34,
+        "median": 31,
+        "min": 28
       },
       "repaths": {
-        "max": 373,
-        "median": 203,
-        "min": 31
+        "max": 350,
+        "median": 197,
+        "min": 93
       },
       "resolved": {
         "count": 27,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 23.53,
-        "median": 6.33,
-        "min": 2.04
+        "max": 9.88,
+        "median": 3.55,
+        "min": 1.71
       },
       "shuffles": {
-        "max": 28019,
-        "median": 22020,
-        "min": 13713
+        "max": 14327,
+        "median": 5760,
+        "min": 2065
       },
       "shufflesNowhere": {
-        "max": 139,
-        "median": 6,
+        "max": 5,
+        "median": 1,
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 3559,
-        "median": 14,
+        "max": 0,
+        "median": 0,
         "min": 0
       },
       "unitsArrived": {
-        "max": 43,
-        "median": 34,
-        "min": 30
+        "max": 34,
+        "median": 31,
+        "min": 28
       },
       "unitsNear": {
         "max": 82,
@@ -4392,20 +4392,20 @@
         "min": 82
       },
       "unitsStillOrdered": {
-        "max": 20,
-        "median": 14,
-        "min": 8
+        "max": 4,
+        "median": 1,
+        "min": 0
       },
       "worstOverlapPct": {
         "max": 100,
         "median": 99,
-        "min": 84
+        "min": 77
       }
     },
     "separating": {
       "arrival_p50": {
         "max": 1785,
-        "median": 1116,
+        "median": 1091,
         "min": 416
       },
       "arrival_p95": {
@@ -4430,13 +4430,13 @@
       },
       "bumps": {
         "max": 4316,
-        "median": 563,
-        "min": 313
+        "median": 560,
+        "min": 302
       },
       "bumpsRepeat": {
         "max": 118970,
-        "median": 12254,
-        "min": 5185
+        "median": 12172,
+        "min": 5100
       },
       "density_p95": {
         "max": 14,
@@ -4449,23 +4449,23 @@
         "min": 2
       },
       "giveUps": {
-        "max": 42,
-        "median": 18,
+        "max": 27,
+        "median": 14,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
+        "max": 27,
+        "median": 14,
         "min": 0
       },
       "hardStops": {
         "max": 84837,
-        "median": 3723,
-        "min": 836
+        "median": 3704,
+        "min": 832
       },
       "hardStopsNear": {
-        "max": 114,
-        "median": 8,
+        "max": 29,
+        "median": 4,
         "min": 0
       },
       "hardStopsTransit": {
@@ -4480,13 +4480,13 @@
       },
       "overlapPairTicks": {
         "max": 18533,
-        "median": 1543,
+        "median": 1629,
         "min": 73
       },
       "pauseTicks": {
         "max": 63633,
-        "median": 9186,
-        "min": 4790
+        "median": 8951,
+        "min": 4701
       },
       "peakDensity": {
         "max": 14,
@@ -4504,12 +4504,12 @@
       },
       "secPerTile_p95": {
         "max": 23.45,
-        "median": 8.03,
+        "median": 8.05,
         "min": 5.76
       },
       "shuffles": {
-        "max": 227,
-        "median": 53,
+        "max": 108,
+        "median": 48,
         "min": 0
       },
       "shufflesNowhere": {
@@ -4518,12 +4518,12 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 6803,
+        "max": 0,
         "median": 0,
         "min": 0
       },
       "unitsArrived": {
-        "max": 32,
+        "max": 31,
         "median": 28,
         "min": 3
       },
@@ -4545,12 +4545,12 @@
     },
     "strafe": {
       "arrival_p50": {
-        "max": 124,
-        "median": 121,
-        "min": 80
+        "max": 107,
+        "median": 103,
+        "min": 103
       },
       "arrival_p95": {
-        "max": 146,
+        "max": 147,
         "median": 146,
         "min": 145
       },
@@ -4570,18 +4570,18 @@
         "min": 0
       },
       "bumps": {
-        "max": 950,
-        "median": 816,
-        "min": 765
+        "max": 872,
+        "median": 778,
+        "min": 771
       },
       "bumpsRepeat": {
-        "max": 11546,
-        "median": 10389,
-        "min": 8165
+        "max": 10027,
+        "median": 9245,
+        "min": 8424
       },
       "density_p95": {
         "max": 12,
-        "median": 12,
+        "median": 11,
         "min": 11
       },
       "formationSpreadTiles": {
@@ -4590,29 +4590,29 @@
         "min": 3
       },
       "giveUps": {
-        "max": 57,
-        "median": 48,
-        "min": 26
+        "max": 50,
+        "median": 50,
+        "min": 28
       },
       "giveUpsApplied": {
-        "max": 0,
-        "median": 0,
-        "min": 0
+        "max": 50,
+        "median": 50,
+        "min": 28
       },
       "hardStops": {
-        "max": 2599,
-        "median": 2457,
-        "min": 1706
+        "max": 2370,
+        "median": 1813,
+        "min": 1709
       },
       "hardStopsNear": {
-        "max": 872,
-        "median": 469,
-        "min": 411
+        "max": 465,
+        "median": 304,
+        "min": 275
       },
       "hardStopsTransit": {
-        "max": 2130,
-        "median": 1585,
-        "min": 1295
+        "max": 1905,
+        "median": 1509,
+        "min": 1434
       },
       "moveToBuildTicks": {
         "max": 0,
@@ -4620,14 +4620,14 @@
         "min": 0
       },
       "overlapPairTicks": {
-        "max": 495,
-        "median": 286,
-        "min": 123
+        "max": 412,
+        "median": 282,
+        "min": 141
       },
       "pauseTicks": {
-        "max": 8278,
-        "median": 7329,
-        "min": 6204
+        "max": 7157,
+        "median": 6482,
+        "min": 5650
       },
       "peakDensity": {
         "max": 12,
@@ -4635,23 +4635,23 @@
         "min": 12
       },
       "repaths": {
-        "max": 65,
-        "median": 53,
-        "min": 36
+        "max": 52,
+        "median": 50,
+        "min": 47
       },
       "resolved": {
         "count": 0,
         "of": 27
       },
       "secPerTile_p95": {
-        "max": 7.25,
-        "median": 4.0,
-        "min": 3.8
+        "max": 5.8,
+        "median": 4.16,
+        "min": 3.7
       },
       "shuffles": {
-        "max": 370,
-        "median": 329,
-        "min": 129
+        "max": 477,
+        "median": 381,
+        "min": 243
       },
       "shufflesNowhere": {
         "max": 0,
@@ -4659,29 +4659,29 @@
         "min": 0
       },
       "strandedPauseTicks": {
-        "max": 137,
-        "median": 54,
-        "min": 49
+        "max": 0,
+        "median": 0,
+        "min": 0
       },
       "unitsArrived": {
-        "max": 6,
-        "median": 6,
+        "max": 10,
+        "median": 7,
         "min": 3
       },
       "unitsNear": {
-        "max": 27,
-        "median": 23,
+        "max": 23,
+        "median": 21,
         "min": 21
       },
       "unitsStillOrdered": {
         "max": 57,
-        "median": 54,
-        "min": 54
+        "median": 53,
+        "min": 50
       },
       "worstOverlapPct": {
-        "max": 51,
-        "median": 43,
-        "min": 27
+        "max": 95,
+        "median": 36,
+        "min": 33
       }
     },
     "tworoute": {
@@ -4731,12 +4731,12 @@
         "min": 8
       },
       "giveUps": {
-        "max": 26,
+        "max": 10,
         "median": 0,
         "min": 0
       },
       "giveUpsApplied": {
-        "max": 0,
+        "max": 10,
         "median": 0,
         "min": 0
       },
@@ -4746,7 +4746,7 @@
         "min": 192
       },
       "hardStopsNear": {
-        "max": 81,
+        "max": 20,
         "median": 0,
         "min": 0
       },
@@ -4790,7 +4790,7 @@
         "min": 4.7
       },
       "shuffles": {
-        "max": 185,
+        "max": 50,
         "median": 0,
         "min": 0
       },
