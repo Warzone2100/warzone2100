@@ -78,6 +78,7 @@ enum PathfindingFeature : uint16_t
 	PF_BACKOFF           = 1 << 12,  ///< back a droid that has gained no ground out of the press holding it
 	PF_PARKED_OBSTACLE   = 1 << 13,  ///< avoidance treats a droid with no move in progress as stationary
 	PF_STILL_BUMP        = 1 << 14,  ///< start a bump clock for a droid moving to work that makes no progress
+	PF_BUILD_FROM_HERE   = 1 << 15,  ///< join a build under way from one tile outside the ring when stuck short of it
 };
 
 /// True if any overlay feature is on, so the planner needs the congestion backend.
@@ -120,6 +121,9 @@ bool pathfindingParkedObstacleEnabled();
 /// True if a droid moving to work that makes no progress with no bump clock running
 /// should be given one.
 bool pathfindingStillBumpEnabled();
+/// True if a truck stopped or blocked just outside the ring around a build already under way
+/// should join it from where it is.
+bool pathfindingBuildFromHereEnabled();
 
 class IPathfindingBackend
 {

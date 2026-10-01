@@ -47,6 +47,7 @@
 #include "move.h"
 #include "cmddroid.h"
 #include "game_world.h"
+#include "pathfinding_backend.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
@@ -566,6 +567,31 @@ bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t dir, BAS
 	// NOT ANY MORE - JOHN
 	Vector2i delta = map_coord(psDroid->pos.xy()) - b.map;
 	return delta.x >= -1 && delta.x <= b.size.x && delta.y >= -1 && delta.y <= b.size.y;
+}
+
+// How long a truck may be blocked on its way to a build site before it may build from where it is
+#define BUILD_FROM_HERE_BLOCKED_TIME 1500
+
+bool actionCanBuildFromHere(DROID const *psDroid, int x, int y, uint16_t dir, STRUCTURE_STATS const *psStats)
+{
+	ASSERT_OR_RETURN(false, psStats != nullptr && psDroid != nullptr, "Bad stat or droid");
+	if (!pathfindingBuildFromHereEnabled())
+	{
+		return false;
+	}
+	const bool blocked = psDroid->sMove.bumpTime != 0 && gameTime - psDroid->sMove.bumpTime > BUILD_FROM_HERE_BLOCKED_TIME;
+	if (!DROID_STOPPED(psDroid) && !blocked)
+	{
+		return false;
+	}
+	const STRUCTURE *psStruct = getTileStructure(gameWorld.map, map_coord(x), map_coord(y));
+	if (psStruct == nullptr || psStruct->pStructureType != psStats || psStruct->status == SS_BUILT)
+	{
+		return false;
+	}
+	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), dir);
+	Vector2i delta = map_coord(psDroid->pos.xy()) - b.map;
+	return delta.x >= -2 && delta.x <= b.size.x + 1 && delta.y >= -2 && delta.y <= b.size.y + 1;
 }
 
 
@@ -1563,7 +1589,8 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		// The droid can still build or help with a build, and is moving to a location to do so - are we there yet, are we there yet, are we there yet?
-		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
+		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats)
+		    || actionCanBuildFromHere(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
 			// We're there, go ahead and build or help to build the structure
 			bool buildPosEmpty = actionRemoveDroidsFromBuildPos(psDroid->player, psDroid->actionPos, order->direction, order->psStats);
@@ -1744,7 +1771,8 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->sMove.psFormation = nullptr;
 		}
 		if (DROID_STOPPED(psDroid) &&
-		    !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
+		    !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats) &&
+		    !actionCanBuildFromHere(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
 			objTrace(psDroid->id, "DACTION_BUILD: Starting to drive toward construction site");
 			moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
