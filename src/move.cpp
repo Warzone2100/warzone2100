@@ -424,10 +424,12 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	svx = s.x * shuffleMove / shuffleMag;  // Straight in the direction of s.
 	svy = s.y * shuffleMove / shuffleMag;
 
-	lvx = -svy;  // 90° to the... right?
+	// iAtan2 maps the vector (sin a, cos a) to the angle a, so left lies at shuffleDir - 90°, and a
+	// neighbor on that side reads as angleDelta(shuffleDir - droidDir) = +90°.
+	lvx = -svy;  // shuffleDir - 90°
 	lvy = svx;
 
-	rvx = svy;   // 90° to the... left?
+	rvx = svy;   // shuffleDir + 90°
 	rvy = -svx;
 
 	const auto droidPropType = psDroid->getPropulsionStats()->propulsionType;
@@ -437,13 +439,13 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	{
 		leftClear = false;
 	}
-	else if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + rvx),
-	                           map_coord((SDWORD)psDroid->pos.y + rvy), droidPropType))
+	if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + rvx),
+	                      map_coord((SDWORD)psDroid->pos.y + rvy), droidPropType))
 	{
 		rightClear = false;
 	}
-	else if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + svx),
-	                           map_coord((SDWORD)psDroid->pos.y + svy), droidPropType))
+	if (fpathBlockingTile(gameWorld.map, map_coord((SDWORD)psDroid->pos.x + svx),
+	                      map_coord((SDWORD)psDroid->pos.y + svy), droidPropType))
 	{
 		frontClear = false;
 	}
@@ -459,11 +461,11 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 
 		uint16_t droidDir = iAtan2((psCurr->pos - psDroid->pos).xy());
 		int diff = angleDelta(shuffleDir - droidDir);
-		if (diff > -DEG(135) && diff < -DEG(45))
+		if (diff > DEG(45) && diff < DEG(135))
 		{
 			leftClear = false;
 		}
-		else if (diff > DEG(45) && diff < DEG(135))
+		else if (diff > -DEG(135) && diff < -DEG(45))
 		{
 			rightClear = false;
 		}
