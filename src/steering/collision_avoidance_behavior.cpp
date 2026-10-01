@@ -39,6 +39,8 @@
 #include "src/objects.h"
 #include "src/game_world.h"
 #include "src/perfcounters.h"
+#include "src/corridor_gate.h"
+#include "src/pathfinding_backend.h"
 
 #include <algorithm>
 
@@ -61,6 +63,11 @@ SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 	// Vector to target (for blending)
 	Vector2i toTarget = ctx.targetPos - ctx.currentPos;
 
+	// Parked obstacles read as stationary, except to a droid the corridor lanes are steering.
+	Vector2i laneTarget;
+	const bool parkedStationary = pathfindingParkedObstacleEnabled()
+	                              && !(pathfindingCorridorLanesEnabled() && corridorLaneTarget(gameWorld, ctx.droid, laneTarget));
+
 	// Scan nearby objects for obstacles
 	for (BASE_OBJECT* obj : gridStartIterate(ctx.currentPos.x, ctx.currentPos.y, OBSTACLE_SCAN_RADIUS))
 	{
@@ -82,7 +89,7 @@ SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 		int32_t combinedRadius = ctx.radius + obstacleRadius;
 
 		// Estimate obstacle velocity
-		Vector2i obstacleVel = estimateObstacleVelocity(obstacle);
+		Vector2i obstacleVel = estimateObstacleVelocity(obstacle, parkedStationary);
 		// Find the guessed obstacle speed and direction, clamped to half our speed.
 		int32_t obstacleSpeedGuess = std::min(iHypot(obstacleVel), ctx.maxSpeed / 2);
 		uint16_t obstDirectionGuess = iAtan2(obstacleVel);
@@ -168,8 +175,17 @@ bool CollisionAvoidanceBehavior::isEnabled(const SteeringContext& ctx) const
 	return !ctx.droid->isTransporter();
 }
 
-Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(const DROID* obstacle)
+Vector2i CollisionAvoidanceBehavior::estimateObstacleVelocity(const DROID* obstacle, bool parkedStationary)
 {
+	// sMove.target is not cleared when a droid stops, so the guesses below would have a parked droid
+	// driving off along its old line.
+	if (parkedStationary
+	    && (obstacle->sMove.Status == MOVEINACTIVE || obstacle->sMove.Status == MOVETURN
+	        || obstacle->sMove.Status == MOVEHOVER))
+	{
+		return Vector2i(0, 0);
+	}
+
 	// Velocity guess 1: Guess the velocity the droid is actually moving at.
 	Vector2i velocityGuess1 = iSinCosR(obstacle->sMove.moveDir, obstacle->sMove.speed);
 

@@ -80,8 +80,9 @@ private:
 	/// 2. Intended velocity (toward target)
 	/// </summary>
 	/// <param name="obstacle">The obstacle droid</param>
+	/// <param name="parkedStationary">Whether a droid with no move in progress reads as stationary</param>
 	/// <returns>Estimated velocity vector</returns>
-	static Vector2i estimateObstacleVelocity(const DROID* obstacle);
+	static Vector2i estimateObstacleVelocity(const DROID* obstacle, bool parkedStationary);
 
 	/// <summary>
 	/// Check if an object is a valid obstacle for collision avoidance.

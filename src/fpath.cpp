@@ -880,6 +880,11 @@ bool pathfindingBackoffEnabled()
 	return (game.pathfindingBackend & PF_BACKOFF) != 0;
 }
 
+bool pathfindingParkedObstacleEnabled()
+{
+	return (game.pathfindingBackend & PF_PARKED_OBSTACLE) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
