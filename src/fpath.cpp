@@ -890,6 +890,11 @@ bool pathfindingStillBumpEnabled()
 	return (game.pathfindingBackend & PF_STILL_BUMP) != 0;
 }
 
+bool pathfindingBuildFromHereEnabled()
+{
+	return (game.pathfindingBackend & PF_BUILD_FROM_HERE) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;

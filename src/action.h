@@ -95,6 +95,9 @@ bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 /** Check whether a droid is in the neighboring tile to a build position. */
 bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t direction, BASE_STATS const *psStats);
 
+/** Whether a stopped or blocked droid may join a build already under way from one tile outside the ring. */
+bool actionCanBuildFromHere(DROID const *psDroid, int x, int y, uint16_t dir, STRUCTURE_STATS const *psStats);
+
 /** Check that  two droids are next to each other */
 bool actionReachedDroid(DROID const *psDroid, DROID const *psOther);
 
