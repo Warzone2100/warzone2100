@@ -1416,7 +1416,7 @@ static int playerBoxHeight(uint32_t rowPosition)
 	bool hasPlayersTabs = widgGetFromID(psWScreen, MULTIOP_PLAYERS_TABS) != nullptr;
 	int playersTop = (hasPlayersTabs) ? MULTIOP_PLAYERS_TABS_H + 1 : 1;
 	int gap = (MULTIOP_PLAYERSH - playersTop) - MULTIOP_TEAMSHEIGHT * numSlotsToBeDisplayed();
-	int gapDiv = numSlotsToBeDisplayed() - 1;
+	int gapDiv = std::max(numSlotsToBeDisplayed() - 1, 1);
 	gap = std::min(gap, 5 * gapDiv);
 	if (hasPlayersTabs)
 	{
