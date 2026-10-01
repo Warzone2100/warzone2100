@@ -61,6 +61,7 @@ struct MovementMetrics
 	uint64_t repaths = 0;       ///< moveBlocked rerouted to the same destination
 	uint64_t shuffles = 0;      ///< moveShuffleDroid put a parked droid into MOVESHUFFLE
 	uint64_t shufflesNowhere = 0; ///< moveShuffleDroid found nowhere for the parked droid to go
+	uint64_t stillBumps = 0;    ///< a droid standing still with no bump clock was given one
 	std::map<uint32_t, uint32_t> hardStopsByDroid; ///< per-droid hard stops, feeds the concentration fields
 };
 

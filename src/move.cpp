@@ -84,6 +84,10 @@
 #define BLOCK_PAUSERELEASE 500
 // How far a droid has to move before it is no longer 'stationary'
 #define BLOCK_DIST		64
+// How long a droid moving to work may make no progress, with no bump clock running, before it is given one
+#define STILL_BUMP_TIME	5000
+// Progress smaller than this over that time counts as none
+#define STILL_DIST		32
 // How far a droid has to rotate before it is no longer 'stationary'
 #define BLOCK_DIR		90
 
@@ -2462,6 +2466,22 @@ static void checkLocalFeatures(DROID *psDroid)
 }
 
 
+static bool droidMovingToWork(const DROID *psDroid)
+{
+	switch (psDroid->action)
+	{
+	case DACTION_MOVETOBUILD:
+	case DACTION_MOVETODEMOLISH:
+	case DACTION_MOVETOREPAIR:
+	case DACTION_MOVETORESTORE:
+	case DACTION_MOVETODROIDREPAIR:
+		return true;
+	default:
+		return false;
+	}
+}
+
+
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
 {
@@ -2733,6 +2753,38 @@ void moveUpdateDroid(DROID *psDroid)
 	if (pathfindingCorridorLanesEnabled())
 	{
 		moveSpeed = corridorQueueSpeed(gameWorld, psDroid, moveSpeed);
+	}
+
+	// The blocked watchdog only runs from a bump, which a droid held still by the turn-rate limiter never
+	// gets. Start a bump clock for a droid moving to work that has made no progress for STILL_BUMP_TIME.
+	if (pathfindingStillBumpEnabled() && psDroid->sMove.Status == MOVEPOINTTOPOINT && moveSpeed > 0
+	    && psDroid->sMove.bumpTime == 0 && droidMovingToWork(psDroid)
+	    && psPropStats->propulsionType != PROPULSION_TYPE_LIFT)
+	{
+		const Vector2i d = psDroid->pos.xy() - psDroid->sMove.stillPos;
+		if (psDroid->sMove.stillSince == 0 || dot(d, d) > STILL_DIST * STILL_DIST)
+		{
+			psDroid->sMove.stillPos = psDroid->pos.xy();
+			psDroid->sMove.stillSince = gameTime;
+		}
+		else if (gameTime - psDroid->sMove.stillSince > STILL_BUMP_TIME)
+		{
+			objTrace(psDroid->id, "standing still with no bump clock, starting one");
+			psDroid->sMove.bumpTime = gameTime;
+			psDroid->sMove.lastBump = 0;
+			psDroid->sMove.pauseTime = 0;
+			psDroid->sMove.bumpPos = psDroid->pos;
+			psDroid->sMove.bumpDir = psDroid->rot.direction;
+			psDroid->sMove.stillSince = 0;
+			if (g_moveMetrics)
+			{
+				g_moveMetrics->stillBumps++;
+			}
+		}
+	}
+	else
+	{
+		psDroid->sMove.stillSince = 0;
 	}
 
 	// Update the movement model for the droid

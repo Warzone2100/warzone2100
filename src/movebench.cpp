@@ -649,6 +649,7 @@ void writeScorecard(bool completed)
 	card["repaths"] = metrics.repaths;
 	card["shuffles"] = metrics.shuffles;
 	card["shufflesNowhere"] = metrics.shufflesNowhere;
+	card["stillBumps"] = metrics.stillBumps;
 	card["pauseTicks"] = pauseTicks;
 	card["strandedPauseTicks"] = strandedPauseTicks;
 	card["overlapPairTicks"] = overlapPairTicks;

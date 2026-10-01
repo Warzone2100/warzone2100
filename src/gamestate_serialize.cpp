@@ -2117,6 +2117,8 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 	mv["backoffPos"] = writeVector2i(d->sMove.backoffPos);
 	mv["backoffTime"] = d->sMove.backoffTime;
 	mv["backoffUntil"] = d->sMove.backoffUntil;
+	mv["stillPos"] = writeVector2i(d->sMove.stillPos);
+	mv["stillSince"] = d->sMove.stillSince;
 	j["move"] = std::move(mv);
 
 	if (d->sMove.psFormation != nullptr)
@@ -2361,6 +2363,11 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	}
 	d->sMove.backoffTime = mv.value("backoffTime", static_cast<uint32_t>(0));
 	d->sMove.backoffUntil = mv.value("backoffUntil", static_cast<uint32_t>(0));
+	if (mv.contains("stillPos"))
+	{
+		d->sMove.stillPos = readVector2i(mv.at("stillPos"));
+	}
+	d->sMove.stillSince = mv.value("stillSince", static_cast<uint32_t>(0));
 	if (d->isVtol() && d->sMove.Status != MOVEINACTIVE)
 	{
 		d->rot.pitch = 0;
