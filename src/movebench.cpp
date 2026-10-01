@@ -42,6 +42,7 @@
 #include "order.h"
 
 #include <algorithm>
+#include <cstdlib>
 #include <map>
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -723,6 +724,11 @@ bool movementBenchSelectScenario(const std::string &name)
 	activeScenario = scenario;
 	activeTestConfig = scenario->testConfig;
 	g_moveMetrics = &metrics;
+	// WZ_MOVEBENCH_TRACE=<droid id> turns on the object trace for one droid.
+	if (const char *traceEnv = getenv("WZ_MOVEBENCH_TRACE"))
+	{
+		objTraceEnable(static_cast<UDWORD>(atoi(traceEnv)));
+	}
 	// Watched and headless runs of a scenario must be the same simulation, so
 	// the order-queue latency negotiation goes wall-clock-free for the bench.
 	gameTimeSetDeterministicLatency(true);
@@ -773,6 +779,31 @@ void movementBenchUpdate()
 	}
 
 	++tickCount;
+	if (tickCount == 1 && traceID != static_cast<UDWORD>(-1))
+	{
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		{
+			for (const DROID *psDroid : gameWorld.objects.droids[player])
+			{
+				debug(LOG_INFO, "movebench: droid id %u player %u type %d at (%d,%d)", psDroid->id, player, (int)psDroid->droidType, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y));
+			}
+		}
+	}
+	if (traceID != static_cast<UDWORD>(-1) && tickCount % 20 == 0)
+	{
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		{
+			for (const DROID *psDroid : gameWorld.objects.droids[player])
+			{
+				if (psDroid->id == traceID)
+				{
+					debug(LOG_INFO, "movebench: tick %u droid %u at (%d,%d) status %d action %d order %d speed %d bumpTime %u target (%d,%d) pathIndex %d/%zu",
+					      tickCount, psDroid->id, psDroid->pos.x, psDroid->pos.y, (int)psDroid->sMove.Status, (int)psDroid->action, (int)psDroid->order.type,
+					      psDroid->sMove.speed, psDroid->sMove.bumpTime, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.pathIndex, psDroid->sMove.asPath.size());
+				}
+			}
+		}
+	}
 	sampleDroids();
 	sampleMovementState();
 	sampleDensity();
