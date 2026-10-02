@@ -44,6 +44,7 @@
 #include "../challenge.h"
 #include "../console.h"
 #include "../hci.h"
+#include "../hud/hudskin.h"
 #include "../input/manager.h"
 #include "../loop.h"
 #include "../mission.h"
@@ -780,7 +781,7 @@ void InGameConsoleWidget::display(int xOffset, int yOffset)
 			}
 			for (auto &fragment : line.fragments)
 			{
-				fragment.text.render(x0 + LINE_PADDING_X + fragment.offset, y0 + LINE_PADDING_Y - aboveBase, textColor);
+				currentHudSkin().drawOverlayText(fragment.text, x0 + LINE_PADDING_X + fragment.offset, y0 + LINE_PADDING_Y - aboveBase, textColor);
 			}
 		}
 	}

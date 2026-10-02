@@ -29,6 +29,30 @@
 
 #include <algorithm>
 
+namespace
+{
+
+class TabSelectionButton : public W_BUTTON
+{
+public:
+	explicit TabSelectionButton(TabSelectionButtonRole role): role(role) {}
+
+	void display(int xOffset, int yOffset) override
+	{
+		auto owner = std::dynamic_pointer_cast<TabSelectionWidget>(parent());
+		if (owner != nullptr && owner->drawButtonFunction() && owner->drawButtonFunction()(*this, role, xOffset, yOffset))
+		{
+			return;
+		}
+		W_BUTTON::display(xOffset, yOffset);
+	}
+
+private:
+	TabSelectionButtonRole role;
+};
+
+}
+
 TabSelectionStyle::TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap, TabAlignment alignment)
 	: tabSize(tab.width(), tab.height())
 	, scrollTabSize(0, 0)
@@ -46,8 +70,8 @@ TabSelectionStyle::TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasIm
 
 void TabSelectionWidget::initialize()
 {
-	attach(prevTabPageButton = std::make_shared<W_BUTTON>());
-	attach(nextTabPageButton = std::make_shared<W_BUTTON>());
+	attach(prevTabPageButton = std::make_shared<TabSelectionButton>(TabSelectionButtonRole::PreviousPage));
+	attach(nextTabPageButton = std::make_shared<TabSelectionButton>(TabSelectionButtonRole::NextPage));
 
 	prevTabPageButton->addOnClickHandler([](W_BUTTON& button) {
 		auto pParent = std::static_pointer_cast<TabSelectionWidget>(button.parent());
@@ -110,6 +134,11 @@ void TabSelectionWidget::addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHAN
 	onTabChangedHandlers.push_back(onTabChangedFunc);
 }
 
+void TabSelectionWidget::setDrawButtonFunction(const W_TABSELECTION_DRAW_BUTTON_FUNC& drawButtonFunc)
+{
+	drawButton = drawButtonFunc;
+}
+
 void TabSelectionWidget::setNumberOfTabs(size_t tabs)
 {
 	tabs = std::max<size_t>(tabs, 1);
@@ -121,7 +150,7 @@ void TabSelectionWidget::setNumberOfTabs(size_t tabs)
 	tabButtons.resize(tabs);
 	for (size_t n = previousSize; n < tabButtons.size(); ++n)
 	{
-		attach(tabButtons[n] = std::make_shared<W_BUTTON>());
+		attach(tabButtons[n] = std::make_shared<TabSelectionButton>(TabSelectionButtonRole::Tab));
 		tabButtons[n]->addOnClickHandler([n](W_BUTTON& button) {
 			auto pParent = std::static_pointer_cast<TabSelectionWidget>(button.parent());
 			assert(pParent != nullptr);

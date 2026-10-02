@@ -471,6 +471,7 @@ src/hci/quickchat.cpp
 src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
+src/hud/hudmodernskin.cpp
 src/hud/hudreticule.cpp
 src/hud/hudsettings.cpp
 src/ingameop.cpp

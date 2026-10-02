@@ -812,14 +812,10 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 
-	// Draw the background image
-	iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	// Need to flash the timer when < 5 minutes remaining, but > 4 minutes
 	bool flash = UNPACKDWORD_TRI_A(psWidget->UserData);
-	if (flash && ((realTime / 250) % 2) == 0)
-	{
-		iV_DrawImage(IntImages, UNPACKDWORD_TRI_C(psWidget->UserData), x, y);
-	}
+	currentHudSkin().drawTimerBackground(x, y, UNPACKDWORD_TRI_B(psWidget->UserData), flash && ((realTime / 250) % 2) == 0,
+	                                     UNPACKDWORD_TRI_C(psWidget->UserData));
 }
 
 
@@ -1329,6 +1325,11 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset, bool withQuestionMar
 	else
 	{
 		ox = oy = 0;
+	}
+
+	if (withQuestionMark && hudSkin().drawFancyButtonEmpty(hudLook(xOffset, yOffset)))
+	{
+		return;
 	}
 
 	displayClear(xOffset, yOffset);

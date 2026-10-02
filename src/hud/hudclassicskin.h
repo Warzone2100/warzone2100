@@ -46,6 +46,7 @@ public:
 	void drawPowerBar(PowerBar &bar, int xOffset, int yOffset) override;
 	void drawButtonBar(W_BARGRAPH &bar, int xOffset, int yOffset) override;
 	void drawCloseButton(int x, int y, int width, int height, bool highlighted) override;
+	void drawTimerBackground(int x, int y, uint16_t image, bool flashOn, uint16_t flashImage) override;
 	nonstd::optional<WzTipStyle> tooltipStyle() const override;
 
 	void drawCard(const WzRect &rect, HudCardState state) override;

@@ -36,6 +36,7 @@
 #include "radar.h"
 #include "hci.h"
 #include "multiplay.h" //for game
+#include "hud/hudskin.h"
 #include <string>
 #include <sstream>
 #include <deque>
@@ -330,7 +331,14 @@ static void console_drawtext(WzText &display, PIELIGHT colour, int x, int y, CON
 		x = x + (width - display.width()) / 2;
 		break;
 	}
-	display.render(x, y, colour);
+	if (GetGameMode() == GS_NORMAL)
+	{
+		currentHudSkin().drawOverlayText(display, x, y, colour);
+	}
+	else
+	{
+		display.render(x, y, colour);
+	}
 }
 
 const std::deque<ConsoleFeedMessage> &getConsoleFeed()
