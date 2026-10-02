@@ -25,6 +25,8 @@
 #include "../warcam.h"
 #include "../geometry.h"
 #include "groups.h"
+#include "../power.h"
+#include "../hud/hudskin.h"
 
 void BaseObjectsController::clearSelection()
 {
@@ -223,6 +225,13 @@ void StatsFormButton::addCostBar()
 	attach(costBar = std::make_shared<HudButtonBar>(&sBarInit));
 	costBar->setBackgroundColour(WZCOL_BLACK);
 	costBar->setTransparentToMouse(true);
+}
+
+void StatsFormButton::tintCostBar()
+{
+	const uint32_t cost = getCost();
+	const bool affordable = selectedPlayer < MAX_PLAYERS && getPowerMinusQueued(selectedPlayer) >= static_cast<int32_t>(cost);
+	costBar->majorCol = currentHudSkin().statsCostBarColor(WZCOL_ACTION_PROGRESS_BAR_MAJOR, affordable);
 }
 
 void DynamicIntFancyButton::updateHighlight()

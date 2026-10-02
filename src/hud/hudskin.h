@@ -34,6 +34,7 @@
 #include "lib/framework/wzstring.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/widget/listwidget.h"
 #include "lib/widget/widget.h"
 
 class PowerBar;
@@ -145,12 +146,21 @@ public:
 	virtual void drawFancyButtonHighlight(const HudFancyButtonLook &look) = 0;
 	/// A factory or research facility on hold
 	virtual void drawFancyButtonOnHold(const HudFancyButtonLook &look) = 0;
+	/// A button with nothing to show (an idle factory's or research facility's job), instead of its background: false to
+	/// draw the background and the question mark image
+	virtual bool drawFancyButtonEmpty(const HudFancyButtonLook &) { return false; }
 	virtual void drawReticuleButton(const HudReticuleButtonLook &look) = 0;
 	virtual void drawPowerBar(PowerBar &bar, int xOffset, int yOffset) = 0;
 	/// The progress and cost bars inside the object and stats buttons
 	virtual void drawButtonBar(W_BARGRAPH &bar, int xOffset, int yOffset) = 0;
 	/// A panel's close button
 	virtual void drawCloseButton(int x, int y, int width, int height, bool highlighted) = 0;
+	/// A stats panel item's cost bar: `normal`, or (Modern) a warning when it can't be afforded now
+	virtual PIELIGHT statsCostBarColor(PIELIGHT normal, bool) const { return normal; }
+	/// A list's page tab or page scroll button (IntListTabWidget). False to draw its images
+	virtual bool drawPageTab(const WzRect &, TabSelectionButtonRole, bool, bool) { return false; }
+	/// The mission and transporter timers' background
+	virtual void drawTimerBackground(int x, int y, uint16_t image, bool flashOn, uint16_t flashImage) = 0;
 	virtual nonstd::optional<WzTipStyle> tooltipStyle() const = 0;
 
 	/// Shapes for HUD additions (modules, popovers), in the skin's style
@@ -158,9 +168,14 @@ public:
 	virtual void drawPill(const WzRect &rect, HudTone tone, bool filled) = 0;
 	virtual void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) = 0;
 	virtual void drawPopoverFrame(const WzRect &rect) = 0;
+	/// A text button in a panel's header (the research panel's View Tree): the text color,
+	/// or nothing to keep the panel's own look
+	virtual nonstd::optional<PIELIGHT> drawHeaderButton(const WzRect &, bool, bool) { return nonstd::nullopt; }
 	virtual PIELIGHT toneColor(HudTone tone) const = 0;
 	/// Text drawn over the 3D view (console, timers, status line), with an outline when that option is on
 	virtual void drawOverlayText(WzText &text, float x, float y, PIELIGHT color) = 0;
+	/// Free the text it keeps rendered (the in-game interface is shut down)
+	virtual void releaseCaches() {}
 };
 
 /// The skin to draw with now: the chosen one in a game, Classic everywhere else (the title screens)

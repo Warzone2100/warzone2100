@@ -29,9 +29,11 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/widget/button.h"
 #include "modding.h"
 
 #include "intimage.h"
+#include "hud/hudskin.h"
 
 #define INCEND	(0)
 
@@ -257,4 +259,9 @@ void IntListTabWidget::initialize()
 	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
 	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
 	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
+	tabWidget()->setDrawButtonFunction([](W_BUTTON &button, TabSelectionButtonRole role, int xOffset, int yOffset) {
+		const unsigned state = button.getState();
+		return currentHudSkin().drawPageTab(WzRect(xOffset + button.x(), yOffset + button.y(), button.width(), button.height()), role,
+		                                    (state & (WBUT_LOCK | WBUT_CLICKLOCK | WBUT_DOWN)) != 0, (state & WBUT_HIGHLIGHT) != 0);
+	});
 }

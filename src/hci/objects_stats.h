@@ -187,6 +187,8 @@ protected:
 	}
 
 	virtual uint32_t getCost() = 0;
+	/// The cost bar's color: whether it can be afforded now
+	void tintCostBar();
 
 	std::shared_ptr<W_BARGRAPH> costBar;
 };

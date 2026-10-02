@@ -53,6 +53,13 @@ struct TabSelectionStyle
 
 class ListWidget;
 
+enum class TabSelectionButtonRole
+{
+	Tab,
+	PreviousPage,
+	NextPage
+};
+
 class TabSelectionWidget : public WIDGET
 {
 protected:
@@ -81,6 +88,11 @@ public:
 
 	void addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHANGED_FUNC& onTabChangedFunc);
 
+	/// Draws a tab or page button instead of its style's images, unless it returns false
+	typedef std::function<bool (W_BUTTON& button, TabSelectionButtonRole role, int xOffset, int yOffset)> W_TABSELECTION_DRAW_BUTTON_FUNC;
+	void setDrawButtonFunction(const W_TABSELECTION_DRAW_BUTTON_FUNC& drawButtonFunc);
+	const W_TABSELECTION_DRAW_BUTTON_FUNC& drawButtonFunction() const { return drawButton; }
+
 public:
 	void setTab(size_t tab);
 	void setNumberOfTabs(size_t tabs);
@@ -104,6 +116,7 @@ private:
 	std::shared_ptr<W_BUTTON> prevTabPageButton;
 	std::shared_ptr<W_BUTTON> nextTabPageButton;
 	std::vector<W_TABSELECTION_ON_TAB_CHANGED_FUNC> onTabChangedHandlers;
+	W_TABSELECTION_DRAW_BUTTON_FUNC drawButton;
 };
 
 class ListWidget : public WIDGET

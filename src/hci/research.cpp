@@ -30,6 +30,7 @@
 #include "../component.h"
 #include "../mission.h"
 #include "../screens/researchtreescreen.h"
+#include "../hud/hudskin.h"
 
 #include <algorithm>
 
@@ -574,6 +575,7 @@ private:
 	void updateCostBar(RESEARCH *stat)
 	{
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
+		tintCostBar();
 	}
 
 	void updateAllyStatus(RESEARCH *research)
@@ -693,12 +695,19 @@ public:
 		const bool down = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
 		const bool over = (getState() & WBUT_HIGHLIGHT) != 0;
 
-		const PIELIGHT fill = down ? WZCOL_MENU_SCORE_BUILT
-			: (over ? RESEARCH_HEADER_FILL_OVER : RESEARCH_HEADER_FILL);
-		const PIELIGHT border = (down || over) ? WZCOL_TEXT_BRIGHT : RESEARCH_HEADER_BORDER;
-		const PIELIGHT ink = (down || over) ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT;
-		pie_DrawRoundedBox(x0, y0, x0 + static_cast<float>(width()), y0 + static_cast<float>(height()),
-		                   fill, 2.f, border, 1.f);
+		PIELIGHT ink = (down || over) ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT;
+		if (auto skinned = currentHudSkin().drawHeaderButton(WzRect(xOffset + x(), yOffset + y(), width(), height()), over, down))
+		{
+			ink = *skinned;
+		}
+		else
+		{
+			const PIELIGHT fill = down ? WZCOL_MENU_SCORE_BUILT
+				: (over ? RESEARCH_HEADER_FILL_OVER : RESEARCH_HEADER_FILL);
+			const PIELIGHT border = (down || over) ? WZCOL_TEXT_BRIGHT : RESEARCH_HEADER_BORDER;
+			pie_DrawRoundedBox(x0, y0, x0 + static_cast<float>(width()), y0 + static_cast<float>(height()),
+			                   fill, 2.f, border, 1.f);
+		}
 
 		fitTo(width() - PAD_X * 2);
 		const float baseline = y0 + (static_cast<float>(height()) - m_text.lineSize()) / 2.f - m_text.aboveBase();

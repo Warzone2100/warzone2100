@@ -178,6 +178,15 @@ void ClassicHudSkin::drawCloseButton(int x, int y, int, int, bool highlighted)
 	}
 }
 
+void ClassicHudSkin::drawTimerBackground(int x, int y, uint16_t image, bool flashOn, uint16_t flashImage)
+{
+	iV_DrawImage(IntImages, image, x, y);
+	if (flashOn)
+	{
+		iV_DrawImage(IntImages, flashImage, x, y);
+	}
+}
+
 nonstd::optional<WzTipStyle> ClassicHudSkin::tooltipStyle() const
 {
 	return nonstd::nullopt;

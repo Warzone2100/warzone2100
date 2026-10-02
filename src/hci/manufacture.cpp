@@ -577,6 +577,7 @@ private:
 			intSetShadowPower(getCost());
 		}
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
+		tintCostBar();
 		updateProductionRunSizeLabel(controller->getHighlightedObject(), getStats());
 	}
 

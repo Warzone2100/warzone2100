@@ -133,6 +133,7 @@ void hudShutdown()
 {
 	hudCloseTransientUi();
 	destroyModules();
+	modernHudSkin().releaseCaches();
 	initialized = false;
 	rebuildPending = false;
 }
