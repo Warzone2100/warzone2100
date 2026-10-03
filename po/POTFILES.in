@@ -471,9 +471,12 @@ src/hci/quickchat.cpp
 src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
+src/hud/hudbuildcategories.cpp
+src/hud/huddetailcontents.cpp
 src/hud/hudmodernskin.cpp
 src/hud/hudreticule.cpp
 src/hud/hudsettings.cpp
+src/hud/hudunittypes.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp

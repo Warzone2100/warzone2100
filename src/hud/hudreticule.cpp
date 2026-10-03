@@ -26,6 +26,8 @@
 */
 
 #include "hudreticule.h"
+#include "huddetail.h"
+#include "huddetailcontents.h"
 #include "hudkeys.h"
 
 #include "lib/framework/frame.h"
@@ -81,10 +83,30 @@ WidgetHelp reticuleButtonHelp(int slot)
 	return help;
 }
 
-class ReticuleButton : public W_BUTTON
+class ReticuleButton : public W_BUTTON, public HudDetailSource
 {
 public:
 	using W_BUTTON::W_BUTTON;
+
+	bool hasHudDetail() override
+	{
+		return UserData < RETICULE_BUTTONS && !W_BUTTON::getTip().empty() && intCheckReticuleButEnabled(id);
+	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		if (!hasHudDetail())
+		{
+			return nullptr;
+		}
+		const char *keyFunction = reticuleKeyFunctions[UserData];
+		return hudReticuleDetail(static_cast<int>(UserData), W_BUTTON::getTip(), keyFunction != nullptr ? keyFunction : "");
+	}
+
+	HudDetailPlacement hudDetailPlacement() const override
+	{
+		return HudDetailPlacement::Right;
+	}
 
 	std::string getTip() override
 	{

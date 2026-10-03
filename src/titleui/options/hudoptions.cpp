@@ -101,6 +101,29 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 		);
 		form->addOption(optionInfo, valueChanger, true);
 	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.tooltipDelay", N_("Tooltip Delay"), N_("How long the pointer rests on something before its tooltip shows."));
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			[]() {
+				OptionChoices<uint32_t> result;
+				result.choices = {
+					{ _("Short (0.1 s)"), "", 100 },
+					{ _("Normal (0.2 s)"), "", 200 },
+					{ _("Long (0.4 s)"), "", 400 },
+					{ _("Very long (0.8 s)"), "", 800 },
+				};
+				result.setCurrentIdxForValue(hudSettings().tooltipDelay);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.tooltipDelay = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
 	for (size_t i = 0; i < HUD_MODULE_COUNT; ++i)
 	{
 		const auto module = static_cast<HudModuleId>(i);

@@ -30,6 +30,7 @@
 #include "lib/widget/label.h"
 #include "lib/widget/paragraph.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/framework/input.h"
 
@@ -45,6 +46,7 @@ static constexpr int ACTIONS_HEIGHT = 18;
 static constexpr int BADGE_HEIGHT = 15;
 static constexpr int TITLE_HEIGHT = 18;
 static constexpr int STATS_Y = 41;
+static constexpr int COMPACT_STATS_Y = 24;
 static constexpr int STATUS_HEIGHT = 14;
 static constexpr float READABLE_COLOR_LUMINANCE = 140.f;
 static constexpr int BADGE_GAP = 5;
@@ -97,7 +99,10 @@ public:
 		                    pal_RGBA(0, 0, 0, 120));
 		if (m_drawModel)
 		{
+			// Nearer than the models of the buttons the panel may cover
+			gfx_api::context::get().set_depth_range(0.f, 0.01f);
 			m_drawModel(x0, y0, width(), height());
+			pie_BeginInterface();
 		}
 	}
 
@@ -505,7 +510,7 @@ public:
 		int32_t wanted = m_standing.width();
 		if (!m_names.empty())
 		{
-			wanted += static_cast<int32_t>(GAP) + m_prefix.width() + static_cast<int32_t>(SPACE);
+			wanted += (m_standing.getText().isEmpty() ? 0 : static_cast<int32_t>(GAP)) + m_prefix.width() + static_cast<int32_t>(SPACE);
 			for (auto& name : m_names)
 			{
 				wanted += name.text.width();
@@ -518,9 +523,10 @@ public:
 	{
 		const float left = static_cast<float>(xOffset + x());
 		const float right = left + static_cast<float>(width());
+		WzText &metrics = m_standing.getText().isEmpty() ? m_prefix : m_standing;
 		const float baseline = static_cast<float>(yOffset + y())
-			+ (static_cast<float>(height()) - static_cast<float>(m_standing.lineSize())) / 2.f
-			- static_cast<float>(m_standing.aboveBase());
+			+ (static_cast<float>(height()) - static_cast<float>(metrics.lineSize())) / 2.f
+			- static_cast<float>(metrics.aboveBase());
 		float at = left;
 		const auto put = [&](WzText& text, PIELIGHT color) {
 			text.render(at, baseline, color);
@@ -540,7 +546,10 @@ public:
 		{
 			return;
 		}
-		at += GAP;
+		if (!m_standing.getText().isEmpty())
+		{
+			at += GAP;
+		}
 		if (!fits(m_prefix))
 		{
 			return;
@@ -749,7 +758,7 @@ void DetailPanelContents::geometryChanged()
 			{
 				statWidth = std::max(20, (availableWidth - gaps) / static_cast<int>(m_stats.size()));
 			}
-			m_stats[i]->setGeometry(at, PADDING + STATS_Y, statWidth, DetailPanelStat::STAT_HEIGHT);
+			m_stats[i]->setGeometry(at, PADDING + statsY(), statWidth, DetailPanelStat::STAT_HEIGHT);
 			at += statWidth + BADGE_GAP;
 		}
 	}
@@ -762,7 +771,7 @@ void DetailPanelContents::geometryChanged()
 		}
 		else
 		{
-			m_status->setGeometry(textX, PADDING + STATS_Y,
+			m_status->setGeometry(textX, PADDING + statsY(),
 			                      std::min(m_status->idealWidth(), std::max(10, width() - textX - PADDING)), BADGE_HEIGHT);
 		}
 	}
@@ -802,13 +811,19 @@ int DetailPanelContents::headerHeight() const
 	int text = m_title ? TITLE_HEIGHT : 0;
 	if (!m_stats.empty())
 	{
-		text = STATS_Y + DetailPanelStat::STAT_HEIGHT;
+		text = statsY() + DetailPanelStat::STAT_HEIGHT;
 	}
 	else if (m_status && !statusInBar())
 	{
-		text = STATS_Y + BADGE_HEIGHT;
+		text = statsY() + BADGE_HEIGHT;
 	}
 	return std::max(m_model ? m_modelSize : 0, text);
+}
+
+int DetailPanelContents::statsY() const
+{
+	// Without a line under the title, the stats go right under it
+	return (m_group || m_subtitle) ? STATS_Y : COMPACT_STATS_Y;
 }
 
 int DetailPanelContents::statusBarHeight() const

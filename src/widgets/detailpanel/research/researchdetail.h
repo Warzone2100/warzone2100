@@ -63,11 +63,22 @@ struct ResearchDetailSubject
 struct ResearchDetailOptions
 {
 	DetailPanelStyle style = DetailPanelStyle::researchTree();
+	/// A smaller panel (the HUD's): a smaller model, no authored description, and short lists
+	bool compact = false;
+	/// (compact) The most entries in a list ("Unlocks", "Replaces") before "+N more"
+	size_t maxListEntries = 4;
+	/// The status of a topic that's available or being researched (without it, only the allies researching it)
+	bool routineStatus = true;
+	/// The list of what the topic requires
+	bool requirements = true;
 };
 
 /// Contents for a popover describing one research topic.
 /// `width` is what the panel takes unless its header wants more, `maxWidth` is the limit.
 std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const ResearchDetailSubject& subject, const ResearchTreeContext& context, int32_t width, int32_t maxWidth, const ResearchDetailActions& actions = ResearchDetailActions(), const ResearchDetailOptions& options = ResearchDetailOptions());
+
+/// The topic as the live game sees it for a player (its state from the player's research list)
+ResearchDetailSubject researchDetailSubjectForPlayer(uint16_t researchIndex, uint32_t player);
 
 /// All a panel says about a topic that may not be described: that there is something there
 std::shared_ptr<DetailPanelContents> makeUndiscoveredResearchDetailContents(int32_t width);

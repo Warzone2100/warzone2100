@@ -26,6 +26,7 @@
 */
 
 #include "hudmodules.h"
+#include "huddetail.h"
 
 std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
 {
@@ -47,4 +48,5 @@ std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
 
 void hudCloseTransientUi()
 {
+	hudDetailClose();
 }

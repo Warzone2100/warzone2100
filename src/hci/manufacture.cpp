@@ -23,6 +23,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "manufacture.h"
+#include "../hud/huddetailcontents.h"
 #include "../hud/hudtext.h"
 #include "../mission.h"
 #include "../qtscript.h"
@@ -585,6 +586,11 @@ private:
 	{
 		DROID_TEMPLATE* psTemplate = getStats();
 		return psTemplate ? calcTemplatePower(psTemplate) : 0;
+	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		return hudTemplateDetail(getStats(), controller->getHighlightedObject());
 	}
 
 	std::string getTip() override

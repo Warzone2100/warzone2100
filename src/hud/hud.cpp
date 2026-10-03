@@ -26,6 +26,7 @@
 */
 
 #include "hud.h"
+#include "huddetail.h"
 #include "hudmodel.h"
 #include "hudskin.h"
 #include "hudmodules.h"
@@ -147,6 +148,14 @@ void hudUpdate()
 	for (auto &module : modules)
 	{
 		module->update();
+	}
+}
+
+void hudFrame()
+{
+	if (initialized)
+	{
+		hudDetailUpdate();
 	}
 }
 

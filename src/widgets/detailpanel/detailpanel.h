@@ -94,6 +94,7 @@ public:
 private:
 	void recalcHeight();
 	int headerHeight() const;
+	int statsY() const;
 	bool statusInBar() const;
 	int statusBarHeight() const;
 	// Whether the header has anything under it to be divided from.

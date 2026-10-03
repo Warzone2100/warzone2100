@@ -22,6 +22,7 @@
 
 #include "../hci.h"
 #include "../intdisplay.h"
+#include "../hud/huddetail.h"
 
 #define STAT_GAP	   2
 #define STAT_BUTWIDTH  60
@@ -142,13 +143,15 @@ protected:
 	std::shared_ptr<W_BARGRAPH> progressBar;
 };
 
-class ObjectButton : public DynamicIntFancyButton
+class ObjectButton : public DynamicIntFancyButton, public HudDetailSource
 {
 public:
 	ObjectButton()
 	{
 		buttonType = BTMBUTTON;
 	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override;
 
 protected:
 	bool isHighlighted() const override
@@ -170,10 +173,15 @@ private:
 	Vector2i jumpPosition = {0, 0};
 };
 
-class StatsFormButton : public StatsButton
+class StatsFormButton : public StatsButton, public HudDetailSource
 {
 public:
 	void addCostBar();
+
+	HudDetailPlacement hudDetailPlacement() const override
+	{
+		return HudDetailPlacement::Right;
+	}
 
 protected:
 	std::string getTip() override

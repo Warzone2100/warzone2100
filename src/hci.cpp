@@ -98,6 +98,8 @@
 #include "hud/hudmodel.h"
 #include "hud/hudskin.h"
 #include "hud/hud.h"
+#include "hud/huddetail.h"
+#include "hud/huddetailcontents.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -1745,6 +1747,8 @@ bool intConsoleShown()
 /* Display the widgets for the in game interface */
 void intDisplayWidgets()
 {
+	hudFrame();
+
 	if (intConsoleShown())
 	{
 		displayConsoleMessages();
@@ -2165,6 +2169,7 @@ bool intAddPower()
 		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 	}));
 
+	hudDetailRegister(psBarGraph, HudDetailProvider{hudPowerDetail, HudDetailPlacement::Above});
 	psBarGraph->setHelp(WidgetHelp()
 		.setTitle(_("Power"))
 		.setDescription(_("The power you have left once everything queued is paid for. Pointing at something to build shows its cost on the bar. It turns red when the queue costs more than you have.")));
