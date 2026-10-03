@@ -35,6 +35,22 @@
 		"usageClass": "Cyborg",
 		"weight": 50
 	},
+	"CyborgLegsSuper": {
+		"buildPoints": 50,
+		"buildPower": 10,
+		"deceleration": 450,
+		"hitpointPctOfBody": 50,
+		"id": "CyborgLegsSuper",
+		"model": "scbd_std.pie",
+		"name": "Super Cyborg Propulsion",
+		"speed": 400,
+		"spinAngle": 45,
+		"spinSpeed": 450,
+		"turnSpeed": 225,
+		"type": "Legged-Super",
+		"usageClass": "SuperCyborg",
+		"weight": 50
+	},
 	"HalfTrack": {
 		"buildPoints": 75,
 		"buildPower": 75,
