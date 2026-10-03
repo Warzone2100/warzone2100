@@ -30,6 +30,7 @@
 #include "../map.h"
 #include "../game_world.h"
 #include "../stats.h"
+#include "../hud/huddetailcontents.h"
 #include "../hud/hudtext.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
@@ -523,6 +524,11 @@ private:
 	{
 		STRUCTURE_STATS * psStats = getStats();
 		return psStats ? psStats->powerToBuild : 0;
+	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		return hudStructureDetail(getStats(), controller->constructionPointsPerSecond());
 	}
 
 	std::string getTip() override

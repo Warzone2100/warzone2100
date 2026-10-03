@@ -26,6 +26,7 @@
 #include "../geometry.h"
 #include "groups.h"
 #include "../power.h"
+#include "../hud/huddetailcontents.h"
 #include "../hud/hudskin.h"
 
 void BaseObjectsController::clearSelection()
@@ -486,3 +487,9 @@ void StatsForm::removeLastButton()
 	}
 }
 
+
+std::shared_ptr<WIDGET> ObjectButton::makeHudDetail()
+{
+	auto &controller = getController();
+	return objectIndex < controller.objectsSize() ? hudObjectDetail(controller.getObjectAt(objectIndex)) : nullptr;
+}

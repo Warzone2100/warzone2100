@@ -34,7 +34,7 @@
 
 /// What a reticule button opens, and its key
 WidgetHelp reticuleButtonHelp(int slot);
-/// A reticule button, whose tooltip names its key
+/// A reticule button, whose tooltip names its key (and which gives the HUD's detail popover)
 std::shared_ptr<W_BUTTON> makeReticuleButton(const W_BUTINIT *init);
 
 #endif // __INCLUDED_SRC_HUD_HUDRETICULE_H__

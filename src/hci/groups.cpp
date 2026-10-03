@@ -22,6 +22,7 @@
 #include "objects_stats.h"
 #include "../group.h"
 #include "../game_world.h"
+#include "../hud/huddetailcontents.h"
 
 static bool groupButtonEnabled = true;
 
@@ -103,7 +104,7 @@ private:
 	std::array<GroupDisplayInfo, 10> groupInfo;
 };
 
-class GroupButton : public DynamicIntFancyButton
+class GroupButton : public DynamicIntFancyButton, public HudDetailSource
 {
 private:
 	typedef DynamicIntFancyButton BaseWidget;
@@ -116,6 +117,11 @@ private:
 protected:
 	GroupButton() : DynamicIntFancyButton() { }
 public:
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		return hudGroupDetail(static_cast<unsigned>(groupNumber));
+	}
+
 	static std::shared_ptr<GroupButton> make(const std::shared_ptr<GroupsUIController>& controller, size_t groupNumber)
 	{
 		class make_shared_enabler: public GroupButton {};

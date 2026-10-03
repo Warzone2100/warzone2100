@@ -1,0 +1,5 @@
+{
+	"base": { "name": "Base", "order": 10 },
+	"defense": { "name": "Defense", "order": 20 },
+	"support": { "name": "Support", "order": 30 }
+}

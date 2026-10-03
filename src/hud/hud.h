@@ -56,6 +56,8 @@ public:
 void hudInitialize();
 void hudShutdown();
 void hudUpdate();
+/// Each frame, before the widgets are drawn
+void hudFrame();
 /// The scripts showed or hid the interface (showInterface(), hideInterface())
 void hudInterfaceShown(bool shown);
 

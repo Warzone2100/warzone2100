@@ -30,6 +30,7 @@
 #include "../component.h"
 #include "../mission.h"
 #include "../screens/researchtreescreen.h"
+#include "../hud/huddetailcontents.h"
 #include "../hud/hudskin.h"
 
 #include <algorithm>
@@ -516,6 +517,11 @@ private:
 	RESEARCH *getStats() override
 	{
 		return controller->getStatsAt(researchOptionIndex);
+	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		return hudResearchDetail(getStats());
 	}
 
 	void initialize()

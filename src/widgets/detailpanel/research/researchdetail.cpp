@@ -45,7 +45,70 @@
 
 static constexpr int PADDING = DetailPanelContents::PADDING;
 static constexpr int MODEL_SIZE = DetailPanelContents::MODEL_SIZE;
+static constexpr int COMPACT_MODEL_SIZE = 48;
 static constexpr int BADGE_GAP = 5;
+
+ResearchDetailSubject researchDetailSubjectForPlayer(uint16_t researchIndex, uint32_t player)
+{
+	ResearchDetailSubject topic;
+	topic.researchIndex = researchIndex;
+	if (player >= MAX_PLAYERS || researchIndex >= asResearch.size() || researchIndex >= asPlayerResList[player].size())
+	{
+		return topic;
+	}
+	const PLAYER_RESEARCH *state = &asPlayerResList[player][researchIndex];
+	if (IsResearchCompleted(state))
+	{
+		topic.state = NodeState::Researched;
+	}
+	else if (IsResearchDisabled(state))
+	{
+		topic.state = NodeState::Disabled;
+	}
+	else if (IsResearchStartedPending(state) && !IsResearchCancelledPending(state))
+	{
+		topic.state = NodeState::InProgress;
+	}
+	else if (researchAvailable(researchIndex, player, ModeQueue))
+	{
+		topic.state = NodeState::Available;
+	}
+	const RESEARCH &research = asResearch[researchIndex];
+	if (!research.category.isEmpty() && research.categoryMax > 1)
+	{
+		topic.stepText = WzString::format(_("step %u of %u"), static_cast<unsigned>(research.categoryProgress), static_cast<unsigned>(research.categoryMax));
+	}
+	topic.prerequisiteDone = [player](uint16_t prereqIndex) {
+		return prereqIndex < asPlayerResList[player].size() && IsResearchCompleted(&asPlayerResList[player][prereqIndex]);
+	};
+	return topic;
+}
+
+// "+N more" after the first few of a list that would not fit
+template <typename Entries, typename Name>
+static void addListEntries(const std::shared_ptr<Paragraph>& paragraph, const Entries& entries, size_t limit, Name&& name)
+{
+	size_t shown = 0;
+	size_t total = 0;
+	for (const auto& entry : entries)
+	{
+		WzString text = name(entry);
+		if (text.isEmpty())
+		{
+			continue;
+		}
+		++total;
+		if (shown < limit)
+		{
+			paragraph->addText(text + "\n");
+			++shown;
+		}
+	}
+	if (total > shown)
+	{
+		paragraph->addText(WzString::fromUtf8(astringf(_("+%u more"), static_cast<unsigned>(total - shown))) + "\n");
+	}
+}
 
 // Combined output of every research facility the player has running
 static int playerResearchRate(uint32_t player)
@@ -193,6 +256,11 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		}
 	}
 
+	if (!options.routineStatus && (state == NodeState::Available || state == NodeState::InProgress))
+	{
+		standing = WzString();
+	}
+
 	auto onIt = alliesResearching(context, subject);
 	if (state == NodeState::Researched)
 	{
@@ -237,11 +305,11 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		status = makeDetailPanelStatusLine(standing, standingTextColor,
 		                                   WzString::fromUtf8(_("Researching this now:")), onIt);
 	}
-	else if (stats.empty())
+	else if (!standing.isEmpty() && stats.empty())
 	{
 		status = makeDetailPanelBadge(standing, standingFill, standingTextColor);
 	}
-	else
+	else if (!standing.isEmpty())
 	{
 		auto line = std::make_shared<W_LABEL>();
 		line->setFont(font_small, standingTextColor);
@@ -257,21 +325,22 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		group = makeDetailPanelBadge(groupName, pal_RGBA(40, 40, 40, 255), WZCOL_FORM_TEXT);
 	}
 
+	const int modelSize = options.compact ? COMPACT_MODEL_SIZE : MODEL_SIZE;
 	// The title and the badges beside the model do not wrap, and a long progression name next to a
 	// long status runs off the end of the header without this.
 	{
 		const int32_t asked = width;
-		const int textX = PADDING + MODEL_SIZE + PADDING;
+		const int textX = PADDING + modelSize + PADDING;
 		// A status shown as a bar spans the panel rather than sharing the header row, so
 		// what it wants bounds the panel and not that row
 		const bool statusIsBar = !stats.empty();
-		int badges = statusIsBar ? 0 : status->idealWidth();
+		int badges = (statusIsBar || !status) ? 0 : status->idealWidth();
 		if (group)
 		{
 			badges += (badges > 0 ? BADGE_GAP : 0) + group->idealWidth();
 		}
 		width = std::max(width, textX + std::max(title->idealWidth(), badges) + PADDING);
-		if (statusIsBar)
+		if (statusIsBar && status)
 		{
 			width = std::max(width, PADDING + status->idealWidth() + PADDING);
 		}
@@ -317,7 +386,7 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 	}
 
 	// The authored description that the intelligence screen already shows for this topic
-	if (research.pViewData != nullptr && !research.pViewData->textMsg.empty())
+	if (!options.compact && research.pViewData != nullptr && !research.pViewData->textMsg.empty())
 	{
 		paragraph->addText("\n");
 		for (const auto& line : research.pViewData->textMsg)
@@ -351,7 +420,7 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		prereqs.push_back({WzString::fromUtf8(getLocalizedStatsName(&asResearch[prereqIndex])), done});
 	}
 	std::shared_ptr<WIDGET> checklist;
-	if (!prereqs.empty())
+	if (options.requirements && !prereqs.empty())
 	{
 		checklist = makeDetailPanelChecklist(WzString::fromUtf8(_("Requires")), std::move(prereqs));
 	}
@@ -359,7 +428,24 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 	// Resume the running text after the checklist widget
 	auto after = makeDetailPanelParagraph(width - PADDING * 2);
 
-	if (!research.componentResults.empty() || !research.pStructureResults.empty())
+	if (options.compact)
+	{
+		std::vector<WzString> unlocks;
+		for (const auto *component : research.componentResults)
+		{
+			unlocks.push_back(component != nullptr ? WzString::fromUtf8(getLocalizedStatsName(component)) : WzString());
+		}
+		for (const auto structIndex : research.pStructureResults)
+		{
+			unlocks.push_back(structIndex < numStructureStats ? WzString::fromUtf8(getLocalizedStatsName(&asStructureStats[structIndex])) : WzString());
+		}
+		if (!unlocks.empty())
+		{
+			detailPanelAddSection(after, WzString::fromUtf8(_("Unlocks")));
+			addListEntries(after, unlocks, options.maxListEntries, [](const WzString& name) { return name; });
+		}
+	}
+	else if (!research.componentResults.empty() || !research.pStructureResults.empty())
 	{
 		detailPanelAddSection(after, WzString::fromUtf8(_("Unlocks")));
 		for (const auto *component : research.componentResults)
@@ -378,7 +464,7 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		}
 	}
 
-	if (!research.pRedArtefacts.empty() || !research.pRedStructs.empty())
+	if (!options.compact && (!research.pRedArtefacts.empty() || !research.pRedStructs.empty()))
 	{
 		detailPanelAddSection(after, WzString::fromUtf8(_("Replaces")));
 		for (const auto *component : research.pRedArtefacts)
@@ -397,6 +483,16 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		}
 	}
 
+	if (!checklist)
+	{
+		// (a paragraph only lays its text out when its width changes, and the list reads its height. The checklist
+		// otherwise brings that about)
+		for (const auto &text : {paragraph, after})
+		{
+			text->setGeometry(0, 0, text->width() - 1, text->height());
+			text->setGeometry(0, 0, text->width() + 1, text->height());
+		}
+	}
 	auto body = ScrollableListWidget::make();
 	body->addItem(paragraph);
 	if (checklist)
@@ -412,5 +508,5 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 			                             static_cast<UDWORD>(std::min(modelWidth, modelHeight)));
 		}
 	});
-	return DetailPanelContents::make(std::move(model), std::move(title), std::move(subtitle), std::move(group), std::move(status), std::move(stats), std::move(body), makeActionRow(actions), width, options.style);
+	return DetailPanelContents::make(std::move(model), std::move(title), std::move(subtitle), std::move(group), std::move(status), std::move(stats), std::move(body), makeActionRow(actions), width, options.style, DetailStatusPlacement::Automatic, modelSize);
 }

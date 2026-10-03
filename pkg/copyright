@@ -506,17 +506,22 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/hci/quickchat.*
        src/hci/teamstrategy.*
        src/hud/hud.*
+       src/hud/hudbuildcategories.*
        src/hud/hudclassicskin.h
+       src/hud/huddetail.*
+       src/hud/huddetailcontents.*
        src/hud/hudgeometrydump.*
        src/hud/hudids.h
        src/hud/hudkeys.*
        src/hud/hudmodel.*
        src/hud/hudmodernskin.cpp
        src/hud/hudmodules.*
+       src/hud/hudobjectinfo.*
        src/hud/hudreticule.*
        src/hud/hudsettings.*
        src/hud/hudskin.*
        src/hud/hudtext.h
+       src/hud/hudunittypes.*
        src/input/gamepadbindings.*
        src/input/gamepadcursor.*
        src/movebench.*
