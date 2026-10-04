@@ -30,6 +30,7 @@
 
 #include <cstdint>
 #include <deque>
+#include <string>
 
 #include <nonstd/optional.hpp>
 
@@ -54,6 +55,35 @@ public:
 		unsigned derricks = 0;
 		unsigned unusedDerricks = 0;
 		unsigned generators = 0;
+
+		/// "12 derricks · 3 generators · 0 unpowered"
+		std::string derrickSummary() const;
+	};
+
+	/// Units against the limit, counted exactly as the limit check counts them
+	struct Units
+	{
+		unsigned count = 0;
+		unsigned limit = 0;
+		bool atLimit = false;
+	};
+
+	struct Research
+	{
+		unsigned facilities = 0;
+		unsigned active = 0;
+		unsigned onHold = 0;
+		unsigned waitingForPower = 0;
+		/// The topic that will finish first, and in how long
+		nonstd::optional<uint16_t> nextTopic;
+		unsigned nextSeconds = 0;
+	};
+
+	struct Idle
+	{
+		unsigned trucks = 0;
+		unsigned factories = 0;
+		unsigned researchFacilities = 0;
 	};
 
 	/// Called by the HUD every REFRESH_INTERVAL_MS of real time
@@ -62,6 +92,9 @@ public:
 	void reset();
 
 	const Power &power() const { return powerInfo; }
+	const Units &units() const { return unitsInfo; }
+	const Research &research() const { return researchInfo; }
+	const Idle &idle() const { return idleInfo; }
 
 private:
 	struct PowerSample
@@ -71,8 +104,12 @@ private:
 	};
 
 	void updatePower(unsigned player);
+	void updateObjects(unsigned player);
 
 	Power powerInfo;
+	Units unitsInfo;
+	Research researchInfo;
+	Idle idleInfo;
 	std::deque<PowerSample> powerSamples;
 	nonstd::optional<uint32_t> lastUpdateGameTime;
 };

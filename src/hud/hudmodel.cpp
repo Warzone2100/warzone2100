@@ -26,13 +26,19 @@
 */
 
 #include "hudmodel.h"
+#include "hudobjectinfo.h"
 
 #include "lib/framework/frame.h"
 #include "lib/gamelib/gtime.h"
 
+#include "../droid.h"
 #include "../game_world.h"
+#include "../intdisplay.h"
+#include "../selectionidle.h"
+#include "../loop.h"
 #include "../objmem.h"
 #include "../power.h"
+#include "../research.h"
 #include "../structure.h"
 
 constexpr int64_t POWER_FIXED_POINT_ONE = int64_t(1) << 32;
@@ -48,6 +54,9 @@ HudModel &hudModel()
 void HudModel::reset()
 {
 	powerInfo = Power();
+	unitsInfo = Units();
+	researchInfo = Research();
+	idleInfo = Idle();
 	powerSamples.clear();
 	lastUpdateGameTime = nonstd::nullopt;
 }
@@ -68,6 +77,57 @@ void HudModel::update()
 		return;
 	}
 	updatePower(selectedPlayer);
+	updateObjects(selectedPlayer);
+}
+
+std::string HudModel::Power::derrickSummary() const
+{
+	return astringf("%s · %s · %s", astringf(ngettext("%u derrick", "%u derricks", derricks), derricks).c_str(),
+	                astringf(ngettext("%u generator", "%u generators", generators), generators).c_str(),
+	                astringf(_("%u unpowered"), unusedDerricks).c_str());
+}
+
+void HudModel::updateObjects(unsigned player)
+{
+	unitsInfo.count = getNumDroids(player) + getNumMissionDroids(player) + getNumTransporterDroids(player);
+	unitsInfo.limit = static_cast<unsigned>(std::max(0, getMaxDroids(player)));
+	unitsInfo.atLimit = IsPlayerDroidLimitReached(player);
+
+	researchInfo = Research();
+	idleInfo = Idle();
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
+	{
+		if (psStruct->status != SS_BUILT || psStruct->died)
+		{
+			continue;
+		}
+		const STRUCTURE_TYPE type = psStruct->pStructureType->type;
+		if (type == REF_RESEARCH)
+		{
+			++researchInfo.facilities;
+			const auto job = hudStructureJob(psStruct);
+			if (job.has_value() && job->subject != nullptr)
+			{
+				++researchInfo.active;
+				researchInfo.onHold += job->onHold ? 1 : 0;
+				researchInfo.waitingForPower += job->powerNeeded.has_value() && !job->onHold ? 1 : 0;
+				if (!job->onHold && job->pointsPerSecond > 0
+					&& (!researchInfo.nextTopic.has_value() || job->secondsLeft() < researchInfo.nextSeconds))
+				{
+					researchInfo.nextTopic = static_cast<uint16_t>(static_cast<RESEARCH *>(job->subject)->index);
+					researchInfo.nextSeconds = job->secondsLeft();
+				}
+			}
+		}
+		if (structureIsIdlePending(psStruct))
+		{
+			(type == REF_RESEARCH ? idleInfo.researchFacilities : idleInfo.factories) += 1;
+		}
+	}
+	for (const DROID *psDroid : gameWorld.objects.droids[player])
+	{
+		idleInfo.trucks += droidIsIdleTruck(psDroid) ? 1 : 0;
+	}
 }
 
 void HudModel::updatePower(unsigned player)
