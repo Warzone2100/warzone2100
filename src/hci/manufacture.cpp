@@ -23,7 +23,10 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "manufacture.h"
+#include "../hud/hudbadges.h"
 #include "../hud/huddetailcontents.h"
+#include "../hud/hudsettings.h"
+#include "../hud/hudskin.h"
 #include "../hud/hudtext.h"
 #include "../mission.h"
 #include "../qtscript.h"
@@ -345,13 +348,14 @@ protected:
 
 		if (productionPending && StructureIsOnHoldPending(factory))
 		{
-			iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+			currentHudSkin().drawFancyButtonOnHold(hudLook(xOffset, yOffset));
 		}
 		else
 		{
 			displayIfHighlight(xOffset, yOffset);
 		}
 		drawNextDroidRank(xOffset, yOffset);
+		hudDrawJobBadges(factory, xOffset + x(), yOffset + y(), height());
 	}
 
 	// show a little icon on the bottom, indicating what rank next unit will be
@@ -430,7 +434,7 @@ private:
 	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
 	{
 		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
-		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory))
+		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory) && !hudModuleActive(HudModuleId::ObjectBadges))
 		{
 			productionRunSizeLabel->setString(WzString::format("%d", productionRemaining));
 			productionRunSizeLabel->show();

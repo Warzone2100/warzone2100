@@ -27,6 +27,7 @@
 
 #include "hudmodules.h"
 #include "huddetail.h"
+#include "hudidle.h"
 #include "hudstatusline.h"
 
 std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
@@ -34,10 +35,10 @@ std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
 	switch (id)
 	{
 	case HudModuleId::StatusLine: return hudMakeStatusLine();
+	case HudModuleId::IdleIndicators: return hudMakeIdleIndicators();
 	case HudModuleId::SelectionReadout: return hudMakeSelectionReadout();
 	case HudModuleId::PowerDetails:
 	case HudModuleId::ObjectBadges:
-	case HudModuleId::IdleIndicators:
 	case HudModuleId::RowSummary:
 	case HudModuleId::ReadableBars:
 	case HudModuleId::PanelFilters:

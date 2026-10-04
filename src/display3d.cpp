@@ -106,6 +106,7 @@
 #include "cameratrace.h"
 #include "hud/hudskin.h"
 #include "hud/hudstatusline.h"
+#include "hud/hudworldbars.h"
 
 
 /********************  Prototypes  ********************/
@@ -3423,6 +3424,12 @@ static void queueStructureHealth(STRUCTURE *psStruct, BatchedMultiRectRenderer& 
 		powerCol = WZCOL_HEALTH_LOW;
 		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 	}
+	if (hudReadableBarsActive() && !ctrlShiftDown())
+	{
+		hudQueueReadableBar(batchedMultiRectRenderer, rectGroup, static_cast<float>(scrX - scrR), static_cast<float>(scrX - scrR + 2 * width), static_cast<float>(scrY - 1), 4.f,
+		                    static_cast<float>(health) / 100.f, psStruct->id);
+		return;
+	}
 	health = (((width * 10000) / 100) * health) / 10000;
 	health *= 2;
 	batchedMultiRectRenderer.addRectF(PIERECT_DrawRequest_f(scrX - scrR - 1, scrY - 1, scrX - scrR + 2 * width + 1, scrY + 3, WZCOL_RELOAD_BACKGROUND), rectGroup);
@@ -3593,9 +3600,18 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	}
 
 	/* Power bars */
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	if (hudReadableBarsActive())
+	{
+		const float x0 = static_cast<float>(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR);
+		hudQueueReadableBar(batchedMultiRectRenderer, rectGroup, x0, x0 + 2 * psDroid->sDisplay.screenR, static_cast<float>(psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2), 4.f,
+		                    static_cast<float>(psDroid->body) / static_cast<float>(std::max(1u, psDroid->originalBody)), psDroid->id);
+	}
+	else
+	{
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	}
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
 		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
 		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
@@ -3686,6 +3702,11 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 		boxCol = WZCOL_WHITE;
 
 		/* Power bars */
+		if (hudReadableBarsActive() && !ctrlShiftDown())
+		{
+			hudQueueReadableBar(batchedMultiRectRenderer, rectGroup, static_cast<float>(scrX - scrR), static_cast<float>(scrX + scrR), static_cast<float>(scrY + scrR + 2), 4.f, mulH, psDroid->id);
+			return;
+		}
 		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
 		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, powerCol), rectGroup);
 		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow), rectGroup);

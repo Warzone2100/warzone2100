@@ -30,6 +30,7 @@
 #include "../component.h"
 #include "../mission.h"
 #include "../screens/researchtreescreen.h"
+#include "../hud/hudbadges.h"
 #include "../hud/huddetailcontents.h"
 #include "../hud/hudskin.h"
 
@@ -402,12 +403,13 @@ protected:
 
 		if (researchPending && StructureIsOnHoldPending(facility))
 		{
-			iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+			currentHudSkin().drawFancyButtonOnHold(hudLook(xOffset, yOffset));
 		}
 		else
 		{
 			displayIfHighlight(xOffset, yOffset);
 		}
+		hudDrawJobBadges(facility, xOffset + x(), yOffset + y(), height());
 	}
 
 	void updateLayout() override

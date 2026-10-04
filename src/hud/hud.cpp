@@ -26,10 +26,12 @@
 */
 
 #include "hud.h"
+#include "hudbadges.h"
 #include "huddetail.h"
 #include "hudmodel.h"
 #include "hudskin.h"
 #include "hudmodules.h"
+#include "hudworldbars.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -135,6 +137,8 @@ void hudShutdown()
 	hudCloseTransientUi();
 	destroyModules();
 	modernHudSkin().releaseCaches();
+	hudReleaseJobBadges();
+	hudReleaseReadableBars();
 	initialized = false;
 	rebuildPending = false;
 }
