@@ -105,6 +105,7 @@
 #include "perfcounters.h"
 #include "cameratrace.h"
 #include "hud/hudskin.h"
+#include "hud/hudstatusline.h"
 
 
 /********************  Prototypes  ********************/
@@ -4996,14 +4997,21 @@ void display3d_recordSceneOverlays(const gfx_api::RenderPassContext&)
 		char buildInfo[255];
 		bool showMs = (gameTimeGetMod() < Rational(1, 4));
 		getAsciiTime(buildInfo, showMs ? graphicsTime : gameTime, showMs);
-		currentHudSkin().drawOverlayText(txtLevelName, RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
+		const bool statusLine = hudStatusLineShown();
+		if (!statusLine)
+		{
+			currentHudSkin().drawOverlayText(txtLevelName, RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
+		}
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			txtDebugStatus.render(RET_X + 134, 436 + E_H, WZCOL_TEXT_MEDIUM);
 		}
-		txtCurrentTime.setText(buildInfo, font_small);
-		currentHudSkin().drawOverlayText(txtCurrentTime, RET_X + 134, 422 + E_H, WZCOL_TEXT_MEDIUM);
+		if (!statusLine)
+		{
+			txtCurrentTime.setText(buildInfo, font_small);
+			currentHudSkin().drawOverlayText(txtCurrentTime, RET_X + 134, 422 + E_H, WZCOL_TEXT_MEDIUM);
+		}
 	}
 }
 

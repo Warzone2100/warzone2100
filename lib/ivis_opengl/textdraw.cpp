@@ -2077,6 +2077,28 @@ int WzText::lineSize()
 	return mPtsLineSize;
 }
 
+float WzText::inkTop()
+{
+	updateCacheIfNecessary();
+	return (mRenderingVertScaleFactor > 0.f) ? static_cast<float>(inkOffsets.y) / mRenderingVertScaleFactor : 0.f;
+}
+float WzText::inkHeight()
+{
+	updateCacheIfNecessary();
+	return (mRenderingVertScaleFactor > 0.f) ? static_cast<float>(inkDimensions.y) / mRenderingVertScaleFactor : 0.f;
+}
+float WzText::inkCenteredX(const WzRect &rect)
+{
+	updateCacheIfNecessary();
+	const float centerX = static_cast<float>(rect.x()) + static_cast<float>(rect.width()) / 2.f;
+	if (texture == nullptr || mRenderingHorizScaleFactor <= 0.f)
+	{
+		return centerX - static_cast<float>(width()) / 2.f;
+	}
+	const float inkX = std::round(centerX * mRenderingHorizScaleFactor - static_cast<float>(inkDimensions.x) / 2.f);
+	return (inkX - static_cast<float>(inkOffsets.x)) / mRenderingHorizScaleFactor;
+}
+
 static uint32_t getFontGeneration(iV_fonts fontID)
 {
 	ASSERT_OR_RETURN(0, fontID < font_count, "Invalid font: %d", static_cast<int>(fontID));
@@ -2131,6 +2153,32 @@ void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
 	dimensions = (drawResult.text.bitmap) ? Vector2i(drawResult.text.bitmap->width(), drawResult.text.bitmap->height()) : Vector2i(0,0);
 	offsets = Vector2i(drawResult.text.offset_x, drawResult.text.offset_y);
 	layoutMetrics = Vector2i(drawResult.layoutMetrics.width, drawResult.layoutMetrics.height);
+	inkOffsets = offsets;
+	inkDimensions = dimensions;
+	if (dimensions.x > 0 && dimensions.y > 0)
+	{
+		const iV_Image &bitmap = *drawResult.text.bitmap;
+		const unsigned channels = bitmap.channels();
+		const unsigned char *pixels = bitmap.bmp();
+		int x0 = dimensions.x, y0 = dimensions.y, x1 = -1, y1 = -1;
+		for (int y = 0; y < dimensions.y; ++y)
+		{
+			for (int x = 0; x < dimensions.x; ++x)
+			{
+				const unsigned char *pixel = pixels + (static_cast<size_t>(y) * dimensions.x + x) * channels;
+				if (std::any_of(pixel, pixel + channels, [](unsigned char value) { return value != 0; }))
+				{
+					x0 = std::min(x0, x); x1 = std::max(x1, x);
+					y0 = std::min(y0, y); y1 = std::max(y1, y);
+				}
+			}
+		}
+		if (x1 >= 0)
+		{
+			inkOffsets = offsets + Vector2i(x0, y0);
+			inkDimensions = Vector2i(x1 - x0 + 1, y1 - y0 + 1);
+		}
+	}
 
 	if (texture)
 	{
@@ -2180,6 +2228,8 @@ WzText& WzText::operator=(WzText&& other)
 		mPtsLineSize = other.mPtsLineSize;
 		offsets = other.offsets;
 		dimensions = other.dimensions;
+		inkOffsets = other.inkOffsets;
+		inkDimensions = other.inkDimensions;
 		mFontGeneration = other.mFontGeneration;
 		mRenderingHorizScaleFactor = other.mRenderingHorizScaleFactor;
 		mRenderingVertScaleFactor = other.mRenderingVertScaleFactor;

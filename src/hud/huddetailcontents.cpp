@@ -658,9 +658,7 @@ std::shared_ptr<WIDGET> hudPowerDetail()
 	Body body(hudDetailWidth() - PADDING * 2);
 	body.line(power.maxStorage < UNLIMITED_STORAGE ? astringf(_("After what is queued: %d · Storage: %d"), power.afterQueued, power.maxStorage)
 	                                               : astringf(_("After what is queued: %d"), power.afterQueued));
-	body.line(astringf("%s · %s · %s", astringf(ngettext("%u derrick", "%u derricks", power.derricks), power.derricks).c_str(),
-	                   astringf(ngettext("%u generator", "%u generators", power.generators), power.generators).c_str(),
-	                   astringf(_("%u unpowered"), power.unusedDerricks).c_str()),
+	body.line(power.derrickSummary(),
 	          power.unusedDerricks > 0 ? currentHudSkin().toneColor(HudTone::Warn) : WZCOL_TEXT_MEDIUM);
 	if (power.unusedDerricks > 0)
 	{

@@ -79,6 +79,11 @@ public:
 	int aboveBase(); // (in points)
 	int belowBase(); // (in points)
 	int lineSize(); // (in points)
+	// The drawn pixels' top, from the baseline, and their height (in points)
+	float inkTop();
+	float inkHeight();
+	/// The pen position across that centers the drawn pixels in the rectangle (in points), on whole pixels of the display
+	float inkCenteredX(const WzRect &rect);
 
 public:
 	WzText(const WzText& other) = delete; // non-copyable
@@ -104,6 +109,9 @@ private:
 	int mPtsLineSize = 0;
 	Vector2i offsets = Vector2i(0, 0);
 	Vector2i dimensions = Vector2i(0, 0);
+	// The drawn pixels (the bitmap's can have empty edges), from the pen position like `offsets`
+	Vector2i inkOffsets = Vector2i(0, 0);
+	Vector2i inkDimensions = Vector2i(0, 0);
 	float mRenderingHorizScaleFactor = 0.f;
 	float mRenderingVertScaleFactor = 0.f;
 	iV_fonts mFontID = font_count;

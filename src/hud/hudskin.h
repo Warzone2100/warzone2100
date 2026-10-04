@@ -166,6 +166,8 @@ public:
 	/// Shapes for HUD additions (modules, popovers), in the skin's style
 	virtual void drawCard(const WzRect &rect, HudCardState state) = 0;
 	virtual void drawPill(const WzRect &rect, HudTone tone, bool filled) = 0;
+	/// A chip (HudChip): the pill's colors, with the corners of the skin's buttons
+	virtual void drawChip(const WzRect &rect, HudTone tone, bool filled) { drawPill(rect, tone, filled); }
 	virtual void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) = 0;
 	virtual void drawPopoverFrame(const WzRect &rect) = 0;
 	/// A text button in a panel's header (the research panel's View Tree): the text color,

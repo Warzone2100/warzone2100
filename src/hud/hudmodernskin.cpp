@@ -526,11 +526,12 @@ public:
 
 	void drawPill(const WzRect &rect, HudTone tone, bool filled) override
 	{
-		const PIELIGHT color = toneColor(tone);
-		const float r = rect.height() / 2.f;
-		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
-		                   static_cast<float>(rect.bottom()), filled ? withAlpha(color, 70) : pal_RGBA(10, 14, 20, 200), r,
-		                   withAlpha(color, filled ? 255 : 170), 1.f);
+		drawToned(rect, tone, filled, rect.height() / 2.f);
+	}
+
+	void drawChip(const WzRect &rect, HudTone tone, bool filled) override
+	{
+		drawToned(rect, tone, filled, params.cardRadius);
 	}
 
 	nonstd::optional<PIELIGHT> drawHeaderButton(const WzRect &rect, bool hovered, bool down) override
@@ -600,6 +601,14 @@ public:
 	}
 
 private:
+	void drawToned(const WzRect &rect, HudTone tone, bool filled, float radius)
+	{
+		const PIELIGHT color = toneColor(tone);
+		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
+		                   static_cast<float>(rect.bottom()), filled ? withAlpha(color, 70) : pal_RGBA(10, 14, 20, 200), radius,
+		                   withAlpha(color, filled ? 255 : 170), 1.f);
+	}
+
 	struct Params
 	{
 		float panelRadius = 6.f;

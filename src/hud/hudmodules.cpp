@@ -27,17 +27,18 @@
 
 #include "hudmodules.h"
 #include "huddetail.h"
+#include "hudstatusline.h"
 
 std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
 {
 	switch (id)
 	{
+	case HudModuleId::StatusLine: return hudMakeStatusLine();
+	case HudModuleId::SelectionReadout: return hudMakeSelectionReadout();
 	case HudModuleId::PowerDetails:
-	case HudModuleId::StatusLine:
 	case HudModuleId::ObjectBadges:
 	case HudModuleId::IdleIndicators:
 	case HudModuleId::RowSummary:
-	case HudModuleId::SelectionReadout:
 	case HudModuleId::ReadableBars:
 	case HudModuleId::PanelFilters:
 	case HudModuleId::SpectatorStrip:

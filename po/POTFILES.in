@@ -473,9 +473,11 @@ src/hci/research.cpp
 src/hci/teamstrategy.cpp
 src/hud/hudbuildcategories.cpp
 src/hud/huddetailcontents.cpp
+src/hud/hudmodel.cpp
 src/hud/hudmodernskin.cpp
 src/hud/hudreticule.cpp
 src/hud/hudsettings.cpp
+src/hud/hudstatusline.cpp
 src/hud/hudunittypes.cpp
 src/ingameop.cpp
 src/init.cpp

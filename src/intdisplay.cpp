@@ -178,6 +178,11 @@ std::string PowerBar::getTip()
 	{
 		tip += "\n" + astringf(_("Income: %d per minute"), power.incomePerMinute.value());
 	}
+	if (hudModuleActive(HudModuleId::PowerDetails))
+	{
+		tip += "\n" + astringf(_("Queued: %d · After queued: %d"), power.queued, power.afterQueued);
+		tip += "\n" + power.derrickSummary();
+	}
 	return tip;
 }
 
