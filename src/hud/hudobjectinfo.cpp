@@ -76,7 +76,12 @@ nonstd::optional<HudJob> hudStructureJob(STRUCTURE *psStruct)
 			{
 				for (const auto &entry : runs[factory->psAssemblyPoint->factoryInc])
 				{
-					job.queued += static_cast<unsigned>(std::max(0, entry.numRemaining()));
+					const unsigned remaining = static_cast<unsigned>(std::max(0, entry.numRemaining()));
+					job.queued += remaining;
+					if (psTemplate != nullptr && entry.psTemplate != nullptr && entry == psTemplate && job.queuedOfSubject == 0)
+					{
+						job.queuedOfSubject = remaining;
+					}
 				}
 			}
 		}

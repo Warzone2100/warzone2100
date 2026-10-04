@@ -473,6 +473,7 @@ src/hci/research.cpp
 src/hci/teamstrategy.cpp
 src/hud/hudbuildcategories.cpp
 src/hud/huddetailcontents.cpp
+src/hud/hudidle.cpp
 src/hud/hudmodel.cpp
 src/hud/hudmodernskin.cpp
 src/hud/hudreticule.cpp

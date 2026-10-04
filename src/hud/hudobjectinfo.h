@@ -46,6 +46,7 @@ struct HudJob
 	unsigned donePoints = 0;
 	unsigned pointsPerSecond = 0;
 	unsigned queued = 0;            ///< (factories) units still to make in the production run, this one included
+	unsigned queuedOfSubject = 0;   ///< (factories) units of the current design still to make, this one included
 	int loops = 0;                  ///< (factories) the production loops left, or INFINITE_PRODUCTION
 	bool onHold = false;
 	nonstd::optional<int32_t> powerNeeded;  ///< waiting for this much power
