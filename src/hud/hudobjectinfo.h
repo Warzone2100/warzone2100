@@ -33,10 +33,12 @@
 #define __INCLUDED_SRC_HUD_HUDOBJECTINFO_H__
 
 #include <cstdint>
+#include <vector>
 
 #include <nonstd/optional.hpp>
 
 struct BASE_STATS;
+struct DROID_TEMPLATE;
 struct STRUCTURE;
 
 struct HudJob
@@ -57,5 +59,14 @@ struct HudJob
 
 /// For the local player's factories and research facilities (with the UI's pending state). None for anything else
 nonstd::optional<HudJob> hudStructureJob(STRUCTURE *psStruct);
+
+struct HudQueueEntry
+{
+	DROID_TEMPLATE *psTemplate = nullptr;
+	unsigned remaining = 0;
+};
+
+/// What a factory still has to make, in the order it will make it: the current design first
+std::vector<HudQueueEntry> hudFactoryQueue(STRUCTURE *psStruct);
 
 #endif // __INCLUDED_SRC_HUD_HUDOBJECTINFO_H__

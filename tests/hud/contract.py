@@ -58,13 +58,20 @@ def is_addition(widget):
 
 
 def in_extension(key):
-    return any(part.split("~", 1)[0].isdigit() and int(part.split("~", 1)[0]) in EXTENSION_IDS
-               for part in key.split("/"))
+    def part_id(part):
+        return part.split("~", 1)[0].split("@", 1)[0].split("#", 1)[0]
+    return any(part_id(part).isdigit() and int(part_id(part)) in EXTENSION_IDS for part in key.split("/"))
 
 
 def own_id(key):
     last = key.rsplit("/", 1)[-1].split("~", 1)[0]
     return int(last) if last.isdigit() else None
+
+
+def inside(rect, outer):
+    x, y, w, h = rect
+    ox, oy, ow, oh = outer
+    return ox <= x and oy <= y and x + w <= ox + ow and y + h <= oy + oh
 
 
 def growth(ref, cand):
@@ -117,6 +124,11 @@ def check_state(ref, cand, screen, top_band, problems, notes):
     cand_all = {w["key"]: w for w in cand["widgets"]}
     cand_classic = {w["key"]: w for w in cand["widgets"] if not is_addition(w)}
     grown = set()
+    moved = {w["key"] for w in cand["widgets"] if w.get("movedClose")}
+    replaced_tabs = {w["key"] for w in cand["widgets"] if w.get("replacedPageTabs")}
+    replaced_tabs_lists = {k[:k.rfind("#")] for k in replaced_tabs if "#" in k}
+    if replaced_tabs:
+        notes.append(f"{name}: page tabs shown by a panel extension: {', '.join(sorted(replaced_tabs))}")
     for key, rw in ref_widgets.items():
         cw = cand_all.get(key)
         if cw is None:
@@ -125,7 +137,13 @@ def check_state(ref, cand, screen, top_band, problems, notes):
         if is_addition(cw):
             fail(f"Classic widget {key} is now named as a HUD addition")
             continue
-        if cw["rect"] != rw["rect"]:
+        if cw["rect"] != rw["rect"] and key in moved:
+            panel = cand_all.get(key[:key.rfind("#")]) if "#" in key else None
+            if panel is not None and inside(cw["rect"], panel["rect"]):
+                notes.append(f"{name}: {key} moved inside its panel: {rw['rect']} -> {cw['rect']}")
+            else:
+                fail(f"{key} moved out of its panel: {cw['rect']}")
+        elif cw["rect"] != rw["rect"]:
             wid = own_id(key)
             sides = growth(rw["rect"], cw["rect"])
             if wid in GROWABLE and sides is not None and sides <= GROWABLE[wid]:
@@ -137,9 +155,10 @@ def check_state(ref, cand, screen, top_band, problems, notes):
         if key not in ref_widgets:
             fail(f"new widget {key} ({cw['class']}) outside the HUD addition ID range")
 
-    ref_order = [w["key"] for w in sorted(ref["widgets"], key=lambda w: w["z"]) if not is_addition(w)]
+    ref_order = [w["key"] for w in sorted(ref["widgets"], key=lambda w: w["z"])
+                 if not is_addition(w) and w["key"] not in moved]
     cand_order = [w["key"] for w in sorted(cand["widgets"], key=lambda w: w["z"])
-                  if w["key"] in ref_widgets and not is_addition(w)]
+                  if w["key"] in ref_widgets and not is_addition(w) and w["key"] not in moved]
     if [k for k in ref_order if k in cand_all] != cand_order:
         fail("the Classic widgets' z-order changed")
 
@@ -162,6 +181,12 @@ def check_state(ref, cand, screen, top_band, problems, notes):
             if r == c:
                 continue
             if r is None and (c in addition_keys or c in grown):
+                continue
+            if r in moved or c in moved or r in replaced_tabs:
+                continue
+            # (The extension covers the replaced tabs' row: points of their list or its panel may reach it)
+            if replaced_tabs and r is not None and c is not None and in_extension(c) \
+                    and (r in replaced_tabs_lists or own_id(r) in GROWABLE):
                 continue
             pair = (r, c)
             if pair not in changed:

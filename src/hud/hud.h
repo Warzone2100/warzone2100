@@ -65,7 +65,8 @@ void hudInterfaceShown(bool shown);
 /// intelligence screen, the in-game menu or the mission results are closed. The open panel is opened again.
 void hudRequestRebuild();
 bool hudRebuildPending();
-/// The skin (or the tooltip delay) changed: nothing to rebuild, only what the skin sets globally
+/// The skin (or the tooltip delay) changed: applies what the skin sets globally. A skin change also rebuilds the
+/// panels, whose size depends on panelTopPadding()
 void hudSkinChanged();
 
 /// The free zones (logical screen coordinates) where modules may go. Empty when the zone has no room.

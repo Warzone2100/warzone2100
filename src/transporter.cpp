@@ -447,6 +447,7 @@ bool intAddTransButtonForm()
 
 	/* Add the button form */
 	auto transList = IntListTabWidget::make();
+	transList->setHudSkinned();
 	transForm->attach(transList);
 	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	transList->setChildSpacing(OBJ_GAP, OBJ_GAP);
@@ -524,6 +525,7 @@ bool intAddTransContentsForm()
 
 	/* Add the contents form */
 	auto contList = IntListTabWidget::make();
+	contList->setHudSkinned();
 	contForm->attach(contList);
 	contList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	contList->setChildSpacing(OBJ_GAP, OBJ_GAP);
@@ -614,6 +616,7 @@ bool intAddDroidsAvailForm()
 
 	//now add the tabbed droids available form
 	auto droidList = IntListTabWidget::make();
+	droidList->setHudSkinned();
 	transDroids->attach(droidList);
 	droidList->id = IDTRANS_DROIDTAB;
 	droidList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({

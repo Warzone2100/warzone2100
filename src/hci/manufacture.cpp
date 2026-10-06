@@ -893,6 +893,7 @@ bool ManufactureController::showInterface()
 	}
 
 	auto objectsForm = ManufactureObjectsForm::make(shared_from_this());
+	objectsForm->addHudExtension();
 	psWScreen->psForm->attach(objectsForm);
 	displayStatsForm();
 	triggerEvent(TRIGGER_MENU_MANUFACTURE_UP);

@@ -228,6 +228,11 @@ void ClassicHudSkin::drawPopoverFrame(const WzRect &rect)
 	iV_ShadowBox(rect.x(), rect.y(), rect.right(), rect.bottom(), 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
 }
 
+void ClassicHudSkin::drawInputField(const WzRect &rect, bool editing)
+{
+	drawButtonBox(rect, WZCOL_TRANSPARENT_BOX, editing ? WZCOL_TEXT_BRIGHT : BUTTON_BORDER);
+}
+
 PIELIGHT ClassicHudSkin::toneColor(HudTone tone) const
 {
 	switch (tone)

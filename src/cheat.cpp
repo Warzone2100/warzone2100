@@ -40,6 +40,7 @@
 #include "multiint.h"
 #include "multiplay.h"
 #include "gamestate_serialize.h"
+#include "hud/hudbuildcategories.h"
 
 struct CHEAT_ENTRY
 {
@@ -98,6 +99,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"autogame off", kf_AutoGame},
 	{"shakey", kf_ToggleShakeStatus}, //shakey
 	{"list droids", kf_ListDroids},
+	{"buildcategories", hudLogBuildCategories}, // list each structure's build category, and where it comes from
 
 };
 

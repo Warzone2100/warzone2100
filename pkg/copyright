@@ -519,7 +519,10 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/hud/hudmodernskin.cpp
        src/hud/hudmodules.*
        src/hud/hudobjectinfo.*
+       src/hud/hudpanelextension.*
+       src/hud/hudpanelfilters.*
        src/hud/hudreticule.*
+       src/hud/hudrowsummary.*
        src/hud/hudsettings.*
        src/hud/hudskin.*
        src/hud/hudstatusline.*

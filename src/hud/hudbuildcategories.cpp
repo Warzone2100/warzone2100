@@ -32,6 +32,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/physfs_ext.h"
 
+#include "../console.h"
 #include "../structure.h"
 #include "../wzjsonhelpers.h"
 
@@ -200,4 +201,5 @@ void hudLogBuildCategories()
 		const bool own = ownCategories.count(id) != 0;
 		debug(LOG_INFO, "build category of %s: %s (%s)", id.c_str(), hudBuildCategoryOf(stats).c_str(), own ? "structure.json" : "derived from its type");
 	}
+	addConsoleMessage(_("The build category of each structure was written to the log."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }

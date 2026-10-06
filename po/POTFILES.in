@@ -476,7 +476,9 @@ src/hud/huddetailcontents.cpp
 src/hud/hudidle.cpp
 src/hud/hudmodel.cpp
 src/hud/hudmodernskin.cpp
+src/hud/hudpanelfilters.cpp
 src/hud/hudreticule.cpp
+src/hud/hudrowsummary.cpp
 src/hud/hudsettings.cpp
 src/hud/hudstatusline.cpp
 src/hud/hudunittypes.cpp

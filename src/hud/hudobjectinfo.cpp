@@ -69,20 +69,12 @@ nonstd::optional<HudJob> hudStructureJob(STRUCTURE *psStruct)
 				job.donePoints = job.totalPoints - static_cast<unsigned>(remaining);
 			}
 		}
-		if (factory->psAssemblyPoint != nullptr)
+		for (const auto &entry : hudFactoryQueue(psStruct))
 		{
-			const auto &runs = asProductionRun[factory->psAssemblyPoint->factoryType];
-			if (factory->psAssemblyPoint->factoryInc < runs.size())
+			job.queued += entry.remaining;
+			if (psTemplate != nullptr && entry.psTemplate->multiPlayerID == psTemplate->multiPlayerID && job.queuedOfSubject == 0)
 			{
-				for (const auto &entry : runs[factory->psAssemblyPoint->factoryInc])
-				{
-					const unsigned remaining = static_cast<unsigned>(std::max(0, entry.numRemaining()));
-					job.queued += remaining;
-					if (psTemplate != nullptr && entry.psTemplate != nullptr && entry == psTemplate && job.queuedOfSubject == 0)
-					{
-						job.queuedOfSubject = remaining;
-					}
-				}
+				job.queuedOfSubject = entry.remaining;
 			}
 		}
 	}
@@ -112,4 +104,43 @@ nonstd::optional<HudJob> hudStructureJob(STRUCTURE *psStruct)
 		}
 	}
 	return job;
+}
+
+std::vector<HudQueueEntry> hudFactoryQueue(STRUCTURE *psStruct)
+{
+	std::vector<HudQueueEntry> queue;
+	if (psStruct == nullptr || !psStruct->isFactory())
+	{
+		return queue;
+	}
+	FACTORY *factory = StructureGetFactory(psStruct);
+	if (factory->psAssemblyPoint == nullptr)
+	{
+		return queue;
+	}
+	const auto &runs = asProductionRun[factory->psAssemblyPoint->factoryType];
+	if (factory->psAssemblyPoint->factoryInc >= runs.size())
+	{
+		return queue;
+	}
+	DROID_TEMPLATE *current = FactoryGetTemplate(factory);
+	for (const auto &entry : runs[factory->psAssemblyPoint->factoryInc])
+	{
+		if (entry.psTemplate == nullptr || entry.numRemaining() <= 0)
+		{
+			continue;
+		}
+		HudQueueEntry queued;
+		queued.psTemplate = entry.psTemplate;
+		queued.remaining = static_cast<unsigned>(entry.numRemaining());
+		if (current != nullptr && entry == current)
+		{
+			queue.insert(queue.begin(), queued);
+		}
+		else
+		{
+			queue.push_back(queued);
+		}
+	}
+	return queue;
 }

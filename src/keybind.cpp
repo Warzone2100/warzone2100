@@ -89,6 +89,7 @@
 
 #include "screens/ingameopscreen.h"
 #include "titleui/options/optionsforms.h"
+#include "hud/hudpanelfilters.h"
 
 /*
 	KeyBind.c
@@ -2116,6 +2117,11 @@ void kf_SelectAllIdleTrucks()
 	SPECTATOR_NO_OP();
 
 	selAllIdleTrucks(gameWorld.objects);
+}
+
+void kf_FocusPanelSearch()
+{
+	hudFocusPanelSearch();
 }
 
 // --------------------------------------------------------------------------

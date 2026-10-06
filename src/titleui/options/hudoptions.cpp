@@ -187,4 +187,25 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 		);
 		form->addOption(optionInfo, valueChanger, true);
 	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.rememberFilters", N_("Remember Filters"), N_("Keep the panels' filters and search when a panel is opened again, for the rest of the game."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(hudSettings().rememberFilters);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.rememberFilters = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
 }
