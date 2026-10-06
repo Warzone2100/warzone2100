@@ -27,7 +27,15 @@
 #include "groups.h"
 #include "../power.h"
 #include "../hud/huddetailcontents.h"
+#include "../hud/hudids.h"
+#include "../hud/hudpanelextension.h"
+#include "../hud/hudpanelfilters.h"
+#include "../hud/hudrowsummary.h"
+#include "../hud/hudsettings.h"
 #include "../hud/hudskin.h"
+
+#include <algorithm>
+#include <iterator>
 
 void BaseObjectsController::clearSelection()
 {
@@ -117,6 +125,7 @@ void BaseStatsController::displayStatsForm()
 	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
 	{
 		auto newStatsForm = makeStatsForm();
+		newStatsForm->addHudExtension();
 		psWScreen->psForm->attach(newStatsForm);
 		intMode = INT_STAT;
 		setSecondaryWindowUp(true);
@@ -266,10 +275,61 @@ void ObjectsForm::goToHighlightedTab()
 	{
 		if (highlighted == getController().getObjectAt(i))
 		{
-			objectsList->goToChildPage(i);
+			if (auto position = listPositionOf(i))
+			{
+				objectsList->goToChildPage(position.value());
+			}
 			return;
 		}
 	}
+}
+
+optional<size_t> ObjectsForm::listPositionOf(size_t objectIndex) const
+{
+	if (!filteredLayout)
+	{
+		return objectIndex;
+	}
+	auto it = std::find(shownIndices.begin(), shownIndices.end(), objectIndex);
+	return it != shownIndices.end() ? optional<size_t>(static_cast<size_t>(it - shownIndices.begin())) : nullopt;
+}
+
+BASE_OBJECT *ObjectsForm::objectUnderPointer() const
+{
+	ListWidget *listWidget = objectsList != nullptr ? objectsList->listWidget() : nullptr;
+	if (listWidget == nullptr)
+	{
+		return nullptr;
+	}
+	for (auto widget = getMouseOverWidget().lock(); widget != nullptr; widget = widget->parent())
+	{
+		if (widget->parent().get() != listWidget)
+		{
+			continue;
+		}
+		const auto &children = listWidget->children();
+		const size_t position = static_cast<size_t>(std::find(children.begin(), children.end(), widget) - children.begin());
+		const size_t index = filteredLayout ? (position < shownIndices.size() ? shownIndices[position] : SIZE_MAX) : position;
+		auto &controller = getController();
+		return index < controller.objectsSize() ? controller.getObjectAt(index) : nullptr;
+	}
+	return nullptr;
+}
+
+void ObjectsForm::setObjectFilter(const std::function<bool (BASE_OBJECT *)> &filter)
+{
+	objectFilter = filter;
+	updateButtons();
+	objectsList->goToChildPage(0);
+}
+
+void ObjectsForm::removeAllButtons()
+{
+	while (buttonsCount > 0)
+	{
+		removeLastButton();
+	}
+	shownIndices.clear();
 }
 
 void ObjectsForm::initialize()
@@ -296,6 +356,7 @@ void ObjectsForm::addCloseButton()
 	init.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	auto button = std::make_shared<W_BUTTON>(&init);
 	attach(button);
+	closeButton = button;
 	button->addOnClickHandler([](W_BUTTON&) {
 		widgScheduleTask([]() {
 			intResetScreen(false);
@@ -307,6 +368,7 @@ void ObjectsForm::addCloseButton()
 void ObjectsForm::addTabList()
 {
 	attach(objectsList = IntListTabWidget::make());
+	objectsList->setHudSkinned();
 	objectsList->id = IDOBJ_TABFORM;
 	objectsList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *pObjectsList = static_cast<IntListTabWidget *>(psWidget);
@@ -320,6 +382,16 @@ void ObjectsForm::addTabList()
 
 void ObjectsForm::updateButtons()
 {
+	if (objectFilter)
+	{
+		updateFilteredButtons();
+		return;
+	}
+	if (filteredLayout)
+	{
+		removeAllButtons();
+		filteredLayout = false;
+	}
 	auto objectsCount = getController().objectsSize();
 	while (buttonsCount < objectsCount)
 	{
@@ -332,14 +404,87 @@ void ObjectsForm::updateButtons()
 	}
 }
 
+void ObjectsForm::updateFilteredButtons()
+{
+	auto &controller = getController();
+	std::vector<size_t> wanted;
+	for (size_t i = 0; i < controller.objectsSize(); ++i)
+	{
+		if (objectFilter(controller.getObjectAt(i)))
+		{
+			wanted.push_back(i);
+		}
+	}
+	if (filteredLayout && wanted == shownIndices)
+	{
+		return;
+	}
+	removeAllButtons();
+	filteredLayout = true;
+	shownIndices = wanted;
+	for (size_t index : shownIndices)
+	{
+		addNewButton(index);
+	}
+
+	std::weak_ptr<ObjectsForm> weakForm = std::static_pointer_cast<ObjectsForm>(shared_from_this());
+	widgScheduleTask([weakForm]() {
+		if (auto form = weakForm.lock())
+		{
+			form->highlightFirstShown();
+		}
+	});
+}
+
+void ObjectsForm::highlightFirstShown()
+{
+	auto &controller = getController();
+	auto highlighted = controller.getHighlightedObject();
+	std::vector<size_t> valid;
+	std::copy_if(shownIndices.begin(), shownIndices.end(), std::back_inserter(valid), [&](size_t i) { return i < controller.objectsSize(); });
+	const bool highlightShown = std::any_of(valid.begin(), valid.end(), [&](size_t i) { return controller.getObjectAt(i) == highlighted; });
+	if (highlightShown || valid.empty())
+	{
+		return;
+	}
+	BASE_OBJECT *first = controller.getObjectAt(valid.front());
+	if (first == nullptr || first->died)
+	{
+		return;
+	}
+	if (first->type == OBJ_STRUCTURE)
+	{
+		controller.clearStructureSelection();
+	}
+	else
+	{
+		controller.clearSelection();
+	}
+	controller.selectObject(first, false);
+}
+
 void ObjectsForm::addNewButton()
 {
-	auto buttonIndex = buttonsCount++;
+	addNewButton(buttonsCount);
+}
+
+void ObjectsForm::addNewButton(size_t buttonIndex)
+{
+	buttonsCount++;
 	auto buttonHolder = std::make_shared<WIDGET>();
 	objectsList->addWidgetToLayout(buttonHolder);
 
 	auto statButton = makeStatsButton(buttonIndex);
 	buttonHolder->attach(statButton);
+	std::weak_ptr<ObjectsForm> weakForm = std::static_pointer_cast<ObjectsForm>(shared_from_this());
+	hudDetailRegister(statButton, HudDetailProvider{[weakForm, buttonIndex]() -> std::shared_ptr<WIDGET> {
+		auto form = weakForm.lock();
+		if (form == nullptr || buttonIndex >= form->objectsController().objectsSize())
+		{
+			return nullptr;
+		}
+		return hudObjectDetail(form->objectsController().getObjectAt(buttonIndex));
+	}, HudDetailPlacement::Above, IDOBJ_FORM});
 	statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	statButton->style |= WFORM_SECONDARY;
 
@@ -382,6 +527,7 @@ void StatsForm::addCloseButton()
 	init.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	auto button = std::make_shared<W_BUTTON>(&init);
 	attach(button);
+	closeButton = button;
 	button->addOnClickHandler([](W_BUTTON&) {
 		widgScheduleTask([]() {
 			intRemoveStats();
@@ -393,6 +539,7 @@ void StatsForm::addCloseButton()
 void StatsForm::addTabList()
 {
 	attach(optionList = IntListTabWidget::make());
+	optionList->setHudSkinned();
 	optionList->id = IDSTAT_TABFORM;
 	optionList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
 	optionList->setChildSpacing(STAT_GAP, STAT_GAP);
@@ -449,14 +596,77 @@ void ObjectStatsForm::goToHighlightedTab()
 	{
 		if (highlighted == getController().getStatsAt(i))
 		{
-			optionList->goToChildPage(i);
+			if (auto position = listPositionOf(i))
+			{
+				optionList->goToChildPage(position.value());
+			}
 			return;
 		}
 	}
 }
 
+optional<size_t> StatsForm::listPositionOf(size_t statsIndex) const
+{
+	if (!filteredLayout)
+	{
+		return statsIndex;
+	}
+	auto it = std::find(shownIndices.begin(), shownIndices.end(), statsIndex);
+	return it != shownIndices.end() ? optional<size_t>(static_cast<size_t>(it - shownIndices.begin())) : nullopt;
+}
+
+void StatsForm::setOptionFilter(const std::function<bool (BASE_STATS *)> &filter)
+{
+	optionFilter = filter;
+	updateButtons();
+	optionList->goToChildPage(0);
+}
+
+void StatsForm::removeAllButtons()
+{
+	while (buttonsCount > 0)
+	{
+		removeLastButton();
+	}
+	shownIndices.clear();
+}
+
+void StatsForm::updateFilteredButtons()
+{
+	auto &controller = getController();
+	std::vector<size_t> wanted;
+	for (size_t i = 0; i < controller.statsSize(); ++i)
+	{
+		if (optionFilter(controller.getStatsAt(i)))
+		{
+			wanted.push_back(i);
+		}
+	}
+	if (filteredLayout && wanted == shownIndices)
+	{
+		return;
+	}
+	removeAllButtons();
+	filteredLayout = true;
+	shownIndices = wanted;
+	for (size_t index : shownIndices)
+	{
+		addNewButton(index);
+	}
+}
+
 void StatsForm::updateButtons()
 {
+	if (optionFilter)
+	{
+		updateFilteredButtons();
+		return;
+	}
+	if (filteredLayout)
+	{
+		removeAllButtons();
+		filteredLayout = false;
+	}
 	auto statsCount = getController().statsSize();
 	while (buttonsCount < statsCount)
 	{
@@ -471,7 +681,12 @@ void StatsForm::updateButtons()
 
 void StatsForm::addNewButton()
 {
-	auto buttonIndex = buttonsCount++;
+	addNewButton(buttonsCount);
+}
+
+void StatsForm::addNewButton(size_t buttonIndex)
+{
+	buttonsCount++;
 	auto button = makeOptionButton(buttonIndex);
 	optionList->addWidgetToLayout(button);
 	button->style |= WFORM_SECONDARY;
@@ -492,4 +707,39 @@ std::shared_ptr<WIDGET> ObjectButton::makeHudDetail()
 {
 	auto &controller = getController();
 	return objectIndex < controller.objectsSize() ? hudObjectDetail(controller.getObjectAt(objectIndex)) : nullptr;
+}
+
+void StatsForm::addHudExtension()
+{
+	auto self = std::static_pointer_cast<StatsForm>(shared_from_this());
+	auto content = hudModuleActive(HudModuleId::PanelFilters) ? hudMakePanelFilters(self) : nullptr;
+	if (content == nullptr && currentHudSkin().panelTopPadding() <= 0)
+	{
+		return;
+	}
+	HudPanelExtensionSpec spec;
+	spec.contentId = IDHUD_STATS_CONTENT;
+	spec.classicRect = []() { return WzRect(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT); };
+	spec.availableHeightAbove = [](const WzRect &classic) { return classic.y() - hudTopBand(); };
+	spec.availableWidthRight = [](const WzRect &classic) { return OBJ_BACKX - classic.right(); };
+	spec.closeButton = content != nullptr ? closeButton : nullptr;
+	hudExtendPanel(self, content, spec);
+}
+
+void ObjectsForm::addHudExtension()
+{
+	auto self = std::static_pointer_cast<ObjectsForm>(shared_from_this());
+	auto content = hudModuleActive(HudModuleId::RowSummary) ? hudMakeRowSummary(self) : nullptr;
+	if (content == nullptr && currentHudSkin().panelTopPadding() <= 0)
+	{
+		return;
+	}
+	HudPanelExtensionSpec spec;
+	spec.contentId = IDHUD_OBJECTS_CONTENT;
+	spec.classicRect = []() { return WzRect(OBJ_BACKX, OBJ_BACKY - (getGroupButtonEnabled() ? 80 : 0), OBJ_BACKWIDTH, OBJ_BACKHEIGHT); };
+	spec.availableHeightAbove = [](const WzRect &classic) { return classic.y() - hudTopBand(); };
+	spec.closeButton = content != nullptr ? closeButton : nullptr;
+	// The strip shows the page tabs, so it may cover their row
+	spec.bandOverlap = content != nullptr ? OBJ_TABY + objectsList->tabWidget()->height() : 0;
+	hudExtendPanel(self, content, spec);
 }

@@ -61,8 +61,12 @@ their Classic names.
 
 Against the Classic reference of the same size, scale and settings:
 
-1. Every Classic widget is still there, with the same screen rectangle, except that the stats panel may grow up and
-   right, the object row up, and the order panel down and right (panel extensions).
+1. Every Classic widget is still there, with the same screen rectangle, with these exceptions (marked in the dump):
+   - The stats panel may grow up and right, the object row up, and the order panel down and right (panel extensions).
+   - A grown panel's close button (`movedClose`) moves to the extension's corner. It may be anywhere inside the
+     panel, and rules 3 and 4 skip it.
+   - A list's page tabs that an extension shows in their place (`replacedPageTabs`: the object row's, with the row
+     summary strip) are hidden but still listed where they were. The points that reached them may reach anything.
 2. No new widget appears outside the addition range.
 3. The Classic widgets keep their relative z-order.
 4. Every sampled point that reached a Classic widget still reaches it. A point that reached nothing may reach a HUD

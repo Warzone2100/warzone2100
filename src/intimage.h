@@ -43,6 +43,12 @@ struct TABDEF
 	SWORD MajorSelected;		//< Index of image to use for tab selected (same as pressed).
 };
 
+/// A list's page tabs as in the game's panels: the tab images in three sizes (the smallest with scroll buttons), drawn
+/// by the HUD skin
+void intSetupPageTabs(TabSelectionWidget &tabs, TabAlignment tabAlignment);
+/// Page tabs drawn by the HUD skin (the HUD's, others keep the Classic tabs)
+void intSetHudPageTabs(TabSelectionWidget &tabs);
+
 class IntListTabWidget : public ListTabWidget
 {
 protected:
@@ -58,6 +64,9 @@ public:
 		widget->initialize();
 		return widget;
 	}
+
+	/// Its page tabs drawn by the HUD skin (the HUD's lists, others keep the Classic tabs)
+	void setHudSkinned();
 
 private:
 	TabAlignment tabAlignment = TabAlignment::LeftAligned;

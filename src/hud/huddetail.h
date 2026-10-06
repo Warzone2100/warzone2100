@@ -52,6 +52,8 @@ public:
 	virtual std::shared_ptr<WIDGET> makeHudDetail() = 0;
 	virtual bool hasHudDetail() { return true; }
 	virtual HudDetailPlacement hudDetailPlacement() const { return HudDetailPlacement::Above; }
+	/// The ID of the panel the popover goes beside (rather than beside the widget itself), ex. the object row
+	virtual uint32_t hudDetailPanelId() const { return 0; }
 };
 
 /// For widgets that aren't HudDetailSources: describe them all the same
@@ -59,6 +61,7 @@ struct HudDetailProvider
 {
 	std::function<std::shared_ptr<WIDGET> ()> make;
 	HudDetailPlacement placement = HudDetailPlacement::Above;
+	uint32_t panelId = 0;
 };
 void hudDetailRegister(const std::shared_ptr<WIDGET> &widget, const HudDetailProvider &provider);
 

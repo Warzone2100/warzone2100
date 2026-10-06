@@ -370,6 +370,7 @@ bool CommanderController::showInterface()
 	}
 
 	auto objectsForm = CommanderObjectsForm::make(shared_from_this());
+	objectsForm->addHudExtension();
 	psWScreen->psForm->attach(objectsForm);
 	displayOrderForm();
 	return true;

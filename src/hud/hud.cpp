@@ -31,6 +31,8 @@
 #include "hudmodel.h"
 #include "hudskin.h"
 #include "hudmodules.h"
+#include "hudpanelfilters.h"
+#include "hudrowsummary.h"
 #include "hudworldbars.h"
 
 #include "lib/framework/frame.h"
@@ -125,6 +127,8 @@ void rebuildNow()
 
 void hudInitialize()
 {
+	hudResetPanelFilters();
+	hudResetRowFilters();
 	initialized = true;
 	interfaceShown = true;
 	rebuildPending = false;

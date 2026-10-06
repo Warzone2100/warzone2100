@@ -29,6 +29,7 @@
 
 #include "hudgeometrydump.h"
 #include "hudids.h"
+#include "hudpanelextension.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -192,12 +193,15 @@ public:
 	std::unordered_map<const WIDGET *, std::string> keys;
 
 private:
-	void walkWidget(const std::shared_ptr<WIDGET> &widget, const std::string &namedPath, bool inAddition)
+	void walkWidget(const std::shared_ptr<WIDGET> &widget, const std::string &namedPath, bool inAddition, bool inReplacedTabs = false)
 	{
-		if (!widget->visible())
+		// A list's page tabs that an extension shows in their place still count, where they were, so keys don't change
+		const bool replacedRoot = !widget->visible() && hudIsReplacedPageTabs(*widget);
+		if (!widget->visible() && !replacedRoot)
 		{
 			return;
 		}
+		const bool replacedTabs = inReplacedTabs || replacedRoot;
 		if (hudIsWrapperId(widget->id))
 		{
 			addEntry(*widget, namedPath + "/wrapper:" + std::to_string(widget->id - IDHUD_WRAPPER_FIRST), true);
@@ -226,9 +230,18 @@ private:
 			key = counter + std::to_string(ordinals[counter]++);
 		}
 		addEntry(*widget, key, addition);
-		for (auto const &child : widget->children())
+		if (replacedTabs)
 		{
-			walkWidget(child, childPath, addition);
+			widgets.back()["replacedPageTabs"] = true;
+		}
+		// A panel's close button was its first child in Classic, before its extension moved it: it keeps that key
+		auto children = widget->children();
+		std::stable_partition(children.begin(), children.end(), [](const std::shared_ptr<WIDGET> &child) {
+			return hudIsMovedCloseButton(*child);
+		});
+		for (auto const &child : children)
+		{
+			walkWidget(child, childPath, addition, replacedTabs);
 		}
 	}
 
@@ -244,6 +257,10 @@ private:
 		entry["z"] = static_cast<int>(widgets.size());
 		entry["addition"] = addition;
 		entry["mouseTransparent"] = widget.transparentToMouse();
+		if (hudIsMovedCloseButton(widget))
+		{
+			entry["movedClose"] = true;
+		}
 		widgets.push_back(entry);
 		keys[&widget] = key;
 	}

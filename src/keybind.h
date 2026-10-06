@@ -143,6 +143,7 @@ MappableFunction kf_SelectNextIdleFactory(const bool bJumpToSelected = false);
 MappableFunction kf_SelectNextIdleResearch(const bool bJumpToSelected = false);
 MappableFunction kf_SelectNextIdleTruck(const bool bJumpToSelected = false);
 void kf_SelectAllIdleTrucks();
+void kf_FocusPanelSearch();
 void kf_ToggleConsoleDrop();
 void kf_ConsoleHistoryPageUp();
 void kf_ConsoleHistoryPageDown();

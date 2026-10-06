@@ -700,6 +700,7 @@ bool BuildController::showInterface()
 	}
 
 	auto objectsForm = BuildObjectsForm::make(shared_from_this());
+	objectsForm->addHudExtension();
 	psWScreen->psForm->attach(objectsForm);
 	displayStatsForm();
 	triggerEvent(TRIGGER_MENU_BUILD_UP);

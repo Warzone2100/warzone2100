@@ -70,6 +70,7 @@ namespace
 {
 
 constexpr int COMPACT_MODEL_SIZE = 48;
+constexpr size_t MAX_QUEUE_LINES = 4;
 constexpr int PADDING = DetailPanelContents::PADDING;
 constexpr int UNLIMITED_STORAGE = 1000000;
 constexpr uint32_t MODEL_ROTATE_TIME = 3 * GAME_TICKS_PER_SEC;
@@ -282,6 +283,29 @@ void weaponLines(Body &body, const WEAPON_STATS &weapon, unsigned player)
 	                   static_cast<double>(range) / TILE_UNITS, rof));
 }
 
+void queueSection(Body &body, STRUCTURE *psStruct)
+{
+	const auto queue = hudFactoryQueue(psStruct);
+	if (queue.empty())
+	{
+		return;
+	}
+	unsigned total = 0;
+	for (const auto &entry : queue)
+	{
+		total += entry.remaining;
+	}
+	body.section(astringf(ngettext("Queue: %u unit", "Queue: %u units", total), total).c_str());
+	for (size_t i = 0; i < queue.size() && i < MAX_QUEUE_LINES; ++i)
+	{
+		body.line(astringf("%s %s ×%u", i == 0 ? "▸" : "·", getLocalizedStatsName(queue[i].psTemplate), queue[i].remaining));
+	}
+	if (queue.size() > MAX_QUEUE_LINES)
+	{
+		body.line(astringf(_("+%u more"), static_cast<unsigned>(queue.size() - MAX_QUEUE_LINES)), WZCOL_TEXT_DARK);
+	}
+}
+
 unsigned droidCount(unsigned player)
 {
 	return getNumDroids(player) + getNumMissionDroids(player) + getNumTransporterDroids(player);
@@ -492,10 +516,6 @@ std::shared_ptr<WIDGET> hudObjectDetail(BASE_OBJECT *object)
 			{
 				body.line(astringf(_("Delivery point %u"), factory->psAssemblyPoint->factoryInc + 1));
 			}
-			if (job.has_value() && job->queued > 0)
-			{
-				body.line(astringf(ngettext("%u unit queued", "%u units queued", job->queued), job->queued));
-			}
 			if (factory->productionLoops > 0)
 			{
 				body.line(factory->productionLoops == INFINITE_PRODUCTION ? std::string(_("↻ Repeats forever"))
@@ -532,6 +552,7 @@ std::shared_ptr<WIDGET> hudObjectDetail(BASE_OBJECT *object)
 		}
 		const unsigned hp = psStruct->structureBody();
 		body.line(astringf(_("Hit points: %u of %u"), psStruct->body, hp));
+		queueSection(body, psStruct);
 	}
 	else if (object->type == OBJ_DROID)
 	{

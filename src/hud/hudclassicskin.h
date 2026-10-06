@@ -53,6 +53,7 @@ public:
 	void drawPill(const WzRect &rect, HudTone tone, bool filled) override;
 	void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) override;
 	void drawPopoverFrame(const WzRect &rect) override;
+	void drawInputField(const WzRect &rect, bool editing) override;
 	PIELIGHT toneColor(HudTone tone) const override;
 	void drawOverlayText(WzText &text, float x, float y, PIELIGHT color) override;
 };

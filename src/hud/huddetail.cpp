@@ -80,6 +80,7 @@ class RegisteredSource : public HudDetailSource
 public:
 	std::shared_ptr<WIDGET> makeHudDetail() override { return provider != nullptr && provider->make ? provider->make() : nullptr; }
 	HudDetailPlacement hudDetailPlacement() const override { return provider != nullptr ? provider->placement : HudDetailPlacement::Above; }
+	uint32_t hudDetailPanelId() const override { return provider != nullptr ? provider->panelId : 0; }
 	const HudDetailProvider *provider = nullptr;
 };
 
@@ -173,6 +174,23 @@ WzRect place(const WzRect &around, int w, int h, HudDetailPlacement placement)
 	return WzRect(clampX(fallback.x()), clampY(fallback.y()), w, h);
 }
 
+WzRect besideRect(const WIDGET &widget, uint32_t panelId, HudDetailPlacement placement)
+{
+	const WzRect own = widget.screenGeometry();
+	if (panelId != 0)
+	{
+		for (auto ancestor = widget.parent(); ancestor != nullptr; ancestor = ancestor->parent())
+		{
+			if (ancestor->id == panelId)
+			{
+				const WzRect panel = ancestor->screenGeometry();
+				return placement == HudDetailPlacement::Right ? WzRect(panel.x(), own.y(), panel.width(), own.height()) : panel;
+			}
+		}
+	}
+	return own;
+}
+
 bool show(const std::shared_ptr<WIDGET> &widget)
 {
 	auto source = sourceOf(widget.get());
@@ -193,7 +211,7 @@ bool show(const std::shared_ptr<WIDGET> &widget)
 	contents = newContents;
 	contents->setTransparentToMouse(true);
 	overlayRoot->attach(contents);
-	const WzRect rect = place(widget->screenGeometry(), contents->width(), contents->height(), source->hudDetailPlacement());
+	const WzRect rect = place(besideRect(*widget, source->hudDetailPanelId(), source->hudDetailPlacement()), contents->width(), contents->height(), source->hudDetailPlacement());
 	contents->move(rect.x(), rect.y());
 	anchor = widget;
 	builtAt = realTime;
@@ -245,8 +263,13 @@ void hudDetailUpdate()
 	{
 		installed = true;
 		widgSetTipSuppressed([](const WIDGET &widget) {
-			auto source = sourceOf(&widget);
-			return source != nullptr && usable() && detailWanted() && source->hasHudDetail();
+			if (!usable() || !detailWanted())
+			{
+				return false;
+			}
+			auto described = describedAt(std::const_pointer_cast<WIDGET>(widget.shared_from_this()));
+			auto source = sourceOf(described.get());
+			return source != nullptr && source->hasHudDetail();
 		});
 	}
 

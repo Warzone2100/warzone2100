@@ -449,6 +449,11 @@ public:
 		return affordable ? normal : palette.stateBad;
 	}
 
+	int panelTopPadding() const override
+	{
+		return static_cast<int>(std::ceil(params.accentEdge)) + 2;
+	}
+
 	bool drawPageTab(const WzRect &rect, TabSelectionButtonRole role, bool selected, bool hovered) override
 	{
 		const float x0 = static_cast<float>(rect.x());
@@ -532,6 +537,13 @@ public:
 	void drawChip(const WzRect &rect, HudTone tone, bool filled) override
 	{
 		drawToned(rect, tone, filled, params.cardRadius);
+	}
+
+	void drawInputField(const WzRect &rect, bool editing) override
+	{
+		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
+		                   static_cast<float>(rect.bottom()), pal_RGBA(6, 9, 14, 190), params.cardRadius,
+		                   editing ? withAlpha(palette.accent, 230) : palette.panelBorder, params.borderWidth);
 	}
 
 	nonstd::optional<PIELIGHT> drawHeaderButton(const WzRect &rect, bool hovered, bool down) override

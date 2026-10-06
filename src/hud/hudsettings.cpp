@@ -132,7 +132,7 @@ void hudSetSettings(const HudSettings &settings)
 	{
 		hudSkinChanged();
 	}
-	if (previous.modules != settings.modules || previous.tooltips != settings.tooltips
+	if (previous.skin != settings.skin || previous.modules != settings.modules || previous.tooltips != settings.tooltips
 		|| previous.showModulesInTutorial != settings.showModulesInTutorial)
 	{
 		hudRequestRebuild();

@@ -152,6 +152,7 @@ public:
 	}
 
 	std::shared_ptr<WIDGET> makeHudDetail() override;
+	uint32_t hudDetailPanelId() const override { return IDOBJ_FORM; }
 
 protected:
 	bool isHighlighted() const override
@@ -182,6 +183,7 @@ public:
 	{
 		return HudDetailPlacement::Right;
 	}
+	uint32_t hudDetailPanelId() const override { return IDSTAT_FORM; }
 
 protected:
 	std::string getTip() override
@@ -206,6 +208,16 @@ class ObjectsForm: public IntFormAnimated
 private:
 	typedef IntFormAnimated BaseWidget;
 
+public:
+	/// Lists only the objects the filter keeps, in their Classic order (none: all of them, exactly as in Classic)
+	void setObjectFilter(const std::function<bool (BASE_OBJECT *)> &filter);
+	BaseObjectsController &objectsController() const { return getController(); }
+	/// The object whose button (or job button) the pointer is on, if any
+	BASE_OBJECT *objectUnderPointer() const;
+	/// The row summary strip and its filter chips, when that module is on
+	void addHudExtension();
+	const std::shared_ptr<IntListTabWidget> &objectsListWidget() const { return objectsList; }
+
 protected:
 	ObjectsForm(): BaseWidget(false) {}
 
@@ -215,6 +227,7 @@ protected:
 	void addTabList();
 	void updateButtons();
 	void addNewButton();
+	void addNewButton(size_t buttonIndex);
 	void removeLastButton();
 	void goToHighlightedTab();
 	virtual std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const = 0;
@@ -222,14 +235,33 @@ protected:
 	virtual BaseObjectsController &getController() const = 0;
 
 	std::shared_ptr<IntListTabWidget> objectsList;
+	std::shared_ptr<W_BUTTON> closeButton;
 	size_t buttonsCount = 0;
 	BASE_OBJECT *previousHighlighted = nullptr;
+
+private:
+	void updateFilteredButtons();
+	void removeAllButtons();
+	/// (A filter hid the highlighted object: the first shown one takes its place, as if clicked)
+	void highlightFirstShown();
+	optional<size_t> listPositionOf(size_t objectIndex) const;
+
+	std::function<bool (BASE_OBJECT *)> objectFilter;
+	std::vector<size_t> shownIndices;
+	bool filteredLayout = false;
 };
 
 class StatsForm: public IntFormAnimated
 {
 private:
 	typedef IntFormAnimated BaseWidget;
+
+public:
+	/// Lists only the options the filter keeps, in their Classic order (none: all of them, exactly as in Classic)
+	void setOptionFilter(const std::function<bool (BASE_STATS *)> &filter);
+	BaseStatsController &statsController() const { return getController(); }
+	/// The filters and search field, when that module is on
+	void addHudExtension();
 
 protected:
 	StatsForm(): BaseWidget(false) {}
@@ -240,16 +272,24 @@ protected:
 	void addCloseButton();
 	void addTabList();
 	void addNewButton();
+	void addNewButton(size_t buttonIndex);
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
 	virtual BaseStatsController &getController() const = 0;
 
 	std::shared_ptr<IntListTabWidget> optionList;
+	std::shared_ptr<W_BUTTON> closeButton;
+	optional<size_t> listPositionOf(size_t statsIndex) const;
 
 private:
 	void updateButtons();
+	void updateFilteredButtons();
+	void removeAllButtons();
 
 	size_t buttonsCount = 0;
+	std::function<bool (BASE_STATS *)> optionFilter;
+	std::vector<size_t> shownIndices;
+	bool filteredLayout = false;
 };
 
 class ObjectStatsForm: public StatsForm

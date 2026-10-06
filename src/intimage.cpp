@@ -255,11 +255,25 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 void IntListTabWidget::initialize()
 {
 	ListTabWidget::initialize();
-	tabWidget()->setHeight(15);
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
-	tabWidget()->setDrawButtonFunction([](W_BUTTON &button, TabSelectionButtonRole role, int xOffset, int yOffset) {
+	intSetupPageTabs(*tabWidget(), tabAlignment);
+}
+
+void IntListTabWidget::setHudSkinned()
+{
+	intSetHudPageTabs(*tabWidget());
+}
+
+void intSetupPageTabs(TabSelectionWidget &tabs, TabAlignment tabAlignment)
+{
+	tabs.setHeight(15);
+	tabs.addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabs.addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabs.addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
+}
+
+void intSetHudPageTabs(TabSelectionWidget &tabs)
+{
+	tabs.setDrawButtonFunction([](W_BUTTON &button, TabSelectionButtonRole role, int xOffset, int yOffset) {
 		const unsigned state = button.getState();
 		return currentHudSkin().drawPageTab(WzRect(xOffset + button.x(), yOffset + button.y(), button.width(), button.height()), role,
 		                                    (state & (WBUT_LOCK | WBUT_CLICKLOCK | WBUT_DOWN)) != 0, (state & WBUT_HIGHLIGHT) != 0);

@@ -157,6 +157,8 @@ public:
 	virtual void drawCloseButton(int x, int y, int width, int height, bool highlighted) = 0;
 	/// A stats panel item's cost bar: `normal`, or (Modern) a warning when it can't be afforded now
 	virtual PIELIGHT statsCostBarColor(PIELIGHT normal, bool) const { return normal; }
+	/// How far a panel with an extension (or room for one) grows up so its frame's top edge clears the contents
+	virtual int panelTopPadding() const { return 0; }
 	/// A list's page tab or page scroll button (IntListTabWidget). False to draw its images
 	virtual bool drawPageTab(const WzRect &, TabSelectionButtonRole, bool, bool) { return false; }
 	/// The mission and transporter timers' background
@@ -170,6 +172,7 @@ public:
 	virtual void drawChip(const WzRect &rect, HudTone tone, bool filled) { drawPill(rect, tone, filled); }
 	virtual void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) = 0;
 	virtual void drawPopoverFrame(const WzRect &rect) = 0;
+	virtual void drawInputField(const WzRect &rect, bool editing) = 0;
 	/// A text button in a panel's header (the research panel's View Tree): the text color,
 	/// or nothing to keep the panel's own look
 	virtual nonstd::optional<PIELIGHT> drawHeaderButton(const WzRect &, bool, bool) { return nonstd::nullopt; }

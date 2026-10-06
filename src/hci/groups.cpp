@@ -122,6 +122,11 @@ public:
 		return hudGroupDetail(static_cast<unsigned>(groupNumber));
 	}
 
+	uint32_t hudDetailPanelId() const override
+	{
+		return IDOBJ_GROUP;
+	}
+
 	static std::shared_ptr<GroupButton> make(const std::shared_ptr<GroupsUIController>& controller, size_t groupNumber)
 	{
 		class make_shared_enabler: public GroupButton {};
@@ -394,6 +399,7 @@ void GroupsForum::addCommanderGroupDamageForCurrentTick(const DROID *psCommander
 void GroupsForum::addTabList()
 {
 	attach(groupsList = IntListTabWidget::make(TabAlignment::RightAligned));
+	groupsList->setHudSkinned();
 	groupsList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	groupsList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int groupListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;
