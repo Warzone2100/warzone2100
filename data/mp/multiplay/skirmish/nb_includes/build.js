@@ -1,6 +1,6 @@
 
 /*
- * This file describes building construction procedures.
+ * This file describes building construction and recycling procedures.
  *
  */
 
@@ -184,6 +184,31 @@ function buildBasicStructure(statlist, importance)
 	return (success) ? BUILDRET.SUCCESS : BUILDRET.FAILURE;
 }
 
+function checkPowerIncome()
+{
+    if (myPower() < 50 && countStructList(structures.derricks) > 0 && countFinishedStructList(structures.gens) === 0)
+    {   
+        if (!cancelAllProduction() && !emergencyRecycleBase(false) && !emergencyRecycleTank())
+        {
+            return emergencyRecycleBase(true);//we can't do much more currently        
+        }
+        
+		if (countStructList(structures.gens) < 1 && buildBasicStructure(structures.gens, IMPORTANCE.MANDATORY) !== BUILDRET.UNAVAILABLE)
+        {
+            return true;
+        }
+    }
+    else if(myPower() < 100 && countStructList(structures.derricks) === 0)
+    {
+        if (!emergencyRecycleBase(false) && !emergencyRecycleTruck())//we are so low on power that trucks and most base structures are useless either.
+        {
+            return false;    
+        }    
+        return true;
+    }
+    return false;
+}
+
 function finishStructures()
 {
 	let success = false;
@@ -210,6 +235,8 @@ function finishStructures()
 			success = true;
 		}
 	}
+
+    checkPowerIncome();
 
 	return success;
 }
@@ -625,6 +652,51 @@ function recycleDefenses()
 	}
 
 	return false;
+}
+
+function emergencyRecycleBase(lastResort)//use with care, it's nearly indiscriminate
+{
+    const trucks = enumTrucks();
+
+    if (trucks.length <= 0)
+	{
+		return false;
+	}
+    
+    if (!defined(lastResort))
+    {
+        lastResort = false;    
+    }
+
+    const list = enumStruct(me);
+    let closestTruck;
+    let closestStruct;
+    let minDist = Infinity;
+
+	for (let i = 0; i < list.length; ++i)
+	{
+        if(list[i].stattype !== RESOURCE_EXTRACTOR &&//derricks are free (and most needed now) so leave them
+           list[i].stattype !== POWER_GEN && //also don't demolish new generator
+          (lastResort || 
+          (list[i].stattype !== FACTORY && 
+           list[i].stattype !== CYBORG_FACTORY)))
+        {                                       
+		    for (let j = 0; j < trucks.length; ++j)
+		    {
+			    if (trucks[j].order !== DORDER_DEMOLISH && distance(trucks[j], list[i]) < minDist && droidCanReach(trucks[j], list[i].x, list[i].y))
+			    {
+			    	closestTruck = j;
+                    closestStruct = i;
+                    minDist = distance(trucks[j], list[i]);
+			    }
+		    }
+        }
+	}
+    if (defined(closestTruck) && defined(closestStruct))
+    {
+        return (orderDroidObj(trucks[closestTruck], DORDER_DEMOLISH, list[closestStruct]));
+    }
+    return false;
 }
 
 _global.checkConstruction = function() {
