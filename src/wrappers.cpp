@@ -51,6 +51,8 @@
 #include "stdinreader.h"
 #include "multijoin_helpers.h"
 
+#include <vector>
+
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
@@ -73,76 +75,98 @@ static bool bActualHeadlessAutoGameMode = false;
 static bool bHostLaunchStartNotReady = false;
 static bool loadingScreenSessionActive = false;
 
-static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
-static STAR *stars = nullptr;
+struct LoadingBarLayout
+{
+	int barLeftX = 0;
+	int barLeftY = 0;
+	int barRightX = 0;
+	int barRightY = 0;
+	int boxWidth = 0;
+	int boxHeight = 0;
+	int starsNum = 0;
+	int starHeight = 0;
+	int width = 0;
+	int height = 0;
+};
 
-static STAR newStar()
+static LoadingBarLayout loadingBar;
+static std::vector<STAR> loadingStars;
+
+static STAR newStar(const LoadingBarLayout& layout)
 {
 	STAR s;
-	s.xPos = rand() % barRightX;
+	s.xPos = rand() % layout.barRightX;
 	s.speed = static_cast<int>((rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0);
 	s.colour = pal_SetBrightness(150 + rand() % 100);
 	return s;
 }
 
-static void renderLoadingScreenPass()
+static LoadingBarLayout loadingBarMetricsFor(int width, int height)
 {
-	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
+	LoadingBarLayout layout;
+	const int offset = static_cast<int>(height / 40.0);
 
-	pie_UniTransBoxFill(barLeftX - 2, barLeftY - 2, barRightX + 2, barRightY + 2, loadingbar_background);
+	layout.boxHeight = offset;
+	layout.boxWidth = width - 2 * offset;
+	layout.barRightX = width - offset;
+	layout.barRightY = height - offset;
+	layout.barLeftX = layout.barRightX - layout.boxWidth;
+	layout.barLeftY = layout.barRightY - layout.boxHeight;
+	layout.starsNum = std::max(0, layout.boxWidth / std::max(layout.boxHeight, 1));
+	layout.starHeight = static_cast<int>(2.0 * height / 640.0);
+	layout.width = width;
+	layout.height = height;
+	return layout;
+}
 
-	for (unsigned int i = 1; i < static_cast<unsigned int>(starsNum); ++i)
+static void ensureLoadingBarLayout()
+{
+	const int width = pie_GetVideoBufferWidth();
+	const int height = pie_GetVideoBufferHeight();
+	if (width == loadingBar.width && height == loadingBar.height
+		&& static_cast<int>(loadingStars.size()) == loadingBar.starsNum)
 	{
-		stars[i].xPos = stars[i].xPos + stars[i].speed;
-		if (barLeftX + stars[i].xPos >= barRightX)
-		{
-			stars[i] = newStar();
-			stars[i].xPos = 1;
-		}
-		{
-			const int topX = barLeftX + stars[i].xPos;
-			const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
-			const int botX = MIN(topX + stars[i].speed, barRightX);
-			const int botY = topY + starHeight;
+		return;
+	}
 
-			pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
-		}
+	loadingBar = loadingBarMetricsFor(width, height);
+	if (loadingBar.starsNum <= 0 || loadingBar.barRightX <= 0)
+	{
+		loadingStars.clear();
+		return;
+	}
+
+	loadingStars.resize(static_cast<size_t>(loadingBar.starsNum));
+	for (STAR& star : loadingStars)
+	{
+		star = newStar(loadingBar);
 	}
 }
 
-static void setupLoadingScreen()
+static void renderLoadingScreenPass()
 {
-	unsigned int i;
-	int w = pie_GetVideoBufferWidth();
-	int h = pie_GetVideoBufferHeight();
-	int offset;
+	ensureLoadingBarLayout();
 
-	boxHeight = static_cast<int>(h / 40.0);
-	offset = boxHeight;
-	boxWidth = w - 2 * offset;
+	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
 
-	barRightX = w - offset;
-	barRightY = h - offset;
+	pie_UniTransBoxFill(loadingBar.barLeftX - 2, loadingBar.barLeftY - 2, loadingBar.barRightX + 2, loadingBar.barRightY + 2, loadingbar_background);
 
-	barLeftX = barRightX - boxWidth;
-	barLeftY = barRightY - boxHeight;
-
-	starsNum = boxWidth / std::max<int>(boxHeight, 1);
-	starHeight = static_cast<int>(2.0 * h / 640.0);
-
-	if (!stars)
+	for (size_t i = 1; i < loadingStars.size(); ++i)
 	{
-		stars = (STAR *)malloc(sizeof(STAR) * starsNum);
-		if (!stars)
+		loadingStars[i].xPos = loadingStars[i].xPos + loadingStars[i].speed;
+		if (loadingBar.barLeftX + loadingStars[i].xPos >= loadingBar.barRightX)
 		{
-			starsNum = 0;
-			return;
+			loadingStars[i] = newStar(loadingBar);
+			loadingStars[i].xPos = 1;
 		}
-	}
+		{
+			const int topX = loadingBar.barLeftX + loadingStars[i].xPos;
+			const int topY = loadingBar.barLeftY + static_cast<int>(i) * (loadingBar.boxHeight - loadingBar.starHeight) / static_cast<int>(loadingStars.size());
+			const int botX = MIN(topX + loadingStars[i].speed, loadingBar.barRightX);
+			const int botY = topY + loadingBar.starHeight;
 
-	for (i = 0; i < starsNum; ++i)
-	{
-		stars[i] = newStar();
+			pie_UniTransBoxFill(topX, topY, botX, botY, loadingStars[i].colour);
+		}
 	}
 }
 
@@ -330,10 +354,9 @@ void wzemscripten_display_web_loading_indicator(int x)
 }
 #endif
 
-// fill buffers with the static screen
+// Bar geometry is derived on the first loading-pass record.
 void initLoadingScreen(bool drawbdrop)
 {
-	setupLoadingScreen();
 	wzShowMouse(false);
 	pie_SetFogStatus(false);
 	loadingScreenSessionActive = true;
@@ -361,11 +384,9 @@ void closeLoadingScreen()
 {
 	loadingScreenSessionActive = false;
 
-	if (stars)
-	{
-		free(stars);
-		stars = nullptr;
-	}
+	loadingStars.clear();
+	loadingStars.shrink_to_fit();
+	loadingBar = {};
 #if defined(__EMSCRIPTEN__)
 	wzemscripten_display_web_loading_indicator(0);
 #endif
