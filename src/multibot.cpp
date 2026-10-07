@@ -56,6 +56,10 @@
 
 static std::vector<QueuedDroidInfo> queuedOrders;
 
+static constexpr size_t DroidInfoMaxVarintBytes = 5;
+static constexpr size_t DroidInfoMaxPayloadBytes = MaxMsgSize - NetMessage::HEADER_LENGTH;
+static constexpr uint32_t MaxDroidInfoDroids = static_cast<uint32_t>((DroidInfoMaxPayloadBytes - DroidInfoMaxVarintBytes) / DroidInfoMaxVarintBytes);
+
 static void applyOrderSource(QueuedDroidInfo &info, const OrderSource &source)
 {
 	info.provenance = orderProvenanceFromSource(source);
@@ -408,11 +412,9 @@ void sendQueuedDroidInfo()
 				NETQueuedDroidInfo(w, *eqBegin);
 
 				// The count and each droid ID delta encode to at most 5 bytes.
-				constexpr size_t maxVarintBytes = 5;
-				constexpr size_t maxPayloadBytes = MaxMsgSize - NetMessage::HEADER_LENGTH;
 				const size_t headerBytes = w.msgBuilder.payloadSize();
-				ASSERT(headerBytes + 2 * maxVarintBytes <= maxPayloadBytes, "GAME_DROIDINFO header too large: %zu", headerBytes);
-				const size_t maxIds = (maxPayloadBytes - headerBytes - maxVarintBytes) / maxVarintBytes;
+				ASSERT(headerBytes + 2 * DroidInfoMaxVarintBytes <= DroidInfoMaxPayloadBytes, "GAME_DROIDINFO header too large: %zu", headerBytes);
+				const size_t maxIds = (DroidInfoMaxPayloadBytes - headerBytes - DroidInfoMaxVarintBytes) / DroidInfoMaxVarintBytes;
 				const uint32_t num = static_cast<uint32_t>(std::min<size_t>(eqEnd - chunkBegin, std::max<size_t>(maxIds, 1)));
 				NETuint32_t(w, num);
 
@@ -773,9 +775,7 @@ bool recvDroidInfo(NETQUEUE queue)
 		orderProvenanceRecordReported(info.player, static_cast<OrderOrigin>(info.provenance.origin));
 
 		uint32_t num = 0;
-		NETuint32_t(r, num);
-
-		if (!r.valid() || !validDroidInfoOrderType(info))
+		if (!NETcount(r, num, MaxDroidInfoDroids) || !validDroidInfoOrderType(info))
 		{
 			if (recordInvalidMessage(queue.index, GAME_DROIDINFO))
 			{

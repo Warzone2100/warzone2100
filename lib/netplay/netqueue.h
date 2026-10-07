@@ -252,6 +252,10 @@ public:
 	{
 		return index <= msgData->size();
 	}
+	size_t remaining() const
+	{
+		return (index < msgData->size()) ? msgData->size() - index : 0;
+	}
 	void markInvalid() const
 	{
 		index = msgData->size() + 1;

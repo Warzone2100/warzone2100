@@ -1052,6 +1052,8 @@ static inline std::chrono::seconds maxDataCheck2WaitSeconds()
 	return std::chrono::seconds(std::max(war_getAutoLagKickSeconds() + 3, 60));
 }
 
+static constexpr uint32_t MaxDataCheck2Layers = 1024;
+
 static bool sendDataCheck2()
 {
 	if (NetPlay.isHost)
@@ -1110,7 +1112,7 @@ static bool sendDataCheck2()
 		return true;
 	});
 	uint32_t layersSize = static_cast<uint32_t>(layers.size());
-	NETuint32_t(w, layersSize);
+	NETcount(w, layersSize, MaxDataCheck2Layers);
 	for (auto& layer : layers)
 	{
 		uint16_t zOrder = layer.first;
@@ -1127,6 +1129,17 @@ static bool sendDataCheck2()
 	NETbool(w, bValue);
 	NETend(w);
 	return true;
+}
+
+static bool kickPlayerWithWrongData(uint32_t player)
+{
+	ASSERT_HOST_ONLY(return false);
+	std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+	sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::IncompatibleModKicked, 0, player);
+	addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+	kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
+	return false;
 }
 
 static bool recvDataCheck2(NETQUEUE queue)
@@ -1156,7 +1169,10 @@ static bool recvDataCheck2(NETQUEUE queue)
 	uint32_t layersSize = 0;
 	uint16_t zOrder = 0;
 	uint32_t layerCount = 0;
-	NETuint32_t(r, layersSize);
+	optional<uint32_t> invalidLayersSize;
+	NETcount(r, layersSize, MaxDataCheck2Layers, sizeof(uint16_t) + 1, [&invalidLayersSize](uint32_t badCount) {
+		invalidLayersSize = badCount;
+	});
 	for (uint32_t i = 0; i < layersSize; ++i)
 	{
 		NETuint16_t(r, zOrder);
@@ -1198,17 +1214,17 @@ static bool recvDataCheck2(NETQUEUE queue)
 	debug(LOG_NET, "** Received NET_DATA_CHECK2 from player %u", player);
 	ingame.lastSentPlayerDataCheck2[player].reset();
 
+	if (invalidLayersSize.has_value())
+	{
+		debug(LOG_INFO, "%s (%u) has a very high or invalid layersSize - something is probably wrong. (layersSize: %" PRIu32 ")", getPlayerName(player), player, invalidLayersSize.value());
+		return kickPlayerWithWrongData(player);
+	}
+
 	bool hasWrongData = false;
 
 	if (!NetPlay.players[player].isSpectator && (recvSelectedPlayer != player || recvRealSelectedPlayer != player))
 	{
 		debug(LOG_INFO, "%s (%u) has a corrupted player index. (selectedPlayer: %" PRIu32 ", realSelectedPlayer: %" PRIu32 ")", getPlayerName(player), player, recvSelectedPlayer, recvRealSelectedPlayer);
-		hasWrongData = true;
-	}
-
-	if (layersSize > 1024)
-	{
-		debug(LOG_INFO, "%s (%u) has a very high layersSize - something is probably wrong. (layersSize: %" PRIu32 ")", getPlayerName(player), player, layersSize);
 		hasWrongData = true;
 	}
 
@@ -1261,13 +1277,7 @@ static bool recvDataCheck2(NETQUEUE queue)
 
 	if (hasWrongData)
 	{
-		ASSERT_HOST_ONLY(return false);
-		std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
-		sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::IncompatibleModKicked, 0, player);
-		addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
-
-		kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
-		return false;
+		return kickPlayerWithWrongData(player);
 	}
 
 	return true;

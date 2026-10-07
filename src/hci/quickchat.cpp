@@ -3550,7 +3550,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		NETbool(wref, targeting.humanTeammates);
 		NETbool(wref, targeting.aiTeammates);
 		uint32_t numSpecificRecipients = static_cast<uint32_t>(targeting.specificPlayers.size());
-		NETuint32_t(wref, numSpecificRecipients);
+		NETcount(wref, numSpecificRecipients, MAX_CONNECTED_PLAYERS);
 		for (auto playerIdx : targeting.specificPlayers)
 		{
 			NETuint32_t(wref, playerIdx);
@@ -3694,7 +3694,7 @@ bool recvQuickChat(NETQUEUE queue)
 	NETbool(rref, targeting.humanTeammates);
 	NETbool(rref, targeting.aiTeammates);
 	uint32_t numSpecificRecipients = 0;
-	NETuint32_t(rref, numSpecificRecipients);
+	NETcount(rref, numSpecificRecipients, MAX_CONNECTED_PLAYERS);
 	for (uint32_t i = 0; i < numSpecificRecipients; ++i)
 	{
 		uint32_t tmp_playerIdx = std::numeric_limits<uint32_t>::max();
@@ -3712,7 +3712,14 @@ bool recvQuickChat(NETQUEUE queue)
 		NETuint32_t(rref, messageData.value().dataA);
 		NETuint32_t(rref, messageData.value().dataB);
 	}
-	NETend(rref);
+	if (!NETend(rref))
+	{
+		if (recordInvalidMessage(queue.index, NET_QUICK_CHAT_MSG))
+		{
+			debug(LOG_INFO, "Ignoring invalid NET_QUICK_CHAT_MSG from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return false;
+	}
 
 	if (!validMessageEnumValue)
 	{

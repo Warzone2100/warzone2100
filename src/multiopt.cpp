@@ -75,6 +75,7 @@
 #include "game_world.h"
 
 #define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
+static constexpr uint32_t MaxModHashes = 255;
 
 // send complete game info set!
 void sendOptions()
@@ -90,7 +91,7 @@ void sendOptions()
 	NETstring(w, game.map, 128);
 	NETbin(w, game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize = game.modHashes.size();
-	NETuint32_t(w, modHashesSize);
+	NETcount(w, modHashesSize, MaxModHashes);
 	for (auto &hash : game.modHashes)
 	{
 		NETbin(w, hash.bytes, hash.Bytes);
@@ -147,13 +148,13 @@ void sendOptions()
 		debug(LOG_ERROR, "Number of structure limits (%" PRIu32") exceeds maximum supported - truncating", numStructureLimits);
 		numStructureLimits = MAX_STRUCTURE_LIMITS;
 	}
-	NETuint32_t(w, numStructureLimits);
+	NETcount(w, numStructureLimits, MAX_STRUCTURE_LIMITS);
 	debug(LOG_NET, "(Host) Structure limits to process on client is %zu", ingame.structureLimits.size());
 	// Send the structures changed
-	for (auto structLimit : ingame.structureLimits)
+	for (uint32_t i = 0; i < numStructureLimits; ++i)
 	{
-		NETuint32_t(w, structLimit.id);
-		NETuint32_t(w, structLimit.limit);
+		NETuint32_t(w, ingame.structureLimits[i].id);
+		NETuint32_t(w, ingame.structureLimits[i].limit);
 	}
 	updateStructureDisabledFlags();
 	NETuint8_t(w, ingame.flags);
@@ -189,8 +190,13 @@ bool recvOptions(NETQUEUE queue)
 	NETstring(r, game.map, 128);
 	NETbin(r, game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
-	NETuint32_t(r, modHashesSize);
-	ASSERT_OR_RETURN(false, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
+	if (!NETcount(r, modHashesSize, MaxModHashes, Sha256::Bytes, [](uint32_t badCount) {
+		debug(LOG_ERROR, "Invalid number of mod hashes: %" PRIu32, badCount);
+	}))
+	{
+		NETend(r);
+		return false;
+	}
 	game.modHashes.resize(modHashesSize);
 	for (auto &hash : game.modHashes)
 	{
@@ -271,14 +277,14 @@ bool recvOptions(NETQUEUE queue)
 
 	// Get the number of structure limits to expect
 	uint32_t numStructureLimits = 0;
-	NETuint32_t(r, numStructureLimits);
-	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
-	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
+	if (!NETcount(r, numStructureLimits, MAX_STRUCTURE_LIMITS, 2, [](uint32_t badCount) {
+		debug(LOG_POPUP, "Invalid number of structure limits (%" PRIu32 "). Incompatible host.", badCount);
+	}))
 	{
-		debug(LOG_POPUP, "Number of structure limits (%" PRIu32") exceeds maximum supported. Incompatible host.", numStructureLimits);
 		NETend(r);
 		return false;
 	}
+	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
 	// If there were any changes allocate memory for them
 	if (numStructureLimits)
 	{

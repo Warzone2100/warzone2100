@@ -782,7 +782,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 	}
 
 	auto w = NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
-	NETuint32_t(w, validCount);
+	NETcount(w, validCount, MAX_CONNECTED_PLAYERS);
 	for (unsigned n = 0; n < indexLen; ++n)
 	{
 		if (index[n] >= MAX_CONNECTED_PLAYERS)
@@ -2652,10 +2652,19 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			bool error = false;
 
 			auto r = NETbeginDecode(playerQueue, NET_PLAYER_INFO);
-			NETuint32_t(r, indexLen);
-			if (indexLen > MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer))
+			if (playerQueue.index != NetPlay.hostPlayer)
 			{
-				debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %u", indexLen);
+				if (recordInvalidMessage(playerQueue.index, NET_PLAYER_INFO))
+				{
+					debug(LOG_INFO, "MSG_PLAYER_INFO: Received from non-host player %" PRIu8 " - further ones will not be logged", playerQueue.index);
+				}
+				NETend(r);
+				break;
+			}
+			if (!NETcount(r, indexLen, MAX_CONNECTED_PLAYERS, 1, [](uint32_t badCount) {
+				debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %" PRIu32, badCount);
+			}))
+			{
 				NETend(r);
 				break;
 			}
