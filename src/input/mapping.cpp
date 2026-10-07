@@ -334,8 +334,18 @@ static KeyMappingInput createInputForSource(const KeyMappingInputSource source, 
 {
 	switch (source) {
 	case KeyMappingInputSource::KEY_CODE:
+		if (keyCode > static_cast<unsigned int>(KEY_MAXSCAN))
+		{
+			debug(LOG_WZ, "Encountered invalid key code %u while loading keymap!", keyCode);
+			return KEY_CODE::KEY_MAXSCAN;
+		}
 		return (KEY_CODE)keyCode;
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		if (keyCode >= static_cast<unsigned int>(MOUSE_END))
+		{
+			debug(LOG_WZ, "Encountered invalid mouse button %u while loading keymap!", keyCode);
+			return KEY_CODE::KEY_MAXSCAN;
+		}
 		return (MOUSE_KEY_CODE)keyCode;
 	case KeyMappingInputSource::GAMEPAD:
 		if (keyCode >= static_cast<unsigned int>(GPAD_BTN_MAX))
@@ -366,7 +376,8 @@ bool KeyMappings::load(const char* path, const KeyFunctionConfiguration& keyFunc
 
 	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
-		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
+		const int metaValue = ini.value("meta", 0).toInt();
+		const KEY_CODE meta = (metaValue >= 0 && metaValue < KEY_MAXSCAN) ? (KEY_CODE)metaValue : KEY_IGNORE;
 		auto sub = ini.value("sub", 0).toInt();
 		auto action = (KeyAction)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();

@@ -111,6 +111,11 @@ WZ_Notification_Preferences::WZ_Notification_Preferences(const std::string &file
 			}
 			ASSERT(!mRoot.is_null(), "JSON document from %s is null", fileName.c_str());
 			ASSERT(mRoot.is_object(), "JSON document from %s is not an object. Read: \n%s", fileName.c_str(), data);
+			if (!mRoot.is_object())
+			{
+				// treat as if no preferences exist yet
+				mRoot = json::object();
+			}
 			free(data);
 		}
 		else
