@@ -25,6 +25,8 @@
  * All the stuff relevant to a mission.
  */
 #include <time.h>
+#include <unordered_set>
+#include <vector>
 
 #include "mission.h"
 
@@ -287,6 +289,119 @@ static void resetHomeStructureObjects()
 	}
 }
 
+// Remove references from the home base and limbo droids to the off-world objects
+static void clearReferencesToOffWorldObjects()
+{
+	std::unordered_set<const BASE_OBJECT *> offWorldObjects;
+	for (const auto &droids : gameWorld.objects.droids)
+	{
+		for (const DROID *psDroid : droids)
+		{
+			offWorldObjects.insert(psDroid);
+			if (psDroid->isTransporter() && psDroid->psGroup)
+			{
+				offWorldObjects.insert(psDroid->psGroup->psList.begin(), psDroid->psGroup->psList.end());
+			}
+		}
+	}
+	for (const auto &structures : gameWorld.objects.structures)
+	{
+		offWorldObjects.insert(structures.begin(), structures.end());
+	}
+	for (const auto &features : gameWorld.objects.features)
+	{
+		offWorldObjects.insert(features.begin(), features.end());
+	}
+	auto isOffWorld = [&offWorldObjects](const BASE_OBJECT *psObj) {
+		return psObj != nullptr && offWorldObjects.count(psObj) != 0;
+	};
+
+	auto clearDroidReferences = [&isOffWorld](DROID *psDroid) {
+		clearDroidTargetsIf(psDroid, isOffWorld);
+		std::vector<BASE_OBJECT *> listTargets;
+		for (const DroidOrder &order : psDroid->asOrderList)
+		{
+			if (isOffWorld(order.psObj))
+			{
+				listTargets.push_back(order.psObj);
+			}
+		}
+		for (BASE_OBJECT *psTarget : listTargets)
+		{
+			orderClearTargetFromDroidList(psDroid, psTarget);
+		}
+	};
+	for (const PerPlayerDroidLists *droidLists : {&mission.gameWorld.objects.droids, &apsLimboDroids})
+	{
+		for (const auto &droids : *droidLists)
+		{
+			for (DROID *psDroid : droids)
+			{
+				clearDroidReferences(psDroid);
+				if (psDroid->isTransporter() && psDroid->psGroup)
+				{
+					for (DROID *psCargo : psDroid->psGroup->psList)
+					{
+						if (psCargo != psDroid)
+						{
+							clearDroidReferences(psCargo);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for (const auto &structures : mission.gameWorld.objects.structures)
+	{
+		for (STRUCTURE *psStruct : structures)
+		{
+			clearStructureTargetsIf(psStruct, isOffWorld);
+			clearRepairAndRearmTargetsIf(psStruct, isOffWorld);
+			if (!psStruct->pFunctionality || !psStruct->pStructureType)
+			{
+				continue;
+			}
+			switch (psStruct->pStructureType->type)
+			{
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				if (isOffWorld(psStruct->pFunctionality->factory.psCommander))
+				{
+					assignFactoryCommandDroid(psStruct, nullptr);
+				}
+				break;
+			case REF_POWER_GEN:
+				for (auto &psExtractor : psStruct->pFunctionality->powerGenerator.apResExtractors)
+				{
+					if (isOffWorld(psExtractor))
+					{
+						psExtractor = nullptr;
+					}
+				}
+				break;
+			case REF_RESOURCE_EXTRACTOR:
+				if (isOffWorld(psStruct->pFunctionality->resourceExtractor.psPowerGen))
+				{
+					psStruct->pFunctionality->resourceExtractor.psPowerGen = nullptr;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		if (isOffWorld(cmdDroidGetDesignator(player)))
+		{
+			cmdDroidClearDesignator(player);
+		}
+	}
+}
+
 //returns true if on an off world mission
 bool missionIsOffworld()
 {
@@ -395,6 +510,7 @@ bool missionShutDown()
 		freeAllFeatures(gameWorld);
 		freeAllFlagPositions(gameWorld.objects);
 		releaseAllProxDisp();
+		removeSpotters();
 		gwShutDown(gameWorld.map);
 
 		// freeAll*() above flushed gameWorld's pending visibility removals
@@ -806,6 +922,8 @@ static void saveMissionData()
 
 	debug(LOG_SAVE, "called");
 
+	keybindShutdown();
+
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	//clear out the audio
@@ -889,6 +1007,7 @@ static void saveMissionData()
 	//   stranded
 	flushPendingVisRemoval(mission.gameWorld);
 	fpathActiveBackend().waitForIdle();
+	removeSpotters();
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
 
@@ -922,15 +1041,19 @@ void restoreMissionData()
 
 	debug(LOG_SAVE, "called");
 
+	keybindShutdown();
+
 	//clear out the audio
 	audio_StopAll();
 
 	//clear all the lists
 	proj_FreeAllProjectiles();
+	clearReferencesToOffWorldObjects();
 	freeAllDroids(gameWorld);
 	freeAllStructs(gameWorld);
 	freeAllFeatures(gameWorld);
 	freeAllFlagPositions(gameWorld.objects);
+	removeSpotters();
 	gwShutDown(gameWorld.map);
 	if (game.type != LEVEL_TYPE::CAMPAIGN)
 	{
@@ -1012,7 +1135,7 @@ void placeLimboDroids()
 {
 	debug(LOG_SAVE, "called");
 
-	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	// Copy the droids across for the selected Player
 	mutating_list_iterate(apsLimboDroids[selectedPlayer], [](DROID* psDroid)
@@ -1065,7 +1188,7 @@ void restoreMissionLimboData()
 {
 	debug(LOG_SAVE, "called");
 
-	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	/*the droids stored in the mission droid list need to be added back
 	into the current droid list*/
@@ -1489,9 +1612,8 @@ void endMission()
 		endMissionOffKeepLimbo();
 		break;
 	default:
-		//error!
-		debug(LOG_FATAL, "Unknown Mission Type");
-		abort();
+		debug(LOG_ERROR, "Unknown mission type: %d", static_cast<int>(mission.type));
+		break;
 	}
 
 	intRemoveMissionTimer();
