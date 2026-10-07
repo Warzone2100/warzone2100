@@ -54,6 +54,8 @@ public:
 
 	void setText(const WzString &text);
 	const WzString &text() const { return label; }
+	/// Shown instead of the text by a skin that draws icons (HudSkin::hasNamedIcon)
+	void setIcon(const std::string &iconName);
 	void setActive(bool active);
 	bool isActive() const { return active; }
 	void setTone(HudTone tone);
@@ -76,7 +78,10 @@ private:
 		bool symbol = false;
 	};
 
+	bool showsIcon();
+
 	WzString label;
+	std::string icon;
 	WzText cachedText;
 	std::vector<Piece> pieces;
 	bool active = false;

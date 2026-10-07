@@ -35,6 +35,7 @@ Selection and input:
   `build+hover=/14000/14004#5`). The screenshot shows it, and the popover is listed in `overlayWidgets`.
 - `click=<key>` clicks a widget first (ex. a filter chip), so the state shows its effect. A clicked filter changes
   which items are listed, so such states are for screenshots and behavior checks, not for the contract.
+- `touch` makes clicks count as taps (ex. `research+touch+click=/14000/2113929490@1` opens the page picker).
 
 Each state in the JSON has its `name`, `available` (false when it couldn't be set up, ex. with no droid), and:
 
@@ -65,8 +66,13 @@ Against the Classic reference of the same size, scale and settings:
    - The stats panel may grow up and right, the object row up, and the order panel down and right (panel extensions).
    - A grown panel's close button (`movedClose`) moves to the extension's corner. It may be anywhere inside the
      panel, and rules 3 and 4 skip it.
+   - With the panel filters' page control, the stats panel's header controls move into its row (`movedControl`).
+     They may be anywhere inside the panel, and rules 3 and 4 skip them.
    - A list's page tabs that an extension shows in their place (`replacedPageTabs`: the object row's, with the row
-     summary strip) are hidden but still listed where they were. The points that reached them may reach anything.
+     summary strip, and the stats panels', with the panel filters' page control) are hidden but still listed where
+     they were. The points that reached them may reach anything.
+   - The stats panel may give up the rows at the top of its contents that it no longer shows (`topInset`), and the
+     points there may reach anything.
 2. No new widget appears outside the addition range.
 3. The Classic widgets keep their relative z-order.
 4. Every sampled point that reached a Classic widget still reaches it. A point that reached nothing may reach a HUD

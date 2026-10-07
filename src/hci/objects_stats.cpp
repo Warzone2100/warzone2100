@@ -28,6 +28,7 @@
 #include "../power.h"
 #include "../hud/huddetailcontents.h"
 #include "../hud/hudids.h"
+#include "../hud/hudpagecontrol.h"
 #include "../hud/hudpanelextension.h"
 #include "../hud/hudpanelfilters.h"
 #include "../hud/hudrowsummary.h"
@@ -36,6 +37,13 @@
 
 #include <algorithm>
 #include <iterator>
+
+// How far the header moves down onto the page tabs' row when the page control is in it (7 px above the items)
+static constexpr int COMPACT_HEADER_DROP = 9;
+static constexpr int PAGE_ROW_PAD = 2;
+static constexpr int PAGE_ROW_HEIGHT_OWN = 16;
+static constexpr int PAGE_ROW_VISUAL_HEIGHT = 13;
+static constexpr int HEADER_GAP = 4;
 
 void BaseObjectsController::clearSelection()
 {
@@ -723,7 +731,81 @@ void StatsForm::addHudExtension()
 	spec.availableHeightAbove = [](const WzRect &classic) { return classic.y() - hudTopBand(); };
 	spec.availableWidthRight = [](const WzRect &classic) { return OBJ_BACKX - classic.right(); };
 	spec.closeButton = content != nullptr ? closeButton : nullptr;
+	if (content != nullptr)
+	{
+		addPageControl();
+		std::weak_ptr<StatsForm> weakSelf = self;
+		spec.topInset = [weakSelf]() {
+			auto strongSelf = weakSelf.lock();
+			return strongSelf != nullptr && strongSelf->compactHeaderInRow() ? COMPACT_HEADER_DROP : 0;
+		};
+		spec.afterLayout = [weakSelf]() {
+			if (auto strongSelf = weakSelf.lock())
+			{
+				strongSelf->layoutHudHeader();
+			}
+		};
+	}
 	hudExtendPanel(self, content, spec);
+}
+
+// The page control in place of the page tabs: in the header's row, which moves down onto theirs, so the panel is
+// shorter and the items keep their places (or, with many pages, in the page tabs' own row)
+void StatsForm::addPageControl()
+{
+	pageControl = HudPageControl::make(optionList);
+	pageControl->id = IDHUD_STATS_PAGES;
+	attach(pageControl);
+	auto tabs = std::static_pointer_cast<WIDGET>(optionList->tabWidget()->shared_from_this());
+	tabs->hide();
+	hudSetReplacedPageTabs(tabs);
+	std::weak_ptr<StatsForm> weakSelf = std::static_pointer_cast<StatsForm>(shared_from_this());
+	pageControl->onPagesChanged = [weakSelf](HudPageControl &) {
+		if (auto strongSelf = weakSelf.lock())
+		{
+			strongSelf->callCalcLayout();
+		}
+	};
+}
+
+bool StatsForm::compactHeaderInRow() const
+{
+	return optionList->pages() <= compactHeaderMaxPages();
+}
+
+void StatsForm::layoutHudHeader()
+{
+	if (pageControl == nullptr)
+	{
+		return;
+	}
+	const int listLeft = optionList->x();
+	const int listRight = optionList->x() + optionList->width();
+	if (!compactHeaderInRow())
+	{
+		layoutCompactHeader(0);
+		pageControl->setVisualHeight(PAGE_ROW_VISUAL_HEIGHT);
+		pageControl->setGeometry(listLeft, STAT_TABFORMY - 1, listRight - listLeft, PAGE_ROW_HEIGHT_OWN);
+		return;
+	}
+	const WzRect header = layoutCompactHeader(COMPACT_HEADER_DROP);
+	// As tall as the header's controls, and level with them (its hit area a little taller)
+	pageControl->setVisualHeight(header.height());
+	const int top = header.y() - PAGE_ROW_PAD;
+	const int rowHeight = header.height() + PAGE_ROW_PAD * 2;
+	int right = listRight;
+	// Short of the close button, when it's in this row (no band above the contents)
+	auto anchor = pageControl->parent();
+	if (anchor != nullptr && closeButton != nullptr && closeButton->parent() == anchor->parent())
+	{
+		const int closeTop = closeButton->y() - anchor->y();
+		if (closeTop < top + rowHeight && closeTop + closeButton->height() > top)
+		{
+			right = std::min(right, closeButton->x() - HEADER_GAP);
+		}
+	}
+	const int left = header.x() + header.width() + HEADER_GAP;
+	pageControl->setGeometry(left, top, std::max(0, right - left), rowHeight);
 }
 
 void ObjectsForm::addHudExtension()

@@ -40,19 +40,24 @@
 constexpr int CLOSE_INSET = 3;
 
 static std::vector<std::weak_ptr<WIDGET>> movedCloseButtons;
+static std::vector<std::weak_ptr<WIDGET>> movedPanelControls;
 static std::vector<std::weak_ptr<WIDGET>> replacedPageTabs;
-
-static void addWeak(std::vector<std::weak_ptr<WIDGET>> &list, const std::shared_ptr<WIDGET> &widget)
-{
-	list.erase(std::remove_if(list.begin(), list.end(), [](const std::weak_ptr<WIDGET> &entry) { return entry.expired(); }), list.end());
-	list.push_back(widget);
-}
+static std::vector<std::pair<std::weak_ptr<WIDGET>, std::function<int ()>>> panelTopInsets;
 
 static bool containsWeak(const std::vector<std::weak_ptr<WIDGET>> &list, const WIDGET &widget)
 {
 	return std::any_of(list.begin(), list.end(), [&widget](const std::weak_ptr<WIDGET> &entry) {
 		return entry.lock().get() == &widget;
 	});
+}
+
+static void addWeak(std::vector<std::weak_ptr<WIDGET>> &list, const std::shared_ptr<WIDGET> &widget)
+{
+	list.erase(std::remove_if(list.begin(), list.end(), [](const std::weak_ptr<WIDGET> &entry) { return entry.expired(); }), list.end());
+	if (widget != nullptr && !containsWeak(list, *widget))
+	{
+		list.push_back(widget);
+	}
 }
 
 void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<HudExtensionContent> &content, const HudPanelExtensionSpec &spec)
@@ -82,6 +87,13 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 		addWeak(movedCloseButtons, spec.closeButton);
 	}
 	std::weak_ptr<WIDGET> weakCloseButton = spec.closeButton;
+	if (spec.topInset)
+	{
+		panelTopInsets.erase(std::remove_if(panelTopInsets.begin(), panelTopInsets.end(), [](const std::pair<std::weak_ptr<WIDGET>, std::function<int ()>> &entry) {
+			return entry.first.expired();
+		}), panelTopInsets.end());
+		panelTopInsets.emplace_back(panel, spec.topInset);
+	}
 
 	std::weak_ptr<WIDGET> weakAnchor = anchor;
 	std::weak_ptr<HudExtensionContent> weakContent = content;
@@ -89,7 +101,9 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 	panel->setCalcLayout([weakAnchor, weakContent, weakCloseButton, layoutSpec](WIDGET *psWidget) {
 		auto anchor = weakAnchor.lock();
 		auto content = weakContent.lock();
-		const WzRect classic = layoutSpec.classicRect();
+		const WzRect full = layoutSpec.classicRect();
+		const int inset = layoutSpec.topInset ? std::max(0, std::min(layoutSpec.topInset(), full.height())) : 0;
+		const WzRect classic(full.x(), full.y() + inset, full.width(), full.height() - inset);
 		const int above = layoutSpec.availableHeightAbove ? std::max(0, layoutSpec.availableHeightAbove(classic)) : 0;
 		const int right = layoutSpec.availableWidthRight ? std::max(0, layoutSpec.availableWidthRight(classic)) : 0;
 		HudExtensionFit fit;
@@ -109,7 +123,7 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 		psWidget->setGeometry(classic.x(), classic.y() - fit.top, classic.width() + fit.right, classic.height() + fit.top);
 		if (anchor != nullptr)
 		{
-			anchor->setGeometry(0, fit.top, classic.width(), classic.height());
+			anchor->setGeometry(0, fit.top - inset, full.width(), full.height());
 		}
 		if (content != nullptr)
 		{
@@ -138,6 +152,10 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 				closeButton->setGeometry(classic.width() - CLOSE_WIDTH, fit.top, CLOSE_WIDTH, CLOSE_HEIGHT);
 			}
 		}
+		if (layoutSpec.afterLayout)
+		{
+			layoutSpec.afterLayout();
+		}
 	});
 }
 
@@ -149,6 +167,28 @@ int hudCloseButtonGutter()
 bool hudIsMovedCloseButton(const WIDGET &widget)
 {
 	return containsWeak(movedCloseButtons, widget);
+}
+
+void hudSetMovedPanelControl(const std::shared_ptr<WIDGET> &widget)
+{
+	addWeak(movedPanelControls, widget);
+}
+
+bool hudIsMovedPanelControl(const WIDGET &widget)
+{
+	return containsWeak(movedPanelControls, widget);
+}
+
+int hudPanelTopInset(const WIDGET &panel)
+{
+	for (const auto &entry : panelTopInsets)
+	{
+		if (entry.first.lock().get() == &panel)
+		{
+			return std::max(0, entry.second());
+		}
+	}
+	return 0;
 }
 
 void hudSetReplacedPageTabs(const std::shared_ptr<WIDGET> &tabs)

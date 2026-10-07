@@ -29,6 +29,7 @@
 
 #include "hudgeometrydump.h"
 #include "hudids.h"
+#include "hudpagecontrol.h"
 #include "hudpanelextension.h"
 
 #include "lib/framework/frame.h"
@@ -134,6 +135,7 @@ bool applyState(const std::string &name)
 	hoverKey.clear();
 	clickKeys.clear();
 	hoveredAt = 0;
+	hudSetTouchInputForTests(false);
 	bool ok = true;
 	size_t start = 0;
 	while (start <= name.size())
@@ -149,6 +151,7 @@ bool applyState(const std::string &name)
 		else if (part == "commander") { ok = intTestShowForm(3) && ok; }
 		else if (part == "order") { ok = selectFirstDroid() && intTestShowForm(4) && ok; }
 		else if (part == "select") { ok = selectFirstDroid() && ok; }
+		else if (part == "touch") { hudSetTouchInputForTests(true); }
 		else if (part.rfind("hover=", 0) == 0) { hoverKey = part.substr(6); }
 		else if (part.rfind("click=", 0) == 0) { clickKeys.push_back(part.substr(6)); }
 		else
@@ -260,6 +263,14 @@ private:
 		if (hudIsMovedCloseButton(widget))
 		{
 			entry["movedClose"] = true;
+		}
+		if (hudIsMovedPanelControl(widget))
+		{
+			entry["movedControl"] = true;
+		}
+		if (const int inset = hudPanelTopInset(widget))
+		{
+			entry["topInset"] = inset;
 		}
 		widgets.push_back(entry);
 		keys[&widget] = key;

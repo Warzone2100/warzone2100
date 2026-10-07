@@ -43,6 +43,8 @@ namespace
 constexpr int BADGE_HEIGHT = 11;
 constexpr int BADGE_BOTTOM = 35;
 constexpr int BADGE_PADDING = 3;
+constexpr int BADGE_ICON = 9;
+constexpr int BADGE_ICON_GAP = 2;
 
 struct BadgeValues
 {
@@ -64,22 +66,92 @@ struct BadgeTexts
 	BadgeValues values;
 	bool initialized = false;
 	WzText left;
-	WzText right;
+	HudCountBadge right;
 	bool hasLeft = false;
-	bool hasRight = false;
 };
 
 std::unordered_map<uint32_t, BadgeTexts> cache;
 
-void drawBadge(WzText &text, int x, int y, HudTone tone)
+PIELIGHT badgeColor(HudTone tone)
 {
 	auto &skin = currentHudSkin();
-	const WzRect rect(x, y, text.width() + BADGE_PADDING * 2, BADGE_HEIGHT);
-	skin.drawPill(rect, tone, true);
-	const PIELIGHT color = tone == HudTone::Neutral ? skin.colors().textPrimary : skin.toneColor(tone);
+	return tone == HudTone::Neutral ? skin.colors().textPrimary : skin.toneColor(tone);
+}
+
+void drawBadgeText(WzText &text, const WzRect &rect, PIELIGHT color)
+{
 	text.render(rect.x() + BADGE_PADDING, rect.y() + (BADGE_HEIGHT - text.lineSize()) / 2 - text.aboveBase(), color);
 }
 
+void drawBadge(WzText &text, int x, int y, HudTone tone)
+{
+	const WzRect rect(x, y, text.width() + BADGE_PADDING * 2, BADGE_HEIGHT);
+	currentHudSkin().drawPill(rect, tone, true);
+	drawBadgeText(text, rect, badgeColor(tone));
+}
+
+}
+
+void HudCountBadge::set(const std::string &newText, bool newLoop)
+{
+	if (newText != text || newLoop != loop)
+	{
+		text = newText;
+		loop = newLoop;
+		dirty = true;
+	}
+}
+
+void HudCountBadge::update()
+{
+	const bool withIcon = loop && currentHudSkin().drawsIcons();
+	if (!dirty && withIcon == renderedWithIcon)
+	{
+		return;
+	}
+	dirty = false;
+	renderedWithIcon = withIcon;
+	std::string shown = text;
+	if (loop && !withIcon)
+	{
+		shown += shown.empty() ? "↻" : " ↻";
+	}
+	rendered.setText(WzString::fromUtf8(shown), font_bar);
+}
+
+int HudCountBadge::width()
+{
+	update();
+	int contents = hasRenderedText() ? rendered.width() : 0;
+	if (renderedWithIcon)
+	{
+		contents += (contents > 0 ? BADGE_ICON_GAP : 0) + BADGE_ICON;
+	}
+	return contents + BADGE_PADDING * 2;
+}
+
+void HudCountBadge::draw(int x, int y)
+{
+	if (empty())
+	{
+		return;
+	}
+	auto &skin = currentHudSkin();
+	const WzRect rect(x, y, width(), BADGE_HEIGHT);
+	// (over a dark backing, as it's often over a model)
+	skin.drawPill(rect, HudTone::Neutral, false);
+	skin.drawPill(rect, HudTone::Warn, true);
+	const PIELIGHT color = badgeColor(HudTone::Warn);
+	int iconX = rect.x() + BADGE_PADDING;
+	if (hasRenderedText())
+	{
+		drawBadgeText(rendered, rect, color);
+		iconX += rendered.width() + BADGE_ICON_GAP;
+	}
+	if (renderedWithIcon)
+	{
+		skin.drawHudIcon(HudIcon::Loop, WzRect(iconX, rect.y() + (BADGE_HEIGHT - BADGE_ICON) / 2, BADGE_ICON, BADGE_ICON), color);
+	}
 }
 
 void hudDrawJobBadges(STRUCTURE *psStruct, int x, int y, int height)
@@ -114,29 +186,16 @@ void hudDrawJobBadges(STRUCTURE *psStruct, int x, int y, int height)
 		{
 			left = "⚡";
 		}
-		std::string right;
-		if (values.queued > 0)
-		{
-			right = astringf("×%u", values.queued);
-		}
-		if (values.loops != 0)
-		{
-			right += right.empty() ? "↻" : " ↻";
-		}
 		texts.hasLeft = !left.empty();
-		texts.hasRight = !right.empty();
 		texts.left.setText(WzString::fromUtf8(left), font_bar);
-		texts.right.setText(WzString::fromUtf8(right), font_bar);
+		texts.right.set(values.queued > 0 ? astringf("×%u", values.queued) : std::string(), values.loops != 0);
 	}
 
 	if (texts.hasLeft)
 	{
 		drawBadge(texts.left, x + 2, y + std::min(BADGE_BOTTOM, height) - BADGE_HEIGHT, HudTone::Warn);
 	}
-	if (texts.hasRight)
-	{
-		drawBadge(texts.right, x + 2, y + 2, HudTone::Warn);
-	}
+	texts.right.draw(x + 2, y + 2);
 }
 
 void hudReleaseJobBadges()

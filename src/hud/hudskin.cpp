@@ -233,6 +233,40 @@ void ClassicHudSkin::drawInputField(const WzRect &rect, bool editing)
 	drawButtonBox(rect, WZCOL_TRANSPARENT_BOX, editing ? WZCOL_TEXT_BRIGHT : BUTTON_BORDER);
 }
 
+// (Barely rounded boxes: their borders and fills line up on the pixels, which the Classic boxes' lines don't)
+void ClassicHudSkin::drawPageControlFrame(const WzRect &rect)
+{
+	pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
+	                   WZCOL_TRANSPARENT_BOX, 1.5f, WZCOL_FORM_DARK, 1.f);
+}
+
+nonstd::optional<PIELIGHT> ClassicHudSkin::drawPageSegment(const HudPageSegmentLook &look)
+{
+	const float x0 = static_cast<float>(look.rect.x());
+	const float y0 = static_cast<float>(look.rect.y());
+	const float x1 = static_cast<float>(look.rect.right());
+	const float y1 = static_cast<float>(look.rect.bottom());
+	const PIELIGHT none = pal_RGBA(0, 0, 0, 0);
+	const bool hovered = look.hovered && !look.disabled;
+	if (look.large)
+	{
+		pie_DrawRoundedBox(x0, y0, x1, y1, look.selected ? WZCOL_FORM_HILITE : (hovered ? BUTTON_FILL_OVER : WZCOL_TRANSPARENT_BOX), 1.5f, WZCOL_FORM_DARK, 1.f);
+	}
+	else if (look.role == TabSelectionButtonRole::Tab && (look.selected || hovered))
+	{
+		pie_DrawRoundedBox(x0 + 1.f, y0 + 2.f, x1 - 1.f, y1 - 2.f, look.selected ? WZCOL_FORM_HILITE : BUTTON_FILL_OVER, 1.f, none, 0.f);
+	}
+	if (look.separator && !look.large)
+	{
+		pie_BoxFill(look.rect.x() - 1, look.rect.y() + 3, look.rect.x(), look.rect.bottom() - 3, WZCOL_FORM_DARK);
+	}
+	if (look.disabled)
+	{
+		return WZCOL_FORM_DISABLE;
+	}
+	return look.selected || look.hovered ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+}
+
 PIELIGHT ClassicHudSkin::toneColor(HudTone tone) const
 {
 	switch (tone)

@@ -46,6 +46,8 @@ GROWABLE = {
 }
 # The panel extensions (src/hud/hudids.h)
 EXTENSION_IDS = {0x7E000110, 0x7E000120}
+# The stats panels' page control, which shows their lists' page tabs in their place
+PAGE_CONTROL_IDS = {0x7E000112}
 
 
 def load(path):
@@ -57,10 +59,10 @@ def is_addition(widget):
     return widget.get("addition", False)
 
 
-def in_extension(key):
+def in_extension(key, ids=EXTENSION_IDS):
     def part_id(part):
         return part.split("~", 1)[0].split("@", 1)[0].split("#", 1)[0]
-    return any(part_id(part).isdigit() and int(part_id(part)) in EXTENSION_IDS for part in key.split("/"))
+    return any(part_id(part).isdigit() and int(part_id(part)) in ids for part in key.split("/"))
 
 
 def own_id(key):
@@ -124,7 +126,8 @@ def check_state(ref, cand, screen, top_band, problems, notes):
     cand_all = {w["key"]: w for w in cand["widgets"]}
     cand_classic = {w["key"]: w for w in cand["widgets"] if not is_addition(w)}
     grown = set()
-    moved = {w["key"] for w in cand["widgets"] if w.get("movedClose")}
+    moved = {w["key"] for w in cand["widgets"] if w.get("movedClose") or w.get("movedControl")}
+    insets = {}
     replaced_tabs = {w["key"] for w in cand["widgets"] if w.get("replacedPageTabs")}
     replaced_tabs_lists = {k[:k.rfind("#")] for k in replaced_tabs if "#" in k}
     if replaced_tabs:
@@ -145,7 +148,12 @@ def check_state(ref, cand, screen, top_band, problems, notes):
                 fail(f"{key} moved out of its panel: {cw['rect']}")
         elif cw["rect"] != rw["rect"]:
             wid = own_id(key)
-            sides = growth(rw["rect"], cw["rect"])
+            inset = cw.get("topInset", 0) if wid in GROWABLE else 0
+            x, y, w, h = rw["rect"]
+            sides = growth([x, y + inset, w, h - inset], cw["rect"])
+            if inset:
+                insets[key] = [x, y, w, inset]
+                notes.append(f"{name}: {key} no longer shows the top {inset} px of its contents")
             if wid in GROWABLE and sides is not None and sides <= GROWABLE[wid]:
                 grown.add(key)
                 notes.append(f"{name}: {key} grew {'/'.join(sorted(sides))}: {rw['rect']} -> {cw['rect']}")
@@ -184,8 +192,10 @@ def check_state(ref, cand, screen, top_band, problems, notes):
                 continue
             if r in moved or c in moved or r in replaced_tabs:
                 continue
+            if r in insets and inside([xi * step, yi * step, 1, 1], insets[r]):
+                continue
             # (The extension covers the replaced tabs' row: points of their list or its panel may reach it)
-            if replaced_tabs and r is not None and c is not None and in_extension(c) \
+            if replaced_tabs and r is not None and c is not None and in_extension(c, EXTENSION_IDS | PAGE_CONTROL_IDS) \
                     and (r in replaced_tabs_lists or own_id(r) in GROWABLE):
                 continue
             pair = (r, c)

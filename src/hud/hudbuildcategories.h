@@ -44,7 +44,7 @@ struct HudBuildCategory
 {
 	std::string id;
 	WzString name;      ///< translated
-	std::string icon;   ///< an image in the HUD's image atlas, or empty
+	std::string icon;   ///< drawn instead of the name where the skin draws icons (images/hud/icons/<icon>.svg), or empty
 	int order = 0;
 };
 

@@ -1,5 +1,5 @@
 {
-	"base": { "name": "Base", "order": 10 },
-	"defense": { "name": "Defense", "order": 20 },
-	"support": { "name": "Support", "order": 30 }
+	"base": { "name": "Base", "order": 10, "icon": "category-base" },
+	"defense": { "name": "Defense", "order": 20, "icon": "category-defense" },
+	"support": { "name": "Support", "order": 30, "icon": "category-support" }
 }

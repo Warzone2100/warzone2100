@@ -24,12 +24,15 @@
 #include "../intdisplay.h"
 #include "../hud/huddetail.h"
 
+#include <limits>
+
 #define STAT_GAP	   2
 #define STAT_BUTWIDTH  60
 #define STAT_BUTHEIGHT 46
 
 class StatsForm;
 class ObjectStatsForm;
+class HudPageControl;
 
 class BaseObjectsController
 {
@@ -276,17 +279,26 @@ protected:
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
 	virtual BaseStatsController &getController() const = 0;
+	/// With the page control in place of the page tabs (panel filters): puts the header's controls side by side, `drop`
+	/// below their Classic row, and returns their bounds
+	virtual WzRect layoutCompactHeader(int drop) { return WzRect(0, STAT_SLDY + drop, 0, 13); }
+	/// With more pages than this, the page control takes the page tabs' row, and the header keeps its own
+	virtual size_t compactHeaderMaxPages() const { return std::numeric_limits<size_t>::max(); }
 
 	std::shared_ptr<IntListTabWidget> optionList;
 	std::shared_ptr<W_BUTTON> closeButton;
 	optional<size_t> listPositionOf(size_t statsIndex) const;
 
 private:
+	void addPageControl();
+	bool compactHeaderInRow() const;
+	void layoutHudHeader();
 	void updateButtons();
 	void updateFilteredButtons();
 	void removeAllButtons();
 
 	size_t buttonsCount = 0;
+	std::shared_ptr<HudPageControl> pageControl;
 	std::function<bool (BASE_STATS *)> optionFilter;
 	std::vector<size_t> shownIndices;
 	bool filteredLayout = false;

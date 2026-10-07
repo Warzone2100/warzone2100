@@ -35,6 +35,7 @@
 #include <cmath>
 
 constexpr int CHIP_PADDING = 6;
+constexpr int CHIP_ICON_INSET = 3;
 
 static bool shiftDown()
 {
@@ -99,6 +100,16 @@ void HudChip::setText(const WzString &text)
 	add(bodyEnd == utf8.size() ? utf8.size() : lastSpace + 1, utf8.size(), true);
 }
 
+void HudChip::setIcon(const std::string &iconName)
+{
+	icon = iconName;
+}
+
+bool HudChip::showsIcon()
+{
+	return !icon.empty() && currentHudSkin().hasNamedIcon(icon);
+}
+
 void HudChip::setActive(bool newActive)
 {
 	active = newActive;
@@ -111,6 +122,10 @@ void HudChip::setTone(HudTone newTone)
 
 int32_t HudChip::idealWidth()
 {
+	if (showsIcon())
+	{
+		return HUD_CHIP_HEIGHT + CHIP_PADDING;
+	}
 	return std::max(HUD_MIN_HIT_SIZE, cachedText.width() + CHIP_PADDING * 2);
 }
 
@@ -127,6 +142,14 @@ void HudChip::display(int xOffset, int yOffset)
 	skin.drawChip(rect, active ? HudTone::Accent : tone, active || hovered);
 	const PIELIGHT color = active ? skin.colors().textPrimary : (tone == HudTone::Neutral ? skin.colors().textSecondary : skin.toneColor(tone));
 	const PIELIGHT ink = hovered && !active ? skin.colors().textPrimary : color;
+	if (showsIcon())
+	{
+		const int size = rect.height() - CHIP_ICON_INSET * 2;
+		if (skin.drawNamedIcon(icon, WzRect(rect.x() + (rect.width() - size) / 2, rect.y() + CHIP_ICON_INSET, size, size), ink))
+		{
+			return;
+		}
+	}
 	const float textX = cachedText.inkCenteredX(rect);
 	const int textY = rect.y() + (rect.height() - cachedText.lineSize()) / 2 - cachedText.aboveBase();
 	if (pieces.empty())

@@ -54,6 +54,8 @@ public:
 	void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) override;
 	void drawPopoverFrame(const WzRect &rect) override;
 	void drawInputField(const WzRect &rect, bool editing) override;
+	void drawPageControlFrame(const WzRect &rect) override;
+	nonstd::optional<PIELIGHT> drawPageSegment(const HudPageSegmentLook &look) override;
 	PIELIGHT toneColor(HudTone tone) const override;
 	void drawOverlayText(WzText &text, float x, float y, PIELIGHT color) override;
 };

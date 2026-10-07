@@ -167,6 +167,50 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 		form->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("interface.hud.accent", N_("Accent Color"), N_("The Modern skin's color for selected and active things. Its panels take a tint of the same hue (see Panel Tint)."));
+		auto valueChanger = OptionsDropdown<HudAccent>::make(
+			[]() {
+				OptionChoices<HudAccent> result;
+				for (size_t i = 0; i < HUD_ACCENT_COUNT; ++i)
+				{
+					const auto accent = static_cast<HudAccent>(i);
+					result.choices.push_back({ gettext(hudAccentNameMsgid(accent)), "", accent });
+				}
+				result.setCurrentIdxForValue(hudSettings().accent);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.accent = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.panelTint", N_("Panel Tint"), N_("How much of the accent color's hue the Modern skin's panels take."));
+		auto valueChanger = OptionsDropdown<HudPanelTint>::make(
+			[]() {
+				OptionChoices<HudPanelTint> result;
+				result.choices = {
+					{ _("Full"), "", HudPanelTint::Full },
+					{ _("Subtle"), "", HudPanelTint::Subtle },
+					{ _("None"), "", HudPanelTint::None },
+				};
+				result.setCurrentIdxForValue(hudSettings().panelTint);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.panelTint = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
+	{
 		auto optionInfo = OptionInfo("interface.hud.reduceMotion", N_("Reduce Motion"), N_("No panel animations and no pulsing: flashing buttons get a steady highlight instead."));
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {

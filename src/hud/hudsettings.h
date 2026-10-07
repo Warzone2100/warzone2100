@@ -42,6 +42,28 @@ enum class HudSkinId : uint8_t
 	Modern = 1,
 };
 
+/// The Modern skin's accent color (its panels are tinted with the same hue)
+enum class HudAccent : uint8_t
+{
+	Blue = 0,
+	Teal,
+	Green,
+	Purple,
+	Magenta,
+	Red,
+	Orange,
+	Gray,
+};
+constexpr size_t HUD_ACCENT_COUNT = static_cast<size_t>(HudAccent::Gray) + 1;
+
+/// How much of the accent's hue the Modern skin's panels take
+enum class HudPanelTint : uint8_t
+{
+	Full = 0,
+	Subtle,
+	None,
+};
+
 enum class HudTooltips : uint8_t
 {
 	Simple = 0,
@@ -78,6 +100,8 @@ struct HudSettings
 	HudTooltips tooltips = HudTooltips::Simple;
 	std::array<bool, HUD_MODULE_COUNT> modules = {};
 	bool textOutline = false;
+	HudAccent accent = HudAccent::Blue;
+	HudPanelTint panelTint = HudPanelTint::Full;
 	bool reduceMotion = false;
 	bool rememberFilters = false;
 	uint32_t tooltipDelay = 200;
@@ -108,6 +132,8 @@ const char *hudModuleOptionKey(HudModuleId module);
 /// A module's name and description, untranslated (for the options screen, which translates them itself)
 const char *hudModuleNameMsgid(HudModuleId module);
 const char *hudModuleDescriptionMsgid(HudModuleId module);
+/// An accent's name, untranslated
+const char *hudAccentNameMsgid(HudAccent accent);
 
 /// Config file I/O (src/configuration.cpp)
 void hudLoadSettings(const std::function<nonstd::optional<int> (const std::string &key)> &getInteger);

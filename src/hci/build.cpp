@@ -31,6 +31,8 @@
 #include "../game_world.h"
 #include "../stats.h"
 #include "../hud/huddetailcontents.h"
+#include "../hud/hudiconbutton.h"
+#include "../hud/hudpanelextension.h"
 #include "../hud/hudtext.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
@@ -487,7 +489,10 @@ protected:
 		displayIfHighlight(xOffset, yOffset);
 		if (asStructureStats[stat->index].isFavorite && !controller->shouldShowFavorites())
 		{
-			iV_DrawImage(IntImages, IMAGE_ALLY_RESEARCH_TC, xOffset + x() + 44, yOffset + y() + 3);
+			if (!currentHudSkin().drawHudIcon(HudIcon::Favorite, WzRect(xOffset + x() + width() - 16, yOffset + y() + 4, 12, 12)))
+			{
+				iV_DrawImage(IntImages, IMAGE_ALLY_RESEARCH_TC, xOffset + x() + 44, yOffset + y() + 3);
+			}
 		}
 	}
 
@@ -640,9 +645,23 @@ private:
 		addFavoriteButton();
 	}
 
+	// Nothing takes the delivery point's place (manufacture's) on their left
+	WzRect layoutCompactHeader(int drop) override
+	{
+		obsoleteButton->move(4, STAT_SLDY + drop);
+		favoriteButton->move(obsoleteButton->x() + obsoleteButton->width() + 4, STAT_SLDY + drop);
+		hudSetMovedPanelControl(obsoleteButton);
+		hudSetMovedPanelControl(favoriteButton);
+		const int right = favoriteButton->x() + favoriteButton->width();
+		return WzRect(4, STAT_SLDY + drop, right - 4, std::max(obsoleteButton->height(), favoriteButton->height()));
+	}
+
 	void addObsoleteButton()
 	{
-		attach(obsoleteButton = std::make_shared<MultipleChoiceButton>());
+		auto iconButton = std::make_shared<HudIconChoiceButton>();
+		iconButton->setIcon(false, HudIcon::ObsoleteHidden);
+		iconButton->setIcon(true, HudIcon::ObsoleteShown);
+		attach(obsoleteButton = iconButton);
 		obsoleteButton->style |= WBUT_SECONDARY;
 		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
 		obsoleteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
@@ -665,7 +684,10 @@ private:
 
 	void addFavoriteButton()
 	{
-		attach(favoriteButton = std::make_shared<MultipleChoiceButton>());
+		auto iconButton = std::make_shared<HudIconChoiceButton>(HudIconButtonStyle::Bare);
+		iconButton->setIcon(false, HudIcon::Favorite);
+		iconButton->setIcon(true, HudIcon::Favorite, true);
+		attach(favoriteButton = iconButton);
 		favoriteButton->style |= WBUT_SECONDARY;
 		favoriteButton->setChoice(controller->shouldShowFavorites());
 		favoriteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_ALLY_RESEARCH), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH)));

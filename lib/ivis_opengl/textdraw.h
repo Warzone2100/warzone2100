@@ -84,6 +84,10 @@ public:
 	float inkHeight();
 	/// The pen position across that centers the drawn pixels in the rectangle (in points), on whole pixels of the display
 	float inkCenteredX(const WzRect &rect);
+	/// With its drawn pixels centered in the rectangle (in points), on whole pixels of the display.
+	/// Vertically, when `aboveBaseline` is given, the height of its drawn pixels above the baseline instead
+	/// (ex. all the digits', so numbers share a baseline)
+	void renderCenteredOnInk(const WzRect &rect, PIELIGHT colour, WzText *aboveBaseline = nullptr);
 
 public:
 	WzText(const WzText& other) = delete; // non-copyable
