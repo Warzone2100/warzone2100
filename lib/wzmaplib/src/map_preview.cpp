@@ -288,6 +288,11 @@ std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPrevi
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map data from: %s", wzMap.mapFolderPath().c_str());
 		return nullptr;
 	}
+	if (!mapData->hasValidDimensions())
+	{
+		debug(pCustomLogger, LOG_ERROR, "Invalid map data dimensions (%" PRIu32 "x%" PRIu32 ", %zu tiles) from: %s", mapData->width, mapData->height, mapData->mMapTiles.size(), wzMap.mapFolderPath().c_str());
+		return nullptr;
+	}
 	auto mapTerrainTypes = wzMap.mapTerrainTypes();
 	if (!mapTerrainTypes)
 	{

@@ -32,8 +32,6 @@
 #define VERSION_40              40			// game.map version with full-range tile height
 #define CURRENT_VERSION_NUM     VERSION_40
 
-#define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
-
 // 65536 / 360 = 8192 / 45, with a bit less overflow risk.
 #define DEG(degrees) ((degrees) * 8192 / 45)
 
@@ -151,6 +149,11 @@ static optional<MapDataLoadResult> loadMapData_Internal(const std::string &filen
 	if (!pStream->readULE32(&gwVersion) || !pStream->readULE32(&numGateways) || gwVersion != 1)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Bad gateway in %s", path);
+		return nullopt;
+	}
+	if (numGateways > numMapTiles)
+	{
+		debug(pCustomLogger, LOG_ERROR, "%s: Too many gateways (%" PRIu32 ") for map size", path, numGateways);
 		return nullopt;
 	}
 
@@ -364,26 +367,34 @@ struct JsonParsingContext
 	const char* jsonPath;
 };
 
+#define MAX_MAP_OBJECTS_PER_FILE 65535
+
 static inline nlohmann::json* jsonGetRootMapObjectsContainer(const std::string& filename, nlohmann::json& rootObject, uint32_t jsonFileFormat, const char *pRootContainerName, LoggingProtocol* pCustomLogger = nullptr)
 {
 	assert(pRootContainerName != nullptr);
-	nlohmann::json& mMapObjectsContainer = rootObject;
+	nlohmann::json* pMapObjectsContainer = &rootObject;
 	if (jsonFileFormat > 1)
 	{
-		if (!rootObject.contains(pRootContainerName))
+		auto it = rootObject.find(pRootContainerName);
+		if (it == rootObject.end())
 		{
 			// Missing required "droid" key for list of droids
 			debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"%s\" key in root object", filename.c_str(), pRootContainerName);
 			return nullptr;
 		}
-		mMapObjectsContainer = rootObject.at(pRootContainerName);
-		if (!mMapObjectsContainer.is_array())
+		if (!it->is_array())
 		{
 			debug(pCustomLogger, LOG_ERROR, "%s: \"%s\" value should be an array", filename.c_str(), pRootContainerName);
 			return nullptr;
 		}
+		pMapObjectsContainer = &*it;
 	}
-	return &mMapObjectsContainer;
+	if (pMapObjectsContainer->size() > MAX_MAP_OBJECTS_PER_FILE)
+	{
+		debug(pCustomLogger, LOG_ERROR, "%s: Too many entries (%zu)", filename.c_str(), pMapObjectsContainer->size());
+		return nullptr;
+	}
+	return pMapObjectsContainer;
 }
 
 static inline optional<uint32_t> jsonGetFileFormatVersion(const std::string& filename, nlohmann::json& rootObject, LoggingProtocol* pCustomLogger = nullptr, uint32_t maxSupportedFileFormatVersion = 2)
@@ -741,6 +752,11 @@ static optional<FileLoadResult<Structure>> loadBJOStructureInit(const std::strin
 		return nullopt;
 	}
 	result.fileFormatVersion = version;
+	if (quantity > MAX_MAP_OBJECTS_PER_FILE)
+	{
+		debug(pCustomLogger, LOG_ERROR, "%s: Too many entries (%" PRIu32 ")", path, quantity);
+		return nullopt;
+	}
 
 	if (version < 7 || version > 8)
 	{
@@ -1170,6 +1186,11 @@ static optional<FileLoadResult<Droid>> loadBJODroidInit(const std::string& filen
 		return nullopt;
 	}
 	result.fileFormatVersion = version;
+	if (quantity > MAX_MAP_OBJECTS_PER_FILE)
+	{
+		debug(pCustomLogger, LOG_ERROR, "%s: Too many entries (%" PRIu32 ")", path, quantity);
+		return nullopt;
+	}
 
 	size_t nameLength = 60;
 	if (version <= 19)
@@ -1516,6 +1537,11 @@ static optional<FileLoadResult<Feature>> loadBJOFeatureInit(const std::string& f
 		return nullopt;
 	}
 	result.fileFormatVersion = version;
+	if (quantity > MAX_MAP_OBJECTS_PER_FILE)
+	{
+		debug(pCustomLogger, LOG_ERROR, "%s: Too many entries (%" PRIu32 ")", path, quantity);
+		return nullopt;
+	}
 
 	if (version < 7 || version > 19)
 	{
@@ -2148,6 +2174,13 @@ std::shared_ptr<TerrainTypeData> Map::mapTerrainTypes()
 		return m_terrainTypes;
 	}
 	return nullptr;
+}
+
+bool MapData::hasValidDimensions() const
+{
+	return width > 1 && height > 1 && width <= MAP_MAXWIDTH && height <= MAP_MAXHEIGHT
+		&& static_cast<uint64_t>(width) * height <= MAP_MAXAREA
+		&& mMapTiles.size() == static_cast<size_t>(width) * height;
 }
 
 uint32_t MapData::crcSumMapTiles(uint32_t crc)

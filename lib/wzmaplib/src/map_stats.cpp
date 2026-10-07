@@ -59,11 +59,11 @@ static bool addObjectToTile(MapTileInfo& mapTiles, Object* obj)
 {
 	int32_t mapPosX = map_coord(obj->position.x);
 	int32_t mapPosY = map_coord(obj->position.y);
-	if (mapPosX < 0 || static_cast<uint32_t>(mapPosX) > mapTiles.mapWidth)
+	if (mapPosX < 0 || static_cast<uint32_t>(mapPosX) >= mapTiles.mapWidth)
 	{
 		return false;
 	}
-	if (mapPosY < 0 || static_cast<uint32_t>(mapPosY) > mapTiles.mapHeight)
+	if (mapPosY < 0 || static_cast<uint32_t>(mapPosY) >= mapTiles.mapHeight)
 	{
 		return false;
 	}

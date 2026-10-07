@@ -509,12 +509,26 @@ optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProv
 		return nullopt;
 	}
 
+	for (size_t idx = 0; idx < details.size(); idx++)
+	{
+		if (!detailsFatalError[idx] && (details[idx].players < 1 || details[idx].players > MAX_PLAYERS))
+		{
+			debug(pCustomLogger, LOG_ERROR, "LEV File Parse Error: \"players\" value (%u) is unsupported; ignoring level[%zu](\"%s\")", static_cast<unsigned>(details[idx].players), idx, details[idx].name.c_str());
+			detailsFatalError[idx] = true;
+		}
+	}
+
 	if (details.empty())
 	{
 		return nullopt;
 	}
 	else if (details.size() == 1)
 	{
+		if (detailsFatalError.front())
+		{
+			return nullopt;
+		}
+
 		// Remove any tech level suffix from name of first entry
 		trimTechLevelFromMapName(details.front().name);
 
@@ -615,7 +629,7 @@ optional<LevelDetails> loadLevelDetails_JSON(const std::string& levelJsonFile, I
 		}
 		details.type = typeOpt.value();
 		auto playersNum = mRoot.at("players").get<unsigned>();
-		if (playersNum > static_cast<unsigned>(std::numeric_limits<uint8_t>::max()))
+		if (playersNum < 1 || playersNum > MAX_PLAYERS)
 		{
 			debug(pCustomLogger, LOG_ERROR, "Invalid \"players\" value: %u", playersNum);
 			return nullopt;
