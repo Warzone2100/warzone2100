@@ -2949,7 +2949,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 
 			if (bMultiPlayer)
 			{
-				loadMultiStats(saveGameData.sPName, &playerStats);				// stats stuff
+				loadMultiStats(sPlayer, &playerStats);				// stats stuff
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);
 			}
@@ -4708,7 +4708,7 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 			NetPlay.bComms = saveGameData.sNetPlay.bComms;
 			if (bMultiPlayer)
 			{
-				loadMultiStats(saveGameData.sPName, &playerStats);				// stats stuff
+				loadMultiStats(sPlayer, &playerStats);				// stats stuff
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);
 			}

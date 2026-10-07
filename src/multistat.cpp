@@ -685,9 +685,9 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	}
 	char buffer[1000];
 
-	if (st->identity.empty())
+	if (st->identity.empty() || !st->identity.hasPrivate())
 	{
-		debug(LOG_INFO, "Refusing to save profile with empty identity: %s", sFileName);
+		debug(LOG_INFO, "Refusing to save profile without a private identity: %s", sFileName);
 		return false;
 	}
 
