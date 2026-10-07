@@ -446,6 +446,7 @@ bool runChallenges()
 failure:
 	closeChallenges();
 	challengeActive = false;
+	challengeFileName = "";
 	return false;
 
 // success on load.
