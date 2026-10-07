@@ -41,6 +41,7 @@
 #include "challenge.h" //for challengeActive
 #include <string>
 #include <sstream>
+#include <array>
 #include <deque>
 #include <chrono>
 #include <set>
@@ -87,10 +88,18 @@ struct CONSOLE_MESSAGE
 
 };
 
+struct CONSOLE_HISTORY_MESSAGE
+{
+	WzString text;
+	CONSOLE_TEXT_JUSTIFICATION JustifyType;
+	int player;
+};
+
 static std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
-static std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
-static std::deque<CONSOLE_MESSAGE> HistoryMessages;	// history of all other communications
+static std::deque<CONSOLE_HISTORY_MESSAGE> TeamMessages;		// history of team/private communications
+static std::deque<CONSOLE_HISTORY_MESSAGE> HistoryMessages;	// history of all other communications
 static std::deque<CONSOLE_MESSAGE> InfoMessages;
+static std::array<WzText, NumDisplayLines> historyDisplayLines;
 static bool	bConsoleDropped = false;			// Is the console history on or off?
 static bool HistoryMode = false;				// toggle between team & global history
 static int updatepos = 0;						// if user wants to scroll back the history log
@@ -261,9 +270,9 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 			ActiveMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// everything gets logged here for a specific period of time
 			if (team)
 			{
-				TeamMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// persistent team specific logs
+				TeamMessages.push_back({WzString::fromUtf8(FitText), jusType, player});	// persistent team specific logs
 			}
-			HistoryMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// persistent messages (all types)
+			HistoryMessages.push_back({WzString::fromUtf8(FitText), jusType, player});	// persistent messages (all types)
 		}
 	}
 
@@ -337,6 +346,10 @@ void	flushConsoleMessages()
 	ActiveMessages.clear();
 	TeamMessages.clear();
 	HistoryMessages.clear();
+	for (auto &line : historyDisplayLines)
+	{
+		line = WzText();
+	}
 }
 
 /** Sets console text color depending on message type */
@@ -406,7 +419,7 @@ static void console_drawtext(WzText &display, PIELIGHT colour, int x, int y, CON
 void displayOldMessages(bool mode)
 {
 	int startpos = 0;
-	std::deque<CONSOLE_MESSAGE> *WhichMessages;
+	std::deque<CONSOLE_HISTORY_MESSAGE> *WhichMessages;
 
 	if (mode)
 	{
@@ -455,11 +468,14 @@ void displayOldMessages(bool mode)
 			iV_TransBoxFill(historyConsole.topX + nudgeright - CON_BORDER_WIDTH, historyConsole.topY - historyConsole.textDepth - CON_BORDER_HEIGHT,
 			                historyConsole.topX + historyConsole.width, historyConsole.topY + (NumDisplayLines * linePitch) + CON_BORDER_HEIGHT);
 		}
-		for (int i = startpos; i < count; ++i)
+		for (int i = startpos; i < count && static_cast<size_t>(i - startpos) < historyDisplayLines.size(); ++i)
 		{
-			PIELIGHT colour = mode ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor((*WhichMessages)[i].player);
-			console_drawtext((*WhichMessages)[i].display, colour, historyConsole.topX + nudgeright, TextYpos, (*WhichMessages)[i].JustifyType, historyConsole.width);
-			TextYpos += (*WhichMessages)[i].display.lineSize();
+			const CONSOLE_HISTORY_MESSAGE &message = (*WhichMessages)[i];
+			WzText &display = historyDisplayLines[i - startpos];
+			display.setText(message.text, font_regular);
+			PIELIGHT colour = mode ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor(message.player);
+			console_drawtext(display, colour, historyConsole.topX + nudgeright, TextYpos, message.JustifyType, historyConsole.width);
+			TextYpos += display.lineSize();
 		}
 	}
 }
