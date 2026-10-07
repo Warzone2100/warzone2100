@@ -162,7 +162,7 @@ void startCheck(const optional<nlohmann::json>& manifest)
 	{
 		return;
 	}
-	if (!manifest.has_value() || !manifest.value().contains("artifacts"))
+	if (!manifest.has_value() || !manifest.value().contains("artifacts") || !manifest.value().at("artifacts").is_object())
 	{
 		deliverResult(CoreDataCheckResult());
 		return;
@@ -172,7 +172,8 @@ void startCheck(const optional<nlohmann::json>& manifest)
 	for (const char* archiveName : CORE_ARCHIVE_NAMES)
 	{
 		auto artifactIt = artifacts.find(archiveName);
-		if (artifactIt == artifacts.end() || !artifactIt->contains("sha256"))
+		if (artifactIt == artifacts.end() || !artifactIt->is_object() || !artifactIt->contains("sha256") || !artifactIt->at("sha256").is_string()
+			|| (artifactIt->contains("size") && !artifactIt->at("size").is_number_unsigned()))
 		{
 			continue;
 		}
