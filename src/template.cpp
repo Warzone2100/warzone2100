@@ -74,6 +74,10 @@ static bool researchedItem(int player, COMPONENT_TYPE partIndex, int part, bool 
 	{
 		return true;
 	}
+	if (part < 0 || static_cast<size_t>(part) >= compStatCount(partIndex))
+	{
+		return false;
+	}
 	int availability = apCompLists[player][partIndex][part];
 	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
@@ -86,6 +90,10 @@ static bool researchedPart(const DROID_TEMPLATE *psCurr, int player, COMPONENT_T
 static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
 {
 	ASSERT_PLAYER_OR_RETURN(false, player);
+	if (psCurr->asWeaps[weapIndex] >= compStatCount(COMP_WEAPON))
+	{
+		return false;
+	}
 	int availability = apCompLists[player][COMP_WEAPON][psCurr->asWeaps[weapIndex]];
 	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
@@ -274,7 +282,7 @@ bool loadTemplateCommon(const nlohmann::json& obj, DROID_TEMPLATE &outputTemplat
 }
 
 // A way to check if a design is something someone could legitimately have in multiplayer
-bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
+bool designableTemplate(const DROID_TEMPLATE *psTempl, int player, bool quiet)
 {
 	if (!bMultiPlayer || !isHumanPlayer(player))
 	{
@@ -353,7 +361,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 
 	if (!designable)
 	{
-		debug(LOG_ERROR, "%s \"%s\" for \"%s\" cannot be designed", failPart, failPartName.toUtf8().c_str(), psTempl->name.toUtf8().c_str());
+		debug(quiet ? LOG_NEVER : LOG_ERROR, "%s \"%s\" for \"%s\" cannot be designed", failPart, failPartName.toUtf8().c_str(), psTempl->name.toUtf8().c_str());
 	}
 
 	return designable;
@@ -518,6 +526,23 @@ void templateStoreRemove(const nlohmann::json &entry)
 	}
 }
 
+bool truncateTemplateName(WzString &name)
+{
+	std::string utf8 = name.toUtf8();
+	if (utf8.size() <= MAX_TEMPLATE_NAME_LENGTH)
+	{
+		return false;
+	}
+	size_t length = MAX_TEMPLATE_NAME_LENGTH;
+	while (length > 0 && (static_cast<unsigned char>(utf8[length]) & 0xC0) == 0x80)
+	{
+		--length;
+	}
+	utf8.resize(length);
+	name = WzString::fromUtf8(utf8);
+	return true;
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
@@ -526,7 +551,7 @@ bool initTemplates()
 	{
 		return false;
 	}
-	for (const nlohmann::json &entry : templateStore["templates"])
+	for (nlohmann::json &entry : templateStore["templates"])
 	{
 		if (!entry.is_object())
 		{
@@ -537,6 +562,13 @@ bool initTemplates()
 		{
 			debug(LOG_WZ, "Stored template \"%s\" contains a component this data set does not have, keeping it on disk", design.name.toUtf8().c_str());
 			continue;
+		}
+		if (truncateTemplateName(design.name))
+		{
+			// Rename it on disk too, so the stored entry still matches the template
+			debug(LOG_INFO, "Shortening the name of stored template \"%s\"", design.name.toUtf8().c_str());
+			entry["name"] = design.name.toUtf8();
+			templateStoreDirty = true;
 		}
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template

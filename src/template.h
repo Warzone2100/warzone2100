@@ -29,10 +29,16 @@ extern bool allowDesign;
 extern bool includeRedundantDesigns;
 extern bool playerBuiltHQ;
 
-bool designableTemplate(const DROID_TEMPLATE *psTempl, int player);
+bool designableTemplate(const DROID_TEMPLATE *psTempl, int player, bool quiet = false);
 
 /// True if both templates have the same droid type, parts and weapons (the name is not compared)
 bool templatesHaveSameComponents(const DROID_TEMPLATE &a, const DROID_TEMPLATE &b);
+
+/// Maximum length of a template name, in UTF-8 bytes
+constexpr size_t MAX_TEMPLATE_NAME_LENGTH = MAX_STR_LENGTH - 1;
+
+/// Shortens a name to at most MAX_TEMPLATE_NAME_LENGTH bytes, without splitting a character. Returns true if it was shortened.
+bool truncateTemplateName(WzString &name);
 
 bool initTemplates();
 
