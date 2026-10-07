@@ -209,6 +209,17 @@ public:
 	{
 		LoadingTask* child = nullptr;
 		mutable std::coroutine_handle<promise_type> child_handle{};
+		LoadingTaskPromiseBase* childPromise = nullptr;
+
+		~ChildTaskAwaiter()
+		{
+			if (child_handle && childPromise)
+			{
+				loading_task_detail::destroyDetachedChildFrame(child_handle, childPromise);
+				child_handle = {};
+				childPromise = nullptr;
+			}
+		}
 
 		bool await_ready() const noexcept
 		{
@@ -222,7 +233,10 @@ public:
 				// Child handle destroyed here after controller stack pop (see controller ops).
 				ASSERT(child_handle.done(), "nested child must be done before destroy");
 				LoadResult<T> outcome = child_handle.promise().result.take();
-				child_handle.destroy();
+				auto handle = child_handle;
+				child_handle = {};
+				childPromise = nullptr;
+				handle.destroy();
 				return outcome;
 			}
 			return child ? child->take_result() : load_fail();
@@ -236,11 +250,9 @@ public:
 			ASSERT(!child_coro.done(), "co_await already-completed LoadingTask");
 			child->coro = {};
 			child_handle = child_coro;
+			childPromise = static_cast<LoadingTaskPromiseBase*>(&child_coro.promise());
 
-			loading_task_detail::suspendAwaitChild(
-			    parent,
-			    child_coro,
-			    static_cast<LoadingTaskPromiseBase*>(&child_coro.promise()));
+			loading_task_detail::suspendAwaitChild(parent, child_coro, childPromise);
 		}
 	};
 
