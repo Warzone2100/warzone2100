@@ -86,6 +86,7 @@
 
 #include "random.h"
 #include "perfcounters.h"
+#include "3rdparty/gsl_finally.h"
 #include <functional>
 #include <unordered_map>
 
@@ -149,6 +150,7 @@ static int structureTotalReturn(const STRUCTURE *psStruct);
 static void parseFavoriteStructs();
 static void packFavoriteStructs();
 static bool structureHasModules(const STRUCTURE *psStruct);
+static void releaseStructureStats(size_t count);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -529,6 +531,14 @@ bool loadStructureStats(WzConfig &ini)
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = 0;
+	bool loadSucceeded = false;
+	const size_t allocatedStats = list.size();
+	auto releaseOnFailure = gsl::finally([&loadSucceeded, allocatedStats] {
+		if (!loadSucceeded)
+		{
+			releaseStructureStats(allocatedStats);
+		}
+	});
 	size_t statWriteIdx = 0;
 	for (size_t readIdx = 0; readIdx < list.size(); ++readIdx)
 	{
@@ -611,6 +621,11 @@ bool loadStructureStats(WzConfig &ini)
 		psStats->base.rearm = ini.value("rearmPoints", 0).toInt();
 		psStats->base.resistance = ini.value("resistance", 0).toUInt();
 		psStats->base.hitpoints = ini.value("hitpoints", 1).toUInt();
+		if (psStats->base.hitpoints == 0)
+		{
+			ASSERT(false, "Invalid hitpoints for structure '%s'", getID(psStats));
+			psStats->base.hitpoints = 1;
+		}
 		psStats->base.armour = ini.value("armour", 0).toUInt();
 		psStats->base.thermal = ini.value("thermal", 0).toUInt();
 		for (int i = 0; i < MAX_PLAYERS; i++)
@@ -625,7 +640,7 @@ bool loadStructureStats(WzConfig &ini)
 			psStats->upgrade[i].moduleProduction = psStats->base.moduleProduction;
 			psStats->upgrade[i].rearm = psStats->base.rearm;
 			psStats->upgrade[i].resistance = ini.value("resistance", 0).toUInt();
-			psStats->upgrade[i].hitpoints = ini.value("hitpoints", 1).toUInt();
+			psStats->upgrade[i].hitpoints = psStats->base.hitpoints;
 			psStats->upgrade[i].armour = ini.value("armour", 0).toUInt();
 			psStats->upgrade[i].thermal = ini.value("thermal", 0).toUInt();
 		}
@@ -668,6 +683,11 @@ bool loadStructureStats(WzConfig &ini)
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
 		psStats->buildPoints = ini.value("buildPoints").toUInt();
+		if (psStats->buildPoints == 0)
+		{
+			ASSERT(false, "Invalid buildPoints for structure '%s'", getID(psStats));
+			psStats->buildPoints = 1;
+		}
 
 		// set structure models
 		std::vector<WzString> models = ini.value("structureModel").toWzStringList();
@@ -675,7 +695,15 @@ bool loadStructureStats(WzConfig &ini)
 		{
 			iIMDBaseShape *imd = modelGet(models[j].trimmed());
 			ASSERT(imd != nullptr, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().c_str(), getID(psStats));
-			psStats->pIMD.push_back(imd);
+			if (imd != nullptr)
+			{
+				psStats->pIMD.push_back(imd);
+			}
+		}
+		if (psStats->pIMD.empty())
+		{
+			debug(LOG_ERROR, "Structure '%s' has no valid structureModel", getID(psStats));
+			return false;
 		}
 
 		// set base model
@@ -688,24 +716,22 @@ bool loadStructureStats(WzConfig &ini)
 		}
 
 		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toWzString());
-		if (ecm >= 0)
+		if (ecm < 0)
 		{
-			psStats->pECM = &asECMStats[ecm];
+			ASSERT(false, "Invalid ECM found for '%s'", getID(psStats));
+			ASSERT_OR_RETURN(false, !asECMStats.empty(), "ECM stats must be loaded before structure stats");
+			ecm = 0;  // ZNULLECM
 		}
-		else
-		{
-			ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
-		}
+		psStats->pECM = &asECMStats[ecm];
 
 		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toWzString());
-		if (sensor >= 0)
+		if (sensor < 0)
 		{
-			psStats->pSensor = &asSensorStats[sensor];
+			ASSERT(false, "Invalid sensor found for structure '%s'", getID(psStats));
+			ASSERT_OR_RETURN(false, !asSensorStats.empty(), "Sensor stats must be loaded before structure stats");
+			sensor = 0;  // ZNULLSENSOR
 		}
-		else
-		{
-			ASSERT(sensor >= 0, "Invalid sensor found for structure '%s'", getID(psStats));
-		}
+		psStats->pSensor = &asSensorStats[sensor];
 
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, MAX_WEAPONS, (WEAPON_STATS *)nullptr);
@@ -763,6 +789,7 @@ bool loadStructureStats(WzConfig &ini)
 	}
 	ASSERT_OR_RETURN(false, g_psStatDestroyStruct, "Destroy structure stat not found");
 
+	loadSucceeded = true;
 	return true;
 }
 
@@ -844,12 +871,11 @@ bool loadStructureStrengthModifiers(WzConfig &ini)
 	return true;
 }
 
-bool structureStatsShutDown()
+static void releaseStructureStats(size_t count)
 {
-	packFavoriteStructs();
 	if (asStructureStats)
 	{
-		for (unsigned i = 0; i < numStructureStats; ++i)
+		for (size_t i = 0; i < count; ++i)
 		{
 			unloadStructureStats_BaseStats(asStructureStats[i]);
 		}
@@ -858,6 +884,12 @@ bool structureStatsShutDown()
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
+}
+
+bool structureStatsShutDown()
+{
+	packFavoriteStructs();
+	releaseStructureStats(numStructureStats);
 	return true;
 }
 

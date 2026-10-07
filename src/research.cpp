@@ -454,7 +454,7 @@ bool loadResearch(WzConfig &ini)
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));
 	std::vector<std::vector<WzString>> preResearch;
-	preResearch.resize(list.size());
+	preResearch.resize(asResearch.size() + list.size());
 	for (size_t inc = 0; inc < list.size(); ++inc)
 	{
 		if (list[inc] == CONFIG_DICT_KEY_STR)
@@ -497,17 +497,18 @@ bool loadResearch(WzConfig &ini)
 
 		ini.beginGroup(list[inc]);
 		RESEARCH research;
-		research.index = inc;
+		research.index = asResearch.size();
 		research.name = ini.string("name");
 		research.category = ini.string("category");
 		research.id = list[inc];
 
 		//check the name hasn't been used already
-		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getStatsName(&research));
+		ASSERT_OR_RETURN(false, checkResearchName(&research, research.index), "Research name '%s' used already", getStatsName(&research));
 
-		research.ref = STAT_RESEARCH + inc;
+		research.ref = STAT_RESEARCH + research.index;
 
 		research.results = ini.json("results", nlohmann::json::array());
+		ASSERT_OR_RETURN(false, research.results.is_array(), "Research %s: \"results\" is not an array", getID(&research));
 
 		//set subGroup icon
 		WzString subGroup = ini.value("subgroupIconID", "").toWzString();
@@ -618,7 +619,7 @@ bool loadResearch(WzConfig &ini)
 		research.researchPower = resPower;
 
 		//remember research pre-requisites for futher checking
-		preResearch[inc] = ini.value("requiredResearch").toWzStringList();
+		preResearch[research.index] = ini.value("requiredResearch").toWzStringList();
 
 		//set components results
 		std::vector<WzString> compResults = ini.value("resultComponents").toWzStringList();

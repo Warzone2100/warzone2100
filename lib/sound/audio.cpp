@@ -78,13 +78,20 @@ bool loadAudioEffectFileData(WzConfig &ini)
 			continue;
 		}
 		ASSERT(array.is_array(), "data is not an array");
-		for(auto &a : array)
+		for (const auto &a : array)
 		{
-			std::string fname = a["fileName"].get<std::string>();
-			bool loop = a["loop"].get<bool>();
-			unsigned int volume = a["volume"].get<uint32_t>();
-			unsigned int range = a["range"].get<uint32_t>();
-			audio_SetTrackVals(fname.c_str(), loop, volume, range);
+			try
+			{
+				std::string fname = a.at("fileName").get<std::string>();
+				bool loop = a.at("loop").get<bool>();
+				unsigned int volume = a.at("volume").get<uint32_t>();
+				unsigned int range = a.at("range").get<uint32_t>();
+				audio_SetTrackVals(fname.c_str(), loop, volume, range);
+			}
+			catch (const nlohmann::json::exception &e)
+			{
+				debug(LOG_ERROR, "Invalid audio effect entry in %s: %s", list[i].toUtf8().c_str(), e.what());
+			}
 		}
 		ini.endGroup();
 	}

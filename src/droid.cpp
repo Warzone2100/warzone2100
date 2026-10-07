@@ -2556,7 +2556,12 @@ UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck)
 const char *getDroidLevelName(const DROID *psDroid)
 {
 	const BRAIN_STATS *psStats = psDroid->getBrainStats();
-	return PE_("rank", psStats->rankNames[getDroidLevel(psDroid)].c_str());
+	const unsigned int level = getDroidLevel(psDroid);
+	if (level >= psStats->rankNames.size())
+	{
+		return "";
+	}
+	return PE_("rank", psStats->rankNames[level].c_str());
 }
 
 UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
@@ -3752,7 +3757,7 @@ int16_t DROID::droidResistance() const
 {
 	CHECK_DROID(this);
 	const BODY_STATS *psStats = getBodyStats();
-	int res = experience / (65536 / MAX(1, psStats->upgrade[player].resistance));
+	int res = experience / MAX(1, 65536 / MAX(1, psStats->upgrade[player].resistance));
 	// ensure resistance is a base minimum
 	res = MAX(res, psStats->upgrade[player].resistance);
 	return MIN(res, INT16_MAX);

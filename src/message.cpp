@@ -390,6 +390,13 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	PROX_TYPE	proxType;
 	int cnt;
 	WzString *filename = new WzString(GetLastResourceFilename());
+	auto parseError = [&filename](VIEWDATA *psViewData) -> WzString * {
+		debug(LOG_ERROR, "Invalid view data in %s", filename->toUtf8().c_str());
+		delete psViewData->pData;
+		delete psViewData;
+		delete filename;
+		return nullptr;
+	};
 
 	numData = numCR(pViewMsgData, bufferSize);
 	for (unsigned i = 0; i < numData; i++)
@@ -404,7 +411,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimited using comma's
-		sscanf(pViewMsgData, "%255[^,'\r\n],%u%n", name, &numText, &cnt);
+		if (sscanf(pViewMsgData, "%255[^,'\r\n],%u%n", name, &numText, &cnt) != 2)
+		{
+			return parseError(psViewData);
+		}
 		pViewMsgData += cnt;
 
 		//allocate storage for the name
@@ -415,7 +425,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		for (unsigned dataInc = 0; dataInc < numText; dataInc++)
 		{
 			name[0] = '\0';
-			sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt);
+			if (sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt) != 1)
+			{
+				return parseError(psViewData);
+			}
 			pViewMsgData += cnt;
 
 			// Get the string from the ID string
@@ -425,7 +438,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			psViewData->textMsg.push_back(wstr);
 		}
 
-		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
+		if (sscanf(pViewMsgData, ",%d%n", &readint, &cnt) != 1)
+		{
+			return parseError(psViewData);
+		}
 		psViewData->type = (VIEW_TYPE)readint;
 		pViewMsgData += cnt;
 
@@ -438,16 +454,18 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			imdName2[0] = '\0';
 			string[0] = '\0';
 			audioName[0] = '\0';
-			sscanf(pViewMsgData, ",%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d%n",
-			       imdName, imdName2, string, audioName, &dummy, &cnt);
+			if (sscanf(pViewMsgData, ",%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d%n",
+			           imdName, imdName2, string, audioName, &dummy, &cnt) != 5)
+			{
+				return parseError(psViewData);
+			}
 			pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
 			psViewRes->pIMD = modelGet(imdName);
 			if (psViewRes->pIMD == nullptr)
 			{
 				ASSERT(false, "Cannot find the PIE for message %s", name);
-				delete psViewData;
-				return nullptr;
+				return parseError(psViewData);
 			}
 			if (strcmp(imdName2, "0"))
 			{
@@ -455,8 +473,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if (psViewRes->pIMD2 == nullptr)
 				{
 					ASSERT(false, "Cannot find the 2nd PIE for message %s", name);
-					delete psViewData;
-					return nullptr;
+					return parseError(psViewData);
 				}
 			}
 			else
@@ -479,7 +496,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			psViewReplay = (VIEW_REPLAY *)psViewData->pData;
 
 			//read in number of sequences for this message
-			sscanf(pViewMsgData, ",%u%n", &count, &cnt);
+			if (sscanf(pViewMsgData, ",%u%n", &count, &cnt) != 1 || count > bufferSize)
+			{
+				return parseError(psViewData);
+			}
 			pViewMsgData += cnt;
 
 			psViewReplay->seqList.resize(count);
@@ -493,7 +513,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				//load extradat for extended type only
 				if (psViewData->type == VIEW_RPL)
 				{
-					sscanf(pViewMsgData, ",%255[^,'\r\n],%u%n", name, &count, &cnt);
+					if (sscanf(pViewMsgData, ",%255[^,'\r\n],%u%n", name, &count, &cnt) != 2)
+					{
+						return parseError(psViewData);
+					}
 					pViewMsgData += cnt;
 					//set the flag to default
 					psViewReplay->seqList[dataInc].flag = 0;
@@ -502,7 +525,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				else //extended type
 				{
 					int count2;
-					sscanf(pViewMsgData, ",%255[^,'\r\n],%u,%d%n", name, &count, &count2, &cnt);
+					if (sscanf(pViewMsgData, ",%255[^,'\r\n],%u,%d%n", name, &count, &count2, &cnt) != 3)
+					{
+						return parseError(psViewData);
+					}
 					pViewMsgData += cnt;
 					psViewReplay->seqList[dataInc].flag = (UBYTE)count;
 					numSeqText = count2;
@@ -513,7 +539,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				for (unsigned seqInc = 0; seqInc < numSeqText; seqInc++)
 				{
 					name[0] = '\0';
-					sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt);
+					if (sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt) != 1)
+					{
+						return parseError(psViewData);
+					}
 					pViewMsgData += cnt;
 
 					// Get the string from the ID string
@@ -523,7 +552,10 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					psViewReplay->seqList[dataInc].textMsg.push_back(qstr);
 				}
 				//get the audio text string
-				sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", audioName, &dummy, &cnt);
+				if (sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", audioName, &dummy, &cnt) != 2)
+				{
+					return parseError(psViewData);
+				}
 				pViewMsgData += cnt;
 
 				if (strcmp(audioName, "0"))
@@ -542,8 +574,11 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				int tmp;
 
 				audioName[0] = '\0';
-				sscanf(pViewMsgData, ", %d,%d,%d,%255[^,'\r\n],%d%n", &LocX, &LocY, &LocZ,
-				       audioName, &tmp, &cnt);
+				if (sscanf(pViewMsgData, ", %d,%d,%d,%255[^,'\r\n],%d%n", &LocX, &LocY, &LocZ,
+				           audioName, &tmp, &cnt) != 5 || tmp < 0 || tmp >= PROX_TYPES)
+				{
+					return parseError(psViewData);
+				}
 				proxType = (PROX_TYPE)tmp;
 			}
 			pViewMsgData += cnt;
@@ -558,7 +593,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				if ((audioID = audio_GetIDFromStr(audioName)) == NO_SOUND)
 				{
 					ASSERT(false, "couldn't get ID %d for weapon sound %s", audioID, audioName);
-					return nullptr;
+					return parseError(psViewData);
 				}
 
 				if ((audioID < 0
@@ -566,7 +601,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				    && audioID != NO_SOUND)
 				{
 					ASSERT(false, "Invalid Weapon Sound ID - %d for weapon %s", audioID, audioName);
-					return nullptr;
+					return parseError(psViewData);
 				}
 			}
 
@@ -576,35 +611,35 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			if (LocX < 0)
 			{
 				ASSERT(false, "Negative X coord for prox message - %s", name);
-				return nullptr;
+				return parseError(psViewData);
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 			if (LocY < 0)
 			{
 				ASSERT(false, "Negative Y coord for prox message - %s", name);
-				return nullptr;
+				return parseError(psViewData);
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 			if (LocZ < 0)
 			{
 				ASSERT(false, "Negative Z coord for prox message - %s", name);
-				return nullptr;
+				return parseError(psViewData);
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->z = (UDWORD)LocZ;
 
-			if (proxType > PROX_TYPES)
-			{
-				ASSERT(false, "Invalid proximity message sub type - %s", name);
-				return nullptr;
-			}
 			((VIEW_PROXIMITY *)psViewData->pData)->proxType = proxType;
 			break;
 		default:
 			ASSERT(false, "Unknown ViewData type");
-			return nullptr;
+			return parseError(psViewData);
 		}
 		//increment the pointer to the start of the next record
-		pViewMsgData = strchr(pViewMsgData, '\n') + 1;
+		const char *endOfLine = strchr(pViewMsgData, '\n');
+		if (endOfLine == nullptr)
+		{
+			return parseError(psViewData);
+		}
+		pViewMsgData = endOfLine + 1;
 
 		apsViewData[psViewData->name] = psViewData;
 	}
@@ -736,7 +771,7 @@ WzString *loadProximityViewData(const char *fileName)
 		if (ini.contains("type"))
 		{
 			unsigned int proxType = ini.value("type").toUInt();
-			if (proxType > PROX_TYPES)
+			if (proxType >= PROX_TYPES)
 			{
 				ASSERT(false, "Invalid proximity message sub type - %s", v->name.toUtf8().c_str());
 				return nullptr;
@@ -777,9 +812,9 @@ WzString *loadProximityViewData(const char *fileName)
 
 inline void from_json(const nlohmann::json& j, SEQ_DISPLAY& v)
 {
-	v.sequenceName = WzString::fromUtf8(j["video"].get<std::string>());
+	v.sequenceName = WzString::fromUtf8(j.at("video").get<std::string>());
 	debug(LOG_WZ, "Sequence name: %s", v.sequenceName.toUtf8().c_str());
-	v.flag = j["loop"].get<uint32_t>();
+	v.flag = j.at("loop").get<uint32_t>();
 	debug(LOG_WZ, "Sequence loop: %d", v.flag);
 	auto textFile = j.find("textFile");
 	if (textFile != j.end())
@@ -788,7 +823,7 @@ inline void from_json(const nlohmann::json& j, SEQ_DISPLAY& v)
 		debug(LOG_WZ, "Sequence text file: %s", v.textFile.toUtf8().c_str());
 	}
 	// Set the subtitle string for the sequence.
-	const nlohmann::json& subtitles = j["subtitles"];
+	const nlohmann::json& subtitles = j.at("subtitles");
 	if (!subtitles.is_null() && subtitles.is_array())
 	{
 		for (auto &a : subtitles)
