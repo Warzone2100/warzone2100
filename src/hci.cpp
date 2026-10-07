@@ -1325,9 +1325,13 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 		apsTemplateList.clear();
 		for (auto &localTemplate : localTemplates)
 		{
+			if (localTemplate.hidden)
+			{
+				continue;
+			}
 			apsTemplateList.push_back(&localTemplate);
 		}
-		ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
+		ppsStatsList = (BASE_STATS **)apsTemplateList.data(); // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 		objMode = IOBJ_DEBUG_DROID;
 		intAddDebugStatsForm(ppsStatsList, apsTemplateList.size());
 		intMode = INT_EDITSTAT;
