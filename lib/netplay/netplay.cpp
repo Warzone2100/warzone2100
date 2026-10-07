@@ -2772,6 +2772,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			bool isSpectator = false;
 			bool isAdmin = false;
 			bool error = false;
+			const bool gameStarted = !ingame.localJoiningInProgress;
 
 			auto r = NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 			if (playerQueue.index != NetPlay.hostPlayer)
@@ -2815,18 +2816,22 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 
 				// Retrieve the rest of the data
 				wasAllocated = NetPlay.players[index].allocated;
-				NETbool(r, NetPlay.players[index].allocated);
-				NETbool(r, NetPlay.players[index].heartbeat);
+				bool allocated = false;
+				bool heartbeat = false;
+				uint32_t heartattacktime = 0;
+				bool ready = false;
+				NETbool(r, allocated);
+				NETbool(r, heartbeat);
 				bool tmpDiscard = false;
 				NETbool(r, tmpDiscard); // to maintain message format, discard old "kick" variable // FUTURE TODO: Remove
 				oldName.clear();
 				oldName = NetPlay.players[index].name;
 				NETstring(r, NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
-				NETuint32_t(r, NetPlay.players[index].heartattacktime);
+				NETuint32_t(r, heartattacktime);
 				NETint32_t(r, colour);
 				NETint32_t(r, position);
 				NETint32_t(r, team);
-				NETbool(r, NetPlay.players[index].ready);
+				NETbool(r, ready);
 				NETint8_t(r, ai);
 				NETint8_t(r, difficulty);
 				NETuint8_t(r, faction);
@@ -2856,14 +2861,25 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
 				if (playerQueue.index == NetPlay.hostPlayer)
 				{
-					setPlayerColour(index, colour);
-					NetPlay.players[index].position = position;
-					NetPlay.players[index].team = team;
-					NetPlay.players[index].ai = ai;
-					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
-					NetPlay.players[index].faction = newFactionId.value();
-					NetPlay.players[index].isSpectator = isSpectator;
 					NetPlay.players[index].isAdmin = isAdmin;
+					if (!gameStarted)
+					{
+						NetPlay.players[index].allocated = allocated;
+						NetPlay.players[index].heartbeat = heartbeat;
+						NetPlay.players[index].heartattacktime = heartattacktime;
+						NetPlay.players[index].ready = ready;
+						setPlayerColour(index, colour);
+						NetPlay.players[index].position = position;
+						NetPlay.players[index].team = team;
+						NetPlay.players[index].ai = ai;
+						NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
+						NetPlay.players[index].faction = newFactionId.value();
+						NetPlay.players[index].isSpectator = isSpectator;
+					}
+					else if (allocated != NetPlay.players[index].allocated || isSpectator != NetPlay.players[index].isSpectator)
+					{
+						debug(LOG_NET, "MSG_PLAYER_INFO for player %u: keeping local state (allocated %d, spectator %d; received %d, %d)", index, (int)NetPlay.players[index].allocated, (int)NetPlay.players[index].isSpectator, (int)allocated, (int)isSpectator);
+					}
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
