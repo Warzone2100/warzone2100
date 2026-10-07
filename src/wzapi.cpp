@@ -3227,13 +3227,13 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 
 //-- ## removeStruct(structure)
 //--
-//-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
+//-- Queue the given structure for removal from the map. Returns a boolean that is true on success.
 //-- No special effects are applied. DEPRECATED since 3.2. Use `removeObject` instead.
 //--
 bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
-	return removeStruct(psStruct, true, gameWorld);
+	return removeObject(context, psStruct, false);
 }
 
 //-- ## removeObject(gameObject[, sfx])
@@ -3331,7 +3331,7 @@ wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(s
 	uint16_t direction = scriptDirectionToAngle(static_cast<float>(_direction.value_or(0)));
 
 	STRUCTURE_STATS *psStat = &asStructureStats[structureIndex];
-	STRUCTURE *psStruct = buildStructureDir(gameWorld, psStat, x, y, direction, player, false);
+	STRUCTURE *psStruct = buildStructureDir(gameWorld, psStat, x, y, direction, player, false, generateSynchronisedObjectId(), false, true);
 	if (psStruct)
 	{
 		psStruct->status = SS_BUILT;
@@ -5029,15 +5029,16 @@ bool wzapi::scriptIsObjectQueuedForRemoval(const BASE_OBJECT *psObj)
 void wzapi::processScriptQueuedObjectRemovals()
 {
 	auto& queuedObjRemovals = scriptQueuedObjectRemovals();
-	for (auto& objWithSfxFlag : queuedObjRemovals)
+	// Removing an object can queue further removals, which are handled in the same pass
+	for (size_t i = 0; i < queuedObjRemovals.size(); ++i)
 	{
-		BASE_OBJECT* psObj = objWithSfxFlag.first;
+		const auto [psObj, withSfx] = queuedObjRemovals[i];
 		if (psObj->died)
 		{
 			debug(LOG_MSG, "Object %p is already dead, not processing", static_cast<void*>(psObj));
 			continue;
 		}
-		if (objWithSfxFlag.second)
+		if (withSfx)
 		{
 			switch (psObj->type)
 			{

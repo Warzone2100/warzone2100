@@ -1557,7 +1557,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 	return buildStructureDir(world, pStructureType, x, y, direction, player, FromSave, generateSynchronisedObjectId());
 }
 
-STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/)
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/, bool deferWallRemoval/*= false*/)
 {
 	STRUCTURE *psBuilding = nullptr;
 
@@ -1654,19 +1654,28 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			}
 		}
 
+		std::vector<STRUCTURE *> wallsToReplace;
 		for (int tileY = map.y; tileY < map.y + size.y; ++tileY)
 		{
 			for (int tileX = map.x; tileX < map.x + size.x; ++tileX)
 			{
 				MAPTILE *psTile = mapTile(world.map, tileX, tileY);
 
+				if (TileHasStructure(psTile) && wzapi::scriptIsObjectQueuedForRemoval(psTile->psObject))
+				{
+					continue;
+				}
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
 				if (isBuildableOnWalls(pStructureType->type) && TileHasWall(psTile))
 				{
-					removeStruct((STRUCTURE *)psTile->psObject, true, world);
+					STRUCTURE *psWall = (STRUCTURE *)psTile->psObject;
+					if (std::find(wallsToReplace.begin(), wallsToReplace.end(), psWall) == wallsToReplace.end())
+					{
+						wallsToReplace.push_back(psWall);
+					}
 				}
-				else if (TileHasStructure(psTile) && !wzapi::scriptIsObjectQueuedForRemoval(psTile->psObject))
+				else if (TileHasStructure(psTile))
 				{
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic push
@@ -1680,6 +1689,18 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 #endif
 					return nullptr;
 				}
+			}
+		}
+		for (STRUCTURE *psWall : wallsToReplace)
+		{
+			if (deferWallRemoval)
+			{
+				// The new structure takes over the tiles now, the wall is removed with the other script-queued removals
+				wzapi::scriptQueuedObjectRemovals().emplace_back(psWall, false);
+			}
+			else
+			{
+				removeStruct(psWall, true, world);
 			}
 		}
 		// Emplace the structure being built in the global storage to obtain stable address.
