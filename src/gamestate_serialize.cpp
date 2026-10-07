@@ -5038,17 +5038,9 @@ bool runGameStateSelfTest()
 	setMaxCommanders(0, 17);
 	setMaxConstructors(0, 99);
 
-	// Known production run with template-less entries (exercises the production section
-	// without needing loaded stats; template resolution is covered by the CRC harness later).
+	// Known production layout: two empty factory slots (entries are checked separately below).
 	asProductionRun[0].clear();
 	asProductionRun[0].resize(2);
-	{
-		ProductionRunEntry e;
-		e.quantity = 5;
-		e.built = 2;
-		e.psTemplate = nullptr;
-		asProductionRun[0][1].push_back(e);
-	}
 
 	// Known mission timer: a paused countdown holding 4242 ticks.
 	mission.timerMode = TIMER_PAUSE;
@@ -5130,16 +5122,8 @@ bool runGameStateSelfTest()
 	check(mission.time == 4242, "mission.time not restored");
 	check(mission.startTime == 100u, "mission.startTime not restored");
 
-	// Assert: production restored.
-	if (asProductionRun[0].size() == 2 && asProductionRun[0][1].size() == 1)
-	{
-		check(asProductionRun[0][1][0].quantity == 5, "production quantity not restored");
-		check(asProductionRun[0][1][0].built == 2, "production built not restored");
-	}
-	else
-	{
-		check(false, "production run structure not restored");
-	}
+	// Assert: production layout restored.
+	check(asProductionRun[0].size() == 2 && asProductionRun[0][1].empty(), "production run structure not restored");
 
 	// Assert: the restored RNG produces the exact same sequence as the reference.
 	bool seqMatch = true;
@@ -5170,6 +5154,61 @@ bool runGameStateSelfTest()
 	}
 	const std::string buf3 = serializeGameState();
 	check(buf1 == buf3, "round-trip: deserialize->serialize JSON differs");
+
+	// --- Assert: production section round-trip with a template ---
+	// The production section only stores and resolves template IDs, so a stats-free template is enough.
+	{
+		bool templatesEmpty = true;
+		enumerateTemplates(0, [&templatesEmpty](DROID_TEMPLATE *) { templatesEmpty = false; return false; });
+		check(templatesEmpty, "production round-trip expects no templates for player 0");
+		constexpr uint32_t kTemplateId = 0x7FFF0001u;
+		auto psNew = std::make_unique<DROID_TEMPLATE>();
+		psNew->multiPlayerID = kTemplateId;
+		DROID_TEMPLATE *psTempl = addTemplate(0, std::move(psNew));
+		const std::vector<ProductionRun> savedRuns = asProductionRun[0];
+		asProductionRun[0].clear();
+		asProductionRun[0].resize(2);
+		ProductionRunEntry e;
+		e.quantity = 5;
+		e.built = 2;
+		e.psTemplate = psTempl;
+		asProductionRun[0][1].push_back(e);
+		e.quantity = 3;
+		e.built = 0;
+		e.psTemplate = nullptr;
+		asProductionRun[0][1].push_back(e);
+		nlohmann::ordered_json jp = writeProduction();
+		const nlohmann::ordered_json &jrun = jp["runs"][0][1];
+		check(jrun.size() == 2 && jrun[0].value("templateId", 0u) == kTemplateId && jrun[1].value("templateId", 1u) == 0u, "production entries not written with their template IDs");
+		nlohmann::ordered_json unknown = jrun[0];
+		unknown["templateId"] = kTemplateId + 1;
+		jp["runs"][0][1].push_back(unknown);
+		asProductionRun[0].clear();
+		try
+		{
+			readProduction(jp, jp.value("version", 0u));
+			if (asProductionRun[0].size() == 2 && asProductionRun[0][1].size() == 1)
+			{
+				const ProductionRunEntry &r = asProductionRun[0][1][0];
+				check(r.quantity == 5, "production quantity not restored");
+				check(r.built == 2, "production built not restored");
+				check(r.psTemplate == psTempl, "production template not resolved");
+			}
+			else
+			{
+				check(false, "production entries not restored (or entries without a known template kept)");
+			}
+		}
+		catch (const std::exception &ex)
+		{
+			check(false, ex.what());
+		}
+		asProductionRun[0] = savedRuns;
+		if (templatesEmpty)
+		{
+			clearTemplates(0);
+		}
+	}
 
 	// --- Assert: map terrain write/read round-trip on a synthetic map ---
 	// The rest of the self-test runs with no map loaded, so writeMapTerrain/readMapTerrain (and the
