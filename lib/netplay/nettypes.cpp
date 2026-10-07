@@ -449,6 +449,28 @@ bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type)
 	return true;
 }
 
+bool NETcount(MessageReader& r, uint32_t& count, uint32_t maxCount, size_t minElemBytes, const std::function<void (uint32_t invalidCount)>& onInvalid)
+{
+	NETuint32_t(r, count);
+	if (!r.valid() || count > maxCount || (minElemBytes > 0 && count > r.remaining() / minElemBytes))
+	{
+		uint32_t invalidCount = count;
+		count = 0;
+		r.markInvalid();
+		if (onInvalid)
+		{
+			onInvalid(invalidCount);
+		}
+		return false;
+	}
+	return true;
+}
+
+bool NETcount(MessageReader& r, uint32_t& count, uint32_t maxCount, size_t minElemBytes)
+{
+	return NETcount(r, count, maxCount, minElemBytes, nullptr);
+}
+
 bool NETend(MessageReader& r)
 {
 	bool result = r.valid();
@@ -460,6 +482,14 @@ bool NETend(MessageReader& r)
 }
 
 static std::vector<uint8_t> tmpMessageRawDataBuffer;
+
+bool NETcount(MessageWriter& w, uint32_t count, uint32_t maxCount, size_t minElemBytes)
+{
+	(void)minElemBytes;
+	ASSERT(count <= maxCount, "Count %" PRIu32 " exceeds maximum %" PRIu32, count, maxCount);
+	NETuint32_t(w, count);
+	return count <= maxCount;
+}
 
 bool NETend(MessageWriter& w)
 {

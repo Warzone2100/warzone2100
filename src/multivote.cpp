@@ -640,30 +640,22 @@ bool NETEnumTSet_uint8(MessageReader& r, std::set<T>& val, std::function<bool(ui
 
 	val.clear();
 
-	NETuint32_t(r, numElements);
-
-	if (numElements > MaxSupportedSetMembers)
+	if (!NETcount(r, numElements, MaxSupportedSetMembers, 1, [](uint32_t badCount) {
+		debug(LOG_NET, "Invalid number of set members: %" PRIu32, badCount);
+	}))
 	{
-		debug(LOG_NET, "Invalid number of set members: %" PRIu32, numElements);
-		// will skip extras in the loop, set return value to false
-		retVal = false;
+		return false;
 	}
 	for (uint32_t i = 0; i < numElements; ++i)
 	{
 		uint8_t el = 0;
 		NETuint8_t(r, el);
-		if (i < numElements)
+		if (validateValueFunc && !validateValueFunc(el))
 		{
-			if (validateValueFunc)
-			{
-				if (!validateValueFunc(el))
-				{
-					retVal = false;
-					continue;
-				}
-			}
-			val.insert(static_cast<T>(el));
+			retVal = false;
+			continue;
 		}
+		val.insert(static_cast<T>(el));
 	}
 	return retVal;
 }
@@ -690,7 +682,7 @@ bool NETEnumTSet_uint8(MessageWriter& w, std::set<T>& val, std::function<bool(ui
 		numElements = MaxSupportedSetMembers;
 	}
 
-	NETuint32_t(w, numElements);
+	NETcount(w, numElements, MaxSupportedSetMembers);
 
 	size_t i = 0;
 	for (auto el : val)

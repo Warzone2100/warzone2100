@@ -30,6 +30,7 @@
 #include "lib/framework/wzstring.h"
 
 #include <type_traits>
+#include <functional>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -142,6 +143,12 @@ void NETenum(MessageReader& r, EnumT& enumRef)
 	enumRef = static_cast<EnumT>(val);
 }
 
+/// Reads a count of elements that follow. Fails (setting count to 0 and marking the reader invalid) if count > maxCount,
+/// or if the rest of the message is too short to hold count elements of at least minElemBytes each.
+/// On failure, onInvalid (if provided) is called with the rejected count, for logging.
+bool NETcount(MessageReader& r, uint32_t& count, uint32_t maxCount, size_t minElemBytes = 1);
+bool NETcount(MessageReader& r, uint32_t& count, uint32_t maxCount, size_t minElemBytes, const std::function<void (uint32_t invalidCount)>& onInvalid);
+
 bool NETend(MessageReader& r);
 
 // New overloads that accept MessageWriter:
@@ -190,6 +197,8 @@ static void NETenum(MessageWriter& w, EnumT val)
 
 	NETuint32_t(w, static_cast<uint32_t>(val));
 }
+
+bool NETcount(MessageWriter& w, uint32_t count, uint32_t maxCount, size_t minElemBytes = 1);
 
 bool NETend(MessageWriter& w);
 
