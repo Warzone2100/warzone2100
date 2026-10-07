@@ -289,9 +289,14 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName, bool q
 	};
 	urlRequest.progressCallback = [requestDetails](const std::string& url, int64_t dltotal, int64_t dlnow) {
 		std::string urlCopy = url;
-		float progress = static_cast<float>(dlnow) / static_cast<float>(dltotal);
-		wzAsyncExecOnMainThread([requestDetails, urlCopy, progress]{
-			requestDetails->progressPercentage = std::min<uint32_t>(static_cast<uint32_t>(progress * 100.f), 100);
+		uint32_t percentage = 0;
+		if (dltotal > 0 && dlnow > 0)
+		{
+			double ratio = static_cast<double>(std::min(dlnow, dltotal)) / static_cast<double>(dltotal);
+			percentage = static_cast<uint32_t>(ratio * 100.0);
+		}
+		wzAsyncExecOnMainThread([requestDetails, urlCopy, percentage]{
+			requestDetails->progressPercentage = percentage;
 		});
 	};
 	urlRequest.maxDownloadSizeLimit = 200 * 1024 * 1024; // response should never be > 200 MB

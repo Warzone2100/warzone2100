@@ -973,12 +973,13 @@ public:
 		MemoryStruct *mem = chunk.get();
 
 		const size_t maxSize = static_cast<size_t>(maxDownloadSize());
-		size_t neededBufferSize = mem->size + realsize + 1;
-		size_t newBufferSize = std::min<size_t>(neededBufferSize, maxSize); // prevent allocating more than maxDownloadSize buffer size
-		if (newBufferSize <= mem->size) {
-			/* can't allocate any more */
+		if (realsize > maxSize || mem->size + 1 > maxSize - realsize)
+		{
+			// Returning less than realsize makes curl abort the transfer (CURLE_WRITE_ERROR)
+			debug(LOG_NET, "Response exceeds the maximum download size (%zu bytes): %s", maxSize, request.url.c_str());
 			return 0;
 		}
+		size_t newBufferSize = mem->size + realsize + 1;
 
 		char *ptr = (char*) realloc(mem->memory, newBufferSize);
 		if (ptr == NULL) {
@@ -987,13 +988,11 @@ public:
 		}
 
 		mem->memory = ptr;
-		size_t bytesToWrite = std::min<size_t>(realsize, (newBufferSize > mem->size) ? (newBufferSize - mem->size - 1) : 0);
-		ASSERT(bytesToWrite == realsize, "Writing partial data - reached max size");
-		memcpy(&(mem->memory[mem->size]), contents, bytesToWrite);
-		mem->size += bytesToWrite;
+		memcpy(&(mem->memory[mem->size]), contents, realsize);
+		mem->size += realsize;
 		mem->memory[mem->size] = 0;
 
-		return bytesToWrite;
+		return realsize;
 	}
 	virtual void resetWriteMemory() override
 	{
