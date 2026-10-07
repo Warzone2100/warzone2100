@@ -35,7 +35,8 @@
 #include <coroutine>
 #include <memory>
 #include <queue>
-#include <stack>
+#include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -117,6 +118,9 @@ public:
 	// True while a loading coroutine frame is actively running (not merely paused/yielded).
 	bool isExecutingLoadingCoroutine() const noexcept;
 
+	// Joined loading-domain path. Valid until the next push or pop on this controller.
+	std::string_view loadingDomainPath() const noexcept;
+
 	// Returns an awaitable that suspends the current coroutine until the next `stepOneQuantum()`.
 	FrameYield yieldFrame() noexcept;
 
@@ -162,10 +166,26 @@ private:
 	void onFrameFinished(bool succeeded) noexcept;
 	bool hasActiveExecution() const noexcept { return !executionStack.empty(); }
 
+	void pushLoadingDomain(LoadingTaskPromiseBase* owner, std::string name);
+	void popLoadingDomain(LoadingTaskPromiseBase* owner) noexcept;
+	void noteFrameAlive(LoadingTaskPromiseBase* promise);
+	void noteFrameDead(LoadingTaskPromiseBase* promise) noexcept;
+	bool isLiveFrame(const LoadingTaskPromiseBase* promise) const noexcept;
+	bool isOnExecutionStack(const LoadingTaskPromiseBase* promise) const noexcept;
+
+	struct LoadingDomainSegment
+	{
+		LoadingTaskPromiseBase* owner = nullptr;
+		std::string name;
+	};
+
 	std::unique_ptr<ResourceLoadingSubmission> activeSubmission;
 	std::queue<std::unique_ptr<ResourceLoadingSubmission>> pendingSubmissions; // FIFO while active
 
-	std::stack<ExecutionFrame, std::vector<ExecutionFrame>> executionStack; // root + nested children
+	std::vector<ExecutionFrame> executionStack; // root + nested children
+	std::vector<LoadingDomainSegment> loadingDomains;
+	std::string loadingDomainPathCache;
+	std::vector<LoadingTaskPromiseBase*> liveFrames;
 	std::coroutine_handle<> sessionRootHandle{}; // root handle kept until submission completes
 	bool terminalSucceeded = true;
 	bool sessionFinished = false;
