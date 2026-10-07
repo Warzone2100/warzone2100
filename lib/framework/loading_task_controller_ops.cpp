@@ -75,4 +75,42 @@ void suspendAwaitChild(std::coroutine_handle<> parent,
 	controller->pushFrame(child, child_policy, childPromise);
 }
 
+void activateLoadingDomain(LoadingTaskPromiseBase* promise, std::string name)
+{
+	ASSERT(promise != nullptr, "setLoadingDomain with null promise");
+	ASSERT(promise->controller != nullptr,
+	       "setLoadingDomain outside a ResourceLoadingController task");
+	ASSERT(!promise->loadingDomainActive, "setLoadingDomain called twice in one LoadingTask");
+	ASSERT(!name.empty(), "setLoadingDomain with empty name");
+
+	promise->loadingDomainName = name;
+	promise->controller->pushLoadingDomain(promise, std::move(name));
+	promise->loadingDomainActive = true;
+}
+
+void releaseLoadingDomain(LoadingTaskPromiseBase* promise) noexcept
+{
+	if (promise == nullptr || promise->controller == nullptr)
+	{
+		return;
+	}
+	ResourceLoadingController* controller = promise->controller;
+	if (promise->loadingDomainActive)
+	{
+		controller->popLoadingDomain(promise);
+		promise->loadingDomainActive = false;
+	}
+	controller->noteFrameDead(promise);
+}
+
 } // namespace loading_task_detail
+
+LoadingTaskPromiseBase::~LoadingTaskPromiseBase()
+{
+	loading_task_detail::releaseLoadingDomain(this);
+}
+
+void LoadingTaskPromiseBase::activateLoadingDomain(std::string name)
+{
+	loading_task_detail::activateLoadingDomain(this, std::move(name));
+}
