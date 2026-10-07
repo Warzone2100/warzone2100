@@ -2040,7 +2040,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	gfx_api::context::get().bind_index_buffer(*terrainDecalIndexVBO, gfx_api::index_type::u32);
 	glm::mat4 groundScale = glm::mat4(0);
-	for (int i = 0; i < getNumGroundTypes(); i++) {
+	for (int i = 0; i < std::min<size_t>(getNumGroundTypes(), MAX_GROUND_TYPES); i++) {
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 
@@ -2091,7 +2091,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
 	glm::mat4 groundScale = glm::mat4(0);
-	for (int i = 0; i < getNumGroundTypes(); i++) {
+	for (int i = 0; i < std::min<size_t>(getNumGroundTypes(), MAX_GROUND_TYPES); i++) {
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 
