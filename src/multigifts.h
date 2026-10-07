@@ -29,6 +29,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio);
 void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification);
 void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value);
 bool recvAlliance(NETQUEUE queue, bool allowAudio);                  // Was declared in multirecv.h, too.
+bool allianceInvolvesSpectator(uint8_t p1, uint8_t p2);
 void createTeamAlliances();
 
 bool sendGift(uint8_t type, uint8_t to);

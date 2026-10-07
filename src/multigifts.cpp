@@ -649,6 +649,39 @@ void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value)
 	NETend(w);
 }
 
+bool allianceInvolvesSpectator(uint8_t p1, uint8_t p2)
+{
+	if (!bMultiPlayer)
+	{
+		return false;
+	}
+	auto isSpectator = [](uint8_t player) {
+		return static_cast<size_t>(player) < NetPlay.players.size() && NetPlay.players[player].isSpectator;
+	};
+	return isSpectator(p1) || isSpectator(p2);
+}
+
+static bool validAllianceChange(uint8_t from, uint8_t to, uint8_t state)
+{
+	return from < MAX_PLAYERS && to < MAX_PLAYERS && from != to && !alliancesFixed(game.alliance)
+		&& (state == ALLIANCE_REQUESTED || state == ALLIANCE_FORMED || state == ALLIANCE_BROKEN);
+}
+
+// Whether a valid alliance change still applies, which it may no longer do by the time it is processed
+static bool allianceChangeApplies(uint8_t from, uint8_t to, uint8_t state)
+{
+	switch (state)
+	{
+	case ALLIANCE_REQUESTED:
+		return !allianceInvolvesSpectator(from, to) && alliances[from][to] != ALLIANCE_FORMED;
+	case ALLIANCE_FORMED:
+		// "to" must have asked "from" first
+		return !allianceInvolvesSpectator(from, to) && alliances[from][to] == ALLIANCE_INVITATION;
+	default:
+		return true;
+	}
+}
+
 bool recvAlliance(NETQUEUE queue, bool allowAudio)
 {
 	uint8_t to, from, state;
@@ -659,56 +692,34 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 	NETuint8_t(r, to);
 	NETuint8_t(r, state);
 	NETint32_t(r, value);
-	NETend(r);
+	bool validMessage = NETend(r);
 
-	if (!canGiveOrdersFor(queue.index, from))
+	if (!validMessage || !canGiveOrdersFor(queue.index, from) || !validAllianceChange(from, to, state))
 	{
-		return false;
-	}
-
-	if (to >= MAX_PLAYERS)
-	{
-		debug(LOG_WARNING, "Invalid recipient player (%d), queue.index %d", (int)to, (int)queue.index);
-		return false;
-	}
-
-	auto prohibitedNewAlliance = [](uint8_t from, uint8_t to) -> bool {
-		if (bMultiPlayer)
+		syncDebug("Rejected alliance change %d %d %d from %d", (int)from, (int)to, (int)state, (int)queue.index);
+		if (recordInvalidMessage(queue.index, GAME_ALLIANCE))
 		{
-			if ((static_cast<size_t>(from) < NetPlay.players.size()) && NetPlay.players[from].isSpectator)
-			{
-				debug(LOG_WARNING, "Can't enable alliance from %d (spectator), to %d", (int)from, (int)to);
-				syncDebug("Can't enable alliance from spectator.");
-				return true;
-			}
-			if ((static_cast<size_t>(to) < NetPlay.players.size()) && NetPlay.players[to].isSpectator)
-			{
-				debug(LOG_WARNING, "Can't enable alliance from %d, to %d (spectator)", (int)from, (int)to);
-				syncDebug("Can't enable alliance to spectator.");
-				return true;
-			}
+			debug(LOG_INFO, "Ignoring invalid GAME_ALLIANCE from %d (valid: %d, from: %d, to: %d, state: %d, alliance type: %d) - further invalid ones will not be logged",
+			      (int)queue.index, (int)validMessage, (int)from, (int)to, (int)state, (int)game.alliance);
 		}
 		return false;
-	};
+	}
+	if (!allianceChangeApplies(from, to, state))
+	{
+		syncDebug("Alliance change %d %d %d from %d no longer applies", (int)from, (int)to, (int)state, (int)queue.index);
+		return false;
+	}
 
 	switch (state)
 	{
-	case ALLIANCE_NULL:
-		break;
 	case ALLIANCE_REQUESTED:
-		if (prohibitedNewAlliance(from, to)) { return false; }
 		requestAlliance(from, to, false, allowAudio);
 		break;
 	case ALLIANCE_FORMED:
-		if (prohibitedNewAlliance(from, to)) { return false; }
 		formAlliance(from, to, false, allowAudio, true);
 		break;
 	case ALLIANCE_BROKEN:
 		breakAlliance(from, to, false, allowAudio);
-		break;
-	default:
-		debug(LOG_ERROR, "Unknown alliance state recvd.");
-		return false;
 		break;
 	}
 

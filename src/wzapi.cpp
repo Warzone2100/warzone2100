@@ -311,34 +311,89 @@ uint32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 	return gameRand(limit);
 }
 
+static bool isGlobalScript(const wzapi::execution_context &context)
+{
+	const wzapi::scripting_instance *instance = context.currentInstance();
+	return instance != nullptr && instance->binding() == wzapi::ScriptBinding::HostDeclaredGlobal;
+}
+
 //-- ## setAlliance(player1, player2, areAllies)
 //--
 //-- Set alliance status between two players to either true or false. (3.2+ only)
+//-- In multiplayer, a global (rules or map) script's change applies immediately on every client,
+//-- so, like other functions that change the game state, it must be called the same way on every client.
+//-- Alliances with spectators can't be formed.
+//-- An AI script can only change its own alliances, only if the game's alliance type lets players
+//-- change them, and can only form an alliance that the other player has requested.
+//-- Returns false if the alliance was not changed for these reasons.
 //--
 bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player1);
 	SCRIPT_ASSERT_PLAYER(false, context, player2);
-	if (areAllies)
+	SCRIPT_ASSERT(false, context, player1 != player2, "Cannot set an alliance of player %d with itself", player1);
+	if (!bMultiPlayer || isGlobalScript(context))
 	{
-		formAlliance(player1, player2, true, false, true);
+		// Global scripts run on every client, so apply the change directly on each of them
+		if (!areAllies)
+		{
+			breakAlliance(player1, player2, false, true);
+		}
+		else if (!allianceInvolvesSpectator(player1, player2))
+		{
+			formAlliance(player1, player2, false, bMultiPlayer, true);
+		}
+		else
+		{
+			return false;
+		}
+		return true;
 	}
-	else
+
+	int me = context.player();
+	SCRIPT_ASSERT(false, context, player1 == me || player2 == me, "AI scripts can only change their own alliances (player %d)", me);
+	int other = (player1 == me) ? player2 : player1;
+	if (alliancesFixed(game.alliance))
 	{
-		breakAlliance(player1, player2, true, true);
+		return false;
 	}
+	if (!areAllies)
+	{
+		sendAlliance(me, other, ALLIANCE_BROKEN, 0);
+		return true;
+	}
+	if (alliances[me][other] == ALLIANCE_FORMED)
+	{
+		return true;
+	}
+	if (alliances[me][other] != ALLIANCE_INVITATION)
+	{
+		return false;
+	}
+	sendAlliance(me, other, ALLIANCE_FORMED, 0);
 	return true;
 }
 
 //-- ## sendAllianceRequest(player)
 //--
 //-- Send an alliance request to a player. (3.3+ only)
+//-- It can't be used by global (rules or map) scripts in multiplayer.
 //--
 wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 {
 	SCRIPT_ASSERT_PLAYER({}, context, context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	if (!alliancesFixed(game.alliance))
+	SCRIPT_ASSERT({}, context, player != context.player(), "Cannot request an alliance with oneself");
+	SCRIPT_ASSERT({}, context, !bMultiPlayer || !isGlobalScript(context), "sendAllianceRequest() cannot be used by global scripts in multiplayer");
+	if (alliancesFixed(game.alliance))
+	{
+		return {};
+	}
+	if (bMultiPlayer)
+	{
+		sendAlliance(context.player(), player, ALLIANCE_REQUESTED, 0);
+	}
+	else
 	{
 		requestAlliance(context.player(), player, true, true);
 	}
