@@ -75,6 +75,7 @@ bool loadAudioEffectFileData(WzConfig &ini)
 		nlohmann::json array = ini.json("data");
 		if (array.is_null())
 		{
+			ini.endGroup();
 			continue;
 		}
 		ASSERT(array.is_array(), "data is not an array");

@@ -88,6 +88,12 @@ bool resParserSetDirectory(const char *directory)
 	}
 
 	debug(LOG_NEVER, "directory: %s", directory);
+	const size_t baseLength = (strncmp(directory, "/:", strlen("/:")) == 0) ? 0 : strlen(aResDir);
+	if (baseLength + strlen(directory) + 2 > sizeof(aCurrResDir))
+	{
+		debug(LOG_ERROR, "Resource directory name too long: %s", directory);
+		return false;
+	}
 	if (strncmp(directory, "/:", strlen("/:")) == 0)
 	{
 		sstrcpy(aCurrResDir, directory);
