@@ -75,19 +75,22 @@ bool recvGift(NETQUEUE queue)
 	NETuint8_t(r, from);
 	NETuint8_t(r, to);
 	NETuint32_t(r, droidID);
-	NETend(r);
-
-	if (!canGiveOrdersFor(queue.index, from))
+	if (!NETend(r))
 	{
-		debug(LOG_WARNING, "Gift (%d) from %d, to %d, queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
-		syncDebug("Wrong player.");
+		if (recordInvalidMessage(queue.index, GAME_GIFT))
+		{
+			debug(LOG_INFO, "Ignoring truncated GAME_GIFT from %d - further invalid ones will not be logged", (int)queue.index);
+		}
 		return false;
 	}
 
-	if (to >= MAX_PLAYERS)
+	if (!canGiveOrdersFor(queue.index, from) || to >= MAX_PLAYERS || (from == to && type != AUTOGAME_GIFT))
 	{
-		debug(LOG_WARNING, "Gift (%d) from %d, to %d (invalid recipient player), queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
-		syncDebug("Invalid recipient player.");
+		if (recordInvalidMessage(queue.index, GAME_GIFT))
+		{
+			debug(LOG_INFO, "Ignoring GAME_GIFT (%d) from %d to %d from %d - further invalid ones will not be logged", (int)type, (int)from, (int)to, (int)queue.index);
+		}
+		syncDebug("Invalid gift.");
 		return false;
 	}
 
@@ -95,7 +98,7 @@ bool recvGift(NETQUEUE queue)
 	{
 		if (NetPlay.players[to].isSpectator)
 		{
-			debug(LOG_WARNING, "Can't gift (%d) from %d, to %d (spectator player), queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
+			debug(LOG_NET, "Can't gift (%d) from %d, to %d (spectator player), queue.index %d", (int)type, (int)from, (int)to, (int)queue.index);
 			syncDebug("Can't gift to spectator.");
 			return false;
 		}
@@ -105,6 +108,15 @@ bool recvGift(NETQUEUE queue)
 	switch (type)
 	{
 	case RADAR_GIFT:
+		if (!alliancesCanGiveResearchAndRadar(game.alliance))
+		{
+			if (recordInvalidMessage(queue.index, GAME_GIFT))
+			{
+				debug(LOG_INFO, "Ignoring GAME_GIFT (%d) from %d in this alliance mode - further invalid ones will not be logged", (int)type, (int)queue.index);
+			}
+			syncDebug("Radar gift not allowed.");
+			return false;
+		}
 		audioTrack = ID_SENSOR_DOWNLOAD;
 		giftRadar(from, to, false);
 		break;
@@ -129,7 +141,11 @@ bool recvGift(NETQUEUE queue)
 		giftAutoGame(from, to, false);
 		break;
 	default:
-		debug(LOG_ERROR, "recvGift: Unknown Gift recvd");
+		if (recordInvalidMessage(queue.index, GAME_GIFT))
+		{
+			debug(LOG_INFO, "Ignoring unknown GAME_GIFT (%d) from %d - further invalid ones will not be logged", (int)type, (int)queue.index);
+		}
+		syncDebug("Unknown gift.");
 		return false;
 		break;
 	}
@@ -247,8 +263,14 @@ static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
 	STRUCTURE *psStruct = IdToStruct(structID, from);
 	if (psStruct)
 	{
+		const STRUCTURE_STATS *psStats = psStruct->pStructureType;
+		if (bMultiPlayer && psStats->curCount[to] >= psStats->upgrade[to].limit)
+		{
+			syncDebug("Structure limit reached.");
+			return;
+		}
 		syncDebugStructure(psStruct, '<');
-		giftSingleStructure(psStruct, to, false);
+		giftSingleStructure(psStruct, to, false, false);
 		syncDebugStructure(psStruct, '>');
 		if (to == selectedPlayer)
 		{
@@ -257,7 +279,7 @@ static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
 	}
 	else
 	{
-		debug(LOG_ERROR, "Bad structure id %u, from %u to %u", structID, from, to);
+		syncDebug("Structure %u from %u to %u not found.", structID, from, to);
 	}
 }
 
@@ -283,7 +305,7 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 	}
 	else
 	{
-		debug(LOG_ERROR, "Bad droid id %u, from %u to %u", droidID, from, to);
+		syncDebug("Droid %u from %u to %u not found.", droidID, from, to);
 	}
 }
 
@@ -796,7 +818,14 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 		NETuint32_t(r, y);
 		NETuint32_t(r, id);
 	}
-	NETend(r);
+	if (!NETend(r))
+	{
+		if (recordInvalidMessage(queue.index, GAME_DEBUG_ADD_FEATURE))
+		{
+			debug(LOG_INFO, "Ignoring truncated GAME_DEBUG_ADD_FEATURE from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return;
+	}
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
