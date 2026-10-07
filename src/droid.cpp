@@ -527,7 +527,7 @@ void recycleDroid(DROID *psDroid)
 	// hide the droid
 	memset(psDroid->visible, 0, sizeof(psDroid->visible));
 
-	if (psDroid->psGroup)
+	if (psDroid->psGroup && !psDroid->isTransporter())
 	{
 		psDroid->psGroup->remove(psDroid);
 	}

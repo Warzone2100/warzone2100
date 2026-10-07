@@ -1048,7 +1048,9 @@ bool orderUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DORDER_FIRESUPPORT:
-		if (psDroid->order.psObj == nullptr)
+		if (psDroid->order.psObj == nullptr
+		    || (psDroid->order.psObj->type != OBJ_DROID && psDroid->order.psObj->type != OBJ_STRUCTURE)
+		    || !aiCheckAlliances(psDroid->order.psObj->player, psDroid->player))
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
 			if (psDroid->isVtol())
@@ -1398,6 +1400,17 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 }
 
 
+static bool moduleAvailableToPlayer(const STRUCTURE *psStruct, unsigned player)
+{
+	const STRUCTURE_STATS *psModule = getModuleStat(psStruct);
+	if (psModule == nullptr || player >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	const UBYTE availability = apStructTypeLists[player][psModule - asStructureStats];
+	return availability == AVAILABLE || availability == REDUNDANT;
+}
+
 /** This function actually tells the droid to perform the psOrder.
  * This function is called everytime to send a direct order to a droid.
  */
@@ -1594,6 +1607,11 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			//build a module onto the structure
 			if (!psDroid->isConstructionDroid() || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
 			{
+				break;
+			}
+			if (!moduleAvailableToPlayer((STRUCTURE *)psOrder->psObj, psDroid->player))
+			{
+				syncDebug("Module not available to player %u", psDroid->player);
 				break;
 			}
 			STRUCTURE_STATS *psStats = getModuleStat((STRUCTURE *)psOrder->psObj);
@@ -2846,6 +2864,10 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 		    psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
 			int moduleIndex = nextModuleToBuild(psStruct, ctrlShiftDown() ? highestQueuedModule(psDroid, psStruct) : -1);
+			if (moduleIndex > 0 && !moduleAvailableToPlayer(psStruct, psDroid->player))
+			{
+				moduleIndex = 0;
+			}
 
 			//Re-written to allow demolish order to be added to the queuing system
 			bool ObjDepartedAlly = (bMultiPlayer && NetPlay.players[psObj->player].difficulty == AIDifficulty::HUMAN && !NetPlay.players[psObj->player].allocated);

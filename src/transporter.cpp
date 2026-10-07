@@ -1037,6 +1037,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		debug(LOG_ERROR, "We can't add the unit to the transporter!");
 		return;
 	}
+	if (psTransporter->player != psDroidToAdd->player || !psTransporter->isTransporter() || psDroidToAdd->isTransporter())
+	{
+		objTrace(psDroidToAdd->id, "Can't embark on %u", psTransporter->id);
+		return;
+	}
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
