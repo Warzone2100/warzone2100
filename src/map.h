@@ -571,6 +571,9 @@ void mapFloodFillContinents(WorldMapState& mapState);
 /// path if/when this (off-world) map is actually entered and rendered.
 bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState);
 
+/// Clamps restored scroll limits to the map (does nothing if the map has no tiles yet)
+void mapClampScrollLimits(WorldMapState& mapState);
+
 /// Builds the display layer for terrain restored from a GameState snapshot, for a load with
 /// no scenario map load to have built it: the tileset's ground tables and texture pages, the
 /// texture->ground mapping, and the lightmap. The game-authoritative counterpart is

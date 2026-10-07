@@ -392,25 +392,30 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	auto latestTagResult = version_extractVersionNumberFromTag(version_getLatestTag());
 	ASSERT(latestTagResult.has_value(), "No extractable latest tag?? - Please try re-downloading the latest official source bundle");
 	const TagVer buildTagVer = latestTagResult.value_or(TagVer());
-	try
-	{
-		WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
-			if (strcmp(dirName, "auto") == 0)
-			{
-				return true; // continue
-			}
-			const auto saveInfoFilename = std::string(NewSaveGamePath) + dirName + "/save-info.json";
+	WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
+		if (strcmp(dirName, "auto") == 0)
+		{
+			return true; // continue
+		}
+		const auto saveInfoFilename = std::string(NewSaveGamePath) + dirName + "/save-info.json";
 
-			// avoid spamming stdout if doesn't exist
-			if (!PHYSFS_exists(saveInfoFilename.c_str())) return true;
+		// avoid spamming stdout if doesn't exist
+		if (!PHYSFS_exists(saveInfoFilename.c_str())) return true;
 
-			const auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
-			if (saveInfoDataOpt.has_value())
+		const auto saveInfoDataOpt = parseJsonFile(saveInfoFilename.c_str());
+		if (saveInfoDataOpt.has_value())
+		{
+			try
 			{
 				const auto saveInfoData = saveInfoDataOpt.value();
 				// decide what savegames are viewable/loadable
 				// assume that we can safely load games older than current version
 				const auto saveLatestTagArray = saveInfoData.at("latestTagArray").get<std::vector<uint16_t>>();
+				if (saveLatestTagArray.size() != 3)
+				{
+					debug(LOG_ERROR, "not showing savegame '%s', because its version is invalid", saveInfoFilename.c_str());
+					return true; // continue
+				}
 				TagVer saveTagVer(saveLatestTagArray, "");
 				if (saveTagVer <= buildTagVer)
 				{
@@ -422,13 +427,13 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 					debug(LOG_SAVEGAME, "not showing savegame '%s', because version is higher than this game", saveInfoFilename.c_str());
 				}
 			}
-			return true;
-		});
-	} catch( nlohmann::json::exception &e)
-	{
-		debug(LOG_ERROR, "can't load game: %s", e.what());
-		// continue, because still may find old .gam to load
-	}
+			catch (const nlohmann::json::exception &e)
+			{
+				debug(LOG_ERROR, "not showing savegame '%s': %s", saveInfoFilename.c_str(), e.what());
+			}
+		}
+		return true;
+	});
 
 	if (bReplay)
 	{

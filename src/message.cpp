@@ -1173,3 +1173,13 @@ void cleanupOldBeaconMessages()
 		jsDebugMessageUpdate();
 	}
 }
+
+bool validProximityMessageObject(const BASE_OBJECT *psObj)
+{
+	if (psObj == nullptr || psObj->type != OBJ_FEATURE)
+	{
+		return false;
+	}
+	const FEATURE *psFeature = static_cast<const FEATURE *>(psObj);
+	return psFeature->psStats != nullptr && (psFeature->psStats->subType == FEAT_OIL_RESOURCE || psFeature->psStats->subType == FEAT_GEN_ARTE);
+}

@@ -1388,6 +1388,18 @@ static bool afterMapLoad(WorldMapState& mapState)
 	return true;
 }
 
+void mapClampScrollLimits(WorldMapState& mapState)
+{
+	if (mapState.tiles == nullptr)
+	{
+		return;
+	}
+	mapState.scroll.minX = std::clamp<int>(mapState.scroll.minX, 0, mapState.width);
+	mapState.scroll.maxX = std::clamp<int>(mapState.scroll.maxX, 0, mapState.width);
+	mapState.scroll.minY = std::clamp<int>(mapState.scroll.minY, 0, mapState.height);
+	mapState.scroll.maxY = std::clamp<int>(mapState.scroll.maxY, 0, mapState.height);
+}
+
 bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState)
 {
 	ASSERT_OR_RETURN(false, mapState.tiles != nullptr, "No tiles allocated");
@@ -2453,7 +2465,7 @@ void mapInit(GameWorld& world)
 	ASSERT(dangerSemaphore == nullptr && dangerThread == nullptr, "Map data not cleaned up before starting!");
 	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
-		if (!fromSnapshot)
+		if (!fromSnapshot || lastDangerPlayer < 0)
 		{
 			for (player = 0; player < MAX_PLAYERS; player++)
 			{

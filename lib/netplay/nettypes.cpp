@@ -162,7 +162,8 @@ size_t NETgameQueueRestorePending(unsigned player, const std::vector<std::vector
 	for (const std::vector<uint8_t> &raw : rawMessages)
 	{
 		optional<NetMessage> msg = NetMessage::tryFromRawData(raw.data(), raw.size());
-		if (!msg.has_value())
+		// Each saved entry is a single game message
+		if (!msg.has_value() || msg->rawData().size() != raw.size() || !(msg->type() > GAME_MIN_TYPE && msg->type() < GAME_MAX_TYPE))
 		{
 			debug(LOG_ERROR, "Discarding malformed pending game-queue message for slot %u", player);
 			continue;
