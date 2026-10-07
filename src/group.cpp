@@ -112,6 +112,17 @@ void DROID_GROUP::add(DROID *psDroid)
 			return;
 		}
 
+		// Check before changing the droid's group, so that a rejected droid stays in its old group
+		if (psDroid->isTransporter())
+		{
+			ASSERT_OR_RETURN(, (type == GT_NORMAL), "grpJoin: Cannot have two transporters in a group");
+			ASSERT_OR_RETURN(, psList.empty(), "Adding transporter to non-empty list.");
+		}
+		else if ((psDroid->droidType == DROID_COMMAND) && (type != GT_TRANSPORTER))
+		{
+			ASSERT_OR_RETURN(, (type == GT_NORMAL) && (psCommander == nullptr), "grpJoin: Cannot have two command droids in a group");
+		}
+
 		if (psDroid->psGroup != nullptr)
 		{
 			psDroid->psGroup->remove(psDroid);
@@ -120,14 +131,11 @@ void DROID_GROUP::add(DROID *psDroid)
 
 		if (psDroid->isTransporter())
 		{
-			ASSERT_OR_RETURN(, (type == GT_NORMAL), "grpJoin: Cannot have two transporters in a group");
-			ASSERT_OR_RETURN(, psList.empty(), "Adding transporter to non-empty list.");
 			type = GT_TRANSPORTER;
 			psList.push_front(psDroid);
 		}
 		else if ((psDroid->droidType == DROID_COMMAND) && (type != GT_TRANSPORTER))
 		{
-			ASSERT_OR_RETURN(, (type == GT_NORMAL) && (psCommander == nullptr), "grpJoin: Cannot have two command droids in a group");
 			type = GT_COMMAND;
 			psCommander = psDroid;
 		}

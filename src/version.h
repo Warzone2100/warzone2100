@@ -54,7 +54,8 @@ struct TagVer
         qualifier[TAGVER_MAX_QUALIF_LEN - 1] = 0;
     }
 
-	TagVer(const std::vector<uint16_t> &v, const char *qualifier_) : version {v[0], v[1], v[2]}
+	TagVer(const std::vector<uint16_t> &v, const char *qualifier_)
+		: version {v.size() > 0 ? v[0] : uint16_t(0), v.size() > 1 ? v[1] : uint16_t(0), v.size() > 2 ? v[2] : uint16_t(0)}
 	{
 		strncpy(qualifier, qualifier_, TAGVER_MAX_QUALIF_LEN - 1);
         qualifier[TAGVER_MAX_QUALIF_LEN - 1] = 0;

@@ -47,6 +47,8 @@
 
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
+/// Upper bound on factory numbers
+#define MAX_FACTORY_NUMBER	256
 
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0

@@ -184,6 +184,11 @@ DROID_TYPE droidType(const DROID *psDroid);
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
 void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
+/// Control groups are 0-9, and UBYTE_MAX means no group
+static inline UBYTE validControlGroupOrNone(UBYTE group)
+{
+	return (group < 10) ? group : UBYTE_MAX;
+}
 void removeObjectFromGroup(WorldObjectState& objState, UDWORD playerNumber);
 
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);

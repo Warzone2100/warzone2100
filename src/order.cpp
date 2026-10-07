@@ -2056,6 +2056,65 @@ bool orderStateLoc(const DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *
 }
 
 
+bool validTargetForOrder(DROID_ORDER order, BASE_OBJECT const *psObj)
+{
+	switch (order)
+	{
+	case DORDER_HELPBUILD:
+	case DORDER_BUILDMODULE:
+	case DORDER_DEMOLISH:
+	case DORDER_REPAIR:
+	case DORDER_RESTORE:
+	case DORDER_REARM:
+	case DORDER_RTR_SPECIFIED:
+		return psObj != nullptr && psObj->type == OBJ_STRUCTURE;
+	case DORDER_DROIDREPAIR:
+	case DORDER_COMMANDERSUPPORT:
+	case DORDER_EMBARK:
+		return psObj != nullptr && psObj->type == OBJ_DROID;
+	case DORDER_ATTACK:
+	case DORDER_ATTACKTARGET:
+	case DORDER_OBSERVE:
+	case DORDER_FIRESUPPORT:
+	case DORDER_RECOVER:
+		return psObj != nullptr;
+	default:
+		return true;
+	}
+}
+
+bool validTargetForRestoredOrder(DroidOrder const &order)
+{
+	if (!validTargetForOrder(order.type, order.psObj))
+	{
+		return false;
+	}
+	if (order.psObj == nullptr)
+	{
+		return true;
+	}
+	switch (order.type)
+	{
+	case DORDER_RECYCLE:
+		return order.psObj->type == OBJ_STRUCTURE;
+	case DORDER_RTR:
+	case DORDER_RTR_SPECIFIED:
+		switch (order.rtrType)
+		{
+		case RTR_TYPE_REPAIR_FACILITY:
+		case RTR_TYPE_HQ:
+			return order.psObj->type == OBJ_STRUCTURE;
+		case RTR_TYPE_DROID:
+			return order.psObj->type == OBJ_DROID;
+		case RTR_TYPE_NO_RESULT:
+			return true;
+		}
+		return false;
+	default:
+		return true;
+	}
+}
+
 /** This function returns true if the order is a valid order to give to an object and false if it's not.*/
 bool validOrderForObj(DROID_ORDER order)
 {

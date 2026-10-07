@@ -568,33 +568,6 @@ static bool validOrderForNetQueue(DROID_ORDER order)
 	}
 }
 
-static bool validTargetForOrder(DROID_ORDER order, BASE_OBJECT const *psObj)
-{
-	switch (order)
-	{
-	case DORDER_HELPBUILD:
-	case DORDER_BUILDMODULE:
-	case DORDER_DEMOLISH:
-	case DORDER_REPAIR:
-	case DORDER_RESTORE:
-	case DORDER_REARM:
-	case DORDER_RTR_SPECIFIED:
-		return psObj != nullptr && psObj->type == OBJ_STRUCTURE;
-	case DORDER_DROIDREPAIR:
-	case DORDER_COMMANDERSUPPORT:
-	case DORDER_EMBARK:
-		return psObj != nullptr && psObj->type == OBJ_DROID;
-	case DORDER_ATTACK:
-	case DORDER_ATTACKTARGET:
-	case DORDER_OBSERVE:
-	case DORDER_FIRESUPPORT:
-	case DORDER_RECOVER:
-		return psObj != nullptr;
-	default:
-		return true;
-	}
-}
-
 static uint32_t secondaryStateMask(SECONDARY_ORDER sec)
 {
 	switch (sec)
