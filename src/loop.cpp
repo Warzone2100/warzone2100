@@ -357,6 +357,10 @@ static GAMECODE renderLoop()
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount);
 
 	// deal with the mission state
+	if (loopMissionState != LMS_NORMAL)
+	{
+		wzapi::processScriptQueuedObjectRemovals();
+	}
 	switch (loopMissionState)
 	{
 	case LMS_CLEAROBJECTS:
@@ -554,7 +558,7 @@ static void gameStateUpdate()
 	gridReset(gameWorld);
 
 	// Check which objects are visible.
-	processVisibility();
+	executeFnAndProcessScriptQueuedRemovals([]() { processVisibility(); });
 
 	// Update the map.
 	mapUpdate(gameWorld);
@@ -618,7 +622,7 @@ static void gameStateUpdate()
 	}
 
 	// Free dead droid memory.
-	objmemUpdate();
+	executeFnAndProcessScriptQueuedRemovals([]() { objmemUpdate(); });
 
 	// accumulate occasional stats / snapshots
 	if (!paused && !scriptPaused())

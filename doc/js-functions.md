@@ -808,7 +808,7 @@ Returns true if an alliance exists between the two players, or they are the same
 
 ## removeStruct(structure)
 
-Immediately remove the given structure from the map. Returns a boolean that is true on success.
+Queue the given structure for removal from the map. Returns a boolean that is true on success.
 No special effects are applied. DEPRECATED since 3.2. Use `removeObject` instead.
 
 ## removeObject(gameObject[, sfx])
