@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 
+#include <array>
 #include <sstream>
 #include <string.h>
 #include <physfs.h>
@@ -59,8 +60,8 @@
  *	local Definitions
  */
 /***************************************************************************/
-#define MAX_TEXT_OVERLAYS 32
-#define MAX_SEQ_LIST	  6
+constexpr size_t MAX_TEXT_OVERLAYS = 128;
+constexpr size_t MAX_SEQ_LIST = 10;
 #define SUBTITLE_BOX_MIN 430
 #define SUBTITLE_BOX_MAX 480
 
@@ -85,20 +86,14 @@ struct SEQLIST
 {
 	WzString         pSeq;					//name of the sequence to play
 	WzString         pAudio;				//name of the wav to play
-	bool		bSeqLoop;					//loop this sequence
-	int             currentText;			// current number of text messages for this seq
-	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
+	bool		bSeqLoop = false;			//loop this sequence
+	std::vector<SEQTEXT> aText;				//text data to display for this sequence, at most MAX_TEXT_OVERLAYS lines
 	std::shared_ptr<SeqSubtitles> areaSubtitles;	// text in areas of the video, if its subtitle file is a JSON one
 
-	SEQLIST() : bSeqLoop(false), currentText(0)
-	{
-		memset(aText, 0, sizeof(aText));
-	}
 	void reset()
 	{
 		bSeqLoop = false;
-		currentText = 0;
-		memset(aText, 0, sizeof(aText));
+		aText.clear();
 		areaSubtitles.reset();
 		pSeq.clear();
 		pAudio.clear();
@@ -120,7 +115,7 @@ static WzString currFetchName;	// the candidate name currently being downloaded 
 static std::shared_ptr<VideoProvider> aVideoProvider;
 static std::shared_ptr<const WZVideoEditList> aVideoEdits;	// the playing video's edit list, if it has one
 static WzString aVideoLanguage;	// the edit-list language whose "own" (language-specific) video is playing (empty = the shared video)
-static SEQLIST aSeqList[MAX_SEQ_LIST];
+static std::array<SEQLIST, MAX_SEQ_LIST> aSeqList;
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
 
@@ -806,7 +801,6 @@ bool seq_UpdateFullScreenVideo()
 		// otherwise, we have the data - continue
 	}
 
-	int i;
 	bool bMoreThanOneSequenceLine = false;
 	bool stillPlaying;
 
@@ -815,9 +809,8 @@ bool seq_UpdateFullScreenVideo()
 
 	//get any text lines over bottom of the video
 	double frameTime = seq_GetFrameTime();
-	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
+	for (const SEQTEXT &seqtext : aSeqList[currentPlaySeq].aText)
 	{
-		SEQTEXT seqtext = aSeqList[currentPlaySeq].aText[i];
 		if (seqtext.pText[0] != '\0')
 		{
 			if (seqtext.bSubtitle)
@@ -860,7 +853,7 @@ bool seq_UpdateFullScreenVideo()
 	//print any text over the video
 	frameTime = seq_GetFrameTime();
 
-	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
+	for (size_t i = 0; i < aSeqList[currentPlaySeq].aText.size(); i++)
 	{
 		SEQTEXT currentText = aSeqList[currentPlaySeq].aText[i];
 		if (currentText.pText[0] != '\0')
@@ -956,11 +949,14 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 	// make sure we take xOffset into account, we don't always start at 0
 	const unsigned int buffer_width = pie_GetVideoBufferWidth() - xOffset;
 
-	ASSERT_OR_RETURN(false, aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS, "too many text lines");
+	SEQLIST &seq = aSeqList[currentSeq];
+	ASSERT_OR_RETURN(false, seq.aText.size() < MAX_TEXT_OVERLAYS, "too many text lines");
 
 	sourceLength = strlen(pText);
 	currentLength = sourceLength;
-	currentText = &(aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].pText[0]);
+	seq.aText.emplace_back();
+	SEQTEXT &entry = seq.aText.back();
+	currentText = &(entry.pText[0]);
 
 	//if the string is bigger than the buffer get the last end of the last fullword in the buffer
 	if (currentLength >= MAX_STR_LENGTH)
@@ -992,34 +988,27 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 	//check if x and y are 0 and put text on next line
 	if (((xOffset == 0) && (yOffset == 0)) && (currentLength > 0))
 	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = lastX;
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y =
-		    aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText - 1].y + iV_GetTextLineSize(font_scaled);
+		entry.x = lastX;
+		entry.y = ((seq.aText.size() > 1) ? seq.aText[seq.aText.size() - 2].y : D_H2) + iV_GetTextLineSize(font_scaled);
 	}
 	else
 	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = xOffset + D_W2;
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y = yOffset + D_H2;
+		entry.x = xOffset + D_W2;
+		entry.y = yOffset + D_H2;
 	}
-	lastX = aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x;
+	lastX = entry.x;
 
 	const int MIN_JUSTIFICATION = 40;
 	const int justification = buffer_width - iV_GetTextWidth(currentText, font_scaled);
 	if (textJustification == SEQ_TEXT_JUSTIFY && currentLength == sourceLength && justification > MIN_JUSTIFICATION)
 	{
-		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x += (justification / 2);
+		entry.x += (justification / 2);
 	}
 
 	//set start and finish times for the objects
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].startTime = startTime;
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].endTime = endTime;
-	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].bSubtitle = textJustification;
-
-	aSeqList[currentSeq].currentText++;
-	if (aSeqList[currentSeq].currentText >= MAX_TEXT_OVERLAYS)
-	{
-		aSeqList[currentSeq].currentText = 0;
-	}
+	entry.startTime = startTime;
+	entry.endTime = endTime;
+	entry.bSubtitle = textJustification;
 
 	//check text is okay on the screen
 	if (currentLength < sourceLength)
@@ -1095,9 +1084,9 @@ void seq_ClearSeqList()
 	currentSeq = -1;
 	currentPlaySeq = -1;
 	seqSubtitles_ReleaseLayout();
-	for (int i = 0; i < MAX_SEQ_LIST; ++i)
+	for (SEQLIST &seq : aSeqList)
 	{
-		aSeqList[i].reset();
+		seq.reset();
 	}
 	onDemandVideoProvider.clear();
 }
@@ -1107,7 +1096,7 @@ void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const
 {
 	currentSeq++;
 
-	ASSERT_OR_RETURN(, currentSeq < MAX_SEQ_LIST, "too many sequences");
+	ASSERT_OR_RETURN(, currentSeq < static_cast<SDWORD>(MAX_SEQ_LIST), "too many sequences");
 
 	if (onDemandVideoProvider.hasBaseURLPath())
 	{
@@ -1155,7 +1144,7 @@ bool seq_AnySeqLeft()
 	int nextSeq = currentPlaySeq + 1;
 
 	//check haven't reached end
-	if (nextSeq >= MAX_SEQ_LIST)
+	if (nextSeq >= static_cast<int>(MAX_SEQ_LIST))
 	{
 		return false;
 	}
@@ -1167,7 +1156,7 @@ bool seq_StartNextFullScreenVideo()
 	bool	bPlayedOK;
 
 	currentPlaySeq++;
-	if (currentPlaySeq >= MAX_SEQ_LIST)
+	if (currentPlaySeq >= static_cast<SDWORD>(MAX_SEQ_LIST))
 	{
 		bPlayedOK = false;
 	}
