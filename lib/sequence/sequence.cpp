@@ -126,6 +126,11 @@ class VideoAudioSink
 public:
 	static std::unique_ptr<VideoAudioSink> create(unsigned channels, unsigned sampleRate)
 	{
+		if (channels != 1 && channels != 2)
+		{
+			debug(LOG_WARNING, "FMV audio with %u channels is not supported; playing without sound", channels);
+			return nullptr;
+		}
 		auto sink = std::unique_ptr<VideoAudioSink>(new VideoAudioSink(channels, sampleRate));
 
 		alGetError();
@@ -473,6 +478,7 @@ struct VideoPlayback
 	bool videoExhausted = false;
 	double timelineEnd = 0.0;			// output time the edit-list timeline ends (0 = no timeline)
 	std::vector<uint8_t> fadeBase;		// the frame bitmap a hold_fade starts from
+	bool frameSizeMismatchLogged = false;
 
 	double frameDuration = 1.0 / 25.0;
 	double subtitleTime = 0.0;			// the furthest video time shown (paused by holds and repeats)
@@ -875,9 +881,21 @@ bool seq_Update()
 		switch (item.kind)
 		{
 		case TimelineVideoSource::Item::Kind::Frame:
-			video_upload_frame(item.frame);
+		{
+			const WZVideoTrackMetadata& vmeta = pb.decoder->videoMetadata();
+			if (item.frame.width == vmeta.width && item.frame.height == vmeta.height)
+			{
+				video_upload_frame(item.frame);
+			}
+			else if (!pb.frameSizeMismatchLogged)
+			{
+				debug(LOG_WARNING, "Skipping video frames whose size (%u x %u) differs from the video size (%u x %u)",
+				      item.frame.width, item.frame.height, vmeta.width, vmeta.height);
+				pb.frameSizeMismatchLogged = true;
+			}
 			pb.subtitleTime = std::max(pb.subtitleTime, item.sourcePts);
 			break;
+		}
 		case TimelineVideoSource::Item::Kind::Black:
 			pb.fadeBase.assign(VideoFrameBitmap.data_size(), 0);
 			video_upload_faded(pb.fadeBase, 0.f);

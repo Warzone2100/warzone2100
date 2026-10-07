@@ -526,11 +526,12 @@ bool WebmVideoDecoder::createAudioDecoderFor(const WZAudioTrackMetadata& trackMe
 		return false;
 	}
 
+	std::unique_ptr<WZPacketAudioDecoder> decoder;
 	if (strcmp(codecId, "A_OPUS") == 0)
 	{
 		// Note: the track's CodecDelay element mirrors OpusHead pre-skip, which
 		// the packet decoder applies internally.
-		m_audioDecoder = wzOpusPacketDecoderCreate(priv, privSize);
+		decoder = wzOpusPacketDecoderCreate(priv, privSize);
 	}
 	else	// A_VORBIS (filtered during open())
 	{
@@ -540,14 +541,15 @@ bool WebmVideoDecoder::createAudioDecoderFor(const WZAudioTrackMetadata& trackMe
 			debug(LOG_ERROR, "Malformed Vorbis CodecPrivate data on audio track %zu", trackMeta.index);
 			return false;
 		}
-		m_audioDecoder = wzVorbisPacketDecoderCreate(headerPackets);
+		decoder = wzVorbisPacketDecoderCreate(headerPackets);
 	}
 
-	if (!m_audioDecoder)
+	if (!decoder)
 	{
 		debug(LOG_ERROR, "Failed to initialize audio decoder for track %zu", trackMeta.index);
 		return false;
 	}
+	m_audioDecoder = std::move(decoder);
 	return true;
 }
 
@@ -563,6 +565,8 @@ bool WebmVideoDecoder::selectAudioTrack(size_t index)
 	{
 		return false;
 	}
+	m_audioTracks[index].channels = m_audioDecoder->channels();
+	m_audioTracks[index].sampleRate = m_audioDecoder->sampleRate();
 	m_selectedAudioIdx = index;
 	m_selectedAudioTrackNumber = m_audioTrackNumbers[index];
 	m_audio = TrackCursor();
