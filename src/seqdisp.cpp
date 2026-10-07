@@ -293,7 +293,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName, bool q
 			requestDetails->progressPercentage = percentage;
 		});
 	};
-	urlRequest.maxDownloadSizeLimit = 200 * 1024 * 1024; // response should never be > 200 MB
+	urlRequest.maxDownloadSizeLimit = videoName.endsWith(".edits.json") ? 1024 * 1024 : 200 * 1024 * 1024; // response should never be > 200 MB
 	auto requestHandle = urlRequestData(urlRequest);
 	if (!requestHandle)
 	{

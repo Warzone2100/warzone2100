@@ -30,6 +30,7 @@
 
 static const char *EDIT_LIST_FORMAT = "wz2100-sequence-edits";
 static const int EDIT_LIST_VERSION = 1;
+static const double MAX_EDIT_LIST_SECONDS = 60.0 * 60.0;
 
 const WZVideoEditTrack *WZVideoEditList::findTrack(const WzString& languageCode) const
 {
@@ -51,7 +52,7 @@ static bool readSeconds(const nlohmann::json& obj, const char *key, double& out)
 		return false;
 	}
 	out = it->get<double>();
-	return std::isfinite(out) && out >= 0.0;
+	return std::isfinite(out) && out >= 0.0 && out <= MAX_EDIT_LIST_SECONDS;
 }
 
 static bool readCount(const nlohmann::json& obj, const char *key, size_t& out)
