@@ -46,6 +46,7 @@
 #include "mission.h"        // Cheated - local meta flag, clear/resetMissionWidgets
 #include "effects.h"        // serialize/restoreActiveEffects - local display state
 #include "multistat.h"      // loadMultiStats, setMultiStats, getMultiStats
+#include "multiint.h"       // sPlayer
 #include "modding.h"        // getLoadedMods, setOverrideMods, clearOverrideMods
 #include "init.h"           // rebuildSearchPath, buildMapList, searchPathMode
 #include "levels.h"         // levShutDown, levInitialise, levFindDataSet, makeLevLoadDataLoadingTask
@@ -1476,8 +1477,8 @@ bool coldLoadRestoreWorld()
 
 /// Re-establish the local player's multiplayer profile identity + stats. The load process resets the
 /// per-slot PLAYERSTATS, so without this the local identity is empty and saveMultiStats() on quit
-/// refuses to save ("Refusing to save profile with empty identity"). Mirrors the legacy save load
-/// (game.cpp gameLoadV) and a normal skirmish start: load the profile by player name (generating an
+/// refuses to save ("Refusing to save profile without a private identity"). Mirrors the legacy save load
+/// (game.cpp gameLoadV) and a normal skirmish start: load the local profile (generating an
 /// identity if none is on disk) and set it for the local slot.
 static void restoreLocalPlayerMultiStats()
 {
@@ -1485,10 +1486,8 @@ static void restoreLocalPlayerMultiStats()
 	{
 		return;
 	}
-	char playerName[StringSize];
-	sstrcpy(playerName, getPlayerName(selectedPlayer));
 	PLAYERSTATS stats = getMultiStats(selectedPlayer); // preserve an already-loaded identity, if any
-	loadMultiStats(playerName, &stats);
+	loadMultiStats(sPlayer, &stats);
 	setMultiStats(selectedPlayer, stats, false);
 	setMultiStats(selectedPlayer, stats, true);
 }

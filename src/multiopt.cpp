@@ -707,11 +707,11 @@ bool multiGameShutdown()
 
 	sendLeavingMsg();							// say goodbye
 
-	if (selectedPlayer < MAX_CONNECTED_PLAYERS)
+	if (selectedPlayer < MAX_CONNECTED_PLAYERS && !NETisReplay())
 	{
 		PLAYERSTATS st = getMultiStats(selectedPlayer);	// save stats
 
-		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+		saveMultiStats(sPlayer, sPlayer, &st);
 	}
 
 	// if we terminate the socket too quickly, then, it is possible not to get the leave message
