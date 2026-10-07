@@ -626,25 +626,45 @@ void NETflushGameQueues()
 			continue;  // Can't send for this player.
 		}
 
-		uint32_t num = queue->numMessagesForNet();
+		uint32_t remaining = queue->numMessagesForNet();
 
-		if (num <= 0)
+		if (remaining <= 0)
 		{
 			continue;  // Nothing to send for this player.
 		}
 
 		ASSERT(!bIsReplay, "Where are we sending this if it's a replay?");
 
-		// Decoded in NETprocessSystemMessage in netplay.cpp.
-		auto w = NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
-		NETuint8_t(w, player);
-		NETuint32_t(w, num);
-		for (uint32_t n = 0; n < num; ++n)
+		// Split into several messages if needed, so that each fits in MaxMsgSize (encoded lengths take at most 5 bytes)
+		std::vector<NetMessage> batch;
+		while (remaining > 0)
 		{
-			NETnetMessage(w, queue->getMessageForNet());
-			queue->popMessageForNet();
+			batch.clear();
+			size_t payloadSize = 1 + 5;
+			while (batch.size() < remaining)
+			{
+				const NetMessage &message = queue->getMessageForNet();
+				const size_t messageSize = 5 + message.rawData().size();
+				if (!batch.empty() && payloadSize + messageSize > MaxMsgSize)
+				{
+					break;
+				}
+				payloadSize += messageSize;
+				batch.push_back(message);
+				queue->popMessageForNet();
+			}
+			remaining -= static_cast<uint32_t>(batch.size());
+
+			// Decoded in NETprocessSystemMessage in netplay.cpp.
+			auto w = NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
+			NETuint8_t(w, player);
+			NETuint32_t(w, static_cast<uint32_t>(batch.size()));
+			for (const NetMessage &message : batch)
+			{
+				NETnetMessage(w, message);
+			}
+			NETend(w);
 		}
-		NETend(w);
 	}
 }
 
