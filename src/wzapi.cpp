@@ -109,6 +109,15 @@
 #define ALLIES -2
 #define ENEMIES -3
 
+static uint16_t scriptDirectionToAngle(float degrees)
+{
+	if (!std::isfinite(degrees))
+	{
+		return 0;
+	}
+	return static_cast<uint16_t>(static_cast<int32_t>(DEG(std::fmod(degrees, 360.f))));
+}
+
 
 BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
 {
@@ -395,11 +404,7 @@ bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string 
 	SCRIPT_ASSERT(false, context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(false, context, psStats->id.compare("A0ADemolishStructure") != 0, "Cannot build demolition");
 
-	if (_direction.has_value() && std::isnan(_direction.value()))
-	{
-		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
-	}
-	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+	uint16_t direction = scriptDirectionToAngle(_direction.value_or(0.f));
 
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
 	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
@@ -507,9 +512,11 @@ bool wzapi::setSky(WZAPI_PARAMS(std::string textureFilename, float windSpeed, fl
 //--
 bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 {
-	SCRIPT_ASSERT(false, context, !std::isnan(x), "x must not be nan");
-	SCRIPT_ASSERT(false, context, !std::isnan(y), "y must not be nan");
+	SCRIPT_ASSERT(false, context, std::isfinite(x), "x must be finite");
+	SCRIPT_ASSERT(false, context, std::isfinite(y), "y must be finite");
 
+	x = std::clamp(x, 0.f, static_cast<float>(world_coord(gameWorld.map.width)));
+	y = std::clamp(y, 0.f, static_cast<float>(world_coord(gameWorld.map.height)));
 	requestRadarTrack(static_cast<SDWORD>(x), static_cast<SDWORD>(y));
 	return true;
 }
@@ -520,8 +527,8 @@ bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 //--
 bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 {
-	SCRIPT_ASSERT(false, context, !std::isnan(viewDistance), "viewDistance must not be nan");
-	SCRIPT_ASSERT(false, context, !std::isnan(speed), "speed must not be nan");
+	SCRIPT_ASSERT(false, context, std::isfinite(viewDistance), "viewDistance must be finite");
+	SCRIPT_ASSERT(false, context, std::isfinite(speed), "speed must be finite");
 
 	animateToViewDistance(viewDistance, speed);
 	return true;
@@ -615,6 +622,8 @@ bool wzapi::replaceTexture(WZAPI_PARAMS(std::string oldFilename, std::string new
 //--
 bool wzapi::changePlayerColour(WZAPI_PARAMS(int player, int colour))
 {
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	SCRIPT_ASSERT(false, context, colour >= 0 && colour < 16, "Invalid color: %d", colour);
 	return setPlayerColour(player, colour);
 }
 
@@ -675,6 +684,11 @@ bool wzapi::useSafetyTransport(WZAPI_PARAMS(bool flag))
 //--
 bool wzapi::restoreLimboMissionData(WZAPI_NO_PARAMS)
 {
+	if (bMultiPlayer)
+	{
+		debug(LOG_ERROR, "restoreLimboMissionData() is not available in multiplayer");
+		return false;
+	}
 	resetLimboMission();
 	return true;
 }
@@ -1316,8 +1330,8 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 		if ((!seen || (player < MAX_PLAYERS && psObj->visible[player])) && !psObj->died)
 		{
 			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS
-			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
-			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
+			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliancesInRange(psObj->player, player))
+			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliancesInRange(psObj->player, player)))
 			{
 				list.push_back(psObj);
 			}
@@ -1370,8 +1384,9 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 	SCRIPT_ASSERT(false, context, psResLab->psSubject == nullptr, "Research lab not ready");
 	// Go down the requirements list for the desired tech
 	std::list<RESEARCH *> reslist;
+	std::vector<bool> visited(asResearch.size(), false);
 	RESEARCH *curResearch = psResearch;
-	int iterations = 0;  // Only used to assert we're not stuck in the loop.
+	visited[curResearch->index] = true;
 	while (curResearch)
 	{
 		if (researchAvailable(curResearch->index, player, ModeQueue))
@@ -1410,12 +1425,22 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 			// push any other pre-reqs on the stack
 			reslist.push_back(&asResearch[prevResearch->pPRList[i]]);
 		}
-		if (!curResearch && !reslist.empty())
+		if (curResearch && visited[curResearch->index])
 		{
-			curResearch = reslist.front(); // retrieve options from the stack
+			curResearch = nullptr;
+		}
+		while (!curResearch && !reslist.empty())
+		{
+			if (!visited[reslist.front()->index])
+			{
+				curResearch = reslist.front(); // retrieve options from the stack
+			}
 			reslist.pop_front();
 		}
-		ASSERT_OR_RETURN(false, ++iterations < asResearch.size() * 100 || !curResearch, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", getStatsName(curResearch));
+		if (curResearch)
+		{
+			visited[curResearch->index] = true;
+		}
 	}
 	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return false; // none found
@@ -1443,34 +1468,34 @@ wzapi::researchResults wzapi::findResearch(WZAPI_PARAMS(std::string researchName
 		return result; // return empty array
 	}
 	debug(LOG_SCRIPT, "Find reqs for %s for player %d", researchName.c_str(), player);
-	// Go down the requirements list for the desired tech
-	std::list<RESEARCH *> reslist;
-	RESEARCH *curResearch = psTarget;
-	while (curResearch)
+	// Walk the requirements depth-first, listing each topic before its pre-reqs
+	std::vector<RESEARCH *> postOrder;
+	std::vector<std::pair<RESEARCH *, size_t>> stack;
+	std::vector<bool> visited(asResearch.size(), false);
+	visited[psTarget->index] = true;
+	stack.emplace_back(psTarget, 0);
+	while (!stack.empty())
 	{
+		RESEARCH *curResearch = stack.back().first;
+		size_t nextPreReq = stack.back().second++;
+		if (nextPreReq < curResearch->pPRList.size())
+		{
+			RESEARCH *preReq = &asResearch[curResearch->pPRList[nextPreReq]];
+			if (!visited[preReq->index])
+			{
+				visited[preReq->index] = true;
+				stack.emplace_back(preReq, 0);
+			}
+			continue;
+		}
+		stack.pop_back();
 		if (!(asPlayerResList[player][curResearch->index].ResearchStatus & RESEARCHED))
 		{
 			debug(LOG_SCRIPT, "Added research in %d's %s for %s", player, getID(curResearch), getID(psTarget));
-			result.resList.push_back(curResearch);
-		}
-		RESEARCH *prevResearch = curResearch;
-		curResearch = nullptr;
-		if (!prevResearch->pPRList.empty())
-		{
-			curResearch = &asResearch[prevResearch->pPRList[0]]; // get first pre-req
-		}
-		for (int i = 1; i < prevResearch->pPRList.size(); i++)
-		{
-			// push any other pre-reqs on the stack
-			reslist.push_back(&asResearch[prevResearch->pPRList[i]]);
-		}
-		if (!curResearch && !reslist.empty())
-		{
-			// retrieve options from the stack
-			curResearch = reslist.front();
-			reslist.pop_front();
+			postOrder.push_back(curResearch);
 		}
 	}
+	result.resList.assign(postOrder.rbegin(), postOrder.rend());
 	return result;
 }
 
@@ -1493,6 +1518,11 @@ bool wzapi::orderDroidLoc(WZAPI_PARAMS(DROID *psDroid, int order_, int x, int y)
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)order_;
 	SCRIPT_ASSERT(false, context, validOrderForLoc(order), "Invalid location based order: %s", getDroidOrderName(order));
+	if (bMultiPlayer && (order == DORDER_TRANSPORTOUT || order == DORDER_TRANSPORTIN || order == DORDER_TRANSPORTRETURN))
+	{
+		debug(LOG_ERROR, "%s is not available in multiplayer; use DORDER_DISEMBARK", getDroidOrderName(order));
+		return false;
+	}
 	SCRIPT_ASSERT(false, context, tileOnMap(gameWorld.map, x, y), "Outside map bounds (%d, %d)", x, y);
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
 	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
@@ -1721,11 +1751,7 @@ bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y
 	STRUCTURE_STATS	*psStat = &asStructureStats[structureIndex];
 	SCRIPT_ASSERT(false, context, psStat, "No such stat found: %s", structureName.c_str());
 
-	if (_direction.has_value() && std::isnan(_direction.value()))
-	{
-		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
-	}
-	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+	uint16_t direction = scriptDirectionToAngle(_direction.value_or(0.f));
 
 	return (tileOnMap(gameWorld.map, x, y)
 			&& validLocation(gameWorld, psStat, world_coord(Vector2i(x, y)), direction, player, false));
@@ -1915,6 +1941,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 //-- component in the list will be used. The second reserved parameter used to be a droid type.
 //-- It is now unused and in 3.2+ should be passed "", while in 3.1 it should be the
 //-- droid type to be built. Returns a boolean that is true if production was started.
+//-- The template name can be at most 255 bytes long (in UTF-8).
 //--
 bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets))
 {
@@ -1926,6 +1953,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	const int capacity = psStruct->capacity; // body size limit
 	SCRIPT_ASSERT(false, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
+	SCRIPT_ASSERT(false, context, templateName.size() <= MAX_TEMPLATE_NAME_LENGTH, "Template name is longer than %zu bytes: %s", MAX_TEMPLATE_NAME_LENGTH, templateName.c_str());
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, capacity, true);
 	if (psTemplate)
 	{
@@ -1962,7 +1990,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateNa
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
 //-- cause a desync. Returns the created droid on success, otherwise returns null. Passing "" for
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
-//-- pass -1 as both x and y.
+//-- pass -1 as both x and y. The template name can be at most 255 bytes long (in UTF-8).
 //--
 wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
 {
@@ -1970,6 +1998,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 	bool onMission = (x == -1) && (y == -1);
 	SCRIPT_ASSERT(nullptr, context, (onMission || (x >= 0 && y >= 0)), "Invalid coordinates (%d, %d) for droid", x, y);
 	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
+	SCRIPT_ASSERT(nullptr, context, templateName.size() <= MAX_TEMPLATE_NAME_LENGTH, "Template name is longer than %zu bytes: %s", MAX_TEMPLATE_NAME_LENGTH, templateName.c_str());
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, SIZE_NUM, false);
 	if (psTemplate)
 	{
@@ -2011,12 +2040,14 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 //--
 //-- Create a template (virtual droid) with the given components. Can be useful for calculating the cost
 //-- of droids before putting them into production, for instance. Will fail and return null if template
-//-- could not possibly be built using current research. (3.2+ only)
+//-- could not possibly be built using current research. The template name can be at most
+//-- 255 bytes long (in UTF-8). (3.2+ only)
 //--
 std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets))
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
+	SCRIPT_ASSERT(nullptr, context, templateName.size() <= MAX_TEMPLATE_NAME_LENGTH, "Template name is longer than %zu bytes: %s", MAX_TEMPLATE_NAME_LENGTH, templateName.c_str());
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, SIZE_NUM, true);
 	return std::unique_ptr<const DROID_TEMPLATE>(std::move(psTemplate));
 }
@@ -2038,6 +2069,8 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 	int droidPlayer = droid.player;
 	DROID *psDroid = IdToDroid(mission.gameWorld.objects, droidId, droidPlayer);
 	SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", droidId, droidPlayer);
+	SCRIPT_ASSERT(false, context, !psDroid->isTransporter(), "Cannot load transporter %d into a transporter", droidId);
+	SCRIPT_ASSERT(false, context, droidPlayer == transporterPlayer, "Droid %d belongs to player %d, but transporter %d to player %d", droidId, droidPlayer, transporterId, transporterPlayer);
 	SCRIPT_ASSERT(false, context, checkTransporterSpace(psTransporter, psDroid), "Not enough room in transporter %d for droid %d", transporterId, droidId);
 	bool removeSuccessful = droidRemove(psDroid, mission.gameWorld.objects.droids);
 	SCRIPT_ASSERT(false, context, removeSuccessful, "Could not remove droid id %d from mission list", droidId);
@@ -2219,10 +2252,14 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 		message = _message.value();
 	}
 	int me = context.player();
+	if (me < 0 || me >= MAX_PLAYERS)
+	{
+		return false;
+	}
 	SCRIPT_ASSERT(false, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALLIES, "Message to invalid player filter %d", playerFilter);
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (i != me && (i == playerFilter || (playerFilter == ALLIES && aiCheckAlliances(i, me))))
+		if (i != me && (i == playerFilter || (playerFilter == ALLIES && aiCheckAlliancesInRange(i, me))))
 		{
 			debug(LOG_MSG, "adding script beacon to %d from %d", i, me);
 			sendBeaconToPlayer(x, y, i, me, message.c_str());
@@ -2239,11 +2276,15 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 bool wzapi::removeBeacon(WZAPI_PARAMS(int playerFilter))
 {
 	int me = context.player();
+	if (me < 0 || me >= MAX_PLAYERS)
+	{
+		return false;
+	}
 
 	SCRIPT_ASSERT(false, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALLIES, "Message to invalid player filter %d", playerFilter);
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (i == playerFilter || (playerFilter == ALLIES && aiCheckAlliances(i, me)))
+		if (i == playerFilter || (playerFilter == ALLIES && aiCheckAlliancesInRange(i, me)))
 		{
 			MESSAGE *psMessage = findBeaconMsg(i, me);
 			if (psMessage)
@@ -2381,11 +2422,13 @@ bool wzapi::setConstructorLimit(WZAPI_PARAMS(int player, int maxNumber)) WZAPI_D
 //-- ## setExperienceModifier(player, percent)
 //--
 //-- Set the percentage of experience this player droids are going to gain. (3.2+ only)
+//-- The percentage must not be negative, and is capped at 32767.
 //--
 bool wzapi::setExperienceModifier(WZAPI_PARAMS(int player, int percent))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	setExpGain(player, percent);
+	SCRIPT_ASSERT(false, context, percent >= 0, "Invalid percentage: %d", percent);
+	setExpGain(player, std::min(percent, std::numeric_limits<int>::max() / 65536));
 	return true;
 }
 
@@ -2666,7 +2709,7 @@ bool wzapi::applyLimitSet(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<int> _mode))
 {
-	int time = _time * GAME_TICKS_PER_SEC;
+	int time = static_cast<int>(std::clamp<int64_t>(static_cast<int64_t>(_time) * GAME_TICKS_PER_SEC, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
 	int mode = _mode.value_or(TIMER_COUNTDOWN);
 	SCRIPT_ASSERT({}, context, mode >= TIMER_COUNTDOWN && mode <= TIMER_PAUSE, "Invalid mission timer mode %d", mode);
 	// a negative time always removes the timer, whatever the requested mode
@@ -2719,7 +2762,7 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch))
 {
-	int time = _time * GAME_TICKS_PER_SEC;
+	int time = static_cast<int>(std::clamp<int64_t>(static_cast<int64_t>(_time) * GAME_TICKS_PER_SEC, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
 	bool removeLaunch = _removeLaunch.value_or(true);
 	SCRIPT_ASSERT({}, context, time == LZ_COMPROMISED_TIME || time < 60 * 60 * GAME_TICKS_PER_SEC, "The transport timer cannot be set to more than 1 hour!");
 	SCRIPT_ASSERT({}, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
@@ -2825,39 +2868,50 @@ bool wzapi::enableResearch(WZAPI_PARAMS(std::string researchName, optional<int> 
 	return true;
 }
 
+// Limits that keep the power arithmetic (in 32.32 fixed point, see power.cpp) from overflowing
+static constexpr int MAX_SCRIPT_POWER = 1000000000;
+static constexpr int MAX_SCRIPT_POWER_MODIFIER = 10000;
+static constexpr int MAX_SCRIPT_EXTRA_POWER_TIME = 24 * 60 * 60;
+
 //-- ## setPower(power[, player])
 //--
 //-- Set a player's power directly. (Do not use this in an AI script.)
+//-- The power must not be negative, and is capped at 1000000000.
 //--
 wzapi::no_return_value wzapi::setPower(WZAPI_PARAMS(int power, optional<int> _player)) WZAPI_AI_UNSAFE
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	::setPower(player, power);
+	SCRIPT_ASSERT({}, context, power >= 0, "Invalid power: %d", power);
+	::setPower(player, std::min(power, MAX_SCRIPT_POWER));
 	return {};
 }
 
 //-- ## setPowerModifier(powerModifier[, player])
 //--
 //-- Set a player's power modifier percentage. (Do not use this in an AI script.) (3.2+ only)
+//-- The percentage must not be negative, and is capped at 10000.
 //--
 wzapi::no_return_value wzapi::setPowerModifier(WZAPI_PARAMS(int powerModifier, optional<int> _player)) WZAPI_AI_UNSAFE
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	::setPowerModifier(player, powerModifier);
+	SCRIPT_ASSERT({}, context, powerModifier >= 0, "Invalid power modifier: %d", powerModifier);
+	::setPowerModifier(player, std::min(powerModifier, MAX_SCRIPT_POWER_MODIFIER));
 	return {};
 }
 
 //-- ## setPowerStorageMaximum(powerMaximum[, player])
 //--
 //-- Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
+//-- The maximum must not be negative, and is capped at 1000000000.
 //--
 wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int powerMaximum, optional<int> _player)) WZAPI_AI_UNSAFE
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	::setPowerMaxStorage(player, powerMaximum);
+	SCRIPT_ASSERT({}, context, powerMaximum >= 0, "Invalid power maximum: %d", powerMaximum);
+	::setPowerMaxStorage(player, std::min(powerMaximum, MAX_SCRIPT_POWER));
 	return {};
 }
 
@@ -2865,13 +2919,14 @@ wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int powerMaxim
 //--
 //-- Increase a player's power as if that player had power income equal to current income
 //-- over the given amount of extra time. (3.2+ only)
+//-- The time, in seconds, must not be negative, and is capped at one day.
 //--
 wzapi::no_return_value wzapi::extraPowerTime(WZAPI_PARAMS(int time, optional<int> _player))
 {
-	int ticks = time * GAME_UPDATES_PER_SEC;
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	updatePlayerPower(player, ticks);
+	SCRIPT_ASSERT({}, context, time >= 0, "Invalid time: %d", time);
+	updatePlayerPower(player, std::min(time, MAX_SCRIPT_EXTRA_POWER_TIME) * GAME_UPDATES_PER_SEC);
 	return {};
 }
 
@@ -3155,9 +3210,9 @@ bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx))
 
 //-- ## setScrollLimits(x1, y1, x2, y2)
 //--
-//-- Limit the scrollable area of the map to the given rectangle. (3.2+ only)
+//-- Limit the scrollable area of the map to the given rectangle. (Do not use this in an AI script.) (3.2+ only)
 //--
-wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2))
+wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2)) WZAPI_AI_UNSAFE
 {
 	const int minX = x1;
 	const int minY = y1;
@@ -3168,6 +3223,7 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 	SCRIPT_ASSERT({}, context, minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
 	SCRIPT_ASSERT({}, context, maxX <= gameWorld.map.width, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)gameWorld.map.width);
 	SCRIPT_ASSERT({}, context, maxY <= gameWorld.map.height, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)gameWorld.map.height);
+	SCRIPT_ASSERT({}, context, maxX > minX && maxY > minY, "Invalid scroll limits (%d, %d) - (%d, %d)", minX, minY, maxX, maxY);
 
 	const int prevMinX = gameWorld.map.scroll.minX;
 	const int prevMinY = gameWorld.map.scroll.minY;
@@ -3217,7 +3273,7 @@ wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(s
 	SCRIPT_ASSERT(nullptr, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 
-	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+	uint16_t direction = scriptDirectionToAngle(static_cast<float>(_direction.value_or(0)));
 
 	STRUCTURE_STATS *psStat = &asStructureStats[structureIndex];
 	STRUCTURE *psStruct = buildStructureDir(gameWorld, psStat, x, y, direction, player, false);
@@ -3260,8 +3316,8 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (playerFilter == i || playerFilter == ALL_PLAYERS
-		    || (playerFilter == ALLIES && aiCheckAlliances(i, me))
-		    || (playerFilter == ENEMIES && !aiCheckAlliances(i, me)))
+		    || (playerFilter == ALLIES && aiCheckAlliancesInRange(i, me))
+		    || (playerFilter == ENEMIES && !aiCheckAlliancesInRange(i, me)))
 		{
 			quantity += asStructureStats[structureIndex].curCount[i];
 		}
@@ -3287,8 +3343,8 @@ int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _play
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (playerFilter == i || playerFilter == ALL_PLAYERS
-		    || (playerFilter == ALLIES && aiCheckAlliances(i, me))
-		    || (playerFilter == ENEMIES && !aiCheckAlliances(i, me)))
+		    || (playerFilter == ALLIES && aiCheckAlliancesInRange(i, me))
+		    || (playerFilter == ENEMIES && !aiCheckAlliancesInRange(i, me)))
 		{
 			if (droidType == DROID_ANY)
 			{
@@ -3313,6 +3369,7 @@ int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _play
 //--
 wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 {
+	SCRIPT_ASSERT({}, context, !bMultiPlayer, "loadLevel() is not available in multiplayer");
 	// Find the level dataset
 	LEVEL_DATASET *psNewLevel = levFindDataSet(levelName.c_str());
 	SCRIPT_ASSERT({}, context, psNewLevel, "Could not find level data for %s", levelName.c_str());
@@ -3332,7 +3389,8 @@ wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 wzapi::no_return_value wzapi::setDroidExperience(WZAPI_PARAMS(DROID *psDroid, double experience))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
-	psDroid->experience = static_cast<uint32_t>(experience * 65536);
+	SCRIPT_ASSERT({}, context, std::isfinite(experience) && experience >= 0, "Invalid experience: %f", experience);
+	psDroid->experience = static_cast<uint32_t>(std::min(experience * 65536, static_cast<double>(std::numeric_limits<uint32_t>::max())));
 	return {};
 }
 
@@ -3393,7 +3451,12 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 {
 	int from = context.player();
+	if (from < 0 || from >= MAX_PLAYERS)
+	{
+		return false;
+	}
 	SCRIPT_ASSERT_PLAYER(false, context, player);
+	SCRIPT_ASSERT(false, context, amount >= 0, "Invalid amount: %d", amount);
 	giftPower(from, player, amount, true);
 	return true;
 }
@@ -3411,11 +3474,18 @@ wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, i
 	SCRIPT_ASSERT({}, context, x2 <= gameWorld.map.width, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)gameWorld.map.width);
 	SCRIPT_ASSERT({}, context, y2 <= gameWorld.map.height, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)gameWorld.map.height);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Bad player filter value %d", playerFilter);
+	x1 = std::min<int>(x1, UINT8_MAX);
+	y1 = std::min<int>(y1, UINT8_MAX);
+	x2 = std::min<int>(x2, UINT8_MAX);
+	y2 = std::min<int>(y2, UINT8_MAX);
 
 	if (playerFilter == ALL_PLAYERS)
 	{
 		::setNoGoArea(x1, y1, x2, y2, LIMBO_LANDING);
-		placeLimboDroids();	// this calls the Droids from the Limbo list onto the map
+		if (!bMultiPlayer)
+		{
+			placeLimboDroids();	// this calls the Droids from the Limbo list onto the map
+		}
 	}
 	else
 	{

@@ -976,7 +976,8 @@ void requestRadarTrack(SDWORD x, SDWORD y)
 {
 	auto initialPosition = Vector3f(playerPos.p);
 	auto targetPosition = Vector3f(x, calculateCameraHeightAt(gameWorld.map, map_coord(x), map_coord(y)), y);
-	auto animationDuration = static_cast<uint32_t>(glm::log(glm::length(targetPosition - initialPosition)) * 100);
+	const float distance = glm::length(targetPosition - initialPosition);
+	auto animationDuration = distance > 1 ? static_cast<uint32_t>(glm::log(distance) * 100) : 0;
 	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : playerPos.r;
 	finalRotation.z = 0;
 

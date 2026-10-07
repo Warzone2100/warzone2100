@@ -1766,7 +1766,7 @@ static uint32_t calcBody(T *obj, int player)
 	});
 
 	// Final adjustment based on the hitpoint modifier
-	return hitpoints * (100 + hitpointPct) / 100;
+	return std::max(1, hitpoints * (100 + hitpointPct) / 100);
 }
 
 // Calculate the body points of a droid from its template

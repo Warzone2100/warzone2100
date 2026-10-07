@@ -55,6 +55,11 @@ extern PlayerMask satuplinkbits;
 /** Check no alliance has formed. This is a define to make sure we inline it. */
 #define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)
 
+static inline bool aiCheckAlliancesInRange(int s1, int s2)
+{
+	return s1 >= 0 && s1 < MAX_PLAYER_SLOTS && s2 >= 0 && s2 < MAX_PLAYER_SLOTS && aiCheckAlliances(s1, s2);
+}
+
 /* Initialise the AI system */
 bool aiInitialise();
 

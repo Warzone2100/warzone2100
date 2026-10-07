@@ -63,7 +63,8 @@ dies before the queued call runs, nothing happens.
 Registers a new event namespace. All events can now have this prefix. This is useful for
 code libraries, to implement event that do not conflict with events in main code. This
 function should be called from global; do not (for hopefully obvious reasons) put it
-inside an event.
+inside an event. The prefix must not be empty, and registering the same prefix again
+has no effect.
 
 ## debugGetCallerFuncName()
 
@@ -625,6 +626,7 @@ THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 ## setExperienceModifier(player, percent)
 
 Set the percentage of experience this player droids are going to gain. (3.2+ only)
+The percentage must not be negative, and is capped at 32767.
 
 ## enumCargo(transporterDroid)
 
@@ -725,19 +727,23 @@ Enable a research for the given player, allowing it to be researched.
 ## setPower(power[, player])
 
 Set a player's power directly. (Do not use this in an AI script.)
+The power must not be negative, and is capped at 1000000000.
 
 ## setPowerModifier(powerModifier[, player])
 
 Set a player's power modifier percentage. (Do not use this in an AI script.) (3.2+ only)
+The percentage must not be negative, and is capped at 10000.
 
 ## setPowerStorageMaximum(powerMaximum[, player])
 
 Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
+The maximum must not be negative, and is capped at 1000000000.
 
 ## extraPowerTime(time[, player])
 
 Increase a player's power as if that player had power income equal to current income
 over the given amount of extra time. (3.2+ only)
+The time, in seconds, must not be negative, and is capped at one day.
 
 ## setTutorialMode(enableTutorialMode)
 

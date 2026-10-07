@@ -546,6 +546,9 @@ private:
 public: // temporary
 	std::vector<std::string> eventNamespaces;
 	JSValue Get_Global_Obj() const { return global_obj; }
+	std::weak_ptr<int> lifetimeToken() const { return m_lifetimeToken; }
+private:
+	std::shared_ptr<int> m_lifetimeToken = std::make_shared<int>(0);
 
 public:
 	// MARK: General events
@@ -1770,7 +1773,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		virtual playerCallbackFunc getNamedScriptCallback(const WzString& func) const override
 		{
 			JSContext *pCtx = ctx;
-			return [pCtx, func](const int player) {
+			std::weak_ptr<int> token = engineToInstanceMap.at(ctx)->lifetimeToken();
+			return [pCtx, func, token](const int player) {
+				if (token.expired())
+				{
+					return;
+				}
 				std::vector<JSValue> args;
 				args.push_back(JS_NewInt32(pCtx, player));
 				JS_FreeValue(pCtx, callFunction(pCtx, func.toUtf8(), args));
@@ -3133,14 +3141,21 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 //-- Registers a new event namespace. All events can now have this prefix. This is useful for
 //-- code libraries, to implement event that do not conflict with events in main code. This
 //-- function should be called from global; do not (for hopefully obvious reasons) put it
-//-- inside an event.
+//-- inside an event. The prefix must not be empty, and registering the same prefix again
+//-- has no effect.
 //--
 static JSValue js_namespace(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must have one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Must provide a string namespace prefix");
 	std::string prefix = JSValueToStdString(ctx, argv[0]);
+	SCRIPT_ASSERT(ctx, !prefix.empty(), "Namespace prefix must not be empty");
 	auto instance = engineToInstanceMap.at(ctx);
+	if (std::find(instance->eventNamespaces.begin(), instance->eventNamespaces.end(), prefix) != instance->eventNamespaces.end())
+	{
+		debug(LOG_ERROR, "Namespace prefix already registered: %s", prefix.c_str());
+		return JS_FALSE;
+	}
 	instance->eventNamespaces.push_back(prefix);
 	return JS_TRUE;
 }
