@@ -152,7 +152,8 @@ public:
 		if (len > UINT16_MAX)
 		{
 			ASSERT(false, "Message payload length exceeds uint16_t max: %zu (message type: %u)", len, type());
-			len = UINT16_MAX; // Clamp to max length, so we can still send the message and probably gracefully handle it on the other side.
+			len = UINT16_MAX; // Truncate to the largest length the header can hold
+			data_.resize(NetMessage::HEADER_LENGTH + len);
 		}
 		const uint16_t payloadLen = static_cast<uint16_t>(len);
 		// Store payload length in network byte order starting at the second byte of the data vector.
