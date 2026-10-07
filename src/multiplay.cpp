@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <chrono>
 #include <array>
+#include <map>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -1714,6 +1715,45 @@ bool recvMessage()
 	}
 
 	return true;
+}
+
+static std::array<std::map<uint8_t, uint32_t>, MAX_GAMEQUEUE_SLOTS> invalidMessageCounts;
+
+bool recordInvalidMessage(uint8_t sender, uint8_t messageType)
+{
+	if (sender >= invalidMessageCounts.size())
+	{
+		return true;
+	}
+	return invalidMessageCounts[sender][messageType]++ == 0;
+}
+
+void resetInvalidMessageLog(uint32_t player)
+{
+	ASSERT_OR_RETURN(, player < invalidMessageCounts.size(), "Invalid player: %" PRIu32, player);
+	for (const auto &it : invalidMessageCounts[player])
+	{
+		if (it.second > 1)
+		{
+			debug(LOG_INFO, "Ignored %" PRIu32 " invalid %s messages from player %" PRIu32, it.second, messageTypeToString(it.first), player);
+		}
+	}
+	invalidMessageCounts[player].clear();
+}
+
+void resetInvalidMessageLog()
+{
+	for (uint32_t i = 0; i < invalidMessageCounts.size(); ++i)
+	{
+		resetInvalidMessageLog(i);
+	}
+}
+
+void invalidMessageLogNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	ASSERT_OR_RETURN(, playerIndexA < invalidMessageCounts.size(), "playerIndexA invalid: %" PRIu32, playerIndexA);
+	ASSERT_OR_RETURN(, playerIndexB < invalidMessageCounts.size(), "playerIndexB invalid: %" PRIu32, playerIndexB);
+	std::swap(invalidMessageCounts[playerIndexA], invalidMessageCounts[playerIndexB]);
 }
 
 void HandleBadParam(const char *msg, const int from, const int actual)
