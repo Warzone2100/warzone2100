@@ -962,6 +962,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 					if (!ini.contains("function"))
 					{
 						ASSERT(false, "Invalid trigger in save (%s) - missing new functionRestoreInfo block, and old function parameter", list[i].toUtf8().c_str());
+						ini.endGroup();
 						continue;
 					}
 					backwardsCompatJSFunctionRestoreInfo["function"] = ini.value("function").jsonValue();
@@ -971,6 +972,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			catch (const std::exception& e)
 			{
 				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				ini.endGroup();
 				continue;
 			}
 

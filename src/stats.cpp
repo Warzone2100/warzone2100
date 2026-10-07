@@ -1308,6 +1308,7 @@ bool loadWeaponModifiers(WzConfig &ini)
 		if (!getWeaponEffect(list[i], &effectInc))
 		{
 			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().c_str());
+			ini.endGroup();
 			continue;
 		}
 		std::vector<WzString> keys = ini.childKeys();

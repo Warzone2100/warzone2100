@@ -285,6 +285,35 @@ void WzConfig::setVector3i(const WzString &name, const Vector3i &v)
 	(*pCurrentObj)[name.toUtf8()] = nlohmann::json::array({ v.x, v.y, v.z });
 }
 
+template<typename TYPE, typename JSON>
+static bool json_variant_numberFitsType(const JSON& obj, bool *ok)
+{
+	if (!obj.is_number_float())
+	{
+		return true;
+	}
+	const double value = obj.template get<double>();
+	if (value > static_cast<double>(std::numeric_limits<TYPE>::min()) - 1.0 && value < static_cast<double>(std::numeric_limits<TYPE>::max()) + 1.0)
+	{
+		return true;
+	}
+	debug(LOG_WARNING, "Failed to convert %f to an integer: out of range", value);
+	if (ok)
+	{
+		*ok = false;
+	}
+	return false;
+}
+
+static int jsonIntValue(const nlohmann::json& v)
+{
+	if (!json_variant_numberFitsType<int>(v, nullptr))
+	{
+		return 0;
+	}
+	return v.get<int>();
+}
+
 Vector3i WzConfig::vector3i(const WzString &name)
 {
 	Vector3i r(0, 0, 0);
@@ -296,9 +325,9 @@ Vector3i WzConfig::vector3i(const WzString &name)
 	auto v = it.value();
 	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 	try {
-		r.x = v[0].get<int>();
-		r.y = v[1].get<int>();
-		r.z = v[2].get<int>();
+		r.x = jsonIntValue(v[0]);
+		r.y = jsonIntValue(v[1]);
+		r.z = jsonIntValue(v[2]);
 	}
 	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
@@ -325,8 +354,8 @@ Vector2i WzConfig::vector2i(const WzString &name)
 	auto v = it.value();
 	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().c_str());
 	try {
-		r.x = v[0].get<int>();
-		r.y = v[1].get<int>();
+		r.x = jsonIntValue(v[0]);
+		r.y = jsonIntValue(v[1]);
 	}
 	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
@@ -587,6 +616,10 @@ int json_variant::toInt(bool *ok /*= nullptr*/) const
 {
 	if (mObj.is_number())
 	{
+		if (!json_variant_numberFitsType<int>(mObj, ok))
+		{
+			return 0;
+		}
 		return json_variant_toType<int>(*this, ok, 0);
 	}
 	else if (mObj.is_boolean())
@@ -619,6 +652,10 @@ unsigned int json_variant::toUInt(bool *ok /*= nullptr*/) const
 {
 	if (mObj.is_number())
 	{
+		if (!json_variant_numberFitsType<unsigned int>(mObj, ok))
+		{
+			return 0;
+		}
 		return json_variant_toType<unsigned int>(*this, ok, 0);
 	}
 	else if (mObj.is_boolean())
@@ -629,6 +666,16 @@ unsigned int json_variant::toUInt(bool *ok /*= nullptr*/) const
 	else if (mObj.is_string())
 	{
 		std::string result = json_variant_toType<std::string>(*this, ok, std::string());
+		const size_t firstChar = result.find_first_not_of(" \t\n\v\f\r");
+		if (firstChar != std::string::npos && result[firstChar] == '-')
+		{
+			debug(LOG_WARNING, "Failed to convert string '%s' to unsigned int because of error: value is negative", result.c_str());
+			if (ok)
+			{
+				*ok = false;
+			}
+			return 0;
+		}
 		try {
 			unsigned long ulongValue = std::stoul(result);
 			if (ulongValue > std::numeric_limits<unsigned int>::max())
@@ -657,6 +704,10 @@ uint64_t json_variant::toUint64(bool *ok /*= nullptr*/) const
 {
 	if (mObj.is_number())
 	{
+		if (!json_variant_numberFitsType<uint64_t>(mObj, ok))
+		{
+			return 0;
+		}
 		return json_variant_toType<uint64_t>(*this, ok, 0);
 	}
 	else if (mObj.is_boolean())

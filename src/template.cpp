@@ -747,6 +747,7 @@ bool loadDroidTemplates(const char *filename)
 		if (!loadTemplateCommon(ini, design))
 		{
 			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", ini.string("name").toUtf8().c_str());
+			ini.endGroup();
 			continue;
 		}
 		design.id = list[i];
