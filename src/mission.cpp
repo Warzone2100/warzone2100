@@ -202,6 +202,79 @@ bool MissionResUp	= false;
 static SDWORD		g_iReinforceTime = 0;
 
 
+// Clear a droid's base structure, action targets and order target that match pred
+template <typename Pred>
+static void clearDroidTargetsIf(DROID *psDroid, Pred pred)
+{
+	if (psDroid->psBaseStruct && pred(psDroid->psBaseStruct))
+	{
+		setDroidBase(psDroid, nullptr);
+	}
+	for (unsigned i = 0; i < MAX_WEAPONS; i++)
+	{
+		if (psDroid->psActionTarget[i] && pred(psDroid->psActionTarget[i]))
+		{
+			setDroidActionTarget(psDroid, nullptr, i);
+			// Clear action too if this requires a valid first action target
+			if (i == 0
+			    && psDroid->action != DACTION_MOVEFIRE
+			    && psDroid->action != DACTION_TRANSPORTIN
+			    && psDroid->action != DACTION_TRANSPORTOUT)
+			{
+				psDroid->action = DACTION_NONE;
+			}
+		}
+	}
+	if (psDroid->order.psObj && pred(psDroid->order.psObj))
+	{
+		setDroidTarget(psDroid, nullptr);
+	}
+}
+
+// Clear a structure's weapon targets that match pred
+template <typename Pred>
+static void clearStructureTargetsIf(STRUCTURE *psStruct, Pred pred)
+{
+	for (unsigned i = 0; i < MAX_WEAPONS; i++)
+	{
+		if (psStruct->psTarget[i] && pred(psStruct->psTarget[i]))
+		{
+			setStructureTarget(psStruct, nullptr, i, ORIGIN_UNKNOWN);
+		}
+	}
+}
+
+// Clear a repair facility's or rearm pad's target if it matches pred
+template <typename Pred>
+static void clearRepairAndRearmTargetsIf(STRUCTURE *psStruct, Pred pred)
+{
+	if (!psStruct->pFunctionality || !psStruct->pStructureType)
+	{
+		return;
+	}
+	if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+	{
+		REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
+		if (psRepairFac->psObj && pred(psRepairFac->psObj))
+		{
+			if (psRepairFac->state == RepairState::Repairing)
+			{
+				droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+			}
+			psRepairFac->psObj = nullptr;
+			psRepairFac->state = RepairState::Idle;
+		}
+	}
+	else if (psStruct->pStructureType->type == REF_REARM_PAD)
+	{
+		REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+		if (psReArmPad->psObj && pred(psReArmPad->psObj))
+		{
+			psReArmPad->psObj = nullptr;
+		}
+	}
+}
+
 //Remove soon-to-be illegal references to objects for some structures before going offWorld.
 static void resetHomeStructureObjects()
 {
@@ -209,31 +282,7 @@ static void resetHomeStructureObjects()
 	{
 		for (STRUCTURE *psStruct : gameWorld.objects.structures[i])
 		{
-			if (!psStruct->pFunctionality || !psStruct->pStructureType)
-			{
-				continue;
-			}
-			if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
-			{
-				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
-				if (psRepairFac->psObj)
-				{
-					if (psRepairFac->state == RepairState::Repairing)
-					{
-						droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
-					}
-					psRepairFac->psObj = nullptr;
-					psRepairFac->state = RepairState::Idle;
-				}
-			}
-			else if (psStruct->pStructureType->type == REF_REARM_PAD)
-			{
-				REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
-				if (psReArmPad->psObj)
-				{
-					psReArmPad->psObj = nullptr;
-				}
-			}
+			clearRepairAndRearmTargetsIf(psStruct, [](const BASE_OBJECT *) { return true; });
 		}
 	}
 }
@@ -3011,7 +3060,7 @@ void missionTimerUpdate()
 //
 void missionDestroyObjects()
 {
-	UBYTE Player, i;
+	UBYTE Player;
 
 	debug(LOG_SAVE, "called");
 	proj_FreeAllProjectiles();
@@ -3051,42 +3100,15 @@ void missionDestroyObjects()
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 	Player = selectedPlayer;
 
+	auto isDead = [](const BASE_OBJECT *psObj) { return psObj->died != 0; };
 	for (DROID* psDroid : gameWorld.objects.droids[Player])
 	{
-		if (psDroid->psBaseStruct && psDroid->psBaseStruct->died)
-		{
-			setDroidBase(psDroid, nullptr);
-		}
-		for (i = 0; i < MAX_WEAPONS; i++)
-		{
-			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
-			{
-				setDroidActionTarget(psDroid, nullptr, i);
-				// Clear action too if this requires a valid first action target
-				if (i == 0
-				    && psDroid->action != DACTION_MOVEFIRE
-				    && psDroid->action != DACTION_TRANSPORTIN
-				    && psDroid->action != DACTION_TRANSPORTOUT)
-				{
-					psDroid->action = DACTION_NONE;
-				}
-			}
-		}
-		if (psDroid->order.psObj && psDroid->order.psObj->died)
-		{
-			setDroidTarget(psDroid, nullptr);
-		}
+		clearDroidTargetsIf(psDroid, isDead);
 	}
 
 	for (STRUCTURE* psStruct : gameWorld.objects.structures[Player])
 	{
-		for (i = 0; i < MAX_WEAPONS; i++)
-		{
-			if (psStruct->psTarget[i] && psStruct->psTarget[i]->died)
-			{
-				setStructureTarget(psStruct, nullptr, i, ORIGIN_UNKNOWN);
-			}
-		}
+		clearStructureTargetsIf(psStruct, isDead);
 	}
 
 	// FIXME: check that orders do not reference anything bad?
