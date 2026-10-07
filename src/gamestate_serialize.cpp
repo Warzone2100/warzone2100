@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h" // clip (clamp restored droid positions onto the map)
 #include "lib/framework/crc.h" // base64Encode / base64Decode (binary section fields)
+#include "lib/framework/json_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/sync_debug.h" // syncDebugGetCrc / setResumeSyncDebugCrc (resume sync-CRC continuity)
 #include "lib/netplay/netplay.h"   // NetPlay.scriptSetPlayerDataStrings (scriptPlayerData section)
@@ -4811,43 +4812,6 @@ std::string serializeGameState(ScriptScope scriptScope)
 // JSON->JS-VM converter recurses one native frame per level, so bounding depth here (at the single choke
 // point) covers the whole document, including nested sections, in one place.
 static constexpr int GAMESTATE_MAX_JSON_DEPTH = 128;
-
-static bool jsonNestingWithinLimit(const char *p, const char *end, int maxDepth)
-{
-	int depth = 0;
-	bool inString = false;
-	for (; p < end; ++p)
-	{
-		const char c = *p;
-		if (inString)
-		{
-			if (c == '\\' && p + 1 < end)
-			{
-				++p;
-			}
-			else if (c == '"')
-			{
-				inString = false;
-			}
-		}
-		else if (c == '"')
-		{
-			inString = true;
-		}
-		else if (c == '[' || c == '{')
-		{
-			if (++depth > maxDepth)
-			{
-				return false;
-			}
-		}
-		else if ((c == ']' || c == '}') && depth > 0)
-		{
-			--depth;
-		}
-	}
-	return true;
-}
 
 nlohmann::ordered_json parseJsonBounded(const char *begin, const char *end)
 {
