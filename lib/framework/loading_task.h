@@ -35,6 +35,7 @@
 #include <coroutine>
 #include <exception>
 #include <optional>
+#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -42,15 +43,56 @@ class ResourceLoadingController;
 
 /// <summary>
 /// Shared promise state; embedded as the first base of every `LoadingTaskPromise<T>`.
-/// Holds the bound `ResourceLoadingController`, optional per-task `framePolicy`, and
-/// any stored exception from `unhandled_exception()`.
+/// Holds the bound `ResourceLoadingController`, optional per-task `framePolicy`,
+/// any stored exception from `unhandled_exception()`, and the loading domain
+/// activated by `setLoadingDomain` (popped when the frame is destroyed).
 /// </summary>
 struct LoadingTaskPromiseBase
 {
+	LoadingTaskPromiseBase() = default;
+	LoadingTaskPromiseBase(const LoadingTaskPromiseBase&) = delete;
+	LoadingTaskPromiseBase& operator=(const LoadingTaskPromiseBase&) = delete;
+	LoadingTaskPromiseBase(LoadingTaskPromiseBase&&) = delete;
+	LoadingTaskPromiseBase& operator=(LoadingTaskPromiseBase&&) = delete;
+	~LoadingTaskPromiseBase();
+
+	void activateLoadingDomain(std::string name);
+
 	ResourceLoadingController* controller = nullptr;
 	std::exception_ptr exception;
 	std::optional<ResourceLoadingFramePolicy> framePolicy;
+
+	std::string loadingDomainName;
+	bool loadingDomainActive = false;
 };
+
+/// <summary>
+/// Non-suspending awaitable. `co_await setLoadingDomain(name)` publishes `name` as this
+/// task's loading-domain segment without yielding a frame quantum.
+/// </summary>
+struct SetLoadingDomainAwaiter
+{
+	std::string name;
+
+	bool await_ready() const noexcept { return false; }
+
+	template <typename Promise>
+	bool await_suspend(std::coroutine_handle<Promise> h)
+	{
+		static_assert(std::is_base_of<LoadingTaskPromiseBase, Promise>::value,
+		              "setLoadingDomain can only be co_awaited from a LoadingTask");
+		h.promise().activateLoadingDomain(std::move(name));
+		// Do not suspend. This is not a `yieldFrame()` quantum.
+		return false;
+	}
+
+	void await_resume() const noexcept {}
+};
+
+inline SetLoadingDomainAwaiter setLoadingDomain(std::string name)
+{
+	return SetLoadingDomainAwaiter{std::move(name)};
+}
 
 template <typename T = void>
 struct LoadingTaskPromise : LoadingTaskPromiseBase
@@ -167,6 +209,17 @@ public:
 	{
 		LoadingTask* child = nullptr;
 		mutable std::coroutine_handle<promise_type> child_handle{};
+		LoadingTaskPromiseBase* childPromise = nullptr;
+
+		~ChildTaskAwaiter()
+		{
+			if (child_handle && childPromise)
+			{
+				loading_task_detail::destroyDetachedChildFrame(child_handle, childPromise);
+				child_handle = {};
+				childPromise = nullptr;
+			}
+		}
 
 		bool await_ready() const noexcept
 		{
@@ -180,7 +233,10 @@ public:
 				// Child handle destroyed here after controller stack pop (see controller ops).
 				ASSERT(child_handle.done(), "nested child must be done before destroy");
 				LoadResult<T> outcome = child_handle.promise().result.take();
-				child_handle.destroy();
+				auto handle = child_handle;
+				child_handle = {};
+				childPromise = nullptr;
+				handle.destroy();
 				return outcome;
 			}
 			return child ? child->take_result() : load_fail();
@@ -194,11 +250,9 @@ public:
 			ASSERT(!child_coro.done(), "co_await already-completed LoadingTask");
 			child->coro = {};
 			child_handle = child_coro;
+			childPromise = static_cast<LoadingTaskPromiseBase*>(&child_coro.promise());
 
-			loading_task_detail::suspendAwaitChild(
-			    parent,
-			    child_coro,
-			    static_cast<LoadingTaskPromiseBase*>(&child_coro.promise()));
+			loading_task_detail::suspendAwaitChild(parent, child_coro, childPromise);
 		}
 	};
 

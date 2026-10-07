@@ -1024,6 +1024,8 @@ LoadingTask<> loadSaveGameResourceTaskImpl(ResourceLoadingController &controller
 
 LoadingTask<> startGameResourceTask(ResourceLoadingController &controller)
 {
+	co_await setLoadingDomain(_("Game"));
+
 	if (co_await startGameResourceTaskImpl(controller))
 	{
 		closeLoadingScreen();
@@ -1041,6 +1043,8 @@ LoadingTask<> startGameResourceTask(ResourceLoadingController &controller)
 
 LoadingTask<> loadSaveGameResourceTask(ResourceLoadingController &controller)
 {
+	co_await setLoadingDomain(_("Saved game"));
+
 	if (co_await loadSaveGameResourceTaskImpl(controller))
 	{
 		closeLoadingScreen();

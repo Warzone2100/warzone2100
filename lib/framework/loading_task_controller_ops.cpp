@@ -75,4 +75,63 @@ void suspendAwaitChild(std::coroutine_handle<> parent,
 	controller->pushFrame(child, child_policy, childPromise);
 }
 
+void activateLoadingDomain(LoadingTaskPromiseBase* promise, std::string name)
+{
+	ASSERT(promise != nullptr, "setLoadingDomain with null promise");
+	ASSERT(promise->controller != nullptr,
+	       "setLoadingDomain outside a ResourceLoadingController task");
+	ASSERT(!promise->loadingDomainActive, "setLoadingDomain called twice in one LoadingTask");
+	ASSERT(!name.empty(), "setLoadingDomain with empty name");
+
+	promise->loadingDomainName = name;
+	promise->controller->pushLoadingDomain(promise, std::move(name));
+	promise->loadingDomainActive = true;
+}
+
+void releaseLoadingDomain(LoadingTaskPromiseBase* promise) noexcept
+{
+	if (promise == nullptr || promise->controller == nullptr)
+	{
+		return;
+	}
+	ResourceLoadingController* controller = promise->controller;
+	if (promise->loadingDomainActive)
+	{
+		controller->popLoadingDomain(promise);
+		promise->loadingDomainActive = false;
+	}
+	controller->noteFrameDead(promise);
+}
+
+void destroyDetachedChildFrame(std::coroutine_handle<> handle,
+                               LoadingTaskPromiseBase* promise) noexcept
+{
+	if (!handle || promise == nullptr)
+	{
+		return;
+	}
+	ResourceLoadingController& controller = ResourceLoadingController::instance();
+	// Live-set lookup only. `handle.done()` would be dangling if the frame is already destroyed.
+	if (!controller.isLiveFrame(promise))
+	{
+		return;
+	}
+	// Still on the execution stack, so `popAndDestroyTop` owns this frame.
+	if (controller.isOnExecutionStack(promise))
+	{
+		return;
+	}
+	handle.destroy();
+}
+
 } // namespace loading_task_detail
+
+LoadingTaskPromiseBase::~LoadingTaskPromiseBase()
+{
+	loading_task_detail::releaseLoadingDomain(this);
+}
+
+void LoadingTaskPromiseBase::activateLoadingDomain(std::string name)
+{
+	loading_task_detail::activateLoadingDomain(this, std::move(name));
+}

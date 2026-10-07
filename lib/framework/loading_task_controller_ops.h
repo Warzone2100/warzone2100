@@ -26,6 +26,7 @@
 #pragma once
 
 #include <coroutine>
+#include <string>
 
 struct LoadingTaskPromiseBase;
 
@@ -49,5 +50,24 @@ void notifyFrameFinished(LoadingTaskPromiseBase* promise,
 void suspendAwaitChild(std::coroutine_handle<> parent,
                        std::coroutine_handle<> child,
                        LoadingTaskPromiseBase* childPromise);
+
+/// <summary>
+/// Pushes `name` onto the controller domain stack for `promise`.
+/// Called from `setLoadingDomain`.
+/// </summary>
+void activateLoadingDomain(LoadingTaskPromiseBase* promise, std::string name);
+
+/// <summary>
+/// Pops `promise`'s domain segment, if it activated one, and drops it from the live-frame set.
+/// Called from `~LoadingTaskPromiseBase`.
+/// </summary>
+void releaseLoadingDomain(LoadingTaskPromiseBase* promise) noexcept;
+
+/// <summary>
+/// Destroys a completed child frame that is no longer on the execution stack.
+/// A frame the controller already destroyed, or one still running, is left alone.
+/// </summary>
+void destroyDetachedChildFrame(std::coroutine_handle<> handle,
+                               LoadingTaskPromiseBase* promise) noexcept;
 
 } // namespace loading_task_detail
