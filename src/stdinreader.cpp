@@ -628,14 +628,14 @@ static optional<KickRedirectInfo> parseCmdInterfaceRedirectStringToRedirectInfo(
 
 	try {
 		auto portNumber = std::stoul(redirectComponents[1], nullptr, 10);
-		ASSERT_OR_RETURN(nullopt, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
+		ASSERT_OR_RETURN(nullopt, portNumber <= std::numeric_limits<uint16_t>::max(), "Invalid port: %lu", portNumber);
 		newPort = static_cast<uint16_t>(portNumber);
 	}
 	catch (const std::exception& e) {
 		ASSERT_OR_RETURN(nullopt, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
 	}
 
-	ASSERT_OR_RETURN(nullopt, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
+	ASSERT_OR_RETURN(nullopt, newPort > 1024, "Invalid port (%u) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
 
 	try {
 		auto specValue = std::stoul(redirectComponents[2], nullptr, 10);
@@ -1140,7 +1140,14 @@ int cmdInputThreadFunc(void *)
 					approve = AsyncJoinApprovalAction::Approve;
 					if (r >= 3)
 					{
-						explicitPlayerIdx = uintVal;
+						if (uintVal <= std::numeric_limits<uint8_t>::max())
+						{
+							explicitPlayerIdx = static_cast<uint8_t>(uintVal);
+						}
+						else
+						{
+							approve = nullopt;
+						}
 					}
 				}
 				else if (strcmp(action, "reject") == 0)
@@ -1203,7 +1210,7 @@ int cmdInputThreadFunc(void *)
 				}
 				else
 				{
-					wz_command_interface_output_onmainthread("WZCMD error: Invalid action or rejectionReason passed to join approve/reject command\n");
+					wz_command_interface_output_onmainthread("WZCMD error: Invalid action, player index or rejectionReason passed to join approve/reject command\n");
 				}
 			}
 		}
