@@ -834,11 +834,21 @@ bool WzMapZipIO::fileExists(const std::string& filename)
 	return true;
 }
 
+#define MAX_ZIP_ENTRY_NAME_LENGTH 1024
+#define MAX_ZIP_ENTRY_NAME_DEPTH 32
+#define MAX_ZIP_CACHED_DIRECTORIES 10000
+
 static inline bool isUnsafeZipEntryName(const std::string& filename)
 {
 	if (filename.empty())
 	{
 		return true; // unexpected empty name
+	}
+
+	if (filename.size() > MAX_ZIP_ENTRY_NAME_LENGTH
+		|| std::count(filename.begin(), filename.end(), '/') > MAX_ZIP_ENTRY_NAME_DEPTH)
+	{
+		return true;
 	}
 
 	// Check for directory traversal
@@ -1017,6 +1027,11 @@ bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recu
 				auto setInsertResult = foundDirectoriesSet.insert(nameStr);
 				if (setInsertResult.second)
 				{
+					if (m_cachedDirectoriesList.size() >= MAX_ZIP_CACHED_DIRECTORIES)
+					{
+						m_cachedDirectoriesList.clear();
+						return false;
+					}
 					m_cachedDirectoriesList.push_back(nameStr);
 				}
 

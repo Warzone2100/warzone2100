@@ -21,11 +21,52 @@
 #include "../include/wzmaplib/map.h"
 #include "map_internal.h"
 
+#include <stdexcept>
+
 namespace WzMap {
 
 // MARK: - Helper functions for loading / saving JSON files
 
 constexpr uint32_t MaxJsonFileSize = 20 * 1024 * 1024;
+
+#define MAX_MAP_JSON_DEPTH 128
+
+static bool jsonNestingWithinLimit(const char* p, const char* end, size_t maxDepth)
+{
+	size_t depth = 0;
+	bool inString = false;
+	for (; p < end; ++p)
+	{
+		const char c = *p;
+		if (inString)
+		{
+			if (c == '\\')
+			{
+				++p;
+			}
+			else if (c == '"')
+			{
+				inString = false;
+			}
+		}
+		else if (c == '"')
+		{
+			inString = true;
+		}
+		else if (c == '[' || c == '{')
+		{
+			if (++depth > maxDepth)
+			{
+				return false;
+			}
+		}
+		else if ((c == ']' || c == '}') && depth > 0)
+		{
+			--depth;
+		}
+	}
+	return true;
+}
 
 optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
@@ -59,6 +100,10 @@ optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOP
 	// parse JSON
 	nlohmann::json mRoot;
 	try {
+		if (!jsonNestingWithinLimit(data.data(), data.data() + data.size() - 1, MAX_MAP_JSON_DEPTH))
+		{
+			throw std::runtime_error("JSON nesting depth exceeds maximum allowed");
+		}
 		mRoot = nlohmann::json::parse(data.begin(), data.end() - 1);
 	}
 	catch (const std::exception &e) {
