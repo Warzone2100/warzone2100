@@ -180,12 +180,16 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	}
 
 	char *ptr = pFileData;
-	// count lines, which is identical to number of images
+	// count lines, which is an upper bound on the number of images
 	int numImages = 0;
-	while (ptr < pFileData + pFileSize && *ptr != '\0')
+	while (ptr < pFileData + pFileSize)
 	{
 		numImages += *ptr == '\n';
 		++ptr;
+	}
+	if (pFileSize > 0 && pFileData[pFileSize - 1] != '\n')
+	{
+		++numImages;
 	}
 	IMAGEFILE *imageFile = new IMAGEFILE;
 	imageFile->imageDefs.resize(numImages);
@@ -227,6 +231,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
 	}
 	free(pFileData);
+	imageFile->imageDefs.resize(numImages);
+	pageLayout.images.resize(numImages);
 
 	pageLayout.arrange();  // Arrange all the images onto texture pages (attempt to do so with as few pages as possible).
 	imageFile->pages.resize(pageLayout.pages.size());

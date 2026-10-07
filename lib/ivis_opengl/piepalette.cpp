@@ -45,9 +45,15 @@ void pal_Init()
 			}
 
 			unsigned int r, g, b, a;
-			int len;
+			int len = 0;
 
 			int result = sscanf(ptr, "%x, %x, %x, %x %*[^\n]\n%n", &r, &g, &b, &a, &len);
+			if (len <= 0)
+			{
+				// The line didn't fully match, so %n wasn't reached: continue after the next newline
+				const char *lineEnd = static_cast<const char *>(memchr(ptr, '\n', static_cast<size_t>(lenLeft)));
+				len = (lineEnd != nullptr) ? static_cast<int>(lineEnd - ptr) + 1 : lenLeft;
+			}
 
 			ptr += len;
 			lenLeft -= len;
