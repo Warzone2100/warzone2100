@@ -1528,10 +1528,10 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/)
 {
 	STRUCTURE *psBuilding = nullptr;
-	const Vector2i size = pStructureType->size(direction);
 
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Cannot build structure for player %" PRIu32 " (>= MAX_PLAYERS)", player);
 	ASSERT_OR_RETURN(nullptr, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
+	const Vector2i size = pStructureType->size(direction);
 
 	if (IsStatExpansionModule(pStructureType) == false)
 	{
@@ -1539,7 +1539,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		UDWORD	max = pStructureType - asStructureStats;
 		int	i;
 
-		ASSERT_OR_RETURN(nullptr, max <= numStructureStats, "Invalid structure type");
+		ASSERT_OR_RETURN(nullptr, max < numStructureStats, "Invalid structure type");
 
 		// Don't allow more than interface limits
 		if (asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)

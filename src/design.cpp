@@ -2936,7 +2936,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		psTempl->name = WzString::fromUtf8(newName);
 	}
 
-	if (!designableTemplate(psTempl, player))
+	if (!designableTemplate(psTempl, player, !complain))
 	{
 		return false;
 	}
