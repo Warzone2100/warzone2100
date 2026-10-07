@@ -3064,7 +3064,7 @@ static std::unordered_set<uint32_t> readPendingRoutes(const nlohmann::ordered_js
 		}
 		if (version >= 2)
 		{
-			r.queuedTime = e.at("queuedTime").get<uint32_t>();
+			r.queuedTime = std::min(e.at("queuedTime").get<uint32_t>(), gameTime);
 			r.queuedInDroidUpdate = e.at("queuedInDroidUpdate").get<bool>();
 		}
 		const uint32_t id = e.at("id").get<uint32_t>();
