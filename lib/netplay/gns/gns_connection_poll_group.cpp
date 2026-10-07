@@ -27,7 +27,6 @@
 
 #include "lib/framework/frame.h" // for `ASSERT`
 
-#include <array>
 #include <unordered_set>
 
 #include <steam/isteamnetworkingsockets.h>
@@ -52,24 +51,30 @@ net::result<int> GNSConnectionPollGroup::checkConnectionsReadable(std::chrono::m
 	{
 		return 0;
 	}
-	constexpr int MAX_RECV_MESG_COUNT = 1024;
-	std::array<SteamNetworkingMessage_t*, MAX_RECV_MESG_COUNT> receivedMsgs;
-	auto msgCount = networkInterface_->ReceiveMessagesOnPollGroup(group_, receivedMsgs.data(), MAX_RECV_MESG_COUNT);
-	if (msgCount < 0)
+	constexpr size_t MAX_PENDING_BYTES_PER_CONN = 512 * 1024;
+	constexpr size_t MAX_PENDING_MESSAGES_PER_CONN = 1024;
+	readyConns_.clear();
+	for (const auto& it : connections_)
 	{
-		return tl::make_unexpected(make_gns_error_code(-msgCount));
+		GNSClientConnection* conn = it.second;
+		if (!conn->isValid())
+		{
+			continue;
+		}
+		while (conn->pendingBytes() < MAX_PENDING_BYTES_PER_CONN && conn->pendingMessageCount() < MAX_PENDING_MESSAGES_PER_CONN)
+		{
+			SteamNetworkingMessage_t* msg = nullptr;
+			if (networkInterface_->ReceiveMessagesOnConnection(it.first, &msg, 1) != 1 || msg == nullptr)
+			{
+				break;
+			}
+			conn->enqueueMessage(msg);
+			readyConns_.emplace(it.first);
+		}
 	}
-	else if (msgCount == 0)
+	if (readyConns_.empty())
 	{
 		return connections_.size();
-	}
-	readyConns_.clear();
-	// Put each message in the corresponding `GNSClientConnection` object's message queue
-	for (size_t i = 0; i < msgCount; ++i)
-	{
-		SteamNetworkingMessage_t* msg = receivedMsgs[i];
-		connections_.at(msg->m_conn)->enqueueMessage(msg);
-		readyConns_.emplace(msg->m_conn);
 	}
 	return readyConns_.size();
 }

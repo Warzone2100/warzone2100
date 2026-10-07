@@ -117,6 +117,8 @@ std::string ZlibErrorCategory::message(int ev) const
 		return "Z_DATA_ERROR";
 	case Z_MEM_ERROR:
 		return "Z_MEM_ERROR";
+	case Z_STREAM_END:
+		return "Z_STREAM_END";
 	default:
 		return "Unknown zlib error";
 	}

@@ -1655,7 +1655,7 @@ bool recvMessage()
 				auto r = NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(r, player_id);
 				NETstring(r, reason, MAX_KICK_REASON);
-				NETenum(r, KICK_TYPE);
+				NETenum(r, KICK_TYPE, ERROR_REDIRECT);
 				NETend(r);
 
 				if (player_id == NetPlay.hostPlayer)
@@ -1723,6 +1723,8 @@ bool recvMessage()
 
 		NETpop(queue);
 	}
+
+	multiSyncSendPendingPingReplies();
 
 	return true;
 }

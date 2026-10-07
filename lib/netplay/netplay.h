@@ -343,6 +343,7 @@ enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetS
 size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
 void NETplayerKicked(UDWORD index, bool quiet = false);			// Cleanup after player has been kicked
+bool NETplayerWasKicked(uint32_t index);
 
 bool NETplayerHasConnection(uint32_t index);
 
@@ -428,6 +429,10 @@ void NETsetEnableTCPNoDelay(bool enabled);
 bool NETgetEnableTCPNoDelay();
 uint32_t NETgetJoinConnectionNETPINGChallengeFromHostSize();
 uint32_t NETgetJoinConnectionNETPINGChallengeFromClientSize();
+
+std::vector<uint8_t> NETpingSignatureData(const uint8_t *challenge, size_t challengeSize, uint32_t pingerIndex, uint32_t responderIndex, uint32_t hostIndex, const EcKey::Key& hostPublicKey);
+std::vector<uint8_t> NETjoinClientSignatureData(const std::vector<uint8_t>& hostChallenge, const EcKey::Key& hostPublicKey, const EcKey::Key& clientPublicKey);
+std::vector<uint8_t> NETjoinHostSignatureData(const std::vector<uint8_t>& clientChallenge, const EcKey::Key& clientPublicKey, const EcKey::Key& hostPublicKey);
 
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);

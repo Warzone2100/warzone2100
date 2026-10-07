@@ -1884,16 +1884,23 @@ static std::vector<uint8_t> serializeConnectionDescription(const JoinConnectionD
 
 bool WzJoiningGameScreen_HandlerRoot::verifyEncryptedHostResponse(const std::vector<uint8_t>& encryptedHostChallengeResponse)
 {
+	if (!connectionAuthSessionKeys || challengeForHost.empty())
+	{
+		debug(LOG_ERROR, "Unexpected host challenge response!");
+		return false;
+	}
+
 	// Decrypt the encryptedHostChallengeResponse
 	std::vector<uint8_t> hostChallengeResponse;
-	if (!connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedHostChallengeResponse[0]), encryptedHostChallengeResponse.size(), hostChallengeResponse))
+	if (!connectionAuthSessionKeys->decryptMessageFromOther(encryptedHostChallengeResponse.data(), encryptedHostChallengeResponse.size(), hostChallengeResponse))
 	{
 		debug(LOG_ERROR, "Invalid host challenge response data received!");
 		return false;
 	}
 
 	// Verify the host identity challenge response
-	if (!hostIdentity.verify(hostChallengeResponse, challengeForHost.data(), challengeForHost.size()))
+	const auto hostSignatureData = NETjoinHostSignatureData(challengeForHost, playerIdentity.toBytes(EcKey::Public), hostIdentity.toBytes(EcKey::Public));
+	if (!hostIdentity.verify(hostChallengeResponse, hostSignatureData.data(), hostSignatureData.size()))
 	{
 		debug(LOG_ERROR, "Unable to verify host challenge response!");
 		return false;
@@ -2087,7 +2094,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return;
 			}
 
-			if (index >= MAX_CONNECTED_PLAYERS)
+			if (index >= MAX_CONNECTED_PLAYERS || index == hostPlayer)
 			{
 				debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
 				closeConnectionAttempt();
@@ -2248,7 +2255,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			NETend(r);
 			NETpop(tmpJoiningQUEUE);
 
-			if (!challengeFromHost.empty() && challengeFromHost.size() < NETgetJoinConnectionNETPINGChallengeFromHostSize())
+			if (challengeFromHost.size() != NETgetJoinConnectionNETPINGChallengeFromHostSize())
 			{
 				// Invalid challenge sent by host
 				debug(LOG_ERROR, "Invalid host challenge");
@@ -2294,12 +2301,9 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 
 			std::vector<uint8_t> connectionDescriptionSerializedBytes = serializeConnectionDescription(connectionList[currentConnectionIdx].conn);
-			EcKey::Sig challengeResponse;
-			if (!challengeFromHost.empty())
-			{
-				challengeResponse = playerIdentity.sign(challengeFromHost.data(), challengeFromHost.size());
-			}
 			EcKey::Key identity = playerIdentity.toBytes(EcKey::Public);
+			const auto joinSignatureData = NETjoinClientSignatureData(challengeFromHost, hostPublicKey, identity);
+			EcKey::Sig challengeResponse = playerIdentity.sign(joinSignatureData.data(), joinSignatureData.size());
 			uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
 			const auto& modListStr = getModList();
 

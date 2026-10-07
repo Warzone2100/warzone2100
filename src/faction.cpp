@@ -161,11 +161,13 @@ const iIMDShape* getFactionDisplayIMD(const FACTION *faction, const iIMDShape* i
 
 const FACTION* getPlayerFaction(uint8_t player)
 {
-	return &(factions[NetPlay.players[player].faction]);
+	ASSERT_OR_RETURN(&factions[FACTION_NORMAL], player < NetPlay.players.size(), "Invalid player: %u", static_cast<unsigned>(player));
+	return getFactionByID(NetPlay.players[player].faction);
 }
 
 const FACTION* getFactionByID(FactionID faction)
 {
+	ASSERT_OR_RETURN(&factions[FACTION_NORMAL], static_cast<uint8_t>(faction) < factions.size(), "Invalid faction: %u", static_cast<unsigned>(faction));
 	return &(factions[(uint8_t)faction]);
 }
 

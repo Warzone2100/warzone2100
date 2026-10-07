@@ -6352,7 +6352,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				auto r = NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(r, player_id);
 				NETstring(r, reason, MAX_KICK_REASON);
-				NETenum(r, KICK_TYPE);
+				NETenum(r, KICK_TYPE, ERROR_REDIRECT);
 				NETend(r);
 
 				if (player_id >= MAX_CONNECTED_PLAYERS)
@@ -6529,6 +6529,8 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 
 		NETpop(queue);
 	}
+
+	multiSyncSendPendingPingReplies();
 
 	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 	autoLagKickRoutine(now);
@@ -7857,7 +7859,7 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	}
 	// Do not persist IPtextAddress
 	auto factionUint = j.at("faction").get<uint8_t>();
-	p.faction = static_cast<FactionID>(factionUint); // TODO CHECK
+	p.faction = uintToFactionID(factionUint).value_or(FACTION_NORMAL);
 	p.isSpectator = j.at("isSpectator").get<bool>();
 	if (j.contains("isAdmin"))
 	{
@@ -8099,7 +8101,13 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	}
 
 	// restore `game`
-	game = object.at("game").get<MULTIPLAYERGAME>();
+	auto replayGame = object.at("game").get<MULTIPLAYERGAME>();
+	if (replayGame.maxPlayers == 0 || replayGame.maxPlayers > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid maxPlayers (%u)", static_cast<unsigned>(replayGame.maxPlayers));
+		return false;
+	}
+	game = std::move(replayGame);
 
 	// restore `ingame`
 	ingame = object.at("ingame").get<MULTIPLAYERINGAME>();
@@ -8152,13 +8160,29 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 		debug(LOG_ERROR, "Unsupported netplay.players size (%zu)", netPlayers.size());
 		return false;
 	}
+	std::vector<PLAYER> restoredPlayers;
+	restoredPlayers.reserve(netPlayers.size());
 	for (size_t i = 0; i < netPlayers.size(); ++i)
 	{
-		from_json(netPlayers.at(i), NetPlay.players[i]);
+		PLAYER player = NetPlay.players[i];
+		from_json(netPlayers.at(i), player);
+		if (player.position < 0 || player.position >= MAX_CONNECTED_PLAYERS)
+		{
+			debug(LOG_ERROR, "Invalid position (%" PRIi32 ") for player %zu", player.position, i);
+			return false;
+		}
+		restoredPlayers.push_back(std::move(player));
 	}
 
 	// restore NetPlay.hostPlayer
-	NetPlay.hostPlayer = object.at("netplay.hostPlayer").get<uint32_t>();
+	const uint32_t hostPlayer = object.at("netplay.hostPlayer").get<uint32_t>();
+	if (hostPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid netplay.hostPlayer (%" PRIu32 ")", hostPlayer);
+		return false;
+	}
+	std::move(restoredPlayers.begin(), restoredPlayers.end(), NetPlay.players.begin());
+	NetPlay.hostPlayer = hostPlayer;
 
 	// restore `NetPlay.bComms` (?)
 	NetPlay.bComms = object.at("netplay.bComms").get<bool>();

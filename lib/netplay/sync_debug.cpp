@@ -893,11 +893,8 @@ void recvDebugSync(NETQUEUE queue)
 	NETbin(r, recvBuff, bufLen);
 	NETend(r);
 
-	if (bufLen > 0)
-	{
-		playerDesyncLogOutput.write(time, player, recvBuff, bufLen);
-	}
-	else
+	playerDesyncLogOutput.write(time, player, recvBuff, bufLen);
+	if (bufLen == 0)
 	{
 		// 0-length buffer packet considered EOF
 		if (playerDesyncLogOutput.closeEOF(time, player))
@@ -907,7 +904,7 @@ void recvDebugSync(NETQUEUE queue)
 	}
 
 	// Also dump the debug sync log for this local client (if possible & needed)
-	if (!playerDesyncLogOutput.alreadyWroteLogFor(time, selectedPlayer))
+	if (!playerDesyncLogOutput.alreadyWroteLogFor(time, selectedPlayer) && playerDesyncLogOutput.canWriteLogFor(time, selectedPlayer))
 	{
 		debug(LOG_INFO, "Dumping local debug sync log in response to received for gameTime: %" PRIu32, time);
 		bufLen = dumpLocalDebugSyncLogByTime(time);

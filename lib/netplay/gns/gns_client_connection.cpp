@@ -90,11 +90,13 @@ net::result<ssize_t> GNSClientConnection::recvImpl(char* dst, size_t maxSize)
 
 		// Determine how much bytes left to read from the top of the queue.
 		size_t bytesToRead = static_cast<size_t>(msg->m_cbSize) - currentMsgReadPos_;
-		if (bytesToRead > maxSize)
+		const size_t spaceLeft = maxSize - currentProcessedSize;
+		if (bytesToRead > spaceLeft)
 		{
-			// If there's more than `maxSize`, just copy the max size bytes and adjust the offset accordingly.
-			std::memcpy(dst, reinterpret_cast<const char*>(msg->m_pData) + currentMsgReadPos_, maxSize);
-			currentMsgReadPos_ += maxSize;
+			// If there's more than fits, just copy what fits and adjust the offset accordingly.
+			std::memcpy(dst, reinterpret_cast<const char*>(msg->m_pData) + currentMsgReadPos_, spaceLeft);
+			currentMsgReadPos_ += spaceLeft;
+			pendingBytes_ -= std::min(pendingBytes_, spaceLeft);
 			return maxSize;
 		}
 		// Consume the current message and dispose of it.
@@ -102,6 +104,7 @@ net::result<ssize_t> GNSClientConnection::recvImpl(char* dst, size_t maxSize)
 		std::memcpy(dst, reinterpret_cast<const char*>(msg->m_pData) + currentMsgReadPos_, bytesToRead);
 		dst += bytesToRead;
 		currentProcessedSize += bytesToRead;
+		pendingBytes_ -= std::min(pendingBytes_, bytesToRead);
 		// Reset the read position for the next message.
 		currentMsgReadPos_ = 0;
 
@@ -178,6 +181,7 @@ void GNSClientConnection::setConnectedTimeout(std::chrono::milliseconds timeout)
 void GNSClientConnection::enqueueMessage(SteamNetworkingMessage_t* msg)
 {
 	pendingMessagesToRead_.push(msg);
+	pendingBytes_ += static_cast<size_t>(std::max(msg->m_cbSize, 0));
 }
 
 void GNSClientConnection::flushPendingMessages()
@@ -197,6 +201,8 @@ void GNSClientConnection::flushPendingMessages()
 	{
 		pendingMessagesToRead_.front()->Release();
 	}
+	pendingBytes_ = 0;
+	currentMsgReadPos_ = 0;
 }
 
 void GNSClientConnection::expireConnectionHandle()

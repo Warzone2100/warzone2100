@@ -187,16 +187,16 @@ inline void NETQueuedDroidInfo(SerdeContext& c, typename SerdeFnArgT<SerdeContex
 		"SerdeContext is expected to be either MessageReader or MessageWriter");
 
 	NETuint8_t(c, info.player);
-	NETenum(c, info.subType);
+	NETenum(c, info.subType, SecondaryOrder);
 	switch (info.subType)
 	{
 	case ObjOrder:
 	case LocOrder:
-		NETenum(c, info.order);
+		NETenum(c, info.order, DORDER_MAX);
 		if (info.subType == ObjOrder)
 		{
 			NETuint32_t(c, info.destId);
-			NETenum(c, info.destType);
+			NETenum(c, info.destType, OBJ_NUM_TYPES);
 		}
 		else
 		{
@@ -218,8 +218,8 @@ inline void NETQueuedDroidInfo(SerdeContext& c, typename SerdeFnArgT<SerdeContex
 		NETbool(c, info.add);
 		break;
 	case SecondaryOrder:
-		NETenum(c, info.secOrder);
-		NETenum(c, info.secState);
+		NETenum(c, info.secOrder, DSO_ACCEPT_RETREP);
+		NETenum(c, info.secState, 0x1fffffff); // All state bits, up to DSS_ASSPROD_VTOL_MASK
 		break;
 	}
 

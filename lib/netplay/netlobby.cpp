@@ -2227,7 +2227,11 @@ bool EnumerateGames(const std::string& lobbyServerAddress, CompletionHandlerFunc
 					logExceptionOnMainThread("Failed to parse JSON response: ", e);
 					return false;
 				}
-				ASSERT_OR_RETURN(false, jsonData.is_object(), "Received non-object item");
+				if (!jsonData.is_object())
+				{
+					logErrorOnMainThread("Received non-object item", nullptr);
+					return false;
+				}
 
 				auto it = jsonData.find("type");
 				if (it != jsonData.end() && it.value().is_string() && it.value().get<std::string>() == "header")

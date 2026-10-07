@@ -56,6 +56,7 @@ static PLAYERSTATS zeroStats;
 static EcKey blindIdentity; // a freshly-generated identity used for the local client in the current blind room
 
 static EcKey hostVerifiedJoinIdentities[MAX_CONNECTED_PLAYERS];
+static EcKey hostIdentityFromJoin;
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -544,6 +545,13 @@ void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity)
 {
 	ASSERT_OR_RETURN(, NetPlay.isHost || NetPlay.isHostAlive, "Unexpected state when called");
 	hostVerifiedJoinIdentities[NetPlay.hostPlayer].fromBytes(identity, EcKey::Public);
+	hostIdentityFromJoin.clear();
+	hostIdentityFromJoin.fromBytes(identity, EcKey::Public);
+}
+
+bool isHostIdentityFromJoin(const EcKey& identity)
+{
+	return !hostIdentityFromJoin.empty() && !identity.empty() && hostIdentityFromJoin.toBytes(EcKey::Public) == identity.toBytes(EcKey::Public);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1316,6 +1324,7 @@ void resetRecentScoreData()
 
 		hostVerifiedJoinIdentities[i].clear();
 	}
+	hostIdentityFromJoin.clear();
 }
 
 // MARK: -

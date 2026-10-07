@@ -532,14 +532,30 @@ void recvPlayerLeft(NETQUEUE queue)
 	uint32_t playerIndex = 0;
 	auto r = NETbeginDecode(queue, GAME_PLAYER_LEFT);
 	NETuint32_t(r, playerIndex);
-	NETend(r);
+	if (!NETend(r))
+	{
+		if (recordInvalidMessage(queue.index, GAME_PLAYER_LEFT))
+		{
+			debug(LOG_INFO, "Ignoring truncated GAME_PLAYER_LEFT from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return;
+	}
 
-	addConsolePlayerLeftMessage(playerIndex);
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
+	{
+		if (recordInvalidMessage(queue.index, GAME_PLAYER_LEFT))
+		{
+			debug(LOG_INFO, "Invalid player index %" PRIu32 " from %" PRIu8, playerIndex, queue.index);
+		}
+		return;
+	}
 
 	if (whosResponsible(playerIndex) != queue.index)
 	{
 		return;
 	}
+
+	addConsolePlayerLeftMessage(playerIndex);
 
 	turnOffMultiMsg(true);
 	handlePlayerLeftInGame(playerIndex);
