@@ -1961,6 +1961,7 @@ bool stageThreeShutDown()
 
 	challengesUp = false;
 	challengeActive = false;
+	challengeFileName = "";
 	resetInGameHostQuit();
 	InGameOpUp = false;
 	bInTutorial = false;

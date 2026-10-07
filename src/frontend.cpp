@@ -382,6 +382,7 @@ void displayTutorialMenu()
 void startSinglePlayerMenu()
 {
 	challengeActive = false;
+	challengeFileName = "";
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
