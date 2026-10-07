@@ -40,6 +40,7 @@
 #include "text.h"
 #include "qtscript.h"
 #include "wzjsonhelpers.h"
+#include "seqdisp.h"
 
 static std::map<WzString, VIEWDATA *> apsViewData;
 
@@ -576,6 +577,11 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					psViewReplay->seqList[dataInc].audio = audioName;
 				}
 			}
+			if (psViewReplay->seqList.size() > MAX_SEQ_LIST)
+			{
+				debug(LOG_ERROR, "Too many sequences (%zu) for %s, only using the first %zu", psViewReplay->seqList.size(), psViewData->name.toUtf8().c_str(), MAX_SEQ_LIST);
+				psViewReplay->seqList.resize(MAX_SEQ_LIST);
+			}
 			psViewData->type = VIEW_RPL;//no longer need to know if it is extended type
 			break;
 
@@ -938,6 +944,11 @@ WzString *loadFlicViewData(const char *fileName)
 			continue;
 		}
 		debug(LOG_WZ, "Sequence list size: %zu", seqList.size());
+		if (seqList.size() > MAX_SEQ_LIST)
+		{
+			debug(LOG_ERROR, "\"briefs\"[%s] has too many sequences (%zu), only using the first %zu: %s", brief.key().c_str(), seqList.size(), MAX_SEQ_LIST, fileName);
+			seqList.resize(MAX_SEQ_LIST);
+		}
 
 		// Replay viewdata init
 		VIEWDATA *v = new VIEWDATA;

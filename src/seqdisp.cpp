@@ -61,7 +61,6 @@
  */
 /***************************************************************************/
 constexpr size_t MAX_TEXT_OVERLAYS = 128;
-constexpr size_t MAX_SEQ_LIST = 10;
 #define SUBTITLE_BOX_MIN 430
 #define SUBTITLE_BOX_MAX 480
 
@@ -943,84 +942,112 @@ bool seq_StopFullScreenVideo()
 // add a string at x,y or add string below last line if x and y are 0
 bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
 {
-	SDWORD sourceLength, currentLength;
-	char *currentText;
 	static SDWORD lastX;
-	// make sure we take xOffset into account, we don't always start at 0
-	const unsigned int buffer_width = pie_GetVideoBufferWidth() - xOffset;
 
+	ASSERT_OR_RETURN(false, currentSeq >= 0 && currentSeq < static_cast<SDWORD>(MAX_SEQ_LIST), "No sequence to add text to");
 	SEQLIST &seq = aSeqList[currentSeq];
-	ASSERT_OR_RETURN(false, seq.aText.size() < MAX_TEXT_OVERLAYS, "too many text lines");
+	auto isContinuationByte = [pText](size_t i) { return (static_cast<unsigned char>(pText[i]) & 0xC0) == 0x80; };
 
-	sourceLength = strlen(pText);
-	currentLength = sourceLength;
-	seq.aText.emplace_back();
-	SEQTEXT &entry = seq.aText.back();
-	currentText = &(entry.pText[0]);
-
-	//if the string is bigger than the buffer get the last end of the last fullword in the buffer
-	if (currentLength >= MAX_STR_LENGTH)
+	while (seq.aText.size() < MAX_TEXT_OVERLAYS)
 	{
-		currentLength = MAX_STR_LENGTH - 1;
-		//get end of the last word
-		while ((pText[currentLength] != ' ') && (currentLength > 0))
+		// make sure we take xOffset into account, we don't always start at 0
+		const unsigned int buffer_width = pie_GetVideoBufferWidth() - xOffset;
+		const size_t sourceLength = strlen(pText);
+		size_t currentLength = sourceLength;
+		size_t separatorLength = 1;
+
+		//if the string is bigger than the buffer get the last end of the last fullword in the buffer
+		if (currentLength >= MAX_STR_LENGTH)
+		{
+			currentLength = MAX_STR_LENGTH - 1;
+			//get end of the last word
+			while ((pText[currentLength] != ' ') && (currentLength > 0))
+			{
+				currentLength--;
+			}
+		}
+		std::string line(pText, currentLength);
+
+		//check the string is shortenough to print
+		//if not take a word of the end and try again
+		while ((currentLength > 0) && iV_GetTextWidth(line.c_str(), font_scaled) > buffer_width)
 		{
 			currentLength--;
+			while ((pText[currentLength] != ' ') && (currentLength > 0))
+			{
+				currentLength--;
+			}
+			line.resize(currentLength);
 		}
-	}
 
-	memcpy(currentText, pText, currentLength);
-	currentText[currentLength] = 0;//terminate the string what ever
-
-	//check the string is shortenough to print
-	//if not take a word of the end and try again
-	while ((currentLength > 0) && iV_GetTextWidth(currentText, font_scaled) > buffer_width)
-	{
-		currentLength--;
-		while ((pText[currentLength] != ' ') && (currentLength > 0))
+		if (currentLength == 0 && sourceLength > 0)
 		{
-			currentLength--;
+			size_t minLength = 1;
+			while (minLength < sourceLength && isContinuationByte(minLength))
+			{
+				minLength++;
+			}
+			currentLength = std::max<size_t>(std::min<size_t>(sourceLength, MAX_STR_LENGTH - 1), minLength);
+			while (currentLength > minLength && isContinuationByte(currentLength))
+			{
+				currentLength--;
+			}
+			line.assign(pText, currentLength);
+			while (currentLength > minLength && iV_GetTextWidth(line.c_str(), font_scaled) > buffer_width)
+			{
+				do
+				{
+					currentLength--;
+				} while (currentLength > minLength && isContinuationByte(currentLength));
+				line.resize(currentLength);
+			}
+			separatorLength = 0;
 		}
-		currentText[currentLength] = 0;//terminate the string what ever
-	}
-	currentText[currentLength] = 0;//terminate the string what ever
 
-	//check if x and y are 0 and put text on next line
-	if (((xOffset == 0) && (yOffset == 0)) && (currentLength > 0))
-	{
-		entry.x = lastX;
-		entry.y = ((seq.aText.size() > 1) ? seq.aText[seq.aText.size() - 2].y : D_H2) + iV_GetTextLineSize(font_scaled);
-	}
-	else
-	{
-		entry.x = xOffset + D_W2;
-		entry.y = yOffset + D_H2;
-	}
-	lastX = entry.x;
+		seq.aText.emplace_back();
+		SEQTEXT &entry = seq.aText.back();
+		sstrcpy(entry.pText, line.c_str());
 
-	const int MIN_JUSTIFICATION = 40;
-	const int justification = buffer_width - iV_GetTextWidth(currentText, font_scaled);
-	if (textJustification == SEQ_TEXT_JUSTIFY && currentLength == sourceLength && justification > MIN_JUSTIFICATION)
-	{
-		entry.x += (justification / 2);
-	}
+		//check if x and y are 0 and put text on next line
+		if (((xOffset == 0) && (yOffset == 0)) && (currentLength > 0))
+		{
+			entry.x = lastX;
+			entry.y = ((seq.aText.size() > 1) ? seq.aText[seq.aText.size() - 2].y : D_H2) + iV_GetTextLineSize(font_scaled);
+		}
+		else
+		{
+			entry.x = xOffset + D_W2;
+			entry.y = yOffset + D_H2;
+		}
+		lastX = entry.x;
 
-	//set start and finish times for the objects
-	entry.startTime = startTime;
-	entry.endTime = endTime;
-	entry.bSubtitle = textJustification;
+		const int MIN_JUSTIFICATION = 40;
+		const int justification = buffer_width - iV_GetTextWidth(line.c_str(), font_scaled);
+		if (textJustification == SEQ_TEXT_JUSTIFY && currentLength == sourceLength && justification > MIN_JUSTIFICATION)
+		{
+			entry.x += (justification / 2);
+		}
 
-	//check text is okay on the screen
-	if (currentLength < sourceLength)
-	{
-		//RECURSE x= 0 y = 0 for nextLine
+		//set start and finish times for the objects
+		entry.startTime = startTime;
+		entry.endTime = endTime;
+		entry.bSubtitle = textJustification;
+
+		if (currentLength >= sourceLength)
+		{
+			return true;
+		}
+
+		// put the rest on the next line
+		pText += currentLength + separatorLength;
+		xOffset = 0;
+		yOffset = 0;
 		if (textJustification == SEQ_TEXT_JUSTIFY)
 		{
 			textJustification = SEQ_TEXT_POSITION;
 		}
-		seq_AddTextForVideo(&pText[currentLength + 1], 0, 0, startTime, endTime, textJustification);
 	}
-	return true;
+	return false;
 }
 
 static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
@@ -1092,11 +1119,10 @@ void seq_ClearSeqList()
 }
 
 //add a sequence to the list to be played
-void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop, const WzString &subtitleName)
+bool seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop, const WzString &subtitleName)
 {
+	ASSERT_OR_RETURN(false, currentSeq + 1 < static_cast<SDWORD>(MAX_SEQ_LIST), "too many sequences");
 	currentSeq++;
-
-	ASSERT_OR_RETURN(, currentSeq < static_cast<SDWORD>(MAX_SEQ_LIST), "too many sequences");
 
 	if (onDemandVideoProvider.hasBaseURLPath())
 	{
@@ -1136,6 +1162,7 @@ void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const
 		// Subtitles should be center justified
 		seq_AddTextFromFile(subtitleFile.toUtf8().c_str(), SEQ_TEXT_JUSTIFY);
 	}
+	return true;
 }
 
 /*checks to see if there are any sequences left in the list to play*/
