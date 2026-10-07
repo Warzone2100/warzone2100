@@ -583,6 +583,8 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		resetMultiOptionPrefValues(playerIndex);
 	}
 
+	resetInvalidMessageLog(playerIndex);
+
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 
@@ -663,6 +665,7 @@ bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdenti
 	}
 
 	playerSpamMuteReset(playerIndex);
+	resetInvalidMessageLog(playerIndex);
 
 	if (NetPlay.isHost)		// host responsible for welcoming this player.
 	{

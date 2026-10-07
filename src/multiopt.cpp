@@ -654,6 +654,7 @@ bool multiGameInit()
 	}
 
 	gameInit();
+	resetInvalidMessageLog();
 
 	return true;
 }
@@ -709,6 +710,7 @@ bool multiGameShutdown()
 	// close game
 	NETclose();
 	NETremRedirects();
+	resetInvalidMessageLog();
 
 	ingame.structureLimits.clear();
 	ingame.flags = 0;
