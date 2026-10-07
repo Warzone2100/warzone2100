@@ -348,6 +348,8 @@ bool kickRedirectPlayer(uint32_t player_id, JoinConnectionDescription::JoinConne
 bool sendScoreCheck();							//score check only(frontend)
 void multiSyncResetAllChallenges();
 void multiSyncResetPlayerChallenge(uint32_t playerIdx);
+void multiSyncResetPlayerPingReplies(uint32_t playerIdx);
+void multiSyncSendPendingPingReplies();
 void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);

@@ -85,6 +85,7 @@ bool recvMultiStats(NETQUEUE queue);
 
 void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Key &identity);
 void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity);
+bool isHostIdentityFromJoin(const EcKey& identity);
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);
 

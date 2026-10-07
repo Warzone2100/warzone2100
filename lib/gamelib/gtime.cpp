@@ -66,6 +66,8 @@ static bool     crcError = false;
 // 0 = no floor (normal game). Set to the resume gameTime on snapshot restore; reset in gameTimeInit.
 static uint32_t syncCheckFloorTime = 0;
 
+static constexpr int MaxLatency = GAME_TICKS_PER_UPDATE * GAME_UPDATES_PER_SEC;
+
 static uint32_t updateReadyTime = 0;
 static uint32_t updateWantedTime = 0;
 static uint16_t chosenLatency = GAME_TICKS_PER_UPDATE;
@@ -439,9 +441,9 @@ static void updateLatency()
 		}
 	}
 	// Adjust the agreed latency. (Can maximum decrease by 5ms or increase by 30ms per update.
-	chosenLatency = chosenLatency + clip(maxWantedLatency - chosenLatency, -5, 60);
+	chosenLatency = clip(chosenLatency + clip(maxWantedLatency - chosenLatency, -5, 60), 0, MaxLatency);
 	// Round the chosen latency to an integer number of updates, up to 10.
-	discreteChosenLatency = clip((chosenLatency + GAME_TICKS_PER_UPDATE / 2) / GAME_TICKS_PER_UPDATE * GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE * GAME_UPDATES_PER_SEC);
+	discreteChosenLatency = clip((chosenLatency + GAME_TICKS_PER_UPDATE / 2) / GAME_TICKS_PER_UPDATE * GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE, MaxLatency);
 	if (prevDiscreteChosenLatency != discreteChosenLatency)
 	{
 		debug(LOG_SYNC, "Adjusting latency %d -> %d", prevDiscreteChosenLatency, discreteChosenLatency);
@@ -513,7 +515,6 @@ bool gtimeShouldWaitForPlayer(unsigned player)
 static inline bool shouldCheckDebugSyncForPlayerSlot(unsigned player)
 {
 	return NetPlay.players[player].allocated	// human player
-		&& !ingame.endTime.has_value()			// and game hasn't ended
 		&& (!NetPlay.players[player].isSpectator || player == NetPlay.hostPlayer);
 }
 
@@ -524,13 +525,22 @@ void recvPlayerGameTime(NETQUEUE queue)
 	uint32_t latencyTicks = 0;
 	uint32_t checkTime = 0;
 	GameCrcType checkCrc = 0;
+	uint16_t playerWantedLatency = 0;
 
 	auto r = NETbeginDecode(queue, GAME_GAME_TIME);
 	NETuint32_t(r, latencyTicks);
 	NETuint32_t(r, checkTime);
 	NETuint16_t(r, checkCrc);
-	NETuint16_t(r, wantedLatencies[queue.index]);
-	NETend(r);
+	NETuint16_t(r, playerWantedLatency);
+	if (!NETend(r) || latencyTicks > static_cast<uint32_t>(MaxLatency / GAME_TICKS_PER_UPDATE) || checkTime > gameTime + MaxLatency)
+	{
+		if (recordInvalidMessage(queue.index, GAME_GAME_TIME))
+		{
+			debug(LOG_INFO, "Ignoring invalid GAME_GAME_TIME from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return;
+	}
+	wantedLatencies[queue.index] = playerWantedLatency;
 
 	gameQueueTime[queue.index] = checkTime + latencyTicks * GAME_TICKS_PER_UPDATE;  // gameTime when future messages shall be processed.
 
@@ -541,11 +551,12 @@ void recvPlayerGameTime(NETQUEUE queue)
 	{
 		// NOTE: the syncDebug line is emitted unconditionally so this client's per-tick CRC stays
 		// consistent with peers (GAME_GAME_TIME is broadcast - everyone logs the same line). Only the
-		// CRC *comparison* below is suppressed for checkTime <= syncCheckFloorTime: a client that
-		// resumed from a snapshot at that tick cannot reproduce those ticks' CRCs (see syncCheckFloorTime),
-		// so comparing would spuriously flag a desync on reconnect / mid-match join.
+		// CRC *comparison* below is suppressed once the local game has ended, and for
+		// checkTime <= syncCheckFloorTime: a client that resumed from a snapshot at that tick cannot
+		// reproduce those ticks' CRCs (see syncCheckFloorTime), so comparing would spuriously flag a
+		// desync on reconnect / mid-match join.
 		syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);
-		if (checkTime > syncCheckFloorTime && !checkDebugSync(checkTime, checkCrc))
+		if (!ingame.endTime.has_value() && checkTime > syncCheckFloorTime && !checkDebugSync(checkTime, checkCrc))
 		{
 			debug(LOG_ERROR, "Found CRC error when receiving GAME_GAME_TIME for player: %" PRIu8 " (checkTime: %" PRIu32 ", checkCrc: %" PRIu16 ")", queue.index, checkTime, checkCrc);
 			crcError = true;

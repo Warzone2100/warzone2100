@@ -89,8 +89,8 @@ void NETsetSessionKeys(uint8_t player, SessionKeys&& keys);
 void NETclearSessionKeys();
 void NETclearSessionKeys(uint8_t player);
 optional<MessageWriter> NETbeginEncodeSecured(NETQUEUE queue, uint8_t type); ///< For encoding a secured net message, for a *specific player* - see .cpp file for more details
-optional<MessageReader> NETbeginDecodeSecured(NETQUEUE queue, uint8_t type);
-bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type);
+optional<MessageReader> NETbeginDecodeSecured(NETQUEUE queue, uint8_t type, bool* pNotSecured = nullptr);
+bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type, const char*& failureReason);
 
 // New overloads that accept MessageReader:
 void NETuint8_t(MessageReader& r, uint8_t& val);
@@ -132,14 +132,22 @@ void NETPosition(MessageReader& r, Position& pos);
 void NETRotation(MessageReader& r, Rotation& rot);
 void NETVector2i(MessageReader& r, Vector2i& vec);
 bool NETnetMessage(MessageReader& r, NetMessage** msg) WZ_DECL_WARN_UNUSED_RESULT;  ///< Must delete the NETMESSAGE. On failure *msg is nullptr and the reader is marked invalid.
+bool NETshareGameQueueContains(const NetMessage& shareGameQueueMessage, uint8_t gameMessageType);
 
+/// Reads an enum value. Fails (leaving enumRef unchanged and marking the reader invalid) if the value is > maxValue,
+/// which must keep the value within the enum's range.
 template <typename EnumT>
-void NETenum(MessageReader& r, EnumT& enumRef)
+void NETenum(MessageReader& r, EnumT& enumRef, uint32_t maxValue)
 {
 	static_assert(std::is_enum<EnumT>::value, "Expected enumeration type as the argument");
 
 	uint32_t val = 0;
 	NETuint32_t(r, val);
+	if (!r.valid() || val > maxValue)
+	{
+		r.markInvalid();
+		return;
+	}
 	enumRef = static_cast<EnumT>(val);
 }
 
@@ -196,6 +204,12 @@ static void NETenum(MessageWriter& w, EnumT val)
 	static_assert(std::is_enum<EnumT>::value, "Expected enumeration type as the argument");
 
 	NETuint32_t(w, static_cast<uint32_t>(val));
+}
+
+template <typename EnumT>
+static void NETenum(MessageWriter& w, EnumT val, uint32_t /*maxValue*/)
+{
+	NETenum(w, val);
 }
 
 bool NETcount(MessageWriter& w, uint32_t count, uint32_t maxCount, size_t minElemBytes = 1);

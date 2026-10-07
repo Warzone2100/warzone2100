@@ -3675,9 +3675,14 @@ bool recvQuickChat(NETQUEUE queue)
 	optional<MessageReader> r;
 	if (expectingSecuredMessage)
 	{
-		r = NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG);
+		bool notSecured = false;
+		r = NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG, &notSecured);
 		if (!r)
 		{
+			if (!notSecured && recordInvalidMessage(queue.index, NET_QUICK_CHAT_MSG))
+			{
+				debug(LOG_INFO, "Ignoring invalid NET_QUICK_CHAT_MSG from %d - further invalid ones will not be logged", (int)queue.index);
+			}
 			return false;
 		}
 	}

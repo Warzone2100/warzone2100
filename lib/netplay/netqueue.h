@@ -87,6 +87,15 @@ public:
 	// Append the raw data of this message to the provided output vector.
 	void rawDataAppendToVector(std::vector<uint8_t>& output) const;
 
+	enum class Origin : uint8_t
+	{
+		Received,
+		RelayedByHost,
+		InjectedByHost
+	};
+	Origin origin() const { return origin_; }
+	void setOrigin(Origin origin) { origin_ = origin; }
+
 private:
 
 	// Meant to be executed only by NetMessageBuilder
@@ -95,6 +104,7 @@ private:
 	friend class NetMessageBuilder;
 
 	NetMsgDataVector data_;
+	Origin origin_ = Origin::Received;
 };
 
 /// <summary>
