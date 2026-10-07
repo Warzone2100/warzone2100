@@ -53,6 +53,8 @@ struct DetailPanelStyle
 	bool solidWhenPointedAt = true;
 	/// Draws the panel's background instead (the HUD's popover frame), when set
 	std::function<void (const WzRect &rect)> drawBackground;
+	/// Draws a stat cell's icon (an IntImages id) another way, ex. as a skin's vector icon. False: as the image
+	std::function<bool (uint16_t image, float x, float y, float size, PIELIGHT colour)> drawIcon;
 
 	static DetailPanelStyle researchTree();
 };

@@ -97,6 +97,7 @@
 #include "hud/hudreticule.h"
 #include "hud/hudmodel.h"
 #include "hud/hudskin.h"
+#include "hud/hudiconbutton.h"
 #include "hud/hud.h"
 #include "hud/huddetail.h"
 #include "hud/huddetailcontents.h"
@@ -1979,6 +1980,20 @@ void W_INGAMEOPTIONS_BUTTON::display(int xOffset, int yOffset)
 
 	uint8_t alphaValue = currentAlphaValue();
 
+	HudIconButtonLook look;
+	look.rect = WzRect(x0, y0, width(), height());
+	look.icon = HudIcon::Options;
+	look.style = HudIconButtonStyle::Card;
+	look.down = (getState() & WBUT_DOWN) != 0;
+	look.highlighted = (getState() & WBUT_HIGHLIGHT) != 0;
+	look.active = InGameOpUp;
+	look.disabled = butDisabled;
+	look.opacity = alphaValue / 255.f;
+	if (currentHudSkin().drawIconButton(look))
+	{
+		return;
+	}
+
 	if (butDisabled)
 	{
 		iV_DrawImageTint(IntImages, IMAGE_RETICULE_GREY, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
@@ -2235,8 +2250,10 @@ void intRemoveStatsNoAnim()
 
 void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 {
-	auto obsoleteButton = std::make_shared<MultipleChoiceButton>();
+	auto obsoleteButton = std::make_shared<HudIconChoiceButton>();
 	parent->attach(obsoleteButton);
+	obsoleteButton->setIcon(false, HudIcon::ObsoleteHidden);
+	obsoleteButton->setIcon(true, HudIcon::ObsoleteShown);
 	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
 	obsoleteButton->style |= WBUT_SECONDARY;
 	obsoleteButton->setChoice(includeRedundantDesigns);

@@ -41,7 +41,10 @@
 #include "../hci.h"
 #include "../intdisplay.h"
 #include "../intimage.h"
+#include "../vectorimageloader.h"
 
+#include <algorithm>
+#include <array>
 #include <cmath>
 #include <unordered_map>
 
@@ -101,10 +104,255 @@ PIELIGHT mixColors(PIELIGHT from, PIELIGHT to, float amount)
 	return pal_RGBA(channel(from.byte.r, to.byte.r), channel(from.byte.g, to.byte.g), channel(from.byte.b, to.byte.b), channel(from.byte.a, to.byte.a));
 }
 
+// OKLab and OKLCH (https://bottosson.github.io/posts/oklab/), only to compute colors (which stay display-referred sRGB)
+struct Oklch
+{
+	float l = 0.f;
+	float c = 0.f;
+	float h = 0.f;  ///< (degrees)
+};
+
+float srgbToLinear(uint8_t value)
+{
+	const float v = static_cast<float>(value) / 255.f;
+	return v <= 0.04045f ? v / 12.92f : std::pow((v + 0.055f) / 1.055f, 2.4f);
+}
+
+uint8_t linearToSrgb(float v)
+{
+	v = clamp01(v);
+	const float encoded = v <= 0.0031308f ? 12.92f * v : 1.055f * std::pow(v, 1.f / 2.4f) - 0.055f;
+	return static_cast<uint8_t>(std::lround(encoded * 255.f));
+}
+
+Oklch toOklch(PIELIGHT color)
+{
+	const float r = srgbToLinear(color.byte.r);
+	const float g = srgbToLinear(color.byte.g);
+	const float b = srgbToLinear(color.byte.b);
+	const float l = std::cbrt(0.4122214708f * r + 0.5363325363f * g + 0.0514459929f * b);
+	const float m = std::cbrt(0.2119034982f * r + 0.6806995451f * g + 0.1073969566f * b);
+	const float s = std::cbrt(0.0883024619f * r + 0.2817188376f * g + 0.6299787005f * b);
+	const float labL = 0.2104542553f * l + 0.7936177850f * m - 0.0040720468f * s;
+	const float labA = 1.9779984951f * l - 2.4285922050f * m + 0.4505937099f * s;
+	const float labB = 0.0259040371f * l + 0.7827717662f * m - 0.8086757660f * s;
+	Oklch result;
+	result.l = labL;
+	result.c = std::sqrt(labA * labA + labB * labB);
+	result.h = std::atan2(labB, labA) * 180.f / PI;
+	return result;
+}
+
+/// Inside the sRGB gamut: less chroma until it fits
+PIELIGHT fromOklch(Oklch color, uint8_t alpha)
+{
+	for (float c = std::max(0.f, color.c);; c = std::max(0.f, c - 0.002f))
+	{
+		const float a = c * std::cos(color.h * PI / 180.f);
+		const float b = c * std::sin(color.h * PI / 180.f);
+		const float l = std::pow(color.l + 0.3963377774f * a + 0.2158037573f * b, 3.f);
+		const float m = std::pow(color.l - 0.1055613458f * a - 0.0638541728f * b, 3.f);
+		const float s = std::pow(color.l - 0.0894841775f * a - 1.2914855480f * b, 3.f);
+		const float r = 4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s;
+		const float g = -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s;
+		const float bl = -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s;
+		const float tolerance = 0.0005f;
+		if (c <= 0.f || (std::min({r, g, bl}) >= -tolerance && std::max({r, g, bl}) <= 1.f + tolerance))
+		{
+			return pal_RGBA(linearToSrgb(r), linearToSrgb(g), linearToSrgb(bl), alpha);
+		}
+	}
+}
+
+/// The accents' colors (sRGB, chosen in OKLCH: lightness about 0.66–0.80, chroma up to 0.19, Blue the original)
+PIELIGHT accentColor(HudAccent accent)
+{
+	switch (accent)
+	{
+	case HudAccent::Blue: break;
+	case HudAccent::Teal: return pal_RGBA(16, 202, 202, 255);
+	case HudAccent::Green: return pal_RGBA(116, 206, 96, 255);
+	case HudAccent::Purple: return pal_RGBA(174, 132, 242, 255);
+	case HudAccent::Magenta: return pal_RGBA(240, 112, 190, 255);
+	case HudAccent::Red: return pal_RGBA(240, 85, 91, 255);
+	case HudAccent::Orange: return pal_RGBA(249, 143, 58, 255);
+	case HudAccent::Gray: return pal_RGBA(190, 190, 190, 255);
+	}
+	return pal_RGBA(70, 175, 255, 255);
+}
+
+constexpr size_t ICON_COUNT = static_cast<size_t>(HudIcon::Options) + 1;
+
+struct IconFiles
+{
+	std::string outline;
+	std::string fill;  ///< (optional: a light fill under the outline)
+};
+
+IconFiles namedIconFiles(const std::string &name)
+{
+	const std::string base = "images/hud/icons/" + name;
+	return {base + ".svg", base + ".fill.svg"};
+}
+
+bool validIconName(const std::string &name)
+{
+	return !name.empty() && std::all_of(name.begin(), name.end(), [](char c) {
+		return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-';
+	});
+}
+
+const IconFiles &iconFiles(HudIcon icon)
+{
+	static const std::array<IconFiles, ICON_COUNT> files = [] {
+		const char *names[] = {"research-droid", "research-weapon", "research-cyborg", "research-sensor", "research-computer",
+		                       "research-power", "research-defense", "research-structure", "upgrade", "damage", "accuracy",
+		                       "rate-of-fire", "repair", "ally-research", "favorite", "delivery-point", "obsolete-shown",
+		                       "obsolete-hidden", "loop", "options"};
+		static_assert(sizeof(names) / sizeof(names[0]) == ICON_COUNT, "an icon without a file");
+		std::array<IconFiles, ICON_COUNT> result;
+		for (size_t i = 0; i < result.size(); ++i)
+		{
+			result[i] = namedIconFiles(names[i]);
+		}
+		return result;
+	}();
+	return files[static_cast<size_t>(icon)];
+}
+
+constexpr int ICON_FILL_ALPHA = 72;
+constexpr float ICON_HALO_WIDTH = 1.3f;
+
+PIELIGHT iconColor(HudIcon icon)
+{
+	switch (icon)
+	{
+	case HudIcon::Upgrade:
+	case HudIcon::Favorite: return pal_RGBA(242, 190, 72, 255);
+	case HudIcon::Damage: return pal_RGBA(238, 88, 72, 255);
+	case HudIcon::Accuracy: return pal_RGBA(86, 178, 255, 255);
+	case HudIcon::RateOfFire: return pal_RGBA(79, 209, 197, 255);
+	case HudIcon::Repair: return pal_RGBA(96, 205, 128, 255);
+	default: return pal_RGBA(188, 198, 212, 255);
+	}
+}
+
+/// Markers (a favorite, an ally researching) are solid, the rest outlines over a light fill
+int iconFillAlpha(HudIcon icon)
+{
+	return (icon == HudIcon::Favorite || icon == HudIcon::AllyResearch) ? 255 : ICON_FILL_ALPHA;
+}
+
+/// The icon as a square centered in the rectangle: a halo (dark, or light under a dark color), the fill, the outline
+bool drawIconShape(const IconFiles &files, const WzRect &rect, PIELIGHT color, int fillAlpha, bool halo)
+{
+	if (!loadGameVectorImage(files.outline))
+	{
+		return false;
+	}
+	const float size = static_cast<float>(std::min(rect.width(), rect.height()));
+	const float x = static_cast<float>(rect.x()) + (static_cast<float>(rect.width()) - size) / 2.f;
+	const float y = static_cast<float>(rect.y()) + (static_cast<float>(rect.height()) - size) / 2.f;
+	if (halo)
+	{
+		const int luminance = (color.byte.r * 299 + color.byte.g * 587 + color.byte.b * 114) / 1000;
+		const PIELIGHT haloColor = luminance < 90 ? pal_RGBA(200, 206, 216, 200) : pal_RGBA(8, 10, 14, 210);
+		drawGameVectorImage(files.outline, x, y, size, size, haloColor, ICON_HALO_WIDTH);
+	}
+	if (fillAlpha > 0)
+	{
+		drawGameVectorImage(files.fill, x, y, size, size, withAlpha(color, fillAlpha * color.byte.a / 255), 0.f, true);
+	}
+	drawGameVectorImage(files.outline, x, y, size, size, color);
+	return true;
+}
+
+/// The Modern skin's colors, made for the default accent (blue): the other accents' are computed from them
+HudColors modernColors()
+{
+	return {
+		pal_RGBA(24, 30, 40, 205),
+		pal_RGBA(12, 15, 21, 225),
+		pal_RGBA(120, 150, 190, 110),
+		pal_RGBA(70, 175, 255, 255),
+		pal_RGBA(236, 240, 245, 255),
+		pal_RGBA(160, 172, 190, 255),
+		pal_RGBA(96, 205, 128, 255),
+		pal_RGBA(242, 190, 72, 255),
+		pal_RGBA(238, 88, 72, 255),
+		pal_RGBA(110, 115, 125, 255),
+		pal_RGBA(242, 190, 72, 255),
+		pal_RGBA(86, 178, 255, 255),
+		pal_RGBA(96, 205, 128, 255),
+		pal_RGBA(70, 175, 255, 70),
+		pal_RGBA(0, 0, 0, 95),
+	};
+}
+
+/// Its other colors that follow the accent: tinted surfaces and borders, and the accent's own shades
+struct ModernTints
+{
+	PIELIGHT cardTop = pal_RGBA(34, 42, 56, 215);
+	PIELIGHT cardBottom = pal_RGBA(20, 25, 34, 225);
+	PIELIGHT cardBorder = pal_RGBA(84, 102, 128, 170);
+	PIELIGHT cardHoverTop = pal_RGBA(46, 58, 78, 230);
+	PIELIGHT cardHoverBorder = pal_RGBA(140, 170, 210, 210);
+	PIELIGHT cardDownTop = pal_RGBA(18, 52, 86, 235);
+	PIELIGHT cardDownBottom = pal_RGBA(12, 34, 58, 240);
+	PIELIGHT wellFill = pal_RGBA(6, 9, 14, 255);      ///< (the darkest: pills, fields, tab gaps)
+	PIELIGHT fieldFill = pal_RGBA(10, 14, 20, 255);   ///< (page control, unfilled pills and chips)
+	PIELIGHT troughFill = pal_RGBA(8, 11, 16, 255);   ///< (the power bar's track)
+	PIELIGHT popoverFill = pal_RGBA(14, 18, 26, 255);
+	PIELIGHT onAccent = pal_RGBA(236, 240, 245, 255); ///< (text on an accent fill)
+};
+
 class ModernHudSkin : public ClassicHudSkin
 {
 public:
 	HudSkinId id() const override { return HudSkinId::Modern; }
+
+	/// The colors for an accent: the accent itself, and the tinted colors with its hue (and their chroma scaled down for a
+	/// grayer accent), each at its own lightness. The meanings (states, progress, power) stay as they are
+	void useAccent(HudAccent accent, HudPanelTint tint)
+	{
+		if (accent == accentInUse && tint == tintInUse)
+		{
+			return;
+		}
+		accentInUse = accent;
+		tintInUse = tint;
+		palette = modernColors();
+		tints = ModernTints();
+		if (accent == HudAccent::Blue && tint == HudPanelTint::Full)
+		{
+			return;
+		}
+		const Oklch from = toOklch(accentColor(HudAccent::Blue));
+		const Oklch to = toOklch(accentColor(accent));
+		// The accent's own shades take all of its chroma, the tinted colors as much as the panel tint asks for
+		const float accentChroma = std::min(1.f, to.c / from.c);
+		const float tintChroma = accentChroma * (tint == HudPanelTint::Full ? 1.f : (tint == HudPanelTint::Subtle ? 0.5f : 0.f));
+		auto follow = [&](PIELIGHT &color, float chroma) {
+			Oklch shade = toOklch(color);
+			shade.c *= chroma;
+			shade.h += to.h - from.h;
+			color = fromOklch(shade, color.byte.a);
+		};
+		for (PIELIGHT *color : {&palette.panelBackground, &palette.panelBackgroundBottom, &palette.panelBorder, &palette.textPrimary,
+		                        &palette.textSecondary, &tints.cardTop, &tints.cardBottom, &tints.cardBorder, &tints.cardHoverTop,
+		                        &tints.cardHoverBorder, &tints.wellFill, &tints.fieldFill, &tints.troughFill, &tints.popoverFill})
+		{
+			follow(*color, tintChroma);
+		}
+		follow(tints.cardDownTop, accentChroma);
+		follow(tints.cardDownBottom, accentChroma);
+		palette.accent = accentColor(accent);
+		palette.highlight = withAlpha(palette.accent, palette.highlight.byte.a);
+		// Light text on the accent unless it is light itself (then a dark one: the panels' darkest)
+		const float luminance = 0.2126f * srgbToLinear(palette.accent.byte.r) + 0.7152f * srgbToLinear(palette.accent.byte.g)
+			+ 0.0722f * srgbToLinear(palette.accent.byte.b);
+		tints.onAccent = luminance > 0.45f ? withAlpha(tints.wellFill, 255) : palette.textPrimary;
+	}
 
 	const HudColors &colors() const override { return palette; }
 	const HudMetrics &metrics() const override { return sizes; }
@@ -147,19 +395,19 @@ public:
 		const float y0 = static_cast<float>(card.y());
 		const float x1 = static_cast<float>(card.right());
 		const float y1 = static_cast<float>(card.bottom());
-		PIELIGHT top = cardTop;
-		PIELIGHT bottom = cardBottom;
-		PIELIGHT border = cardBorder;
+		PIELIGHT top = tints.cardTop;
+		PIELIGHT bottom = tints.cardBottom;
+		PIELIGHT border = tints.cardBorder;
 		if (look.down)
 		{
-			top = cardDownTop;
-			bottom = cardDownBottom;
+			top = tints.cardDownTop;
+			bottom = tints.cardDownBottom;
 			border = withAlpha(palette.accent, 220);
 		}
 		else if (look.hovered)
 		{
-			top = cardHoverTop;
-			border = cardHoverBorder;
+			top = tints.cardHoverTop;
+			border = tints.cardHoverBorder;
 		}
 		if (look.emptyBackground)
 		{
@@ -211,7 +459,7 @@ public:
 		const float x1 = static_cast<float>(card.right()) - inset;
 		const float y1 = static_cast<float>(card.bottom()) - inset;
 		const bool lit = look.hovered || look.down;
-		const PIELIGHT outline = look.down ? withAlpha(palette.accent, 230) : (look.hovered ? cardHoverBorder : withAlpha(cardBorder, 200));
+		const PIELIGHT outline = look.down ? withAlpha(palette.accent, 230) : (look.hovered ? tints.cardHoverBorder : withAlpha(tints.cardBorder, 200));
 		pie_DrawDashedRoundedBox(x0, y0, x1, y1, withAlpha(palette.accent, lit ? 30 : 10), params.cardRadius, outline, params.borderWidth, 3.f, 2.5f);
 		if (params.idleJobDot)
 		{
@@ -321,7 +569,7 @@ public:
 		powerText.setText(WzString::number(realPower), font_regular);
 		const float textColumnWidth = std::max(42.f, static_cast<float>(powerText.width()) + 12.f) + (negative ? h : 0.f);
 
-		pie_DrawRoundedBox(x0, y0, x1, y1, pal_RGBA(8, 11, 16, 215), h / 2.f, palette.panelBorder, params.borderWidth);
+		pie_DrawRoundedBox(x0, y0, x1, y1, withAlpha(tints.troughFill, 215), h / 2.f, palette.panelBorder, params.borderWidth);
 
 		const float trackX0 = x0 + textColumnWidth;
 		const float trackX1 = x1 - 3.f;
@@ -422,7 +670,11 @@ public:
 			{
 				const float icon = 9.f;
 				tx += icon / 2.f + 1.f;
-				drawIcon(IMAGE_DES_POWER, tx - icon - 2.f, y0 + h - icon + 1.f, icon, palette.progressPowerWait);
+				const int side = static_cast<int>(icon);
+				if (!drawNamedIcon("power", WzRect(static_cast<int>(tx - icon - 2.f), static_cast<int>(y0 + h - icon + 1.f), side, side), palette.progressPowerWait))
+				{
+					drawIcon(IMAGE_DES_POWER, tx - icon - 2.f, y0 + h - icon + 1.f, icon, palette.progressPowerWait);
+				}
 			}
 			bar.wzCachedText.renderOutlined(static_cast<int>(tx), static_cast<int>(y0 + h), bar.textCol, pal_RGBA(0, 0, 0, 230));
 		}
@@ -449,6 +701,8 @@ public:
 		return affordable ? normal : palette.stateBad;
 	}
 
+	bool drawsProductionRunBadge() const override { return true; }
+
 	int panelTopPadding() const override
 	{
 		return static_cast<int>(std::ceil(params.accentEdge)) + 2;
@@ -462,18 +716,13 @@ public:
 		const float y1 = static_cast<float>(rect.bottom());
 		if (role != TabSelectionButtonRole::Tab)
 		{
-			const float cx = (x0 + x1) / 2.f + (role == TabSelectionButtonRole::PreviousPage ? -1.f : 1.f);
-			const float cy = (y0 + y1) / 2.f;
-			const float arm = std::min(x1 - x0, y1 - y0) * 0.6f;
-			const float lean = role == TabSelectionButtonRole::PreviousPage ? -1.f : 1.f;
-			const PIELIGHT mark = hovered ? palette.textPrimary : palette.textSecondary;
-			pie_DrawSoftRoundedBoxRotated(cx, cy - arm * 0.35f, arm, 1.8f, lean * PI / 4.f, mark, 0.9f, 0.9f);
-			pie_DrawSoftRoundedBoxRotated(cx, cy + arm * 0.35f, arm, 1.8f, -lean * PI / 4.f, mark, 0.9f, 0.9f);
+			// (nudged toward the edge of the list, where a page tab's scroll button is)
+			drawChevron(x0, y0, x1, y1, role == TabSelectionButtonRole::PreviousPage, hovered ? palette.textPrimary : palette.textSecondary, 1.f);
 			return true;
 		}
 		// A ring, a dark gap and an inset fill, as the Classic tab images have
-		PIELIGHT ring = cardBorder;
-		PIELIGHT fill = cardTop;
+		PIELIGHT ring = tints.cardBorder;
+		PIELIGHT fill = tints.cardTop;
 		if (selected)
 		{
 			ring = palette.accent;
@@ -481,14 +730,66 @@ public:
 		}
 		else if (hovered)
 		{
-			ring = cardHoverBorder;
-			fill = cardHoverTop;
+			ring = tints.cardHoverBorder;
+			fill = tints.cardHoverTop;
 		}
 		const float outer = 1.f;
 		const float inner = outer + params.borderWidth + 1.f;
-		pie_DrawRoundedBox(x0 + outer, y0 + outer, x1 - outer, y1 - outer, pal_RGBA(6, 9, 14, 220), (y1 - y0) / 2.f - outer, ring, params.borderWidth);
+		pie_DrawRoundedBox(x0 + outer, y0 + outer, x1 - outer, y1 - outer, withAlpha(tints.wellFill, 220), (y1 - y0) / 2.f - outer, ring, params.borderWidth);
 		pie_DrawRoundedBox(x0 + inner, y0 + inner, x1 - inner, y1 - inner, fill, (y1 - y0) / 2.f - inner, pal_RGBA(0, 0, 0, 0), 0.f);
 		return true;
+	}
+
+	void drawPageControlFrame(const WzRect &rect) override
+	{
+		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
+		                   static_cast<float>(rect.bottom()), withAlpha(tints.fieldFill, 200), params.cardRadius, tints.cardBorder, params.borderWidth);
+	}
+
+	nonstd::optional<PIELIGHT> drawPageSegment(const HudPageSegmentLook &look) override
+	{
+		const float x0 = static_cast<float>(look.rect.x());
+		const float y0 = static_cast<float>(look.rect.y());
+		const float x1 = static_cast<float>(look.rect.right());
+		const float y1 = static_cast<float>(look.rect.bottom());
+		const bool hovered = look.hovered && !look.disabled;
+		if (look.large)
+		{
+			PIELIGHT fill = tints.cardTop;
+			PIELIGHT border = tints.cardBorder;
+			if (look.selected)
+			{
+				fill = withAlpha(palette.accent, 230);
+				border = palette.accent;
+			}
+			else if (hovered)
+			{
+				fill = tints.cardHoverTop;
+				border = tints.cardHoverBorder;
+			}
+			pie_DrawRoundedBox(x0, y0, x1, y1, fill, params.cardRadius + 1.f, border, params.borderWidth);
+		}
+		else
+		{
+			// (the rectangle is the cell between the frame's border or the separators, and the frame's whole height)
+			if (look.separator)
+			{
+				pie_BoxFill(look.rect.x() - 1, look.rect.y() + 3, look.rect.x(), look.rect.bottom() - 3, tints.cardBorder);
+			}
+			if (look.role == TabSelectionButtonRole::Tab && (look.selected || hovered))
+			{
+				// Whole pixels, 1 px clear of the frame's border and the cells beside it
+				pie_DrawRoundedBox(x0 + 1.f, y0 + 2.f, x1 - 1.f, y1 - 2.f, look.selected ? withAlpha(palette.accent, 230) : tints.cardHoverTop,
+				                   params.cardRadius - 1.f, pal_RGBA(0, 0, 0, 0), 0.f);
+			}
+		}
+		const PIELIGHT ink = look.disabled ? withAlpha(palette.textSecondary, 90) : (look.selected ? tints.onAccent : (hovered ? palette.textPrimary : palette.textSecondary));
+		if (look.role != TabSelectionButtonRole::Tab)
+		{
+			drawChevron(x0, y0, x1, y1, look.role == TabSelectionButtonRole::PreviousPage, ink, 0.f);
+			return nonstd::nullopt;
+		}
+		return ink;
 	}
 
 	void drawTimerBackground(int x, int y, uint16_t image, bool flashOn, uint16_t) override
@@ -516,14 +817,14 @@ public:
 
 	void drawCard(const WzRect &rect, HudCardState state) override
 	{
-		PIELIGHT fill = cardTop;
-		PIELIGHT border = cardBorder;
+		PIELIGHT fill = tints.cardTop;
+		PIELIGHT border = tints.cardBorder;
 		switch (state)
 		{
 		case HudCardState::Normal: break;
-		case HudCardState::Highlighted: fill = cardHoverTop; border = cardHoverBorder; break;
-		case HudCardState::Selected: fill = cardDownTop; border = withAlpha(palette.accent, 230); break;
-		case HudCardState::Disabled: fill = scaledAlpha(cardTop, 0.6f); border = withAlpha(palette.stateDisabled, 160); break;
+		case HudCardState::Highlighted: fill = tints.cardHoverTop; border = tints.cardHoverBorder; break;
+		case HudCardState::Selected: fill = tints.cardDownTop; border = withAlpha(palette.accent, 230); break;
+		case HudCardState::Disabled: fill = scaledAlpha(tints.cardTop, 0.6f); border = withAlpha(palette.stateDisabled, 160); break;
 		}
 		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
 		                   static_cast<float>(rect.bottom()), fill, params.cardRadius, border, params.borderWidth);
@@ -542,27 +843,109 @@ public:
 	void drawInputField(const WzRect &rect, bool editing) override
 	{
 		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
-		                   static_cast<float>(rect.bottom()), pal_RGBA(6, 9, 14, 190), params.cardRadius,
+		                   static_cast<float>(rect.bottom()), withAlpha(tints.wellFill, 190), params.cardRadius,
 		                   editing ? withAlpha(palette.accent, 230) : palette.panelBorder, params.borderWidth);
 	}
 
 	nonstd::optional<PIELIGHT> drawHeaderButton(const WzRect &rect, bool hovered, bool down) override
 	{
-		PIELIGHT fill = cardTop;
-		PIELIGHT border = cardBorder;
+		PIELIGHT fill = tints.cardTop;
+		PIELIGHT border = tints.cardBorder;
 		if (down)
 		{
-			fill = cardDownTop;
+			fill = tints.cardDownTop;
 			border = withAlpha(palette.accent, 230);
 		}
 		else if (hovered)
 		{
-			fill = cardHoverTop;
-			border = cardHoverBorder;
+			fill = tints.cardHoverTop;
+			border = tints.cardHoverBorder;
 		}
 		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
 		                   static_cast<float>(rect.bottom()), fill, params.cardRadius, border, params.borderWidth);
 		return (down || hovered) ? palette.textPrimary : palette.textSecondary;
+	}
+
+	bool drawsIcons() const override { return true; }
+
+	bool drawHudIcon(HudIcon icon, const WzRect &rect, nonstd::optional<PIELIGHT> color) override
+	{
+		return drawIconShape(iconFiles(icon), rect, color.value_or(iconColor(icon)), iconFillAlpha(icon), true);
+	}
+
+	bool hasNamedIcon(const std::string &name) override
+	{
+		return validIconName(name) && loadGameVectorImage(namedIconFiles(name).outline, true);
+	}
+
+	bool drawNamedIcon(const std::string &name, const WzRect &rect, PIELIGHT color) override
+	{
+		return validIconName(name) && drawIconShape(namedIconFiles(name), rect, color, 0, false);
+	}
+
+	bool drawIconButton(const HudIconButtonLook &look) override
+	{
+		const WzRect &rect = look.rect;
+		const float opacity = clamp01(look.opacity) * (look.disabled ? 0.5f : 1.f);
+		auto faded = [opacity](PIELIGHT color) { return scaledAlpha(color, opacity); };
+		if (!loadGameVectorImage(iconFiles(look.icon).outline))
+		{
+			return false;
+		}
+		if (look.style == HudIconButtonStyle::Bare)
+		{
+			const PIELIGHT color = look.active ? iconColor(look.icon) : (look.highlighted ? palette.textPrimary : palette.textSecondary);
+			return drawIconShape(iconFiles(look.icon), rect, faded(color), look.active ? iconFillAlpha(look.icon) : 0, false);
+		}
+		WzRect frame = rect;
+		int iconSize = rect.height() - 2;
+		if (look.style == HudIconButtonStyle::Card)
+		{
+			const int side = std::min(rect.width(), rect.height());
+			frame = WzRect(rect.x() + (rect.width() - side) / 2, rect.y() + (rect.height() - side) / 2, side, side);
+			iconSize = side * 3 / 5;
+		}
+		const float x0 = static_cast<float>(frame.x());
+		const float y0 = static_cast<float>(frame.y());
+		const float x1 = static_cast<float>(frame.right());
+		const float y1 = static_cast<float>(frame.bottom());
+		PIELIGHT border = look.style == HudIconButtonStyle::Card ? palette.panelBorder : tints.cardBorder;
+		if (look.down || look.active)
+		{
+			border = withAlpha(palette.accent, 230);
+		}
+		else if (look.highlighted)
+		{
+			border = tints.cardHoverBorder;
+		}
+		if (look.style == HudIconButtonStyle::Card)
+		{
+			const float radius = std::min(params.panelRadius, frame.height() / 4.f);
+			pie_DrawGradientRoundedBox(x0, y0, x1, y1, faded(look.down ? tints.cardDownTop : palette.panelBackground),
+			                           faded(look.down ? tints.cardDownBottom : palette.panelBackgroundBottom), false, 1.f, radius, faded(border),
+			                           params.borderWidth);
+		}
+		else
+		{
+			PIELIGHT fill = tints.cardTop;
+			if (look.down || look.active)
+			{
+				fill = tints.cardDownTop;
+			}
+			else if (look.highlighted)
+			{
+				fill = tints.cardHoverTop;
+			}
+			pie_DrawRoundedBox(x0, y0, x1, y1, faded(fill), std::min(params.cardRadius, frame.height() / 2.f), faded(border), params.borderWidth);
+		}
+		const int shift = look.down ? 1 : 0;
+		PIELIGHT color = look.active ? palette.accent : ((look.down || look.highlighted) ? palette.textPrimary : palette.textSecondary);
+		if (look.disabled)
+		{
+			color = palette.stateDisabled;
+		}
+		return drawIconShape(iconFiles(look.icon), WzRect(frame.x() + (frame.width() - iconSize) / 2, frame.y() + (frame.height() - iconSize) / 2 + shift,
+		                                       iconSize, iconSize), faded(color), ICON_FILL_ALPHA, false);
 	}
 
 	void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) override
@@ -596,7 +979,7 @@ public:
 		const float x1 = static_cast<float>(rect.right());
 		const float y1 = static_cast<float>(rect.bottom());
 		pie_DrawSoftRoundedBox(x0 - 4.f, y0 - 2.f, x1 + 4.f, y1 + 6.f, palette.shadow, params.cardRadius + 6.f, 5.f);
-		pie_DrawRoundedBox(x0, y0, x1, y1, pal_RGBA(14, 18, 26, 240), params.cardRadius + 1.f, withAlpha(palette.panelBorder, 200), 1.f);
+		pie_DrawRoundedBox(x0, y0, x1, y1, withAlpha(tints.popoverFill, 240), params.cardRadius + 1.f, withAlpha(palette.panelBorder, 200), 1.f);
 	}
 
 	PIELIGHT toneColor(HudTone tone) const override
@@ -617,7 +1000,7 @@ private:
 	{
 		const PIELIGHT color = toneColor(tone);
 		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
-		                   static_cast<float>(rect.bottom()), filled ? withAlpha(color, 70) : pal_RGBA(10, 14, 20, 200), radius,
+		                   static_cast<float>(rect.bottom()), filled ? withAlpha(color, 70) : withAlpha(tints.fieldFill, 200), radius,
 		                   withAlpha(color, filled ? 255 : 170), 1.f);
 	}
 
@@ -647,33 +1030,23 @@ private:
 		text.render(x, y, color);
 	}
 
-	Params params;
-	HudColors palette = {
-		pal_RGBA(24, 30, 40, 205),
-		pal_RGBA(12, 15, 21, 225),
-		pal_RGBA(120, 150, 190, 110),
-		pal_RGBA(70, 175, 255, 255),
-		pal_RGBA(236, 240, 245, 255),
-		pal_RGBA(160, 172, 190, 255),
-		pal_RGBA(96, 205, 128, 255),
-		pal_RGBA(242, 190, 72, 255),
-		pal_RGBA(238, 88, 72, 255),
-		pal_RGBA(110, 115, 125, 255),
-		pal_RGBA(242, 190, 72, 255),
-		pal_RGBA(86, 178, 255, 255),
-		pal_RGBA(96, 205, 128, 255),
-		pal_RGBA(70, 175, 255, 70),
-		pal_RGBA(0, 0, 0, 95),
-	};
-	HudMetrics sizes = {6.f, 3.f, 1.f, 6, font_regular_bold, font_small, font_small};
+	/// Pointing left (previous) or right, `outward` px from the middle in the direction it points
+	static void drawChevron(float x0, float y0, float x1, float y1, bool previous, PIELIGHT color, float outward)
+	{
+		const float lean = previous ? -1.f : 1.f;
+		const float cx = (x0 + x1) / 2.f + lean * outward;
+		const float cy = (y0 + y1) / 2.f;
+		const float arm = std::min(x1 - x0, y1 - y0) * 0.6f;
+		pie_DrawSoftRoundedBoxRotated(cx, cy - arm * 0.35f, arm, 1.8f, lean * PI / 4.f, color, 0.9f, 0.9f);
+		pie_DrawSoftRoundedBoxRotated(cx, cy + arm * 0.35f, arm, 1.8f, -lean * PI / 4.f, color, 0.9f, 0.9f);
+	}
 
-	PIELIGHT cardTop = pal_RGBA(34, 42, 56, 215);
-	PIELIGHT cardBottom = pal_RGBA(20, 25, 34, 225);
-	PIELIGHT cardBorder = pal_RGBA(84, 102, 128, 170);
-	PIELIGHT cardHoverTop = pal_RGBA(46, 58, 78, 230);
-	PIELIGHT cardHoverBorder = pal_RGBA(140, 170, 210, 210);
-	PIELIGHT cardDownTop = pal_RGBA(18, 52, 86, 235);
-	PIELIGHT cardDownBottom = pal_RGBA(12, 34, 58, 240);
+	Params params;
+	HudColors palette = modernColors();
+	HudMetrics sizes = {6.f, 3.f, 1.f, 6, font_regular_bold, font_small, font_small};
+	ModernTints tints;
+	HudAccent accentInUse = HudAccent::Blue;
+	HudPanelTint tintInUse = HudPanelTint::Full;
 	PIELIGHT powerFillFrom = pal_RGBA(60, 150, 230, 235);
 	PIELIGHT powerFillTo = pal_RGBA(90, 205, 255, 235);
 
@@ -698,5 +1071,6 @@ private:
 HudSkin &modernHudSkin()
 {
 	static ModernHudSkin skin;
+	skin.useAccent(hudSettings().accent, hudSettings().panelTint);
 	return skin;
 }

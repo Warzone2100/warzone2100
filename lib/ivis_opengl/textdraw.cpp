@@ -2099,6 +2099,28 @@ float WzText::inkCenteredX(const WzRect &rect)
 	return (inkX - static_cast<float>(inkOffsets.x)) / mRenderingHorizScaleFactor;
 }
 
+void WzText::renderCenteredOnInk(const WzRect &rect, PIELIGHT colour, WzText *aboveBaseline)
+{
+	updateCacheIfNecessary();
+	if (texture == nullptr || mRenderingHorizScaleFactor <= 0.f || mRenderingVertScaleFactor <= 0.f)
+	{
+		return;
+	}
+	// In the display's pixels, where the ink's corner (and so the texture's) must land on a whole pixel.
+	// The offsets are from the pen position, on the baseline
+	const float centerX = (static_cast<float>(rect.x()) + static_cast<float>(rect.width()) / 2.f) * mRenderingHorizScaleFactor;
+	const float centerY = (static_cast<float>(rect.y()) + static_cast<float>(rect.height()) / 2.f) * mRenderingVertScaleFactor;
+	const float inkX = std::round(centerX - static_cast<float>(inkDimensions.x) / 2.f);
+	float penY = std::round(centerY - static_cast<float>(inkDimensions.y) / 2.f) - static_cast<float>(inkOffsets.y);
+	if (aboveBaseline != nullptr)
+	{
+		aboveBaseline->updateCacheIfNecessary();
+		const float height = -static_cast<float>(aboveBaseline->inkOffsets.y);
+		penY = std::round(centerY - height / 2.f) + height;
+	}
+	render((inkX - static_cast<float>(inkOffsets.x)) / mRenderingHorizScaleFactor, penY / mRenderingVertScaleFactor, colour);
+}
+
 static uint32_t getFontGeneration(iV_fonts fontID)
 {
 	ASSERT_OR_RETURN(0, fontID < font_count, "Invalid font: %d", static_cast<int>(fontID));

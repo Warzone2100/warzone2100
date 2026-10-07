@@ -33,7 +33,31 @@
 #ifndef __INCLUDED_SRC_HUD_HUDBADGES_H__
 #define __INCLUDED_SRC_HUD_HUDBADGES_H__
 
+#include "lib/ivis_opengl/textdraw.h"
+
+#include <string>
+
 struct STRUCTURE;
+
+/// A small pill with a count (ex. "×3") and, while looping, the loop icon (a loop sign where the skin draws no icons)
+class HudCountBadge
+{
+public:
+	void set(const std::string &text, bool loop);
+	bool empty() const { return text.empty() && !loop; }
+	int width();
+	void draw(int x, int y);
+
+private:
+	void update();
+	bool hasRenderedText() const { return !text.empty() || (loop && !renderedWithIcon); }
+
+	std::string text;
+	bool loop = false;
+	WzText rendered;
+	bool renderedWithIcon = false;
+	bool dirty = true;
+};
 
 /// Over the job button of a factory or research facility (screen rectangle), when the module is on
 void hudDrawJobBadges(STRUCTURE *psStruct, int x, int y, int height);

@@ -129,6 +129,63 @@ enum class HudTone : uint8_t
 	Bad,
 };
 
+/// Icons that a skin may draw instead of the interface images they stand for
+enum class HudIcon : uint8_t
+{
+	ResearchDroid,
+	ResearchWeapon,
+	ResearchCyborg,
+	ResearchSensor,
+	ResearchComputer,
+	ResearchPower,
+	ResearchDefense,
+	ResearchStructure,
+	Upgrade,
+	Damage,
+	Accuracy,
+	RateOfFire,
+	Repair,
+	AllyResearch,
+	Favorite,
+	DeliveryPoint,
+	ObsoleteShown,
+	ObsoleteHidden,
+	Loop,
+	Options,
+};
+
+enum class HudIconButtonStyle : uint8_t
+{
+	Framed,  ///< (in a panel, like its header buttons)
+	Bare,    ///< (only the icon)
+	Card,    ///< (on its own over the 3D view, like the panels)
+};
+
+/// A button that shows an icon (a stats panel's delivery point, obsolete, favorite and loop buttons, the in-game options)
+struct HudIconButtonLook
+{
+	WzRect rect;
+	HudIcon icon = HudIcon::DeliveryPoint;
+	HudIconButtonStyle style = HudIconButtonStyle::Framed;
+	bool down = false;
+	bool highlighted = false;
+	bool active = false;  ///< (on: showing only favorites, a factory looping, the options open)
+	bool disabled = false;
+	float opacity = 1.f;
+};
+
+/// A segment of a page control (the stats panels' pages, with panel filters): a page, or the previous or next page arrow
+struct HudPageSegmentLook
+{
+	WzRect rect;
+	TabSelectionButtonRole role = TabSelectionButtonRole::Tab;
+	bool selected = false;
+	bool hovered = false;
+	bool disabled = false;   ///< (an arrow at the first or last page)
+	bool separator = false;  ///< (a line on its left, between it and the segment before)
+	bool large = false;      ///< (a button of the touch page picker, on its own)
+};
+
 /// How the HUD's elements are drawn. The geometry is never the skin's business: every skin draws inside the
 /// rectangles the Classic layout gives it.
 class HudSkin
@@ -157,10 +214,16 @@ public:
 	virtual void drawCloseButton(int x, int y, int width, int height, bool highlighted) = 0;
 	/// A stats panel item's cost bar: `normal`, or (Modern) a warning when it can't be afforded now
 	virtual PIELIGHT statsCostBarColor(PIELIGHT normal, bool) const { return normal; }
+	/// Whether a production run's size is a badge in the button's top-left corner, instead of Classic's label
+	virtual bool drawsProductionRunBadge() const { return false; }
 	/// How far a panel with an extension (or room for one) grows up so its frame's top edge clears the contents
 	virtual int panelTopPadding() const { return 0; }
 	/// A list's page tab or page scroll button (IntListTabWidget). False to draw its images
 	virtual bool drawPageTab(const WzRect &, TabSelectionButtonRole, bool, bool) { return false; }
+	/// A page control's frame, around its segments
+	virtual void drawPageControlFrame(const WzRect &rect) = 0;
+	/// A page control's segment: the color of its number or arrow sign, or nothing if it drew the arrow
+	virtual nonstd::optional<PIELIGHT> drawPageSegment(const HudPageSegmentLook &look) = 0;
 	/// The mission and transporter timers' background
 	virtual void drawTimerBackground(int x, int y, uint16_t image, bool flashOn, uint16_t flashImage) = 0;
 	virtual nonstd::optional<WzTipStyle> tooltipStyle() const = 0;
@@ -179,6 +242,15 @@ public:
 	virtual PIELIGHT toneColor(HudTone tone) const = 0;
 	/// Text drawn over the 3D view (console, timers, status line), with an outline when that option is on
 	virtual void drawOverlayText(WzText &text, float x, float y, PIELIGHT color) = 0;
+	/// Whether it draws HudIcons instead of the images they stand for
+	virtual bool drawsIcons() const { return false; }
+	/// An icon, in `color` or else the skin's color for it, over whatever is under it: false if it can't (draw the image)
+	virtual bool drawHudIcon(HudIcon, const WzRect &, nonstd::optional<PIELIGHT> = nonstd::nullopt) { return false; }
+	/// False to draw the button's images
+	virtual bool drawIconButton(const HudIconButtonLook &) { return false; }
+	/// Whether it draws an icon named in the data (images/hud/icons/<name>.svg, ex. a build category's)
+	virtual bool hasNamedIcon(const std::string &) { return false; }
+	virtual bool drawNamedIcon(const std::string &, const WzRect &, PIELIGHT) { return false; }
 	/// Free the text it keeps rendered (the in-game interface is shut down)
 	virtual void releaseCaches() {}
 };

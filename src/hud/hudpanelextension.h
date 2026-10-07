@@ -64,6 +64,10 @@ struct HudPanelExtensionSpec
 	std::shared_ptr<WIDGET> closeButton;
 	/// How much of the top of the panel's contents a band may cover: rows the content takes over (ex. page tabs)
 	int bandOverlap = 0;
+	/// Rows at the top of the panel's contents it no longer shows: the panel's top edge moves down by as much
+	std::function<int ()> topInset;
+	/// After each layout of the panel
+	std::function<void ()> afterLayout;
 };
 
 /// Wraps the panel's children in a content anchor, and grows the panel for `content` (if any) on every layout,
@@ -73,6 +77,11 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 int hudCloseButtonGutter();
 /// A panel's close button that its extension moved
 bool hudIsMovedCloseButton(const WIDGET &widget);
+/// One of a panel's own controls that its extension moved, inside the panel
+void hudSetMovedPanelControl(const std::shared_ptr<WIDGET> &widget);
+bool hudIsMovedPanelControl(const WIDGET &widget);
+/// The rows at the top of an extended panel's contents that it no longer shows (HudPanelExtensionSpec::topInset)
+int hudPanelTopInset(const WIDGET &panel);
 /// A list's page tabs, which an extension hides while it shows them itself
 void hudSetReplacedPageTabs(const std::shared_ptr<WIDGET> &tabs);
 bool hudIsReplacedPageTabs(const WIDGET &widget);

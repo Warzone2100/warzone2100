@@ -66,7 +66,7 @@ bool sameLook(const HudSettings &a, const HudSettings &b)
 
 bool HudSettings::operator==(const HudSettings &other) const
 {
-	return sameLook(*this, other) && reduceMotion == other.reduceMotion && rememberFilters == other.rememberFilters
+	return sameLook(*this, other) && accent == other.accent && panelTint == other.panelTint && reduceMotion == other.reduceMotion && rememberFilters == other.rememberFilters
 		&& tooltipDelay == other.tooltipDelay && showModulesInTutorial == other.showModulesInTutorial;
 }
 
@@ -200,6 +200,22 @@ const char *hudModuleDescriptionMsgid(HudModuleId module)
 	return moduleInfo[static_cast<size_t>(module)].description;
 }
 
+const char *hudAccentNameMsgid(HudAccent accent)
+{
+	switch (accent)
+	{
+	case HudAccent::Blue: return N_("Blue");
+	case HudAccent::Teal: return N_("Teal");
+	case HudAccent::Green: return N_("Green");
+	case HudAccent::Purple: return N_("Purple");
+	case HudAccent::Magenta: return N_("Magenta");
+	case HudAccent::Red: return N_("Red");
+	case HudAccent::Orange: return N_("Orange");
+	case HudAccent::Gray: return N_("Gray");
+	}
+	return N_("Blue");
+}
+
 void hudLoadSettings(const std::function<nonstd::optional<int> (const std::string &key)> &getInteger)
 {
 	HudSettings settings;
@@ -214,6 +230,8 @@ void hudLoadSettings(const std::function<nonstd::optional<int> (const std::strin
 		settings.modules[i] = get(moduleInfo[i].key, 0) != 0;
 	}
 	settings.textOutline = get("hudTextOutline", 0) != 0;
+	settings.accent = static_cast<HudAccent>(std::max(0, std::min(get("hudAccent", 0), static_cast<int>(HUD_ACCENT_COUNT) - 1)));
+	settings.panelTint = static_cast<HudPanelTint>(std::max(0, std::min(get("hudPanelTint", 0), static_cast<int>(HudPanelTint::None))));
 	settings.reduceMotion = get("hudReduceMotion", 0) != 0;
 	settings.rememberFilters = get("hudRememberFilters", 0) != 0;
 	settings.tooltipDelay = static_cast<uint32_t>(std::max(0, std::min(get("hudTooltipDelay", 200), 2000)));
@@ -230,6 +248,8 @@ void hudSaveSettings(const std::function<void (const std::string &key, int value
 		setInteger(moduleInfo[i].key, currentSettings.modules[i] ? 1 : 0);
 	}
 	setInteger("hudTextOutline", currentSettings.textOutline ? 1 : 0);
+	setInteger("hudAccent", static_cast<int>(currentSettings.accent));
+	setInteger("hudPanelTint", static_cast<int>(currentSettings.panelTint));
 	setInteger("hudReduceMotion", currentSettings.reduceMotion ? 1 : 0);
 	setInteger("hudRememberFilters", currentSettings.rememberFilters ? 1 : 0);
 	setInteger("hudTooltipDelay", static_cast<int>(currentSettings.tooltipDelay));

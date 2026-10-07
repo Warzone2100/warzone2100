@@ -203,6 +203,8 @@ public:
 	void setTip(std::string string) override { m_tip = std::move(string); }
 	std::string getTip() override { return m_tip; }
 
+	std::function<bool (uint16_t image, float x, float y, float size, PIELIGHT colour)> drawIcon;
+
 	void display(int xOffset, int yOffset) override
 	{
 		const float x0 = static_cast<float>(xOffset + x());
@@ -223,9 +225,12 @@ public:
 			// under the baseline for descenders and a row of digits has none.
 			const float size = static_cast<float>(iconSize());
 			const float ascent = static_cast<float>(-m_valueText.aboveBase());
-			iV_DrawImageTint(IntImages, *m_icon, at - ICON_NUDGE,
-			                 valueTop + (ascent - size) / 2.f,
-			                 WZCOL_TEXT_BRIGHT, Vector2f(size, size));
+			const float iconX = at - ICON_NUDGE;
+			const float iconY = valueTop + (ascent - size) / 2.f;
+			if (!drawIcon || !drawIcon(*m_icon, iconX, iconY, size, WZCOL_TEXT_BRIGHT))
+			{
+				iV_DrawImageTint(IntImages, *m_icon, iconX, iconY, WZCOL_TEXT_BRIGHT, Vector2f(size, size));
+			}
 			at += size + static_cast<float>(ICON_GAP) - ICON_NUDGE;
 		}
 		renderCut(m_valueText, at, valueTop - m_valueText.aboveBase(), WZCOL_TEXT_BRIGHT,
@@ -660,6 +665,10 @@ std::shared_ptr<DetailPanelContents> DetailPanelContents::make(std::shared_ptr<W
 	}
 	for (const auto& stat : widget->m_stats)
 	{
+		if (auto cell = std::dynamic_pointer_cast<DetailPanelStat>(stat))
+		{
+			cell->drawIcon = panelStyle.drawIcon;
+		}
 		widget->attach(stat);
 	}
 	if (widget->m_body)

@@ -95,6 +95,7 @@ struct CategoryChoice
 {
 	std::string id;
 	WzString name;
+	std::string icon;  ///< (HudChip::setIcon)
 };
 
 const char *templateCategory(const DROID_TEMPLATE *psTemplate)
@@ -117,9 +118,9 @@ const char *templateCategory(const DROID_TEMPLATE *psTemplate)
 std::vector<CategoryChoice> templateCategories()
 {
 	return {
-		{"combat", WzString::fromUtf8(_("Combat"))},
-		{"trucks", WzString::fromUtf8(_("Trucks"))},
-		{"support", WzString::fromUtf8(_("Support"))},
+		{"combat", WzString::fromUtf8(_("Combat")), "category-combat"},
+		{"trucks", WzString::fromUtf8(_("Trucks")), "category-trucks"},
+		{"support", WzString::fromUtf8(_("Support")), "category-support"},
 	};
 }
 
@@ -257,7 +258,7 @@ private:
 		{
 			for (const auto &category : hudBuildCategories())
 			{
-				all.push_back({category.id, category.name});
+				all.push_back({category.id, category.name, category.icon});
 			}
 		}
 		else if (panel == FilterPanel::Manufacture)
@@ -269,7 +270,7 @@ private:
 			std::vector<bool> visible(asResearch.size(), true);
 			for (uint8_t lane : researchLanesInUse(visible))
 			{
-				all.push_back({std::to_string(lane), researchLaneName(lane)});
+				all.push_back({std::to_string(lane), researchLaneName(lane), std::string()});
 			}
 		}
 		std::vector<bool> used(all.size(), false);
@@ -377,11 +378,13 @@ private:
 			return;
 		}
 		auto all = HudChip::make(WzString::fromUtf8(_("All")), _("Show everything"));
+		all->setIcon("category-all");
 		all->onPressed = [this](HudChip &, bool) { selectCategory(std::string()); };
 		chips.push_back(all);
 		for (const auto &category : categories)
 		{
-			auto chip = HudChip::make(category.name);
+			auto chip = HudChip::make(category.name, category.icon.empty() ? std::string() : category.name.toUtf8());
+			chip->setIcon(category.icon);
 			const std::string categoryId = category.id;
 			chip->onPressed = [this, categoryId](HudChip &, bool) { selectCategory(state.category == categoryId ? std::string() : categoryId); };
 			chips.push_back(chip);

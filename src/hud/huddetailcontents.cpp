@@ -88,6 +88,13 @@ DetailPanelStyle hudPanelStyle()
 		currentHudSkin().drawPopoverFrame(rect);
 	};
 	style.divider = withAlpha(currentHudSkin().colors().panelBorder, 140);
+	style.drawIcon = [](uint16_t image, float x, float y, float size, PIELIGHT) {
+		// (the skin's vector bolt, where it has one, in the warning tone)
+		const int side = static_cast<int>(std::lround(size));
+		HudSkin &skin = currentHudSkin();
+		return image == IMAGE_DES_POWER
+			&& skin.drawNamedIcon("power", WzRect(static_cast<int>(std::lround(x)), static_cast<int>(std::lround(y)), side, side), skin.toneColor(HudTone::Warn));
+	};
 	return style;
 }
 

@@ -355,12 +355,53 @@ Files: data/fonts/NotoSansCJK-VF.otf.ttc
 Copyright: 2014-2021 Adobe
 License: OFL-1.1
 
+Files: data/base/images/hud/icons/accuracy.svg
+       data/base/images/hud/icons/ally-research.fill.svg
+       data/base/images/hud/icons/ally-research.svg
+       data/base/images/hud/icons/category-all.svg
+       data/base/images/hud/icons/category-base.svg
+       data/base/images/hud/icons/category-combat.svg
+       data/base/images/hud/icons/category-defense.svg
+       data/base/images/hud/icons/category-support.svg
+       data/base/images/hud/icons/category-trucks.svg
+       data/base/images/hud/icons/delivery-point.fill.svg
+       data/base/images/hud/icons/delivery-point.svg
+       data/base/images/hud/icons/favorite.fill.svg
+       data/base/images/hud/icons/favorite.svg
+       data/base/images/hud/icons/loop.svg
+       data/base/images/hud/icons/obsolete-hidden.svg
+       data/base/images/hud/icons/obsolete-shown.svg
+       data/base/images/hud/icons/options.fill.svg
+       data/base/images/hud/icons/options.svg
+       data/base/images/hud/icons/rate-of-fire.fill.svg
+       data/base/images/hud/icons/rate-of-fire.svg
+       data/base/images/hud/icons/repair.svg
+       data/base/images/hud/icons/research-computer.svg
+       data/base/images/hud/icons/research-defense.fill.svg
+       data/base/images/hud/icons/research-defense.svg
+       data/base/images/hud/icons/research-droid.fill.svg
+       data/base/images/hud/icons/research-droid.svg
+       data/base/images/hud/icons/research-power.fill.svg
+       data/base/images/hud/icons/research-power.svg
+       data/base/images/hud/icons/research-structure.fill.svg
+       data/base/images/hud/icons/research-structure.svg
+       data/base/images/hud/icons/upgrade.svg
+Copyright: 2020-2026 Paweł Kuna
+License: Expat
+Comment: Tabler Icons (https://tabler.io/icons), some adapted
+
 Files: doc/quickstartguide.*
 Copyright: Ben Latimore
            Guangcong Luo
 License: CC0
 
-Files: data/mp/multiplay/maps/MoveBench-*/game.js
+Files: data/base/images/hud/icons/research-cyborg.fill.svg
+       data/base/images/hud/icons/research-cyborg.svg
+       data/base/images/hud/icons/research-sensor.fill.svg
+       data/base/images/hud/icons/research-sensor.svg
+       data/base/images/hud/icons/research-weapon.fill.svg
+       data/base/images/hud/icons/research-weapon.svg
+       data/mp/multiplay/maps/MoveBench-*/game.js
        data/mp/multiplay/maps/PathBench/game.js
        data/mp/tests/movebench_blob.js
        data/mp/tests/movebench_common.js
@@ -512,6 +553,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/hud/huddetail.*
        src/hud/huddetailcontents.*
        src/hud/hudgeometrydump.*
+       src/hud/hudiconbutton.*
        src/hud/hudidle.*
        src/hud/hudids.h
        src/hud/hudkeys.*
@@ -519,6 +561,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/hud/hudmodernskin.cpp
        src/hud/hudmodules.*
        src/hud/hudobjectinfo.*
+       src/hud/hudpagecontrol.*
        src/hud/hudpanelextension.*
        src/hud/hudpanelfilters.*
        src/hud/hudreticule.*

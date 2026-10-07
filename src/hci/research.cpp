@@ -32,7 +32,9 @@
 #include "../screens/researchtreescreen.h"
 #include "../hud/hudbadges.h"
 #include "../hud/huddetailcontents.h"
+#include "../hud/hudpanelextension.h"
 #include "../hud/hudskin.h"
+#include "../intfac.h"
 
 #include <algorithm>
 
@@ -207,6 +209,27 @@ void ResearchController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHi
 	highlightedFacility = facility;
 }
 
+static nonstd::optional<HudIcon> researchHudIcon(UWORD imageId)
+{
+	switch (imageId)
+	{
+	case IMAGE_RES_DROIDTECH: return HudIcon::ResearchDroid;
+	case IMAGE_RES_WEAPONTECH: return HudIcon::ResearchWeapon;
+	case IMAGE_RES_CYBORGTECH: return HudIcon::ResearchCyborg;
+	case IMAGE_RES_SYSTEMTECH: return HudIcon::ResearchSensor;
+	case IMAGE_RES_COMPUTERTECH: return HudIcon::ResearchComputer;
+	case IMAGE_RES_POWERTECH: return HudIcon::ResearchPower;
+	case IMAGE_RES_DEFENCE: return HudIcon::ResearchDefense;
+	case IMAGE_RES_STRUCTURETECH: return HudIcon::ResearchStructure;
+	case IMAGE_RES_GRPUPG: return HudIcon::Upgrade;
+	case IMAGE_RES_GRPDAM: return HudIcon::Damage;
+	case IMAGE_RES_GRPACC: return HudIcon::Accuracy;
+	case IMAGE_RES_GRPROF: return HudIcon::RateOfFire;
+	case IMAGE_RES_GRPREP: return HudIcon::Repair;
+	default: return nonstd::nullopt;
+	}
+}
+
 class AllyResearchsIcons
 {
 private:
@@ -234,7 +257,11 @@ public:
 		auto x = label->x() + xOffset;
 		auto y = label->y() + yOffset;
 
-		iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(label->UserData));
+		const PIELIGHT teamColor = pal_GetTeamColour(label->UserData);
+		if (!currentHudSkin().drawHudIcon(HudIcon::AllyResearch, WzRect(x, y, label->width(), label->height()), teamColor))
+		{
+			iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, teamColor);
+		}
 	}
 
 	void hide()
@@ -546,12 +573,26 @@ private:
 		auto research = getStats();
 		ASSERT_NOT_NULLPTR_OR_RETURN(, research);
 
-		auto researchIcon = research->iconID != NO_RESEARCH_ICON ? AtlasImage(IntImages, research->iconID) : AtlasImage();
-		displayIMD(researchIcon, getResearchObjectImage(research), xOffset, yOffset);
+		auto &skin = currentHudSkin();
+		auto object = getResearchObjectImage(research);
+		// The skin's icons go over the model, so a button without one keeps its image
+		auto categoryIcon = skin.drawsIcons() && !object.empty() ? researchHudIcon(research->iconID) : nonstd::nullopt;
+		auto researchIcon = research->iconID != NO_RESEARCH_ICON && !categoryIcon ? AtlasImage(IntImages, research->iconID) : AtlasImage();
+		displayIMD(researchIcon, object, xOffset, yOffset);
 
+		const int buttonX = xOffset + x();
+		const int buttonY = yOffset + y();
+		if (categoryIcon && !skin.drawHudIcon(*categoryIcon, WzRect(buttonX + 4, buttonY + 4, 14, 14)))
+		{
+			iV_DrawImage(IntImages, research->iconID, buttonX, buttonY);
+		}
 		if (research->subGroup != NO_RESEARCH_ICON)
 		{
-			iV_DrawImage(IntImages, research->subGroup, xOffset + x() + STAT_BUTWIDTH - 16, yOffset + y() + 3);
+			auto subgroupIcon = skin.drawsIcons() ? researchHudIcon(research->subGroup) : nonstd::nullopt;
+			if (!subgroupIcon || !skin.drawHudIcon(*subgroupIcon, WzRect(buttonX + width() - 16, buttonY + 4, 12, 12)))
+			{
+				iV_DrawImage(IntImages, research->subGroup, buttonX + STAT_BUTWIDTH - 16, buttonY + 3);
+			}
 		}
 
 		displayIfHighlight(xOffset, yOffset);
@@ -679,6 +720,8 @@ private:
 // its close button sits, so the button below shares that row.
 static constexpr int32_t RESEARCH_HEADER_PAD = 3;
 static constexpr int32_t RESEARCH_HEADER_BUTTON_HEIGHT = 14;
+static constexpr int32_t RESEARCH_COMPACT_VIEW_TREE_WIDTH = 70;
+static constexpr int32_t RESEARCH_COMPACT_HEADER_HEIGHT = 13;
 static const PIELIGHT RESEARCH_HEADER_FILL = pal_RGBA(47, 51, 87, 255);
 static const PIELIGHT RESEARCH_HEADER_FILL_OVER = pal_RGBA(72, 78, 125, 255);
 static const PIELIGHT RESEARCH_HEADER_BORDER = pal_RGBA(89, 90, 144, 255);
@@ -719,6 +762,11 @@ public:
 
 		fitTo(width() - PAD_X * 2);
 		const float baseline = y0 + (static_cast<float>(height()) - m_text.lineSize()) / 2.f - m_text.aboveBase();
+		if (!m_cut && centeredOnInk)
+		{
+			m_text.renderCenteredOnInk(WzRect(xOffset + x(), yOffset + y(), width(), height()), ink, &m_text);
+			return;
+		}
 		if (!m_cut)
 		{
 			// Centered when it fits
@@ -760,6 +808,11 @@ private:
 		m_cut = m_text.width() > room;
 	}
 
+public:
+	/// Its text centered on its drawn pixels (in a compact header, as tall as the buttons beside it)
+	bool centeredOnInk = false;
+
+private:
 	static constexpr iV_fonts FONT = font_small;
 	static constexpr int PAD_X = 4;
 
@@ -838,6 +891,15 @@ protected:
 		addViewTreeButton();
 	}
 
+	WzRect layoutCompactHeader(int drop) override
+	{
+		// As tall as the other panels' header buttons, in the same row
+		viewTreeButton->setGeometry(RESEARCH_HEADER_PAD, STAT_SLDY + drop, RESEARCH_COMPACT_VIEW_TREE_WIDTH, RESEARCH_COMPACT_HEADER_HEIGHT);
+		viewTreeButton->centeredOnInk = true;
+		hudSetMovedPanelControl(viewTreeButton);
+		return viewTreeButton->geometry();
+	}
+
 private:
 	// Across the top, up to the close button in the corner
 	void addViewTreeButton()
@@ -845,6 +907,7 @@ private:
 		auto button = WzResearchHeaderButton::make(WzString::fromUtf8(_("View Tree")),
 		                                           _("Open the research tree"));
 		attach(button);
+		viewTreeButton = button;
 		const int right = STAT_WIDTH - CLOSE_WIDTH - RESEARCH_HEADER_PAD;
 		button->setGeometry(RESEARCH_HEADER_PAD, (STAT_TABFORMY - RESEARCH_HEADER_BUTTON_HEIGHT) / 2,
 		                    std::max(10, right - RESEARCH_HEADER_PAD), RESEARCH_HEADER_BUTTON_HEIGHT);
@@ -856,6 +919,7 @@ private:
 	}
 
 	std::shared_ptr<ResearchController> controller;
+	std::shared_ptr<WzResearchHeaderButton> viewTreeButton;
 };
 
 bool ResearchController::showInterface()
