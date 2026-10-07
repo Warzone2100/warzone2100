@@ -819,6 +819,7 @@ bool CoordInRadar(int x, int y)
 
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)
 {
+	ASSERT_OR_RETURN(, tileNumber < MAX_TILES, "Invalid tile number: %u", tileNumber);
 	tileColours[tileNumber].byte.r = r;
 	tileColours[tileNumber].byte.g = g;
 	tileColours[tileNumber].byte.b = b;

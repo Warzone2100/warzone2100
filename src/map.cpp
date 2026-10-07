@@ -191,11 +191,12 @@ struct GATEWAY_SAVE
 #define WATER_MIN_DEPTH 500
 #define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 400)
 
-static void SetGroundForTile(const char *filename, const char *nametype);
+static bool SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
+static int getGroundTypeIndex(const char *textureType);
 static bool hasDecals(WorldMapState& mapState, int i, int j);
-static void SetDecals(const char *filename, const char *decal_type);
-static void init_tileNames(MAP_TILESET type);
+static bool SetDecals(const char *filename, const char *decal_type);
+static bool init_tileNames(MAP_TILESET type);
 
 /// The different ground types
 static std::vector<GROUND_TYPE> groundTypes;
@@ -257,7 +258,14 @@ size_t getNumGroundTypes()
 	return groundTypes.size();
 }
 
-static void init_tileNames(MAP_TILESET type)
+// The start of the next line in a tileset file, or its end if there is none
+static char *tilesetNextLine(char *pFileData)
+{
+	char *pNext = strchr(pFileData, '\n');
+	return pNext != nullptr ? pNext + 1 : pFileData + strlen(pFileData);
+}
+
+static bool init_tileNames(MAP_TILESET type)
 {
 	char	*pFileData = nullptr;
 	char	name[MAX_STR_LENGTH] = {'\0'};
@@ -272,8 +280,8 @@ static void init_tileNames(MAP_TILESET type)
 		{
 			if (!loadFileToBuffer("tileset/arizona_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				debug(LOG_FATAL, "tileset/arizona_enum.txt not found.  Aborting.");
-				abort();
+				debug(LOG_ERROR, "tileset/arizona_enum.txt not found");
+				return false;
 			}
 
 			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
@@ -281,8 +289,8 @@ static void init_tileNames(MAP_TILESET type)
 
 			if (strcmp("arizona_enum", name))
 			{
-				debug(LOG_FATAL, "%s found, but was expecting arizona_enum, aborting.", name);
-				abort();
+				debug(LOG_ERROR, "%s found, but was expecting arizona_enum", name);
+				return false;
 			}
 			break;
 		}
@@ -290,8 +298,8 @@ static void init_tileNames(MAP_TILESET type)
 		{
 			if (!loadFileToBuffer("tileset/urban_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				debug(LOG_FATAL, "tileset/urban_enum.txt not found.  Aborting.");
-				abort();
+				debug(LOG_ERROR, "tileset/urban_enum.txt not found");
+				return false;
 			}
 
 			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
@@ -299,8 +307,8 @@ static void init_tileNames(MAP_TILESET type)
 
 			if (strcmp("urban_enum", name))
 			{
-				debug(LOG_FATAL, "%s found, but was expecting urban_enum, aborting.", name);
-				abort();
+				debug(LOG_ERROR, "%s found, but was expecting urban_enum", name);
+				return false;
 			}
 			break;
 		}
@@ -308,8 +316,8 @@ static void init_tileNames(MAP_TILESET type)
 		{
 			if (!loadFileToBuffer("tileset/rockie_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				debug(LOG_FATAL, "tileset/rockie_enum.txt not found.  Aborting.");
-				abort();
+				debug(LOG_ERROR, "tileset/rockie_enum.txt not found");
+				return false;
 			}
 
 			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
@@ -317,32 +325,34 @@ static void init_tileNames(MAP_TILESET type)
 
 			if (strcmp("rockie_enum", name))
 			{
-				debug(LOG_FATAL, "%s found, but was expecting rockie_enum, aborting.", name);
-				abort();
+				debug(LOG_ERROR, "%s found, but was expecting rockie_enum", name);
+				return false;
 			}
 			break;
 		}
 	}
 
 	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
-	if (numlines == 0 || numlines > MAX_TERRAIN_TILES)
+	if (numlines <= 0 || numlines > MAX_TERRAIN_TILES)
 	{
-		debug(LOG_FATAL, "Rockie_enum parameter is out of range (%d). Aborting.", numlines);
-		abort();
+		debug(LOG_ERROR, "%s has an invalid number of entries (%d)", name, numlines);
+		return false;
 	}
 
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData, '\n') + 1;
+	pFileData = tilesetNextLine(pFileData);
 	Tile_names = std::make_unique<char[]>(numlines * MAX_STR_LENGTH);
 
 	for (i = 0; i < numlines; i++)
 	{
+		cnt = 0;
 		sscanf(pFileData, "%255[^,'\r\n]%n", &Tile_names[i * MAX_STR_LENGTH], &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
+		pFileData = tilesetNextLine(pFileData);
 	}
+	return true;
 }
 
 const char *tilesetDirectory(MAP_TILESET tileset)
@@ -410,7 +420,7 @@ static std::string getTextureVariant(const std::string &origTextureFilename, con
 	return "";
 }
 
-static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* tertilesFile)
+static bool mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* tertilesFile)
 {
 	char	*pFileData = fileLoadBuffer;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
@@ -425,11 +435,14 @@ static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* terti
 	{
 		debug(LOG_POPUP, "Failed to load terrain type override");
 	}
-	init_tileNames(tileSet);
+	if (!init_tileNames(tileSet))
+	{
+		return false;
+	}
 	if (!loadFileToBuffer(tertilesFile, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_FATAL, "%s not found, aborting.", tertilesFile);
-		abort();
+		debug(LOG_ERROR, "%s not found", tertilesFile);
+		return false;
 	}
 
 	sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
@@ -437,23 +450,34 @@ static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* terti
 
 	if (!strstr(tertilesFile, tilename))
 	{
-		debug(LOG_FATAL, "%s found, but was expecting %s!  Aborting.", tilename, tertilesFile);
-		abort();
+		debug(LOG_ERROR, "%s found, but was expecting %s", tilename, tertilesFile);
+		return false;
 	}
 
 	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+	if (numlines <= 0 || numlines > MAX_GROUND_TYPES)
+	{
+		debug(LOG_ERROR, "%s has an invalid number of ground types (%d)", tertilesFile, numlines);
+		return false;
+	}
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData, '\n') + 1;
+	pFileData = tilesetNextLine(pFileData);
 	groundTypes.resize(numlines);
 
 	for (i = 0; i < numlines; i++)
 	{
+		cnt = 0;
 		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
+		pFileData = tilesetNextLine(pFileData);
 
 		int textureTypeIdx = getTextureType(textureType);
+		if (textureTypeIdx < 0 || textureTypeIdx >= numlines)
+		{
+			debug(LOG_ERROR, "%s: ground type %s is not one of the first %d types", tertilesFile, textureType, numlines);
+			return false;
+		}
 		groundTypes[textureTypeIdx].textureName = textureName;
 		groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
 		groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
@@ -461,24 +485,25 @@ static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* terti
 		groundTypes[textureTypeIdx].heightMapTextureName = getTextureVariant(textureName, "_hm");
 		groundTypes[textureTypeIdx].highQualityTextures = !groundTypes[textureTypeIdx].normalMapTextureName.empty() || !groundTypes[textureTypeIdx].specularMapTextureName.empty() || !groundTypes[textureTypeIdx].heightMapTextureName.empty();
 	}
+	return true;
 }
 
-static void SetDecals(MAP_TILESET tileset)
+static bool SetDecals(MAP_TILESET tileset)
 {
 	if (tileset == MAP_TILESET::ARIZONA)
 	{
 fallback:
-		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
+		return SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
 	else if (tileset == MAP_TILESET::URBAN)
 	{
-		SetDecals("tileset/urbandecals.txt", "urban_decals");
+		return SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
 	else if (tileset == MAP_TILESET::ROCKIES)
 	{
-		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
+		return SetDecals("tileset/rockiedecals.txt", "rockie_decals");
 	}
 	// When a map uses something other than the above, we fallback to Arizona
 	else
@@ -499,20 +524,29 @@ static bool mapLoadGroundTypes(bool preview)
 	if (currentMapTileset == MAP_TILESET::ARIZONA)
 	{
 fallback:
-		mapLoadTertiles(preview, MAP_TILESET::ARIZONA, "tileset/tertilesc1hwGtype.txt");
-		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
+		if (!mapLoadTertiles(preview, MAP_TILESET::ARIZONA, "tileset/tertilesc1hwGtype.txt")
+			|| !SetGroundForTile("tileset/arizonaground.txt", "arizona_ground"))
+		{
+			return false;
+		}
 	}
 	// for Urban
 	else if (currentMapTileset == MAP_TILESET::URBAN)
 	{
-		mapLoadTertiles(preview, MAP_TILESET::URBAN, "tileset/tertilesc2hwGtype.txt");
-		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
+		if (!mapLoadTertiles(preview, MAP_TILESET::URBAN, "tileset/tertilesc2hwGtype.txt")
+			|| !SetGroundForTile("tileset/urbanground.txt", "urban_ground"))
+		{
+			return false;
+		}
 	}
 	// for Rockie
 	else if (currentMapTileset == MAP_TILESET::ROCKIES)
 	{
-		mapLoadTertiles(preview, MAP_TILESET::ROCKIES, "tileset/tertilesc3hwGtype.txt");
-		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
+		if (!mapLoadTertiles(preview, MAP_TILESET::ROCKIES, "tileset/tertilesc3hwGtype.txt")
+			|| !SetGroundForTile("tileset/rockieground.txt", "rockie_ground"))
+		{
+			return false;
+		}
 	}
 	// When a map uses something other than the above, we fallback to Arizona
 	else
@@ -523,16 +557,15 @@ fallback:
 		goto fallback;
 	}
 
-	SetDecals(currentMapTileset);
-	return true;
+	return SetDecals(currentMapTileset);
 }
 
 // Parse the file to set up the ground type
-static void SetGroundForTile(const char *filename, const char *nametype)
+static bool SetGroundForTile(const char *filename, const char *nametype)
 {
 	char	*pFileData = nullptr;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
-	char	val1[MAX_STR_LENGTH], val2[MAX_STR_LENGTH], val3[MAX_STR_LENGTH], val4[MAX_STR_LENGTH];
+	char	val1[MAX_STR_LENGTH] = {'\0'}, val2[MAX_STR_LENGTH] = {'\0'}, val3[MAX_STR_LENGTH] = {'\0'}, val4[MAX_STR_LENGTH] = {'\0'};
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
 	uint32_t	fileSize = 0;
@@ -540,8 +573,8 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	pFileData = fileLoadBuffer;
 	if (!loadFileToBuffer(filename, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_FATAL, "%s not found, aborting.", filename);
-		abort();
+		debug(LOG_ERROR, "%s not found", filename);
+		return false;
 	}
 
 	sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
@@ -549,33 +582,57 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 
 	if (strcmp(tilename, nametype))
 	{
-		debug(LOG_FATAL, "%s found, but was expecting %s, aborting.", tilename, nametype);
-		abort();
+		debug(LOG_ERROR, "%s found, but was expecting %s", tilename, nametype);
+		return false;
 	}
 
 	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+	if (numlines <= 0 || numlines > MAX_TERRAIN_TILES)
+	{
+		debug(LOG_ERROR, "%s has an invalid number of tiles (%d)", filename, numlines);
+		return false;
+	}
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData, '\n') + 1;
+	pFileData = tilesetNextLine(pFileData);
 
 	numTile_types = numlines;
 	map = std::unique_ptr<int[]> (new int[numlines * 2 * 2]());
 
 	for (i = 0; i < numlines; i++)
 	{
+		cnt = 0;
 		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]%n", val1, val2, val3, val4, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
+		pFileData = tilesetNextLine(pFileData);
 
 		// inline int iA(int i, int j, int k){ return i*N2*N3 + j*N3 + k; }
 		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
 		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
 		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
-		map[i * 2 * 2 + 0 * 2 + 0] = getTextureType(val4);
-		map[i * 2 * 2 + 0 * 2 + 1] = getTextureType(val2);
-		map[i * 2 * 2 + 1 * 2 + 0] = getTextureType(val3);
-		map[i * 2 * 2 + 1 * 2 + 1] = getTextureType(val1);
+		const int ground[4] = {getGroundTypeIndex(val4), getGroundTypeIndex(val2), getGroundTypeIndex(val3), getGroundTypeIndex(val1)};
+		for (int k = 0; k < 4; ++k)
+		{
+			if (ground[k] < 0)
+			{
+				return false;
+			}
+			map[i * 2 * 2 + k] = ground[k];
+		}
 	}
+	return true;
+}
+
+// The ground type index for a texture type, which must be one of the loaded ground types
+static int getGroundTypeIndex(const char *textureType)
+{
+	const int index = getTextureType(textureType);
+	if (index < 0 || index >= static_cast<int>(groundTypes.size()))
+	{
+		debug(LOG_ERROR, "Texture type %s has no ground type", textureType);
+		return -1;
+	}
+	return index;
 }
 
 // getTextureType() -- just returns the value for that texture type.
@@ -589,8 +646,8 @@ static int getTextureType(const char *textureType)
 			return i;
 		}
 	}
-	debug(LOG_FATAL, "unknown type [%s] found, aborting!", textureType);
-	abort();
+	debug(LOG_ERROR, "unknown type [%s] found", textureType);
+	return -1;
 }
 
 // groundFromMapTile() just a simple lookup table, using pointers to access the 3D map array
@@ -730,18 +787,18 @@ static int determineGroundType(WorldMapState& mapState, int x, int y)
 
 // SetDecals()
 // reads in the decal array for the requested tileset.
-static void SetDecals(const char *filename, const char *decal_type)
+static bool SetDecals(const char *filename, const char *decal_type)
 {
-	char decalname[MAX_STR_LENGTH], *pFileData;
-	int numlines, cnt, i, tiledecal;
+	char decalname[MAX_STR_LENGTH] = {'\0'}, *pFileData;
+	int numlines = 0, cnt = 0, i, tiledecal;
 	uint32_t fileSize;
 
 	pFileData = fileLoadBuffer;
 
 	if (!loadFileToBuffer(filename, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_POPUP, "%s not found, aborting.", filename);
-		abort();
+		debug(LOG_ERROR, "%s not found", filename);
+		return false;
 	}
 
 	sscanf(pFileData, "%255[^,'\r\n],%d%n", decalname, &numlines, &cnt);
@@ -749,23 +806,29 @@ static void SetDecals(const char *filename, const char *decal_type)
 
 	if (strcmp(decalname, decal_type))
 	{
-		debug(LOG_POPUP, "%s found, but was expecting %s, aborting.", decalname, decal_type);
-		abort();
+		debug(LOG_ERROR, "%s found, but was expecting %s", decalname, decal_type);
+		return false;
 	}
 
 	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
+	if (numlines < 0 || numlines > MAX_TERRAIN_TILES)
+	{
+		debug(LOG_ERROR, "%s has an invalid number of decals (%d)", filename, numlines);
+		return false;
+	}
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData, '\n') + 1;
+	pFileData = tilesetNextLine(pFileData);
 	// value initialization sets everything to false.
 	mapDecals = std::make_unique<bool[]>(MAX_TERRAIN_TILES);
 
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
+		cnt = 0;
 		sscanf(pFileData, "%d%n", &tiledecal, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
+		pFileData = tilesetNextLine(pFileData);
 		if ((unsigned)tiledecal >= MAX_TERRAIN_TILES)
 		{
 			debug(LOG_ERROR, "Tile index is out of range!  Was %d, our max is %d", tiledecal, MAX_TERRAIN_TILES - 1);
@@ -773,6 +836,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 		}
 		mapDecals[tiledecal] = true;
 	}
+	return true;
 }
 // hasDecals()
 // Checks to see if the requested tile has a decal on it or not.
@@ -818,7 +882,10 @@ bool mapReloadGroundTypes()
 	{
 		return false;
 	}
-	mapLoadGroundTypes(false);
+	if (!mapLoadGroundTypes(false))
+	{
+		return false;
+	}
 	if (!mapSetGroundTypes(gameWorld.map))
 	{
 		return false;

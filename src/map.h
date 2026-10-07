@@ -66,7 +66,7 @@ extern MAP_TILESET currentMapTileset;
 
 const GROUND_TYPE& getGroundType(size_t idx);
 size_t getNumGroundTypes();
-#define MAX_GROUND_TYPES 12
+#define MAX_GROUND_TYPES 16  ///< Maximum number of ground types (see: groundScale, etc)
 
 #define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
 #define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
