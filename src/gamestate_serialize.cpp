@@ -844,6 +844,7 @@ static void readTemplates(const nlohmann::ordered_json &j, uint32_t version)
 			{
 				throw StateError("template contains an unknown component (different stats/mods?)");
 			}
+			truncateTemplateName(psTempl->name);
 			psTempl->id = WzString::fromUtf8(jt.value("id", std::string()));
 			psTempl->multiPlayerID = jt.at("multiPlayerID").get<uint32_t>();
 			psTempl->enabled = jt.at("enabled").get<bool>();

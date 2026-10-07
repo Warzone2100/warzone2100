@@ -7433,6 +7433,7 @@ bool loadSaveTemplate(const char *pFileName)
 			debug(LOG_ERROR, "Stored template \"%s\" contains an unknown component.", ini.string("name").toUtf8().c_str());
 		}
 		t.name = ini.string("name");
+		truncateTemplateName(t.name);
 		t.id = ini.string("id");
 		t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
 		t.enabled = ini.value("enabled", false).toBool();

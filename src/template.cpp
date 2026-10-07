@@ -758,6 +758,7 @@ bool loadDroidTemplates(const char *filename)
 		bool available = ini.value("available", false).toBool();
 		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().c_str());
 		design.name = WzString::fromUtf8(droidResourceName != nullptr ? droidResourceName : GetDefaultTemplateName(&design));
+		truncateTemplateName(design.name);
 		ini.endGroup();
 
 		for (int playerIdx = 0; playerIdx < MAX_PLAYERS; ++playerIdx)
