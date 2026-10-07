@@ -148,6 +148,9 @@ size_t getStatModelLoadingFailures();
 
 UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 
+/// Number of loaded stats for a given component type (the length of apCompLists[player][comp])
+size_t compStatCount(unsigned comp);
+
 /// Get the component index for a component based on the name, verifying with type.
 /// It is currently identical to getCompFromID, but may not be in the future.
 int getCompFromName(COMPONENT_TYPE compType, const WzString &name);

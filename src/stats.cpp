@@ -1368,6 +1368,22 @@ UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 	return asTerrainTable[type * PROPULSION_TYPE_NUM + propulsionType];
 }
 
+size_t compStatCount(unsigned comp)
+{
+	switch (comp)
+	{
+	case COMP_BODY:       return asBodyStats.size();
+	case COMP_BRAIN:      return asBrainStats.size();
+	case COMP_PROPULSION: return asPropulsionStats.size();
+	case COMP_REPAIRUNIT: return asRepairStats.size();
+	case COMP_ECM:        return asECMStats.size();
+	case COMP_SENSOR:     return asSensorStats.size();
+	case COMP_CONSTRUCT:  return asConstructStats.size();
+	case COMP_WEAPON:     return asWeaponStats.size();
+	default:              return 0;
+	}
+}
+
 int getCompFromName(COMPONENT_TYPE compType, const WzString &name)
 {
 	return getCompFromID(compType, name);
