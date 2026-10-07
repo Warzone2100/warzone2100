@@ -66,6 +66,34 @@ struct LoadingTaskPromiseBase
 	bool loadingDomainActive = false;
 };
 
+/// <summary>
+/// Non-suspending awaitable. `co_await setLoadingDomain(name)` publishes `name` as this
+/// task's loading-domain segment without yielding a frame quantum.
+/// </summary>
+struct SetLoadingDomainAwaiter
+{
+	std::string name;
+
+	bool await_ready() const noexcept { return false; }
+
+	template <typename Promise>
+	bool await_suspend(std::coroutine_handle<Promise> h)
+	{
+		static_assert(std::is_base_of<LoadingTaskPromiseBase, Promise>::value,
+		              "setLoadingDomain can only be co_awaited from a LoadingTask");
+		h.promise().activateLoadingDomain(std::move(name));
+		// Do not suspend. This is not a `yieldFrame()` quantum.
+		return false;
+	}
+
+	void await_resume() const noexcept {}
+};
+
+inline SetLoadingDomainAwaiter setLoadingDomain(std::string name)
+{
+	return SetLoadingDomainAwaiter{std::move(name)};
+}
+
 template <typename T = void>
 struct LoadingTaskPromise : LoadingTaskPromiseBase
 {
