@@ -523,7 +523,7 @@ void loadMultiScripts()
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game].c_str());
-	aFileName[strlen(aFileName) - 4] = '\0';
+	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcpy(aPathName, aFileName);
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
