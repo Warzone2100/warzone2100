@@ -2730,6 +2730,8 @@ LoadingTask<> loadGameCleanupOnFailure(ResourceLoadingController& controller, co
 // UserSaveGame ... this is true when you are loading a players save game
 LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 {
+	co_await setLoadingDomain(_("Game data"));
+
 	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, PerPlayerDroidLists *> droidMap;
 	std::map<WzString, PerPlayerStructureLists *> structMap;
