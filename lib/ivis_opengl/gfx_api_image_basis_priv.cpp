@@ -520,7 +520,7 @@ gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& file
 	unsigned int toplevel_width = images[0]->width();
 	unsigned int toplevel_height = images[0]->height();
 	auto uploadFormat = images[0]->pixel_format();
-	std::unique_ptr<gfx_api::texture> pTexture = std::unique_ptr<gfx_api::texture>(gfx_api::context::get().create_texture(mipmap_levels, toplevel_width, toplevel_width, uploadFormat, filename));
+	std::unique_ptr<gfx_api::texture> pTexture = std::unique_ptr<gfx_api::texture>(gfx_api::context::get().create_texture(mipmap_levels, toplevel_width, toplevel_height, uploadFormat, filename));
 
 	// Upload image levels to texture
 	for (size_t i = 0; i < mipmap_levels; i++)
@@ -528,7 +528,7 @@ gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& file
 		unsigned int expected_width = std::max<unsigned int>(1, toplevel_width >> i);
 		unsigned int expected_height = std::max<unsigned int>(1, toplevel_height >> i);
 
-		ASSERT(images[i]->width() == expected_width && images[i]->height() == expected_height, "Actual mip-level dimensions (%u x %u) do not match expected dimensions (%u x %u) for level[%zu] in image: %s", images[i]->width(), images[i]->height(), expected_width, expected_height, i, filename.c_str());
+		ASSERT_OR_RETURN(nullptr, images[i]->width() == expected_width && images[i]->height() == expected_height, "Actual mip-level dimensions (%u x %u) do not match expected dimensions (%u x %u) for level[%zu] in image: %s", images[i]->width(), images[i]->height(), expected_width, expected_height, i, filename.c_str());
 
 		bool uploadResult = pTexture->upload(i, *(images[i]));
 		ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");

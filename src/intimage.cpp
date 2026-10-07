@@ -122,7 +122,7 @@ IMAGEFRAME FrameRadar =
 bool imageInitBitmaps()
 {
 	IntImages = (IMAGEFILE *)resGetData("IMG", "intfac.img");
-	if (IntImages == nullptr)
+	if (IntImages == nullptr || IntImages->imageDefs.size() < IMAGE_INTFAC_COUNT)
 	{
 		std::string errorMessage = astringf(_("Unable to load: %s."), "intfac.img");
 		if (!getLoadedMods().empty())

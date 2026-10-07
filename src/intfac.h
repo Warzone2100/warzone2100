@@ -493,6 +493,8 @@ enum INTFAC_TYPE
 	// For a list of prerequisites read as a checklist. Only the ticked state needs
 	// an image: an empty circle is a circle, which the renderer draws already.
 	IMAGE_INTFAC_CHECK_CIRCLE,
+
+	IMAGE_INTFAC_COUNT
 };
 
 #endif //__INCLUDED_SRC_INTFAC_H__

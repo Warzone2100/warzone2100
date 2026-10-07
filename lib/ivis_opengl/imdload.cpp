@@ -30,6 +30,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <array>
+#include <limits>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
@@ -59,6 +60,9 @@ using Vector4f = glm::vec4;
 //#define MAX_PIE_POLYGONS 21844 // floor((UINT16_MAX-1) / 3)
 #define MAX_PIE_POLYGONS 8192
 static_assert(MAX_PIE_POLYGONS <= ((UINT16_MAX-1) / 3), "MAX_PIE_POLYGONS must not currently exceed floor((UINT16_MAX-1) / 3)");
+#define MAX_PIE_POINTS (MAX_PIE_POLYGONS * 3)
+#define MAX_PIE_CONNECTORS 256
+#define MAX_PIE_ANIM_FRAMES 1024
 
 // Scale animation numbers from int to float
 #define INT_SCALE       1000
@@ -128,7 +132,7 @@ iIMDShape& iIMDShape::operator=(iIMDShape&& other) noexcept
 		std::swap(buffers, other.buffers);
 		std::swap(vertexCount, other.vertexCount);
 		std::swap(objanimdata, other.objanimdata);
-		std::swap(objanimframes, objanimframes);
+		std::swap(objanimframes, other.objanimframes);
 		std::swap(objanimtime, other.objanimtime);
 		std::swap(objanimcycles, other.objanimcycles);
 		std::swap(objanimpie, other.objanimpie);
@@ -1150,6 +1154,7 @@ static void _imd_calc_bounds(iIMDShape &s, bool allLevels = false)
 
 static bool _imd_load_points(const char **ppFileData, const char *FileDataEnd, iIMDShape &s, uint32_t npoints)
 {
+	ASSERT_OR_RETURN(false, npoints <= MAX_PIE_POINTS, "'POINTS' directive count (%" PRIu32") exceeds maximum supported (%d)", npoints, MAX_PIE_POINTS);
 	//load the points then pass through a second time to setup bounding datavalues
 	s.points.resize(npoints);
 
@@ -1183,6 +1188,7 @@ bool _imd_load_connectors(const char **ppFileData, const char *FileDataEnd, unsi
 	lineToProcess.pNextLineBegin = pFileData;
 	Vector3i newVector(0, 0, 0);
 
+	ASSERT_OR_RETURN(false, numConnectors <= MAX_PIE_CONNECTORS, "'CONNECTORS' directive count (%u) exceeds maximum supported (%d)", numConnectors, MAX_PIE_CONNECTORS);
 	s.connectors.reserve(numConnectors);
 	for (unsigned int i = 0; i < numConnectors; ++i)
 	{
@@ -1805,18 +1811,19 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		}
 		else if (strcmp(buffer, "ANIMOBJECT") == 0)
 		{
-			s.objanimtime = value;
-			if (s.objanimtime == 0)
-			{
-				debug(LOG_ERROR, "%s bad ANIMOBJ time: %" PRIu32, filename.toUtf8().c_str(), value);
-				return nullptr;
-			}
 			const char* pRestOfLine = lineToProcess.lineContents.c_str() + cnt;
 			if (sscanf(pRestOfLine, "%d %d%n", &s.objanimcycles, &s.objanimframes, &cnt) != 2)
 			{
 				debug(LOG_ERROR, "%s bad ANIMOBJ: %s", filename.toUtf8().c_str(), pFileData);
 				return nullptr;
 			}
+			if (s.objanimframes <= 0 || s.objanimframes > MAX_PIE_ANIM_FRAMES || s.objanimcycles < 0
+			    || value == 0 || value > static_cast<uint32_t>(std::numeric_limits<int>::max() / std::max(s.objanimframes, s.objanimcycles)))
+			{
+				debug(LOG_ERROR, "%s bad ANIMOBJ time / cycles / frames: %" PRIu32 " %d %d", filename.toUtf8().c_str(), value, s.objanimcycles, s.objanimframes);
+				return nullptr;
+			}
+			s.objanimtime = static_cast<int>(value);
 			pFileData = lineToProcess.pNextLineBegin;
 			s.objanimdata.resize(s.objanimframes);
 			for (int i = 0; i < s.objanimframes; i++)
@@ -1828,7 +1835,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 					return nullptr;
 				}
 
-				int frame;
+				int frame = -1;
 				Vector3i pos(0, 0, 0), rot(0, 0, 0);
 
 				if (sscanf(lineToProcess.lineContents.c_str(), "%d %d %d %d %d %d %d %f %f %f%n",
@@ -1865,6 +1872,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		{
 			ASSERT_OR_RETURN(nullptr, s.altShadowPoints.size() > 0, "'SHADOW_POLYGONS' must follow a non-empty SHADOW_POINTS section");
 			ASSERT_OR_RETURN(nullptr, value > 0, "Invalid 'SHADOW_POLYGONS' count, got: %" PRIu32, value);
+			ASSERT_OR_RETURN(nullptr, value <= MAX_PIE_POLYGONS, "'SHADOW_POLYGONS' directive count (%" PRIu32") exceeds maximum supported (%d)", value, MAX_PIE_POLYGONS);
 			uint32_t nShadowPolys = static_cast<uint32_t>(value);
 
 			iIMDShape tmpShadowShape;

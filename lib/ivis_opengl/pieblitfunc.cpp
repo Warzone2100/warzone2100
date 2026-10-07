@@ -924,7 +924,10 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 		pBatchedRequests = &localBatch;
 	}
 
-	assertValidImage(ImageFile, ID);
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
 	const AtlasImageDef *Image = &ImageFile->imageDefs[ID];
 
 	REND_MODE mode = REND_OPAQUE;
@@ -934,7 +937,7 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 	unsigned int usableImageWidth = Image->Width;
 	unsigned int imageXInset = 0;
-	if (enableHorizontalTilingSeamWorkaround)
+	if (enableHorizontalTilingSeamWorkaround && Image->Width > 2)
 	{
 		// Inset the portion of the image that is used by 1 on both the left + right sides
 		usableImageWidth -= 2;
@@ -977,7 +980,10 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 		pBatchedRequests = &localBatch;
 	}
 
-	assertValidImage(ImageFile, ID);
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
 	const AtlasImageDef *Image = &ImageFile->imageDefs[ID];
 
 	REND_MODE mode = REND_OPAQUE;

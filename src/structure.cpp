@@ -3951,7 +3951,10 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 			if (strFirstImd != nullptr && strFirstImd->next != nullptr)
 			{
 				const iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
-				psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
+				if (strImd->objanimframes > 0)
+				{
+					psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
+				}
 			}
 			else
 			{
@@ -5217,7 +5220,7 @@ bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muz
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psShape && !psShape->connectors.empty())
+	if (psShape && static_cast<size_t>(weapon_slot) < psShape->connectors.size())
 	{
 		Vector3i barrel(0, 0, 0);
 
@@ -5251,7 +5254,7 @@ bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle,
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psShape && !psShape->connectors.empty())
+	if (psShape && static_cast<size_t>(weapon_slot) < psShape->connectors.size())
 	{
 		Vector3i barrel(0, 0, 0);
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;

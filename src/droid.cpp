@@ -2430,7 +2430,8 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 
 	if (psBodyImd && static_cast<size_t>(weapon_slot) < psBodyImd->connectors.size())
 	{
-		char debugStr[250], debugLen = 0;  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
+		char debugStr[250];  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
+		size_t debugLen = 0;
 
 		Vector3i barrel(0, 0, 0);
 		const iIMDBaseShape *psWeaponImd = nullptr, *psMountImd = nullptr;
