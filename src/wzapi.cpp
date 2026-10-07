@@ -317,6 +317,12 @@ static bool isGlobalScript(const wzapi::execution_context &context)
 	return instance != nullptr && instance->binding() == wzapi::ScriptBinding::HostDeclaredGlobal;
 }
 
+// Global scripts run on every client, so only the client responsible for the player sends a game message for it
+static bool scriptSendsFor(const wzapi::execution_context &context, int player)
+{
+	return !bMultiPlayer || !isGlobalScript(context) || myResponsibility(player);
+}
+
 //-- ## setAlliance(player1, player2, areAllies)
 //--
 //-- Set alliance status between two players to either true or false. (3.2+ only)
@@ -2867,7 +2873,10 @@ wzapi::no_return_value wzapi::completeResearch(WZAPI_PARAMS(std::string research
 	}
 	if (bMultiMessages && (gameTime > 2)) // ??? "gameTime > 2" ??
 	{
-		SendResearch(player, psResearch->index, false);
+		if (scriptSendsFor(context, player))
+		{
+			SendResearch(player, psResearch->index, false);
+		}
 		// Wait for our message before doing anything.
 	}
 	else
@@ -2893,7 +2902,10 @@ wzapi::no_return_value wzapi::completeAllResearch(WZAPI_PARAMS(optional<int> _pl
 		{
 			if (bMultiMessages && (gameTime > 2))
 			{
-				SendResearch(player, psResearch->index, false);
+				if (scriptSendsFor(context, player))
+				{
+					SendResearch(player, psResearch->index, false);
+				}
 				// Wait for our message before doing anything.
 			}
 			else
@@ -3463,6 +3475,10 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 	uint32_t object_id = psObject->id;
 	uint8_t from = psObject->player;
 	uint8_t to = static_cast<uint8_t>(player);
+	if (from == to)
+	{
+		return false;
+	}
 	uint8_t giftType = 0;
 	if (psObject->type == OBJ_DROID)
 	{
@@ -3490,6 +3506,10 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 	{
 		return false;
 	}
+	if (!scriptSendsFor(context, from))
+	{
+		return true;
+	}
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
 	NETuint8_t(w, giftType);
 	NETuint8_t(w, from);
@@ -3512,6 +3532,10 @@ bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 	}
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	SCRIPT_ASSERT(false, context, amount >= 0, "Invalid amount: %d", amount);
+	if (from == player)
+	{
+		return false;
+	}
 	giftPower(from, player, amount, true);
 	return true;
 }

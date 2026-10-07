@@ -320,7 +320,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
 bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid);
 
 // give a structure from one player to another - used in Electronic Warfare
-STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true);
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true, bool grantReward = true);
 
 /*Initialise the production list and set up the production player*/
 void changeProductionPlayer(UBYTE player);

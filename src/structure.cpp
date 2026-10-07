@@ -7041,7 +7041,7 @@ bool	STRUCTURE::isDamaged() const
 
 // give a structure from one player to another - used in Electronic Warfare
 //returns pointer to the new structure
-STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare)
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare, bool grantReward)
 {
 	STRUCTURE           *psNewStruct;
 	STRUCTURE_STATS     *psType, *psModule;
@@ -7056,7 +7056,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	visRemoveVisibility(psStructure, gameWorld.map);
 
 	int prevState = intGetResearchState();
-	bool reward = electronicReward(psStructure, attackPlayer);
+	bool reward = grantReward && electronicReward(psStructure, attackPlayer);
 
 	if (bMultiPlayer)
 	{
