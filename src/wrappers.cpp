@@ -27,12 +27,15 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/gamepad_input.h"
+#include "lib/framework/resource_loading_controller.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"	// multiplayer
 #include "lib/sound/audio.h"
@@ -143,6 +146,33 @@ static void ensureLoadingBarLayout()
 	}
 }
 
+static void drawLoadingDomainLabel()
+{
+	const std::string_view path = ResourceLoadingController::instance().loadingDomainPath();
+	if (path.empty() || loadingBar.boxWidth <= 0)
+	{
+		return;
+	}
+
+	constexpr iV_fonts font = font_medium;
+	constexpr int gapPx = 4;
+	const int lineSize = iV_GetTextLineSize(font);
+	const int aboveBase = iV_GetTextAboveBase(font);
+	const float baseline = static_cast<float>(loadingBar.barLeftY - gapPx - lineSize - aboveBase);
+
+	WzString shown = WzString::fromUtf8(std::string(_("Loading")) + " " + std::string(path));
+	const unsigned int barWidth = static_cast<unsigned int>(loadingBar.boxWidth);
+	if (iV_GetTextWidth(shown, font) > barWidth)
+	{
+		WidthLimitedWzText limited;
+		limited.setTruncatableText(shown, font, barWidth);
+		shown = limited.getText();
+	}
+
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText(shown.toUtf8().c_str(), static_cast<float>(loadingBar.barLeftX), baseline, font);
+}
+
 static void renderLoadingScreenPass()
 {
 	ensureLoadingBarLayout();
@@ -168,6 +198,8 @@ static void renderLoadingScreenPass()
 			pie_UniTransBoxFill(topX, topY, botX, botY, loadingStars[i].colour);
 		}
 	}
+
+	drawLoadingDomainLabel();
 }
 
 bool recalculateEffectiveHeadlessValue()
