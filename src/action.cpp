@@ -2013,8 +2013,8 @@ void actionUpdateDroid(DROID *psDroid)
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
 					// if completely repaired then reset order
-					secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 					orderDroidObj(psDroid, DORDER_GUARD, psDroid->order.psObj, ModeImmediate);
+					secondarySetStateWithoutMessage(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 				}
 				else
 				{

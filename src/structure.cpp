@@ -2408,7 +2408,7 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 }
 
 // Set the command droid that factory production should go to
-void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
+void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander, QUEUE_MODE clearMode)
 {
 	FACTORY			*psFact;
 	SDWORD			factoryInc, typeFlag;
@@ -2438,20 +2438,17 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 	// removing a commander from a factory
 	if (psFact->psCommander != nullptr)
 	{
-		if (typeFlag == FACTORY_FLAG)
+		if (psFact->psAssemblyPoint->factoryInc < MAX_FACTORY)
 		{
+			const unsigned shift = (typeFlag == FACTORY_FLAG) ? DSS_ASSPROD_SHIFT : (typeFlag == CYBORG_FLAG) ? DSS_ASSPROD_CYBORG_SHIFT : DSS_ASSPROD_VTOL_SHIFT;
+			const bool prevMultiMessages = bMultiMessages;
+			if (clearMode == ModeImmediate)
+			{
+				bMultiMessages = false;
+			}
 			secondarySetState(psFact->psCommander, gameWorld.objects, DSO_CLEAR_PRODUCTION,
-			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_SHIFT)));
-		}
-		else if (typeFlag == CYBORG_FLAG)
-		{
-			secondarySetState(psFact->psCommander, gameWorld.objects, DSO_CLEAR_PRODUCTION,
-			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_CYBORG_SHIFT)));
-		}
-		else
-		{
-			secondarySetState(psFact->psCommander, gameWorld.objects, DSO_CLEAR_PRODUCTION,
-			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_VTOL_SHIFT)));
+			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + shift)));
+			bMultiMessages = prevMultiMessages;
 		}
 
 		psFact->psCommander = nullptr;
@@ -2472,6 +2469,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		ASSERT_OR_RETURN(, !missionIsOffworld(), "cannot assign a commander to a factory when off world");
 
 		factoryInc = psFact->psAssemblyPoint->factoryInc;
+		ASSERT_OR_RETURN(, factoryInc < MAX_FACTORY, "Factory number %d cannot have a commander", factoryInc);
 
 		auto& flagPosList = gameWorld.objects.flags[psStruct->player];
 		FlagPositionList::iterator flagPosIt = flagPosList.begin(), flagPosItNext;
@@ -2504,9 +2502,13 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid)
 {
-	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+	const unsigned player = psDroid->player;
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
 
-	for (STRUCTURE* psCurr : gameWorld.objects.structures[selectedPlayer])
+	for (STRUCTURE* psCurr : gameWorld.objects.structures[player])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2518,7 +2520,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 			}
 		}
 	}
-	for (STRUCTURE* psCurr : mission.gameWorld.objects.structures[selectedPlayer])
+	for (STRUCTURE* psCurr : mission.gameWorld.objects.structures[player])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2740,7 +2742,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			return false;
 		}
 		psFact = &psStructure->pFunctionality->factory;
-		bool hasCommander = psFact->psCommander != nullptr && myResponsibility(psStructure->player);
+		bool hasCommander = psFact->psCommander != nullptr;
 		// assign a group to the manufactured droid
 		if (psStructure->productToGroup != UBYTE_MAX)
 		{
@@ -3130,7 +3132,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 		// only call "secondarySetState" *after* triggering "droidWasFullyRepaired"
 		// because in some cases calling it would modify primary order
 		// thus, loosing information that we actually had a RTR|RTR_SPECIFIED before
-		secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
+		secondarySetStateWithoutMessage(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 		return RepairState::Idle;
 	};
 	case RepairEvents::UnitDied:

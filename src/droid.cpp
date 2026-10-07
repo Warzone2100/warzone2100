@@ -330,7 +330,7 @@ int32_t droidDamage(GameWorld& world, DROID *psDroid, PROJECTILE *psProjectile, 
 		// reset the attack level
 		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ATTACKED)
 		{
-			secondarySetState(psDroid, world.objects, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
+			secondarySetStateWithoutMessage(psDroid, world.objects, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
 		}
 		// Now check for auto return on droid's secondary orders (i.e. return on medium/heavy damage)
 		secondaryCheckDamageLevel(psDroid);
@@ -1588,7 +1588,7 @@ bool droidUpdateDroidRepair(DROID *psRepairDroid)
 		// if psDroidToRepair has a commander, commander will call him back anyway
 		// if no commanders, just DORDER_GUARD the repair turret
 		orderDroidObj(psDroidToRepair, DORDER_GUARD, psRepairDroid, ModeImmediate);
-		secondarySetState(psDroidToRepair, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
+		secondarySetStateWithoutMessage(psDroidToRepair, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 		psDroidToRepair->order.psObj = nullptr;
 	}
 	return needMoreRepair;
@@ -1974,7 +1974,7 @@ DROID *reallyBuildDroid(GameWorld& world, const DROID_TEMPLATE *pTemplate, Posit
 		droid.pos.z += TRANSPORTER_HOVER_HEIGHT;
 
 		/* reset halt secondary order from guard to hold */
-		secondarySetState(&droid, world.objects, DSO_HALTTYPE, DSS_HALT_HOLD);
+		secondarySetStateWithoutMessage(&droid, world.objects, DSO_HALTTYPE, DSS_HALT_HOLD);
 	}
 
 	if (player == selectedPlayer)
@@ -3557,6 +3557,126 @@ bool standardSensorDroid(const DROID *psDroid)
 // Give a droid from one player to another - used in Electronic Warfare and multiplayer.
 // Got to destroy the droid and build another since there are too many complications otherwise.
 // Returns the droid created.
+static bool giftTargetIsFriendly(const BASE_OBJECT *psTarget, unsigned player)
+{
+	return psTarget != nullptr && (psTarget->player == player || aiCheckAlliancesInRange(psTarget->player, player));
+}
+
+static bool giftedDroidKeepsOrder(const DROID_ORDER_DATA &order, unsigned player)
+{
+	switch (order.type)
+	{
+	case DORDER_NONE:
+	case DORDER_STOP:
+	case DORDER_MOVE:
+	case DORDER_SCOUT:
+	case DORDER_PATROL:
+	case DORDER_CIRCLE:
+	case DORDER_HOLD:
+	case DORDER_DISEMBARK:
+	case DORDER_RECOVER:
+		return true;
+	case DORDER_GUARD:
+		return order.psObj == nullptr || giftTargetIsFriendly(order.psObj, player);
+	case DORDER_ATTACK:
+	case DORDER_ATTACKTARGET:
+	case DORDER_OBSERVE:
+		return order.psObj != nullptr && !giftTargetIsFriendly(order.psObj, player);
+	case DORDER_REPAIR:
+	case DORDER_DROIDREPAIR:
+	case DORDER_RESTORE:
+		return giftTargetIsFriendly(order.psObj, player);
+	case DORDER_FIRESUPPORT:
+	case DORDER_COMMANDERSUPPORT:
+	case DORDER_EMBARK:
+		return order.psObj != nullptr && order.psObj->player == player;
+	default:
+		return false;
+	}
+}
+
+static void giftedDroidUpdateOrders(DROID *psD)
+{
+	const unsigned player = psD->player;
+
+	setDroidBase(psD, nullptr);
+
+	for (unsigned i = psD->listSize; i-- > 0;)
+	{
+		if (!giftedDroidKeepsOrder(psD->asOrderList[i], player))
+		{
+			orderDroidListEraseRange(psD, i, i + 1);
+		}
+	}
+
+	if (!giftedDroidKeepsOrder(psD->order, player))
+	{
+		syncDebug("Gifted droid %u drops order %s", psD->id, getDroidOrderName(psD->order.type));
+		psD->secondaryOrder &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
+		psD->secondaryOrderPending &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_PATROL_MASK);
+		if (orderDroidList(psD))
+		{
+			return;
+		}
+		if (psD->isVtol())
+		{
+			psD->order = DroidOrder(DORDER_NONE);
+			actionDroid(psD, DACTION_NONE);
+			moveToRearm(psD);
+		}
+		else
+		{
+			orderDroid(psD, DORDER_STOP, ModeImmediate);
+		}
+		return;
+	}
+
+	bool resetAction = false;
+	switch (psD->action)
+	{
+	case DACTION_ATTACK:
+	case DACTION_MOVETOATTACK:
+	case DACTION_ROTATETOATTACK:
+	case DACTION_VTOLATTACK:
+	case DACTION_OBSERVE:
+	case DACTION_MOVETOOBSERVE:
+	case DACTION_MOVEFIRE:
+		for (const BASE_OBJECT *psTarget : psD->psActionTarget)
+		{
+			resetAction = resetAction || giftTargetIsFriendly(psTarget, player);
+		}
+		break;
+	case DACTION_MOVETOREARM:
+	case DACTION_WAITFORREARM:
+	case DACTION_MOVETOREARMPOINT:
+	case DACTION_WAITDURINGREARM:
+		resetAction = psD->psActionTarget[0] == nullptr || psD->psActionTarget[0]->player != player;
+		break;
+	default:
+		break;
+	}
+	if (!resetAction)
+	{
+		return;
+	}
+
+	syncDebug("Gifted droid %u resets action %s", psD->id, getDroidActionName(psD->action));
+	const bool wasRearming = psD->isVtolRearming();
+	if (psD->order.type == DORDER_MOVE)
+	{
+		DROID_ORDER_DATA order = psD->order;
+		orderDroidBase(psD, &order);
+	}
+	else
+	{
+		actionDroid(psD, DACTION_NONE);
+	}
+	if (wasRearming)
+	{
+		moveToRearm(psD);
+	}
+}
+
 DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 {
 	CHECK_DROID(psD);
@@ -3638,6 +3758,21 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 
 	int oldPlayer = psD->player;
 
+	if (psD->droidType == DROID_COMMAND)
+	{
+		for (STRUCTURE *psStruct : gameWorld.objects.structures[oldPlayer])
+		{
+			if (psStruct->isFactory() && psStruct->pFunctionality->factory.psCommander == psD)
+			{
+				assignFactoryCommandDroid(psStruct, nullptr);
+			}
+		}
+		if (cmdDroidGetDesignator(oldPlayer) == psD)
+		{
+			cmdDroidClearDesignator(oldPlayer);
+		}
+	}
+
 	// reset the assigned state of units attached to a leader
 	for (DROID *psCurr : gameWorld.objects.droids[oldPlayer])
 	{
@@ -3704,6 +3839,8 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 
 	// Update visibility
 	visTilesUpdate((BASE_OBJECT*)psD, gameWorld.map);
+
+	giftedDroidUpdateOrders(psD);
 
 	// check through the players, and our allies, list of droids to see if any are targetting it
 	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)

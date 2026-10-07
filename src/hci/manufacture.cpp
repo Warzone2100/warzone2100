@@ -106,7 +106,7 @@ void ManufactureController::startDeliveryPointPosition()
 	ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 
 	// make sure that the factory isn't assigned to a commander
-	assignFactoryCommandDroid(factory, nullptr);
+	assignFactoryCommandDroid(factory, nullptr, ModeQueue);
 	auto psFlag = FindFactoryDelivery(factory);
 	if (psFlag)
 	{

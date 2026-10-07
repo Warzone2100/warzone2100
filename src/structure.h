@@ -201,7 +201,7 @@ void checkForPowerGen(STRUCTURE *psPowerGen, WorldObjectState& objState);
 uint16_t countPlayerUnusedDerricks(const WorldObjectState& objState);
 
 // Set the command droid that factory production should go to struct _command_droid;
-void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
+void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander, QUEUE_MODE clearMode = ModeImmediate);
 
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid);
