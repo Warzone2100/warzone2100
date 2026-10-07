@@ -1025,7 +1025,8 @@ void desSetupDesignTemplates()
 		/* add template to list if not a transporter,
 		 * cyborg, person or command droid,
 		 */
-		if (templ.droidType != DROID_TRANSPORTER        &&
+		if (!templ.hidden                               &&
+		    templ.droidType != DROID_TRANSPORTER        &&
 		    templ.droidType != DROID_SUPERTRANSPORTER   &&
 		    templ.droidType != DROID_CYBORG             &&
 		    templ.droidType != DROID_CYBORG_SUPER       &&

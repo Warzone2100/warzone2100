@@ -7630,6 +7630,10 @@ bool writeTemplateFile(const char *pFileName)
 	nlohmann::json localtemplates_array = nlohmann::json::array();
 	for (auto &psCurr : localTemplates)
 	{
+		if (psCurr.hidden)
+		{
+			continue;
+		}
 		localtemplates_array.push_back(convGameTemplateToJSON(&psCurr));
 	}
 	mRoot["localTemplates"] = std::move(localtemplates_array);

@@ -3092,12 +3092,13 @@ bool wzapi::removeTemplate(WZAPI_PARAMS(std::string _templateName))
 		debug(LOG_ERROR, "Template %s was not found!", templateName.toUtf8().c_str());
 		return false;
 	}
-	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	for (auto &localTemplate : localTemplates)
 	{
-		psCurr = &*i;
-		if (templateName.compare(psCurr->id) == 0)
+		psCurr = &localTemplate;
+		if (!psCurr->hidden && templateName.compare(psCurr->id) == 0)
 		{
-			localTemplates.erase(i);
+			psCurr->enabled = false;
+			psCurr->hidden = true;
 			break;
 		}
 	}
