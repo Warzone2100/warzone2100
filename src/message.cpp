@@ -141,6 +141,17 @@ static inline void addMessageToList(PerPlayerMessageLists& list, MESSAGE *msg, U
  * list is a pointer to the message list
  * del is a pointer to the message to remove
 */
+// Beacon messages own their view data
+static void deleteMessage(MESSAGE *psMessage)
+{
+	if (psMessage->dataType == MSG_DATA_BEACON && psMessage->pViewData != nullptr)
+	{
+		delete psMessage->pViewData->pData;
+		delete psMessage->pViewData;
+	}
+	delete psMessage;
+}
+
 static inline void removeMessageFromList(PerPlayerMessageLists& list, MESSAGE *del, UDWORD player)
 {
 	ASSERT_OR_RETURN(, del != nullptr, "Invalid message pointer");
@@ -149,7 +160,7 @@ static inline void removeMessageFromList(PerPlayerMessageLists& list, MESSAGE *d
 	auto it = std::find(list[player].begin(), list[player].end(), del);
 	ASSERT_OR_RETURN(, it != list[player].end(), "Message %p not found in list", static_cast<void*>(del));
 	list[player].erase(it);
-	delete del;
+	deleteMessage(del);
 }
 
 static inline void releaseAllMessages(PerPlayerMessageLists& list)
@@ -160,7 +171,7 @@ static inline void releaseAllMessages(PerPlayerMessageLists& list)
 		// Iterate through all messages in list
 		for (MESSAGE* psCurr : pl)
 		{
-			delete psCurr;
+			deleteMessage(psCurr);
 		}
 		pl.clear();
 	}

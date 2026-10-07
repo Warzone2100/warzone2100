@@ -199,6 +199,9 @@ bool SendColourRequest(UBYTE player, UBYTE col);
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
+void lobbyRequestRateLimitsNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB);
+void lobbyRequestRateLimitsReset(uint32_t playerIndex);
+bool lobbyNameChangeRequestAllowed(uint32_t sender);
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN

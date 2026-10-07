@@ -66,6 +66,7 @@
 #include "src/multijoin.h"
 #include "src/multiint.h"
 #include "src/multiplay.h"
+#include "src/multivote.h"
 #include "src/hci/quickchat.h"
 #include "src/warzoneconfig.h"
 #include "src/version.h"
@@ -685,6 +686,7 @@ static void initPlayerNetworkProps(int playerIndex)
 	{
 		ASSERT(false, "PLAYERS.wzFiles is uninitialized??");
 	}
+	NetPlay.players[playerIndex].wzFileUploadCounts.clear();
 	if (playerIndex < MAX_CONNECTED_PLAYERS)
 	{
 		ingame.JoiningInProgress[playerIndex] = false;
@@ -1263,12 +1265,32 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 	return true;
 }
 
-void NETfixDuplicatePlayerNames()
+void NETfixDuplicatePlayerNames(optional<uint32_t> changedPlayer)
 {
-	char name[StringSize];
-	unsigned i, j, pass;
-	for (i = 1; i != MAX_CONNECTED_PLAYERS; ++i)
+	// The host keeps its name, and a player who just joined or changed name gives way to everyone else
+	std::vector<uint32_t> order;
+	order.reserve(MAX_CONNECTED_PLAYERS);
+	if (NetPlay.hostPlayer < MAX_CONNECTED_PLAYERS)
 	{
+		order.push_back(NetPlay.hostPlayer);
+	}
+	for (uint32_t i = 0; i != MAX_CONNECTED_PLAYERS; ++i)
+	{
+		if (i != NetPlay.hostPlayer && i != changedPlayer.value_or(MAX_CONNECTED_PLAYERS))
+		{
+			order.push_back(i);
+		}
+	}
+	if (changedPlayer.value_or(MAX_CONNECTED_PLAYERS) < MAX_CONNECTED_PLAYERS && changedPlayer.value() != NetPlay.hostPlayer)
+	{
+		order.push_back(changedPlayer.value());
+	}
+
+	char name[StringSize];
+	unsigned pass;
+	for (size_t k = 1; k < order.size(); ++k)
+	{
+		const uint32_t i = order[k];
 		sstrcpy(name, NetPlay.players[i].name);
 		if (name[0] == '\0' || !NetPlay.players[i].allocated)
 		{
@@ -1281,15 +1303,16 @@ void NETfixDuplicatePlayerNames()
 				ssprintf(name, "%s_%X", NetPlay.players[i].name, pass + 1);
 			}
 
-			for (j = 0; j != i; ++j)
+			size_t j;
+			for (j = 0; j != k; ++j)
 			{
-				if (strcmp(name, NetPlay.players[j].name) == 0)
+				if (strcmp(name, NetPlay.players[order[j]].name) == 0)
 				{
 					break;  // Duplicate name.
 				}
 			}
 
-			if (i == j)
+			if (j == k)
 			{
 				break;  // Unique name.
 			}
@@ -1932,11 +1955,10 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 		NetPlay.playerReferences[playerIndex]->disconnect();
 		NetPlay.playerReferences[playerIndex] = std::make_shared<PlayerReference>(playerIndex);
 
-		//
-//		if (playerIndex < MAX_PLAYERS)
-//		{
-//			playerVotes[playerIndex] = 0;
-//		}
+		if (playerIndex < MAX_PLAYERS)
+		{
+			resetLobbyChangePlayerVote(playerIndex);
+		}
 	}
 
 	// Swap the player multistats / identity info
@@ -1973,7 +1995,11 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	playerSpamMuteNotifyIndexSwap(playerIndexA, playerIndexB);
 	invalidMessageLogNotifyIndexSwap(playerIndexA, playerIndexB);
+	lobbyRequestRateLimitsNotifyIndexSwap(playerIndexA, playerIndexB);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
+	multiOptionPrefValuesSwap(playerIndexA, playerIndexB);
+	multiClearHostRequestMoveToPlayer(playerIndexA);
+	multiClearHostRequestMoveToPlayer(playerIndexB);
 
 	// Ensure we filter messages appropriately waiting for the client ack *at each new index*
 	if (NetPlay.players[playerIndexA].allocated)
@@ -2703,15 +2729,25 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				break;
 			}
 
+			if (playerQueue.index != NetPlay.hostPlayer && !lobbyNameChangeRequestAllowed(playerQueue.index))
+			{
+				debug(LOG_NET, "Ignoring NET_PLAYERNAME_CHANGEREQUEST from %" PRIu8 ": too many requests", playerQueue.index);
+				if (NetPlay.players[player].allocated)
+				{
+					NETSendPlayerInfoTo(player, player);
+				}
+				break;
+			}
+
 			oldName = NetPlay.players[player].name;
 			setPlayerName(player, newName.toUtf8().c_str());
+			NETfixDuplicatePlayerNames(player);
 
 			if (NetPlay.players[player].allocated && strncmp(oldName.toUtf8().c_str(), NetPlay.players[player].name, sizeof(NetPlay.players[player].name)) != 0)
 			{
 				printConsoleNameChange(oldName.toUtf8().c_str(), NetPlay.players[player].name);
 				// Send the updated data to all other clients as well.
 				NETBroadcastPlayerInfo(player); // ultimately triggers updateMultiplayGameData inside NETSendNPlayerInfoTo
-				NETfixDuplicatePlayerNames();
 				netPlayersUpdated = true;
 			}
 
@@ -3359,8 +3395,8 @@ bool markAsDownloadedFile(const std::string &filename)
 	return false;
 }
 
-// recv file. it returns % of the file so far recvd.
-int NETrecvFile(NETQUEUE queue)
+// recv file. it returns true when a file has been received and validated.
+bool NETrecvFile(NETQUEUE queue)
 {
 	Sha256 hash;
 	hash.setZero();
@@ -3396,7 +3432,7 @@ int NETrecvFile(NETQUEUE queue)
 	{
 		debug(LOG_WARNING, "Receiving file data we didn't request.");
 		sendCancelFileDownload(hash);
-		return 100;
+		return false;
 	}
 
 	auto terminateFileDownload = [sendCancelFileDownload](std::vector<WZFile>::iterator &file) {
@@ -3413,7 +3449,7 @@ int NETrecvFile(NETQUEUE queue)
 	{
 		debug(LOG_ERROR, "Invalid file data received; (bytes: %" PRIu32")", bytesToRead);
 		terminateFileDownload(file); // 'file' is now an invalidated iterator.
-		return 100;
+		return false;
 	}
 
 	//sanity checks
@@ -3430,7 +3466,7 @@ int NETrecvFile(NETQUEUE queue)
 			// this should not happen!
 			debug(LOG_ERROR, "Host sent a different file size for this file; (original size: %u, new size: %u)", file->size, size);
 			terminateFileDownload(file); // 'file' is now an invalidated iterator.
-			return 100;
+			return false;
 		}
 	}
 
@@ -3438,7 +3474,7 @@ int NETrecvFile(NETQUEUE queue)
 	{
 		debug(LOG_ERROR, "Invalid downloaded filesize; (size: %" PRIu32")", size);
 		terminateFileDownload(file); // 'file' is now an invalidated iterator.
-		return 100;
+		return false;
 	}
 
 	if (PHYSFS_tell(file->handle()) != static_cast<PHYSFS_sint64>(pos))
@@ -3446,7 +3482,7 @@ int NETrecvFile(NETQUEUE queue)
 		// actual position in file does not equal the expected position in the file (sent by the host)
 		debug(LOG_ERROR, "Invalid file position in downloaded file; (desired: %" PRIu32")", pos);
 		terminateFileDownload(file); // 'file' is now an invalidated iterator.
-		return 100;
+		return false;
 	}
 
 	// Write packet to the file.
@@ -3462,7 +3498,8 @@ int NETrecvFile(NETQUEUE queue)
 			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", WZ_PHYSFS_getLastError());
 		}
 
-		if(!validateReceivedFile(*file))
+		const bool validFile = validateReceivedFile(*file);
+		if (!validFile)
 		{
 			// Delete the (invalid) downloaded file
 			PHYSFS_delete(file->filename.c_str());
@@ -3474,11 +3511,10 @@ int NETrecvFile(NETQUEUE queue)
 		}
 
 		DownloadingWzFiles.erase(file);
+		return validFile;
 	}
-	// 'file' may now be an invalidated iterator.
 
-	//return the percentage count
-	return static_cast<int>(static_cast<uint64_t>(newPos) * 100 / size);
+	return false;
 }
 
 unsigned NETgetDownloadProgress(unsigned player)
@@ -4719,7 +4755,7 @@ static void NETallowJoining()
 			{
 				NETBroadcastPlayerInfo(j);
 			}
-			NETfixDuplicatePlayerNames();
+			NETfixDuplicatePlayerNames(index);
 
 			// Send the updated gameListing to the masterserver
 			NETupdateLobbyGameListing();

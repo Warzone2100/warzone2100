@@ -595,11 +595,17 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	if (NetPlay.isHost)
 	{
 		multiClearHostRequestMoveToPlayer(playerIndex);
+		if (playerIndex < MAX_PLAYERS)
+		{
+			resetLobbyChangePlayerVote(playerIndex);
+		}
 		multiSyncResetPlayerChallenge(playerIndex);
 		resetMultiOptionPrefValues(playerIndex);
 	}
 
 	resetInvalidMessageLog(playerIndex);
+	multiSyncResetPlayerPingReplies(playerIndex);
+	lobbyRequestRateLimitsReset(playerIndex);
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
@@ -623,6 +629,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(gameWorld, playerIndex, false);
 		clearPlayerMultiStats(playerIndex); // local only
+		ingame.VerifiedIdentity[playerIndex] = false;
 		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
@@ -682,6 +689,8 @@ bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdenti
 
 	playerSpamMuteReset(playerIndex);
 	resetInvalidMessageLog(playerIndex);
+	multiSyncResetPlayerPingReplies(playerIndex);
+	lobbyRequestRateLimitsReset(playerIndex);
 
 	if (NetPlay.isHost)		// host responsible for welcoming this player.
 	{
