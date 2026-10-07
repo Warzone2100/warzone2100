@@ -136,6 +136,10 @@ private:
 	    LoadingTaskPromiseBase*, std::coroutine_handle<>, bool) noexcept;
 	friend void loading_task_detail::suspendAwaitChild(
 	    std::coroutine_handle<>, std::coroutine_handle<>, LoadingTaskPromiseBase*);
+	friend void loading_task_detail::activateLoadingDomain(LoadingTaskPromiseBase*, std::string);
+	friend void loading_task_detail::releaseLoadingDomain(LoadingTaskPromiseBase*) noexcept;
+	friend void loading_task_detail::destroyDetachedChildFrame(
+	    std::coroutine_handle<>, LoadingTaskPromiseBase*) noexcept;
 
 	struct ExecutionFrame
 	{

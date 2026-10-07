@@ -35,6 +35,7 @@
 #include <coroutine>
 #include <exception>
 #include <optional>
+#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -42,14 +43,27 @@ class ResourceLoadingController;
 
 /// <summary>
 /// Shared promise state; embedded as the first base of every `LoadingTaskPromise<T>`.
-/// Holds the bound `ResourceLoadingController`, optional per-task `framePolicy`, and
-/// any stored exception from `unhandled_exception()`.
+/// Holds the bound `ResourceLoadingController`, optional per-task `framePolicy`,
+/// any stored exception from `unhandled_exception()`, and the loading domain
+/// activated by `setLoadingDomain` (popped when the frame is destroyed).
 /// </summary>
 struct LoadingTaskPromiseBase
 {
+	LoadingTaskPromiseBase() = default;
+	LoadingTaskPromiseBase(const LoadingTaskPromiseBase&) = delete;
+	LoadingTaskPromiseBase& operator=(const LoadingTaskPromiseBase&) = delete;
+	LoadingTaskPromiseBase(LoadingTaskPromiseBase&&) = delete;
+	LoadingTaskPromiseBase& operator=(LoadingTaskPromiseBase&&) = delete;
+	~LoadingTaskPromiseBase();
+
+	void activateLoadingDomain(std::string name);
+
 	ResourceLoadingController* controller = nullptr;
 	std::exception_ptr exception;
 	std::optional<ResourceLoadingFramePolicy> framePolicy;
+
+	std::string loadingDomainName;
+	bool loadingDomainActive = false;
 };
 
 template <typename T = void>
