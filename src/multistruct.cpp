@@ -365,8 +365,6 @@ void recvStructureInfo(NETQUEUE queue)
 	NETOrderProvenance(r, provenance);
 	bool validMessage = NETend(r);
 
-	orderProvenanceRecordReported(player, static_cast<OrderOrigin>(provenance.origin));
-
 	if (!validMessage || player >= MAX_PLAYERS || structureInfo > STRUCTUREINFO_RELEASERESEARCH || nameLength > MAX_TEMPLATE_NAME_LENGTH)
 	{
 		if (recordInvalidMessage(queue.index, GAME_STRUCTUREINFO))
@@ -425,6 +423,8 @@ void recvStructureInfo(NETQUEUE queue)
 			pT = copyTemplate(player, &t);
 		}
 	}
+
+	orderProvenanceRecordReported(player, static_cast<OrderOrigin>(provenance.origin));
 
 	if (psStruct->isFactory())
 	{

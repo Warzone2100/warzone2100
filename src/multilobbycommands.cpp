@@ -87,7 +87,7 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx, bool quiet = fal
 	{
 		return false;
 	}
-	if (!identityMatchesAdmin(trueIdentity.identity))
+	if (!identityMatchesAdmin(trueIdentity.identity) || !isVerifiedJoinIdentity(playerIdx, trueIdentity.identity))
 	{
 		// identity is not in permitted list
 		return false;
@@ -123,6 +123,11 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	sendLobbyCommandResponse(receiver, Context::Help, Command::Help, senderHasLobbyCommandAdminPrivs(receiver, true) ? 1 : 0);
 }
 
+bool lobbyCommandSenderHasAdminPrivs(uint32_t playerIdx)
+{
+	return senderHasLobbyCommandAdminPrivs(playerIdx, true);
+}
+
 static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
 {
 	std::unordered_set<size_t> adminPlayerIndexes;
@@ -136,7 +141,7 @@ static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
 	return adminPlayerIndexes;
 }
 
-static void lobbyCommand_Admin()
+static void lobbyCommand_Admin(uint32_t receiver)
 {
 	uint32_t adminPlayerBitmask = 0;
 	for (const auto adminPlayerIdx : getConnectedAdminPlayerIndexes())
@@ -148,7 +153,7 @@ static void lobbyCommand_Admin()
 		}
 		adminPlayerBitmask |= (1u << adminPlayerIdx);
 	}
-	sendLobbyCommandResponse(nullopt, Context::AdminList, Command::Admin, adminPlayerBitmask);
+	sendLobbyCommandResponse(receiver, Context::AdminList, Command::Admin, adminPlayerBitmask);
 }
 
 #define ADMIN_REQUIRED_FOR_COMMAND(command) \
@@ -233,7 +238,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	}
 	else if (strcmp(&message.text[startingCommandPosition], "admin") == 0 || strcmp(&message.text[startingCommandPosition], "admins") == 0)
 	{
-		lobbyCommand_Admin();
+		lobbyCommand_Admin(static_cast<uint32_t>(message.sender));
 	}
 	else if (strcmp(&message.text[startingCommandPosition], "me") == 0)
 	{
@@ -313,14 +318,14 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	else if (strncmp(&message.text[startingCommandPosition], "swap ", 5) == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND(Command::Swap);
-		unsigned int s1, s2;
+		unsigned int s1 = 0, s2 = 0;
 		int r = sscanf(&message.text[startingCommandPosition], "swap %u %u", &s1, &s2);
-		int playerIdxA = posToNetPlayer(s1);
-		if (r != 2)
+		if (r != 2 || s1 >= MAX_PLAYERS)
 		{
 			sendLobbyCommandResponse(nullopt, Context::Usage, Command::Swap);
 			return false;
 		}
+		int playerIdxA = posToNetPlayer(s1);
 
 		if (playerIdxA >= std::min<int>(game.maxPlayers, MAX_PLAYERS))
 		{

@@ -726,7 +726,8 @@ static void refreshLobbyAdminStatusForConnectedPlayers()
 			const auto trueIdentity = getTruePlayerIdentity(playerIdx);
 			const bool shouldBeAdmin = trueIdentity.verified
 					&& !trueIdentity.identity.empty()
-					&& identityMatchesAdmin(trueIdentity.identity);
+					&& identityMatchesAdmin(trueIdentity.identity)
+					&& isVerifiedJoinIdentity(playerIdx, trueIdentity.identity);
 			if (NetPlay.players[playerIdx].isAdmin != shouldBeAdmin)
 			{
 					NetPlay.players[playerIdx].isAdmin = shouldBeAdmin;

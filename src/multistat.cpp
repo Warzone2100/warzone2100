@@ -113,6 +113,13 @@ const EcKey& getVerifiedJoinIdentity(UDWORD player)
 	}
 }
 
+bool isVerifiedJoinIdentity(UDWORD player, const EcKey& identity)
+{
+	ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player: %u", player);
+	const EcKey& joinIdentity = getVerifiedJoinIdentity(player);
+	return !joinIdentity.empty() && !identity.empty() && joinIdentity.toBytes(EcKey::Public) == identity.toBytes(EcKey::Public);
+}
+
 // In blind games, it returns the verified join identity (if executed on the host, or on all clients after the game has ended)
 // In regular games, it returns the current player identity
 TrueIdentity getTruePlayerIdentity(UDWORD player)

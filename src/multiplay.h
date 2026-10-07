@@ -131,6 +131,7 @@ struct MULTIPLAYERINGAME
 
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
+	optional<bool>		cheatsLocked;
 	bool				isAllPlayersDataOK;
 	std::chrono::steady_clock::time_point startTime;
 	optional<std::chrono::steady_clock::time_point> endTime;

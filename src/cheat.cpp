@@ -225,9 +225,16 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	bool val = false;
 	auto r = NETbeginDecode(queue, GAME_DEBUG_MODE);
 	NETbool(r, val);
-	NETend(r);
+	if (!NETend(r))
+	{
+		if (recordInvalidMessage(queue.index, GAME_DEBUG_MODE))
+		{
+			debug(LOG_INFO, "Ignoring truncated GAME_DEBUG_MODE from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return;
+	}
 
-	if (getLockedOptions().cheats && val)
+	if (ingame.cheatsLocked.value_or(getLockedOptions().cheats) && val)
 	{
 		addConsoleMessage(_("The host has disabled debug mode / cheats for this game."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 		return;

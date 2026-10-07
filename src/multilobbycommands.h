@@ -50,6 +50,7 @@ public:
 void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_prefix, optional<std::string> _senderhash = nullopt, optional<std::string> _senderPublicKeyB64 = nullopt);
 
 bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyOperationsInterface& cmdInterface);
+bool lobbyCommandSenderHasAdminPrivs(uint32_t playerIdx);
 
 bool identityMatchesAdmin(const EcKey& identity);
 

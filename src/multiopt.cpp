@@ -202,12 +202,15 @@ bool recvOptions(NETQUEUE queue)
 	{
 		NETbin(r, hash.bytes, hash.Bytes);
 	}
-	NETuint8_t(r, game.maxPlayers);
-	if (game.maxPlayers > MAX_PLAYERS)
+	uint8_t maxPlayers = 0;
+	NETuint8_t(r, maxPlayers);
+	if (maxPlayers == 0 || maxPlayers > MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "Invalid maxPlayers value specified: %" PRIu8, game.maxPlayers);
+		debug(LOG_ERROR, "Invalid maxPlayers value specified: %" PRIu8, maxPlayers);
+		NETend(r);
 		return false;
 	}
+	game.maxPlayers = maxPlayers;
 	NETstring(r, game.name, 128);
 	NETuint32_t(r, game.power);
 	NETuint8_t(r, game.base);
@@ -219,12 +222,14 @@ bool recvOptions(NETQUEUE queue)
 	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32, game.inactivityMinutes);
+		NETend(r);
 		return false;
 	}
 	NETuint32_t(r, game.gameTimeLimitMinutes);
 	if (game.gameTimeLimitMinutes > 0 && game.gameTimeLimitMinutes < MIN_MPGAMETIMELIMIT_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid gameTimeLimitMinutes value specified: %" PRIu32, game.gameTimeLimitMinutes);
+		NETend(r);
 		return false;
 	}
 	uint8_t tempPlayerLeaveModeValue = 0;
@@ -232,6 +237,7 @@ bool recvOptions(NETQUEUE queue)
 	if (tempPlayerLeaveModeValue > static_cast<uint8_t>(PLAYER_LEAVE_MODE_MAX))
 	{
 		debug(LOG_ERROR, "Invalid playerLeaveMode value specified: %" PRIu8, tempPlayerLeaveModeValue);
+		NETend(r);
 		return false;
 	}
 	game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(tempPlayerLeaveModeValue);
@@ -240,6 +246,7 @@ bool recvOptions(NETQUEUE queue)
 	if (tempPlayerReconnectWaitSeconds > PLAYER_RECONNECT_WAIT_SECONDS_MAX)
 	{
 		debug(LOG_ERROR, "Invalid playerReconnectWaitSeconds value specified: %" PRIu16, tempPlayerReconnectWaitSeconds);
+		NETend(r);
 		return false;
 	}
 	game.playerReconnectWaitSeconds = tempPlayerReconnectWaitSeconds;
@@ -421,7 +428,7 @@ bool recvOptions(NETQUEUE queue)
 				// do nothing - just wait
 				break;
 			case FileRequestResult::FileExists:
-				debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
+				debug(LOG_ERROR, "Can't load map %s, even though we downloaded %s", game.map, filename);
 				return false;
 			case FileRequestResult::FailedToOpenFileForWriting:
 				// TODO: How best to handle? Ideally, message + back out of lobby?
@@ -725,6 +732,7 @@ bool multiGameShutdown()
 	ingame.localOptionsReceived = false;
 	ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 	ingame.TimeEveryoneIsInGame = nullopt;
+	ingame.cheatsLocked = nullopt;
 	ingame.startTime = std::chrono::steady_clock::time_point();
 	ingame.endTime = nullopt;
 	ingame.lastLagCheck = std::chrono::steady_clock::time_point();

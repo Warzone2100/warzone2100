@@ -745,8 +745,6 @@ bool recvDroidInfo(NETQUEUE queue)
 		QueuedDroidInfo info;
 		NETQueuedDroidInfo(r, info);
 
-		orderProvenanceRecordReported(info.player, static_cast<OrderOrigin>(info.provenance.origin));
-
 		uint32_t num = 0;
 		if (!NETcount(r, num, MaxDroidInfoDroids) || !validDroidInfoOrderType(info))
 		{
@@ -810,6 +808,8 @@ bool recvDroidInfo(NETQUEUE queue)
 			NETend(r);
 			return false;
 		}
+
+		orderProvenanceRecordReported(info.player, static_cast<OrderOrigin>(info.provenance.origin));
 
 		for (uint32_t n = 0; n < num; ++n)
 		{

@@ -195,7 +195,14 @@ bool recvSyncOptChange(NETQUEUE queue)
 	NETuint8_t(r, player); // the player
 	NETuint8_t(r, optType);
 	NETuint8_t(r, value);
-	NETend(r);
+	if (!NETend(r))
+	{
+		if (recordInvalidMessage(queue.index, GAME_SYNC_OPT_CHANGE))
+		{
+			debug(LOG_INFO, "Ignoring truncated GAME_SYNC_OPT_CHANGE from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return false;
+	}
 
 	if (!canGiveOrdersFor(queue.index, player))
 	{

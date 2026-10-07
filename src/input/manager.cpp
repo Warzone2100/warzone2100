@@ -87,9 +87,12 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 	markerKeyFunctions.clear();
 
 	bMappingsSortOrderDirty = true;
-	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	if (!bForceDefaults)
 	{
-		dbgInputManager.setPlayerWantsDebugMappings(n, false);
+		for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+		{
+			dbgInputManager.setPlayerWantsDebugMappings(n, false);
+		}
 	}
 
 	// load the mappings.
