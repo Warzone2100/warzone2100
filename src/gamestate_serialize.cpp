@@ -608,23 +608,6 @@ static void readResearch(const nlohmann::ordered_json &j, uint32_t version)
 
 constexpr uint32_t AVAILABILITY_SECTION_VERSION = 1;
 
-/// Number of loaded stats for a given component type (the length of apCompLists[player][comp])
-static size_t compStatCount(unsigned comp)
-{
-	switch (comp)
-	{
-	case COMP_BODY:       return asBodyStats.size();
-	case COMP_BRAIN:      return asBrainStats.size();
-	case COMP_PROPULSION: return asPropulsionStats.size();
-	case COMP_REPAIRUNIT: return asRepairStats.size();
-	case COMP_ECM:        return asECMStats.size();
-	case COMP_SENSOR:     return asSensorStats.size();
-	case COMP_CONSTRUCT:  return asConstructStats.size();
-	case COMP_WEAPON:     return asWeaponStats.size();
-	default:              return 0;
-	}
-}
-
 static nlohmann::ordered_json writeAvailability()
 {
 	nlohmann::ordered_json j = nlohmann::ordered_json::object();
