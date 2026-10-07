@@ -73,10 +73,12 @@ bool seq_StopFullScreenVideo();
 bool seq_GetVideoSize(SDWORD *pWidth, SDWORD *pHeight);
 //text
 bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification);
+constexpr size_t MAX_SEQ_LIST = 10;
+
 //clear the sequence list
 void seq_ClearSeqList();
 //add a sequence to the list to be played
-void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop, const WzString &subtitleName = WzString());
+bool seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const char *pTextName, bool bLoop, const WzString &subtitleName = WzString());
 /*checks to see if there are any sequences left in the list to play*/
 bool seq_AnySeqLeft();
 
