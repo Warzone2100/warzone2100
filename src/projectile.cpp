@@ -1528,8 +1528,11 @@ void proj_UpdateAll()
 	// Penetrating projectiles may spawn additional projectiles,
 	// which will be returned from `PROJECTILE::update()`.
 	// These need to be added separately to `psProjectileList` later.
-	for (PROJECTILE* p : psProjectileList)
+	// Not a range-based for: projectiles may be added during the loop (for example, by script event handlers).
+	const size_t projectileCount = psProjectileList.size();
+	for (size_t i = 0; i < projectileCount; ++i)
 	{
+		PROJECTILE* p = psProjectileList[i];
 		PROJECTILE* spawned = p->update();
 		if (spawned)
 		{
