@@ -939,7 +939,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 					setDroidTarget(psDroid, nullptr);
 					psDroid->order.psObj = nullptr;
-					secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
+					secondarySetStateWithoutMessage(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 					moveReallyStopDroid(psDroid);
 
 					// Fire off embark event
@@ -982,7 +982,7 @@ bool orderUpdateDroid(DROID *psDroid)
 		if (psDroid->action == DACTION_NONE)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
+			secondarySetStateWithoutMessage(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 		}
 		break;
 	case DORDER_RTR:
@@ -3812,6 +3812,10 @@ bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORD
 				    factType == REF_CYBORG_FACTORY)
 				{
 					factoryInc = ((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint->factoryInc;
+					if (factoryInc >= MAX_FACTORY)
+					{
+						continue;
+					}
 					if (factType == REF_FACTORY)
 					{
 						factoryInc += DSS_ASSPROD_SHIFT;
@@ -4043,6 +4047,15 @@ bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORD
 	}
 
 	return retVal;
+}
+
+bool secondarySetStateWithoutMessage(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORDER sec, SECONDARY_STATE State)
+{
+	const bool prevMultiMessages = bMultiMessages;
+	bMultiMessages = false;
+	const bool result = secondarySetState(psDroid, objState, sec, State);
+	bMultiMessages = prevMultiMessages;
+	return result;
 }
 
 /** This function assigns all droids of the group to the state.
