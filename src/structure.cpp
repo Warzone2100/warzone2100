@@ -1599,6 +1599,12 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return nullptr;
 		}
+		const StructureBounds footprint = getStructureBounds(pStructureType, Vector2i(x, y), direction);
+		if (footprint.map.x < 0 || footprint.map.y < 0 || footprint.map.x + footprint.size.x > world.map.width || footprint.map.y + footprint.size.y > world.map.height)
+		{
+			debug(LOG_ERROR, "Structure %s at (%d, %d) would extend past the map edge", getStatsName(pStructureType), map_coord((int)x), map_coord((int)y));
+			return nullptr;
+		}
 
 		WallOrientation wallOrientation = WallConnectNone;
 		if ((!FromSave || forceWallOrientation) && isWallCombiningStructureType(pStructureType))
@@ -1932,7 +1938,11 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			return nullptr;
 		}
 
-		ASSERT(psBuilding->player == player, "Trying to upgrade player %u building with player %u module?", static_cast<unsigned>(psBuilding->player), player);
+		if (psBuilding->player != player && !aiCheckAlliances(psBuilding->player, player))
+		{
+			syncDebug("Player %u cannot upgrade player %u building", player, static_cast<unsigned>(psBuilding->player));
+			return nullptr;
+		}
 
 		int prevResearchState = intGetResearchState();
 
@@ -2928,6 +2938,8 @@ bool structureExists(const WorldObjectState& objState, int player, STRUCTURE_TYP
 	return found;
 }
 
+#define MAX_UNIT_LIMIT_VALUE 100000
+
 // Disallow manufacture of units once these limits are reached,
 // doesn't mean that these numbers can't be exceeded if units are
 // put down in the editor or by the scripts.
@@ -2935,19 +2947,19 @@ bool structureExists(const WorldObjectState& objState, int player, STRUCTURE_TYP
 void setMaxDroids(UDWORD player, int value)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
-	droidLimit[player] = value;
+	droidLimit[player] = std::clamp(value, 0, MAX_UNIT_LIMIT_VALUE);
 }
 
 void setMaxCommanders(UDWORD player, int value)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
-	commanderLimit[player] = value;
+	commanderLimit[player] = std::clamp(value, 0, MAX_UNIT_LIMIT_VALUE);
 }
 
 void setMaxConstructors(UDWORD player, int value)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
-	constructorLimit[player] = value;
+	constructorLimit[player] = std::clamp(value, 0, MAX_UNIT_LIMIT_VALUE);
 }
 
 int getMaxDroids(UDWORD player)
