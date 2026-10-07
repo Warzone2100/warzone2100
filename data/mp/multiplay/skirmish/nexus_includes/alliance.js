@@ -28,7 +28,7 @@ function eventAllianceOffer(from, to)
 	{
 		if (random(28) === 0)
 		{
-			setAlliance(from, to, true);
+			setAlliance(me, from, true);
 		}
 	}
 }
