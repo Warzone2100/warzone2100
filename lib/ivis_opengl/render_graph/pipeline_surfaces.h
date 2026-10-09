@@ -331,6 +331,7 @@ enum class SurfaceStorageKind : uint8_t
 {
 	None,                    // WSI rows; must be None if provisionMode != Allocate
 	SampledColor2D,          // VkRenderedImage / GL color texture
+	StorageColor2D,          // sampled color image that compute can write
 	MsaaColorAttachment,     // Vk MSAA color image / GL MSAA color renderbuffer
 	DepthStencilAttachment,  // Vk depth image / GL depth-stencil renderbuffer
 	SampledDepthArray,       // VkDepthMapImage + cascade views / GL depth array + compare

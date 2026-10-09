@@ -2052,6 +2052,8 @@ inline vk::BufferUsageFlags to_vk(const gfx_api::buffer::usage& usage)
 			return vk::BufferUsageFlagBits::eVertexBuffer;
 		case gfx_api::buffer::usage::index_buffer:
 			return vk::BufferUsageFlagBits::eIndexBuffer;
+		case gfx_api::buffer::usage::storage_buffer:
+			return vk::BufferUsageFlagBits::eStorageBuffer;
 	}
 	return vk::BufferUsageFlags(); // silence warning
 }
@@ -2524,7 +2526,7 @@ size_t VkTexture::backend_internal_value() const
 
 // MARK: VkRenderedImage
 
-VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height, vk::Format _imageFormat, const std::string& filename)
+VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height, vk::Format _imageFormat, const std::string& filename, vk::ImageUsageFlags usage)
 	: dev(root.dev)
 	, imageFormat(_imageFormat)
 	, width(static_cast<uint32_t>(width))
@@ -2545,7 +2547,7 @@ VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height
 	.setMipLevels(1)
 	.setTiling(vk::ImageTiling::eOptimal)
 	.setFormat(_imageFormat)
-	.setUsage(vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment)
+	.setUsage(usage)
 	.setInitialLayout(vk::ImageLayout::eUndefined)
 	.setSamples(vk::SampleCountFlagBits::e1)
 	.setSharingMode(vk::SharingMode::eExclusive);
@@ -2629,6 +2631,26 @@ void VkRenderedImage::destroy(vk::Device _dev, const VmaAllocator& allocator, co
 }
 
 void VkRenderedImage::bind() { }
+
+bool VkRenderedImage::upload(const size_t&, const iV_BaseImage&)
+{
+	return false;
+}
+
+bool VkRenderedImage::upload_sub(const size_t&, const size_t&, const size_t&, const iV_BaseImage&)
+{
+	return false;
+}
+
+unsigned VkRenderedImage::id()
+{
+	return 0;
+}
+
+gfx_api::texture2dDimensions VkRenderedImage::get_dimensions() const
+{
+	return { width, height };
+}
 
 bool VkRenderedImage::isArray() const
 {
@@ -3405,9 +3427,19 @@ void VkRoot::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t group
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->dispatch(groupsX, groupsY, groupsZ, vkDynLoader);
 }
 
-gfx_api::texture* VkRoot::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
+gfx_api::texture* VkRoot::create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string& debugName)
 {
-	return nullptr;
+	if (width == 0 || height == 0)
+	{
+		return nullptr;
+	}
+	if (!textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, format, gfx_api::pixel_format_usage::storage_image))
+	{
+		debug(LOG_ERROR, "Format is not supported as a storage image: %s", debugName.c_str());
+		return nullptr;
+	}
+	return new VkRenderedImage(*this, width, height, gfx_api::pixelFormatToVkFormat(format), debugName,
+		vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eStorage);
 }
 
 void VkRoot::rebuildPipelinesIfNecessary()
@@ -3728,6 +3760,14 @@ bool VkRoot::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id, con
 			{
 				auto* rendered = new VkRenderedImage(root, createSpec.width, createSpec.height, vkFormat,
 					pipelineSurfaceDebugName(id));
+				gpu.texture.reset(rendered);
+				break;
+			}
+			case gfx_api::SurfaceStorageKind::StorageColor2D:
+			{
+				auto* rendered = new VkRenderedImage(root, createSpec.width, createSpec.height, vkFormat,
+					pipelineSurfaceDebugName(id),
+					vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eStorage);
 				gpu.texture.reset(rendered);
 				break;
 			}

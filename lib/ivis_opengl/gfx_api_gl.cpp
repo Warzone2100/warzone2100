@@ -386,6 +386,14 @@ static GLenum to_gl(const gfx_api::buffer::usage& usage)
 			return GL_ELEMENT_ARRAY_BUFFER;
 		case gfx_api::buffer::usage::vertex_buffer:
 			return GL_ARRAY_BUFFER;
+		case gfx_api::buffer::usage::storage_buffer:
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			return GL_SHADER_STORAGE_BUFFER;
+#else
+			// the static GLES bindings lack GL_SHADER_STORAGE_BUFFER
+			debug(LOG_FATAL, "Storage buffers are unavailable with static GLES bindings");
+			break;
+#endif
 		default:
 			debug(LOG_FATAL, "Unrecognised buffer usage");
 	}
@@ -2876,6 +2884,7 @@ void gl_compute_pipeline_state_object::bind_storage_buffers(const std::vector<gf
 		ASSERT(static_cast<GLint>(slot) < maxBindings, "Compute storage buffer binding %u is above GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS (%d)", slot, maxBindings);
 		ASSERT(buffers[i] != nullptr, "compute storage buffer is null");
 		auto* buffer = static_cast<gl_buffer*>(buffers[i]);
+		ASSERT(buffer->usage == gfx_api::buffer::usage::storage_buffer, "compute storage buffer has the wrong usage");
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, slot, buffer->buffer);
 	}
 #else
@@ -2937,9 +2946,50 @@ bool gl_context::supportsComputeShaders() const
 	return computeShadersSupported;
 }
 
-gfx_api::texture* gl_context::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
+gfx_api::texture* gl_context::create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string& debugName)
 {
+	if (width == 0 || height == 0)
+	{
+		return nullptr;
+	}
+	if (!textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, format, gfx_api::pixel_format_usage::storage_image))
+	{
+		debug(LOG_ERROR, "Format is not supported as a storage image: %s", debugName.c_str());
+		return nullptr;
+	}
+#if defined(WZ_STATIC_GL_BINDINGS)
+	debug(LOG_ERROR, "Immutable storage textures are unavailable with static GL bindings");
 	return nullptr;
+#else
+	if (glTexStorage2D == nullptr)
+	{
+		debug(LOG_ERROR, "glTexStorage2D is unavailable");
+		return nullptr;
+	}
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
+	auto* new_texture = new gl_texture();
+	new_texture->gles = gles;
+	new_texture->mip_count = 1;
+	new_texture->internal_format = format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	new_texture->debugName = debugName;
+#endif
+	new_texture->bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (!debugName.empty())
+	{
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, debugName.c_str());
+	}
+#endif
+	glTexStorage2D(GL_TEXTURE_2D, 1, to_gl_internalformat(format, gles), static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+	new_texture->unbind();
+	return new_texture;
+#endif
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -7073,6 +7123,16 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 	case gfx_api::SurfaceProvisionMode::Allocate:
 		switch (createSpec.storageKind)
 		{
+		case gfx_api::SurfaceStorageKind::StorageColor2D:
+		{
+			gfx_api::texture* image = root.create_storage_texture(createSpec.width, createSpec.height, createSpec.format, "<storage texture>");
+			if (image == nullptr)
+			{
+				return false;
+			}
+			gpu.texture.reset(image);
+			break;
+		}
 		case gfx_api::SurfaceStorageKind::SampledColor2D:
 		{
 			GLenum colorInternalFormat = to_gl_internalformat(createSpec.format, root.gles);
