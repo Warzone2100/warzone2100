@@ -4225,7 +4225,7 @@ bool gl_context::enableDebugMessageCallbacks()
 
 void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
 {
-	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	if (!(GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
 	{
 		return;
 	}
@@ -4248,7 +4248,7 @@ void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length,
 
 void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
 {
-	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	if (!(GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
 	{
 		return;
 	}
@@ -4271,7 +4271,7 @@ void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, co
 
 void gl_context::wzGLPopDebugGroup()
 {
-	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	if (!(GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
 	{
 		return;
 	}
@@ -4401,7 +4401,9 @@ bool gl_context::initGLContext()
 #if defined(WZ_STATIC_GL_BINDINGS)
 	computeShadersSupported = false;
 #else
-	if (computeShadersSupported && glDispatchCompute == nullptr)
+	// Glad loads these from desktop core 4.2/4.3 and from GLES 3.0/3.1.
+	// A context that advertises the version but did not resolve an entry point cannot dispatch.
+	if (computeShadersSupported && (glDispatchCompute == nullptr || glBindImageTexture == nullptr || glTexStorage2D == nullptr))
 	{
 		computeShadersSupported = false;
 	}
@@ -4418,7 +4420,7 @@ bool gl_context::initGLContext()
 	}
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	khr_debug = (/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug);
+	khr_debug = (GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug);
 #else
 	khr_debug = false;
 #endif
@@ -4454,6 +4456,8 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 4.2 %s supported!", GLAD_GL_VERSION_4_2 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 4.3 %s supported!", GLAD_GL_VERSION_4_3 ? "is" : "is NOT");
 
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
@@ -6049,11 +6053,15 @@ void gl_context::initLightDataTransport()
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
 	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
 	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
-	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding to bind them, so it stays on the uniform block for now
-	const bool hasStorageBuffers = !gles && (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr)
-		&& (GLAD_GL_ARB_program_interface_query != 0) && (glGetProgramResourceIndex != nullptr)
-		// The shader declares its storage buffers readonly, which needs GLSL 420 or this extension
+	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding, so it stays on the uniform block.
+	// Desktop 4.3 has shader storage blocks, program-interface query, and readonly storage as core.
+	// Below 4.3 the same three pieces are the ARB extensions, including GL_ARB_shader_image_load_store for readonly.
+	const bool storageEntryPoints = (glShaderStorageBlockBinding != nullptr) && (glGetProgramResourceIndex != nullptr);
+	const bool storageCore43 = GLAD_GL_VERSION_4_3 != 0;
+	const bool storageViaArb = (GLAD_GL_ARB_shader_storage_buffer_object != 0)
+		&& (GLAD_GL_ARB_program_interface_query != 0)
 		&& (GLAD_GL_ARB_shader_image_load_store != 0);
+	const bool hasStorageBuffers = !gles && storageEntryPoints && (storageCore43 || storageViaArb);
 
 	// Preference order:
 	// 1. storage buffer (spends no sampler, and the index can be scalarized)
