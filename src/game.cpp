@@ -6817,7 +6817,7 @@ static bool loadSaveStructure2(const char *pFileName, GameWorld& world)
 		default:
 			break;
 		}
-		psStructure->body = healthValue(ini, psStructure->structureBody());
+		psStructure->body = healthValue(ini, psStructure->fullMaxBody());
 		psStructure->currentBuildPts = ini.value("currentBuildPts", structureBuildPointsToCompletion(*psStructure)).toInt();
 		if (psStructure->status == SS_BUILT)
 		{

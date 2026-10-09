@@ -884,7 +884,7 @@ int32_t structureDamage(GameWorld& world, STRUCTURE *psStructure, PROJECTILE *ps
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 	      psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
-	relativeDamage = objDamage(psStructure, psProjectile, damage, psStructure->structureBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
+	relativeDamage = objDamage(psStructure, psProjectile, damage, psStructure->fullMaxBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -905,9 +905,9 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 {
 	CHECK_STRUCTURE(psStructure);
 
-	unsigned maxBody = structureBodyBuilt(psStructure);
+	unsigned currMaxBody = structureCurrMaxBody(psStructure);
 
-	int64_t health = (int64_t)65536 * psStructure->body / MAX(1, maxBody);
+	int64_t health = (int64_t)65536 * psStructure->body / MAX(1, currMaxBody);
 	CLIP(health, 0, 65536);
 
 	return 65536 - health;
@@ -933,7 +933,7 @@ float structureCompletionProgress(const STRUCTURE & structure)
 
 /// Calculate a structure's current max body points (its max body points at its
 /// current build progress), given its full max body points (when fully built).
-/// Parameter fullMaxBody is typically psStruct->structureBody() but could
+/// Parameter fullMaxBody is typically psStruct->fullMaxBody() but could
 /// differ (e.g. after a body points upgrade is researched).
 static unsigned calcCurrMaxBody(const STRUCTURE *psStruct, unsigned fullMaxBody)
 {
@@ -996,7 +996,7 @@ void structureBuild(GameWorld& world, STRUCTURE *psStruct, DROID *psDroid, int b
 		addPower(psStruct->player, structureTotalReturn(psStruct));
 	}
 
-	unsigned fullMaxBody = psStruct->structureBody();
+	unsigned fullMaxBody = psStruct->fullMaxBody();
 	int oldCurrMaxBody = (int)calcCurrMaxBody(psStruct, fullMaxBody);
 	psStruct->currentBuildPts = newBuildPoints;
 	int deltaCurrMaxBody = (int)calcCurrMaxBody(psStruct, fullMaxBody) - oldCurrMaxBody;
@@ -1153,16 +1153,16 @@ void structureDemolish(GameWorld& world, STRUCTURE *psStruct, DROID *psDroid, in
 
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 {
-	int repairAmount = gameTimeAdjustedAverage(buildRate * psStruct->structureBody(), psStruct->pStructureType->buildPoints);
-	/*	(droid construction power * current max hitpoints [incl. upgrades])
+	int repairAmount = gameTimeAdjustedAverage(buildRate * psStruct->fullMaxBody(), psStruct->pStructureType->buildPoints);
+	/*	(droid construction power * full max hitpoints [incl. upgrades])
 			/ construction power that was necessary to build structure in the first place
 
 	=> to repair a building from 1HP to full health takes as much time as building it.
-	=> if buildPoints = 1 and structureBody < buildPoints, repairAmount might get truncated to zero.
+	=> if buildPoints = 1 and fullMaxBody < buildPoints, repairAmount might get truncated to zero.
 		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
 		and notify the caller (read: droid) of your idleness by returning false.
 	*/
-	psStruct->body = clip<UDWORD>(psStruct->body + repairAmount, 0, psStruct->structureBody());
+	psStruct->body = clip<UDWORD>(psStruct->body + repairAmount, 0, psStruct->fullMaxBody());
 }
 
 static void refundFactoryBuildPower(STRUCTURE *psBuilding)
@@ -1832,7 +1832,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			}
 		}
 
-		psBuilding->body = (UWORD)psBuilding->structureBody();
+		psBuilding->body = (UWORD)psBuilding->fullMaxBody();
 		psBuilding->expectedDamage = 0;  // Begin life optimistically.
 
 		//add the structure to the list - this enables it to be drawn whilst being built
@@ -1980,7 +1980,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			psBuilding->sDisplay.imd = IMDs[imdIndex];
 
 			//calculate the new body points of the owning structure
-			psBuilding->body = (uint64_t)psBuilding->structureBody() * bodyDiff / 65536;
+			psBuilding->body = (uint64_t)psBuilding->fullMaxBody() * bodyDiff / 65536;
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
@@ -4053,7 +4053,7 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 	{
 		//if selfrepair has been researched then check the health level of the
 		//structure once resistance is fully up
-		iPointsRequired = psBuilding->structureBody();
+		iPointsRequired = psBuilding->fullMaxBody();
 		if (selfRepairEnabled(psBuilding->player) && psBuilding->body < iPointsRequired && psBuilding->status != SS_BEING_BUILT)
 		{
 			//start the self repair off
@@ -5657,7 +5657,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Hitpoints %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, psStructure->structureBody());
+					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, psStructure->fullMaxBody());
 			if (dbgInputManager.debugMappingsAllowed())
 			{
 				// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5677,11 +5677,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Damage %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, psStructure->structureBody());
+					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, psStructure->fullMaxBody());
 		}
 		else
 		{
-			console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+			console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		}
 		if (dbgInputManager.debugMappingsAllowed())
 		{
@@ -5694,7 +5694,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REPAIR_FACILITY:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5703,7 +5703,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed() && selectedPlayer < MAX_PLAYERS)
 		{
 			console(_("ID %d - %s"), psStructure->id, (auxTile(gameWorld.map, map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
@@ -5720,7 +5720,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			}
 		}
 		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), numConnected,
-		        NUM_POWER_MODULES, psStructure->body, psStructure->structureBody());
+		        NUM_POWER_MODULES, psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5730,7 +5730,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 	case REF_FACTORY:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5740,7 +5740,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESEARCH:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5748,7 +5748,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REARM_PAD:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5757,7 +5757,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	default:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->fullMaxBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5996,15 +5996,15 @@ bool validStructResistance(const STRUCTURE *psStruct)
 	return bTarget;
 }
 
-unsigned structureBodyBuilt(const STRUCTURE *psStructure)
+unsigned structureCurrMaxBody(const STRUCTURE *psStructure)
 {
-	unsigned maxBody = psStructure->structureBody();
+	unsigned fullMaxBody = psStructure->fullMaxBody();
 
 	if (psStructure->status == SS_BEING_BUILT)
 	{
-		return calcCurrMaxBody(psStructure, maxBody);
+		return calcCurrMaxBody(psStructure, fullMaxBody);
 	}
-	return maxBody;
+	return fullMaxBody;
 }
 
 void structureUpgradeBody(STRUCTURE *psStructure, unsigned oldFullMaxBody, unsigned newFullMaxBody)
@@ -6020,7 +6020,7 @@ void structureUpgradeBody(STRUCTURE *psStructure, unsigned oldFullMaxBody, unsig
 }
 
 /*Access functions for the upgradeable stats of a structure*/
-uint32_t STRUCTURE::structureBody() const
+uint32_t STRUCTURE::fullMaxBody() const
 {
 	return pStructureType->upgrade[player].hitpoints;
 }
@@ -6998,10 +6998,10 @@ bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid)
 }
 
 
-/* Just returns true if the structure's present body points aren't as high as the original*/
+/* Just returns true if the structure's body points are below its full max body points*/
 bool	STRUCTURE::isDamaged() const
 {
-	return body < structureBody();
+	return body < fullMaxBody();
 }
 
 // give a structure from one player to another - used in Electronic Warfare

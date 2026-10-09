@@ -273,7 +273,7 @@ void kf_DamageMe()
 	{
 		if (psStruct->selected)
 		{
-			int val = psStruct->body - ((psStruct->structureBody() / 100) * 20);
+			int val = psStruct->body - ((psStruct->fullMaxBody() / 100) * 20);
 			if (val > 0)
 			{
 				psStruct->body = val;

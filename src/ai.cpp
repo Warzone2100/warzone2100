@@ -448,7 +448,7 @@ static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *p
 		targetStructure = (STRUCTURE *)psTarget;
 
 		/* Calculate damage this target suffered */
-		damageRatio = 100 - 100 * targetStructure->body / targetStructure->structureBody();
+		damageRatio = 100 - 100 * targetStructure->body / targetStructure->fullMaxBody();
 
 		/* See if this type of a structure should be prioritized */
 		switch (targetStructure->pStructureType->type)

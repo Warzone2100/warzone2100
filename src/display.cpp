@@ -2984,7 +2984,7 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 /* Just returns true if the building's present body points aren't 100 percent */
 static bool	buildingDamaged(STRUCTURE *psStructure)
 {
-	return psStructure->body < psStructure->structureBody();
+	return psStructure->body < psStructure->fullMaxBody();
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/

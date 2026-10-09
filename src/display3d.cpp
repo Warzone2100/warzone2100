@@ -3388,9 +3388,9 @@ static void queueStructureHealth(STRUCTURE *psStruct, BatchedMultiRectRenderer& 
 		health = static_cast<int32_t>((1. - getStructureDamage(psStruct) / 65536.f) * 100);
 
 		// If structure is incomplete, make bar correspondingly thinner.
-		int maxBody = psStruct->structureBody();
-		int maxBodyBuilt = structureBodyBuilt(psStruct);
-		width = (uint64_t)width * maxBodyBuilt / maxBody;
+		int fullMaxBody = psStruct->fullMaxBody();
+		int currMaxBody = structureCurrMaxBody(psStruct);
+		width = (uint64_t)width * currMaxBody / fullMaxBody;
 	}
 	if (health > REPAIRLEV_HIGH)
 	{
