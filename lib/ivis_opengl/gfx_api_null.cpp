@@ -210,6 +210,30 @@ gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_
 	return new null_pipeline_state_object(createInfo.state_desc, createInfo.attribute_descriptions);
 }
 
+gfx_api::pipeline_state_object* null_context::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info&)
+{
+	auto* pso = existing != nullptr
+		? static_cast<gfx_api::compute_pipeline_state_object*>(existing)
+		: new gfx_api::compute_pipeline_state_object();
+	pso->broken = true;
+	return pso;
+}
+
+void null_context::bind_compute_pipeline(gfx_api::pipeline_state_object*)
+{
+	ASSERT(false, "compute pipeline bind is not implemented");
+}
+
+void null_context::dispatch_compute(uint32_t, uint32_t, uint32_t)
+{
+	ASSERT(false, "compute dispatch is not implemented");
+}
+
+gfx_api::texture* null_context::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
+{
+	return nullptr;
+}
+
 void null_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
 	null_pipeline_state_object* new_program = static_cast<null_pipeline_state_object*>(pso);
