@@ -2551,23 +2551,390 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	return new gl_pipeline_id(psoID.value(), pipeline->broken); // always return a new indirect reference
 }
 
-gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info&)
+#if !defined(WZ_STATIC_GL_BINDINGS)
+static GLuint glTextureName(gfx_api::abstract_texture* texture)
 {
-	auto* pso = existing != nullptr
-		? static_cast<gfx_api::compute_pipeline_state_object*>(existing)
-		: new gfx_api::compute_pipeline_state_object();
-	pso->broken = true;
-	return pso;
+	if (auto* image = dynamic_cast<gl_texture*>(texture))
+	{
+		return image->id();
+	}
+	if (auto* image = dynamic_cast<gl_texture_array*>(texture))
+	{
+		return image->id();
+	}
+	if (auto* image = dynamic_cast<gl_gpurendered_texture*>(texture))
+	{
+		return image->id();
+	}
+	return 0;
 }
 
-void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object*)
+#endif
+
+struct gl_compute_pipeline_handle final : public gfx_api::compute_pipeline_state_object
 {
-	ASSERT(false, "compute pipeline bind is not implemented");
+	gl_context* ctx = nullptr;
+	size_t index = 0;
+
+	gl_compute_pipeline_handle(gl_context& context, size_t registryIndex, bool isBroken)
+		: ctx(&context), index(registryIndex)
+	{
+		broken = isBroken;
+	}
+
+	gl_compute_pipeline_state_object* current() const
+	{
+		return ctx->createdComputePipelines[index].pso;
+	}
+
+	void bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override
+	{
+		if (auto* program = current())
+		{
+			program->bind_sampled_textures(descs, textures);
+		}
+	}
+	void bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override
+	{
+		if (auto* program = current())
+		{
+			program->bind_storage_images(descs, textures);
+		}
+	}
+	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers) override
+	{
+		if (auto* program = current())
+		{
+			program->bind_storage_buffers(descs, buffers);
+		}
+	}
+};
+
+gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& ctx, const gfx_api::compute_pipeline_create_info& createInfo, const gfx_api::lighting_constants& lightingConstants)
+	: sampled(createInfo.sampled)
+	, storage_images(createInfo.storage_images)
+	, storage_buffers(createInfo.storage_buffers)
+	, owningContext(&ctx)
+{
+	const gfx_api::shader_program_desc& shaderInfo = gfx_api::shader_catalog(createInfo.shader_mode);
+	for (const auto& blockType : createInfo.uniform_blocks)
+	{
+		if (blockType == std::type_index(typeid(gfx_api::PointLightsUniforms)))
+		{
+			broken = true;
+			debug(LOG_ERROR, "Compute pipeline \"%s\" cannot use PointLightsUniforms", shaderInfo.friendly_name);
+			return;
+		}
+	}
+	if (!ctx.supportsComputeShaders())
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute shaders are unavailable; \"%s\" was not compiled", shaderInfo.friendly_name);
+		return;
+	}
+
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	const std::string sourcePath = gl_stage_path(shaderInfo, gfx_api::shader_stage_kind::compute);
+	std::string source = gl_pipeline_state_object::readShaderBuf(sourcePath);
+	if (source.empty())
+	{
+		broken = true;
+		debug(LOG_ERROR, "Failed to read compute shader [%s]", sourcePath.c_str());
+		return;
+	}
+	if (source.find("#version") != std::string::npos)
+	{
+		broken = true;
+		ASSERT(false, "Compute shader [%s] must not contain #version", sourcePath.c_str());
+		debug(LOG_ERROR, "Compute shader [%s] must not contain #version", sourcePath.c_str());
+		return;
+	}
+	patchShaderPointLightsDefines(source, lightingConstants, ctx.lightDataTransport());
+
+	const char* header = ctx.gles ? "#version 310 es\n" : "#version 430\n";
+	program = glCreateProgram();
+	computeShader = glCreateShader(GL_COMPUTE_SHADER);
+	const char* strings[2] = { header, source.c_str() };
+	glShaderSource(computeShader, 2, strings, nullptr);
+	glCompileShader(computeShader);
+	GLint status = GL_FALSE;
+	glGetShaderiv(computeShader, GL_COMPILE_STATUS, &status);
+	if (!status)
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute shader compilation has failed [%s]", sourcePath.c_str());
+		gl_pipeline_state_object::printShaderInfoLog(LOG_ERROR, computeShader);
+		return;
+	}
+	glAttachShader(program, computeShader);
+	glLinkProgram(program);
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (!status)
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute program link has failed [%s]", shaderInfo.friendly_name);
+		gl_pipeline_state_object::printProgramInfoLog(LOG_ERROR, program);
+		return;
+	}
+
+	GLint workGroup[3] = {};
+	glGetProgramiv(program, GL_COMPUTE_WORK_GROUP_SIZE, workGroup);
+	const gfx_api::shader_local_size& local = shaderInfo.local_size;
+	if (workGroup[0] <= 0 || workGroup[1] <= 0 || workGroup[2] <= 0
+		|| workGroup[0] != static_cast<GLint>(local.x)
+		|| workGroup[1] != static_cast<GLint>(local.y)
+		|| workGroup[2] != static_cast<GLint>(local.z))
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute program \"%s\" workgroup (%d, %d, %d) does not match the catalog (%u, %u, %u)",
+			shaderInfo.friendly_name, workGroup[0], workGroup[1], workGroup[2], local.x, local.y, local.z);
+		return;
+	}
+
+	GLint previousProgram = 0;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &previousProgram);
+	glUseProgram(program);
+	for (const auto& texture : sampled)
+	{
+		if (texture.glsl_name == nullptr)
+		{
+			continue;
+		}
+		const GLint location = glGetUniformLocation(program, texture.glsl_name);
+		if (location >= 0)
+		{
+			glUniform1i(location, static_cast<GLint>(texture.id));
+		}
+	}
+	glUseProgram(static_cast<GLuint>(previousProgram));
+
+	uniformBlockSizes.resize(createInfo.uniform_block_names.size(), 0);
+	uniformBlockRanges.resize(createInfo.uniform_block_names.size(), {gl_uniform_block_allocator::Allocation{}, 0});
+	uniform_bind_functions.resize(createInfo.uniform_block_names.size());
+	uniformBlockTypes = createInfo.uniform_blocks;
+	for (size_t slot = 0; slot < createInfo.uniform_block_names.size(); ++slot)
+	{
+		const char* blockName = createInfo.uniform_block_names[slot] != nullptr ? createInfo.uniform_block_names[slot] : "";
+		const GLuint blockIndex = glGetUniformBlockIndex(program, blockName);
+		if (blockIndex == GL_INVALID_INDEX)
+		{
+			continue;
+		}
+		GLint blockSize = 0;
+		glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+		if (blockSize > ctx.maxUniformBlockSize)
+		{
+			broken = true;
+			debug(LOG_ERROR, "%s: uniform block \"%s\" needs %d bytes, more than the %d the driver allows",
+				shaderInfo.friendly_name, blockName, blockSize, ctx.maxUniformBlockSize);
+			return;
+		}
+		uniformBlockSizes[slot] = blockSize;
+		glUniformBlockBinding(program, blockIndex, static_cast<GLuint>(slot));
+		uniform_bind_functions[slot] = [this, slot](const void* buffer, size_t size) {
+			ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range", slot);
+			if (uniformBlockSizes[slot] == 0 || owningContext == nullptr)
+			{
+				return;
+			}
+			const GLsizeiptr dataSize = static_cast<GLsizeiptr>(size);
+			const GLsizeiptr rangeSize = std::max<GLsizeiptr>(dataSize, uniformBlockSizes[slot]);
+			auto allocation = owningContext->activeUniformBlockAllocator().alloc(rangeSize);
+			ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate uniform block storage");
+			owningContext->writeUniformRange(allocation, buffer, dataSize);
+			owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
+			uniformBlockRanges[slot] = {allocation, rangeSize};
+		};
+	}
+#else
+	(void)lightingConstants;
+	broken = true;
+	debug(LOG_ERROR, "Compute shaders are unavailable with static GL bindings");
+#endif
 }
 
-void gl_context::dispatch_compute(uint32_t, uint32_t, uint32_t)
+gl_compute_pipeline_state_object::~gl_compute_pipeline_state_object()
 {
-	ASSERT(false, "compute dispatch is not implemented");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (computeShader)
+	{
+		glDeleteShader(computeShader);
+	}
+	if (program)
+	{
+		glDeleteProgram(program);
+	}
+#endif
+}
+
+void gl_compute_pipeline_state_object::bind()
+{
+	glUseProgram(program);
+	for (size_t slot = 0; slot < uniformBlockRanges.size(); ++slot)
+	{
+		const auto& range = uniformBlockRanges[slot];
+		if (range.first.valid() && owningContext != nullptr)
+		{
+			owningContext->bindUniformRange(static_cast<GLuint>(slot), range.first.buffer, range.first.offset, range.second);
+		}
+	}
+}
+
+void gl_compute_pipeline_state_object::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < uniform_bind_functions.size(); ++i)
+	{
+		auto* buffer = std::get<0>(uniform_blocks[i]);
+		if (buffer == nullptr || !uniform_bind_functions[first + i])
+		{
+			continue;
+		}
+		uniform_bind_functions[first + i](buffer, std::get<1>(uniform_blocks[i]));
+	}
+}
+
+void gl_compute_pipeline_state_object::set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration)
+{
+	ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range", slot);
+	ASSERT_OR_RETURN(, owningContext != nullptr, "No owning context");
+	if (uniformBlockSizes[slot] == 0)
+	{
+		return;
+	}
+	ASSERT(slot >= uniformBlockTypes.size() || uniformBlockTypes[slot] == type,
+		"Uniform block slot %zu holds %s, not %s", slot, uniformBlockTypes[slot].name(), type.name());
+	const bool usable = allocation.valid()
+		&& allocation.generation == currentGeneration
+		&& static_cast<GLsizeiptr>(allocation.size) >= uniformBlockSizes[slot];
+	if (!usable)
+	{
+		owningContext->bindUniformRange(static_cast<GLuint>(slot), 0, 0, 0);
+		uniformBlockRanges[slot] = {gl_uniform_block_allocator::Allocation{}, 0};
+		return;
+	}
+	const gl_uniform_block_allocator::Allocation range{static_cast<GLuint>(allocation.handle), static_cast<GLintptr>(allocation.offset), nullptr};
+	const GLsizeiptr rangeSize = static_cast<GLsizeiptr>(allocation.size);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), range.buffer, range.offset, rangeSize);
+	uniformBlockRanges[slot] = {range, rangeSize};
+}
+
+void gl_compute_pipeline_state_object::bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	ASSERT_OR_RETURN(, !broken && program, "compute pipeline is broken");
+	ASSERT(textures.size() == descs.size(), "Sampled texture count mismatch");
+	for (size_t i = 0; i < textures.size(); ++i)
+	{
+		const auto& desc = descs[i];
+		glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + desc.id));
+		if (textures[i] != nullptr)
+		{
+			textures[i]->bind();
+		}
+	}
+	glActiveTexture(GL_TEXTURE0);
+}
+
+void gl_compute_pipeline_state_object::bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	ASSERT_OR_RETURN(, !broken && program, "compute pipeline is broken");
+	ASSERT(textures.size() == descs.size(), "Storage image count mismatch");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	GLint maxUnits = 0;
+	glGetIntegerv(GL_MAX_IMAGE_UNITS, &maxUnits);
+	for (size_t i = 0; i < textures.size(); ++i)
+	{
+		const GLuint slot = static_cast<GLuint>(descs[i].slot);
+		ASSERT(static_cast<GLint>(slot) < maxUnits, "Compute image unit %u is above GL_MAX_IMAGE_UNITS (%d)", slot, maxUnits);
+		GLenum internalFormat = GL_RGBA8;
+		const bool gles = owningContext != nullptr && owningContext->gles;
+		if (auto* image = dynamic_cast<gl_texture*>(textures[i]))
+		{
+			internalFormat = to_gl_internalformat(image->internal_format, gles);
+		}
+		else if (auto* imageArray = dynamic_cast<gl_texture_array*>(textures[i]))
+		{
+			internalFormat = to_gl_internalformat(imageArray->internal_format, gles);
+		}
+		glBindImageTexture(slot, glTextureName(textures[i]), 0, GL_FALSE, 0, GL_READ_WRITE, internalFormat);
+	}
+#else
+	(void)descs;
+	(void)textures;
+#endif
+}
+
+void gl_compute_pipeline_state_object::bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers)
+{
+	ASSERT_OR_RETURN(, !broken && program, "compute pipeline is broken");
+	ASSERT(buffers.size() == descs.size(), "Storage buffer count mismatch");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	GLint maxBindings = 0;
+	glGetIntegerv(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS, &maxBindings);
+	for (size_t i = 0; i < buffers.size(); ++i)
+	{
+		const GLuint slot = static_cast<GLuint>(descs[i].slot);
+		ASSERT(static_cast<GLint>(slot) < maxBindings, "Compute storage buffer binding %u is above GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS (%d)", slot, maxBindings);
+		ASSERT(buffers[i] != nullptr, "compute storage buffer is null");
+		auto* buffer = static_cast<gl_buffer*>(buffers[i]);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, slot, buffer->buffer);
+	}
+#else
+	(void)descs;
+	(void)buffers;
+#endif
+}
+
+gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info)
+{
+	if (!computeShadersSupported)
+	{
+		const gfx_api::shader_program_desc& shaderInfo = gfx_api::shader_catalog(info.shader_mode);
+		GLint major = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+		GLint minor = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+		debug(LOG_ERROR, "Compute shaders require desktop GL 4.3 or GLES 3.1 (context is %d.%d); \"%s\" is broken",
+			major, minor, shaderInfo.friendly_name);
+		auto* unsupported = new gfx_api::compute_pipeline_state_object();
+		unsupported->broken = true;
+		return unsupported;
+	}
+
+	auto* created = new gl_compute_pipeline_state_object(*this, info, shadowConstants);
+	if (auto* previous = dynamic_cast<gl_compute_pipeline_handle*>(existing))
+	{
+		auto& entry = createdComputePipelines[previous->index];
+		delete entry.pso;
+		entry.createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
+		entry.pso = created;
+		return new gl_compute_pipeline_handle(*this, previous->index, created->broken);
+	}
+	createdComputePipelines.push_back(ComputePipelineRegistry{ std::make_shared<gfx_api::compute_pipeline_create_info>(info), created });
+	return new gl_compute_pipeline_handle(*this, createdComputePipelines.size() - 1, created->broken);
+}
+
+void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
+{
+	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
+	auto* handle = dynamic_cast<gl_compute_pipeline_handle*>(pso);
+	ASSERT_OR_RETURN(, handle != nullptr, "compute pipeline is not ready");
+	auto* program = handle->current();
+	ASSERT_OR_RETURN(, program != nullptr && !program->broken && program->program, "compute pipeline is broken");
+	currentComputeProgram = program;
+	program->bind();
+}
+
+void gl_context::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ)
+{
+	ASSERT(isComputePassActive(), "dispatch_compute outside a compute pass");
+	ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+	ASSERT(groupsX >= 1 && groupsY >= 1 && groupsZ >= 1, "compute dispatch axis is 0");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	glDispatchCompute(groupsX, groupsY, groupsZ);
+#endif
+}
+
+bool gl_context::supportsComputeShaders() const
+{
+	return computeShadersSupported;
 }
 
 gfx_api::texture* gl_context::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
@@ -2577,6 +2944,7 @@ gfx_api::texture* gl_context::create_storage_texture(size_t, size_t, gfx_api::pi
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
+	ASSERT(!isComputePassActive(), "graphics pipeline bind inside a compute pass");
 	gl_pipeline_id* newPSOId = static_cast<gl_pipeline_id*>(pso);
 	// lookup pipeline
 	auto& pipelineInfo = createdPipelines[newPSOId->psoID];
@@ -2851,12 +3219,24 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 
 void gl_context::set_constants(const void* buffer, const size_t& size)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+		currentComputeProgram->set_uniforms(0, { std::make_tuple(buffer, size) });
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_constants(buffer, size);
 }
 
 void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+		currentComputeProgram->set_uniforms(first, uniform_blocks);
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_uniforms(first, uniform_blocks);
 }
@@ -2881,6 +3261,12 @@ gfx_api::frame_uniform_allocation gl_context::upload_frame_uniform_raw(const voi
 
 void gl_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+		currentComputeProgram->set_frame_uniform(slot, allocation, type, frameUniformGeneration());
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_frame_uniform(slot, allocation, type, frameUniformGeneration());
 }
@@ -2903,6 +3289,7 @@ bool gl_context::ensurePatchVertices4()
 
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	if (primitive == gfx_api::primitive_type::patch_list_4)
@@ -2914,6 +3301,7 @@ void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::
 
 void gl_context::draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT_OR_RETURN(, hasInstancedRenderingSupport, "Instanced rendering is unavailable");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
@@ -2923,6 +3311,7 @@ void gl_context::draw_instanced(const std::size_t& offset, const std::size_t &co
 
 void gl_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	if (primitive == gfx_api::primitive_type::patch_list_4)
 	{
@@ -2933,6 +3322,7 @@ void gl_context::draw_elements(const size_t& offset, const size_t &count, const 
 
 void gl_context::draw_elements_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT_OR_RETURN(, hasInstancedRenderingSupport, "Instanced rendering is unavailable");
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	ASSERT(instance_count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "instance_count (%zu) exceeds GLsizei max", count);
@@ -3947,6 +4337,26 @@ bool gl_context::initGLContext()
 	ssprintf(opengl.version, "OpenGL Version: %s", wzSafeGlGetString(GL_VERSION));
 	addDumpInfo(opengl.version);
 	debug(LOG_INFO, "%s", opengl.version);
+
+	const GLint glMajor = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+	const GLint glMinor = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+	if (!gles)
+	{
+		computeShadersSupported = glMajor > 4 || (glMajor == 4 && glMinor >= 3);
+	}
+	else
+	{
+		computeShadersSupported = glMajor > 3 || (glMajor == 3 && glMinor >= 1);
+	}
+#if defined(WZ_STATIC_GL_BINDINGS)
+	computeShadersSupported = false;
+#else
+	if (computeShadersSupported && glDispatchCompute == nullptr)
+	{
+		computeShadersSupported = false;
+	}
+#endif
+	debug(LOG_INFO, "  * Compute shader support %s detected", computeShadersSupported ? "was" : "was NOT");
 
 	formattedRendererInfoString = calculateFormattedRendererInfoString();
 
@@ -6414,6 +6824,11 @@ void gl_context::shutdown()
 		}
 	}
 	createdPipelines.clear();
+	for (auto& entry : createdComputePipelines)
+	{
+		delete entry.pso;
+	}
+	createdComputePipelines.clear();
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	if (!debugLiveTextures.empty())
@@ -6539,6 +6954,20 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 				anyBroken = anyBroken || pipelineInfo.pso->broken;
 			}
 		}
+		for (auto& entry : createdComputePipelines)
+		{
+			if (entry.pso == nullptr || entry.createInfo == nullptr)
+			{
+				continue;
+			}
+			if (gfx_api::shader_catalog(entry.createInfo->shader_mode).spec_constants == 0)
+			{
+				continue;
+			}
+			delete entry.pso;
+			entry.pso = new gl_compute_pipeline_state_object(*this, *entry.createInfo, shadowConstants);
+			anyBroken = anyBroken || entry.pso->broken;
+		}
 		return !anyBroken;
 	};
 
@@ -6568,6 +6997,15 @@ bool gl_context::debugRecompileAllPipelines()
 			delete pipelineInfo.pso;
 			pipelineInfo.pso = new gl_pipeline_state_object(*this, pipelineInfo.createInfo, shadowConstants);
 		}
+	}
+	for (auto& entry : createdComputePipelines)
+	{
+		if (entry.pso == nullptr || entry.createInfo == nullptr)
+		{
+			continue;
+		}
+		delete entry.pso;
+		entry.pso = new gl_compute_pipeline_state_object(*this, *entry.createInfo, shadowConstants);
 	}
 	return true;
 }
