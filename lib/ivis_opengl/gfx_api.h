@@ -806,6 +806,8 @@ namespace gfx_api
 		// tessellation shader support (primitive_type::patch_list_4 + TCS/TES pipeline stages)
 		virtual bool supportsTessellationShaders() const { return false; }
 		bool isComputePassActive() const { return _computePassActive; }
+		/// Pass desc live for the current begin/record/end. Null when no pass is active.
+		virtual const RenderPassDesc* activePassDesc() const { return nullptr; }
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -1263,6 +1265,14 @@ namespace gfx_api
 		{
 			static_assert(sizeof...(args) == std::tuple_size<SampledInputs>::value, "Wrong number of textures");
 			ASSERT(gfx_api::context::get().isComputePassActive(), "bind_textures outside a compute pass");
+			if constexpr (sizeof...(args) > 0)
+			{
+				const abstract_texture* bound[] = { args... };
+				if (!computePassDeclares(bound, sizeof...(args), true))
+				{
+					return;
+				}
+			}
 			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
 			ASSERT(compute != nullptr, "compute pipeline is not bound");
 			compute->bind_sampled_textures(sampled_descriptions(), { args... });
@@ -1273,6 +1283,14 @@ namespace gfx_api
 		{
 			static_assert(sizeof...(args) == std::tuple_size<StorageImageInputs>::value, "Wrong number of storage images");
 			ASSERT(gfx_api::context::get().isComputePassActive(), "bind_storage_images outside a compute pass");
+			if constexpr (sizeof...(args) > 0)
+			{
+				const abstract_texture* bound[] = { args... };
+				if (!computePassDeclares(bound, sizeof...(args), false))
+				{
+					return;
+				}
+			}
 			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
 			ASSERT(compute != nullptr, "compute pipeline is not bound");
 			compute->bind_storage_images(storage_image_descriptions(), { args... });
@@ -1283,10 +1301,73 @@ namespace gfx_api
 		{
 			static_assert(sizeof...(args) == std::tuple_size<StorageBufferInputs>::value, "Wrong number of storage buffers");
 			ASSERT(gfx_api::context::get().isComputePassActive(), "bind_storage_buffers outside a compute pass");
+			if constexpr (sizeof...(args) > 0)
+			{
+				const buffer* bound[] = { args... };
+				const RenderPassDesc* pass = gfx_api::context::get().activePassDesc();
+				ASSERT(pass != nullptr, "bind_storage_buffers without an active pass");
+				if (pass == nullptr)
+				{
+					return;
+				}
+				for (const buffer* buf : bound)
+				{
+					bool declared = false;
+					for (const ComputeBufferUse& entry : pass->storageBuffers)
+					{
+						if (entry.buf == buf && buf != nullptr)
+						{
+							declared = true;
+							break;
+						}
+					}
+					ASSERT(declared, "storage buffer is not declared on the compute pass");
+					if (!declared)
+					{
+						return;
+					}
+				}
+			}
 			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
 			ASSERT(compute != nullptr, "compute pipeline is not bound");
 			compute->bind_storage_buffers(storage_buffer_descriptions(), { args... });
 		}
+
+	private:
+		static bool computePassDeclares(const abstract_texture* const* bound, size_t count, bool sampled)
+		{
+			if (count == 0)
+			{
+				return true;
+			}
+			const RenderPassDesc* pass = gfx_api::context::get().activePassDesc();
+			ASSERT(pass != nullptr, "compute bind without an active pass");
+			if (pass == nullptr)
+			{
+				return false;
+			}
+			const std::vector<ComputeImageUse>& declared = sampled ? pass->sampledInputs : pass->storageImages;
+			for (size_t i = 0; i < count; ++i)
+			{
+				bool found = false;
+				for (const ComputeImageUse& image : declared)
+				{
+					if (image.texture == bound[i] && image.texture != nullptr)
+					{
+						found = true;
+						break;
+					}
+				}
+				ASSERT(found, "compute image is not declared on the pass");
+				if (!found)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+	public:
 
 		template<typename... Args>
 		void set_uniforms(Args&&... args)

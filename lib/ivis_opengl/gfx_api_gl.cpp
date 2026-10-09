@@ -5027,9 +5027,70 @@ void gl_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /
 {
 }
 
+const gfx_api::RenderPassDesc* gl_context::activePassDesc() const
+{
+	return hasActivePass ? &_activePassDesc : nullptr;
+}
+
+void gl_context::emitPrePassBarriers(const gfx_api::ExecutionBatch& batch,
+	const std::vector<gfx_api::CompiledPass>& compiledPasses)
+{
+	if (batch.count == 0 || batch.startIndex > compiledPasses.size()
+		|| batch.count > compiledPasses.size() - batch.startIndex)
+	{
+		return;
+	}
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// GLES3/gl3.h has no glMemoryBarrier. These bits are only set for compute.
+	return;
+#else
+	GLbitfield mask = 0;
+	const size_t batchEnd = batch.startIndex + batch.count;
+	for (size_t b = batch.startIndex; b < batchEnd; ++b)
+	{
+		for (const gfx_api::ImageBarrierOp& barrierOp : compiledPasses[b].prePassBarriers)
+		{
+			const bool sampled = barrierOp.srcUse == gfx_api::ImageUse::ComputeSampled
+				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeSampled;
+			const bool storage = barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
+				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeStorage;
+			if (sampled)
+			{
+				mask |= GL_TEXTURE_FETCH_BARRIER_BIT;
+			}
+			if (storage)
+			{
+				mask |= GL_SHADER_IMAGE_ACCESS_BARRIER_BIT;
+			}
+		}
+		if (!compiledPasses[b].prePassBufferBarriers.empty())
+		{
+			mask |= GL_SHADER_STORAGE_BARRIER_BIT;
+		}
+	}
+	if (mask != 0 && glMemoryBarrier != nullptr)
+	{
+		glMemoryBarrier(mask);
+	}
+#endif
+}
+
 void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
 	ASSERT_OR_RETURN(, !hasActivePass, "beginPass called while another pass is active");
+	if (pass.kind == gfx_api::PassKind::Compute)
+	{
+		ASSERT_OR_RETURN(, pass.colorAttachments.empty() && !pass.depthAttachment.has_value() && !pass.resolveAttachment.has_value(),
+			"Compute pass cannot have graphics attachments");
+		setComputePassActive(true);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		_dynamicPassFBO = 0;
+		_activePassDesc = pass;
+		hasActivePass = true;
+		frameHasDrawCommands = true;
+		return;
+	}
+	setComputePassActive(false);
 	ASSERT_OR_RETURN(, !_dynamicPassFBO, "Stale pass framebuffer binding");
 	ASSERT_OR_RETURN(, pass.viewportSize.has_value(), "Pass requires resolved viewportSize");
 	ASSERT_OR_RETURN(, !pass.colorAttachments.empty()
@@ -5080,6 +5141,13 @@ void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::C
 void gl_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
 {
 	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
+	if (isComputePassActive())
+	{
+		setComputePassActive(false);
+		_activePassDesc = gfx_api::RenderPassDesc();
+		hasActivePass = false;
+		return;
+	}
 
 	const uint32_t passWidth = _activePassDesc.viewportSize.has_value()
 		? _activePassDesc.viewportSize->first

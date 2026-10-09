@@ -889,6 +889,9 @@ struct VkRoot final : gfx_api::context
 
 	bool frameHasDrawCommands = false;
 	bool hasActivePass = false;
+	/// Points at `CompiledPass::desc` for the pass `executeCompiledRenderGraph` is recording. Cleared in `endPass`.
+	const gfx_api::RenderPassDesc* _activePassDesc = nullptr;
+	const gfx_api::RenderPassDesc* activePassDesc() const override { return hasActivePass ? _activePassDesc : nullptr; }
 	const size_t maxErrorHandlingDepth = 10;
 	std::vector<vk::Result> errorHandlingDepth;
 

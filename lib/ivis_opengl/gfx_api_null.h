@@ -137,6 +137,7 @@ public:
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	const gfx_api::RenderPassDesc* activePassDesc() const override { return _activePassDesc; }
 	virtual void beginScreenFrame() override;
 	virtual void finishScreenFrame() override;
 	virtual bool ensurePipelineSurfaces(const gfx_api::ResolvedSurfaceTable& specs) override;
@@ -183,4 +184,5 @@ private:
 
 	size_t frameNum = 0;
 	bool frameHasDrawCommands = false;
+	const gfx_api::RenderPassDesc* _activePassDesc = nullptr;
 };

@@ -43,7 +43,8 @@ class FrameLayoutTracker;
 /// Batches `CompiledPass::prePassBarriers` into coalesced `vkCmdPipelineBarrier` calls.
 ///
 /// Honors `ReadProducerScope::External` (runtime old layout, always emit) vs
-/// `ReadProducerScope::InGraph` (compile-time old layout, skip when old == new).
+/// `ReadProducerScope::InGraph` (skip only a graphics sampled to graphics sampled
+/// barrier whose layouts already match). Compute keeps a same-layout barrier.
 /// Invoked from `VkRoot::emitPrePassBarriers` before `beginPass`.
 /// </summary>
 class PrePassBarrierEmitter
@@ -66,6 +67,7 @@ private:
 	VkRoot& _root;
 	FrameLayoutTracker& _tracker;
 	std::vector<::vk::ImageMemoryBarrier> _scratch;
+	std::vector<::vk::BufferMemoryBarrier> _bufferScratch;
 };
 
 } // namespace gfx_api::vk
