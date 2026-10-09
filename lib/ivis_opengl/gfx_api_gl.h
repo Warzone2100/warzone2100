@@ -83,6 +83,7 @@ private:
 	std::string debugName;
 #endif
 
+	friend struct gl_compute_pipeline_state_object;
 	gl_texture();
 	virtual ~gl_texture();
 public:
@@ -113,6 +114,7 @@ private:
 #endif
 	texture_array_mip_level_buffer *pInternalBuffer = nullptr;
 
+	friend struct gl_compute_pipeline_state_object;
 	gl_texture_array();
 	virtual ~gl_texture_array();
 public:
@@ -337,6 +339,8 @@ private:
 	// Replace the contents of a uniform block slot.
 	void uploadUniformBlock(size_t slot, const void* buffer, size_t size);
 
+	friend struct gl_compute_pipeline_state_object;
+
 	void build_program(gl_context& ctx,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
@@ -347,11 +351,39 @@ private:
 
 };
 
+struct gl_compute_pipeline_handle;
+
+struct gl_compute_pipeline_state_object final : public gfx_api::compute_pipeline_state_object
+{
+	GLuint program = 0;
+	GLuint computeShader = 0;
+	std::vector<gfx_api::texture_input> sampled;
+	std::vector<gfx_api::storage_image_input> storage_images;
+	std::vector<gfx_api::storage_buffer_input> storage_buffers;
+	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
+	std::vector<GLint> uniformBlockSizes;
+	std::vector<std::pair<gl_uniform_block_allocator::Allocation, GLsizeiptr>> uniformBlockRanges;
+	std::vector<std::type_index> uniformBlockTypes;
+	gl_context* owningContext = nullptr;
+
+	gl_compute_pipeline_state_object(gl_context& ctx, const gfx_api::compute_pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants);
+	~gl_compute_pipeline_state_object();
+
+	void bind();
+	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
+	void set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration);
+
+	void bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
+	void bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
+	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers) override;
+};
+
 struct gl_context final : public gfx_api::context
 {
 	std::unique_ptr<gfx_api::backend_OpenGL_Impl> backend_impl;
 
 	gl_pipeline_state_object* current_program = nullptr;
+	gl_compute_pipeline_state_object* currentComputeProgram = nullptr;
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
@@ -491,6 +523,7 @@ struct gl_context final : public gfx_api::context
 	virtual gfx_api::lighting_constants getShadowConstants() override;
 	virtual bool setShadowConstants(gfx_api::lighting_constants values) override;
 	virtual bool supportsTessellationShaders() const override;
+	virtual bool supportsComputeShaders() const override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
@@ -528,6 +561,8 @@ private:
 
 protected:
 	friend struct gl_pipeline_state_object;
+	friend struct gl_compute_pipeline_state_object;
+	friend struct gl_compute_pipeline_handle;
 	void wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
 	void wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message);
 	void wzGLPopDebugGroup();
@@ -584,6 +619,7 @@ private:
 	bool hasInstancedRenderingSupport = false;
 	bool hasBorderClampSupport = false;
 	bool hasTessellationSupport = false;
+	bool computeShadersSupported = false;
 	bool hasTextureGatherSupport = false;
 	// whether a 10 bit per channel scene colour target is renderable on this driver
 	bool hasTenBitMsaaSupport = false; // and whether it is renderable multisampled
@@ -628,6 +664,13 @@ private:
 		{ }
 	};
 	std::vector<BuiltPipelineRegistry> createdPipelines;
+
+	struct ComputePipelineRegistry
+	{
+		std::shared_ptr<gfx_api::compute_pipeline_create_info> createInfo;
+		gl_compute_pipeline_state_object* pso = nullptr;
+	};
+	std::vector<ComputePipelineRegistry> createdComputePipelines;
 
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
