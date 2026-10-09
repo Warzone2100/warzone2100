@@ -2267,6 +2267,14 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
+/* The cost bar on a debug menu button (drawn by the HUD skin) */
+static void addDebugCostBar(WIDGET &button, const W_BARINIT &init)
+{
+	auto bar = std::make_shared<HudButtonBar>(&init);
+	button.attach(bar);
+	bar->setBackgroundColour(WZCOL_BLACK);
+}
+
 static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 {
 	// should this ever be called with psOwner == NULL?
@@ -2289,6 +2297,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 	/* Create the basic form */
 	auto statForm = std::make_shared<IntFormAnimated>(false);
+	statForm->setHudSkinned(true);
 	parent->attach(statForm);
 	statForm->id = IDSTAT_FORM;
 	statForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -2304,7 +2313,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -2313,6 +2322,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 	// Add the tabbed form
 	auto statList = IntListTabWidget::make();
+	statList->setHudSkinned();
 	statForm->attach(statList);
 	statList->id = IDSTAT_TABFORM;
 	statList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
@@ -2345,6 +2355,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 		}
 
 		auto button = std::make_shared<IntStatsButton>();
+		button->setHudSkinned(true);
 		statList->attach(button);
 		button->id = nextButtonId;
 		button->style |= WFORM_SECONDARY;
@@ -2354,7 +2365,6 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 		BASE_STATS *Stat = _ppsStatsList[i];
 		WzString tipString = getLocalizedStatsName(_ppsStatsList[i]);
 		unsigned powerCost = 0;
-		W_BARGRAPH *bar;
 		if (Stat->hasType(STAT_STRUCTURE))  // It's a structure.
 		{
 			powerCost = ((STRUCTURE_STATS *)Stat)->powerToBuild;
@@ -2366,8 +2376,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 			sBarInit.formID = nextButtonId;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
-			bar = widgAddBarGraph(psWScreen, &sBarInit);
-			bar->setBackgroundColour(WZCOL_BLACK);
+			addDebugCostBar(*button, sBarInit);
 		}
 		else if (Stat->hasType(STAT_TEMPLATE))  // It's a droid.
 		{
@@ -2380,8 +2389,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 			sBarInit.formID = nextButtonId;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
-			bar = widgAddBarGraph(psWScreen, &sBarInit);
-			bar->setBackgroundColour(WZCOL_BLACK);
+			addDebugCostBar(*button, sBarInit);
 		}
 		WzString costString = WzString::format(_("Cost: %u"), powerCost);
 		tipString.append("\n");

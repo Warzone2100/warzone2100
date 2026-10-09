@@ -80,6 +80,10 @@ bool hudIsMovedCloseButton(const WIDGET &widget);
 /// One of a panel's own controls that its extension moved, inside the panel
 void hudSetMovedPanelControl(const std::shared_ptr<WIDGET> &widget);
 bool hudIsMovedPanelControl(const WIDGET &widget);
+/// A Classic widget that a skin may place a little differently in its row, for what it draws beside it (the mission
+/// timer's time, after the Modern skin's stopwatch)
+void hudSetSkinPlacedWidget(const std::shared_ptr<WIDGET> &widget);
+bool hudIsSkinPlacedWidget(const WIDGET &widget);
 /// The rows at the top of an extended panel's contents that it no longer shows (HudPanelExtensionSpec::topInset)
 int hudPanelTopInset(const WIDGET &panel);
 /// A list's page tabs, which an extension hides while it shows them itself

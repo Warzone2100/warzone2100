@@ -203,6 +203,10 @@ void hudSkinChanged()
 {
 	widgSetTipStyle(currentHudSkin().tooltipStyle());
 	widgSetTipDelay(hudSettings().tooltipDelay);
+	if (WIDGET *missionTime = psWScreen ? widgGetFromID(psWScreen, IDTIMER_DISPLAY) : nullptr)
+	{
+		missionTime->callCalcLayout();
+	}
 }
 
 WzRect hudStatusZone()

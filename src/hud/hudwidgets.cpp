@@ -211,6 +211,13 @@ void HudOverlayText::display(int xOffset, int yOffset)
 	currentHudSkin().drawOverlayText(cachedText, static_cast<float>(xOffset + x()), static_cast<float>(yOffset + y() - cachedText.aboveBase()), textColor);
 }
 
+int hudDrawTextLine(WzText &text, float x, float baseline, int maxWidth, PIELIGHT color, bool alignRight)
+{
+	text.setText(text.getText(), text.getFontID(), std::max(maxWidth, 1));
+	text.render(alignRight ? x - static_cast<float>(text.width()) : x, baseline, color);
+	return text.width();
+}
+
 int hudFlowLayout(const std::vector<std::shared_ptr<WIDGET>> &widgets, int x, int y, int width, int gap, int lineHeight)
 {
 	int cursorX = 0;

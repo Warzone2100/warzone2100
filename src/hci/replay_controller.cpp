@@ -36,6 +36,7 @@
 #include "../gamestate_replay_seek.h"
 #include "../gamestate_snapshot_ring.h"
 #include "../hci.h"
+#include "../hud/hudskin.h"
 #include "../loop.h"
 #include "../notifications.h"
 
@@ -149,6 +150,18 @@ public:
 		const bool isDisabled = (getState() & WBUT_DISABLE) != 0;
 		const bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
 
+		HudReplayButtonLook look;
+		look.rect = WzRect(x0, y0, width(), height());
+		look.button = showAltImage ? altRole : role;
+		look.down = isDown;
+		look.highlighted = isHighlight;
+		look.disabled = isDisabled;
+		look.fastForward = (outline == OutlineState::Double) ? 4 : ((outline == OutlineState::Single) ? 2 : 0);
+		if (currentHudSkin().drawReplayButton(look))
+		{
+			return;
+		}
+
 		const auto light_border = pal_RGBA(255, 255, 255, 100);
 		const auto fill_color = isDown || isDisabled ? pal_RGBA(10, 0, 70, 200) : pal_RGBA(25, 0, 110, 175);
 		iV_ShadowBox(x0, y0, x1, y1, 0, isDown ? pal_RGBA(0, 0, 0, 0) : light_border, isDisabled ? light_border : WZCOL_FORM_DARK, fill_color);
@@ -183,6 +196,8 @@ public:
 	gfx_api::texture* pButtonImage = nullptr;
 	gfx_api::texture* pAltImage = nullptr; ///< (shown instead while showAltImage: the play/pause button's play)
 	bool showAltImage = false;
+	HudReplayButton role = HudReplayButton::Play;
+	HudReplayButton altRole = HudReplayButton::Play;
 	enum class OutlineState
 	{
 		None,
@@ -202,7 +217,7 @@ public:
 	void run(W_CONTEXT *psContext) override;
 
 private:
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> makeReplayActionButton(const char *imagePath);
+	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> makeReplayActionButton(const char *imagePath, HudReplayButton role);
 	void refreshButtonStates();
 	void layoutContent();
 
@@ -277,9 +292,11 @@ void ReplayTransportBar::seekRelative(int32_t deltaMs)
 	replayplayback::seekTo(target);
 }
 
-std::shared_ptr<W_REPLAY_CONTROL_BUTTON> ReplayTransportBar::makeReplayActionButton(const char *imagePath)
+std::shared_ptr<W_REPLAY_CONTROL_BUTTON> ReplayTransportBar::makeReplayActionButton(const char *imagePath, HudReplayButton role)
 {
 	auto button = std::make_shared<W_REPLAY_CONTROL_BUTTON>();
+	button->role = role;
+	button->altRole = role;
 	button->style |= WBUT_SECONDARY;
 	button->FontID = font_regular;
 	button->pButtonImage = WZ_Notification_Image(imagePath).loadImageToTexture();
@@ -303,14 +320,14 @@ std::shared_ptr<ReplayTransportBar> ReplayTransportBar::make()
 	result->timeline = ReplayTimelineWidget::make();
 	result->attach(result->timeline);
 
-	result->startButton = result->makeReplayActionButton("images/replay/skip_start.png");
+	result->startButton = result->makeReplayActionButton("images/replay/skip_start.png", HudReplayButton::Start);
 	result->startButton->setTip(_("Back to the start"));
 	result->attach(result->startButton);
 	result->startButton->addOnClickHandler([](W_BUTTON&) {
 		replayplayback::seekTo(0);
 	});
 
-	result->skipBackButton = result->makeReplayActionButton("images/replay/skip_backward.png");
+	result->skipBackButton = result->makeReplayActionButton("images/replay/skip_backward.png", HudReplayButton::Back);
 	result->skipBackButton->setTip(_("Back 15 seconds"));
 	result->attach(result->skipBackButton);
 	result->skipBackButton->addOnClickHandler([](W_BUTTON&) {
@@ -318,8 +335,9 @@ std::shared_ptr<ReplayTransportBar> ReplayTransportBar::make()
 	});
 
 	// One button: pause while playing, resume while paused
-	result->playPauseButton = result->makeReplayActionButton("images/replay/pause.png");
+	result->playPauseButton = result->makeReplayActionButton("images/replay/pause.png", HudReplayButton::Pause);
 	result->playPauseButton->pAltImage = WZ_Notification_Image("images/replay/play.png").loadImageToTexture();
+	result->playPauseButton->altRole = HudReplayButton::Play;
 	result->playPauseButton->setTip(_("Pause"));
 	result->attach(result->playPauseButton);
 	result->playPauseButton->addOnClickHandler([refreshSoon](W_BUTTON&) {
@@ -327,14 +345,14 @@ std::shared_ptr<ReplayTransportBar> ReplayTransportBar::make()
 		refreshSoon();
 	});
 
-	result->skipForwardButton = result->makeReplayActionButton("images/replay/skip_forward.png");
+	result->skipForwardButton = result->makeReplayActionButton("images/replay/skip_forward.png", HudReplayButton::Forward);
 	result->skipForwardButton->setTip(_("Forward 15 seconds"));
 	result->attach(result->skipForwardButton);
 	result->skipForwardButton->addOnClickHandler([](W_BUTTON&) {
 		seekRelative(static_cast<int32_t>(REPLAY_SKIP_STEP_MS));
 	});
 
-	result->fastForwardButton = result->makeReplayActionButton("images/replay/fast_forward.png");
+	result->fastForwardButton = result->makeReplayActionButton("images/replay/fast_forward.png", HudReplayButton::FastForward);
 	result->fastForwardButton->setTip(_("Fast-Forward"));
 	result->attach(result->fastForwardButton);
 	result->fastForwardButton->addOnClickHandler([refreshSoon](W_BUTTON& button) {
@@ -359,7 +377,10 @@ void ReplayTransportBar::display(int xOffset, int yOffset)
 {
 	const int x0 = x() + xOffset;
 	const int y0 = y() + yOffset;
-	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), pal_RGBA(0, 0, 0, 160));
+	if (!currentHudSkin().drawReplayBar(WzRect(x0, y0, width(), height())))
+	{
+		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), pal_RGBA(0, 0, 0, 160));
+	}
 }
 
 void ReplayTransportBar::geometryChanged()

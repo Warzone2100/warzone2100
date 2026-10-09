@@ -125,6 +125,7 @@ struct VectorImage
 {
 	std::vector<char> data;
 	bool unusable = false;
+	float aspect = 0.f;  ///< (0 until known)
 	std::map<RasterKey, Rasterization> rasterizations;
 };
 
@@ -170,51 +171,86 @@ void dilate(std::vector<uint8_t> &coverage, int width, int height, float radius)
 	coverage.swap(grown);
 }
 
-Rasterization rasterize(const std::string &name, VectorImage &image, int width, int height, float haloPixels)
+bool startThorVG()
 {
-	Rasterization result;
 	if (!thorvgReady)
 	{
 		if (tvg::Initializer::init(0) != tvg::Result::Success)
 		{
 			debug(LOG_ERROR, "Vector images: ThorVG failed to start");
-			return result;
+			return false;
 		}
 		thorvgReady = true;
 	}
-	const int padding = haloPixels > 0.f ? static_cast<int>(std::ceil(haloPixels)) + 1 : 0;
-	const int textureWidth = width + padding * 2;
-	const int textureHeight = height + padding * 2;
-	std::vector<uint32_t> pixels(static_cast<size_t>(textureWidth) * textureHeight, 0);
+	return true;
+}
+
+/// ThorVG's picture of the image, or nullptr (and the image marked unusable)
+tvg::Picture *loadPicture(const std::string &name, VectorImage &image)
+{
+	tvg::Picture *picture = tvg::Picture::gen();
+	if (picture == nullptr || picture->load(image.data.data(), static_cast<uint32_t>(image.data.size()), "svg", nullptr, true) != tvg::Result::Success)
+	{
+		tvg::Paint::rel(picture);
+		image.unusable = true;
+		debug(LOG_ERROR, "Vector image %s: ThorVG can't load it", name.c_str());
+		return nullptr;
+	}
+	return picture;
+}
+
+nonstd::optional<VectorImageCoverage> coverageOf(const std::string &name, VectorImage &image, int width, int height, float haloPixels)
+{
+	if (!startThorVG())
+	{
+		return nonstd::nullopt;
+	}
+	VectorImageCoverage result;
+	result.padding = haloPixels > 0.f ? static_cast<int>(std::ceil(haloPixels)) + 1 : 0;
+	result.width = width + result.padding * 2;
+	result.height = height + result.padding * 2;
+	std::vector<uint32_t> pixels(static_cast<size_t>(result.width) * result.height, 0);
 	{
 		std::unique_ptr<tvg::SwCanvas> canvas(tvg::SwCanvas::gen(tvg::EngineOption::None));
 		if (canvas == nullptr
-			|| canvas->target(pixels.data(), static_cast<uint32_t>(textureWidth), static_cast<uint32_t>(textureWidth), static_cast<uint32_t>(textureHeight), tvg::ColorSpace::ABGR8888) != tvg::Result::Success)
+			|| canvas->target(pixels.data(), static_cast<uint32_t>(result.width), static_cast<uint32_t>(result.width), static_cast<uint32_t>(result.height), tvg::ColorSpace::ABGR8888) != tvg::Result::Success)
 		{
-			return result;
+			return nonstd::nullopt;
 		}
-		tvg::Picture *picture = tvg::Picture::gen();
-		if (picture == nullptr || picture->load(image.data.data(), static_cast<uint32_t>(image.data.size()), "svg", nullptr, true) != tvg::Result::Success)
+		tvg::Picture *picture = loadPicture(name, image);
+		if (picture == nullptr)
 		{
-			tvg::Paint::rel(picture);
-			image.unusable = true;
-			debug(LOG_ERROR, "Vector image %s: ThorVG can't load it", name.c_str());
-			return result;
+			return nonstd::nullopt;
 		}
 		picture->size(static_cast<float>(width), static_cast<float>(height));
-		picture->translate(static_cast<float>(padding), static_cast<float>(padding));
+		picture->translate(static_cast<float>(result.padding), static_cast<float>(result.padding));
 		if (canvas->add(picture) != tvg::Result::Success || canvas->draw(true) != tvg::Result::Success || canvas->sync() != tvg::Result::Success)
 		{
-			return result;
+			return nonstd::nullopt;
 		}
 	}
 
-	std::vector<uint8_t> coverage(pixels.size());
-	std::transform(pixels.begin(), pixels.end(), coverage.begin(), [](uint32_t pixel) { return static_cast<uint8_t>(pixel >> 24); });
+	result.coverage.resize(pixels.size());
+	std::transform(pixels.begin(), pixels.end(), result.coverage.begin(), [](uint32_t pixel) { return static_cast<uint8_t>(pixel >> 24); });
 	if (haloPixels > 0.f)
 	{
-		dilate(coverage, textureWidth, textureHeight, haloPixels);
+		dilate(result.coverage, result.width, result.height, haloPixels);
 	}
+	return result;
+}
+
+Rasterization rasterize(const std::string &name, VectorImage &image, int width, int height, float haloPixels)
+{
+	Rasterization result;
+	auto rasterized = coverageOf(name, image, width, height, haloPixels);
+	if (!rasterized.has_value())
+	{
+		return result;
+	}
+	const std::vector<uint8_t> &coverage = rasterized->coverage;
+	const int textureWidth = rasterized->width;
+	const int textureHeight = rasterized->height;
+	const int padding = rasterized->padding;
 
 	// White, with the coverage as (straight) alpha: drawing multiplies it by the color
 	iV_Image bitmap;
@@ -476,19 +512,63 @@ bool iV_HasVectorImage(const std::string &name)
 	return images.count(name) != 0;
 }
 
-bool iV_DrawVectorImage(const std::string &name, float x, float y, float width, float height, PIELIGHT colour, float haloWidth)
+nonstd::optional<VectorImageCoverage> iV_VectorImageCoverage(const std::string &name, int width, int height, float haloPixels)
+{
+	auto it = images.find(name);
+	if (it == images.end() || it->second.unusable || width < 1 || height < 1 || width > VECTOR_IMAGE_MAX_PIXELS || height > VECTOR_IMAGE_MAX_PIXELS)
+	{
+		return nonstd::nullopt;
+	}
+	return coverageOf(name, it->second, width, height, std::min(std::max(haloPixels, 0.f), MAX_HALO_PIXELS));
+}
+
+float iV_VectorImagesScale()
+{
+	return scaleX;
+}
+
+nonstd::optional<float> iV_VectorImageAspect(const std::string &name)
 {
 	auto it = images.find(name);
 	if (it == images.end() || it->second.unusable)
 	{
-		return false;
+		return nonstd::nullopt;
+	}
+	VectorImage &image = it->second;
+	if (image.aspect <= 0.f && startThorVG())
+	{
+		if (tvg::Picture *picture = loadPicture(name, image))
+		{
+			float width = 0.f;
+			float height = 0.f;
+			if (picture->size(&width, &height) == tvg::Result::Success && width > 0.f && height > 0.f)
+			{
+				image.aspect = width / height;
+			}
+			tvg::Paint::rel(picture);
+		}
+	}
+	if (image.aspect <= 0.f)
+	{
+		return nonstd::nullopt;
+	}
+	return image.aspect;
+}
+
+/// The image rasterized for a logical size and halo, cached (nullptr if it can't be)
+const Rasterization *rasterizationFor(const std::string &name, float width, float height, float haloWidth)
+{
+	auto it = images.find(name);
+	if (it == images.end() || it->second.unusable)
+	{
+		return nullptr;
 	}
 	VectorImage &image = it->second;
 	const int pixelWidth = static_cast<int>(std::lround(width * scaleX));
 	const int pixelHeight = static_cast<int>(std::lround(height * scaleY));
 	if (pixelWidth < 1 || pixelHeight < 1 || pixelWidth > VECTOR_IMAGE_MAX_PIXELS || pixelHeight > VECTOR_IMAGE_MAX_PIXELS)
 	{
-		return false;
+		return nullptr;
 	}
 	const float haloPixels = std::min(std::max(haloWidth, 0.f) * std::min(scaleX, scaleY), MAX_HALO_PIXELS);
 	const RasterKey key{pixelWidth, pixelHeight, static_cast<int>(std::lround(haloPixels * 16.f))};
@@ -502,16 +582,38 @@ bool iV_DrawVectorImage(const std::string &name, float x, float y, float width, 
 		Rasterization rasterization = rasterize(name, image, pixelWidth, pixelHeight, haloPixels);
 		if (rasterization.texture == nullptr)
 		{
-			return false;
+			return nullptr;
 		}
 		found = image.rasterizations.emplace(key, std::move(rasterization)).first;
 	}
-	const Rasterization &rasterization = found->second;
+	return &found->second;
+}
+
+bool iV_DrawVectorImage(const std::string &name, float x, float y, float width, float height, PIELIGHT colour, float haloWidth)
+{
+	const Rasterization *rasterization = rasterizationFor(name, width, height, haloWidth);
+	if (rasterization == nullptr)
+	{
+		return false;
+	}
 	// The top-left corner on a whole physical pixel, so each texel covers exactly one
-	const float left = (std::round(x * scaleX) - static_cast<float>(rasterization.padding)) / scaleX;
-	const float top = (std::round(y * scaleY) - static_cast<float>(rasterization.padding)) / scaleY;
-	iV_DrawTextureTinted(*rasterization.texture, Vector2f(left, top),
-	                     Vector2f(static_cast<float>(rasterization.width) / scaleX, static_cast<float>(rasterization.height) / scaleY), colour);
+	const float left = (std::round(x * scaleX) - static_cast<float>(rasterization->padding)) / scaleX;
+	const float top = (std::round(y * scaleY) - static_cast<float>(rasterization->padding)) / scaleY;
+	iV_DrawTextureTinted(*rasterization->texture, Vector2f(left, top),
+	                     Vector2f(static_cast<float>(rasterization->width) / scaleX, static_cast<float>(rasterization->height) / scaleY), colour);
+	return true;
+}
+
+bool iV_DrawVectorImageTransformed(const std::string &name, const glm::mat4 &modelViewProjection, float x, float y, float width, float height, PIELIGHT colour, float haloWidth)
+{
+	const Rasterization *rasterization = rasterizationFor(name, width, height, haloWidth);
+	if (rasterization == nullptr)
+	{
+		return false;
+	}
+	const float padding = static_cast<float>(rasterization->padding);
+	iV_DrawTextureTinted(*rasterization->texture, Vector2f(x - padding / scaleX, y - padding / scaleY),
+	                     Vector2f(static_cast<float>(rasterization->width) / scaleX, static_cast<float>(rasterization->height) / scaleY), colour, modelViewProjection);
 	return true;
 }
 

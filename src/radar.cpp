@@ -56,6 +56,7 @@
 #include "order.h"
 #include "cameratrace.h"
 #include "display3d_render_graph.h"
+#include "hud/hudskin.h"
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -203,7 +204,7 @@ PIELIGHT inline applyAlpha(PIELIGHT color, float alpha)
 
 static void DrawRadarTiles(WorldMapState& mapState);
 static void DrawRadarObjects(GameWorld& world);
-static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix);
+static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix, bool frame);
 static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix);
 static void setViewingWindow(const WorldMapState& mapState);
 
@@ -392,14 +393,18 @@ void drawRadar(GameWorld& world)
 	{
 		// rotate the map
 		radarMatrix *= glm::rotate(UNDEG(playerPos.r.y), glm::vec3(0.f, 0.f, 1.f));
-		if (radarRotationArrow)
-		{
-			DrawNorth(orthoMatrix * radarMatrix);
-		}
+	}
+	// (The map is drawn from 0, 0 to its size in this space)
+	const glm::mat4 mapSpace = orthoMatrix * radarMatrix * glm::translate(glm::vec3(-static_cast<float>(radarWidth) / 2.f - 1.f, -static_cast<float>(radarHeight) / 2.f - 1.f, 0.f));
+	const bool northArrow = rotateRadar && radarRotationArrow;
+	const bool skinFrame = currentHudSkin().drawRadarFrame(mapSpace, static_cast<float>(radarWidth), static_cast<float>(radarHeight), northArrow);
+	if (northArrow && !skinFrame)
+	{
+		DrawNorth(orthoMatrix * radarMatrix);
 	}
 
 	pie_RenderRadar(orthoMatrix * radarMatrix);
-	DrawRadarExtras(orthoMatrix * radarMatrix * glm::translate(glm::vec3(-static_cast<float>(radarWidth) / 2.f - 1.f, -static_cast<float>(radarHeight) / 2.f - 1.f, 0.f)));
+	DrawRadarExtras(mapSpace, !skinFrame);
 	drawRadarBlips(static_cast<int>(-static_cast<int>(radarWidth) / 2.f - 1), static_cast<int>(-static_cast<int>(radarHeight) / 2.f - 1), pixSizeH, pixSizeV, orthoMatrix * radarMatrix);
 }
 
@@ -814,10 +819,13 @@ static void setViewingWindow(const WorldMapState& mapState)
 	pie_SetViewingWindow(points, colour);
 }
 
-static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix)
+static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix, bool frame)
 {
 	pie_DrawViewingWindow(modelViewProjectionMatrix);
-	RenderWindowFrame(FRAME_RADAR, -1, -1, radarWidth + 2, radarHeight + 2, modelViewProjectionMatrix);
+	if (frame)
+	{
+		RenderWindowFrame(FRAME_RADAR, -1, -1, radarWidth + 2, radarHeight + 2, modelViewProjectionMatrix);
+	}
 }
 
 /** Does a screen coordinate lie within the radar area? */

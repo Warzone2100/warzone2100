@@ -472,6 +472,7 @@ src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
 src/hud/hudbuildcategories.cpp
+src/hud/hudconnection.cpp
 src/hud/huddetailcontents.cpp
 src/hud/hudidle.cpp
 src/hud/hudmodel.cpp

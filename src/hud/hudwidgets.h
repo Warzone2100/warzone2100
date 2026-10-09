@@ -118,6 +118,10 @@ private:
 	WzText cachedText;
 };
 
+/// Draws a line of text at `baseline`, cut to `maxWidth` with an ellipsis when it doesn't fit (WzText::setText()).
+/// Returns the width it uses.
+int hudDrawTextLine(WzText &text, float x, float baseline, int maxWidth, PIELIGHT color, bool alignRight = false);
+
 /// Sizes a popover menu to its items (at most the screen's height) and opens it under `anchor`, left-aligned with it
 void hudOpenMenu(const std::shared_ptr<PopoverMenuWidget> &menu, const std::shared_ptr<WIDGET> &anchor);
 

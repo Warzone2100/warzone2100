@@ -31,6 +31,8 @@
  */
 
 #include "hudclassicskin.h"
+#include "hudradarblips.h"
+#include "hudranks.h"
 
 #include "lib/framework/frame.h"
 #include "lib/gamelib/gtime.h"
@@ -221,6 +223,18 @@ const IconFiles &iconFiles(HudIcon icon)
 }
 
 constexpr int ICON_FILL_ALPHA = 72;
+constexpr float ORDER_ICON_HEIGHT = 15.f;
+constexpr float ORDER_ICON_MARGIN = 3.f;
+constexpr float TIMER_ICON_MARGIN = 2.f;
+constexpr float TIMER_CLOCK_MARGIN = 2.f;
+/// The room added before the mission timer's time (from TIMER_LABELX, 15, in mission.cpp), and the stopwatch's
+/// segment, up to the time
+constexpr int TIMER_CLOCK_GUTTER = 6;
+constexpr float TIMER_CLOCK_SEGMENT = 19.f;
+/// The transporter's ETA button: the right edge of the ETA's well, and where the load's label starts (TRAN_TIMER_X,
+/// IDTRANS_CAPACITY in mission.cpp)
+constexpr float TRANSPORTER_ETA_WELL = 41.f;
+constexpr float TRANSPORTER_LOAD_LABEL = 70.f;
 constexpr float ICON_HALO_WIDTH = 1.3f;
 
 PIELIGHT iconColor(HudIcon icon)
@@ -266,6 +280,31 @@ bool drawIconShape(const IconFiles &files, const WzRect &rect, PIELIGHT color, i
 	drawGameVectorImage(files.outline, x, y, size, size, color);
 	return true;
 }
+
+/// The replay controls: the bar's opacity (about two thirds), the buttons' icons, the timeline's track and playhead
+constexpr int REPLAY_BAR_ALPHA = 170;
+constexpr float REPLAY_ICON_SIZE = 14.f;
+constexpr float REPLAY_TRACK_HEIGHT = 4.f;
+constexpr float REPLAY_PLAYHEAD_RADIUS = 6.f;
+
+const char *replayIconPath(HudReplayButton button)
+{
+	switch (button)
+	{
+	case HudReplayButton::Start: return "images/hud/icons/replay-start.svg";
+	case HudReplayButton::Back: return "images/hud/icons/replay-back.svg";
+	case HudReplayButton::Pause: return "images/hud/icons/replay-pause.svg";
+	case HudReplayButton::Play: return "images/hud/icons/replay-play.svg";
+	case HudReplayButton::Forward: return "images/hud/icons/replay-forward.svg";
+	case HudReplayButton::FastForward: return "images/hud/icons/replay-fast-forward.svg";
+	}
+	return "images/hud/icons/replay-play.svg";
+}
+
+/// The radar's frame (the panel's padding around the map, and its corners) and the north arrow's height
+constexpr float RADAR_FRAME_PADDING = 3.f;
+constexpr float RADAR_FRAME_RADIUS = 5.f;
+constexpr float RADAR_NORTH_HEIGHT = 30.f;
 
 /// The Modern skin's colors, made for the default accent (blue): the other accents' are computed from them
 HudColors modernColors()
@@ -800,6 +839,62 @@ public:
 		const float y1 = y0 + static_cast<float>(iV_GetImageHeight(IntImages, image));
 		pie_DrawGradientRoundedBox(x0, y0, x1, y1, palette.panelBackground, palette.panelBackgroundBottom, false, 1.f, params.cardRadius + 1.f,
 		                           flashOn ? palette.stateWarn : palette.panelBorder, flashOn ? 1.5f : params.borderWidth);
+		if (image == IMAGE_MISSION_CLOCK || image == IMAGE_MISSION_CLOCK_UP)
+		{
+			// The stopwatch on a tinted segment, in the room the time leaves before it (its label is at TIMER_LABELX)
+			const PIELIGHT color = flashOn ? palette.stateWarn : palette.accent;
+			const float inset = flashOn ? 1.5f : params.borderWidth;
+			const float radius = std::max(0.f, params.cardRadius + 1.f - inset);
+			const float segmentRight = x0 + TIMER_CLOCK_SEGMENT;
+			pie_DrawRoundedBox(x0 + inset, y0 + inset, segmentRight, y1 - inset, withAlpha(color, 56), glm::vec4(radius, 0.f, radius, 0.f),
+			                   pal_RGBA(0, 0, 0, 0), 0.f);
+			const float size = y1 - y0 - 2 * TIMER_CLOCK_MARGIN;
+			drawGameVectorImage("images/hud/icons/mission-clock.svg", std::round(x0 + inset + (segmentRight - x0 - inset - size) / 2.f),
+			                    y0 + TIMER_CLOCK_MARGIN, size, size, color);
+		}
+	}
+
+	int timerIconGutter() const override { return TIMER_CLOCK_GUTTER; }
+
+	bool drawTransporterButton(const HudTransporterButtonLook &look) override
+	{
+		const std::string icon = look.launch ? "images/hud/icons/transporter-launch.svg" : "images/hud/icons/transporter-arriving.svg";
+		if (!loadGameVectorImage(icon))
+		{
+			return false;
+		}
+		const WzRect &rect = look.rect;
+		const float x0 = static_cast<float>(rect.x());
+		const float y0 = static_cast<float>(rect.y());
+		const float x1 = static_cast<float>(rect.right());
+		const float y1 = static_cast<float>(rect.bottom());
+		PIELIGHT border = palette.panelBorder;
+		PIELIGHT ink = palette.textSecondary;
+		if (look.flashOn)
+		{
+			border = palette.accent;
+			ink = palette.accent;
+		}
+		else if (look.highlighted)
+		{
+			border = tints.cardHoverBorder;
+			ink = palette.textPrimary;
+		}
+		pie_DrawGradientRoundedBox(x0, y0, x1, y1, palette.panelBackground, palette.panelBackgroundBottom, false, 1.f, params.cardRadius + 1.f,
+		                           border, look.flashOn ? 1.5f : params.borderWidth);
+		float iconLeft = x0;
+		float iconRight = x1;
+		if (!look.launch)
+		{
+			// The ETA's well (where its label is), then the icon, before the load's label
+			pie_DrawRoundedBox(x0 + 2.f, y0 + 2.f, x0 + TRANSPORTER_ETA_WELL, y1 - 2.f, tints.wellFill, params.cardRadius - 1.f, pal_RGBA(0, 0, 0, 0), 0.f);
+			iconLeft = x0 + TRANSPORTER_ETA_WELL;
+			iconRight = x0 + TRANSPORTER_LOAD_LABEL;
+		}
+		const float height = (y1 - y0) - 2 * TIMER_ICON_MARGIN;
+		const float width = height * gameVectorImageAspect(icon);
+		drawGameVectorImage(icon, std::round(iconLeft + (iconRight - iconLeft - width) / 2.f), y0 + TIMER_ICON_MARGIN, width, height, ink);
+		return true;
 	}
 
 	nonstd::optional<WzTipStyle> tooltipStyle() const override
@@ -867,6 +962,102 @@ public:
 	}
 
 	bool drawsIcons() const override { return true; }
+	bool drawsRankInsignia() const override { return true; }
+	bool drawsRadarBlips() const override { return true; }
+	bool drawsConnectionPanel() const override { return true; }
+
+	bool drawReplayBar(const WzRect &rect) override
+	{
+		// See-through over the game, in the darkest fill, with no shadow
+		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
+		                   withAlpha(tints.wellFill, REPLAY_BAR_ALPHA), params.cardRadius + 1.f, withAlpha(palette.panelBorder, 200), 1.f);
+		return true;
+	}
+
+	bool drawReplayButton(const HudReplayButtonLook &look) override
+	{
+		const WzRect &rect = look.rect;
+		const bool fast = look.fastForward > 0;
+		drawCard(rect, look.disabled ? HudCardState::Disabled
+		               : (look.down || fast ? HudCardState::Selected : (look.highlighted ? HudCardState::Highlighted : HudCardState::Normal)));
+		const PIELIGHT color = look.disabled ? palette.stateDisabled : (fast ? palette.accent : palette.textPrimary);
+		const float size = REPLAY_ICON_SIZE;
+		drawGameVectorImage(replayIconPath(look.button), std::round(static_cast<float>(rect.x()) + (static_cast<float>(rect.width()) - size) / 2.f),
+		                    std::round(static_cast<float>(rect.y()) + (static_cast<float>(rect.height()) - size) / 2.f), size, size, color);
+		if (fast)
+		{
+			// How much faster, at most, as a badge on the button's top right
+			replaySpeed.setText(WzString::fromUtf8(astringf("×%d", look.fastForward)), font_bar);
+			const float w = static_cast<float>(replaySpeed.width()) + 6.f;
+			const float h = 10.f;
+			const float bx1 = static_cast<float>(rect.right()) + 3.f;
+			const float by0 = static_cast<float>(rect.y()) - 4.f;
+			pie_DrawRoundedBox(bx1 - w, by0, bx1, by0 + h, palette.accent, h / 2.f, withAlpha(tints.wellFill, 255), 1.f);
+			replaySpeed.renderCenteredOnInk(WzRect(static_cast<int>(bx1 - w), static_cast<int>(by0), static_cast<int>(w), static_cast<int>(h)), tints.wellFill);
+		}
+		return true;
+	}
+
+	bool drawReplayTrack(const WzRect &track, float playedX) override
+	{
+		const float x0 = static_cast<float>(track.x());
+		const float x1 = static_cast<float>(track.right());
+		const float cy = static_cast<float>(track.y()) + static_cast<float>(track.height()) / 2.f;
+		const float half = REPLAY_TRACK_HEIGHT / 2.f;
+		pie_DrawRoundedBox(x0, cy - half, x1, cy + half, tints.wellFill, half, withAlpha(palette.panelBorder, 200), 1.f);
+		if (playedX > x0 + 1.f)
+		{
+			pie_DrawRoundedBox(x0, cy - half, std::min(playedX, x1), cy + half, palette.accent, half);
+		}
+		return true;
+	}
+
+	bool drawReplayPlayhead(float centerX, float centerY, HudReplayPlayhead kind) override
+	{
+		const float r = REPLAY_PLAYHEAD_RADIUS;
+		const PIELIGHT edge = withAlpha(tints.wellFill, 255);
+		switch (kind)
+		{
+		case HudReplayPlayhead::Current:
+			pie_DrawRoundedBox(centerX - r, centerY - r, centerX + r, centerY + r, palette.textPrimary, r, edge, 1.f);
+			break;
+		case HudReplayPlayhead::Drag:
+			pie_DrawRoundedBox(centerX - r, centerY - r, centerX + r, centerY + r, withAlpha(palette.textPrimary, 150), r, edge, 1.f);
+			break;
+		case HudReplayPlayhead::SeekTarget:
+			pie_DrawRoundedBox(centerX - r, centerY - r, centerX + r, centerY + r, withAlpha(palette.accent, 70), r, palette.accent, 1.5f);
+			break;
+		}
+		return true;
+	}
+
+	bool drawReplayTimeTip(const WzRect &rect) override
+	{
+		drawPopoverFrame(rect);
+		return true;
+	}
+
+	bool drawRadarFrame(const glm::mat4 &mapSpace, float width, float height, bool north) override
+	{
+		// A panel 3 px around the map, under it, with no accent edge (it turns with the camera)
+		const float x0 = -RADAR_FRAME_PADDING - 1.f;
+		const float y0 = -RADAR_FRAME_PADDING - 1.f;
+		const float x1 = width + RADAR_FRAME_PADDING + 1.f;
+		const float y1 = height + RADAR_FRAME_PADDING + 1.f;
+		pie_DrawRoundedBoxTransformed(mapSpace, x0 - 2.f, y0 - 1.f, x1 + 2.f, y1 + 3.f, pal_RGBA(0, 0, 0, 70), RADAR_FRAME_RADIUS + 2.f, pal_RGBA(0, 0, 0, 0), 0.f, 4.f);
+		pie_DrawRoundedBoxTransformed(mapSpace, x0, y0, x1, y1, withAlpha(palette.panelBackground, 235), RADAR_FRAME_RADIUS, palette.panelBorder, params.borderWidth);
+		if (north)
+		{
+			// As the Classic arrow: against the frame's west side, its tip level with the frame's top
+			const std::string path = "images/hud/icons/radar-north.svg";
+			const float arrowHeight = RADAR_NORTH_HEIGHT;
+			const float arrowWidth = arrowHeight * gameVectorImageAspect(path, true);
+			const float ax = x0 - 1.f - arrowWidth;
+			drawGameVectorImageTransformed(path, mapSpace, ax, y0, arrowWidth, arrowHeight, pal_RGBA(8, 10, 14, 200), 1.f);
+			drawGameVectorImageTransformed(path, mapSpace, ax, y0, arrowWidth, arrowHeight, palette.textSecondary);
+		}
+		return true;
+	}
 
 	bool drawHudIcon(HudIcon icon, const WzRect &rect, nonstd::optional<PIELIGHT> color) override
 	{
@@ -946,6 +1137,68 @@ public:
 		}
 		return drawIconShape(iconFiles(look.icon), WzRect(frame.x() + (frame.width() - iconSize) / 2, frame.y() + (frame.height() - iconSize) / 2 + shift,
 		                                       iconSize, iconSize), faded(color), ICON_FILL_ALPHA, false);
+	}
+
+	bool drawOrderButton(const HudOrderButtonLook &look) override
+	{
+		const bool numbered = look.icon == nullptr;
+		if (numbered && (look.number < 0 || static_cast<size_t>(look.number) >= orderNumbers.size()))
+		{
+			return false;
+		}
+		const IconFiles files = numbered ? IconFiles() : namedIconFiles(look.icon);
+		if (!numbered && !loadGameVectorImage(files.outline))
+		{
+			return false;
+		}
+		const WzRect &rect = look.rect;
+		const float opacity = look.disabled ? 0.5f : 1.f;
+		PIELIGHT fill = tints.cardTop;
+		PIELIGHT border = tints.cardBorder;
+		PIELIGHT ink = palette.textSecondary;
+		if (look.down)
+		{
+			fill = tints.cardDownTop;
+			border = withAlpha(palette.accent, 230);
+			ink = palette.accent;
+		}
+		else if (look.highlighted && !look.disabled)
+		{
+			fill = tints.cardHoverTop;
+			border = tints.cardHoverBorder;
+			ink = palette.textPrimary;
+		}
+		if (look.disabled)
+		{
+			ink = palette.stateDisabled;
+		}
+		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()),
+		                   static_cast<float>(rect.bottom()), scaledAlpha(fill, opacity), std::min(params.cardRadius, rect.height() / 2.f),
+		                   scaledAlpha(border, opacity), params.borderWidth);
+		ink = scaledAlpha(ink, opacity);
+		if (numbered)
+		{
+			if (orderNumberDigits.getText().isEmpty())
+			{
+				orderNumberDigits.setText(WzString::fromUtf8("0123456789"), font_regular_bold);
+			}
+			WzText &text = orderNumbers[look.number];
+			if (text.getText().isEmpty())
+			{
+				text.setText(WzString::number(look.number), font_regular_bold);
+			}
+			text.renderCenteredOnInk(rect, ink, &orderNumberDigits);
+			return true;
+		}
+		// 24 units high, at most ORDER_ICON_HEIGHT px, and narrower than the button by ORDER_ICON_MARGIN on each side
+		const float aspect = gameVectorImageAspect(files.outline);
+		const float height = std::min(ORDER_ICON_HEIGHT, (rect.width() - 2 * ORDER_ICON_MARGIN) / aspect);
+		const float width = height * aspect;
+		const float x = std::round(rect.x() + (rect.width() - width) / 2.f);
+		const float y = std::round(rect.y() + (rect.height() - height) / 2.f);
+		drawGameVectorImage(files.fill, x, y, width, height, scaledAlpha(toneColor(look.fillTone), opacity), 0.f, true);
+		drawGameVectorImage(files.outline, x, y, width, height, ink);
+		return true;
 	}
 
 	void drawProgress(const WzRect &rect, float fraction, HudProgressKind kind) override
@@ -1057,6 +1310,11 @@ public:
 		costText = WzText();
 		needText = WzText();
 		bangText = WzText();
+		orderNumbers = {};
+		replaySpeed = WzText();
+		orderNumberDigits = WzText();
+		hudReleaseRanks();
+		hudReleaseRadarBlips();
 	}
 
 private:
@@ -1064,6 +1322,9 @@ private:
 	WzText costText;
 	WzText needText;
 	WzText bangText;
+	std::array<WzText, 10> orderNumbers;
+	WzText replaySpeed;
+	WzText orderNumberDigits;
 };
 
 }

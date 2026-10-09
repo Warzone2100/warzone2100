@@ -234,8 +234,7 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -296,8 +295,7 @@ bool intAddTransporterContents()
 		psWidget->setGeometry(STAT_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -333,7 +331,7 @@ bool intAddTransporterContents()
 		sButFInit.width = iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.pTip = _("Launch Transport");
-		sButFInit.pDisplay = intDisplayImageHilight;
+		sButFInit.pDisplay = intDisplayTransporterButton;
 
 		sButFInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 
@@ -385,7 +383,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	sButInit.width = (UWORD)(10 + iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP));
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 	sButInit.pTip = _("Launch Transport");
-	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.pDisplay = intDisplayTransporterButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 	auto psForm = widgAddForm(psWScreen, &sButInit);
 	if (!psForm)
@@ -607,8 +605,7 @@ bool intAddDroidsAvailForm()
 		psWidget->setGeometry(TRANSDROID_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;

@@ -697,6 +697,11 @@ void recvPlayerGameTime(NETQUEUE queue)
 	}
 }
 
+uint32_t gameTimeWaitingForPlayersDuration()
+{
+	return waitingOnPlayersStartTime.has_value() ? realTime - *waitingOnPlayersStartTime : 0;
+}
+
 bool checkPlayerGameTime(unsigned player)
 {
 	unsigned begin = player, end = player + 1;

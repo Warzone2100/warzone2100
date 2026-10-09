@@ -19,6 +19,7 @@
 
 #include "replay_timeline.h"
 #include "replay_controller.h"
+#include "../hud/hudskin.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/geometry.h"
@@ -110,8 +111,12 @@ void ReplayTimelineWidget::released(W_CONTEXT *psContext, WIDGET_KEY)
 	ghostMs_.reset();
 }
 
-void ReplayTimelineWidget::drawPlayhead(float centerX, float centerY, PIELIGHT colour) const
+void ReplayTimelineWidget::drawPlayhead(float centerX, float centerY, PIELIGHT colour, HudReplayPlayhead kind) const
 {
+	if (currentHudSkin().drawReplayPlayhead(centerX, centerY, kind))
+	{
+		return;
+	}
 	const float half = static_cast<float>(REPLAY_PLAYHEAD_SIZE) * 0.5f;
 	pie_DrawRoundedBox(centerX - half, centerY - half, centerX + half, centerY + half, colour, REPLAY_TIMELINE_CORNER_RADIUS);
 }
@@ -138,7 +143,10 @@ void ReplayTimelineWidget::drawCursorTimeTip(uint32_t timeMs) const
 	{
 		boxY = std::min(mouseY() + cursorGap, std::max(0, static_cast<int>(screenHeight) - boxH));
 	}
-	iV_ShadowBox(boxX, boxY, boxX + boxW, boxY + boxH, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
+	if (!currentHudSkin().drawReplayTimeTip(WzRect(boxX, boxY, boxW, boxH)))
+	{
+		iV_ShadowBox(boxX, boxY, boxX + boxW, boxY + boxH, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
+	}
 	iV_SetTextColour(WZCOL_WHITE);
 	iV_DrawText(label.c_str(), boxX + hGap, boxY + vGap - iV_GetTextAboveBase(font_regular), font_regular);
 }
@@ -154,10 +162,16 @@ void ReplayTimelineWidget::display(int xOffset, int yOffset)
 	const float radius = REPLAY_TIMELINE_CORNER_RADIUS;
 	const PIELIGHT noBorder = pal_RGBA(0, 0, 0, 0);
 
-	pie_DrawRoundedBox(trackX0, trackY0, trackX1, trackY1, pal_RGBA(255, 255, 255, 35), radius);
-
 	const uint32_t duration = replayplayback::durationMs();
-	if (duration == 0 || trackWidth() <= 0)
+	const uint32_t playheadMs = replayplayback::playheadMs();
+	const bool timed = duration != 0 && trackWidth() > 0;
+	const float playedX = timed ? static_cast<float>(msToX(x0, duration, playheadMs)) : trackX0;
+	const bool skinTrack = currentHudSkin().drawReplayTrack(WzRect(static_cast<int>(trackX0), static_cast<int>(trackY0), trackWidth(), REPLAY_TIMELINE_STRIP_HEIGHT), playedX);
+	if (!skinTrack)
+	{
+		pie_DrawRoundedBox(trackX0, trackY0, trackX1, trackY1, pal_RGBA(255, 255, 255, 35), radius);
+	}
+	if (!timed)
 	{
 		return;
 	}
@@ -177,8 +191,10 @@ void ReplayTimelineWidget::display(int xOffset, int yOffset)
 		pie_DrawRoundedBoxClipped(trackX0, trackY0, trackX1, trackY1, colour, radius, noBorder, 0.f, clipRect);
 	};
 
-	const uint32_t playheadMs = replayplayback::playheadMs();
-	fillTrackRange(0, playheadMs, pal_RGBA(218, 207, 255, 160));
+	if (!skinTrack)
+	{
+		fillTrackRange(0, playheadMs, pal_RGBA(218, 207, 255, 160));
+	}
 
 	// The snapshots: seeking back to (just after) one of them is quick
 	for (uint32_t t : replayplayback::snapshotTimes())
@@ -191,13 +207,13 @@ void ReplayTimelineWidget::display(int xOffset, int yOffset)
 	if (replayplayback::isBusy())
 	{
 		// Where the seek is going
-		drawPlayhead(static_cast<float>(msToX(x0, duration, replayplayback::seekTargetMs())), centerY, pal_RGBA(255, 255, 255, 110));
+		drawPlayhead(static_cast<float>(msToX(x0, duration, replayplayback::seekTargetMs())), centerY, pal_RGBA(255, 255, 255, 110), HudReplayPlayhead::SeekTarget);
 	}
 	else if (ghostMs_.has_value())
 	{
-		drawPlayhead(static_cast<float>(msToX(x0, duration, *ghostMs_)), centerY, pal_RGBA(255, 255, 255, 160));
+		drawPlayhead(static_cast<float>(msToX(x0, duration, *ghostMs_)), centerY, pal_RGBA(255, 255, 255, 160), HudReplayPlayhead::Drag);
 	}
-	drawPlayhead(static_cast<float>(msToX(x0, duration, playheadMs)), centerY, pal_RGBA(255, 255, 255, 230));
+	drawPlayhead(static_cast<float>(msToX(x0, duration, playheadMs)), centerY, pal_RGBA(255, 255, 255, 230), HudReplayPlayhead::Current);
 	if (ghostMs_.has_value())
 	{
 		drawCursorTimeTip(*ghostMs_);

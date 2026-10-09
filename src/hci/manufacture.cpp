@@ -27,6 +27,7 @@
 #include "../hud/huddetailcontents.h"
 #include "../hud/hudiconbutton.h"
 #include "../hud/hudpanelextension.h"
+#include "../hud/hudranks.h"
 #include "../hud/hudsettings.h"
 #include "../hud/hudskin.h"
 #include "../hud/hudtext.h"
@@ -414,7 +415,8 @@ protected:
 			lvl = getDroidLevel(exp, player, nullBrainComponent);
 		}
 		const auto expgfx = getDroidRankGraphicFromLevel(lvl);
-		if (expgfx != UDWORD_MAX)
+		const bool insignia = currentHudSkin().drawsRankInsignia() && hudDrawRank(lvl, xOffset + 44, yOffset + 4, HudRankSize::Button);
+		if (!insignia && expgfx != UDWORD_MAX)
 		{
 			// FIXME: use offsets relative to template positon, not hardcoded values ?
 			iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);

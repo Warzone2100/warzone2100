@@ -341,6 +341,8 @@ void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intUpdateQuantitySlider(WIDGET *psWidget, const W_CONTEXT *psContext);
 
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+/// A campaign transporter's ETA and load button, or a launch button
+void intDisplayTransporterButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const std::vector<AllyResearch> &researches);
 STRUCTURE *droidGetCommandFactory(DROID *psDroid);

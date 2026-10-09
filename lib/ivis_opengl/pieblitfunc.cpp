@@ -631,6 +631,18 @@ void pie_DrawSoftRoundedBoxRotated(float centerX, float centerY, float width, fl
 	pie_DrawUIBoxWithMVP(mvp, width, height, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), pal_RGBA(0, 0, 0, 0), 0.f, edgeSoftness);
 }
 
+void pie_DrawRoundedBoxTransformed(const glm::mat4 &modelViewProjection, float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, float edgeSoftness)
+{
+	const float w = x1 - x0;
+	const float h = y1 - y0;
+	if (w <= 0.f || h <= 0.f)
+	{
+		return;
+	}
+	const glm::mat4 mvp = modelViewProjection * glm::translate(Vector3f(x0, y0, 0.f)) * glm::scale(glm::vec3(w, h, 1.f));
+	pie_DrawUIBoxWithMVP(mvp, w, h, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), borderColour, borderWidth, edgeSoftness);
+}
+
 void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, float cornerRadius, PIELIGHT borderColour, float borderWidth)
 {
 	pie_DrawUIBox(x0, y0, x1, y1, from, to, horizontalGradient ? glm::vec2(1.f, 0.f) : glm::vec2(0.f, 1.f), falloffExponent, glm::vec4(cornerRadius), borderColour, borderWidth);
@@ -696,10 +708,41 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f o
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
-void iV_DrawTextureTinted(gfx_api::texture& TextureID, Vector2f position, Vector2f size, PIELIGHT colour)
+void iV_DrawTextureTinted(gfx_api::texture& TextureID, Vector2f position, Vector2f size, PIELIGHT colour, const glm::mat4 &modelViewProjection)
 {
-	const glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(position.x, position.y, 0.f));
+	const glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3(position.x, position.y, 0.f));
 	iv_DrawImageImpl<gfx_api::DrawImagePSO>(TextureID, Vector2f(0.f, 0.f), size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
+}
+
+void iV_DrawTextureRegions(gfx_api::texture& TextureID, Vector2i textureSize, const std::vector<TextureRegionDraw> &regions)
+{
+	iV_DrawTextureRegions(TextureID, textureSize, regions, defaultProjectionMatrix());
+}
+
+void iV_DrawTextureRegions(gfx_api::texture& TextureID, Vector2i textureSize, const std::vector<TextureRegionDraw> &regions, const glm::mat4 &modelViewProjection)
+{
+	if (regions.empty() || textureSize.x <= 0 || textureSize.y <= 0)
+	{
+		return;
+	}
+	const glm::mat4 &projection = modelViewProjection;
+	const float invWidth = 1.f / static_cast<float>(textureSize.x);
+	const float invHeight = 1.f / static_cast<float>(textureSize.y);
+	gfx_api::DrawImagePSO::get().bind();
+	gfx_api::DrawImagePSO::get().bind_textures(&TextureID);
+	gfx_api::DrawImagePSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
+	for (const TextureRegionDraw &region : regions)
+	{
+		const glm::mat4 transform = projection * glm::translate(glm::vec3(region.position.x, region.position.y, 0.f)) * glm::scale(glm::vec3(region.size.x, region.size.y, 1.f));
+		gfx_api::DrawImagePSO::get().bind_constants({ transform,
+			Vector2f(region.texturePosition.x * invWidth, region.texturePosition.y * invHeight),
+			Vector2f(region.textureSize.x * invWidth, region.textureSize.y * invHeight),
+			pielightToRGBAVec4(region.colour),
+			0
+		});
+		gfx_api::DrawImagePSO::get().draw(4, 0);
+	}
+	gfx_api::DrawImagePSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
 }
 
 void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, const WzClippingRectF& clippingRect)
