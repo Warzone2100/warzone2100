@@ -369,7 +369,9 @@ QueueFamilyIndices findQueueFamilies(const vk::PhysicalDevice &device, const vk:
 	uint32_t i = 0;
 	for (const auto& queueFamily : queueFamilies)
 	{
-		if (queueFamily.queueCount > 0 && (queueFamily.queueFlags & vk::QueueFlagBits::eGraphics))
+		if (queueFamily.queueCount > 0
+			&& (queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
+			&& (queueFamily.queueFlags & vk::QueueFlagBits::eCompute))
 		{
 			indices.graphicsFamily = i;
 		}
@@ -866,6 +868,7 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 {
 	combinedImageSamplerDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eCombinedImageSampler, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
 	uniformDynamicDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eUniformBufferDynamic, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
+	storageImageDescriptorPools.push_back(createNewDescriptorPool(vk::DescriptorType::eStorageImage, descriptorPoolMaxSetsDefault, descriptorPoolSizeDescriptorCountDefault));
 
 	pool = dev.createCommandPool(
 		vk::CommandPoolCreateInfo()
@@ -901,6 +904,12 @@ perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescrip
 	if (type == vk::DescriptorType::eCombinedImageSampler)
 	{
 		poolSizes.emplace_back(vk::DescriptorType::eStorageBuffer, maxSets * 2);
+	}
+	else if (type == vk::DescriptorType::eStorageImage)
+	{
+		// A compute resource set mixes sampled images, storage images, and storage buffers.
+		poolSizes.emplace_back(vk::DescriptorType::eCombinedImageSampler, descriptorCount);
+		poolSizes.emplace_back(vk::DescriptorType::eStorageBuffer, descriptorCount);
 	}
 
 	return DescriptorPoolDetails(dev.createDescriptorPool(vk::DescriptorPoolCreateInfo()
@@ -964,6 +973,9 @@ vk::DescriptorPool perFrameResources_t::getDescriptorPool(uint32_t numSets, vk::
 			break;
 		case vk::DescriptorType::eUniformBufferDynamic:
 			pPools = &uniformDynamicDescriptorPools;
+			break;
+		case vk::DescriptorType::eStorageImage:
+			pPools = &storageImageDescriptorPools;
 			break;
 		default:
 			debug(LOG_FATAL, "Invalid descriptor type: %s", vk::to_string(descriptorType).c_str());
@@ -1034,6 +1046,11 @@ void perFrameResources_t::clean()
 		delete old_pso;
 	}
 	pso_to_delete.clear();
+	for (auto old_pso : compute_pso_to_delete)
+	{
+		delete old_pso;
+	}
+	compute_pso_to_delete.clear();
 }
 
 perFrameResources_t::~perFrameResources_t()
@@ -1044,6 +1061,10 @@ perFrameResources_t::~perFrameResources_t()
 		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
 	}
 	for (const auto& descriptorPoolDetails : uniformDynamicDescriptorPools.pools)
+	{
+		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
+	}
+	for (const auto& descriptorPoolDetails : storageImageDescriptorPools.pools)
 	{
 		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
 	}
@@ -1067,6 +1088,7 @@ void perFrameResources_t::resetDescriptorPools()
 {
 	combinedImageSamplerDescriptorPools.reset(dev, *pVkDynLoader);
 	uniformDynamicDescriptorPools.reset(dev, *pVkDynLoader);
+	storageImageDescriptorPools.reset(dev, *pVkDynLoader);
 }
 
 perFrameResources_t& buffering_mechanism::get_current_resources()
@@ -1583,7 +1605,7 @@ vk::BorderColor VkPSO::to_vk(gfx_api::border_color border)
 	return vk::BorderColor::eFloatTransparentBlack;
 }
 
-vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_api::pixel_format_target& target, gfx_api::border_color border)
+vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_api::pixel_format_target& target, gfx_api::border_color border, float maxSamplerAnisotropy)
 {
 	switch (type)
 	{
@@ -1615,7 +1637,7 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 			.setMinFilter(vk::Filter::eLinear)
 			.setMagFilter(vk::Filter::eLinear)
 			.setMipmapMode(vk::SamplerMipmapMode::eLinear)
-			.setMaxAnisotropy(std::min<float>(16.f, root->physDeviceProps.limits.maxSamplerAnisotropy))
+			.setMaxAnisotropy(std::min<float>(16.f, maxSamplerAnisotropy))
 			.setAnisotropyEnable(true)
 			.setMinLod(0.f)
 			.setMaxLod(VK_LOD_CLAMP_NONE)
@@ -1630,7 +1652,7 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 			.setMinFilter(vk::Filter::eLinear)
 			.setMagFilter(vk::Filter::eLinear)
 			.setMipmapMode(vk::SamplerMipmapMode::eLinear)
-			.setMaxAnisotropy(std::min<float>(16.f, root->physDeviceProps.limits.maxSamplerAnisotropy))
+			.setMaxAnisotropy(std::min<float>(16.f, maxSamplerAnisotropy))
 			.setAnisotropyEnable(true)
 			.setMinLod(0.f)
 			.setMaxLod(VK_LOD_CLAMP_NONE)
@@ -1773,6 +1795,7 @@ VkPSO::VkPSO(vk::Device _dev,
 		switch (stage)
 		{
 			case gfx_api::shader_stage::tessellation_evaluation: return vk::ShaderStageFlagBits::eTessellationEvaluation;
+			case gfx_api::shader_stage::compute: return vk::ShaderStageFlagBits::eCompute;
 			case gfx_api::shader_stage::fragment: break;
 		}
 		return vk::ShaderStageFlagBits::eFragment;
@@ -1782,7 +1805,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	samplers.reserve(texture_desc.size());
 	for (const auto& texture : texture_desc)
 	{
-		samplers.emplace_back(dev.createSampler(to_vk(texture.sampler, texture.target, texture.border), nullptr, *pVkDynLoader));
+		samplers.emplace_back(dev.createSampler(to_vk(texture.sampler, texture.target, texture.border, root->physDeviceProps.limits.maxSamplerAnisotropy), nullptr, *pVkDynLoader));
 
 		textures_layout_desc.emplace_back(
 			vk::DescriptorSetLayoutBinding()
@@ -2943,23 +2966,443 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	return new VkPSOId(psoID.value(), false); // always return a new indirect reference
 }
 
-gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info&)
+static vk::ImageView computeResourceImageView(gfx_api::abstract_texture* texture, bool storage, vk::ImageLayout& layout)
 {
-	auto* pso = existing != nullptr
-		? static_cast<gfx_api::compute_pipeline_state_object*>(existing)
-		: new gfx_api::compute_pipeline_state_object();
-	pso->broken = true;
-	return pso;
+	layout = storage ? vk::ImageLayout::eGeneral : vk::ImageLayout::eShaderReadOnlyOptimal;
+	if (texture == nullptr)
+	{
+		return vk::ImageView();
+	}
+	const auto textureType = static_cast<VulkanBackendInternalTextureType>(texture->backend_internal_value());
+	switch (textureType)
+	{
+	case VulkanBackendInternalTextureType::Texture:
+		return static_cast<VkTexture*>(texture)->view.get();
+	case VulkanBackendInternalTextureType::TextureArray:
+		return static_cast<VkTextureArray*>(texture)->view.get();
+	case VulkanBackendInternalTextureType::RenderedImage:
+		return static_cast<VkRenderedImage*>(texture)->view.get();
+	case VulkanBackendInternalTextureType::DepthMap:
+		if (!storage)
+		{
+			layout = vk::ImageLayout::eDepthStencilReadOnlyOptimal;
+		}
+		return static_cast<VkDepthMapImage*>(texture)->view.get();
+	case VulkanBackendInternalTextureType::AttachmentImage:
+	{
+		const auto* attachmentImage = static_cast<VkAttachmentImage*>(texture);
+		if (!storage)
+		{
+			switch (attachmentImage->imageFormat)
+			{
+			case vk::Format::eD16Unorm:
+			case vk::Format::eX8D24UnormPack32:
+			case vk::Format::eD32Sfloat:
+			case vk::Format::eD16UnormS8Uint:
+			case vk::Format::eD24UnormS8Uint:
+			case vk::Format::eD32SfloatS8Uint:
+				layout = vk::ImageLayout::eDepthStencilReadOnlyOptimal;
+				break;
+			default:
+				break;
+			}
+		}
+		return attachmentImage->view;
+	}
+	default:
+		return vk::ImageView();
+	}
 }
 
-void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object*)
+VkComputePSO::VkComputePSO(vk::Device _dev,
+	const vk::PhysicalDeviceLimits& limits,
+	const gfx_api::compute_pipeline_create_info& createInfo,
+	const WZ_vk::DispatchLoaderDynamic& _vkDynLoader,
+	const VkRoot& _root)
+	: dev(_dev)
+	, pVkDynLoader(&_vkDynLoader)
+	, root(&_root)
+	, uniformBlockTypes(createInfo.uniform_blocks)
+	, sampled(createInfo.sampled)
+	, storage_images(createInfo.storage_images)
+	, storage_buffers(createInfo.storage_buffers)
 {
-	ASSERT(false, "compute pipeline bind is not implemented");
+	const gfx_api::shader_program_desc& shaderInfo = gfx_api::shader_catalog(createInfo.shader_mode);
+	if (std::find(uniformBlockTypes.begin(), uniformBlockTypes.end(), std::type_index(typeid(gfx_api::PointLightsUniforms))) != uniformBlockTypes.end())
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute pipeline \"%s\" cannot use PointLightsUniforms", shaderInfo.friendly_name);
+		return;
+	}
+
+	const gfx_api::shader_local_size local = shaderInfo.local_size;
+	const uint64_t invocations = static_cast<uint64_t>(local.x) * local.y * local.z;
+	if (local.x == 0 || local.y == 0 || local.z == 0
+		|| local.x > limits.maxComputeWorkGroupSize[0]
+		|| local.y > limits.maxComputeWorkGroupSize[1]
+		|| local.z > limits.maxComputeWorkGroupSize[2]
+		|| invocations > limits.maxComputeWorkGroupInvocations)
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute local size %u,%u,%u for \"%s\" exceeds device limits (%u,%u,%u invocations %u)",
+			local.x, local.y, local.z, shaderInfo.friendly_name,
+			limits.maxComputeWorkGroupSize[0], limits.maxComputeWorkGroupSize[1], limits.maxComputeWorkGroupSize[2],
+			limits.maxComputeWorkGroupInvocations);
+		return;
+	}
+
+	std::vector<vk::DescriptorSetLayout> setLayouts;
+	for (size_t i = 0; i < createInfo.uniform_blocks.size(); ++i)
+	{
+		const auto binding = std::array<vk::DescriptorSetLayoutBinding, 1>{
+			vk::DescriptorSetLayoutBinding()
+				.setBinding(0)
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
+				.setStageFlags(vk::ShaderStageFlagBits::eCompute)
+		};
+		auto setLayout = dev.createDescriptorSetLayout(
+			vk::DescriptorSetLayoutCreateInfo().setBindingCount(1).setPBindings(binding.data()),
+			nullptr, *pVkDynLoader);
+		cbuffer_set_layout.push_back(setLayout);
+		setLayouts.push_back(setLayout);
+	}
+
+	std::vector<vk::DescriptorSetLayoutBinding> resourceBindings;
+	std::vector<uint32_t> usedBindings;
+	const auto claimBinding = [&](uint32_t binding) -> bool {
+		if (std::find(usedBindings.begin(), usedBindings.end(), binding) != usedBindings.end())
+		{
+			ASSERT(false, "Compute resource binding %u is duplicated", binding);
+			debug(LOG_ERROR, "Compute resource binding %u is duplicated", binding);
+			return false;
+		}
+		usedBindings.push_back(binding);
+		return true;
+	};
+	samplers.reserve(sampled.size());
+	for (const auto& texture : sampled)
+	{
+		if (texture.id >= gfx_api::kMaxComputeSlotsPerKind)
+		{
+			broken = true;
+			debug(LOG_ERROR, "Compute sampled id %zu is out of range", texture.id);
+			return;
+		}
+		if (!claimBinding(static_cast<uint32_t>(texture.id)))
+		{
+			broken = true;
+			return;
+		}
+		samplers.emplace_back(dev.createSampler(VkPSO::to_vk(texture.sampler, texture.target, texture.border, root->physDeviceProps.limits.maxSamplerAnisotropy), nullptr, *pVkDynLoader));
+		resourceBindings.emplace_back(
+			vk::DescriptorSetLayoutBinding()
+				.setBinding(static_cast<uint32_t>(texture.id))
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
+				.setPImmutableSamplers(&samplers.back())
+				.setStageFlags(vk::ShaderStageFlagBits::eCompute)
+		);
+	}
+	for (const auto& image : storage_images)
+	{
+		if (!claimBinding(static_cast<uint32_t>(image.binding)))
+		{
+			broken = true;
+			return;
+		}
+		resourceBindings.emplace_back(
+			vk::DescriptorSetLayoutBinding()
+				.setBinding(static_cast<uint32_t>(image.binding))
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eStorageImage)
+				.setStageFlags(vk::ShaderStageFlagBits::eCompute)
+		);
+	}
+	for (const auto& buffer : storage_buffers)
+	{
+		if (!claimBinding(static_cast<uint32_t>(buffer.binding)))
+		{
+			broken = true;
+			return;
+		}
+		resourceBindings.emplace_back(
+			vk::DescriptorSetLayoutBinding()
+				.setBinding(static_cast<uint32_t>(buffer.binding))
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eStorageBuffer)
+				.setStageFlags(vk::ShaderStageFlagBits::eCompute)
+		);
+	}
+
+	resource_set_layout = dev.createDescriptorSetLayout(
+		vk::DescriptorSetLayoutCreateInfo()
+			.setBindingCount(static_cast<uint32_t>(resourceBindings.size()))
+			.setPBindings(resourceBindings.empty() ? nullptr : resourceBindings.data()),
+		nullptr, *pVkDynLoader);
+	textures_first_set = static_cast<uint32_t>(setLayouts.size());
+	setLayouts.push_back(resource_set_layout);
+	if (setLayouts.size() > limits.maxBoundDescriptorSets)
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute pipeline \"%s\" uses %zu descriptor sets; device allows %" PRIu32,
+			shaderInfo.friendly_name, setLayouts.size(), limits.maxBoundDescriptorSets);
+		return;
+	}
+	layout = dev.createPipelineLayout(
+		vk::PipelineLayoutCreateInfo()
+			.setSetLayoutCount(static_cast<uint32_t>(setLayouts.size()))
+			.setPSetLayouts(setLayouts.data()),
+		nullptr, *pVkDynLoader);
+
+	const std::string compSpv = vk_stage_path(shaderInfo, gfx_api::shader_stage_kind::compute);
+	const auto code = VkPSO::readShaderBuf(compSpv);
+	if (code.empty())
+	{
+		broken = true;
+		debug(LOG_ERROR, "Failed to read compute shader %s", compSpv.c_str());
+		return;
+	}
+	shaderModule = dev.createShaderModule(
+		vk::ShaderModuleCreateInfo().setCodeSize(code.size() * sizeof(uint32_t)).setPCode(code.data()),
+		nullptr, *pVkDynLoader);
+
+	std::vector<char> specializationData;
+	std::vector<vk::SpecializationMapEntry> specializationEntries;
+	auto appendUint32 = [&](uint32_t constantID, uint32_t value) {
+		const size_t copyIdx = specializationData.size();
+		specializationData.resize(copyIdx + sizeof(uint32_t));
+		memcpy(&specializationData[copyIdx], &value, sizeof(uint32_t));
+		specializationEntries.emplace_back(constantID, static_cast<uint32_t>(copyIdx), sizeof(uint32_t));
+	};
+	if (shaderInfo.spec_constants & gfx_api::spec_shadow_mode)
+	{
+		appendUint32(1, root->shadowConstants.shadowMode);
+	}
+	if (shaderInfo.spec_constants & gfx_api::spec_shadow_filter_size)
+	{
+		appendUint32(2, root->shadowConstants.shadowFilterSize);
+	}
+	if (shaderInfo.spec_constants & gfx_api::spec_shadow_cascades)
+	{
+		appendUint32(3, root->shadowConstants.shadowCascadesCount);
+	}
+	if (shaderInfo.spec_constants & gfx_api::spec_point_light_enabled)
+	{
+		appendUint32(4, static_cast<uint32_t>(root->shadowConstants.isPointLightPerPixelEnabled));
+	}
+	vk::SpecializationInfo specInfo;
+	vk::PipelineShaderStageCreateInfo stage = vk::PipelineShaderStageCreateInfo()
+		.setStage(vk::ShaderStageFlagBits::eCompute)
+		.setModule(shaderModule)
+		.setPName("main");
+	if (!specializationEntries.empty())
+	{
+		specInfo
+			.setMapEntryCount(static_cast<uint32_t>(specializationEntries.size()))
+			.setPMapEntries(specializationEntries.data())
+			.setDataSize(specializationData.size())
+			.setPData(specializationData.data());
+		stage.setPSpecializationInfo(&specInfo);
+	}
+
+	const auto pipelineInfo = vk::ComputePipelineCreateInfo()
+		.setStage(stage)
+		.setLayout(layout);
+	try
+	{
+		const auto result = dev.createComputePipelines(vk::PipelineCache(), { pipelineInfo }, nullptr, *pVkDynLoader);
+		if (result.result != vk::Result::eSuccess || result.value.empty() || !result.value[0])
+		{
+			broken = true;
+			debug(LOG_ERROR, "createComputePipelines failed for \"%s\": %s", shaderInfo.friendly_name, vk::to_string(result.result).c_str());
+			return;
+		}
+		object = result.value[0];
+	}
+	catch (const vk::SystemError& e)
+	{
+		broken = true;
+		debug(LOG_ERROR, "createComputePipelines failed for \"%s\": %s", shaderInfo.friendly_name, e.what());
+	}
 }
 
-void VkRoot::dispatch_compute(uint32_t, uint32_t, uint32_t)
+VkComputePSO::~VkComputePSO()
 {
-	ASSERT(false, "compute dispatch is not implemented");
+	if (object)
+	{
+		dev.destroyPipeline(object, nullptr, *pVkDynLoader);
+	}
+	if (shaderModule)
+	{
+		dev.destroyShaderModule(shaderModule, nullptr, *pVkDynLoader);
+	}
+	if (layout)
+	{
+		dev.destroyPipelineLayout(layout, nullptr, *pVkDynLoader);
+	}
+	if (resource_set_layout)
+	{
+		dev.destroyDescriptorSetLayout(resource_set_layout, nullptr, *pVkDynLoader);
+	}
+	for (auto sampler : samplers)
+	{
+		dev.destroySampler(sampler, nullptr, *pVkDynLoader);
+	}
+	for (auto setLayout : cbuffer_set_layout)
+	{
+		dev.destroyDescriptorSetLayout(setLayout, nullptr, *pVkDynLoader);
+	}
+}
+
+void VkComputePSO::bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	ASSERT_OR_RETURN(, !broken && object, "compute pipeline is broken");
+	ASSERT(textures.size() == descs.size(), "Sampled texture count mismatch");
+	boundSampled = textures;
+	flushResourceSet();
+}
+
+void VkComputePSO::bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	ASSERT_OR_RETURN(, !broken && object, "compute pipeline is broken");
+	ASSERT(textures.size() == descs.size(), "Storage image count mismatch");
+	boundStorageImages = textures;
+	flushResourceSet();
+}
+
+void VkComputePSO::bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers)
+{
+	ASSERT_OR_RETURN(, !broken && object, "compute pipeline is broken");
+	ASSERT(buffers.size() == descs.size(), "Storage buffer count mismatch");
+	boundStorageBuffers = buffers;
+	flushResourceSet();
+}
+
+void VkComputePSO::flushResourceSet()
+{
+	ASSERT(boundSampled.empty() || boundSampled.size() == sampled.size(), "Sampled bind does not match the compute pipeline");
+	ASSERT(boundStorageImages.empty() || boundStorageImages.size() == storage_images.size(), "Storage image bind does not match the compute pipeline");
+	ASSERT(boundStorageBuffers.empty() || boundStorageBuffers.size() == storage_buffers.size(), "Storage buffer bind does not match the compute pipeline");
+	const size_t descriptorTotal = boundSampled.size() + boundStorageImages.size() + boundStorageBuffers.size();
+	const uint32_t descriptorCount = static_cast<uint32_t>(std::max<size_t>(descriptorTotal, 1));
+	const auto sets = const_cast<VkRoot*>(root)->allocateDescriptorSet(resource_set_layout, vk::DescriptorType::eStorageImage, descriptorCount);
+
+	std::vector<vk::DescriptorImageInfo> sampledInfos;
+	std::vector<vk::DescriptorImageInfo> storageImageInfos;
+	std::vector<vk::DescriptorBufferInfo> storageBufferInfos;
+	sampledInfos.reserve(boundSampled.size());
+	storageImageInfos.reserve(boundStorageImages.size());
+	storageBufferInfos.reserve(boundStorageBuffers.size());
+
+	for (auto* texture : boundSampled)
+	{
+		vk::ImageLayout imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+		const vk::ImageView view = computeResourceImageView(texture, false, imageLayout);
+		sampledInfos.emplace_back(vk::DescriptorImageInfo().setImageView(view).setImageLayout(imageLayout));
+	}
+	for (auto* texture : boundStorageImages)
+	{
+		vk::ImageLayout imageLayout = vk::ImageLayout::eGeneral;
+		const vk::ImageView view = computeResourceImageView(texture, true, imageLayout);
+		storageImageInfos.emplace_back(vk::DescriptorImageInfo().setImageView(view).setImageLayout(vk::ImageLayout::eGeneral));
+	}
+	for (auto* buffer : boundStorageBuffers)
+	{
+		ASSERT(buffer != nullptr, "compute storage buffer is null");
+		auto* vkBuffer = static_cast<VkBuf*>(buffer);
+		storageBufferInfos.emplace_back(vk::DescriptorBufferInfo(vkBuffer->object, 0, VK_WHOLE_SIZE));
+	}
+
+	std::vector<vk::WriteDescriptorSet> writes;
+	writes.reserve(descriptorTotal);
+	for (size_t i = 0; i < sampledInfos.size(); ++i)
+	{
+		writes.emplace_back(vk::WriteDescriptorSet()
+			.setDstSet(sets[0])
+			.setDstBinding(static_cast<uint32_t>(sampled[i].id))
+			.setDescriptorCount(1)
+			.setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
+			.setPImageInfo(&sampledInfos[i]));
+	}
+	for (size_t i = 0; i < storageImageInfos.size(); ++i)
+	{
+		writes.emplace_back(vk::WriteDescriptorSet()
+			.setDstSet(sets[0])
+			.setDstBinding(static_cast<uint32_t>(storage_images[i].binding))
+			.setDescriptorCount(1)
+			.setDescriptorType(vk::DescriptorType::eStorageImage)
+			.setPImageInfo(&storageImageInfos[i]));
+	}
+	for (size_t i = 0; i < storageBufferInfos.size(); ++i)
+	{
+		writes.emplace_back(vk::WriteDescriptorSet()
+			.setDstSet(sets[0])
+			.setDstBinding(static_cast<uint32_t>(storage_buffers[i].binding))
+			.setDescriptorCount(1)
+			.setDescriptorType(vk::DescriptorType::eStorageBuffer)
+			.setPBufferInfo(&storageBufferInfos[i]));
+	}
+	if (!writes.empty())
+	{
+		dev.updateDescriptorSets(writes, nullptr, *pVkDynLoader);
+	}
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(
+		vk::PipelineBindPoint::eCompute, layout, textures_first_set, sets[0], {}, *pVkDynLoader);
+}
+
+gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info)
+{
+	VkComputePSO* created = nullptr;
+	try
+	{
+		created = new VkComputePSO(dev, physDeviceProps.limits, info, vkDynLoader, *this);
+	}
+	catch (const vk::SystemError& e)
+	{
+		debug(LOG_ERROR, "Failed to build compute pipeline: %s", e.what());
+		return nullptr;
+	}
+	auto* previous = dynamic_cast<VkComputePSO*>(existing);
+	for (auto& entry : createdComputePipelines)
+	{
+		if (entry.pso == previous)
+		{
+			if (entry.pso != nullptr)
+			{
+				buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+			}
+			entry.createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
+			entry.pso = created;
+			return created;
+		}
+	}
+	createdComputePipelines.push_back(ComputePipelineRegistry{ std::make_shared<gfx_api::compute_pipeline_create_info>(info), created });
+	return created;
+}
+
+void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
+{
+	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
+	auto* compute = dynamic_cast<VkComputePSO*>(pso);
+	ASSERT_OR_RETURN(, compute != nullptr && !compute->broken && compute->object, "compute pipeline is not ready");
+	currentComputePSO = compute;
+	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
+	frameHasDrawCommands = true;
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindPipeline(vk::PipelineBindPoint::eCompute, compute->object, vkDynLoader);
+}
+
+void VkRoot::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ)
+{
+	ASSERT(isComputePassActive(), "dispatch_compute outside a compute pass");
+	ASSERT_OR_RETURN(, currentComputePSO != nullptr, "currentComputePSO == NULL");
+	const auto& limits = physDeviceProps.limits;
+	ASSERT(groupsX >= 1 && groupsX <= limits.maxComputeWorkGroupCount[0], "groupsX %u is outside the device limit", groupsX);
+	ASSERT(groupsY >= 1 && groupsY <= limits.maxComputeWorkGroupCount[1], "groupsY %u is outside the device limit", groupsY);
+	ASSERT(groupsZ >= 1 && groupsZ <= limits.maxComputeWorkGroupCount[2], "groupsZ %u is outside the device limit", groupsZ);
+	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
+	frameHasDrawCommands = true;
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->dispatch(groupsX, groupsY, groupsZ, vkDynLoader);
 }
 
 gfx_api::texture* VkRoot::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
@@ -3818,7 +4261,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	QueueFamilyIndices indices = findQueueFamilies(device, surface, vkDynLoader);
 	if (!indices.isComplete())
 	{
-		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Unable to find graphics + present queue families", deviceProperties.deviceID, deviceProperties.deviceName.data());
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Unable to find a queue family with eGraphics and eCompute, plus a present queue", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 	if (indices.graphicsFamily.value() == indices.presentFamily.value())
@@ -3952,6 +4395,11 @@ void VkRoot::shutdown()
 			}
 		}
 		createdPipelines.clear();
+		for (auto& entry : createdComputePipelines)
+		{
+			delete entry.pso;
+		}
+		createdComputePipelines.clear();
 
 		// ShadowMap was reset above; swapchain/scene surfaces were reset in destroySwapchain.
 		// destroy default depth map texture
@@ -5254,7 +5702,8 @@ bool VkRoot::getQueueFamiliesInfo()
 	ASSERT(surface, "Surface is null");
 
 	queueFamilyIndices = findQueueFamilies(physicalDevice, surface, vkDynLoader);
-	ASSERT_OR_RETURN(false, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
+	ASSERT_OR_RETURN(false, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies (need eGraphics|eCompute and a present queue)");
+	graphicsQueueSupportsCompute = true;
 
 	// check for optional features of queue family
 	const auto queuesFamilies = physicalDevice.getQueueFamilyProperties(vkDynLoader);
@@ -5462,6 +5911,7 @@ void VkRoot::getQueues()
 
 void VkRoot::draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&)
 {
+	ASSERT(!isComputePassActive(), "draw during a compute pass");
 	ASSERT_OR_RETURN(, renderGraphExecuting() && hasActivePass,
 		"draw() called outside render graph record callback");
 
@@ -5472,6 +5922,7 @@ void VkRoot::draw(const std::size_t& offset, const std::size_t& count, const gfx
 
 void VkRoot::draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw_instanced during a compute pass");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->draw(static_cast<uint32_t>(count), static_cast<uint32_t>(instance_count), static_cast<uint32_t>(offset), 0, vkDynLoader);
@@ -5479,6 +5930,7 @@ void VkRoot::draw_instanced(const std::size_t& offset, const std::size_t &count,
 
 void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&)
 {
+	ASSERT(!isComputePassActive(), "draw_elements during a compute pass");
 	ASSERT_OR_RETURN(, renderGraphExecuting() && hasActivePass,
 		"draw_elements() called outside render graph record callback");
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
@@ -5489,6 +5941,7 @@ void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, 
 
 void VkRoot::draw_elements_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw_elements_instanced during a compute pass");
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
@@ -5995,6 +6448,29 @@ void VkRoot::set_constants(const void* buffer, const std::size_t& size)
 
 void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, size_t size)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputePSO != nullptr, "currentComputePSO == NULL");
+		ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
+		const auto stagingMemory = buffering_mechanism::get_current_resources().uniformBufferAllocator.alloc(static_cast<uint32_t>(size), physDeviceProps.limits.minUniformBufferOffsetAlignment);
+		void* mapped = buffering_mechanism::get_current_resources().uniformBufferAllocator.mapMemory(stagingMemory);
+		memcpy(reinterpret_cast<uint8_t*>(mapped), buffer, size);
+		const auto bufferInfo = vk::DescriptorBufferInfo(stagingMemory.buffer, 0, size);
+		auto sets = allocateDescriptorSet(currentComputePSO->cbuffer_set_layout[uniform_set], vk::DescriptorType::eUniformBufferDynamic, 1);
+		const auto descriptorWrite = std::array<vk::WriteDescriptorSet, 1>{
+			vk::WriteDescriptorSet()
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
+				.setDstBinding(0)
+				.setPBufferInfo(&bufferInfo)
+				.setDstSet(sets[0])
+		};
+		dev.updateDescriptorSets(descriptorWrite, nullptr, vkDynLoader);
+		const auto dynamicOffsets = std::array<uint32_t, 1>{ stagingMemory.offset };
+		buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(
+			vk::PipelineBindPoint::eCompute, currentComputePSO->layout, static_cast<uint32_t>(uniform_set), sets[0], dynamicOffsets, vkDynLoader);
+		return;
+	}
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
 	const auto stagingMemory = buffering_mechanism::get_current_resources().uniformBufferAllocator.alloc(static_cast<uint32_t>(size), physDeviceProps.limits.minUniformBufferOffsetAlignment);
@@ -6086,6 +6562,32 @@ gfx_api::frame_uniform_allocation VkRoot::upload_frame_uniform_raw(const void* d
 
 void VkRoot::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputePSO != nullptr, "currentComputePSO == NULL");
+		ASSERT_OR_RETURN(, slot < currentComputePSO->cbuffer_set_layout.size(), "Uniform set %zu is out of range", slot);
+		if (allocation.generation == 0 || !allocation.valid() || allocation.generation != frameUniformGeneration()
+			|| allocation.handle == 0 || allocation.handle > frameUniforms.size())
+		{
+			return;
+		}
+		const auto& uploaded = frameUniforms[static_cast<size_t>(allocation.handle) - 1];
+		const auto bufferInfo = vk::DescriptorBufferInfo(uploaded.buffer, 0, uploaded.size);
+		auto sets = allocateDescriptorSet(currentComputePSO->cbuffer_set_layout[slot], vk::DescriptorType::eUniformBufferDynamic, 1);
+		const auto descriptorWrite = std::array<vk::WriteDescriptorSet, 1>{
+			vk::WriteDescriptorSet()
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
+				.setDstBinding(0)
+				.setPBufferInfo(&bufferInfo)
+				.setDstSet(sets[0])
+		};
+		dev.updateDescriptorSets(descriptorWrite, nullptr, vkDynLoader);
+		const auto dynamicOffsets = std::array<uint32_t, 1>{ uploaded.offset };
+		buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(
+			vk::PipelineBindPoint::eCompute, currentComputePSO->layout, static_cast<uint32_t>(slot), sets[0], dynamicOffsets, vkDynLoader);
+		return;
+	}
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT_OR_RETURN(, slot < currentPSO->cbuffer_set_layout.size(), "Uniform set %zu is out of range (have %zu)", slot, currentPSO->cbuffer_set_layout.size());
 	ASSERT(slot >= currentPSO->uniformBlockTypes.size() || currentPSO->uniformBlockTypes[slot] == type,
@@ -6115,6 +6617,20 @@ void VkRoot::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allo
 
 void VkRoot::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputePSO != nullptr, "currentComputePSO == NULL");
+		for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < currentComputePSO->cbuffer_set_layout.size(); ++i)
+		{
+			auto* buffer = std::get<0>(uniform_blocks[i]);
+			if (buffer == nullptr)
+			{
+				continue;
+			}
+			set_uniforms_set(first + i, buffer, std::get<1>(uniform_blocks[i]));
+		}
+		return;
+	}
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < currentPSO->cbuffer_set_layout.size(); ++i)
 	{
@@ -6129,6 +6645,7 @@ void VkRoot::set_uniforms(const size_t& first, const std::vector<std::tuple<cons
 
 void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notextures*/)
 {
+	ASSERT(!isComputePassActive(), "bind_pipeline during a compute pass");
 	ASSERT_OR_RETURN(, renderGraphExecuting() && hasActivePass,
 		"bind_pipeline() called outside render graph record callback");
 
@@ -7829,6 +8346,20 @@ bool VkRoot::setShadowConstants(gfx_api::lighting_constants newValues)
 		}
 	}
 
+	for (auto& entry : createdComputePipelines)
+	{
+		if (entry.pso == nullptr || entry.createInfo == nullptr)
+		{
+			continue;
+		}
+		if (gfx_api::shader_catalog(entry.createInfo->shader_mode).spec_constants == 0)
+		{
+			continue;
+		}
+		buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+		entry.pso = new VkComputePSO(dev, physDeviceProps.limits, *entry.createInfo, vkDynLoader, *this);
+	}
+
 	return true;
 }
 
@@ -7851,6 +8382,15 @@ bool VkRoot::debugRecompileAllPipelines()
 			buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(pipeline);
 			pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 		}
+	}
+	for (auto& entry : createdComputePipelines)
+	{
+		if (entry.pso == nullptr || entry.createInfo == nullptr)
+		{
+			continue;
+		}
+		buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+		entry.pso = new VkComputePSO(dev, physDeviceProps.limits, *entry.createInfo, vkDynLoader, *this);
 	}
 	return true;
 }

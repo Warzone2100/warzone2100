@@ -171,6 +171,7 @@ private:
 
 struct VkRoot; // forward-declare
 struct VkPSO; // forward-declare
+struct VkComputePSO;
 struct buffering_mechanism;
 
 namespace gfx_api::vk
@@ -245,6 +246,7 @@ struct perFrameResources_t
 	};
 	DescriptorPoolsContainer combinedImageSamplerDescriptorPools;
 	DescriptorPoolsContainer uniformDynamicDescriptorPools;
+	DescriptorPoolsContainer storageImageDescriptorPools;
 	uint32_t numalloc = 0;
 	vk::CommandPool pool;
 	vk::Fence previousSubmission;
@@ -255,6 +257,7 @@ struct perFrameResources_t
 	std::vector<vk::DeviceMemory> devicememory_to_free;
 	std::vector<VmaAllocation> vmamemory_to_free;
 	std::vector<VkPSO*> pso_to_delete;
+	std::vector<VkComputePSO*> compute_pso_to_delete;
 	std::vector<vk::Framebuffer> fbo_to_delete;
 
 	BlockBufferAllocator stagingBufferAllocator;
@@ -406,9 +409,13 @@ struct VkPSO final
 	bool hasSpecializationConstant_ShadowConstants = false;
 	bool hasSpecializationConstant_PointLightConstants = false;
 
-private:
+	friend struct VkComputePSO;
+
+public:
 	// Read shader into text buffer
 	static std::vector<uint32_t> readShaderBuf(const std::string& name);
+
+private:
 
 	vk::ShaderModule get_module(const std::string& name, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 
@@ -422,7 +429,7 @@ private:
 
 	static vk::Format to_vk(const gfx_api::vertex_attribute_type& type);
 
-	vk::SamplerCreateInfo to_vk(const gfx_api::sampler_type& type, const gfx_api::pixel_format_target& target, gfx_api::border_color border);
+	static vk::SamplerCreateInfo to_vk(const gfx_api::sampler_type& type, const gfx_api::pixel_format_target& target, gfx_api::border_color border, float maxSamplerAnisotropy);
 
 	static vk::PrimitiveTopology to_vk(const gfx_api::primitive_type& primitive);
 
@@ -447,6 +454,42 @@ public:
 
 private:
 	const VkRoot* root;
+};
+
+struct VkComputePSO final : public gfx_api::compute_pipeline_state_object
+{
+	vk::Device dev;
+	const WZ_vk::DispatchLoaderDynamic* pVkDynLoader = nullptr;
+	const VkRoot* root = nullptr;
+	vk::Pipeline object;
+	vk::PipelineLayout layout;
+	vk::ShaderModule shaderModule;
+	std::vector<vk::DescriptorSetLayout> cbuffer_set_layout;
+	std::vector<std::type_index> uniformBlockTypes;
+	uint32_t textures_first_set = 0;
+	vk::DescriptorSetLayout resource_set_layout;
+	std::vector<vk::Sampler> samplers;
+	std::vector<gfx_api::texture_input> sampled;
+	std::vector<gfx_api::storage_image_input> storage_images;
+	std::vector<gfx_api::storage_buffer_input> storage_buffers;
+	std::vector<gfx_api::abstract_texture*> boundSampled;
+	std::vector<gfx_api::abstract_texture*> boundStorageImages;
+	std::vector<gfx_api::buffer*> boundStorageBuffers;
+
+	VkComputePSO(vk::Device dev,
+		const vk::PhysicalDeviceLimits& limits,
+		const gfx_api::compute_pipeline_create_info& createInfo,
+		const WZ_vk::DispatchLoaderDynamic& vkDynLoader,
+		const VkRoot& root);
+	~VkComputePSO();
+
+	void bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
+	void bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
+	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers) override;
+	void flushResourceSet();
+
+	VkComputePSO(const VkComputePSO&) = delete;
+	VkComputePSO& operator=(const VkComputePSO&) = delete;
 };
 
 struct VkBuf final : public gfx_api::buffer
@@ -706,6 +749,7 @@ struct VkSurfaceGpu
 
 struct VkRoot final : gfx_api::context
 {
+	friend struct VkComputePSO;
 	std::unique_ptr<gfx_api::backend_Vulkan_Impl> backend_impl;
 	VkhInfo debugInfo;
 	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
@@ -826,6 +870,15 @@ struct VkRoot final : gfx_api::context
 	std::vector<BuiltPipelineRegistry> createdPipelines;
 	VkPSO* currentPSO = nullptr;
 
+	struct ComputePipelineRegistry
+	{
+		std::shared_ptr<gfx_api::compute_pipeline_create_info> createInfo;
+		VkComputePSO* pso = nullptr;
+	};
+	std::vector<ComputePipelineRegistry> createdComputePipelines;
+	VkComputePSO* currentComputePSO = nullptr;
+	bool graphicsQueueSupportsCompute = false;
+
 	bool validationLayer = false;
 	bool debugCallbacksEnabled = true;
 	bool debugUtilsExtEnabled = false;
@@ -848,6 +901,7 @@ public:
 	virtual void bind_compute_pipeline(gfx_api::pipeline_state_object* pso) override;
 	virtual void dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ) override;
 	virtual gfx_api::texture* create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string& debugName) override;
+	virtual bool supportsComputeShaders() const override { return graphicsQueueSupportsCompute; }
 
 	virtual void draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&) override;
 	virtual void draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&) override;
