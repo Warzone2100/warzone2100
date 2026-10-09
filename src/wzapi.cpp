@@ -645,7 +645,7 @@ bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObject;
 		SCRIPT_ASSERT(false, context, psStruct, "No such structure id %d belonging to player %d", id, player);
-		psStruct->body = percentOf(MAX(1, psStruct->fullMaxBody()));
+		psStruct->body = percentOf(MAX(1, psStruct->currMaxBody()));
 	}
 	else
 	{
