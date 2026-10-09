@@ -103,6 +103,12 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 		// (Note: There is fallback handling inside sdl_OpenGL_Impl::createGLContext())
 
 		// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
+		case OpenGLCore_4_3:
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+			return true;
 		case OpenGLCore_3_3:
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -150,6 +156,8 @@ std::string sdl_OpenGL_Impl::to_string(const GLContextRequests& request) const\
 {
 	switch (contextRequest)
 	{
+		case OpenGLCore_4_3:
+			return "OpenGL 4.3";
 		case OpenGLCore_3_3:
 			return "OpenGL 3.3";
 		case OpenGLCore_3_2:
