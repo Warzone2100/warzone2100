@@ -996,9 +996,11 @@ void structureBuild(GameWorld& world, STRUCTURE *psStruct, DROID *psDroid, int b
 		addPower(psStruct->player, structureTotalReturn(psStruct));
 	}
 
-	int deltaBody = quantiseFraction(9 * psStruct->structureBody(), 10 * structureBuildPointsToCompletion(*psStruct), newBuildPoints, psStruct->currentBuildPts);
+	unsigned fullMaxBody = psStruct->structureBody();
+	int oldCurrMaxBody = (int)calcCurrMaxBody(psStruct, fullMaxBody);
 	psStruct->currentBuildPts = newBuildPoints;
-	psStruct->body = std::max<int>(psStruct->body + deltaBody, 1);
+	int deltaCurrMaxBody = (int)calcCurrMaxBody(psStruct, fullMaxBody) - oldCurrMaxBody;
+	psStruct->body = std::max<int>(psStruct->body + deltaCurrMaxBody, 1);
 
 	//check if structure is built
 	if (buildPoints > 0 && psStruct->currentBuildPts >= structureBuildPointsToCompletion(*psStruct))
@@ -6000,12 +6002,8 @@ unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 
 	if (psStructure->status == SS_BEING_BUILT)
 	{
-		// Calculate the body points the structure would have, if not damaged.
-		unsigned unbuiltBody = (maxBody + 9) / 10;  // See droidStartBuild() in droid.cpp.
-		unsigned deltaBody = static_cast<unsigned>(maxBody * 9 * structureCompletionProgress(*psStructure) / 10);  // See structureBuild() in structure.cpp.
-		maxBody = unbuiltBody + deltaBody;
+		return calcCurrMaxBody(psStructure, maxBody);
 	}
-
 	return maxBody;
 }
 
