@@ -31,6 +31,8 @@
 
 #include "lib/ivis_opengl/piepalette.h"
 
+#include <glm/mat4x4.hpp>
+
 #include <string>
 
 /// Loads the vector image at `path` (lib/ivis_opengl/vectorimage.h) the first time, from the game's own data only: a
@@ -38,5 +40,10 @@
 bool loadGameVectorImage(const std::string &path, bool optional = false);
 /// Draws it (iV_DrawVectorImage), loading it the first time
 bool drawGameVectorImage(const std::string &path, float x, float y, float width, float height, PIELIGHT colour, float haloWidth = 0.f, bool optional = false);
+/// Draws it through a matrix (iV_DrawVectorImageTransformed), loading it the first time
+bool drawGameVectorImageTransformed(const std::string &path, const glm::mat4 &modelViewProjection, float x, float y, float width, float height, PIELIGHT colour, float haloWidth = 0.f);
+
+/// Its width over its height (iV_VectorImageAspect), loading it the first time (1 if it can't be loaded)
+float gameVectorImageAspect(const std::string &path, bool optional = false);
 
 #endif // __INCLUDED_SRC_VECTORIMAGELOADER_H__

@@ -37,6 +37,8 @@
 #include "lib/widget/listwidget.h"
 #include "lib/widget/widget.h"
 
+#include <glm/mat4x4.hpp>
+
 class PowerBar;
 class W_BARGRAPH;
 
@@ -174,6 +176,57 @@ struct HudIconButtonLook
 	float opacity = 1.f;
 };
 
+/// A button of the unit orders panel (or the guide's picture of one): an icon, or an assign-production button's number
+struct HudOrderButtonLook
+{
+	WzRect rect;
+	const char *icon = nullptr;  ///< (images/hud/icons/<icon>.svg, and its .fill.svg, if any, in fillTone)
+	HudTone fillTone = HudTone::Neutral;
+	int number = 0;
+	bool down = false;
+	bool highlighted = false;
+	bool disabled = false;
+};
+
+/// A campaign transporter button in the timer row (or the transporter's contents panel): its ETA and load, or launch
+struct HudTransporterButtonLook
+{
+	WzRect rect;
+	bool launch = false;     ///< (else the ETA and load button, which opens the load menu)
+	bool highlighted = false;
+	bool flashOn = false;    ///< (the launch button flashes while the transporter is full)
+};
+
+/// The replay controls' buttons (src/hci/replay_controller.cpp)
+enum class HudReplayButton : uint8_t
+{
+	Start,
+	Back,
+	Pause,
+	Play,
+	Forward,
+	FastForward,
+};
+
+/// A replay control button: its screen rectangle and state
+struct HudReplayButtonLook
+{
+	WzRect rect;
+	HudReplayButton button = HudReplayButton::Play;
+	bool down = false;
+	bool highlighted = false;
+	bool disabled = false;
+	int fastForward = 0; ///< (the fast-forward button: 0 off, else at most how many times as fast it plays: 2 or 4)
+};
+
+/// A playhead on the replay timeline: where the replay is, where a drag would seek to, where a seek is going
+enum class HudReplayPlayhead : uint8_t
+{
+	Current,
+	Drag,
+	SeekTarget,
+};
+
 /// A segment of a page control (the stats panels' pages, with panel filters): a page, or the previous or next page arrow
 struct HudPageSegmentLook
 {
@@ -226,6 +279,8 @@ public:
 	virtual nonstd::optional<PIELIGHT> drawPageSegment(const HudPageSegmentLook &look) = 0;
 	/// The mission and transporter timers' background
 	virtual void drawTimerBackground(int x, int y, uint16_t image, bool flashOn, uint16_t flashImage) = 0;
+	/// How much further right the mission timer's time starts, for the skin's icon before it
+	virtual int timerIconGutter() const { return 0; }
 	virtual nonstd::optional<WzTipStyle> tooltipStyle() const = 0;
 
 	/// Shapes for HUD additions (modules, popovers), in the skin's style
@@ -244,10 +299,31 @@ public:
 	virtual void drawOverlayText(WzText &text, float x, float y, PIELIGHT color) = 0;
 	/// Whether it draws HudIcons instead of the images they stand for
 	virtual bool drawsIcons() const { return false; }
+	/// Whether units' ranks are the rank insignia (hudranks.h) instead of the rank images
+	virtual bool drawsRankInsignia() const { return false; }
+	/// The radar's blips as the skin's shapes (hudradarblips.h), rather than the images
+	virtual bool drawsRadarBlips() const { return false; }
+	/// Draws the multiplayer connection warnings as a panel (hudconnection.h) instead of the Classic column of images
+	virtual bool drawsConnectionPanel() const { return false; }
+	/// Draws the radar's frame (and, when `north`, its north arrow) before the minimap, in the minimap's own space
+	/// (`mapSpace`: the map from 0, 0 to width, height, turned with the camera when the radar turns). False: the radar
+	/// draws its Classic images
+	virtual bool drawRadarFrame(const glm::mat4 &/*mapSpace*/, float /*width*/, float /*height*/, bool /*north*/) { return false; }
+	/// The replay controls: their bar's background, a button, the timeline's track (played up to playedX), a playhead,
+	/// the frame of the time the pointer is over on the timeline. False: the Classic look
+	virtual bool drawReplayBar(const WzRect &) { return false; }
+	virtual bool drawReplayButton(const HudReplayButtonLook &) { return false; }
+	virtual bool drawReplayTrack(const WzRect &, float /*playedX*/) { return false; }
+	virtual bool drawReplayPlayhead(float /*centerX*/, float /*centerY*/, HudReplayPlayhead) { return false; }
+	virtual bool drawReplayTimeTip(const WzRect &) { return false; }
 	/// An icon, in `color` or else the skin's color for it, over whatever is under it: false if it can't (draw the image)
 	virtual bool drawHudIcon(HudIcon, const WzRect &, nonstd::optional<PIELIGHT> = nonstd::nullopt) { return false; }
 	/// False to draw the button's images
 	virtual bool drawIconButton(const HudIconButtonLook &) { return false; }
+	/// False to draw the button's images
+	virtual bool drawOrderButton(const HudOrderButtonLook &) { return false; }
+	/// False to draw the button's images
+	virtual bool drawTransporterButton(const HudTransporterButtonLook &) { return false; }
 	/// Whether it draws an icon named in the data (images/hud/icons/<name>.svg, ex. a build category's)
 	virtual bool hasNamedIcon(const std::string &) { return false; }
 	virtual bool drawNamedIcon(const std::string &, const WzRect &, PIELIGHT) { return false; }
@@ -257,6 +333,8 @@ public:
 
 /// The skin to draw with now: the chosen one in a game, Classic everywhere else (the title screens)
 HudSkin &currentHudSkin();
+/// The skin the HUD skin setting chooses, in a game or not (for pictures of the in-game interface, like the guide's)
+HudSkin &hudSkinForSetting();
 HudSkin &classicHudSkin();
 HudSkin &modernHudSkin();
 

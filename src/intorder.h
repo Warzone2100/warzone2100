@@ -43,4 +43,10 @@ void intAddFactoryOrder(STRUCTURE *psStructure);
 
 std::vector<UWORD> intOrderGetButtonImageIDs(SECONDARY_ORDER secondaryOrder);
 
+class HudSkin;
+class WzRect;
+/// The skin's drawing of an order button, given its normal image (as intOrderGetButtonImageIDs gives them): false to
+/// draw the images
+bool intDrawOrderButton(HudSkin &skin, UWORD imageId, const WzRect &rect, bool down, bool highlighted, bool disabled);
+
 #endif // __INCLUDED_SRC_INTORDER_H__

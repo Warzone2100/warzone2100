@@ -41,6 +41,7 @@ constexpr int CLOSE_INSET = 3;
 
 static std::vector<std::weak_ptr<WIDGET>> movedCloseButtons;
 static std::vector<std::weak_ptr<WIDGET>> movedPanelControls;
+static std::vector<std::weak_ptr<WIDGET>> skinPlacedWidgets;
 static std::vector<std::weak_ptr<WIDGET>> replacedPageTabs;
 static std::vector<std::pair<std::weak_ptr<WIDGET>, std::function<int ()>>> panelTopInsets;
 
@@ -177,6 +178,16 @@ void hudSetMovedPanelControl(const std::shared_ptr<WIDGET> &widget)
 bool hudIsMovedPanelControl(const WIDGET &widget)
 {
 	return containsWeak(movedPanelControls, widget);
+}
+
+void hudSetSkinPlacedWidget(const std::shared_ptr<WIDGET> &widget)
+{
+	addWeak(skinPlacedWidgets, widget);
+}
+
+bool hudIsSkinPlacedWidget(const WIDGET &widget)
+{
+	return containsWeak(skinPlacedWidgets, widget);
 }
 
 int hudPanelTopInset(const WIDGET &panel)

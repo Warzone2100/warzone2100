@@ -104,3 +104,17 @@ bool drawGameVectorImage(const std::string &path, float x, float y, float width,
 {
 	return loadGameVectorImage(path, optional) && iV_DrawVectorImage(path, x, y, width, height, colour, haloWidth);
 }
+
+bool drawGameVectorImageTransformed(const std::string &path, const glm::mat4 &modelViewProjection, float x, float y, float width, float height, PIELIGHT colour, float haloWidth)
+{
+	return loadGameVectorImage(path) && iV_DrawVectorImageTransformed(path, modelViewProjection, x, y, width, height, colour, haloWidth);
+}
+
+float gameVectorImageAspect(const std::string &path, bool optional)
+{
+	if (!loadGameVectorImage(path, optional))
+	{
+		return 1.f;
+	}
+	return iV_VectorImageAspect(path).value_or(1.f);
+}

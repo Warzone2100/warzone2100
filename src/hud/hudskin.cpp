@@ -301,6 +301,11 @@ HudSkin &classicHudSkin()
 	return skin;
 }
 
+HudSkin &hudSkinForSetting()
+{
+	return hudSettings().skin == HudSkinId::Modern ? modernHudSkin() : classicHudSkin();
+}
+
 HudSkin &currentHudSkin()
 {
 	if (hudSettings().skin == HudSkinId::Modern && GetGameMode() == GS_NORMAL)

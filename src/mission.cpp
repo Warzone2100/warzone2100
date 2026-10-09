@@ -97,6 +97,8 @@
 #include "game_world.h"
 #include "wzapi.h"
 #include "screens/guidescreen.h"
+#include "hud/hudskin.h"
+#include "hud/hudpanelextension.h"
 #include "lib/framework/loading_task.h"
 
 #define		IDMISSIONRES_TXT		11004
@@ -2119,18 +2121,38 @@ bool intAddMissionTimer()
 	sLabInit.y = TIMER_LABELY;
 	sLabInit.width = sFormInit.width;//TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;//TIMER_HEIGHT;
+	sLabInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(TIMER_LABELX + currentHudSkin().timerIconGutter(), TIMER_LABELY);
+	});
 	sLabInit.pText = WzString::fromUtf8("00:00:00");
 	sLabInit.pCallback = intUpdateMissionTimer;
 
-	if (!widgAddLabel(psWScreen, &sLabInit))
+	W_LABEL *psTime = widgAddLabel(psWScreen, &sLabInit);
+	if (!psTime)
 	{
 		return false;
 	}
+	hudSetSkinPlacedWidget(psTime->shared_from_this());
 
 	return true;
 }
 
 //add the Transporter timer into the top left hand corner of the screen
+bool missionShowTimerRowForTests(bool launch)
+{
+	bool ok = intAddMissionTimer();
+	if (!launch)
+	{
+		return intAddTransporterTimer() && ok;
+	}
+	// (the launch button is campaign only)
+	const bool multiPlayer = bMultiPlayer;
+	bMultiPlayer = false;
+	ok = intAddTransporterLaunch(nullptr) && ok;
+	bMultiPlayer = multiPlayer;
+	return ok;
+}
+
 bool intAddTransporterTimer()
 {
 	// Make sure that Transporter Launch button isn't up as well
@@ -2152,7 +2174,7 @@ bool intAddTransporterTimer()
 	sFormInit.width = iV_GetImageWidth(IntImages, IMAGE_TRANSETA_UP);
 	sFormInit.height = iV_GetImageHeight(IntImages, IMAGE_TRANSETA_UP);
 	sFormInit.pTip = _("Load Transport");
-	sFormInit.pDisplay = intDisplayImageHilight;
+	sFormInit.pDisplay = intDisplayTransporterButton;
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_TRANSETA_DOWN, IMAGE_TRANSETA_UP);
 
 	W_FORM * pForm = widgAddForm(psWScreen, &sFormInit);

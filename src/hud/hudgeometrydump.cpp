@@ -28,6 +28,7 @@
 #include <nlohmann/json.hpp> // Must come before WZ includes
 
 #include "hudgeometrydump.h"
+#include "hudconnection.h"
 #include "hudids.h"
 #include "hudpagecontrol.h"
 #include "hudpanelextension.h"
@@ -46,6 +47,9 @@
 #include "../objmem.h"
 #include "../droid.h"
 #include "../game_world.h"
+#include "../screens/guidescreen.h"
+#include "../mission.h"
+#include "../transporter.h"
 
 #include <algorithm>
 #include <fstream>
@@ -100,6 +104,24 @@ void clearSelection()
 	}
 }
 
+bool selectAllDroids()
+{
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	bool any = false;
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
+	{
+		if (psDroid->died == 0 && !psDroid->isTransporter())
+		{
+			psDroid->selected = true;
+			any = true;
+		}
+	}
+	return any;
+}
+
 bool selectFirstDroid()
 {
 	if (selectedPlayer >= MAX_PLAYERS)
@@ -130,12 +152,21 @@ void parkPointer()
 bool applyState(const std::string &name)
 {
 	clearSelection();
+	if (name.find("guide=") == std::string::npos)
+	{
+		// (closing it takes effect after the frame: a guide state shows its topic in the open guide)
+		closeGuideScreen();
+	}
+	intRemoveMissionTimer();
+	intRemoveTransporterTimer();
+	intRemoveTransporterLaunch();
 	intTestShowForm(5);
 	parkPointer();
 	hoverKey.clear();
 	clickKeys.clear();
 	hoveredAt = 0;
 	hudSetTouchInputForTests(false);
+	hudShowConnectionWarningsForTests(false, false);
 	bool ok = true;
 	size_t start = 0;
 	while (start <= name.size())
@@ -151,7 +182,17 @@ bool applyState(const std::string &name)
 		else if (part == "commander") { ok = intTestShowForm(3) && ok; }
 		else if (part == "order") { ok = selectFirstDroid() && intTestShowForm(4) && ok; }
 		else if (part == "select") { ok = selectFirstDroid() && ok; }
+		else if (part == "selectall") { ok = selectAllDroids() && ok; }
 		else if (part == "touch") { hudSetTouchInputForTests(true); }
+		else if (part == "timers") { ok = missionShowTimerRowForTests(false) && ok; }
+		else if (part == "launch") { ok = missionShowTimerRowForTests(true) && ok; }
+		else if (part == "netwarn") { hudShowConnectionWarningsForTests(true, false); }
+		else if (part == "netwarnopen") { hudShowConnectionWarningsForTests(true, true); }
+		else if (part == "debug=droids") { intOpenDebugMenu(OBJ_DROID); }
+		else if (part == "debug=structures") { intOpenDebugMenu(OBJ_STRUCTURE); }
+		else if (part == "debug=features") { intOpenDebugMenu(OBJ_FEATURE); }
+		else if (part == "flash") { flashMissionButton(IDTIMER_FORM); flashMissionButton(IDTRANS_LAUNCH); }
+		else if (part.rfind("guide=", 0) == 0) { addGuideTopic(part.substr(6), ShowTopicFlags::NeverViewed); }
 		else if (part.rfind("hover=", 0) == 0) { hoverKey = part.substr(6); }
 		else if (part.rfind("click=", 0) == 0) { clickKeys.push_back(part.substr(6)); }
 		else
@@ -267,6 +308,10 @@ private:
 		if (hudIsMovedPanelControl(widget))
 		{
 			entry["movedControl"] = true;
+		}
+		if (hudIsSkinPlacedWidget(widget))
+		{
+			entry["skinPlaced"] = true;
 		}
 		if (const int inset = hudPanelTopInset(widget))
 		{
@@ -474,7 +519,7 @@ bool hudSetGeometryDump(const std::string &spec)
 	stateNames.assign(parts.begin() + std::min<size_t>(parts.size(), 2), parts.end());
 	if (stateNames.empty())
 	{
-		stateNames = {"none", "build", "manufacture", "research", "commander", "order"};
+		stateNames = {"none", "build", "manufacture", "research", "commander", "order", "timers", "launch"};
 	}
 	armed = true;
 	return true;

@@ -40,7 +40,10 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piepalette.h"
 
+#include <glm/mat4x4.hpp>
+
 #include <string>
+#include <vector>
 
 #include <nonstd/optional.hpp>
 
@@ -56,10 +59,30 @@ nonstd::optional<std::string> iV_CheckVectorImage(const char *data, size_t size)
 bool iV_AddVectorImage(const std::string &name, const char *data, size_t size);
 bool iV_HasVectorImage(const std::string &name);
 
+/// An image's coverage (0-255, row by row), for callers that build their own textures (ex. an atlas)
+struct VectorImageCoverage
+{
+	int width = 0;   ///< (padding included)
+	int height = 0;
+	int padding = 0; ///< (around the shape, for its halo)
+	std::vector<uint8_t> coverage;
+};
+
+/// The image rasterized at width × height physical pixels, grown by haloPixels if > 0 (as iV_DrawVectorImage's halo)
+nonstd::optional<VectorImageCoverage> iV_VectorImageCoverage(const std::string &name, int width, int height, float haloPixels = 0.f);
+/// The game-to-renderer scale the images are rasterized for (iV_VectorImagesUpdateScaleFactor)
+float iV_VectorImagesScale();
+
+/// Its own width over its height (from its viewBox), or nothing if there is no such image or ThorVG can't load it
+nonstd::optional<float> iV_VectorImageAspect(const std::string &name);
+
 /// Draws the image into the logical rectangle in one color (only its shape counts, not its own colors).
 /// With haloWidth > 0, draws the shape grown by that many logical pixels instead: a halo to draw under it.
 /// False if there is no such image or ThorVG can't draw it.
 bool iV_DrawVectorImage(const std::string &name, float x, float y, float width, float height, PIELIGHT colour, float haloWidth = 0.f);
+/// The same, with the rectangle in its own space, drawn through modelViewProjection (ex. rotated with the radar). That
+/// space should keep the screen's scale
+bool iV_DrawVectorImageTransformed(const std::string &name, const glm::mat4 &modelViewProjection, float x, float y, float width, float height, PIELIGHT colour, float haloWidth = 0.f);
 
 /// The game-to-renderer scale (as for iV_TextUpdateScaleFactor): images are rasterized again when next drawn
 void iV_VectorImagesUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int vertScalePercentage);

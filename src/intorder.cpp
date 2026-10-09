@@ -28,6 +28,7 @@
 #include "objects.h"
 #include "order.h"
 #include "game_world.h"
+#include "hud/hudskin.h"
 
 #include <set>
 #include <algorithm>
@@ -546,6 +547,78 @@ std::vector<UWORD> intOrderGetButtonImageIDs(SECONDARY_ORDER secondaryOrder)
 }
 
 
+namespace
+{
+
+struct OrderIcon
+{
+	UWORD image;
+	const char *icon;
+	HudTone fillTone;
+};
+
+const OrderIcon ORDER_ICONS[] = {
+	{IMAGE_ORD_RANGE3UP, "order-range-optimum", HudTone::Neutral},
+	{IMAGE_ORD_RANGE1UP, "order-range-short", HudTone::Neutral},
+	{IMAGE_ORD_RANGE2UP, "order-range-long", HudTone::Neutral},
+	{IMAGE_ORD_REPAIR3UP, "order-repair-never", HudTone::Neutral},
+	{IMAGE_ORD_REPAIR2UP, "order-repair-heavy", HudTone::Bad},
+	{IMAGE_ORD_REPAIR1UP, "order-repair-medium", HudTone::Warn},
+	{IMAGE_ORD_FATWILLUP, "order-fire-at-will", HudTone::Neutral},
+	{IMAGE_ORD_RETFIREUP, "order-return-fire", HudTone::Neutral},
+	{IMAGE_ORD_HOLDFIREUP, "order-hold-fire", HudTone::Neutral},
+	{IMAGE_ORD_FIREDES_UP, "order-fire-support", HudTone::Neutral},
+	{IMAGE_ORD_ACCREP_UP, "order-accept-retreat", HudTone::Neutral},
+	{IMAGE_ORD_PATROLUP, "order-patrol", HudTone::Neutral},
+	{IMAGE_ORD_CIRCLEUP, "order-circle", HudTone::Neutral},
+	{IMAGE_ORD_PURSUEUP, "order-pursue", HudTone::Neutral},
+	{IMAGE_ORD_GUARDUP, "order-guard", HudTone::Neutral},
+	{IMAGE_ORD_HALTUP, "order-hold-position", HudTone::Neutral},
+	{IMAGE_ORD_RTRUP, "order-return-repair", HudTone::Neutral},
+	{IMAGE_ORD_GOTOHQUP, "order-return-hq", HudTone::Neutral},
+	{IMAGE_ORD_EMBARKUP, "order-embark", HudTone::Neutral},
+	{IMAGE_ORD_DESTRUCT1UP, "order-return-recycle", HudTone::Neutral},
+	{IMAGE_ORD_DESTRUCT2UP, "order-recycle", HudTone::Neutral},
+};
+
+void displayOrderButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	const unsigned state = psWidget->getState();
+	const bool disabled = (state & WBUT_DISABLE) != 0;
+	const WzRect rect(xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
+	if (!intDrawOrderButton(currentHudSkin(), UNPACKDWORD_TRI_C(psWidget->UserData), rect, (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0,
+	                        !disabled && (state & WBUT_HIGHLIGHT) != 0, disabled))
+	{
+		intDisplayButtonHilight(psWidget, xOffset, yOffset);
+	}
+}
+
+}
+
+bool intDrawOrderButton(HudSkin &skin, UWORD imageId, const WzRect &rect, bool down, bool highlighted, bool disabled)
+{
+	HudOrderButtonLook look;
+	look.rect = rect;
+	look.down = down;
+	look.highlighted = highlighted;
+	look.disabled = disabled;
+	if (imageId >= IMAGE_ORD_FAC1UP && imageId <= IMAGE_ORD_FAC5DOWN)
+	{
+		look.number = (imageId - IMAGE_ORD_FAC1UP) / 2 + 1;
+		return skin.drawOrderButton(look);
+	}
+	for (const OrderIcon &entry : ORDER_ICONS)
+	{
+		if (entry.image == imageId)
+		{
+			look.icon = entry.icon;
+			look.fillTone = entry.fillTone;
+			return skin.drawOrderButton(look);
+		}
+	}
+	return false;
+}
+
 // Add the droid order screen.
 // Returns true if the form was displayed ok.
 //
@@ -664,8 +737,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -674,7 +746,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	sButInit = W_BUTINIT();
 	sButInit.formID = IDORDER_FORM;
 	sButInit.id = IDORDER_CLOSE + 1;
-	sButInit.pDisplay = intDisplayButtonHilight;
+	sButInit.pDisplay = displayOrderButton;
 	sButInit.y = ORDER_BUTY;
 
 	Height = 0;

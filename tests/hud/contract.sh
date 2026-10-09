@@ -70,7 +70,7 @@ for size in $SIZES; do
 		fi
 		if [ -n "$BASELINE" ]; then
 			echo "$TAG: classic vs the baseline build"
-			python3 -I "$HERE/contract.py" "$BASELINE/classic.$TAG.json" "$REF.json" --quiet || note_fail 1
+			python3 -I "$HERE/contract.py" "$BASELINE/classic.$TAG.json" "$REF.json" --quiet --new-states || note_fail 1
 			python3 -I "$HERE/imgcmp.py" "$BASELINE/classic.$TAG.shots" "$REF.shots" || note_fail 1
 		fi
 		for variant in "$@"; do

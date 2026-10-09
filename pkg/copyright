@@ -364,18 +364,41 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/category-defense.svg
        data/base/images/hud/icons/category-support.svg
        data/base/images/hud/icons/category-trucks.svg
+       data/base/images/hud/icons/connection-desync.svg
+       data/base/images/hud/icons/connection-left.svg
+       data/base/images/hud/icons/connection-waiting.svg
        data/base/images/hud/icons/delivery-point.fill.svg
        data/base/images/hud/icons/delivery-point.svg
        data/base/images/hud/icons/favorite.fill.svg
        data/base/images/hud/icons/favorite.svg
        data/base/images/hud/icons/loop.svg
+       data/base/images/hud/icons/mission-clock.svg
        data/base/images/hud/icons/obsolete-hidden.svg
        data/base/images/hud/icons/obsolete-shown.svg
        data/base/images/hud/icons/options.fill.svg
        data/base/images/hud/icons/options.svg
+       data/base/images/hud/icons/order-accept-retreat.svg
+       data/base/images/hud/icons/order-guard.svg
+       data/base/images/hud/icons/order-hold-position.svg
+       data/base/images/hud/icons/order-patrol.svg
+       data/base/images/hud/icons/order-pursue.svg
+       data/base/images/hud/icons/order-range-long.svg
+       data/base/images/hud/icons/order-range-optimum.svg
+       data/base/images/hud/icons/order-range-short.svg
+       data/base/images/hud/icons/order-recycle.svg
+       data/base/images/hud/icons/order-repair-heavy.svg
+       data/base/images/hud/icons/order-repair-medium.svg
+       data/base/images/hud/icons/order-return-recycle.svg
+       data/base/images/hud/icons/order-return-repair.svg
        data/base/images/hud/icons/rate-of-fire.fill.svg
        data/base/images/hud/icons/rate-of-fire.svg
        data/base/images/hud/icons/repair.svg
+       data/base/images/hud/icons/replay-back.svg
+       data/base/images/hud/icons/replay-fast-forward.svg
+       data/base/images/hud/icons/replay-forward.svg
+       data/base/images/hud/icons/replay-pause.svg
+       data/base/images/hud/icons/replay-play.svg
+       data/base/images/hud/icons/replay-start.svg
        data/base/images/hud/icons/research-computer.svg
        data/base/images/hud/icons/research-defense.fill.svg
        data/base/images/hud/icons/research-defense.svg
@@ -390,12 +413,28 @@ Copyright: 2020-2026 Paweł Kuna
 License: Expat
 Comment: Tabler Icons (https://tabler.io/icons), some adapted
 
+Files: data/base/images/hud/icons/order-embark.svg
+       data/base/images/hud/icons/order-fire-support.svg
+       data/base/images/hud/icons/order-return-hq.svg
+Copyright: 2026, Warzone 2100 Project
+           2020-2026 Paweł Kuna
+License: GPL-2+ and Expat
+Comment: Their Tabler Icons (https://tabler.io/icons) parts are under the Expat license.
+
 Files: doc/quickstartguide.*
 Copyright: Ben Latimore
            Guangcong Luo
 License: CC0
 
-Files: data/base/images/hud/icons/research-cyborg.fill.svg
+Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
+       data/base/images/hud/icons/order-repair-medium.fill.svg
+       data/base/images/hud/icons/order-repair-never.svg
+       data/base/images/hud/icons/radar-blip-1.svg
+       data/base/images/hud/icons/radar-blip-2.svg
+       data/base/images/hud/icons/radar-blip-3.svg
+       data/base/images/hud/icons/radar-blip-flame.svg
+       data/base/images/hud/icons/radar-blip-read.svg
+       data/base/images/hud/icons/research-cyborg.fill.svg
        data/base/images/hud/icons/research-cyborg.svg
        data/base/images/hud/icons/research-sensor.fill.svg
        data/base/images/hud/icons/research-sensor.svg
@@ -550,6 +589,7 @@ Files: data/base/images/hud/icons/research-cyborg.fill.svg
        src/hud/hudbadges.*
        src/hud/hudbuildcategories.*
        src/hud/hudclassicskin.h
+       src/hud/hudconnection.*
        src/hud/huddetail.*
        src/hud/huddetailcontents.*
        src/hud/hudgeometrydump.*
@@ -564,7 +604,10 @@ Files: data/base/images/hud/icons/research-cyborg.fill.svg
        src/hud/hudpagecontrol.*
        src/hud/hudpanelextension.*
        src/hud/hudpanelfilters.*
+       src/hud/hudradarblips.*
+       src/hud/hudranks.*
        src/hud/hudreticule.*
+       src/hud/hudrightcolumn.*
        src/hud/hudrowsummary.*
        src/hud/hudsettings.*
        src/hud/hudskin.*

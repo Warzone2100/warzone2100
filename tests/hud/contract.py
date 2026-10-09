@@ -48,6 +48,8 @@ GROWABLE = {
 EXTENSION_IDS = {0x7E000110, 0x7E000120}
 # The stats panels' page control, which shows their lists' page tabs in their place
 PAGE_CONTROL_IDS = {0x7E000112}
+# How far a skin may move a widget in its row
+SKIN_PLACED_MAX = 16
 
 
 def load(path):
@@ -112,6 +114,12 @@ def expand_rows(hitmap, width):
     return rows
 
 
+def parent_key(key):
+    """The key of a widget's parent: its last /<id> or #<index> removed"""
+    cut = max(key.rfind("/"), key.rfind("#"))
+    return key[:cut] if cut > 0 else None
+
+
 def check_state(ref, cand, screen, top_band, problems, notes):
     name = ref["name"]
 
@@ -127,6 +135,7 @@ def check_state(ref, cand, screen, top_band, problems, notes):
     cand_classic = {w["key"]: w for w in cand["widgets"] if not is_addition(w)}
     grown = set()
     moved = {w["key"] for w in cand["widgets"] if w.get("movedClose") or w.get("movedControl")}
+    skin_placed = {w["key"] for w in cand["widgets"] if w.get("skinPlaced")}
     insets = {}
     replaced_tabs = {w["key"] for w in cand["widgets"] if w.get("replacedPageTabs")}
     replaced_tabs_lists = {k[:k.rfind("#")] for k in replaced_tabs if "#" in k}
@@ -146,6 +155,12 @@ def check_state(ref, cand, screen, top_band, problems, notes):
                 notes.append(f"{name}: {key} moved inside its panel: {rw['rect']} -> {cw['rect']}")
             else:
                 fail(f"{key} moved out of its panel: {cw['rect']}")
+        elif cw["rect"] != rw["rect"] and key in skin_placed:
+            (rx, ry, rw_, rh), (cx, cy, cw_, ch) = rw["rect"], cw["rect"]
+            if (rw_, rh) == (cw_, ch) and abs(cx - rx) <= SKIN_PLACED_MAX and abs(cy - ry) <= SKIN_PLACED_MAX:
+                notes.append(f"{name}: {key} placed by the skin: {rw['rect']} -> {cw['rect']}")
+            else:
+                fail(f"skin-placed widget {key} moved too far or changed size: {rw['rect']} -> {cw['rect']}")
         elif cw["rect"] != rw["rect"]:
             wid = own_id(key)
             inset = cw.get("topInset", 0) if wid in GROWABLE else 0
@@ -192,6 +207,8 @@ def check_state(ref, cand, screen, top_band, problems, notes):
                 continue
             if r in moved or c in moved or r in replaced_tabs:
                 continue
+            if (r in skin_placed and c in (parent_key(r), None)) or (c in skin_placed and r in (parent_key(c), None)):
+                continue
             if r in insets and inside([xi * step, yi * step, 1, 1], insets[r]):
                 continue
             # (The extension covers the replaced tabs' row: points of their list or its panel may reach it)
@@ -213,6 +230,7 @@ def main():
     parser.add_argument("--top-band", type=int, default=0, metavar="PX",
                         help="the height at the top kept for the console and timers")
     parser.add_argument("--quiet", action="store_true", help="don't print the notes")
+    parser.add_argument("--new-states", action="store_true", help="skip the states the reference doesn't have")
     args = parser.parse_args()
     ref = load(args.reference)
     cand = load(args.candidate)
@@ -224,6 +242,9 @@ def main():
     ref_states = {s["name"]: s for s in ref["states"]}
     for state in cand["states"]:
         if state["name"] not in ref_states:
+            if args.new_states:
+                notes.append(f"{state['name']}: not in the reference (skipped)")
+                continue
             problems.append(f"{state['name']}: not in the reference")
             continue
         check_state(ref_states[state["name"]], state, ref["screen"], args.top_band, problems, notes)

@@ -45,6 +45,7 @@
 #include "piepalette.h"
 #include "pieclip.h"
 #include <list>
+#include <vector>
 #include <map>
 #include <memory>
 
@@ -250,7 +251,20 @@ private:
 void iV_DrawImageAnisotropic(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
 void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
 /// A whole texture (straight alpha) drawn into a rectangle, multiplied by the given color
-void iV_DrawTextureTinted(gfx_api::texture& TextureID, Vector2f position, Vector2f size, PIELIGHT colour);
+void iV_DrawTextureTinted(gfx_api::texture& TextureID, Vector2f position, Vector2f size, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+/// A region of a texture (ex. an atlas) drawn into a rectangle, multiplied by the given color
+struct TextureRegionDraw
+{
+	Vector2f position;
+	Vector2f size;
+	Vector2i texturePosition;  ///< (in the texture's pixels)
+	Vector2i textureSize;
+	PIELIGHT colour;
+};
+/// Draws regions of one texture of textureSize pixels (straight alpha), binding the pipeline and the texture once
+void iV_DrawTextureRegions(gfx_api::texture& TextureID, Vector2i textureSize, const std::vector<TextureRegionDraw> &regions);
+/// The same, with the regions in their own space, drawn through modelViewProjection (ex. rotated with the radar)
+void iV_DrawTextureRegions(gfx_api::texture& TextureID, Vector2i textureSize, const std::vector<TextureRegionDraw> &regions, const glm::mat4 &modelViewProjection);
 void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, const WzClippingRectF& clippingRect);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr, uint8_t alpha = 255);
 void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, float x, float y, PIELIGHT color, optional<Vector2f> size = nullopt, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
@@ -302,6 +316,9 @@ void pie_DrawSoftRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fil
 // Same soft box, rotated by angleRadians about its center (positive = clockwise on screen).
 // centerX/centerY position the box center on screen.
 void pie_DrawSoftRoundedBoxRotated(float centerX, float centerY, float width, float height, float angleRadians, PIELIGHT fill, float cornerRadius, float edgeSoftness);
+/// A rounded box in its own space, drawn through modelViewProjection (ex. rotated with the radar). That space should
+/// keep the screen's scale, as its edges are smoothed over its pixels
+void pie_DrawRoundedBoxTransformed(const glm::mat4 &modelViewProjection, float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f);
 
 bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
 

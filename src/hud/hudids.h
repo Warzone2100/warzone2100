@@ -49,6 +49,7 @@ static constexpr uint32_t IDHUD_STATUS_LINE = IDHUD_ADDITION_FIRST + 0x30;
 static constexpr uint32_t IDHUD_IDLE_INDICATORS = IDHUD_ADDITION_FIRST + 0x40;
 static constexpr uint32_t IDHUD_SELECTION_READOUT = IDHUD_ADDITION_FIRST + 0x50;
 static constexpr uint32_t IDHUD_SPECTATOR_STRIP = IDHUD_ADDITION_FIRST + 0x60;
+static constexpr uint32_t IDHUD_CONNECTION_PANEL = IDHUD_ADDITION_FIRST + 0x70;
 
 inline bool hudIsWrapperId(uint32_t id)
 {

@@ -153,6 +153,9 @@ void missionTimerUpdate();
 void addMissionTimerInterface();
 
 void intRemoveMissionTimer();
+/// (tests) Shows the campaign's timer row in any game: the mission timer,
+/// and the transporter's ETA button or its launch button
+bool missionShowTimerRowForTests(bool launch);
 
 //access functions for bPlayCountDown flag
 void setPlayCountDown(UBYTE set);

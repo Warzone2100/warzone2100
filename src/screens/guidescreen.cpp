@@ -52,6 +52,7 @@
 #include "../loop.h"
 #include "../intdisplay.h"
 #include "../intorder.h"
+#include "../hud/hudskin.h"
 #include "../hci/objects_stats.h"
 #include "../activity.h"
 #include "../feature.h"
@@ -692,11 +693,14 @@ void WzGuideRetButtonView::display(int xOffset, int yOffset)
 	{
 		return;
 	}
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	float w = width();
-	float h = height();
-	iV_DrawImage2(retButtonDisplayFilename, x0, y0, w, h);
+	HudReticuleButtonLook look;
+	look.x = x() + xOffset;
+	look.y = y() + yOffset;
+	look.width = width();
+	look.height = height();
+	look.upImage = retButtonDisplayFilename;
+	look.downImage = retButtonDisplayFilename;
+	hudSkinForSetting().drawReticuleButton(look);
 }
 
 // MARK: - Stat image view
@@ -952,6 +956,8 @@ private:
 	std::vector<int32_t> imageHeights;
 	int32_t maxImageHeight = 0;
 	int32_t totalIdealWidth = 0;
+public:
+	bool drawOrderButtons = false;  ///< (the unit orders panel's buttons: drawn by the HUD skin)
 };
 
 void W_ATLASIMAGE::display(int xOffset, int yOffset)
@@ -967,7 +973,10 @@ void W_ATLASIMAGE::display(int xOffset, int yOffset)
 		auto imageHeight = imageHeights[idx];
 		auto imageID = ImageIDs[idx];
 		int imageY0 = y0 + (h - imageHeight) / 2;
-		iV_DrawImageTint(ImageFile, imageID, currImageX0, imageY0, pal_RGBA(255, 255, 255, 255));
+		if (!drawOrderButtons || !intDrawOrderButton(hudSkinForSetting(), imageID, WzRect(currImageX0, imageY0, imageWidth, imageHeight), false, false, false))
+		{
+			iV_DrawImageTint(ImageFile, imageID, currImageX0, imageY0, pal_RGBA(255, 255, 255, 255));
+		}
 		currImageX0 += imageWidth + 2;
 	}
 }
@@ -1385,6 +1394,7 @@ void WzGuideTopicDisplayWidget::initialize(const WzWrappedGuideTopic& psWrappedT
 				auto orderButtonImagesWidg = W_ATLASIMAGE::make(IntImages, orderButtonImages);
 				if (orderButtonImagesWidg)
 				{
+					orderButtonImagesWidg->drawOrderButtons = true;
 					attach(orderButtonImagesWidg, ChildZPos::Back);
 					int32_t imageHeight = std::min<int32_t>(maxVisualHeight, orderButtonImagesWidg->idealHeight());
 					orderButtonImagesWidg->setGeometry(0, 0, orderButtonImagesWidg->idealWidth(), imageHeight);

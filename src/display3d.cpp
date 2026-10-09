@@ -104,6 +104,8 @@
 #include "corridor_map.h"
 #include "perfcounters.h"
 #include "cameratrace.h"
+#include "hud/hudconnection.h"
+#include "hud/hudranks.h"
 #include "hud/hudskin.h"
 #include "hud/hudstatusline.h"
 #include "hud/hudworldbars.h"
@@ -140,7 +142,7 @@ static void	addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 static void	doConstructionLines(const glm::mat4 &viewMatrix);
 static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidOrder(const DROID *psDroid);
-static void	drawDroidRank(DROID *psDroid);
+static void	drawDroidRank(DROID *psDroid, bool insignia);
 static void	drawDroidSensorLock(DROID *psDroid);
 static	int	calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ);
 static	float	calculateCameraHeight(float averageTerrainHeight);
@@ -525,7 +527,8 @@ public:
 		// droid selection / health draw
 		// 1. box + power bars rects
 		batchedMultiRectRenderer.drawRects(0);
-		// 2. droid rank images
+		// 2. droid rank images (or the skin's insignia, drawn together after)
+		const bool insignia = currentHudSkin().drawsRankInsignia();
 		for (DROID *psDroid : droidsToDraw)
 		{
 			/* Write the droid rank out */
@@ -534,12 +537,13 @@ public:
 				&&	(psDroid->sDisplay.screenY + psDroid->sDisplay.screenR) > 0
 				&&	(psDroid->sDisplay.screenY - psDroid->sDisplay.screenR) < pie_GetVideoBufferHeight())
 			{
-				drawDroidRank(psDroid);
+				drawDroidRank(psDroid, insignia);
 				drawDroidSensorLock(psDroid);
 				drawDroidCmndNo(psDroid);
 				drawGroupNumber(psDroid);
 			}
 		}
+		hudDrawQueuedRanks();
 		// 3. weapon reload bar
 		batchedMultiRectRenderer.drawRects(1);
 
@@ -974,6 +978,19 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 static void setupConnectionStatusForm()
 {
 	static unsigned          prevStatusMask = 0;
+
+	hudApplyConnectionWarningsForTests();
+	if (currentHudSkin().drawsConnectionPanel())
+	{
+		if (prevStatusMask != 0)
+		{
+			widgDelete(psWScreen, NETWORK_FORM_ID);
+			prevStatusMask = 0;
+		}
+		hudUpdateConnectionPanel();
+		return;
+	}
+	hudRemoveConnectionPanel();
 
 	const int separation = 3;
 	unsigned statusMask = 0;
@@ -4534,8 +4551,13 @@ UDWORD  getDroidRankGraphic(const DROID *psDroid)
 /**	Will render a graphic depiction of the droid's present rank.
  * \note Assumes matrix context set and that z-buffer write is force enabled (Always).
  */
-static void	drawDroidRank(DROID *psDroid)
+static void	drawDroidRank(DROID *psDroid, bool insignia)
 {
+	if (insignia && hudQueueRank(getDroidLevel(psDroid), psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 8,
+	                             psDroid->sDisplay.screenY + psDroid->sDisplay.screenR, HudRankSize::World))
+	{
+		return;
+	}
 	UDWORD	gfxId = getDroidRankGraphic(psDroid);
 
 	/* Did we get one? - We should have... */

@@ -73,6 +73,8 @@
 #include "multiplay.h"
 #include "qtscript.h"
 #include "hud/hudmodel.h"
+#include "hud/hudradarblips.h"
+#include "hud/hudranks.h"
 #include "hud/hudskin.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
@@ -823,6 +825,20 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	                                     UNPACKDWORD_TRI_C(psWidget->UserData));
 }
 
+
+void intDisplayTransporterButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	const UWORD image = UNPACKDWORD_TRI_C(psWidget->UserData);
+	HudTransporterButtonLook look;
+	look.rect = WzRect(xOffset + psWidget->x(), yOffset + psWidget->y(), iV_GetImageWidth(IntImages, image), iV_GetImageHeight(IntImages, image));
+	look.launch = psWidget->id == IDTRANS_LAUNCH;
+	look.highlighted = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
+	look.flashOn = look.launch && UNPACKDWORD_TRI_A(psWidget->UserData) && ((realTime / 250) % 2) == 0;
+	if (!currentHudSkin().drawTransporterButton(look))
+	{
+		intDisplayImageHilight(psWidget, xOffset, yOffset);
+	}
+}
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
@@ -1727,12 +1743,15 @@ void IntTransportButton::display(int xOffset, int yOffset)
 
 	if (psDroid)
 	{
-		// Add the experience level for each droid
-		unsigned gfxId = getDroidRankGraphic(psDroid);
-		if (gfxId != UDWORD_MAX)
+		// Add the experience level for each droid (the insignia are 8 px wide, where the images are 6)
+		if (!hudSkin().drawsRankInsignia() || !hudDrawRank(getDroidLevel(psDroid), xOffset + x() + 49, yOffset + y() + 10, HudRankSize::Button))
 		{
-			/* Render the rank graphic at the correct location */
-			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 10);
+			unsigned gfxId = getDroidRankGraphic(psDroid);
+			if (gfxId != UDWORD_MAX)
+			{
+				/* Render the rank graphic at the correct location */
+				iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 10);
+			}
 		}
 	}
 }
@@ -1749,6 +1768,19 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	static const uint16_t imagesArtifact[] = {IMAGE_RAD_ARTREAD, IMAGE_RAD_ART1, IMAGE_RAD_ART2, IMAGE_RAD_ART3};
 	static const uint16_t imagesBurningResource[] = {IMAGE_RAD_BURNRESREAD, IMAGE_RAD_BURNRES1, IMAGE_RAD_BURNRES2, IMAGE_RAD_BURNRES3, IMAGE_RAD_BURNRES4, IMAGE_RAD_BURNRES5, IMAGE_RAD_BURNRES6};
 	static const uint16_t *const imagesProxTypes[] = {imagesEnemy, imagesResource, imagesArtifact};
+	static const HudRadarBlip blipProxTypes[] = {HudRadarBlip::Enemy, HudRadarBlip::Resource, HudRadarBlip::Artifact};
+	// (the skin's shapes, all in one batch, a flame's six steps flickering through three sizes)
+	static const int flameFrames[] = {0, 1, 2, 2, 1, 0};
+	const bool shapes = currentHudSkin().drawsRadarBlips();
+	// The image at `index` in its list (0: read, then the animation's steps) as the skin's shape, if it draws them
+	auto queueShape = [shapes](HudRadarBlip kind, unsigned index, int x, int y) {
+		int frame = -1;
+		if (index > 0)
+		{
+			frame = kind == HudRadarBlip::BurningResource ? flameFrames[(index - 1) % 6] : static_cast<int>(index - 1);
+		}
+		return shapes && hudQueueRadarBlip(kind, frame, static_cast<float>(x), static_cast<float>(y));
+	};
 
 	// store the width & height of the radar/mini-map
 	width = gameWorld.map.scroll.maxX - gameWorld.map.scroll.minX;
@@ -1761,6 +1793,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 		{
 			unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
 			const uint16_t* images;
+			HudRadarBlip kind = HudRadarBlip::Enemy;
+			unsigned index = 0;
 
 			if (psProxDisp->psMessage->player != selectedPlayer)
 			{
@@ -1775,6 +1809,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				}
 				PROX_TYPE proxType = ((VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData)->proxType;
 				images = imagesProxTypes[proxType];
+				kind = blipProxTypes[proxType];
 			}
 			else
 			{
@@ -1784,22 +1819,26 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 				{
 					images = imagesResource;
+					kind = HudRadarBlip::Resource;
 					if (fireOnLocation(gameWorld.map, psFeature->pos.x, psFeature->pos.y))
 					{
 						images = imagesBurningResource;
+						kind = HudRadarBlip::BurningResource;
 						animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
 					}
 				}
 				else
 				{
 					images = imagesArtifact;
+					kind = HudRadarBlip::Artifact;
 				}
 			}
 
 			// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
 			if (psProxDisp->psMessage->read)
 			{
-				imageID = images[0];
+				index = 0;
+				imageID = images[index];
 			}
 			else
 			{
@@ -1810,7 +1849,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 					psProxDisp->timeLastDrawn = realTime;
 				}
 				psProxDisp->strobe %= animationLength;
-				imageID = images[1 + psProxDisp->strobe];
+				index = 1 + psProxDisp->strobe;
+				imageID = images[index];
 			}
 
 			if (psProxDisp->type == POS_PROXDATA)
@@ -1838,7 +1878,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				&& (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 			{
 				// Draw the 'blip'
-				iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+				if (!queueShape(kind, index, x + radarX, y + radarY))
+				{
+					iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+				}
 			}
 		}
 	}
@@ -1857,9 +1900,13 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 		{
 			// Draw the 'blip'
-			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			if (!queueShape(HudRadarBlip::Enemy, static_cast<unsigned>(strobe), x + radarX, y + radarY))
+			{
+				iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			}
 		}
 	}
+	hudDrawQueuedRadarBlips(modelViewProjection);
 }
 
 
