@@ -50,6 +50,7 @@ Other elements:
   They aren't default states, as the contract doesn't apply to them: the Modern panel stands where the Classic
   column of images doesn't.
 - `debug=<droids|structures|features>` opens the debug menu's panel for adding them.
+- `stats` opens the spectator statistics.
 
 Each state in the JSON has its `name`, `available` (false when it couldn't be set up, ex. with no droid), and:
 

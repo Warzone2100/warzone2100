@@ -481,6 +481,7 @@ src/hud/hudpanelfilters.cpp
 src/hud/hudreticule.cpp
 src/hud/hudrowsummary.cpp
 src/hud/hudsettings.cpp
+src/hud/hudspectator.cpp
 src/hud/hudstatusline.cpp
 src/hud/hudunittypes.cpp
 src/ingameop.cpp

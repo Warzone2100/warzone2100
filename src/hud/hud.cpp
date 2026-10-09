@@ -44,6 +44,7 @@
 #include "../ingameop.h"
 #include "../mission.h"
 #include "../radar.h"
+#include "../spectatorwidgets.h"
 
 #include <vector>
 
@@ -117,6 +118,7 @@ void rebuildNow()
 		intResetScreen(true);
 	}
 	createModules();
+	specStatsViewSkinChanged();
 	if (openPanel != IOBJ_NONE)
 	{
 		intReopenObjectPanel(openPanel);

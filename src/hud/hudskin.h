@@ -154,6 +154,7 @@ enum class HudIcon : uint8_t
 	ObsoleteHidden,
 	Loop,
 	Options,
+	Statistics,
 };
 
 enum class HudIconButtonStyle : uint8_t
@@ -163,7 +164,8 @@ enum class HudIconButtonStyle : uint8_t
 	Card,    ///< (on its own over the 3D view, like the panels)
 };
 
-/// A button that shows an icon (a stats panel's delivery point, obsolete, favorite and loop buttons, the in-game options)
+/// A button that shows an icon (a stats panel's delivery point, obsolete, favorite and loop buttons, the in-game options,
+/// the spectator statistics)
 struct HudIconButtonLook
 {
 	WzRect rect;
@@ -316,6 +318,14 @@ public:
 	virtual bool drawReplayTrack(const WzRect &, float /*playedX*/) { return false; }
 	virtual bool drawReplayPlayhead(float /*centerX*/, float /*centerY*/, HudReplayPlayhead) { return false; }
 	virtual bool drawReplayTimeTip(const WzRect &) { return false; }
+	/// The spectator strip's background. False: the Classic look
+	virtual bool drawSpectatorStrip(const WzRect &) { return false; }
+	/// Whether it draws the spectator statistics as a panel, with its buttons in its table's header and no title strip.
+	/// Then it draws the panel, the table's header (with lines across at `columnLinesX`) and every other row's fill
+	virtual bool drawsSpectatorStats() const { return false; }
+	virtual void drawSpectatorStatsPanel(const WzRect &) {}
+	virtual void drawSpectatorStatsHeader(const WzRect &, const std::vector<int> &/*columnLinesX*/) {}
+	virtual PIELIGHT spectatorStatsAlternateRowFill() const { return WZCOL_TRANSPARENT_BOX; }
 	/// An icon, in `color` or else the skin's color for it, over whatever is under it: false if it can't (draw the image)
 	virtual bool drawHudIcon(HudIcon, const WzRect &, nonstd::optional<PIELIGHT> = nonstd::nullopt) { return false; }
 	/// False to draw the button's images

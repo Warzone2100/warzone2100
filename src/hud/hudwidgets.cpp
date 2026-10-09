@@ -29,7 +29,11 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piepalette.h"
+
+#include "../component.h"
 
 #include <algorithm>
 #include <cmath>
@@ -120,6 +124,11 @@ void HudChip::setTone(HudTone newTone)
 	tone = newTone;
 }
 
+void HudChip::setCardShape(bool newCardShape)
+{
+	cardShape = newCardShape;
+}
+
 int32_t HudChip::idealWidth()
 {
 	if (showsIcon())
@@ -139,7 +148,14 @@ void HudChip::display(int xOffset, int yOffset)
 	const WzRect rect(xOffset + x(), yOffset + y(), width(), height());
 	const bool hovered = (getState() & WBUT_HIGHLIGHT) != 0;
 	auto &skin = currentHudSkin();
-	skin.drawChip(rect, active ? HudTone::Accent : tone, active || hovered);
+	if (cardShape)
+	{
+		skin.drawCard(rect, active ? HudCardState::Selected : (hovered ? HudCardState::Highlighted : HudCardState::Normal));
+	}
+	else
+	{
+		skin.drawChip(rect, active ? HudTone::Accent : tone, active || hovered);
+	}
 	const PIELIGHT color = active ? skin.colors().textPrimary : (tone == HudTone::Neutral ? skin.colors().textSecondary : skin.toneColor(tone));
 	const PIELIGHT ink = hovered && !active ? skin.colors().textPrimary : color;
 	if (showsIcon())
@@ -240,6 +256,12 @@ int hudFlowLayout(const std::vector<std::shared_ptr<WIDGET>> &widgets, int x, in
 		any = true;
 	}
 	return any ? (line + 1) * lineHeight + line * gap : 0;
+}
+
+void hudDrawPlayerMark(int x, int y, int size, unsigned player)
+{
+	pie_UniTransBoxFill(static_cast<float>(x - 1), static_cast<float>(y - 1), static_cast<float>(x + size + 1), static_cast<float>(y + size + 1), pal_RGBA(200, 210, 225, 150));
+	pie_BoxFill(x, y, x + size, y + size, pal_GetTeamColour(getPlayerColour(player)));
 }
 
 void hudOpenMenu(const std::shared_ptr<PopoverMenuWidget> &menu, const std::shared_ptr<WIDGET> &anchor)

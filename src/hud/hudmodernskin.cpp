@@ -183,7 +183,7 @@ PIELIGHT accentColor(HudAccent accent)
 	return pal_RGBA(70, 175, 255, 255);
 }
 
-constexpr size_t ICON_COUNT = static_cast<size_t>(HudIcon::Options) + 1;
+constexpr size_t ICON_COUNT = static_cast<size_t>(HudIcon::Statistics) + 1;
 
 struct IconFiles
 {
@@ -210,7 +210,7 @@ const IconFiles &iconFiles(HudIcon icon)
 		const char *names[] = {"research-droid", "research-weapon", "research-cyborg", "research-sensor", "research-computer",
 		                       "research-power", "research-defense", "research-structure", "upgrade", "damage", "accuracy",
 		                       "rate-of-fire", "repair", "ally-research", "favorite", "delivery-point", "obsolete-shown",
-		                       "obsolete-hidden", "loop", "options"};
+		                       "obsolete-hidden", "loop", "options", "statistics"};
 		static_assert(sizeof(names) / sizeof(names[0]) == ICON_COUNT, "an icon without a file");
 		std::array<IconFiles, ICON_COUNT> result;
 		for (size_t i = 0; i < result.size(); ++i)
@@ -286,6 +286,8 @@ constexpr int REPLAY_BAR_ALPHA = 170;
 constexpr float REPLAY_ICON_SIZE = 14.f;
 constexpr float REPLAY_TRACK_HEIGHT = 4.f;
 constexpr float REPLAY_PLAYHEAD_RADIUS = 6.f;
+// The spectator statistics: more see-through than the replay bar (it covers more of the game)
+constexpr int SPECTATOR_STATS_ALPHA = 140;
 
 const char *replayIconPath(HudReplayButton button)
 {
@@ -972,6 +974,39 @@ public:
 		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
 		                   withAlpha(tints.wellFill, REPLAY_BAR_ALPHA), params.cardRadius + 1.f, withAlpha(palette.panelBorder, 200), 1.f);
 		return true;
+	}
+
+	bool drawSpectatorStrip(const WzRect &rect) override
+	{
+		return drawReplayBar(rect);
+	}
+
+	bool drawsSpectatorStats() const override { return true; }
+
+	void drawSpectatorStatsPanel(const WzRect &rect) override
+	{
+		pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
+		                   withAlpha(tints.wellFill, SPECTATOR_STATS_ALPHA), params.cardRadius + 1.f, withAlpha(palette.panelBorder, 200), 1.f);
+	}
+
+	void drawSpectatorStatsHeader(const WzRect &rect, const std::vector<int> &columnLinesX) override
+	{
+		const float x0 = static_cast<float>(rect.x());
+		const float x1 = static_cast<float>(rect.right());
+		const float y1 = static_cast<float>(rect.bottom());
+		pie_DrawRoundedBox(x0, static_cast<float>(rect.y()), x1, y1, withAlpha(tints.popoverFill, 235), params.cardRadius, pal_RGBA(0, 0, 0, 0), 0.f);
+		pie_UniTransBoxFill(x0, y1 - 1.f, x1, y1, withAlpha(palette.accent, 170));
+		// Not after the last column (the header's end)
+		for (size_t i = 0; i + 1 < columnLinesX.size(); ++i)
+		{
+			const float x = static_cast<float>(columnLinesX[i]);
+			pie_UniTransBoxFill(x, static_cast<float>(rect.y()) + 6.f, x + 1.f, y1 - 6.f, withAlpha(palette.panelBorder, 140));
+		}
+	}
+
+	PIELIGHT spectatorStatsAlternateRowFill() const override
+	{
+		return pal_RGBA(255, 255, 255, 12);
 	}
 
 	bool drawReplayButton(const HudReplayButtonLook &look) override

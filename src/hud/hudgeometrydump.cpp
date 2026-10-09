@@ -49,6 +49,7 @@
 #include "../game_world.h"
 #include "../screens/guidescreen.h"
 #include "../mission.h"
+#include "../spectatorwidgets.h"
 #include "../transporter.h"
 
 #include <algorithm>
@@ -157,6 +158,7 @@ bool applyState(const std::string &name)
 		// (closing it takes effect after the frame: a guide state shows its topic in the open guide)
 		closeGuideScreen();
 	}
+	specStatsViewClose();
 	intRemoveMissionTimer();
 	intRemoveTransporterTimer();
 	intRemoveTransporterLaunch();
@@ -188,6 +190,7 @@ bool applyState(const std::string &name)
 		else if (part == "launch") { ok = missionShowTimerRowForTests(true) && ok; }
 		else if (part == "netwarn") { hudShowConnectionWarningsForTests(true, false); }
 		else if (part == "netwarnopen") { hudShowConnectionWarningsForTests(true, true); }
+		else if (part == "stats") { specStatsViewCreate(); ok = specStatsViewShown() && ok; }
 		else if (part == "debug=droids") { intOpenDebugMenu(OBJ_DROID); }
 		else if (part == "debug=structures") { intOpenDebugMenu(OBJ_STRUCTURE); }
 		else if (part == "debug=features") { intOpenDebugMenu(OBJ_FEATURE); }
