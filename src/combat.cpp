@@ -73,7 +73,7 @@ bool objectBelowHealthLevel(BASE_OBJECT *psObj, const unsigned int percentage)
 		STRUCTURE *psStructure = castStructure(psObj);
 		if (psStructure != nullptr)
 		{
-			healthLevel = PERCENT(psStructure->body, psStructure->fullMaxBody());
+			healthLevel = PERCENT(psStructure->body, psStructure->currMaxBody());
 		}
 	}
 
