@@ -210,32 +210,40 @@ gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_
 	return new null_pipeline_state_object(createInfo.state_desc, createInfo.attribute_descriptions);
 }
 
-gfx_api::pipeline_state_object* null_context::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info&)
+struct null_compute_pipeline_state_object final : public gfx_api::compute_pipeline_state_object
 {
-	auto* pso = existing != nullptr
-		? static_cast<gfx_api::compute_pipeline_state_object*>(existing)
-		: new gfx_api::compute_pipeline_state_object();
-	pso->broken = true;
+	void bind_sampled_textures(const std::vector<gfx_api::texture_input>&, const std::vector<gfx_api::abstract_texture*>&) override {}
+	void bind_storage_images(const std::vector<gfx_api::storage_image_input>&, const std::vector<gfx_api::abstract_texture*>&) override {}
+	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>&, const std::vector<gfx_api::buffer*>&) override {}
+};
+
+gfx_api::pipeline_state_object* null_context::build_compute_pipeline(gfx_api::pipeline_state_object*, const gfx_api::compute_pipeline_create_info&)
+{
+	auto* pso = new null_compute_pipeline_state_object();
+	pso->broken = false;
 	return pso;
 }
 
 void null_context::bind_compute_pipeline(gfx_api::pipeline_state_object*)
 {
-	ASSERT(false, "compute pipeline bind is not implemented");
 }
 
 void null_context::dispatch_compute(uint32_t, uint32_t, uint32_t)
 {
-	ASSERT(false, "compute dispatch is not implemented");
 }
 
-gfx_api::texture* null_context::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
+gfx_api::texture* null_context::create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string&)
 {
-	return nullptr;
+	auto* new_texture = new null_texture();
+	new_texture->internal_format = format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
+	return new_texture;
 }
 
 void null_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
+	ASSERT(!isComputePassActive(), "graphics pipeline bind inside a compute pass");
 	null_pipeline_state_object* new_program = static_cast<null_pipeline_state_object*>(pso);
 	if (current_program != new_program)
 	{
@@ -298,12 +306,20 @@ void null_context::bind_textures(const std::vector<gfx_api::texture_input>& text
 
 void null_context::set_constants(const void* buffer, const size_t& size)
 {
+	if (isComputePassActive())
+	{
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	// no-op
 }
 
 void null_context::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
 {
+	if (isComputePassActive())
+	{
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	// no-op
 }
@@ -320,27 +336,35 @@ gfx_api::frame_uniform_allocation null_context::upload_frame_uniform_raw(const v
 
 void null_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
 {
+	if (isComputePassActive())
+	{
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	// no-op
 }
 
 void null_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	// no-op
 }
 
 void null_context::draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	// no-op
 }
 
 void null_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	// no-op
 }
 
 void null_context::draw_elements_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	// no-op
 }
 

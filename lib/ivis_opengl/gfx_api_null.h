@@ -112,6 +112,7 @@ public:
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw, const std::string& debugName = "") override;
 
 	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
+	virtual bool supportsComputeShaders() const override { return true; }
 	virtual gfx_api::pipeline_state_object* build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info) override;
 	virtual void bind_compute_pipeline(gfx_api::pipeline_state_object* pso) override;
 	virtual void dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ) override;
