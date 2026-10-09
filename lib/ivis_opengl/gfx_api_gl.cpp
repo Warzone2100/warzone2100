@@ -2551,6 +2551,30 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	return new gl_pipeline_id(psoID.value(), pipeline->broken); // always return a new indirect reference
 }
 
+gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info&)
+{
+	auto* pso = existing != nullptr
+		? static_cast<gfx_api::compute_pipeline_state_object*>(existing)
+		: new gfx_api::compute_pipeline_state_object();
+	pso->broken = true;
+	return pso;
+}
+
+void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object*)
+{
+	ASSERT(false, "compute pipeline bind is not implemented");
+}
+
+void gl_context::dispatch_compute(uint32_t, uint32_t, uint32_t)
+{
+	ASSERT(false, "compute dispatch is not implemented");
+}
+
+gfx_api::texture* gl_context::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
+{
+	return nullptr;
+}
+
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
 	gl_pipeline_id* newPSOId = static_cast<gl_pipeline_id*>(pso);
