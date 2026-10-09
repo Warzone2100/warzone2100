@@ -2837,6 +2837,10 @@ void gl_compute_pipeline_state_object::bind_sampled_textures(const std::vector<g
 		if (textures[i] != nullptr)
 		{
 			textures[i]->bind();
+			if (owningContext != nullptr)
+			{
+				owningContext->applySamplerState(textures[i]->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, desc);
+			}
 		}
 	}
 	glActiveTexture(GL_TEXTURE0);
@@ -3158,6 +3162,81 @@ static float* to_gl(gfx_api::border_color border)
 	return transparentBlackFloats;
 }
 
+void gl_context::applySamplerState(GLenum target, const gfx_api::texture_input& desc)
+{
+	switch (desc.sampler)
+	{
+		case gfx_api::sampler_type::nearest_clamped:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case gfx_api::sampler_type::nearest_border:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+#if !defined(__EMSCRIPTEN__)
+			if (hasBorderClampSupport)
+			{
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				break;
+			}
+#else
+			// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
+#endif
+			break;
+		case gfx_api::sampler_type::bilinear:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case gfx_api::sampler_type::bilinear_repeat:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			break;
+		case gfx_api::sampler_type::bilinear_border:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#if !defined(__EMSCRIPTEN__)
+			if (hasBorderClampSupport)
+			{
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				break;
+			}
+#else
+			// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
+#endif
+			break;
+		case gfx_api::sampler_type::anisotropic_repeat:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			if (GLAD_GL_EXT_texture_filter_anisotropic)
+			{
+				glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
+			}
+			break;
+		case gfx_api::sampler_type::anisotropic:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			if (GLAD_GL_EXT_texture_filter_anisotropic)
+			{
+				glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
+			}
+			break;
+	}
+}
+
 void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
@@ -3192,77 +3271,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 			// we're using a default texture, so skip changing filters
 			continue;
 		}
-		switch (desc.sampler)
-		{
-			case gfx_api::sampler_type::nearest_clamped:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				break;
-			case gfx_api::sampler_type::nearest_border:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-#if !defined(__EMSCRIPTEN__)
-				if (hasBorderClampSupport)
-				{
-					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
-					break;
-				}
-#else
-				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
-#endif
-				break;
-			case gfx_api::sampler_type::bilinear:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				break;
-			case gfx_api::sampler_type::bilinear_repeat:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				break;
-			case gfx_api::sampler_type::bilinear_border:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-#if !defined(__EMSCRIPTEN__)
-				if (hasBorderClampSupport)
-				{
-					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
-					break;
-				}
-#else
-				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
-#endif
-				break;
-			case gfx_api::sampler_type::anisotropic_repeat:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				if (GLAD_GL_EXT_texture_filter_anisotropic)
-				{
-					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
-				}
-				break;
-			case gfx_api::sampler_type::anisotropic:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				if (GLAD_GL_EXT_texture_filter_anisotropic)
-				{
-					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
-				}
-				break;
-		}
+		applySamplerState(type, desc);
 	}
 	glActiveTexture(GL_TEXTURE0);
 }
