@@ -478,6 +478,9 @@ struct gl_context final : public gfx_api::context
 	virtual bool setGpuFrameTimingEnabled(bool enabled) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void emitPrePassBarriers(const gfx_api::ExecutionBatch& batch,
+		const std::vector<gfx_api::CompiledPass>& compiledPasses) override;
+	const gfx_api::RenderPassDesc* activePassDesc() const override;
 	virtual void beginScreenFrame() override;
 	virtual void finishScreenFrame() override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;

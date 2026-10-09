@@ -7851,6 +7851,19 @@ const gfx_api::vk::VulkanWarmEntry& VkRoot::warmEntry(size_t graphIndex) const
 void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass)
 {
 	ASSERT_OR_RETURN(, !hasActivePass, "beginPass called while another pass is active");
+	if (pass.kind == gfx_api::PassKind::Compute)
+	{
+		ASSERT_OR_RETURN(, pass.colorAttachments.empty() && !pass.depthAttachment.has_value() && !pass.resolveAttachment.has_value(),
+			"Compute pass cannot have graphics attachments");
+		setComputePassActive(true);
+		_activePassDesc = &pass;
+		hasActivePass = true;
+		buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
+		frameHasDrawCommands = true;
+		return;
+	}
+	setComputePassActive(false);
+	_activePassDesc = &pass;
 	ASSERT_OR_RETURN(, pass.viewportSize.has_value(), "Pass requires resolved viewportSize");
 	ASSERT_OR_RETURN(, !pass.colorAttachments.empty()
 		|| (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr),
@@ -7962,6 +7975,17 @@ void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::Compi
 void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 {
 	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
+	if (isComputePassActive())
+	{
+		if (compiledPass != nullptr)
+		{
+			applyCompiledPostPassLayouts(*compiledPass);
+		}
+		setComputePassActive(false);
+		_activePassDesc = nullptr;
+		hasActivePass = false;
+		return;
+	}
 
 	buffering_mechanism::get_current_resources().drawCmdBuffer().endRenderPass(vkDynLoader);
 	perfSamplePassEnd(buffering_mechanism::get_current_resources().drawCmdBuffer());
@@ -7995,6 +8019,7 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 	currentRenderPassId = INVALID_RENDER_PASS_ID;
 	currentPSO = nullptr;
 	hasActivePass = false;
+	_activePassDesc = nullptr;
 	_activePassTargetsSwapchain = false;
 }
 
