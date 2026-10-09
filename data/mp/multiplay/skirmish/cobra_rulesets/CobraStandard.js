@@ -148,9 +148,9 @@ const _WEAPON_STATS =
 		],
 		templates: [
 			{ res: "R-Wpn-Cannon1Mk1", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "CyborgCannon", ] }, // lc borg
-			{ res: "R-Cyborg-Hvywpn-Mcannon", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-Mcannon", ] }, // mc super
-			{ res: "R-Cyborg-Hvywpn-HPV", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-HPV", ] }, // hpv super
-			{ res: "R-Cyborg-Hvywpn-Acannon", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-Acannon", ] }, // ac super
+			{ res: "R-Cyborg-Hvywpn-Mcannon", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-Mcannon", ] }, // mc super
+			{ res: "R-Cyborg-Hvywpn-HPV", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-HPV", ] }, // hpv super
+			{ res: "R-Cyborg-Hvywpn-Acannon", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-Acannon", ] }, // ac super
 		],
 		extras: [
 			"R-Wpn-Cannon-Damage03",
@@ -185,7 +185,7 @@ const _WEAPON_STATS =
 		],
 		templates: [
 			{ res: "R-Wpn-RailGun01", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Rail1", ] }, // needle borg
-			{ res: "R-Cyborg-Hvywpn-RailGunner", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-RailGunner", ] }, // rail super
+			{ res: "R-Cyborg-Hvywpn-RailGunner", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-RailGunner", ] }, // rail super
 		],
 		extras: [
 			"R-Wpn-Rail-Damage03", // sure it's required by gauss, but what if our AI uses only cyborgs and vtols?
@@ -398,9 +398,9 @@ const _WEAPON_STATS =
 		],
 		templates: [
 			{ res: "R-Wpn-Rocket01-LtAT", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "CyborgRocket", ] }, // lancer borg
-			{ res: "R-Cyborg-Hvywpn-TK", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-TK", ] }, // tk super
+			{ res: "R-Cyborg-Hvywpn-TK", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-TK", ] }, // tk super
 			{ res: "R-Wpn-Missile2A-T", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Atmiss", ] }, // scourge borg
-			{ res: "R-Cyborg-Hvywpn-A-T", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-A-T", ] }, // scourge super
+			{ res: "R-Cyborg-Hvywpn-A-T", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-A-T", ] }, // scourge super
 		],
 		extras: [
 			"R-Wpn-Rocket-ROF02",
@@ -433,7 +433,7 @@ const _WEAPON_STATS =
 		],
 		templates: [
 			{ res: "R-Wpn-Missile2A-T", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Atmiss", ] }, // scourge borg
-			{ res: "R-Cyborg-Hvywpn-A-T", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-A-T", ] }, // scourge super
+			{ res: "R-Cyborg-Hvywpn-A-T", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-A-T", ] }, // scourge super
 		],
 		extras: [
 			"R-Wpn-Missile-Damage01",
@@ -579,7 +579,7 @@ const _WEAPON_STATS =
 		],
 		templates: [
 			{ res: "R-Wpn-Laser01", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Laser", ] }, // flash borg
-			{ res: "R-Cyborg-Hvywpn-PulseLsr", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-PulseLsr", ] }, // pulse super
+			{ res: "R-Cyborg-Hvywpn-PulseLsr", body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weapons: [ "Cyb-Hvywpn-PulseLsr", ] }, // pulse super
 		],
 		extras: [
 			"R-Wpn-Energy-ROF01",
