@@ -111,11 +111,36 @@ constexpr std::array<shader_program_desc, SHADER_MAX> make_catalog_table()
 	return t;
 }
 
+constexpr bool has_stage(const shader_program_desc& desc, shader_stage_kind kind)
+{
+	for (uint8_t i = 0; i < desc.stage_count && i < MAX_SHADER_STAGES; ++i)
+	{
+		const shader_stage_file& stage = desc.stages[i];
+		if (stage.kind == kind && stage.basename != nullptr && stage.basename[0] != '\0')
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+constexpr bool program_is_valid(const shader_program_desc& desc)
+{
+	if (shader_is_compute(desc))
+	{
+		return desc.local_size.x > 0 && desc.local_size.y > 0 && desc.local_size.z > 0;
+	}
+	return desc.stage_count >= 2
+		&& has_stage(desc, shader_stage_kind::vertex)
+		&& has_stage(desc, shader_stage_kind::fragment)
+		&& !has_stage(desc, shader_stage_kind::compute);
+}
+
 constexpr bool catalog_is_complete(const std::array<shader_program_desc, SHADER_MAX>& t)
 {
 	for (int i = SHADER_NONE + 1; i < SHADER_MAX; ++i)
 	{
-		if (t[static_cast<size_t>(i)].stage_count < 2)
+		if (!program_is_valid(t[static_cast<size_t>(i)]))
 		{
 			return false;
 		}
