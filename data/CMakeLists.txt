@@ -188,6 +188,7 @@ file(GLOB _vk_shader_stage_files
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.tesc"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.comp"
 )
 foreach(_vk_shader_file ${_vk_shader_stage_files})
 	if(NOT _vk_shader_file IN_LIST VK_SHADERS)
