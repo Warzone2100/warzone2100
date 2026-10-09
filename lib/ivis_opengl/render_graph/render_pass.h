@@ -43,6 +43,29 @@ namespace gfx_api
 {
 
 struct abstract_texture;
+struct buffer;
+
+/// Whether a pass records draws or a compute dispatch.
+enum class PassKind : uint8_t
+{
+	Graphics,
+	Compute,
+};
+
+/// Image subresource a compute pass samples or stores into.
+struct ComputeImageUse
+{
+	abstract_texture* texture = nullptr;
+	uint32_t arrayLayer = 0;
+	uint32_t mipLevel = 0;
+	bool isDepth = false;
+};
+
+/// Storage buffer a compute pass binds.
+struct ComputeBufferUse
+{
+	buffer* buf = nullptr;
+};
 
 /// Runtime index of a pass within a materialized `vector<RenderPassDesc>` (execution order).
 using PassHandle = size_t;
@@ -61,6 +84,8 @@ enum class AttachmentRole : uint8_t
 	Depth,
 	/// `resolveAttachment`.
 	Resolve,
+	/// `storageImages[attachmentIndex]` written by a compute pass.
+	Storage,
 };
 
 /// <summary>
@@ -114,6 +139,7 @@ class RenderPassContext;
 struct RenderPassDesc
 {
 	std::string debugName;
+	PassKind kind = PassKind::Graphics;
 
 	/// Records draw calls for this pass; must only call gfx_api bind/draw while the pass is active.
 	using RecordFunc = std::function<void(const RenderPassContext&)>;
@@ -125,8 +151,14 @@ struct RenderPassDesc
 	optional<AttachmentDesc> resolveAttachment;
 	optional<std::pair<uint32_t, uint32_t>> viewportSize;
 	std::vector<ReadDesc> reads;
+	std::vector<ComputeImageUse> sampledInputs;
+	std::vector<ComputeImageUse> storageImages;
+	std::vector<ComputeBufferUse> storageBuffers;
 	/// Stable pass identity; `PassId::Count` means unset.
+	/// A hand-built compute desc may use `Count`. Blueprint materialize still rejects it.
 	PassId passId = PassId::Count;
+
+	void addStorageBuffer(buffer* buf);
 };
 
 /// <summary>
@@ -152,6 +184,9 @@ public:
 	size_t writeCount() const { return _desc.colorAttachments.size(); }
 	/// Color write texture (null if unresolved or out of range). Parallel to `getRead`.
 	abstract_texture* getWrite(size_t index = 0) const;
+	abstract_texture* getSampledInput(size_t index) const;
+	abstract_texture* getStorageImage(size_t index) const;
+	buffer* getStorageBuffer(size_t index) const;
 	/// Full tracked color-write attachment (texture + load/store + `pipelineSurfaceId`).
 	const AttachmentDesc& writeAttachment(size_t index = 0) const;
 	/// Catalog id of the tracked color write; unset if the write is not a pipeline surface.
