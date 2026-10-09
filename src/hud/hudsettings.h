@@ -135,6 +135,10 @@ const char *hudModuleDescriptionMsgid(HudModuleId module);
 /// An accent's name, untranslated
 const char *hudAccentNameMsgid(HudAccent accent);
 
+/// The spectator strip's view (two lines per player, or one): remembered, but not one of the settings
+bool hudSpectatorStripTwoLines();
+void hudSetSpectatorStripTwoLines(bool twoLines);
+
 /// Config file I/O (src/configuration.cpp)
 void hudLoadSettings(const std::function<nonstd::optional<int> (const std::string &key)> &getInteger);
 void hudSaveSettings(const std::function<void (const std::string &key, int value)> &setInteger);

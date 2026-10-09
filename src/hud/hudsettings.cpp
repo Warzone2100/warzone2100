@@ -37,6 +37,7 @@ namespace
 {
 
 HudSettings currentSettings;
+bool spectatorStripTwoLines = true;
 
 struct ModuleInfo
 {
@@ -54,7 +55,7 @@ const ModuleInfo moduleInfo[HUD_MODULE_COUNT] = {
 	{"hud.selectionReadout", N_("Selection Readout"), N_("What the selected units are made of, by type. Click a type to keep only those units.")},
 	{"hud.readableBars", N_("Readable Health Bars"), N_("Thicker health bars, with an outline and segment ticks.")},
 	{"hud.panelFilters", N_("Panel Filters"), N_("Category filters and a search box above the build, manufacture and research panels.")},
-	{"hud.spectatorStrip", N_("Spectator Strip"), N_("Clock, speed and per-player power and units for spectators")},
+	{"hud.spectatorStrip", N_("Spectator Strip"), N_("For spectators: each player's power and units, at the top of the screen.")},
 };
 
 bool sameLook(const HudSettings &a, const HudSettings &b)
@@ -216,6 +217,16 @@ const char *hudAccentNameMsgid(HudAccent accent)
 	return N_("Blue");
 }
 
+bool hudSpectatorStripTwoLines()
+{
+	return spectatorStripTwoLines;
+}
+
+void hudSetSpectatorStripTwoLines(bool twoLines)
+{
+	spectatorStripTwoLines = twoLines;
+}
+
 void hudLoadSettings(const std::function<nonstd::optional<int> (const std::string &key)> &getInteger)
 {
 	HudSettings settings;
@@ -237,6 +248,7 @@ void hudLoadSettings(const std::function<nonstd::optional<int> (const std::strin
 	settings.tooltipDelay = static_cast<uint32_t>(std::max(0, std::min(get("hudTooltipDelay", 200), 2000)));
 	settings.showModulesInTutorial = get("hudModulesInTutorial", 0) != 0;
 	hudSetSettings(settings);
+	spectatorStripTwoLines = get("hudSpectatorStripLines", 2) != 1;
 }
 
 void hudSaveSettings(const std::function<void (const std::string &key, int value)> &setInteger)
@@ -254,4 +266,5 @@ void hudSaveSettings(const std::function<void (const std::string &key, int value
 	setInteger("hudRememberFilters", currentSettings.rememberFilters ? 1 : 0);
 	setInteger("hudTooltipDelay", static_cast<int>(currentSettings.tooltipDelay));
 	setInteger("hudModulesInTutorial", currentSettings.showModulesInTutorial ? 1 : 0);
+	setInteger("hudSpectatorStripLines", spectatorStripTwoLines ? 2 : 1);
 }

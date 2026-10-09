@@ -119,6 +119,9 @@ data/base/images/hud/icons/research-power.fill.svg
 data/base/images/hud/icons/research-power.svg
 data/base/images/hud/icons/research-structure.fill.svg
 data/base/images/hud/icons/research-structure.svg
+data/base/images/hud/icons/statistics.svg
+data/base/images/hud/icons/strip-collapse.svg
+data/base/images/hud/icons/strip-expand.svg
 data/base/images/hud/icons/upgrade.svg
 	- MIT License, Copyright (c) 2020-2026 Paweł Kuna (https://github.com/tabler/tabler-icons)
 data/base/images/hud/icons/order-embark.svg

@@ -59,6 +59,8 @@ public:
 	void setActive(bool active);
 	bool isActive() const { return active; }
 	void setTone(HudTone tone);
+	/// Drawn as a card (like the skin's other buttons) instead of a chip
+	void setCardShape(bool cardShape);
 	int32_t idealWidth() override;
 	int32_t idealHeight() override;
 
@@ -85,6 +87,7 @@ private:
 	WzText cachedText;
 	std::vector<Piece> pieces;
 	bool active = false;
+	bool cardShape = false;
 	HudTone tone = HudTone::Neutral;
 };
 
@@ -128,5 +131,8 @@ void hudOpenMenu(const std::shared_ptr<PopoverMenuWidget> &menu, const std::shar
 /// Lays widgets out left to right at their ideal widths, starting a new line when one would not fit.
 /// Returns the height used.
 int hudFlowLayout(const std::vector<std::shared_ptr<WIDGET>> &widgets, int x, int y, int width, int gap, int lineHeight);
+
+/// A player's team color, as a square with a light edge
+void hudDrawPlayerMark(int x, int y, int size, unsigned player);
 
 #endif // __INCLUDED_SRC_HUD_HUDWIDGETS_H__

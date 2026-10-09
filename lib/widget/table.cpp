@@ -300,6 +300,17 @@ void TableHeader::display(int xOffset, int yOffset)
 	int y0 = y() + yOffset;
 	int x1 = x0 + width();
 	int y1 = y0 + height() - 1;
+	auto table = parentTable.lock();
+	if (table && table->headerBackgroundFunc)
+	{
+		std::vector<int> columnLinesX;
+		for (auto& child : columns)
+		{
+			columnLinesX.push_back(x0 + child.columnWidget->x() + child.columnWidget->width() + columnPadding.x);
+		}
+		table->headerBackgroundFunc(WzRect(x0, y0, width(), height()), columnLinesX);
+		return;
+	}
 	iV_TransBoxFill(x0, y0, x1, y1);
 	iV_Line(x0, y1, x1, y1, WZCOL_MENU_SEPARATOR);
 
@@ -515,6 +526,11 @@ int32_t ScrollableTableWidget::idealHeight()
 	return scrollableList->y() + scrollableList->idealHeight();
 }
 
+void ScrollableTableWidget::setHeaderBackgroundFunc(const HeaderBackgroundFunc& func)
+{
+	headerBackgroundFunc = func;
+}
+
 void ScrollableTableWidget::setBackgroundColor(PIELIGHT const &color)
 {
 	scrollableList->setBackgroundColor(color);
@@ -591,6 +607,16 @@ optional<size_t> ScrollableTableWidget::changeColumnWidth(size_t col, size_t new
 		return nullopt;
 	}
 	return columnWidths[col];
+}
+
+bool ScrollableTableWidget::restoreUserColumnWidths(const std::vector<size_t>& newColumnWidths)
+{
+	if (!changeColumnWidths(newColumnWidths, true))
+	{
+		return false;
+	}
+	userDidResizeColumnWidths = true;
+	return true;
 }
 
 // Called specifically from the header to inform the Table that the user has resized the columns
