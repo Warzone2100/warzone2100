@@ -496,12 +496,23 @@ void null_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>&
 
 void null_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
-	(void)pass;
+	if (pass.kind == gfx_api::PassKind::Compute)
+	{
+		setComputePassActive(true);
+		_activePassDesc = &pass;
+	}
+	else
+	{
+		setComputePassActive(false);
+		_activePassDesc = nullptr;
+	}
 	frameHasDrawCommands = true;
 }
 
 void null_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
 {
+	setComputePassActive(false);
+	_activePassDesc = nullptr;
 }
 
 void null_context::beginScreenFrame()

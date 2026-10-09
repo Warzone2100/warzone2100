@@ -38,6 +38,45 @@ namespace gfx_api
 namespace
 {
 
+SubresourceSyncState graphicsSyncState(CompileImageLayout layout)
+{
+	SubresourceSyncState state;
+	state.layout = layout;
+	switch (layout)
+	{
+	case CompileImageLayout::Undefined:
+		state.use = ImageUse::None;
+		break;
+	case CompileImageLayout::ShaderReadOnly:
+		state.use = ImageUse::GraphicsSampled;
+		break;
+	case CompileImageLayout::DepthReadOnly:
+		state.use = ImageUse::GraphicsDepthSampled;
+		break;
+	case CompileImageLayout::ColorAttachment:
+		state.use = ImageUse::ColorAttachment;
+		break;
+	case CompileImageLayout::DepthAttachment:
+		state.use = ImageUse::DepthAttachment;
+		break;
+	case CompileImageLayout::Present:
+		state.use = ImageUse::Present;
+		break;
+	case CompileImageLayout::Storage:
+		ASSERT(false, "graphicsSyncState cannot record a storage image");
+		state.use = ImageUse::None;
+		break;
+	}
+	return state;
+}
+
+bool sameGraphicsSample(const SubresourceSyncState& oldState, CompileImageLayout newLayout, ImageUse newUse)
+{
+	return oldState.layout == newLayout
+		&& oldState.use == newUse
+		&& (newUse == ImageUse::GraphicsSampled || newUse == ImageUse::GraphicsDepthSampled);
+}
+
 CompileImageLayout getReadTargetLayout(const ResolvedRead& read)
 {
 	return read.isDepth ? CompileImageLayout::DepthReadOnly : CompileImageLayout::ShaderReadOnly;
@@ -121,7 +160,7 @@ CompileImageLayout incomingInitialLayout(const AttachmentDesc& attachment, const
 		return CompileImageLayout::Undefined;
 	}
 	const auto it = layoutState.find(layoutSubresourceKey(attachment));
-	return (it != layoutState.end()) ? it->second : CompileImageLayout::Undefined;
+	return (it != layoutState.end()) ? it->second.layout : CompileImageLayout::Undefined;
 }
 
 void populateCompiledPassInitialLayouts(CompiledPass& compiledPass, const LayoutStateMap& layoutState)
@@ -194,7 +233,7 @@ void advanceLayoutStateForPassAttachments(const RenderPassDesc& pass,
 		{
 			continue;
 		}
-		layoutState[layoutSubresourceKey(attachment)] = metadata.colorFinalLayouts[i];
+		layoutState[layoutSubresourceKey(attachment)] = graphicsSyncState(metadata.colorFinalLayouts[i]);
 	}
 
 	if (pass.resolveAttachment.has_value())
@@ -202,7 +241,7 @@ void advanceLayoutStateForPassAttachments(const RenderPassDesc& pass,
 		const AttachmentDesc& attachment = pass.resolveAttachment.value();
 		if (attachment.texture != nullptr && metadata.resolveFinalLayout.has_value())
 		{
-			layoutState[layoutSubresourceKey(attachment)] = metadata.resolveFinalLayout.value();
+			layoutState[layoutSubresourceKey(attachment)] = graphicsSyncState(metadata.resolveFinalLayout.value());
 		}
 	}
 
@@ -211,7 +250,7 @@ void advanceLayoutStateForPassAttachments(const RenderPassDesc& pass,
 		const AttachmentDesc& attachment = pass.depthAttachment.value();
 		if (attachment.texture != nullptr)
 		{
-			layoutState[layoutSubresourceKey(attachment)] = metadata.depthFinalLayout;
+			layoutState[layoutSubresourceKey(attachment)] = graphicsSyncState(metadata.depthFinalLayout);
 		}
 	}
 }
@@ -230,7 +269,7 @@ void applyPostPassLayoutUpdates(CompiledPass& compiledPass, LayoutStateMap& layo
 		if (layout.has_value())
 		{
 			compiledPass.postPassLayoutUpdates.push_back(makeLayoutStateUpdate(subresource, layout.value()));
-			layoutState[subresource] = layout.value();
+			layoutState[subresource] = graphicsSyncState(layout.value());
 		}
 	}
 	else
@@ -244,7 +283,7 @@ void applyPostPassLayoutUpdates(CompiledPass& compiledPass, LayoutStateMap& layo
 			if (layout.has_value())
 			{
 				compiledPass.postPassLayoutUpdates.push_back(makeLayoutStateUpdate(subresource, layout.value()));
-				layoutState[subresource] = layout.value();
+				layoutState[subresource] = graphicsSyncState(layout.value());
 			}
 		}
 	}
@@ -258,7 +297,7 @@ void applyPostPassLayoutUpdates(CompiledPass& compiledPass, LayoutStateMap& layo
 		if (layout.has_value())
 		{
 			compiledPass.postPassLayoutUpdates.push_back(makeLayoutStateUpdate(subresource, layout.value()));
-			layoutState[subresource] = layout.value();
+			layoutState[subresource] = graphicsSyncState(layout.value());
 		}
 	}
 }
@@ -326,11 +365,33 @@ std::vector<LayoutSubresourceSet> computeSampledAfter(
 	return sampledAfter;
 }
 
+void recordImageUse(CompiledPass& compiledPass, LayoutStateMap& layoutState,
+	abstract_texture* texture, uint32_t arrayLayer, uint32_t mipLevel, bool isDepth,
+	CompileImageLayout newLayout, ImageUse newUse, ReadProducerScope scope, const SubresourceSyncState& oldState)
+{
+	if (!sameGraphicsSample(oldState, newLayout, newUse))
+	{
+		ImageBarrierOp barrier;
+		barrier.texture = texture;
+		barrier.arrayLayer = arrayLayer;
+		barrier.mipLevel = mipLevel;
+		barrier.isDepth = isDepth;
+		barrier.producerScope = scope;
+		barrier.oldLayout = oldState.layout;
+		barrier.newLayout = newLayout;
+		barrier.srcUse = oldState.use;
+		barrier.dstUse = newUse;
+		compiledPass.prePassBarriers.emplace_back(std::move(barrier));
+	}
+	layoutState[layoutSubresourceKey(texture, arrayLayer, mipLevel)] = SubresourceSyncState{ newLayout, newUse };
+}
+
 } // anonymous namespace
 
 bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 {
 	LayoutStateMap layoutState;
+	std::unordered_map<buffer*, BufferUse> bufferUses;
 
 	std::vector<RenderPassDesc> passDescs;
 	passDescs.reserve(passes.size());
@@ -344,11 +405,11 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 	{
 		// Across frames the swapchain image starts in PresentSrcKHR (left there by the
 		// previous frame's single present transition). This only matters for a Load.
-		layoutState[layoutSubresourceKey(swapchainColor)] = CompileImageLayout::Present;
+		layoutState[layoutSubresourceKey(swapchainColor)] = graphicsSyncState(CompileImageLayout::Present);
 	}
 	if (gfx_api::abstract_texture* swapchainDepth = ctx.getPipelineSurface(PipelineSurfaceId::SwapchainDepth))
 	{
-		layoutState[layoutSubresourceKey(swapchainDepth)] = CompileImageLayout::DepthAttachment;
+		layoutState[layoutSubresourceKey(swapchainDepth)] = graphicsSyncState(CompileImageLayout::DepthAttachment);
 	}
 
 	const auto sampledAfter = computeSampledAfter(passes);
@@ -357,6 +418,7 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 	{
 		CompiledPass& compiledPass = passes[passIndex];
 		compiledPass.prePassBarriers.clear();
+		compiledPass.prePassBufferBarriers.clear();
 		compiledPass.postPassLayoutUpdates.clear();
 		compiledPass.renderPassLayouts = CompiledPassLayoutMetadata {};
 		if (compiledPass.skipped)
@@ -383,19 +445,12 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 
 			const ReadProducerScope scope = classifyReadProducerScope(readDesc, passDescs, passIndex, layoutState);
 			const CompileImageLayout targetLayout = getReadTargetLayout(read);
+			const ImageUse dstUse = read.isDepth ? ImageUse::GraphicsDepthSampled : ImageUse::GraphicsSampled;
 
 			if (scope == ReadProducerScope::External)
 			{
-				ImageBarrierOp barrier;
-				barrier.texture = read.texture;
-				barrier.arrayLayer = read.arrayLayer;
-				barrier.mipLevel = read.mipLevel;
-				barrier.isDepth = read.isDepth;
-				barrier.producerScope = ReadProducerScope::External;
-				barrier.oldLayout = CompileImageLayout::Undefined; // resolved at runtime
-				barrier.newLayout = targetLayout;
-				compiledPass.prePassBarriers.emplace_back(std::move(barrier));
-				layoutState[readSubresource] = targetLayout;
+				recordImageUse(compiledPass, layoutState, read.texture, read.arrayLayer, read.mipLevel, read.isDepth,
+					targetLayout, dstUse, ReadProducerScope::External, SubresourceSyncState{});
 				continue;
 			}
 
@@ -407,20 +462,40 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 				readSubresource.arrayLayer,
 				readSubresource.mipLevel);
 
-			const CompileImageLayout currentLayout = layoutIt->second;
-			if (currentLayout != targetLayout)
+			recordImageUse(compiledPass, layoutState, read.texture, read.arrayLayer, read.mipLevel, read.isDepth,
+				targetLayout, dstUse, ReadProducerScope::InGraph, layoutIt->second);
+		}
+
+		if (pass.kind == PassKind::Compute)
+		{
+			const auto planComputeImage = [&](const ComputeImageUse& image, CompileImageLayout newLayout, ImageUse newUse) {
+				const LayoutSubresourceKey key = layoutSubresourceKey(image.texture, image.arrayLayer, image.mipLevel);
+				const auto it = layoutState.find(key);
+				const bool external = it == layoutState.end();
+				const SubresourceSyncState oldState = external ? SubresourceSyncState{} : it->second;
+				recordImageUse(compiledPass, layoutState, image.texture, image.arrayLayer, image.mipLevel, image.isDepth,
+					newLayout, newUse, external ? ReadProducerScope::External : ReadProducerScope::InGraph, oldState);
+			};
+			for (const ComputeImageUse& image : pass.storageImages)
 			{
-				ImageBarrierOp barrier;
-				barrier.texture = read.texture;
-				barrier.arrayLayer = read.arrayLayer;
-				barrier.mipLevel = read.mipLevel;
-				barrier.isDepth = read.isDepth;
-				barrier.producerScope = ReadProducerScope::InGraph;
-				barrier.oldLayout = currentLayout;
-				barrier.newLayout = targetLayout;
-				compiledPass.prePassBarriers.emplace_back(std::move(barrier));
-				layoutState[readSubresource] = targetLayout;
+				planComputeImage(image, CompileImageLayout::Storage, ImageUse::ComputeStorage);
 			}
+			for (const ComputeImageUse& image : pass.sampledInputs)
+			{
+				planComputeImage(image, image.isDepth ? CompileImageLayout::DepthReadOnly : CompileImageLayout::ShaderReadOnly,
+					ImageUse::ComputeSampled);
+			}
+			for (const ComputeBufferUse& bufferUse : pass.storageBuffers)
+			{
+				BufferBarrierOp op;
+				op.buf = bufferUse.buf;
+				const auto recorded = bufferUses.find(bufferUse.buf);
+				op.srcUse = recorded == bufferUses.end() ? BufferUse::TransferWrite : recorded->second;
+				op.dstUse = BufferUse::ComputeReadWrite;
+				compiledPass.prePassBufferBarriers.push_back(op);
+				bufferUses[bufferUse.buf] = BufferUse::ComputeReadWrite;
+			}
+			continue;
 		}
 
 		populateCompiledPassInitialLayouts(compiledPass, layoutState);

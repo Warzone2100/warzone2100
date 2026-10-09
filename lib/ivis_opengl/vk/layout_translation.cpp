@@ -45,6 +45,8 @@ namespace gfx_api::vk
 		return ::vk::ImageLayout::eDepthStencilAttachmentOptimal;
 	case CompileImageLayout::Present:
 		return ::vk::ImageLayout::ePresentSrcKHR;
+	case CompileImageLayout::Storage:
+		return ::vk::ImageLayout::eGeneral;
 	}
 	return ::vk::ImageLayout::eUndefined;
 }
@@ -63,6 +65,8 @@ CompileImageLayout fromVkImageLayout(::vk::ImageLayout layout)
 		return CompileImageLayout::DepthAttachment;
 	case ::vk::ImageLayout::ePresentSrcKHR:
 		return CompileImageLayout::Present;
+	case ::vk::ImageLayout::eGeneral:
+		return CompileImageLayout::Storage;
 	default:
 		return CompileImageLayout::Undefined;
 	}

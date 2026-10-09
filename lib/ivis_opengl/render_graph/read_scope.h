@@ -35,6 +35,7 @@ namespace gfx_api
 {
 
 enum class CompileImageLayout : uint8_t;
+struct SubresourceSyncState;
 
 /// Whether a sampled read's producer is tracked in the compile-time layout timeline.
 enum class ReadProducerScope : uint8_t
@@ -46,7 +47,7 @@ enum class ReadProducerScope : uint8_t
 };
 
 /// Compile-time layout state keyed by texture subresource; used by `planLayoutTimeline` and `classifyReadProducerScope`.
-using LayoutStateMap = std::unordered_map<LayoutSubresourceKey, CompileImageLayout, LayoutSubresourceKeyHash>;
+using LayoutStateMap = std::unordered_map<LayoutSubresourceKey, SubresourceSyncState, LayoutSubresourceKeyHash>;
 
 /// Classify a read when planning barriers. Uses ReadDesc + layout timeline state.
 /// Does NOT mutate ResolvedRead — scope is stored on ImageBarrierOp only.
