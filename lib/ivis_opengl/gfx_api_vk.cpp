@@ -1620,6 +1620,21 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 			.setAddressModeU(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeV(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeW(vk::SamplerAddressMode::eClampToEdge);
+	case gfx_api::sampler_type::bilinear_mip_clamped:
+		return vk::SamplerCreateInfo()
+			.setMinFilter(vk::Filter::eLinear)
+			.setMagFilter(vk::Filter::eLinear)
+			.setMipmapMode(vk::SamplerMipmapMode::eNearest)
+			.setAddressModeU(vk::SamplerAddressMode::eClampToEdge)
+			.setAddressModeV(vk::SamplerAddressMode::eClampToEdge)
+			.setAddressModeW(vk::SamplerAddressMode::eClampToEdge)
+			.setMinLod(0.f)
+			.setMaxLod(VK_LOD_CLAMP_NONE)
+			.setMaxAnisotropy(1.f)
+			.setBorderColor(vk::BorderColor::eFloatTransparentBlack)
+			.setUnnormalizedCoordinates(false)
+			.setCompareEnable(false)
+			.setCompareOp(vk::CompareOp::eNever);
 	case gfx_api::sampler_type::bilinear_repeat:
 		return vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eLinear)

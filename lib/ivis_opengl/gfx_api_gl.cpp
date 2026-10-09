@@ -3214,6 +3214,13 @@ void gl_context::applySamplerState(GLenum target, const gfx_api::texture_input& 
 			// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
 			break;
+		case gfx_api::sampler_type::bilinear_mip_clamped:
+			// Integer textureLod levels only: no blending between mips, which keeps each cascade on its own mip.
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
 		case gfx_api::sampler_type::anisotropic_repeat:
 			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

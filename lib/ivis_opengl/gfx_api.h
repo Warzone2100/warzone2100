@@ -292,6 +292,8 @@ namespace gfx_api
 		nearest_clamped,
 		nearest_border,
 		anisotropic_repeat,
+		/// Bilinear within an explicitly chosen mip, clamped to edge (`textureLod` with integer levels).
+		bilinear_mip_clamped,
 	};
 
 	enum class border_color
