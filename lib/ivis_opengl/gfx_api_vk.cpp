@@ -2943,6 +2943,30 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	return new VkPSOId(psoID.value(), false); // always return a new indirect reference
 }
 
+gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info&)
+{
+	auto* pso = existing != nullptr
+		? static_cast<gfx_api::compute_pipeline_state_object*>(existing)
+		: new gfx_api::compute_pipeline_state_object();
+	pso->broken = true;
+	return pso;
+}
+
+void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object*)
+{
+	ASSERT(false, "compute pipeline bind is not implemented");
+}
+
+void VkRoot::dispatch_compute(uint32_t, uint32_t, uint32_t)
+{
+	ASSERT(false, "compute dispatch is not implemented");
+}
+
+gfx_api::texture* VkRoot::create_storage_texture(size_t, size_t, gfx_api::pixel_format, const std::string&)
+{
+	return nullptr;
+}
+
 void VkRoot::rebuildPipelinesIfNecessary()
 {
 	if (renderPasses.empty())

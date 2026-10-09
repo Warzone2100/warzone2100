@@ -112,6 +112,10 @@ public:
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw, const std::string& debugName = "") override;
 
 	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
+	virtual gfx_api::pipeline_state_object* build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info) override;
+	virtual void bind_compute_pipeline(gfx_api::pipeline_state_object* pso) override;
+	virtual void dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ) override;
+	virtual gfx_api::texture* create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string& debugName) override;
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 	virtual void bind_index_buffer(gfx_api::buffer&, const gfx_api::index_type&) override;
 	virtual void unbind_index_buffer(gfx_api::buffer&) override;

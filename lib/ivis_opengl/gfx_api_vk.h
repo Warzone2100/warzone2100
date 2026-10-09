@@ -844,6 +844,10 @@ public:
 	~VkRoot();
 
 	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
+	virtual gfx_api::pipeline_state_object* build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info) override;
+	virtual void bind_compute_pipeline(gfx_api::pipeline_state_object* pso) override;
+	virtual void dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ) override;
+	virtual gfx_api::texture* create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string& debugName) override;
 
 	virtual void draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&) override;
 	virtual void draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&) override;
