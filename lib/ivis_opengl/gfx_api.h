@@ -144,8 +144,9 @@ namespace gfx_api
 		{
 			 vertex_buffer,
 			 index_buffer,
+			 storage_buffer,
 		};
-		static const size_t USAGE_COUNT = 2;
+		static const size_t USAGE_COUNT = 3;
 
 		// Create a new data store for the buffer. Any existing data store will be deleted.
 		// The new data store is created with the specified `size` in bytes.
