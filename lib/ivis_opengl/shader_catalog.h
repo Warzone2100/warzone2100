@@ -23,18 +23,20 @@
  * SHADER_MODE -> stage basenames + spec-constant mask + GLES cap.
  * Backends own GPU objects (gl_pipeline_state_object / VkPSO).
  *
- * Adding a SHADER_MODE:
+ * Adding a graphics SHADER_MODE:
  * 1. Append the enumerator in pietypes.h (before SHADER_MAX).
- * 2. Add a catalog row in shader_catalog.cpp.
+ * 2. Add a catalog row in shader_catalog.cpp (vertex + optional tessellation + fragment).
  * 3. Add GL sources under data/base/shaders/ and VK sources under data/base/shaders/vk/.
  * 4. List the new VK stage files in data/CMakeLists.txt VK_SHADERS (glob check will FATAL otherwise).
  * 5. Add UBO struct + pipeline_state_helper alias (gfx_pipelines.h).
  * 6. Draw with the PSO.
+ * A compute mode uses shader_program_desc::make_compute and one .comp stage instead of
+ * vertex/fragment, and compute_pipeline_helper instead of pipeline_state_helper.
  * Do not add rows to gfx_api_gl.cpp / gfx_api_vk.cpp.
  *
  * Ownership:
- * - Recipe (pipeline_state_helper): raster state, vertex layout, UBO types, textures, SHADER_MODE.
- * - Catalog: stage basenames, spec-constant mask, friendly name, max GLES version. No GPU objects.
+ * - Recipe (pipeline_state_helper / compute_pipeline_helper): raster or dispatch state, UBO types, resources, SHADER_MODE.
+ * - Catalog: stage basenames, spec-constant mask, friendly name, max GLES version, compute local size. No GPU objects.
  * - C++ UBO types: std140 layout + GLSL block name.
  * - GLSL: algorithm, per dialect (shaders/ vs shaders/vk/). Not merged.
  */
@@ -50,7 +52,7 @@
 namespace gfx_api
 {
 
-enum class shader_stage_kind : uint8_t { vertex, tess_control, tess_eval, fragment };
+enum class shader_stage_kind : uint8_t { vertex, tess_control, tess_eval, fragment, compute };
 
 struct shader_stage_file
 {
@@ -76,6 +78,14 @@ using shader_spec_mask = uint8_t;
 
 static constexpr size_t MAX_SHADER_STAGES = 4;
 
+/// Compute workgroup size. Dispatch uses this; graphics rows keep the default (as it's not really used).
+struct shader_local_size
+{
+	uint32_t x = 1;
+	uint32_t y = 1;
+	uint32_t z = 1;
+};
+
 struct shader_program_desc
 {
 	const char* friendly_name = "";
@@ -83,6 +93,7 @@ struct shader_program_desc
 	uint8_t stage_count = 0;
 	shader_spec_mask spec_constants = 0;
 	shader_es_version max_es = shader_es_version::es_300;
+	shader_local_size local_size{};
 
 	constexpr shader_program_desc() = default;
 
@@ -99,6 +110,7 @@ struct shader_program_desc
 		, stage_count(0)
 		, spec_constants(spec)
 		, max_es(max_es)
+		, local_size{1, 1, 1}
 	{
 		uint8_t n = 0;
 		stages[n++] = shader_stage_file{shader_stage_kind::vertex, vert};
@@ -113,7 +125,35 @@ struct shader_program_desc
 		stages[n++] = shader_stage_file{shader_stage_kind::fragment, frag};
 		stage_count = n;
 	}
+
+	// One compute stage. local_x and local_y have no defaults, so a row cannot omit the workgroup size.
+	static constexpr shader_program_desc make_compute(
+		const char* friendly_name,
+		const char* comp,
+		uint32_t local_x,
+		uint32_t local_y,
+		uint32_t local_z = 1,
+		shader_spec_mask spec = 0,
+		shader_es_version max_es = shader_es_version::es_310)
+	{
+		shader_program_desc desc{};
+		desc.friendly_name = friendly_name;
+		desc.stages[0] = shader_stage_file{shader_stage_kind::compute, comp};
+		desc.stage_count = 1;
+		desc.spec_constants = spec;
+		desc.max_es = max_es;
+		desc.local_size = shader_local_size{local_x, local_y, local_z};
+		return desc;
+	}
 };
+
+constexpr bool shader_is_compute(const shader_program_desc& desc)
+{
+	return desc.stage_count == 1
+		&& desc.stages[0].kind == shader_stage_kind::compute
+		&& desc.stages[0].basename != nullptr
+		&& desc.stages[0].basename[0] != '\0';
+}
 
 const shader_program_desc& shader_catalog(SHADER_MODE mode);
 
