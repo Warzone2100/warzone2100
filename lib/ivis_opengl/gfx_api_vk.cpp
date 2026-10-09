@@ -5676,6 +5676,7 @@ bool VkRoot::initPixelFormatsSupport()
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16_UNORM)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG16_UNORM)
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_SRGB_PACK8)
+	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT)
 
 	// RGB8 is optional
 	PIXEL_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8)

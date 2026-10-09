@@ -5680,6 +5680,13 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG16_UNORM)
 	}
 
+	// RGBA16F
+	// Desktop OpenGL 3.0+ / OpenGL ES 3.0+ (sampling). Image load/store support is queried per format below.
+	if ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0))
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT)
+	}
+
 	// S3TC
 	// Desktop OpenGL: GL_EXT_texture_compression_s3tc
 	// OpenGL ES: (May be supported by the same GL_EXT_texture_compression_s3tc, other extensions)
