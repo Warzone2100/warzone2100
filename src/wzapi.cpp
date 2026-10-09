@@ -3922,7 +3922,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			{
 				if (psStats == psCurr->pStructureType && previousHitpoints > 0 && (!bMultiPlayer || previousHitpoints < newHitpoints))
 				{
-					psCurr->body = static_cast<UDWORD>(static_cast<uint64_t>(psCurr->body) * newHitpoints / previousHitpoints);
+					structureUpgradeBody(psCurr, previousHitpoints, newHitpoints);
 				}
 			};
 			for (STRUCTURE *psCurr : gameWorld.objects.structures[player])

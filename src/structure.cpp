@@ -931,6 +931,19 @@ float structureCompletionProgress(const STRUCTURE & structure)
 	return MIN(1, structure.currentBuildPts / (float)structureBuildPointsToCompletion(structure));
 }
 
+/// Calculate a structure's current max body points (its max body points at its
+/// current build progress), given its full max body points (when fully built).
+/// Parameter fullMaxBody is typically psStruct->structureBody() but could
+/// differ (e.g. after a body points upgrade is researched).
+static unsigned calcCurrMaxBody(const STRUCTURE *psStruct, unsigned fullMaxBody)
+{
+	uint32_t totalBuildPointsRequired = std::max<uint32_t>(structureBuildPointsToCompletion(*psStruct), 1);
+	uint32_t currentBuildPoints = std::min(psStruct->currentBuildPts, totalBuildPointsRequired);
+	unsigned startingBody = (fullMaxBody + 9) / 10; // 10%, rounded up
+	unsigned constructedBody = static_cast<unsigned>((int64_t)9 * fullMaxBody * currentBuildPoints / (10 * (int64_t)totalBuildPointsRequired));
+	return startingBody + constructedBody;
+}
+
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
 /// Also can deconstruct (demolish) a building if passed negative buildpoints
 void structureBuild(GameWorld& world, STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int buildRate)
@@ -5994,6 +6007,18 @@ unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 	}
 
 	return maxBody;
+}
+
+void structureUpgradeBody(STRUCTURE *psStructure, unsigned oldFullMaxBody, unsigned newFullMaxBody)
+{
+	unsigned oldCurrMaxBody = oldFullMaxBody;
+	unsigned newCurrMaxBody = newFullMaxBody;
+	if (psStructure->status == SS_BEING_BUILT)
+	{
+		oldCurrMaxBody = calcCurrMaxBody(psStructure, oldFullMaxBody);
+		newCurrMaxBody = calcCurrMaxBody(psStructure, newFullMaxBody);
+	}
+	psStructure->body = (uint64_t)psStructure->body * newCurrMaxBody / std::max(oldCurrMaxBody, 1u);
 }
 
 /*Access functions for the upgradeable stats of a structure*/

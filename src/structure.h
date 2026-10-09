@@ -237,6 +237,7 @@ bool checkSpecificStructExists(const WorldObjectState& objState, UDWORD structIn
 int32_t getStructureDamage(const STRUCTURE *psStructure);
 
 unsigned structureBodyBuilt(const STRUCTURE *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
+void structureUpgradeBody(STRUCTURE *psStruct, unsigned oldFullMaxBody, unsigned newFullMaxBody);  ///< Applies a hitpoints upgrade to the structure, keeping its health fraction.
 UDWORD structureResistance(const STRUCTURE_STATS *psStats, UBYTE player);
 
 void hqReward(GameWorld& world, UBYTE losingPlayer, UBYTE rewardPlayer);
