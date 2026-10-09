@@ -5070,8 +5070,13 @@ void gl_context::emitPrePassBarriers(const gfx_api::ExecutionBatch& batch,
 	{
 		for (const gfx_api::ImageBarrierOp& barrierOp : compiledPasses[b].prePassBarriers)
 		{
+			// Texture fetches after image stores need TEXTURE_FETCH as well, whichever stage samples:
+			// SHADER_IMAGE_ACCESS only orders imageLoad/imageStore.
 			const bool sampled = barrierOp.srcUse == gfx_api::ImageUse::ComputeSampled
-				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeSampled;
+				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeSampled
+				|| (barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
+					&& (barrierOp.dstUse == gfx_api::ImageUse::GraphicsSampled
+						|| barrierOp.dstUse == gfx_api::ImageUse::GraphicsDepthSampled));
 			const bool storage = barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
 				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeStorage;
 			if (sampled)
