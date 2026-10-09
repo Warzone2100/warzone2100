@@ -97,10 +97,18 @@ BlueprintBuilder& BlueprintBuilder::beginPass(PassId id, std::string debugName)
 	return *this;
 }
 
+BlueprintBuilder& BlueprintBuilder::beginComputePass(PassId id, std::string debugName)
+{
+	beginPass(id, std::move(debugName));
+	_current->kind = PassKind::Compute;
+	return *this;
+}
+
 BlueprintBuilder& BlueprintBuilder::color(PipelineSurfaceId surface, AttachmentLoadOp load, AttachmentStoreOp store,
 	ClearValue clear)
 {
 	ASSERT(_current != nullptr, "BlueprintBuilder::color without beginPass");
+	ASSERT(_current->kind == PassKind::Graphics, "BlueprintBuilder::color on a compute pass");
 	_current->colorAttachments.push_back(makePipelineColorAttachment(surface, load, store, clear));
 	return *this;
 }
@@ -109,6 +117,7 @@ BlueprintBuilder& BlueprintBuilder::depth(PipelineSurfaceId surface, AttachmentL
 	optional<uint32_t> arrayLayer, ClearValue clear)
 {
 	ASSERT(_current != nullptr, "BlueprintBuilder::depth without beginPass");
+	ASSERT(_current->kind == PassKind::Graphics, "BlueprintBuilder::depth on a compute pass");
 	_current->depthAttachment = makePipelineDepthAttachment(surface, load, store, arrayLayer, clear);
 	return *this;
 }
@@ -117,6 +126,7 @@ BlueprintBuilder& BlueprintBuilder::resolve(PipelineSurfaceId surface, Attachmen
 	ClearValue clear)
 {
 	ASSERT(_current != nullptr, "BlueprintBuilder::resolve without beginPass");
+	ASSERT(_current->kind == PassKind::Graphics, "BlueprintBuilder::resolve on a compute pass");
 	_current->resolveAttachment = makePipelineColorAttachment(surface, load, store, clear);
 	return *this;
 }
@@ -132,11 +142,30 @@ BlueprintBuilder& BlueprintBuilder::viewport(ViewportRule rule, uint32_t cascade
 BlueprintBuilder& BlueprintBuilder::readFrom(PassId producer, AttachmentRole role, uint32_t attachmentIndex)
 {
 	ASSERT(_current != nullptr, "BlueprintBuilder::readFrom without beginPass");
+	ASSERT(_current->kind == PassKind::Graphics, "BlueprintBuilder::readFrom on a compute pass");
 	BlueprintReadEdge edge;
 	edge.producerPass = producer;
 	edge.producerRole = role;
 	edge.attachmentIndex = attachmentIndex;
 	_current->reads.push_back(edge);
+	return *this;
+}
+
+BlueprintBuilder& BlueprintBuilder::readSampled(PipelineSurfaceId surface, uint32_t arrayLayer, uint32_t mipLevel)
+{
+	ASSERT(_current != nullptr, "BlueprintBuilder::readSampled without beginPass");
+	ASSERT(_current->kind == PassKind::Compute, "BlueprintBuilder::readSampled on a graphics pass");
+	ASSERT(surface != PipelineSurfaceId::Count, "BlueprintBuilder::readSampled requires a surface");
+	_current->sampledInputs.push_back(BlueprintComputeImage{ surface, arrayLayer, mipLevel });
+	return *this;
+}
+
+BlueprintBuilder& BlueprintBuilder::useStorageImage(PipelineSurfaceId surface, uint32_t arrayLayer, uint32_t mipLevel)
+{
+	ASSERT(_current != nullptr, "BlueprintBuilder::useStorageImage without beginPass");
+	ASSERT(_current->kind == PassKind::Compute, "BlueprintBuilder::useStorageImage on a graphics pass");
+	ASSERT(surface != PipelineSurfaceId::Count, "BlueprintBuilder::useStorageImage requires a surface");
+	_current->storageImages.push_back(BlueprintComputeImage{ surface, arrayLayer, mipLevel });
 	return *this;
 }
 
@@ -163,8 +192,17 @@ uint64_t PassGraphTopologyBlueprint::topologyHash() const
 	{
 		hash_combine(h,
 			static_cast<std::size_t>(pass.id),
+			static_cast<std::size_t>(pass.kind),
 			static_cast<std::size_t>(pass.viewportRule),
 			pass.viewportCascadeIndex);
+		for (const BlueprintComputeImage& image : pass.sampledInputs)
+		{
+			hash_combine(h, static_cast<std::size_t>(image.surface), image.arrayLayer, image.mipLevel);
+		}
+		for (const BlueprintComputeImage& image : pass.storageImages)
+		{
+			hash_combine(h, static_cast<std::size_t>(image.surface), image.arrayLayer, image.mipLevel);
+		}
 
 		for (const BlueprintAttachment& colorAttachment : pass.colorAttachments)
 		{
