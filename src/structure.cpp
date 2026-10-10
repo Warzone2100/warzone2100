@@ -1162,7 +1162,7 @@ void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
 		and notify the caller (read: droid) of your idleness by returning false.
 	*/
-	psStruct->body = clip<UDWORD>(psStruct->body + repairAmount, 0, psStruct->fullMaxBody());
+	psStruct->body = clip<UDWORD>(psStruct->body + repairAmount, 0, psStruct->currMaxBody());
 }
 
 static void refundFactoryBuildPower(STRUCTURE *psBuilding)
