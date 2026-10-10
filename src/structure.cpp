@@ -905,7 +905,7 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 {
 	CHECK_STRUCTURE(psStructure);
 
-	unsigned currMaxBody = structureCurrMaxBody(psStructure);
+	unsigned currMaxBody = psStructure->currMaxBody();
 
 	int64_t health = (int64_t)65536 * psStructure->body / MAX(1, currMaxBody);
 	CLIP(health, 0, 65536);
@@ -5996,17 +5996,6 @@ bool validStructResistance(const STRUCTURE *psStruct)
 	return bTarget;
 }
 
-unsigned structureCurrMaxBody(const STRUCTURE *psStructure)
-{
-	unsigned fullMaxBody = psStructure->fullMaxBody();
-
-	if (psStructure->status == SS_BEING_BUILT)
-	{
-		return calcCurrMaxBody(psStructure, fullMaxBody);
-	}
-	return fullMaxBody;
-}
-
 void structureUpgradeBody(STRUCTURE *psStructure, unsigned oldFullMaxBody, unsigned newFullMaxBody)
 {
 	unsigned oldCurrMaxBody = oldFullMaxBody;
@@ -6023,6 +6012,15 @@ void structureUpgradeBody(STRUCTURE *psStructure, unsigned oldFullMaxBody, unsig
 uint32_t STRUCTURE::fullMaxBody() const
 {
 	return pStructureType->upgrade[player].hitpoints;
+}
+
+uint32_t STRUCTURE::currMaxBody() const
+{
+	if (status == SS_BEING_BUILT)
+	{
+		return calcCurrMaxBody(this, fullMaxBody());
+	}
+	return fullMaxBody();
 }
 
 UDWORD	structureResistance(const STRUCTURE_STATS *psStats, UBYTE player)
