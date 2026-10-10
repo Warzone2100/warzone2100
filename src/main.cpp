@@ -1593,9 +1593,9 @@ void osSpecificPostInit_Win()
 # include "emscripten_helpers.h"
 #endif
 
-void osSpecificFirstChanceProcessSetup()
+void osSpecificFirstChanceProcessSetup(int argc, const char * const *argv)
 {
-	wz::sandbox::harden();
+	wzSandboxHarden(argc, argv);
 
 #if defined(WZ_OS_UNIX)
 	// Before anything else is run, and before creating any threads, ignore SIGPIPE
@@ -1844,7 +1844,7 @@ int realmain(int argc, char *argv[])
 	utfargc = argc;
 	utfargv = (char **)argv;
 
-	osSpecificFirstChanceProcessSetup();
+	osSpecificFirstChanceProcessSetup(argc, argv);
 
 	debug_init();
 #if defined(__EMSCRIPTEN__)

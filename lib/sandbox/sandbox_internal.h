@@ -34,7 +34,7 @@
 namespace wz::sandbox
 {
 
-void backendHarden();
+void backendHarden(Tier requested);
 
 void logPending(LogLevel level, const char* format, ...);
 
