@@ -841,6 +841,19 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 		return nullptr;
 	}
 
+	if (psStats->flags.test(WEAPON_FLAG_IMPACT_AT_SOURCE))
+	{
+		setSpacetime(psProj, psProj->prevSpacetime);
+		psProj->time = std::max(psProj->time, gameTime - deltaGameTime + 1);
+		if (psProj->time == psProj->prevSpacetime.time)
+		{
+			--psProj->prevSpacetime.time;
+		}
+		setProjectileDestination(psProj, nullptr);
+		psProj->state = PROJ_IMPACT;
+		return nullptr;
+	}
+
 	/* Calculate movement vector: */
 	int32_t currentDistance = 0;
 	switch (psStats->movementModel)
