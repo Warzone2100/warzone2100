@@ -85,6 +85,7 @@ bool recvMultiStats(NETQUEUE queue);
 
 void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Key &identity);
 void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity);
+bool isHostIdentityFromJoin(const EcKey& identity);
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);
 
@@ -136,6 +137,7 @@ bool generateBlindIdentity();
 //   - Before game ends, an empty identity
 //   - After game ends, the host-verified join identity
 const EcKey& getVerifiedJoinIdentity(UDWORD player);
+bool isVerifiedJoinIdentity(UDWORD player, const EcKey& identity);
 
 // In blind games, it returns the verified join identity (if executed on the host, or on all clients after the game has ended)
 // In regular games, it returns the current player identity

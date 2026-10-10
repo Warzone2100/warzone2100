@@ -142,6 +142,8 @@
 
 #include "activity.h"
 #include <algorithm>
+#include <chrono>
+#include <deque>
 #include <set>
 #include "3rdparty/gsl_finally.h"
 
@@ -521,7 +523,7 @@ void loadMultiScripts()
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game].c_str());
-	aFileName[strlen(aFileName) - 4] = '\0';
+	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcpy(aPathName, aFileName);
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
@@ -2574,6 +2576,75 @@ static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	return true;
 }
 
+class LobbyRequestRateLimit
+{
+public:
+	LobbyRequestRateLimit(size_t maxRequests, std::chrono::milliseconds period)
+	: maxRequests(maxRequests)
+	, period(period)
+	{ }
+
+	bool allow(uint32_t sender)
+	{
+		if (sender >= requestTimes.size())
+		{
+			return false;
+		}
+		const auto now = std::chrono::steady_clock::now();
+		auto &times = requestTimes[sender];
+		while (!times.empty() && now - times.front() >= period)
+		{
+			times.pop_front();
+		}
+		if (times.size() >= maxRequests)
+		{
+			return false;
+		}
+		times.push_back(now);
+		return true;
+	}
+
+	void swap(uint32_t playerA, uint32_t playerB)
+	{
+		ASSERT_OR_RETURN(, playerA < requestTimes.size() && playerB < requestTimes.size(), "Invalid players: %" PRIu32 ", %" PRIu32, playerA, playerB);
+		std::swap(requestTimes[playerA], requestTimes[playerB]);
+	}
+
+	void reset(uint32_t player)
+	{
+		ASSERT_OR_RETURN(, player < requestTimes.size(), "Invalid player: %" PRIu32, player);
+		requestTimes[player].clear();
+	}
+
+private:
+	size_t maxRequests;
+	std::chrono::milliseconds period;
+	std::array<std::deque<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> requestTimes;
+};
+
+static LobbyRequestRateLimit teamRequestLimit(3, std::chrono::seconds(5));
+static LobbyRequestRateLimit slotTypeRequestLimit(1, std::chrono::seconds(5));
+static LobbyRequestRateLimit nameChangeRequestLimit(3, std::chrono::seconds(10));
+
+void lobbyRequestRateLimitsNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	teamRequestLimit.swap(playerIndexA, playerIndexB);
+	slotTypeRequestLimit.swap(playerIndexA, playerIndexB);
+	nameChangeRequestLimit.swap(playerIndexA, playerIndexB);
+}
+
+void lobbyRequestRateLimitsReset(uint32_t playerIndex)
+{
+	teamRequestLimit.reset(playerIndex);
+	slotTypeRequestLimit.reset(playerIndex);
+	nameChangeRequestLimit.reset(playerIndex);
+}
+
+bool lobbyNameChangeRequestAllowed(uint32_t sender)
+{
+	return nameChangeRequestLimit.allow(sender);
+}
+
 bool recvTeamRequest(NETQUEUE queue)
 {
 	ASSERT_HOST_ONLY(return true);
@@ -2611,6 +2682,11 @@ bool recvTeamRequest(NETQUEUE queue)
 
 	if (NetPlay.players[player].team != team)
 	{
+		if (queue.index != NetPlay.hostPlayer && player == queue.index && !teamRequestLimit.allow(queue.index))
+		{
+			debug(LOG_NET, "Ignoring NET_TEAMREQUEST from %" PRIu8 ": too many requests", queue.index);
+			return false;
+		}
 		resetReadyStatus(false);
 	}
 	debug(LOG_NET, "%s is now part of team: %d", getPlayerName(player), (int) team);
@@ -3053,10 +3129,18 @@ bool recvPositionRequest(NETQUEUE queue)
 	NETend(r);
 	debug(LOG_NET, "Host received position request from player %d to %d", player, position);
 
-	if (player >= MAX_PLAYERS || position >= MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
-		      queue.index, (int)player, (int)position);
+		if (recordInvalidMessage(queue.index, NET_POSITIONREQUEST))
+		{
+			debug(LOG_INFO, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d - further ones will not be logged",
+			      queue.index, (int)player, (int)position);
+		}
+		return false;
+	}
+	if (position >= game.maxPlayers)
+	{
+		debug(LOG_NET, "NET_POSITIONREQUEST from player %d for position %d, which isn't available", queue.index, (int)position);
 		return false;
 	}
 
@@ -3143,6 +3227,15 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 	if (desiredIsSpectator == NetPlay.players[playerIndex].isSpectator)
 	{
 		// no-op change - this may be a response to a request
+		if (NetPlay.isHost)
+		{
+			if (!desiredIsSpectator || !bHostRequestedMoveToPlayers.at(playerIndex))
+			{
+				debug(LOG_NET, "Ignoring unrequested no-op NET_PLAYER_SLOTTYPE_REQUEST from %" PRIu8, queue.index);
+				return false;
+			}
+			bHostRequestedMoveToPlayers[playerIndex] = false;
+		}
 		std::string playerName = getPlayerName(playerIndex);
 		std::string text;
 		if (NetPlay.isHost)
@@ -3241,6 +3334,15 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 
 	if (locked.spectators)
 	{
+		return false;
+	}
+
+	const bool answersHostRequest = !desiredIsSpectator && bHostRequestedMoveToPlayers.at(playerIndex);
+	if (queue.index != NetPlay.hostPlayer && !answersHostRequest && !slotTypeRequestLimit.allow(queue.index))
+	{
+		debug(LOG_NET, "Ignoring NET_PLAYER_SLOTTYPE_REQUEST from %" PRIu8 ": too many requests", queue.index);
+		// Notify the player that the answer is "no" by sending a no-op PlayerSlotTypeRequest
+		SendPlayerSlotTypeRequest(playerIndex, NetPlay.players[playerIndex].isSpectator);
 		return false;
 	}
 
@@ -3420,7 +3522,11 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 	}
 	std::swap(ingame.hostChatPermissions[playerIndexA], ingame.hostChatPermissions[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
+	std::swap(ingame.VerifiedIdentity[playerIndexA], ingame.VerifiedIdentity[playerIndexB]);
+	std::swap(ingame.PingTimes[playerIndexA], ingame.PingTimes[playerIndexB]);
 	playerSpamMuteNotifyIndexSwap(playerIndexA, playerIndexB);
+	invalidMessageLogNotifyIndexSwap(playerIndexA, playerIndexB);
+	lobbyRequestRateLimitsNotifyIndexSwap(playerIndexA, playerIndexB);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 	multiOptionPrefValuesSwap(playerIndexA, playerIndexB);
 
@@ -3894,6 +4000,13 @@ void from_json(const nlohmann::json& j, KickRedirectInfo& v)
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer)
 {
 	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, player_id < MAX_CONNECTED_PLAYERS, "Invalid player_id: %" PRIu32, player_id);
+	ASSERT_OR_RETURN(, player_id != NetPlay.hostPlayer, "Can't kick the host");
+	if (NETplayerWasKicked(player_id))
+	{
+		debug(LOG_NET, "Player %" PRIu32 " was already kicked", player_id);
+		return;
+	}
 
 	debug(LOG_INFO, "Kicking player %u (%s). Reason: %s", (unsigned int)player_id, getPlayerName(player_id), reason);
 
@@ -3904,7 +4017,6 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, 
 	NETenum(w, type);
 	NETend(w);
 	NETflush();
-	wzDelay(300);
 
 	ActivityManager::instance().hostKickPlayer(NetPlay.players[player_id], type, reason);
 
@@ -3920,6 +4032,7 @@ bool kickRedirectPlayer(uint32_t player_id, const KickRedirectInfo& redirectInfo
 {
 	ASSERT_HOST_ONLY(return false);
 	ASSERT_OR_RETURN(false, player_id < NetPlay.players.size(), "Invalid player_id: %" PRIu32, player_id);
+	ASSERT_OR_RETURN(false, player_id != NetPlay.hostPlayer, "Can't kick the host");
 	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress, "Only if the game hasn't started yet");
 
 	std::string redirectStr;
@@ -5669,6 +5782,7 @@ void startMultiplayerGame()
 		sendOptions();
 		NEThaltJoining(true);						// stop new players entering.
 		ingame.TimeEveryoneIsInGame = nullopt;
+		ingame.cheatsLocked = getLockedOptions().cheats;
 		ingame.endTime = nullopt;
 		ingame.isAllPlayersDataOK = false;
 		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
@@ -6160,14 +6274,10 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 			break;
 		}
 
-		case GAME_ALLIANCE:
-			recvAlliance(queue, false);
-			break;
-
 		case NET_COLOURREQUEST:
 			if (multiplayIsStartingGame())
 			{
-				ignoredMessage = true;
+				debug(LOG_NET, "Ignoring %s while the game is starting", messageTypeToString(type));
 				break;
 			}
 			recvColourRequest(queue);
@@ -6176,7 +6286,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		case NET_FACTIONREQUEST:
 			if (multiplayIsStartingGame())
 			{
-				ignoredMessage = true;
+				debug(LOG_NET, "Ignoring %s while the game is starting", messageTypeToString(type));
 				break;
 			}
 			recvFactionRequest(queue);
@@ -6185,7 +6295,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		case NET_POSITIONREQUEST:
 			if (multiplayIsStartingGame())
 			{
-				ignoredMessage = true;
+				debug(LOG_NET, "Ignoring %s while the game is starting", messageTypeToString(type));
 				break;
 			}
 			recvPositionRequest(queue);
@@ -6194,42 +6304,48 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		case NET_TEAMREQUEST:
 			if (multiplayIsStartingGame())
 			{
-				ignoredMessage = true;
+				debug(LOG_NET, "Ignoring %s while the game is starting", messageTypeToString(type));
 				break;
 			}
 			recvTeamRequest(queue);
 			break;
 
 		case NET_READY_REQUEST:
-			if (multiplayIsStartingGame())
 			{
-				ignoredMessage = true;
-				break;
-			}
-			recvReadyRequest(queue);
-
-			// If hosting and game not yet started, try to start the game if everyone is ready.
-			if (NetPlay.isHost && multiplayPlayersReady())
-			{
-				if (!multiplayLacksEnoughPlayersToAutostart())
+				if (multiplayIsStartingGame())
 				{
-					startMultiplayerGame();
-
-					// Start the game before processing more messages.
-					// (startMultiplayerGame transitions to new TitleUI)
-					NETpop(queue);
-					return MultiMessagesResult::StoppedJoining;
+					debug(LOG_NET, "Ignoring %s while the game is starting", messageTypeToString(type));
+					break;
 				}
-				else
+				const bool readyStatusChanged = recvReadyRequest(queue);
+
+				// If hosting and game not yet started, try to start the game if everyone is ready.
+				if (NetPlay.isHost && multiplayPlayersReady())
 				{
-					int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
-					if (minAutoStartPlayerCount > 0)
+					if (!multiplayLacksEnoughPlayersToAutostart())
 					{
-						sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::MinPlayersToStart, minAutoStartPlayerCount);
+						startMultiplayerGame();
+
+						// Start the game before processing more messages.
+						// (startMultiplayerGame transitions to new TitleUI)
+						NETpop(queue);
+						return MultiMessagesResult::StoppedJoining;
+					}
+					else
+					{
+						int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
+						static optional<std::chrono::steady_clock::time_point> lastMinPlayersNotice;
+						const auto now = std::chrono::steady_clock::now();
+						if (minAutoStartPlayerCount > 0 && readyStatusChanged
+							&& (!lastMinPlayersNotice.has_value() || now - lastMinPlayersNotice.value() >= std::chrono::seconds(10)))
+						{
+							lastMinPlayersNotice = now;
+							sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::MinPlayersToStart, minAutoStartPlayerCount);
+						}
 					}
 				}
+				break;
 			}
-			break;
 
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
@@ -6238,8 +6354,6 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		case NET_PLAYER_DROPPED:		// remote player got disconnected
 			{
 				uint32_t player_id = MAX_CONNECTED_PLAYERS;
-
-				resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());
 
 				auto r = NETbeginDecode(queue, NET_PLAYER_DROPPED);
 				{
@@ -6259,6 +6373,8 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 					break;
 				}
 
+				resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());
+
 				debug(LOG_INFO, "** player %u has dropped!", player_id);
 
 				MultiPlayerLeave(player_id);		// get rid of their stuff
@@ -6275,31 +6391,6 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 					stopJoining(parent, ERROR_NOERROR);
 				}
 				updateGameOptions();
-				break;
-			}
-		case NET_PLAYERRESPONDING:			// remote player is now playing.
-			{
-				uint32_t player_id;
-
-				auto r = NETbeginDecode(queue, NET_PLAYERRESPONDING);
-				// the player that has just responded
-				NETuint32_t(r, player_id);
-				NETend(r);
-
-				if (player_id >= MAX_CONNECTED_PLAYERS)
-				{
-					debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
-					break;
-				}
-
-				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
-				{
-					HandleBadParam("NET_PLAYERRESPONDING given incorrect params.", player_id, queue.index);
-					break;
-				}
-
-				ingame.JoiningInProgress[player_id] = false;
-				ingame.DataIntegrity[player_id] = false;
 				break;
 			}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
@@ -6327,6 +6418,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 
 				debug(LOG_NET, "& local Options Received (MP game)");
 				ingame.TimeEveryoneIsInGame = nullopt;			// reset time
+				ingame.cheatsLocked = getLockedOptions().cheats;
 				ingame.endTime = nullopt;
 				resetDataHash();
 				decideWRF();
@@ -6351,16 +6443,19 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				auto r = NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(r, player_id);
 				NETstring(r, reason, MAX_KICK_REASON);
-				NETenum(r, KICK_TYPE);
+				NETenum(r, KICK_TYPE, ERROR_REDIRECT);
 				NETend(r);
 
 				if (player_id >= MAX_CONNECTED_PLAYERS)
 				{
-					debug(LOG_ERROR, "NET_KICK message with invalid player_id: (%" PRIu32")", player_id);
+					if (recordInvalidMessage(queue.index, NET_KICK))
+					{
+						debug(LOG_INFO, "NET_KICK message from %" PRIu8 " with invalid player_id: (%" PRIu32") - further ones will not be logged", queue.index, player_id);
+					}
 					break;
 				}
 
-				if (player_id < MAX_PLAYERS)
+				if (player_id < MAX_PLAYERS && queue.index == NetPlay.hostPlayer)
 				{
 					resetLobbyChangePlayerVote(player_id);
 				}
@@ -6404,7 +6499,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 						return MultiMessagesResult::StoppedJoining;
 					}
 				}
-				else
+				else if (!NetPlay.isHost)
 				{
 					NETplayerKicked(player_id, KICK_TYPE == ERROR_REDIRECT);
 				}
@@ -6414,6 +6509,14 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		{
 			auto r = NETbeginDecode(queue, NET_HOST_DROPPED);
 			NETend(r);
+			if (queue.index != NetPlay.hostPlayer)
+			{
+				if (recordInvalidMessage(queue.index, NET_HOST_DROPPED))
+				{
+					debug(LOG_INFO, "Ignoring NET_HOST_DROPPED from %d - further ones will not be logged", (int)queue.index);
+				}
+				break;
+			}
 			stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("No connection to host.")), parent), ERROR_HOSTDROPPED);
 			debug(LOG_NET, "The host has quit!");
 			break;
@@ -6443,11 +6546,16 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 					}
 
 					bool isLobbySlashCommand = false;
-					if (lobby_slashcommands_enabled())
+					const bool senderIsAdmin = isHostFreeText || lobbyCommandSenderHasAdminPrivs(static_cast<uint32_t>(message.sender));
+					if (lobby_slashcommands_enabled() && (senderIsAdmin || !playerSpamMutedUntil(message.sender).has_value()))
 					{
 						isLobbySlashCommand = processChatLobbySlashCommands(message, cmdInterface);
 						if (isLobbySlashCommand && !displayedMessage)
 						{
+							if (!senderIsAdmin)
+							{
+								recordPlayerMessageSent(message.sender);
+							}
 							// display it anyway, even though user is muted, because it was a processed slash command
 							displayRoomMessage(buildMessage(message.sender, message.text));
 							audio_PlayTrack(FE_AUDIO_MESSAGEEND);
@@ -6522,12 +6630,17 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 
 		if (ignoredMessage)
 		{
-			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
+			if (recordInvalidMessage(queue.index, type))
+			{
+				debug(LOG_INFO, "Didn't handle %s message from %d - further ones will not be logged", messageTypeToString(type), (int)queue.index);
+			}
 			ignoredMessage = false;
 		}
 
 		NETpop(queue);
 	}
+
+	multiSyncSendPendingPingReplies();
 
 	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 	autoLagKickRoutine(now);
@@ -6942,7 +7055,7 @@ void WzMultiplayerOptionsTitleUI::start()
 
 		currentMultiOptionsTitleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
 		bRequestedSelfMoveToPlayers = false;
-		bHostRequestedMoveToPlayers.resize(MAX_CONNECTED_PLAYERS, false);
+		bHostRequestedMoveToPlayers.assign(MAX_CONNECTED_PLAYERS, false);
 		playerRows.clear();
 		initKnownPlayers();
 		resetPlayerConfiguration(true);
@@ -7790,6 +7903,10 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERINGAME& p) {
 	j["side"] = p.side;
 	j["structureLimits"] = p.lastAppliedStructureLimits; // See applyLimitSet() for why we save `lastAppliedStructureLimits` as `structureLimits`
 	j["flags"] = p.flags;
+	if (p.cheatsLocked.has_value())
+	{
+		j["cheatsLocked"] = p.cheatsLocked.value();
+	}
 }
 
 inline void from_json(const nlohmann::json& j, MULTIPLAYERINGAME& p) {
@@ -7807,6 +7924,10 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERINGAME& p) {
 	p.side = j.at("side").get<InGameSide>();
 	p.structureLimits = j.at("structureLimits").get<std::vector<MULTISTRUCTLIMITS>>();
 	p.flags = j.at("flags").get<uint8_t>();
+	if (j.contains("cheatsLocked"))
+	{
+		p.cheatsLocked = j.at("cheatsLocked").get<bool>();
+	}
 }
 
 inline void to_json(nlohmann::json& j, const PLAYER& p) {
@@ -7856,7 +7977,7 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	}
 	// Do not persist IPtextAddress
 	auto factionUint = j.at("faction").get<uint8_t>();
-	p.faction = static_cast<FactionID>(factionUint); // TODO CHECK
+	p.faction = uintToFactionID(factionUint).value_or(FACTION_NORMAL);
 	p.isSpectator = j.at("isSpectator").get<bool>();
 	if (j.contains("isAdmin"))
 	{
@@ -8098,7 +8219,13 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	}
 
 	// restore `game`
-	game = object.at("game").get<MULTIPLAYERGAME>();
+	auto replayGame = object.at("game").get<MULTIPLAYERGAME>();
+	if (replayGame.maxPlayers == 0 || replayGame.maxPlayers > MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid maxPlayers (%u)", static_cast<unsigned>(replayGame.maxPlayers));
+		return false;
+	}
+	game = std::move(replayGame);
 
 	// restore `ingame`
 	ingame = object.at("ingame").get<MULTIPLAYERINGAME>();
@@ -8151,13 +8278,29 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 		debug(LOG_ERROR, "Unsupported netplay.players size (%zu)", netPlayers.size());
 		return false;
 	}
+	std::vector<PLAYER> restoredPlayers;
+	restoredPlayers.reserve(netPlayers.size());
 	for (size_t i = 0; i < netPlayers.size(); ++i)
 	{
-		from_json(netPlayers.at(i), NetPlay.players[i]);
+		PLAYER player = NetPlay.players[i];
+		from_json(netPlayers.at(i), player);
+		if (player.position < 0 || player.position >= MAX_CONNECTED_PLAYERS)
+		{
+			debug(LOG_ERROR, "Invalid position (%" PRIi32 ") for player %zu", player.position, i);
+			return false;
+		}
+		restoredPlayers.push_back(std::move(player));
 	}
 
 	// restore NetPlay.hostPlayer
-	NetPlay.hostPlayer = object.at("netplay.hostPlayer").get<uint32_t>();
+	const uint32_t hostPlayer = object.at("netplay.hostPlayer").get<uint32_t>();
+	if (hostPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid netplay.hostPlayer (%" PRIu32 ")", hostPlayer);
+		return false;
+	}
+	std::move(restoredPlayers.begin(), restoredPlayers.end(), NetPlay.players.begin());
+	NetPlay.hostPlayer = hostPlayer;
 
 	// restore `NetPlay.bComms` (?)
 	NetPlay.bComms = object.at("netplay.bComms").get<bool>();

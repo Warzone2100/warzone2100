@@ -121,6 +121,10 @@ void playerSpamMuteReset(uint32_t playerIndex)
 
 void recordPlayerMessageSent(uint32_t playerIdx)
 {
+	if (playerIdx >= lastQuickChatMessageTimes.size())
+	{
+		return;
+	}
 	if (playerSpamMutedUntil(playerIdx).has_value())
 	{
 		// ignore incoming message
@@ -138,10 +142,16 @@ static bool isInternalMessage(WzQuickChatMessage msg)
 	return static_cast<uint32_t>(msg) >= WzQuickChatMessage_FIRST_INTERNAL_MSG_VALUE;
 }
 
+static bool isRateLimitedMessage(WzQuickChatMessage msg)
+{
+	return !isInternalMessage(msg) || msg == WzQuickChatMessage::INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED;
+}
+
 static bool isHostOnlyInternalMessage(WzQuickChatMessage msg)
 {
 	switch (msg)
 	{
+		case WzQuickChatMessage::INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN:
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
@@ -3550,7 +3560,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		NETbool(wref, targeting.humanTeammates);
 		NETbool(wref, targeting.aiTeammates);
 		uint32_t numSpecificRecipients = static_cast<uint32_t>(targeting.specificPlayers.size());
-		NETuint32_t(wref, numSpecificRecipients);
+		NETcount(wref, numSpecificRecipients, MAX_CONNECTED_PLAYERS);
 		for (auto playerIdx : targeting.specificPlayers)
 		{
 			NETuint32_t(wref, playerIdx);
@@ -3579,7 +3589,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		}
 	}
 
-	if (!recipients.empty() && !internalMessage)
+	if (!recipients.empty() && isRateLimitedMessage(message))
 	{
 		recordPlayerMessageSent(fromPlayer);
 	}
@@ -3643,13 +3653,18 @@ bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuick
 	}
 
 	auto senderSpamMute = playerSpamMutedUntil(sender);
-	if (senderSpamMute.has_value() && !internalMessage)
+	if (senderSpamMute.has_value() && isRateLimitedMessage(message))
 	{
 		// ignore message sent while player send was throttled
 		return false;
 	}
 
 	if (hostOnlyInternalMessage && queue.index != NetPlay.hostPlayer)
+	{
+		return false;
+	}
+
+	if (isInGame && message == WzQuickChatMessage::INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED)
 	{
 		return false;
 	}
@@ -3675,9 +3690,14 @@ bool recvQuickChat(NETQUEUE queue)
 	optional<MessageReader> r;
 	if (expectingSecuredMessage)
 	{
-		r = NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG);
+		bool notSecured = false;
+		r = NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG, &notSecured);
 		if (!r)
 		{
+			if (!notSecured && recordInvalidMessage(queue.index, NET_QUICK_CHAT_MSG))
+			{
+				debug(LOG_INFO, "Ignoring invalid NET_QUICK_CHAT_MSG from %d - further invalid ones will not be logged", (int)queue.index);
+			}
 			return false;
 		}
 	}
@@ -3694,7 +3714,7 @@ bool recvQuickChat(NETQUEUE queue)
 	NETbool(rref, targeting.humanTeammates);
 	NETbool(rref, targeting.aiTeammates);
 	uint32_t numSpecificRecipients = 0;
-	NETuint32_t(rref, numSpecificRecipients);
+	NETcount(rref, numSpecificRecipients, MAX_CONNECTED_PLAYERS);
 	for (uint32_t i = 0; i < numSpecificRecipients; ++i)
 	{
 		uint32_t tmp_playerIdx = std::numeric_limits<uint32_t>::max();
@@ -3712,7 +3732,14 @@ bool recvQuickChat(NETQUEUE queue)
 		NETuint32_t(rref, messageData.value().dataA);
 		NETuint32_t(rref, messageData.value().dataB);
 	}
-	NETend(rref);
+	if (!NETend(rref))
+	{
+		if (recordInvalidMessage(queue.index, NET_QUICK_CHAT_MSG))
+		{
+			debug(LOG_INFO, "Ignoring invalid NET_QUICK_CHAT_MSG from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return false;
+	}
 
 	if (!validMessageEnumValue)
 	{
@@ -3724,8 +3751,7 @@ bool recvQuickChat(NETQUEUE queue)
 		return false;
 	}
 
-	bool internalMessage = isInternalMessage(msgEnumVal);
-	if (!internalMessage && recipient == selectedPlayer)
+	if (isRateLimitedMessage(msgEnumVal) && recipient == selectedPlayer)
 	{
 		recordPlayerMessageSent(sender);
 	}

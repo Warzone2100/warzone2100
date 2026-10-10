@@ -125,7 +125,7 @@ const NetMsgDataVector& NetMessage::rawData() const
 const uint8_t* NetMessage::payload() const
 {
 	ASSERT_OR_RETURN(nullptr, !data_.empty() && data_.size() >= HEADER_LENGTH, "Invalid message data");
-	return &data_[HEADER_LENGTH];
+	return data_.data() + HEADER_LENGTH;
 }
 
 size_t NetMessage::payloadSize() const

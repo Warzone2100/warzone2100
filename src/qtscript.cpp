@@ -706,6 +706,14 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	// Attempt to ready instance for execution
 	if (!pNewInstance->readyInstanceForExecution())
 	{
+		removeTimersIf([pNewInstance](const timerNode& node) { return node.instance == pNewInstance; });
+		auto groupIt = groups.find(pNewInstance);
+		if (groupIt != groups.end())
+		{
+			delete groupIt->second;
+			groups.erase(groupIt);
+		}
+		ownedLabels.erase(pNewInstance);
 		delete pNewInstance;
 		debug(LOG_ERROR, "Unable to ready instance for execution: %s", path.toUtf8().c_str());
 		return nullptr;
@@ -954,6 +962,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 					if (!ini.contains("function"))
 					{
 						ASSERT(false, "Invalid trigger in save (%s) - missing new functionRestoreInfo block, and old function parameter", list[i].toUtf8().c_str());
+						ini.endGroup();
 						continue;
 					}
 					backwardsCompatJSFunctionRestoreInfo["function"] = ini.value("function").jsonValue();
@@ -963,6 +972,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			catch (const std::exception& e)
 			{
 				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				ini.endGroup();
 				continue;
 			}
 
@@ -1027,8 +1037,8 @@ bool scripting_engine::loadScriptStates(const char *filename)
 // since the restore wipes live state up front - would leave the engine half-restored; defaulting instead
 // keeps the restore total. When a wrong type is encountered *mismatch is set, so the caller can note the
 // document was not fully faithful.
-template <typename T>
-static T jsonValueOr(const nlohmann::ordered_json &j, const char *key, T fallback, bool *mismatch = nullptr)
+template <typename T, typename JsonType>
+static T jsonValueOr(const JsonType &j, const char *key, T fallback, bool *mismatch = nullptr)
 {
 	auto it = j.find(key);
 	if (it == j.end())
@@ -1037,11 +1047,11 @@ static T jsonValueOr(const nlohmann::ordered_json &j, const char *key, T fallbac
 	}
 	try
 	{
-		return it->get<T>();
+		return it->template get<T>();
 	}
 	catch (const nlohmann::json::exception &e)
 	{
-		debug(LOG_ERROR, "Wrong-typed field \"%s\" in script state; using default (%s)", key, e.what());
+		debug(LOG_ERROR, "Wrong-typed field \"%s\"; using default (%s)", key, e.what());
 		if (mismatch) { *mismatch = true; }
 		return fallback;
 	}
@@ -2672,6 +2682,13 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 	return loadLabels(ini.currentJsonValue(), fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 }
 
+// A label's player/subscriber must be a real player slot or ALL_PLAYERS
+// The upper bound is MAX_PLAYER_SLOTS (see: PLAYER_FEATURE, scavenger player slot)
+static bool isValidLabelPlayer(int v)
+{
+	return v == ALL_PLAYERS || (v >= 0 && v < MAX_PLAYER_SLOTS);
+}
+
 // Loader A: load flat labels.json (map/scenario data or an old v1 savegame) from an in-memory JSON object
 // - The object's keys are section names ("position_<n>" / "area_<n>" / "radius_<n>" / "object_<n>" / "group_<n>")
 // - All labels are global (this format has no ownership)
@@ -2722,7 +2739,12 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 		const std::string &sectionName = it.key();
 		const nlohmann::json &section = it.value();
 		LABEL p;
-		std::string label = section.value("label", std::string());
+		std::string label = jsonValueOr(section, "label", std::string());
+		if (!isValidLabelPlayer(jsonValueOr(section, "player", ALL_PLAYERS)) || !isValidLabelPlayer(jsonValueOr(section, "subscriber", ALL_PLAYERS)))
+		{
+			debug(LOG_ERROR, "Invalid player/subscriber for label '%s' - skipping", label.c_str());
+			continue;
+		}
 
 		// The flat labels.json format (map/scenario data and old v1 savegames) has no concept of
 		// per-instance ownership - every label is global. (Owned labels are a v2 feature and travel
@@ -2738,7 +2760,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			p.type = SCRIPT_POSITION;
 			p.player = ALL_PLAYERS;
 			p.id = -1;
-			p.triggered = section.value("triggered", -1); // deactivated by default
+			p.triggered = jsonValueOr(section, "triggered", -1); // deactivated by default
 			p.subscriber = ALL_PLAYERS;
 			globalLabels[label] = p;
 		}
@@ -2747,27 +2769,27 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			p.p1 = jsonVector2i(section, "pos1");
 			p.p2 = jsonVector2i(section, "pos2");
 			p.type = SCRIPT_AREA;
-			p.player = section.value("player", ALL_PLAYERS);
-			p.triggered = section.value("triggered", 0); // activated by default
+			p.player = jsonValueOr(section, "player", ALL_PLAYERS);
+			p.triggered = jsonValueOr(section, "triggered", 0); // activated by default
 			p.id = -1;
-			p.subscriber = section.value("subscriber", ALL_PLAYERS);
+			p.subscriber = jsonValueOr(section, "subscriber", ALL_PLAYERS);
 			globalLabels[label] = p;
 		}
 		else if (startsWith(sectionName, "radius"))
 		{
 			p.p1 = jsonVector2i(section, "pos");
-			p.p2.x = section.value("radius", 0);
+			p.p2.x = jsonValueOr(section, "radius", 0);
 			p.p2.y = 0; // unused
 			p.type = SCRIPT_RADIUS;
-			p.player = section.value("player", ALL_PLAYERS);
-			p.triggered = section.value("triggered", 0); // activated by default
-			p.subscriber = section.value("subscriber", ALL_PLAYERS);
+			p.player = jsonValueOr(section, "player", ALL_PLAYERS);
+			p.triggered = jsonValueOr(section, "triggered", 0); // activated by default
+			p.subscriber = jsonValueOr(section, "subscriber", ALL_PLAYERS);
 			p.id = -1;
 			globalLabels[label] = p;
 		}
 		else if (startsWith(sectionName, "object"))
 		{
-			auto id = section.value("id", 0);
+			auto id = jsonValueOr(section, "id", 0);
 			ASSERT(id > 0, "Unexpected id %d for object label", id);
 			auto itr = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
 			if (itr != fixedMapIdToGeneratedId.end())
@@ -2777,7 +2799,12 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 				debug(LOG_MAP, "replaced fixed map id %d with %d", id, itr->second);
 				id = itr->second;
 			}
-			const auto player = section.value("player", 0);
+			const auto player = jsonValueOr(section, "player", 0);
+			if (player < 0)
+			{
+				debug(LOG_ERROR, "Invalid player %d for object label '%s' - skipping", player, label.c_str());
+				continue;
+			}
 			const auto it_modulemap = moduleToBuilding[player].find(id);
 			if (it_modulemap != moduleToBuilding[player].end())
 			{
@@ -2786,10 +2813,10 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 				id = it_modulemap->second;
 			}
 			p.id = id;
-			p.type = section.value("type", 0);
+			p.type = jsonValueOr(section, "type", 0);
 			p.player = player;
-			p.triggered = section.value("triggered", -1); // deactivated by default
-			p.subscriber = section.value("subscriber", ALL_PLAYERS);
+			p.triggered = jsonValueOr(section, "triggered", -1); // deactivated by default
+			p.subscriber = jsonValueOr(section, "subscriber", ALL_PLAYERS);
 			auto checkFoundObject = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
 			if (!UserSaveGame)
 			{
@@ -2815,7 +2842,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 				p.id = groupidx--;
 			}
 			p.type = SCRIPT_GROUP;
-			p.player = section.value("player", 0);
+			p.player = jsonValueOr(section, "player", 0);
 			// 'members' is a map-load seed consumed by prepareLabels()
 			// - For savegame loads prepareLabels does not run and the live membership is restored
 			//   from the saved groups, so the seed is dead data - skip it (keeping savegame
@@ -2842,8 +2869,8 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 					p.idlist.push_back(id);
 				}
 			}
-			p.triggered = section.value("triggered", -1); // deactivated by default
-			p.subscriber = section.value("subscriber", ALL_PLAYERS);
+			p.triggered = jsonValueOr(section, "triggered", -1); // deactivated by default
+			p.subscriber = jsonValueOr(section, "subscriber", ALL_PLAYERS);
 			globalLabels[label] = p;
 		}
 		else
@@ -2878,22 +2905,16 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 		} catch (const std::exception &) { /* leave as (0, 0) */ }
 		return r;
 	};
-	// A label's player/subscriber must be a real player slot or ALL_PLAYERS
-	// The upper bound is MAX_PLAYER_SLOTS (see: PLAYER_FEATURE, scavenger player slot)
-	auto isValidLabelPlayer = [](int v) -> bool {
-		return v == ALL_PLAYERS || (v >= 0 && v < MAX_PLAYER_SLOTS);
-	};
-
 	for (const auto& entry : labelArray)
 	{
 		if (!entry.is_object()) { continue; }
 		LABEL p;
-		std::string label = entry.value("label", std::string());
-		std::string type = entry.value("type", std::string());
+		std::string label = jsonValueOr(entry, "label", std::string());
+		std::string type = jsonValueOr(entry, "type", std::string());
 
 		// Sanity-check player/subscriber up-front (Absent keys default to ALL_PLAYERS, which is valid)
-		int entryPlayer = entry.value("player", ALL_PLAYERS);
-		int entrySubscriber = entry.value("subscriber", ALL_PLAYERS);
+		int entryPlayer = jsonValueOr(entry, "player", ALL_PLAYERS);
+		int entrySubscriber = jsonValueOr(entry, "subscriber", ALL_PLAYERS);
 		if (!isValidLabelPlayer(entryPlayer) || !isValidLabelPlayer(entrySubscriber))
 		{
 			debug(LOG_ERROR, "Invalid player/subscriber (%d/%d) for label '%s' - skipping", entryPlayer, entrySubscriber, label.c_str());
@@ -2911,7 +2932,7 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 			p.type = SCRIPT_POSITION;
 			p.player = ALL_PLAYERS;
 			p.id = -1;
-			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.triggered = jsonValueOr(entry, "triggered", -1); // deactivated by default
 			p.subscriber = ALL_PLAYERS;
 			target[label] = p;
 		}
@@ -2921,7 +2942,7 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 			p.p2 = jsonVector2i(entry, "pos2");
 			p.type = SCRIPT_AREA;
 			p.player = entryPlayer;
-			p.triggered = entry.value("triggered", 0); // activated by default
+			p.triggered = jsonValueOr(entry, "triggered", 0); // activated by default
 			p.id = -1;
 			p.subscriber = entrySubscriber;
 			target[label] = p;
@@ -2929,29 +2950,29 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 		else if (type == "radius")
 		{
 			p.p1 = jsonVector2i(entry, "pos");
-			p.p2.x = entry.value("radius", 0);
+			p.p2.x = jsonValueOr(entry, "radius", 0);
 			p.p2.y = 0; // unused
 			p.type = SCRIPT_RADIUS;
 			p.player = entryPlayer;
-			p.triggered = entry.value("triggered", 0); // activated by default
+			p.triggered = jsonValueOr(entry, "triggered", 0); // activated by default
 			p.subscriber = entrySubscriber;
 			p.id = -1;
 			target[label] = p;
 		}
 		else if (type == "object")
 		{
-			int objectType = entry.value("objectType", -1); // the OBJECT_TYPE
+			int objectType = jsonValueOr(entry, "objectType", -1); // the OBJECT_TYPE
 			if (objectType < 0 || objectType >= OBJ_NUM_TYPES)
 			{
 				debug(LOG_ERROR, "Invalid objectType %d for object label '%s' - skipping", objectType, label.c_str());
 				continue;
 			}
-			auto id = entry.value("id", 0);
+			auto id = jsonValueOr(entry, "id", 0);
 			ASSERT(id > 0, "Unexpected id %d for object label", id);
 			p.id = id; // already a runtime id - no map remapping for savegame labels
 			p.type = objectType;
 			p.player = entryPlayer;
-			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.triggered = jsonValueOr(entry, "triggered", -1); // deactivated by default
 			p.subscriber = ALL_PLAYERS; // object labels do not carry a subscriber
 			if (IdToObject((OBJECT_TYPE)p.type, p.id, p.player) == nullptr)
 			{
@@ -2969,7 +2990,7 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 			p.player = entryPlayer;
 			// NOTE: No members to read - a group label's idlist is only a map-load seed for prepareLabels
 			// (which does not run for savegames), and the live membership is restored from the saved groups
-			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.triggered = jsonValueOr(entry, "triggered", -1); // deactivated by default
 			p.subscriber = entrySubscriber;
 			target[label] = p;
 		}
@@ -3081,6 +3102,7 @@ wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string lab
 	// own-first, then global (so a script can still reset map/global labels - campaign relies on this)
 	LABEL *label = scripting_engine::instance().findScopedLabel(context.currentInstance(), labelName);
 	SCRIPT_ASSERT({}, context, label != nullptr, "Label %s not found", labelName.c_str());
+	SCRIPT_ASSERT({}, context, isValidLabelPlayer(playerFilter.value_or(ALL_PLAYERS)), "Invalid player filter %d", playerFilter.value_or(ALL_PLAYERS));
 	label->triggered = 0; // make active again
 	label->subscriber = playerFilter.value_or(ALL_PLAYERS);
 	return {};
@@ -3207,6 +3229,7 @@ LABEL generic_script_object::toNewLabel() const
 	value.type = type;
 	value.id = id;
 	value.player = player;
+	value.subscriber = ALL_PLAYERS;
 	value.p1.x = world_coord(p1.x);
 	value.p1.y = world_coord(p1.y);
 	if (type == SCRIPT_AREA)
@@ -3443,11 +3466,11 @@ std::vector<const BASE_OBJECT *> scripting_engine::_enumAreaWorldCoords(WZAPI_PA
 	std::vector<const BASE_OBJECT *> list;
 	for (BASE_OBJECT *psObj : gridStartIterateArea(x1, y1, x2, y2))
 	{
-		if ((psObj->visible[player] || !seen) && !psObj->died)
+		if ((!seen || (player >= 0 && player < MAX_PLAYERS && psObj->visible[player])) && !psObj->died)
 		{
 			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS
-			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
-			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
+			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliancesInRange(psObj->player, player))
+			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliancesInRange(psObj->player, player)))
 			{
 				list.push_back(psObj);
 			}
@@ -3514,6 +3537,10 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	int x2 = world_coord(_x2);
 	int y2 = world_coord(_y2);
 
+	if (player < 0 || player >= MAX_PLAYERS)
+	{
+		return {};
+	}
 	for (DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2)

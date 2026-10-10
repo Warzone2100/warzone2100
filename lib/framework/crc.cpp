@@ -660,14 +660,19 @@ std::vector<uint8_t> SessionKeys::encryptMessageForOther(void const *data, size_
 
 bool SessionKeys::decryptMessageFromOther(void const *data, size_t dataLen, std::vector<uint8_t>& decrypted)
 {
-	ASSERT_OR_RETURN(false, dataLen > crypto_aead_xchacha20poly1305_ietf_NPUBBYTES, "Invalid dataLen");
-	ASSERT_OR_RETURN(false, dataLen < std::numeric_limits<uint32_t>::max(), "Invalid dataLen");
+	if (dataLen <= crypto_aead_xchacha20poly1305_ietf_NPUBBYTES || dataLen >= std::numeric_limits<uint32_t>::max())
+	{
+		return false;
+	}
 
 	// Split data: <nonce><ciphertext>
 	const unsigned char *npub = (const unsigned char *)data;
 	const unsigned char *ciphertext = ((const unsigned char *)data) + crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
 	size_t ciphertextLen = dataLen - crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
-	ASSERT_OR_RETURN({}, ciphertextLen >= crypto_aead_xchacha20poly1305_ietf_ABYTES, "Invalid dataLen");
+	if (ciphertextLen < crypto_aead_xchacha20poly1305_ietf_ABYTES)
+	{
+		return false;
+	}
 
 	decrypted.resize(ciphertextLen, 0);
 	unsigned long long decryptedLen = 0;
@@ -679,7 +684,6 @@ bool SessionKeys::decryptMessageFromOther(void const *data, size_t dataLen, std:
 												   npub, receiveKey.data()) != 0)
 	{
 		// Invalid / forged message
-		ASSERT(false, "Invalid encrypted message");
 		return false;
 	}
 
@@ -688,7 +692,6 @@ bool SessionKeys::decryptMessageFromOther(void const *data, size_t dataLen, std:
 	size_t bufferUnpaddedLen = 0;
 	if (sodium_unpad(&bufferUnpaddedLen, decrypted.data(), bufferPaddedLen, sessionMessageBlockSize) != 0)
 	{
-		ASSERT(false, "Incorrect padding");
 		return false;
 	}
 

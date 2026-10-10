@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <map>
 #include <vector>
 
@@ -135,6 +136,16 @@ static bool checkType(const nlohmann::json &obj, const char *type, const std::st
 	return true;
 }
 
+static bool validReferenceSize(double size)
+{
+	return size > 0.0 && size <= std::numeric_limits<float>::max();
+}
+
+static float toFraction(double number, float reference)
+{
+	return static_cast<float>(std::max(-2.0, std::min(2.0, number / reference)));
+}
+
 static bool readReference(const nlohmann::json &obj, const std::string &fileName, float &referenceWidth, float &referenceHeight)
 {
 	auto it = obj.find("reference");
@@ -143,7 +154,7 @@ static bool readReference(const nlohmann::json &obj, const std::string &fileName
 		return false;
 	}
 	if (!it->is_array() || it->size() != 2 || !(*it)[0].is_number() || !(*it)[1].is_number()
-		|| (*it)[0].get<float>() <= 0.f || (*it)[1].get<float>() <= 0.f)
+		|| !validReferenceSize((*it)[0].get<double>()) || !validReferenceSize((*it)[1].get<double>()))
 	{
 		debug(LOG_ERROR, "%s: \"reference\" must be [width, height]", fileName.c_str());
 		return false;
@@ -167,16 +178,16 @@ static void applyAreaKeys(SubtitleArea &area, const nlohmann::json &keys, float 
 				debug(LOG_ERROR, "%s: area \"%s\": \"%s\" must be a number", fileName.c_str(), name.c_str(), key.c_str());
 				continue;
 			}
-			const float number = value.get<float>();
-			if (key == "x") { area.x = number / referenceWidth; }
-			else if (key == "y") { area.y = number / referenceHeight; }
-			else if (key == "width") { area.width = number / referenceWidth; }
-			else if (key == "height") { area.height = number / referenceHeight; }
-			else if (key == "fontSize") { area.fontSize = number / referenceHeight; }
+			const double number = value.get<double>();
+			if (key == "x") { area.x = toFraction(number, referenceWidth); }
+			else if (key == "y") { area.y = toFraction(number, referenceHeight); }
+			else if (key == "width") { area.width = toFraction(number, referenceWidth); }
+			else if (key == "height") { area.height = toFraction(number, referenceHeight); }
+			else if (key == "fontSize") { area.fontSize = toFraction(number, referenceHeight); }
 			else
 			{
-				area.paddingX = number / referenceWidth;
-				area.paddingY = number / referenceHeight;
+				area.paddingX = toFraction(number, referenceWidth);
+				area.paddingY = toFraction(number, referenceHeight);
 			}
 		}
 		else if (key == "align")
@@ -290,7 +301,10 @@ static optional<SubtitleLine> readLine(const nlohmann::json &obj, const std::map
 	{
 		const std::string id = textId->get<std::string>();
 		const char *str = (psStringRes != nullptr) ? strresGetString(psStringRes, id.c_str()) : nullptr;
-		ASSERT(str != nullptr, "%s: no string \"%s\" is loaded", fileName.c_str(), id.c_str());
+		if (str == nullptr)
+		{
+			debug(LOG_ERROR, "%s: no string \"%s\" is loaded", fileName.c_str(), id.c_str());
+		}
 		line.text = WzString::fromUtf8((str != nullptr) ? str : id.c_str());
 	}
 	else
@@ -373,6 +387,13 @@ std::shared_ptr<SeqSubtitles> seqSubtitles_Load(const WzString &fileName)
 		if (area.width <= 0.f || area.height <= 0.f || area.fontSize <= 0.f)
 		{
 			debug(LOG_ERROR, "%s: area \"%s\" needs a width, height and fontSize", subtitles->fileName.c_str(), it->first.c_str());
+			it = subtitles->areas.erase(it);
+			continue;
+		}
+		if (area.x < 0.f || area.x > 1.f || area.y < 0.f || area.y > 1.f || area.width > 1.f || area.height > 1.f || area.fontSize > 1.f
+			|| area.paddingX < 0.f || area.paddingX > 0.5f || area.paddingY < 0.f || area.paddingY > 0.5f)
+		{
+			debug(LOG_ERROR, "%s: area \"%s\" is not inside the video", subtitles->fileName.c_str(), it->first.c_str());
 			it = subtitles->areas.erase(it);
 			continue;
 		}

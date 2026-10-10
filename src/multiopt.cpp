@@ -75,6 +75,7 @@
 #include "game_world.h"
 
 #define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
+static constexpr uint32_t MaxModHashes = 255;
 
 // send complete game info set!
 void sendOptions()
@@ -90,7 +91,7 @@ void sendOptions()
 	NETstring(w, game.map, 128);
 	NETbin(w, game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize = game.modHashes.size();
-	NETuint32_t(w, modHashesSize);
+	NETcount(w, modHashesSize, MaxModHashes);
 	for (auto &hash : game.modHashes)
 	{
 		NETbin(w, hash.bytes, hash.Bytes);
@@ -147,13 +148,13 @@ void sendOptions()
 		debug(LOG_ERROR, "Number of structure limits (%" PRIu32") exceeds maximum supported - truncating", numStructureLimits);
 		numStructureLimits = MAX_STRUCTURE_LIMITS;
 	}
-	NETuint32_t(w, numStructureLimits);
+	NETcount(w, numStructureLimits, MAX_STRUCTURE_LIMITS);
 	debug(LOG_NET, "(Host) Structure limits to process on client is %zu", ingame.structureLimits.size());
 	// Send the structures changed
-	for (auto structLimit : ingame.structureLimits)
+	for (uint32_t i = 0; i < numStructureLimits; ++i)
 	{
-		NETuint32_t(w, structLimit.id);
-		NETuint32_t(w, structLimit.limit);
+		NETuint32_t(w, ingame.structureLimits[i].id);
+		NETuint32_t(w, ingame.structureLimits[i].limit);
 	}
 	updateStructureDisabledFlags();
 	NETuint8_t(w, ingame.flags);
@@ -189,19 +190,27 @@ bool recvOptions(NETQUEUE queue)
 	NETstring(r, game.map, 128);
 	NETbin(r, game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
-	NETuint32_t(r, modHashesSize);
-	ASSERT_OR_RETURN(false, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
+	if (!NETcount(r, modHashesSize, MaxModHashes, Sha256::Bytes, [](uint32_t badCount) {
+		debug(LOG_ERROR, "Invalid number of mod hashes: %" PRIu32, badCount);
+	}))
+	{
+		NETend(r);
+		return false;
+	}
 	game.modHashes.resize(modHashesSize);
 	for (auto &hash : game.modHashes)
 	{
 		NETbin(r, hash.bytes, hash.Bytes);
 	}
-	NETuint8_t(r, game.maxPlayers);
-	if (game.maxPlayers > MAX_PLAYERS)
+	uint8_t maxPlayers = 0;
+	NETuint8_t(r, maxPlayers);
+	if (maxPlayers == 0 || maxPlayers > MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "Invalid maxPlayers value specified: %" PRIu8, game.maxPlayers);
+		debug(LOG_ERROR, "Invalid maxPlayers value specified: %" PRIu8, maxPlayers);
+		NETend(r);
 		return false;
 	}
+	game.maxPlayers = maxPlayers;
 	NETstring(r, game.name, 128);
 	NETuint32_t(r, game.power);
 	NETuint8_t(r, game.base);
@@ -213,12 +222,14 @@ bool recvOptions(NETQUEUE queue)
 	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32, game.inactivityMinutes);
+		NETend(r);
 		return false;
 	}
 	NETuint32_t(r, game.gameTimeLimitMinutes);
 	if (game.gameTimeLimitMinutes > 0 && game.gameTimeLimitMinutes < MIN_MPGAMETIMELIMIT_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid gameTimeLimitMinutes value specified: %" PRIu32, game.gameTimeLimitMinutes);
+		NETend(r);
 		return false;
 	}
 	uint8_t tempPlayerLeaveModeValue = 0;
@@ -226,6 +237,7 @@ bool recvOptions(NETQUEUE queue)
 	if (tempPlayerLeaveModeValue > static_cast<uint8_t>(PLAYER_LEAVE_MODE_MAX))
 	{
 		debug(LOG_ERROR, "Invalid playerLeaveMode value specified: %" PRIu8, tempPlayerLeaveModeValue);
+		NETend(r);
 		return false;
 	}
 	game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(tempPlayerLeaveModeValue);
@@ -234,6 +246,7 @@ bool recvOptions(NETQUEUE queue)
 	if (tempPlayerReconnectWaitSeconds > PLAYER_RECONNECT_WAIT_SECONDS_MAX)
 	{
 		debug(LOG_ERROR, "Invalid playerReconnectWaitSeconds value specified: %" PRIu16, tempPlayerReconnectWaitSeconds);
+		NETend(r);
 		return false;
 	}
 	game.playerReconnectWaitSeconds = tempPlayerReconnectWaitSeconds;
@@ -271,14 +284,14 @@ bool recvOptions(NETQUEUE queue)
 
 	// Get the number of structure limits to expect
 	uint32_t numStructureLimits = 0;
-	NETuint32_t(r, numStructureLimits);
-	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
-	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
+	if (!NETcount(r, numStructureLimits, MAX_STRUCTURE_LIMITS, 2, [](uint32_t badCount) {
+		debug(LOG_POPUP, "Invalid number of structure limits (%" PRIu32 "). Incompatible host.", badCount);
+	}))
 	{
-		debug(LOG_POPUP, "Number of structure limits (%" PRIu32") exceeds maximum supported. Incompatible host.", numStructureLimits);
 		NETend(r);
 		return false;
 	}
+	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
 	// If there were any changes allocate memory for them
 	if (numStructureLimits)
 	{
@@ -415,7 +428,7 @@ bool recvOptions(NETQUEUE queue)
 				// do nothing - just wait
 				break;
 			case FileRequestResult::FileExists:
-				debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
+				debug(LOG_ERROR, "Can't load map %s, even though we downloaded %s", game.map, filename);
 				return false;
 			case FileRequestResult::FailedToOpenFileForWriting:
 				// TODO: How best to handle? Ideally, message + back out of lobby?
@@ -654,6 +667,7 @@ bool multiGameInit()
 	}
 
 	gameInit();
+	resetInvalidMessageLog();
 
 	return true;
 }
@@ -693,11 +707,11 @@ bool multiGameShutdown()
 
 	sendLeavingMsg();							// say goodbye
 
-	if (selectedPlayer < MAX_CONNECTED_PLAYERS)
+	if (selectedPlayer < MAX_CONNECTED_PLAYERS && !NETisReplay())
 	{
 		PLAYERSTATS st = getMultiStats(selectedPlayer);	// save stats
 
-		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+		saveMultiStats(sPlayer, sPlayer, &st);
 	}
 
 	// if we terminate the socket too quickly, then, it is possible not to get the leave message
@@ -709,6 +723,7 @@ bool multiGameShutdown()
 	// close game
 	NETclose();
 	NETremRedirects();
+	resetInvalidMessageLog();
 
 	ingame.structureLimits.clear();
 	ingame.flags = 0;
@@ -717,6 +732,7 @@ bool multiGameShutdown()
 	ingame.localOptionsReceived = false;
 	ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 	ingame.TimeEveryoneIsInGame = nullopt;
+	ingame.cheatsLocked = nullopt;
 	ingame.startTime = std::chrono::steady_clock::time_point();
 	ingame.endTime = nullopt;
 	ingame.lastLagCheck = std::chrono::steady_clock::time_point();

@@ -1998,7 +1998,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		Vector3i camera = camera_base;
 		glm::mat4 modelMatrix = modelMatrix_base;
 
-		if (pitchToCamera || rollToCamera)
+		if ((pitchToCamera || rollToCamera) && !pIMD->connectors.empty())
 		{
 			// Centre on projectile (relevant for twin projectiles).
 			camera -= Vector3i(pIMD->connectors[0].x, pIMD->connectors[0].y, pIMD->connectors[0].z);
@@ -2019,7 +2019,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 			modelMatrix *= glm::rotate(UNDEG(z), glm::vec3(0.f, 0.f, 1.f));
 		}
 
-		if (pitchToCamera || rollToCamera)
+		if ((pitchToCamera || rollToCamera) && !pIMD->connectors.empty())
 		{
 			camera -= Vector3i(-pIMD->connectors[0].x, -pIMD->connectors[0].y, -pIMD->connectors[0].z);
 			// Undo centre on projectile (relevant for twin projectiles).
@@ -2808,7 +2808,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, const iIMDShape *strI
 	{
 		Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
 
-		if (weaponImd[i] != nullptr)
+		if (weaponImd[i] != nullptr && static_cast<size_t>(i) < strImd->connectors.size())
 		{
 			glm::mat4 matrix = glm::translate(glm::vec3(strImd->connectors[i].xzy())) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 			float heightAboveTerrain = strImd->connectors[i].z;

@@ -131,6 +131,7 @@ struct MULTIPLAYERINGAME
 
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
+	optional<bool>		cheatsLocked;
 	bool				isAllPlayersDataOK;
 	std::chrono::steady_clock::time_point startTime;
 	optional<std::chrono::steady_clock::time_point> endTime;
@@ -348,9 +349,15 @@ bool kickRedirectPlayer(uint32_t player_id, JoinConnectionDescription::JoinConne
 bool sendScoreCheck();							//score check only(frontend)
 void multiSyncResetAllChallenges();
 void multiSyncResetPlayerChallenge(uint32_t playerIdx);
+void multiSyncResetPlayerPingReplies(uint32_t playerIdx);
+void multiSyncSendPendingPingReplies();
 void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
+bool recordInvalidMessage(uint8_t sender, uint8_t messageType);  ///< Returns true only for the first invalid message of this type from this sender (since the game started, or the player joined)
+void resetInvalidMessageLog();
+void resetInvalidMessageLog(uint32_t player);
+void invalidMessageLogNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB);
 // multijoin
 bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart, const OrderSource &source);
 

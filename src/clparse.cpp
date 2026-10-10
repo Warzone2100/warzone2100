@@ -1041,7 +1041,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				unsigned int width, height;
 
 				token = poptGetOptArg(poptCon);
-				if (sscanf(token, "%ux%u", &width, &height) != 2)
+				if (token == nullptr || sscanf(token, "%ux%u", &width, &height) != 2)
 				{
 					qFatal("Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
 				}

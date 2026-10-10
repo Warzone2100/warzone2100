@@ -185,9 +185,14 @@ bool recvStrategyPlanUpdate(NETQUEUE queue)
 	std::vector<uint8_t> weaponStates;
 	std::vector<uint8_t> unitStates;
 
-	auto r = NETbeginDecodeSecured(queue, NET_TEAM_STRATEGY);
+	bool notSecured = false;
+	auto r = NETbeginDecodeSecured(queue, NET_TEAM_STRATEGY, &notSecured);
 	if (!r)
 	{
+		if (!notSecured && recordInvalidMessage(queue.index, NET_TEAM_STRATEGY))
+		{
+			debug(LOG_INFO, "Ignoring invalid NET_TEAM_STRATEGY from %d - further invalid ones will not be logged", (int)queue.index);
+		}
 		return false;
 	}
 	auto& rref = *r;

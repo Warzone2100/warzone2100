@@ -41,6 +41,13 @@ TimelineVideoSource::TimelineVideoSource(WZVideoDecoder& decoder, std::vector<WZ
 		straight.to = std::numeric_limits<double>::infinity();
 		m_ops.push_back(straight);
 	}
+	for (WZVideoTimelineOp& op : m_ops)
+	{
+		if (op.type == WZVideoTimelineOp::Type::Loop && op.to - op.from < m_frameDuration)
+		{
+			op.to = op.from + m_frameDuration;
+		}
+	}
 }
 
 bool TimelineVideoSource::next(Item& out)

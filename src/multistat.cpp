@@ -56,6 +56,7 @@ static PLAYERSTATS zeroStats;
 static EcKey blindIdentity; // a freshly-generated identity used for the local client in the current blind room
 
 static EcKey hostVerifiedJoinIdentities[MAX_CONNECTED_PLAYERS];
+static EcKey hostIdentityFromJoin;
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -110,6 +111,13 @@ const EcKey& getVerifiedJoinIdentity(UDWORD player)
 			return hostVerifiedJoinIdentities[player];
 		}
 	}
+}
+
+bool isVerifiedJoinIdentity(UDWORD player, const EcKey& identity)
+{
+	ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player: %u", player);
+	const EcKey& joinIdentity = getVerifiedJoinIdentity(player);
+	return !joinIdentity.empty() && !identity.empty() && joinIdentity.toBytes(EcKey::Public) == identity.toBytes(EcKey::Public);
 }
 
 // In blind games, it returns the verified join identity (if executed on the host, or on all clients after the game has ended)
@@ -544,6 +552,13 @@ void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity)
 {
 	ASSERT_OR_RETURN(, NetPlay.isHost || NetPlay.isHostAlive, "Unexpected state when called");
 	hostVerifiedJoinIdentities[NetPlay.hostPlayer].fromBytes(identity, EcKey::Public);
+	hostIdentityFromJoin.clear();
+	hostIdentityFromJoin.fromBytes(identity, EcKey::Public);
+}
+
+bool isHostIdentityFromJoin(const EcKey& identity)
+{
+	return !hostIdentityFromJoin.empty() && !identity.empty() && hostIdentityFromJoin.toBytes(EcKey::Public) == identity.toBytes(EcKey::Public);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -670,9 +685,9 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	}
 	char buffer[1000];
 
-	if (st->identity.empty())
+	if (st->identity.empty() || !st->identity.hasPrivate())
 	{
-		debug(LOG_INFO, "Refusing to save profile with empty identity: %s", sFileName);
+		debug(LOG_INFO, "Refusing to save profile without a private identity: %s", sFileName);
 		return false;
 	}
 
@@ -1316,6 +1331,7 @@ void resetRecentScoreData()
 
 		hostVerifiedJoinIdentities[i].clear();
 	}
+	hostIdentityFromJoin.clear();
 }
 
 // MARK: -

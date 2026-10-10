@@ -81,8 +81,7 @@ bool strresStoreString(STR_RES *psRes, const char *pID, const char *pString)
 	// Make sure that this ID string hasn't been used before
 	if (treapFind(psRes->psIDTreap, pID) != nullptr)
 	{
-		debug(LOG_FATAL, "Duplicate string for id: \"%s\"", pID);
-		abort();
+		debug(LOG_ERROR, "Duplicate string for id: \"%s\"", pID);
 		return false;
 	}
 

@@ -68,6 +68,8 @@ public:
 	virtual void setConnectedTimeout(std::chrono::milliseconds timeout) override;
 
 	HSteamNetConnection connectionHandle() const { return conn_; }
+	size_t pendingBytes() const { return pendingBytes_; }
+	size_t pendingMessageCount() const { return pendingMessagesToRead_.size(); }
 
 private:
 
@@ -88,6 +90,7 @@ private:
 	HSteamNetConnection conn_ = k_HSteamNetConnection_Invalid;
 	std::queue<SteamNetworkingMessage_t*> pendingMessagesToRead_;
 	size_t currentMsgReadPos_ = 0;
+	size_t pendingBytes_ = 0;
 	bool useNagle_ = true;
 	GNSConnectionPollGroup* pollGroup_ = nullptr;
 };

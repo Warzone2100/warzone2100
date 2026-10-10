@@ -86,6 +86,7 @@
 
 #include "random.h"
 #include "perfcounters.h"
+#include "3rdparty/gsl_finally.h"
 #include <functional>
 #include <unordered_map>
 
@@ -149,6 +150,7 @@ static int structureTotalReturn(const STRUCTURE *psStruct);
 static void parseFavoriteStructs();
 static void packFavoriteStructs();
 static bool structureHasModules(const STRUCTURE *psStruct);
+static void releaseStructureStats(size_t count);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -529,6 +531,14 @@ bool loadStructureStats(WzConfig &ini)
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = 0;
+	bool loadSucceeded = false;
+	const size_t allocatedStats = list.size();
+	auto releaseOnFailure = gsl::finally([&loadSucceeded, allocatedStats] {
+		if (!loadSucceeded)
+		{
+			releaseStructureStats(allocatedStats);
+		}
+	});
 	size_t statWriteIdx = 0;
 	for (size_t readIdx = 0; readIdx < list.size(); ++readIdx)
 	{
@@ -611,6 +621,11 @@ bool loadStructureStats(WzConfig &ini)
 		psStats->base.rearm = ini.value("rearmPoints", 0).toInt();
 		psStats->base.resistance = ini.value("resistance", 0).toUInt();
 		psStats->base.hitpoints = ini.value("hitpoints", 1).toUInt();
+		if (psStats->base.hitpoints == 0)
+		{
+			ASSERT(false, "Invalid hitpoints for structure '%s'", getID(psStats));
+			psStats->base.hitpoints = 1;
+		}
 		psStats->base.armour = ini.value("armour", 0).toUInt();
 		psStats->base.thermal = ini.value("thermal", 0).toUInt();
 		for (int i = 0; i < MAX_PLAYERS; i++)
@@ -625,7 +640,7 @@ bool loadStructureStats(WzConfig &ini)
 			psStats->upgrade[i].moduleProduction = psStats->base.moduleProduction;
 			psStats->upgrade[i].rearm = psStats->base.rearm;
 			psStats->upgrade[i].resistance = ini.value("resistance", 0).toUInt();
-			psStats->upgrade[i].hitpoints = ini.value("hitpoints", 1).toUInt();
+			psStats->upgrade[i].hitpoints = psStats->base.hitpoints;
 			psStats->upgrade[i].armour = ini.value("armour", 0).toUInt();
 			psStats->upgrade[i].thermal = ini.value("thermal", 0).toUInt();
 		}
@@ -668,6 +683,11 @@ bool loadStructureStats(WzConfig &ini)
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
 		psStats->buildPoints = ini.value("buildPoints").toUInt();
+		if (psStats->buildPoints == 0)
+		{
+			ASSERT(false, "Invalid buildPoints for structure '%s'", getID(psStats));
+			psStats->buildPoints = 1;
+		}
 
 		// set structure models
 		std::vector<WzString> models = ini.value("structureModel").toWzStringList();
@@ -675,7 +695,15 @@ bool loadStructureStats(WzConfig &ini)
 		{
 			iIMDBaseShape *imd = modelGet(models[j].trimmed());
 			ASSERT(imd != nullptr, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().c_str(), getID(psStats));
-			psStats->pIMD.push_back(imd);
+			if (imd != nullptr)
+			{
+				psStats->pIMD.push_back(imd);
+			}
+		}
+		if (psStats->pIMD.empty())
+		{
+			debug(LOG_ERROR, "Structure '%s' has no valid structureModel", getID(psStats));
+			return false;
 		}
 
 		// set base model
@@ -688,24 +716,22 @@ bool loadStructureStats(WzConfig &ini)
 		}
 
 		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toWzString());
-		if (ecm >= 0)
+		if (ecm < 0)
 		{
-			psStats->pECM = &asECMStats[ecm];
+			ASSERT(false, "Invalid ECM found for '%s'", getID(psStats));
+			ASSERT_OR_RETURN(false, !asECMStats.empty(), "ECM stats must be loaded before structure stats");
+			ecm = 0;  // ZNULLECM
 		}
-		else
-		{
-			ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
-		}
+		psStats->pECM = &asECMStats[ecm];
 
 		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toWzString());
-		if (sensor >= 0)
+		if (sensor < 0)
 		{
-			psStats->pSensor = &asSensorStats[sensor];
+			ASSERT(false, "Invalid sensor found for structure '%s'", getID(psStats));
+			ASSERT_OR_RETURN(false, !asSensorStats.empty(), "Sensor stats must be loaded before structure stats");
+			sensor = 0;  // ZNULLSENSOR
 		}
-		else
-		{
-			ASSERT(sensor >= 0, "Invalid sensor found for structure '%s'", getID(psStats));
-		}
+		psStats->pSensor = &asSensorStats[sensor];
 
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, MAX_WEAPONS, (WEAPON_STATS *)nullptr);
@@ -763,6 +789,7 @@ bool loadStructureStats(WzConfig &ini)
 	}
 	ASSERT_OR_RETURN(false, g_psStatDestroyStruct, "Destroy structure stat not found");
 
+	loadSucceeded = true;
 	return true;
 }
 
@@ -844,12 +871,11 @@ bool loadStructureStrengthModifiers(WzConfig &ini)
 	return true;
 }
 
-bool structureStatsShutDown()
+static void releaseStructureStats(size_t count)
 {
-	packFavoriteStructs();
 	if (asStructureStats)
 	{
-		for (unsigned i = 0; i < numStructureStats; ++i)
+		for (size_t i = 0; i < count; ++i)
 		{
 			unloadStructureStats_BaseStats(asStructureStats[i]);
 		}
@@ -858,6 +884,12 @@ bool structureStatsShutDown()
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
+}
+
+bool structureStatsShutDown()
+{
+	packFavoriteStructs();
+	releaseStructureStats(numStructureStats);
 	return true;
 }
 
@@ -1525,13 +1557,13 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 	return buildStructureDir(world, pStructureType, x, y, direction, player, FromSave, generateSynchronisedObjectId());
 }
 
-STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/)
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/, bool deferWallRemoval/*= false*/)
 {
 	STRUCTURE *psBuilding = nullptr;
-	const Vector2i size = pStructureType->size(direction);
 
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Cannot build structure for player %" PRIu32 " (>= MAX_PLAYERS)", player);
 	ASSERT_OR_RETURN(nullptr, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
+	const Vector2i size = pStructureType->size(direction);
 
 	if (IsStatExpansionModule(pStructureType) == false)
 	{
@@ -1539,7 +1571,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		UDWORD	max = pStructureType - asStructureStats;
 		int	i;
 
-		ASSERT_OR_RETURN(nullptr, max <= numStructureStats, "Invalid structure type");
+		ASSERT_OR_RETURN(nullptr, max < numStructureStats, "Invalid structure type");
 
 		// Don't allow more than interface limits
 		if (asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
@@ -1565,6 +1597,12 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		{
 			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
 			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
+			return nullptr;
+		}
+		const StructureBounds footprint = getStructureBounds(pStructureType, Vector2i(x, y), direction);
+		if (footprint.map.x < 0 || footprint.map.y < 0 || footprint.map.x + footprint.size.x > world.map.width || footprint.map.y + footprint.size.y > world.map.height)
+		{
+			debug(LOG_ERROR, "Structure %s at (%d, %d) would extend past the map edge", getStatsName(pStructureType), map_coord((int)x), map_coord((int)y));
 			return nullptr;
 		}
 
@@ -1622,19 +1660,28 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			}
 		}
 
+		std::vector<STRUCTURE *> wallsToReplace;
 		for (int tileY = map.y; tileY < map.y + size.y; ++tileY)
 		{
 			for (int tileX = map.x; tileX < map.x + size.x; ++tileX)
 			{
 				MAPTILE *psTile = mapTile(world.map, tileX, tileY);
 
+				if (TileHasStructure(psTile) && wzapi::scriptIsObjectQueuedForRemoval(psTile->psObject))
+				{
+					continue;
+				}
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
 				if (isBuildableOnWalls(pStructureType->type) && TileHasWall(psTile))
 				{
-					removeStruct((STRUCTURE *)psTile->psObject, true, world);
+					STRUCTURE *psWall = (STRUCTURE *)psTile->psObject;
+					if (std::find(wallsToReplace.begin(), wallsToReplace.end(), psWall) == wallsToReplace.end())
+					{
+						wallsToReplace.push_back(psWall);
+					}
 				}
-				else if (TileHasStructure(psTile) && !wzapi::scriptIsObjectQueuedForRemoval(psTile->psObject))
+				else if (TileHasStructure(psTile))
 				{
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic push
@@ -1648,6 +1695,18 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 #endif
 					return nullptr;
 				}
+			}
+		}
+		for (STRUCTURE *psWall : wallsToReplace)
+		{
+			if (deferWallRemoval)
+			{
+				// The new structure takes over the tiles now, the wall is removed with the other script-queued removals
+				wzapi::scriptQueuedObjectRemovals().emplace_back(psWall, false);
+			}
+			else
+			{
+				removeStruct(psWall, true, world);
 			}
 		}
 		// Emplace the structure being built in the global storage to obtain stable address.
@@ -1879,7 +1938,11 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 			return nullptr;
 		}
 
-		ASSERT(psBuilding->player == player, "Trying to upgrade player %u building with player %u module?", static_cast<unsigned>(psBuilding->player), player);
+		if (psBuilding->player != player && !aiCheckAlliances(psBuilding->player, player))
+		{
+			syncDebug("Player %u cannot upgrade player %u building", player, static_cast<unsigned>(psBuilding->player));
+			return nullptr;
+		}
 
 		int prevResearchState = intGetResearchState();
 
@@ -2376,7 +2439,7 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 }
 
 // Set the command droid that factory production should go to
-void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
+void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander, QUEUE_MODE clearMode)
 {
 	FACTORY			*psFact;
 	SDWORD			factoryInc, typeFlag;
@@ -2406,20 +2469,17 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 	// removing a commander from a factory
 	if (psFact->psCommander != nullptr)
 	{
-		if (typeFlag == FACTORY_FLAG)
+		if (psFact->psAssemblyPoint->factoryInc < MAX_FACTORY)
 		{
+			const unsigned shift = (typeFlag == FACTORY_FLAG) ? DSS_ASSPROD_SHIFT : (typeFlag == CYBORG_FLAG) ? DSS_ASSPROD_CYBORG_SHIFT : DSS_ASSPROD_VTOL_SHIFT;
+			const bool prevMultiMessages = bMultiMessages;
+			if (clearMode == ModeImmediate)
+			{
+				bMultiMessages = false;
+			}
 			secondarySetState(psFact->psCommander, gameWorld.objects, DSO_CLEAR_PRODUCTION,
-			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_SHIFT)));
-		}
-		else if (typeFlag == CYBORG_FLAG)
-		{
-			secondarySetState(psFact->psCommander, gameWorld.objects, DSO_CLEAR_PRODUCTION,
-			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_CYBORG_SHIFT)));
-		}
-		else
-		{
-			secondarySetState(psFact->psCommander, gameWorld.objects, DSO_CLEAR_PRODUCTION,
-			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_VTOL_SHIFT)));
+			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + shift)));
+			bMultiMessages = prevMultiMessages;
 		}
 
 		psFact->psCommander = nullptr;
@@ -2440,6 +2500,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		ASSERT_OR_RETURN(, !missionIsOffworld(), "cannot assign a commander to a factory when off world");
 
 		factoryInc = psFact->psAssemblyPoint->factoryInc;
+		ASSERT_OR_RETURN(, factoryInc < MAX_FACTORY, "Factory number %d cannot have a commander", factoryInc);
 
 		auto& flagPosList = gameWorld.objects.flags[psStruct->player];
 		FlagPositionList::iterator flagPosIt = flagPosList.begin(), flagPosItNext;
@@ -2472,9 +2533,13 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid)
 {
-	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
+	const unsigned player = psDroid->player;
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
 
-	for (STRUCTURE* psCurr : gameWorld.objects.structures[selectedPlayer])
+	for (STRUCTURE* psCurr : gameWorld.objects.structures[player])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2486,7 +2551,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 			}
 		}
 	}
-	for (STRUCTURE* psCurr : mission.gameWorld.objects.structures[selectedPlayer])
+	for (STRUCTURE* psCurr : mission.gameWorld.objects.structures[player])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2708,7 +2773,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			return false;
 		}
 		psFact = &psStructure->pFunctionality->factory;
-		bool hasCommander = psFact->psCommander != nullptr && myResponsibility(psStructure->player);
+		bool hasCommander = psFact->psCommander != nullptr;
 		// assign a group to the manufactured droid
 		if (psStructure->productToGroup != UBYTE_MAX)
 		{
@@ -2873,6 +2938,8 @@ bool structureExists(const WorldObjectState& objState, int player, STRUCTURE_TYP
 	return found;
 }
 
+#define MAX_UNIT_LIMIT_VALUE 100000
+
 // Disallow manufacture of units once these limits are reached,
 // doesn't mean that these numbers can't be exceeded if units are
 // put down in the editor or by the scripts.
@@ -2880,19 +2947,19 @@ bool structureExists(const WorldObjectState& objState, int player, STRUCTURE_TYP
 void setMaxDroids(UDWORD player, int value)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
-	droidLimit[player] = value;
+	droidLimit[player] = std::clamp(value, 0, MAX_UNIT_LIMIT_VALUE);
 }
 
 void setMaxCommanders(UDWORD player, int value)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
-	commanderLimit[player] = value;
+	commanderLimit[player] = std::clamp(value, 0, MAX_UNIT_LIMIT_VALUE);
 }
 
 void setMaxConstructors(UDWORD player, int value)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "player = %" PRIu32 "", player);
-	constructorLimit[player] = value;
+	constructorLimit[player] = std::clamp(value, 0, MAX_UNIT_LIMIT_VALUE);
 }
 
 int getMaxDroids(UDWORD player)
@@ -3098,7 +3165,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 		// only call "secondarySetState" *after* triggering "droidWasFullyRepaired"
 		// because in some cases calling it would modify primary order
 		// thus, loosing information that we actually had a RTR|RTR_SPECIFIED before
-		secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
+		secondarySetStateWithoutMessage(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 		return RepairState::Idle;
 	};
 	case RepairEvents::UnitDied:
@@ -3919,7 +3986,10 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 			if (strFirstImd != nullptr && strFirstImd->next != nullptr)
 			{
 				const iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
-				psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
+				if (strImd->objanimframes > 0)
+				{
+					psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
+				}
 			}
 			else
 			{
@@ -5185,7 +5255,7 @@ bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muz
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psShape && !psShape->connectors.empty())
+	if (psShape && static_cast<size_t>(weapon_slot) < psShape->connectors.size())
 	{
 		Vector3i barrel(0, 0, 0);
 
@@ -5219,7 +5289,7 @@ bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle,
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psShape && !psShape->connectors.empty())
+	if (psShape && static_cast<size_t>(weapon_slot) < psShape->connectors.size())
 	{
 		Vector3i barrel(0, 0, 0);
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
@@ -6983,7 +7053,7 @@ bool	STRUCTURE::isDamaged() const
 
 // give a structure from one player to another - used in Electronic Warfare
 //returns pointer to the new structure
-STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare)
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare, bool grantReward)
 {
 	STRUCTURE           *psNewStruct;
 	STRUCTURE_STATS     *psType, *psModule;
@@ -6998,7 +7068,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	visRemoveVisibility(psStructure, gameWorld.map);
 
 	int prevState = intGetResearchState();
-	bool reward = electronicReward(psStructure, attackPlayer);
+	bool reward = grantReward && electronicReward(psStructure, attackPlayer);
 
 	if (bMultiPlayer)
 	{

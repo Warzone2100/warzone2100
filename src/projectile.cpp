@@ -796,6 +796,24 @@ static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t
 	return -1;
 }
 
+// quantiseFraction() with a 64-bit numerator
+static int quantiseFraction64(int64_t numerator, int denominator, int newTime, int oldTime)
+{
+	const int64_t quotient = numerator / denominator;
+	const int64_t remainder = numerator % denominator;
+	const int64_t newValue = (int64_t)newTime * quotient + (int64_t)newTime * remainder / denominator;
+	const int64_t oldValue = (int64_t)oldTime * quotient + (int64_t)oldTime * remainder / denominator;
+	return static_cast<int>(newValue - oldValue);
+}
+
+static Vector3i homingStep(const Vector3i &delta, unsigned flightSpeed, int targetDistance, int newTime, int oldTime)
+{
+	const int denominator = GAME_TICKS_PER_SEC * targetDistance;
+	return Vector3i(quantiseFraction64(static_cast<int64_t>(delta.x) * flightSpeed, denominator, newTime, oldTime),
+	                quantiseFraction64(static_cast<int64_t>(delta.y) * flightSpeed, denominator, newTime, oldTime),
+	                quantiseFraction64(static_cast<int64_t>(delta.z) * flightSpeed, denominator, newTime, oldTime));
+}
+
 static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 {
 	WZ_PERF_SCOPE(T_projInFlight);
@@ -820,6 +838,19 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 	if (bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT &&
 	    (unsigned)timeSoFar < LAS_SAT_DELAY * GAME_TICKS_PER_SEC)
 	{
+		return nullptr;
+	}
+
+	if (psStats->flags.test(WEAPON_FLAG_IMPACT_AT_SOURCE))
+	{
+		setSpacetime(psProj, psProj->prevSpacetime);
+		psProj->time = std::max(psProj->time, gameTime - deltaGameTime + 1);
+		if (psProj->time == psProj->prevSpacetime.time)
+		{
+			--psProj->prevSpacetime.time;
+		}
+		setProjectileDestination(psProj, nullptr);
+		psProj->state = PROJ_IMPACT;
 		return nullptr;
 	}
 
@@ -897,7 +928,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 				psProj->dst = psProj->pos + delta * 10; // Target missing, so just keep going in a straight line.
 			}
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
-			Vector3i step = quantiseFraction(delta * int32_t(psStats->flightSpeed), GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
+			Vector3i step = homingStep(delta, psStats->flightSpeed, targetDistance, psProj->time, psProj->prevSpacetime.time);
 			if (psStats->movementModel == MM_HOMINGINDIRECT && psProj->psDest != nullptr)
 			{
 				for (int tries = 0; tries < 10 && map_LineIntersect(psProj->prevSpacetime.pos, psProj->pos + step, iHypot(step)) < targetDistance - 1u; ++tries)
@@ -906,7 +937,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 					// Recalculate delta, targetDistance and step.
 					delta = psProj->dst - psProj->pos;
 					targetDistance = std::max(iHypot(delta), 1);
-					step = quantiseFraction(delta * int32_t(psStats->flightSpeed), GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
+					step = homingStep(delta, psStats->flightSpeed, targetDistance, psProj->time, psProj->prevSpacetime.time);
 				}
 			}
 			psProj->pos += step;
@@ -1510,8 +1541,11 @@ void proj_UpdateAll()
 	// Penetrating projectiles may spawn additional projectiles,
 	// which will be returned from `PROJECTILE::update()`.
 	// These need to be added separately to `psProjectileList` later.
-	for (PROJECTILE* p : psProjectileList)
+	// Not a range-based for: projectiles may be added during the loop (for example, by script event handlers).
+	const size_t projectileCount = psProjectileList.size();
+	for (size_t i = 0; i < projectileCount; ++i)
 	{
+		PROJECTILE* p = psProjectileList[i];
 		PROJECTILE* spawned = p->update();
 		if (spawned)
 		{

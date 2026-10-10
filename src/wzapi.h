@@ -1135,7 +1135,7 @@ namespace wzapi
 	/// <param name="_sfx">Optional boolean parameter that specifies whether special effects are to be applied.</param>
 	/// <returns>`true` if `psObj` has been successfully queued for destruction.</returns>
 	bool removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx));
-	no_return_value setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2));
+	no_return_value setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2)); WZAPI_AI_UNSAFE
 	scr_area getScrollLimits(WZAPI_NO_PARAMS);
 	returned_nullable_ptr<const STRUCTURE> addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y, optional<int> _direction));
 	unsigned int getStructureLimit(WZAPI_PARAMS(std::string structureName, optional<int> _player));

@@ -1296,7 +1296,7 @@ bool frontendInitialiseFinalize()
 	}
 
 	FrontImages = (IMAGEFILE *)resGetData("IMG", "frontend.img");
-	if (FrontImages == nullptr)
+	if (FrontImages == nullptr || FrontImages->imageDefs.size() < IMAGE_FRONTEND_COUNT)
 	{
 		std::string errorMessage = astringf(_("Unable to load: %s."), "frontend.img");
 		if (!getLoadedMods().empty())
@@ -1961,6 +1961,7 @@ bool stageThreeShutDown()
 
 	challengesUp = false;
 	challengeActive = false;
+	challengeFileName = "";
 	resetInGameHostQuit();
 	InGameOpUp = false;
 	bInTutorial = false;

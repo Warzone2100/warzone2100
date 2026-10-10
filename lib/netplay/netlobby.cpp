@@ -25,6 +25,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzstring_json.h"
 #include "lib/framework/crc.h"
+#include "lib/framework/json_ext.h"
 #include "src/urlrequest.h"
 #include "src/version.h"
 
@@ -1088,6 +1089,8 @@ void setHashRequestHandler(std::function<void(const nlohmann::json& hashRequest,
 
 // MARK: LobbyConnectCheckRequest
 
+static constexpr size_t MAX_LOBBY_CONNECT_CHECK_JSON_DEPTH = 32;
+
 struct LobbyConnectCheckRequest
 {
 	std::string lobbyConnectToken;
@@ -1099,11 +1102,6 @@ void from_json(const nlohmann::json& j, LobbyConnectCheckRequest& v)
 {
 	v.lobbyConnectToken = j.at("lobbyToken").get<std::string>();
 	v.challenge = j.at("challenge").get<std::string>();
-	auto hashRequestIt = j.find("hashReq");
-	if (hashRequestIt != j.end())
-	{
-		v.hashRequest = *hashRequestIt;
-	}
 }
 
 // MARK: LobbyConnectCheckResponse
@@ -1566,9 +1564,15 @@ LobbyServerHostingHandlerImpl::LobbyConnectionCheckResult LobbyServerHostingHand
 	}
 
 	// JSON decode LobbyConnectCheckRequest from jsonString
+	if (!jsonNestingWithinLimit(jsonRequest.data(), jsonRequest.data() + jsonRequest.size(), MAX_LOBBY_CONNECT_CHECK_JSON_DEPTH))
+	{
+		debug(LOG_LOBBY, "Invalid lobby connection request");
+		return ::tl::make_unexpected(LobbyConnectionCheckRequestError::InvalidRequest);
+	}
 	LobbyConnectCheckRequest request;
+	nlohmann::json jsonData;
 	try {
-		nlohmann::json jsonData = nlohmann::json::parse(jsonRequest);
+		jsonData = nlohmann::json::parse(jsonRequest);
 		request = jsonData.get<LobbyConnectCheckRequest>();
 	}
 	catch (const std::exception &e) {
@@ -1588,6 +1592,14 @@ LobbyServerHostingHandlerImpl::LobbyConnectionCheckResult LobbyServerHostingHand
 		// Insufficient challenge length
 		debug(LOG_LOBBY, "Invalid challenge length: %zu", challengeLength);
 		return ::tl::make_unexpected(LobbyConnectionCheckRequestError::InvalidRequest);
+	}
+	if (trustedLobbyServerAddress)
+	{
+		auto hashRequestIt = jsonData.find("hashReq");
+		if (hashRequestIt != jsonData.end())
+		{
+			request.hashRequest = std::move(*hashRequestIt);
+		}
 	}
 
 	nlohmann::ordered_json responseJson;
@@ -2227,7 +2239,11 @@ bool EnumerateGames(const std::string& lobbyServerAddress, CompletionHandlerFunc
 					logExceptionOnMainThread("Failed to parse JSON response: ", e);
 					return false;
 				}
-				ASSERT_OR_RETURN(false, jsonData.is_object(), "Received non-object item");
+				if (!jsonData.is_object())
+				{
+					logErrorOnMainThread("Received non-object item", nullptr);
+					return false;
+				}
 
 				auto it = jsonData.find("type");
 				if (it != jsonData.end() && it.value().is_string() && it.value().get<std::string>() == "header")

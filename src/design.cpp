@@ -1025,7 +1025,8 @@ void desSetupDesignTemplates()
 		/* add template to list if not a transporter,
 		 * cyborg, person or command droid,
 		 */
-		if (templ.droidType != DROID_TRANSPORTER        &&
+		if (!templ.hidden                               &&
+		    templ.droidType != DROID_TRANSPORTER        &&
 		    templ.droidType != DROID_SUPERTRANSPORTER   &&
 		    templ.droidType != DROID_CYBORG             &&
 		    templ.droidType != DROID_CYBORG_SUPER       &&
@@ -2936,7 +2937,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		psTempl->name = WzString::fromUtf8(newName);
 	}
 
-	if (!designableTemplate(psTempl, player))
+	if (!designableTemplate(psTempl, player, !complain))
 	{
 		return false;
 	}

@@ -2104,7 +2104,7 @@ void	effectSetupConstruction(EFFECT& effect)
 void	effectSetupFire(EFFECT& effect)
 {
 	effect.frameDelay = 300;	   // needs to be investigated...
-	effect.radius = auxVar;	// needs to be investigated
+	effect.radius = static_cast<uint16_t>(std::clamp<UDWORD>(auxVar, 1, UINT16_MAX));
 	effect.lifeSpan = (UWORD)auxVarSec;
 	effect.birthTime = graphicsTime;
 	SET_ESSENTIAL(effect);
@@ -2580,11 +2580,19 @@ bool readFXData(const char *fileName, WorldMapState& mapState)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
+		const int group = ini.value("group").toInt();
+		const int type = ini.value("type").toInt();
+		if (group < 0 || group >= EFFECT_FREED || type < 0 || type > DROID_ANIMEVENT_DYING_NORMAL_ST)
+		{
+			debug(LOG_ERROR, "Invalid effect group (%d) or type (%d) in %s", group, type, fileName);
+			ini.endGroup();
+			continue;
+		}
 		EFFECT curEffect;
 
 		curEffect.control      = ini.value("control").toInt();
-		curEffect.group        = (EFFECT_GROUP)ini.value("group").toInt();
-		curEffect.type         = (EFFECT_TYPE)ini.value("type").toInt();
+		curEffect.group        = (EFFECT_GROUP)group;
+		curEffect.type         = (EFFECT_TYPE)type;
 		curEffect.frameNumber  = ini.value("frameNumber").toInt();
 		curEffect.size         = ini.value("size").toInt();
 		curEffect.baseScale    = ini.value("baseScale").toInt();
@@ -2611,6 +2619,16 @@ bool readFXData(const char *fileName, WorldMapState& mapState)
 		{
 			curEffect.imd = nullptr;
 		}
+		if (curEffect.imd == nullptr && curEffect.group != EFFECT_DESTRUCTION && curEffect.group != EFFECT_FIRE && curEffect.group != EFFECT_SAT_LASER)
+		{
+			debug(LOG_ERROR, "Effect without a model in %s", fileName);
+			ini.endGroup();
+			continue;
+		}
+		if (curEffect.group == EFFECT_FIRE && curEffect.radius == 0)
+		{
+			curEffect.radius = 1;
+		}
 
 		// For fire effects, set the tile as being on fire so that (e.g.) burning oil resources can't
 		// immediately be built on
@@ -2620,7 +2638,9 @@ bool readFXData(const char *fileName, WorldMapState& mapState)
 			const int timeLeftToRun = curEffect.lifeSpan - timeThatEffectHasBeenRunning;
 
 			// Sanity check - don't allow a negative time to wrap to a huge positive unsigned value.
-			if (timeLeftToRun > 0)
+			if (timeLeftToRun > 0
+				&& curEffect.position.x >= 0 && curEffect.position.x < world_coord(mapState.width)
+				&& curEffect.position.z >= 0 && curEffect.position.z < world_coord(mapState.height))
 			{
 				tileSetFire(mapState, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
 			}

@@ -64,6 +64,9 @@ MESSAGE *addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
 /** Remove a message. */
 void removeMessage(MESSAGE *psDel, UDWORD player);
 
+/// Whether \c psObj can be the object of a proximity message (oil resources and artifacts)
+bool validProximityMessageObject(const BASE_OBJECT *psObj);
+
 /** Remove all Messages. */
 void freeMessages();
 

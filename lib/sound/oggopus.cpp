@@ -336,7 +336,7 @@ optional<size_t> WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 	{
 		size_t spaceLeft = bufferSize - bufferOffset;
 		ASSERT(spaceLeft <= static_cast<size_t>(std::numeric_limits<int>::max()), "spaceLeft (%zu) exceeds int::max", spaceLeft);
-		int toRead = static_cast<int>(std::min<size_t>(TMP_BUF, spaceLeft));
+		int toRead = static_cast<int>(std::min<size_t>(TMP_BUF, spaceLeft / sizeof(opus_int16)));
 
 		// Note: the return value is the number of *samples per channel*, not *bytes* !!
 		samples_per_chan = op_read_stereo(m_of, pcm, toRead);

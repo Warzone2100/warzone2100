@@ -46,6 +46,7 @@
 #include "mission.h"        // Cheated - local meta flag, clear/resetMissionWidgets
 #include "effects.h"        // serialize/restoreActiveEffects - local display state
 #include "multistat.h"      // loadMultiStats, setMultiStats, getMultiStats
+#include "multiint.h"       // sPlayer
 #include "modding.h"        // getLoadedMods, setOverrideMods, clearOverrideMods
 #include "init.h"           // rebuildSearchPath, buildMapList, searchPathMode
 #include "levels.h"         // levShutDown, levInitialise, levFindDataSet, makeLevLoadDataLoadingTask
@@ -143,9 +144,17 @@ static void readPlayers(const nlohmann::ordered_json &jplayers)
 		PLAYER &pl = NetPlay.players[idx];
 		sstrcpy(pl.name, jp.at("name").get<std::string>().c_str());
 		pl.position = jp.at("position").get<int32_t>();
+		if (pl.position < 0 || pl.position >= MAX_CONNECTED_PLAYERS)
+		{
+			throw StateError("setup.players position out of range");
+		}
 		pl.colour = jp.at("colour").get<int32_t>();
+		if (pl.colour < 0 || pl.colour >= 16)  // as setPlayerColour() allows
+		{
+			throw StateError("setup.players colour out of range");
+		}
 		pl.team = jp.at("team").get<int32_t>();
-		pl.faction = static_cast<FactionID>(jp.at("faction").get<uint8_t>());
+		pl.faction = uintToFactionID(jp.at("faction").get<uint8_t>()).value_or(FACTION_NORMAL);
 		pl.difficulty = static_cast<AIDifficulty>(static_cast<int8_t>(jp.at("difficulty").get<int>()));
 		pl.ai = static_cast<int8_t>(jp.at("ai").get<int>());
 		pl.allocated = jp.at("allocated").get<bool>();
@@ -283,6 +292,10 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 		throw StateError("setup.selectedPlayer out of range");
 	}
 	NetPlay.hostPlayer = j.at("hostPlayer").get<uint32_t>();
+	if (NetPlay.hostPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		throw StateError("setup.hostPlayer out of range");
+	}
 	NetPlay.playercount = j.at("playerCount").get<uint32_t>();
 	NetPlay.bComms = j.at("bComms").get<bool>();
 
@@ -350,6 +363,10 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	if (game.maxPlayers > MAX_PLAYERS)
 	{
 		throw StateError("options.maxPlayers exceeds MAX_PLAYERS");
+	}
+	if (game.maxPlayers == 0 && game.type == LEVEL_TYPE::SKIRMISH)
+	{
+		throw StateError("options.maxPlayers is 0 in a skirmish game");
 	}
 	sstrcpy(game.name, jopt.at("name").get<std::string>().c_str());
 	game.blindMode = static_cast<BLIND_MODE>(jopt.at("blindMode").get<uint8_t>());
@@ -1421,7 +1438,14 @@ bool coldLoadRestoreWorld()
 	// for the network path (it never carries localState) and harmless if missing (no-op object).
 	if (g_coldLoadLocalStateDoc)
 	{
-		readLocalState(*g_coldLoadLocalStateDoc);
+		try
+		{
+			readLocalState(*g_coldLoadLocalStateDoc);
+		}
+		catch (const std::exception &e)
+		{
+			debug(LOG_ERROR, "Ignoring invalid local state: %s", e.what());
+		}
 		g_coldLoadLocalStateDoc.reset();
 	}
 
@@ -1453,8 +1477,8 @@ bool coldLoadRestoreWorld()
 
 /// Re-establish the local player's multiplayer profile identity + stats. The load process resets the
 /// per-slot PLAYERSTATS, so without this the local identity is empty and saveMultiStats() on quit
-/// refuses to save ("Refusing to save profile with empty identity"). Mirrors the legacy save load
-/// (game.cpp gameLoadV) and a normal skirmish start: load the profile by player name (generating an
+/// refuses to save ("Refusing to save profile without a private identity"). Mirrors the legacy save load
+/// (game.cpp gameLoadV) and a normal skirmish start: load the local profile (generating an
 /// identity if none is on disk) and set it for the local slot.
 static void restoreLocalPlayerMultiStats()
 {
@@ -1462,10 +1486,8 @@ static void restoreLocalPlayerMultiStats()
 	{
 		return;
 	}
-	char playerName[StringSize];
-	sstrcpy(playerName, getPlayerName(selectedPlayer));
 	PLAYERSTATS stats = getMultiStats(selectedPlayer); // preserve an already-loaded identity, if any
-	loadMultiStats(playerName, &stats);
+	loadMultiStats(sPlayer, &stats);
 	setMultiStats(selectedPlayer, stats, false);
 	setMultiStats(selectedPlayer, stats, true);
 }

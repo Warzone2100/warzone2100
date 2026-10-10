@@ -414,8 +414,18 @@ bool loadWeaponStats(WzConfig &ini)
 			psStats->upgrade[j] = psStats->base;
 		}
 
-		psStats->numExplosions = ini.value("numExplosions").toUInt();
-		psStats->flightSpeed = ini.value("flightSpeed", 1).toUInt();
+		psStats->numExplosions = std::min(ini.value("numExplosions").toUInt(), 100u);
+		const json_variant flightSpeed = ini.value("flightSpeed", 1);
+		if (flightSpeed.jsonValue().is_number() && flightSpeed.jsonValue().get<double>() < 0)
+		{
+			debug(LOG_INFO, "%s: A negative flightSpeed is deprecated, use the \"ImpactAtSource\" flag instead", list[i].toUtf8().c_str());
+			psStats->flags.set(WEAPON_FLAG_IMPACT_AT_SOURCE, true);
+			psStats->flightSpeed = static_cast<unsigned>(std::clamp(-flightSpeed.jsonValue().get<double>(), 1.0, 45000.0));
+		}
+		else
+		{
+			psStats->flightSpeed = flightSpeed.toUInt();
+		}
 		psStats->rotate = ini.value("rotate").toUInt();
 		psStats->minElevation = ini.value("minElevation").toInt();
 		psStats->maxElevation = ini.value("maxElevation").toInt();
@@ -436,7 +446,11 @@ bool loadWeaponStats(WzConfig &ini)
 		ASSERT(weaponSize <= WEAPON_SIZE_ANY, "Bad weapon size for %s", list[i].toUtf8().c_str());
 		psStats->weaponSize = (WEAPON_SIZE)weaponSize;
 
-		ASSERT(psStats->flightSpeed > 0, "Invalid flight speed for %s", list[i].toUtf8().c_str());
+		if (psStats->flightSpeed == 0 || psStats->flightSpeed > 45000)
+		{
+			ASSERT(false, "Invalid flight speed for %s", list[i].toUtf8().c_str());
+			psStats->flightSpeed = std::clamp<UDWORD>(psStats->flightSpeed, 1, 45000);
+		}
 
 		psStats->ref = STAT_WEAPON + i;
 
@@ -577,6 +591,10 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_TELEPORT_CAPTURE, true);
 		}
+		if (std::find(flags.begin(), flags.end(), "impactatsource") != flags.end()) // "ImpactAtSource"
+		{
+			psStats->flags.set(WEAPON_FLAG_IMPACT_AT_SOURCE, true);
+		}
 		// Exp gain is based on damage from projectiles and all forms of damage allow it by default.
 		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, true);
 		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, true);
@@ -642,7 +660,7 @@ bool loadBodyStats(WzConfig &ini)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_BODY;
 
-		psStats->weaponSlots = ini.value("weaponSlots").toInt();
+		psStats->weaponSlots = std::clamp(ini.value("weaponSlots").toInt(), 0, static_cast<int>(MAX_WEAPONS));
 		psStats->bodyClass = ini.value("class").toWzString();
 		psStats->base.thermal = ini.value("armourHeat").toInt();
 		psStats->base.armour = ini.value("armourKinetic").toInt();
@@ -761,7 +779,13 @@ bool loadBrainStats(WzConfig &ini)
 			ASSERT(cmdExpRange.is_array(), "cmdExpRange is not an array");
 			for (const auto& v : cmdExpRange)
 			{
-				psStats->cmdExpRange.push_back(v.get<int>());
+				ASSERT_OR_RETURN(false, v.is_number(), "Invalid cmdExpRange for %s", getID(psStats));
+				const double range = v.get<double>();
+				if (range < 0 || range > 46340)
+				{
+					debug(LOG_ERROR, "Invalid cmdExpRange for %s: %f", getID(psStats), range);
+				}
+				psStats->cmdExpRange.push_back(static_cast<int>(std::clamp(range, 0.0, 46340.0)));
 			}
 		}
 
@@ -769,12 +793,14 @@ bool loadBrainStats(WzConfig &ini)
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)
 		{
+			ASSERT_OR_RETURN(false, v.is_string(), "Invalid ranks for %s", getID(psStats));
 			psStats->rankNames.push_back(v.get<std::string>());
 		}
 		auto rankThresholds = ini.json("thresholds");
 		for (const auto& v : rankThresholds)
 		{
-			psStats->base.rankThresholds.push_back(v.get<int>());
+			ASSERT_OR_RETURN(false, v.is_number(), "Invalid thresholds for %s", getID(psStats));
+			psStats->base.rankThresholds.push_back(static_cast<int>(std::clamp(v.get<double>(), static_cast<double>(std::numeric_limits<int>::min()), static_cast<double>(std::numeric_limits<int>::max()))));
 		}
 		psStats->ref = STAT_BRAIN + i;
 
@@ -798,9 +824,19 @@ bool loadBrainStats(WzConfig &ini)
 				retVal = false;
 			}
 		}
+		else if (i != 0)
+		{
+			debug(LOG_ERROR, "Brain %s has no turret", getStatsName(psStats));
+			retVal = false;
+		}
 
 		psStats->scavengersGiveExpUntilLevel = ini.value("scavengersGiveExpUntilLevel", -1).toInt();
-		psStats->productionCommanderExpLimit = ini.value("productionCommanderExpLimit", 10000).toInt();
+		const int productionCommanderExpLimit = ini.value("productionCommanderExpLimit", 10000).toInt();
+		if (productionCommanderExpLimit < 0 || productionCommanderExpLimit > 32767)
+		{
+			debug(LOG_ERROR, "Invalid productionCommanderExpLimit for %s: %d", getID(psStats), productionCommanderExpLimit);
+		}
+		psStats->productionCommanderExpLimit = std::clamp(productionCommanderExpLimit, 0, 32767);
 		psStats->autoRewardRankFromAttach = ini.value("autoRewardRankFromAttach", true).toBool();
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
@@ -878,7 +914,15 @@ bool loadPropulsionStats(WzConfig &ini)
 		psStats->spinSpeed = ini.value("spinSpeed", DEG(3) / 4).toInt();
 		ASSERT(psStats->spinSpeed != 0, "\"%s\".\"spinSpeed\" is 0", psStats->id.toUtf8().c_str());
 		psStats->spinAngle = ini.value("spinAngle", 180).toInt();
-		ASSERT(psStats->spinAngle != 0, "\"%s\".\"spinAngle\" is 0", psStats->id.toUtf8().c_str());
+		if (psStats->spinAngle >= 360)
+		{
+			debug(LOG_ERROR, "\"%s\".\"spinAngle\" is out of range (%u), and wraps around", psStats->id.toUtf8().c_str(), psStats->spinAngle);
+		}
+		if (static_cast<uint16_t>(DEG(psStats->spinAngle)) == 0)
+		{
+			ASSERT(false, "\"%s\".\"spinAngle\" is equivalent to 0: %u", psStats->id.toUtf8().c_str(), psStats->spinAngle);
+			psStats->spinAngle = 180;
+		}
 		psStats->acceleration = ini.value("acceleration", 250).toInt();
 		ASSERT(psStats->acceleration != 0, "\"%s\".\"acceleration\" is 0", psStats->id.toUtf8().c_str());
 		psStats->deceleration = ini.value("deceleration", 800).toInt();
@@ -1278,6 +1322,7 @@ bool loadWeaponModifiers(WzConfig &ini)
 		if (!getWeaponEffect(list[i], &effectInc))
 		{
 			debug(LOG_FATAL, "Invalid Weapon Effect - %s", list[i].toUtf8().c_str());
+			ini.endGroup();
 			continue;
 		}
 		std::vector<WzString> keys = ini.childKeys();
@@ -1311,7 +1356,7 @@ bool loadPropulsionSounds(const char *pFileName)
 	SDWORD	i, startID, idleID, moveOffID, moveID, hissID, shutDownID;
 	PROPULSION_TYPE type;
 
-	ASSERT(asPropulsionTypes.size() != 0, "loadPropulsionSounds: Propulsion type stats not loaded");
+	ASSERT_OR_RETURN(false, asPropulsionTypes.size() != 0, "loadPropulsionSounds: Propulsion type stats not loaded");
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	std::vector<WzString> list = ini.childGroups();
@@ -1365,7 +1410,27 @@ bool loadPropulsionSounds(const char *pFileName)
 UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 {
 	ASSERT(propulsionType < PROPULSION_TYPE_NUM, "The propulsion type is too large");
+	if (asTerrainTable == nullptr)
+	{
+		return 100; // No terrain table was loaded, which is the same as one without entries
+	}
 	return asTerrainTable[type * PROPULSION_TYPE_NUM + propulsionType];
+}
+
+size_t compStatCount(unsigned comp)
+{
+	switch (comp)
+	{
+	case COMP_BODY:       return asBodyStats.size();
+	case COMP_BRAIN:      return asBrainStats.size();
+	case COMP_PROPULSION: return asPropulsionStats.size();
+	case COMP_REPAIRUNIT: return asRepairStats.size();
+	case COMP_ECM:        return asECMStats.size();
+	case COMP_SENSOR:     return asSensorStats.size();
+	case COMP_CONSTRUCT:  return asConstructStats.size();
+	case COMP_WEAPON:     return asWeaponStats.size();
+	default:              return 0;
+	}
 }
 
 int getCompFromName(COMPONENT_TYPE compType, const WzString &name)

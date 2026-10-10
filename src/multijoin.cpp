@@ -532,14 +532,30 @@ void recvPlayerLeft(NETQUEUE queue)
 	uint32_t playerIndex = 0;
 	auto r = NETbeginDecode(queue, GAME_PLAYER_LEFT);
 	NETuint32_t(r, playerIndex);
-	NETend(r);
+	if (!NETend(r))
+	{
+		if (recordInvalidMessage(queue.index, GAME_PLAYER_LEFT))
+		{
+			debug(LOG_INFO, "Ignoring truncated GAME_PLAYER_LEFT from %d - further invalid ones will not be logged", (int)queue.index);
+		}
+		return;
+	}
 
-	addConsolePlayerLeftMessage(playerIndex);
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
+	{
+		if (recordInvalidMessage(queue.index, GAME_PLAYER_LEFT))
+		{
+			debug(LOG_INFO, "Invalid player index %" PRIu32 " from %" PRIu8, playerIndex, queue.index);
+		}
+		return;
+	}
 
 	if (whosResponsible(playerIndex) != queue.index)
 	{
 		return;
 	}
+
+	addConsolePlayerLeftMessage(playerIndex);
 
 	turnOffMultiMsg(true);
 	handlePlayerLeftInGame(playerIndex);
@@ -579,9 +595,17 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	if (NetPlay.isHost)
 	{
 		multiClearHostRequestMoveToPlayer(playerIndex);
+		if (playerIndex < MAX_PLAYERS)
+		{
+			resetLobbyChangePlayerVote(playerIndex);
+		}
 		multiSyncResetPlayerChallenge(playerIndex);
 		resetMultiOptionPrefValues(playerIndex);
 	}
+
+	resetInvalidMessageLog(playerIndex);
+	multiSyncResetPlayerPingReplies(playerIndex);
+	lobbyRequestRateLimitsReset(playerIndex);
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
@@ -605,6 +629,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(gameWorld, playerIndex, false);
 		clearPlayerMultiStats(playerIndex); // local only
+		ingame.VerifiedIdentity[playerIndex] = false;
 		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
@@ -663,6 +688,9 @@ bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdenti
 	}
 
 	playerSpamMuteReset(playerIndex);
+	resetInvalidMessageLog(playerIndex);
+	multiSyncResetPlayerPingReplies(playerIndex);
+	lobbyRequestRateLimitsReset(playerIndex);
 
 	if (NetPlay.isHost)		// host responsible for welcoming this player.
 	{

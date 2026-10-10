@@ -47,6 +47,8 @@
 
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
+/// Upper bound on factory numbers
+#define MAX_FACTORY_NUMBER	256
 
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0
@@ -110,7 +112,7 @@ float structureCompletionProgress(const STRUCTURE & structure);
 
 //builds a specified structure at a given location
 STRUCTURE *buildStructure(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
-STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation = false);
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation = false, bool deferWallRemoval = false);
 STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
 /// IMPORTANT: Do not save the reference to this instance anywhere, since it's
@@ -199,7 +201,7 @@ void checkForPowerGen(STRUCTURE *psPowerGen, WorldObjectState& objState);
 uint16_t countPlayerUnusedDerricks(const WorldObjectState& objState);
 
 // Set the command droid that factory production should go to struct _command_droid;
-void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
+void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander, QUEUE_MODE clearMode = ModeImmediate);
 
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid);
@@ -318,7 +320,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
 bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid);
 
 // give a structure from one player to another - used in Electronic Warfare
-STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true);
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true, bool grantReward = true);
 
 /*Initialise the production list and set up the production player*/
 void changeProductionPlayer(UBYTE player);

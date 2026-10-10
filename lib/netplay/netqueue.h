@@ -87,6 +87,15 @@ public:
 	// Append the raw data of this message to the provided output vector.
 	void rawDataAppendToVector(std::vector<uint8_t>& output) const;
 
+	enum class Origin : uint8_t
+	{
+		Received,
+		RelayedByHost,
+		InjectedByHost
+	};
+	Origin origin() const { return origin_; }
+	void setOrigin(Origin origin) { origin_ = origin; }
+
 private:
 
 	// Meant to be executed only by NetMessageBuilder
@@ -95,6 +104,7 @@ private:
 	friend class NetMessageBuilder;
 
 	NetMsgDataVector data_;
+	Origin origin_ = Origin::Received;
 };
 
 /// <summary>
@@ -142,7 +152,8 @@ public:
 		if (len > UINT16_MAX)
 		{
 			ASSERT(false, "Message payload length exceeds uint16_t max: %zu (message type: %u)", len, type());
-			len = UINT16_MAX; // Clamp to max length, so we can still send the message and probably gracefully handle it on the other side.
+			len = UINT16_MAX; // Truncate to the largest length the header can hold
+			data_.resize(NetMessage::HEADER_LENGTH + len);
 		}
 		const uint16_t payloadLen = static_cast<uint16_t>(len);
 		// Store payload length in network byte order starting at the second byte of the data vector.
@@ -251,6 +262,10 @@ public:
 	bool valid() const
 	{
 		return index <= msgData->size();
+	}
+	size_t remaining() const
+	{
+		return (index < msgData->size()) ? msgData->size() - index : 0;
 	}
 	void markInvalid() const
 	{

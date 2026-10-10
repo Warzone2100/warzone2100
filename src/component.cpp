@@ -61,6 +61,7 @@ static bool		leftFirst;
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 bool setPlayerColour(UDWORD player, UDWORD col)
 {
+	ASSERT_OR_RETURN(false, player < NetPlay.players.size(), "Invalid player: %u", player);
 	if (player >= MAX_PLAYERS)
 	{
 		NetPlay.players[player].colour = MAX_PLAYERS;

@@ -60,6 +60,10 @@ bool validOrderForLoc(DROID_ORDER order);
 /** \brief Checks if an order is valid for an object. */
 bool validOrderForObj(DROID_ORDER order);
 
+/** \brief Checks that \c psObj is a target of the type \c order needs (orders that need no target accept any, or none). */
+bool validTargetForOrder(DROID_ORDER order, BASE_OBJECT const *psObj);
+bool validTargetForRestoredOrder(DroidOrder const &order);
+
 /** \brief Sends an order with a location to a droid. */
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode);
 
@@ -117,6 +121,7 @@ SECONDARY_STATE secondaryGetState(const DROID *psDroid, SECONDARY_ORDER sec, QUE
 
 /** \brief Sets the state of a secondary order, return false if failed. */
 bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
+bool secondarySetStateWithoutMessage(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORDER sec, SECONDARY_STATE State);
 
 /** \brief Checks the damage level of a droid against it's secondary state. */
 void secondaryCheckDamageLevel(DROID *psDroid);

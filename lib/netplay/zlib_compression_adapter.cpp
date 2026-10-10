@@ -33,7 +33,7 @@ ZlibCompressionAdapter::ZlibCompressionAdapter()
 ZlibCompressionAdapter::~ZlibCompressionAdapter()
 {
 	deflateEnd(&deflateStream_);
-	deflateEnd(&inflateStream_);
+	inflateEnd(&inflateStream_);
 }
 
 net::result<void> ZlibCompressionAdapter::initialize()
@@ -156,6 +156,7 @@ net::result<void> ZlibCompressionAdapter::decompress(void* dst, size_t size)
 	// Z_STREAM_ERROR indicates an inconsistent stream state (not malformed input)
 	// it shouldn't happen, but treat it as an error regardless
 	case Z_STREAM_ERROR: err = "Z_STREAM_ERROR"; break;
+	case Z_STREAM_END:   err = "Z_STREAM_END";  break;
 	}
 	if (err != nullptr)
 	{

@@ -153,7 +153,7 @@ bool texLoad(const char *fileName)
 		}
 		i++; // next tile
 	}
-	while (k >= 3 && j + 6 < size);
+	while (k >= 3 && j + 6 < size && i < MAX_TILES);
 	free(buffer);
 
 	/* Now load the actual tiles */
@@ -177,7 +177,7 @@ bool texLoad(const char *fileName)
 			size_t len = strlen(fileName);
 			auto hasSuffix = [&](const char *suf) -> bool {
 				size_t l = strlen(suf);
-				return strncmp(fileName + len - l, suf, l) == 0;
+				return len >= l && strncmp(fileName + len - l, suf, l) == 0;
 			};
 			has_nm |= hasSuffix("_nm.png") || hasSuffix("_nm.ktx2");
 			has_sm |= hasSuffix("_sm.png") || hasSuffix("_sm.ktx2");

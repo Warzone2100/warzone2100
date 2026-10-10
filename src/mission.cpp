@@ -25,6 +25,8 @@
  * All the stuff relevant to a mission.
  */
 #include <time.h>
+#include <unordered_set>
+#include <vector>
 
 #include "mission.h"
 
@@ -202,6 +204,79 @@ bool MissionResUp	= false;
 static SDWORD		g_iReinforceTime = 0;
 
 
+// Clear a droid's base structure, action targets and order target that match pred
+template <typename Pred>
+static void clearDroidTargetsIf(DROID *psDroid, Pred pred)
+{
+	if (psDroid->psBaseStruct && pred(psDroid->psBaseStruct))
+	{
+		setDroidBase(psDroid, nullptr);
+	}
+	for (unsigned i = 0; i < MAX_WEAPONS; i++)
+	{
+		if (psDroid->psActionTarget[i] && pred(psDroid->psActionTarget[i]))
+		{
+			setDroidActionTarget(psDroid, nullptr, i);
+			// Clear action too if this requires a valid first action target
+			if (i == 0
+			    && psDroid->action != DACTION_MOVEFIRE
+			    && psDroid->action != DACTION_TRANSPORTIN
+			    && psDroid->action != DACTION_TRANSPORTOUT)
+			{
+				psDroid->action = DACTION_NONE;
+			}
+		}
+	}
+	if (psDroid->order.psObj && pred(psDroid->order.psObj))
+	{
+		setDroidTarget(psDroid, nullptr);
+	}
+}
+
+// Clear a structure's weapon targets that match pred
+template <typename Pred>
+static void clearStructureTargetsIf(STRUCTURE *psStruct, Pred pred)
+{
+	for (unsigned i = 0; i < MAX_WEAPONS; i++)
+	{
+		if (psStruct->psTarget[i] && pred(psStruct->psTarget[i]))
+		{
+			setStructureTarget(psStruct, nullptr, i, ORIGIN_UNKNOWN);
+		}
+	}
+}
+
+// Clear a repair facility's or rearm pad's target if it matches pred
+template <typename Pred>
+static void clearRepairAndRearmTargetsIf(STRUCTURE *psStruct, Pred pred)
+{
+	if (!psStruct->pFunctionality || !psStruct->pStructureType)
+	{
+		return;
+	}
+	if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+	{
+		REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
+		if (psRepairFac->psObj && pred(psRepairFac->psObj))
+		{
+			if (psRepairFac->state == RepairState::Repairing)
+			{
+				droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+			}
+			psRepairFac->psObj = nullptr;
+			psRepairFac->state = RepairState::Idle;
+		}
+	}
+	else if (psStruct->pStructureType->type == REF_REARM_PAD)
+	{
+		REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+		if (psReArmPad->psObj && pred(psReArmPad->psObj))
+		{
+			psReArmPad->psObj = nullptr;
+		}
+	}
+}
+
 //Remove soon-to-be illegal references to objects for some structures before going offWorld.
 static void resetHomeStructureObjects()
 {
@@ -209,31 +284,120 @@ static void resetHomeStructureObjects()
 	{
 		for (STRUCTURE *psStruct : gameWorld.objects.structures[i])
 		{
+			clearRepairAndRearmTargetsIf(psStruct, [](const BASE_OBJECT *) { return true; });
+		}
+	}
+}
+
+// Remove references from the home base and limbo droids to the off-world objects
+static void clearReferencesToOffWorldObjects()
+{
+	std::unordered_set<const BASE_OBJECT *> offWorldObjects;
+	for (const auto &droids : gameWorld.objects.droids)
+	{
+		for (const DROID *psDroid : droids)
+		{
+			offWorldObjects.insert(psDroid);
+			if (psDroid->isTransporter() && psDroid->psGroup)
+			{
+				offWorldObjects.insert(psDroid->psGroup->psList.begin(), psDroid->psGroup->psList.end());
+			}
+		}
+	}
+	for (const auto &structures : gameWorld.objects.structures)
+	{
+		offWorldObjects.insert(structures.begin(), structures.end());
+	}
+	for (const auto &features : gameWorld.objects.features)
+	{
+		offWorldObjects.insert(features.begin(), features.end());
+	}
+	auto isOffWorld = [&offWorldObjects](const BASE_OBJECT *psObj) {
+		return psObj != nullptr && offWorldObjects.count(psObj) != 0;
+	};
+
+	auto clearDroidReferences = [&isOffWorld](DROID *psDroid) {
+		clearDroidTargetsIf(psDroid, isOffWorld);
+		std::vector<BASE_OBJECT *> listTargets;
+		for (const DroidOrder &order : psDroid->asOrderList)
+		{
+			if (isOffWorld(order.psObj))
+			{
+				listTargets.push_back(order.psObj);
+			}
+		}
+		for (BASE_OBJECT *psTarget : listTargets)
+		{
+			orderClearTargetFromDroidList(psDroid, psTarget);
+		}
+	};
+	for (const PerPlayerDroidLists *droidLists : {&mission.gameWorld.objects.droids, &apsLimboDroids})
+	{
+		for (const auto &droids : *droidLists)
+		{
+			for (DROID *psDroid : droids)
+			{
+				clearDroidReferences(psDroid);
+				if (psDroid->isTransporter() && psDroid->psGroup)
+				{
+					for (DROID *psCargo : psDroid->psGroup->psList)
+					{
+						if (psCargo != psDroid)
+						{
+							clearDroidReferences(psCargo);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for (const auto &structures : mission.gameWorld.objects.structures)
+	{
+		for (STRUCTURE *psStruct : structures)
+		{
+			clearStructureTargetsIf(psStruct, isOffWorld);
+			clearRepairAndRearmTargetsIf(psStruct, isOffWorld);
 			if (!psStruct->pFunctionality || !psStruct->pStructureType)
 			{
 				continue;
 			}
-			if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+			switch (psStruct->pStructureType->type)
 			{
-				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
-				if (psRepairFac->psObj)
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				if (isOffWorld(psStruct->pFunctionality->factory.psCommander))
 				{
-					if (psRepairFac->state == RepairState::Repairing)
+					assignFactoryCommandDroid(psStruct, nullptr);
+				}
+				break;
+			case REF_POWER_GEN:
+				for (auto &psExtractor : psStruct->pFunctionality->powerGenerator.apResExtractors)
+				{
+					if (isOffWorld(psExtractor))
 					{
-						droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+						psExtractor = nullptr;
 					}
-					psRepairFac->psObj = nullptr;
-					psRepairFac->state = RepairState::Idle;
 				}
-			}
-			else if (psStruct->pStructureType->type == REF_REARM_PAD)
-			{
-				REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
-				if (psReArmPad->psObj)
+				break;
+			case REF_RESOURCE_EXTRACTOR:
+				if (isOffWorld(psStruct->pFunctionality->resourceExtractor.psPowerGen))
 				{
-					psReArmPad->psObj = nullptr;
+					psStruct->pFunctionality->resourceExtractor.psPowerGen = nullptr;
 				}
+				break;
+			default:
+				break;
 			}
+		}
+	}
+
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		if (isOffWorld(cmdDroidGetDesignator(player)))
+		{
+			cmdDroidClearDesignator(player);
 		}
 	}
 }
@@ -346,6 +510,7 @@ bool missionShutDown()
 		freeAllFeatures(gameWorld);
 		freeAllFlagPositions(gameWorld.objects);
 		releaseAllProxDisp();
+		removeSpotters();
 		gwShutDown(gameWorld.map);
 
 		// freeAll*() above flushed gameWorld's pending visibility removals
@@ -757,6 +922,8 @@ static void saveMissionData()
 
 	debug(LOG_SAVE, "called");
 
+	keybindShutdown();
+
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	//clear out the audio
@@ -840,6 +1007,7 @@ static void saveMissionData()
 	//   stranded
 	flushPendingVisRemoval(mission.gameWorld);
 	fpathActiveBackend().waitForIdle();
+	removeSpotters();
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
 
@@ -873,15 +1041,19 @@ void restoreMissionData()
 
 	debug(LOG_SAVE, "called");
 
+	keybindShutdown();
+
 	//clear out the audio
 	audio_StopAll();
 
 	//clear all the lists
 	proj_FreeAllProjectiles();
+	clearReferencesToOffWorldObjects();
 	freeAllDroids(gameWorld);
 	freeAllStructs(gameWorld);
 	freeAllFeatures(gameWorld);
 	freeAllFlagPositions(gameWorld.objects);
+	removeSpotters();
 	gwShutDown(gameWorld.map);
 	if (game.type != LEVEL_TYPE::CAMPAIGN)
 	{
@@ -963,7 +1135,7 @@ void placeLimboDroids()
 {
 	debug(LOG_SAVE, "called");
 
-	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	// Copy the droids across for the selected Player
 	mutating_list_iterate(apsLimboDroids[selectedPlayer], [](DROID* psDroid)
@@ -1016,7 +1188,7 @@ void restoreMissionLimboData()
 {
 	debug(LOG_SAVE, "called");
 
-	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	/*the droids stored in the mission droid list need to be added back
 	into the current droid list*/
@@ -1440,9 +1612,8 @@ void endMission()
 		endMissionOffKeepLimbo();
 		break;
 	default:
-		//error!
-		debug(LOG_FATAL, "Unknown Mission Type");
-		abort();
+		debug(LOG_ERROR, "Unknown mission type: %d", static_cast<int>(mission.type));
+		break;
 	}
 
 	intRemoveMissionTimer();
@@ -3011,7 +3182,7 @@ void missionTimerUpdate()
 //
 void missionDestroyObjects()
 {
-	UBYTE Player, i;
+	UBYTE Player;
 
 	debug(LOG_SAVE, "called");
 	proj_FreeAllProjectiles();
@@ -3051,42 +3222,15 @@ void missionDestroyObjects()
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 	Player = selectedPlayer;
 
+	auto isDead = [](const BASE_OBJECT *psObj) { return psObj->died != 0; };
 	for (DROID* psDroid : gameWorld.objects.droids[Player])
 	{
-		if (psDroid->psBaseStruct && psDroid->psBaseStruct->died)
-		{
-			setDroidBase(psDroid, nullptr);
-		}
-		for (i = 0; i < MAX_WEAPONS; i++)
-		{
-			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
-			{
-				setDroidActionTarget(psDroid, nullptr, i);
-				// Clear action too if this requires a valid first action target
-				if (i == 0
-				    && psDroid->action != DACTION_MOVEFIRE
-				    && psDroid->action != DACTION_TRANSPORTIN
-				    && psDroid->action != DACTION_TRANSPORTOUT)
-				{
-					psDroid->action = DACTION_NONE;
-				}
-			}
-		}
-		if (psDroid->order.psObj && psDroid->order.psObj->died)
-		{
-			setDroidTarget(psDroid, nullptr);
-		}
+		clearDroidTargetsIf(psDroid, isDead);
 	}
 
 	for (STRUCTURE* psStruct : gameWorld.objects.structures[Player])
 	{
-		for (i = 0; i < MAX_WEAPONS; i++)
-		{
-			if (psStruct->psTarget[i] && psStruct->psTarget[i]->died)
-			{
-				setStructureTarget(psStruct, nullptr, i, ORIGIN_UNKNOWN);
-			}
-		}
+		clearStructureTargetsIf(psStruct, isDead);
 	}
 
 	// FIXME: check that orders do not reference anything bad?

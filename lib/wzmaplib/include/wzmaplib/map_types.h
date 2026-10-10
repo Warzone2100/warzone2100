@@ -68,6 +68,7 @@ struct MapData
 	};
 
 	uint32_t crcSumMapTiles(uint32_t crc);
+	bool hasValidDimensions() const;
 
 	uint32_t height = 0;
 	uint32_t width = 0;

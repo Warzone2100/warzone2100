@@ -447,12 +447,13 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 			updateMultiStatsLoses();
 		}
 	}
-	if (bMultiPlayer && isFirstCallForThisGame)
+	// Replay viewers have no profile stats to save
+	if (bMultiPlayer && isFirstCallForThisGame && !NETisReplay() && selectedPlayer < MAX_CONNECTED_PLAYERS)
 	{
 		updateMultiStatsGames(); // update games played.
 
 		PLAYERSTATS st = getMultiStats(selectedPlayer);
-		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
+		saveMultiStats(sPlayer, sPlayer, &st);
 	}
 
 	//clear out any mission widgets - timers etc that may be on the screen

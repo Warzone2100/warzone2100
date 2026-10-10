@@ -533,7 +533,7 @@ static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMo
 #ifdef DEBUG
 	if (gameTime != currentFpathTick)
 	{
-		if (enabled_debug[currentFpathTick])
+		if (enabled_debug[LOG_MOVEMENT])
 		{
 			static std::string tmpDgbStr;
 			tmpDgbStr = "Last tick fpath jobs per thread:";

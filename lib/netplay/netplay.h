@@ -38,6 +38,7 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <unordered_map>
 
 namespace netlobby
 {
@@ -243,6 +244,7 @@ struct PLAYER
 
 	// used on host-ONLY (not transmitted to other clients):
 	std::shared_ptr<std::vector<WZFile>> wzFiles = std::make_shared<std::vector<WZFile>>();            ///< for each player, we keep track of map/mod download progress
+	std::unordered_map<Sha256, uint8_t> wzFileUploadCounts;  ///< number of uploads started for each file
 	char                IPtextAddress[40];  ///< IP of this player
 	bool fileSendInProgress() const
 	{
@@ -324,7 +326,7 @@ WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       //
 void NETflush();                                                              ///< Flushes any data stuck in compression buffers.
 
 int NETsendFile(WZFile &file, unsigned player);  ///< Send file chunk. Returns 100 when done.
-int NETrecvFile(NETQUEUE queue);                 ///< Receive file chunk. Returns 100 when done.
+bool NETrecvFile(NETQUEUE queue);                ///< Receive file chunk. Returns true when a file has been received and validated.
 unsigned NETgetDownloadProgress(unsigned player);     ///< Returns 100 when done.
 
 int NETclose();					// close current game
@@ -343,6 +345,7 @@ enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetS
 size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
 void NETplayerKicked(UDWORD index, bool quiet = false);			// Cleanup after player has been kicked
+bool NETplayerWasKicked(uint32_t index);
 
 bool NETplayerHasConnection(uint32_t index);
 
@@ -413,7 +416,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, const EcKey& p
 				 UDWORD plyrs, uint16_t desiredOpenSpectatorSlots,
                  uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
-void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
+void NETfixDuplicatePlayerNames(optional<uint32_t> changedPlayer = nullopt);  // Change a player's name automatically, if there are duplicates.
 
 void NETsetLobbyserverAddress(std::string_view lobbyAddress);
 const std::string& NETgetLobbyserverAddress();
@@ -428,6 +431,10 @@ void NETsetEnableTCPNoDelay(bool enabled);
 bool NETgetEnableTCPNoDelay();
 uint32_t NETgetJoinConnectionNETPINGChallengeFromHostSize();
 uint32_t NETgetJoinConnectionNETPINGChallengeFromClientSize();
+
+std::vector<uint8_t> NETpingSignatureData(const uint8_t *challenge, size_t challengeSize, uint32_t pingerIndex, uint32_t responderIndex, uint32_t hostIndex, const EcKey::Key& hostPublicKey);
+std::vector<uint8_t> NETjoinClientSignatureData(const std::vector<uint8_t>& hostChallenge, const EcKey::Key& hostPublicKey, const EcKey::Key& clientPublicKey);
+std::vector<uint8_t> NETjoinHostSignatureData(const std::vector<uint8_t>& clientChallenge, const EcKey::Key& clientPublicKey, const EcKey::Key& hostPublicKey);
 
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);

@@ -60,6 +60,12 @@ static_assert(PING_CHALLENGE_BYTES % 8 == 0, "Must be a multiple of 8 bytes");
 typedef std::array<uint8_t, PING_CHALLENGE_BYTES> PingChallengeBytes;
 static std::array<optional<PingChallengeBytes>, MAX_CONNECTED_PLAYERS> pingChallenges;  // Random data sent with the last ping.
 
+#define PING_REPLY_MIN_INTERVAL         1000                    // least time between replies to the same player's pings. in approx millisecs.
+#define PING_REPLY_MAX_VERIFY_ATTEMPTS  2                       // replies checked against each ping we send to a player.
+static std::array<optional<PingChallengeBytes>, MAX_CONNECTED_PLAYERS> pendingPingReplies;
+static std::array<UDWORD, MAX_CONNECTED_PLAYERS> lastPingReplyTime{};
+static std::array<uint8_t, MAX_CONNECTED_PLAYERS> pingReplyVerifyAttempts{};
+
 
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
@@ -117,6 +123,18 @@ void multiSyncResetAllChallenges()
 	{
 		challenge.reset();
 	}
+	for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	{
+		multiSyncResetPlayerPingReplies(i);
+	}
+}
+
+void multiSyncResetPlayerPingReplies(uint32_t playerIdx)
+{
+	ASSERT_OR_RETURN(, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, playerIdx);
+	pendingPingReplies[playerIdx].reset();
+	lastPingReplyTime[playerIdx] = 0;
+	pingReplyVerifyAttempts[playerIdx] = 0;
 }
 
 void multiSyncResetPlayerChallenge(uint32_t playerIdx)
@@ -127,6 +145,9 @@ void multiSyncResetPlayerChallenge(uint32_t playerIdx)
 
 void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB)
 {
+	std::swap(pendingPingReplies[playerIndexA], pendingPingReplies[playerIndexB]);
+	std::swap(lastPingReplyTime[playerIndexA], lastPingReplyTime[playerIndexB]);
+	std::swap(pingReplyVerifyAttempts[playerIndexA], pingReplyVerifyAttempts[playerIndexB]);
 	if (!NetPlay.isHost) { return; }
 	std::swap(pingChallenges[playerIndexA], pingChallenges[playerIndexB]);
 }
@@ -134,7 +155,7 @@ void multiSyncPlayerSwap(uint32_t playerIndexA, uint32_t playerIndexB)
 static inline PingChallengeBytes generatePingChallenge(uint8_t playerIdx)
 {
 	PingChallengeBytes bytes;
-	if (NetPlay.isHost && !ingame.VerifiedIdentity[playerIdx])
+	if (!NetPlay.isHost || !ingame.VerifiedIdentity[playerIdx])
 	{
 		// generate secure random challenges until the player verifies their identity
 		genSecRandomBytes(bytes.data(), bytes.size());
@@ -153,12 +174,59 @@ static inline PingChallengeBytes generatePingChallenge(uint8_t playerIdx)
 	return bytes;
 }
 
+static void sendPingReply(uint8_t player, const PingChallengeBytes& challenge)
+{
+	const EcKey& hostIdentity = (NetPlay.isHost) ? getLocalSharedIdentity() : getMultiStats(NetPlay.hostPlayer).identity;
+	if (hostIdentity.empty())
+	{
+		return;
+	}
+	const EcKey::Key hostPublicKey = hostIdentity.toBytes(EcKey::Public);
+	uint8_t us = selectedPlayer;
+	bool isNew = false;
+
+	const auto signatureData = NETpingSignatureData(challenge.data(), PING_CHALLENGE_BYTES, player, us, NetPlay.hostPlayer, hostPublicKey);
+	EcKey::Sig challengeResponse = getLocalSharedIdentity().sign(signatureData.data(), signatureData.size());
+
+	auto w = NETbeginEncode(NETnetQueue(player), NET_PING);
+	NETuint8_t(w, us);
+	NETbool(w, isNew);
+	NETbytes(w, challengeResponse);
+	NETend(w);
+
+	lastPingReplyTime[player] = realTime;
+}
+
+void multiSyncSendPendingPingReplies()
+{
+	for (uint8_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	{
+		if (!pendingPingReplies[i].has_value())
+		{
+			continue;
+		}
+		if (lastPingReplyTime[i] > realTime)
+		{
+			lastPingReplyTime[i] = 0;
+		}
+		if (realTime - lastPingReplyTime[i] < PING_REPLY_MIN_INTERVAL)
+		{
+			continue;
+		}
+		const PingChallengeBytes challenge = pendingPingReplies[i].value();
+		pendingPingReplies[i].reset();
+		sendPingReply(i, challenge);
+	}
+}
+
 bool sendPing()
 {
 	bool			isNew = true;
 	uint8_t			player = selectedPlayer;
 	static UDWORD	lastPing = 0;	// Last time we sent a ping
 	static UDWORD	lastav = 0;		// Last time we updated average
+
+	multiSyncSendPendingPingReplies();
 
 	// Only ping every so often
 	if (lastPing > realTime)
@@ -220,6 +288,7 @@ bool sendPing()
 				&& i != selectedPlayer)
 			{
 				pingChallenges[i] = generatePingChallenge(i);
+				pingReplyVerifyAttempts[i] = 0;
 
 				auto w = NETbeginEncode(NETnetQueue(i), NET_PING);
 				NETuint8_t(w, player);
@@ -236,6 +305,7 @@ bool sendPing()
 	{
 		// Just generate and broadcast the same ping challenge to all other players
 		pingChallenges[0] = generatePingChallenge(0);
+		pingReplyVerifyAttempts.fill(0);
 
 		auto w = NETbeginEncode(NETbroadcastQueue(), NET_PING);
 		NETuint8_t(w, player);
@@ -262,7 +332,7 @@ inline optional<PingChallengeBytes>& expectedPingChallengeBytes(uint8_t playerId
 bool recvPing(NETQUEUE queue)
 {
 	bool	isNew = false;
-	uint8_t	sender, us = selectedPlayer;
+	uint8_t	sender;
 	uint8_t challenge[PING_CHALLENGE_BYTES];
 	EcKey::Sig challengeResponse;
 
@@ -291,19 +361,24 @@ bool recvPing(NETQUEUE queue)
 		return false;
 	}
 
+	const EcKey& hostIdentity = (NetPlay.isHost) ? getLocalSharedIdentity() : getMultiStats(NetPlay.hostPlayer).identity;
+	if (hostIdentity.empty())
+	{
+		return false;
+	}
+	const EcKey::Key hostPublicKey = hostIdentity.toBytes(EcKey::Public);
+
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
-		challengeResponse = getLocalSharedIdentity().sign(&challenge, PING_CHALLENGE_BYTES);
+		if (!NetPlay.isHost && !ingame.VerifiedIdentity[NetPlay.hostPlayer] && !isHostIdentityFromJoin(hostIdentity))
+		{
+			return false;
+		}
 
-		auto w = NETbeginEncode(NETnetQueue(sender), NET_PING);
-		// We are responding to a new ping
-		isNew = false;
-
-		NETuint8_t(w, us);
-		NETbool(w, isNew);
-		NETbytes(w, challengeResponse);
-		NETend(w);
+		PingChallengeBytes received;
+		std::copy(challenge, challenge + PING_CHALLENGE_BYTES, received.begin());
+		pendingPingReplies[sender] = received;
 	}
 	// They are responding to one of our pings
 	else
@@ -314,12 +389,18 @@ bool recvPing(NETQUEUE queue)
 			// Someone is sending a NET_PING but we do not have a valid challenge for them... ignore
 			return false;
 		}
+		if (pingReplyVerifyAttempts[sender] >= PING_REPLY_MAX_VERIFY_ATTEMPTS)
+		{
+			return false;
+		}
+		++pingReplyVerifyAttempts[sender];
 
 		bool verifiedResponse = false;
 		const auto& senderIdentity = getMultiStats(sender).identity;
 		if (!senderIdentity.empty())
 		{
-			verifiedResponse = senderIdentity.verify(challengeResponse, expectedPingChallenge.value().data(), PING_CHALLENGE_BYTES);
+			const auto signatureData = NETpingSignatureData(expectedPingChallenge.value().data(), PING_CHALLENGE_BYTES, selectedPlayer, sender, NetPlay.hostPlayer, hostPublicKey);
+			verifiedResponse = senderIdentity.verify(challengeResponse, signatureData.data(), signatureData.size());
 		}
 		if (!verifiedResponse)
 		{
@@ -340,7 +421,7 @@ bool recvPing(NETQUEUE queue)
 			{
 				// check if verified identity is an admin, and handle changes to admin status
 				bool oldIsAdminStatus = NetPlay.players[sender].isAdmin;
-				NetPlay.players[sender].isAdmin = identityMatchesAdmin(senderIdentity);
+				NetPlay.players[sender].isAdmin = identityMatchesAdmin(senderIdentity) && isVerifiedJoinIdentity(sender, senderIdentity);
 				if (oldIsAdminStatus != NetPlay.players[sender].isAdmin)
 				{
 					// then send info about admin status changes to all players

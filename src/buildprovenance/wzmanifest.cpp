@@ -91,6 +91,10 @@ optional<std::string> readSmallFile(const std::string& path)
 bool exeEntryMatchesSelf(const nlohmann::json& exeEntry, const ExeDetails& details)
 {
 	auto hashModeIt = exeEntry.find("hash_mode");
+	if (hashModeIt != exeEntry.end() && !hashModeIt->is_string())
+	{
+		return false;
+	}
 	if (hashModeIt != exeEntry.end() && hashModeIt->get<std::string>() == "macho-canonical")
 	{
 		auto slicesIt = exeEntry.find("slices");
@@ -102,14 +106,14 @@ bool exeEntryMatchesSelf(const nlohmann::json& exeEntry, const ExeDetails& detai
 		for (const auto& measured : details.machoCanonicalSlices)
 		{
 			auto archIt = slicesIt->find(measured.arch);
-			if (archIt == slicesIt->end() || archIt->get<std::string>() != measured.sha256Hex)
+			if (archIt == slicesIt->end() || !archIt->is_string() || archIt->get<std::string>() != measured.sha256Hex)
 			{
 				return false;
 			}
 		}
 		return true;
 	}
-	if (!details.rawHash.has_value() || !exeEntry.contains("sha256"))
+	if (!details.rawHash.has_value() || !exeEntry.contains("sha256") || !exeEntry.at("sha256").is_string())
 	{
 		return false;
 	}
@@ -117,7 +121,7 @@ bool exeEntryMatchesSelf(const nlohmann::json& exeEntry, const ExeDetails& detai
 	{
 		return false;
 	}
-	if (exeEntry.contains("size") && exeEntry.at("size").get<uint64_t>() != details.fileSize.value_or(0))
+	if (exeEntry.contains("size") && (!exeEntry.at("size").is_number_unsigned() || exeEntry.at("size").get<uint64_t>() != details.fileSize.value_or(0)))
 	{
 		return false;
 	}

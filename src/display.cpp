@@ -203,11 +203,13 @@ static uint32_t viewDistanceIncrementCooldownTime = 0;
 
 void animateToViewDistance(float target, float speed)
 {
+	const float distance = std::abs(target - getViewDistance());
+	const double duration = (speed > 0 && distance > 1) ? glm::log(distance) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed : 0;
 	viewDistanceAnimation
 		.setInitialData(getViewDistance())
 		.setFinalData(target)
 		.setEasing(viewDistanceAnimation.isActive() ? EASE_OUT : EASE_IN_OUT)
-		.setDuration(speed <= 0 ? 0 : static_cast<uint32_t>(glm::log(std::abs(target - getViewDistance())) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed))
+		.setDuration(static_cast<uint32_t>(std::min<double>(duration, std::numeric_limits<uint32_t>::max())))
 		.start();
 }
 

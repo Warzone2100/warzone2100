@@ -104,6 +104,7 @@
 #include "screens/gamepadlayoutscreen.h"
 #include "input/gamepadcursor.h"
 #include "qtscript.h"
+#include "visibility.h"
 #include "research.h"
 #include "seqdisp.h"
 #include "warzoneconfig.h"
@@ -841,6 +842,8 @@ LoadingTask<> startGameAbortLevelLoadFailure(ResourceLoadingController& controll
 	}
 	orderSourceReset();
 	orderProvenanceReset();
+	removeSpotters();
+	shutdownScripts();
 	levReleaseAll();
 	closeLoadingScreen();
 	cdAudio_SetGameMode(MusicGameMode::MENUS);
@@ -981,6 +984,8 @@ LoadingTask<> saveGameLoadAbortOnFailure(ResourceLoadingController& controller)
 	// FIXME: If we bomb out on a in game load, then we would crash if we don't do the next two calls
 	// Doesn't seem to be a way to tell where we are in game loop to determine if/when we should do the two calls.
 	gameLoopStatus = GAMECODE_FASTEXIT;
+	removeSpotters();
+	shutdownScripts();
 	// we had a error loading savegame (corrupt?), so go back to title screen?
 	stopGameLoop();
 	if (!(co_await startTitleLoopTask(controller))) // Restart into titleloop

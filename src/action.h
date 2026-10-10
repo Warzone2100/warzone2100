@@ -67,6 +67,12 @@ void actionUpdateDroid(DROID *psDroid);
 /** Do sanity update only. Called from actionUpdateDroid() normally. */
 void actionSanity(DROID *psDroid);
 
+/** Whether \c value is a DROID_ACTION. */
+bool validDroidAction(int value);
+
+/** Whether \c psTarget is a valid target for \c action. */
+bool validTargetForAction(DROID_ACTION action, BASE_OBJECT const *psTarget);
+
 /** Give a droid an action. */
 void actionDroid(DROID *psDroid, DROID_ACTION action);
 

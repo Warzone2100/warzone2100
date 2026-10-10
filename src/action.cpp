@@ -654,6 +654,41 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 }
 
 
+bool validDroidAction(int value)
+{
+	return (value >= DACTION_NONE && value <= DACTION_FIRESUPPORT_RETREAT) || value == DACTION_CIRCLE;
+}
+
+bool validTargetForAction(DROID_ACTION action, BASE_OBJECT const *psTarget)
+{
+	switch (action)
+	{
+	case DACTION_DEMOLISH:
+	case DACTION_REPAIR:
+	case DACTION_RESTORE:
+	case DACTION_MOVETODEMOLISH:
+	case DACTION_MOVETOREPAIR:
+	case DACTION_MOVETORESTORE:
+	case DACTION_WAITFORREARM:
+	case DACTION_MOVETOREARM:
+	case DACTION_WAITDURINGREARM:
+		return psTarget == nullptr || psTarget->type == OBJ_STRUCTURE;
+	case DACTION_MOVETOREARMPOINT:
+	case DACTION_MOVETOREPAIRPOINT:
+		return psTarget != nullptr && psTarget->type == OBJ_STRUCTURE;
+	case DACTION_DROIDREPAIR:
+		return psTarget == nullptr || psTarget->type == OBJ_DROID;
+	case DACTION_MOVETODROIDREPAIR:
+		return psTarget != nullptr && psTarget->type == OBJ_DROID;
+	case DACTION_MOVETOATTACK:
+	case DACTION_OBSERVE:
+	case DACTION_MOVETOOBSERVE:
+		return psTarget != nullptr;
+	default:
+		return true;
+	}
+}
+
 void actionSanity(DROID *psDroid)
 {
 	// Don't waste ammo unless given a direct attack order.
@@ -1978,8 +2013,8 @@ void actionUpdateDroid(DROID *psDroid)
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
 					// if completely repaired then reset order
-					secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 					orderDroidObj(psDroid, DORDER_GUARD, psDroid->order.psObj, ModeImmediate);
+					secondarySetStateWithoutMessage(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 				}
 				else
 				{
