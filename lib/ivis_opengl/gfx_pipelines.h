@@ -467,10 +467,13 @@ namespace gfx_api
 		int viewportHeight;
 		int bucketDimensionUsed;
 		float pad1 = 0.f;
+		float pad2 = 0.f;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
+	// std140 starts an ivec4 array on a 16-byte boundary, while glm::ivec4 only needs 4, so the C++ side must pad by hand.
+	static_assert(offsetof(constant_buffer_type<SHADER_WATER_HIGH>, bucketOffsetAndSize) % 16 == 0, "Water bucket table must sit where std140 puts it");
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_WATER_HIGH>, PointLightsUniforms>,

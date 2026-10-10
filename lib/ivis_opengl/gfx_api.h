@@ -1254,6 +1254,7 @@ namespace gfx_api
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
+	static_assert(offsetof(Draw3DShapeInstancedGlobalUniforms, bucketOffsetAndSize) % 16 == 0, "Instanced bucket table must sit where std140 puts it");
 
 	// Only change per mesh
 	struct Draw3DShapeInstancedPerMeshUniforms
@@ -1374,6 +1375,7 @@ namespace gfx_api
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
+	static_assert(offsetof(TerrainCombinedUniforms, bucketOffsetAndSize) % 16 == 0, "Terrain bucket table must sit where std140 puts it");
 	static_assert(WZ_MAX_SHADOW_CASCADES <= 4, "Packing the ShadowMapCascadeSplits into a vec4 won't work...");
 
 	// position-only view of the TerrainDecalVertex buffer, for the tessellated shadow/depth map pass

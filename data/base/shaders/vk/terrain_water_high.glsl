@@ -21,6 +21,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int viewportHeight;
 	int bucketDimensionUsed;
 	float pad1;
+	float pad2;
 	// Last because its length follows the grid dimension
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 };
