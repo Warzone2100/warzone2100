@@ -415,7 +415,17 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 
 		psStats->numExplosions = std::min(ini.value("numExplosions").toUInt(), 100u);
-		psStats->flightSpeed = ini.value("flightSpeed", 1).toUInt();
+		const json_variant flightSpeed = ini.value("flightSpeed", 1);
+		if (flightSpeed.jsonValue().is_number() && flightSpeed.jsonValue().get<double>() < 0)
+		{
+			debug(LOG_INFO, "%s: A negative flightSpeed is deprecated, use the \"ImpactAtSource\" flag instead", list[i].toUtf8().c_str());
+			psStats->flags.set(WEAPON_FLAG_IMPACT_AT_SOURCE, true);
+			psStats->flightSpeed = static_cast<unsigned>(std::clamp(-flightSpeed.jsonValue().get<double>(), 1.0, 45000.0));
+		}
+		else
+		{
+			psStats->flightSpeed = flightSpeed.toUInt();
+		}
 		psStats->rotate = ini.value("rotate").toUInt();
 		psStats->minElevation = ini.value("minElevation").toInt();
 		psStats->maxElevation = ini.value("maxElevation").toInt();
@@ -580,6 +590,10 @@ bool loadWeaponStats(WzConfig &ini)
 		if (std::find(flags.begin(), flags.end(), "teleportcapture") != flags.end()) // "TeleportCapture"
 		{
 			psStats->flags.set(WEAPON_FLAG_TELEPORT_CAPTURE, true);
+		}
+		if (std::find(flags.begin(), flags.end(), "impactatsource") != flags.end()) // "ImpactAtSource"
+		{
+			psStats->flags.set(WEAPON_FLAG_IMPACT_AT_SOURCE, true);
 		}
 		// Exp gain is based on damage from projectiles and all forms of damage allow it by default.
 		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, true);
