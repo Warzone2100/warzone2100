@@ -143,10 +143,15 @@ static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
  * \param mode  the specified alliance
  * \param player the specified player
  */
+bool multiMenuPlayerIsDead(uint32_t player)
+{
+	return player >= MAX_PLAYERS || (gameWorld.objects.droids[player].empty() && gameWorld.objects.structures[player].empty());
+}
+
 static PIELIGHT GetPlayerTextColor(int mode, UDWORD player)
 {
 	// override color if they are dead...
-	if (player >= MAX_PLAYERS || (gameWorld.objects.droids[player].empty() && gameWorld.objects.structures[player].empty()))
+	if (multiMenuPlayerIsDead(player))
 	{
 		return WZCOL_GREY;			// dead text color
 	}
@@ -738,6 +743,158 @@ static void displayMuteState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 
 // ////////////////////////////////////////////////////////////////////////////
+// The menu's rules (shared with the HUD's players view)
+
+bool multiMenuListsPlayer(uint32_t player)
+{
+	return isHumanPlayer(player) || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers && NetPlay.players[player].difficulty != AIDifficulty::DISABLED);
+}
+
+static bool multiMenuIsAlly(uint32_t player)
+{
+	return (selectedPlayer < MAX_PLAYERS && player < MAX_PLAYERS) && aiCheckAlliances(selectedPlayer, player);
+}
+
+MultiMenuLastColumn multiMenuLastColumn()
+{
+	/* Display player power instead of number of played games
+	 * and number of units instead of ping when in debug mode
+	 */
+	if (gInputManager.debugManager().debugMappingsAllowed())  //Won't pass this when in both release and multiplayer modes
+	{
+		return MultiMenuLastColumn::Power;
+	}
+	return runningMultiplayer() ? MultiMenuLastColumn::Ping : MultiMenuLastColumn::Structures;
+}
+
+std::string multiMenuScoreText(uint32_t player)
+{
+	ASSERT_OR_RETURN("", player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	// Let's use the real score for MP games
+	if (Cheated && NetPlay.bComms)
+	{
+		return "(cheated)";
+	}
+	return astringf("%d", getMultiStats(player).recentScore);
+}
+
+std::string multiMenuKillsText(uint32_t player)
+{
+	ASSERT_OR_RETURN("", player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	return astringf("%d", getMultiStats(player).recentKills);
+}
+
+std::string multiMenuUnitsText(uint32_t player)
+{
+	ASSERT_OR_RETURN("", player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	//only show player's and allies' unit counts, and nobody elses.
+	if (multiMenuIsAlly(player) || gInputManager.debugManager().debugMappingsAllowed())
+	{
+		return astringf("%d", getNumDroids(player) + getNumTransporterDroids(player));
+	}
+	return std::string();
+}
+
+std::string multiMenuLastColumnText(uint32_t player)
+{
+	ASSERT_OR_RETURN("", player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	switch (multiMenuLastColumn())
+	{
+	case MultiMenuLastColumn::Power:
+		// Player power
+		return astringf("%u", (int)getPower(player));
+	case MultiMenuLastColumn::Ping:
+		// ping
+		if (player != selectedPlayer && isHumanPlayer(player))
+		{
+			if (ingame.PingTimes[player] < PING_LIMIT)
+			{
+				return astringf("%d", ingame.PingTimes[player]);
+			}
+			return "∞";
+		}
+		return std::string();
+	case MultiMenuLastColumn::Structures:
+		// Structures
+		if (multiMenuIsAlly(player) || gInputManager.debugManager().debugMappingsAllowed())
+		{
+			// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
+			return astringf("%d", static_cast<int>(gameWorld.objects.structures[player].size()));
+		}
+		return std::string();
+	}
+	return std::string();
+}
+
+bool multiMenuHasChannel(uint32_t player)
+{
+	// - not configurable for self (obviously)
+	// - players shouldn't configure channel to spectators
+	const bool selectedPlayerIsSpectator = NetPlay.players[selectedPlayer].isSpectator;
+	return (player != selectedPlayer) && (selectedPlayerIsSpectator || !NetPlay.players[player].isSpectator);
+}
+
+bool multiMenuHasAllianceControls(uint32_t player)
+{
+	return alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && player < MAX_PLAYERS && !NetPlay.players[player].isSpectator;
+}
+
+bool multiMenuCanChangeAlliance(uint32_t player)
+{
+	//can't break alliances in 'Locked Teams' mode
+	return multiMenuHasAllianceControls(player) && !alliancesFixed(game.alliance);
+}
+
+void multiMenuToggleAlliance(uint32_t player)
+{
+	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS && player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+	UBYTE i = (UBYTE)(player);
+
+	switch (alliances[selectedPlayer][i])
+	{
+	case ALLIANCE_BROKEN:
+		requestAlliance((UBYTE)selectedPlayer, i, true, true);			// request an alliance
+		break;
+	case ALLIANCE_INVITATION:
+		formAlliance((UBYTE)selectedPlayer, i, true, true, true);			// form an alliance
+		break;
+	case ALLIANCE_REQUESTED:
+		breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
+		break;
+	case ALLIANCE_FORMED:
+		breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
+		break;
+	default:
+		break;
+	}
+}
+
+bool multiMenuShowsGifts(uint32_t player)
+{
+	return multiMenuHasAllianceControls(player) && multiMenuIsAlly(player);
+}
+
+bool multiMenuCanGiveResearchAndRadar()
+{
+	return alliancesCanGiveResearchAndRadar(game.alliance);
+}
+
+bool multiMenuCanStartKickVote(uint32_t player)
+{
+	if (!NetPlay.isHost || player >= MAX_CONNECTED_PLAYERS)
+	{
+		return false;
+	}
+	// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
+	return (NetPlay.bComms || Cheated) && (NetPlay.players[player].allocated || (NetPlay.players[player].allocated == false && NetPlay.players[player].ai != AI_OPEN));
+}
+
+bool multiMenuHasMute(uint32_t player)
+{
+	return player != selectedPlayer;
+}
+
+// ////////////////////////////////////////////////////////////////////////////
 
 class MultiMenuDroidView: public WIDGET
 {
@@ -846,7 +1003,7 @@ private:
 
 		for (auto player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 		{
-			if (isHumanPlayer(player) || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers && NetPlay.players[player].difficulty != AIDifficulty::DISABLED))
+			if (multiMenuListsPlayer(player))
 			{
 				addPlayerWidgets(player, 1 + NetPlay.players[player].position);
 			}
@@ -879,12 +1036,8 @@ private:
 
 		auto alliancesGrid = std::make_shared<GridLayout>();
 
-		bool selectedPlayerIsSpectator = NetPlay.players[selectedPlayer].isSpectator;
-
 		// add channel opener.
-		// - not configurable for self (obviously)
-		// - players shouldn't configure channel to spectators
-		if ((player != selectedPlayer) && (selectedPlayerIsSpectator || !NetPlay.players[player].isSpectator))
+		if (multiMenuHasChannel(player))
 		{
 			W_BUTINIT sButInit;
 			sButInit.width	= 35;
@@ -899,10 +1052,9 @@ private:
 				UBYTE i = (UBYTE)player;
 				openchannels[i] = !openchannels[i];
 
-				if (mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
+				if (mouseDown(MOUSE_RMB)) // both buttons....
 				{
-					// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
-					if ((NetPlay.bComms || Cheated) && (NetPlay.players[i].allocated || (NetPlay.players[i].allocated == false && NetPlay.players[i].ai != AI_OPEN)))
+					if (multiMenuCanStartKickVote(i))
 					{
 						inputLoseFocus();
 						startKickVote(static_cast<uint32_t>(i));
@@ -913,7 +1065,7 @@ private:
 			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(channelButton));
 		}
 
-		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && player < MAX_PLAYERS && !NetPlay.players[player].isSpectator)
+		if (multiMenuHasAllianceControls(player))
 		{
 			W_BUTINIT sButInit;
 			//alliance
@@ -925,29 +1077,11 @@ private:
 			sButInit.height = 24;
 
 			//can't break alliances in 'Locked Teams' mode
-			if (!alliancesFixed(game.alliance))
+			if (multiMenuCanChangeAlliance(player))
 			{
 				auto allianceButton = std::make_shared<W_BUTTON>(&sButInit);
 				allianceButton->addOnClickHandler([player](W_BUTTON& widg){
-					UBYTE i = (UBYTE)(player);
-
-					switch (alliances[selectedPlayer][i])
-					{
-					case ALLIANCE_BROKEN:
-						requestAlliance((UBYTE)selectedPlayer, i, true, true);			// request an alliance
-						break;
-					case ALLIANCE_INVITATION:
-						formAlliance((UBYTE)selectedPlayer, i, true, true, true);			// form an alliance
-						break;
-					case ALLIANCE_REQUESTED:
-						breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
-						break;
-					case ALLIANCE_FORMED:
-						breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
-						break;
-					default:
-						break;
-					}
+					multiMenuToggleAlliance(player);
 				});
 				alliancesGrid->place({1}, {0}, Margin(0, 1, 0, 0).wrap(allianceButton));
 			}
@@ -958,7 +1092,7 @@ private:
 			sButInit.width	= 31;
 			sButInit.height = 21;
 
-			if (alliancesCanGiveResearchAndRadar(game.alliance))
+			if (multiMenuCanGiveResearchAndRadar())
 			{
 				sButInit.id		= MULTIMENU_GIFT_RAD + player;
 				sButInit.pTip	= _("Give Visibility Report");
@@ -1019,7 +1153,7 @@ private:
 
 		// chat mute button
 		std::shared_ptr<WIDGET> muteWidget;
-		if (player != selectedPlayer)
+		if (multiMenuHasMute(player))
 		{
 			W_BUTINIT sButInit;
 			sButInit.id		= MULTIMENU_PLAYER_MUTE_START + player;
@@ -1058,7 +1192,7 @@ private:
 		{
 			const auto color = GetPlayerTextColor((selectedPlayer < MAX_PLAYERS && playerWidget.player < MAX_PLAYERS) ? alliances[selectedPlayer][playerWidget.player] : 0, playerWidget.player);
 			const bool isHuman = isHumanPlayer(playerWidget.player);
-			const bool isAlly = (selectedPlayer < MAX_PLAYERS && playerWidget.player < MAX_PLAYERS) && aiCheckAlliances(selectedPlayer, playerWidget.player);
+			const bool isAlly = multiMenuIsAlly(playerWidget.player);
 			const bool isSelectedPlayer = playerWidget.player == selectedPlayer;
 
 			playerWidget.name->setFontColour(color);
@@ -1072,66 +1206,10 @@ private:
 				continue;
 			}
 
-			char scoreString[128];
-			char killsString[20];
-			char unitsString[20] = {0};
-			char lastString[20] = {0};
-
-			// Let's use the real score for MP games
-			if (Cheated && NetPlay.bComms)
-			{
-				sstrcpy(scoreString, "(cheated)");
-			}
-			else
-			{
-				ssprintf(scoreString, "%d", getMultiStats(playerWidget.player).recentScore);
-			}
-			ssprintf(killsString, "%d", getMultiStats(playerWidget.player).recentKills);
-
-			//only show player's and allies' unit counts, and nobody elses.
-			if (isAlly || gInputManager.debugManager().debugMappingsAllowed())
-			{
-				ssprintf(unitsString, "%d", getNumDroids(playerWidget.player) + getNumTransporterDroids(playerWidget.player));
-			}
-
-			/* Display player power instead of number of played games
-			 * and number of units instead of ping when in debug mode
-			 */
-			if (gInputManager.debugManager().debugMappingsAllowed())  //Won't pass this when in both release and multiplayer modes
-			{
-				// Player power
-				ssprintf(lastString, "%u", (int)getPower(playerWidget.player));
-			}
-			else if (runningMultiplayer())
-			{
-				// ping
-				if (!isSelectedPlayer && isHuman)
-				{
-					if (ingame.PingTimes[playerWidget.player] < PING_LIMIT)
-					{
-						ssprintf(lastString, "%d", ingame.PingTimes[playerWidget.player]);
-					}
-					else
-					{
-						sstrcpy(lastString, "∞");
-					}
-				}
-			}
-			else
-			{
-				// Structures
-				if (isAlly || gInputManager.debugManager().debugMappingsAllowed())
-				{
-					// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
-					int num = gameWorld.objects.structures[playerWidget.player].size();
-					ssprintf(lastString, "%d", num);
-				}
-			}
-
-			playerWidget.score->setString(scoreString);
-			playerWidget.kills->setString(killsString);
-			playerWidget.units->setString(unitsString);
-			playerWidget.lastColumn->setString(lastString);
+			playerWidget.score->setString(WzString::fromUtf8(multiMenuScoreText(playerWidget.player)));
+			playerWidget.kills->setString(WzString::fromUtf8(multiMenuKillsText(playerWidget.player)));
+			playerWidget.units->setString(WzString::fromUtf8(multiMenuUnitsText(playerWidget.player)));
+			playerWidget.lastColumn->setString(WzString::fromUtf8(multiMenuLastColumnText(playerWidget.player)));
 
 			auto lockedScreen = screenPointer.lock();
 
@@ -1245,17 +1323,17 @@ public:
 		powerLabel->hide();
 		pingLabel->hide();
 		structsLabel->hide();
-		if (gInputManager.debugManager().debugMappingsAllowed())
+		switch (multiMenuLastColumn())
 		{
+		case MultiMenuLastColumn::Power:
 			powerLabel->show();
-		}
-		else if (runningMultiplayer())
-		{
+			break;
+		case MultiMenuLastColumn::Ping:
 			pingLabel->show();
-		}
-		else
-		{
+			break;
+		case MultiMenuLastColumn::Structures:
 			structsLabel->show();
+			break;
 		}
 	}
 
