@@ -28,13 +28,17 @@
 
 #include "lib/sandbox/sandbox.h"
 
+#include <sys/prctl.h>
+
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <string>
 #include <fcntl.h>
+#include <sys/ptrace.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -70,6 +74,88 @@ static bool canRead(const char* path)
 	}
 	close(fd);
 	return true;
+}
+
+/// SECCOMP_MODE_FILTER out of /proc/self/status, or 0 when there is no filter.
+static int seccompMode()
+{
+	FILE* status = fopen("/proc/self/status", "r");
+	if (status == nullptr)
+	{
+		return 0;
+	}
+
+	int mode = 0;
+	char line[256];
+	while (fgets(line, sizeof(line), status) != nullptr)
+	{
+		if (sscanf(line, "Seccomp: %d", &mode) == 1)
+		{
+			break;
+		}
+	}
+	fclose(status);
+	return mode;
+}
+
+/// A child of a filtered process inherits the filter, so these two have to keep working.
+static bool childCanExec()
+{
+	const pid_t child = fork();
+	if (child == 0)
+	{
+		execl("/bin/true", "true", static_cast<char*>(nullptr));
+		_exit(127);
+	}
+
+	int status = 0;
+	waitpid(child, &status, 0);
+	return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+}
+
+static bool childCanPtrace()
+{
+	const pid_t child = fork();
+	if (child == 0)
+	{
+		const long result = ptrace(PTRACE_TRACEME, 0, nullptr, nullptr);
+		_exit((result == -1 && errno == EPERM) ? 1 : 0);
+	}
+
+	int status = 0;
+	waitpid(child, &status, 0);
+	return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+}
+
+static int runHardenChecks()
+{
+	wz::sandbox::harden(wz::sandbox::Tier::WriteConfined);
+	for (const wz::sandbox::LogLine& line : wz::sandbox::pendingLog())
+	{
+		printf("  sandbox: %s\n", line.text.c_str());
+	}
+
+	check(prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0) == 1, "no_new_privs is set");
+	check(fcntl(STDIN_FILENO, F_GETFD) != -1, "stdin is open");
+	check(fcntl(STDOUT_FILENO, F_GETFD) != -1, "stdout is open");
+	check(fcntl(STDERR_FILENO, F_GETFD) != -1, "stderr is open");
+
+	if (seccompMode() != 2)
+	{
+		printf("SKIP: no syscall filter installed\n");
+		return failures;
+	}
+	printf("syscall filter installed\n");
+
+#if defined(__NR_keyctl)
+	errno = 0;
+	check(syscall(__NR_keyctl, 0, 0, 0, 0, 0) == -1 && errno == EPERM, "keyctl is denied with EPERM");
+#endif
+	check(canRead("/etc/hostname"), "an ordinary open still works");
+	check(childCanExec(), "a child can still execve");
+	check(childCanPtrace(), "a child can still ptrace");
+
+	return failures;
 }
 
 static void checkTierParsing()
@@ -175,7 +261,19 @@ int main()
 	}
 	close(readableFd);
 
-	bool tiersPassed = runTierInChild(wz::sandbox::Tier::WriteConfined, writeRoot, homeOutside, homeReadable);
+	fflush(stdout);
+	const pid_t hardenChild = fork();
+	if (hardenChild == 0)
+	{
+		const int hardenFailures = runHardenChecks();
+		fflush(stdout);
+		_exit(hardenFailures != 0);
+	}
+	int hardenStatus = 0;
+	waitpid(hardenChild, &hardenStatus, 0);
+	bool tiersPassed = WIFEXITED(hardenStatus) && WEXITSTATUS(hardenStatus) == 0;
+
+	tiersPassed = runTierInChild(wz::sandbox::Tier::WriteConfined, writeRoot, homeOutside, homeReadable) && tiersPassed;
 	tiersPassed = runTierInChild(wz::sandbox::Tier::Strict, writeRoot, homeOutside, homeReadable) && tiersPassed;
 
 	unlink(homeReadable.c_str());

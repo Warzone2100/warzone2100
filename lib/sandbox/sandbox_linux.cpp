@@ -28,9 +28,14 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <string>
+#include <sys/ioctl.h>
 #include <sys/prctl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#if defined(WZ_SANDBOX_HAVE_LIBSECCOMP)
+# include <seccomp.h>
+#endif
 
 // Linux 3.5
 #if !defined(PR_SET_NO_NEW_PRIVS)
@@ -66,7 +71,90 @@ static void openStandardDescriptors()
 	}
 }
 
-void backendHarden()
+#if defined(WZ_SANDBOX_HAVE_LIBSECCOMP)
+
+struct DeniedSyscall
+{
+	int number;
+	int error;
+	const char* name;
+};
+
+/**
+ * Syscalls nothing in this process has any business making.
+ *
+ * NOTE: Every entry is inherited by children with no way to opt out, so nothing the xdg-open browser or
+ * the gdb and crashpad crash path needs may be added - such as: clone and unshare, chroot, mount, setns,
+ * ptrace, and process_vm_readv.
+ */
+static const DeniedSyscall deniedSyscalls[] =
+{
+	{ SCMP_SYS(add_key), EPERM, "add_key" },
+	{ SCMP_SYS(keyctl), EPERM, "keyctl" },
+	{ SCMP_SYS(request_key), EPERM, "request_key" },
+#if !defined(WZ_SANDBOX_ALLOW_PERF_EVENTS)
+	{ SCMP_SYS(perf_event_open), EPERM, "perf_event_open" },
+#endif
+	{ SCMP_SYS(bpf), EPERM, "bpf" },
+	{ SCMP_SYS(userfaultfd), EPERM, "userfaultfd" },
+};
+
+// libseccomp's SCMP_A* macros expand to C compound literals that leave fields unset,
+// which a C++ build with -Wpedantic -Wextra rejects, so the comparison is built here
+static scmp_arg_cmp argumentEquals(unsigned int argument, scmp_datum_t value)
+{
+	scmp_arg_cmp comparison;
+	comparison.arg = argument;
+	comparison.op = SCMP_CMP_EQ;
+	comparison.datum_a = value;
+	comparison.datum_b = 0;
+	return comparison;
+}
+
+static void installSyscallFilter()
+{
+	scmp_filter_ctx filter = seccomp_init(SCMP_ACT_ALLOW);
+	if (filter == nullptr)
+	{
+		logPending(LogLevel::Info, "syscall filter not created");
+		return;
+	}
+
+	// Without this, a kernel before 5.16 turns on speculative store bypass disable for the whole process
+	seccomp_attr_set(filter, SCMP_FLTATR_CTL_SSB, 1);
+
+#if defined(__x86_64__)
+	// x32 reaches the same syscalls through a numbering of its own
+	seccomp_arch_add(filter, SCMP_ARCH_X32);
+#endif
+
+	for (const DeniedSyscall& denied : deniedSyscalls)
+	{
+		const int result = seccomp_rule_add(filter, SCMP_ACT_ERRNO(denied.error), denied.number, 0);
+		if (result != 0)
+		{
+			logPending(LogLevel::Info, "no syscall rule for %s: %s", denied.name, strerror(-result));
+		}
+	}
+
+#if defined(TIOCSTI)
+	seccomp_rule_add(filter, SCMP_ACT_ERRNO(EPERM), SCMP_SYS(ioctl), 1, argumentEquals(1, TIOCSTI));
+#endif
+#if defined(TIOCLINUX)
+	seccomp_rule_add(filter, SCMP_ACT_ERRNO(EPERM), SCMP_SYS(ioctl), 1, argumentEquals(1, TIOCLINUX));
+#endif
+
+	const int loaded = seccomp_load(filter);
+	if (loaded != 0)
+	{
+		logPending(LogLevel::Info, "syscall filter not installed: %s", strerror(-loaded));
+	}
+	seccomp_release(filter);
+}
+
+#endif // WZ_SANDBOX_HAVE_LIBSECCOMP
+
+void backendHarden(Tier requested)
 {
 	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) != 0)
 	{
@@ -74,6 +162,15 @@ void backendHarden()
 	}
 
 	openStandardDescriptors();
+
+#if defined(WZ_SANDBOX_HAVE_LIBSECCOMP)
+	if (requested != Tier::Off)
+	{
+		installSyscallFilter();
+	}
+#else
+	(void)requested;
+#endif
 }
 
 constexpr uint64_t RIGHTS_RO = LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR;

@@ -23,6 +23,9 @@
 
 #include <string>
 
+/// Applies the process mitigations, at the tier the command line and environment ask for.
+void wzSandboxHarden(int argc, const char * const *argv);
+
 /**
  * Picks a tier, builds the plan and confines the process to it.
  *

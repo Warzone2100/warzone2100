@@ -32,9 +32,9 @@ namespace wz::sandbox
 static Status lastStatus;
 static std::vector<LogLine> pending;
 
-void harden()
+void harden(Tier requested)
 {
-	backendHarden();
+	backendHarden(requested);
 }
 
 Status confine(const Plan& plan, Tier requested)

@@ -84,8 +84,10 @@ typedef BOOL (WINAPI *SetProcessDEPPolicyFunction)(
 namespace wz::sandbox
 {
 
-void backendHarden()
+void backendHarden(Tier requested)
 {
+	(void)requested;
+
 #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 	HMODULE hKernel32 = GetModuleHandleW(L"kernel32");
 

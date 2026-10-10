@@ -164,6 +164,11 @@ static wz::sandbox::Plan buildPlan(int argc, const char * const *argv, const std
 	return plan;
 }
 
+void wzSandboxHarden(int argc, const char * const *argv)
+{
+	wz::sandbox::harden(requestedTier(argc, argv));
+}
+
 void wzSandboxEarlySetup(int argc, const char * const *argv, const std::string& platformPrefDir)
 {
 	wz::sandbox::confine(buildPlan(argc, argv, platformPrefDir), requestedTier(argc, argv));

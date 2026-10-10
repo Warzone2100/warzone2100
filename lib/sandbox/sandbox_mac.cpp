@@ -33,8 +33,9 @@
 namespace wz::sandbox
 {
 
-void backendHarden()
+void backendHarden(Tier requested)
 {
+	(void)requested;
 }
 
 Status backendConfine(const Plan& plan, Tier requested)

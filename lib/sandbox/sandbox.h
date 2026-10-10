@@ -72,8 +72,9 @@ struct LogLine
 	std::string text;
 };
 
-/// Applies the platform mitigations that need no configuration. Safe to call first thing in main().
-void harden();
+/// Applies the platform mitigations. Safe to call first thing in main().
+/// Tier::Off skips the ones that could get in the way and applies the rest.
+void harden(Tier requested);
 
 /**
  * Applies the plan as far as the platform allows, and records the result for status().

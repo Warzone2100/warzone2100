@@ -33,8 +33,10 @@
 namespace wz::sandbox
 {
 
-void backendHarden()
+void backendHarden(Tier requested)
 {
+	(void)requested;
+
 #if defined(__FreeBSD__) && defined(PROC_NO_NEW_PRIVS_CTL)
 	int enable = PROC_NO_NEW_PRIVS_ENABLE;
 	if (procctl(P_PID, getpid(), PROC_NO_NEW_PRIVS_CTL, &enable) != 0)
