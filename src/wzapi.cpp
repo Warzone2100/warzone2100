@@ -645,7 +645,7 @@ bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObject;
 		SCRIPT_ASSERT(false, context, psStruct, "No such structure id %d belonging to player %d", id, player);
-		psStruct->body = percentOf(MAX(1, psStruct->structureBody()));
+		psStruct->body = percentOf(MAX(1, psStruct->currMaxBody()));
 	}
 	else
 	{
@@ -3922,7 +3922,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			{
 				if (psStats == psCurr->pStructureType && previousHitpoints > 0 && (!bMultiPlayer || previousHitpoints < newHitpoints))
 				{
-					psCurr->body = static_cast<UDWORD>(static_cast<uint64_t>(psCurr->body) * newHitpoints / previousHitpoints);
+					structureUpgradeBody(psCurr, previousHitpoints, newHitpoints);
 				}
 			};
 			for (STRUCTURE *psCurr : gameWorld.objects.structures[player])

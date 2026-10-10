@@ -115,7 +115,6 @@ int scrollDirUpDown = 0;
 # define DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW true
 #endif
 
-static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(const WorldObjectState& objState, UDWORD player);
 static bool vtolDroidSelected(const WorldObjectState& objState, UDWORD player);
 static bool	anyDroidSelected(const WorldObjectState& objState, UDWORD player);
@@ -1031,7 +1030,7 @@ void processMouseClickInput()
 					if (ObjUnderMouse							// something valid
 					    && (ObjUnderMouse->type == OBJ_STRUCTURE))// check if struct
 					{
-						if (buildingDamaged((STRUCTURE *)ObjUnderMouse))
+						if (((STRUCTURE *)ObjUnderMouse)->isDamaged())
 						{
 							item = MT_OWNSTRDAM;				// replace guard/sense with usual icons.
 						}
@@ -2809,7 +2808,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 				// repair center.
 				else if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 				{
-					if (buildingDamaged(psStructure))
+					if (psStructure->isDamaged())
 					{
 						retVal = MT_REPAIRDAM;
 					}
@@ -2822,7 +2821,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 				else if ((psStructure->pStructureType->pSensor) &&
 				         (psStructure->pStructureType->pSensor->location == LOC_TURRET))
 				{
-					if (buildingDamaged(psStructure))
+					if (psStructure->isDamaged())
 					{
 						retVal = MT_SENSORSTRUCTDAM;
 					}
@@ -2832,8 +2831,8 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 					}
 				}
 
-				// standard buildings. - check for buildingDamaged BEFORE upgrades
-				else if (buildingDamaged(psStructure))
+				// standard buildings. - check for damage BEFORE upgrades
+				else if (psStructure->isDamaged())
 				{
 					retVal = MT_OWNSTRDAM;
 				}
@@ -2979,12 +2978,6 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 		}
 	}
 	return (selectionClass);
-}
-
-/* Just returns true if the building's present body points aren't 100 percent */
-static bool	buildingDamaged(STRUCTURE *psStructure)
-{
-	return psStructure->body < psStructure->structureBody();
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/
