@@ -6996,10 +6996,10 @@ bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid)
 }
 
 
-/* Just returns true if the structure's body points are below its full max body points*/
+/* Returns true if the structure's body points are below its current max body points */
 bool	STRUCTURE::isDamaged() const
 {
-	return body < fullMaxBody();
+	return body < currMaxBody();
 }
 
 // give a structure from one player to another - used in Electronic Warfare

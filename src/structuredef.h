@@ -287,7 +287,7 @@ struct STRUCTURE : public BASE_OBJECT
 	uint32_t fullMaxBody() const;
 	// Max body points at the structure's current build progress. Equals fullMaxBody() once built.
 	uint32_t currMaxBody() const;
-	// Just returns true if the structure's body points are below its full max body points
+	// Returns true if the structure's body points are below its current max body points
 	bool isDamaged() const;
 	// is this a blueprint and not a real structure?
 	bool isBlueprint() const;
