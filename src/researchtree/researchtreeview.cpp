@@ -1290,6 +1290,21 @@ void WzResearchTreeView::revealSomethingToResearch()
 	}
 }
 
+void WzResearchTreeView::revealResearch(uint16_t researchIndex)
+{
+	if (m_canvas == nullptr)
+	{
+		return;
+	}
+	if (!m_canvas->revealResearch(researchIndex) && m_canvas->isFocused())
+	{
+		m_canvas->toggleFocusOnSelection();
+		updateTraceBar();
+		geometryChanged();
+		m_canvas->revealResearch(researchIndex);
+	}
+}
+
 void WzResearchTreeView::revealDuplicatedResearch()
 {
 	if (m_canvas == nullptr || m_canvas->duplicatedTopics().empty())

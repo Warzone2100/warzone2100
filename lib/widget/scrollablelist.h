@@ -75,6 +75,8 @@ public:
 	void displayRecursive(WidgetGraphicsContext const& context) override;
 	int getScrollbarWidth() const;
 	void setScrollbarWidth(int newWidth);
+	/// Draws the scrollbar's slider instead of the default look (ScrollBarWidget::setSliderDisplay)
+	void setScrollbarDisplay(WIDGET_DISPLAY display);
 	// Optional floor (in pixels) for the scrollbar's slider handle - see
 	// ScrollBarWidget::setMinimumSliderSize. Useful for very long lists.
 	void setScrollbarMinimumSliderSize(uint32_t value);

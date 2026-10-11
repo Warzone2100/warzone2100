@@ -42,6 +42,7 @@
 
 #include "../hci.h"
 #include "../ingameop.h"
+#include "../intelmap.h"
 #include "../mission.h"
 #include "../radar.h"
 #include "../spectatorwidgets.h"
@@ -154,6 +155,11 @@ void hudUpdate()
 	if (rebuildPending && safeToRebuild())
 	{
 		rebuildNow();
+	}
+	else if (rebuildPending && !InGameOpUp && !MissionResUp)
+	{
+		// Meanwhile, keep up what holds the rebuild back: the intelligence screen (opened again in the new skin)
+		intRebuildIntelMap();
 	}
 	for (auto &module : modules)
 	{

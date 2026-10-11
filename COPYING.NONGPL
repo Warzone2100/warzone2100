@@ -75,6 +75,8 @@ data/base/images/hud/icons/category-combat.svg
 data/base/images/hud/icons/category-defense.svg
 data/base/images/hud/icons/category-support.svg
 data/base/images/hud/icons/category-trucks.svg
+data/base/images/hud/icons/chevron-down.svg
+data/base/images/hud/icons/chevron-right.svg
 data/base/images/hud/icons/connection-desync.svg
 data/base/images/hud/icons/connection-left.svg
 data/base/images/hud/icons/connection-waiting.svg
@@ -82,8 +84,12 @@ data/base/images/hud/icons/delivery-point.fill.svg
 data/base/images/hud/icons/delivery-point.svg
 data/base/images/hud/icons/favorite.fill.svg
 data/base/images/hud/icons/favorite.svg
+data/base/images/hud/icons/filter.svg
+data/base/images/hud/icons/intelligence.svg
 data/base/images/hud/icons/loop.svg
+data/base/images/hud/icons/mark-unread.svg
 data/base/images/hud/icons/mission-clock.svg
+data/base/images/hud/icons/objective.svg
 data/base/images/hud/icons/obsolete-hidden.svg
 data/base/images/hud/icons/obsolete-shown.svg
 data/base/images/hud/icons/options.fill.svg
@@ -119,6 +125,8 @@ data/base/images/hud/icons/research-power.fill.svg
 data/base/images/hud/icons/research-power.svg
 data/base/images/hud/icons/research-structure.fill.svg
 data/base/images/hud/icons/research-structure.svg
+data/base/images/hud/icons/research-tree.svg
+data/base/images/hud/icons/search.svg
 data/base/images/hud/icons/statistics.svg
 data/base/images/hud/icons/strip-collapse.svg
 data/base/images/hud/icons/strip-expand.svg

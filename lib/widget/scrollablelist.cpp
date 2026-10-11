@@ -511,6 +511,11 @@ void ScrollableListWidget::displayRecursive(WidgetGraphicsContext const& context
 	pie_DrawMultiRect(lineDraws);
 }
 
+void ScrollableListWidget::setScrollbarDisplay(WIDGET_DISPLAY display)
+{
+	scrollBar->setSliderDisplay(display);
+}
+
 int ScrollableListWidget::getScrollbarWidth() const
 {
 	return scrollbarWidth;

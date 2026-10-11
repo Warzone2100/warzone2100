@@ -87,6 +87,7 @@
 #include "gamehistorylogger.h"
 #include "hci/quickchat.h"
 #include "screens/guidescreen.h"
+#include "hud/intel/intelmodel.h"
 
 #include <list>
 #include <cmath>
@@ -920,6 +921,7 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 	{
 		psMessage->pViewData = psViewData;
 		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), static_cast<void *>(psMessage->pViewData));
+		hudIntelNoteMessage(psMessage);
 		if (msgType == MSG_PROXIMITY)
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;

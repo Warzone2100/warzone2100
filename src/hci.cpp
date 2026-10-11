@@ -97,6 +97,7 @@
 #include "hud/hudreticule.h"
 #include "hud/hudmodel.h"
 #include "hud/hudskin.h"
+#include "hud/intel/intelpanel.h"
 #include "hud/hudiconbutton.h"
 #include "hud/hud.h"
 #include "hud/huddetail.h"
@@ -973,7 +974,8 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 		triggerEvent(TRIGGER_DESIGN_QUIT);
 		break;
 	case INT_INTELMAP:
-		if (!bMultiPlayer)
+		// (The HUD's intelligence screen restarts the game time it stopped when it closes)
+		if (!bMultiPlayer && !hudIntelScreenIsOpen())
 		{
 			gameTimeStart();
 		}

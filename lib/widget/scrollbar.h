@@ -56,6 +56,8 @@ public:
 	void enable();
 	void disable();
 	bool isEnabled() const;
+	/// Draws the slider (its track and handle) instead of the default look
+	void setSliderDisplay(WIDGET_DISPLAY display);
 
 protected:
 	void geometryChanged() override;

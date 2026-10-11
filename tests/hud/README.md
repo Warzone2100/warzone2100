@@ -52,6 +52,14 @@ Other elements:
 - `debug=<droids|structures|features>` opens the debug menu's panel for adding them.
 - `stats` opens the spectator statistics.
 
+The intelligence screen:
+
+- `intel` opens the Modern skin's intelligence screen (in single player, ex. `--game=CAM_2A`).
+- `intel.<setting>=<value>` sets it up: `select=<row>`, `pinned=1`, `filter=<all|briefings|research|unread>`,
+  `order=<newest|kind>`, `search=<text>` or `tree=1` (the selected report in the research tree).
+- `report=<view>` gives the local player a research report for its topic (researched, as a report's topic is), and
+  `readreport=<view>` one already read (ex. `readreport=RES_CY_AH1+report=RES_CYW_MG4,intel`).
+
 Each state in the JSON has its `name`, `available` (false when it couldn't be set up, ex. with no droid), and:
 
 - `widgets`: every visible widget of the HUD screen, in paint (z) order, with its screen rectangle, type and class,
@@ -62,6 +70,10 @@ Each state in the JSON has its `name`, `available` (false when it couldn't be se
 - `hitMap`: which widget a click at each point of the screen reaches (every 2 logical pixels, run-length encoded by
   row), found with the widget library's own mouse-target search, overlays first (`overlay:root` when an overlay
   screen's own form takes it).
+
+After the states, `intelligence` lists what the intelligence screen would list (`src/hud/intel/intelmodel.h`),
+newest first: each entry's kind (`research`, `update`, `briefing`), view data name, title, the level and game time
+it arrived (when known), whether it's unread, and whether the engine still has its message.
 
 ### Naming HUD additions
 

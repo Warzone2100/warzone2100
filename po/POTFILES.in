@@ -484,6 +484,8 @@ src/hud/hudsettings.cpp
 src/hud/hudspectator.cpp
 src/hud/hudstatusline.cpp
 src/hud/hudunittypes.cpp
+src/hud/intel/intelpanel.cpp
+src/hud/intel/intelview.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp

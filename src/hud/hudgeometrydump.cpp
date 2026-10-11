@@ -32,6 +32,8 @@
 #include "hudids.h"
 #include "hudpagecontrol.h"
 #include "hudpanelextension.h"
+#include "intel/intelmodel.h"
+#include "intel/intelpanel.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -49,6 +51,8 @@
 #include "../game_world.h"
 #include "../screens/guidescreen.h"
 #include "../mission.h"
+#include "../message.h"
+#include "../research.h"
 #include "../spectatorwidgets.h"
 #include "../transporter.h"
 
@@ -150,6 +154,34 @@ void parkPointer()
 	wzWarpMouseToLogicalPos(static_cast<int>(screenWidth) / 2, static_cast<int>(screenHeight) / 3);
 }
 
+/// A research report for the local player, as research gives it (read: then read and deleted, as the intelligence
+/// screen does once it closes)
+bool addResearchReport(const std::string &viewName, bool read)
+{
+	VIEWDATA *viewData = getViewData(WzString::fromUtf8(viewName));
+	if (viewData == nullptr || selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	MESSAGE *message = addMessage(MSG_RESEARCH, false, selectedPlayer);
+	if (message == nullptr)
+	{
+		return false;
+	}
+	message->pViewData = viewData;
+	hudIntelNoteMessage(message);
+	// (Researched, as a report's topic is, without a second report)
+	if (const RESEARCH *research = getResearchForMsg(viewData))
+	{
+		researchResult(research->index, static_cast<UBYTE>(selectedPlayer), false, nullptr, false);
+	}
+	if (read)
+	{
+		removeMessage(message, selectedPlayer);
+	}
+	return true;
+}
+
 bool applyState(const std::string &name)
 {
 	clearSelection();
@@ -196,6 +228,10 @@ bool applyState(const std::string &name)
 		else if (part == "debug=features") { intOpenDebugMenu(OBJ_FEATURE); }
 		else if (part == "flash") { flashMissionButton(IDTIMER_FORM); flashMissionButton(IDTRANS_LAUNCH); }
 		else if (part.rfind("guide=", 0) == 0) { addGuideTopic(part.substr(6), ShowTopicFlags::NeverViewed); }
+		else if (part == "intel") { addIntelScreen(); ok = hudIntelScreenIsOpen() && ok; }
+		else if (part.rfind("report=", 0) == 0) { ok = addResearchReport(part.substr(7), false) && ok; }
+		else if (part.rfind("readreport=", 0) == 0) { ok = addResearchReport(part.substr(11), true) && ok; }
+		else if (part.rfind("intel.", 0) == 0) { ok = hudIntelScreenApplyForTests(part.substr(6)) && ok; }
 		else if (part.rfind("hover=", 0) == 0) { hoverKey = part.substr(6); }
 		else if (part.rfind("click=", 0) == 0) { clickKeys.push_back(part.substr(6)); }
 		else
@@ -479,8 +515,38 @@ std::string screenshotName(const std::string &state)
 	return "hudtest/" + name + ".png";
 }
 
+/// What the intelligence screen would list, at the end of the dump
+nlohmann::json dumpIntelligence()
+{
+	nlohmann::json entries = nlohmann::json::array();
+	for (const HudIntelEntry &entry : hudIntelEntries())
+	{
+		nlohmann::json j;
+		j["kind"] = entry.kind == HudIntelKind::Research ? "research" : (entry.kind == HudIntelKind::Update ? "update" : "briefing");
+		j["key"] = entry.key;
+		j["title"] = entry.title;
+		if (!entry.headlineKind.empty())
+		{
+			j["headlineKind"] = entry.headlineKind;
+		}
+		if (entry.time.has_value())
+		{
+			j["time"] = *entry.time;
+		}
+		if (!entry.level.empty())
+		{
+			j["level"] = entry.level;
+		}
+		j["unread"] = entry.unread;
+		j["message"] = entry.message != nullptr;
+		entries.push_back(std::move(j));
+	}
+	return entries;
+}
+
 void finish()
 {
+	result["intelligence"] = dumpIntelligence();
 	std::ofstream out(outputPath);
 	if (!out)
 	{

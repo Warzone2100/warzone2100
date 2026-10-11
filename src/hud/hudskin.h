@@ -307,6 +307,8 @@ public:
 	virtual bool drawsRadarBlips() const { return false; }
 	/// Draws the multiplayer connection warnings as a panel (hudconnection.h) instead of the Classic column of images
 	virtual bool drawsConnectionPanel() const { return false; }
+	/// Shows the intelligence screen of src/hud/intel (in single player) instead of the Classic one
+	virtual bool drawsIntelligenceScreen() const { return false; }
 	/// Draws the radar's frame (and, when `north`, its north arrow) before the minimap, in the minimap's own space
 	/// (`mapSpace`: the map from 0, 0 to width, height, turned with the camera when the radar turns). False: the radar
 	/// draws its Classic images

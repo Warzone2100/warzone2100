@@ -99,6 +99,7 @@
 #include "screens/guidescreen.h"
 #include "hud/hudskin.h"
 #include "hud/hudpanelextension.h"
+#include "hud/intel/intelmodel.h"
 #include "lib/framework/loading_task.h"
 
 #define		IDMISSIONRES_TXT		11004
@@ -1386,6 +1387,7 @@ LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, G
 
 	// Clear out all intelligence screen messages
 	freeMessages();
+	hudIntelReset();
 
 	// Check no units left with any settings that are invalid
 	clearCampaignUnits();
@@ -1405,6 +1407,7 @@ LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, 
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
+	hudIntelReset();
 
 	// Cancel any research active in a lab
 	CancelAllResearch(selectedPlayer);
