@@ -54,6 +54,8 @@
 #include "../message.h"
 #include "../research.h"
 #include "../spectatorwidgets.h"
+#include "../hci/teamstrategy.h"
+#include "../multigifts.h"
 #include "../transporter.h"
 
 #include <algorithm>
@@ -182,6 +184,38 @@ bool addResearchReport(const std::string &viewName, bool read)
 	return true;
 }
 
+/// "<player>:<formed|requested|invitation|broken>": the local player's alliance with that player (no message sent)
+bool setAllianceForTests(const std::string &setting)
+{
+	const size_t colon = setting.find(':');
+	const unsigned long player = std::strtoul(setting.c_str(), nullptr, 10);
+	if (colon == std::string::npos || player >= MAX_PLAYERS || player == selectedPlayer || selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	const uint8_t me = static_cast<uint8_t>(selectedPlayer);
+	const uint8_t them = static_cast<uint8_t>(player);
+	const std::string state = setting.substr(colon + 1);
+	breakAlliance(me, them, false, false);
+	if (state == "formed")
+	{
+		formAlliance(me, them, false, false, false);
+	}
+	else if (state == "requested")
+	{
+		requestAlliance(me, them, false, false);
+	}
+	else if (state == "invitation")
+	{
+		requestAlliance(them, me, false, false);
+	}
+	else if (state != "broken")
+	{
+		return false;
+	}
+	return true;
+}
+
 bool applyState(const std::string &name)
 {
 	clearSelection();
@@ -232,6 +266,8 @@ bool applyState(const std::string &name)
 		else if (part.rfind("report=", 0) == 0) { ok = addResearchReport(part.substr(7), false) && ok; }
 		else if (part.rfind("readreport=", 0) == 0) { ok = addResearchReport(part.substr(11), true) && ok; }
 		else if (part.rfind("intel.", 0) == 0) { ok = hudIntelScreenApplyForTests(part.substr(6)) && ok; }
+		else if (part.rfind("alliance=", 0) == 0) { ok = setAllianceForTests(part.substr(9)) && ok; }
+		else if (part.rfind("teamplans=", 0) == 0) { ok = teamStrategyFillForTests(std::strtoul(part.substr(10).c_str(), nullptr, 10)) > 0 && ok; }
 		else if (part.rfind("hover=", 0) == 0) { hoverKey = part.substr(6); }
 		else if (part.rfind("click=", 0) == 0) { clickKeys.push_back(part.substr(6)); }
 		else

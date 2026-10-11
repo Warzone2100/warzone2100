@@ -54,11 +54,19 @@ Other elements:
 
 The intelligence screen:
 
-- `intel` opens the Modern skin's intelligence screen (in single player, ex. `--game=CAM_2A`).
-- `intel.<setting>=<value>` sets it up: `select=<row>`, `pinned=1`, `filter=<all|briefings|research|unread>`,
-  `order=<newest|kind>`, `search=<text>` or `tree=1` (the selected report in the research tree).
+- `intel` opens the Modern skin's intelligence screen (in a game with other players, on its players view).
+- `intel.<setting>=<value>` sets it up: `view=<players|intelligence|strategy>`, then the current view's settings:
+  - the intelligence view's `select=<row>`, `pinned=1`, `filter=<all|briefings|research|unread>`,
+    `order=<newest|kind>`, `search=<text>` and `tree=1` (the selected report in the research tree)
+  - the players view's `menu=<give|more>:<row>`, `confirm=<row>` (breaking the alliance) and `focus=<row>`
+  - the team strategy view's `focus=<class>`
 - `report=<view>` gives the local player a research report for its topic (researched, as a report's topic is), and
   `readreport=<view>` one already read (ex. `readreport=RES_CY_AH1+report=RES_CYW_MG4,intel`).
+- `alliance=<player>:<formed|requested|invitation|broken>` sets the local player's alliance with a player (no
+  message is sent).
+- `teamplans=<n>` makes up to n of the local player's AI teammates count as players who were human, with sample
+  plans for them and the local player (the team strategy view lists them, in a game with teams; ex.
+  `teamplans=1+intel+intel.view=strategy`).
 
 Each state in the JSON has its `name`, `available` (false when it couldn't be set up, ex. with no droid), and:
 

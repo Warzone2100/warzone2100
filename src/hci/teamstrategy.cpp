@@ -365,6 +365,42 @@ bool teamStrategyUnitTypeDisabled(WzStrategyPlanningUnitTypes unitType)
 	return false;
 }
 
+size_t teamStrategyFillForTests(size_t teammates)
+{
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+	const auto team = checkedGetPlayerTeam(selectedPlayer);
+	std::vector<uint32_t> players = {selectedPlayer};
+	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS) && players.size() <= teammates; ++player)
+	{
+		if (player != selectedPlayer && checkedGetPlayerTeam(player) == team && NetPlay.players[player].difficulty != AIDifficulty::DISABLED)
+		{
+			NetPlay.players[player].difficulty = AIDifficulty::HUMAN;
+			players.push_back(static_cast<uint32_t>(player));
+		}
+	}
+	// (Sample plans: a few classes each, varied by player)
+	for (size_t i = 0; i < players.size(); ++i)
+	{
+		auto &plan = playerStrategyPlans[players[i]];
+		plan.reset();
+		for (size_t c = 0; c < plan.weaponPlans.size(); ++c)
+		{
+			const size_t v = (c * 7 + i * 5 + c * i) % 11;
+			plan.weaponPlans[c].state = v == 0 ? WzStrategyPlanningState::HeavilyPlanned : (v <= 2 ? WzStrategyPlanningState::Planned : (v == 3 ? WzStrategyPlanningState::Never : WzStrategyPlanningState::NotSpecified));
+		}
+		for (size_t u = 0; u < plan.unitPlans.size(); ++u)
+		{
+			const size_t v = (u * 3 + i * 2) % 5;
+			plan.unitPlans[u].state = v == 0 ? WzStrategyPlanningState::HeavilyPlanned : (v <= 2 ? WzStrategyPlanningState::Planned : (v == 3 ? WzStrategyPlanningState::Never : WzStrategyPlanningState::NotSpecified));
+		}
+		plan.hasBeenSet = true;
+	}
+	return players.size() - 1;
+}
+
 void WzPlayerStrategyPlan::reset()
 {
 	for (size_t i = 0; i < weaponPlans.size(); ++i)

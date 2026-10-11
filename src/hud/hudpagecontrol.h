@@ -83,5 +83,7 @@ private:
 
 /// Clicks count as taps (the geometry dump's touch state)
 void hudSetTouchInputForTests(bool on);
+/// The last pointer input was a touch (or the touch state of the geometry dump)
+bool hudPointerIsTouch();
 
 #endif // __INCLUDED_SRC_HUD_HUDPAGECONTROL_H__

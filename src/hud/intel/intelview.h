@@ -67,6 +67,9 @@ public:
 
 	/// Selects the entry of `message` (or the first unread, or the first)
 	void selectMessage(const MESSAGE *message);
+	bool hasSelection() const { return selected.has_value(); }
+	/// Selects an entry by its kind and view data name (ex. a row of the players view's latest intelligence)
+	bool selectEntry(HudIntelKind kind, const std::string &key);
 	/// Plays the selected briefing's videos, full screen
 	void playSelected();
 	void moveSelection(int delta);

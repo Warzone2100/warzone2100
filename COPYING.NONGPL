@@ -67,6 +67,8 @@ data/base/images/wz_original_campaign_banner.png
 data/base/images/flags/flag-*.png
 	- MIT License, Copyright (c) 2016 Bowtie AB (https://github.com/madebybowtie/FlagKit)
 data/base/images/hud/icons/accuracy.svg
+data/base/images/hud/icons/alliance-broken.svg
+data/base/images/hud/icons/alliance.svg
 data/base/images/hud/icons/ally-research.fill.svg
 data/base/images/hud/icons/ally-research.svg
 data/base/images/hud/icons/category-all.svg
@@ -75,6 +77,8 @@ data/base/images/hud/icons/category-combat.svg
 data/base/images/hud/icons/category-defense.svg
 data/base/images/hud/icons/category-support.svg
 data/base/images/hud/icons/category-trucks.svg
+data/base/images/hud/icons/channel-off.svg
+data/base/images/hud/icons/channel.svg
 data/base/images/hud/icons/chevron-down.svg
 data/base/images/hud/icons/chevron-right.svg
 data/base/images/hud/icons/connection-desync.svg
@@ -85,10 +89,14 @@ data/base/images/hud/icons/delivery-point.svg
 data/base/images/hud/icons/favorite.fill.svg
 data/base/images/hud/icons/favorite.svg
 data/base/images/hud/icons/filter.svg
+data/base/images/hud/icons/gift.svg
 data/base/images/hud/icons/intelligence.svg
+data/base/images/hud/icons/kick.svg
 data/base/images/hud/icons/loop.svg
 data/base/images/hud/icons/mark-unread.svg
 data/base/images/hud/icons/mission-clock.svg
+data/base/images/hud/icons/more.svg
+data/base/images/hud/icons/never.svg
 data/base/images/hud/icons/objective.svg
 data/base/images/hud/icons/obsolete-hidden.svg
 data/base/images/hud/icons/obsolete-shown.svg
@@ -107,6 +115,8 @@ data/base/images/hud/icons/order-repair-heavy.svg
 data/base/images/hud/icons/order-repair-medium.svg
 data/base/images/hud/icons/order-return-recycle.svg
 data/base/images/hud/icons/order-return-repair.svg
+data/base/images/hud/icons/players.svg
+data/base/images/hud/icons/power.svg
 data/base/images/hud/icons/rate-of-fire.fill.svg
 data/base/images/hud/icons/rate-of-fire.svg
 data/base/images/hud/icons/repair.svg
@@ -130,7 +140,13 @@ data/base/images/hud/icons/search.svg
 data/base/images/hud/icons/statistics.svg
 data/base/images/hud/icons/strip-collapse.svg
 data/base/images/hud/icons/strip-expand.svg
+data/base/images/hud/icons/team-strategy.svg
+data/base/images/hud/icons/technology.svg
+data/base/images/hud/icons/units.svg
 data/base/images/hud/icons/upgrade.svg
+data/base/images/hud/icons/visibility.svg
+data/base/images/hud/icons/volume-off.svg
+data/base/images/hud/icons/volume.svg
 	- MIT License, Copyright (c) 2020-2026 Paweł Kuna (https://github.com/tabler/tabler-icons)
 data/base/images/hud/icons/order-embark.svg
 data/base/images/hud/icons/order-fire-support.svg

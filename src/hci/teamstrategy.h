@@ -73,6 +73,9 @@ void teamStrategySendLocalPlan();
 bool teamStrategyUnitTypeDisabled(WzStrategyPlanningUnitTypes unitType);
 const char *teamStrategyUnitTypeName(WzStrategyPlanningUnitTypes unitType);
 const char *teamStrategyUnitTypeImagePath(WzStrategyPlanningUnitTypes unitType);
+/// For the HUD geometry dump: up to `teammates` of the local player's AI teammates count as players who were human, and
+/// they and the local player have sample plans. Returns how many teammates it found.
+size_t teamStrategyFillForTests(size_t teammates);
 std::shared_ptr<WIDGET> createTeamStrategyView(bool allowAIs = false);
 bool transformTeamStrategyViewMode(const std::shared_ptr<WIDGET>& teamStrategyView, bool updatingPlayers);
 bool teamStrategyViewSetBackgroundColor(const std::shared_ptr<WIDGET>& view, PIELIGHT color);
