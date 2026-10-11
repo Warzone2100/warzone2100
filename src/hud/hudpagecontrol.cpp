@@ -389,3 +389,8 @@ void hudSetTouchInputForTests(bool on)
 {
 	touchForTests = on;
 }
+
+bool hudPointerIsTouch()
+{
+	return touchForTests || inputLastPointerInputWasTouch();
+}

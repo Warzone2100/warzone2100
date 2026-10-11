@@ -484,8 +484,11 @@ src/hud/hudsettings.cpp
 src/hud/hudspectator.cpp
 src/hud/hudstatusline.cpp
 src/hud/hudunittypes.cpp
+src/hud/intel/intelkit.cpp
 src/hud/intel/intelpanel.cpp
 src/hud/intel/intelview.cpp
+src/hud/intel/playersview.cpp
+src/hud/intel/teamstrategyview.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp

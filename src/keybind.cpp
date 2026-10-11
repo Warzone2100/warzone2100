@@ -36,6 +36,7 @@
 #include "display3d.h"
 #include "edit3d.h"
 #include "keybind.h"
+#include "hud/intel/intelpanel.h"
 #include "screens/researchtreescreen.h"
 #include "hci/ingameconsole.h"
 #include "mechanics.h"
@@ -1320,6 +1321,19 @@ void	kf_addInGameOptions()
 // Display multiplayer guff.
 void	kf_addMultiMenu()
 {
+	if (bMultiPlayer && hudIntelScreenEnabled())
+	{
+		// The HUD's screen: its players view, which it opens on (or closes it)
+		if (hudIntelScreenIsOpen())
+		{
+			intResetScreen(false);
+		}
+		else
+		{
+			addIntelScreen();
+		}
+		return;
+	}
 	if (bMultiPlayer && (intMode != INT_INTELMAP))
 	{
 		intAddMultiMenu();

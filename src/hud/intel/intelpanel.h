@@ -32,20 +32,27 @@
 
 struct MESSAGE;
 
-/// The HUD's intelligence screen: a panel over the paused, dimmed world, in place of the Classic screen
-/// (src/intelmap.cpp) when the skin draws it (HudSkin::drawsIntelligenceScreen), in single player.
-/// Its layout is compact (the panel filling the screen) when the full panel doesn't fit.
+/// The HUD's intelligence screen: a panel in place of the Classic screen (src/intelmap.cpp) and its multiplayer menu
+/// (src/multimenu.cpp) when the skin draws it (HudSkin::drawsIntelligenceScreen). In single player, over the paused,
+/// dimmed world. With other players, with the players and team strategy views. Its layout is compact (the panel
+/// filling the screen) when the full panel doesn't fit.
 
 /// Whether the intelligence button opens this screen
 bool hudIntelScreenEnabled();
-/// Opens it on `message` (when given), playing its videos at once when `play`, and pauses the game (single player)
+/// Opens it on `message` (when given), playing its videos at once when `play`, and pauses the game (single player).
+/// With other players it opens on the players view, unless on an item.
 void hudIntelScreenOpen(MESSAGE *message, bool play);
+/// Opens it on a view: 0 the players, 1 the intelligence, 2 the team strategy (when the game has it)
+void hudIntelScreenOpenOn(int view);
 /// Closes it and lets the game go on
 void hudIntelScreenClose();
 bool hudIntelScreenIsOpen();
 
-/// For the HUD geometry dump: "select=<row>", "pinned=1", "filter=<all|briefings|research|unread>",
-/// "order=<newest|kind>", "search=<text>", "tree=1" (the selected report in the research tree)
+/// For the HUD geometry dump: "view=<players|intelligence|strategy>", then the current view's settings:
+/// - the intelligence's "select=<row>", "pinned=1", "filter=<all|briefings|research|unread>", "order=<newest|kind>",
+///   "search=<text>", "tree=1" (the selected report in the research tree)
+/// - the players' "menu=<give|more>:<row>", "confirm=<row>", "focus=<row>"
+/// - the team strategy's "focus=<class>"
 bool hudIntelScreenApplyForTests(const std::string &setting);
 
 #endif // __INCLUDED_SRC_HUD_INTEL_INTELPANEL_H__

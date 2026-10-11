@@ -43,6 +43,7 @@
 #include "hud/hudskin.h"
 #include "hud/hudspectator.h"
 #include "hud/hudwidgets.h"
+#include "hud/intel/intelpanel.h"
 
 #include <unordered_set>
 #include <unordered_map>
@@ -114,9 +115,15 @@ static bool statsButtonHidden = false;
 #define SPEC_STATS_CARD_BUTTON_X 16
 #define SPEC_STATS_CARD_BUTTON_Y 18
 
+// The Modern skin's intelligence screen covers the button's corner, as it does the options button's
+static bool specStatsButtonCovered()
+{
+	return hudIntelScreenIsOpen();
+}
+
 void intDisplayImageHilightOnceStarted(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	if (bDisplayMultiJoiningStatus)
+	if (bDisplayMultiJoiningStatus || specStatsButtonCovered())
 	{
 		return;
 	}
@@ -173,7 +180,7 @@ bool specLayerInit(bool showButton /*= true*/)
 				});
 			});
 			specStatsButton->setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
-				if (bDisplayMultiJoiningStatus)
+				if (bDisplayMultiJoiningStatus || specStatsButtonCovered())
 				{
 					// effectively: make this unclickable until the game actually starts
 					return false;

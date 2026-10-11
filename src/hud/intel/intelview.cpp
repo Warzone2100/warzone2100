@@ -26,6 +26,7 @@
 */
 
 #include "intelview.h"
+#include "intelkit.h"
 
 #include "../hudskin.h"
 #include "../hudtext.h"
@@ -57,6 +58,8 @@
 #include <algorithm>
 #include <cctype>
 
+using namespace intelkit;
+
 namespace
 {
 
@@ -72,116 +75,13 @@ constexpr int ROW_HEIGHT_COMPACT = 44;
 constexpr int SECTION_HEIGHT = 20;
 constexpr int PINNED_HEIGHT = 58;
 constexpr int PINNED_HEIGHT_COMPACT = 40;
-constexpr int BUTTON_HEIGHT = 26;
 constexpr int BUTTON_HEIGHT_COMPACT = 32;
 constexpr int THUMB_WIDTH = 40;
 constexpr int THUMB_HEIGHT = 34;
 constexpr int GAP = 8;
 
-HudSkin &skin()
-{
-	return currentHudSkin();
-}
-
-PIELIGHT alpha(PIELIGHT color, uint8_t a)
-{
-	color.byte.a = a;
-	return color;
-}
-
-/// The baseline of a line of text whose top is at `top`
-float baselineAt(WzText &text, int top)
-{
-	return static_cast<float>(top - text.aboveBase());
-}
-
-/// One line, cut with an ellipsis to `maxWidth` (hudDrawTextLine). Returns the width it uses.
-int drawLine(WzText &text, const std::string &string, iV_fonts font, int x, int top, int maxWidth, PIELIGHT color, bool alignRight = false)
-{
-	text.setText(WzString::fromUtf8(string), font);
-	return hudDrawTextLine(text, static_cast<float>(x), baselineAt(text, top), maxWidth, color, alignRight);
-}
-
-std::string sentenceCase(const std::string &text)
-{
-	// Only all-capital ASCII headlines ("TRANSPORT MISSION"): others are left as written
-	const bool shouting = std::none_of(text.begin(), text.end(), [](unsigned char c) { return std::islower(c) || c >= 0x80; });
-	if (!shouting || text.empty())
-	{
-		return text;
-	}
-	std::string result = text;
-	std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-	result[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(result[0])));
-	return result;
-}
-
-std::string timeText(const HudIntelEntry &entry)
-{
-	return entry.time.has_value() ? hudFormatDuration(*entry.time / GAME_TICKS_PER_SEC) : std::string();
-}
-
-void drawUnreadDot(int cx, int cy)
-{
-	const PIELIGHT accent = skin().colors().accent;
-	pie_DrawRoundedBox(static_cast<float>(cx - 3), static_cast<float>(cy - 3), static_cast<float>(cx + 3), static_cast<float>(cy + 3), accent, 3.f);
-}
-
-void drawWell(const WzRect &rect)
-{
-	pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
-	                   pal_RGBA(6, 9, 14, 230), 4.f, alpha(skin().colors().panelBorder, 150), 1.f);
-}
-
-/// A research topic's model, still, fitted in `rect`
-void drawResearchModel(const RESEARCH *research, const WzRect &rect)
-{
-	if (research == nullptr)
-	{
-		return;
-	}
-	gfx_api::context::get().set_depth_range(0.f, 0.01f);
-	renderResearchFittedToBuffer(const_cast<RESEARCH *>(research), static_cast<UDWORD>(rect.x() + rect.width() / 2),
-	                             static_cast<UDWORD>(rect.y() + rect.height() / 2), static_cast<UDWORD>(std::min(rect.width(), rect.height())), false);
-	pie_BeginInterface();
-}
-
-/// An item's picture: its topic's model, or a play mark for a briefing
-void drawThumb(const HudIntelEntry &entry, const WzRect &rect)
-{
-	drawWell(rect);
-	if (entry.kind == HudIntelKind::Research)
-	{
-		drawResearchModel(entry.research, rect);
-		return;
-	}
-	const int s = std::min(16, rect.height() - 8);
-	skin().drawNamedIcon("replay-play", WzRect(rect.x() + (rect.width() - s) / 2, rect.y() + (rect.height() - s) / 2, s, s), skin().colors().accent);
-}
-
-/// A divider inside the panel, muted
-void drawDivider(int x0, int y0, int x1, int y1)
-{
-	pie_UniTransBoxFill(static_cast<float>(x0), static_cast<float>(y0), static_cast<float>(x1), static_cast<float>(y1), pal_RGBA(120, 150, 190, 48));
-}
-
 /// (Draws nothing: the search field draws the edit box's background, with its icon)
 void displayNothing(WIDGET *, UDWORD, UDWORD) {}
-
-/// A thin track and handle, instead of the framed Classic scrollbar
-void displayScrollbar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
-{
-	auto slider = static_cast<W_SLIDER *>(widget);
-	const int x0 = static_cast<int>(xOffset) + slider->x() + slider->width() - 4;
-	const int y0 = static_cast<int>(yOffset) + slider->y();
-	const int h = slider->height();
-	pie_DrawRoundedBox(static_cast<float>(x0), static_cast<float>(y0), static_cast<float>(x0 + 3), static_cast<float>(y0 + h), pal_RGBA(255, 255, 255, 16), 1.5f);
-	const int handle = std::max<int>(slider->barSize, 16);
-	const int top = slider->numStops > 0 ? static_cast<int>(static_cast<int64_t>(h - handle) * slider->pos / slider->numStops) : 0;
-	PIELIGHT color = skin().colors().textSecondary;
-	color.byte.a = slider->isHighlighted() ? 200 : 130;
-	pie_DrawRoundedBox(static_cast<float>(x0), static_cast<float>(y0 + top), static_cast<float>(x0 + 3), static_cast<float>(y0 + top + handle), color, 1.5f);
-}
 
 /// The search field: the skin's input field with a search icon, and the edit box in it
 class IntelSearchField : public WIDGET
@@ -211,88 +111,6 @@ public:
 
 private:
 	int iconSize() const { return height() >= 30 ? 15 : 13; }
-};
-
-/// A text button in the skin's card look, maybe with an icon (primary: the accent's)
-class IntelButton : public W_BUTTON
-{
-public:
-	static std::shared_ptr<IntelButton> make(const std::string &text, const std::string &icon, bool primary, int height, bool plain = false)
-	{
-		auto button = std::make_shared<IntelButton>();
-		button->label = text;
-		button->iconName = icon;
-		button->primary = primary;
-		button->plain = plain;
-		button->buttonHeight = height;
-		button->setGeometry(0, 0, button->idealWidth(), height);
-		return button;
-	}
-
-	void setLabel(const std::string &newLabel)
-	{
-		label = newLabel;
-		setGeometry(x(), y(), idealWidth(), height());
-	}
-
-	int32_t idealWidth() override
-	{
-		const int iconWidth = iconName.empty() ? 0 : iconSize() + (label.empty() ? 0 : 6);
-		const int textWidth = label.empty() ? 0 : static_cast<int>(iV_GetTextWidth(WzString::fromUtf8(label), font_small));
-		const int trailingIconWidth = trailingIcon.empty() ? 0 : iconSize() + 4;
-		return label.empty() ? buttonHeight : textWidth + iconWidth + trailingIconWidth + (plain ? 4 : 20);
-	}
-	int32_t idealHeight() override { return buttonHeight; }
-
-	std::string label;
-	std::string iconName;
-	std::string trailingIcon;   ///< after the text (a menu's chevron)
-	bool primary = false;
-	bool plain = false;         ///< text only, no card (the order's menu)
-	int buttonHeight = BUTTON_HEIGHT;
-
-protected:
-	int iconSize() const { return buttonHeight >= 30 ? 16 : 14; }
-
-	void display(int xOffset, int yOffset) override
-	{
-		const WzRect rect(xOffset + x(), yOffset + y(), width(), height());
-		const bool disabled = (getState() & WBUT_DISABLE) != 0;
-		const HudColors &colors = skin().colors();
-		if (plain)
-		{
-		}
-		else if (primary && !disabled)
-		{
-			pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
-			                   alpha(colors.accent, isHighlighted() ? 110 : 70), skin().metrics().cardRadius, colors.accent, 1.f);
-		}
-		else
-		{
-			skin().drawCard(rect, disabled ? HudCardState::Disabled : (isHighlighted() ? HudCardState::Highlighted : HudCardState::Normal));
-		}
-		const PIELIGHT color = disabled ? colors.stateDisabled : ((plain && !isHighlighted()) ? colors.textSecondary : colors.textPrimary);
-		int x0 = rect.x() + (label.empty() ? (rect.width() - iconSize()) / 2 : (plain ? 2 : 10));
-		if (!iconName.empty())
-		{
-			skin().drawNamedIcon(iconName, WzRect(x0, rect.y() + (rect.height() - iconSize()) / 2, iconSize(), iconSize()), primary ? colors.textPrimary : colors.textSecondary);
-			x0 += iconSize() + 6;
-		}
-		if (!label.empty())
-		{
-			text.setText(WzString::fromUtf8(label), font_small);
-			const float base = static_cast<float>(rect.y()) + (static_cast<float>(rect.height()) - text.lineSize()) / 2.f - text.aboveBase();
-			text.render(static_cast<float>(x0), std::round(base), color);
-			x0 += text.width() + 4;
-		}
-		if (!trailingIcon.empty())
-		{
-			skin().drawNamedIcon(trailingIcon, WzRect(x0, rect.y() + (rect.height() - iconSize()) / 2, iconSize(), iconSize()), plain ? color : colors.textSecondary);
-		}
-	}
-
-private:
-	WzText text;
 };
 
 /// A section's heading in the list ("New", "Earlier · Transport Down"), with its count
@@ -798,18 +616,7 @@ bool IntelView::isSelected(size_t index) const
 
 std::string IntelView::subtitle(const HudIntelEntry &item) const
 {
-	if (item.kind == HudIntelKind::Research)
-	{
-		// The progression it's in, or its kind of technology, as the detail panel's badge
-		std::string group;
-		if (item.research != nullptr)
-		{
-			group = item.research->category.isEmpty() ? researchTechCategoryName(*item.research).toUtf8() : item.research->category.toUtf8();
-		}
-		return group.empty() ? std::string(_("Research")) : astringf(_("Research · %s"), group.c_str());
-	}
-	const std::string kind = item.kind == HudIntelKind::Update ? _("Update") : _("Briefing");
-	return item.headlineKind.empty() ? kind : kind + " · " + sentenceCase(item.headlineKind);
+	return entrySubtitle(item);
 }
 
 size_t IntelView::unreadCount() const
@@ -1086,6 +893,19 @@ void IntelView::select(size_t index, bool byPointer)
 			++rowPosition;
 		}
 	}
+}
+
+bool IntelView::selectEntry(HudIntelKind kind, const std::string &key)
+{
+	for (size_t i = 0; i < entries.size(); ++i)
+	{
+		if (entries[i].kind == kind && entries[i].key == key)
+		{
+			select(i, false);
+			return true;
+		}
+	}
+	return false;
 }
 
 void IntelView::selectMessage(const MESSAGE *message)
