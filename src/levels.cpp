@@ -59,6 +59,7 @@
 #include "qtscript.h"
 #include "wrappers.h"
 #include "activity.h"
+#include "hud/intel/intelmodel.h"
 #include <wzmaplib/map_package.h>
 
 #include <unordered_set>
@@ -1491,6 +1492,11 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	       "The LC_NUMERIC locale is not \"C\" - this may break level-data parsing depending on the user's system locale settings");
 
 	levelLoadType = params.saveType;
+	if (params.pSaveName != nullptr)
+	{
+		// (The save's own log, if it has one, comes with its local state)
+		hudIntelReset();
+	}
 
 	LevLoadContext ctx;
 	ctx.name = std::move(params.name);

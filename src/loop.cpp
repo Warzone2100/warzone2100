@@ -46,6 +46,7 @@
 #include "gamestate_serialize.h"
 #include "gamestate_harness.h"
 #include "hud/hudgeometrydump.h"
+#include "hud/intel/intelpanel.h"
 #include "movebench.h"
 #include "pathbench.h"
 #include "corridordump.h"
@@ -367,6 +368,11 @@ static GAMECODE renderLoop()
 		else
 		{
 			gamepadProcessPausedBindings();
+			// The HUD's intelligence screen pauses as the Classic one, but shows the paused world behind it
+			if (hudIntelScreenIsOpen() && !gameStateRestoreFailed())
+			{
+				displayWorld();
+			}
 		}
 	}
 

@@ -87,6 +87,8 @@ public:
 	void setLabeled(bool labeled);
 	// Jump to the first thing the player could start (for the idle-lab chip)
 	void revealSomethingToResearch();
+	// Jump to a topic, ex. a research report's (going back to the whole tree if it is outside a focused path)
+	void revealResearch(uint16_t researchIndex);
 	void toggleLabeled();
 
 	// The seat switcher and the way back to the viewer's own seat belong to the

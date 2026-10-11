@@ -412,6 +412,14 @@ void researchTreeScreenTracePath()
 	}
 }
 
+void researchTreeScreenRevealResearch(uint16_t researchIndex)
+{
+	if (auto view = researchTreeView.lock())
+	{
+		view->revealResearch(researchIndex);
+	}
+}
+
 void researchTreeScreenFocusSearch()
 {
 	if (auto view = researchTreeView.lock())

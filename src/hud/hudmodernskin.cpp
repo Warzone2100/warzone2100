@@ -967,6 +967,7 @@ public:
 	bool drawsRankInsignia() const override { return true; }
 	bool drawsRadarBlips() const override { return true; }
 	bool drawsConnectionPanel() const override { return true; }
+	bool drawsIntelligenceScreen() const override { return true; }
 
 	bool drawReplayBar(const WzRect &rect) override
 	{
