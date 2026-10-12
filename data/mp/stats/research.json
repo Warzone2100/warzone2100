@@ -2241,7 +2241,8 @@
 		"researchPower": 56,
 		"resultComponents": [
 			"CyborgLightBody",
-			"CyborgLegs"
+			"CyborgLegs",
+			"CyborgLegsSuper"
 		],
 		"resultStructures": [
 			"A0CyborgFactory"

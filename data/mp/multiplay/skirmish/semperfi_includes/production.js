@@ -119,7 +119,7 @@ function buildCyborg(struct)
 		return buildDroid(struct, "Cyborg Flamer", "CyborgLightBody", "CyborgLegs", "", "", CYBORG_FLAMERS);
 	}
 
-	return buildDroid(struct, "Cyborg Rocket", "CyborgHeavyBody", "CyborgLegs", "", "", CYBORG_ROCKETS);
+	return buildDroid(struct, "Cyborg Rocket", "CyborgHeavyBody", "CyborgLegsSuper", "", "", CYBORG_ROCKETS);
 }
 
 function buildVTOL(struct)
