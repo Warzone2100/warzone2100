@@ -2448,6 +2448,15 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Features
 
+// Ask every player to remove a feature (the debug mode's demolish tool)
+bool SendDestroyFeature(const FEATURE *psFeature)
+{
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_FEATURE);
+	uint32_t id = psFeature->id;
+	NETuint32_t(w, id);
+	return NETend(w);
+}
+
 // process a destroy feature msg.
 bool recvDestroyFeature(NETQUEUE queue)
 {

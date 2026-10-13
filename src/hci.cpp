@@ -1800,7 +1800,7 @@ INT_RETVAL intRunWidgets()
 							}
 							else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 							{
-								removeFeature(psFeature, gameWorld);
+								SendDestroyFeature(psFeature);
 							}
 						}
 						else
