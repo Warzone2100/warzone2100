@@ -150,7 +150,7 @@ var fullBase = false;
 var earlyGame = true;
 var running = false; // Работаем?
 
-const produceTrigger = [];
+var produceTrigger = []; // var, not const: a saved game keeps only var globals
 
 var armyToPlayer = false; // Передавать всю новую армию игроку №№
 var vtolToPlayer = false;
@@ -198,10 +198,10 @@ else
 var buildersMain = newGroup();
 var buildersHunters = newGroup();
 
-const policy = {};
+var policy = {};
 
 // Фитчи, не совместимые с 3.1.5
-const nf = {};
+var nf = {};
 nf['policy'] = false;
 
 var enemyDist = 0;
@@ -245,7 +245,7 @@ var credit = 0;
 var lassat_charged = false;
 
 
-const eventsRun = {};
+var eventsRun = {};
 eventsRun['targetCyborgs'] = 0;
 eventsRun['targetArmy'] = 0;
 eventsRun['targetRegular'] = 0;
@@ -883,10 +883,14 @@ function bc_eventGameLoaded()
 
 function bc_eventGameSaved()
 {
+	// This runs after the save is taken, so it must not change the game (not even the state of Math.random()).
+	const messages = _chatting['saved'];
+	const message = messages[Math.floor(gameTime / 1000) % messages.length];
+
 	playerData.forEach((data, player) => {
 		if (!asPlayer)
 		{
-			chat(player, ' from ' + debugName + ': ' + chatting('saved'));
+			chat(player, ' from ' + debugName + ': ' + message);
 		}
 	});
 }
