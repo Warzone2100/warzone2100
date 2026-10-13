@@ -150,6 +150,13 @@ fi
 if echo "camreinforce" | grep -qE "$FILTER"; then
 	"$HERE/camreinforce.sh" "$BIN"
 fi
+if echo "camtextures" | grep -qE "$FILTER"; then
+	if command -v Xvfb > /dev/null; then
+		"$HERE/camtextures.sh" "$BIN" | grep -v '^  '
+	else
+		echo "camtextures: skipped (no Xvfb)"
+	fi
+fi
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
 fi

@@ -29,6 +29,9 @@
 
 #include <functional>
 #include <unordered_set>
+#include <string>
+#include <utility>
+#include <vector>
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -56,6 +59,13 @@ void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile);
+/// The texture pages replaceTexture() loaded another file into:
+/// {the file the page was loaded from, the file it shows}, each pair once
+std::vector<std::pair<std::string, std::string>> getReplacedTextures();
+/// Make the pages show what they did when getReplacedTextures() gave this list:
+/// replace those listed, as replaceTexture() did, and put back any other replaced page.
+/// A page that isn't loaded, or a file that is missing, is logged and skipped.
+void restoreReplacedTextures(const std::vector<std::pair<std::string, std::string>> &replaced);
 size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType);
 size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api::texture_type textureType, size_t page);
 void pie_TexInit();

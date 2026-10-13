@@ -58,6 +58,8 @@
 struct iTexPage
 {
 	std::string filename;
+	// The file the page was first loaded from: replaceTexture() loads another file into the page, under its name
+	std::string originalFilename;
 	gfx_api::texture* id = nullptr;
 	gfx_api::texture_type textureType = gfx_api::texture_type::user_interface;
 
@@ -66,6 +68,7 @@ struct iTexPage
 	iTexPage(iTexPage&& input)
 	{
 		std::swap(filename, input.filename);
+		std::swap(originalFilename, input.originalFilename);
 		id = input.id;
 		input.id = nullptr;
 		std::swap(textureType, input.textureType);
@@ -101,6 +104,7 @@ size_t pie_ReserveTexture(const char *filename, const size_t& width, const size_
 {
 	iTexPage tex;
 	tex.filename = filename;
+	tex.originalFilename = filename;
 	_TEX_PAGE.push_back(std::move(tex));
 	size_t page = _TEX_PAGE.size() - 1;
 	_NAME_TO_TEX_PAGE_MAP[filename] = page;
@@ -143,6 +147,7 @@ size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api:
 	iTexPage tex;
 	size_t page = _TEX_PAGE.size();
 	tex.filename = filename;
+	tex.originalFilename = filename;
 	_TEX_PAGE.push_back(std::move(tex));
 
 	return pie_AddTexPage_Impl(pTexture, filename, textureType, page);
@@ -285,6 +290,73 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 	}
 	debug(LOG_TEXTURE, "Nothing to replace - old (not found): %s, new (not used): %s", oldfile.toUtf8().c_str(), newfile.toUtf8().c_str());
 	return false;
+}
+
+std::vector<std::pair<std::string, std::string>> getReplacedTextures()
+{
+	// Each replacement once: a later level whose models need the page under its original name loads it again
+	// (the name went with the replaced page), and the scripts replace that one too.
+	// A game loaded from a save only has the pages its level needs, so one page per replacement shows the same.
+	std::vector<std::pair<std::string, std::string>> replaced;
+	for (const iTexPage &tex : _TEX_PAGE)
+	{
+		if (!tex.originalFilename.empty() && tex.filename != tex.originalFilename)
+		{
+			std::pair<std::string, std::string> r(tex.originalFilename, tex.filename);
+			if (std::find(replaced.begin(), replaced.end(), r) == replaced.end())
+			{
+				replaced.push_back(std::move(r));
+			}
+		}
+	}
+	return replaced;
+}
+
+void restoreReplacedTextures(const std::vector<std::pair<std::string, std::string>> &replaced)
+{
+	// Put back the replaced pages whose original isn't in the list (an in-process restore to before a replacement)
+	for (size_t page = 0; page < _TEX_PAGE.size(); ++page)
+	{
+		const iTexPage &tex = _TEX_PAGE[page];
+		if (tex.originalFilename.empty() || tex.filename == tex.originalFilename)
+		{
+			continue;
+		}
+		const bool listed = std::any_of(replaced.begin(), replaced.end(), [&tex](const std::pair<std::string, std::string> &r) {
+			return r.first == tex.originalFilename;
+		});
+		if (!listed)
+		{
+			const std::string current = tex.filename;
+			const std::string original = tex.originalFilename;
+			if (!replaceTexture(WzString::fromUtf8(current), WzString::fromUtf8(original)))
+			{
+				debug(LOG_WARNING, "Could not put back texture %s (now %s)", original.c_str(), current.c_str());
+			}
+		}
+	}
+	for (const auto &r : replaced)
+	{
+		const std::string &original = r.first;
+		const std::string &current = r.second;
+		auto it = std::find_if(_TEX_PAGE.begin(), _TEX_PAGE.end(), [&original](const iTexPage &tex) {
+			return tex.originalFilename == original;
+		});
+		if (it != _TEX_PAGE.end() && it->filename == current)
+		{
+			continue; // already
+		}
+		if (it == _TEX_PAGE.end())
+		{
+			// Not loaded (ex. a game without the GUI, which loads no model textures): nothing shows it
+			debug(LOG_TEXTURE, "Texture %s isn't loaded: not replacing it with %s", original.c_str(), current.c_str());
+			continue;
+		}
+		if (!replaceTexture(WzString::fromUtf8(it->filename), WzString::fromUtf8(current)))
+		{
+			debug(LOG_WARNING, "Could not replace texture %s with %s again (is the file missing?)", original.c_str(), current.c_str());
+		}
+	}
 }
 
 bool debugReloadTexturesFromDisk(const std::unordered_set<size_t>& texPages)

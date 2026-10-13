@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "mission.h"
+#include "gamestate_harness.h" // continueLevels (test-only)
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -2915,6 +2916,17 @@ bool setUpMission(LEVEL_TYPE type)
 		{
 			bPlaySuccess = false;
 		}
+		// --gamestate-test-continue-levels: go on as the continue button does,
+		// with game updates paused as the result screen pauses them until stageThreeInitialise
+		// (no frame may draw the world before the next level starts).
+		// Game time isn't paused, as only the result screen's removal would start it again.
+		if (gamestate::harness::continueLevels())
+		{
+			clearCampaignName();
+			setGameUpdatePause(true);
+			launchMission();
+			return true;
+		}
 		// Give the option of save/continue
 		if (!intAddMissionResult(true, bPlaySuccess, true))
 		{
@@ -2937,6 +2949,16 @@ bool setUpMission(LEVEL_TYPE type)
 			intResetScreen(false);
 		}
 
+		// --gamestate-test-continue-levels: go on as the continue button does,
+		// with game updates paused as the result screen pauses them until stageThreeInitialise
+		// (no frame may draw the world before the next level starts).
+		// Game time isn't paused, as only the result screen's removal would start it again.
+		if (gamestate::harness::continueLevels())
+		{
+			setGameUpdatePause(true);
+			launchMission();
+			return true;
+		}
 		// Give the option of save / continue
 		if (!intAddMissionResult(true, true, true))
 		{

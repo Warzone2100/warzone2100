@@ -81,6 +81,7 @@
 #include "wrappers.h"  // testPlayerHasWon/Lost
 #include "lighting.h"  // getTheSun/setTheSun (presentation section)
 #include "atmos.h"     // atmosGet/SetWeatherType (presentation section)
+#include "lib/ivis_opengl/tex.h" // get/restoreReplacedTextures (presentation section)
 #include "display3d.h" // setSkyBox / getCurrentSkybox* / radarPermitted (presentation section)
 #include "advvis.h"    // get/setRevealStatus (presentation section)
 #include "component.h" // get/setPlayerColour (presentation section)
@@ -5171,8 +5172,15 @@ static void readCampaign(const nlohmann::ordered_json &j, uint32_t version)
 //
 // A mod that re-applies these in eventGameLoaded overrides this restore harmlessly (script wins,
 // exactly as before) - the fidelity gain is for state changed mid-match and never re-applied on load.
+//
+// Version 2: "replacedTextures", the texture pages replaceTexture() loaded another file into,
+// as [the file the page was loaded from, the file it shows].
+// Texture pages last until stageOneShutDown, so a replacement carries over the levels of a campaign
+// (a later level whose models need the page under its original name loads it again).
+// The list is the pages' state, not the calls (restoreReplacedTextures makes the pages match it).
+// Version 1 is still read (no textures).
 
-constexpr uint32_t PRESENTATION_SECTION_VERSION = 1;
+constexpr uint32_t PRESENTATION_SECTION_VERSION = 2;
 
 static nlohmann::ordered_json writeLightVec4(const glm::vec4 &v)
 {
@@ -5209,6 +5217,13 @@ static nlohmann::ordered_json writePresentation()
 		colours.push_back(getPlayerColour(p));
 	}
 	j["playerColour"] = std::move(colours);
+
+	nlohmann::ordered_json textures = nlohmann::ordered_json::array();
+	for (const auto &replaced : getReplacedTextures())
+	{
+		textures.push_back(nlohmann::ordered_json::array({ replaced.first, replaced.second }));
+	}
+	j["replacedTextures"] = std::move(textures);
 	return j;
 }
 
@@ -5229,7 +5244,7 @@ static void applyLightVec4(const nlohmann::ordered_json &j, const char *key, LIG
 
 static void readPresentation(const nlohmann::ordered_json &j, uint32_t version)
 {
-	if (version != PRESENTATION_SECTION_VERSION)
+	if (version < 1 || version > PRESENTATION_SECTION_VERSION)
 	{
 		throw StateError("unsupported presentation section version");
 	}
@@ -5313,6 +5328,15 @@ static void readPresentation(const nlohmann::ordered_json &j, uint32_t version)
 				setPlayerColour(p, colours[p].get<UDWORD>());
 			}
 		}
+	}
+	if (version >= 2 && j.contains("replacedTextures"))
+	{
+		std::vector<std::pair<std::string, std::string>> replaced;
+		for (const nlohmann::ordered_json &r : j.at("replacedTextures"))
+		{
+			replaced.emplace_back(r.at(0).get<std::string>(), r.at(1).get<std::string>());
+		}
+		restoreReplacedTextures(replaced);
 	}
 }
 
