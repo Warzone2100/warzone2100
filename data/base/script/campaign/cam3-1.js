@@ -268,7 +268,7 @@ function getCountdown()
 			}
 			if (!skip)
 			{
-				playSound(countdownObject[0].sound, CAM_HUMAN_PLAYER);
+				playSound(countdownObject[0].sound);
 			}
 
 			if (SILOS_DESTROYED)
