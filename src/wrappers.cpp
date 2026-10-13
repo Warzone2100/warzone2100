@@ -43,12 +43,15 @@
 
 #include "clparse.h"
 #include "frontend.h"
+#include "configuration.h"
+#include "loadsave.h"
 #include "mission.h"
 #include "multiint.h"
 #include "multilimit.h"
 #include "multistat.h"
 #include "screens/spectatorgameoverscreen.h"
 #include "warzoneconfig.h"
+#include "gamestate_replay_seek.h"
 #include "wrappers.h"
 #include "titleui/titleui.h"
 #include "stdinreader.h"
@@ -287,6 +290,7 @@ TITLECODE titleLoop()
 	// When we first init the game, firstcall is true.
 	if (firstcall)
 	{
+		bool replayLaunchedFromCommandLine = false;
 		firstcall = false;
 		// First check to see if --host was given as a command line option, if not,
 		// then check --join and if neither, run the normal game menu.
@@ -329,6 +333,21 @@ TITLECODE titleLoop()
 			// It will be automatically called upon connection attempt
 			// with the correct connection provider type corresponding to discovered connection info.
 			joinLobbyGame(NETgetLobbyserverAddress(), cli_lobby_game_to_connect_str(), cliConnectAsSpectator);
+		}
+		else if (std::string replayFile; gamestate::takeReplayRestart(replayFile, replayLaunchedFromCommandLine))
+		{
+			// A replay seek that couldn't restore any snapshot quit the game to play the replay again from the start
+			// (gamestate_replay_seek.h): load it as the menu does (frontend.cpp, FRONTEND_REPLAY and loadOK)
+			if (replayLaunchedFromCommandLine)
+			{
+				setHostLaunch(HostLaunch::LoadReplay);
+			}
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			bMultiPlayer = true;
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
+			sstrcpy(sRequestResult, replayFile.c_str());
+			sstrcpy(saveGameName, replayFile.c_str());
+			changeTitleMode(LOADSAVEGAME);
 		}
 		else
 		{

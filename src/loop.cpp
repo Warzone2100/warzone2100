@@ -328,7 +328,8 @@ static GAMECODE renderLoop()
 
 	/* Check for quit */
 	bool quitting = false;
-	if (intRetVal == INT_QUIT)
+	// (A replay seek that can't restore any snapshot plays the replay again from the start: see gamestate_replay_seek.h)
+	if (intRetVal == INT_QUIT || gamestate::replayRestartPending())
 	{
 		if (!loop_GetVideoStatus())
 		{

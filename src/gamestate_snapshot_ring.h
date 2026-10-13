@@ -52,6 +52,9 @@ struct SnapshotRingOptions
 	uint32_t interval = 30000;               ///< game time between two snapshots (ms)
 	size_t memoryBudget = 64 * 1024 * 1024;  ///< compressed bytes to keep at most, before snapshots are thinned out
 	int compressionLevel = 3;                ///< zlib level
+	/// Test-only: when a snapshot comes due while the worker is still on the previous one,
+	/// wait for it instead of taking the snapshot later
+	bool waitForWorker = false;
 };
 
 /// Start taking snapshots: the first at the next capture point. Stops a ring already running first.
@@ -75,6 +78,14 @@ nonstd::optional<GameStateSnapshot> snapshotRingFindAtOrBefore(uint32_t gameTime
 
 /// The game times of the snapshots kept, oldest first (main thread, waits for the worker).
 std::vector<uint32_t> snapshotRingTimes();
+
+/// The game times of the snapshots stored so far, oldest first, without waiting for the worker
+/// (a snapshot it is still working on isn't in yet). For display.
+std::vector<uint32_t> snapshotRingStoredTimes();
+
+/// Drop the snapshot taken at that game time (one that couldn't be restored), so it isn't tried again.
+/// False if there is none (main thread, waits for the worker).
+bool snapshotRingDrop(uint32_t gameTime);
 
 struct SnapshotRingStats
 {
