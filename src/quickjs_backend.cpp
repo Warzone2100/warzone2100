@@ -59,6 +59,7 @@
 #include "lighting.h"
 #include "radar.h"
 #include "random.h"
+#include "gamestate_harness.h"
 #include "frontend.h"
 #include "loop.h"
 #include "gateway.h"
@@ -404,6 +405,8 @@ static void QJSRuntimeFree_LeakHandler_Error(const char* msg)
   #define QUICKJS_HAS_FEATURE(x) 0
 #endif
 
+static std::string QuickJS_DumpError(JSContext *ctx);
+
 class quickjs_scripting_instance : public wzapi::scripting_instance
 {
 public:
@@ -433,6 +436,20 @@ public:
 		ctxOptions.weakRef = false;
 		ctx = JS_NewLimitedContext(rt, &ctxOptions);
 		ASSERT(ctx != nullptr, "JS_NewContext failed?");
+		if (const uint64_t testRandomState = gamestate::harness::testScriptRandomState(player, scriptName))
+		{
+			JS_SetRandomState(ctx, testRandomState); // --gamestate-test-seed: repeatable Math.random()
+		}
+		const std::string testPrelude = gamestate::harness::testScriptPrelude(); // --gamestate-test-seed: fixed clock
+		if (!testPrelude.empty())
+		{
+			JSValue preludeResult = JS_Eval_BypassLimitedContext(ctx, testPrelude.c_str(), testPrelude.size(), "<gamestate-test-seed>", JS_EVAL_TYPE_GLOBAL);
+			if (JS_IsException(preludeResult))
+			{
+				debug(LOG_ERROR, "gamestate-test-seed prelude failed: %s", QuickJS_DumpError(ctx).c_str());
+			}
+			JS_FreeValue(ctx, preludeResult);
+		}
 
 		global_obj = JS_GetGlobalObject(ctx);
 

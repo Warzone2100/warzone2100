@@ -103,6 +103,9 @@ bool shutdownScripts();
 /// Run after all data is loaded, but before game is started.
 bool prepareScripts(bool loadGame);
 
+/// Drop the eventResearched calls queued while scripts were not ready (the savegame-load replay). Test harness only.
+void discardQueuedResearchEvents();
+
 /// Run this each logical frame to update frame-dependent script states
 bool updateScripts();
 
