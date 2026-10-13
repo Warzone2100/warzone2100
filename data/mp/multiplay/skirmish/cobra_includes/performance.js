@@ -6,11 +6,41 @@ function callFuncWithArgs(func, parameters)
 	return func.apply(this, parameters);
 }
 
+// The cache and throttle state of each calling function, by the function's name.
+// Var globals, so that a saved game keeps them (properties set on a function object start over on load).
+// Every caller of cacheThis() and stopExecution() must therefore be a named function with a name of its own.
+// NOTE: an anonymous caller falls back to state kept on the function object, which a saved game loses.
+var cachedTimes = {};
+var cachedValues = {};
+var throttleTimes = {};
+
+// The table of the calling function `caller` in `table`, or undefined if there is none yet (create: make one)
+function callerTable(table, caller, prop, create)
+{
+	if (caller.name === "")
+	{
+		if (create && !isDefined(caller[prop]))
+		{
+			caller[prop] = {};
+		}
+
+		return caller[prop];
+	}
+
+	if (create && !isDefined(table[caller.name]))
+	{
+		table[caller.name] = {};
+	}
+
+	return table[caller.name];
+}
+
 //cacheThis(FUNCTION_NAME, [FUNCTION_PARAMETERS], [CACHED_NAME], [TIME])
 //Pass in Infinity for time to never recalculate it again.
 function cacheThis(func, funcParameters, cachedItem, time)
 {
 	const __refreshTime = isDefined(time) ? time : 15000;
+	const _caller = debugGetCallerFuncObject();
 
 	if (!isDefined(cachedItem))
 	{
@@ -22,30 +52,26 @@ function cacheThis(func, funcParameters, cachedItem, time)
 		funcParameters = [];
 	}
 
-	if ((time === Infinity) && isDefined(debugGetCallerFuncObject().cachedValues))
+	if ((time === Infinity) && isDefined(callerTable(cachedValues, _caller, "cachedValues", false)))
 	{
-		return debugGetCallerFuncObject().cachedValues[cachedItem];
+		return callerTable(cachedValues, _caller, "cachedValues", false)[cachedItem];
 	}
 
-	if (!isDefined(debugGetCallerFuncObject().cachedTimes))
-	{
-		debugGetCallerFuncObject().cachedTimes = {};
-		debugGetCallerFuncObject().cachedValues = {};
-	}
-
-	const __t = debugGetCallerFuncObject().cachedTimes[cachedItem];
-	const _obj = debugGetCallerFuncObject().cachedValues[cachedItem];
+	const _times = callerTable(cachedTimes, _caller, "cachedTimes", true);
+	const _values = callerTable(cachedValues, _caller, "cachedValues", true);
+	const __t = _times[cachedItem];
+	const _obj = _values[cachedItem];
 	const __def = isDefined(_obj);
 
 	if (!__def ||
 		(isDefined(_obj.typeInfo) && (getObject(_obj.typeInfo, _obj.playerInfo, _obj.idInfo) === null)) ||
 		((gameTime - __t) >= __refreshTime))
 	{
-		debugGetCallerFuncObject().cachedValues[cachedItem] = callFuncWithArgs(func, funcParameters);
-		debugGetCallerFuncObject().cachedTimes[cachedItem] = gameTime;
+		_values[cachedItem] = callFuncWithArgs(func, funcParameters);
+		_times[cachedItem] = gameTime;
 	}
 
-	return debugGetCallerFuncObject().cachedValues[cachedItem];
+	return _values[cachedItem];
 }
 
 //A simple throttle function to make sure something is not executed too much.
@@ -56,23 +82,20 @@ function stopExecution(throttleThis, time)
 		time = 2000;
 	}
 
-	if (!isDefined(debugGetCallerFuncObject().throttleTimes))
-	{
-		debugGetCallerFuncObject().throttleTimes = {};
-	}
+	const _times = callerTable(throttleTimes, debugGetCallerFuncObject(), "throttleTimes", true);
 
-	if (!isDefined(debugGetCallerFuncObject().throttleTimes[throttleThis]))
+	if (!isDefined(_times[throttleThis]))
 	{
-		debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
+		_times[throttleThis] = gameTime;
 		return false;
 	}
 
-	if (gameTime - debugGetCallerFuncObject().throttleTimes[throttleThis] < time)
+	if (gameTime - _times[throttleThis] < time)
 	{
 		return true;
 	}
 
-	debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
+	_times[throttleThis] = gameTime;
 	return false;
 }
 
