@@ -431,6 +431,14 @@ namespace wzapi
 		//__ An event that is run whenever an object is destroyed. Careful passing
 		//__ the parameter object around, since it is about to vanish!
 		//__
+		//__ It is run at the end of the game update in which the object was
+		//__ destroyed. It isn't run for objects removed between two updates:
+		//__ - while a game or level is being set up, by the game itself or by
+		//__   removeObject() in eventGameInit or eventStartLevel
+		//__ - by removeObject() in another event that runs between updates
+		//__   (eventGameLoaded, eventPlayerLeft, the UI and menu events, ...)
+		//__ - when a player leaves the game.
+		//__
 		virtual bool handle_eventDestroyed(const BASE_OBJECT *psVictim) = 0;
 
 		//__ ## eventPickup(feature, droid)

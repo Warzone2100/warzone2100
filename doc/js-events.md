@@ -190,6 +190,14 @@ be set to null. The player parameter gives the player it is called for.
 An event that is run whenever an object is destroyed. Careful passing
 the parameter object around, since it is about to vanish!
 
+It is run at the end of the game update in which the object was
+destroyed. It isn't run for objects removed between two updates:
+- while a game or level is being set up, by the game itself or by
+  removeObject() in eventGameInit or eventStartLevel
+- by removeObject() in another event that runs between updates
+  (eventGameLoaded, eventPlayerLeft, the UI and menu events, ...)
+- when a player leaves the game.
+
 ## eventPickup(feature, droid)
 
 An event that is run whenever a feature is picked up. It is called for

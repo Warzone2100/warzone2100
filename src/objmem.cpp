@@ -359,6 +359,16 @@ void objmemUpdate()
 	}
 }
 
+uint32_t deathTimeNow()
+{
+	return gameTime;
+}
+
+uint32_t deathTimeInTick()
+{
+	return gameTime - deltaGameTime + 1;
+}
+
 void objmemFreeAllDestroyed()
 {
 	flushPendingVisRemoval(gameWorld);
@@ -442,7 +452,7 @@ static inline void destroyObject(WorldObjectState& objState, PerPlayerObjectList
 		objState.pendingVisRemoval.emplace_back((BASE_OBJECT*)object);
 
 		// Set destruction time
-		object->died = gameTime;
+		object->died = deathTimeNow();
 	}
 	scriptRemoveObject(object);
 }

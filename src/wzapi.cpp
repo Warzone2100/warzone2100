@@ -5070,9 +5070,9 @@ void wzapi::processScriptQueuedObjectRemovals()
 		{
 			switch (psObj->type)
 			{
-			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime, gameWorld); break;
-			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime, gameWorld); break;
-			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime, gameWorld); break;
+			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, deathTimeNow(), gameWorld); break;
+			case OBJ_DROID: destroyDroid((DROID*)psObj, deathTimeNow(), gameWorld); break;
+			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, deathTimeNow(), gameWorld); break;
 			default: ASSERT(false, "Wrong game object type"); break;
 			}
 		}

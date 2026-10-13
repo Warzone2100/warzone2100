@@ -2482,7 +2482,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getStatsName(pF->psStats));
 	// Remove the feature locally
 	turnOffMultiMsg(true);
-	destroyFeature(pF, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+	destroyFeature(pF, deathTimeInTick(), gameWorld);
 	turnOffMultiMsg(false);
 
 	return true;
@@ -3041,7 +3041,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 			}
 			else			// show effects
 			{
-				destroyStruct(psStruct, gameTime, gameWorld);
+				destroyStruct(psStruct, deathTimeNow(), gameWorld);
 			}
 		}
 
@@ -3055,7 +3055,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 			}
 			else				// show effects
 			{
-				destroyDroid(d, gameTime, gameWorld);
+				destroyDroid(d, deathTimeNow(), gameWorld);
 			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
@@ -3077,7 +3077,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 				}
 				else			// show effects
 				{
-					destroyStruct(psStruct, gameTime, gameWorld);
+					destroyStruct(psStruct, deathTimeNow(), gameWorld);
 				}
 			}
 			return IterationResult::CONTINUE_ITERATION;
