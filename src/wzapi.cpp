@@ -4407,6 +4407,36 @@ wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(cons
 	return wzapi::setUpgradeStats(context, getPlayer(), name, type, getIndex(), newValue);
 }
 
+const std::vector<wzapi::PerPlayerUpgrades>& wzapi::getUpgradesObjectCached()
+{
+	// Valid while statsGeneration() is unchanged.
+	// The list sizes and storage are checked too, to catch a change that didn't bump the generation.
+	static std::vector<PerPlayerUpgrades> cached;
+	static bool haveCached = false;
+	static uint32_t cachedGeneration = 0;
+	static std::vector<std::pair<const void *, size_t>> cachedLists;
+	const std::vector<std::pair<const void *, size_t>> lists = {
+		{asBodyStats.data(), asBodyStats.size()}, {asSensorStats.data(), asSensorStats.size()},
+		{asPropulsionStats.data(), asPropulsionStats.size()}, {asECMStats.data(), asECMStats.size()},
+		{asRepairStats.data(), asRepairStats.size()}, {asConstructStats.data(), asConstructStats.size()},
+		{asBrainStats.data(), asBrainStats.size()}, {asWeaponStats.data(), asWeaponStats.size()},
+		{asStructureStats, numStructureStats},
+	};
+	if (haveCached && cachedGeneration == statsGeneration())
+	{
+		if (lists == cachedLists)
+		{
+			return cached;
+		}
+		ASSERT(false, "The stats lists changed without a statsGenerationBump()");
+	}
+	cached = getUpgradesObject();
+	haveCached = true;
+	cachedGeneration = statsGeneration();
+	cachedLists = lists;
+	return cached;
+}
+
 std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 {
 	//== * ```Upgrades``` A special array containing per-player rules information for game entity types,

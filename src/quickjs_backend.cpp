@@ -131,17 +131,6 @@ static inline JSCFunctionListEntry QJS_CFUNC_DEF(const char *name, uint8_t lengt
 // #define JS_CGETSET_DEF(name, fgetter, fsetter) { name, JS_PROP_CONFIGURABLE, JS_DEF_CGETSET, 0, .u = { .getset = { .get = { .getter = fgetter }, .set = { .setter = fsetter } } } }
 typedef JSValue JSCFunctionGetter(JSContext *ctx, JSValueConst this_val);
 typedef JSValue JSCFunctionSetter(JSContext *ctx, JSValueConst this_val, JSValueConst val);
-static inline JSCFunctionListEntry QJS_CGETSET_DEF(const char *name, JSCFunctionGetter *fgetter, JSCFunctionSetter *fsetter)
-{
-	JSCFunctionListEntry entry;
-	entry.name = name;
-	entry.prop_flags = JS_PROP_CONFIGURABLE;
-	entry.def_type = JS_DEF_CGETSET;
-	entry.magic = 0;
-	entry.u.getset.get.getter = fgetter;
-	entry.u.getset.set.setter = fsetter;
-	return entry;
-}
 
 struct JSToJsonContext
 {
@@ -1932,39 +1921,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			return result;
 		}
 
-		static inline uint32_t JSValueToUint32(JSContext *ctx, JSValue &value)
-		{
-			uint32_t uintVal = 0;
-			if (JS_ToUint32(ctx, &uintVal, value))
-			{
-				// failed
-				ASSERT(false, "Failed"); // TODO:
-			}
-			return uintVal;
-		}
-
-		static uint32_t QuickJS_GetUint32(JSContext *ctx, JSValueConst this_obj, const char *prop)
-		{
-			JSValue val = JS_GetPropertyStr(ctx, this_obj, prop);
-			uint32_t result = JSValueToUint32(ctx, val);
-			JS_FreeValue(ctx, val);
-			return result;
-		}
-
 		static inline std::string JSValueToStdString(JSContext *ctx, JSValue &value)
 		{
 			const char* pStr = JS_ToCString(ctx, value);
 			std::string result;
 			if (pStr) result = pStr;
 			JS_FreeCString(ctx, pStr);
-			return result;
-		}
-
-		static std::string QuickJS_GetStdString(JSContext *ctx, JSValueConst this_obj, const char *prop)
-		{
-			JSValue val = JS_GetPropertyStr(ctx, this_obj, prop);
-			std::string result = JSValueToStdString(ctx, val);
-			JS_FreeValue(ctx, val);
 			return result;
 		}
 
@@ -3902,26 +3864,45 @@ IMPL_JS_FUNC(getRevealStatus, wzapi::getRevealStatus)
 IMPL_JS_FUNC(setRevealStatus, wzapi::setRevealStatus)
 IMPL_JS_FUNC(setGameStoryLogPlayerDataValue, wzapi::setGameStoryLogPlayerDataValue)
 
-static JSValue js_stats_get(JSContext *ctx, JSValueConst this_val)
+// The names of the Upgrades properties, interned: a getter or setter refers to its property's name by its index here
+static std::vector<std::string> &upgradePropertyNames()
 {
-	JSValue currentFuncObj = js_debugger_get_current_funcObject(ctx);
-	int type = QuickJS_GetInt32(ctx, currentFuncObj, "type");
-	int player = QuickJS_GetInt32(ctx, currentFuncObj, "player");
-	unsigned index = QuickJS_GetUint32(ctx, currentFuncObj, "index");
-	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
-	JS_FreeValue(ctx, currentFuncObj);
+	static std::vector<std::string> names;
+	return names;
+}
+
+static int32_t upgradePropertyNameId(const std::string &name)
+{
+	static std::unordered_map<std::string, int32_t> ids;
+	auto it = ids.find(name);
+	if (it != ids.end())
+	{
+		return it->second;
+	}
+	const int32_t id = static_cast<int32_t>(upgradePropertyNames().size());
+	upgradePropertyNames().push_back(name);
+	ids.emplace(name, id);
+	return id;
+}
+
+// func_data: player, type, index, name id
+static JSValue js_stats_get_data(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv, int magic, JSValue *func_data)
+{
+	const int player = JS_VALUE_GET_INT(func_data[0]);
+	const int type = JS_VALUE_GET_INT(func_data[1]);
+	const unsigned index = static_cast<unsigned>(JS_VALUE_GET_INT(func_data[2]));
+	const std::string &name = upgradePropertyNames()[JS_VALUE_GET_INT(func_data[3])];
 	quickjs_execution_context execution_context(ctx);
 	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
 
-static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst val)
+static JSValue js_stats_set_data(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv, int magic, JSValue *func_data)
 {
-	JSValue currentFuncObj = js_debugger_get_current_funcObject(ctx);
-	int type = QuickJS_GetInt32(ctx, currentFuncObj, "type");
-	int player = QuickJS_GetInt32(ctx, currentFuncObj, "player");
-	unsigned index = QuickJS_GetUint32(ctx, currentFuncObj, "index");
-	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
-	JS_FreeValue(ctx, currentFuncObj);
+	const int player = JS_VALUE_GET_INT(func_data[0]);
+	const int type = JS_VALUE_GET_INT(func_data[1]);
+	const unsigned index = static_cast<unsigned>(JS_VALUE_GET_INT(func_data[2]));
+	const std::string &name = upgradePropertyNames()[JS_VALUE_GET_INT(func_data[3])];
+	JSValueConst val = argc > 0 ? argv[0] : JS_UNDEFINED;
 	quickjs_execution_context execution_context(ctx);
 	auto toJsonContext = JSToJsonContext(ctx, true);
 	try {
@@ -3934,60 +3915,42 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
 
-
-
-static bool setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name, int player, int type, unsigned index)
+static bool setStatsFunc(JSValue &base, JSContext *ctx, JSAtom atom, int32_t nameId, int player, int type, unsigned index)
 {
-	const JSCFunctionListEntry js_stats_getter_setter_func[] = {
-		QJS_CGETSET_DEF(name.c_str(), js_stats_get, js_stats_set)
-	};
-
-	JSValue getter = JS_UNDEFINED;
-	JSValue setter = JS_UNDEFINED;
-	char buf[64];
-
-	JSAtom atom = JS_NewAtom(ctx, name.c_str());
-	ASSERT_OR_RETURN(false, atom != JS_ATOM_NULL, "Failed to create atom: %s", name.c_str());
-
-	snprintf(buf, sizeof(buf), "get %s", name.c_str());
-	getter = JS_NewCFunction2(ctx, js_stats_getter_setter_func[0].u.getset.get.generic,
-							  buf, 0, JS_CFUNC_getter,
-							  0);
+	JSValue data[4] = {JS_NewInt32(ctx, player), JS_NewInt32(ctx, type), JS_NewInt32(ctx, static_cast<int32_t>(index)), JS_NewInt32(ctx, nameId)};
+	JSValue getter = JS_NewCFunctionData(ctx, js_stats_get_data, 0, 0, 4, data);
 	if (JS_IsException(getter))
 	{
-		JS_FreeAtom(ctx, atom);
 		return false;
 	}
-
-	snprintf(buf, sizeof(buf), "set %s", name.c_str());
-	setter = JS_NewCFunction2(ctx, js_stats_getter_setter_func[0].u.getset.set.generic,
-							  buf, 1, JS_CFUNC_setter,
-							  0);
+	JSValue setter = JS_NewCFunctionData(ctx, js_stats_set_data, 1, 0, 4, data);
 	if (JS_IsException(setter))
 	{
 		JS_FreeValue(ctx, getter);
-		JS_FreeAtom(ctx, atom);
 		return false;
 	}
-
-	JSValue funcObjects[2] = {getter, setter};
-	for (size_t i = 0; i < 2; i++)
-	{
-		QuickJS_DefinePropertyValue(ctx, funcObjects[i], "player", JS_NewInt32(ctx, player), 0);
-		QuickJS_DefinePropertyValue(ctx, funcObjects[i], "type", JS_NewInt32(ctx, type), 0);
-		QuickJS_DefinePropertyValue(ctx, funcObjects[i], "index", JS_NewUint32(ctx, index), 0);
-		QuickJS_DefinePropertyValue(ctx, funcObjects[i], "name", JS_NewStringLen(ctx, name.c_str(), name.length()), 0);
-	}
-
-	JS_DefinePropertyGetSet(ctx, base, atom, getter, setter, js_stats_getter_setter_func[0].prop_flags | JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
-
-	JS_FreeAtom(ctx, atom);
+	JS_DefinePropertyGetSet(ctx, base, atom, getter, setter, JS_PROP_CONFIGURABLE | JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 	return true;
 }
 
 JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 {
-	auto upgradesObj = wzapi::getUpgradesObject();
+	const auto &upgradesObj = wzapi::getUpgradesObjectCached();
+
+	// No garbage collection while the properties (every player, stat and rule) are added,
+	// as each one would scan the growing object graph again.
+	// (The runtime is new, so the initial threshold is restored after.)
+	JSRuntime *rt = JS_GetRuntime(ctx);
+	JS_SetGCThreshold(rt, std::numeric_limits<size_t>::max());
+	// Each property name's atom and name id, made once per name
+	std::unordered_map<std::string, std::pair<JSAtom, int32_t>> names;
+	const auto cleanUp = [&]() {
+		for (auto &name : names)
+		{
+			JS_FreeAtom(ctx, name.second.first);
+		}
+		JS_SetGCThreshold(rt, 256 * 1024);
+	};
 
 	JSValue upgrades = JS_NewArray(ctx);
 	for (auto& playerUpgrades : upgradesObj)
@@ -4005,13 +3968,19 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 				JSValue v = JS_NewObject(ctx);
 				for (const auto& property : gameEntityRules)
 				{
-					if (!setStatsFunc(v, ctx, property.first, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex()))
+					auto nameIt = names.find(property.first);
+					if (nameIt == names.end())
+					{
+						nameIt = names.emplace(property.first, std::make_pair(JS_NewAtom(ctx, property.first.c_str()), upgradePropertyNameId(property.first))).first;
+					}
+					if (!setStatsFunc(v, ctx, nameIt->second.first, nameIt->second.second, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex()))
 					{
 						// Presumably, OOM
 						JS_FreeValue(ctx, v);
 						JS_FreeValue(ctx, entityBase);
 						JS_FreeValue(ctx, node);
 						JS_FreeValue(ctx, upgrades);
+						cleanUp();
 						return JS_EXCEPTION;
 					}
 				}
@@ -4026,6 +3995,7 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 		JS_DefinePropertyValueUint32(ctx, upgrades, static_cast<uint32_t>(playerUpgrades.getPlayer()), node, JS_PROP_ENUMERABLE);
 	}
 
+	cleanUp();
 	return upgrades;
 }
 

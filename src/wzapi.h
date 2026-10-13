@@ -1170,6 +1170,8 @@ namespace wzapi
 	nlohmann::json getUsefulConstants();
 	nlohmann::json constructStaticPlayerData();
 	std::vector<PerPlayerUpgrades> getUpgradesObject();
+	/// getUpgradesObject(), built once for the stats loaded (statsGeneration()), for every script instance to share
+	const std::vector<PerPlayerUpgrades>& getUpgradesObjectCached();
 	nlohmann::json constructMapTilesArray();
 
 	// `wzapi::removeObject` API call adds the game objects to this list.
