@@ -798,6 +798,11 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 			// ignore everything but people
 			continue;
 		}
+		if (psObj->died)
+		{
+			// Already dead (ex. squished earlier in this tick): the grid keeps dead objects until the end of the tick
+			continue;
+		}
 
 		ASSERT_OR_RETURN(, psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_PERSON, "squished - eerk");
 

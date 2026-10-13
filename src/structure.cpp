@@ -3941,7 +3941,8 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 
 			for (BASE_OBJECT *gridObj : gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS))
 			{
-				if (isDroid(gridObj))
+				// Not one that died or left the map earlier in this tick: the grid keeps it until the end of the tick
+				if (isDroid(gridObj) && !gridObj->died)
 				{
 					found = true;
 					break;
