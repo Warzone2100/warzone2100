@@ -31,6 +31,7 @@
 #include "game.h"
 #include "game_world.h"
 #include "gamestate_capture.h"
+#include "transporter.h"  // transporterTestLaunchReinforcements
 #include "loop.h"  // levelChangePending
 #include "map.h"
 #include "objmem.h"
@@ -67,6 +68,7 @@ static bool g_saveWhenCoveragePending = false;
 static uint32_t g_checkCoverageTicks = 0;
 static uint32_t g_coverageChecks = 0;
 static uint32_t g_coverageChecksDiffering = 0;
+static uint32_t g_testReinforceAt = 0;      // --gamestate-test-reinforce (0: none)
 static bool g_haveTestSeed = false;
 static uint32_t g_testSeed = 0;
 
@@ -153,6 +155,27 @@ void setExitAtTick(uint32_t tick)
 	g_exitAtTick = tick;
 }
 
+static bool parseUint(const std::string &text, uint32_t &value)
+{
+	if (text.empty() || text.find_first_not_of("0123456789") != std::string::npos || text.size() > 9)
+	{
+		return false;
+	}
+	value = static_cast<uint32_t>(std::stoul(text));
+	return true;
+}
+
+bool setTestReinforce(const std::string &spec)
+{
+	uint32_t tick = 0;
+	if (!parseUint(spec, tick) || tick == 0)
+	{
+		return false;
+	}
+	g_testReinforceAt = tick;
+	return true;
+}
+
 void setRewindTest(uint32_t tick, uint32_t ticksLater)
 {
 	g_rewindAtTick = tick;
@@ -230,6 +253,10 @@ static void checkCoverage(const char *when);
 
 void onColdLoadComplete()
 {
+	if (g_testReinforceAt != 0 && gameTime >= g_testReinforceAt)
+	{
+		g_testReinforceAt = 0;  // (the loaded game was saved after the reinforcements were sent, or without them)
+	}
 	checkCoverage("after load");
 	if (g_resaveOnLoadPath.empty())
 	{
@@ -444,6 +471,12 @@ void afterMessages()
 	{
 		maybeSave();
 		maybeRewindSnapshot();
+	}
+	if (g_testReinforceAt != 0 && gameStateCaptureSafe() && gameTime >= g_testReinforceAt)
+	{
+		g_testReinforceAt = 0;
+		const bool launched = transporterTestLaunchReinforcements();
+		debug(LOG_INFO, "GameState harness: reinforcements %s at gameTime %u", launched ? "launched" : "NOT launched", gameTime);
 	}
 }
 
