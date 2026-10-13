@@ -81,8 +81,21 @@ miza 300000 330000 20000
 # damaged replay read positions must be rejected before the restore changes anything
 REPLAY_FAULT_KINDS='replay-position no-replay-positions'
 
-# Rewind faults (rewindfault.sh): a damaged snapshot must be rejected before the restore changes anything (the live
-# game goes on, IDENTICAL), over-limit must restore, and a throw during the restore must stop the game cleanly
+# Replay seeks (replayseek.sh, sharing the recordings above): "<test> <end tick> <ring> [<seeks>]", in order:
+# - the ring alone
+# - seeks forward (no restore), back to a snapshot's time, back between snapshots and back to the start
+# - a small budget that thins the ring out
+# - miza
+SEEK_CELLS='
+highground 90000 10000
+highground 90000 10000 30000:55000,60000:40002,70000:25000,80000:1000
+highground 90000 5000,400 70000:25000,85000:61000
+miza 330000 30000 200000:150000,300000:20000,310000:325000
+'
+
+# Rewind faults (rewindfault.sh): a damaged snapshot must be rejected before the restore changes anything
+# (the live game goes on, IDENTICAL), over-limit must restore,
+# and a throw during the restore must stop the game cleanly
 FAULT_KINDS='truncate section-version:power bad-stat duplicate-id dangling-ref overlap edge off-map over-limit throw-at:pass1 throw-at:sections'
 
 # Double-save cells: savegames written by the fork cells above, loaded and saved again straight away.
@@ -124,6 +137,13 @@ if echo "replayrewind" | grep -qE "$FILTER"; then
 	done
 	for kind in $REPLAY_FAULT_KINDS; do
 		FAULT=$kind "$HERE/replayrewind.sh" "$BIN" highground 60000 90000 5000
+	done
+fi
+if echo "replayseek" | grep -qE "$FILTER"; then
+	echo "$SEEK_CELLS" | while read -r cell; do
+		[ -n "$cell" ] || continue
+		# shellcheck disable=SC2086
+		"$HERE/replayseek.sh" "$BIN" $cell | head -2
 	done
 fi
 if echo "rewindfault" | grep -qE "$FILTER"; then

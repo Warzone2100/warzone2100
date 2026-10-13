@@ -32,6 +32,8 @@
 #include "game_world.h"
 #include "gamestate_capture.h"
 #include "gamestate_snapshot.h"
+#include "gamestate_snapshot_ring.h"
+#include "gamestate_replay_seek.h"
 #include "transporter.h"  // transporterTestLaunchReinforcements
 #include "loop.h"  // levelChangePending
 #include "map.h"
@@ -69,6 +71,11 @@ static uint32_t g_coverageChecks = 0;
 static uint32_t g_coverageChecksDiffering = 0;
 static std::string g_rewindFault;          // --gamestate-rewind-fault kind[:arg]
 static bool g_rewindFaultContinue = false; // ... ,continue
+static bool g_snapshotRing = false;         // --gamestate-snapshot-ring
+static bool g_snapshotRingStarted = false;
+static SnapshotRingOptions g_snapshotRingOptions;
+static std::vector<std::pair<uint32_t, uint32_t>> g_seekTests;  // --gamestate-seek-test: (at, target), in order
+static size_t g_nextSeekTest = 0;
 static uint32_t g_testReinforceAt = 0;      // --gamestate-test-reinforce (0: none)
 static bool g_haveTestSeed = false;
 static uint32_t g_testSeed = 0;
@@ -180,6 +187,20 @@ bool setRewindFault(const std::string &spec)
 	return true;
 }
 
+static std::vector<std::string> splitList(const std::string &spec)
+{
+	std::vector<std::string> items;
+	size_t start = 0;
+	while (start <= spec.size())
+	{
+		const size_t comma = spec.find(',', start);
+		const size_t end = comma == std::string::npos ? spec.size() : comma;
+		items.push_back(spec.substr(start, end - start));
+		start = end + 1;
+	}
+	return items;
+}
+
 static bool parseUint(const std::string &text, uint32_t &value)
 {
 	if (text.empty() || text.find_first_not_of("0123456789") != std::string::npos || text.size() > 9)
@@ -187,6 +208,30 @@ static bool parseUint(const std::string &text, uint32_t &value)
 		return false;
 	}
 	value = static_cast<uint32_t>(std::stoul(text));
+	return true;
+}
+
+bool setSnapshotRing(const std::string &spec)
+{
+	const std::vector<std::string> items = splitList(spec);
+	uint32_t interval = 0, budgetKB = 0, level = 0;
+	if (items.empty() || items.size() > 3 || !parseUint(items[0], interval) || interval == 0
+	    || (items.size() > 1 && (!parseUint(items[1], budgetKB) || budgetKB == 0))
+	    || (items.size() > 2 && (!parseUint(items[2], level) || level < 1 || level > 9)))
+	{
+		return false;
+	}
+	g_snapshotRingOptions = SnapshotRingOptions();
+	g_snapshotRingOptions.interval = interval;
+	if (items.size() > 1)
+	{
+		g_snapshotRingOptions.memoryBudget = static_cast<size_t>(budgetKB) * 1024;
+	}
+	if (items.size() > 2)
+	{
+		g_snapshotRingOptions.compressionLevel = static_cast<int>(level);
+	}
+	g_snapshotRing = true;
 	return true;
 }
 
@@ -198,6 +243,24 @@ bool setTestReinforce(const std::string &spec)
 		return false;
 	}
 	g_testReinforceAt = tick;
+	return true;
+}
+
+bool setSeekTest(const std::string &spec)
+{
+	std::vector<std::pair<uint32_t, uint32_t>> seeks;
+	for (const std::string &item : splitList(spec))
+	{
+		const size_t colon = item.find(':');
+		uint32_t at = 0, target = 0;
+		if (colon == std::string::npos || !parseUint(item.substr(0, colon), at) || !parseUint(item.substr(colon + 1), target))
+		{
+			return false;
+		}
+		seeks.emplace_back(at, target);
+	}
+	g_seekTests = std::move(seeks);
+	g_nextSeekTest = 0;
 	return true;
 }
 
@@ -672,6 +735,25 @@ void afterMessages()
 		g_testReinforceAt = 0;
 		const bool launched = transporterTestLaunchReinforcements();
 		debug(LOG_INFO, "GameState harness: reinforcements %s at gameTime %u", launched ? "launched" : "NOT launched", gameTime);
+	}
+	if (g_snapshotRing && !g_snapshotRingStarted)
+	{
+		g_snapshotRingStarted = true;
+		snapshotRingStart(g_snapshotRingOptions);
+	}
+	if (g_nextSeekTest < g_seekTests.size() && gameTime >= g_seekTests[g_nextSeekTest].first)
+	{
+		const uint32_t target = g_seekTests[g_nextSeekTest++].second;
+		std::string error;
+		if (requestReplaySeek(target, &error))
+		{
+			debug(LOG_INFO, "GameState harness: replay seek to gameTime %u requested at gameTime %u", target, gameTime);
+		}
+		else
+		{
+			debug(LOG_ERROR, "GameState harness: replay seek to gameTime %u FAILED to start: %s", target, error.c_str());
+			wzQuit(EXIT_FAILURE);
+		}
 	}
 }
 
