@@ -1837,6 +1837,14 @@ static bool stageThreeInitialiseSync()
 
 	mapInit(gameWorld);
 	gridReset(gameWorld);
+	// eventGameInit and eventStartLevel run after this, and can add or remove objects:
+	// rebuild the grid at the start of the first update.
+	// Not after a GameState load: the grid built here is the one the saved game had,
+	// and a later rebuild would take in changes made before the first update that its grid did not have.
+	if (!wasColdLoad)
+	{
+		gridMarkDirty();
+	}
 
 	//if mission screen is up, close it.
 	if (MissionResUp)

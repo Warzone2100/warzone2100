@@ -544,6 +544,10 @@ static void gameStateUpdate()
 	sendPlayerGameTime();
 	NETflush();  // Make sure the game time tick message is really sent over the network.
 
+	// The grid was built at the end of the last update.
+	// Rebuild it first if objects were freed or worlds swapped since then (between updates), or if a level just started.
+	gridResetIfDirty(gameWorld);
+
 	if (!paused && !scriptPaused())
 	{
 		executeFnAndProcessScriptQueuedRemovals([]() { updateScripts(); });
@@ -554,9 +558,6 @@ static void gameStateUpdate()
 
 	// Update the visibility change stuff
 	visUpdateLevel();
-
-	// Put all droids/structures/features into the grid.
-	gridReset(gameWorld);
 
 	// Check which objects are visible.
 	executeFnAndProcessScriptQueuedRemovals([]() { processVisibility(); });
@@ -624,6 +625,10 @@ static void gameStateUpdate()
 
 	// Free dead droid memory.
 	executeFnAndProcessScriptQueuedRemovals([]() { objmemUpdate(); });
+
+	// Put all droids/structures/features into the grid, for everything that reads it until the end of the next
+	// update (see gridReset). Must follow objmemUpdate directly: the grid may point to the objects it freed.
+	gridReset(gameWorld);
 
 	// accumulate occasional stats / snapshots
 	if (!paused && !scriptPaused())
