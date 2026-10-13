@@ -36,6 +36,7 @@
 #include "geometry.h"
 #include "console.h"
 #include "selection.h"
+#include "uiobjectrefs.h"
 #include "hci.h"
 #include "map.h"
 #include "selection.h"
@@ -280,11 +281,20 @@ static unsigned int selSelectAllSame(WorldObjectState& objState, unsigned int pl
 	return selected;
 }
 
+static DROID *psOldRD = nullptr; // the unit selNextSpecifiedUnit selected last
+static DROID *psOldNS = nullptr; // the unit selNextUnassignedUnit selected last
+
+void selectionVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	// (Only compared, but cleared so a new object at the same address isn't taken for them)
+	visitUiObjectRef(psOldRD, visit);
+	visitUiObjectRef(psOldNS, visit);
+}
+
 // ffs am
 // ---------------------------------------------------------------------
 void selNextSpecifiedUnit(WorldObjectState& objState, DROID_TYPE unitType)
 {
-	static DROID *psOldRD = nullptr; // pointer to last selected repair unit
 	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 
@@ -392,7 +402,6 @@ void selNextSpecifiedUnit(WorldObjectState& objState, DROID_TYPE unitType)
 // ---------------------------------------------------------------------
 void selNextUnassignedUnit(WorldObjectState& objState)
 {
-	static DROID *psOldNS = nullptr;
 	DROID *psResult = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
 

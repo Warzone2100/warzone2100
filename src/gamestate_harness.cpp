@@ -34,7 +34,12 @@
 #include "gamestate_snapshot.h"
 #include "gamestate_snapshot_ring.h"
 #include "gamestate_replay_seek.h"
+#include "display3d.h"  // assignSensorTarget
+#include "droid.h"
+#include "hci.h"  // intTestShowForm
+#include "uiobjectrefs.h"
 #include "transporter.h"  // transporterTestLaunchReinforcements
+#include "warcam.h"  // camTestTrackDroid
 #include "loop.h"  // levelChangePending
 #include "map.h"
 #include "objmem.h"
@@ -77,6 +82,11 @@ static SnapshotRingOptions g_snapshotRingOptions;
 static std::vector<std::pair<uint32_t, uint32_t>> g_seekTests;  // --gamestate-seek-test: (at, target), in order
 static size_t g_nextSeekTest = 0;
 static uint32_t g_testReinforceAt = 0;      // --gamestate-test-reinforce (0: none)
+static uint32_t g_uiStressTicks = 0;        // --gamestate-ui-stress
+static uint32_t g_uiStressNext = 0;
+static unsigned g_uiStressStep = 0;
+static size_t g_uiChecks = 0;
+static size_t g_uiStale = 0;
 static bool g_haveTestSeed = false;
 static uint32_t g_testSeed = 0;
 
@@ -246,6 +256,88 @@ bool setTestReinforce(const std::string &spec)
 	return true;
 }
 
+bool setUiStress(const std::string &spec)
+{
+	uint32_t ticks = 0;
+	if (!parseUint(spec, ticks) || ticks == 0)
+	{
+		return false;
+	}
+	g_uiStressTicks = ticks;
+	return true;
+}
+
+// --gamestate-ui-stress: the UI's references, pointed at the droid most likely to die next
+static void uiStress()
+{
+	DROID *psTarget = nullptr;
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (DROID *psDroid : gameWorld.objects.droids[player])
+		{
+			if (psDroid->died == 0 && !psDroid->isTransporter()
+			    && (psTarget == nullptr || psDroid->body < psTarget->body || (psDroid->body == psTarget->body && psDroid->id < psTarget->id)))
+			{
+				psTarget = psDroid;
+			}
+		}
+	}
+	if (psTarget == nullptr)
+	{
+		return;
+	}
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (DROID *psDroid : gameWorld.objects.droids[player])
+		{
+			psDroid->selected = false;
+		}
+	}
+	std::vector<DROID *> weakest;
+	for (DROID *psDroid : gameWorld.objects.droids[psTarget->player])
+	{
+		if (psDroid->died == 0 && !psDroid->isTransporter())
+		{
+			weakest.push_back(psDroid);
+		}
+	}
+	std::sort(weakest.begin(), weakest.end(), [](const DROID *a, const DROID *b) { return a->body != b->body ? a->body < b->body : a->id < b->id; });
+	weakest.resize(std::min<size_t>(weakest.size(), 5));
+	for (DROID *psDroid : weakest)
+	{
+		psDroid->selected = true;
+	}
+	camTestTrackDroid(psTarget);
+	assignSensorTarget(psTarget);
+	bool form = false;
+	if (psTarget->player == selectedPlayer)
+	{
+		form = intTestShowForm(g_uiStressStep);
+	}
+	debug(LOG_INFO, "GameState harness: UI stress at gameTime %u: tracking droid %u (player %u, %u body points), %zu selected%s",
+	      gameTime, psTarget->id, psTarget->player, psTarget->body, weakest.size(), form ? astringf(", form %u", g_uiStressStep % 6).c_str() : "");
+	++g_uiStressStep;
+}
+
+void afterScreenRefresh()
+{
+	if (g_uiStressTicks == 0)
+	{
+		return;
+	}
+	if (g_uiChecks++ == 0)
+	{
+		debug(LOG_INFO, "GameState harness: checking the UI's object references every frame");
+	}
+	const size_t stale = checkUiObjectRefs();
+	if (stale > 0)
+	{
+		g_uiStale += stale;
+		debug(LOG_ERROR, "GameState harness: UI check at gameTime %u: %zu reference(s) to freed objects (%zu in %zu frames so far)",
+		      gameTime, stale, g_uiStale, g_uiChecks);
+	}
+}
+
 bool setSeekTest(const std::string &spec)
 {
 	std::vector<std::pair<uint32_t, uint32_t>> seeks;
@@ -289,9 +381,17 @@ void setTestSeed(uint32_t seed)
 {
 	g_haveTestSeed = true;
 	g_testSeed = seed;
-	// The same sequence the start-up code runs with the clock as the seed (realmain)
-	srand(seed);
-	gameSRand(static_cast<uint32_t>(rand()));
+	srand(seed);  // (not the simulation's: see the header)
+	gameTimeSetDeterministicLatency(true);
+}
+
+nonstd::optional<uint32_t> testGameSeed()
+{
+	if (!g_haveTestSeed)
+	{
+		return nonstd::nullopt;
+	}
+	return g_testSeed;
 }
 
 uint64_t testScriptRandomState(int player, const std::string &scriptName)
@@ -735,6 +835,11 @@ void afterMessages()
 		g_testReinforceAt = 0;
 		const bool launched = transporterTestLaunchReinforcements();
 		debug(LOG_INFO, "GameState harness: reinforcements %s at gameTime %u", launched ? "launched" : "NOT launched", gameTime);
+	}
+	if (g_uiStressTicks != 0 && gameStateCaptureSafe() && gameTime >= g_uiStressNext)
+	{
+		g_uiStressNext = gameTime + g_uiStressTicks * GAME_TICKS_PER_UPDATE;
+		uiStress();
 	}
 	if (g_snapshotRing && !g_snapshotRingStarted)
 	{

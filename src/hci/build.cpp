@@ -31,6 +31,12 @@
 #include "../game_world.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
+
+void BuildController::visitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	visitUiObjectRef(highlightedBuilder, visit);
+}
+
 bool BuildController::showFavorites = false;
 
 void BuildController::updateData()

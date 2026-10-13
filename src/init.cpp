@@ -75,6 +75,7 @@
 #include "gamestate_snapshot.h"
 #include "gamestate_snapshot_ring.h"
 #include "gamestate_replay_seek.h"
+#include "uiobjectrefs.h"
 #include "gateway.h"
 #include "hci.h"
 #include "intdisplay.h"
@@ -1148,6 +1149,11 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 //
 void systemShutdown()
 {
+	// Nothing reads the UI's object references any more.
+	// Objects freed from here on (and static ones at exit) don't clear them,
+	// as their holders are being shut down too (uiobjectrefs.h).
+	setUiObjectRefsEnabled(false);
+
 	if (bLoadSaveUp)
 	{
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)

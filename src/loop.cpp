@@ -211,6 +211,7 @@ static GAMECODE renderLoop()
 	{
 		/* Always refresh the widgets' backing stores if needed, even if we don't process clicks below */
 		intDoScreenRefresh();
+		gamestate::harness::afterScreenRefresh();
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
 		if (!getRotActive() && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)

@@ -35,6 +35,11 @@
 
 STRUCTURE *ResearchController::highlightedFacility = nullptr;
 
+void ResearchController::visitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	visitUiObjectRef(highlightedFacility, visit);
+}
+
 void ResearchController::updateData()
 {
 	updateFacilitiesList();

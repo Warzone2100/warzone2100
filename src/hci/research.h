@@ -20,6 +20,7 @@
 #ifndef __INCLUDED_SRC_HCI_RESEARCH_INTERFACE_H__
 #define __INCLUDED_SRC_HCI_RESEARCH_INTERFACE_H__
 
+#include "../uiobjectrefs.h"
 #include "objects_stats.h"
 
 // Start a topic in one named facility, cancelling whatever it was doing and
@@ -30,6 +31,8 @@ bool startResearchAt(STRUCTURE *facility, RESEARCH &research, uint32_t player);
 class ResearchController: public BaseObjectsStatsController, public std::enable_shared_from_this<ResearchController>
 {
 public:
+	/// The highlighted object, as a UI reference to a game object (uiobjectrefs.h)
+	static void visitUiObjectRefs(const UiObjectRefVisitor &visit);
 	RESEARCH *getObjectStatsAt(size_t objectIndex) const override;
 	RESEARCH *getStatsAt(size_t statsIndex) const override
 	{

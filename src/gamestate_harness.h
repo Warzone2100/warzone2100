@@ -32,6 +32,8 @@
 #include <cstdint>
 #include <string>
 
+#include <nonstd/optional.hpp>
+
 namespace gamestate
 {
 namespace harness
@@ -83,8 +85,8 @@ bool setRewindFault(const std::string &spec);
 /// (gamestate_snapshot_ring.h) at the first capture point of the game. Returns false on a bad spec.
 bool setSnapshotRing(const std::string &spec);
 
-/// --gamestate-seek-test=<at>:<target>[,<at>:<target>...]: test-only, with --gamestate-snapshot-ring, during headless
-/// replay playback. At the first capture point at or after each <at> (in order), request a replay seek to <target>
+/// --gamestate-seek-test=<at>:<target>[,<at>:<target>...]: test-only, with --gamestate-snapshot-ring, during replay
+/// playback. At the first capture point at or after each <at> (in order), request a replay seek to <target>
 /// (gamestate_replay_seek.h). Returns false on a bad spec.
 bool setSeekTest(const std::string &spec);
 
@@ -97,10 +99,17 @@ bool suppressLoadedEvent();
 /// tick), write a savegame and quit. Comparing it with the loaded save shows what the load did not restore exactly.
 void setResaveOnLoad(const std::string &savePath);
 
-/// --gamestate-test-seed=<seed>: make a run repeatable in another process. Seeds the C library random generator
-/// (which picks a new game's random seed) and every script instance's Math.random() from <seed> rather than from
-/// the clock. Test-only.
+/// --gamestate-test-seed=<seed>: make a run repeatable in another process, on any platform,
+/// with or without the GUI. Set explicitly from <seed> rather than from the clock:
+/// - a new game's random seed is <seed> itself (gameSRand, through testGameSeed()),
+///   for skirmish and multiplayer games in SendFireUp, and campaign games when they start from the title loop
+/// - every script instance's Math.random() (testScriptRandomState) and its clock (testScriptPrelude)
+/// - the network latency is negotiated without the wall clock (gameTimeSetDeterministicLatency), as with a CRC trace
+/// The C library's generator, which the simulation doesn't use (effects, player colors), is seeded with <seed> too.
 void setTestSeed(uint32_t seed);
+
+/// With --gamestate-test-seed, the random seed of a new game, else nullopt (the game picks its own)
+nonstd::optional<uint32_t> testGameSeed();
 
 /// The initial Math.random() state for a new script instance when a test seed is set, else 0 (keep the clock seed).
 uint64_t testScriptRandomState(int player, const std::string &scriptName);
@@ -140,11 +149,25 @@ void onColdLoadComplete();
 /// Per-tick hook, called by gameLoop() right after each game state update.
 void tick();
 
-/// --gamestate-test-reinforce=<tick>: test-only. At the first capture point at or after <tick>, during an off-world
-/// campaign mission, send reinforcements as the player does from the transporter screen
-/// (transporterTestLaunchReinforcements). Not in a game loaded at or after <tick>: it was saved after that. Returns false
-/// on a bad value.
+/// --gamestate-ui-stress=<ticks>: test-only. Every <ticks> ticks (at the capture point),
+/// point the UI at the live droid most likely to die next (the one with the least body points left), whoever's it is:
+/// the camera tracks it, the sensor view targets it, it and its player's other weakest droids are selected,
+/// and one of the forms is opened in turn (when the droid is the local player's).
+/// And every frame, once the interface is refreshed (afterScreenRefresh()),
+/// check that every UI reference to a game object is to one not yet freed (checkUiObjectRefs).
+/// Returns false on a bad value.
+bool setUiStress(const std::string &spec);
+
+/// --gamestate-test-reinforce=<tick>: at the first capture point at or after <tick>,
+/// during an off-world campaign mission, send reinforcements as the player does from the transporter screen
+/// (transporterTestLaunchReinforcements).
+/// Not in a game loaded at or after <tick>: it was saved after that.
+/// Returns false on a bad value.
 bool setTestReinforce(const std::string &spec);
+
+/// Frame hook, called by renderLoop() right after the interface's refresh (intDoScreenRefresh), before any widget
+/// runs or is drawn.
+void afterScreenRefresh();
 
 } // namespace harness
 } // namespace gamestate

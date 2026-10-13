@@ -54,6 +54,8 @@ void initWarCam();
 void setWarCamActive(bool status);
 bool getWarCamStatus();
 void camToggleStatus();
+/// --gamestate-ui-stress: track this droid, whoever's it is
+void camTestTrackDroid(DROID *psDroid);
 void processWarCam();
 void camToggleInfo();
 void requestRadarTrack(SDWORD x, SDWORD y);

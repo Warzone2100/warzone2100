@@ -29,6 +29,7 @@
 #include "feature.h"
 #include "intdisplay.h"
 #include "map.h"
+#include "uiobjectrefs.h"
 #include "game_world.h"
 
 
@@ -144,6 +145,8 @@ BASE_OBJECT::~BASE_OBJECT()
 	// The destructor cannot do it itself because it has no reliable way to know which world's map this
 	// object belonged to.
 	ASSERT(watchedTiles.empty(), "watchedTiles not removed before destruction (player %d)", (int)player);
+	// Every way of freeing an object ends here: clear the UI's references to it
+	uiObjectFreed(this);
 }
 
 

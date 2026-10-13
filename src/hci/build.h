@@ -20,11 +20,14 @@
 #ifndef __INCLUDED_SRC_HCI_BUILD_INTERFACE_H__
 #define __INCLUDED_SRC_HCI_BUILD_INTERFACE_H__
 
+#include "../uiobjectrefs.h"
 #include "objects_stats.h"
 
 class BuildController: public BaseObjectsStatsController, public std::enable_shared_from_this<BuildController>
 {
 public:
+	/// The highlighted object, as a UI reference to a game object (uiobjectrefs.h)
+	static void visitUiObjectRefs(const UiObjectRefVisitor &visit);
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
 	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const override
 	{
