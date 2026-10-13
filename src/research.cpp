@@ -1293,8 +1293,21 @@ static void makeComponentAvailable(UBYTE &state)
 	}
 }
 
+static void applyResearchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool fireEvent);
+
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
+{
+	// bTrigger is not honored: several callers pass false and still rely on eventResearched
+	applyResearchResult(researchIndex, player, bDisplay, psResearchFacility, true);
+}
+
+void researchResultRestore(UDWORD researchIndex, UBYTE player)
+{
+	applyResearchResult(researchIndex, player, false, nullptr, false);
+}
+
+static void applyResearchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool fireEvent)
 {
 	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
@@ -1403,7 +1416,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 
 	eventResearchedHandleUpgrades(pResearch, psResearchFacility, player);
 
-	triggerEventResearched(pResearch, psResearchFacility, player);
+	if (fireEvent)
+	{
+		triggerEventResearched(pResearch, psResearchFacility, player);
+	}
 }
 
 /*This function is called when the research files are reloaded*/
@@ -1918,6 +1934,50 @@ void enableSelfRepair(UBYTE player)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
 	bSelfRepair[player] = true;
+}
+
+void setSelfRepairEnabled(UBYTE player, bool enabled)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %" PRIu8 "", player);
+	bSelfRepair[player] = enabled;
+}
+
+ResearchUpgradeBookkeeping getResearchUpgradeBookkeeping(unsigned player)
+{
+	ResearchUpgradeBookkeeping result;
+	ASSERT_OR_RETURN(result, player < MAX_PLAYERS, "invalid player: %u", player);
+	// The counts are allocated when research is loaded (or by setResearchUpgradeBookkeeping). Before that there are none.
+	if (player < playerUpgradeCounts.size())
+	{
+		const PlayerUpgradeCounts &counts = playerUpgradeCounts[player];
+		result.numBodyClassArmourUpgrades.insert(counts.numBodyClassArmourUpgrades.begin(), counts.numBodyClassArmourUpgrades.end());
+		result.numBodyClassThermalUpgrades.insert(counts.numBodyClassThermalUpgrades.begin(), counts.numBodyClassThermalUpgrades.end());
+		result.numWeaponImpactClassUpgrades.insert(counts.numWeaponImpactClassUpgrades.begin(), counts.numWeaponImpactClassUpgrades.end());
+	}
+	for (const auto &comp : cachedPerPlayerRawUpgradeChange[player])
+	{
+		result.rawUpgradeChange[comp.first].insert(comp.second.begin(), comp.second.end());
+	}
+	return result;
+}
+
+void setResearchUpgradeBookkeeping(unsigned player, const ResearchUpgradeBookkeeping &bookkeeping)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player: %u", player);
+	if (playerUpgradeCounts.size() != MAX_PLAYERS)
+	{
+		playerUpgradeCounts = std::vector<PlayerUpgradeCounts>(MAX_PLAYERS);
+	}
+	PlayerUpgradeCounts &counts = playerUpgradeCounts[player];
+	counts.numBodyClassArmourUpgrades = {bookkeeping.numBodyClassArmourUpgrades.begin(), bookkeeping.numBodyClassArmourUpgrades.end()};
+	counts.numBodyClassThermalUpgrades = {bookkeeping.numBodyClassThermalUpgrades.begin(), bookkeeping.numBodyClassThermalUpgrades.end()};
+	counts.numWeaponImpactClassUpgrades = {bookkeeping.numWeaponImpactClassUpgrades.begin(), bookkeeping.numWeaponImpactClassUpgrades.end()};
+	RawResearchUpgradeChangeValues &raw = cachedPerPlayerRawUpgradeChange[player];
+	raw.clear();
+	for (const auto &comp : bookkeeping.rawUpgradeChange)
+	{
+		raw[comp.first] = {comp.second.begin(), comp.second.end()};
+	}
 }
 
 /*check to see if any research has been completed that enables self repair*/
