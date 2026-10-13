@@ -26,6 +26,9 @@
 #include "stats.h"
 #include "droid.h"
 
+#include <string>
+#include <vector>
+
 #define LINE_OF_FIRE_MINIMUM 5
 
 struct WorldMapState;
@@ -135,5 +138,22 @@ std::vector<SpotterSaveData> spotterEnumerateForSave();
 /// Recreate a spotter from saved data, preserving its synchronised id (the ctor's fresh id-bump of
 /// the object-ID counter is corrected by the counters-restored-last rule). Mirrors addSpotter's watch.
 void spotterRestore(WorldMapState& mapState, const SpotterSaveData& d);
+
+struct GameWorld;
+
+/// Result of visCheckCoverage().
+struct CoverageCheckResult
+{
+	size_t checked = 0;          ///< droids and structures compared
+	size_t differing = 0;        ///< of those, how many have different watched tiles after a recompute
+	std::string firstDifference; ///< a description of the first one that differs
+};
+
+/// Test tooling: recompute the tile coverage of every droid and structure in the world from its current state,
+/// compare it with the coverage it has, and put everything back as it was (the world is left unchanged).
+/// The coverage is meant to be a function of the current state at the end of every tick,
+/// so that a loaded game, which can only recompute it, gets the same coverage.
+/// Any difference is coverage that depends on how the game got there.
+CoverageCheckResult visCheckCoverage(GameWorld& world);
 
 #endif // __INCLUDED_SRC_VISIBILITY__

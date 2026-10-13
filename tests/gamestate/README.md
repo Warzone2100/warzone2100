@@ -53,6 +53,7 @@ They are developer options: `--help` doesn't list them, and their descriptions a
 | `--gamestate-rewind-test=<tick>:<k>` | Snapshot in-process at the tick, restore it in-process `k` ticks later. |
 | `--gamestate-resave-on-load=<path>` | After a GameState load has completed, save again before the first tick, and quit. |
 | `--gamestate-test-seed=<seed>` | Seed the new game's random seed and every script's `Math.random()` from `<seed>` instead of the clock, and fix the scripts' `Date` to a time derived from it, so a run can be repeated in another process. `forkcrc.sh` passes `$SEED` (default 1). |
+| `--gamestate-check-coverage=<ticks>` | Every `<ticks>` ticks, and right before a harness save or rewind snapshot, check that every droid's and structure's tile coverage matches a recompute from its current state, and log the checks that differ. A loaded game can only recompute it. `forkcrc.sh` passes `$CHECK_COVERAGE` (default 0, off; `matrix.sh` sets 10), and a difference fails the cell. |
 | `--gamestate-test-suppress-loaded-event` | On a GameState load, don't fire `eventGameLoaded` and drop the queued `eventResearched` replay. Separates engine restore fidelity from what load-time script handlers do. |
 
 Reading the results:

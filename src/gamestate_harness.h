@@ -81,6 +81,12 @@ uint64_t testScriptRandomState(int player, const std::string &scriptName);
 /// since scripts can read the wall clock (ex. NullBot picks its personality by the current minute).
 std::string testScriptPrelude();
 
+/// --gamestate-check-coverage=<ticks>: every <ticks> ticks, and right before a harness save or rewind snapshot, check
+/// that the tile coverage of every droid and structure in the active world matches a recompute from its current state
+/// (visCheckCoverage), and log the checks that find a difference. A loaded game can only recompute the coverage, so a
+/// difference at a save point is coverage the loaded game won't have. Test-only.
+void setCheckCoverage(uint32_t ticks);
+
 /// Called at the end of a GameState cold load (stageThreeInitialise), just before the first tick.
 void onColdLoadComplete();
 
