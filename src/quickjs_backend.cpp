@@ -3275,6 +3275,7 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 	{
 		calcDataHash(reinterpret_cast<const uint8_t *>(bytes), size, DATA_SCRIPT);
 	}
+	noteSourceFile(path.toUtf8(), bytes, size);
 	m_path = path.toUtf8();
 	compiledScriptObj = JS_Eval_BypassLimitedContext(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	free(bytes);

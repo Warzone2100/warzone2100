@@ -641,6 +641,12 @@ namespace wzapi
 		// - 4.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
 		bool loadFileForInclude(const std::string& filePath, std::string& loadedFilePath, char **ppFileData, UDWORD *pFileSize, uint32_t searchFlags = LoadFileSearchOptions::All);
 
+		// Record a file this instance was loaded from (the script file, then each include() or includeJSON(), in order).
+		// sourceHash() is saved with the script state, so a load can tell a script changed since the save.
+		void noteSourceFile(const std::string& path, const char *data, size_t size);
+		/// A SHA-256 (hex) of the files' paths and contents (line endings as LF), in the order they were read
+		std::string sourceHash() const;
+
 	public:
 		// event handling
 		// - see `scripting_event_handling_interface`
@@ -707,6 +713,7 @@ namespace wzapi
 		int m_player;
 		std::string m_scriptName;
 		std::string m_scriptPath;
+		std::vector<std::pair<std::string, std::string>> m_sourceFiles; // path, SHA-256 (hex) of the contents
 		bool m_isReceivingAllEvents = false;
 		ScriptBinding m_binding = ScriptBinding::PlayerAI;
 	};
