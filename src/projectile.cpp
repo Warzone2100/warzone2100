@@ -256,6 +256,14 @@ PROJECTILE* proj_AllocForRestore(uint32_t id, unsigned player)
 
 /***************************************************************************/
 
+void proj_ReleaseExpectedDamage()
+{
+	for (PROJECTILE *p : psProjectileList)
+	{
+		setProjectileDestination(p, nullptr);
+	}
+}
+
 // Clean out all projectiles from the system, and properly decrement
 // all reference counts.
 void
@@ -1500,6 +1508,8 @@ PROJECTILE* PROJECTILE::update()
 	// This extra check fixes a crash in cam2, mission1
 	if (worldOnMap(gameWorld.map, psObj->pos.x, psObj->pos.y) == false)
 	{
+		// The target won't be hit by this projectile any more
+		setProjectileDestination(psObj, nullptr);
 		psObj->died = true;
 		return nullptr;
 	}
