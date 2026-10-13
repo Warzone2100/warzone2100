@@ -144,6 +144,11 @@ bool loadWeaponModifiers(WzConfig &ini);
 /*calls the STATS_DEALLOC macro for each set of stats*/
 bool statsShutDown();
 
+/// Changes whenever the component or structure stats lists are allocated or freed, so a cache derived from them
+/// (their sizes, names, indexes) is stale once this differs from when it was built.
+uint32_t statsGeneration();
+void statsGenerationBump();
+
 size_t getStatModelLoadingFailures();
 
 UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
