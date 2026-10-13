@@ -49,6 +49,7 @@
 #include "multirecv.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
+#include "objmem.h"
 #include "research.h"
 #include "qtscript.h"
 #include "combat.h"
@@ -197,7 +198,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
-		destroyStruct(psStruct, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+		destroyStruct(psStruct, deathTimeInTick(), gameWorld);
 		turnOffMultiMsg(false);
 	}
 
