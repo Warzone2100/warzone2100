@@ -786,6 +786,7 @@ constexpr uint32_t SAVEGAME_MAX_UNCOMPRESSED = 512u * 1024u * 1024u;
 constexpr uint32_t LOCAL_INTERFACE_VERSION = 1;
 
 static std::unique_ptr<nlohmann::ordered_json> g_coldLoadInterfaceDoc; // applied in stageThreeInitialise
+static uint32_t g_coldLoadPresentationVersion = 0; // version 2 has the replaced textures
 
 static nlohmann::ordered_json writeLocalInterface()
 {
@@ -1679,6 +1680,8 @@ void applyDeferredColdLoadView()
 
 bool applyDeferredColdLoadInterface()
 {
+	const uint32_t presentationVersion = g_coldLoadPresentationVersion;
+	g_coldLoadPresentationVersion = 0;
 	if (!g_coldLoadInterfaceDoc)
 	{
 		return false;
@@ -1702,7 +1705,9 @@ bool applyDeferredColdLoadInterface()
 		debug(LOG_ERROR, "Ignoring invalid saved interface: %s", e.what());
 	}
 	g_coldLoadInterfaceDoc.reset();
-	return applied;
+	// Everything the scripts set up for the interface is back only with the replaced textures too
+	// (presentation version 2)
+	return applied && presentationVersion >= 2;
 }
 
 void applyDeferredColdLoadMessages()
@@ -1773,9 +1778,11 @@ bool coldLoadRestoreWorld()
 	// (init3DView the sun, skybox, fog color and camera rotation, pie_InitLighting the light colors),
 	// so keep what it resets to apply again then
 	g_coldLoadViewDoc = std::make_unique<nlohmann::ordered_json>(nlohmann::ordered_json::object());
+	g_coldLoadPresentationVersion = 0;
 	if (g_coldLoadGameStateDoc->contains("presentation"))
 	{
 		(*g_coldLoadViewDoc)["presentation"] = g_coldLoadGameStateDoc->at("presentation");
+		g_coldLoadPresentationVersion = g_coldLoadGameStateDoc->at("presentation").value("version", 0u);
 	}
 	if (g_coldLoadLocalStateDoc && g_coldLoadLocalStateDoc->is_object() && g_coldLoadLocalStateDoc->contains("camera"))
 	{

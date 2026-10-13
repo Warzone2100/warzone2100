@@ -66,15 +66,18 @@ They are developer options: `--help` doesn't list them, and their descriptions a
 | `--gamestate-test-seed=<seed>` | Make a run repeatable in another process, on any platform, with or without the GUI. A new game's random seed is `<seed>` itself (skirmish and multiplayer games in `SendFireUp`, campaign games when they start from the title loop or `--game`, but the movement bench keeps its own), logged as "Game random seed". Every script's `Math.random()` is seeded from `<seed>`, the player and the script name, and the scripts' `Date` is fixed to a time derived from it. The network latency is negotiated without the wall clock. `forkcrc.sh` passes `$SEED` (default 1). |
 | `--gamestate-save-before-messages` | Take the `--gamestate-save-at-tick` save and the rewind snapshot right after a tick, before the game loop processes the messages for the next tick, instead of at the save point. A game saved there can resume differently. `forkcrc.sh --before-messages`. (`--gamestate-save-after-messages`, which selects the default save point, is also accepted, as is `forkcrc.sh --after-messages`.) |
 | `--gamestate-save-when-coverage-pending` | Delay that save until tile coverage changes are pending (ex. a range upgrade between ticks). `forkcrc.sh --coverage-pending`. |
-| `--gamestate-check-coverage=<ticks>` | Every `<ticks>` ticks, right before a harness save or rewind snapshot, and right after a GameState load, check in both worlds that every droid's and structure's tile coverage matches a recompute from its current state, that the per-tile counts add up to the watched tiles, and that watched tiles are explored for every player sharing vision, and log the checks that differ. A loaded game can only recompute it. `forkcrc.sh` passes `$CHECK_COVERAGE` (default 0, off; `matrix.sh` sets 10), and a difference fails the cell. |
-| `--gamestate-test-suppress-loaded-event` | On a GameState load, don't fire `eventGameLoaded` and drop the queued `eventResearched` replay. Separates engine restore fidelity from what load-time script handlers do. |
+| `--gamestate-check-coverage=<ticks>` | Every `<ticks>` ticks, right before a harness save or rewind snapshot, and right after a GameState load, check in both worlds that every droid's and structure's tile coverage matches a recompute from its current state, that the per-tile counts add up to the watched tiles, and that watched tiles are explored for every player sharing vision, and log the checks that differ. A loaded game can only recompute it. `forkcrc.sh` passes `$CHECK_COVERAGE` (default 0, off, but `matrix.sh` sets 10), and a difference fails the cell. |
+| `--gamestate-test-suppress-loaded-event` | On a GameState load, don't fire `eventGameLoaded` and drop the queued `eventResearched` replay. Separates engine restore fidelity from what load-time script handlers do. Only changes anything for a save without the interface the scripts set up (its `localState` interface block and presentation version 2), since a save that has it is loaded without `eventGameLoaded` anyway. |
 
 Reading the results:
 
-- A tick whose CRC differs is echoed a few ticks later in the `GAME_GAME_TIME` message, so one difference repeats at a
-  fixed stride for the rest of the run. `cmptrace.py` reports "echo chain only" when that is all that differs, and
-  otherwise the first tick that is not an echo (where the simulation itself parts). When consecutive ticks differ, the
-  simulation has parted at the first one.
-- Movement bench saves are loaded with the standard rules script rather than the bench's own, and fork cells that use
-  bundled AIs also measure what the AI scripts restore (see the `var` convention); use `--no-loaded` and the `mb:` cells to
-  isolate the engine.
+- A tick whose CRC differs is echoed a few ticks later in the `GAME_GAME_TIME` message,
+  so one difference repeats at a fixed stride for the rest of the run.
+  `cmptrace.py` reports "echo chain only" when that is all that differs,
+  and otherwise the first tick that is not an echo (where the simulation itself parts).
+  When consecutive ticks differ, the simulation has parted at the first one.
+- Movement bench saves are loaded with the standard rules script rather than the bench's own,
+  and fork cells that use bundled AIs also measure what the AI scripts restore (see the `var` convention).
+  Use the `mb:` cells to isolate the engine.
+- A save that has the interface the scripts set up is loaded without `eventGameLoaded`,
+  so `--no-loaded` only matters for saves without it.

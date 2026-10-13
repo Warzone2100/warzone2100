@@ -24,7 +24,14 @@ An event that is run when a video show stopped playing.
 
 ## eventGameLoaded()
 
-An event that is run when game is loaded from a saved game. There is usually no need to use this event.
+An event that is run when a game is loaded from a save written by an earlier version of the game.
+A save written since 4.8 restores the game as it was saved, including the scripts' global (`var`) variables,
+their timers, groups and labels, and the interface they set up
+(the reticule buttons, whether the interface is shown, replaced textures, the minimap, the sky and lighting).
+This event isn't run then, and the game goes on as if it had never been saved.
+NOTE: a script that keeps state anywhere else
+(`let` or `const` variables it changes, closures, properties of functions) loses it when a game is loaded.
+(Changed in 4.8.)
 
 ## eventGameSaving()
 
