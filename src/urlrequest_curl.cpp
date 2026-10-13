@@ -625,6 +625,17 @@ public:
 		curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, 60L);
 		curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, 30L);
 
+	#if LIBCURL_VERSION_NUM >= 0x074600	// cURL 7.70.0+
+		// Schannel (the default TLS backend on Windows) checks certificate revocation by default,
+		// and treats a revocation check that *cannot be performed* as a fatal error.
+		//
+		// With CURLSSLOPT_REVOKE_BEST_EFFORT, a certificate that is actually reported as revoked is
+		// still rejected - only "revocation status unavailable" errors are ignored (just as browsers do).
+		//
+		// (This option is ignored by other TLS backends.)
+		curl_easy_setopt(handle, CURLOPT_SSL_OPTIONS, static_cast<long>(CURLSSLOPT_REVOKE_BEST_EFFORT));
+	#endif
+
 		return handle;
 	}
 
