@@ -1049,6 +1049,7 @@ void restoreMissionData()
 	audio_StopAll();
 
 	//clear all the lists
+	proj_ReleaseExpectedDamage();
 	proj_FreeAllProjectiles();
 	clearReferencesToOffWorldObjects();
 	freeAllDroids(gameWorld);
@@ -3191,6 +3192,7 @@ void missionDestroyObjects()
 	UBYTE Player;
 
 	debug(LOG_SAVE, "called");
+	proj_ReleaseExpectedDamage();
 	proj_FreeAllProjectiles();
 	for (Player = 0; Player < MAX_PLAYERS; Player++)
 	{

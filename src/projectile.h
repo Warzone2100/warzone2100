@@ -65,6 +65,10 @@ uint32_t proj_GetIdCounter();
 void proj_SetIdCounter(uint32_t counter);
 
 void	proj_FreeAllProjectiles();	///< Free all projectiles in the list.
+/// Take back the expected damage of every projectile in flight (see aiObjectAddExpectedDamage). Call before
+/// proj_FreeAllProjectiles() while the projectiles' targets still exist, where they outlive the projectiles
+/// (ex. at the end of a mission).
+void	proj_ReleaseExpectedDamage();
 
 void setExpGain(int player, int gain);
 int getExpGain(int player);
