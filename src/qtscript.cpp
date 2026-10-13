@@ -1444,11 +1444,12 @@ void jsShowDebug()
 //__
 //__ ## eventGameSaving()
 //__
-//__ An event that is run before game is saved. There is usually no need to use this event.
+//__ Deprecated: no longer raised.
 //__
 //__ ## eventGameSaved()
 //__
 //__ An event that is run after game is saved. There is usually no need to use this event.
+//__ It runs after the game state was captured, so a handler must not change the game state.
 //__
 //__ ## eventDeliveryPointMoving()
 //__
