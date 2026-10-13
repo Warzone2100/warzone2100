@@ -64,6 +64,7 @@ static std::map<WzString, const char *> languageIconsMap()
 		{"hu", "flag-HU.png"},
 		{"id", "flag-ID.png"},
 		{"it", "flag-IT.png"},
+		{"ja_JP", "flag-JP.png"},
 		{"ko_KR", "flag-KR.png"},
 		{"la", "flag-VA.png"},
 		{"lt", "flag-LT.png"},
