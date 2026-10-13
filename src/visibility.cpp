@@ -487,6 +487,17 @@ void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState)
 	// Remove previous map visibility provided by object
 	visRemoveVisibility(psObj, mapState);
 
+	if (psObj->type == OBJ_DROID)
+	{
+		const DROID *psDroid = static_cast<const DROID *>(psObj);
+		if (psDroid->isTransporter() && psDroid->action == DACTION_NONE
+		    && (psDroid->order.type == DORDER_TRANSPORTRETURN || psDroid->order.type == DORDER_TRANSPORTOUT))
+		{
+			// A transporter that has reached the map edge on its way out: updateTransporter dropped its vision there,
+			// and the order update moves it off world in the next tick.
+			return;
+		}
+	}
 	if (psObj->type == OBJ_STRUCTURE)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObj;
