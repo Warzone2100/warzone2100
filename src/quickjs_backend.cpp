@@ -617,7 +617,14 @@ public:
 
 	//__ ## eventGameLoaded()
 	//__
-	//__ An event that is run when game is loaded from a saved game. There is usually no need to use this event.
+	//__ An event that is run when a game is loaded from a save written by an earlier version of the game.
+	//__ A save written since 4.8 restores the game as it was saved, including the scripts' global (`var`) variables,
+	//__ their timers, groups and labels, and the interface they set up
+	//__ (the reticule buttons, whether the interface is shown, replaced textures, the minimap, the sky and lighting).
+	//__ This event isn't run then, and the game goes on as if it had never been saved.
+	//__ NOTE: a script that keeps state anywhere else
+	//__ (`let` or `const` variables it changes, closures, properties of functions) loses it when a game is loaded.
+	//__ (Changed in 4.8.)
 	//__
 	virtual bool handle_eventGameLoaded() override;
 
