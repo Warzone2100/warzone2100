@@ -388,6 +388,7 @@ typedef enum
 	CLI_GAMESTATE_UISTRESS,
 	CLI_GAMESTATE_TESTREINFORCE,
 	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
+	CLI_GAMESTATE_TESTCONTINUELEVELS,
 	CLI_GAMESTATE_RESAVEONLOAD,
 	CLI_GAMESTATE_TESTSEED,
 	CLI_GAMESTATE_CHECKCOVERAGE,
@@ -510,6 +511,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-ui-stress", POPT_ARG_STRING, CLI_GAMESTATE_UISTRESS, "Test only: every given number of ticks, point the UI at the droid most likely to die next, and check every frame that the UI references no freed object", "ticks", true },
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
 		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
+		{ "gamestate-test-continue-levels", POPT_ARG_NONE, CLI_GAMESTATE_TESTCONTINUELEVELS, "Test only: go on to the next campaign level without the mission result screen, and log the replaced textures when each level starts", nullptr, true },
 		{ "gamestate-resave-on-load", POPT_ARG_STRING, CLI_GAMESTATE_RESAVEONLOAD, "After loading a savegame, save it again to the given path before the first tick, and quit", "savegame path", true },
 		{ "gamestate-save-after-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEAFTERMESSAGES, "Test only: take the --gamestate-save-at-tick save right after the messages for the next tick are processed (the default)", nullptr, true },
 		{ "gamestate-save-before-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEBEFOREMESSAGES, "Test only: take the --gamestate-save-at-tick save and the rewind snapshot right after a tick, before the messages for the next tick are processed", nullptr, true },
@@ -1073,6 +1075,9 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		}
 		case CLI_GAMESTATE_SUPPRESSLOADEDEVENT:
 			gamestate::harness::setSuppressLoadedEvent(true);
+			break;
+		case CLI_GAMESTATE_TESTCONTINUELEVELS:
+			gamestate::harness::setContinueLevels(true);
 			break;
 		case CLI_GAMESTATE_RESAVEONLOAD:
 			token = poptGetOptArg(poptCon);

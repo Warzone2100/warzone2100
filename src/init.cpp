@@ -1980,6 +1980,8 @@ static bool stageThreeInitialiseSync()
 		// Test harness (--gamestate-resave-on-load): save again now, after the load completed and before the first tick
 		gamestate::harness::onColdLoadComplete();
 	}
+	// Test harness (--gamestate-test-continue-levels): log the replaced textures
+	gamestate::harness::noteLevelStarted();
 
 	return true;
 }
