@@ -104,6 +104,7 @@ public:
 			}
 			return false;
 		}
+		out.format = WZVideoPlaneFormat::I420;
 		out.y = img->planes[VPX_PLANE_Y];
 		out.u = img->planes[VPX_PLANE_U];
 		out.v = img->planes[VPX_PLANE_V];
