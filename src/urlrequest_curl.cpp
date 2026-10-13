@@ -56,6 +56,7 @@
 #include <list>
 #include <algorithm>
 #include <cstdio>
+#include <iterator>
 #include <vector>
 // On Fedora 40, GCC 14 produces false-positive warnings for -Walloc-zero
 // when compiling <regex> with optimizations. Silence these warnings.
@@ -87,6 +88,13 @@
 # include <stdio.h>
 #endif
 
+#if defined(_MSC_VER) && !defined(__clang__)
+// Force-define UTF_CPP_CPLUSPLUS to C++17 for MSVC, because:
+// "By default, Visual Studio always returns the value 199711L for the __cplusplus preprocessor macro."
+#define UTF_CPP_CPLUSPLUS 201703L
+#endif
+#include <utfcpp/source/utf8.h>
+
 #undef max
 #undef min
 
@@ -107,15 +115,20 @@ public:
 
 class CURLHTTPResponseDetails : public HTTPResponseDetails {
 public:
-	CURLHTTPResponseDetails(CURLcode curlResult, long httpStatusCode, optional<std::string> primaryIp, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
+	CURLHTTPResponseDetails(CURLcode curlResult, long httpStatusCode, optional<std::string> primaryIp, std::shared_ptr<HTTPResponseHeaders> responseHeaders, std::string curlErrorDetails = std::string())
 	: HTTPResponseDetails(httpStatusCode, responseHeaders)
 	, _curlResult(curlResult)
 	, primaryIp(primaryIp)
+	, _curlErrorDetails(std::move(curlErrorDetails))
 	{ }
 	virtual ~CURLHTTPResponseDetails()
 	{ }
 
 	CURLcode curlResult() const { return _curlResult; }
+
+	// The detailed error message libcurl wrote to CURLOPT_ERRORBUFFER (may be empty)
+	// For TLS failures, this contains the TLS backend's specific error
+	const std::string& curlErrorDetails() const { return _curlErrorDetails; }
 
 	optional<std::string> getPrimaryIP() const override
 	{
@@ -124,18 +137,81 @@ public:
 
 	std::string getInternalResultDescription() const override
 	{
+		std::string description;
 		const char *pStrError = curl_easy_strerror(_curlResult);
-		if (!pStrError)
+		if (pStrError)
 		{
-			return std::string();
+			description = pStrError;
 		}
-		return std::string(pStrError);
+		if (!_curlErrorDetails.empty() && _curlErrorDetails != description)
+		{
+			if (!description.empty())
+			{
+				description += ": ";
+			}
+			description += _curlErrorDetails;
+		}
+		return description;
 	}
 
 private:
 	CURLcode _curlResult;
 	optional<std::string> primaryIp;
+	std::string _curlErrorDetails;
 };
+
+static bool isCURLTLSError(CURLcode result)
+{
+	switch (result)
+	{
+		case CURLE_SSL_CONNECT_ERROR:
+		case CURLE_SSL_CERTPROBLEM:
+		case CURLE_SSL_CIPHER:
+#if LIBCURL_VERSION_NUM >= 0x071101	// cURL 7.17.1+
+		case CURLE_PEER_FAILED_VERIFICATION:
+#endif
+#if LIBCURL_VERSION_NUM < 0x073E00	// cURL < 7.62.0 (afterwards, CURLE_SSL_CACERT is an alias for CURLE_PEER_FAILED_VERIFICATION)
+		case CURLE_SSL_CACERT:
+#endif
+#if LIBCURL_VERSION_NUM >= 0x071000	// cURL 7.16.0+
+		case CURLE_SSL_CACERT_BADFILE:
+#endif
+#if LIBCURL_VERSION_NUM >= 0x071300	// cURL 7.19.0+
+		case CURLE_SSL_ISSUER_ERROR:
+#endif
+#if LIBCURL_VERSION_NUM >= 0x072900	// cURL 7.41.0+
+		case CURLE_SSL_INVALIDCERTSTATUS:
+#endif
+			return true;
+		default:
+			return false;
+	}
+}
+
+// Formats a cURL failure for logging, ex: "error 35 (SSL connect error: schannel: ...)"
+static std::string describeCURLFailure(const CURLHTTPResponseDetails& details)
+{
+	return astringf("error %d (%s)", static_cast<int>(details.curlResult()), details.getInternalResultDescription().c_str());
+}
+
+// Returns just "scheme://host[:port]" from a URL (omitting any userinfo, path, query, or fragment), for logging
+static std::string urlOriginForLogging(const std::string& url)
+{
+	size_t authorityStart = url.find("://");
+	if (authorityStart == std::string::npos)
+	{
+		return "<unknown>";
+	}
+	authorityStart += 3;
+	size_t authorityEnd = url.find_first_of("/?#", authorityStart);
+	std::string authority = url.substr(authorityStart, (authorityEnd == std::string::npos) ? std::string::npos : (authorityEnd - authorityStart));
+	size_t userInfoEnd = authority.rfind('@');
+	if (userInfoEnd != std::string::npos)
+	{
+		authority = authority.substr(userInfoEnd + 1);
+	}
+	return url.substr(0, authorityStart) + authority;
+}
 
 // MARK: - Handle thread-safety for cURL
 
@@ -446,6 +522,10 @@ public:
 
 	virtual CURL* createCURLHandle()
 	{
+		// Clear any error message left over from a previous attempt
+		// (libcurl only does this automatically since 7.60.0)
+		curlErrorBuffer[0] = '\0';
+
 		if (handle != nullptr)
 		{
 			// reuse already-created handle
@@ -459,6 +539,9 @@ public:
 			// Something went wrong with curl_easy_init
 			return nullptr;
 		}
+
+		// Have libcurl write detailed error messages (curl_easy_strerror() only gives a generic description of the CURLcode)
+		curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, curlErrorBuffer);
 
 		auto requestMethod = method();
 		curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, to_string(requestMethod));
@@ -657,12 +740,28 @@ public:
 		numRetries++;
 	}
 
+	// Returns the detailed error message libcurl wrote for the last transfer attempt (may be empty)
+	std::string getCurlErrorDetails() const
+	{
+		size_t len = static_cast<size_t>(std::find(curlErrorBuffer, curlErrorBuffer + CURL_ERROR_SIZE, '\0') - curlErrorBuffer);
+		while (len > 0 && (curlErrorBuffer[len - 1] == '\n' || curlErrorBuffer[len - 1] == '\r' || curlErrorBuffer[len - 1] == ' ' || curlErrorBuffer[len - 1] == '\t'))
+		{
+			--len;
+		}
+		// TLS backend error messages may come from the OS, localized in a non-UTF-8 codepage
+		// Replace any invalid UTF-8 sequences
+		std::string details;
+		utf8::replace_invalid(curlErrorBuffer, curlErrorBuffer + len, std::back_inserter(details), '?');
+		return details;
+	}
+
 protected:
 	friend size_t header_callback(char *buffer, size_t size, size_t nitems, void *userdata);
 	std::shared_ptr<HTTPResponseHeadersContainer> responseHeaders = std::make_shared<HTTPResponseHeadersContainer>();
 private:
 	struct curl_slist *request_header_list = nullptr;
 	size_t numRetries = 0;
+	char curlErrorBuffer[CURL_ERROR_SIZE] = {};
 };
 
 static size_t
@@ -852,7 +951,7 @@ public:
 				default:
 					break;
 			}
-			onFailure(failureType, std::make_shared<CURLHTTPResponseDetails>(result, code, primaryIp, responseHeaders));
+			onFailure(failureType, std::make_shared<CURLHTTPResponseDetails>(result, code, primaryIp, responseHeaders, getCurlErrorDetails()));
 			return URLRequestHandlingBehavior::Done();
 		}
 	}
@@ -871,6 +970,20 @@ private:
 		auto request = getBaseRequest();
 
 		const std::string& url = request.url;
+		const std::string failureDescription = (transferDetails) ? describeCURLFailure(*transferDetails) : std::string("no details");
+
+		if (transferDetails && isCURLTLSError(transferDetails->curlResult()))
+		{
+			// TLS failures are often caused by the local system's configuration, so always log them
+			// (with the TLS backend's detailed error) to help diagnose user reports.
+			std::string urlOrigin = urlOriginForLogging(url);
+			const curl_version_info_data * info = curl_version_info(CURLVERSION_NOW);
+			std::string sslVersion = (info && info->ssl_version) ? info->ssl_version : "unknown";
+			wzAsyncExecOnMainThread([urlOrigin, sslVersion, failureDescription]{
+				debug(LOG_INFO, "cURL: TLS failure connecting to %s [%s]: %s", urlOrigin.c_str(), sslVersion.c_str(), failureDescription.c_str());
+			});
+		}
+
 		switch (type)
 		{
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
@@ -879,13 +992,13 @@ private:
 				});
 				break;
 			case URLRequestFailureType::OPERATION_TIMEOUT:
-				wzAsyncExecOnMainThread([url]{
-					debug(LOG_NET, "cURL: Request timeout for (%s)", url.c_str());
+				wzAsyncExecOnMainThread([url, failureDescription]{
+					debug(LOG_NET, "cURL: Request timeout for (%s): %s", url.c_str(), failureDescription.c_str());
 				});
 				break;
 			case URLRequestFailureType::COULDNT_CONNECT:
-				wzAsyncExecOnMainThread([url]{
-					debug(LOG_NET, "cURL: Couldn't connect for (%s)", url.c_str());
+				wzAsyncExecOnMainThread([url, failureDescription]{
+					debug(LOG_NET, "cURL: Couldn't connect for (%s): %s", url.c_str(), failureDescription.c_str());
 				});
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
@@ -897,10 +1010,9 @@ private:
 				}
 				else
 				{
-					CURLcode result = transferDetails->curlResult();
 					long httpStatusCode = transferDetails->httpStatusCode();
-					wzAsyncExecOnMainThread([url, result, httpStatusCode]{
-						debug(LOG_NET, "cURL: Request for (%s) failed with error %d, and HTTP response code: %ld", url.c_str(), result, httpStatusCode);
+					wzAsyncExecOnMainThread([url, failureDescription, httpStatusCode]{
+						debug(LOG_NET, "cURL: Request for (%s) failed with %s, and HTTP response code: %ld", url.c_str(), failureDescription.c_str(), httpStatusCode);
 					});
 				}
 				break;
