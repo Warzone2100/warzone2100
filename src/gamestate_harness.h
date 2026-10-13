@@ -107,8 +107,16 @@ bool setSeekFault(const std::string &spec);
 void setSuppressLoadedEvent(bool enable);
 bool suppressLoadedEvent();
 
-/// --gamestate-resave-on-load=<savegame path>: after a GameState cold load has completed (just before the first
-/// tick), write a savegame and quit. Comparing it with the loaded save shows what the load did not restore exactly.
+/// --gamestate-test-continue-levels: go on to the next campaign level
+/// without waiting on the mission result screen (which needs a click),
+/// and log the texture pages replaceTexture() replaced when each level starts (and when a save is loaded).
+void setContinueLevels(bool enable);
+bool continueLevels();
+/// At the end of stageThreeInitialise (a level started, or a save was loaded): log the replaced textures if asked
+void noteLevelStarted();
+
+/// --gamestate-resave-on-load=<savegame path>: after a GameState cold load has completed
+/// (just before the first tick), write a savegame and quit.
 void setResaveOnLoad(const std::string &savePath);
 
 /// --gamestate-test-seed=<seed>: make a run repeatable in another process, on any platform,

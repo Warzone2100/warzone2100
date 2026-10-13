@@ -46,6 +46,8 @@
 #include "mission.h"
 #include "random.h"
 #include "visibility.h"
+#include "levels.h"  // getLevelName
+#include "lib/ivis_opengl/tex.h"  // getReplacedTextures
 
 #include <algorithm>
 #include <chrono>
@@ -416,6 +418,32 @@ void setRewindTest(uint32_t tick, uint32_t ticksLater)
 {
 	g_rewindAtTick = tick;
 	g_rewindTicksLater = ticksLater;
+}
+
+static bool g_continueLevels = false;
+
+void setContinueLevels(bool enable)
+{
+	g_continueLevels = enable;
+}
+
+bool continueLevels()
+{
+	return g_continueLevels;
+}
+
+void noteLevelStarted()
+{
+	if (!g_continueLevels)
+	{
+		return;
+	}
+	std::string list;
+	for (const auto &replaced : getReplacedTextures())
+	{
+		list += (list.empty() ? "" : ", ") + replaced.first + " -> " + replaced.second;
+	}
+	debug(LOG_INFO, "GameState harness: level %s started at gameTime %u; replaced textures: [%s]", getLevelName(), gameTime, list.c_str());
 }
 
 void setSuppressLoadedEvent(bool enable)
