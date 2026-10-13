@@ -530,6 +530,7 @@ bool loadStructureStats(WzConfig &ini)
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = 0;
+	statsGenerationBump();
 	bool loadSucceeded = false;
 	const size_t allocatedStats = list.size();
 	auto releaseOnFailure = gsl::finally([&loadSucceeded, allocatedStats] {
@@ -883,6 +884,7 @@ static void releaseStructureStats(size_t count)
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
+	statsGenerationBump();
 }
 
 bool structureStatsShutDown()

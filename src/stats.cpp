@@ -98,13 +98,27 @@ static void deallocTerrainTable()
 /* Macro to allocate memory for a set of stats */
 #define ALLOC_STATS(numEntries, list, type) \
 	ASSERT((numEntries) < ~STAT_MASK + 1, "Number of stats entries too large for " #type);\
+	statsGenerationBump(); \
 	if (!list.empty()) list.clear(); \
 	list.resize(numEntries); \
 	return true
 
+static uint32_t statsGenerationCounter = 0;
+
+uint32_t statsGeneration()
+{
+	return statsGenerationCounter;
+}
+
+void statsGenerationBump()
+{
+	++statsGenerationCounter;
+}
+
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown()
 {
+	statsGenerationBump();
 	lookupStatPtr.clear();
 	lookupCompStatPtr.clear();
 
