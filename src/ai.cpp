@@ -1192,7 +1192,8 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	/* Don't update target if we are sent to attack and reached attack destination (attacking our target) */
-	if (orderState(psDroid, DORDER_ATTACK) && psDroid->psActionTarget[0] == psDroid->order.psObj)
+	if (orderState(psDroid, DORDER_ATTACK) && psDroid->order.psObj != nullptr && !psDroid->order.psObj->died
+	    && psDroid->psActionTarget[0] == psDroid->order.psObj)
 	{
 		updateTarget = false;
 	}
