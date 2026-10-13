@@ -149,6 +149,9 @@ bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer = -1);
 size_t scriptStatesLastUnmatchedInstances();
 /// Whether a script instance with this script name runs for this player
 bool scriptInstanceRunning(int player, const std::string &scriptName);
+/// A callback calling the named function of the script instance of this player and name (as setReticuleButton's), or
+/// none if no such instance is running
+playerCallbackFunc scriptNamedCallback(int player, const std::string &scriptName, const std::string &function);
 size_t scriptInstanceCount();
 bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer = -1);
 

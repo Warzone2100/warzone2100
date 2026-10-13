@@ -49,6 +49,7 @@
 #include "radar.h"          // Get/SetRadarZoom - local view state
 #include "mission.h"        // Cheated - local meta flag, clear/resetMissionWidgets
 #include "effects.h"        // serialize/restoreActiveEffects - local display state
+#include "hci.h"            // get/restoreReticuleButtonStates - local interface state
 #include "multistat.h"      // loadMultiStats, setMultiStats, getMultiStats
 #include "multiint.h"       // sPlayer, getAIData, readAIs
 #include "modding.h"        // getLoadedMods, setOverrideMods, clearOverrideMods
@@ -780,6 +781,69 @@ constexpr uint32_t SAVEGAME_MAX_UNCOMPRESSED = 512u * 1024u * 1024u;
 // The loaded (unlocked) guide topics + the popup-disable toggle are persisted here: they are in-game session state
 // driven by the addGuideTopic() wzapi (campaign progression), matching the legacy per-savegame guidetopics.json.
 
+// The interface the scripts set up for the local player (version 1: whether they showed or hid it, and the reticule
+// buttons), so that a load needn't have the scripts set it up again (eventGameLoaded).
+constexpr uint32_t LOCAL_INTERFACE_VERSION = 1;
+
+static std::unique_ptr<nlohmann::ordered_json> g_coldLoadInterfaceDoc; // applied in stageThreeInitialise
+
+static nlohmann::ordered_json writeLocalInterface()
+{
+	nlohmann::ordered_json j = nlohmann::ordered_json::object();
+	j["version"] = LOCAL_INTERFACE_VERSION;
+	switch (getScriptInterfaceRequest())
+	{
+		case ScriptInterfaceRequest::Shown: j["shown"] = true; break;
+		case ScriptInterfaceRequest::Hidden: j["shown"] = false; break;
+		case ScriptInterfaceRequest::None: break;
+	}
+	nlohmann::ordered_json buttons = nlohmann::ordered_json::array();
+	for (const ReticuleButtonState &state : getReticuleButtonStates())
+	{
+		nlohmann::ordered_json b = nlohmann::ordered_json::object();
+		if (!state.tip.empty()) { b["tip"] = state.tip; }
+		if (!state.filename.empty()) { b["image"] = state.filename; }
+		if (!state.filenameDown.empty()) { b["imageDown"] = state.filenameDown; }
+		if (state.flashing) { b["flashing"] = true; }
+		if (!state.callback.empty())
+		{
+			b["callback"] = { {"script", state.callback.scriptName}, {"player", state.callback.player}, {"function", state.callback.function} };
+		}
+		buttons.push_back(std::move(b));
+	}
+	j["reticule"] = std::move(buttons);
+	return j;
+}
+
+static void readLocalInterface(const nlohmann::ordered_json &j)
+{
+	// Shown or hidden first: adding the reticule stops its buttons flashing
+	if (j.contains("shown"))
+	{
+		scriptShowInterface(j.at("shown").get<bool>());
+	}
+	std::vector<ReticuleButtonState> states;
+	for (const nlohmann::ordered_json &b : j.at("reticule"))
+	{
+		ReticuleButtonState state;
+		state.tip = b.value("tip", std::string());
+		state.filename = b.value("image", std::string());
+		state.filenameDown = b.value("imageDown", std::string());
+		state.flashing = b.value("flashing", false);
+		if (b.contains("callback"))
+		{
+			const nlohmann::ordered_json &c = b.at("callback");
+			state.callback.scriptName = c.at("script").get<std::string>();
+			state.callback.player = c.at("player").get<int>();
+			state.callback.function = c.at("function").get<std::string>();
+		}
+		states.push_back(std::move(state));
+	}
+	restoreReticuleButtonStates(states, [](const ReticuleCallbackRef &ref) {
+		return scriptNamedCallback(ref.player, ref.scriptName, ref.function);
+	});
+}
+
 static nlohmann::ordered_json writeLocalState()
 {
 	nlohmann::ordered_json j = nlohmann::ordered_json::object();
@@ -810,6 +874,8 @@ static nlohmann::ordered_json writeLocalState()
 	// one that was saved, ex. a destroyed oil derrick still burning. Per-client and display-only, so
 	// it belongs here rather than in the game state document. Empty in headless mode.
 	j["effects"] = serializeActiveEffects();
+
+	j["interface"] = writeLocalInterface();
 	return j;
 }
 
@@ -846,6 +912,14 @@ static void readLocalState(const nlohmann::ordered_json &j)
 			restoreLoadedGuideTopics(guide.at("loaded").get<std::vector<std::string>>());
 		}
 		setGameGuideDisableTopicPopups(guide.value("disableTopicPopups", false));
+	}
+
+	// The interface is applied later, once the scripts are loaded and the interface is up
+	// (applyDeferredColdLoadInterface)
+	g_coldLoadInterfaceDoc.reset();
+	if (j.contains("interface") && j.at("interface").is_object())
+	{
+		g_coldLoadInterfaceDoc = std::make_unique<nlohmann::ordered_json>(j.at("interface"));
 	}
 
 	// The saved effect list (see writeLocalState). Applied after the world restore, so it also clears
@@ -1603,6 +1677,34 @@ void applyDeferredColdLoadView()
 	g_coldLoadViewDoc.reset();
 }
 
+bool applyDeferredColdLoadInterface()
+{
+	if (!g_coldLoadInterfaceDoc)
+	{
+		return false;
+	}
+	bool applied = false;
+	try
+	{
+		const uint32_t version = g_coldLoadInterfaceDoc->value("version", 0u);
+		if (version > LOCAL_INTERFACE_VERSION)
+		{
+			debug(LOG_ERROR, "The saved interface is from a newer version (%u); not restoring it", version);
+		}
+		else
+		{
+			readLocalInterface(*g_coldLoadInterfaceDoc);
+			applied = true;
+		}
+	}
+	catch (const std::exception &e)
+	{
+		debug(LOG_ERROR, "Ignoring invalid saved interface: %s", e.what());
+	}
+	g_coldLoadInterfaceDoc.reset();
+	return applied;
+}
+
 void applyDeferredColdLoadMessages()
 {
 	if (!g_coldLoadGameStateDoc)
@@ -1796,6 +1898,7 @@ LoadingTask<> coldLoadGameInit(ResourceLoadingController &controller, const std:
 	g_coldLoadLocalStateDoc = std::make_unique<nlohmann::ordered_json>(std::move(localDoc));
 	g_coldLoadPendingResumeDoc = std::make_unique<nlohmann::ordered_json>(std::move(pendingDoc));
 	g_coldLoadViewDoc.reset();
+	g_coldLoadInterfaceDoc.reset();
 	g_coldLoadScriptPositions.reset();
 	if (header.hasScriptPositions)
 	{
@@ -1823,6 +1926,7 @@ LoadingTask<> coldLoadGameInit(ResourceLoadingController &controller, const std:
 		g_coldLoadLocalStateDoc.reset();
 		g_coldLoadPendingResumeDoc.reset();
 		g_coldLoadViewDoc.reset();
+		g_coldLoadInterfaceDoc.reset();
 		g_coldLoadScriptPositions.reset();
 		g_coldLoadReconstruct = false;
 		debug(LOG_ERROR, "Failed to load/reconstruct savegame '%s'", folderPath.c_str());
