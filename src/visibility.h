@@ -39,6 +39,9 @@ bool visInitialise();
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState);
 
+/// Lift propulsion: the height band of the droid's current height, which its vision height is taken from.
+int visLiftHeightBand(const DROID *psDroid);
+
 void revealAll(WorldMapState& mapState, UBYTE player);
 
 /* Check whether psViewer can see psTarget
