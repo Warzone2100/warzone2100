@@ -237,6 +237,16 @@ void proj_AddActiveProjectile(PROJECTILE* p)
 	psProjectileList.emplace_back(p);
 }
 
+uint32_t proj_GetIdCounter()
+{
+	return projectileTrackerIDIncrement;
+}
+
+void proj_SetIdCounter(uint32_t counter)
+{
+	projectileTrackerIDIncrement = counter;
+}
+
 PROJECTILE* proj_AllocForRestore(uint32_t id, unsigned player)
 {
 	PROJECTILE proj(id, player);

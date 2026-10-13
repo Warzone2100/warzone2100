@@ -112,7 +112,9 @@ float structureCompletionProgress(const STRUCTURE & structure);
 
 //builds a specified structure at a given location
 STRUCTURE *buildStructure(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
-STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation = false, bool deferWallRemoval = false);
+/// ignoreLimits: restore a structure that exists in a save even if it puts its owner over the structure limit
+/// (structures taken over by electronic warfare or gifted are not limit-checked, so a game can be over it).
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation = false, bool deferWallRemoval = false, bool ignoreLimits = false);
 STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
 /// IMPORTANT: Do not save the reference to this instance anywhere, since it's

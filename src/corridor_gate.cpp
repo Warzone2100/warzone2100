@@ -1841,6 +1841,35 @@ std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world, unsig
 	return carry;
 }
 
+bool corridorGateMapAnnounced(const GameWorld &world)
+{
+	const CorridorMap *cmap = world.map.corridors.get();
+	return cmap != nullptr && world.corridorFlow.seenMap == cmap && world.corridorFlow.seenChecksum == cmap->checksum;
+}
+
+void corridorGateRestoreMapAnnounced(GameWorld &world)
+{
+	CorridorFlowWorld &wf = world.corridorFlow;
+	const CorridorMap *cmap = world.map.corridors.get();
+	if (cmap == nullptr)
+	{
+		return;
+	}
+	wf.seenMap = cmap;
+	wf.seenChecksum = cmap->checksum;
+	// What the announcing update would have left: flow measured against this map, all-zero where none
+	// was carried (a save leaves out players whose flow is all zero).
+	for (CorridorFlowState &flow : wf.perPlayer)
+	{
+		if (flow.prevFlowChecksum != cmap->checksum || flow.prevFlow.size() != cmap->corridors.size())
+		{
+			flow.prevFlow.assign(cmap->corridors.size(), 0);
+			flow.prevFlowChecksum = cmap->checksum;
+		}
+	}
+	++g_queryStamp;   // the joints changed, so no earlier answer holds
+}
+
 void corridorGateRestoreCarry(GameWorld &world, unsigned player, const CorridorGateCarry &carry)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "corridor carry for player %u", player);
