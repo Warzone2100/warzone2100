@@ -924,6 +924,13 @@ if(WZ_BUILD_TERRAIN_SURFACE_TEST)
 	target_include_directories(terrain_surface_test PRIVATE "${PROJECT_SOURCE_DIR}/src")
 endif()
 
+# Standalone unit test for the (dependency-free) VP9 bitstream helpers
+option(WZ_BUILD_VP9_BITSTREAM_TEST "Build the VP9 bitstream helpers unit test (tests/vp9_bitstream_test.cpp)" OFF)
+if(WZ_BUILD_VP9_BITSTREAM_TEST)
+	add_executable(vp9_bitstream_test "${PROJECT_SOURCE_DIR}/tests/vp9_bitstream_test.cpp" "${PROJECT_SOURCE_DIR}/lib/sequence/vp9_bitstream.cpp")
+	target_include_directories(vp9_bitstream_test PRIVATE "${PROJECT_SOURCE_DIR}")
+endif()
+
 # In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
 option(WZ_BUILD_RENDER_GRAPH_TEST "Build the render-graph pass sequence unit test (tests/render_graph_pass_sequence_test.cpp)" OFF)
 if(WZ_BUILD_RENDER_GRAPH_TEST)

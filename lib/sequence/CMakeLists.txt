@@ -16,8 +16,8 @@ set(SRC
 )
 
 if(WZ_ENABLE_WEBM)
-	list(APPEND HEADERS webm_decoder.h webm_video_codec.h)
-	list(APPEND SRC webm_decoder.cpp webm_video_codec.cpp video_codec_vpx.cpp)
+	list(APPEND HEADERS webm_decoder.h webm_video_codec.h vp9_bitstream.h)
+	list(APPEND SRC webm_decoder.cpp webm_video_codec.cpp video_codec_vpx.cpp vp9_bitstream.cpp)
 endif()
 
 find_package(OggVorbis REQUIRED)
