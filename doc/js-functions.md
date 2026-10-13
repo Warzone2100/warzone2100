@@ -185,6 +185,13 @@ Return the number of droids currently in the given group. Note that you can use 
 
 Mark string for translation.
 
+## N_(string)
+
+Mark string for translation, without translating it (returns it unchanged).
+For text the game translates itself where it shows it (the tooltip of setReticuleButton()),
+so that it is shown in the player's language even when it was set before a change of language,
+or in a game saved by a player using another language. (4.8+ only)
+
 ## syncRandom(limit)
 
 Generate a synchronized random number in range 0...(limit - 1) that will be the same if this function is
@@ -769,8 +776,10 @@ Turns visible minimap on or off in the GUI.
 
 Add reticule button. buttonId is which button to change, where zero is zero is the middle button, then going clockwise from
 the uppermost button. filename is button graphics and filenameDown is for highlighting. The tooltip is the text you see when
-you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
-for such changes to take effect. (3.2+ only)
+you mouse over the button: the game translates it where it shows it, so pass it marked with N_() rather than translated
+with _(), and it is shown in the player's language even in a saved game loaded with another one (4.8+). Finally, the
+callback is which scripting function to call. Hide and show the user interface for such changes to take effect.
+(3.2+ only)
 
 ## setReticuleFlash(buttonId, flash)
 

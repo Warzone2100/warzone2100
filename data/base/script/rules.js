@@ -54,11 +54,11 @@ function reticuleManufactureCheck()
 
 	if (structureComplete === true && getMissionType() !== LDS_EXPAND_LIMBO)
 	{
-		setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
+		setReticuleButton(1, N_("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	}
 	else
 	{
-		setReticuleButton(1, _("Manufacture - build factory first"), "", "");
+		setReticuleButton(1, N_("Manufacture - build factory first"), "", "");
 	}
 }
 
@@ -104,11 +104,11 @@ function reticuleResearchCheck()
 
 	if (structureComplete === true && getMissionType() !== LDS_EXPAND_LIMBO)
 	{
-		setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
+		setReticuleButton(2, N_("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	}
 	else
 	{
-		setReticuleButton(2, _("Research - build research facility first"), "", "");
+		setReticuleButton(2, N_("Research - build research facility first"), "", "");
 	}
 }
 
@@ -116,11 +116,11 @@ function reticuleBuildCheck()
 {
 	if (enumDroid(selectedPlayer, DROID_CONSTRUCT).length > 0)
 	{
-		setReticuleButton(3, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
+		setReticuleButton(3, N_("Build (F3)"), "image_build_up.png", "image_build_down.png");
 	}
 	else
 	{
-		setReticuleButton(3, _("Build - manufacture constructor droids first"), "", "");
+		setReticuleButton(3, N_("Build - manufacture constructor droids first"), "", "");
 	}
 }
 
@@ -166,12 +166,12 @@ function reticuleDesignCheck()
 
 	if (structureComplete === true)
 	{
-		setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
+		setReticuleButton(4, N_("Design (F4)"), "image_design_up.png", "image_design_down.png");
 		setMiniMap(true);
 	}
 	else
 	{
-		setReticuleButton(4, _("Design - construct HQ first"), "", "");
+		setReticuleButton(4, N_("Design - construct HQ first"), "", "");
 		setMiniMap(false);
 	}
 }
@@ -180,22 +180,22 @@ function reticuleCommandCheck()
 {
 	if (enumDroid(selectedPlayer, DROID_COMMAND).length > 0)
 	{
-		setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
+		setReticuleButton(6, N_("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	}
 	else
 	{
-		setReticuleButton(6, _("Commanders - manufacture commanders first"), "", "");
+		setReticuleButton(6, N_("Commanders - manufacture commanders first"), "", "");
 	}
 }
 
 function setMainReticule()
 {
-	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
+	setReticuleButton(0, N_("Close"), "image_cancel_up.png", "image_cancel_down.png");
 	reticuleManufactureCheck();
 	reticuleResearchCheck();
 	reticuleBuildCheck();
 	reticuleDesignCheck();
-	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
+	setReticuleButton(5, N_("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
 	reticuleCommandCheck();
 }
 
