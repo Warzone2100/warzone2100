@@ -1895,6 +1895,12 @@ static bool stageThreeInitialiseSync()
 		bMultiMessages = bMultiPlayer;
 	}
 
+	// A GameState load restores the interface the scripts had set up (before eventGameLoaded, which may set it up again)
+	if (wasColdLoad)
+	{
+		gamestate::savegame::applyDeferredColdLoadInterface();
+	}
+
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{
 		if (suppressLoadEvents)

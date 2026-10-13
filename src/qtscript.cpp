@@ -850,6 +850,20 @@ bool scriptInstanceRunning(int player, const std::string &scriptName)
 	});
 }
 
+playerCallbackFunc scriptNamedCallback(int player, const std::string &scriptName, const std::string &function)
+{
+	// As findInstanceForPlayer matches them, without its assert
+	const WzString name = WzString::fromUtf8(scriptName).normalized(WzString::NormalizationForm_KD);
+	for (auto *instance : scripts)
+	{
+		if (instance->player() == player && WzString::fromUtf8(instance->scriptName()).normalized(WzString::NormalizationForm_KD).compare(name) == 0)
+		{
+			return instance->namedCallback(WzString::fromUtf8(function));
+		}
+	}
+	return nullptr;
+}
+
 size_t scriptInstanceCount()
 {
 	return scripts.size();

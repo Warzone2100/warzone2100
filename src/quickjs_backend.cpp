@@ -517,6 +517,8 @@ public:
 	virtual uint64_t saveMathRandomState() const override;
 	virtual void restoreMathRandomState(uint64_t state) override;
 
+	virtual playerCallbackFunc namedCallback(const WzString& func) override;
+
 public:
 	// get state for debugging
 	nlohmann::json debugGetAllScriptGlobals() override;
@@ -1816,18 +1818,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 
 		virtual playerCallbackFunc getNamedScriptCallback(const WzString& func) const override
 		{
-			JSContext *pCtx = ctx;
-			std::weak_ptr<int> token = engineToInstanceMap.at(ctx)->lifetimeToken();
-			return [pCtx, func, token](const int player) {
-				if (token.expired())
-				{
-					return;
-				}
-				std::vector<JSValue> args;
-				args.push_back(JS_NewInt32(pCtx, player));
-				JS_FreeValue(pCtx, callFunction(pCtx, func.toUtf8(), args));
-				std::for_each(args.begin(), args.end(), [pCtx](JSValue& val) { JS_FreeValue(pCtx, val); });
-			};
+			return engineToInstanceMap.at(ctx)->namedCallback(func);
 		}
 
 		virtual void doNotSaveGlobal(const std::string &name) const override
@@ -3430,6 +3421,22 @@ bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::ordered_json 
 		}
 	}
 	return true;
+}
+
+playerCallbackFunc quickjs_scripting_instance::namedCallback(const WzString& func)
+{
+	JSContext *pCtx = ctx;
+	std::weak_ptr<int> token = lifetimeToken();
+	return [pCtx, func, token](const int player) {
+		if (token.expired())
+		{
+			return;
+		}
+		std::vector<JSValue> args;
+		args.push_back(JS_NewInt32(pCtx, player));
+		JS_FreeValue(pCtx, callFunction(pCtx, func.toUtf8(), args));
+		std::for_each(args.begin(), args.end(), [pCtx](JSValue& val) { JS_FreeValue(pCtx, val); });
+	};
 }
 
 uint64_t quickjs_scripting_instance::saveMathRandomState() const

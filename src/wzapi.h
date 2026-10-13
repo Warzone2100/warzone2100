@@ -663,6 +663,10 @@ namespace wzapi
 		virtual uint64_t saveMathRandomState() const = 0;
 		virtual void restoreMathRandomState(uint64_t state) = 0;
 
+		// a callback that calls the named script function of this instance with the player (as setReticuleButton's).
+		// It does nothing once the instance is gone.
+		virtual playerCallbackFunc namedCallback(const WzString& func) = 0;
+
 	public:
 		// get state for debugging
 		virtual nlohmann::json debugGetAllScriptGlobals() = 0;
