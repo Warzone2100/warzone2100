@@ -60,6 +60,9 @@ void proj_AddActiveProjectile(PROJECTILE* p); ///< Add allocated projectile `p` 
 /// Allocate a projectile in the global storage for restoration from a saved match state.
 /// Caller fills in the remaining fields and then calls proj_AddActiveProjectile().
 PROJECTILE* proj_AllocForRestore(uint32_t id, unsigned player);
+/// The counter new projectile ids are made from (GameState save / restore).
+uint32_t proj_GetIdCounter();
+void proj_SetIdCounter(uint32_t counter);
 
 void	proj_FreeAllProjectiles();	///< Free all projectiles in the list.
 

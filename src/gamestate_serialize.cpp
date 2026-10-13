@@ -63,6 +63,7 @@
 #include "cmddroid.h"
 #include "formation.h"
 #include "fpath.h"
+#include "pathfinding_backend.h" // fpathActiveBackend().hardReset (restore teardown)
 #include "visibility.h"
 #include "projectile.h"
 #include "projectiledef.h"
@@ -115,6 +116,20 @@ static void from_json(const nlohmann::ordered_json &j, CorridorGateCarry &carry)
 
 namespace gamestate
 {
+
+// MARK: - Compatibility with older section versions
+//
+// Readers still accept these older section versions, and fall back as follows:
+//
+// - world v1: no expected-damage fields (rebuilt by re-adding each projectile's expectedDamageCaused), no
+//   corridorMapAnnounced (the first update announces the corridor map again), no sensors list order, no
+//   structure sensorTarget, no repair delivery point number, no transporter "selected", factory templates
+//   resolved against any player (readTemplateRef).
+// - production v1: production-run templates resolved against any player (readTemplateRef).
+// - projectiles v1: no idCounter (the projectile id counter is left as it is).
+// - no upgrades section: the upgrade tables are rebuilt by replaying researchResult for completed research
+//   (readResearch, replayUpgrades).
+// - pendingRoutes v1: no queuedTime / queuedInDroidUpdate.
 
 // MARK: - Parsed-input validation helpers
 //
@@ -788,6 +803,67 @@ static void readLimits(const nlohmann::ordered_json &j, uint32_t version)
 
 constexpr uint32_t TEMPLATES_SECTION_VERSION = 1;
 
+// One template, as stored in the templates section and (inline) by factories / production runs that build a
+// template the player has since replaced.
+static nlohmann::ordered_json writeTemplateRecord(const DROID_TEMPLATE *psTempl)
+{
+	nlohmann::ordered_json jt = saveTemplateCommon(psTempl);
+	// The stats id is what map-placed droids resolve against
+	jt["id"] = psTempl->id.toUtf8();
+	jt["multiPlayerID"] = psTempl->multiPlayerID;
+	jt["enabled"] = psTempl->enabled;
+	jt["stored"] = psTempl->stored;
+	jt["prefab"] = psTempl->prefab;
+	jt["hidden"] = psTempl->hidden;
+	return jt;
+}
+
+static std::unique_ptr<DROID_TEMPLATE> readTemplateRecord(const nlohmann::ordered_json &jt)
+{
+	auto psTempl = std::make_unique<DROID_TEMPLATE>();
+	if (!loadTemplateCommon(jt, *psTempl))
+	{
+		throw StateError("template contains an unknown component (different stats/mods?)");
+	}
+	truncateTemplateName(psTempl->name);
+	psTempl->id = WzString::fromUtf8(jt.value("id", std::string()));
+	psTempl->multiPlayerID = jt.at("multiPlayerID").get<uint32_t>();
+	psTempl->enabled = jt.at("enabled").get<bool>();
+	psTempl->stored = jt.at("stored").get<bool>();
+	psTempl->prefab = jt.at("prefab").get<bool>();
+	psTempl->hidden = jt.value("hidden", false);
+	return psTempl;
+}
+
+// A reference from something `player` owns (a factory, or the production run) to a template, stored by id.
+// A template that is not the player's current one with that id (replaced while queued or being built, kept in
+// replacedDroidTemplates) is stored inline, so the restored reference builds the same droid.
+static void writeTemplateRef(nlohmann::ordered_json &j, unsigned player, const DROID_TEMPLATE *psTempl)
+{
+	j["templateId"] = psTempl->multiPlayerID;
+	if (player >= MAX_PLAYERS || findPlayerTemplateById(static_cast<int>(player), psTempl->multiPlayerID) != psTempl)
+	{
+		j["template"] = writeTemplateRecord(psTempl);
+	}
+}
+
+// Resolve a reference written by writeTemplateRef, against the templates of the player that holds it. Saves
+// written before templates were looked up by owner resolve against any player's template with the id.
+static DROID_TEMPLATE *readTemplateRef(const nlohmann::ordered_json &j, unsigned player)
+{
+	if (j.contains("template"))
+	{
+		if (player >= MAX_PLAYERS)
+		{
+			throw StateError("inline template for an invalid player");
+		}
+		return addReplacedTemplate(static_cast<int>(player), readTemplateRecord(j.at("template")));
+	}
+	const uint32_t tid = j.at("templateId").get<uint32_t>();
+	DROID_TEMPLATE *psTempl = (player < MAX_PLAYERS) ? findPlayerTemplateById(static_cast<int>(player), tid) : nullptr;
+	return (psTempl != nullptr) ? psTempl : getTemplateFromMultiPlayerID(tid);
+}
+
 static nlohmann::ordered_json writeTemplates()
 {
 	nlohmann::ordered_json j = nlohmann::ordered_json::object();
@@ -801,15 +877,7 @@ static nlohmann::ordered_json writeTemplates()
 		// so iteration order is deterministic.
 		enumerateTemplates(p, [&jlist](DROID_TEMPLATE *psTempl)
 		{
-			nlohmann::ordered_json jt = saveTemplateCommon(psTempl);
-			// The stats id is what map-placed droids resolve against
-			jt["id"] = psTempl->id.toUtf8();
-			jt["multiPlayerID"] = psTempl->multiPlayerID;
-			jt["enabled"] = psTempl->enabled;
-			jt["stored"] = psTempl->stored;
-			jt["prefab"] = psTempl->prefab;
-			jt["hidden"] = psTempl->hidden;
-			jlist.push_back(std::move(jt));
+			jlist.push_back(writeTemplateRecord(psTempl));
 			return true;
 		});
 		jplayers.push_back(std::move(jlist));
@@ -840,19 +908,7 @@ static void readTemplates(const nlohmann::ordered_json &j, uint32_t version)
 		clearTemplates(p);
 		for (const nlohmann::ordered_json &jt : jlist)
 		{
-			auto psTempl = std::make_unique<DROID_TEMPLATE>();
-			if (!loadTemplateCommon(jt, *psTempl))
-			{
-				throw StateError("template contains an unknown component (different stats/mods?)");
-			}
-			truncateTemplateName(psTempl->name);
-			psTempl->id = WzString::fromUtf8(jt.value("id", std::string()));
-			psTempl->multiPlayerID = jt.at("multiPlayerID").get<uint32_t>();
-			psTempl->enabled = jt.at("enabled").get<bool>();
-			psTempl->stored = jt.at("stored").get<bool>();
-			psTempl->prefab = jt.at("prefab").get<bool>();
-			psTempl->hidden = jt.value("hidden", false);
-			addTemplate(p, std::move(psTempl));
+			addTemplate(p, readTemplateRecord(jt));
 		}
 	}
 	// droidTemplates is the source of truth, localTemplates is derived from it
@@ -863,7 +919,10 @@ static void readTemplates(const nlohmann::ordered_json &j, uint32_t version)
 // asProductionRun[factoryType][factoryInc] is a queue of {quantity, built, template}.
 // Templates are referenced by multiPlayerID and resolved after templates are restored.
 
-constexpr uint32_t PRODUCTION_SECTION_VERSION = 1;
+// Version 2: templates resolved against the production player, + inline "template" for a replaced one.
+// Version 1 is still read.
+constexpr uint32_t PRODUCTION_SECTION_VERSION = 2;
+constexpr uint32_t PRODUCTION_SECTION_VERSION_MIN = 1;
 
 static nlohmann::ordered_json writeProduction()
 {
@@ -882,7 +941,15 @@ static nlohmann::ordered_json writeProduction()
 				nlohmann::ordered_json je = nlohmann::ordered_json::object();
 				je["quantity"] = e.quantity;
 				je["built"] = e.built;
-				je["templateId"] = (e.psTemplate != nullptr) ? e.psTemplate->multiPlayerID : 0u;
+				// The production run is the production player's (the local player's)
+				if (e.psTemplate != nullptr)
+				{
+					writeTemplateRef(je, static_cast<unsigned>(productionPlayer), e.psTemplate);
+				}
+				else
+				{
+					je["templateId"] = 0u;
+				}
 				jentries.push_back(std::move(je));
 			}
 			jfactories.push_back(std::move(jentries));
@@ -895,7 +962,7 @@ static nlohmann::ordered_json writeProduction()
 
 static void readProduction(const nlohmann::ordered_json &j, uint32_t version)
 {
-	if (version != PRODUCTION_SECTION_VERSION)
+	if (version < PRODUCTION_SECTION_VERSION_MIN || version > PRODUCTION_SECTION_VERSION)
 	{
 		throw StateError("unsupported production section version");
 	}
@@ -928,7 +995,7 @@ static void readProduction(const nlohmann::ordered_json &j, uint32_t version)
 				e.quantity = je.at("quantity").get<int>();
 				e.built = je.at("built").get<int>();
 				const uint32_t tid = je.at("templateId").get<uint32_t>();
-				e.psTemplate = (tid != 0) ? getTemplateFromMultiPlayerID(tid) : nullptr;
+				e.psTemplate = (tid != 0 || je.contains("template")) ? readTemplateRef(je, static_cast<unsigned>(productionPlayer)) : nullptr;
 				if (e.psTemplate == nullptr)
 				{
 					continue;
@@ -947,7 +1014,11 @@ static void readProduction(const nlohmann::ordered_json &j, uint32_t version)
 // object types (addObjectToList prepends, so rebuilding in reverse reproduces
 // the exact list order, which matters for deterministic iteration).
 
-constexpr uint32_t WORLD_SECTION_VERSION = 1;
+// Version 2: + corridorMapAnnounced, structure sensorTarget, droid / structure expected damage, sensors,
+// factory templates resolved against the factory's owner (+ inline "template" for a replaced one).
+// Version 1 sections are still read, with each field added since defaulting to the version 1 behavior.
+constexpr uint32_t WORLD_SECTION_VERSION = 2;
+constexpr uint32_t WORLD_SECTION_VERSION_MIN = 1;
 
 static nlohmann::ordered_json writeVector3i(const Vector3i &v)
 {
@@ -1228,6 +1299,9 @@ static nlohmann::ordered_json writeStructure(const STRUCTURE *psStruct)
 	j["status"] = static_cast<int>(psStruct->status);
 	j["resistance"] = psStruct->resistance;
 	j["lastResistance"] = psStruct->lastResistance; // regen-timer anchor - without it the post-restore regen schedule diverges
+	// Incoming-damage accumulator read by target selection (aiObjectIsProbablyDoomed). Saved verbatim: the live
+	// value is not always the sum of the in-flight projectiles (see readProjectile).
+	j["expectedDamage"] = psStruct->expectedDamage;
 	j["capacity"] = psStruct->capacity;
 	j["currentBuildPts"] = psStruct->currentBuildPts;
 	j["productToGroup"] = psStruct->productToGroup;
@@ -1253,6 +1327,12 @@ static nlohmann::ordered_json writeStructure(const STRUCTURE *psStruct)
 		weapons.push_back(std::move(jw));
 	}
 	j["weapons"] = std::move(weapons);
+	// A structure without weapons can still hold a target in slot 0: sensor, CB and VTOL-CB towers. CB towers
+	// never pick their own target (only incoming artillery fire sets it), so it must be restored.
+	if (psStruct->numWeaps == 0 && psStruct->psTarget[0] != nullptr)
+	{
+		j["sensorTarget"] = writeObjRef(psStruct->psTarget[0]);
+	}
 
 	const STRUCTURE_TYPE type = psStruct->pStructureType->type;
 	if (isFactoryType(type))
@@ -1267,7 +1347,7 @@ static nlohmann::ordered_json writeStructure(const STRUCTURE *psStruct)
 		jf["secondaryOrder"] = f->secondaryOrder;
 		if (f->psSubject != nullptr)
 		{
-			jf["templateId"] = f->psSubject->multiPlayerID;
+			writeTemplateRef(jf, psStruct->player, f->psSubject);
 		}
 		if (f->psAssemblyPoint != nullptr)
 		{
@@ -1360,7 +1440,9 @@ static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j
 	const uint16_t direction = reqArray(j.at("rot"), 1)[0].get<uint16_t>();
 	const unsigned player = j.at("player").get<unsigned>();
 
-	STRUCTURE *psStruct = buildStructureDir(world, psStats, x, y, direction, player, true, id);
+	// ignoreLimits: the saved game can legitimately be over a structure limit (structures taken over by
+	// electronic warfare or gifted skip the limit check), and the restored set must match it exactly.
+	STRUCTURE *psStruct = buildStructureDir(world, psStats, x, y, direction, player, true, id, false, false, /*ignoreLimits=*/true);
 	if (psStruct == nullptr)
 	{
 		throw StateError("failed to reconstruct structure id " + std::to_string(id));
@@ -1368,6 +1450,7 @@ static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j
 	readBaseObjectCommon(j, psStruct);
 	psStruct->resistance = j.at("resistance").get<int>();
 	psStruct->lastResistance = j.at("lastResistance").get<uint32_t>();
+	psStruct->expectedDamage = j.value("expectedDamage", 0u); // world v1: rebuilt from the projectiles instead
 	psStruct->productToGroup = validControlGroupOrNone(j.at("productToGroup").get<uint8_t>());
 	const int capacity = std::min<int>(j.at("capacity").get<int>(), SIZE_SUPER_HEAVY);
 	psStruct->capacity = 0; // incremented as modules are (re)built
@@ -1398,7 +1481,7 @@ static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j
 		buildModules();
 		if (jf.contains("templateId"))
 		{
-			f->psSubject = getTemplateFromMultiPlayerID(jf.at("templateId").get<uint32_t>());
+			f->psSubject = readTemplateRef(jf, player);
 		}
 		if (jf.contains("assembly"))
 		{
@@ -1473,6 +1556,13 @@ static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j
 			setAssemblyPoint(world, rp->psDeliveryPoint, jdp[0].get<int32_t>(), jdp[1].get<int32_t>(), player, false);
 			rp->psDeliveryPoint->coords.z = jdp[2].get<int32_t>(); // authoritative z (see factory assembly above)
 			rp->psDeliveryPoint->selected = jd.at("selected").get<bool>();
+			// The delivery point's number, as for a factory's assembly point.
+			const int deliveryInc = jd.value("number", static_cast<int>(rp->psDeliveryPoint->factoryInc));
+			if (deliveryInc < 0 || deliveryInc >= MAX_FACTORY_NUMBER)
+			{
+				throw StateError("repair facility delivery point number out of range");
+			}
+			rp->psDeliveryPoint->factoryInc = deliveryInc;
 		}
 	}
 	else if (type == REF_REARM_PAD)
@@ -1576,6 +1666,14 @@ static void readStructurePass2(const nlohmann::ordered_json &j)
 		if (target != nullptr)
 		{
 			setStructureTarget(psStruct, target, w, ORIGIN_UNKNOWN);
+		}
+	}
+	if (psStruct->numWeaps == 0 && j.contains("sensorTarget"))
+	{
+		BASE_OBJECT *target = readObjRef(j.at("sensorTarget"));
+		if (target != nullptr)
+		{
+			setStructureTarget(psStruct, target, 0, ORIGIN_UNKNOWN);
 		}
 	}
 
@@ -2039,6 +2137,9 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 
 	j["experience"] = d->experience;
 	j["kills"] = d->kills;
+	// Incoming-damage accumulators (see writeStructure's expectedDamage)
+	j["expectedDamageDirect"] = d->expectedDamageDirect;
+	j["expectedDamageIndirect"] = d->expectedDamageIndirect;
 	j["shieldPoints"] = d->shieldPoints;
 	j["shieldRegenTime"] = d->shieldRegenTime;
 	j["shieldInterruptRegenTime"] = d->shieldInterruptRegenTime;
@@ -2142,6 +2243,12 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 
 	j["underRepair"] = d->underRepair;
 	j["onMission"] = onMission;
+	// Selection is UI state, except for a campaign transporter: the mission code selects it (so the camera tracks
+	// it), and orderDroidBase refuses non-transport orders to a selected campaign transporter.
+	if (d->isTransporter() && d->selected)
+	{
+		j["selected"] = true;
+	}
 	return j;
 }
 
@@ -2248,6 +2355,8 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 	readBaseObjectCommon(j, d);
 	d->experience = j.at("experience").get<uint32_t>();
 	d->kills = j.at("kills").get<uint32_t>();
+	d->expectedDamageDirect = j.value("expectedDamageDirect", 0u); // world v1: rebuilt from the projectiles instead
+	d->expectedDamageIndirect = j.value("expectedDamageIndirect", 0u);
 	if (j.contains("lastCheckNearestTargetFailed"))
 	{
 		const nlohmann::ordered_json &lcntf = j.at("lastCheckNearestTargetFailed");
@@ -2337,6 +2446,15 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 				groupMap[aigroup] = d->psGroup;
 			}
 		}
+		else if (j.value("aigroupType", -1) == static_cast<int>(GT_NORMAL))
+		{
+			// A plain group has no droid that creates it on construction: it is what is left of a command group
+			// whose commander died (or a transporter group whose transporter left it).
+			DROID_GROUP *psGroup = grpCreate();
+			grpReassignId(psGroup, aigroup);
+			groupMap[aigroup] = psGroup;
+			psGroup->add(d);
+		}
 		if (d->psGroup != nullptr && d->psGroup->type == GT_TRANSPORTER)
 		{
 			d->selected = false;
@@ -2395,12 +2513,12 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 		d->sMove.stillPos = readVector2i(mv.at("stillPos"));
 	}
 	d->sMove.stillSince = mv.value("stillSince", static_cast<uint32_t>(0));
-	if (d->isVtol() && d->sMove.Status != MOVEINACTIVE)
-	{
-		d->rot.pitch = 0;
-	}
 
 	d->underRepair = static_cast<uint16_t>(j.at("underRepair").get<uint32_t>());
+	if (d->isTransporter())
+	{
+		d->selected = j.value("selected", false);
+	}
 
 	// Formation (movement formation), if any: attach to the verbatim-restored formation
 	// (exact-coordinate match; formationFind's FIND_RANGE could bind a nearby wrong one).
@@ -2772,9 +2890,12 @@ static nlohmann::ordered_json writeDangerMaps(const GameWorld &world)
 	std::vector<uint8_t> blockDanger(n);
 	const uint8_t *wb = world.map.auxMap[MAX_PLAYERS + AUX_DANGERMAP].get();
 	const uint8_t *bd = world.map.blockMap[AUX_DANGERMAP].get();
+	// Only the worker's inputs are saved. Its outputs (DANGER, and the TEMPORARY scratch bit) are reset by every
+	// flood (dangerFloodFill) and recomputed by the restarted worker, and would record how far it had got.
+	constexpr uint8_t DANGER_WORKER_OUTPUT_BITS = AUXBITS_DANGER | AUXBITS_TEMPORARY;
 	for (size_t i = 0; i < n; ++i)
 	{
-		work[i] = wb[i];
+		work[i] = static_cast<uint8_t>(wb[i] & ~DANGER_WORKER_OUTPUT_BITS);
 		blockDanger[i] = bd[i];
 	}
 	mapDangerSerializeEnd(parked);
@@ -2875,6 +2996,9 @@ static nlohmann::ordered_json writeWorldObjects(const GameWorld &world, bool onM
 	{
 		j["corridorFlow"] = std::move(jgateCarry);
 	}
+	// Whether the world's corridor map was already announced into the sync stream (corridorGateUpdate):
+	// a restored world must not announce it again on its first update.
+	j["corridorMapAnnounced"] = corridorGateMapAnnounced(world);
 
 	nlohmann::ordered_json jfeatures = nlohmann::ordered_json::array();
 	for (const FEATURE *psFeature : world.objects.features[0])
@@ -2895,12 +3019,48 @@ static nlohmann::ordered_json writeWorldObjects(const GameWorld &world, bool onM
 
 	j["droids"] = writeDroidList(world.objects.droids, onMission);
 
+	// The sensor list mixes every player's sensor structures and sensor droids in the order they were added.
+	// Reconstruction adds structures before droids, player by player, so it would not reproduce that order,
+	// and target selection (aiSearchSensorTargets tie-breaks), counter-battery assignment and enumBlips walk it.
+	nlohmann::ordered_json jsensors = nlohmann::ordered_json::array();
+	for (const BASE_OBJECT *psSensor : world.objects.sensors[0])
+	{
+		jsensors.push_back(writeObjRef(psSensor));
+	}
+	j["sensors"] = std::move(jsensors);
+
 	return j;
+}
+
+// Put the world's sensor list, rebuilt by the object construction, in the saved order.
+// A saved list that does not hold exactly the reconstructed sensors (corrupt or hand-edited data) is ignored.
+static void restoreSensorListOrder(GameWorld &world, const nlohmann::ordered_json &jsensors)
+{
+	SensorList &live = world.objects.sensors[0];
+	if (!jsensors.is_array() || jsensors.size() != live.size())
+	{
+		debug(LOG_ERROR, "Saved sensor list does not match the restored sensors (%zu saved, %zu restored); keeping the rebuilt order",
+		      jsensors.is_array() ? jsensors.size() : 0, live.size());
+		return;
+	}
+	std::unordered_set<const BASE_OBJECT *> liveSet(live.begin(), live.end());
+	SensorList ordered;
+	for (const nlohmann::ordered_json &jref : jsensors)
+	{
+		BASE_OBJECT *psSensor = readObjRef(jref);
+		if (psSensor == nullptr || liveSet.erase(psSensor) != 1)
+		{
+			debug(LOG_ERROR, "Saved sensor list does not match the restored sensors; keeping the rebuilt order");
+			return;
+		}
+		ordered.push_back(psSensor);
+	}
+	live = std::move(ordered);
 }
 
 static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, uint32_t version)
 {
-	if (version != WORLD_SECTION_VERSION)
+	if (version < WORLD_SECTION_VERSION_MIN || version > WORLD_SECTION_VERSION)
 	{
 		throw StateError("unsupported world section version");
 	}
@@ -2932,6 +3092,10 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 			}
 			corridorGateRestoreCarry(world, static_cast<unsigned>(p), it.value().get<CorridorGateCarry>());
 		}
+	}
+	if (j.value("corridorMapAnnounced", false))
+	{
+		corridorGateRestoreMapAnnounced(world);
 	}
 
 	const nlohmann::ordered_json &jfeatures = j.at("features");
@@ -2967,6 +3131,11 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 	// Override the greedy derrick<->power-gen rebuild with the exact saved slotting (lockstep CRC).
 	restorePowerLinkage(world, jstructures);
 
+	if (j.contains("sensors"))
+	{
+		restoreSensorListOrder(world, j.at("sensors"));
+	}
+
 	// Apply authoritative per-tile dynamic state last (fog/fire), overriding what restored
 	// objects re-revealed, so the explored set exactly matches the saved one.
 	if (j.contains("mapDynamic"))
@@ -2978,13 +3147,8 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 // MARK: - Section: pendingRoutes (in-flight path results)
 //
 // A droid in MOVEWAITROUTE is waiting on an async fpath request whose result is engine-global and not
-// part of the object graph. Re-deriving it on restore (resubmitUncoveredRoutes) is NOT exact:
-// the worker's per-thread A* PathfindContext for a co-destination cohort is built incrementally and is
-// also shaped by cohort jobs that already COMPLETED this tick (those droids have left MOVEWAITROUTE and
-// are not re-submitted), so a re-derived tail job builds from a different context and can pick a
-// different equal-cost path -> desync. Instead we serialize the RESULT itself and replay it directly:
-// the droid consumes it on its first resumed tick with no re-derivation, so order / context / thread
-// count are all irrelevant.
+// part of the object graph. Re-deriving the route on restore isn't exact, so the result itself is saved,
+// and the droid consumes it on its first resumed tick.
 //
 // fpathTakePendingResult force-completes the still-pending future (deterministic: the value is fixed by
 // the frozen end-of-tick context) and re-populates it so a host that keeps simulating is unaffected.
@@ -3099,7 +3263,9 @@ static void resubmitUncoveredRoutes(const std::unordered_set<uint32_t> &covered)
 // objects, so they are restored AFTER all world objects exist (resolved via getBaseObjFromData).
 // proj_AddActiveProjectile appends, so saved order is reproduced by appending in order.
 
-constexpr uint32_t PROJECTILES_SECTION_VERSION = 1;
+// Version 2: + idCounter. Version 1 is still read.
+constexpr uint32_t PROJECTILES_SECTION_VERSION = 2;
+constexpr uint32_t PROJECTILES_SECTION_VERSION_MIN = 1;
 
 static nlohmann::ordered_json writeRotation(const Rotation &r)
 {
@@ -3153,7 +3319,7 @@ static nlohmann::ordered_json writeProjectile(const PROJECTILE *p)
 	return j;
 }
 
-static void readProjectile(const nlohmann::ordered_json &j)
+static void readProjectile(const nlohmann::ordered_json &j, bool addExpectedDamage)
 {
 	const int widx = j.contains("weaponId") ? getCompFromID(COMP_WEAPON, WzString::fromUtf8(j.at("weaponId").get<std::string>())) : -1;
 	if (widx < 0)
@@ -3192,14 +3358,16 @@ static void readProjectile(const nlohmann::ordered_json &j)
 	p->expectedDamageCaused = j.at("expectedDamageCaused").get<uint32_t>();
 	p->partVisible = j.at("partVisible").get<int>();
 	p->penetratingProjectile = j.at("penetrating").get<bool>();
-	// Rebuild the target's incoming-damage accumulator (DROID::expectedDamage{Direct,Indirect} /
-	// STRUCTURE::expectedDamage) from this projectile. The engine maintains it via
-	// aiObjectAddExpectedDamage as projectiles launch/retarget/impact - freshly reconstructed targets
-	// start at 0. An impacted projectile has expectedDamageCaused == 0 (zeroed on impact), so re-adding
-	// for every restored projectile reproduces the live accumulator exactly: in-flight projectiles
-	// contribute their value, impacted ones add nothing. Without this the restored in-flight
-	// projectiles later subtract on impact and drive the accumulator negative (asserting in ai.cpp).
-	if (p->expectedDamageCaused != 0)
+	// World section v1 documents: rebuild the target's incoming-damage accumulator
+	// (DROID::expectedDamage{Direct,Indirect} / STRUCTURE::expectedDamage) from this projectile,
+	// as freshly reconstructed targets start at 0.
+	// An impacted projectile has expectedDamageCaused == 0 (zeroed on impact), so re-adding for every restored
+	// projectile reproduces the live accumulator (unless the live value leaked).
+	// Without this the restored in-flight projectiles later subtract on impact and drive the accumulator negative
+	// (asserting in ai.cpp).
+	// World section v2 restores the accumulators verbatim instead (they can hold amounts no projectile accounts
+	// for any more).
+	if (addExpectedDamage && p->expectedDamageCaused != 0)
 	{
 		aiObjectAddExpectedDamage(p->psDest, static_cast<SDWORD>(p->expectedDamageCaused), proj_Direct(p->psWStats));
 	}
@@ -3216,12 +3384,15 @@ static nlohmann::ordered_json writeProjectiles()
 		list.push_back(writeProjectile(p));
 	}
 	j["list"] = std::move(list);
+	// New projectile ids continue from this counter. Not part of the sync log, but without it a restored game
+	// numbers its projectiles differently, and can reuse the id of a restored one.
+	j["idCounter"] = proj_GetIdCounter();
 	return j;
 }
 
-static void readProjectiles(const nlohmann::ordered_json &j, uint32_t version)
+static void readProjectiles(const nlohmann::ordered_json &j, uint32_t version, bool addExpectedDamage)
 {
-	if (version != PROJECTILES_SECTION_VERSION)
+	if (version < PROJECTILES_SECTION_VERSION_MIN || version > PROJECTILES_SECTION_VERSION)
 	{
 		throw StateError("unsupported projectiles section version");
 	}
@@ -3233,7 +3404,11 @@ static void readProjectiles(const nlohmann::ordered_json &j, uint32_t version)
 	}
 	for (const nlohmann::ordered_json &jp : list)
 	{
-		readProjectile(jp);
+		readProjectile(jp, addExpectedDamage);
+	}
+	if (j.contains("idCounter"))
+	{
+		proj_SetIdCounter(j.at("idCounter").get<uint32_t>());
 	}
 }
 
@@ -3458,15 +3633,33 @@ static void restampTerrainHeights(WorldMapState &map, const nlohmann::ordered_js
 	{
 		return;
 	}
-	const nlohmann::ordered_json &hgt = j.at("tileHeight");
+	// Same encoding as readMapTerrain (base64, little-endian int32 per tile). readMapTerrain has already
+	// validated this field against the same dimensions, so a mismatch here is a programming error.
 	const size_t n = static_cast<size_t>(map.width) * static_cast<size_t>(map.height);
-	if (hgt.size() != n)
+	const std::vector<uint8_t> hgt = decodeBase64Field(j.at("tileHeight"), n * 4, "map terrain tileHeight");
+	for (size_t i = 0; i < n; ++i)
+	{
+		map.tiles[i].height = static_cast<int32_t>(readU32le(&hgt[i * 4]));
+	}
+}
+
+// Re-stamp the saved feature positions after restampTerrainHeights. Features are rebuilt before the
+// structures, and a structure's build path (buildFlatten) lifts any feature on its re-flattened foundation
+// tiles to the new foundation height, clobbering the feature's restored pos.z. (Structures re-stamp their
+// own pos in pass 2.)
+static void restampFeaturePositions(GameWorld &world, const nlohmann::ordered_json &jworld)
+{
+	if (!jworld.contains("features") || !jworld.at("features").is_array())
 	{
 		return;
 	}
-	for (size_t i = 0; i < n; ++i)
+	for (const nlohmann::ordered_json &jf : jworld.at("features"))
 	{
-		map.tiles[i].height = hgt[i].get<int32_t>();
+		BASE_OBJECT *psFeature = getBaseObjFromId(world.objects.features[0], jf.at("id").get<uint32_t>());
+		if (psFeature != nullptr)
+		{
+			psFeature->pos = readVector3i(jf.at("pos"));
+		}
 	}
 }
 
@@ -3583,6 +3776,7 @@ static void readMission(const nlohmann::ordered_json &j, uint32_t version)
 	{
 		restampTerrainHeights(mission.gameWorld.map, j.at("mapTerrain"));
 	}
+	restampFeaturePositions(mission.gameWorld, jworld);
 
 	// Limbo droids: free existing then reconstruct into apsLimboDroids. These are off the
 	// active map (onMission), so the active gameWorld supplies only the build context.
@@ -4536,6 +4730,12 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// dangerMaps post-pass below and the worker is (re)started by the next mapInit.
 	mapStopDangerThreadForReconstruct();
 
+	// Drop the pathfinding caches. The current tick's blocking maps are only discarded when a request comes
+	// at a different gameTime, so after an in-process restore to an earlier moment,
+	// a request at the tick the live game last pathed in would reuse that tick's map (and its search contexts)
+	// from the abandoned timeline.
+	fpathActiveBackend().hardReset();
+
 	// Purge the pending destroyed-object list before teardown. Objects killed in the tick(s) before the
 	// snapshot were moved off the world lists onto the global psDestroyedObj, so clearWorldObjects never
 	// frees them. Left in place, the next objmemUpdate would fire triggerEventDestroyed / free them on the
@@ -4685,6 +4885,10 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		debug(LOG_GAMESTATE_SERIAL, "post-pass: restampTerrainHeights (main world)");
 		restampTerrainHeights(gameWorld.map, j.at("mapTerrain"));
 	}
+	if (j.contains("world"))
+	{
+		restampFeaturePositions(gameWorld, j.at("world"));
+	}
 	// Re-apply the power request queues now that all structures exist: structure (re)building during
 	// the world restore mutates the per-player queue (delPowerRequest/requestPowerFor), so it must be
 	// stamped from the snapshot after reconstruction rather than inside readPower (see reapplyPowerQueue).
@@ -4712,7 +4916,9 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	{
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: projectiles");
 		const nlohmann::ordered_json &sec = j.at("projectiles");
-		readProjectiles(sec, sec.value("version", 0u));
+		// Expected-damage accumulators come from the world section from version 2 on
+		const bool worldHasExpectedDamage = j.contains("world") && j.at("world").value("version", 0u) >= 2;
+		readProjectiles(sec, sec.value("version", 0u), !worldHasExpectedDamage);
 	}
 	// Spotters watch active-map tiles: restore them after the world is built (tile watcher/sensor counts
 	// zeroed by teardown, re-added by object rebuild) so their contribution lands on the correct baseline,
@@ -5220,6 +5426,15 @@ bool runGameStateSelfTest()
 			}
 			check(currentMapTileset == MAP_TILESET::URBAN, "terrain round-trip tileset wrong");
 			check(terrainTypes[6] == 3, "terrain round-trip terrainTypes wrong");
+			// Object reconstruction re-flattens structure foundations.
+			// restampTerrainHeights must put the saved heights back.
+			if (tm2.tiles)
+			{
+				tm2.tiles[5].height += 1;
+				tm2.tiles[10].height -= 1;
+				restampTerrainHeights(tm2, tj);
+				check(tm2.tiles[5].height == 105 && tm2.tiles[10].height == 110, "restampTerrainHeights did not restore the saved heights");
+			}
 		}
 		catch (const std::exception &e)
 		{
