@@ -4392,9 +4392,17 @@ static void readMissionHeader(const nlohmann::ordered_json &j, uint32_t version)
 
 	// Restore off-world terrain (if any) before the objects, so the map exists for object placement
 	// and the dynamic fog/fire overlay (applied by readWorldObjectsPass2).
-	if (j.contains("mapTerrain"))
+	if (j.contains("mapTerrain") && j.at("mapTerrain").contains("width"))
 	{
 		readMapTerrain(mission.gameWorld.map, j.at("mapTerrain"), false);
+	}
+	else if (mission.gameWorld.map.tiles)
+	{
+		// The snapshot has no off-world map, but the live game has one
+		// (an in-process restore to a moment before an off-world mission was set up).
+		// Drop it, as the end of the mission does. Its objects are already freed.
+		gwShutDown(mission.gameWorld.map);
+		mission.gameWorld.map = {};
 	}
 	const nlohmann::ordered_json &jworld = j.at("world");
 	readWorldObjectsBegin(mission.gameWorld, jworld, jworld.value("version", 0u));
@@ -5331,8 +5339,33 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	return j;
 }
 
-void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope, bool deferMessages)
+// The restore stage gameStateFromJson has reached (nullptr: none, the live state is untouched), and a stage at
+// which to throw (test-only, --gamestate-rewind-fault=throw-at:<stage>).
+static const char *g_restoreStage = nullptr;
+static std::string g_restoreFaultStage;
+
+static void restoreStage(const char *name)
 {
+	g_restoreStage = name;
+	if (!g_restoreFaultStage.empty() && g_restoreFaultStage == name)
+	{
+		throw StateError(std::string("injected fault at restore stage ") + name);
+	}
+}
+
+const char *gameStateLastRestoreStage()
+{
+	return g_restoreStage;
+}
+
+void setGameStateRestoreFaultStage(const std::string &stage)
+{
+	g_restoreFaultStage = stage;
+}
+
+void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope, bool deferMessages, bool inProcess)
+{
+	g_restoreStage = nullptr;
 	if (!j.is_object())
 	{
 		throw StateError("GameState snapshot must be a JSON object");
@@ -5349,6 +5382,9 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 
 	// Each subsystem is a top-level section object carrying its own "version".
 	// Unknown sections are ignored.
+
+	// From here on the live state is changed
+	restoreStage("teardown");
 
 	// Stop the SKIRMISH danger worker (if one is running) BEFORE the world is torn down and the aux/block
 	// maps are reallocated by readMapTerrain - the worker writes auxMap[MAX_PLAYERS+AUX_DANGERMAP] /
@@ -5399,6 +5435,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		freeAllLimboDroids();
 	}
 
+	restoreStage("terrain");
 	// Main-world static terrain is restored FIRST: the world is built on it and every object /
 	// fog-fire overlay references tiles. The serialized terrain is authoritative and always overwrites
 	// whatever the receiver had loaded (in place when dimensions match, else reallocating), then the
@@ -5410,6 +5447,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		readMapTerrain(gameWorld.map, j.at("mapTerrain"), true);
 	}
 
+	restoreStage("globals");
 	// The determinism clock is applied next - its counters (object IDs + RNG) are applied
 	// LAST, after reconstruction (which advances them) - see end of this function.
 	if (j.contains("determinismCore"))
@@ -5498,9 +5536,13 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		const nlohmann::ordered_json &sec = j.at("production");
 		readProduction(sec, sec.value("version", 0u));
 	}
+	restoreStage("formations");
 	// Movement formations, restored VERBATIM before the world sections so rebuilt droids re-attach
 	// to them (slot state exact, no formationJoin). The old formations died with the droids
 	// clearWorldObjects freed at the top (droid teardown calls formationLeave).
+	// Any left belong to no droid (left by an in-process restore that failed between here and pass1),
+	// and formationFind would hand them to the next move order made at their place.
+	formationShutDown();
 	g_restoredFormations.clear();
 	if (j.contains("formations"))
 	{
@@ -5512,8 +5554,8 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// banked experience (reallyBuildDroid pops from them while the clock runs). They are repopulated from
 	// the snapshot after all object restoration (see readRecycledExperience).
 	clearAllRecycledExperience();
-	// The objects of every world: construct all of them (pass 1), then resolve the references of all of them
-	// (pass 2), since a reference can point into another world.
+	restoreStage("worlds");
+	// Construct the objects of every world (pass 1) before resolving any reference (pass 2).
 	const nlohmann::ordered_json *jmainWorld = j.contains("world") ? &j.at("world") : nullptr;
 	const nlohmann::ordered_json *jmission = j.contains("mission") ? &j.at("mission") : nullptr;
 	const nlohmann::ordered_json *jmissionWorld = nullptr;
@@ -5532,6 +5574,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	}
 	// The objects that died in the save tick, before any live object: see the dying section
 	g_ghosts.clear();
+	restoreStage("dying");
 	DyingRestore dying;
 	if (j.contains("dying"))
 	{
@@ -5539,6 +5582,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		const nlohmann::ordered_json &sec = j.at("dying");
 		readDyingPass1(sec, sec.value("version", 0u), dying);
 	}
+	restoreStage("pass1");
 	DroidListRestore mainDroids, missionDroids, limboDroids;
 	if (jmainWorld != nullptr)
 	{
@@ -5553,6 +5597,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		// Limbo droids are off the active map (onMission), so the active gameWorld supplies only the build context.
 		readDroidListPass1(gameWorld, apsLimboDroids, *jlimbo, limboDroids);
 	}
+	restoreStage("pass2");
 	if (jmainWorld != nullptr)
 	{
 		readWorldObjectsPass2(gameWorld, *jmainWorld, mainDroids);
@@ -5573,6 +5618,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		readDroidListPass2(*jlimbo, limboDroids);
 	}
 	readDyingPass2(dying);
+	restoreStage("post");
 	// factoryNumFlag is a single global reflecting the ACTIVE world's factory/repair assembly slots.
 	// readWorldObjectsPass1 rebuilds it per world (resetFactoryNumFlag clears ALL players then refills from the
 	// one world it is passed), so the last pass - the mission world, empty in skirmish - would otherwise
@@ -5626,6 +5672,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		coveredRoutes = readPendingRoutes(sec, sec.value("version", 0u));
 	}
 	resubmitUncoveredRoutes(coveredRoutes);
+	restoreStage("sections");
 	// Projectiles reference world objects, so restore them after the world sections.
 	if (j.contains("projectiles"))
 	{
@@ -5687,6 +5734,17 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		const nlohmann::ordered_json &sec = j.at("scores");
 		readScores(sec, sec.value("version", 0u), scriptScope);
 	}
+	restoreStage("scripting");
+	// An in-process restore loads the scripts again first, so they restart from their source as on a cold load.
+	// State outside their saved globals (let/const, closures, globals the snapshot doesn't have, groupSizes)
+	// can't survive from the abandoned timeline.
+	if (inProcess && scriptsAreReady())
+	{
+		if (!reloadScriptInstances())
+		{
+			throw StateError("a script could not be loaded again");
+		}
+	}
 	// Scripting state (groups/timers reference object ids) is restored after objects exist.
 	if (j.contains("scripting"))
 	{
@@ -5694,6 +5752,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		const nlohmann::ordered_json &sec = j.at("scripting");
 		readScripting(sec, sec.value("version", 0u), scriptScope);
 	}
+	restoreStage("derived");
 	// Rebuild derived state (spatial grid, counts) for the active world, once.
 	debug(LOG_GAMESTATE_SERIAL, "post-pass: rebuildDerivedState");
 	rebuildDerivedState();
@@ -5709,6 +5768,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		readDangerMaps(gameWorld, sec, sec.value("version", 0u));
 	}
 
+	restoreStage("counters");
 	// Apply the determinism counters (object-ID allocators + RNG state) LAST: object
 	// reconstruction advances synchObjID (module building) and may consume gameRand, so the
 	// authoritative post-snapshot values must overwrite whatever reconstruction left behind.
@@ -5723,6 +5783,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	{
 		debug(LOG_INFO, "GameState restore: %u object reference(s) did not resolve and were restored as null", g_unresolvedObjRefs);
 	}
+	restoreStage("done");
 	debug(LOG_GAMESTATE_SERIAL, "gameStateFromJson complete");
 }
 
@@ -5753,8 +5814,9 @@ nlohmann::ordered_json parseJsonBounded(const char *begin, const char *end)
 	return nlohmann::ordered_json::parse(begin, end);
 }
 
-void deserializeGameState(const std::string &jsonText, ScriptScope scriptScope)
+void deserializeGameState(const std::string &jsonText, ScriptScope scriptScope, bool inProcess)
 {
+	g_restoreStage = nullptr;
 	nlohmann::ordered_json j;
 	try
 	{
@@ -5767,7 +5829,7 @@ void deserializeGameState(const std::string &jsonText, ScriptScope scriptScope)
 
 	try
 	{
-		gameStateFromJson(j, scriptScope);
+		gameStateFromJson(j, scriptScope, false, inProcess);
 	}
 	catch (const StateError &)
 	{

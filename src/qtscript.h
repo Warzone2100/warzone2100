@@ -108,6 +108,13 @@ bool shutdownScripts();
 /// Run after all data is loaded, but before game is started.
 bool prepareScripts(bool loadGame);
 
+/// Load every script instance again from the file it was loaded from, in the same order, for the same player,
+/// difficulty and binding, dropping all of their state (globals, closures, groups, labels and timers).
+/// For an in-process restore (gamestate_snapshot.h), which then applies the snapshot's script state.
+/// No event is raised. A script callback held by the UI (setReticuleButton's) goes inert.
+/// Returns false if an instance could not be loaded again.
+bool reloadScriptInstances();
+
 /// Drop the eventResearched calls queued while scripts were not ready (the savegame-load replay). Test harness only.
 void discardQueuedResearchEvents();
 
@@ -327,6 +334,17 @@ private:
 	typedef std::map<wzapi::scripting_instance *, GROUPMAP *> ENGINEMAP;
 	ENGINEMAP groups;
 
+	/// What each instance was loaded from, to load it again (reloadScriptInstances)
+	struct InstanceSource
+	{
+		WzString path;
+		int player;
+		AIDifficulty difficulty;
+		wzapi::ScriptBinding binding;
+	};
+	std::map<wzapi::scripting_instance *, InstanceSource> instanceSources;
+	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding, bool clearLog);
+
 	/// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 	/// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 	/// host, we do not need to worry about each peer simulating the world differently.
@@ -344,6 +362,7 @@ public:
 	bool shutdownScripts();
 
 	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding);
+	bool reloadScriptInstances();
 
 	// Set/write variables in the script's global context, run after loading script,
 	// but before triggering any events.

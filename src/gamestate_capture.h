@@ -59,8 +59,12 @@ void clearPendingGameStateCaptures();
 /// Called by gameLoop() at the start of each tick.
 void gameStateCaptureOnTick();
 
-/// Debug check, called by recvMessage() for each game message it reads: a game message read after a capture and before
-/// the next tick is one the capture missed.
+/// Called by restoreGameStateSnapshot() once it has restored a snapshot: the game is back at a capture point, so the
+/// check below applies until the next tick (a message read then would be one the restored game reads twice).
+void gameStateCaptureNoteRestore();
+
+/// Debug check, called by recvMessage() for each game message it reads: a game message read after a capture (or a
+/// restore) and before the next tick is one the capture missed.
 void gameStateCaptureCheckGameMessage(unsigned player, const char *messageType);
 
 /// Test-only (--gamestate-save-before-messages): allow captures before the messages for the next tick have been

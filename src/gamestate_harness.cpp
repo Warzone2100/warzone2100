@@ -31,16 +31,17 @@
 #include "game.h"
 #include "game_world.h"
 #include "gamestate_capture.h"
+#include "gamestate_snapshot.h"
 #include "transporter.h"  // transporterTestLaunchReinforcements
 #include "loop.h"  // levelChangePending
 #include "map.h"
 #include "objmem.h"
 #include "mission.h"
-#include "multiplay.h"  // captureQueuedDroidInfo, restoreQueuedDroidInfo
 #include "random.h"
 #include "visibility.h"
 
 #include <algorithm>
+#include <chrono>
 #include <cstdlib>
 
 namespace gamestate
@@ -58,9 +59,7 @@ static uint32_t g_exitAtTick = 0;
 static uint32_t g_rewindAtTick = 0;
 static uint32_t g_rewindTicksLater = 0;
 static uint32_t g_rewindRestoreAtTick = 0;
-static std::string g_rewindSnapshot;
-static std::vector<std::vector<std::vector<uint8_t>>> g_rewindPendingGameQueue; // per game-queue slot, the unread messages at the snapshot
-static std::vector<std::vector<uint8_t>> g_rewindQueuedOrders; // the local droid orders not sent yet at the snapshot
+static GameStateSnapshot g_rewindSnapshot;
 static bool g_suppressLoadedEvent = false;
 static std::string g_resaveOnLoadPath;
 static bool g_saveBeforeMessages = false;
@@ -68,6 +67,8 @@ static bool g_saveWhenCoveragePending = false;
 static uint32_t g_checkCoverageTicks = 0;
 static uint32_t g_coverageChecks = 0;
 static uint32_t g_coverageChecksDiffering = 0;
+static std::string g_rewindFault;          // --gamestate-rewind-fault kind[:arg]
+static bool g_rewindFaultContinue = false; // ... ,continue
 static uint32_t g_testReinforceAt = 0;      // --gamestate-test-reinforce (0: none)
 static bool g_haveTestSeed = false;
 static uint32_t g_testSeed = 0;
@@ -153,6 +154,29 @@ static bool dyingConditionMet()
 void setExitAtTick(uint32_t tick)
 {
 	g_exitAtTick = tick;
+}
+
+bool setRewindFault(const std::string &spec)
+{
+	std::string kind = spec;
+	g_rewindFaultContinue = false;
+	const std::string continueSuffix = ",continue";
+	if (kind.size() > continueSuffix.size() && kind.compare(kind.size() - continueSuffix.size(), continueSuffix.size(), continueSuffix) == 0)
+	{
+		g_rewindFaultContinue = true;
+		kind.resize(kind.size() - continueSuffix.size());
+	}
+	const std::string name = kind.substr(0, kind.find(':'));
+	const bool hasArg = kind.find(':') != std::string::npos && kind.find(':') + 1 < kind.size();
+	static const char *const plain[] = {"truncate", "bad-stat", "duplicate-id", "dangling-ref", "overlap", "edge", "off-map", "over-limit"};
+	const bool known = std::find(std::begin(plain), std::end(plain), name) != std::end(plain)
+		|| ((name == "section-version" || name == "throw-at") && hasArg);
+	if (!known)
+	{
+		return false;
+	}
+	g_rewindFault = kind;
+	return true;
 }
 
 static bool parseUint(const std::string &text, uint32_t &value)
@@ -250,6 +274,11 @@ std::string testScriptPrelude()
 }
 
 static void checkCoverage(const char *when);
+
+static double msSince(std::chrono::steady_clock::time_point start)
+{
+	return std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
+}
 
 void onColdLoadComplete()
 {
@@ -383,9 +412,10 @@ static void maybeSave()
 static void takeRewindSnapshot()
 {
 	checkCoverage("rewind snapshot");
+	const auto start = std::chrono::steady_clock::now();
 	try
 	{
-		g_rewindSnapshot = serializeGameState();
+		g_rewindSnapshot = takeGameStateSnapshot();
 	}
 	catch (const std::exception &e)
 	{
@@ -393,18 +423,21 @@ static void takeRewindSnapshot()
 		wzQuit(EXIT_FAILURE);
 		return;
 	}
-	// Like a disk save's pending-resume section: the in-flight game-queue messages (scheduled for later ticks by
-	// the lockstep latency) belong to the snapshot's timeline, so keep them to re-inject on restore.
-	g_rewindPendingGameQueue.assign(MAX_GAMEQUEUE_SLOTS, {});
-	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
+	const double ms = msSince(start);
+	size_t pendingMessages = 0, pendingBytes = 0;
+	for (const auto &slot : g_rewindSnapshot.gameQueue)
 	{
-		g_rewindPendingGameQueue[p] = NETgameQueueCapturePending(p);
+		pendingMessages += slot.size();
+		for (const auto &message : slot)
+		{
+			pendingBytes += message.size();
+		}
 	}
-	// And the local droid orders not sent yet
-	g_rewindQueuedOrders = captureQueuedDroidInfo();
 	g_rewindRestoreAtTick = gameTime + std::max<uint32_t>(g_rewindTicksLater, 1);
 	debug(LOG_INFO, "GameState harness: rewind snapshot taken at gameTime %u (%zu bytes, %zu object(s) pending destruction); restoring at gameTime %u",
-	      gameTime, g_rewindSnapshot.size(), psDestroyedObj.size(), g_rewindRestoreAtTick);
+	      gameTime, g_rewindSnapshot.document.size(), psDestroyedObj.size(), g_rewindRestoreAtTick);
+	debug(LOG_INFO, "GameState harness: rewind snapshot timing: total %.1f ms; %zu pending game message(s), %zu bytes",
+	      ms, pendingMessages, pendingBytes);
 }
 
 // At the save point
@@ -418,6 +451,127 @@ static void maybeRewindSnapshot()
 	}
 }
 
+// The first object reference ({id, player, type}, as writeObjRef writes it) in a document subtree, or nullptr
+static nlohmann::ordered_json *findObjRef(nlohmann::ordered_json &j)
+{
+	if (j.is_object())
+	{
+		if (j.size() == 3 && j.contains("id") && j.contains("player") && j.contains("type"))
+		{
+			return &j;
+		}
+		for (auto &item : j.items())
+		{
+			if (auto *found = findObjRef(item.value()))
+			{
+				return found;
+			}
+		}
+	}
+	else if (j.is_array())
+	{
+		for (auto &item : j)
+		{
+			if (auto *found = findObjRef(item))
+			{
+				return found;
+			}
+		}
+	}
+	return nullptr;
+}
+
+// --gamestate-rewind-fault: damage the snapshot document (or arm a throw in the restore) the way the fault kind says.
+// Returns what was done, or throws std::runtime_error if the document has nothing to damage that way.
+static std::string applyRewindFault(std::string &doc)
+{
+	const size_t colon = g_rewindFault.find(':');
+	const std::string kind = g_rewindFault.substr(0, colon);
+	const std::string arg = colon == std::string::npos ? std::string() : g_rewindFault.substr(colon + 1);
+	if (kind == "truncate")
+	{
+		doc.resize(doc.size() / 2);
+		return "truncated the document to " + std::to_string(doc.size()) + " bytes";
+	}
+	if (kind == "throw-at")
+	{
+		setGameStateRestoreFaultStage(arg);
+		return "armed a throw at restore stage " + arg;
+	}
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(doc);
+	auto &structures = j.at("world").at("structures");
+	auto &droids = j.at("world").at("droids");
+	auto needStructures = [&](size_t n) {
+		if (structures.size() < n)
+		{
+			throw std::runtime_error("the snapshot has fewer than " + std::to_string(n) + " structure(s)");
+		}
+	};
+	std::string what;
+	if (kind == "section-version")
+	{
+		j.at(arg)["version"] = 99999;
+		what = "set section " + arg + "'s version to 99999";
+	}
+	else if (kind == "bad-stat")
+	{
+		needStructures(1);
+		what = "renamed structure " + std::to_string(structures[0].at("id").get<uint32_t>()) + "'s stat " + structures[0].at("statId").get<std::string>() + " to NoSuchStat";
+		structures[0]["statId"] = "NoSuchStat";
+	}
+	else if (kind == "duplicate-id")
+	{
+		if (droids.size() < 2)
+		{
+			throw std::runtime_error("the snapshot has fewer than 2 droids");
+		}
+		what = "gave droid " + std::to_string(droids[1].at("id").get<uint32_t>()) + " the id of droid " + std::to_string(droids[0].at("id").get<uint32_t>());
+		droids[1]["id"] = droids[0].at("id");
+	}
+	else if (kind == "dangling-ref")
+	{
+		auto *ref = findObjRef(j.at("world"));
+		if (ref == nullptr)
+		{
+			throw std::runtime_error("the snapshot's world has no object reference");
+		}
+		what = "repointed a reference to object " + std::to_string(ref->at("id").get<uint32_t>()) + " to the unused id 2147483632";
+		(*ref)["id"] = 2147483632u;
+	}
+	else if (kind == "overlap")
+	{
+		needStructures(2);
+		what = "moved structure " + std::to_string(structures[1].at("id").get<uint32_t>()) + " onto structure " + std::to_string(structures[0].at("id").get<uint32_t>());
+		structures[1]["pos"][0] = structures[0].at("pos")[0];
+		structures[1]["pos"][1] = structures[0].at("pos")[1];
+	}
+	else if (kind == "edge" || kind == "off-map")
+	{
+		needStructures(1);
+		const auto &mapDynamic = j.at("world").at("mapDynamic");
+		const int x = kind == "edge" ? 64 : mapDynamic.at("width").get<int>() * 128 + 512;
+		const int y = kind == "edge" ? 64 : mapDynamic.at("height").get<int>() * 128 + 512;
+		what = "moved structure " + std::to_string(structures[0].at("id").get<uint32_t>()) + " to (" + std::to_string(x) + ", " + std::to_string(y) + ")";
+		structures[0]["pos"][0] = x;
+		structures[0]["pos"][1] = y;
+	}
+	else if (kind == "over-limit")
+	{
+		needStructures(1);
+		const unsigned player = structures[0].at("player").get<unsigned>();
+		for (auto &perStat : j.at("limits").at("structLimits"))
+		{
+			if (player < perStat.size())
+			{
+				perStat[player] = 0;
+			}
+		}
+		what = "set every structure limit of player " + std::to_string(player) + " to 0";
+	}
+	doc = j.dump();
+	return what;
+}
+
 // At the tick hook. The restore replaces the game queues with the snapshot's,
 // so the messages the live game would read next are dropped.
 static void maybeRewindRestore()
@@ -426,40 +580,47 @@ static void maybeRewindRestore()
 	{
 		g_rewindRestoreAtTick = 0;
 		const uint32_t fromTime = gameTime;
-		try
+		if (!g_rewindFault.empty())
 		{
-			deserializeGameState(g_rewindSnapshot);
+			try
+			{
+				debug(LOG_INFO, "GameState harness: rewind fault %s: %s", g_rewindFault.c_str(), applyRewindFault(g_rewindSnapshot.document).c_str());
+			}
+			catch (const std::exception &e)
+			{
+				debug(LOG_ERROR, "GameState harness: rewind fault %s not applied: %s", g_rewindFault.c_str(), e.what());
+				wzQuit(EXIT_FAILURE);
+				return;
+			}
 		}
-		catch (const std::exception &e)
+		const auto start = std::chrono::steady_clock::now();
+		std::string error;
+		const GameStateRestoreResult result = restoreGameStateSnapshot(g_rewindSnapshot, &error);
+		setGameStateRestoreFaultStage(std::string());
+		if (result == GameStateRestoreResult::Rejected)
 		{
-			debug(LOG_ERROR, "GameState harness: rewind restore FAILED: %s", e.what());
+			debug(LOG_ERROR, "GameState harness: rewind restore FAILED before changing any live state (%.1f ms): %s; the live game goes on",
+			      msSince(start), error.c_str());
+			g_rewindSnapshot = GameStateSnapshot();
+			return;
+		}
+		if (result == GameStateRestoreResult::Failed)
+		{
+			debug(LOG_ERROR, "GameState harness: rewind restore FAILED at stage %s, after the live state was changed (%.1f ms): %s",
+			      gameStateLastRestoreStage(), msSince(start), error.c_str());
+			g_rewindSnapshot = GameStateSnapshot();
+			if (g_rewindFaultContinue)
+			{
+				debug(LOG_INFO, "GameState harness: going on with the half-restored game (--gamestate-rewind-fault ...,continue)");
+				return;
+			}
 			wzQuit(EXIT_FAILURE);
 			return;
 		}
-		g_rewindSnapshot.clear();
-		// Replace the live game-queue contents (messages for the live timeline's future ticks) with the
-		// snapshot's in-flight messages, as the cold load does with a save's pending-resume section.
-		for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
-		{
-			if (NETgameQueueCapturePending(p).empty() && g_rewindPendingGameQueue[p].empty())
-			{
-				continue;
-			}
-			NETinitQueue(NETgameQueue(p));
-			NETgameQueueRestorePending(p, g_rewindPendingGameQueue[p]);
-		}
-		g_rewindPendingGameQueue.clear();
-		restoreQueuedDroidInfo(g_rewindQueuedOrders);
-		g_rewindQueuedOrders.clear();
-		// Mirror what the cold load does after its reconstruct: restart the skirmish danger worker
-		// (the restore stopped it, and mapInit keeps the restored danger maps),
-		// and restart the sync-debug accumulator from the snapshot's save-boundary CRC.
-		mapInit(gameWorld);
-		resetSyncDebug();
-		applyResumeSyncDebugCrc();
-		setSyncCheckFloorTime(gameTime);
-		syncCrcDetailArmOnSaveOrLoad();
-		debug(LOG_INFO, "GameState harness: rewound from gameTime %u to gameTime %u", fromTime, gameTime);
+		g_rewindSnapshot = GameStateSnapshot();
+		debug(LOG_INFO, "GameState harness: rewound from gameTime %u to gameTime %u (%u unresolved reference(s))", fromTime, gameTime,
+		      gameStateLastRestoreUnresolvedReferences());
+		debug(LOG_INFO, "GameState harness: rewind restore timing: total %.1f ms", msSince(start));
 	}
 }
 
