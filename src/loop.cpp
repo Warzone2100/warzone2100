@@ -630,6 +630,10 @@ static void gameStateUpdate()
 	// update (see gridReset). Must follow objmemUpdate directly: the grid may point to the objects it freed.
 	gridReset(gameWorld);
 
+	// Bring the tile coverage of the objects that this tick's terrain changes may have changed up to date, so that at
+	// the end of every tick it is what a recompute from the current state gives (which is all a loaded game can do).
+	visFlushCoverageChanges(gameWorld);
+
 	// accumulate occasional stats / snapshots
 	if (!paused && !scriptPaused())
 	{

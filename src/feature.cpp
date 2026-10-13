@@ -348,6 +348,10 @@ FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD
 
 			if ((!psStats->tileDraw) && (FromSave == false))
 			{
+				if (psTile->height != height)
+				{
+					mapNoteHeightChange(world.map, b.map.x + width, b.map.y + breadth);
+				}
 				psTile->height = height;
 			}
 		}

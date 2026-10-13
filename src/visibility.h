@@ -36,8 +36,23 @@ struct WorldMapState;
 // initialise the visibility stuff
 bool visInitialise();
 
+struct GameWorld;
+
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState);
+
+/// Called at the end of every tick: recompute the tile coverage of the objects in the world that the changes recorded
+/// since the last call may have changed (terrain heights, see WorldMapState::heightChanges), so the coverage stays
+/// what a recompute from the current state gives.
+void visFlushCoverageChanges(GameWorld& world);
+
+/// A player's sensor or jammer range changed (an upgrade): visFlushCoverageChanges() recomputes the tile coverage of
+/// all their droids and structures.
+void visNoteRangeChange(int player);
+
+/// Recompute the tile coverage of every droid and structure in the world from its current state, and drop the
+/// pending changes for it (a world swapped in, or restored from a save).
+void visRecomputeCoverage(GameWorld& world);
 
 /// Lift propulsion: the height band of the droid's current height, which its vision height is taken from.
 int visLiftHeightBand(const DROID *psDroid);
@@ -142,9 +157,6 @@ std::vector<SpotterSaveData> spotterEnumerateForSave();
 /// the object-ID counter is corrected by the counters-restored-last rule). Mirrors addSpotter's watch.
 void spotterRestore(WorldMapState& mapState, const SpotterSaveData& d);
 
-struct GameWorld;
-
-/// Result of visCheckCoverage().
 struct CoverageCheckResult
 {
 	size_t checked = 0;          ///< droids and structures compared

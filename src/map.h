@@ -489,12 +489,33 @@ static inline WZ_DECL_PURE int32_t map_TileHeightSurface(const WorldMapState& ma
 }
 
 
+/// Record that the height of tile (x, y) changed (see WorldMapState::heightChanges).
+/// Neighboring changes, as from one structure's foundation, extend the same rectangle.
+static inline void mapNoteHeightChange(WorldMapState& mapState, int32_t x, int32_t y)
+{
+	if (!mapState.heightChanges.empty())
+	{
+		std::pair<Vector2i, Vector2i> &r = mapState.heightChanges.back();
+		if (x >= r.first.x - 1 && x <= r.second.x + 1 && y >= r.first.y - 1 && y <= r.second.y + 1)
+		{
+			r.first = Vector2i(std::min(r.first.x, x), std::min(r.first.y, y));
+			r.second = Vector2i(std::max(r.second.x, x), std::max(r.second.y, y));
+			return;
+		}
+	}
+	mapState.heightChanges.emplace_back(Vector2i(x, y), Vector2i(x, y));
+}
+
 /*sets the tile height */
 static inline void setTileHeight(WorldMapState& mapState, int32_t x, int32_t y, int32_t height)
 {
 	ASSERT_OR_RETURN(, x < mapState.width && x >= 0, "x coordinate %d bigger than map width %u", x, mapState.width);
 	ASSERT_OR_RETURN(, y < mapState.height && x >= 0, "y coordinate %d bigger than map height %u", y, mapState.height);
 
+	if (mapState.tiles[x + (y * mapState.width)].height != height)
+	{
+		mapNoteHeightChange(mapState, x, y);
+	}
 	mapState.tiles[x + (y * mapState.width)].height = height;
 	markTileDirty(x, y);
 }
