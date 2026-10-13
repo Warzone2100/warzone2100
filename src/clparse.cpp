@@ -384,6 +384,7 @@ typedef enum
 	CLI_GAMESTATE_REWINDFAULT,
 	CLI_GAMESTATE_SNAPSHOTRING,
 	CLI_GAMESTATE_SEEKTEST,
+	CLI_GAMESTATE_SEEKFAULT,
 	CLI_GAMESTATE_UISTRESS,
 	CLI_GAMESTATE_TESTREINFORCE,
 	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
@@ -502,8 +503,9 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-dying-filter", POPT_ARG_STRING, CLI_GAMESTATE_DYINGFILTER, "With --gamestate-save-when-dying: what the objects pending destruction must include (comma-separated: a minimum count, droid, structure, feature, pendingvis)", "filter", true },
 		{ "gamestate-exit-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_EXITATTICK, "Quit at the given game tick", "game tick", true },
 		{ "gamestate-rewind-fault", POPT_ARG_STRING, CLI_GAMESTATE_REWINDFAULT, "Test only: damage the --gamestate-rewind-test snapshot before restoring it", "kind[,continue]", true },
-		{ "gamestate-snapshot-ring", POPT_ARG_STRING, CLI_GAMESTATE_SNAPSHOTRING, "Test only: keep in-process snapshots of the game every given game time (replay seek-back)", "interval ms[,budget KB[,zlib level]]", true },
-		{ "gamestate-seek-test", POPT_ARG_STRING, CLI_GAMESTATE_SEEKTEST, "Test only: during replay playback, with --gamestate-snapshot-ring, seek to a game time when another is reached", "at:target[,at:target...]", true },
+		{ "gamestate-snapshot-ring", POPT_ARG_STRING, CLI_GAMESTATE_SNAPSHOTRING, "During replay playback, keep in-process snapshots of the game every given game time, for seeking back (headless too), or turn that off", "interval ms[,budget KB[,zlib level]][,sync] | off", true },
+		{ "gamestate-seek-test", POPT_ARG_STRING, CLI_GAMESTATE_SEEKTEST, "Test only: during replay playback, seek to a game time when another is reached", "at:target[,at:target...]", true },
+		{ "gamestate-seek-fault", POPT_ARG_STRING, CLI_GAMESTATE_SEEKFAULT, "Test only: damage the snapshots replay seeks restore (the first given number of them), as --gamestate-rewind-fault does", "kind[,restores]", true },
 		{ "gamestate-test-reinforce", POPT_ARG_STRING, CLI_GAMESTATE_TESTREINFORCE, "Test only: at this game tick, during an off-world campaign mission, send reinforcements as the player does", "tick", true },
 		{ "gamestate-ui-stress", POPT_ARG_STRING, CLI_GAMESTATE_UISTRESS, "Test only: every given number of ticks, point the UI at the droid most likely to die next, and check every frame that the UI references no freed object", "ticks", true },
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
@@ -1027,7 +1029,14 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr || !gamestate::harness::setSnapshotRing(token))
 			{
-				qFatal("Bad value for --gamestate-snapshot-ring (expected <interval ms>[,<budget KB>[,<zlib level>]])");
+				qFatal("Bad value for --gamestate-snapshot-ring (expected <interval ms>[,<budget KB>[,<zlib level>]][,sync] or off)");
+			}
+			break;
+		case CLI_GAMESTATE_SEEKFAULT:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setSeekFault(token))
+			{
+				qFatal("Bad value for --gamestate-seek-fault (expected <kind>[,<restores>], kinds as --gamestate-rewind-fault)");
 			}
 			break;
 		case CLI_GAMESTATE_SEEKTEST:

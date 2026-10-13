@@ -86,11 +86,12 @@ enum class GameStateRestoreResult
 /// the danger worker and the sync-debug state, as they were when it was taken. Call it between two ticks.
 /// On a failure, error (if given) says why, and gamestate::gameStateLastRestoreStage() where.
 ///
-/// The document is checked before anything is changed (gamestate::checkGameStateDocument, and that its scripts are
-/// the running ones), and the restore is strict: what a cold load would repair (an unresolved reference, a script
-/// instance the game doesn't run) fails it. A restore that fails after changing live state (Failed) leaves the game
-/// stopped (gameStateRestoreFailed()): no tick runs, the world isn't drawn, and nothing can be saved, until the game
-/// shuts down. The caller's fallback (another snapshot, or a restart) takes it from there.
+/// The document is checked before anything is changed
+/// (gamestate::checkGameStateDocument, and that its scripts are the running ones), and the restore is strict:
+/// what a cold load would repair (an unresolved reference, a script instance the game doesn't run) fails it.
+/// A restore that fails after changing live state (Failed) leaves the game stopped (gameStateRestoreFailed()):
+/// no tick runs, the world isn't drawn, and nothing can be saved,
+/// until the game shuts down, or another restore succeeds.
 GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapshot, std::string *error = nullptr);
 
 /// Whether an in-process restore failed after changing live state, leaving the game half restored (see above).

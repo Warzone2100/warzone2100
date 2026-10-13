@@ -76,9 +76,10 @@ static uint32_t g_coverageChecks = 0;
 static uint32_t g_coverageChecksDiffering = 0;
 static std::string g_rewindFault;          // --gamestate-rewind-fault kind[:arg]
 static bool g_rewindFaultContinue = false; // ... ,continue
-static bool g_snapshotRing = false;         // --gamestate-snapshot-ring
-static bool g_snapshotRingStarted = false;
-static SnapshotRingOptions g_snapshotRingOptions;
+static std::string g_seekFault;             // --gamestate-seek-fault kind[:arg][,attempts]
+static unsigned g_seekFaultAttempts = 0;
+
+static std::string applySnapshotFault(GameStateSnapshot &snapshot, const std::string &fault);
 static std::vector<std::pair<uint32_t, uint32_t>> g_seekTests;  // --gamestate-seek-test: (at, target), in order
 static size_t g_nextSeekTest = 0;
 static uint32_t g_testReinforceAt = 0;      // --gamestate-test-reinforce (0: none)
@@ -173,6 +174,17 @@ void setExitAtTick(uint32_t tick)
 	g_exitAtTick = tick;
 }
 
+// Whether kind[:arg] is a snapshot fault applySnapshotFault() knows
+static bool knownSnapshotFault(const std::string &kind)
+{
+	const std::string name = kind.substr(0, kind.find(':'));
+	const bool hasArg = kind.find(':') != std::string::npos && kind.find(':') + 1 < kind.size();
+	static const char *const plain[] = {"truncate", "bad-stat", "duplicate-id", "dangling-ref", "overlap", "edge", "off-map", "over-limit",
+		"replay-position", "no-replay-positions"};
+	return std::find(std::begin(plain), std::end(plain), name) != std::end(plain)
+		|| ((name == "section-version" || name == "throw-at") && hasArg);
+}
+
 bool setRewindFault(const std::string &spec)
 {
 	std::string kind = spec;
@@ -183,13 +195,7 @@ bool setRewindFault(const std::string &spec)
 		g_rewindFaultContinue = true;
 		kind.resize(kind.size() - continueSuffix.size());
 	}
-	const std::string name = kind.substr(0, kind.find(':'));
-	const bool hasArg = kind.find(':') != std::string::npos && kind.find(':') + 1 < kind.size();
-	static const char *const plain[] = {"truncate", "bad-stat", "duplicate-id", "dangling-ref", "overlap", "edge", "off-map", "over-limit",
-		"replay-position", "no-replay-positions"};
-	const bool known = std::find(std::begin(plain), std::end(plain), name) != std::end(plain)
-		|| ((name == "section-version" || name == "throw-at") && hasArg);
-	if (!known)
+	if (!knownSnapshotFault(kind))
 	{
 		return false;
 	}
@@ -223,7 +229,17 @@ static bool parseUint(const std::string &text, uint32_t &value)
 
 bool setSnapshotRing(const std::string &spec)
 {
-	const std::vector<std::string> items = splitList(spec);
+	if (spec == "off")
+	{
+		disableReplaySnapshotRing();
+		return true;
+	}
+	std::vector<std::string> items = splitList(spec);
+	const bool waitForWorker = !items.empty() && items.back() == "sync";
+	if (waitForWorker)
+	{
+		items.pop_back();
+	}
 	uint32_t interval = 0, budgetKB = 0, level = 0;
 	if (items.empty() || items.size() > 3 || !parseUint(items[0], interval) || interval == 0
 	    || (items.size() > 1 && (!parseUint(items[1], budgetKB) || budgetKB == 0))
@@ -231,17 +247,18 @@ bool setSnapshotRing(const std::string &spec)
 	{
 		return false;
 	}
-	g_snapshotRingOptions = SnapshotRingOptions();
-	g_snapshotRingOptions.interval = interval;
+	SnapshotRingOptions options;
+	options.interval = interval;
+	options.waitForWorker = waitForWorker;
 	if (items.size() > 1)
 	{
-		g_snapshotRingOptions.memoryBudget = static_cast<size_t>(budgetKB) * 1024;
+		options.memoryBudget = static_cast<size_t>(budgetKB) * 1024;
 	}
 	if (items.size() > 2)
 	{
-		g_snapshotRingOptions.compressionLevel = static_cast<int>(level);
+		options.compressionLevel = static_cast<int>(level);
 	}
-	g_snapshotRing = true;
+	setReplaySnapshotRing(options);
 	return true;
 }
 
@@ -353,6 +370,45 @@ bool setSeekTest(const std::string &spec)
 	}
 	g_seekTests = std::move(seeks);
 	g_nextSeekTest = 0;
+	return true;
+}
+
+bool setSeekFault(const std::string &spec)
+{
+	std::string kind = spec;
+	uint32_t attempts = 1;
+	const size_t comma = kind.rfind(',');
+	if (comma != std::string::npos)
+	{
+		if (!parseUint(kind.substr(comma + 1), attempts) || attempts == 0)
+		{
+			return false;
+		}
+		kind.resize(comma);
+	}
+	if (!knownSnapshotFault(kind))
+	{
+		return false;
+	}
+	g_seekFault = kind;
+	g_seekFaultAttempts = attempts;
+	setReplaySeekRestoreHook([](GameStateSnapshot &snapshot, unsigned attempt) {
+		setGameStateRestoreFaultStage(std::string());  // (disarm a throw armed for the attempt before)
+		if (attempt >= g_seekFaultAttempts)
+		{
+			return;
+		}
+		try
+		{
+			debug(LOG_INFO, "GameState harness: seek fault %s (restore %u of %u): %s", g_seekFault.c_str(), attempt + 1, g_seekFaultAttempts,
+			      applySnapshotFault(snapshot, g_seekFault).c_str());
+		}
+		catch (const std::exception &e)
+		{
+			debug(LOG_ERROR, "GameState harness: seek fault %s not applied: %s", g_seekFault.c_str(), e.what());
+			wzQuit(EXIT_FAILURE);
+		}
+	});
 	return true;
 }
 
@@ -655,14 +711,15 @@ static nlohmann::ordered_json *findObjRef(nlohmann::ordered_json &j)
 	return nullptr;
 }
 
-// --gamestate-rewind-fault: damage the snapshot document (or arm a throw in the restore) the way the fault kind says.
-// Returns what was done, or throws std::runtime_error if the document has nothing to damage that way.
-static std::string applyRewindFault(GameStateSnapshot &snapshot)
+// --gamestate-rewind-fault, --gamestate-seek-fault: damage the snapshot document (or arm a throw in the restore) the
+// way the fault kind[:arg] says. Returns what was done, or throws std::runtime_error if the document has nothing to
+// damage that way.
+static std::string applySnapshotFault(GameStateSnapshot &snapshot, const std::string &fault)
 {
 	std::string &doc = snapshot.document;
-	const size_t colon = g_rewindFault.find(':');
-	const std::string kind = g_rewindFault.substr(0, colon);
-	const std::string arg = colon == std::string::npos ? std::string() : g_rewindFault.substr(colon + 1);
+	const size_t colon = fault.find(':');
+	const std::string kind = fault.substr(0, colon);
+	const std::string arg = colon == std::string::npos ? std::string() : fault.substr(colon + 1);
 	if (kind == "replay-position" || kind == "no-replay-positions")
 	{
 		if (snapshot.replayReadPositions.empty())
@@ -780,7 +837,7 @@ static void maybeRewindRestore()
 		{
 			try
 			{
-				debug(LOG_INFO, "GameState harness: rewind fault %s: %s", g_rewindFault.c_str(), applyRewindFault(g_rewindSnapshot).c_str());
+				debug(LOG_INFO, "GameState harness: rewind fault %s: %s", g_rewindFault.c_str(), applySnapshotFault(g_rewindSnapshot, g_rewindFault).c_str());
 			}
 			catch (const std::exception &e)
 			{
@@ -840,11 +897,6 @@ void afterMessages()
 	{
 		g_uiStressNext = gameTime + g_uiStressTicks * GAME_TICKS_PER_UPDATE;
 		uiStress();
-	}
-	if (g_snapshotRing && !g_snapshotRingStarted)
-	{
-		g_snapshotRingStarted = true;
-		snapshotRingStart(g_snapshotRingOptions);
 	}
 	if (g_nextSeekTest < g_seekTests.size() && gameTime >= g_seekTests[g_nextSeekTest].first)
 	{

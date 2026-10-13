@@ -289,6 +289,11 @@ void snapshotRingAtCapturePoint()
 	{
 		return;
 	}
+	if (r.outstanding && r.options.waitForWorker)
+	{
+		collectJob(r, true);
+		reportFailures(r);
+	}
 	if (r.outstanding)
 	{
 		// The worker is still on the previous one (playback can outrun it when fast-forwarding):
@@ -386,6 +391,43 @@ std::vector<uint32_t> snapshotRingTimes()
 		times.push_back(entry->gameTime);
 	}
 	return times;
+}
+
+std::vector<uint32_t> snapshotRingStoredTimes()
+{
+	std::vector<uint32_t> times;
+	if (ring == nullptr)
+	{
+		return times;
+	}
+	MutexLock lock(ring->mutex);
+	times.reserve(ring->entries.size());
+	for (const auto &entry : ring->entries)
+	{
+		times.push_back(entry->gameTime);
+	}
+	return times;
+}
+
+bool snapshotRingDrop(uint32_t time)
+{
+	if (ring == nullptr)
+	{
+		return false;
+	}
+	collectJob(*ring, true);
+	MutexLock lock(ring->mutex);
+	for (auto it = ring->entries.begin(); it != ring->entries.end(); ++it)
+	{
+		if ((*it)->gameTime == time)
+		{
+			ring->compressedBytes -= (*it)->compressedDocument.size();
+			ring->documentBytes -= (*it)->documentSize;
+			ring->entries.erase(it);
+			return true;
+		}
+	}
+	return false;
 }
 
 SnapshotRingStats snapshotRingStats()

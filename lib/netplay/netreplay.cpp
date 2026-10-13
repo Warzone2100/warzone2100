@@ -491,6 +491,41 @@ bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &play
 	return (message->type() > GAME_MIN_TYPE && message->type() < GAME_MAX_TYPE) || message->type() == REPLAY_ENDED;
 }
 
+bool NETreplayLoadEndInfo(uint32_t &gameTimeElapsed)
+{
+	if (!replayLoadHandle)
+	{
+		return false;
+	}
+	// The JSON, preceded and followed by its size (see NETreplaySaveStop)
+	uint32_t size = 0;
+	if (!PHYSFS_readUBE32(replayLoadHandle, &size) || size > MaxReplaySettingsJSONSize)
+	{
+		return false;
+	}
+	std::string data(size, '\0');
+	if (size > 0 && WZ_PHYSFS_readBytes(replayLoadHandle, &data[0], size) != static_cast<PHYSFS_sint64>(size))
+	{
+		return false;
+	}
+	uint32_t sizeAfter = 0;
+	if (!PHYSFS_readUBE32(replayLoadHandle, &sizeAfter) || sizeAfter != size)
+	{
+		return false;
+	}
+	try
+	{
+		const nlohmann::json endOfGameInfo = nlohmann::json::parse(data);
+		gameTimeElapsed = endOfGameInfo.at("gameTimeElapsed").get<uint32_t>();
+	}
+	catch (const std::exception &e)
+	{
+		debug(LOG_WARNING, "Can't read the replay's end-of-game info: %s", e.what());
+		return false;
+	}
+	return true;
+}
+
 bool NETreplayLoadStop()
 {
 	if (!replayLoadHandle)

@@ -174,5 +174,7 @@ GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapsho
 	// The game is at the snapshot's capture point again: no game message may be read before the next tick
 	gameStateCaptureNoteRestore();
 	uiAfterObjectsReplaced(viewerState);
+	// A restore that succeeds replaces everything, a half-restored world left by one that failed before included
+	restoreFailed = false;
 	return GameStateRestoreResult::Restored;
 }
