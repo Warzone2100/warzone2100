@@ -86,9 +86,15 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope 
 /// An honest snapshot has none.
 uint32_t gameStateLastRestoreUnresolvedReferences();
 
-/// The stage of the last gameStateFromJson (or deserializeGameState) a failure happened in: nullptr if it failed
-/// before changing any live state, else the last stage it reached ("teardown", "terrain", "globals", "formations",
-/// "worlds", "dying", "pass1", "pass2", "post", "sections", "scripting", "derived", "counters"; "done" on success).
+/// Check what a GameState document alone decides, as an in-process restore does before changing anything
+/// (sections, map, objects, and that every object reference outside the scripts resolves within the document).
+/// Throws StateError on the first problem.
+void checkGameStateDocument(const nlohmann::ordered_json &j);
+
+/// The stage of the last gameStateFromJson (or deserializeGameState) a failure happened in:
+/// nullptr if it failed before changing any live state, else the last stage it reached
+/// ("teardown", "terrain", "globals", "formations", "worlds", "dying", "pass1", "pass2", "post", "sections",
+/// "scripting", "derived", "counters", or "done" on success).
 const char *gameStateLastRestoreStage();
 
 /// Make gameStateFromJson throw a StateError when it reaches that stage (--gamestate-rewind-fault).

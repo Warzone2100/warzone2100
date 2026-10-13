@@ -72,6 +72,7 @@
 #include "frontend.h"
 #include "game.h"
 #include "gamestate_capture.h"
+#include "gamestate_snapshot.h"
 #include "gateway.h"
 #include "hci.h"
 #include "intdisplay.h"
@@ -1996,6 +1997,7 @@ bool stageThreeShutDown()
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
 	clearPendingGameStateCaptures();  // requested for the world being shut down
+	clearGameStateRestoreFailed();
 
 	resetHostLaunch();
 

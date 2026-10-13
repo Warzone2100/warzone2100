@@ -611,6 +611,7 @@ static void maybeRewindRestore()
 			g_rewindSnapshot = GameStateSnapshot();
 			if (g_rewindFaultContinue)
 			{
+				clearGameStateRestoreFailed();
 				debug(LOG_INFO, "GameState harness: going on with the half-restored game (--gamestate-rewind-fault ...,continue)");
 				return;
 			}

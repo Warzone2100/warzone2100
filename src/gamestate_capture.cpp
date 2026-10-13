@@ -25,6 +25,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"  // NET_ALL_PLAYERS
 
+#include "gamestate_snapshot.h"  // gameStateRestoreFailed
 #include "loop.h"  // levelChangePending
 
 #include <vector>
@@ -37,7 +38,7 @@ static bool beforeMessagesAllowed = false;
 
 bool gameStateCaptureSafe()
 {
-	return !levelChangePending() && (beforeMessagesAllowed || checkPlayerGameTime(NET_ALL_PLAYERS));
+	return !levelChangePending() && !gameStateRestoreFailed() && (beforeMessagesAllowed || checkPlayerGameTime(NET_ALL_PLAYERS));
 }
 
 static void runCapture(const std::function<void()> &capture)
