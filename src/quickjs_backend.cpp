@@ -377,6 +377,34 @@ static std::string getBuiltinExoticClassName(JSToJsonContext& c, JSValue value)
 // NOTE: May throw if there is a circular reference!
 nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
+// Collects the entries of an ordered_json object in order, then builds the object at its final size.
+// (An ordered_json object is a vector of pair<const key, value>, which can't be moved, so growing it copies every
+// value inserted so far.)
+// Each key must be set once (own property names are unique).
+class OrderedJsonObjectBuilder
+{
+public:
+	void set(std::string key, nlohmann::ordered_json value)
+	{
+		entries.emplace_back(std::move(key), std::move(value));
+	}
+	size_t size() const { return entries.size(); }
+	nlohmann::ordered_json take()
+	{
+		nlohmann::ordered_json result = nlohmann::ordered_json::object();
+		auto &object = result.get_ref<nlohmann::ordered_json::object_t &>();
+		object.reserve(entries.size());
+		for (auto &entry : entries)
+		{
+			object.emplace_back(std::move(entry.first), std::move(entry.second));
+		}
+		entries.clear();
+		return result;
+	}
+private:
+	std::vector<std::pair<std::string, nlohmann::ordered_json>> entries;
+};
+
 bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::function<void (const char *key, JSAtom& atom)>& func, bool enumerableOnly = true); // forward-declare
 
 class quickjs_scripting_instance;
@@ -3316,7 +3344,8 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::ordered_json &resul
 	auto toJsonContext = JSToJsonContext(ctx, true, /*tag_class_instances=*/true);
 
 	// we save 'scriptName' and 'me' implicitly
-	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result, &toJsonContext](const char *key, JSAtom &atom) {
+	OrderedJsonObjectBuilder globals;
+	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals, &toJsonContext](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if (!JS_IsException(jsVal))
@@ -3326,7 +3355,7 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::ordered_json &resul
 				)//&& !it.value().equals(engine->globalObject()))
 			{
 				try {
-					result[nameStr] = wz_qjs_to_json(toJsonContext, jsVal);
+					globals.set(nameStr, wz_qjs_to_json(toJsonContext, jsVal));
 					ASSERT(toJsonContext.isReset(), "JSToJsonContext has non-empty stack!");
 				} catch (const std::runtime_error &e) {
 					debug(LOG_ERROR, "%s: Failed to convert global \"%s\" to json with error: %s", m_path.c_str(), nameStr.c_str(), e.what());
@@ -3340,6 +3369,8 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::ordered_json &resul
 		}
         JS_FreeValue(ctx, jsVal);
 	});
+	ASSERT(result.is_null() || (result.is_object() && result.empty()), "Script globals saved into a non-empty value");
+	result = globals.take();
 	return true;
 }
 
@@ -4342,7 +4373,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			else
 			{
 				std::string className = getSerializableClassName(c, value);
-				nlohmann::ordered_json data = nlohmann::ordered_json::object();
+				OrderedJsonObjectBuilder data;
 				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &data](const char *key, JSAtom &atom) {
 					if (isOwnAccessorProperty(c.ctx, value, atom))
 					{
@@ -4357,11 +4388,11 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 					{
 						if (!JS_IsConstructor(c.ctx, jsVal))
 						{
-							data[nameStr] = wz_qjs_to_json(c, jsVal);
+							data.set(nameStr, wz_qjs_to_json(c, jsVal));
 						}
 						else if (!c.skip_constructors)
 						{
-							data[nameStr] = "<constructor>";
+							data.set(nameStr, "<constructor>");
 						}
 					}
 					else
@@ -4386,7 +4417,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 						debug(LOG_SCRIPT, "Cannot fully save script global of built-in type \"%s\": its internal state is not serializable; it will be restored as a plain object (%zu own propert%s preserved)", builtinName.c_str(), static_cast<size_t>(data.size()), (data.size() == 1) ? "y" : "ies");
 					}
 				}
-				j[WZ_JSON_DATA_KEY] = std::move(data);
+				j[WZ_JSON_DATA_KEY] = data.take();
 			}
 		}
 		else if (isArray)

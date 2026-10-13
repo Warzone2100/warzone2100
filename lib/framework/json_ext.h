@@ -22,7 +22,16 @@
 
 #include <cstddef>
 
+#include <nlohmann/json_fwd.hpp>
+
 // Whether the arrays and objects in the JSON text [begin, end) nest no deeper than maxDepth (string contents are skipped)
 bool jsonNestingWithinLimit(const char *begin, const char *end, size_t maxDepth);
+
+// Parse the JSON text [begin, end) into an ordered_json, as nlohmann::ordered_json::parse(begin, end) does
+// (same result and exceptions, and for a duplicate key, the last value at the first one's place),
+// but building each object at its final size once its members are parsed.
+// (An ordered_json object is a vector of pair<const key, value>, which can't be moved,
+// so ordered_json::parse copies every member so far each time an object grows.)
+nlohmann::ordered_json parseOrderedJson(const char *begin, const char *end);
 
 #endif // _LIB_FRAMEWORK_JSON_EXT_H
