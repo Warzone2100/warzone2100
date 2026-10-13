@@ -3621,6 +3621,15 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	// would change the game being saved, so the save would differ from the game that goes on.
 
 	ASSERT_OR_RETURN(false, aFileName && strlen(aFileName) > 4, "Bad savegame filename");
+	// A script's loadLevel() has already set aLevelName to the next level, so a save now would record
+	// the next level's name with this level's world (which missionDestroyObjects() may already have emptied of
+	// the other players' objects).
+	// The callers check this first.
+	if (levelChangePending())
+	{
+		debug(LOG_ERROR, "Not saving %s: a level change or a savegame load is pending", aFileName);
+		return false;
+	}
 	sstrcpy(CurrentFileName, aFileName);
 	debug(LOG_WZ, "saveGame: %s", CurrentFileName);
 

@@ -81,8 +81,29 @@ done
 if echo "betweenticks" | grep -qE "$FILTER"; then
 	"$HERE/betweenticks.sh" "$BIN" | sed -n '1p;/COVERAGE DIFFERS/,+1p'
 fi
+if echo "camlaunch" | grep -qE "$FILTER"; then
+	"$HERE/camlaunch.sh" "$BIN" | grep -v '^  '
+fi
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
+fi
+# Campaign level changes (camtransition.sh, which also builds the test mod the cells below need):
+# CAM_2A loads the off-world mission SUB_2_1 in tick 20002.
+# The 15000 cells run through the level change.
+# The 20002 cell asks for a save in the tick of the loadLevel() call, which the game can't save,
+# so it is taken in SUB_2_1's first tick.
+CAMTRANSITION_CELLS='
+15000 20250
+15000 20250 --no-loaded
+20002 20250 --no-loaded
+'
+if echo "camtransition" | grep -qE "$FILTER"; then
+	"$HERE/camtransition.sh" "$BIN" | grep -v '^  started'
+	echo "$CAMTRANSITION_CELLS" | while read -r cell; do
+		[ -n "$cell" ] || continue
+		# shellcheck disable=SC2086
+		EXTRA="--mod=camtransition.wz" "$HERE/forkcrc.sh" "$BIN" cam:CAM_2A $cell | sed -n '1p;/COVERAGE DIFFERS/,+1p'
+	done
 fi
 echo "== double-save cells"
 echo "$DOUBLESAVES" | grep -E "$FILTER" | while read -r save; do
@@ -90,3 +111,7 @@ echo "$DOUBLESAVES" | grep -E "$FILTER" | while read -r save; do
 	"$HERE/doublesave.sh" "$BIN" "$save" --no-loaded
 	"$HERE/doublesave.sh" "$BIN" "$save"
 done
+if echo "camtransition" | grep -qE "$FILTER"; then
+	EXTRA="--mod=camtransition.wz" "$HERE/doublesave.sh" "$BIN" fork_cam_CAM_2A_20002_noloaded --no-loaded
+	EXTRA="--mod=camtransition.wz" "$HERE/doublesave.sh" "$BIN" fork_cam_CAM_2A_20002_noloaded
+fi
