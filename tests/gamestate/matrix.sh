@@ -10,6 +10,7 @@
 # "mb:" tests are movement bench scenarios, which run without AI scripts, so they isolate engine restore fidelity:
 # - mb:gamestate_deaths kills objects of every shape on purpose
 # - mb:gamestate_scripts has script groups and labels a load must restore
+# - mb:gamestate_rewind has script state only a rewind can get wrong
 # The miza 28102 cells are saved right before the messages for the next tick request a route.
 # The betweenticks cell (betweenticks.sh) is saved between two ticks with coverage changes pending.
 # "cam:" tests are campaign games, which run campaign scripts but no AI bots
@@ -60,7 +61,24 @@ cam:CAM_3A 30000 150000 --no-loaded --dying
 cam:CAM_3A 60000 150000 --rewind 20000
 highground 60000 90000 --rewind 5000
 highground 60000 130000 --rewind 60000
+mb:gamestate_rewind 20000 60000 --rewind 20000
+mb:gamestate_scripts 30000 100000 --rewind 40000
+miza 300000 330000 --rewind 5000
+gamestate_cobra 300000 330000 --rewind 5000
+gamestate_bonecrusher 300000 330000 --rewind 5000
+cam:CAM_2A 60000 120000 --rewind 5000
 '
+
+# Replay rewinds (replayrewind.sh): a recorded skirmish game played back with an in-process rewind
+REPLAY_CELLS='
+highground 60000 90000 5000
+miza 300000 330000 20000
+'
+
+# Rewind faults (rewindfault.sh): a damaged snapshot must be rejected before the restore changes anything
+# (the live game goes on, IDENTICAL), over-limit must restore,
+# and a throw during the restore must stop the game cleanly
+FAULT_KINDS='truncate section-version:power bad-stat duplicate-id dangling-ref overlap edge off-map over-limit throw-at:pass1 throw-at:sections'
 
 # Double-save cells: savegames written by the fork cells above, loaded and saved again straight away.
 DOUBLESAVES='
@@ -92,6 +110,18 @@ if echo "camreinforce" | grep -qE "$FILTER"; then
 fi
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
+fi
+if echo "replayrewind" | grep -qE "$FILTER"; then
+	echo "$REPLAY_CELLS" | while read -r cell; do
+		[ -n "$cell" ] || continue
+		# shellcheck disable=SC2086
+		"$HERE/replayrewind.sh" "$BIN" $cell
+	done
+fi
+if echo "rewindfault" | grep -qE "$FILTER"; then
+	for kind in $FAULT_KINDS; do
+		"$HERE/rewindfault.sh" "$BIN" mb:perf_battle 20000 30000 5000 "$kind"
+	done
 fi
 # Campaign level changes (camtransition.sh, which also builds the test mod the cells below need):
 # CAM_2A loads the off-world mission SUB_2_1 in tick 20002.

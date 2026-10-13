@@ -60,6 +60,23 @@ void setExitAtTick(uint32_t tick);
 /// <ticks later> more game time, then restore the snapshot in-process and keep running from it.
 void setRewindTest(uint32_t tick, uint32_t ticksLater);
 
+/// --gamestate-rewind-fault=<kind>[,continue]: test-only, with --gamestate-rewind-test.
+/// Damage the snapshot right before it is restored, to see where the restore fails and what is left. Kinds:
+/// - truncate (cut the document in half)
+/// - section-version:<section> (an unknown section version)
+/// - bad-stat (a structure with an unknown stat)
+/// - duplicate-id (two droids with one id)
+/// - dangling-ref (the first object reference in the world repointed to an unused id)
+/// - overlap (a structure moved onto another)
+/// - edge (a structure moved to the map corner)
+/// - off-map (a structure moved past the map)
+/// - over-limit (every structure limit of a player set to 0, which a restore must ignore)
+/// - throw-at:<stage> (throw when the restore reaches that stage, see gameStateLastRestoreStage())
+/// A restore that fails before changing any live state lets the live game go on.
+/// One that fails later quits, or with ",continue" goes on with the half-restored game.
+/// Returns false on an unknown kind.
+bool setRewindFault(const std::string &spec);
+
 /// --gamestate-test-suppress-loaded-event: test-only. On a GameState cold load, do not fire eventGameLoaded,
 /// and drop the queued replay of eventResearched.
 void setSuppressLoadedEvent(bool enable);

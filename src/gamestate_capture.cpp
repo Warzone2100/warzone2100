@@ -32,6 +32,7 @@
 static std::vector<std::function<void()>> pendingCaptures;
 static bool capturedSinceTick = false;
 static uint32_t captureGameTime = 0;
+static const char *captureKind = "capture";
 static bool beforeMessagesAllowed = false;
 
 bool gameStateCaptureSafe()
@@ -43,7 +44,15 @@ static void runCapture(const std::function<void()> &capture)
 {
 	capturedSinceTick = true;
 	captureGameTime = gameTime;
+	captureKind = "capture";
 	capture();
+}
+
+void gameStateCaptureNoteRestore()
+{
+	capturedSinceTick = true;
+	captureGameTime = gameTime;
+	captureKind = "restore";
 }
 
 bool requestGameStateCapture(std::function<void()> capture)
@@ -103,8 +112,8 @@ void gameStateCaptureCheckGameMessage(unsigned player, const char *messageType)
 {
 	if (capturedSinceTick && !beforeMessagesAllowed)
 	{
-		ASSERT(false, "Game message %s of player %u read after a game state capture at gameTime %u (now %u), before the next tick: the capture missed it",
-		       messageType, player, captureGameTime, gameTime);
+		ASSERT(false, "Game message %s of player %u read after a game state %s at gameTime %u (now %u), before the next tick: the capture missed it",
+		       messageType, player, captureKind, captureGameTime, gameTime);
 		capturedSinceTick = false;  // once per capture
 	}
 }
