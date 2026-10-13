@@ -28,11 +28,12 @@ An event that is run when game is loaded from a saved game. There is usually no 
 
 ## eventGameSaving()
 
-An event that is run before game is saved. There is usually no need to use this event.
+Deprecated: no longer raised.
 
 ## eventGameSaved()
 
 An event that is run after game is saved. There is usually no need to use this event.
+It runs after the game state was captured, so a handler must not change the game state.
 
 ## eventTransporterLaunch(transport)
 

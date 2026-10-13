@@ -881,14 +881,8 @@ function bc_eventGameLoaded()
 	queue("init", 1000);
 }
 
-function bc_eventGameSaving()
-{
-	running = false;
-}
-
 function bc_eventGameSaved()
 {
-	running = true;
 	playerData.forEach((data, player) => {
 		if (!asPlayer)
 		{
