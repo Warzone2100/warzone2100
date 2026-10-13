@@ -3136,7 +3136,14 @@ wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int buttonId, std::
 	{
 		return {}; // no-op
 	}
-	setReticuleStats(buttonId, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func));
+	ReticuleCallbackRef callbackRef;
+	if (!func.isEmpty())
+	{
+		callbackRef.scriptName = context.currentInstance()->scriptName();
+		callbackRef.player = context.player();
+		callbackRef.function = func.toUtf8();
+	}
+	setReticuleStats(buttonId, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func), callbackRef);
 	return {};
 }
 
@@ -3168,7 +3175,7 @@ wzapi::no_return_value wzapi::showReticuleWidget(WZAPI_PARAMS(int buttonId))
 //--
 wzapi::no_return_value wzapi::showInterface(WZAPI_NO_PARAMS)
 {
-	intShowInterface();
+	scriptShowInterface(true);
 	return {};
 }
 
@@ -3178,7 +3185,7 @@ wzapi::no_return_value wzapi::showInterface(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::hideInterface(WZAPI_NO_PARAMS)
 {
-	intHideInterface();
+	scriptShowInterface(false);
 	return {};
 }
 

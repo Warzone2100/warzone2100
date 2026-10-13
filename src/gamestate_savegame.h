@@ -245,5 +245,10 @@ void applyDeferredColdLoadMessages();
 /// view (init3DView, pie_InitLighting). No-op unless a cold load is pending.
 void applyDeferredColdLoadView();
 
+/// Apply the saved interface the scripts set up (the reticule buttons), once the scripts are loaded and the interface
+/// is up, where eventGameLoaded runs (stageThreeInitialise). Returns whether the save had it. No-op (false) unless a
+/// cold load is pending.
+bool applyDeferredColdLoadInterface();
+
 } // namespace savegame
 } // namespace gamestate

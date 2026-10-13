@@ -72,6 +72,7 @@
 #include "mission.h"
 #include "missiondef.h"
 #include "qtscript.h"
+#include "hci.h"             // resolveReticuleCallbacks
 #include "message.h"
 #include "messagedef.h"
 #include "multiplay.h" // CreateBeaconViewData
@@ -5290,6 +5291,13 @@ static void readPresentation(const nlohmann::ordered_json &j, uint32_t version)
 	if (j.contains("revealActive"))
 	{
 		setRevealStatus(j.at("revealActive").get<bool>());
+		// As the script call does (setRevealStatus()). Otherwise the tiles' display levels of the abandoned
+		// timeline (an in-process restore) would stay until each tile is seen again.
+		// A cold load does it again in stageThreeInitialise.
+		if (gameWorld.map.tiles)
+		{
+			preProcessVisibility(gameWorld.map);
+		}
 	}
 	if (j.contains("radarPermitted"))
 	{
@@ -6089,6 +6097,14 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: scripting");
 		const nlohmann::ordered_json &sec = j.at("scripting");
 		readScripting(sec, sec.value("version", 0u), scriptScope, true, /*strict=*/inProcess);
+	}
+	// The reticule buttons' callbacks called functions of the script instances that were just replaced:
+	// find them in the new ones
+	if (inProcess)
+	{
+		resolveReticuleCallbacks([](const ReticuleCallbackRef &ref) {
+			return scriptNamedCallback(ref.player, ref.scriptName, ref.function);
+		});
 	}
 	restoreStage("derived");
 	// Rebuild derived state (spatial grid, counts) for the active world, once.

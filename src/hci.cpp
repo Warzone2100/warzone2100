@@ -323,14 +323,17 @@ struct RETBUTSTATS
 	int flashTime = 0;
 	std::shared_ptr<W_BUTTON> button = nullptr;
 	playerCallbackFunc callbackFunc = nullptr;
+	ReticuleCallbackRef callbackRef;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
+static ScriptInterfaceRequest scriptInterfaceRequest = ScriptInterfaceRequest::None;
 
 void clearReticuleCallbacks()
 {
 	for (auto& i : retbutstats)
 	{
 		i.callbackFunc = nullptr;
+		i.callbackRef = ReticuleCallbackRef();
 	}
 }
 
@@ -406,7 +409,7 @@ optional<std::string> getReticuleButtonDisplayFilename(int ButId)
 	return retbutstats[ButId].filename.toUtf8();
 }
 
-void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc)
+void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc, const ReticuleCallbackRef& callbackRef)
 {
 	ASSERT_OR_RETURN(, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
 
@@ -417,6 +420,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
 	retbutstats[ButId].callbackFunc = callbackFunc;
+	retbutstats[ButId].callbackRef = callbackFunc ? callbackRef : ReticuleCallbackRef();
 	ReticuleEnabled[ButId].Enabled = false;
 
 	if (!retbutstats[ButId].button) // not quite set up yet
@@ -435,6 +439,53 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	{
 		ReticuleEnabled[ButId].Enabled = true;
 		retbutstats[ButId].button->setState(0);
+	}
+}
+
+std::vector<ReticuleButtonState> getReticuleButtonStates()
+{
+	std::vector<ReticuleButtonState> states(NUMRETBUTS);
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		states[i].tip = retbutstats[i].tip;
+		states[i].filename = retbutstats[i].filename.toUtf8();
+		states[i].filenameDown = retbutstats[i].filenameDown.toUtf8();
+		states[i].flashing = retbutstats[i].flashing;
+		states[i].callback = retbutstats[i].callbackRef;
+	}
+	return states;
+}
+
+void restoreReticuleButtonStates(const std::vector<ReticuleButtonState> &states, const std::function<playerCallbackFunc (const ReticuleCallbackRef &)> &resolveCallback)
+{
+	for (int i = 0; i < NUMRETBUTS && i < static_cast<int>(states.size()); i++)
+	{
+		const ReticuleButtonState &state = states[i];
+		playerCallbackFunc callbackFunc = (!state.callback.empty() && resolveCallback) ? resolveCallback(state.callback) : nullptr;
+		if (!state.callback.empty() && !callbackFunc)
+		{
+			debug(LOG_WARNING, "Reticule button %d: no function %s in script %s of player %d to call", i, state.callback.function.c_str(), state.callback.scriptName.c_str(), state.callback.player);
+		}
+		setReticuleStats(i, state.tip, state.filename, state.filenameDown, callbackFunc, state.callback);
+		// (after setReticuleStats, which stops the flashing)
+		setReticuleFlash(i, state.flashing);
+	}
+}
+
+void resolveReticuleCallbacks(const std::function<playerCallbackFunc (const ReticuleCallbackRef &)> &resolveCallback)
+{
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		RETBUTSTATS &stats = retbutstats[i];
+		if (stats.callbackRef.empty())
+		{
+			continue;
+		}
+		stats.callbackFunc = resolveCallback ? resolveCallback(stats.callbackRef) : nullptr;
+		if (!stats.callbackFunc)
+		{
+			debug(LOG_WARNING, "Reticule button %d: no function %s in script %s of player %d to call", i, stats.callbackRef.function.c_str(), stats.callbackRef.scriptName.c_str(), stats.callbackRef.player);
+		}
 	}
 }
 
@@ -671,6 +722,7 @@ void interfaceShutDown()
 	{
 		i = RETBUTSTATS();
 	}
+	scriptInterfaceRequest = ScriptInterfaceRequest::None;
 
 	shutdownChatScreen();
 	closeResearchTreeScreen();
@@ -2823,6 +2875,24 @@ void intShowInterface()
 	intAddReticule();
 	intShowPowerBar();
 	intShowGroupSelectionMenu();
+}
+
+ScriptInterfaceRequest getScriptInterfaceRequest()
+{
+	return scriptInterfaceRequest;
+}
+
+void scriptShowInterface(bool show)
+{
+	scriptInterfaceRequest = show ? ScriptInterfaceRequest::Shown : ScriptInterfaceRequest::Hidden;
+	if (show)
+	{
+		intShowInterface();
+	}
+	else
+	{
+		intHideInterface();
+	}
 }
 
 void intHideInterface(bool forceHidePowerbar)
