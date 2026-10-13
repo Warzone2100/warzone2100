@@ -38,7 +38,12 @@
 struct GameStateSnapshot
 {
 	std::string document;                                     ///< the GameState document (serializeGameState)
-	std::vector<std::vector<std::vector<uint8_t>>> gameQueue; ///< per game-queue slot, the messages not read yet
+	/// Per game-queue slot, the messages not read yet.
+	/// During replay playback, only for the queues the replay doesn't feed (the viewer's own):
+	/// the others are put back from replayReadPositions.
+	std::vector<std::vector<std::vector<uint8_t>>> gameQueue;
+	/// During replay playback, how far each game queue has read the replay (NETreplayReadPositions), else empty
+	std::vector<uint32_t> replayReadPositions;
 	std::vector<std::vector<uint8_t>> queuedOrders;           ///< the local droid orders not sent yet
 	uint32_t gameTime = 0;                                    ///< the game time it was taken at
 

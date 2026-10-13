@@ -49,11 +49,17 @@ GameStateSnapshot takeGameStateSnapshot()
 	}
 	snapshot.document = document.dump();
 	// Like a savegame's pending-resume section: the game-queue messages not read yet (scheduled for later ticks by
-	// the lockstep latency) belong to the snapshot's timeline
+	// the lockstep latency) belong to the snapshot's timeline.
+	// During replay playback the queues hold the rest of the replay, which is kept read-only for the whole playback:
+	// keep only how far each of them has read it
+	snapshot.replayReadPositions = NETreplayReadPositions();
 	snapshot.gameQueue.assign(MAX_GAMEQUEUE_SLOTS, {});
 	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
 	{
-		snapshot.gameQueue[p] = NETgameQueueCapturePending(p);
+		if (snapshot.replayReadPositions.empty() || NETreplayLoadedCount(p) == 0)
+		{
+			snapshot.gameQueue[p] = NETgameQueueCapturePending(p);
+		}
 	}
 	snapshot.queuedOrders = captureQueuedDroidInfo();
 	snapshot.gameTime = gameTime;
@@ -74,6 +80,24 @@ void clearGameStateRestoreFailed()
 
 GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapshot, std::string *error)
 {
+	// The replay read positions are checked with the document, before anything is changed
+	std::string positionsError;
+	if (!snapshot.replayReadPositions.empty() && !NETreplayCheckReadPositions(snapshot.replayReadPositions, &positionsError))
+	{
+		if (error != nullptr)
+		{
+			*error = positionsError;
+		}
+		return GameStateRestoreResult::Rejected;
+	}
+	if (snapshot.replayReadPositions.empty() && NETisReplay())
+	{
+		if (error != nullptr)
+		{
+			*error = "a snapshot taken outside replay playback";
+		}
+		return GameStateRestoreResult::Rejected;
+	}
 	try
 	{
 		gamestate::deserializeGameState(snapshot.document, gamestate::ScriptScope::AllInstances, /*inProcess=*/true);
@@ -96,13 +120,29 @@ GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapsho
 	}
 	// Replace the live game-queue contents (messages for the abandoned timeline's future ticks) with the snapshot's,
 	// as the cold load does with a savegame's pending-resume section
+	if (!snapshot.replayReadPositions.empty() && !NETreplayRestoreReadPositions(snapshot.replayReadPositions))
+	{
+		// The positions were checked above, so only a kept message that can't be read back gets here.
+		// The game state is the snapshot's but the replay queues aren't.
+		if (error != nullptr)
+		{
+			*error = "the replay's game queues couldn't be put back";
+		}
+		restoreFailed = true;
+		debug(LOG_ERROR, "In-process restore failed putting the replay's game queues back; the game is stopped");
+		return GameStateRestoreResult::Failed;
+	}
 	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS && p < snapshot.gameQueue.size(); ++p)
 	{
+		if (!snapshot.replayReadPositions.empty() && NETreplayLoadedCount(p) != 0)
+		{
+			continue;  // put back from the replay read positions
+		}
 		if (NETgameQueueCapturePending(p).empty() && snapshot.gameQueue[p].empty())
 		{
 			continue;
 		}
-		NETinitQueue(NETgameQueue(p));
+		NETgameQueueReset(p);
 		NETgameQueueRestorePending(p, snapshot.gameQueue[p]);
 	}
 	restoreQueuedDroidInfo(snapshot.queuedOrders);

@@ -235,6 +235,11 @@ size_t NetQueue::currentIncompleteDataBuffered() const
 	return incompleteReceivedMessageData.size();
 }
 
+size_t NetQueue::numUnreadMessages() const
+{
+	return static_cast<size_t>(std::distance(messages.cbegin(), List::const_iterator(messagePos)));
+}
+
 std::vector<std::vector<uint8_t>> NetQueue::snapshotUnreadMessages() const
 {
 	// Unread messages occupy [messages.begin(), messagePos). They are read back-to-front (the message

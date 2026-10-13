@@ -72,6 +72,8 @@ void setRewindTest(uint32_t tick, uint32_t ticksLater);
 /// - off-map (a structure moved past the map)
 /// - over-limit (every structure limit of a player set to 0, which a restore must ignore)
 /// - throw-at:<stage> (throw when the restore reaches that stage, see gameStateLastRestoreStage())
+/// - during replay playback, replay-position (a game queue's replay read position put past the replay's end)
+///   and no-replay-positions (the snapshot's replay read positions dropped, as if taken outside replay playback)
 /// A restore that fails before changing any live state lets the live game go on.
 /// One that fails later quits, or with ",continue" goes on with the half-restored game.
 /// Returns false on an unknown kind.

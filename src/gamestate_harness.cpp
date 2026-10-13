@@ -168,7 +168,8 @@ bool setRewindFault(const std::string &spec)
 	}
 	const std::string name = kind.substr(0, kind.find(':'));
 	const bool hasArg = kind.find(':') != std::string::npos && kind.find(':') + 1 < kind.size();
-	static const char *const plain[] = {"truncate", "bad-stat", "duplicate-id", "dangling-ref", "overlap", "edge", "off-map", "over-limit"};
+	static const char *const plain[] = {"truncate", "bad-stat", "duplicate-id", "dangling-ref", "overlap", "edge", "off-map", "over-limit",
+		"replay-position", "no-replay-positions"};
 	const bool known = std::find(std::begin(plain), std::end(plain), name) != std::end(plain)
 		|| ((name == "section-version" || name == "throw-at") && hasArg);
 	if (!known)
@@ -438,6 +439,16 @@ static void takeRewindSnapshot()
 	      gameTime, g_rewindSnapshot.document.size(), psDestroyedObj.size(), g_rewindRestoreAtTick);
 	debug(LOG_INFO, "GameState harness: rewind snapshot timing: total %.1f ms; %zu pending game message(s), %zu bytes",
 	      ms, pendingMessages, pendingBytes);
+	if (!g_rewindSnapshot.replayReadPositions.empty())
+	{
+		size_t unread = 0;
+		for (unsigned p = 0; p < g_rewindSnapshot.replayReadPositions.size(); ++p)
+		{
+			unread += NETreplayLoadedCount(p) - g_rewindSnapshot.replayReadPositions[p];
+		}
+		debug(LOG_INFO, "GameState harness: rewind snapshot replay read positions: %zu replay message(s) not read yet, put back from the kept replay (%zu bytes, shared)",
+		      unread, NETreplayLoadedSize());
+	}
 }
 
 // At the save point
@@ -483,11 +494,33 @@ static nlohmann::ordered_json *findObjRef(nlohmann::ordered_json &j)
 
 // --gamestate-rewind-fault: damage the snapshot document (or arm a throw in the restore) the way the fault kind says.
 // Returns what was done, or throws std::runtime_error if the document has nothing to damage that way.
-static std::string applyRewindFault(std::string &doc)
+static std::string applyRewindFault(GameStateSnapshot &snapshot)
 {
+	std::string &doc = snapshot.document;
 	const size_t colon = g_rewindFault.find(':');
 	const std::string kind = g_rewindFault.substr(0, colon);
 	const std::string arg = colon == std::string::npos ? std::string() : g_rewindFault.substr(colon + 1);
+	if (kind == "replay-position" || kind == "no-replay-positions")
+	{
+		if (snapshot.replayReadPositions.empty())
+		{
+			throw std::runtime_error("the snapshot has no replay read positions (not replay playback)");
+		}
+		if (kind == "no-replay-positions")
+		{
+			snapshot.replayReadPositions.clear();
+			return "dropped the replay read positions";
+		}
+		for (unsigned p = 0; p < snapshot.replayReadPositions.size(); ++p)
+		{
+			if (NETreplayLoadedCount(p) > 0)
+			{
+				snapshot.replayReadPositions[p] = static_cast<uint32_t>(NETreplayLoadedCount(p) + 1);
+				return "put game queue " + std::to_string(p) + "'s replay read position past its " + std::to_string(NETreplayLoadedCount(p)) + " message(s)";
+			}
+		}
+		throw std::runtime_error("the replay feeds no game queue");
+	}
 	if (kind == "truncate")
 	{
 		doc.resize(doc.size() / 2);
@@ -584,7 +617,7 @@ static void maybeRewindRestore()
 		{
 			try
 			{
-				debug(LOG_INFO, "GameState harness: rewind fault %s: %s", g_rewindFault.c_str(), applyRewindFault(g_rewindSnapshot.document).c_str());
+				debug(LOG_INFO, "GameState harness: rewind fault %s: %s", g_rewindFault.c_str(), applyRewindFault(g_rewindSnapshot).c_str());
 			}
 			catch (const std::exception &e)
 			{
