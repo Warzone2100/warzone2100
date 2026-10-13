@@ -3822,6 +3822,7 @@ IMPL_JS_FUNC(enableComponent, wzapi::enableComponent)
 IMPL_JS_FUNC(makeComponentAvailable, wzapi::makeComponentAvailable)
 IMPL_JS_FUNC(allianceExistsBetween, wzapi::allianceExistsBetween)
 IMPL_JS_FUNC(translate, wzapi::translate)
+IMPL_JS_FUNC(markForTranslation, wzapi::markForTranslation)
 IMPL_JS_FUNC(playerPower, wzapi::playerPower)
 IMPL_JS_FUNC(queuedPower, wzapi::queuedPower)
 IMPL_JS_FUNC(isStructureAvailable, wzapi::isStructureAvailable)
@@ -4087,6 +4088,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 
 	// Register functions to the script engine here
 	JS_REGISTER_FUNC_NAME(_, 1, JS_FUNC_IMPL_NAME(translate)); // WZAPI
+	JS_REGISTER_FUNC_NAME(N_, 1, JS_FUNC_IMPL_NAME(markForTranslation)); // WZAPI
 	JS_REGISTER_FUNC2(dump, 1, MAX_JS_VARARGS);
 	JS_REGISTER_FUNC(syncRandom, 1); // WZAPI
 	JS_REGISTER_FUNC_NAME2(label, 1, 3, JS_FUNC_IMPL_NAME(getObject)); // deprecated // scripting_engine

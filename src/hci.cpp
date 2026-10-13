@@ -403,6 +403,14 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 	}
 }
 
+// The tooltip as shown: the scripts may pass it untranslated (N_()), so translate it here.
+// Text passed translated (_()) isn't a message of the catalog, and gettext returns it unchanged.
+// (Not the empty text: gettext("") is the catalog's header.)
+static std::string reticuleTipText(const std::string &tip)
+{
+	return tip.empty() ? tip : std::string(gettext(tip.c_str()));
+}
+
 optional<std::string> getReticuleButtonDisplayFilename(int ButId)
 {
 	ASSERT_OR_RETURN(nullopt, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
@@ -432,7 +440,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 
 	if (!retbutstats[ButId].tip.empty())
 	{
-		retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
+		retbutstats[ButId].button->setTip(reticuleTipText(retbutstats[ButId].tip));
 	}
 
 	if (!retbutstats[ButId].filename.isEmpty())
@@ -2094,7 +2102,7 @@ bool intAddReticule()
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.x = ReticuleOffsets[i].x;
 		sButInit.y = ReticuleOffsets[i].y;
-		sButInit.pTip = retbutstats[i].tip;
+		sButInit.pTip = reticuleTipText(retbutstats[i].tip);
 		sButInit.style = WBUT_SECONDARY;
 		sButInit.UserData = i;
 		retbutstats[i].downTime = 0;
