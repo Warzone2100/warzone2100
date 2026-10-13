@@ -135,6 +135,23 @@ saved while a function is running, you don't need to worry about local variables
 Const definitions are not stored in savegames, and are therefore recommended over variables to hold information
 that does not change.
 
+### State that changes during the game
+
+A saved game keeps only global variables (`var` declarations, and properties set on the global object).
+Loading a game runs the script's top level again and then restores the saved globals,
+so anything else that changes during the game starts over from its initial value after a load:
+
+- the contents of top-level `const` and `let` bindings (ex. `const seen = {};` with `seen[id] = true;` in an event),
+- variables of a function wrapping the file (ex. `(function(_global) { var stats = []; ... })(this);`),
+- properties set on function objects (ex. a cache or throttle kept with `debugGetCallerFuncObject()`).
+
+Keep such state in global variables.
+The `wz/saved-script-state` ESLint rule reports these cases
+(`tools/eslint/saved-script-state.mjs`, enabled for `data/**/*.js` in `eslint.config.mjs`).
+It follows names, not values, so it doesn't see a write through another name that refers to the same object.
+Scripts split across several files are listed in its `scriptGroups` setting,
+so that it finds the declarations in the other files.
+
 ### Object states
 
 Most object states that are changed from the scripts are not in fact changed, but queued up to be synchronized
