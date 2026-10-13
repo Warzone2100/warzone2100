@@ -28,8 +28,9 @@
  *  Then the game fast-forwards to the target, ticking without waiting for real time
  *  (the game loop asks replaySeekFastForwarding()).
  *
- *  Headless only: a restore frees every game object,
- *  and nothing releases the UI's pointers to them (selection, camera tracking, the sensor view...).
+ *  The viewer's view goes on across a seek: the camera stays where it is,
+ *  the selection is kept where its objects exist at the target,
+ *  and what showed objects of the timeline left behind is closed (uiobjectrefs.h).
  */
 
 #pragma once
@@ -40,8 +41,8 @@
 namespace gamestate
 {
 
-/// Ask for a seek to the given game time. False (error says why) if it can't be done: not playing a replay back,
-/// not headless, or no snapshot ring. A seek already pending or fast-forwarding is replaced.
+/// Ask for a seek to the given game time. False (error says why) if it can't be done: not playing a replay back, or no
+/// snapshot ring. A seek already pending or fast-forwarding is replaced.
 bool requestReplaySeek(uint32_t targetGameTime, std::string *error = nullptr);
 
 /// At the capture point of every game-loop iteration (main thread), before the snapshot ring's: start a requested

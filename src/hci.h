@@ -346,6 +346,8 @@ void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHe
 
 /* Refresh icons on the interface, without disturbing the layout. i.e. smartreset*/
 void intRefreshScreen();
+/// Test-only (--gamestate-ui-stress): open the build, manufacture, research, commander or order form, or close them
+bool intTestShowForm(unsigned which);
 
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats();

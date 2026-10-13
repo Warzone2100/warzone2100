@@ -114,6 +114,7 @@
 #include "map.h"
 #include "keybind.h"
 #include "random.h"
+#include "gamestate_harness.h"
 #include "urlhelpers.h"
 #include "urlrequest.h"
 #include <time.h>
@@ -1216,6 +1217,21 @@ static void runGameLoop()
 
 static optional<TITLECODE> queuedTilecodeChange = nullopt;
 
+// With --gamestate-test-seed, a new campaign game (from the title loop or --game) is seeded with the test seed.
+// (A skirmish or multiplayer game is seeded in SendFireUp, and a campaign level change isn't a new game.)
+static void seedNewCampaignGameForTest()
+{
+	if (bMultiPlayer)
+	{
+		return;
+	}
+	if (const auto testSeed = gamestate::harness::testGameSeed())
+	{
+		gameSRand(testSeed.value());
+		debug(LOG_INFO, "Game random seed: %u (--gamestate-test-seed)", testSeed.value());
+	}
+}
+
 /*!
  * Run the code inside the titleloop
  */
@@ -1239,6 +1255,7 @@ static void runTitleLoop()
 			}
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
+			seedNewCampaignGameForTest();
 			stopTitleLoop();
 			// Restart into gameloop
 			submitResourceLoadingTask(startGameResourceTask);
@@ -2317,6 +2334,7 @@ int realmain(int argc, char *argv[])
 		submitResourceLoadingTask(loadSaveGameResourceTask);
 		break;
 	case GS_NORMAL:
+		seedNewCampaignGameForTest();
 		submitResourceLoadingTask(startGameResourceTask);
 		break;
 	default:

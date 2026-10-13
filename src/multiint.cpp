@@ -97,6 +97,7 @@
 #include "movebench.h"
 #include "qtscript.h"
 #include "random.h"
+#include "gamestate_harness.h"
 #include "notifications.h"
 #include "radar.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -3995,7 +3996,13 @@ static void SendFireUp()
 
 	// Pick a random random seed for the synchronised random number generator.
 	// The movement benchmark pins it instead, so a scenario reproduces exactly.
-	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : rand();
+	// (So does --gamestate-test-seed.)
+	const auto testSeed = gamestate::harness::testGameSeed();
+	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : testSeed.has_value() ? testSeed.value() : rand();
+	if (testSeed.has_value())
+	{
+		debug(LOG_INFO, "Game random seed: %u (--gamestate-test-seed)", randomSeed);
+	}
 
 	debug(LOG_INFO, "Sending NET_FIREUP");
 

@@ -27,6 +27,11 @@
 
 DROID *CommanderController::highlightedCommander = nullptr;
 
+void CommanderController::visitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	visitUiObjectRef(highlightedCommander, visit);
+}
+
 void CommanderController::updateData()
 {
 	updateCommandersList();

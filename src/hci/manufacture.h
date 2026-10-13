@@ -20,11 +20,14 @@
 #ifndef __INCLUDED_SRC_HCI_MANUFACTURE_INTERFACE_H__
 #define __INCLUDED_SRC_HCI_MANUFACTURE_INTERFACE_H__
 
+#include "../uiobjectrefs.h"
 #include "objects_stats.h"
 
 class ManufactureController: public BaseObjectsStatsController, public std::enable_shared_from_this<ManufactureController>
 {
 public:
+	/// The highlighted object, as a UI reference to a game object (uiobjectrefs.h)
+	static void visitUiObjectRefs(const UiObjectRefVisitor &visit);
 	DROID_TEMPLATE *getObjectStatsAt(size_t objectIndex) const override;
 	DROID_TEMPLATE *getStatsAt(size_t statsIndex) const override
 	{

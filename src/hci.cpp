@@ -82,6 +82,7 @@
 #include "hci/research.h"
 #include "hci/manufacture.h"
 #include "hci/commander.h"
+#include "uiobjectrefs.h"
 #include "notifications.h"
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
@@ -1081,6 +1082,29 @@ void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj)
 		psSelectedBuilder = nullptr;
 	}
 	// intDoScreenRefresh handles refreshing the backing stores for any open interfaceController
+}
+
+void hciVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	visitUiObjectRef(psSelectedBuilder, visit);
+	BuildController::visitUiObjectRefs(visit);
+	ResearchController::visitUiObjectRefs(visit);
+	ManufactureController::visitUiObjectRefs(visit);
+	CommanderController::visitUiObjectRefs(visit);
+	// The open form's list of objects is rebuilt from the object lists at the start of the next frame,
+	// before any widget runs or is drawn (intDoScreenRefresh). Until then, nothing reads it.
+	if (interfaceController != nullptr)
+	{
+		bool refresh = false;
+		interfaceController->findObject([&visit, &refresh](BASE_OBJECT *psObj) {
+			refresh = refresh || visit(psObj);
+			return false;
+		});
+		if (refresh)
+		{
+			intRefreshScreen();
+		}
+	}
 }
 
 bool intAddRadarWidget()
@@ -2722,6 +2746,21 @@ static bool intAddCommand()
 {
 	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<CommanderController>(), INT_CMDORDER, IOBJ_COMMAND);
+}
+
+bool intTestShowForm(unsigned which)
+{
+	switch (which % 6)
+	{
+	case 0: return intAddBuild();
+	case 1: return intAddManufacture();
+	case 2: return intAddResearch();
+	case 3: return intAddCommand();
+	case 4: return intAddOrder(nullptr);
+	default:
+		intResetScreen(true);
+		return true;
+	}
 }
 
 //sets up the Intelligence Screen as far as the interface is concerned
