@@ -30,6 +30,7 @@
 
 #include "game.h"
 #include "game_world.h"
+#include "loop.h"  // levelChangePending
 #include "map.h"
 #include "objmem.h"
 #include "mission.h"
@@ -307,6 +308,10 @@ static void maybeSave()
 	{
 		return;
 	}
+	if (levelChangePending())
+	{
+		return; // the game can't be saved until the next level has started (see saveGame()): save at its first tick
+	}
 	if (g_saveWhenDying && !dyingConditionMet())
 	{
 		return;
@@ -338,7 +343,8 @@ static void maybeSave()
 
 static void maybeRewind()
 {
-	if (g_rewindAtTick != 0 && gameTime >= g_rewindAtTick && (!g_saveWhenDying || dyingConditionMet()))
+	// Not while a level change is pending, for the same reason as a save (see saveGame()): snapshot in the next level
+	if (g_rewindAtTick != 0 && gameTime >= g_rewindAtTick && (!g_saveWhenDying || dyingConditionMet()) && !levelChangePending())
 	{
 		g_rewindAtTick = 0;
 		checkCoverage("rewind snapshot");
@@ -417,7 +423,9 @@ void afterMessages()
 
 void tick()
 {
-	if (g_checkCoverageTicks != 0 && (gameTime / GAME_TICKS_PER_UPDATE) % g_checkCoverageTicks == 0)
+	// Not while a level change is pending: the game can't be saved then (see saveGame()), and no tick runs before the
+	// level changes, so nothing would ever recompute the coverage from that state
+	if (g_checkCoverageTicks != 0 && (gameTime / GAME_TICKS_PER_UPDATE) % g_checkCoverageTicks == 0 && !levelChangePending())
 	{
 		checkCoverage("periodic");
 	}

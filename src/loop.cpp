@@ -153,6 +153,11 @@ static bool backdropWasActiveBeforeVideo = false;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
+bool levelChangePending()
+{
+	return loopMissionState != LMS_NORMAL;
+}
+
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 LEVEL_TYPE prevMissionType = LEVEL_TYPE::LDS_NONE;
@@ -741,8 +746,15 @@ GAMECODE gameLoop()
 
 		bool forceTryGameTickUpdate = canFastForwardGameTime && ((!fastForwardTicksFixedToNormalTickRate && numForcedUpdatesLastCall > 0) || numRegularUpdatesTicks > 0) && NETgameIsBehindPlayersByAtLeast(4);
 
+		// No game state update once a level change or a savegame load has been requested (in a tick, by a script's
+		// loadLevel()): renderLoop() hands over to it in the next frames, which block for a while (destroying the
+		// objects, shutting the level down), and the ticks run until then would depend on how long those frames take.
+		// The world would also go on without its scripts. Game time stops at the tick that made the request (graphics
+		// time catches up with it, and the time that passes is dropped), and the next level starts from that tick.
+		const bool mayTick = !levelChangePending();
+
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-		auto timeUpdateResult = gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender, forceTryGameTickUpdate);
+		auto timeUpdateResult = gameTimeUpdate(mayTick && (renderBudget > 0 || previousUpdateWasRender), mayTick && forceTryGameTickUpdate);
 
 		if (timeUpdateResult == GameTimeUpdateResult::GAME_TIME_UPDATED_FORCED)
 		{

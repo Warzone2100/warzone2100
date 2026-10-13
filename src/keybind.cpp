@@ -2716,6 +2716,13 @@ void kf_QuickSave()
 		return; // Bail out if we're running a replay
 	}
 
+	if (levelChangePending())
+	{
+		// Before the old quicksave is deleted: saveGame() would refuse
+		console(_("QuickSave not possible while the level is changing"));
+		return;
+	}
+
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
 	if (WZ_PHYSFS_isDirectory(quickSaveFolder))

@@ -57,6 +57,10 @@ void objmemShutdown();
 /* General housekeeping for the object system */
 void objmemUpdate();
 
+/* Free every object pending destruction now, whenever it died, without raising eventDestroyed for any (as objmemUpdate()
+ * does for those that died too recently to be freed). For the end of a level, when no tick will see them again. */
+void objmemFreeAllDestroyed();
+
 /* Remove tile visibility for objects killed this tick in the given world, against that
  * world's own map. Safe to call repeatedly; clears the world's pending-removal queue. */
 void flushPendingVisRemoval(GameWorld& world);
