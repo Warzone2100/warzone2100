@@ -77,8 +77,9 @@ public:
 		return "libvpx";
 	}
 
-	bool decode(const uint8_t *data, size_t len) override
+	bool decode(const uint8_t *data, size_t len, double pts) override
 	{
+		(void)pts;
 		if (vpx_codec_decode(&m_ctx, data, static_cast<unsigned>(len), nullptr, 0) != VPX_CODEC_OK)
 		{
 			debug(LOG_WARNING, "vpx_codec_decode() failed: %s", vpx_codec_error(&m_ctx));
