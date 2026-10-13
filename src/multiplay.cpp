@@ -1557,9 +1557,16 @@ bool recvMessage()
 					// ignore
 					break;
 				}
+				debug(LOG_INFO, "Replay ended at gameTime %u", gameTime);
 				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				showSpectatorGameOverScreen();
+				if (headlessGameMode())
+				{
+					// Nobody is there to press ESC: quit, as a headless game does when it is over (gameOverMessage)
+					debug(LOG_WARNING, "Headless replay playback completed successfully!");
+					wzQuit(0);
+				}
 				break;
 			default:
 				processedMessage1 = false;
