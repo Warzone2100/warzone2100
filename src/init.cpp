@@ -1894,10 +1894,15 @@ static bool stageThreeInitialiseSync()
 		bMultiMessages = bMultiPlayer;
 	}
 
-	// A GameState load restores the interface the scripts had set up (before eventGameLoaded, which may set it up again)
+	// A GameState load restores the interface the scripts had set up.
+	// A save that has all of it (and the scripts' state, which every GameState save has) restores the game as it was,
+	// and runs no eventGameLoaded: the scripts go on as if it had never been saved.
+	// An older one (a legacy save, or a GameState save from before 4.8 without the interface) still runs it,
+	// for the scripts to set up again what it didn't keep.
+	bool restoredInterface = false;
 	if (wasColdLoad)
 	{
-		gamestate::savegame::applyDeferredColdLoadInterface();
+		restoredInterface = gamestate::savegame::applyDeferredColdLoadInterface();
 	}
 
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
@@ -1905,6 +1910,10 @@ static bool stageThreeInitialiseSync()
 		if (suppressLoadEvents)
 		{
 			debug(LOG_INFO, "Not firing eventGameLoaded (--gamestate-test-suppress-loaded-event)");
+		}
+		else if (restoredInterface)
+		{
+			debug(LOG_SAVE, "Not firing eventGameLoaded: the save restored the game as it was");
 		}
 		else
 		{
