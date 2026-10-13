@@ -78,6 +78,7 @@
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "modding.h"
 #include "multiplay.h"
+#include "gamestate_capture.h"
 #include "ordersource_wire.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
@@ -1470,6 +1471,7 @@ bool recvMessage()
 		if (queue.queueType == QUEUE_GAME)
 		{
 			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
+			gameStateCaptureCheckGameMessage(queue.index, messageTypeToString(type));
 		}
 
 		if (!shouldProcessMessage(queue, type))

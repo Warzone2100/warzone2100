@@ -10,6 +10,7 @@
 # "mb:" tests are movement bench scenarios, which run without AI scripts, so they isolate engine restore fidelity:
 # - mb:gamestate_deaths kills objects of every shape on purpose
 # - mb:gamestate_scripts has script groups and labels a load must restore
+# The miza 28102 cells are saved right before the messages for the next tick request a route.
 # The betweenticks cell (betweenticks.sh) is saved between two ticks with coverage changes pending.
 # "cam:" tests are campaign games, which run campaign scripts but no AI bots
 # (keep their end ticks short of the level ending).
@@ -38,6 +39,8 @@ mb:perf_battle 20000 100000 --rewind 5000
 mb:perf_battle 20000 100000 --rewind 5000 --dying
 mb:perf_vtol_rearm 20000 100000 --rewind 5000 --dying
 miza 20000 60000 --no-loaded --dying-filter feature
+miza 28102 33102 --no-loaded
+miza 28102 33102 --rewind 1000
 gamestate_cobra 300000 330000 --no-loaded
 gamestate_bonecrusher 300000 330000 --no-loaded
 mb:gamestate_deaths 27000 150000 --no-loaded --dying-filter pendingvis

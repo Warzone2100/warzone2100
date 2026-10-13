@@ -795,6 +795,14 @@ public:
 		overlays.clear();
 	}
 
+	// After a load or an in-process restore the overlays were built from another world state.
+	// The next updateTick rebuilds them. Until then, searches get none, as in a game loaded from disk.
+	void hardReset() override
+	{
+		LegacyAStarBackend::hardReset();
+		overlays.clear();
+	}
+
 	std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const override
 	{
 		if (owner < 0 || static_cast<size_t>(owner) >= overlays.size())

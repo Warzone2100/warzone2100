@@ -21,8 +21,9 @@
 /** \file
  *  Command-line test harness for GameState save / load / rewind fidelity.
  *
- *  All hooks run in gameLoop() right after a game state update (after its "End game state update"
- *  syncDebug line), i.e. between two ticks, so a save or snapshot sees exactly what a menu save sees.
+ *  The saves and the rewind snapshot are taken at the save point (see gamestate_capture.h): between two ticks, right
+ *  after the game loop has processed the messages for the next tick (afterMessages()), where a menu save is taken.
+ *  The other hooks, and the rewind restore, run right after a game state update (tick()).
  *  Every option is inert unless set on the command line.
  */
 
@@ -81,16 +82,18 @@ uint64_t testScriptRandomState(int player, const std::string &scriptName);
 /// since scripts can read the wall clock (ex. NullBot picks its personality by the current minute).
 std::string testScriptPrelude();
 
-/// --gamestate-save-after-messages: take the --gamestate-save-at-tick save right after the game loop has processed the
-/// received messages (afterMessages()) instead of right after a tick. A player's messages for the next tick are
-/// processed as soon as they have all arrived, possibly frames before that tick runs, so a menu save can fall there.
-void setSaveAfterMessages(bool enable);
+/// --gamestate-save-before-messages: test-only.
+/// Take the --gamestate-save-at-tick save and the --gamestate-rewind-test snapshot right after a tick (tick()),
+/// before the game loop processes the messages for the next tick, instead of at the save point.
+/// NOTE: a game saved there may resume differently.
+/// (--gamestate-save-after-messages, which selects the default save point, is still accepted.)
+void setSaveBeforeMessages(bool enable);
 
 /// --gamestate-save-when-coverage-pending: delay the save until there are tile coverage changes not yet applied
-/// (visCoverageChangesPending), as after a range upgrade between two ticks. Use with --gamestate-save-after-messages.
+/// (visCoverageChangesPending), as after a range upgrade between two ticks.
 void setSaveWhenCoveragePending(bool enable);
 
-/// Hook called by gameLoop() right after it has processed the received messages.
+/// Hook called by gameLoop() right after it has processed the received messages: the save point, once it is safe.
 void afterMessages();
 
 /// --gamestate-check-coverage=<ticks>: test-only.
