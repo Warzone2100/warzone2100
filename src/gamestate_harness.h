@@ -112,5 +112,11 @@ void onColdLoadComplete();
 /// Per-tick hook, called by gameLoop() right after each game state update.
 void tick();
 
+/// --gamestate-test-reinforce=<tick>: test-only. At the first capture point at or after <tick>, during an off-world
+/// campaign mission, send reinforcements as the player does from the transporter screen
+/// (transporterTestLaunchReinforcements). Not in a game loaded at or after <tick>: it was saved after that. Returns false
+/// on a bad value.
+bool setTestReinforce(const std::string &spec);
+
 } // namespace harness
 } // namespace gamestate

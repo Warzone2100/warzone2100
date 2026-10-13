@@ -87,6 +87,9 @@ fi
 if echo "camlaunch" | grep -qE "$FILTER"; then
 	"$HERE/camlaunch.sh" "$BIN" | grep -v '^  '
 fi
+if echo "camreinforce" | grep -qE "$FILTER"; then
+	"$HERE/camreinforce.sh" "$BIN"
+fi
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
 fi

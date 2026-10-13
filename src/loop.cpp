@@ -623,6 +623,7 @@ static void gameStateUpdate()
 	}
 
 	missionTimerUpdate();
+	missionReinforcementUpdate();
 
 	executeFnAndProcessScriptQueuedRemovals([]() { proj_UpdateAll(); });
 
