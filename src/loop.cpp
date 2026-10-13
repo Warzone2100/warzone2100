@@ -548,6 +548,12 @@ static void gameStateUpdate()
 	// Rebuild it first if objects were freed or worlds swapped since then (between updates), or if a level just started.
 	gridResetIfDirty(gameWorld);
 
+	// Apply the tile coverage changes made between ticks (a range upgrade from a research gift, ...)
+	// before anything in this tick reads the coverage.
+	// Every client has processed the same messages at this point,
+	// unlike right after recvMessage, which runs at frame-dependent times.
+	visFlushCoverageChanges();
+
 	if (!paused && !scriptPaused())
 	{
 		executeFnAndProcessScriptQueuedRemovals([]() { updateScripts(); });
@@ -630,9 +636,10 @@ static void gameStateUpdate()
 	// update (see gridReset). Must follow objmemUpdate directly: the grid may point to the objects it freed.
 	gridReset(gameWorld);
 
-	// Bring the tile coverage of the objects that this tick's terrain changes may have changed up to date, so that at
-	// the end of every tick it is what a recompute from the current state gives (which is all a loaded game can do).
-	visFlushCoverageChanges(gameWorld);
+	// Bring the tile coverage of the objects that this tick's terrain changes and range upgrades may have changed
+	// up to date, so that at the end of every tick it is what a recompute from the current state gives
+	// (which is all a loaded game can do).
+	visFlushCoverageChanges();
 
 	// accumulate occasional stats / snapshots
 	if (!paused && !scriptPaused())
@@ -721,6 +728,7 @@ GAMECODE gameLoop()
 		// Receive NET_BLAH messages.
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
 		executeFnAndProcessScriptQueuedRemovals([]() { recvMessage(); });
+		gamestate::harness::afterMessages();  // (test hook, a no-op unless --gamestate-save-after-messages)
 
 		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected

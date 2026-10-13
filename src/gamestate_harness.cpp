@@ -60,6 +60,8 @@ static std::vector<std::vector<std::vector<uint8_t>>> g_rewindPendingGameQueue; 
 static std::vector<std::vector<uint8_t>> g_rewindQueuedOrders; // the local droid orders not sent yet at the snapshot
 static bool g_suppressLoadedEvent = false;
 static std::string g_resaveOnLoadPath;
+static bool g_saveAfterMessages = false;
+static bool g_saveWhenCoveragePending = false;
 static uint32_t g_checkCoverageTicks = 0;
 static uint32_t g_coverageChecks = 0;
 static uint32_t g_coverageChecksDiffering = 0;
@@ -222,8 +224,11 @@ std::string testScriptPrelude()
 	       "})(" + std::to_string(fixedTime) + ");\n";
 }
 
+static void checkCoverage(const char *when);
+
 void onColdLoadComplete()
 {
+	checkCoverage("after load");
 	if (g_resaveOnLoadPath.empty())
 	{
 		return;
@@ -233,6 +238,16 @@ void onColdLoadComplete()
 	      ok ? "wrote" : "FAILED to write", g_resaveOnLoadPath.c_str(), gameTime);
 	g_resaveOnLoadPath.clear();
 	wzQuit(ok ? EXIT_SUCCESS : EXIT_FAILURE);
+}
+
+void setSaveAfterMessages(bool enable)
+{
+	g_saveAfterMessages = enable;
+}
+
+void setSaveWhenCoveragePending(bool enable)
+{
+	g_saveWhenCoveragePending = enable;
 }
 
 void setCheckCoverage(uint32_t ticks)
@@ -246,13 +261,35 @@ static void checkCoverage(const char *when)
 	{
 		return;
 	}
-	const CoverageCheckResult result = visCheckCoverage(gameWorld);
 	++g_coverageChecks;
-	if (result.differing > 0)
+	bool differs = false;
+	// Both worlds: the inactive one (a campaign home base or off-world map) is restored by recomputing it too
+	const std::pair<GameWorld *, const char *> worlds[] = {{&gameWorld, "active"}, {&mission.gameWorld, "inactive"}};
+	for (const auto &w : worlds)
+	{
+		const CoverageCheckResult result = visCheckCoverage(*w.first);
+		if (result.differing > 0)
+		{
+			differs = true;
+			debug(LOG_INFO, "GameState harness: coverage check (%s) at gameTime %u, %s world: %zu of %zu object(s) differ from a recompute; first: %s",
+			      when, gameTime, w.second, result.differing, result.checked, result.firstDifference.c_str());
+		}
+		if (result.inconsistentTiles > 0)
+		{
+			differs = true;
+			debug(LOG_INFO, "GameState harness: coverage check (%s) at gameTime %u, %s world: %zu tile count(s) differ from the watched tiles; first: %s",
+			      when, gameTime, w.second, result.inconsistentTiles, result.firstInconsistentTile.c_str());
+		}
+		if (result.unexplored > 0)
+		{
+			differs = true;
+			debug(LOG_INFO, "GameState harness: coverage check (%s) at gameTime %u, %s world: %zu watcher(s) with unexplored watched tiles; first: %s",
+			      when, gameTime, w.second, result.unexplored, result.firstUnexplored.c_str());
+		}
+	}
+	if (differs)
 	{
 		++g_coverageChecksDiffering;
-		debug(LOG_INFO, "GameState harness: coverage check (%s) at gameTime %u: %zu of %zu object(s) differ from a recompute; first: %s",
-		      when, gameTime, result.differing, result.checked, result.firstDifference.c_str());
 	}
 }
 
@@ -274,8 +311,21 @@ static void maybeSave()
 	{
 		return;
 	}
+	if (g_saveWhenCoveragePending && !visCoverageChangesPending())
+	{
+		return;
+	}
 	g_saveAtTick = 0; // save exactly once
-	checkCoverage("save");
+	if (visCoverageChangesPending())
+	{
+		// Between two ticks, after the messages: the coverage isn't up to date yet by design (the pending changes are
+		// applied at the start of the next tick), so there is nothing to compare a recompute with
+		debug(LOG_INFO, "GameState harness: no coverage check at the save: changes are pending");
+	}
+	else
+	{
+		checkCoverage("save");
+	}
 	const size_t dying = psDestroyedObj.size();
 	const bool ok = saveGame(g_savePath.c_str(), GTYPE_SAVE_MIDMISSION);
 	debug(LOG_INFO, "GameState harness: %s save \"%s\" at gameTime %u (%zu object(s) pending destruction)",
@@ -357,13 +407,24 @@ static void maybeRewind()
 	}
 }
 
+void afterMessages()
+{
+	if (g_saveAfterMessages)
+	{
+		maybeSave();
+	}
+}
+
 void tick()
 {
 	if (g_checkCoverageTicks != 0 && (gameTime / GAME_TICKS_PER_UPDATE) % g_checkCoverageTicks == 0)
 	{
 		checkCoverage("periodic");
 	}
-	maybeSave();
+	if (!g_saveAfterMessages)
+	{
+		maybeSave();
+	}
 	maybeRewind();
 	if (g_exitAtTick != 0 && gameTime >= g_exitAtTick)
 	{

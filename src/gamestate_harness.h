@@ -81,10 +81,26 @@ uint64_t testScriptRandomState(int player, const std::string &scriptName);
 /// since scripts can read the wall clock (ex. NullBot picks its personality by the current minute).
 std::string testScriptPrelude();
 
-/// --gamestate-check-coverage=<ticks>: every <ticks> ticks, and right before a harness save or rewind snapshot, check
-/// that the tile coverage of every droid and structure in the active world matches a recompute from its current state
-/// (visCheckCoverage), and log the checks that find a difference. A loaded game can only recompute the coverage, so a
-/// difference at a save point is coverage the loaded game won't have. Test-only.
+/// --gamestate-save-after-messages: take the --gamestate-save-at-tick save right after the game loop has processed the
+/// received messages (afterMessages()) instead of right after a tick. A player's messages for the next tick are
+/// processed as soon as they have all arrived, possibly frames before that tick runs, so a menu save can fall there.
+void setSaveAfterMessages(bool enable);
+
+/// --gamestate-save-when-coverage-pending: delay the save until there are tile coverage changes not yet applied
+/// (visCoverageChangesPending), as after a range upgrade between two ticks. Use with --gamestate-save-after-messages.
+void setSaveWhenCoveragePending(bool enable);
+
+/// Hook called by gameLoop() right after it has processed the received messages.
+void afterMessages();
+
+/// --gamestate-check-coverage=<ticks>: test-only.
+/// Every <ticks> ticks, right before a harness save or rewind snapshot, and right after a GameState load,
+/// check the following (visCheckCoverage), and log the checks that find a difference:
+/// - that the tile coverage of every droid and structure in both worlds matches a recompute from its current state
+/// - that the per-tile counts add up
+/// - that watched tiles are explored
+/// A loaded game can only recompute the coverage,
+/// so a difference at a save point is coverage the loaded game won't have.
 void setCheckCoverage(uint32_t ticks);
 
 /// Called at the end of a GameState cold load (stageThreeInitialise), just before the first tick.

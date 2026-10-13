@@ -21,14 +21,18 @@
 #                     pending destruction
 #     --dying-filter <filter>  like --dying, with a --gamestate-dying-filter (ex. 3,structure)
 #     --no-loaded     load with --gamestate-test-suppress-loaded-event (no eventGameLoaded / research replay)
+#     --after-messages  save right after the game loop has processed the received messages, rather than right after a
+#                     tick (--gamestate-save-after-messages)
+#     --coverage-pending  save (at or after <save tick>) once tile coverage changes are pending, as after a range
+#                     upgrade between ticks (--gamestate-save-when-coverage-pending), with --after-messages
 #     --rewind <k>    instead of a save + load, snapshot in-process at <save tick> and restore it <k> ticks later
 #
-# Environment: OUT (default /tmp/gamestate-forkcrc) holds the config dir, traces and logs;
-#              RUN_TIMEOUT (default 600) is the per-run time limit in seconds (a stalled run counts as failed);
-#              SEED (default 1) is passed as --gamestate-test-seed, so every run of a cell plays the same game;
-#              CHECK_COVERAGE (default 0, off) is passed as --gamestate-check-coverage=<ticks> to every run: check that
-#              the tile coverage at every <ticks>th tick, and at the save or snapshot, matches a recompute from the
-#              current state (a loaded game can only recompute it). A difference is reported, and fails the cell.
+# Environment: OUT (default /tmp/gamestate-forkcrc) holds the config dir, traces and logs.
+#              RUN_TIMEOUT (default 600) is the per-run time limit in seconds (a stalled run counts as failed).
+#              EXTRA (default none): more options for every run (ex. --mod=<test mod>).
+#              SEED (default 1) is passed as --gamestate-test-seed, so every run of a cell plays the same game.
+#              CHECK_COVERAGE (default 0, off) is passed as --gamestate-check-coverage=<ticks> to every run,
+#              and a tile coverage difference it finds fails the cell.
 # Exit status: 0 identical, 1 differs, 2 a run failed.
 set -u
 
@@ -41,11 +45,15 @@ DYING=
 DYINGTAG=
 NOLOADED=
 REWIND=
+SAVEPOINT=
+SAVEPOINTTAG=
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--dying) DYING=--gamestate-save-when-dying ;;
 		--dying-filter) shift; DYING="--gamestate-save-when-dying --gamestate-dying-filter=${1:?dying filter}"; DYINGTAG=".dying_$(echo "$1" | tr ',' '_')" ;;
 		--no-loaded) NOLOADED=--gamestate-test-suppress-loaded-event ;;
+		--after-messages) SAVEPOINT="$SAVEPOINT --gamestate-save-after-messages"; SAVEPOINTTAG="$SAVEPOINTTAG.aftermsg" ;;
+		--coverage-pending) SAVEPOINT="$SAVEPOINT --gamestate-save-when-coverage-pending"; SAVEPOINTTAG="$SAVEPOINTTAG.covpending" ;;
 		--rewind) shift; REWIND=${1:?rewind ticks} ;;
 		*) echo "unknown option $1" >&2; exit 2 ;;
 	esac
@@ -67,15 +75,15 @@ case "$TEST" in
 esac
 TEST=$(echo "$TEST" | tr ':' '_')
 [ -n "$DYINGTAG" ] || DYINGTAG=${DYING:+.dying}
-TAG="$TEST.$SAVETICK$DYINGTAG${NOLOADED:+.noloaded}${REWIND:+.rewind$REWIND}"
+TAG="$TEST.$SAVETICK$DYINGTAG$SAVEPOINTTAG${NOLOADED:+.noloaded}${REWIND:+.rewind$REWIND}"
 CFG="$OUT/config"
 mkdir -p "$OUT" "$CFG"
 SAVENAME="fork_$(echo "$TAG" | tr '.' '_')"
 rm -rf "$CFG/savegames/$SAVEDIR/$SAVENAME" "$CFG/savegames/$SAVEDIR/$SAVENAME.gam"
 
-COMMON="--configdir=$CFG --headless --autogame --gamestate-test-seed=$SEED $COVOPT"
+COMMON="--configdir=$CFG --headless --autogame --gamestate-test-seed=$SEED $COVOPT ${EXTRA:-}"
 [ -n "$ACOMMON" ] || ACOMMON="$COMMON"
-case "$ACOMMON" in *check-coverage*) ;; *) ACOMMON="$ACOMMON $COVOPT" ;; esac
+case "$ACOMMON" in *check-coverage*) ;; *) ACOMMON="$ACOMMON $COVOPT ${EXTRA:-}" ;; esac
 
 # coverage_report <status>: with CHECK_COVERAGE, report the coverage checks that found a difference.
 # Returns the status to exit with (a difference fails an otherwise identical cell).
@@ -123,7 +131,7 @@ if [ -n "$REWIND" ]; then
 	exit $?
 fi
 
-run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING" || { echo "$TAG RUN A FAILED"; exit 2; }
+run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING $SAVEPOINT" || { echo "$TAG RUN A FAILED"; exit 2; }
 AT=$(sed -n 's/.*GameState harness: wrote save .* at gameTime \([0-9]*\) (\([0-9]*\) object.*/\1 \2/p' "$OUT/$TAG.A.log" | head -1)
 [ -n "$AT" ] || { echo "$TAG NO SAVE WRITTEN (see $OUT/$TAG.A.log)"; exit 2; }
 SAVEDAT=${AT% *}
@@ -137,8 +145,7 @@ if [ $STATUS -eq 1 ]; then
 	# Prefer the first tick where the simulation itself differs over an echoed CRC (see cmptrace.py)
 	TICK=$(echo "$RESULT" | sed -n 's/.*first non-echo difference at tick \([0-9]*\).*/\1/p')
 	[ -n "$TICK" ] || TICK=$(echo "$RESULT" | sed -n 's/DIFFERS at tick \([0-9]*\).*/\1/p')
-	# Rerun both with the full sync-debug log of the first differing tick, and show where they part.
-	run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING --gamestate-crc-detail-tick=$TICK" || exit 2
+	run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING $SAVEPOINT --gamestate-crc-detail-tick=$TICK" || exit 2
 	run_b "--gamestate-crc-detail-tick=$TICK" || exit 2
 	python3 -I "$HERE/difflog.py" "$OUT/$TAG.A.trace.detail.txt" "$OUT/$TAG.B.trace.detail.txt" | head -40
 fi
