@@ -32,8 +32,10 @@
 #include "game_world.h"
 #include "map.h"
 #include "objmem.h"
+#include "mission.h"
 #include "random.h"
 
+#include <algorithm>
 #include <cstdlib>
 
 namespace gamestate
@@ -44,6 +46,9 @@ namespace harness
 static uint32_t g_saveAtTick = 0;
 static std::string g_savePath;
 static bool g_saveWhenDying = false;
+static size_t g_dyingMinCount = 1;
+static bool g_dyingNeedsType[3] = {false, false, false}; // OBJ_DROID, OBJ_STRUCTURE, OBJ_FEATURE
+static bool g_dyingNeedsPendingVis = false;
 static uint32_t g_exitAtTick = 0;
 static uint32_t g_rewindAtTick = 0;
 static uint32_t g_rewindTicksLater = 0;
@@ -64,6 +69,73 @@ void setSaveAtTick(uint32_t tick, const std::string &savePath)
 void setSaveWhenDying(bool enable)
 {
 	g_saveWhenDying = enable;
+}
+
+bool setDyingFilter(const std::string &filter)
+{
+	size_t start = 0;
+	while (start <= filter.size())
+	{
+		const size_t end = std::min(filter.find(',', start), filter.size());
+		const std::string item = filter.substr(start, end - start);
+		if (item == "droid")
+		{
+			g_dyingNeedsType[OBJ_DROID] = true;
+		}
+		else if (item == "structure")
+		{
+			g_dyingNeedsType[OBJ_STRUCTURE] = true;
+		}
+		else if (item == "feature")
+		{
+			g_dyingNeedsType[OBJ_FEATURE] = true;
+		}
+		else if (item == "pendingvis")
+		{
+			g_dyingNeedsPendingVis = true;
+		}
+		else if (!item.empty() && item.find_first_not_of("0123456789") == std::string::npos)
+		{
+			g_dyingMinCount = std::max<size_t>(1, std::stoul(item));
+		}
+		else
+		{
+			return false;
+		}
+		start = end + 1;
+	}
+	return true;
+}
+
+// Whether the objects pending destruction satisfy --gamestate-save-when-dying and its filter.
+static bool dyingConditionMet()
+{
+	if (psDestroyedObj.size() < g_dyingMinCount)
+	{
+		return false;
+	}
+	bool haveType[3] = {false, false, false};
+	bool havePendingVis = false;
+	for (const BASE_OBJECT *psObj : psDestroyedObj)
+	{
+		if (psObj->type <= OBJ_FEATURE)
+		{
+			haveType[psObj->type] = true;
+		}
+		for (const GameWorld *world : {&gameWorld, &mission.gameWorld})
+		{
+			const auto &pending = world->objects.pendingVisRemoval;
+			havePendingVis = havePendingVis || std::find(pending.begin(), pending.end(), psObj) != pending.end();
+		}
+	}
+	for (int t = 0; t < 3; ++t)
+	{
+		if (g_dyingNeedsType[t] && !haveType[t])
+		{
+			return false;
+		}
+	}
+	return !g_dyingNeedsPendingVis || havePendingVis;
 }
 
 void setExitAtTick(uint32_t tick)
@@ -163,7 +235,7 @@ static void maybeSave()
 	{
 		return;
 	}
-	if (g_saveWhenDying && psDestroyedObj.empty())
+	if (g_saveWhenDying && !dyingConditionMet())
 	{
 		return;
 	}
@@ -180,7 +252,7 @@ static void maybeSave()
 
 static void maybeRewind()
 {
-	if (g_rewindAtTick != 0 && gameTime >= g_rewindAtTick)
+	if (g_rewindAtTick != 0 && gameTime >= g_rewindAtTick && (!g_saveWhenDying || dyingConditionMet()))
 	{
 		g_rewindAtTick = 0;
 		try

@@ -379,6 +379,7 @@ typedef enum
 	CLI_GAMESTATE_CRCDETAIL_ONSAVE,
 	CLI_GAMESTATE_SAVEATTICK,
 	CLI_GAMESTATE_SAVEWHENDYING,
+	CLI_GAMESTATE_DYINGFILTER,
 	CLI_GAMESTATE_EXITATTICK,
 	CLI_GAMESTATE_REWINDTEST,
 	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
@@ -491,6 +492,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-crc-detail-on-save", POPT_ARG_NONE, CLI_GAMESTATE_CRCDETAIL_ONSAVE, "Auto-dump a window of full sync-debug logs to <crc-trace-file>.detail.txt around each GameState save/load (no need to know the save tick)", nullptr, true },
 		{ "gamestate-save-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_SAVEATTICK, "Write a savegame at the given game tick and keep running (for the load sync test)", "tick:savegame path", true },
 		{ "gamestate-save-when-dying", POPT_ARG_NONE, CLI_GAMESTATE_SAVEWHENDYING, "Delay --gamestate-save-at-tick until a tick that ends with objects pending destruction", nullptr, true },
+		{ "gamestate-dying-filter", POPT_ARG_STRING, CLI_GAMESTATE_DYINGFILTER, "With --gamestate-save-when-dying: what the objects pending destruction must include (comma-separated: a minimum count, droid, structure, feature, pendingvis)", "filter", true },
 		{ "gamestate-exit-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_EXITATTICK, "Quit at the given game tick", "game tick", true },
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
 		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
@@ -990,6 +992,13 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		}
 		case CLI_GAMESTATE_SAVEWHENDYING:
 			gamestate::harness::setSaveWhenDying(true);
+			break;
+		case CLI_GAMESTATE_DYINGFILTER:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setDyingFilter(token))
+			{
+				qFatal("Bad value for --gamestate-dying-filter (expected a comma-separated list of: a minimum count, droid, structure, feature, pendingvis)");
+			}
 			break;
 		case CLI_GAMESTATE_EXITATTICK:
 			token = poptGetOptArg(poptCon);

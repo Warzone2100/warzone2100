@@ -193,6 +193,9 @@ bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muz
 /*this is called whenever a structure has finished building*/
 void buildingComplete(STRUCTURE *psBuilding, GameWorld& world);
 
+/// Take a structure off the map tiles it occupies (tile object pointers and blocking flags), as its removal does.
+void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState);
+
 // Reapply a gate's tile blocking bits to match its restored SAS_* animation state (GameState restore).
 void structureApplyGateStateBlocking(STRUCTURE *psStructure, WorldMapState& mapState);
 

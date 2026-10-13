@@ -42,7 +42,15 @@ void setSaveAtTick(uint32_t tick, const std::string &savePath);
 
 /// --gamestate-save-when-dying: delay the save-at-tick save until a tick that ends with objects waiting to be freed
 /// (psDestroyedObj not empty), i.e. a save with references to objects that died in the save tick.
+/// Delays the --gamestate-rewind-test snapshot the same way.
 void setSaveWhenDying(bool enable);
+
+/// --gamestate-dying-filter=<filter>: with --gamestate-save-when-dying,
+/// what the objects pending destruction must include.
+/// Comma-separated: a minimum count, "droid", "structure", "feature" (at least one of that type),
+/// "pendingvis" (at least one whose tile visibility removal is still pending).
+/// Returns false on a bad filter.
+bool setDyingFilter(const std::string &filter);
 
 /// --gamestate-exit-at-tick=<tick>: quit (exit code 0) at the first tick >= tick.
 void setExitAtTick(uint32_t tick);

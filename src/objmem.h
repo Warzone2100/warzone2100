@@ -100,6 +100,9 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objS
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState);
 
+/*Remove a single Feature from its lists (the reverse of addFeature)*/
+void removeFeatureFromList(FEATURE *psFeatureToRemove, WorldObjectState& objState);
+
 /* Destroy a feature */
 void killFeature(FEATURE *psDel, WorldObjectState& objState);
 

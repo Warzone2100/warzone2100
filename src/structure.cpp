@@ -144,7 +144,6 @@ static bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer);
 static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD player);
-static void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState);
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(const STRUCTURE *psStruct);
 static void parseFavoriteStructs();
@@ -4690,7 +4689,7 @@ bool validLocation(GameWorld& world, BASE_STATS *psStats, Vector2i pos, uint16_t
 
 
 //remove a structure from the map
-static void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState)
+void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState)
 {
 	auxStructureNonblocking(psStruct, mapState);
 
