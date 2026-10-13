@@ -77,6 +77,7 @@
 #include "advvis.h"
 #include "loadsave.h"
 #include "wzapi.h"
+#include "visibility.h"
 #include "ordersource.h"
 #include "order.h"
 #include "chat.h"
@@ -3831,6 +3832,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			psStats->upgrade[player].range = value;
 			dirtyAllDroids(player);
 			dirtyAllStructures(player);
+			visNoteRangeChange(player); // the tile coverage is refreshed at the end of the tick
 		}
 		else if (name == "HitPoints")
 		{
@@ -3856,6 +3858,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			psStats->upgrade[player].range = value;
 			dirtyAllDroids(player);
 			dirtyAllStructures(player);
+			visNoteRangeChange(player); // the tile coverage is refreshed at the end of the tick
 		}
 		else if (name == "HitPoints")
 		{

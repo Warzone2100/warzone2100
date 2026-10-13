@@ -29,6 +29,8 @@
 
 #include <array>
 #include <memory>
+#include <utility>
+#include <vector>
 
 #include <stdint.h>
 
@@ -92,4 +94,7 @@ struct WorldMapState
 	GATEWAY_LIST gateways;
 	/// detected narrow passages, built after load, null until then
 	std::unique_ptr<CorridorMap> corridors;
+	/// Tile height changes since the last visFlushCoverageChanges(), as tile rectangles (first = min, second = max,
+	/// inclusive): the objects whose tile coverage they may change are recomputed at the end of the tick.
+	std::vector<std::pair<Vector2i, Vector2i>> heightChanges;
 };

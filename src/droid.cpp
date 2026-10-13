@@ -899,7 +899,7 @@ void droidUpdate(DROID *psDroid)
 
 	if (psDroid->flags.test(OBJECT_FLAG_DIRTY))
 	{
-		visTilesUpdate(psDroid, gameWorld.map);
+		// (A range upgrade refreshes the tile coverage at the end of the tick, see visNoteRangeChange)
 		droidBodyUpgrade(psDroid);
 		psDroid->flags.set(OBJECT_FLAG_DIRTY, false);
 	}
