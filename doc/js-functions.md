@@ -606,6 +606,11 @@ the general droid limit (eg for commanders and construction droids). (3.2+ only)
 
 Get the percentage of experience this player droids are going to gain. (3.2+ only)
 
+
+## getPlayerDamageModifier(player)
+
+Get the percentage of damage this player's stuff will take.
+
 ## setDroidLimit(player, maxNumber[, droidType])
 
 Set the maximum number of droids that this player can produce. If a third
@@ -627,6 +632,11 @@ THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 
 Set the percentage of experience this player droids are going to gain. (3.2+ only)
 The percentage must not be negative, and is capped at 32767.
+
+## setDamageModifier(player, percent)
+
+Set a modifier for how much damage a specific player's objects will take.
+A percent > 100 means this player will take more damage, while < 100 means reduced damage.
 
 ## enumCargo(transporterDroid)
 
