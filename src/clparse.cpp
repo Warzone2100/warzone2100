@@ -382,6 +382,7 @@ typedef enum
 	CLI_GAMESTATE_DYINGFILTER,
 	CLI_GAMESTATE_EXITATTICK,
 	CLI_GAMESTATE_REWINDTEST,
+	CLI_GAMESTATE_TESTREINFORCE,
 	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
 	CLI_GAMESTATE_RESAVEONLOAD,
 	CLI_GAMESTATE_TESTSEED,
@@ -498,6 +499,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-save-when-dying", POPT_ARG_NONE, CLI_GAMESTATE_SAVEWHENDYING, "Delay --gamestate-save-at-tick until a tick that ends with objects pending destruction", nullptr, true },
 		{ "gamestate-dying-filter", POPT_ARG_STRING, CLI_GAMESTATE_DYINGFILTER, "With --gamestate-save-when-dying: what the objects pending destruction must include (comma-separated: a minimum count, droid, structure, feature, pendingvis)", "filter", true },
 		{ "gamestate-exit-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_EXITATTICK, "Quit at the given game tick", "game tick", true },
+		{ "gamestate-test-reinforce", POPT_ARG_STRING, CLI_GAMESTATE_TESTREINFORCE, "Test only: at this game tick, during an off-world campaign mission, send reinforcements as the player does", "tick", true },
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
 		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
 		{ "gamestate-resave-on-load", POPT_ARG_STRING, CLI_GAMESTATE_RESAVEONLOAD, "After loading a savegame, save it again to the given path before the first tick, and quit", "savegame path", true },
@@ -1015,6 +1017,13 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Missing game tick value for --gamestate-exit-at-tick");
 			}
 			gamestate::harness::setExitAtTick(static_cast<uint32_t>(strtoul(token, nullptr, 10)));
+			break;
+		case CLI_GAMESTATE_TESTREINFORCE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setTestReinforce(token))
+			{
+				qFatal("Bad value for --gamestate-test-reinforce (expected <tick>)");
+			}
 			break;
 		case CLI_GAMESTATE_REWINDTEST:
 		{

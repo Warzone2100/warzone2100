@@ -171,7 +171,10 @@ void initNoGoAreas();
 void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area);
 
 /** Fly in transporters at start of level. */
-void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter);
+/// Returns the transporter flown in (the player's first at the home base with droids aboard), or nullptr if none
+DROID *missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter);
+/// Per tick: start flying in the reinforcements launched during an off-world mission when their time comes
+void missionReinforcementUpdate();
 
 /** Move transporter offworld. */
 void missionMoveTransporterOffWorld(DROID *psTransporter);

@@ -840,12 +840,13 @@ void addTransporterTimerInterface()
 #define	EDGE_SIZE	1
 
 /* fly in transporters at start of level */
-void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
+DROID *missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 {
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY;
+	DROID *psFlownIn = nullptr;
 
-	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
+	ASSERT_OR_RETURN(nullptr, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
 
 	iLandX = getLandingX(iPlayer);
 	iLandY = getLandingY(iPlayer);
@@ -853,7 +854,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 	iZ = (UWORD)(map_Height(gameWorld.map, iX, iY) + OFFSCREEN_HEIGHT);
 
 	//get the droids for the mission
-	mutating_list_iterate(mission.gameWorld.objects.droids[iPlayer], [iPlayer, bTrackTransporter, iX, iY, iZ, iLandX, iLandY](DROID* psTransporter)
+	mutating_list_iterate(mission.gameWorld.objects.droids[iPlayer], [iPlayer, bTrackTransporter, iX, iY, iZ, iLandX, iLandY, &psFlownIn](DROID* psTransporter)
 	{
 		SDWORD iDx, iDy;
 
@@ -907,12 +908,14 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 
 				audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_FLIGHT, moveCheckDroidMovingAndVisible);
 
+				psFlownIn = psTransporter;
 				//only want to fly one transporter in at a time now - AB 14/01/99
 				return IterationResult::BREAK_ITERATION;
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
+	return psFlownIn;
 }
 
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
@@ -2290,7 +2293,41 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
 
-//update function for the transporter timer
+/* Each tick, after the droids and the mission timer (gameStateUpdate):
+   reinforcements the player launched during an off-world mission (their transporter waits at the home base,
+   DACTION_TRANSPORTWAITTOFLYIN) start flying in TRANSPORTER_REINFORCE_LEADIN before the reinforcement time is up,
+   so they land about when the transporter timer reaches 0. */
+void missionReinforcementUpdate()
+{
+	if (selectedPlayer >= MAX_PLAYERS || mission.ETA < 0 || mission.ETA == LZ_COMPROMISED_TIME)
+	{
+		return;
+	}
+	const auto &homeDroids = mission.gameWorld.objects.droids[selectedPlayer];
+	const auto waiting = std::find_if(homeDroids.begin(), homeDroids.end(), [](const DROID *psDroid) {
+		return psDroid->isTransporter() && psDroid->action == DACTION_TRANSPORTWAITTOFLYIN;
+	});
+	if (waiting == homeDroids.end())
+	{
+		return;
+	}
+	const SDWORD timeRemaining = mission.ETA - static_cast<SDWORD>(gameTime - g_iReinforceTime);
+	if (timeRemaining >= TRANSPORTER_REINFORCE_LEADIN)
+	{
+		return;
+	}
+	// (An empty transporter, sent to move droids to safety, isn't flown in: the action update brings it back
+	// when the time is up)
+	if (DROID *psTransporter = missionFlyTransportersIn(selectedPlayer, false))
+	{
+		executeFnAndProcessScriptQueuedRemovals([psTransporter]()
+		{
+			triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
+		});
+	}
+}
+
+//update function for the transporter timer (display only: missionReinforcementUpdate flies the reinforcements in)
 void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
@@ -2324,19 +2361,6 @@ void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 				if (timeRemaining < 0)
 				{
 					timeRemaining = 0;
-				}
-				if (timeRemaining < TRANSPORTER_REINFORCE_LEADIN)
-				{
-					// arrived: tell the transporter to move to the new onworld
-					// location if not already doing so
-					if (psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN)
-					{
-						missionFlyTransportersIn(selectedPlayer, false);
-						executeFnAndProcessScriptQueuedRemovals([psTransporter]()
-						{
-							triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
-						});
-					}
 				}
 			}
 			fillTimeDisplay(*Label, timeRemaining, false);

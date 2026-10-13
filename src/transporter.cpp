@@ -1193,6 +1193,39 @@ void transporterRestoreOnMission(bool onMissionState)
 	onMission = onMissionState;
 }
 
+// --gamestate-test-reinforce: send reinforcements during an off-world mission as the player does,
+// by putting one of the home base's droids aboard the transporter waiting there and launching it
+bool transporterTestLaunchReinforcements()
+{
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "No local player");
+	DROID *psTransporter = nullptr;
+	DROID *psCargo = nullptr;
+	for (DROID *psDroid : mission.gameWorld.objects.droids[selectedPlayer])
+	{
+		if (psDroid->isTransporter())
+		{
+			psTransporter = (psTransporter == nullptr && !transporterFlying(psDroid)) ? psDroid : psTransporter;
+		}
+		else if (psCargo == nullptr)
+		{
+			psCargo = psDroid;
+		}
+	}
+	if (psTransporter == nullptr || psCargo == nullptr)
+	{
+		debug(LOG_ERROR, "No transporter waiting off-world, or no droid at the home base, to send reinforcements with");
+		return false;
+	}
+	onMission = true;  // (as intAddTransporter(psTransporter, true) sets it)
+	transporterAddDroid(psTransporter, psCargo);
+	debug(LOG_INFO, "Launching reinforcements: transporter %u with droid %u aboard", psTransporter->id, psCargo->id);
+	// As processLaunchTransporter does
+	const bool launched = launchTransporter(psTransporter);
+	widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)psTransporter);
+	executeFnAndProcessScriptQueuedRemovals([psTransporter]() { triggerEvent(TRIGGER_TRANSPORTER_LAUNCH, psTransporter); });
+	return launched;
+}
+
 /*launches the defined transporter to the offworld map*/
 bool launchTransporter(DROID *psTransporter)
 {
