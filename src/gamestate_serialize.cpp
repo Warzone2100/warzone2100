@@ -1521,6 +1521,20 @@ static void clearWorldObjects(GameWorld &world)
 	}
 }
 
+/// Recompute a restored world's tile coverage from its restored state (visRecomputeCoverage).
+///
+/// This also marks the covered tiles explored for every player the object shares vision with,
+/// on top of the saved exploration. The live game keeps those tiles explored already (see hqReward),
+/// so this only adds the tiles of a coverage change still pending at the save (a range upgrade between ticks).
+static void recomputeRestoredCoverage(GameWorld &world)
+{
+	if (!world.map.tiles)
+	{
+		return;
+	}
+	visRecomputeCoverage(world);
+}
+
 /// Rebuild transient/derived state that is recomputed rather than serialized.
 static void rebuildDerivedState()
 {
@@ -5581,6 +5595,15 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	{
 		restampFeaturePositions(gameWorld, j.at("world"));
 	}
+	// Tile coverage (watched tiles and the per-tile watcher/sensor/jammer counts) is not saved.
+	// The live game keeps it equal to a recompute from the current state at the end of every tick
+	// (see visTilesUpdate), so recompute it now that every input is restored (terrain, positions and heights,
+	// move status, structure status and models, range upgrades).
+	// This replaces what the objects computed while they were built, and drops the terrain changes the rebuild
+	// recorded. Changes pending in a save taken between ticks are applied now, not at the start of the next tick.
+	debug(LOG_GAMESTATE_SERIAL, "post-pass: recompute tile coverage");
+	recomputeRestoredCoverage(gameWorld);
+	recomputeRestoredCoverage(mission.gameWorld);
 	// Re-apply the power request queues now that all structures exist: structure (re)building during
 	// the world restore mutates the per-player queue (delPowerRequest/requestPowerFor), so it must be
 	// stamped from the snapshot after reconstruction rather than inside readPower (see reapplyPowerQueue).
