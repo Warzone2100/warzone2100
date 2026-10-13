@@ -422,6 +422,15 @@ bool prepareScripts(bool loadGame)
 	return true;
 }
 
+void discardQueuedResearchEvents()
+{
+	if (!eventQueue.empty())
+	{
+		debug(LOG_INFO, "Discarding %zu queued eventResearched call(s)", eventQueue.size());
+	}
+	std::queue<struct researchEvent>().swap(eventQueue);
+}
+
 bool initScripts()
 {
 	return true;

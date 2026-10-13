@@ -107,6 +107,7 @@
 #include "ingameop.h"
 #include "qtscript.h"
 #include "gamestate_savegame.h"
+#include "gamestate_harness.h"
 #include "template.h"
 #include "activity.h"
 #include "spectatorwidgets.h"
@@ -1809,6 +1810,12 @@ static bool stageThreeInitialiseSync()
 	// research-event replay below sees the restored script globals. Consume the reconstruct marker to
 	// learn it was a cold load (ex. so the bInTutorial reset further down does not clobber the restored value).
 	const bool wasColdLoad = gamestate::savegame::takeColdLoadReconstructFlag();
+	// Test harness (--gamestate-test-suppress-loaded-event): restore fidelity without the load-time script events
+	const bool suppressLoadEvents = wasColdLoad && gamestate::harness::suppressLoadedEvent();
+	if (suppressLoadEvents)
+	{
+		discardQueuedResearchEvents();
+	}
 
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
@@ -1849,7 +1856,14 @@ static bool stageThreeInitialiseSync()
 
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{
-		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
+		if (suppressLoadEvents)
+		{
+			debug(LOG_INFO, "Not firing eventGameLoaded (--gamestate-test-suppress-loaded-event)");
+		}
+		else
+		{
+			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
+		}
 	}
 	else
 	{
@@ -1916,6 +1930,9 @@ static bool stageThreeInitialiseSync()
 		// desync). The first post-resume boundary (> gameTime) is reproduced by applyResumeSyncDebugCrc()
 		// above and so is left verifiable. See setSyncCheckFloorTime.
 		setSyncCheckFloorTime(gameTime);
+
+		// Test harness (--gamestate-resave-on-load): save again now, after the load completed and before the first tick
+		gamestate::harness::onColdLoadComplete();
 	}
 
 	return true;

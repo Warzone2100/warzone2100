@@ -1427,7 +1427,13 @@ static LoadingTask<> levFinalizeLevelLoad(ResourceLoadingController& controller,
 		{
 			// Watched bench runs are meant to be followed, so they keep normal speed.
 			gameTimeSetMod(Rational(movementBenchWatching() ? 1 : 500));
-			if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
+			if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
+			{
+				// A loaded game keeps the AIs (and AI script state) it was saved with: adding a fresh AI for the
+				// local player would make it play differently from the game that wrote the save.
+				debug(LOG_INFO, "Not adding an autogame AI for selectedPlayer %" PRIu32 " to a loaded game", selectedPlayer);
+			}
+			else if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 			{
 				if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
 				{
