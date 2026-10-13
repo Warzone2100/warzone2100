@@ -1,9 +1,23 @@
-file(GLOB HEADERS "*.h")
-file(GLOB SRC "*.cpp")
+set(HEADERS
+	ogg_decoder.h
+	sequence.h
+	video_decoder.h
+	video_edits.h
+	video_provider.h
+	video_timeline.h
+)
+set(SRC
+	ogg_decoder.cpp
+	sequence.cpp
+	video_decoder.cpp
+	video_edits.cpp
+	video_provider.cpp
+	video_timeline.cpp
+)
 
-if(NOT WZ_ENABLE_WEBM)
-	list(REMOVE_ITEM SRC "${CMAKE_CURRENT_SOURCE_DIR}/webm_decoder.cpp")
-	list(REMOVE_ITEM HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/webm_decoder.h")
+if(WZ_ENABLE_WEBM)
+	list(APPEND HEADERS webm_decoder.h webm_video_codec.h)
+	list(APPEND SRC webm_decoder.cpp webm_video_codec.cpp video_codec_vpx.cpp)
 endif()
 
 find_package(OggVorbis REQUIRED)
