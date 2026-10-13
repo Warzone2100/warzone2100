@@ -219,6 +219,8 @@ private:
 	bool m_audioDecodeStarted = false;
 
 	unsigned m_consecutiveNoOutput = 0;
+	double m_lastVideoPacketPts = 0.0;
+	bool m_videoDraining = false;
 
 	uint64_t m_audioSamplesOut = 0;
 	double m_audioBasePts = 0.0;
@@ -524,35 +526,49 @@ bool WebmVideoDecoder::nextVideoFrame(WZVideoFrameYUV& out)
 		return false;
 	}
 
+	const bool codecProvidesPts = m_videoCodec->providesFramePts();
+
 	for (;;)
 	{
-		if (!m_video.queue.empty())
+		// a buffering backend may hold several frames
+		if (m_videoCodec->getFrame(out))
 		{
-			DemuxedPacket packet = std::move(m_video.queue.front());
-			m_video.queue.pop_front();
-			// a failed decode (corrupt packet) or missing output (invisible
-			// alt-ref frame) is skippable - but a stream where *every* packet
-			// produces nothing (e.g. an unsupported VP9 profile) must fail
-			// loudly and promptly, not play black / grind through the file
-			if (!m_videoCodec->decode(packet.data.data(), packet.data.size())
-			    || !m_videoCodec->getFrame(out))
+			if (!codecProvidesPts)
 			{
-				if (++m_consecutiveNoOutput >= 16)
-				{
-					debug(LOG_ERROR, "Video stream produced no displayable frames (unsupported profile/format?): %s", m_provider->filename().toUtf8().c_str());
-					return false;
-				}
-				continue;
+				out.pts = m_lastVideoPacketPts;
 			}
 			m_consecutiveNoOutput = 0;
-			out.pts = packet.pts;
 			return true;
 		}
 
-		if (!demuxNextBlock(m_video))
+		if (m_videoDraining)
 		{
 			return false;
 		}
+
+		if (m_video.queue.empty())
+		{
+			if (!demuxNextBlock(m_video))
+			{
+				m_videoCodec->drain();
+				m_videoDraining = true;
+			}
+			continue;
+		}
+
+		// a packet without output is skippable (corrupt, an invisible alt-ref frame, a pipeline filling),
+		// but a stream that never decodes (ex. an unsupported VP9 profile) must fail promptly
+		if (m_consecutiveNoOutput >= 32)
+		{
+			debug(LOG_ERROR, "Video stream produced no displayable frames (unsupported profile/format?): %s", m_provider->filename().toUtf8().c_str());
+			return false;
+		}
+
+		DemuxedPacket packet = std::move(m_video.queue.front());
+		m_video.queue.pop_front();
+		m_lastVideoPacketPts = packet.pts;
+		m_videoCodec->decode(packet.data.data(), packet.data.size(), packet.pts);
+		++m_consecutiveNoOutput;
 	}
 }
 
@@ -569,6 +585,8 @@ bool WebmVideoDecoder::seekVideo(double pts)
 	m_video.resumeAtEntry = true;
 	m_video.queue.clear();
 	m_consecutiveNoOutput = 0;
+	m_videoCodec->flush();
+	m_videoDraining = false;
 	return true;
 }
 
