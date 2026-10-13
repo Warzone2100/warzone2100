@@ -36,6 +36,7 @@
 #include "lib/widget/multibutform.h"
 #include "lib/widget/paneltabbutton.h"
 #include "lib/widget/editbox.h"
+#include "lib/widget/checkbox.h"
 
 #include "display3d.h"
 #include "intdisplay.h"
@@ -82,6 +83,7 @@ bool	MultiMenuUp			= false;
 static UDWORD	current_context = 0;
 UDWORD	current_numplayers = 4;
 static std::string current_searchString;
+static bool current_searchByAuthor;
 
 #define MULTIMENU_FORM_Y		25
 
@@ -392,7 +394,7 @@ void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight,
  *  \param mode (purpose unknown)
  *  \param numPlayers (purpose unknown)
  */
-void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE numPlayers, std::string const &searchString)
+void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE numPlayers, std::string const &searchString, bool searchByAuthor)
 {
 	const size_t extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
@@ -403,6 +405,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		// only save these when they select MAP button
 		current_numplayers = numPlayers;
 		current_searchString = searchString;
+		current_searchByAuthor = searchByAuthor;
 	}
 
 	psRScreen = W_SCREEN::make(); ///< move this to intinit or somewhere like that.. (close too.)
@@ -480,21 +483,42 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 	if (mode == MULTIOP_MAP)
 	{
+		// Add the author filter checkbox
+		auto authorCheckbox = std::make_shared<WzCheckboxButton>();
+		requestForm->attach(authorCheckbox);
+		authorCheckbox->setString(_("Author"));
+		authorCheckbox->setIsChecked(current_searchByAuthor);
+		authorCheckbox->setTextColor(WZCOL_TEXT_BRIGHT);
+		Vector2i authorCbDimentions = authorCheckbox->calculateDesiredDimensions();
+		authorCheckbox->setGeometry(requestForm->width() - authorCbDimentions.x - 3,
+			requestForm->height() - MULTIOP_SEARCHBOXH - 3,
+			authorCbDimentions.x,
+			authorCbDimentions.y);
+
+		authorCheckbox->addOnClickHandler([searchDir, fileExtension, mode, numPlayers](W_BUTTON& widg) {
+			bool searchByAuthor = static_cast<WzCheckboxButton*>(&widg)->getIsChecked();
+			closeMultiRequester();
+			addMultiRequest(searchDir, fileExtension, mode, numPlayers, current_searchString, searchByAuthor);
+		});
+
 		// Add the search edit box
 		auto searchBox = std::make_shared<W_EDITBOX>();
 		requestForm->attach(searchBox);
-		searchBox->setGeometry(3, requestForm->height() - MULTIOP_SEARCHBOXH - 3, requestForm->width() - 6, MULTIOP_SEARCHBOXH);
+		searchBox->setGeometry(3,
+			requestForm->height() - MULTIOP_SEARCHBOXH - 3,
+			requestForm->width() - authorCbDimentions.x - 9,
+			MULTIOP_SEARCHBOXH);
 		searchBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 		searchBox->setPlaceholder(_("Search for map"));
 		searchBox->setString(WzString::fromUtf8(current_searchString));
 
-		searchBox->setOnEditingStoppedHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
+		searchBox->setOnEditingStoppedHandler([searchDir, fileExtension, mode, numPlayers, searchByAuthor](W_EDITBOX& widg) {
 			std::string value = widg.getString().toUtf8();
 			if (value == current_searchString) {
 				return;
 			}
 			closeMultiRequester();
-			addMultiRequest(searchDir, fileExtension, mode, numPlayers, value);
+			addMultiRequest(searchDir, fileExtension, mode, numPlayers, value, searchByAuthor);
 		});
 
 		LEVEL_LIST levels = enumerateMultiMaps(game.techLevel, numPlayers);
@@ -504,11 +528,13 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		for (auto mapData : levels)
 		{
 			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName.c_str());
+			std::string tip = withoutTechlevel +
+				(mapData->pAuthor.empty() ? "" : "\n" + astringf(_("By %s"), mapData->pAuthor.c_str()));
 			// add number of players to string.
 			auto button = std::make_shared<W_BUTTON>();
 			requestList->attach(button);
 			button->id = nextButtonId;
-			button->setTip(withoutTechlevel);
+			button->setTip(tip);
 			button->setString(WzString::fromUtf8(withoutTechlevel));
 			button->displayFunction = displayRequestOption;
 			button->pUserData = new DisplayRequestOptionData(mapData);
@@ -517,7 +543,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 				delete static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
 				psWidget->pUserData = nullptr;
 			});
-			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
+			buttons.push_back({stringRelevance(current_searchByAuthor ? mapData->pAuthor : mapData->pName, searchString), button});
 
 			++nextButtonId;
 		}
@@ -634,7 +660,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 	{
 	case M_REQUEST_AP:
 		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 0, current_searchString);
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 0, current_searchString, current_searchByAuthor);
 		break;
 	default:
 		for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
@@ -642,7 +668,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 			if (id == M_REQUEST_NP[numPlayers - 2])
 			{
 				closeMultiRequester();
-				addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, numPlayers, current_searchString);
+				addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, numPlayers, current_searchString, current_searchByAuthor);
 				break;
 			}
 		}
