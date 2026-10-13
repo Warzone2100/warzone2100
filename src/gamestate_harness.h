@@ -79,6 +79,15 @@ void setRewindTest(uint32_t tick, uint32_t ticksLater);
 /// Returns false on an unknown kind.
 bool setRewindFault(const std::string &spec);
 
+/// --gamestate-snapshot-ring=<interval ms>[,<budget KB>[,<zlib level>]]: test-only. Start the snapshot ring
+/// (gamestate_snapshot_ring.h) at the first capture point of the game. Returns false on a bad spec.
+bool setSnapshotRing(const std::string &spec);
+
+/// --gamestate-seek-test=<at>:<target>[,<at>:<target>...]: test-only, with --gamestate-snapshot-ring, during headless
+/// replay playback. At the first capture point at or after each <at> (in order), request a replay seek to <target>
+/// (gamestate_replay_seek.h). Returns false on a bad spec.
+bool setSeekTest(const std::string &spec);
+
 /// --gamestate-test-suppress-loaded-event: test-only. On a GameState cold load, do not fire eventGameLoaded,
 /// and drop the queued replay of eventResearched.
 void setSuppressLoadedEvent(bool enable);
