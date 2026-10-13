@@ -35,6 +35,7 @@
 #include "mission.h"
 #include "multiplay.h"  // captureQueuedDroidInfo, restoreQueuedDroidInfo
 #include "random.h"
+#include "visibility.h"
 
 #include <algorithm>
 #include <cstdlib>
@@ -59,6 +60,9 @@ static std::vector<std::vector<std::vector<uint8_t>>> g_rewindPendingGameQueue; 
 static std::vector<std::vector<uint8_t>> g_rewindQueuedOrders; // the local droid orders not sent yet at the snapshot
 static bool g_suppressLoadedEvent = false;
 static std::string g_resaveOnLoadPath;
+static uint32_t g_checkCoverageTicks = 0;
+static uint32_t g_coverageChecks = 0;
+static uint32_t g_coverageChecksDiffering = 0;
 static bool g_haveTestSeed = false;
 static uint32_t g_testSeed = 0;
 
@@ -231,6 +235,35 @@ void onColdLoadComplete()
 	wzQuit(ok ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
+void setCheckCoverage(uint32_t ticks)
+{
+	g_checkCoverageTicks = ticks;
+}
+
+static void checkCoverage(const char *when)
+{
+	if (g_checkCoverageTicks == 0)
+	{
+		return;
+	}
+	const CoverageCheckResult result = visCheckCoverage(gameWorld);
+	++g_coverageChecks;
+	if (result.differing > 0)
+	{
+		++g_coverageChecksDiffering;
+		debug(LOG_INFO, "GameState harness: coverage check (%s) at gameTime %u: %zu of %zu object(s) differ from a recompute; first: %s",
+		      when, gameTime, result.differing, result.checked, result.firstDifference.c_str());
+	}
+}
+
+static void logCoverageSummary()
+{
+	if (g_checkCoverageTicks != 0)
+	{
+		debug(LOG_INFO, "GameState harness: coverage checks: %u, with differences: %u", g_coverageChecks, g_coverageChecksDiffering);
+	}
+}
+
 static void maybeSave()
 {
 	if (g_saveAtTick == 0 || gameTime < g_saveAtTick)
@@ -242,6 +275,7 @@ static void maybeSave()
 		return;
 	}
 	g_saveAtTick = 0; // save exactly once
+	checkCoverage("save");
 	const size_t dying = psDestroyedObj.size();
 	const bool ok = saveGame(g_savePath.c_str(), GTYPE_SAVE_MIDMISSION);
 	debug(LOG_INFO, "GameState harness: %s save \"%s\" at gameTime %u (%zu object(s) pending destruction)",
@@ -257,6 +291,7 @@ static void maybeRewind()
 	if (g_rewindAtTick != 0 && gameTime >= g_rewindAtTick && (!g_saveWhenDying || dyingConditionMet()))
 	{
 		g_rewindAtTick = 0;
+		checkCoverage("rewind snapshot");
 		try
 		{
 			g_rewindSnapshot = serializeGameState();
@@ -324,11 +359,16 @@ static void maybeRewind()
 
 void tick()
 {
+	if (g_checkCoverageTicks != 0 && (gameTime / GAME_TICKS_PER_UPDATE) % g_checkCoverageTicks == 0)
+	{
+		checkCoverage("periodic");
+	}
 	maybeSave();
 	maybeRewind();
 	if (g_exitAtTick != 0 && gameTime >= g_exitAtTick)
 	{
 		g_exitAtTick = 0;
+		logCoverageSummary();
 		debug(LOG_INFO, "GameState harness: reached gameTime %u; exiting.", gameTime);
 		wzQuit(EXIT_SUCCESS);
 	}

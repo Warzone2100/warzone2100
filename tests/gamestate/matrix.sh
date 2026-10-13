@@ -3,6 +3,8 @@
 #
 # usage: matrix.sh <warzone2100 binary> [cell filter (grep -E pattern)]
 # Environment: OUT (default /tmp/gamestate-forkcrc).
+#              CHECK_COVERAGE (default 10): check the tile coverage every 10 ticks and at every save or snapshot
+#              (see forkcrc.sh), and 0 turns it off.
 #
 # Cells are "<test> <save tick> <end tick> [forkcrc options]".
 # "mb:" tests are movement bench scenarios, which run without AI scripts, so they isolate engine restore fidelity:
@@ -15,6 +17,8 @@ set -u
 BIN=$(cd "$(dirname "${1:?binary}")" && pwd)/$(basename "$1")
 FILTER=${2:-.}
 HERE=$(cd "$(dirname "$0")" && pwd)
+CHECK_COVERAGE=${CHECK_COVERAGE:-10}
+export CHECK_COVERAGE
 
 CELLS='
 mb:perf_battle 20000 100000 --no-loaded
@@ -71,7 +75,7 @@ echo "== fork cells"
 echo "$CELLS" | grep -E "$FILTER" | while read -r cell; do
 	[ -n "$cell" ] || continue
 	# shellcheck disable=SC2086
-	"$HERE/forkcrc.sh" "$BIN" $cell | head -1
+	"$HERE/forkcrc.sh" "$BIN" $cell | sed -n '1p;/COVERAGE DIFFERS/,+1p'
 done
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
