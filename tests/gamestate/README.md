@@ -17,11 +17,15 @@ Results go to `$OUT` (default `/tmp/gamestate-forkcrc`).
 | `cmptrace.py`, `difflog.py`, `cmpsave.py` | The comparison helpers used by the scripts (`cmptrace.py --replayed <trace>` compares a rewound run with itself). |
 
 `<test>` is a `--skirmish` settings file from `data/mp/tests` (ex. `highground`, `miza`), which runs bundled AIs, or
-`mb:<scenario>` for a movement bench scenario (ex. `mb:perf_battle`), which runs without AI scripts and so isolates engine
-restore fidelity, or `cam:<start level>` for a campaign (`--game`, ex. `cam:CAM_2A`; `CAM_1A` pauses on a guide topic, and
-a level can end early when nobody plays it, so keep end ticks short). `mb:gamestate_deaths` is a scenario for these tests:
-every few seconds it kills, in one tick, several droids (some while being repaired), a commander, a repair facility while
-it repairs, a wall and an oil drum, and its `eventDestroyed` handler removes one more droid.
+`mb:<scenario>` for a movement bench scenario (ex. `mb:perf_battle`), which runs without AI scripts and so isolates
+engine restore fidelity, or `cam:<start level>` for a campaign (`--game`, ex. `cam:CAM_2A`; `CAM_1A` pauses on a guide
+topic, and a level can end early when nobody plays it, so keep end ticks short). `mb:gamestate_deaths` is a scenario for
+these tests: every few seconds it kills, in one tick, several droids (some while being repaired), a commander, a repair
+facility while it repairs, a wall and an oil drum, and its `eventDestroyed` handler removes one more droid.
+`mb:gamestate_scripts` is another: it saves while some members of a script group are aboard a transporter (which drops
+them after the save), and with object labels armed for one player only (`resetLabel(label, player)`) on objects first
+seen after the save; a group member missing after a load, or an `eventObjectSeen` the original game did not have, spawns
+a droid.
 
 `mb:gamestate_deaths` is a scenario for these tests:
 every few seconds it kills, in one tick, several droids (some while being repaired), a commander,

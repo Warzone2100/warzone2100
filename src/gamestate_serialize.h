@@ -111,6 +111,11 @@ void applyGameStateScripting(const nlohmann::ordered_json &gameStateDoc, ScriptS
 /// during the early world restore). No-op if the section is absent.
 void applyGameStateMessages(const nlohmann::ordered_json &gameStateDoc);
 
+/// Apply ONLY the "presentation" section of a GameState document (sun, lighting, fog color, weather, skybox, ...).
+/// The disk cold-load applies it again once stageThreeInitialise has reset the view (init3DView, pie_InitLighting).
+/// No-op if the section is absent.
+void applyGameStatePresentation(const nlohmann::ordered_json &gameStateDoc);
+
 /// In-engine determinism harness self-test (round-trip + RNG-sequence fidelity + byte-stability).
 /// Needs no game data - safe to run very early. Returns true if all checks pass.
 bool runGameStateSelfTest();

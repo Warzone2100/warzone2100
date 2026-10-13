@@ -41,6 +41,9 @@ constexpr size_t MAX_TEMPLATE_NAME_LENGTH = MAX_STR_LENGTH - 1;
 bool truncateTemplateName(WzString &name);
 
 bool initTemplates();
+/// Load the local player's template store without adding its designs to the game: for a GameState load, whose
+/// templates are the saved game's. Designs made afterwards are still stored.
+bool initTemplateStore();
 
 /// Refill the UI template list (localTemplates) from droidTemplates[player]
 /// NOTE: this invalidates every pointer into localTemplates, so it is only safe before any UI or pending production order exists

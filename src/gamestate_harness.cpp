@@ -33,6 +33,7 @@
 #include "map.h"
 #include "objmem.h"
 #include "mission.h"
+#include "multiplay.h"  // captureQueuedDroidInfo, restoreQueuedDroidInfo
 #include "random.h"
 
 #include <algorithm>
@@ -55,6 +56,7 @@ static uint32_t g_rewindTicksLater = 0;
 static uint32_t g_rewindRestoreAtTick = 0;
 static std::string g_rewindSnapshot;
 static std::vector<std::vector<std::vector<uint8_t>>> g_rewindPendingGameQueue; // per game-queue slot, the unread messages at the snapshot
+static std::vector<std::vector<uint8_t>> g_rewindQueuedOrders; // the local droid orders not sent yet at the snapshot
 static bool g_suppressLoadedEvent = false;
 static std::string g_resaveOnLoadPath;
 static bool g_haveTestSeed = false;
@@ -272,6 +274,8 @@ static void maybeRewind()
 		{
 			g_rewindPendingGameQueue[p] = NETgameQueueCapturePending(p);
 		}
+		// And the local droid orders not sent yet
+		g_rewindQueuedOrders = captureQueuedDroidInfo();
 		g_rewindRestoreAtTick = gameTime + std::max<uint32_t>(g_rewindTicksLater, 1);
 		debug(LOG_INFO, "GameState harness: rewind snapshot taken at gameTime %u (%zu bytes, %zu object(s) pending destruction); restoring at gameTime %u",
 		      gameTime, g_rewindSnapshot.size(), psDestroyedObj.size(), g_rewindRestoreAtTick);
@@ -304,6 +308,8 @@ static void maybeRewind()
 			NETgameQueueRestorePending(p, g_rewindPendingGameQueue[p]);
 		}
 		g_rewindPendingGameQueue.clear();
+		restoreQueuedDroidInfo(g_rewindQueuedOrders);
+		g_rewindQueuedOrders.clear();
 		// Mirror what the cold load does after its reconstruct: restart the skirmish danger worker
 		// (the restore stopped it, and mapInit keeps the restored danger maps),
 		// and restart the sync-debug accumulator from the snapshot's save-boundary CRC.

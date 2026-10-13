@@ -30,6 +30,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <array>
+#include <vector>
 
 class WzString;
 struct BASE_OBJECT;
@@ -93,6 +94,10 @@ bool scriptInit();
 void scriptSetStartPos(int position, int x, int  y);
 void scriptSetDerrickPos(int x, int y);
 Vector2i getPlayerStartPosition(int player);
+/// The derrick positions given to the scripts (derrickPositions), in tile coordinates, in their order
+std::vector<Vector2i> scriptGetDerrickPositions();
+/// Forget the derrick positions (for a GameState load, which then sets the saved ones)
+void scriptClearDerrickPositions();
 
 /// Initialize script system
 bool initScripts();

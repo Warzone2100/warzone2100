@@ -543,6 +543,12 @@ bool truncateTemplateName(WzString &name)
 	return true;
 }
 
+bool initTemplateStore()
+{
+	if (selectedPlayer >= MAX_PLAYERS) { return false; }
+	return templateStoreLoad();
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
