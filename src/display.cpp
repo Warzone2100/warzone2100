@@ -860,7 +860,7 @@ void processMouseClickInput()
 		return;
 	}
 
-	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
+	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !bDisplayMultiJoiningStatus)
 	{
 		OrderSourceScope orderScope(pointerOrderSource());
 		if (bEffectiveRightClickOrders)
