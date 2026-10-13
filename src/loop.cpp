@@ -74,6 +74,7 @@
 #include "input/gamepadbindings.h"
 #include "loadsave.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "multijoin.h"
 #include "lighting.h"
 #include "intimage.h"
@@ -166,6 +167,28 @@ static void resetVideoSkipStates()
 {
 	videoTimeSkipState.begin = std::chrono::steady_clock::now();
 	videoTimeSkipState.canSkip = false;
+}
+
+// A save from the in-game save menu, at the next safe point (see gamestate_capture.h):
+// now, unless a networked game is waiting for a player's messages for the next tick.
+static void saveGameFromMenu(const std::string &path)
+{
+	requestGameStateCapture([path]() {
+		char msgbuffer[256] = {'\0'};
+		if (saveGame(path.c_str(), GTYPE_SAVE_MIDMISSION))
+		{
+			sstrcpy(msgbuffer, _("GAME SAVED: "));
+			sstrcat(msgbuffer, savegameWithoutExtension(path.c_str()));
+			addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+		else
+		{
+			ASSERT(false, "saveGame(\"%s\") failed", path.c_str());
+			sstrcpy(msgbuffer, _("Could not save game!"));
+			addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+			deleteSaveGame_classic(path.c_str());
+		}
+	});
 }
 
 static GAMECODE renderLoop()
@@ -281,41 +304,15 @@ static GAMECODE renderLoop()
 			}
 			else
 			{
-				char msgbuffer[256] = {'\0'};
-
 				if (saveInMissionRes())
 				{
 					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
 					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
-					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
-					{
-						sstrcpy(msgbuffer, _("GAME SAVED: "));
-						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-					}
-					else
-					{
-						ASSERT(false, "Mission Results: saveGame Failed");
-						sstrcpy(msgbuffer, _("Could not save game!"));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						deleteSaveGame_classic(sRequestResult);
-					}
+					saveGameFromMenu(sRequestResult);
 				}
 				else if (bMultiPlayer || saveMidMission())
 				{
-					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))//mid mission from [esc] menu
-					{
-						sstrcpy(msgbuffer, _("GAME SAVED: "));
-						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-					}
-					else
-					{
-						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed");
-						sstrcpy(msgbuffer, _("Could not save game!"));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						deleteSaveGame_classic(sRequestResult);
-					}
+					saveGameFromMenu(sRequestResult); //mid mission from [esc] menu
 				}
 				else
 				{
@@ -733,7 +730,9 @@ GAMECODE gameLoop()
 		// Receive NET_BLAH messages.
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
 		executeFnAndProcessScriptQueuedRemovals([]() { recvMessage(); });
-		gamestate::harness::afterMessages();  // (test hook, a no-op unless --gamestate-save-after-messages)
+		// Saves and snapshots requested while the messages for the next tick were still to arrive (networked games)
+		runPendingGameStateCaptures();
+		gamestate::harness::afterMessages();  // (test hook: the harness save point)
 
 		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected
@@ -770,6 +769,7 @@ GAMECODE gameLoop()
 		{
 			break;  // Not doing a game state update.
 		}
+		gameStateCaptureOnTick();
 
 		ASSERT(!paused && !gameUpdatePaused(), "Nonsensical pause values.");
 

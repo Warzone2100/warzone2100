@@ -63,6 +63,7 @@
 #include "modding.h"
 #include "version.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "warzoneconfig.h"
 #include "challenge.h"
 #include "multistat.h"
@@ -1650,8 +1651,11 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 	if ((trigger == TRIGGER_START_LEVEL || trigger == TRIGGER_GAME_LOADED) && !saveandquit_enabled().empty())
 	{
 		// --saveandquit produces a normal mid-mission save (which, unlike the old START path, also captures script state)
-		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_MIDMISSION);
-		wzQuit(0);
+		// At the next safe point (see gamestate_capture.h)
+		requestGameStateCapture([]() {
+			saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_MIDMISSION);
+			wzQuit(0);
+		});
 	}
 
 	return true;

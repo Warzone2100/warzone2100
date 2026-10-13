@@ -30,6 +30,7 @@
 
 #include "game.h"
 #include "game_world.h"
+#include "gamestate_capture.h"
 #include "loop.h"  // levelChangePending
 #include "map.h"
 #include "objmem.h"
@@ -61,7 +62,7 @@ static std::vector<std::vector<std::vector<uint8_t>>> g_rewindPendingGameQueue; 
 static std::vector<std::vector<uint8_t>> g_rewindQueuedOrders; // the local droid orders not sent yet at the snapshot
 static bool g_suppressLoadedEvent = false;
 static std::string g_resaveOnLoadPath;
-static bool g_saveAfterMessages = false;
+static bool g_saveBeforeMessages = false;
 static bool g_saveWhenCoveragePending = false;
 static uint32_t g_checkCoverageTicks = 0;
 static uint32_t g_coverageChecks = 0;
@@ -234,16 +235,25 @@ void onColdLoadComplete()
 	{
 		return;
 	}
-	const bool ok = saveGame(g_resaveOnLoadPath.c_str(), GTYPE_SAVE_MIDMISSION);
-	debug(LOG_INFO, "GameState harness: %s re-save \"%s\" right after the load, at gameTime %u",
-	      ok ? "wrote" : "FAILED to write", g_resaveOnLoadPath.c_str(), gameTime);
-	g_resaveOnLoadPath.clear();
-	wzQuit(ok ? EXIT_SUCCESS : EXIT_FAILURE);
+	// A load of a save taken at a safe point leaves the game at one, so this runs now. If it is deferred, the load did
+	// not restore the network game timing, or the save was taken before the messages (--gamestate-save-before-messages)
+	const bool now = requestGameStateCapture([]() {
+		const bool ok = saveGame(g_resaveOnLoadPath.c_str(), GTYPE_SAVE_MIDMISSION);
+		debug(LOG_INFO, "GameState harness: %s re-save \"%s\" right after the load, at gameTime %u",
+		      ok ? "wrote" : "FAILED to write", g_resaveOnLoadPath.c_str(), gameTime);
+		g_resaveOnLoadPath.clear();
+		wzQuit(ok ? EXIT_SUCCESS : EXIT_FAILURE);
+	});
+	if (!now)
+	{
+		debug(LOG_INFO, "GameState harness: the re-save is deferred: the loaded game has messages for the next tick to process first");
+	}
 }
 
-void setSaveAfterMessages(bool enable)
+void setSaveBeforeMessages(bool enable)
 {
-	g_saveAfterMessages = enable;
+	g_saveBeforeMessages = enable;
+	setGameStateCaptureBeforeMessagesAllowed(enable);
 }
 
 void setSaveWhenCoveragePending(bool enable)
@@ -323,55 +333,68 @@ static void maybeSave()
 	g_saveAtTick = 0; // save exactly once
 	if (visCoverageChangesPending())
 	{
-		// Between two ticks, after the messages: the coverage isn't up to date yet by design (the pending changes are
-		// applied at the start of the next tick), so there is nothing to compare a recompute with
+		// The pending changes are applied at the start of the next tick: until then there is nothing to compare a
+		// recompute with
 		debug(LOG_INFO, "GameState harness: no coverage check at the save: changes are pending");
 	}
 	else
 	{
 		checkCoverage("save");
 	}
-	const size_t dying = psDestroyedObj.size();
-	const bool ok = saveGame(g_savePath.c_str(), GTYPE_SAVE_MIDMISSION);
-	debug(LOG_INFO, "GameState harness: %s save \"%s\" at gameTime %u (%zu object(s) pending destruction)",
-	      ok ? "wrote" : "FAILED to write", g_savePath.c_str(), gameTime, dying);
-	if (!ok)
-	{
-		wzQuit(EXIT_FAILURE);
-	}
+	requestGameStateCapture([]() {
+		const size_t dying = psDestroyedObj.size();
+		const bool ok = saveGame(g_savePath.c_str(), GTYPE_SAVE_MIDMISSION);
+		debug(LOG_INFO, "GameState harness: %s save \"%s\" at gameTime %u (%zu object(s) pending destruction%s)",
+		      ok ? "wrote" : "FAILED to write", g_savePath.c_str(), gameTime, dying, g_saveBeforeMessages ? ", before the messages" : "");
+		if (!ok)
+		{
+			wzQuit(EXIT_FAILURE);
+		}
+	});
 }
 
-static void maybeRewind()
+static void takeRewindSnapshot()
+{
+	checkCoverage("rewind snapshot");
+	try
+	{
+		g_rewindSnapshot = serializeGameState();
+	}
+	catch (const std::exception &e)
+	{
+		debug(LOG_ERROR, "GameState harness: rewind snapshot FAILED: %s", e.what());
+		wzQuit(EXIT_FAILURE);
+		return;
+	}
+	// Like a disk save's pending-resume section: the in-flight game-queue messages (scheduled for later ticks by
+	// the lockstep latency) belong to the snapshot's timeline, so keep them to re-inject on restore.
+	g_rewindPendingGameQueue.assign(MAX_GAMEQUEUE_SLOTS, {});
+	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
+	{
+		g_rewindPendingGameQueue[p] = NETgameQueueCapturePending(p);
+	}
+	// And the local droid orders not sent yet
+	g_rewindQueuedOrders = captureQueuedDroidInfo();
+	g_rewindRestoreAtTick = gameTime + std::max<uint32_t>(g_rewindTicksLater, 1);
+	debug(LOG_INFO, "GameState harness: rewind snapshot taken at gameTime %u (%zu bytes, %zu object(s) pending destruction); restoring at gameTime %u",
+	      gameTime, g_rewindSnapshot.size(), psDestroyedObj.size(), g_rewindRestoreAtTick);
+}
+
+// At the save point
+static void maybeRewindSnapshot()
 {
 	// Not while a level change is pending, for the same reason as a save (see saveGame()): snapshot in the next level
 	if (g_rewindAtTick != 0 && gameTime >= g_rewindAtTick && (!g_saveWhenDying || dyingConditionMet()) && !levelChangePending())
 	{
 		g_rewindAtTick = 0;
-		checkCoverage("rewind snapshot");
-		try
-		{
-			g_rewindSnapshot = serializeGameState();
-		}
-		catch (const std::exception &e)
-		{
-			debug(LOG_ERROR, "GameState harness: rewind snapshot FAILED: %s", e.what());
-			wzQuit(EXIT_FAILURE);
-			return;
-		}
-		// Like a disk save's pending-resume section: the in-flight game-queue messages (scheduled for later ticks by
-		// the lockstep latency) belong to the snapshot's timeline, so keep them to re-inject on restore.
-		g_rewindPendingGameQueue.assign(MAX_GAMEQUEUE_SLOTS, {});
-		for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
-		{
-			g_rewindPendingGameQueue[p] = NETgameQueueCapturePending(p);
-		}
-		// And the local droid orders not sent yet
-		g_rewindQueuedOrders = captureQueuedDroidInfo();
-		g_rewindRestoreAtTick = gameTime + std::max<uint32_t>(g_rewindTicksLater, 1);
-		debug(LOG_INFO, "GameState harness: rewind snapshot taken at gameTime %u (%zu bytes, %zu object(s) pending destruction); restoring at gameTime %u",
-		      gameTime, g_rewindSnapshot.size(), psDestroyedObj.size(), g_rewindRestoreAtTick);
-		return;
+		requestGameStateCapture(takeRewindSnapshot);
 	}
+}
+
+// At the tick hook. The restore replaces the game queues with the snapshot's,
+// so the messages the live game would read next are dropped.
+static void maybeRewindRestore()
+{
 	if (g_rewindRestoreAtTick != 0 && gameTime >= g_rewindRestoreAtTick)
 	{
 		g_rewindRestoreAtTick = 0;
@@ -413,11 +436,14 @@ static void maybeRewind()
 	}
 }
 
+// The save point: right after the game loop has processed the received messages, once every message for the next tick
+// has been (see gamestate_capture.h)
 void afterMessages()
 {
-	if (g_saveAfterMessages)
+	if (!g_saveBeforeMessages && gameStateCaptureSafe())
 	{
 		maybeSave();
+		maybeRewindSnapshot();
 	}
 }
 
@@ -429,11 +455,12 @@ void tick()
 	{
 		checkCoverage("periodic");
 	}
-	if (!g_saveAfterMessages)
+	if (g_saveBeforeMessages)
 	{
 		maybeSave();
+		maybeRewindSnapshot();
 	}
-	maybeRewind();
+	maybeRewindRestore();
 	if (g_exitAtTick != 0 && gameTime >= g_exitAtTick)
 	{
 		g_exitAtTick = 0;

@@ -55,6 +55,7 @@
 #include "display3d.h"
 #include "edit3d.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "hci.h"
 #include "ordersource.h"
 #include "ingameop.h"
@@ -1445,24 +1446,28 @@ INT_RETVAL intRunWidgets()
 		{
 			// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
 			// GTYPE_SAVE_START is deprecated, so use MIDMISSION
-			if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
-			{
-				char msg[256] = {'\0'};
-
-				sstrcpy(msg, _("GAME SAVED: "));
-				sstrcat(msg, savegameWithoutExtension(saveGameName));
-				addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-
-				if (widgGetFromID(psWScreen, IDMISSIONRES_SAVE))
+			// At the next safe point (see gamestate_capture.h)
+			std::string path = sRequestResult;
+			requestGameStateCapture([path]() {
+				if (saveGame(path.c_str(), GTYPE_SAVE_MIDMISSION))
 				{
-					widgDelete(psWScreen, IDMISSIONRES_SAVE);
+					char msg[256] = {'\0'};
+
+					sstrcpy(msg, _("GAME SAVED: "));
+					sstrcat(msg, savegameWithoutExtension(saveGameName));
+					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+					if (widgGetFromID(psWScreen, IDMISSIONRES_SAVE))
+					{
+						widgDelete(psWScreen, IDMISSIONRES_SAVE);
+					}
 				}
-			}
-			else
-			{
-				ASSERT(false, "intRunWidgets: saveGame Failed");
-				deleteSaveGame_classic(sRequestResult);
-			}
+				else
+				{
+					ASSERT(false, "intRunWidgets: saveGame Failed");
+					deleteSaveGame_classic(path.c_str());
+				}
+			});
 		}
 	}
 
