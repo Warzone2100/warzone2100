@@ -736,6 +736,8 @@ struct LoadedReplayQueue
 	}
 };
 static std::array<LoadedReplayQueue, MAX_GAMEQUEUE_SLOTS> loadedReplayQueues;
+static std::string loadedReplayFilename;
+static uint32_t loadedReplayEndGameTime = 0;
 
 static void clearLoadedReplayQueues()
 {
@@ -743,6 +745,8 @@ static void clearLoadedReplayQueues()
 	{
 		q = LoadedReplayQueue();
 	}
+	loadedReplayFilename.clear();
+	loadedReplayEndGameTime = 0;
 }
 
 // TODO Call this function somewhere.
@@ -779,6 +783,13 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 		NETshutdownReplay();
 		return false;
 	}
+	if (gotReplayEnded && !NETreplayLoadEndInfo(loadedReplayEndGameTime))
+	{
+		debug(LOG_WARNING, "The replay has no readable end-of-game info: its length is unknown");
+		loadedReplayEndGameTime = 0;
+	}
+	loadedReplayFilename = filename;
+	debug(LOG_INFO, "Replay loaded: %s, which ends at gameTime %u", filename.c_str(), loadedReplayEndGameTime);
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
 	NetMessage replayEnded = NetMessageBuilder(REPLAY_ENDED, 0).build();
 	loadedReplayQueues[NetPlay.hostPlayer].add(replayEnded);
@@ -878,6 +889,16 @@ bool NETreplayRestoreReadPositions(const std::vector<uint32_t> &positions)
 		}
 	}
 	return true;
+}
+
+const std::string &NETreplayFilename()
+{
+	return loadedReplayFilename;
+}
+
+uint32_t NETreplayEndGameTime()
+{
+	return loadedReplayEndGameTime;
 }
 
 size_t NETreplayLoadedCount(unsigned player)

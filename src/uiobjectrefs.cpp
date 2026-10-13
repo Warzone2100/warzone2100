@@ -23,6 +23,7 @@
 
 #include "lib/framework/frame.h"
 
+#include "console.h"
 #include "display.h"
 #include "droid.h"
 #include "effects.h"
@@ -31,6 +32,7 @@
 #include "hci.h"
 #include "keybind.h"
 #include "multiplay.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "structure.h"
 #include "terrain.h"
 
@@ -113,6 +115,8 @@ UiViewerState uiBeforeObjectsReplaced()
 		}
 	}
 	intResetScreen(true);  // the forms, the intel and transporter screens, build placement
+	closeSpectatorGameOverScreen();  // a replay's end, shown until a seek goes back from it
+	clearActiveConsole();            // the messages on screen (the history keeps them)
 	cancelDeliveryRepos();
 	initEffectsSystem();   // explosions, smoke and the like of the world being left
 	keybindShutdown();     // the extractor cycling's place in the extractor list

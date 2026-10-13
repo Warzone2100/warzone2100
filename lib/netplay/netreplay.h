@@ -32,5 +32,8 @@ void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player);
 bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler, uint32_t& output_replayFormatVer);
 bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &player);
 bool NETreplayLoadStop();
+/// Right after NETreplayLoadNetMessage() has read the REPLAY_ENDED message: read the end-of-game info that follows it
+/// (written by NETreplaySaveStop). False if it is missing or can't be read.
+bool NETreplayLoadEndInfo(uint32_t &gameTimeElapsed);
 
 #endif // _NETREPLAY_H

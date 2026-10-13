@@ -77,6 +77,7 @@
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "modding.h"
+#include "gamestate_replay_seek.h"
 #include "multiplay.h"
 #include "gamestate_capture.h"
 #include "ordersource_wire.h"								// warzone net stuff.
@@ -1558,6 +1559,7 @@ bool recvMessage()
 					break;
 				}
 				debug(LOG_INFO, "Replay ended at gameTime %u", gameTime);
+				gamestate::noteReplayEnded();
 				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				showSpectatorGameOverScreen();

@@ -259,6 +259,11 @@ bool NETreplayCheckReadPositions(const std::vector<uint32_t> &positions, std::st
 /// which only gets what the viewer sends itself) is left to the caller.
 /// Returns false, changing nothing, if the positions don't fit this playback.
 bool NETreplayRestoreReadPositions(const std::vector<uint32_t> &positions);
+/// During replay playback: the file being played back (as given to NETloadReplay).
+const std::string &NETreplayFilename();
+/// During replay playback: the game time the recorded game had when the recording stopped
+/// (from the replay's end-of-game info), which playback reaches at the replay's end. 0 if unknown.
+uint32_t NETreplayEndGameTime();
 /// How many of the replay's messages were loaded into a game queue (0: the replay doesn't feed it).
 size_t NETreplayLoadedCount(unsigned player);
 /// The memory the kept replay messages take (bytes), for the logs.
