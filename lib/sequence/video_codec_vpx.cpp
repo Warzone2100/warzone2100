@@ -25,9 +25,7 @@
 #include <vpx/vpx_decoder.h>
 #include <vpx/vp8dx.h>
 
-#include <algorithm>
 #include <cstring>
-#include <thread>
 
 namespace
 {
@@ -54,7 +52,7 @@ public:
 		auto codec = std::unique_ptr<VpxVideoCodec>(new VpxVideoCodec());
 		vpx_codec_dec_cfg_t cfg;
 		memset(&cfg, 0, sizeof(cfg));
-		cfg.threads = std::clamp(std::thread::hardware_concurrency(), 1u, 4u);
+		cfg.threads = wzWebmVideoCodecDecodeThreads();
 		if (vpx_codec_dec_init(&codec->m_ctx, iface, &cfg, 0) != VPX_CODEC_OK)
 		{
 			debug(LOG_ERROR, "vpx_codec_dec_init() failed: %s", vpx_codec_error(&codec->m_ctx));

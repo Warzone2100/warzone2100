@@ -22,8 +22,18 @@
 #include "lib/framework/frame.h"
 #include "webm_video_codec.h"
 
+#include <algorithm>
+#include <cstring>
+#include <thread>
+
 WZWebmVideoCodec::~WZWebmVideoCodec()
 { }
+
+unsigned wzWebmVideoCodecDecodeThreads()
+{
+	// hardware_concurrency() returns 0 when it can't tell
+	return std::clamp(std::thread::hardware_concurrency(), 1u, 4u);
+}
 
 namespace
 {
@@ -85,6 +95,22 @@ std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreate(const char *codecId, un
 			{
 				return codec;
 			}
+		}
+	}
+	return nullptr;
+}
+
+std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreateReplacement(const char *codecId, unsigned width, unsigned height, const WZWebmVideoCodec& failed)
+{
+	for (const auto& entry : backendTable)
+	{
+		if (strcmp(entry.name, failed.backendName()) == 0)
+		{
+			continue;
+		}
+		if (auto codec = tryCreate(entry, codecId, width, height))
+		{
+			return codec;
 		}
 	}
 	return nullptr;

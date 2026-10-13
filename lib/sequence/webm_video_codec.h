@@ -61,6 +61,9 @@ public:
 	 * Decoding resumes from a key frame. */
 	virtual void flush() { }
 
+	/** Whether the codec has stopped decoding for good */
+	virtual bool failed() const { return false; }
+
 	/** Color description from the container - used where the bitstream lacks one */
 	WZVideoColorMatrix containerColorMatrix = WZVideoColorMatrix::BT601;
 	bool containerFullRange = false;
@@ -69,6 +72,9 @@ public:
 /** Create a codec for a Matroska CodecID ("V_VP8" / "V_VP9"), falling back through the registry on failure */
 std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreate(const char *codecId, unsigned width, unsigned height, WZWebmCodecBackend preference);
 
+/** Create a codec from the first backend in the registry other than the one \p failed came from. */
+std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreateReplacement(const char *codecId, unsigned width, unsigned height, const WZWebmVideoCodec& failed);
+
 std::unique_ptr<WZWebmVideoCodec> wzCreateVpxVideoCodec(const char *codecId, unsigned width, unsigned height);
 bool wzVpxVideoCodecAvailable(WzString& detail);
 
@@ -76,3 +82,6 @@ bool wzVpxVideoCodecAvailable(WzString& detail);
 std::unique_ptr<WZWebmVideoCodec> wzCreateMediaFoundationVideoCodec(const char *codecId, unsigned width, unsigned height);
 bool wzMediaFoundationVideoCodecAvailable(WzString& detail);
 #endif
+
+/** Worker thread count for a backend's decoder: the hardware thread count, clamped to [1, 4] */
+unsigned wzWebmVideoCodecDecodeThreads();
