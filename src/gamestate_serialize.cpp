@@ -40,6 +40,8 @@
 #include "research.h"
 #include "researchdef.h"
 #include "stats.h"
+#include <set>
+#include <tuple>
 #include "structure.h"
 #include "structuredef.h"
 #include "template.h"
@@ -1395,6 +1397,8 @@ static nlohmann::ordered_json writeObjRef(const BASE_OBJECT *psObj)
 // Non-null references in the document that resolved to no object in the current restore (restored as nullptr).
 // An honest snapshot has none.
 static uint32_t g_unresolvedObjRefs = 0;
+static uint32_t g_mistypedObjRefs = 0;      // references that resolved to an object of another class
+static uint32_t g_formationRepairs = 0;     // restored formations whose members didn't all re-attach
 
 // The objects that died in the save tick and wait to be freed (the dying section), by type and id.
 // Only readObjRef finds them. getBaseObjFromData never does, as in the live game,
@@ -1436,6 +1440,10 @@ template <typename T>
 static T *readObjRefTyped(const nlohmann::ordered_json &j, OBJECT_TYPE want)
 {
 	BASE_OBJECT *obj = readObjRef(j);
+	if (obj != nullptr && obj->type != want)
+	{
+		++g_mistypedObjRefs;
+	}
 	if (obj == nullptr || obj->type != want)
 	{
 		return nullptr;
@@ -2370,6 +2378,7 @@ static void finalizeRestoredFormations()
 			{
 				continue;
 			}
+			++g_formationRepairs;
 			debug(LOG_ERROR, "Restored formation (player %u at %d,%d): slot %u droid id %u never re-attached; releasing slot",
 			      f->player, f->x, f->y, slot, info.slotDroidIds[slot]);
 			// Unlink the orphaned slot from its line chain and push it onto the free list
@@ -2398,6 +2407,7 @@ static void finalizeRestoredFormations()
 		}
 		if (info.attachedMembers != info.expectedMembers)
 		{
+			++g_formationRepairs;
 			debug(LOG_ERROR, "Restored formation (player %u at %d,%d): refCount %d != re-attached members %d; re-basing",
 			      f->player, f->x, f->y, info.expectedMembers, info.attachedMembers);
 			f->refCount = static_cast<SWORD>(info.attachedMembers);
@@ -4441,7 +4451,7 @@ static nlohmann::ordered_json writeScripting(ScriptScope scriptScope)
 // are instantiated, so scripting must be skipped there and replayed later. The explicit deferred replay
 // (applyGameStateScripting) passes false: its caller guarantees the script instances exist (all level data
 // is loaded) even though scriptsReady is not set yet, mirroring the legacy loadScriptState timing.
-static void readScripting(const nlohmann::ordered_json &j, uint32_t version, ScriptScope scriptScope, bool requireScriptsReady = true)
+static void readScripting(const nlohmann::ordered_json &j, uint32_t version, ScriptScope scriptScope, bool requireScriptsReady = true, bool strict = false)
 {
 	if (version != SCRIPTING_SECTION_VERSION)
 	{
@@ -4462,10 +4472,14 @@ static void readScripting(const nlohmann::ordered_json &j, uint32_t version, Scr
 		if (!loadScriptStates(j.at("states"), targetPlayer))
 		{
 			debug(LOG_ERROR, "Script state restore skipped malformed entries (targetPlayer %d)", targetPlayer);
-			if (scriptScope == ScriptScope::LocalPlayerOnly)
+			if (scriptScope == ScriptScope::LocalPlayerOnly || strict)
 			{
 				throw StateError("script state restore skipped malformed entries - rejecting snapshot");
 			}
+		}
+		if (strict && scriptStatesLastUnmatchedInstances() != 0)
+		{
+			throw StateError(std::to_string(scriptStatesLastUnmatchedInstances()) + " saved script instance(s) have no running instance");
 		}
 	}
 }
@@ -5339,6 +5353,313 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	return j;
 }
 
+// MARK: - Document check (in-process restores)
+//
+// What the document alone decides is checked before an in-process restore changes anything,
+// so a snapshot that can't be restored is rejected while the live game can still go on:
+// the sections and their versions, the map dimensions and blobs, the stats of every object, unique object ids,
+// every structure and feature on its map
+// (and each structure clear of the map edge and of the others, as buildStructureDir requires),
+// the death times of the dying objects,
+// and that every object reference outside the scripts resolves to an object of the document.
+
+namespace
+{
+
+[[noreturn]] void documentCheckFail(const std::string &what)
+{
+	throw StateError("document check: " + what);
+}
+
+struct DocumentIndex
+{
+	std::set<std::pair<int, uint32_t>> ids;                // (type, id): unique per type
+	std::set<std::tuple<int, unsigned, uint32_t>> objects; // (type, player (0 for features), id)
+
+	void add(int type, unsigned player, uint32_t id)
+	{
+		static const char *const names[] = {"droid", "structure", "feature"};
+		if (!ids.insert({type, id}).second)
+		{
+			documentCheckFail(std::string("duplicate ") + names[type] + " id " + std::to_string(id));
+		}
+		objects.insert({type, type == OBJ_FEATURE ? 0u : player, id});
+	}
+};
+
+void checkSectionVersion(const nlohmann::ordered_json &sec, const char *name, uint32_t version)
+{
+	if (!sec.is_object() || sec.value("version", 0u) != version)
+	{
+		documentCheckFail(std::string("section ") + name + " is missing or not version " + std::to_string(version));
+	}
+}
+
+// The dimensions of a world's terrain (0 x 0: none), after checking its blobs
+std::pair<int, int> checkMapTerrain(const nlohmann::ordered_json &t)
+{
+	if (!t.is_object() || !t.contains("width"))
+	{
+		return {0, 0};
+	}
+	const int w = t.at("width").get<int>();
+	const int h = t.at("height").get<int>();
+	if (w <= 0 || h <= 0 || w > MAP_MAXWIDTH || h > MAP_MAXHEIGHT)
+	{
+		documentCheckFail("map dimensions out of range");
+	}
+	const size_t n = static_cast<size_t>(w) * static_cast<size_t>(h);
+	const std::pair<const char *, size_t> blobs[] = {{"texture", n * 2}, {"tileHeight", n * 4}, {"water", n * 4}};
+	for (const auto &blob : blobs)
+	{
+		const nlohmann::ordered_json &b = t.at(blob.first);
+		if (!b.is_string() || b.get_ref<const nlohmann::ordered_json::string_t &>().size() != (blob.second + 2) / 3 * 4)
+		{
+			documentCheckFail(std::string("map terrain ") + blob.first + " has the wrong size");
+		}
+	}
+	return {w, h};
+}
+
+void checkDroidParts(const nlohmann::ordered_json &d)
+{
+	const nlohmann::ordered_json &parts = d.at("parts");
+	const std::pair<const char *, COMPONENT_TYPE> single[] = {{"body", COMP_BODY}, {"brain", COMP_BRAIN}, {"propulsion", COMP_PROPULSION},
+		{"repair", COMP_REPAIRUNIT}, {"ecm", COMP_ECM}, {"sensor", COMP_SENSOR}, {"construct", COMP_CONSTRUCT}};
+	for (const auto &part : single)
+	{
+		const std::string id = parts.at(part.first).get<std::string>();
+		if (getCompFromID(part.second, WzString::fromUtf8(id)) < 0)
+		{
+			documentCheckFail("droid " + std::to_string(d.at("id").get<uint32_t>()) + " has an unknown " + part.first + ": " + id);
+		}
+	}
+	for (const auto &weapon : parts.at("weapons"))
+	{
+		if (getCompFromID(COMP_WEAPON, WzString::fromUtf8(weapon.get<std::string>())) < 0)
+		{
+			documentCheckFail("droid " + std::to_string(d.at("id").get<uint32_t>()) + " has an unknown weapon: " + weapon.get<std::string>());
+		}
+	}
+}
+
+void checkWorld(const nlohmann::ordered_json &w, std::pair<int, int> mapSize, DocumentIndex &index, const char *worldName)
+{
+	checkSectionVersion(w, worldName, WORLD_SECTION_VERSION);
+	const nlohmann::ordered_json &dyn = w.at("mapDynamic");
+	if (dyn.contains("width") && (dyn.at("width").get<int>() != mapSize.first || dyn.at("height").get<int>() != mapSize.second))
+	{
+		documentCheckFail(std::string(worldName) + ": the dynamic map state doesn't match the terrain's dimensions");
+	}
+	const bool hasMap = mapSize.first > 0;
+	auto onMap = [&](const StructureBounds &b) {
+		return b.map.x >= 0 && b.map.y >= 0 && b.map.x + b.size.x <= mapSize.first && b.map.y + b.size.y <= mapSize.second;
+	};
+	for (const auto &f : w.at("features"))
+	{
+		const uint32_t id = f.at("id").get<uint32_t>();
+		const SDWORD statIndex = getFeatureStatFromName(WzString::fromUtf8(f.at("statId").get<std::string>()));
+		if (statIndex < 0)
+		{
+			documentCheckFail("feature " + std::to_string(id) + " has an unknown stat");
+		}
+		const Vector2i pos(f.at("pos")[0].get<int>(), f.at("pos")[1].get<int>());
+		if (!hasMap || !onMap(getStructureBounds(&asFeatureStats[statIndex], pos)))
+		{
+			documentCheckFail(std::string(worldName) + ": feature " + std::to_string(id) + " is off the map");
+		}
+		index.add(OBJ_FEATURE, f.at("player").get<unsigned>(), id);
+	}
+	std::set<std::pair<int, int>> structureTiles;
+	for (const auto &s : w.at("structures"))
+	{
+		const uint32_t id = s.at("id").get<uint32_t>();
+		const int statIndex = getStructStatFromName(WzString::fromUtf8(s.at("statId").get<std::string>()));
+		if (statIndex < 0)
+		{
+			documentCheckFail("structure " + std::to_string(id) + " has an unknown stat");
+		}
+		const unsigned player = s.at("player").get<unsigned>();
+		if (player >= MAX_PLAYERS)
+		{
+			documentCheckFail("structure " + std::to_string(id) + " has an invalid player");
+		}
+		// As buildStructureDir places it: snapped to the tile, clear of the map edge, on the map, on free tiles
+		const STRUCTURE_STATS *psStats = &asStructureStats[statIndex];
+		const uint16_t direction = s.at("rot")[0].get<uint16_t>();
+		const Vector2i size = psStats->size(direction);
+		const int x = (s.at("pos")[0].get<int>() & ~TILE_MASK) + size.x % 2 * TILE_UNITS / 2;
+		const int y = (s.at("pos")[1].get<int>() & ~TILE_MASK) + size.y % 2 * TILE_UNITS / 2;
+		if (!hasMap || map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > mapSize.first - TOO_NEAR_EDGE
+		    || map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > mapSize.second - TOO_NEAR_EDGE)
+		{
+			documentCheckFail(std::string(worldName) + ": structure " + std::to_string(id) + " is too near the map edge, or off the map");
+		}
+		const StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), direction);
+		if (!onMap(b))
+		{
+			documentCheckFail(std::string(worldName) + ": structure " + std::to_string(id) + " extends past the map");
+		}
+		for (int ty = b.map.y; ty < b.map.y + b.size.y; ++ty)
+		{
+			for (int tx = b.map.x; tx < b.map.x + b.size.x; ++tx)
+			{
+				if (!structureTiles.insert({tx, ty}).second)
+				{
+					documentCheckFail(std::string(worldName) + ": structure " + std::to_string(id) + " overlaps another structure");
+				}
+			}
+		}
+		index.add(OBJ_STRUCTURE, player, id);
+	}
+	for (const auto &d : w.at("droids"))
+	{
+		const uint32_t id = d.at("id").get<uint32_t>();
+		if (!hasMap && !d.value("onMission", false))  // (as readDroidPass1 requires)
+		{
+			documentCheckFail(std::string(worldName) + ": droid " + std::to_string(id) + " in a world without a map");
+		}
+		checkDroidParts(d);
+		index.add(OBJ_DROID, d.at("player").get<unsigned>(), id);
+	}
+}
+
+// Every {id, player, type} object reference (writeObjRef) in a subtree resolves to an object of the document
+void checkReferences(const nlohmann::ordered_json &j, const DocumentIndex &index)
+{
+	if (j.is_object())
+	{
+		if (j.size() == 3 && j.contains("id") && j.contains("player") && j.contains("type"))
+		{
+			const int type = j.at("type").get<int>();
+			if (type == OBJ_DROID || type == OBJ_STRUCTURE || type == OBJ_FEATURE)
+			{
+				const uint32_t id = j.at("id").get<uint32_t>();
+				const unsigned player = type == OBJ_FEATURE ? 0u : j.at("player").get<unsigned>();
+				if (index.objects.count({type, player, id}) == 0)
+				{
+					documentCheckFail("a reference to object " + std::to_string(id) + " (type " + std::to_string(type)
+					                  + ", player " + std::to_string(player) + ") doesn't resolve");
+				}
+			}
+			return;
+		}
+		for (const auto &item : j.items())
+		{
+			checkReferences(item.value(), index);
+		}
+	}
+	else if (j.is_array())
+	{
+		for (const auto &item : j)
+		{
+			if (item.is_structured())
+			{
+				checkReferences(item, index);
+			}
+		}
+	}
+}
+
+} // anonymous namespace
+
+void checkGameStateDocument(const nlohmann::ordered_json &j)
+{
+	try
+	{
+		if (!j.is_object() || j.value("format", std::string()) != GAMESTATE_FORMAT_TAG || j.value("formatVersion", 0u) != GAMESTATE_FORMAT_VERSION)
+		{
+			documentCheckFail("not a GameState document of this version");
+		}
+		const std::pair<const char *, uint32_t> sections[] = {
+			{"determinismCore", DETERMINISM_CORE_VERSION}, {"diplomacy", DIPLOMACY_SECTION_VERSION}, {"power", POWER_SECTION_VERSION},
+			{"research", RESEARCH_SECTION_VERSION}, {"upgrades", UPGRADES_SECTION_VERSION}, {"combatModifiers", COMBAT_MODIFIERS_SECTION_VERSION},
+			{"simMisc", SIM_MISC_SECTION_VERSION}, {"campaign", CAMPAIGN_SECTION_VERSION}, {"availability", AVAILABILITY_SECTION_VERSION},
+			{"limits", LIMITS_SECTION_VERSION}, {"templates", TEMPLATES_SECTION_VERSION}, {"production", PRODUCTION_SECTION_VERSION},
+			{"scores", SCORES_SECTION_VERSION}, {"recycledExperience", RECYCLED_XP_SECTION_VERSION}, {"formations", FORMATIONS_SECTION_VERSION},
+			{"world", WORLD_SECTION_VERSION}, {"dangerMaps", DANGER_SECTION_VERSION}, {"pendingRoutes", PENDING_ROUTES_VERSION},
+			{"mission", MISSION_SECTION_VERSION}, {"dying", DYING_SECTION_VERSION}, {"projectiles", PROJECTILES_SECTION_VERSION},
+			{"spotters", SPOTTERS_SECTION_VERSION}, {"commandDesignators", DESIGNATORS_SECTION_VERSION}, {"messages", MESSAGES_SECTION_VERSION},
+			{"presentation", PRESENTATION_SECTION_VERSION}, {"scriptPlayerData", SCRIPT_PLAYER_DATA_SECTION_VERSION},
+			{"scripting", SCRIPTING_SECTION_VERSION},
+		};
+		for (const auto &section : sections)
+		{
+			if (!j.contains(section.first))
+			{
+				documentCheckFail(std::string("section ") + section.first + " is missing");
+			}
+			checkSectionVersion(j.at(section.first), section.first, section.second);
+		}
+
+		DocumentIndex index;
+		checkWorld(j.at("world"), checkMapTerrain(j.at("mapTerrain")), index, "world");
+		const nlohmann::ordered_json &mission = j.at("mission");
+		checkWorld(mission.at("world"), checkMapTerrain(mission.at("mapTerrain")), index, "off-world");
+		for (const auto &d : mission.at("limboDroids"))
+		{
+			checkDroidParts(d);
+			index.add(OBJ_DROID, d.at("player").get<unsigned>(), d.at("id").get<uint32_t>());
+		}
+		// The dying objects (ghosts) can be referenced too, and died in the snapshot's tick or the one before
+		const uint32_t docGameTime = j.at("determinismCore").at("gameTime").get<uint32_t>();
+		for (const auto &o : j.at("dying").at("objects"))
+		{
+			const int type = o.at("type").get<int>();
+			const uint32_t died = o.at("died").get<uint32_t>();
+			if (type < OBJ_DROID || type > OBJ_FEATURE || died <= NOT_CURRENT_LIST || died > docGameTime)
+			{
+				documentCheckFail("dying object " + std::to_string(o.at("id").get<uint32_t>()) + " has an invalid type or death time");
+			}
+			index.add(type, o.at("player").get<unsigned>(), o.at("id").get<uint32_t>());
+		}
+		for (const auto &item : j.items())
+		{
+			// The scripts' saved globals may hold plain copies of objects that are gone, legitimately
+			if (item.key() != "scripting" && item.key() != "mapTerrain" && item.key() != "dangerMaps")
+			{
+				checkReferences(item.value(), index);
+			}
+		}
+	}
+	catch (const nlohmann::ordered_json::exception &e)
+	{
+		documentCheckFail(std::string("malformed document: ") + e.what());
+	}
+}
+
+// The running script instances are the ones the snapshot saved: every saved instance is running, and no other
+static void checkScriptInstancesMatch(const nlohmann::ordered_json &j)
+{
+	if (!scriptsAreReady())
+	{
+		return;
+	}
+	try
+	{
+		const nlohmann::ordered_json &states = j.at("scripting").at("states");
+		const nlohmann::ordered_json &instances = states.at("instances");
+		for (const auto &instance : instances)
+		{
+			const int player = instance.at("me").get<int>();
+			const std::string scriptName = instance.at("scriptName").get<std::string>();
+			if (!scriptInstanceRunning(player, scriptName))
+			{
+				documentCheckFail("the snapshot's script " + scriptName + " of player " + std::to_string(player) + " isn't running");
+			}
+		}
+		if (instances.size() != scriptInstanceCount())
+		{
+			documentCheckFail("the snapshot has " + std::to_string(instances.size()) + " script instance(s), the game runs "
+			                  + std::to_string(scriptInstanceCount()));
+		}
+	}
+	catch (const nlohmann::ordered_json::exception &e)
+	{
+		documentCheckFail(std::string("malformed scripting section: ") + e.what());
+	}
+}
+
 // The restore stage gameStateFromJson has reached (nullptr: none, the live state is untouched), and a stage at
 // which to throw (test-only, --gamestate-rewind-fault=throw-at:<stage>).
 static const char *g_restoreStage = nullptr;
@@ -5383,6 +5704,13 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// Each subsystem is a top-level section object carrying its own "version".
 	// Unknown sections are ignored.
 
+	// Checked before anything changes, so a snapshot that can't be restored is rejected while the live game can go on
+	if (inProcess)
+	{
+		checkGameStateDocument(j);
+		checkScriptInstancesMatch(j);
+	}
+
 	// From here on the live state is changed
 	restoreStage("teardown");
 
@@ -5394,6 +5722,8 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// dangerMaps post-pass below and the worker is (re)started by the next mapInit.
 	mapStopDangerThreadForReconstruct();
 	g_unresolvedObjRefs = 0;
+	g_mistypedObjRefs = 0;
+	g_formationRepairs = 0;
 
 	// Drop the pathfinding caches. The current tick's blocking maps are only discarded when a request comes
 	// at a different gameTime, so after an in-process restore to an earlier moment,
@@ -5750,7 +6080,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	{
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: scripting");
 		const nlohmann::ordered_json &sec = j.at("scripting");
-		readScripting(sec, sec.value("version", 0u), scriptScope);
+		readScripting(sec, sec.value("version", 0u), scriptScope, true, /*strict=*/inProcess);
 	}
 	restoreStage("derived");
 	// Rebuild derived state (spatial grid, counts) for the active world, once.
@@ -5782,6 +6112,15 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	if (g_unresolvedObjRefs != 0)
 	{
 		debug(LOG_INFO, "GameState restore: %u object reference(s) did not resolve and were restored as null", g_unresolvedObjRefs);
+	}
+	// Strict for an in-process restore: a snapshot taken by this game restores exactly,
+	// so anything the readers had to repair (which a cold load of a crafted or older save may need) is a bug,
+	// and the restored game may diverge
+	if (inProcess && (g_unresolvedObjRefs != 0 || g_mistypedObjRefs != 0 || g_formationRepairs != 0))
+	{
+		throw StateError("in-process restore repaired the snapshot: " + std::to_string(g_unresolvedObjRefs) + " unresolved and "
+		                 + std::to_string(g_mistypedObjRefs) + " mistyped object reference(s), " + std::to_string(g_formationRepairs)
+		                 + " formation repair(s)");
 	}
 	restoreStage("done");
 	debug(LOG_GAMESTATE_SERIAL, "gameStateFromJson complete");

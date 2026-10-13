@@ -836,6 +836,25 @@ bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer)
 	return scripting_engine::instance().loadScriptStates2(result, targetPlayer);
 }
 
+size_t scriptStatesLastUnmatchedInstances()
+{
+	return scripting_engine::instance().lastUnmatchedInstances;
+}
+
+bool scriptInstanceRunning(int player, const std::string &scriptName)
+{
+	// As findInstanceForPlayer matches them, without its assert
+	const WzString name = WzString::fromUtf8(scriptName).normalized(WzString::NormalizationForm_KD);
+	return std::any_of(scripts.begin(), scripts.end(), [&](const wzapi::scripting_instance *instance) {
+		return instance->player() == player && WzString::fromUtf8(instance->scriptName()).normalized(WzString::NormalizationForm_KD).compare(name) == 0;
+	});
+}
+
+size_t scriptInstanceCount()
+{
+	return scripts.size();
+}
+
 bool scriptsAreReady()
 {
 	return scriptsReady;
@@ -1153,6 +1172,7 @@ static T jsonValueOr(const JsonType &j, const char *key, T fallback, bool *misma
 bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer)
 {
 	bool anySkipped = false;
+	lastUnmatchedInstances = 0;
 	const int version = jsonValueOr(root, "version", 1);
 	ASSERT_OR_RETURN(false, version >= 2, "Invalid version: %d", version);
 
@@ -1237,6 +1257,8 @@ bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int
 			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 			if (!instance)
 			{
+				debug(LOG_SAVE, "No script instance %s for player %d: its saved state is not restored", scriptName.toUtf8().c_str(), player);
+				++lastUnmatchedInstances;
 				continue;
 			}
 

@@ -75,6 +75,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "gamestate_capture.h"
+#include "gamestate_snapshot.h"
 #include "multijoin.h"
 #include "lighting.h"
 #include "intimage.h"
@@ -349,7 +350,10 @@ static GAMECODE renderLoop()
 			{
 				processMouseClickInput();
 			}
-			displayWorld();
+			if (!gameStateRestoreFailed())  // a half-restored world isn't drawn
+			{
+				displayWorld();
+			}
 		}
 		else
 		{
@@ -746,12 +750,13 @@ GAMECODE gameLoop()
 
 		bool forceTryGameTickUpdate = canFastForwardGameTime && ((!fastForwardTicksFixedToNormalTickRate && numForcedUpdatesLastCall > 0) || numRegularUpdatesTicks > 0) && NETgameIsBehindPlayersByAtLeast(4);
 
-		// No game state update once a level change or a savegame load has been requested (in a tick, by a script's
-		// loadLevel()): renderLoop() hands over to it in the next frames, which block for a while (destroying the
-		// objects, shutting the level down), and the ticks run until then would depend on how long those frames take.
-		// The world would also go on without its scripts. Game time stops at the tick that made the request (graphics
-		// time catches up with it, and the time that passes is dropped), and the next level starts from that tick.
-		const bool mayTick = !levelChangePending();
+		// No game state update once a level change or a savegame load has been requested
+		// (in a tick, by a script's loadLevel()): renderLoop() hands over to it in the next frames,
+		// which block for a while, and the ticks run until then would depend on how long those frames take.
+		// (The world would also go on without its scripts.)
+		// Game time stops at the tick that made the request, and the next level starts from that tick.
+		// Nor after an in-process restore failed halfway (gamestate_snapshot.h): the world isn't consistent.
+		const bool mayTick = !levelChangePending() && !gameStateRestoreFailed();
 
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
 		auto timeUpdateResult = gameTimeUpdate(mayTick && (renderBudget > 0 || previousUpdateWasRender), mayTick && forceTryGameTickUpdate);
