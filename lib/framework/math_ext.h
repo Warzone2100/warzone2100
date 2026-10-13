@@ -111,6 +111,13 @@ static inline WZ_DECL_CONST T clip(T x, T min, T max)
 	return x < min ? min : x > max ? max : x;
 }
 
+template <typename T>
+static inline WZ_DECL_CONST T idiv_round(T numerator, T denominator)
+{
+	return ((numerator < 0) == (denominator < 0))
+		? ((numerator + denominator / 2) / denominator)
+		: ((numerator - denominator / 2) / denominator);
+}
 
 /*!
  * Clips x to boundaries
