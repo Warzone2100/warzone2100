@@ -265,6 +265,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
  * Hopefully by this time, no pointers still refer to it! */
 bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 {
+	gridMarkDirty();  // The grid may still point to it
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
@@ -624,6 +625,7 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 {
 	using Traits = GlobalEntityContainerTraits<Entity>;
 	auto& entityContainer = Traits::getContainer();
+	gridMarkDirty();  // The grid may still point to them
 	for (auto& list : entityLists)
 	{
 		for (auto* ent : list)

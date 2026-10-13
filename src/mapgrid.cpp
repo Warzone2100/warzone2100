@@ -38,6 +38,7 @@
 
 static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
 static unsigned gridPersonCount = 0;
+static bool gridDirty = false;
 static PointTree::Filter *gridFiltersUnseen;
 static PointTree::Filter *gridFiltersDroidsByPlayer;
 static PointTree::Filter *gridFiltersDroidsRepairCandidates;
@@ -125,6 +126,21 @@ void gridReset(GameWorld& world)
 		gridFiltersUnseen[player].reset(*gridPointTree);
 		gridFiltersDroidsByPlayer[player].reset(*gridPointTree);
 		gridFiltersDroidsRepairCandidates[player].reset(*gridPointTree);
+	}
+
+	gridDirty = false;
+}
+
+void gridMarkDirty()
+{
+	gridDirty = true;
+}
+
+void gridResetIfDirty(GameWorld& world)
+{
+	if (gridDirty)
+	{
+		gridReset(world);
 	}
 }
 
@@ -305,7 +321,9 @@ struct ConditionUnseen
 	ConditionUnseen(int32_t player_) : player(player_) {}
 	bool test(BASE_OBJECT *obj) const
 	{
-		return obj->seenThisTick[player] < UINT8_MAX;
+		// Skip dead objects (the grid keeps them until its next rebuild), so visibility never marks one seen
+		// or fires eventObjectSeen for it.
+		return obj->seenThisTick[player] < UINT8_MAX && !obj->died;
 	}
 	int player;
 };
