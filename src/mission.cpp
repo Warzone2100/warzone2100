@@ -3241,8 +3241,10 @@ void missionDestroyObjects()
 	{
 		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
 	}
-	gameTime++;	// Wonderful hack to ensure objects destroyed above get free'ed up by objmemUpdate.
-	objmemUpdate();	// Actually free objects removed above
+	// The level is ending: free every object pending destruction.
+	// (objmemUpdate() would miss those removed by a GAME_DEBUG_REMOVE_* message after the last tick,
+	// which die at gameTime + 1.)
+	objmemFreeAllDestroyed();
 }
 
 void processPreviousCampDroids()

@@ -53,6 +53,10 @@ enum LOOP_MISSION_STATE
 	LMS_CLEAROBJECTS,	// make the call to destroy objects
 };
 extern LOOP_MISSION_STATE		loopMissionState;
+/// True from the request of a level change (a script's loadLevel()), the mission result screen between two levels,
+/// or a savegame load, until it is carried out:
+/// the world is about to be replaced, so the game doesn't tick and can't be saved.
+bool levelChangePending();
 
 // this is set by scrStartMission to say what type of new level is to be started
 extern LEVEL_TYPE nextMissionType;

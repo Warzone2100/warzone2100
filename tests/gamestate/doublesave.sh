@@ -7,7 +7,8 @@
 # usage: doublesave.sh <warzone2100 binary> <savegame name> [--no-loaded]
 #   The savegame must already exist in $OUT/config/savegames/skirmish/ or .../campaign/ (ex. written by forkcrc.sh).
 #   --no-loaded  load with --gamestate-test-suppress-loaded-event (no eventGameLoaded / research replay)
-# Environment: OUT (default /tmp/gamestate-forkcrc), RUN_TIMEOUT (default 600 seconds).
+# Environment: OUT (default /tmp/gamestate-forkcrc), RUN_TIMEOUT (default 600 seconds),
+#              EXTRA (default none): more game options (ex. --mod=<test mod> the savegame was written with).
 # Exit status: 0 identical, 1 differs, 2 a run failed.
 set -u
 BIN=${1:?binary}
@@ -24,7 +25,7 @@ SAVEDIR=skirmish
 rm -rf "$CFG/savegames/$SAVEDIR/$RESAVE"
 [ -f "$CFG/savegames/$SAVEDIR/$SAVE/gamestate.wz" ] || { echo "$SAVE: no such new-format savegame in $CFG"; exit 2; }
 
-timeout "$RUN_TIMEOUT" "$BIN" --configdir="$CFG" --headless --autogame --load$SAVEDIR="$SAVE" $NOLOADED \
+timeout "$RUN_TIMEOUT" "$BIN" --configdir="$CFG" --headless --autogame --load$SAVEDIR="$SAVE" $NOLOADED ${EXTRA:-} \
 	--gamestate-resave-on-load="savegames/$SAVEDIR/$RESAVE.gam" > "$OUT/$RESAVE.log" 2>&1
 [ -f "$CFG/savegames/$SAVEDIR/$RESAVE/gamestate.wz" ] || { echo "$SAVE${NOLOADED:+ (no eventGameLoaded)}: RESAVE FAILED (see $OUT/$RESAVE.log)"; exit 2; }
 echo "$SAVE${NOLOADED:+ (no eventGameLoaded)}: load + immediate re-save:"

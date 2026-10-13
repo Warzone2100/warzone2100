@@ -359,6 +359,17 @@ void objmemUpdate()
 	}
 }
 
+void objmemFreeAllDestroyed()
+{
+	flushPendingVisRemoval(gameWorld);
+	flushPendingVisRemoval(mission.gameWorld);
+	for (BASE_OBJECT *psObj : psDestroyedObj)
+	{
+		objmemDestroy(psObj, true);
+	}
+	psDestroyedObj.clear();
+}
+
 uint32_t generateNewObjectId()
 {
 	// Generate even ID for unsynchronized objects. This is needed for debug objects, templates and other border lines cases that should preferably be removed one day.

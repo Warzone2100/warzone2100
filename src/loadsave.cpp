@@ -1138,6 +1138,13 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 
 static bool doAutoSave()
 {
+	if (levelChangePending())
+	{
+		// Queued (by autoSave()) just before a level change was requested: saveGame() would refuse, so don't free an
+		// autosave slot for it
+		debug(LOG_INFO, "Skipping autosave: a level change or a savegame load is pending");
+		return false;
+	}
 	const char *dir = bMultiPlayer ? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
 	// Backward compatibility: remove later
 	if (!freeAutoSaveSlot_old(dir))
@@ -1181,6 +1188,11 @@ bool autoSave(bool force)
 	}
 	// Bail out if autosaves only mode and not forced
 	if (getCamTweakOption_AutosavesOnly() && !force)
+	{
+		return false;
+	}
+	// (see saveGame())
+	if (levelChangePending())
 	{
 		return false;
 	}

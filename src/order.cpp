@@ -50,6 +50,7 @@
 #include "qtscript.h"
 #include "group.h"
 #include "cmddroid.h"
+#include "loop.h"
 #include "move.h"
 #include "multiplay.h"  //ajl
 #include "random.h" // to balance the damaged units flow to repairs
@@ -522,10 +523,31 @@ bool orderUpdateDroid(DROID *psDroid)
 					/* clear order */
 					psDroid->order = DroidOrder(DORDER_NONE);
 				}
+				const bool orderCleared = psDroid->order.type == DORDER_NONE;
 				//the script can call startMission for this callback for offworld missions (if we want to change level)
 				triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
 
 				psDroid->sMove.speed = 0; // Prevent radical movement vector when adjusting from home to away map exit and entry coordinates.
+
+				// With its order cleared, the transporter stays in the world it left (updateTransporter dropped its tile
+				// coverage on arrival). Only for the current world: missionDroidUpdate() runs this for the inactive one too.
+				const auto &currentDroids = gameWorld.objects.droids[psDroid->player];
+				if (orderCleared && std::find(currentDroids.begin(), currentDroids.end(), psDroid) != currentDroids.end())
+				{
+					if (levelChangePending())
+					{
+						// The level change the exit asked for comes before the next tick (see gameLoop) and keeps this world as is.
+						// Stop the transporter, or its move in the rest of this tick would give it coverage again on the map it left
+						// (missionFlyTransportersIn later drops its watched tiles without removing them from that map).
+						moveReallyStopDroid(psDroid);
+					}
+					else
+					{
+						// Staying (order and action none, as a recompute of its coverage assumes): give its coverage back.
+						// Its move, if any, keeps it up to date.
+						visTilesUpdate(psDroid, gameWorld.map);
+					}
+				}
 			}
 		}
 		break;
