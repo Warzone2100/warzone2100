@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <cstring>
 #include <deque>
+#include <string>
 #include <vector>
 
 namespace
@@ -197,6 +198,8 @@ private:
 	bool demuxNextBlock(TrackCursor& cursor);
 	/** The end time of the last video frame, found from the last cue point (or a full scan without cues) */
 	double findVideoDuration() const;
+	/** Switch to another backend, once per decoder. \returns false when there is none */
+	bool replaceVideoCodec();
 
 private:
 	std::shared_ptr<VideoProvider> m_provider;
@@ -208,6 +211,8 @@ private:
 	TrackCursor m_audio;
 
 	std::unique_ptr<WZWebmVideoCodec> m_videoCodec;
+	std::string m_videoCodecId;
+	bool m_videoCodecReplaced = false;
 	long long m_videoTrackNumber = -1;
 	WZVideoTrackMetadata m_videoMetadata;
 
@@ -221,6 +226,9 @@ private:
 	unsigned m_consecutiveNoOutput = 0;
 	double m_lastVideoPacketPts = 0.0;
 	bool m_videoDraining = false;
+	double m_videoDecodeStartPts = 0.0;		// where decoding last (re)started
+	double m_lastVideoFramePts = -1.0;		// the last frame returned since then (-1 = none)
+	double m_videoResumeAfterPts = -1.0;	// frames up to here were returned by a replaced codec
 
 	uint64_t m_audioSamplesOut = 0;
 	double m_audioBasePts = 0.0;
@@ -282,6 +290,7 @@ bool WebmVideoDecoder::open()
 			debug(LOG_VIDEO, "WebM video track %lld: %s %ux%u %.02f fps",
 			      m_videoTrackNumber, codecId, m_videoMetadata.width, m_videoMetadata.height, m_videoMetadata.fps);
 
+			m_videoCodecId = codecId;
 			m_videoCodec = wzWebmVideoCodecCreate(codecId, m_videoMetadata.width, m_videoMetadata.height, m_backendPreference);
 			if (!m_videoCodec)
 			{
@@ -526,21 +535,28 @@ bool WebmVideoDecoder::nextVideoFrame(WZVideoFrameYUV& out)
 		return false;
 	}
 
-	const bool codecProvidesPts = m_videoCodec->providesFramePts();
-
 	for (;;)
 	{
 		// a buffering backend may hold several frames
 		if (m_videoCodec->getFrame(out))
 		{
-			if (!codecProvidesPts)
+			if (!m_videoCodec->providesFramePts())
 			{
 				out.pts = m_lastVideoPacketPts;
 			}
 			m_consecutiveNoOutput = 0;
+			if (out.pts <= m_videoResumeAfterPts)
+			{
+				continue;
+			}
+			m_lastVideoFramePts = out.pts;
 			return true;
 		}
 
+		if (m_videoCodec->failed() && replaceVideoCodec())
+		{
+			continue;
+		}
 		if (m_videoDraining)
 		{
 			return false;
@@ -560,6 +576,10 @@ bool WebmVideoDecoder::nextVideoFrame(WZVideoFrameYUV& out)
 		// but a stream that never decodes (ex. an unsupported VP9 profile) must fail promptly
 		if (m_consecutiveNoOutput >= 32)
 		{
+			if (replaceVideoCodec())
+			{
+				continue;
+			}
 			debug(LOG_ERROR, "Video stream produced no displayable frames (unsupported profile/format?): %s", m_provider->filename().toUtf8().c_str());
 			return false;
 		}
@@ -587,6 +607,41 @@ bool WebmVideoDecoder::seekVideo(double pts)
 	m_consecutiveNoOutput = 0;
 	m_videoCodec->flush();
 	m_videoDraining = false;
+	m_videoDecodeStartPts = pts;
+	m_lastVideoFramePts = -1.0;
+	m_videoResumeAfterPts = -1.0;
+	return true;
+}
+
+bool WebmVideoDecoder::replaceVideoCodec()
+{
+	if (m_videoCodecReplaced)
+	{
+		return false;
+	}
+	m_videoCodecReplaced = true;
+	auto replacement = wzWebmVideoCodecCreateReplacement(m_videoCodecId.c_str(), m_videoMetadata.width, m_videoMetadata.height, *m_videoCodec);
+	if (!replacement)
+	{
+		return false;
+	}
+	debug(LOG_WARNING, "Video decode backend '%s' stopped producing frames, switching to '%s': %s",
+	      m_videoCodec->backendName(), replacement->backendName(), m_provider->filename().toUtf8().c_str());
+	replacement->containerColorMatrix = m_videoCodec->containerColorMatrix;
+	replacement->containerFullRange = m_videoCodec->containerFullRange;
+	m_videoCodec = std::move(replacement);
+
+	// restart at a key frame, skipping the frames already shown
+	const double resumeAfterPts = m_lastVideoFramePts;
+	const double seekPts = (resumeAfterPts >= 0.0) ? resumeAfterPts : m_videoDecodeStartPts;
+	if (!seekVideo(seekPts))
+	{
+		debug(LOG_WARNING, "Video can't seek to %.3fs, continuing from the next key frame", seekPts);
+		m_consecutiveNoOutput = 0;
+		m_videoDraining = false;
+		return true;
+	}
+	m_videoResumeAfterPts = resumeAfterPts;
 	return true;
 }
 
