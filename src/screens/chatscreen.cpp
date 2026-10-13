@@ -725,10 +725,6 @@ void WzInGameChatScreen_CLICKFORM::run(W_CONTEXT *psContext)
 			giveChatBoxFocus();
 		}
 	}
-
-	// while this is displayed, clear the input buffer
-	// (ensuring that subsequent screens / the main screen do not get the input to handle)
-	inputLoseFocus();
 }
 
 // MARK: - WzGameStartOverlayScreen
