@@ -1391,6 +1391,20 @@ static nlohmann::ordered_json writeObjRef(const BASE_OBJECT *psObj)
 	return j;
 }
 
+// Non-null references in the document that resolved to no object in the current restore (restored as nullptr).
+// An honest snapshot has none.
+static uint32_t g_unresolvedObjRefs = 0;
+
+// The objects that died in the save tick and wait to be freed (the dying section), by type and id.
+// Only readObjRef finds them. getBaseObjFromData never does, as in the live game,
+// where no lookup returns an object on psDestroyedObj.
+static std::unordered_map<uint64_t, BASE_OBJECT *> g_ghosts;
+
+static uint64_t ghostKey(OBJECT_TYPE type, uint32_t id)
+{
+	return (static_cast<uint64_t>(type) << 32) | id;
+}
+
 static BASE_OBJECT *readObjRef(const nlohmann::ordered_json &j)
 {
 	if (j.is_null())
@@ -1400,7 +1414,18 @@ static BASE_OBJECT *readObjRef(const nlohmann::ordered_json &j)
 	const uint32_t id = j.at("id").get<uint32_t>();
 	const unsigned player = j.at("player").get<unsigned>();
 	const OBJECT_TYPE type = static_cast<OBJECT_TYPE>(j.at("type").get<int>());
-	return getBaseObjFromData(id, player, type);
+	BASE_OBJECT *psObj = getBaseObjFromData(id, player, type);
+	if (psObj == nullptr)
+	{
+		auto ghost = g_ghosts.find(ghostKey(type, id));
+		if (ghost != g_ghosts.end() && ghost->second->player == player)
+		{
+			return ghost->second;
+		}
+		++g_unresolvedObjRefs;
+		debug(LOG_GAMESTATE_SERIAL, "unresolved object reference: type %d, id %u, player %u", static_cast<int>(type), id, player);
+	}
+	return psObj;
 }
 
 // Resolve an object ref and confirm the resolved object is of the expected class before casting.
@@ -1521,7 +1546,7 @@ static void requireUniqueObjectId(std::unordered_set<uint32_t> &seenIds, uint32_
 	}
 }
 
-static void readFeature(GameWorld &world, const nlohmann::ordered_json &j, std::unordered_set<uint32_t> &seenIds)
+static FEATURE *readFeature(GameWorld &world, const nlohmann::ordered_json &j, std::unordered_set<uint32_t> &seenIds)
 {
 	const WzString statId = WzString::fromUtf8(j.at("statId").get<std::string>());
 	const SDWORD statIndex = getFeatureStatFromName(statId);
@@ -1544,6 +1569,7 @@ static void readFeature(GameWorld &world, const nlohmann::ordered_json &j, std::
 	}
 	readBaseObjectCommon(j, psFeature);
 	// pos.z (foundation depth) is derived from the map by buildFeature - x/y are authoritative.
+	return psFeature;
 }
 
 // MARK: - Structures
@@ -1692,7 +1718,7 @@ static nlohmann::ordered_json writeStructure(const STRUCTURE *psStruct)
 
 /// Pass 1: construct the structure and restore its scalar + functionality state.
 /// Object cross-references (targets, commander, repair/rearm target) are resolved in pass 2.
-static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j, std::unordered_set<uint32_t> &seenIds)
+static STRUCTURE *readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j, std::unordered_set<uint32_t> &seenIds)
 {
 	const WzString name = WzString::fromUtf8(j.at("statId").get<std::string>());
 	STRUCTURE_STATS *psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats,
@@ -1908,18 +1934,25 @@ static void readStructurePass1(GameWorld &world, const nlohmann::ordered_json &j
 	psStruct->lastStateTime = j.at("lastStateTime").get<uint32_t>();
 	structureApplyGateStateBlocking(psStruct, world.map);
 	// body is the absolute value already restored by readBaseObjectCommon
+	return psStruct;
+}
+
+// Restore a structure's target. A target can be an object that died in the save tick (a ghost, see the dying
+// section): the live game kept the pointer, while setStructureTarget refuses to set a dead target.
+static void restoreStructureTarget(STRUCTURE *psStruct, BASE_OBJECT *psTarget, unsigned slot)
+{
+	if (psTarget != nullptr && psTarget->died)
+	{
+		psStruct->psTarget[slot] = psTarget;
+		psStruct->asWeaps[slot].origin = ORIGIN_UNKNOWN;
+		return;
+	}
+	setStructureTarget(psStruct, psTarget, slot, ORIGIN_UNKNOWN);
 }
 
 /// Pass 2: resolve object cross-references now that every object exists.
-static void readStructurePass2(const nlohmann::ordered_json &j)
+static void readStructurePass2(const nlohmann::ordered_json &j, STRUCTURE *psStruct)
 {
-	const uint32_t id = j.at("id").get<uint32_t>();
-	const unsigned player = j.at("player").get<unsigned>();
-	STRUCTURE *psStruct = static_cast<STRUCTURE *>(getBaseObjFromData(id, player, OBJ_STRUCTURE));
-	if (psStruct == nullptr)
-	{
-		throw StateError("structure pass 2: object not found, id " + std::to_string(id));
-	}
 
 	// Re-stamp the authoritative saved position. readBaseObjectCommon already restored pos in pass 1,
 	// but pulled-to-terrain structures (walls/gates/defenses) have pos.z recomputed by alignStructure
@@ -1935,7 +1968,7 @@ static void readStructurePass2(const nlohmann::ordered_json &j)
 		BASE_OBJECT *target = readObjRef(weapons[w].at("target"));
 		if (target != nullptr)
 		{
-			setStructureTarget(psStruct, target, w, ORIGIN_UNKNOWN);
+			restoreStructureTarget(psStruct, target, w);
 		}
 	}
 	if (psStruct->numWeaps == 0 && j.contains("sensorTarget"))
@@ -1943,7 +1976,7 @@ static void readStructurePass2(const nlohmann::ordered_json &j)
 		BASE_OBJECT *target = readObjRef(j.at("sensorTarget"));
 		if (target != nullptr)
 		{
-			setStructureTarget(psStruct, target, 0, ORIGIN_UNKNOWN);
+			restoreStructureTarget(psStruct, target, 0);
 		}
 	}
 
@@ -2434,7 +2467,7 @@ static nlohmann::ordered_json writeDroid(const DROID *d, bool onMission)
 	// For a command droid, serialize its group's member ids in psList order. Command-group iteration
 	// order is sync-relevant (order.cpp syncDebug + DORDER_RECOVER tie-break), and the members re-attach
 	// from the flat per-player list in an order that would not otherwise reproduce psList. The commander
-	// itself is psCommander, not a psList entry. Restored via the reverse-add pass in readDroidList.
+	// itself is psCommander, not a psList entry. Restored via the reverse-add pass in readDroidListPass1.
 	if (d->droidType == DROID_COMMAND && d->psGroup != nullptr && d->psGroup->type == GT_COMMAND
 	    && d->psGroup->psCommander == d)
 	{
@@ -2682,7 +2715,7 @@ static void readDroidPass1(GameWorld &world, const nlohmann::ordered_json &j, st
 		}
 		if (it != groupMap.end())
 		{
-			// Transporter cargo AND command-group members are deferred to readDroidList's reverse
+			// Transporter cargo AND command-group members are deferred to readDroidListPass1's reverse
 			// insertion pass: DROID_GROUP::add prepends (push_front), so adding them here in forward
 			// (priority-sorted) order would not reproduce the saved psList order. Both are serialized in
 			// psList order (cargo inline after its transporter, command members via "cmdGroupMembers" on
@@ -2931,13 +2964,21 @@ static int droidLoadPriority(const nlohmann::ordered_json &j)
 	}
 }
 
-// Reconstruct a droid list: construct in priority order (transporters/commanders first so their groups exist),
-// insert into targetList in the host's order (reverse rebuild of the prepending list), then resolve cross-references.
-// constructWorld supplies the build context (container/map).
-static void readDroidList(GameWorld &constructWorld, PerPlayerDroidLists &targetList, const nlohmann::ordered_json &jdroids)
+// What pass 1 of a droid list leaves for its pass 2.
+struct DroidListRestore
 {
 	std::unordered_map<int, DROID_GROUP *> groupMap;
 	std::unordered_map<uint32_t, DROID *> droidById;
+};
+
+// Reconstruct a droid list, pass 1: construct in priority order (transporters/commanders first so their groups
+// exist) and insert into targetList in the host's order (reverse rebuild of the prepending list). The
+// cross-references are resolved by readDroidListPass2, once every world has been constructed.
+// constructWorld supplies the build context (container/map).
+static void readDroidListPass1(GameWorld &constructWorld, PerPlayerDroidLists &targetList, const nlohmann::ordered_json &jdroids, DroidListRestore &restore)
+{
+	std::unordered_map<int, DROID_GROUP *> &groupMap = restore.groupMap;
+	std::unordered_map<uint32_t, DROID *> &droidById = restore.droidById;
 	std::vector<size_t> order(jdroids.size());
 	for (size_t i = 0; i < jdroids.size(); ++i)
 	{
@@ -3014,9 +3055,13 @@ static void readDroidList(GameWorld &constructWorld, PerPlayerDroidLists &target
 			}
 		}
 	}
+}
+
+static void readDroidListPass2(const nlohmann::ordered_json &jdroids, DroidListRestore &restore)
+{
 	for (const nlohmann::ordered_json &jd : jdroids)
 	{
-		readDroidPass2(jd, droidById);
+		readDroidPass2(jd, restore.droidById);
 	}
 }
 
@@ -3328,19 +3373,22 @@ static void restoreSensorListOrder(GameWorld &world, const nlohmann::ordered_jso
 	live = std::move(ordered);
 }
 
-static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, uint32_t version)
+// Restoring a world takes three steps, so that every world (main, off-world, limbo) is constructed before any
+// cross-reference is resolved: a reference can point into another world.
+//   readWorldObjectsBegin: checks the version and puts back the corridor flow. The objects were already freed
+//                          (clearWorldObjects, for every world at once).
+//   readWorldObjectsPass1: constructs the objects.
+//   readWorldObjectsPass2: resolves the references and applies the per-world post-passes.
+static void readWorldObjectsBegin(GameWorld &world, const nlohmann::ordered_json &j, uint32_t version)
 {
 	if (version < WORLD_SECTION_VERSION_MIN || version > WORLD_SECTION_VERSION)
 	{
 		throw StateError("unsupported world section version");
 	}
 
-	// Clear the existing world (objects + map tile pointers) before reconstructing.
-	clearWorldObjects(world);
-
 	// The flow state describes the world being replaced, so reset it with the objects, then put
 	// back the saved carry. The world's corridors were already rebuilt from the restored terrain
-	// (main world before any other section, off-world inside readMission), so it applies directly,
+	// (main world before any other section, off-world in readMissionHeader), so it applies directly,
 	// checked against the checksum of the map that actually loaded.
 	world.corridorFlow = CorridorFlowWorld();
 	if (j.contains("corridorFlow"))
@@ -3368,14 +3416,17 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 		corridorGateRestoreMapAnnounced(world);
 	}
 
-	const nlohmann::ordered_json &jfeatures = j.at("features");
-	const nlohmann::ordered_json &jstructures = j.at("structures");
-	const nlohmann::ordered_json &jdroids = j.at("droids");
-	if (!jfeatures.is_array() || !jstructures.is_array() || !jdroids.is_array())
+	if (!j.at("features").is_array() || !j.at("structures").is_array() || !j.at("droids").is_array())
 	{
 		throw StateError("world.features/structures/droids must be arrays");
 	}
-	// PASS 1: Construct objects. Rebuild in reverse: addObjectToList prepends
+}
+
+static void readWorldObjectsPass1(GameWorld &world, const nlohmann::ordered_json &j, DroidListRestore &droids)
+{
+	const nlohmann::ordered_json &jfeatures = j.at("features");
+	const nlohmann::ordered_json &jstructures = j.at("structures");
+	// Construct objects. Rebuild in reverse: addObjectToList prepends
 	// (emplace_front), so reverse rebuild reproduces the original list order.
 	std::unordered_set<uint32_t> seenIds;
 	for (size_t i = jfeatures.size(); i-- > 0; )
@@ -3389,13 +3440,26 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 	}
 	resetFactoryNumFlag(world.objects);
 
-	// Droids: construct in priority order, insert in host order, resolve cross-refs.
-	readDroidList(world, world.objects.droids, jdroids);
+	// Droids: construct in priority order, insert in host order.
+	readDroidListPass1(world, world.objects.droids, j.at("droids"), droids);
+}
+
+static void readWorldObjectsPass2(GameWorld &world, const nlohmann::ordered_json &j, DroidListRestore &droids)
+{
+	const nlohmann::ordered_json &jstructures = j.at("structures");
+	readDroidListPass2(j.at("droids"), droids);
 
 	// Structure cross-references (targets/commander/repair-rearm) need all objects + lists.
 	for (const nlohmann::ordered_json &js : jstructures)
 	{
-		readStructurePass2(js);
+		const uint32_t id = js.at("id").get<uint32_t>();
+		const unsigned player = js.at("player").get<unsigned>();
+		STRUCTURE *psStruct = player < MAX_PLAYERS ? static_cast<STRUCTURE *>(getBaseObjFromId(world.objects.structures[player], id)) : nullptr;
+		if (psStruct == nullptr)
+		{
+			throw StateError("structure pass 2: object not found, id " + std::to_string(id));
+		}
+		readStructurePass2(js, psStruct);
 	}
 
 	// Override the greedy derrick<->power-gen rebuild with the exact saved slotting (lockstep CRC).
@@ -3411,6 +3475,285 @@ static void readWorldObjects(GameWorld &world, const nlohmann::ordered_json &j, 
 	if (j.contains("mapDynamic"))
 	{
 		readMapDynamic(world, j.at("mapDynamic"));
+	}
+}
+
+// MARK: - Section: dying objects
+//
+// The objects that died in the save tick (psDestroyedObj).
+// The live game keeps them until the end of the next tick,
+// and the objects that referenced them keep their pointers until their own updates notice the death,
+// so the next tick still reads them (ex. rearm pads, repair facilities and projectiles reading a dead target).
+// Restoring those references as null would change what that tick does.
+//
+// Each object is saved with the same writer as a live one, and restored as a "ghost":
+// constructed with the live readers, then detached into the shape its death left
+// (off every list, the map and the grid, no group, no structure count, no power request,
+// no tile visibility unless its removal was still pending), and put back on psDestroyedObj in the saved order.
+// The next tick's objmemUpdate frees it, as it would have the original.
+// References to a ghost resolve through readObjRef's ghost table only.
+
+constexpr uint32_t DYING_SECTION_VERSION = 1;
+
+static bool isPendingVisRemoval(const GameWorld &world, const BASE_OBJECT *psObj)
+{
+	const auto &pending = world.objects.pendingVisRemoval;
+	return std::find(pending.begin(), pending.end(), psObj) != pending.end();
+}
+
+static nlohmann::ordered_json writeDying()
+{
+	nlohmann::ordered_json j = nlohmann::ordered_json::object();
+	j["version"] = DYING_SECTION_VERSION;
+	nlohmann::ordered_json objects = nlohmann::ordered_json::array();
+	for (const BASE_OBJECT *psObj : psDestroyedObj)
+	{
+		nlohmann::ordered_json jo;
+		switch (psObj->type)
+		{
+		case OBJ_DROID:     jo = writeDroid(static_cast<const DROID *>(psObj), false); break;
+		case OBJ_STRUCTURE: jo = writeStructure(static_cast<const STRUCTURE *>(psObj)); break;
+		case OBJ_FEATURE:   jo = writeFeature(static_cast<const FEATURE *>(psObj)); break;
+		default:
+			ASSERT(false, "Unexpected object type %d on the destroyed list", static_cast<int>(psObj->type));
+			continue;
+		}
+		jo["type"] = static_cast<int>(psObj->type);
+		// An object killed after this tick's flushPendingVisRemoval (ex. by an eventDestroyed handler)
+		// still holds its tile visibility until the next tick's flush.
+		if (isPendingVisRemoval(gameWorld, psObj))
+		{
+			jo["pendingVisRemoval"] = "main";
+		}
+		else if (isPendingVisRemoval(mission.gameWorld, psObj))
+		{
+			jo["pendingVisRemoval"] = "mission";
+		}
+		objects.push_back(std::move(jo));
+	}
+	j["objects"] = std::move(objects);
+	return j;
+}
+
+struct DyingRestore
+{
+	std::vector<std::pair<const nlohmann::ordered_json *, BASE_OBJECT *>> ghosts;  ///< in document order
+	std::unordered_map<uint32_t, DROID *> droidById;
+};
+
+static bool positionOnMap(const WorldMapState &map, const nlohmann::ordered_json &jo)
+{
+	const nlohmann::ordered_json &jpos = reqArray(jo.at("pos"), 2);
+	return map.tiles != nullptr && worldOnMap(map, jpos[0].get<int32_t>(), jpos[1].get<int32_t>());
+}
+
+// Take a reconstructed feature back off its lists and the map, as removeFeature does.
+static void detachGhostFeature(GameWorld &world, FEATURE *psFeature)
+{
+	removeFeatureFromList(psFeature, world.objects);
+	const StructureBounds b = getStructureBounds(psFeature);
+	for (int y = 0; y < b.size.y; ++y)
+	{
+		for (int x = 0; x < b.size.x; ++x)
+		{
+			if (tileOnMap(world.map, b.map.x + x, b.map.y + y))
+			{
+				MAPTILE *psTile = mapTile(world.map, b.map.x + x, b.map.y + y);
+				if (psTile->psObject == psFeature)
+				{
+					psTile->psObject = nullptr;
+					auxClearBlocking(world.map, b.map.x + x, b.map.y + y, FEATURE_BLOCKED | AIR_BLOCKED);
+				}
+			}
+		}
+	}
+}
+
+// Undo what reconstructing a structure did that its death had undone (removeStruct + killStruct).
+static void detachGhostStructure(GameWorld &world, STRUCTURE *psStruct)
+{
+	removeStructureFromList(psStruct, world.objects);
+	removeStructFromMap(psStruct, world.map);
+	const size_t inc = static_cast<size_t>(psStruct->pStructureType - asStructureStats);
+	if (inc < numStructureStats && asStructureStats[inc].curCount[psStruct->player] > 0)
+	{
+		asStructureStats[inc].curCount[psStruct->player]--;
+	}
+	if (psStruct->isFactory())
+	{
+		FACTORY *psFactory = &psStruct->pFunctionality->factory;
+		if (psFactory->psAssemblyPoint != nullptr)
+		{
+			removeFlagPosition(psFactory->psAssemblyPoint);
+			psFactory->psAssemblyPoint = nullptr;
+		}
+		psFactory->psCommander = nullptr;
+	}
+	else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+	{
+		REPAIR_FACILITY *psRepair = &psStruct->pFunctionality->repairFacility;
+		if (psRepair->psDeliveryPoint != nullptr)
+		{
+			removeFlagPosition(psRepair->psDeliveryPoint);
+			psRepair->psDeliveryPoint = nullptr;
+		}
+	}
+	else if (psStruct->pStructureType->type == REF_POWER_GEN)
+	{
+		POWER_GEN *psPowerGen = &psStruct->pFunctionality->powerGenerator;
+		for (int i = 0; i < NUM_POWER_MODULES; ++i)
+		{
+			if (psPowerGen->apResExtractors[i] != nullptr)
+			{
+				psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.psPowerGen = nullptr;
+				psPowerGen->apResExtractors[i] = nullptr;
+			}
+		}
+	}
+	else if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+	{
+		STRUCTURE *psPowerGen = psStruct->pFunctionality->resourceExtractor.psPowerGen;
+		if (psPowerGen != nullptr)
+		{
+			for (int i = 0; i < NUM_POWER_MODULES; ++i)
+			{
+				if (psPowerGen->pFunctionality->powerGenerator.apResExtractors[i] == psStruct)
+				{
+					psPowerGen->pFunctionality->powerGenerator.apResExtractors[i] = nullptr;
+				}
+			}
+			psStruct->pFunctionality->resourceExtractor.psPowerGen = nullptr;
+		}
+	}
+	delPowerRequest(psStruct);
+}
+
+// Pass 1: construct and detach every ghost. Runs before any live object is constructed, so a ghost is built on
+// empty tiles (a dead structure's tiles may already hold a live one) and leaves nothing behind for them.
+static void readDyingPass1(const nlohmann::ordered_json &j, uint32_t version, DyingRestore &restore)
+{
+	if (version != DYING_SECTION_VERSION)
+	{
+		throw StateError("unsupported dying section version");
+	}
+	const nlohmann::ordered_json &objects = j.at("objects");
+	if (!objects.is_array())
+	{
+		throw StateError("dying.objects must be an array");
+	}
+	std::unordered_set<uint32_t> seenFeatures, seenStructures;
+	std::unordered_map<int, DROID_GROUP *> noGroups;  // the dead have no group (removeDroidBase)
+	for (const nlohmann::ordered_json &jo : objects)
+	{
+		const OBJECT_TYPE type = static_cast<OBJECT_TYPE>(jo.at("type").get<int>());
+		const uint32_t id = jo.at("id").get<uint32_t>();
+		const uint32_t died = jo.at("died").get<uint32_t>();
+		if (died <= NOT_CURRENT_LIST || died > gameTime)
+		{
+			throw StateError("dying object " + std::to_string(id) + " has an invalid death time");
+		}
+		if (g_ghosts.count(ghostKey(type, id)) != 0)
+		{
+			throw StateError("duplicate dying object id " + std::to_string(id));
+		}
+
+		// The world whose pending tile-visibility removal holds the object, else the map it is on
+		const std::string pendingVis = jo.value("pendingVisRemoval", std::string());
+		if (!pendingVis.empty() && pendingVis != "main" && pendingVis != "mission")
+		{
+			throw StateError("dying object " + std::to_string(id) + ": unknown pendingVisRemoval world");
+		}
+		GameWorld *world = nullptr;
+		if (pendingVis == "mission")
+		{
+			world = &mission.gameWorld;
+		}
+		else if (pendingVis == "main" || positionOnMap(gameWorld.map, jo))
+		{
+			world = &gameWorld;
+		}
+		else if (positionOnMap(mission.gameWorld.map, jo))
+		{
+			world = &mission.gameWorld;
+		}
+
+		BASE_OBJECT *psObj = nullptr;
+		switch (type)
+		{
+		case OBJ_FEATURE:
+		{
+			if (world == nullptr)
+			{
+				throw StateError("dying feature " + std::to_string(id) + " is off every map");
+			}
+			FEATURE *psFeature = readFeature(*world, jo, seenFeatures);
+			detachGhostFeature(*world, psFeature);
+			psObj = psFeature;
+			break;
+		}
+		case OBJ_STRUCTURE:
+		{
+			if (world == nullptr)
+			{
+				throw StateError("dying structure " + std::to_string(id) + " is off every map");
+			}
+			STRUCTURE *psStruct = readStructurePass1(*world, jo, seenStructures);
+			detachGhostStructure(*world, psStruct);
+			psObj = psStruct;
+			break;
+		}
+		case OBJ_DROID:
+		{
+			// Constructed off the map (no tile visibility) unless its visibility removal was still pending
+			nlohmann::ordered_json jd = jo;
+			jd["onMission"] = pendingVis.empty();
+			readDroidPass1(world != nullptr ? *world : gameWorld, jd, noGroups, restore.droidById);
+			DROID *psDroid = restore.droidById.at(id);
+			if (psDroid->psGroup != nullptr)
+			{
+				// The group a transporter or commander gets on construction
+				psDroid->psGroup->remove(psDroid);
+			}
+			psObj = psDroid;
+			break;
+		}
+		default:
+			throw StateError("dying object " + std::to_string(id) + " has an unknown type");
+		}
+
+		if (!pendingVis.empty())
+		{
+			world->objects.pendingVisRemoval.push_back(psObj);
+		}
+		else if (world != nullptr)
+		{
+			visRemoveVisibility(psObj, world->map);
+		}
+		psDestroyedObj.push_back(psObj);
+		g_ghosts[ghostKey(type, id)] = psObj;
+		restore.ghosts.emplace_back(&jo, psObj);
+	}
+}
+
+// Pass 2: resolve the ghosts' own references, once every live object and ghost exists.
+static void readDyingPass2(DyingRestore &restore)
+{
+	for (const auto &ghost : restore.ghosts)
+	{
+		const nlohmann::ordered_json &jo = *ghost.first;
+		BASE_OBJECT *psObj = ghost.second;
+		if (getBaseObjFromData(psObj->id, psObj->player, psObj->type) != nullptr)
+		{
+			throw StateError("dying object " + std::to_string(psObj->id) + " has the id of a live object");
+		}
+		if (psObj->type == OBJ_DROID)
+		{
+			readDroidPass2(jo, restore.droidById);
+		}
+		else if (psObj->type == OBJ_STRUCTURE)
+		{
+			readStructurePass2(jo, static_cast<STRUCTURE *>(psObj));
+		}
 	}
 }
 
@@ -3987,7 +4330,9 @@ static nlohmann::ordered_json writeMission()
 	return j;
 }
 
-static void readMission(const nlohmann::ordered_json &j, uint32_t version)
+// The mission section's own state and the off-world terrain. Its objects (off-world world and limbo) are
+// restored by gameStateFromJson together with the main world's.
+static void readMissionHeader(const nlohmann::ordered_json &j, uint32_t version)
 {
 	if (version != MISSION_SECTION_VERSION)
 	{
@@ -4031,30 +4376,13 @@ static void readMission(const nlohmann::ordered_json &j, uint32_t version)
 	}
 
 	// Restore off-world terrain (if any) before the objects, so the map exists for object placement
-	// and the dynamic fog/fire overlay (applied inside readWorldObjects).
+	// and the dynamic fog/fire overlay (applied by readWorldObjectsPass2).
 	if (j.contains("mapTerrain"))
 	{
 		readMapTerrain(mission.gameWorld.map, j.at("mapTerrain"), false);
 	}
-
 	const nlohmann::ordered_json &jworld = j.at("world");
-	readWorldObjects(mission.gameWorld, jworld, jworld.value("version", 0u));
-
-	// Undo the foundation-flattening the object build path applied to the off-world terrain
-	// (see restampTerrainHeights); the saved terrain is authoritative.
-	if (j.contains("mapTerrain"))
-	{
-		restampTerrainHeights(mission.gameWorld.map, j.at("mapTerrain"));
-	}
-	restampFeaturePositions(mission.gameWorld, jworld);
-
-	// Limbo droids: free existing then reconstruct into apsLimboDroids. These are off the
-	// active map (onMission), so the active gameWorld supplies only the build context.
-	freeAllLimboDroids();
-	if (j.contains("limboDroids"))
-	{
-		readDroidList(gameWorld, apsLimboDroids, j.at("limboDroids"));
-	}
+	readWorldObjectsBegin(mission.gameWorld, jworld, jworld.value("version", 0u));
 }
 
 // MARK: - Section: scripting (core/rules script state)
@@ -4964,6 +5292,7 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	j["dangerMaps"] = writeDangerMaps(gameWorld);
 	j["pendingRoutes"] = writePendingRoutes();
 	j["mission"] = writeMission();
+	j["dying"] = writeDying();
 	j["projectiles"] = writeProjectiles();
 	j["spotters"] = writeSpotters();
 	j["commandDesignators"] = writeCommandDesignators();
@@ -5000,6 +5329,7 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// and in-place resume are the cases with a live worker here. The danger overlay is re-applied by the
 	// dangerMaps post-pass below and the worker is (re)started by the next mapInit.
 	mapStopDangerThreadForReconstruct();
+	g_unresolvedObjRefs = 0;
 
 	// Drop the pathfinding caches. The current tick's blocking maps are only discarded when a request comes
 	// at a different gameTime, so after an in-process restore to an earlier moment,
@@ -5012,6 +5342,10 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// frees them. Left in place, the next objmemUpdate would fire triggerEventDestroyed / free them on the
 	// resumed tick - the pre-restore timeline leaking into the restored one. (No-op when the list is empty:
 	// cold-load starts fresh, the in-process round-trip usually has none pending.)
+	// First take the tile visibility of the ones whose removal is still pending off their own world's map:
+	// the queue holds pointers to them, which the purge would leave dangling for the next flush.
+	flushPendingVisRemoval(gameWorld);
+	flushPendingVisRemoval(mission.gameWorld);
 	mechanicsPurgeDestroyedObjects();
 
 	// Tear down any live script spotters before the world/map is reset. They hold watchedTiles into the
@@ -5019,6 +5353,23 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// so a surviving spotter's ~SPOTTER would later underflow those counts. The snapshot's own spotters are
 	// rebuilt by the "spotters" section (readSpotters) after the world is restored.
 	removeSpotters();
+
+	// Free the objects of every world the snapshot replaces, all of them before any is rebuilt,
+	// and while each world still has the map its objects were placed on (readMapTerrain may reallocate it):
+	// - a reference can point into another world, so no world may be resolved while another still holds
+	//   pre-restore objects (they would be found, then freed).
+	// - the structure counts (curCount) are global, so a rebuilt world would otherwise still count the
+	//   structures of a world not yet cleared.
+	// - groups are global too, so restored group ids could collide with a live off-world or limbo group.
+	if (j.contains("world"))
+	{
+		clearWorldObjects(gameWorld);
+	}
+	if (j.contains("mission"))
+	{
+		clearWorldObjects(mission.gameWorld);
+		freeAllLimboDroids();
+	}
 
 	// Main-world static terrain is restored FIRST: the world is built on it and every object /
 	// fog-fire overlay references tiles. The serialized terrain is authoritative and always overwrites
@@ -5120,8 +5471,8 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		readProduction(sec, sec.value("version", 0u));
 	}
 	// Movement formations, restored VERBATIM before the world sections so rebuilt droids re-attach
-	// to them (slot state exact, no formationJoin). The old formations die naturally as
-	// clearWorldObjects frees the droids referencing them (droid teardown calls formationLeave).
+	// to them (slot state exact, no formationJoin). The old formations died with the droids
+	// clearWorldObjects freed at the top (droid teardown calls formationLeave).
 	g_restoredFormations.clear();
 	if (j.contains("formations"))
 	{
@@ -5133,20 +5484,69 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	// banked experience (reallyBuildDroid pops from them while the clock runs). They are repopulated from
 	// the snapshot after all object restoration (see readRecycledExperience).
 	clearAllRecycledExperience();
-	if (j.contains("world"))
+	// The objects of every world: construct all of them (pass 1), then resolve the references of all of them
+	// (pass 2), since a reference can point into another world.
+	const nlohmann::ordered_json *jmainWorld = j.contains("world") ? &j.at("world") : nullptr;
+	const nlohmann::ordered_json *jmission = j.contains("mission") ? &j.at("mission") : nullptr;
+	const nlohmann::ordered_json *jmissionWorld = nullptr;
+	const nlohmann::ordered_json *jlimbo = nullptr;
+	if (jmainWorld != nullptr)
 	{
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: world (active gameWorld objects)");
-		const nlohmann::ordered_json &sec = j.at("world");
-		readWorldObjects(gameWorld, sec, sec.value("version", 0u));
+		readWorldObjectsBegin(gameWorld, *jmainWorld, jmainWorld->value("version", 0u));
 	}
-	if (j.contains("mission"))
+	if (jmission != nullptr)
 	{
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: mission (off-world terrain + objects + limbo)");
-		const nlohmann::ordered_json &sec = j.at("mission");
-		readMission(sec, sec.value("version", 0u));
+		readMissionHeader(*jmission, jmission->value("version", 0u));
+		jmissionWorld = &jmission->at("world");
+		jlimbo = jmission->contains("limboDroids") ? &jmission->at("limboDroids") : nullptr;
 	}
+	// The objects that died in the save tick, before any live object: see the dying section
+	g_ghosts.clear();
+	DyingRestore dying;
+	if (j.contains("dying"))
+	{
+		debug(LOG_GAMESTATE_SERIAL, "restoring section: dying (objects that died in the save tick)");
+		const nlohmann::ordered_json &sec = j.at("dying");
+		readDyingPass1(sec, sec.value("version", 0u), dying);
+	}
+	DroidListRestore mainDroids, missionDroids, limboDroids;
+	if (jmainWorld != nullptr)
+	{
+		readWorldObjectsPass1(gameWorld, *jmainWorld, mainDroids);
+	}
+	if (jmissionWorld != nullptr)
+	{
+		readWorldObjectsPass1(mission.gameWorld, *jmissionWorld, missionDroids);
+	}
+	if (jlimbo != nullptr)
+	{
+		// Limbo droids are off the active map (onMission), so the active gameWorld supplies only the build context.
+		readDroidListPass1(gameWorld, apsLimboDroids, *jlimbo, limboDroids);
+	}
+	if (jmainWorld != nullptr)
+	{
+		readWorldObjectsPass2(gameWorld, *jmainWorld, mainDroids);
+	}
+	if (jmissionWorld != nullptr)
+	{
+		readWorldObjectsPass2(mission.gameWorld, *jmissionWorld, missionDroids);
+		// Undo the foundation-flattening the object build path applied to the off-world terrain
+		// (see restampTerrainHeights). The saved terrain is authoritative.
+		if (jmission->contains("mapTerrain"))
+		{
+			restampTerrainHeights(mission.gameWorld.map, jmission->at("mapTerrain"));
+		}
+		restampFeaturePositions(mission.gameWorld, *jmissionWorld);
+	}
+	if (jlimbo != nullptr)
+	{
+		readDroidListPass2(*jlimbo, limboDroids);
+	}
+	readDyingPass2(dying);
 	// factoryNumFlag is a single global reflecting the ACTIVE world's factory/repair assembly slots.
-	// readWorldObjects rebuilds it per world (resetFactoryNumFlag clears ALL players then refills from the
+	// readWorldObjectsPass1 rebuilds it per world (resetFactoryNumFlag clears ALL players then refills from the
 	// one world it is passed), so the last pass - the mission world, empty in skirmish - would otherwise
 	// leave it bound to the wrong (or empty) world. Rebind it to the active gameWorld now that both are
 	// restored, else a factory built post-restore reuses a colliding factoryInc.
@@ -5281,7 +5681,17 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		const nlohmann::ordered_json &sec = j.at("determinismCore");
 		applyDeterminismCounters(sec, sec.value("version", 0u));
 	}
+	g_ghosts.clear();
+	if (g_unresolvedObjRefs != 0)
+	{
+		debug(LOG_INFO, "GameState restore: %u object reference(s) did not resolve and were restored as null", g_unresolvedObjRefs);
+	}
 	debug(LOG_GAMESTATE_SERIAL, "gameStateFromJson complete");
+}
+
+uint32_t gameStateLastRestoreUnresolvedReferences()
+{
+	return g_unresolvedObjRefs;
 }
 
 std::string serializeGameState(ScriptScope scriptScope)

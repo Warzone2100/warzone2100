@@ -80,6 +80,10 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope = ScriptScope::Al
 /// VIEWDATA is not yet loaded when this runs. The caller replays it later via applyGameStateMessages().
 void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope = ScriptScope::AllInstances, bool deferMessages = false);
 
+/// The number of non-null object references the last gameStateFromJson could not resolve (restored as null).
+/// An honest snapshot has none.
+uint32_t gameStateLastRestoreUnresolvedReferences();
+
 /// Serialize the current live match state to a (canonical, compact) JSON string.
 std::string serializeGameState(ScriptScope scriptScope = ScriptScope::AllInstances);
 

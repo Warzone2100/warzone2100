@@ -809,6 +809,20 @@ void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState)
 	}
 }
 
+/*Remove a single Feature from its lists (the reverse of addFeature)*/
+void removeFeatureFromList(FEATURE *psFeatureToRemove, WorldObjectState& objState)
+{
+	ASSERT(psFeatureToRemove->type == OBJ_FEATURE, "removeFeatureFromList: pointer is not a feature");
+	auto &list = objState.features[0];
+	auto it = std::find(list.begin(), list.end(), psFeatureToRemove);
+	ASSERT_OR_RETURN(, it != list.end(), "Feature %p not found in list", static_cast<void *>(psFeatureToRemove));
+	list.erase(it);
+	if (psFeatureToRemove->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		removeObjectFromFuncList(objState.oils, psFeatureToRemove, 0);
+	}
+}
+
 /* Destroy a feature */
 // set the player to 0 since features have player = maxplayers+1. This screws up destroyObject
 // it's a bit of a hack, but hey, it works

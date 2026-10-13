@@ -176,6 +176,8 @@ const BenchScenario scenarios[] =
 	{ "perf_scout_patrol",   "movebench_perf_scout_patrol.json",    1500, 0x5EEDBEEF, false },
 	{ "perf_repair_search",  "movebench_perf_repair_search.json",   2000, 0x5EEDBEEF, false },
 	{ "perf_repair_facility","movebench_perf_repair_facility.json", 2000, 0x5EEDBEEF, false },
+	// Not a benchmark: deaths of every shape the GameState save / load tests need (tests/gamestate).
+	{ "gamestate_deaths",    "movebench_gamestate_deaths.json",     2000, 0x5EEDBEEF, false },
 };
 
 optional<uint32_t> seedOverride;
