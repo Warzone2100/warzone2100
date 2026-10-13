@@ -614,6 +614,10 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		{
 			continue;  // Only looking for droids.
 		}
+		if (droid->died)
+		{
+			continue;  // Died (or left the map) earlier in this tick: the grid keeps it until the end of the tick.
+		}
 
 		Vector2i delta = map_coord(droid->pos.xy()) - b.map;
 		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || droid->isFlying() || droid->isFlightBasedTransporter())

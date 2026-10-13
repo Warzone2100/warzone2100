@@ -176,6 +176,8 @@ const BenchScenario scenarios[] =
 	{ "gamestate_deaths",    "movebench_gamestate_deaths.json",     2000, 0x5EEDBEEF, false },
 	// Not a benchmark: script groups and labels the GameState save / load tests need (tests/gamestate).
 	{ "gamestate_scripts",   "movebench_gamestate_scripts.json",    1500, 0x5EEDBEEF, false },
+	// Not a benchmark: grid readers and objects that died earlier in the same tick (prints deadgrid: lines).
+	{ "dead_grid",           "movebench_dead_grid.json",             200, 0x5EEDBEEF, false },
 };
 
 optional<uint32_t> seedOverride;
