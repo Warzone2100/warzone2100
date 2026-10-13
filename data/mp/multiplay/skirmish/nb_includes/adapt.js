@@ -8,11 +8,15 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-var enemyStats = [];
-var enemyStatsTemp = [];
-var myStats = new MyStat();
-var myStatsTemp = new MyStat();
-var stack = [];
+// The adaptation statistics and the progress of the cycle that gathers them.
+// Global variables, so that a saved game keeps them (the variables of this closure start over on load).
+_global.enemyStats = [];
+_global.enemyStatsTemp = [];
+_global.myStats = new MyStat();
+_global.myStatsTemp = new MyStat();
+_global.adaptStack = [];
+_global.adaptCyclePlayer = undefined;
+_global.adaptCyclePhase = undefined;
 const MAX_PER_CYCLE = 20;
 
 for (let i = 0; i < maxPlayers; ++i)
@@ -125,50 +129,60 @@ function ScopeStat()
 	this.land = new SimpleStat();
 	this.sea = new SimpleStat();
 	this.air = new SimpleStat();
-	// a function to convert this sort of stat to a SimpleStat
-	this.collapse = function() {
-		const ret = new SimpleStat();
-
-		for (const i in SCOPES)
-		{
-			addStat(ret, this[i]);
-		}
-
-		return ret;
-	};
 }
+
+// a function to convert this sort of stat to a SimpleStat
+// (methods live on the prototypes, since a saved game keeps an instance's data but not functions set on it)
+ScopeStat.prototype.collapse = function() {
+	const ret = new SimpleStat();
+
+	for (const i in SCOPES)
+	{
+		addStat(ret, this[i]);
+	}
+
+	return ret;
+};
 
 function EnemyStat()
 {
 	// separate stats for defense and offense
 	this.defense = new ScopeStat();
 	this.offense = new SimpleStat();
-	// a function to convert this sort of stat to a SimpleStat
-	this.collapse = function() {
-		const ret = new SimpleStat();
-
-		addStat(ret, this.defense.collapse());
-		addStat(ret, this.offense);
-
-		return ret;
-	};
 }
+
+// a function to convert this sort of stat to a SimpleStat
+EnemyStat.prototype.collapse = function() {
+	const ret = new SimpleStat();
+
+	addStat(ret, this.defense.collapse());
+	addStat(ret, this.offense);
+
+	return ret;
+};
 
 function MyStat()
 {
 	// separate stats for defense and offense
 	this.defense = new SimpleStat();
 	this.offense = new ScopeStat();
-	// a function to convert this sort of stat to a SimpleStat
-	this.collapse = function() {
-		const ret = new SimpleStat();
-
-		addStat(ret, this.defense);
-		addStat(ret, this.offense.collapse());
-
-		return ret;
-	};
 }
+
+// a function to convert this sort of stat to a SimpleStat
+MyStat.prototype.collapse = function() {
+	const ret = new SimpleStat();
+
+	addStat(ret, this.defense);
+	addStat(ret, this.offense.collapse());
+
+	return ret;
+};
+
+// Export the classes, so that a saved game restores their instances with these prototypes
+_global.SimpleStat = SimpleStat;
+_global.ScopeStat = ScopeStat;
+_global.EnemyStat = EnemyStat;
+_global.MyStat = MyStat;
 
 function canReachBy(scope, location)
 {
@@ -452,34 +466,34 @@ function summUpMyObject(obj, stat)
 }
 
 _global.adaptCycle = function() {
-	if (!defined(adaptCycle.player))
+	if (!defined(adaptCyclePlayer))
 	{
-		adaptCycle.player = me;
+		adaptCyclePlayer = me;
 	}
 
-	if (!defined(adaptCycle.phase))
+	if (!defined(adaptCyclePhase))
 	{
-		adaptCycle.phase = 0;
+		adaptCyclePhase = 0;
 	}
 
-	if (stack.length > 0)
+	if (adaptStack.length > 0)
 	{
 		let items = MAX_PER_CYCLE;
 
-		if (items > stack.length)
+		if (items > adaptStack.length)
 		{
-			items = stack.length;
+			items = adaptStack.length;
 		}
 
 		for (let i = 0; i < items; ++i)
 		{
-			const obj = stack.pop();
+			const obj = adaptStack.pop();
 
-			if (isEnemy(adaptCycle.player))
+			if (isEnemy(adaptCyclePlayer))
 			{
-				summUpEnemyObject(obj, enemyStatsTemp[adaptCycle.player]);
+				summUpEnemyObject(obj, enemyStatsTemp[adaptCyclePlayer]);
 			}
-			else if (adaptCycle.player === me)
+			else if (adaptCyclePlayer === me)
 			{
 				summUpMyObject(obj, myStatsTemp);
 			}
@@ -488,43 +502,43 @@ _global.adaptCycle = function() {
 		return;
 	}
 
-	++adaptCycle.phase;
+	++adaptCyclePhase;
 
-	switch (adaptCycle.phase)
+	switch (adaptCyclePhase)
 	{
 		case 1:
-			stack = enumStruct(adaptCycle.player, DEFENSE);
+			adaptStack = enumStruct(adaptCyclePlayer, DEFENSE);
 			return;
 		case 2:
-			stack = enumDroid(adaptCycle.player, DROID_WEAPON);
+			adaptStack = enumDroid(adaptCyclePlayer, DROID_WEAPON);
 			return;
 		case 3:
-			stack = enumDroid(adaptCycle.player, DROID_CYBORG);
+			adaptStack = enumDroid(adaptCyclePlayer, DROID_CYBORG);
 			return;
 	}
 
-	if (adaptCycle.player === me)
+	if (adaptCyclePlayer === me)
 	{
 		myStats = myStatsTemp;
 		myStatsTemp = new MyStat();
 	}
 	else
 	{
-		enemyStats[adaptCycle.player] = enemyStatsTemp[adaptCycle.player];
-		enemyStatsTemp[adaptCycle.player] = new EnemyStat();
+		enemyStats[adaptCyclePlayer] = enemyStatsTemp[adaptCyclePlayer];
+		enemyStatsTemp[adaptCyclePlayer] = new EnemyStat();
 	}
 
 	do
 	{
-		++adaptCycle.player;
+		++adaptCyclePlayer;
 
-		if (adaptCycle.player >= maxPlayers)
+		if (adaptCyclePlayer >= maxPlayers)
 		{
-			adaptCycle.player = 0;
+			adaptCyclePlayer = 0;
 		}
-	} while (adaptCycle.player !== me && !isEnemy(adaptCycle.player));
+	} while (adaptCyclePlayer !== me && !isEnemy(adaptCyclePlayer));
 
-	adaptCycle.phase = 0;
+	adaptCyclePhase = 0;
 };
 
 function getMyGroupInfo(gr)
@@ -617,7 +631,7 @@ function groupTheirs(gr)
 }
 
 // use this for research; 15% smooth
-_global.chooseWeaponRole = function(gr) {
+_global.chooseWeaponRole = function chooseWeaponRole(gr) {
 	function uncached()
 	{
 		if (withChance(20))
@@ -632,7 +646,7 @@ _global.chooseWeaponRole = function(gr) {
 };
 
 // use this for droids and long-range arty emplacements
-_global.chooseAttackWeaponRole = function(gr) {
+_global.chooseAttackWeaponRole = function chooseAttackWeaponRole(gr) {
 	function uncached()
 	{
 		return adaptVote(groupAttackOurs(gr).role, groupTheirs(gr).obj, true);
@@ -642,7 +656,7 @@ _global.chooseAttackWeaponRole = function(gr) {
 };
 
 // use this for defenses; 15% smooth
-_global.chooseDefendWeaponRole = function() {
+_global.chooseDefendWeaponRole = function chooseDefendWeaponRole() {
 	function uncached()
 	{
 		if (withChance(20))
@@ -656,7 +670,7 @@ _global.chooseDefendWeaponRole = function() {
 	return cached(uncached, 5000);
 };
 
-_global.chooseBodyClass = function(gr) {
+_global.chooseBodyClass = function chooseBodyClass(gr) {
 	function uncached()
 	{
 		const our = groupAttackOurs(gr), their = groupTheirs(gr);
@@ -670,7 +684,7 @@ _global.chooseBodyClass = function(gr) {
 	return cached(uncached, 5000, gr);
 };
 
-_global.chooseObjectType = function() {
+_global.chooseObjectType = function chooseObjectType() {
 	function uncached()
 	{
 		const our = groupOurs(), their = groupTheirs();
@@ -715,7 +729,7 @@ _global.chooseObjectType = function() {
 	return cached(uncached, 5000);
 };
 
-_global.scopeRatings = function() {
+_global.scopeRatings = function scopeRatings() {
 	function uncached()
 	{
 		const ret = { land: 0, sea: 0, air: 0 };

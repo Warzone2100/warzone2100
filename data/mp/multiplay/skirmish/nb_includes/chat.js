@@ -25,7 +25,8 @@ const commandMap = {
 	tx: chatUnhelp,
 };
 
-const beaconInfo = [];
+// The last beacon of each player (a global variable, so that a saved game keeps it)
+_global.beaconInfo = [];
 
 _global.noticeBeacon = function(x, y, from) {
 	beaconInfo[from] = {

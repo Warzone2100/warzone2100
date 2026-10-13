@@ -396,7 +396,7 @@ _global.buildMinimum = function(statlist, count, importance) {
 	return false;
 };
 
-_global.captureSomeOil = function() {
+_global.captureSomeOil = function captureSomeOil() {
 	if (throttled(500))
 	{
 		return true;
@@ -627,7 +627,7 @@ function recycleDefenses()
 	return false;
 }
 
-_global.checkConstruction = function() {
+_global.checkConstruction = function checkConstruction() {
 	if (enumTrucks().filter(truckFree).length === 0)
 	{
 		return;
