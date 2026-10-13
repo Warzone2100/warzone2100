@@ -732,33 +732,31 @@ static void visitStructureUpgrade(U &u, F &&f) // all but the limit
 template<typename Stats, typename Visit>
 static nlohmann::ordered_json writeUpgradeTable(const Stats *stats, size_t count, Visit visit)
 {
-	const auto fields = [&visit](const auto &u)
-	{
-		nlohmann::ordered_json o = nlohmann::ordered_json::object();
-		visit(u, [&o](const char *name, const auto &value) { o[name] = value; });
-		return o;
-	};
+	std::vector<nlohmann::ordered_json> baseValues;
 	nlohmann::ordered_json arr = nlohmann::ordered_json::array();
 	for (size_t i = 0; i < count; ++i)
 	{
-		const nlohmann::ordered_json jbase = fields(stats[i].base);
+		baseValues.clear();
+		visit(stats[i].base, [&baseValues](const char *, const auto &value) { baseValues.emplace_back(value); });
 		for (unsigned p = 0; p < MAX_PLAYERS; ++p)
 		{
-			const nlohmann::ordered_json jcur = fields(stats[i].upgrade[p]);
-			nlohmann::ordered_json entry = nlohmann::ordered_json::object();
-			for (auto it = jcur.begin(); it != jcur.end(); ++it)
+			nlohmann::ordered_json entry;
+			size_t field = 0;
+			visit(stats[i].upgrade[p], [&](const char *name, const auto &value)
 			{
-				if (it.value() != jbase.at(it.key()))
+				nlohmann::ordered_json current(value);
+				if (current != baseValues[field++])
 				{
-					if (entry.empty())
+					if (entry.is_null())
 					{
+						entry = nlohmann::ordered_json::object();
 						entry["id"] = stats[i].id.toUtf8();
 						entry["player"] = p;
 					}
-					entry[it.key()] = it.value();
+					entry[name] = std::move(current);
 				}
-			}
-			if (!entry.empty())
+			});
+			if (!entry.is_null())
 			{
 				arr.push_back(std::move(entry));
 			}
@@ -1080,7 +1078,15 @@ constexpr uint32_t TEMPLATES_SECTION_VERSION = 1;
 // template the player has since replaced.
 static nlohmann::ordered_json writeTemplateRecord(const DROID_TEMPLATE *psTempl)
 {
-	nlohmann::ordered_json jt = saveTemplateCommon(psTempl);
+	// saveTemplateCommon's keys (in its std::map order, as converting it would give), then ours.
+	nlohmann::json common = saveTemplateCommon(psTempl);
+	nlohmann::ordered_json jt = nlohmann::ordered_json::object();
+	auto &entries = jt.get_ref<nlohmann::ordered_json::object_t &>();
+	entries.reserve(common.size() + 6);
+	for (auto &item : common.get_ref<nlohmann::json::object_t &>())
+	{
+		entries.emplace_back(item.first, nlohmann::ordered_json(std::move(item.second)));
+	}
 	// The stats id is what map-placed droids resolve against
 	jt["id"] = psTempl->id.toUtf8();
 	jt["multiPlayerID"] = psTempl->multiPlayerID;
@@ -5317,6 +5323,8 @@ void applyGameStatePresentation(const nlohmann::ordered_json &gameStateDoc)
 nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 {
 	nlohmann::ordered_json j = nlohmann::ordered_json::object();
+	// An ordered_json object copies (not moves) every section built so far each time it grows.
+	j.get_ref<nlohmann::ordered_json::object_t &>().reserve(32);
 	j["format"] = GAMESTATE_FORMAT_TAG;
 	j["formatVersion"] = GAMESTATE_FORMAT_VERSION;
 	// Main-world static terrain, serialized first (restored first too) so the snapshot is
@@ -6150,7 +6158,7 @@ nlohmann::ordered_json parseJsonBounded(const char *begin, const char *end)
 	{
 		throw StateError("JSON nesting depth exceeds maximum allowed");
 	}
-	return nlohmann::ordered_json::parse(begin, end);
+	return parseOrderedJson(begin, end);
 }
 
 void deserializeGameState(const std::string &jsonText, ScriptScope scriptScope, bool inProcess)

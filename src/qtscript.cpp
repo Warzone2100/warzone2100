@@ -884,6 +884,8 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer)
 {
 	root = nlohmann::ordered_json::object();
+	// Reserve room for the keys below: an ordered_json object copies its entries (and all they hold) each time it grows.
+	root.get_ref<nlohmann::ordered_json::object_t &>().reserve(8);
 	root["version"] = SCRIPTSTATE_VERSION;
 
 	// One object per script instance, bundling its globals, group memberships, and per-instance flags
@@ -900,6 +902,7 @@ bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyP
 		}
 
 		nlohmann::ordered_json instanceObj = nlohmann::ordered_json::object();
+		instanceObj.get_ref<nlohmann::ordered_json::object_t &>().reserve(8);  // (as root above: globals isn't copied)
 		// 'me'/'scriptName' identify the instance on load (findInstanceForPlayer)
 		instanceObj["me"] = instance->player();
 		instanceObj["scriptName"] = instance->scriptName();
