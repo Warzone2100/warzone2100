@@ -3929,7 +3929,7 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 
 	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY) && !bMission)
 	{
-		visTilesUpdate(psBuilding, world.map);
+		// (A range upgrade refreshes the tile coverage at the end of the tick, see visNoteRangeChange)
 		psBuilding->flags.set(OBJECT_FLAG_DIRTY, false);
 	}
 

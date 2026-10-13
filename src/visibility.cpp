@@ -1214,6 +1214,91 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 
 }
 
+/// Whether a terrain change in tile rectangle r may change psObj's tile coverage: r is within its sensor range (its
+/// wavecast), or under it (its own height). Tile heights are at tile corners, so a changed height affects the tiles
+/// on both sides of it: keep a margin of two tiles.
+static bool heightChangeReaches(const BASE_OBJECT *psObj, const std::pair<Vector2i, Vector2i> &r)
+{
+	const Vector2i lo = world_coord(r.first);
+	const Vector2i hi = world_coord(r.second + Vector2i(1, 1));
+	const int64_t dx = std::max<int64_t>({0, lo.x - psObj->pos.x, psObj->pos.x - hi.x});
+	const int64_t dy = std::max<int64_t>({0, lo.y - psObj->pos.y, psObj->pos.y - hi.y});
+	const int64_t reach = objSensorRange(psObj) + 2 * TILE_UNITS;
+	return dx * dx + dy * dy <= reach * reach;
+}
+
+/// Players whose sensor or jammer range changed since the last visFlushCoverageChanges()
+static PlayerMask visRangeChangedPlayers = 0;
+
+void visNoteRangeChange(int player)
+{
+	ASSERT_OR_RETURN(, player >= 0 && player < MAX_PLAYERS, "Bad player %d", player);
+	visRangeChangedPlayers |= static_cast<PlayerMask>(1) << player;
+}
+
+void visRecomputeCoverage(GameWorld& world)
+{
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (DROID *psDroid : world.objects.droids[player])
+		{
+			if (!psDroid->died)
+			{
+				visTilesUpdate(psDroid, world.map);
+			}
+		}
+		for (STRUCTURE *psStruct : world.objects.structures[player])
+		{
+			if (!psStruct->died)
+			{
+				visTilesUpdate(psStruct, world.map);
+			}
+		}
+	}
+	world.map.heightChanges.clear();
+	visRangeChangedPlayers = 0;
+}
+
+void visFlushCoverageChanges(GameWorld& world)
+{
+	if (world.map.heightChanges.empty() && visRangeChangedPlayers == 0)
+	{
+		return;
+	}
+	auto refresh = [&world](BASE_OBJECT *psObj) {
+		if (psObj->died)
+		{
+			return;
+		}
+		if (visRangeChangedPlayers & (static_cast<PlayerMask>(1) << psObj->player))
+		{
+			visTilesUpdate(psObj, world.map);
+			return;
+		}
+		for (const std::pair<Vector2i, Vector2i> &r : world.map.heightChanges)
+		{
+			if (heightChangeReaches(psObj, r))
+			{
+				visTilesUpdate(psObj, world.map);
+				return;
+			}
+		}
+	};
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (DROID *psDroid : world.objects.droids[player])
+		{
+			refresh(psDroid);
+		}
+		for (STRUCTURE *psStruct : world.objects.structures[player])
+		{
+			refresh(psStruct);
+		}
+	}
+	world.map.heightChanges.clear();
+	visRangeChangedPlayers = 0;
+}
+
 CoverageCheckResult visCheckCoverage(GameWorld& world)
 {
 	CoverageCheckResult result;

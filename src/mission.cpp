@@ -519,6 +519,8 @@ bool missionShutDown()
 		fpathActiveBackend().waitForIdle();
 		gameWorld = std::move(mission.gameWorld);
 		mission.gameWorld = {};
+		// The world was inactive: bring its tile coverage up to date (range upgrades only refresh the active world)
+		visRecomputeCoverage(gameWorld);
 	}
 	keybindShutdown();
 	// sorry if this breaks something - but it looks like it's what should happen - John
@@ -1070,6 +1072,8 @@ void restoreMissionData()
 	gameWorld = std::move(mission.gameWorld);
 	mission.gameWorld = {};
 	gridMarkDirty();  // The grid holds the objects of the world that just left
+	// The world was inactive: bring its tile coverage up to date (range upgrades only refresh the active world)
+	visRecomputeCoverage(gameWorld);
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		for (DROID* psObj : gameWorld.objects.droids[inc])
