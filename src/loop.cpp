@@ -76,6 +76,8 @@
 #include "game.h"
 #include "gamestate_capture.h"
 #include "gamestate_snapshot.h"
+#include "gamestate_snapshot_ring.h"
+#include "gamestate_replay_seek.h"
 #include "multijoin.h"
 #include "lighting.h"
 #include "intimage.h"
@@ -729,6 +731,8 @@ GAMECODE gameLoop()
 
 	size_t numRegularUpdatesTicks = 0;
 	size_t numFastForwardTicks = 0;
+	const uint32_t loopStartTicks = wzGetTicks();
+	constexpr uint32_t SEEK_FASTFORWARD_MS_PER_FRAME = 100;
 	gameTimeUpdateBegin();
 	while (true)
 	{
@@ -737,7 +741,10 @@ GAMECODE gameLoop()
 		executeFnAndProcessScriptQueuedRemovals([]() { recvMessage(); });
 		// Saves and snapshots requested while the messages for the next tick were still to arrive (networked games)
 		runPendingGameStateCaptures();
-		gamestate::harness::afterMessages();  // (test hook: the harness save point)
+		gamestate::harness::afterMessages();  // (the harness save point)
+		// (Both do nothing unless started)
+		gamestate::replaySeekAtCapturePoint();
+		gamestate::snapshotRingAtCapturePoint();
 
 		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected
@@ -749,6 +756,11 @@ GAMECODE gameLoop()
 			&& checkPlayerGameTime(NET_ALL_PLAYERS);	// and there must be a new game tick available to process from all players
 
 		bool forceTryGameTickUpdate = canFastForwardGameTime && ((!fastForwardTicksFixedToNormalTickRate && numForcedUpdatesLastCall > 0) || numRegularUpdatesTicks > 0) && NETgameIsBehindPlayersByAtLeast(4);
+		// A replay seek fast-forwards to its target as fast as the ticks run, rendering a frame every so often
+		if (gamestate::replaySeekFastForwarding() && wzGetTicks() - loopStartTicks < SEEK_FASTFORWARD_MS_PER_FRAME && checkPlayerGameTime(NET_ALL_PLAYERS))
+		{
+			forceTryGameTickUpdate = true;
+		}
 
 		// No game state update once a level change or a savegame load has been requested
 		// (in a tick, by a script's loadLevel()): renderLoop() hands over to it in the next frames,

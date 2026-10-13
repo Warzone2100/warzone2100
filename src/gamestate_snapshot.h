@@ -35,6 +35,8 @@
 #include <string>
 #include <vector>
 
+#include <nlohmann/json.hpp>
+
 struct GameStateSnapshot
 {
 	std::string document;                                     ///< the GameState document (serializeGameState)
@@ -52,7 +54,26 @@ struct GameStateSnapshot
 
 /// Take a snapshot of the running game. Call it at a capture point (from a requestGameStateCapture() capture).
 /// Throws gamestate::StateError (or another std::exception) if the game can't be serialized.
+/// Same as finishGameStateSnapshot(captureGameStateSnapshot()), with an assertion if the check fails.
 GameStateSnapshot takeGameStateSnapshot();
+
+/// A snapshot as the capture leaves it: the document still in memory form, everything else done.
+struct GameStateSnapshotCapture
+{
+	nlohmann::ordered_json document;
+	GameStateSnapshot snapshot;  ///< everything but the document text
+};
+
+/// The part of taking a snapshot that reads the game:
+/// build the document, and take the game queues, the unsent local orders and the game time.
+/// Main thread, at a capture point. Throws as takeGameStateSnapshot() does.
+GameStateSnapshotCapture captureGameStateSnapshot();
+
+/// The rest: check the document (gamestate::checkGameStateDocument: a snapshot that fails it is a serializer bug),
+/// and write it out. It reads only the capture and the loaded stats (by name),
+/// so it can run on another thread while the game goes on, as long as the stats stay loaded.
+/// Throws if the check fails.
+GameStateSnapshot finishGameStateSnapshot(GameStateSnapshotCapture &&capture);
 
 enum class GameStateRestoreResult
 {

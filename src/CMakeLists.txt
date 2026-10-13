@@ -140,6 +140,8 @@ target_link_libraries(warzone2100 nlohmann_json)
 target_link_libraries(warzone2100 optional-lite)
 target_link_libraries(warzone2100 quickjs)
 target_link_libraries(warzone2100 inih)
+find_package(ZLIB REQUIRED) # the snapshot ring compresses its snapshots (netplay already requires zlib)
+target_link_libraries(warzone2100 ZLIB::ZLIB)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# Exclude CURL implementation, Use Fetch API for Emscripten

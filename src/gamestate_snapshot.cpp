@@ -32,22 +32,11 @@
 #include "map.h"
 #include "multiplay.h"  // captureQueuedDroidInfo, restoreQueuedDroidInfo
 
-GameStateSnapshot takeGameStateSnapshot()
+GameStateSnapshotCapture captureGameStateSnapshot()
 {
-	GameStateSnapshot snapshot;
-	const nlohmann::ordered_json document = gamestate::gameStateToJson();
-	// Check it now, while the game it was taken from is at hand: a snapshot that couldn't be restored is a serializer
-	// bug, better caught here than when a restore needs it
-	try
-	{
-		gamestate::checkGameStateDocument(document);
-	}
-	catch (const std::exception &e)
-	{
-		ASSERT(false, "A snapshot of this game fails its own check: %s", e.what());
-		throw;
-	}
-	snapshot.document = document.dump();
+	GameStateSnapshotCapture capture;
+	capture.document = gamestate::gameStateToJson();
+	GameStateSnapshot &snapshot = capture.snapshot;
 	// Like a savegame's pending-resume section: the game-queue messages not read yet (scheduled for later ticks by
 	// the lockstep latency) belong to the snapshot's timeline.
 	// During replay playback the queues hold the rest of the replay, which is kept read-only for the whole playback:
@@ -63,7 +52,32 @@ GameStateSnapshot takeGameStateSnapshot()
 	}
 	snapshot.queuedOrders = captureQueuedDroidInfo();
 	snapshot.gameTime = gameTime;
+	return capture;
+}
+
+GameStateSnapshot finishGameStateSnapshot(GameStateSnapshotCapture &&capture)
+{
+	// Checked now, while the game it was taken from is at hand:
+	// a snapshot that couldn't be restored is a serializer bug
+	gamestate::checkGameStateDocument(capture.document);
+	GameStateSnapshot snapshot = std::move(capture.snapshot);
+	snapshot.document = capture.document.dump();
+	capture.document = nlohmann::ordered_json();
 	return snapshot;
+}
+
+GameStateSnapshot takeGameStateSnapshot()
+{
+	GameStateSnapshotCapture capture = captureGameStateSnapshot();
+	try
+	{
+		return finishGameStateSnapshot(std::move(capture));
+	}
+	catch (const std::exception &e)
+	{
+		ASSERT(false, "A snapshot of this game fails its own check, or can't be written out: %s", e.what());
+		throw;
+	}
 }
 
 static bool restoreFailed = false;
