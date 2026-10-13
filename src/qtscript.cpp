@@ -59,6 +59,7 @@
 #include "console.h"
 #include "clparse.h"
 #include "mission.h"
+#include "objmem.h"
 #include "modding.h"
 #include "version.h"
 #include "game.h"
@@ -323,6 +324,22 @@ void scriptSetDerrickPos(int x, int y)
 	static_assert(MAX_TILE_TEXTURES <= 255, "If MAX_TILE_TEXTURES is raised above 255, this code will need to change");
 	uint16_t out = (mx << 8) | my;
 	derricks.insert(out);
+}
+
+std::vector<Vector2i> scriptGetDerrickPositions()
+{
+	std::vector<Vector2i> result;
+	result.reserve(derricks.size());
+	for (uint16_t pos : derricks)
+	{
+		result.emplace_back(pos >> 8, pos & 0xff);
+	}
+	return result;
+}
+
+void scriptClearDerrickPositions()
+{
+	derricks.clear();
 }
 
 bool scriptInit()
@@ -2637,7 +2654,8 @@ bool scripting_engine::groupAddObject(const BASE_OBJECT *psObj, int groupId, wza
 
 bool scripting_engine::loadGroup(wzapi::scripting_instance *instance, int groupId, int objId)
 {
-	BASE_OBJECT *psObj = IdToPointer(objId, ANYPLAYER);
+	// Not IdToPointer(): a group member can be off the map, in a transporter's cargo or on the mission list
+	BASE_OBJECT *psObj = getBaseObjFromId(objId);
 	ASSERT_OR_RETURN(false, psObj, "Non-existent object %d in group %d in savegame", objId, groupId);
 	return groupAddObject(psObj, groupId, instance);
 }
@@ -2983,7 +3001,7 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 			p.type = objectType;
 			p.player = entryPlayer;
 			p.triggered = jsonValueOr(entry, "triggered", -1); // deactivated by default
-			p.subscriber = ALL_PLAYERS; // object labels do not carry a subscriber
+			p.subscriber = entrySubscriber;
 			if (IdToObject((OBJECT_TYPE)p.type, p.id, p.player) == nullptr)
 			{
 				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
@@ -3069,6 +3087,7 @@ bool scripting_engine::writeLabelMap(const LABELMAP& labels, nlohmann::ordered_j
 			entry["id"] = l.id;
 			entry["player"] = l.player;
 			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber; // set by resetLabel(label, player): only that player's objects trigger it
 		}
 		result.push_back(std::move(entry));
 	}

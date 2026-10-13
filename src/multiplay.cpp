@@ -3096,39 +3096,44 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 	if (playerIndex == selectedPlayer)
 	{
-		// reset the widget screen to just the reticule (close all panels)
-		auto savedIntMode = intMode;
-		intResetScreen(false, true);
-		intMode = savedIntMode; // restore intMode from before intResetScreen call (or it may not be possible to click "continue game" on the mission results screen)
-
-		// disable various reticule buttons
-		std::array<UDWORD, 5> reticuleButtonsToDisable{IDRET_MANUFACTURE, IDRET_RESEARCH, IDRET_BUILD, IDRET_DESIGN, IDRET_COMMAND};
-		for (UDWORD buttonID : reticuleButtonsToDisable)
-		{
-			if (intCheckReticuleButEnabled(buttonID))
-			{
-				setReticuleStats(buttonID, "", "", "");
-			}
-		}
-
-		// hide the power bar
-		forceHidePowerBar(true);
-
-		if (!headlessGameMode())
-		{
-			// enable "god mode" for map + object visibility (+ minimap)
-			enableGodMode();
-		}
-
-		// add spectator mode message
-		bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();
-		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
-		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? 30 : 15);
-
-		specLayerInit(!streamer_spectator_mode());
+		setUpLocalSpectatorInterface();
 	}
 
 	turnOffMultiMsg(false);
 
 	return true;
+}
+
+void setUpLocalSpectatorInterface()
+{
+	// reset the widget screen to just the reticule (close all panels)
+	auto savedIntMode = intMode;
+	intResetScreen(false, true);
+	intMode = savedIntMode; // restore intMode from before intResetScreen call (or it may not be possible to click "continue game" on the mission results screen)
+
+	// disable various reticule buttons
+	std::array<UDWORD, 5> reticuleButtonsToDisable{IDRET_MANUFACTURE, IDRET_RESEARCH, IDRET_BUILD, IDRET_DESIGN, IDRET_COMMAND};
+	for (UDWORD buttonID : reticuleButtonsToDisable)
+	{
+		if (intCheckReticuleButEnabled(buttonID))
+		{
+			setReticuleStats(buttonID, "", "", "");
+		}
+	}
+
+	// hide the power bar
+	forceHidePowerBar(true);
+
+	if (!headlessGameMode())
+	{
+		// enable "god mode" for map + object visibility (+ minimap)
+		enableGodMode();
+	}
+
+	// add spectator mode message
+	bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();
+	addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
+	addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? 30 : 15);
+
+	specLayerInit(!streamer_spectator_mode());
 }

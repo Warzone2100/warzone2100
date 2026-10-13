@@ -576,7 +576,8 @@ bool multiShutdown()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static bool gameInit()
+// fromSnapshot: a GameState load, whose restored world is authoritative
+static bool gameInit(bool fromSnapshot)
 {
 	UDWORD			player;
 
@@ -600,6 +601,18 @@ static bool gameInit()
 				ASSERT(NetPlay.players[player].ai < 0 || NetPlay.players[player].difficulty != AIDifficulty::DISABLED, "Slot (%u) has AI, but disabled difficulty?", player);
 			}
 		}
+	}
+
+	// A GameState load restored the world with the players below already removed and the spectators converted.
+	// Only the local player's spectator interface needs setting up again.
+	if (fromSnapshot)
+	{
+		if (selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator)
+		{
+			setUpLocalSpectatorInterface();
+			setPlayerHasLost(true); // set this flag to true so we don't accumulate loss statistics
+		}
+		return true;
 	}
 
 	for (player = 1; player < MAX_CONNECTED_PLAYERS; player++)
@@ -657,7 +670,7 @@ void playerResponding()
 
 // ////////////////////////////////////////////////////////////////////////////
 //called when the game finally gets fired up.
-bool multiGameInit()
+bool multiGameInit(bool fromSnapshot)
 {
 	UDWORD player;
 
@@ -666,7 +679,7 @@ bool multiGameInit()
 		openchannels[player] = true;								//open comms to this player.
 	}
 
-	gameInit();
+	gameInit(fromSnapshot);
 	resetInvalidMessageLog();
 
 	return true;
