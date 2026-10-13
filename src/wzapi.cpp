@@ -27,6 +27,7 @@
 #include "lib/framework/wzpaths.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/file.h"
+#include "lib/framework/crc.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
@@ -207,9 +208,39 @@ bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, 
 	{
 		calcDataHash(reinterpret_cast<const uint8_t *>(*ppFileData), *pFileSize, DATA_SCRIPT);
 	}
+	noteSourceFile(path, *ppFileData, *pFileSize);
 
 	loadedFilePath = path;
 	return true;
+}
+
+void wzapi::scripting_instance::noteSourceFile(const std::string& path, const char *data, size_t size)
+{
+	// Line endings as LF, so that the same script copied between systems hashes the same
+	std::string text;
+	text.reserve(size);
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (data[i] == '\r' && i + 1 < size && data[i + 1] == '\n')
+		{
+			continue;
+		}
+		text.push_back(data[i]);
+	}
+	m_sourceFiles.emplace_back(path, sha256Sum(text.data(), text.size()).toString());
+}
+
+std::string wzapi::scripting_instance::sourceHash() const
+{
+	std::string list;
+	for (const auto &file : m_sourceFiles)
+	{
+		list += file.first;
+		list += '\n';
+		list += file.second;
+		list += '\n';
+	}
+	return sha256Sum(list.data(), list.size()).toString();
 }
 
 std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> wzapi::scripting_instance::debugGetScriptGlobalSpecialStringValues()
