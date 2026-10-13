@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-08-14 02:55\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -912,28 +912,28 @@ msgid "Jump Heavy Gunner"
 msgstr "Kanónový Kyborg s Jetpackem"
 
 msgid "Jump Lancer"
-msgstr ""
+msgstr "Skákací Odpalovač"
 
 msgid "Jump Assault Gunner"
-msgstr ""
+msgstr "Skákací Útočný Kanón"
 
 msgid "Jump Needle Gunner"
-msgstr ""
+msgstr "Skákající Jehlový Kanón"
 
 msgid "Jump Scourge"
-msgstr ""
+msgstr "Skákací Sběrač"
 
 msgid "Jump Flashlight Gunner"
-msgstr ""
+msgstr "Skákací Světlicový Kanón"
 
 msgid "Cyborg Jump Pack"
-msgstr ""
+msgstr "Kyborgský Skákací Batoh"
 
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "Kyborgský pohon II"
 
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "Kyborgský pohon III"
 
 msgid "NP-Hardcrete"
 msgstr "Stěny Nového Paradigmatu"
@@ -1023,130 +1023,130 @@ msgid "Automated Vehicle Repair Mk3"
 msgstr "Sebeopravování Tanků Mk3"
 
 msgid "Heavy Mobile Repair Turret"
-msgstr ""
+msgstr "Těžká Mobilní Opravárenská Věž"
 
 msgid "Mobile Repair Upgrade"
-msgstr ""
+msgstr "Vylepšení Mobilní Opravy"
 
 msgid "Mobile Repair Upgrade Mk2"
-msgstr ""
+msgstr "Vylepšení Mobilní Opravy Mk2"
 
 msgid "CB Sensor Upgrade"
-msgstr ""
+msgstr "Vylepšení CB Senzoru"
 
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "Vylepšení CB Senzoru Mk2"
 
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "Vylepšení CB Senzoru Mk3"
 
 msgid "VTOL CB Upgrade"
-msgstr ""
+msgstr "Vylepšení VTOL CB"
 
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Vylepšení VTOL CB Mk2"
 
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Vylepšení VTOL CB Mk3"
 
 msgid "VTOL Strike Upgrade"
-msgstr ""
+msgstr "Vylepšení útočné věže VTOL"
 
 msgid "VTOL Strike Upgrade Mk2"
-msgstr ""
+msgstr "Vylepšení útočné věže VTOL Mk2"
 
 msgid "VTOL Strike Upgrade Mk3"
-msgstr ""
+msgstr "Vylepšení útočné věže VTOL mk3"
 
 msgid "Improved Scrambler"
-msgstr ""
+msgstr "Zdokonalená Rušička"
 
 msgid "Scrambler Turret Mk2"
-msgstr ""
+msgstr "Rušící Věž Mk2"
 
 msgid "Sensor Lock"
-msgstr ""
+msgstr "Zamčení Senzorem"
 
 msgid "Improved Laser Focusing Mk2"
-msgstr ""
+msgstr "Vylepšené laserové zaostřování Mk2"
 
 msgid "Improved Laser Focusing Mk3"
-msgstr ""
+msgstr "Vylepšené laserové zaostřování Mk3"
 
 msgid "HEAP Missile Warhead"
-msgstr ""
+msgstr "Hlavice Rakety HEAP"
 
 msgid "HEAP Missile Warhead Mk2"
-msgstr ""
+msgstr "Hlavice Rakety HEAP Mk2"
 
 msgid "HEAP Missile Warhead Mk3"
-msgstr ""
+msgstr "Hlavice Rakety HEAP MK3"
 
 msgid "Improved Missile Loading System"
-msgstr ""
+msgstr "Vylepšený Systém Nabíjení Rakety"
 
 msgid "Rapid Fire Mini-Rockets"
-msgstr ""
+msgstr "Rychlopalné Mini-Rakety"
 
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr ""
+msgstr "Rychlopalné Mini-Rakety Mk2"
 
 msgid "Rapid Fire Mini-Rockets Mk3"
-msgstr ""
+msgstr "Rychlopalné Mini-Rakety Mk3"
 
 msgid "Scavenger Flame Tower End"
-msgstr ""
+msgstr "Koncová Plamenometná Věž Sběračů"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Most"
 
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "Vrak Tanku"
 
 msgid "Cyborg Laboratory"
-msgstr ""
+msgstr "Laboratoř Kyborgů"
 
 msgid "Advanced Warfare Laboratory"
-msgstr ""
+msgstr "Laboratoř Pokročilého Boje"
 
 msgid "Engineering Laboratory"
-msgstr ""
+msgstr "Laboratoř Inženýrství"
 
 msgid "Robotics Laboratory"
-msgstr ""
+msgstr "Laboratoř Robotiky"
 
 msgid "Laser Optics Laboratory"
-msgstr ""
+msgstr "Laboratoř Laserové Optiky"
 
 msgid "Electronics Laboratory"
-msgstr ""
+msgstr "Laboratoř Elektroniky"
 
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "Chemická Laboratoř"
 
 msgid "Advanced Warfare"
-msgstr ""
+msgstr "Pokročilý Boj"
 
 msgid "Bunker Blaster"
-msgstr ""
+msgstr "Drtič Bunkrů"
 
 msgid "Cyborg Materials Improved"
-msgstr ""
+msgstr "Vylepšeny materiály pro kyborgy"
 
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr ""
+msgstr "Vrstvené husté kompozitní slitiny a energii pohlcující vlákna"
 
 msgid "Increases Kinetic Armor and Body Points"
-msgstr ""
+msgstr "Zvyšuje Kinetický Pancíř a Životy Podvozku"
 
 msgid "All Cyborgs upgraded automatically"
-msgstr ""
+msgstr "Všichni Kyborgové automaticky vylepšeni"
 
 msgid "Cyborg Thermal Armor Improved"
-msgstr ""
+msgstr "Tepelný Pancíř Kyborgů Vylepšen"
 
 msgid "Heat resistant armored layers"
-msgstr ""
+msgstr "Tepelně odolné pancéřové vrstvy"
 
 msgid "Thermal Armor increased"
 msgstr "Vylepšeno Tepelné Brnění"
