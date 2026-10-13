@@ -44,6 +44,7 @@
 
 #include "loop.h"
 #include "gamestate_serialize.h"
+#include "gamestate_harness.h"
 #include "movebench.h"
 #include "pathbench.h"
 #include "corridordump.h"
@@ -748,6 +749,9 @@ GAMECODE gameLoop()
 		gameStateUpdate();
 		gameStatePerfEndOfTick();
 		syncDebug("End game state update, gameTime = %d", gameTime);
+		// No-op unless a --gamestate-* harness option was set.
+		// Between two ticks, so a save sees what a menu save sees.
+		gamestate::harness::tick();
 		unsigned after = wzGetTicks();
 
 		renderBudget -= (after - before) * renderFraction.n;
