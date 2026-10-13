@@ -85,12 +85,36 @@ REPLAY_FAULT_KINDS='replay-position no-replay-positions'
 # - the ring alone
 # - seeks forward (no restore), back to a snapshot's time, back between snapshots and back to the start
 # - a small budget that thins the ring out
+# - past the replay's end
+# - to the very start (the first snapshot)
+# - a seek that replaces another still fast-forwarding
+# - without the ring (each seek back plays the replay again from the start)
 # - miza
 SEEK_CELLS='
 highground 90000 10000
 highground 90000 10000 30000:55000,60000:40002,70000:25000,80000:1000
 highground 90000 5000,400 70000:25000,85000:61000
+highground 90000 10000 30000:999999
+highground 90000 10000 50000:0
+highground 90000 10000 30000:80000,40000:20000
+highground 90000 off 30000:55000,60000:40002,70000:25000
 miza 330000 30000 200000:150000,300000:20000,310000:325000
+'
+# Replay seek fallbacks (replayseek.sh with FAULT and EXPECT):
+# "<fault> <expected fallback> <test> <end tick> <ring> <seeks>".
+# A snapshot that is rejected, or whose restore fails half way, is dropped and an older one restored,
+# and when none can be, the replay is played again from the start.
+# The rings take their snapshots at the same game times in every run (sync).
+# With snapshots every 12 s, the highground seek from 60002 to 40002 fails to restore the snapshot at 36002
+# and restores 24002 (a failure at pass1 or worlds there must not leave formations behind).
+SEEK_FAULT_CELLS='
+truncate older highground 90000 12000,65536,3,sync 60000:40002
+throw-at:worlds older highground 90000 12000,65536,3,sync 60000:40002
+throw-at:pass1 older highground 90000 12000,65536,3,sync 60000:40002
+throw-at:sections older highground 90000 12000,65536,3,sync 60000:40002
+throw-at:scripting older miza 330000 30000,65536,3,sync 300000:150000,310000:325000
+truncate,99 restart highground 90000 12000,65536,3,sync 60000:40002
+throw-at:sections,99 restart highground 90000 12000,65536,3,sync 60000:40002
 '
 
 # Rewind faults (rewindfault.sh): a damaged snapshot must be rejected before the restore changes anything
@@ -161,6 +185,18 @@ if echo "replayseek" | grep -qE "$FILTER"; then
 		# shellcheck disable=SC2086
 		"$HERE/replayseek.sh" "$BIN" $cell | head -2
 	done
+	echo "$SEEK_FAULT_CELLS" | while read -r fault expect cell; do
+		[ -n "$fault" ] || continue
+		# shellcheck disable=SC2086
+		FAULT=$fault EXPECT=$expect "$HERE/replayseek.sh" "$BIN" $cell | head -1
+	done
+fi
+if echo "replaycontrols" | grep -qE "$FILTER"; then
+	if command -v Xvfb > /dev/null && command -v xdotool > /dev/null; then
+		"$HERE/replaycontrols.sh" "$BIN"
+	else
+		echo "replaycontrols: skipped (no Xvfb or xdotool)"
+	fi
 fi
 if echo "rewindfault" | grep -qE "$FILTER"; then
 	for kind in $FAULT_KINDS; do
