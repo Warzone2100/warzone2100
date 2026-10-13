@@ -55,6 +55,10 @@ DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate);
 
 void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func);
 DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId);
+
+/// Keep a template that is no longer in the player's template list alive (like the template addTemplate() replaces),
+/// for factories and production runs that still refer to it. Used when restoring a saved game.
+DROID_TEMPLATE *addReplacedTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate);
 size_t templateCount(int player);
 
 void clearTemplates(int player);

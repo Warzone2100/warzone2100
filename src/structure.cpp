@@ -1557,7 +1557,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 	return buildStructureDir(world, pStructureType, x, y, direction, player, FromSave, generateSynchronisedObjectId());
 }
 
-STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/, bool deferWallRemoval/*= false*/)
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/, bool deferWallRemoval/*= false*/, bool ignoreLimits/*= false*/)
 {
 	STRUCTURE *psBuilding = nullptr;
 
@@ -1574,7 +1574,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		ASSERT_OR_RETURN(nullptr, max < numStructureStats, "Invalid structure type");
 
 		// Don't allow more than interface limits
-		if (asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
+		if (!ignoreLimits && asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
 		{
 			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %u, max %u)!",
 			      player, getStatsName(pStructureType), asStructureStats[max].curCount[player],
