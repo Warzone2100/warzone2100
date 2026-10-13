@@ -519,7 +519,7 @@ _global.attackGroupSize = function() {
 	return ret;
 };
 
-_global.setTarget = function(object, group) {
+_global.setTarget = function setTarget(object, group) {
 	if (!defined(group))
 	{
 		group = findNearestGroup(object.x, object.y);
@@ -609,7 +609,7 @@ _global.groupDroid = function(droid) {
 	}
 };
 
-_global.rebalanceGroups = function() {
+_global.rebalanceGroups = function rebalanceGroups() {
 	if (throttled(5000))
 	{
 		return;
@@ -681,7 +681,7 @@ _global.dangerLevel = function(loc) {
 	return enumRange(loc.x, loc.y, baseScale / 2, ENEMIES, false).length;
 };
 
-_global.checkAttack = function() {
+_global.checkAttack = function checkAttack() {
 	if (enumLivingPlayers().filter(isEnemy).length === 0)
 	{
 		return;
@@ -743,7 +743,7 @@ _global.pushVtols = function(object) {
 	}
 };
 
-_global.inPanic = function() {
+_global.inPanic = function inPanic() {
 	function uncached()
 	{
 		const badGuys = enumRange(baseLocation.x, baseLocation.y, baseScale, ENEMIES).length;
