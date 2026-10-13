@@ -10,7 +10,7 @@ Results go to `$OUT` (default `/tmp/gamestate-forkcrc`).
 
 | Script | What it checks |
 |---|---|
-| `forkcrc.sh <bin> <test> <save tick> <end tick> [--dying] [--no-loaded]` | **Fork test.** Run A starts a game, saves at the save tick and keeps running; run B loads that save in a fresh process. The traces are compared after the save tick. On a difference, both runs are repeated with the full sync-debug log of the first differing tick and the first differing lines are printed. |
+| `forkcrc.sh <bin> <test> <save tick> <end tick> [--dying \| --dying-filter <filter>] [--no-loaded]` | **Fork test.** Run A starts a game, saves at the save tick (with `--dying`, at the first tick from there that ends with objects pending destruction) and keeps running; run B loads that save in a fresh process. The traces are compared after the save tick. On a difference, both runs are repeated with the full sync-debug log of the first differing tick and the first differing lines are printed. |
 | `forkcrc.sh <bin> <test> <tick> <end tick> --rewind <k>` | **Rewind test.** Snapshots in-process at the tick, keeps running `k` more ticks, restores the snapshot in-process and keeps running; compared with an uninterrupted run. If the two runs already differ before the snapshot (ex. a different `SEED`), the ticks the rewound run simulated twice are compared with each other instead. |
 | `doublesave.sh <bin> <save> [--no-loaded]` | **Double-save test.** Loads a save and saves it again right after the load (before the first tick); compares the two GameState documents section by section. |
 | `matrix.sh <bin> [filter]` | Runs the standard set of fork, rewind and double-save cells. |
@@ -18,7 +18,10 @@ Results go to `$OUT` (default `/tmp/gamestate-forkcrc`).
 
 `<test>` is a `--skirmish` settings file from `data/mp/tests` (ex. `highground`, `miza`), which runs bundled AIs, or
 `mb:<scenario>` for a movement bench scenario (ex. `mb:perf_battle`), which runs without AI scripts and so isolates engine
-restore fidelity.
+restore fidelity, or `cam:<start level>` for a campaign (`--game`, ex. `cam:CAM_2A`; `CAM_1A` pauses on a guide topic, and
+a level can end early when nobody plays it, so keep end ticks short). `mb:gamestate_deaths` is a scenario for these tests:
+every few seconds it kills, in one tick, several droids (some while being repaired), a commander, a repair facility while
+it repairs, a wall and an oil drum, and its `eventDestroyed` handler removes one more droid.
 
 `mb:gamestate_deaths` is a scenario for these tests:
 every few seconds it kills, in one tick, several droids (some while being repaired), a commander,
@@ -38,11 +41,12 @@ They are developer options: `--help` doesn't list them, and their descriptions a
 | Option | Effect |
 |---|---|
 | `--gamestate-save-at-tick=<tick>:<path>` | Write a savegame at the first tick >= tick (between two ticks, like a menu save), and keep running. |
-| `--gamestate-save-when-dying` | Delay that save until a tick that ends with objects pending destruction. |
+| `--gamestate-save-when-dying` | Delay that save (and the rewind snapshot) until a tick that ends with objects pending destruction. |
+| `--gamestate-dying-filter=<filter>` | What those objects must include: comma-separated, a minimum count, `droid`, `structure`, `feature`, `pendingvis` (an object whose tile visibility removal is still pending). |
 | `--gamestate-exit-at-tick=<tick>` | Quit at the first tick >= tick. |
 | `--gamestate-rewind-test=<tick>:<k>` | Snapshot in-process at the tick, restore it in-process `k` ticks later. |
 | `--gamestate-resave-on-load=<path>` | After a GameState load has completed, save again before the first tick, and quit. |
-| `--gamestate-test-seed=<seed>` | Seed the new game's random seed and every script's `Math.random()` from `<seed>` instead of the clock, so a run can be repeated in another process. `forkcrc.sh` passes `$SEED` (default 1). |
+| `--gamestate-test-seed=<seed>` | Seed the new game's random seed and every script's `Math.random()` from `<seed>` instead of the clock, and fix the scripts' `Date` to a time derived from it, so a run can be repeated in another process. `forkcrc.sh` passes `$SEED` (default 1). |
 | `--gamestate-test-suppress-loaded-event` | On a GameState load, don't fire `eventGameLoaded` and drop the queued `eventResearched` replay. Separates engine restore fidelity from what load-time script handlers do. |
 
 Reading the results:

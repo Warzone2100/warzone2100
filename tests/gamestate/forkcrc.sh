@@ -1,7 +1,7 @@
 #!/bin/sh
 # GameState fork test: does a game loaded from a save continue exactly like the game that wrote it?
 #
-#   run A: start a headless skirmish, write a save at tick T and keep running to tick E, tracing sync CRCs
+#   run A: start a headless game, write a save at tick T and keep running to tick E, tracing sync CRCs
 #   run B: load that save in a fresh process and run to tick E, tracing sync CRCs
 #   then compare both traces on the ticks after the save
 #
@@ -13,9 +13,13 @@
 # usage: forkcrc.sh <warzone2100 binary> <skirmish test> <save tick> <end tick> [options]
 #   <skirmish test>   a --skirmish settings file name, ex. highground (data/mp/tests/highground.json),
 #                     or mb:<scenario> for a movement bench scenario, ex. mb:perf_battle (run A then uses
-#                     --movementbench, which needs no AI scripts and quits at its own tick budget)
+#                     --movementbench, which needs no AI scripts and quits at its own tick budget),
+#                     or cam:<start level> for a campaign, ex. cam:CAM_2A
+#                     (--game, but CAM_1A pauses on a guide topic)
 #   options:
-#     --dying         save at the first tick >= <save tick> that ends with objects pending destruction
+#     --dying         save (or take the rewind snapshot) at the first tick >= <save tick> that ends with objects
+#                     pending destruction
+#     --dying-filter <filter>  like --dying, with a --gamestate-dying-filter (ex. 3,structure)
 #     --no-loaded     load with --gamestate-test-suppress-loaded-event (no eventGameLoaded / research replay)
 #     --rewind <k>    instead of a save + load, snapshot in-process at <save tick> and restore it <k> ticks later
 #
@@ -31,11 +35,13 @@ SAVETICK=${3:?save tick}
 ENDTICK=${4:?end tick}
 shift 4
 DYING=
+DYINGTAG=
 NOLOADED=
 REWIND=
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--dying) DYING=--gamestate-save-when-dying ;;
+		--dying-filter) shift; DYING="--gamestate-save-when-dying --gamestate-dying-filter=${1:?dying filter}"; DYINGTAG=".dying_$(echo "$1" | tr ',' '_')" ;;
 		--no-loaded) NOLOADED=--gamestate-test-suppress-loaded-event ;;
 		--rewind) shift; REWIND=${1:?rewind ticks} ;;
 		*) echo "unknown option $1" >&2; exit 2 ;;
@@ -47,16 +53,19 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 RUN_TIMEOUT=${RUN_TIMEOUT:-600}
 SEED=${SEED:-1}
 OUT=${OUT:-/tmp/gamestate-forkcrc}
+SAVEDIR=skirmish
 case "$TEST" in
 	mb:*) START="--movementbench=${TEST#mb:}"; ACOMMON="--configdir=$OUT/config --gamestate-test-seed=$SEED" ;;
+	cam:*) START="--game=${TEST#cam:}"; ACOMMON=""; SAVEDIR=campaign ;;
 	*) START="--skirmish=$TEST.json"; ACOMMON="" ;;
 esac
 TEST=$(echo "$TEST" | tr ':' '_')
-TAG="$TEST.$SAVETICK${DYING:+.dying}${NOLOADED:+.noloaded}${REWIND:+.rewind$REWIND}"
+[ -n "$DYINGTAG" ] || DYINGTAG=${DYING:+.dying}
+TAG="$TEST.$SAVETICK$DYINGTAG${NOLOADED:+.noloaded}${REWIND:+.rewind$REWIND}"
 CFG="$OUT/config"
 mkdir -p "$OUT" "$CFG"
 SAVENAME="fork_$(echo "$TAG" | tr '.' '_')"
-rm -rf "$CFG/savegames/skirmish/$SAVENAME" "$CFG/savegames/skirmish/$SAVENAME.gam"
+rm -rf "$CFG/savegames/$SAVEDIR/$SAVENAME" "$CFG/savegames/$SAVEDIR/$SAVENAME.gam"
 
 COMMON="--configdir=$CFG --headless --autogame --gamestate-test-seed=$SEED"
 [ -n "$ACOMMON" ] || ACOMMON="$COMMON"
@@ -66,7 +75,7 @@ run_a() { # $1 = extra args
 		--gamestate-exit-at-tick="$ENDTICK" $1 > "$OUT/$TAG.A.log" 2>&1
 }
 run_b() { # $1 = extra args
-	timeout "$RUN_TIMEOUT" "$BIN" $COMMON --loadskirmish="$SAVENAME" $NOLOADED --gamestate-crc-trace="$OUT/$TAG.B.trace" \
+	timeout "$RUN_TIMEOUT" "$BIN" $COMMON --load$SAVEDIR="$SAVENAME" $NOLOADED --gamestate-crc-trace="$OUT/$TAG.B.trace" \
 		--gamestate-exit-at-tick="$ENDTICK" $1 > "$OUT/$TAG.B.log" 2>&1
 }
 
@@ -75,7 +84,7 @@ if [ -n "$REWIND" ]; then
 	timeout "$RUN_TIMEOUT" "$BIN" $ACOMMON "$START" --gamestate-crc-trace="$OUT/$TAG.A.trace" \
 		--gamestate-exit-at-tick="$ENDTICK" > "$OUT/$TAG.A.log" 2>&1 || { echo "$TAG RUN A FAILED"; exit 2; }
 	timeout "$RUN_TIMEOUT" "$BIN" $ACOMMON "$START" --gamestate-crc-trace="$OUT/$TAG.B.trace" \
-		--gamestate-rewind-test="$SAVETICK:$REWIND" --gamestate-exit-at-tick="$ENDTICK" > "$OUT/$TAG.B.log" 2>&1 \
+		--gamestate-rewind-test="$SAVETICK:$REWIND" $DYING --gamestate-exit-at-tick="$ENDTICK" > "$OUT/$TAG.B.log" 2>&1 \
 		|| { echo "$TAG RUN B (rewind) FAILED"; exit 2; }
 	AT=$(sed -n 's/.*rewind snapshot taken at gameTime \([0-9]*\).*/\1/p' "$OUT/$TAG.B.log" | head -1)
 	[ -n "$AT" ] || { echo "$TAG NO REWIND SNAPSHOT"; exit 2; }
@@ -94,7 +103,7 @@ if [ -n "$REWIND" ]; then
 	exit $STATUS
 fi
 
-run_a "--gamestate-save-at-tick=$SAVETICK:savegames/skirmish/$SAVENAME.gam $DYING" || { echo "$TAG RUN A FAILED"; exit 2; }
+run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING" || { echo "$TAG RUN A FAILED"; exit 2; }
 AT=$(sed -n 's/.*GameState harness: wrote save .* at gameTime \([0-9]*\) (\([0-9]*\) object.*/\1 \2/p' "$OUT/$TAG.A.log" | head -1)
 [ -n "$AT" ] || { echo "$TAG NO SAVE WRITTEN (see $OUT/$TAG.A.log)"; exit 2; }
 SAVEDAT=${AT% *}
@@ -109,7 +118,7 @@ if [ $STATUS -eq 1 ]; then
 	TICK=$(echo "$RESULT" | sed -n 's/.*first non-echo difference at tick \([0-9]*\).*/\1/p')
 	[ -n "$TICK" ] || TICK=$(echo "$RESULT" | sed -n 's/DIFFERS at tick \([0-9]*\).*/\1/p')
 	# Rerun both with the full sync-debug log of the first differing tick, and show where they part.
-	run_a "--gamestate-save-at-tick=$SAVETICK:savegames/skirmish/$SAVENAME.gam $DYING --gamestate-crc-detail-tick=$TICK" || exit 2
+	run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING --gamestate-crc-detail-tick=$TICK" || exit 2
 	run_b "--gamestate-crc-detail-tick=$TICK" || exit 2
 	python3 -I "$HERE/difflog.py" "$OUT/$TAG.A.trace.detail.txt" "$OUT/$TAG.B.trace.detail.txt" | head -40
 fi
