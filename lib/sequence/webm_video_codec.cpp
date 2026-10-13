@@ -57,7 +57,47 @@ const BackendEntry backendTable[] = {
 // native backends are opt-in for now
 constexpr WZWebmCodecBackend autoBackend = WZWebmCodecBackend::Libvpx;
 
+WZWebmCodecBackend preferredBackend = WZWebmCodecBackend::Auto;
+
 } // anonymous namespace
+
+void wzWebmSetPreferredCodecBackend(WZWebmCodecBackend backend)
+{
+	preferredBackend = backend;
+}
+
+WZWebmCodecBackend wzWebmPreferredCodecBackend()
+{
+	return preferredBackend;
+}
+
+bool wzWebmCodecBackendFromName(const WzString& name, WZWebmCodecBackend& out)
+{
+	if (name.compare("auto") == 0)
+	{
+		out = WZWebmCodecBackend::Auto;
+		return true;
+	}
+	for (const auto& entry : backendTable)
+	{
+		if (name.compare(entry.name) == 0)
+		{
+			out = entry.id;
+			return true;
+		}
+	}
+	return false;
+}
+
+std::vector<const char*> wzWebmCodecBackendNames()
+{
+	std::vector<const char*> result;
+	for (const auto& entry : backendTable)
+	{
+		result.push_back(entry.name);
+	}
+	return result;
+}
 
 static std::unique_ptr<WZWebmVideoCodec> tryCreate(const BackendEntry& entry, const char *codecId, unsigned width, unsigned height)
 {

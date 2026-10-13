@@ -691,7 +691,7 @@ std::unique_ptr<WZVideoDecoder> webmVideoDecoderOpen(std::shared_ptr<VideoProvid
 	{
 		return nullptr;
 	}
-	auto decoder = std::make_unique<WebmVideoDecoder>(std::move(provider), WZWebmCodecBackend::Auto);
+	auto decoder = std::make_unique<WebmVideoDecoder>(std::move(provider), wzWebmPreferredCodecBackend());
 	if (!decoder->open())
 	{
 		return nullptr;

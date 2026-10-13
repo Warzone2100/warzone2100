@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 enum class WZWebmCodecBackend
 {
@@ -74,6 +75,12 @@ std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreate(const char *codecId, un
 
 /** Create a codec from the first backend in the registry other than the one \p failed came from. */
 std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreateReplacement(const char *codecId, unsigned width, unsigned height, const WZWebmVideoCodec& failed);
+
+std::vector<const char*> wzWebmCodecBackendNames();
+bool wzWebmCodecBackendFromName(const WzString& name, WZWebmCodecBackend& out);
+
+void wzWebmSetPreferredCodecBackend(WZWebmCodecBackend backend);
+WZWebmCodecBackend wzWebmPreferredCodecBackend();
 
 std::unique_ptr<WZWebmVideoCodec> wzCreateVpxVideoCodec(const char *codecId, unsigned width, unsigned height);
 bool wzVpxVideoCodecAvailable(WzString& detail);

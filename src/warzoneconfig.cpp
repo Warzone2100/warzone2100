@@ -29,6 +29,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sound/sounddefs.h"
 #include "lib/netplay/connection_provider_registry.h"
+#include "lib/sequence/video_decoder.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -84,6 +85,7 @@ struct WARZONE_GLOBALS
 	int cameraSpeed = CAMERASPEED_DEFAULT;
 	bool radarJump = false;
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
+	WzString videoDecoderBackend = "auto";
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
@@ -601,6 +603,21 @@ video_backend war_getGfxBackend()
 void war_setGfxBackend(video_backend backend)
 {
 	warGlobs.gfxBackend = backend;
+}
+
+WzString war_getVideoDecoderBackend()
+{
+	return warGlobs.videoDecoderBackend;
+}
+
+bool war_setVideoDecoderBackend(const WzString& backend)
+{
+	if (!videoDecoderSetPreferredBackend(backend))
+	{
+		return false;
+	}
+	warGlobs.videoDecoderBackend = backend;
+	return true;
 }
 
 JS_BACKEND war_getJSBackend()
