@@ -2812,6 +2812,69 @@
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
 		"techCode": 1
 	},
+	"R-Struc-Research-Upgrade10": {
+		"iconID": "IMAGE_RES_COMPUTERTECH",
+		"id": "R-Struc-Research-Upgrade10",
+		"imdName": "blresch4.PIE",
+		"name": "Quantum Pathfinding Research Brain",
+		"category": "Research",
+		"requiredResearch": [
+			"R-Struc-Research-Upgrade09"
+		],
+		"researchPoints": 16000,
+		"researchPower": 500,
+		"results": [
+			{
+				"class": "Building",
+				"parameter": "ResearchPoints",
+				"value": 30
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"techCode": 1
+	},
+	"R-Struc-Research-Upgrade11": {
+		"iconID": "IMAGE_RES_COMPUTERTECH",
+		"id": "R-Struc-Research-Upgrade11",
+		"imdName": "blresch4.PIE",
+		"name": "Quantum Pathfinding Research Brain Mk2",
+		"category": "Research",
+		"requiredResearch": [
+			"R-Struc-Research-Upgrade10"
+		],
+		"researchPoints": 20000,
+		"researchPower": 600,
+		"results": [
+			{
+				"class": "Building",
+				"parameter": "ResearchPoints",
+				"value": 50
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"techCode": 1
+	},
+	"R-Struc-Research-Upgrade12": {
+		"iconID": "IMAGE_RES_COMPUTERTECH",
+		"id": "R-Struc-Research-Upgrade12",
+		"imdName": "blresch4.PIE",
+		"name": "Quantum Pathfinding Research Brain Mk3",
+		"category": "Research",
+		"requiredResearch": [
+			"R-Struc-Research-Upgrade11"
+		],
+		"researchPoints": 23000,
+		"researchPower": 700,
+		"results": [
+			{
+				"class": "Building",
+				"parameter": "ResearchPoints",
+				"value": 150
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"techCode": 1
+	},
 	"R-Struc-RprFac-Upgrade01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Struc-RprFac-Upgrade01",
