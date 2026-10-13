@@ -35,9 +35,22 @@ bool gridInitialise();
 // shutdown the grid system
 void gridShutDown();
 
-// Reset the grid system. Called once per update.
+// Rebuild the grid from the world's objects.
+// Called once per update, at its end, right after objmemUpdate frees the objects that died earlier
+// (so everything that reads the grid before the next rebuild, including a game loaded from a save written
+// between updates, sees the same grid).
+// Objects created after the rebuild are found from the next rebuild on.
+// Objects that die after it stay in the grid, dead, until then (grid users skip dead objects).
 // Resets seenThisTick[] to false.
 void gridReset(GameWorld& world);
+
+/// Note that the grid no longer matches the world outside the normal flow of an update (objects freed outside the
+/// end of an update, which the grid may still point to, a world swapped in or out, or a level started).
+/// The next update then rebuilds the grid at its start, before anything reads it.
+void gridMarkDirty();
+
+/// Rebuild the grid if gridMarkDirty() was called since the last gridReset(). Called at the start of an update.
+void gridResetIfDirty(GameWorld& world);
 
 /// How many live DROID_PERSON droids gridReset() put in the grid. Nothing is added to the grid between
 /// one reset and the next, so a zero here means no query this update can return a person.
@@ -92,7 +105,7 @@ GridQuery gridStartIterateDroidsByPlayer(int32_t x, int32_t y, uint32_t radius, 
 GridQuery gridStartIterateRepairCandidates(int32_t x, int32_t y, uint32_t radius, int player);
 
 // Used for visibility.
-/// Find all objects within radius where object->seenThisTick[player] != 255.
+/// Find all objects within radius where !object->died && object->seenThisTick[player] != 255.
 GridQuery gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, int player);
 
 #endif // __INCLUDED_SRC_MAPGRID_H__

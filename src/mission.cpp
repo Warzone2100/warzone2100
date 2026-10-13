@@ -1010,6 +1010,7 @@ static void saveMissionData()
 	removeSpotters();
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
+	gridMarkDirty();  // The grid holds the objects of the world that just left
 
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
@@ -1068,6 +1069,7 @@ void restoreMissionData()
 	fpathActiveBackend().waitForIdle();
 	gameWorld = std::move(mission.gameWorld);
 	mission.gameWorld = {};
+	gridMarkDirty();  // The grid holds the objects of the world that just left
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		for (DROID* psObj : gameWorld.objects.droids[inc])
