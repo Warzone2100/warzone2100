@@ -581,14 +581,14 @@ static const YUVToRGBCoefficients& yuvToRGBCoefficients(const WZVideoFrameYUV& f
 	return frame.fullRange ? bt601Full : bt601Studio;
 }
 
-/** Convert a decoded YUV420 frame to RGBA (with optional scanline emulation) and upload it */
-static void video_upload_frame(const WZVideoFrameYUV& frame)
+/** Convert a decoded YUV420 frame to RGBA (with optional scanline emulation) */
+template <WZVideoPlaneFormat FORMAT>
+static void video_convert_frame(const WZVideoFrameYUV& frame, unsigned char *pRGBABitmapData)
 {
 	const int video_width = static_cast<int>(frame.width);
 	const int video_height = static_cast<int>(frame.height);
 	const int half_width = video_width / 2;
 	const YUVToRGBCoefficients& k = yuvToRGBCoefficients(frame);
-	unsigned char *pRGBABitmapData = VideoFrameBitmap.bmp_w();
 
 	auto setRGBAFramePixel = [pRGBABitmapData](int pixelOffset, uint32_t rgbaValue) {
 		memcpy(&pRGBABitmapData[(pixelOffset * 4)], &rgbaValue, sizeof(uint32_t));
@@ -603,8 +603,19 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 		for (int x = 0; x < half_width; x++)
 		{
 			int Y = frame.y[y_offset++] - k.yOffset;
-			const int U = frame.u[uv_offset] - 128;
-			const int V = frame.v[uv_offset++] - 128;
+			int U, V;
+			if constexpr (FORMAT == WZVideoPlaneFormat::NV12)
+			{
+				U = frame.u[uv_offset] - 128;
+				V = frame.u[uv_offset + 1] - 128;
+				uv_offset += 2;
+			}
+			else
+			{
+				U = frame.u[uv_offset] - 128;
+				V = frame.v[uv_offset] - 128;
+				uv_offset += 1;
+			}
 
 			int A = k.y * Y;
 			const int C = k.rv * V;
@@ -654,6 +665,19 @@ static void video_upload_frame(const WZVideoFrameYUV& frame)
 		{
 			rgb_offset += video_width;
 		}
+	}
+}
+
+static void video_upload_frame(const WZVideoFrameYUV& frame)
+{
+	unsigned char *pRGBABitmapData = VideoFrameBitmap.bmp_w();
+	if (frame.format == WZVideoPlaneFormat::NV12)
+	{
+		video_convert_frame<WZVideoPlaneFormat::NV12>(frame, pRGBABitmapData);
+	}
+	else
+	{
+		video_convert_frame<WZVideoPlaneFormat::I420>(frame, pRGBABitmapData);
 	}
 
 	videoGfx->updateTexture(VideoFrameBitmap);
