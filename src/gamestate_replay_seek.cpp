@@ -30,7 +30,6 @@
 #include "gamestate_serialize.h"
 #include "gamestate_snapshot.h"
 #include "gamestate_snapshot_ring.h"
-#include "wrappers.h"  // headlessGameMode
 
 #include <chrono>
 
@@ -133,10 +132,6 @@ bool requestReplaySeek(uint32_t targetGameTime, std::string *error)
 	if (!NETisReplay())
 	{
 		return fail("not playing a replay back");
-	}
-	if (!headlessGameMode())
-	{
-		return fail("only headless (the UI's pointers to game objects aren't released on a restore)");
 	}
 	if (!snapshotRingRunning())
 	{

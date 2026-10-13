@@ -31,6 +31,7 @@
 #include "game_world.h"
 #include "map.h"
 #include "multiplay.h"  // captureQueuedDroidInfo, restoreQueuedDroidInfo
+#include "uiobjectrefs.h"
 
 GameStateSnapshotCapture captureGameStateSnapshot()
 {
@@ -112,6 +113,8 @@ GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapsho
 		}
 		return GameStateRestoreResult::Rejected;
 	}
+	// Every object is about to be replaced: what the viewer sees of them is closed, and the selection kept by id
+	const UiViewerState viewerState = uiBeforeObjectsReplaced();
 	try
 	{
 		gamestate::deserializeGameState(snapshot.document, gamestate::ScriptScope::AllInstances, /*inProcess=*/true);
@@ -170,5 +173,6 @@ GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapsho
 	syncCrcDetailArmOnSaveOrLoad();
 	// The game is at the snapshot's capture point again: no game message may be read before the next tick
 	gameStateCaptureNoteRestore();
+	uiAfterObjectsReplaced(viewerState);
 	return GameStateRestoreResult::Restored;
 }

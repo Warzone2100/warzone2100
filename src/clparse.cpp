@@ -384,6 +384,7 @@ typedef enum
 	CLI_GAMESTATE_REWINDFAULT,
 	CLI_GAMESTATE_SNAPSHOTRING,
 	CLI_GAMESTATE_SEEKTEST,
+	CLI_GAMESTATE_UISTRESS,
 	CLI_GAMESTATE_TESTREINFORCE,
 	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
 	CLI_GAMESTATE_RESAVEONLOAD,
@@ -502,8 +503,9 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-exit-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_EXITATTICK, "Quit at the given game tick", "game tick", true },
 		{ "gamestate-rewind-fault", POPT_ARG_STRING, CLI_GAMESTATE_REWINDFAULT, "Test only: damage the --gamestate-rewind-test snapshot before restoring it", "kind[,continue]", true },
 		{ "gamestate-snapshot-ring", POPT_ARG_STRING, CLI_GAMESTATE_SNAPSHOTRING, "Test only: keep in-process snapshots of the game every given game time (replay seek-back)", "interval ms[,budget KB[,zlib level]]", true },
-		{ "gamestate-seek-test", POPT_ARG_STRING, CLI_GAMESTATE_SEEKTEST, "Test only: during headless replay playback, with --gamestate-snapshot-ring, seek to a game time when another is reached", "at:target[,at:target...]", true },
+		{ "gamestate-seek-test", POPT_ARG_STRING, CLI_GAMESTATE_SEEKTEST, "Test only: during replay playback, with --gamestate-snapshot-ring, seek to a game time when another is reached", "at:target[,at:target...]", true },
 		{ "gamestate-test-reinforce", POPT_ARG_STRING, CLI_GAMESTATE_TESTREINFORCE, "Test only: at this game tick, during an off-world campaign mission, send reinforcements as the player does", "tick", true },
+		{ "gamestate-ui-stress", POPT_ARG_STRING, CLI_GAMESTATE_UISTRESS, "Test only: every given number of ticks, point the UI at the droid most likely to die next, and check every frame that the UI references no freed object", "ticks", true },
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
 		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
 		{ "gamestate-resave-on-load", POPT_ARG_STRING, CLI_GAMESTATE_RESAVEONLOAD, "After loading a savegame, save it again to the given path before the first tick, and quit", "savegame path", true },
@@ -1040,6 +1042,13 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			if (token == nullptr || !gamestate::harness::setTestReinforce(token))
 			{
 				qFatal("Bad value for --gamestate-test-reinforce (expected <tick>)");
+			}
+			break;
+		case CLI_GAMESTATE_UISTRESS:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setUiStress(token))
+			{
+				qFatal("Bad value for --gamestate-ui-stress (expected <ticks>)");
 			}
 			break;
 		case CLI_GAMESTATE_REWINDTEST:

@@ -139,6 +139,22 @@ if echo "replayrewind" | grep -qE "$FILTER"; then
 		FAULT=$kind "$HERE/replayrewind.sh" "$BIN" highground 60000 90000 5000
 	done
 fi
+# GUI cells (guistress.sh): a replay with seeks, and a skirmish game with and without the stress
+GUI_CELLS='
+replay highground 90000 10000 30000:55000,60000:40002,70000:25000,80000:1000 20
+skirmish highground 90000 10
+'
+if echo "guistress" | grep -qE "$FILTER"; then
+	if command -v xvfb-run > /dev/null; then
+		echo "$GUI_CELLS" | while read -r cell; do
+			[ -n "$cell" ] || continue
+			# shellcheck disable=SC2086
+			"$HERE/guistress.sh" "$BIN" $cell
+		done
+	else
+		echo "guistress: skipped (no xvfb-run)"
+	fi
+fi
 if echo "replayseek" | grep -qE "$FILTER"; then
 	echo "$SEEK_CELLS" | while read -r cell; do
 		[ -n "$cell" ] || continue

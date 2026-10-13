@@ -28,6 +28,12 @@
 #include "../display3d.h"
 
 STRUCTURE *ManufactureController::highlightedFactory = nullptr;
+
+void ManufactureController::visitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	visitUiObjectRef(highlightedFactory, visit);
+}
+
 static const uint8_t nullBrainComponent = 0; // "0" to reference "NULLxxx" components
 static const uint8_t commandBrainComponent = 1; // hmm there is only 1 "CommandBrain01" anyway..
 

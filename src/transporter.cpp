@@ -36,6 +36,7 @@
 #include "intdisplay.h"
 #include "objmem.h"
 #include "transporter.h"
+#include "uiobjectrefs.h"
 #include "ordersource.h"
 #include "group.h"
 #include "move.h"
@@ -143,6 +144,26 @@ void initTransporters()
 	psCurrTransporter = nullptr;
 }
 
+void transporterVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	if (visitUiObjectRef(psCurrTransporter, visit))
+	{
+		intRefreshScreen();  // closes the transporter screen (intRefreshTransporter)
+	}
+	// The transporter timer (mission.cpp) shows the transporter it was given
+	if (psWScreen != nullptr)
+	{
+		if (WIDGET *psTimer = widgGetFromID(psWScreen, IDTRANTIMER_DISPLAY))
+		{
+			const BASE_OBJECT *psObj = static_cast<const BASE_OBJECT *>(psTimer->pUserData);
+			if (psObj != nullptr && visit(psObj))
+			{
+				psTimer->pUserData = nullptr;
+			}
+		}
+	}
+}
+
 // Call to refresh the transporter screen, ie when a droids boards it.
 //
 bool intRefreshTransporter()
@@ -150,6 +171,12 @@ bool intRefreshTransporter()
 	// Is the transporter screen up?
 	if (intMode == INT_TRANSPORTER && widgGetFromID(psWScreen, IDTRANS_FORM) != nullptr)
 	{
+		if (psCurrTransporter == nullptr)
+		{
+			// Its transporter was freed (uiobjectrefs.h)
+			intRemoveTransNoAnim();
+			return true;
+		}
 		bool Ret;
 		// Refresh it by re-adding it.
 		Ret = intAddTransporter(psCurrTransporter, onMission);

@@ -70,6 +70,7 @@
 #include "intdisplay.h"
 #include "radar.h"
 #include "display3d.h"
+#include "uiobjectrefs.h"
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
 #include "dynamicresolution.h"
@@ -4145,6 +4146,14 @@ ENERGY_BAR toggleEnergyBars()
 	return (ENERGY_BAR)barMode;
 }
 
+void display3dVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	if (visitUiObjectRef(psSensorObj, visit))
+	{
+		bSensorTargetting = false;
+	}
+}
+
 /// Set everything up for when the player assigns the sensor target
 void assignSensorTarget(BASE_OBJECT *psObj)
 {
@@ -4171,7 +4180,7 @@ static void processSensorTarget()
 	{
 		if ((realTime - lastTargetAssignation) < TARGET_TO_SENSOR_TIME)
 		{
-			if (!psSensorObj->died && psSensorObj->sDisplay.frameNumber == currentGameFrame)
+			if (psSensorObj != nullptr && !psSensorObj->died && psSensorObj->sDisplay.frameNumber == currentGameFrame)
 			{
 				const int x = /*mouseX();*/(SWORD)psSensorObj->sDisplay.screenX;
 				const int y = (SWORD)psSensorObj->sDisplay.screenY;
