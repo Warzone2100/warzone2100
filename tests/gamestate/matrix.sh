@@ -33,6 +33,8 @@ mb:perf_battle 20000 100000 --rewind 5000
 mb:perf_battle 20000 100000 --rewind 5000 --dying
 mb:perf_vtol_rearm 20000 100000 --rewind 5000 --dying
 miza 20000 60000 --no-loaded --dying-filter feature
+gamestate_cobra 300000 330000 --no-loaded
+gamestate_bonecrusher 300000 330000 --no-loaded
 mb:gamestate_deaths 27000 150000 --no-loaded --dying-filter pendingvis
 mb:gamestate_deaths 40000 150000 --no-loaded --dying-filter pendingvis
 mb:gamestate_deaths 40000 150000 --rewind 5000 --dying-filter pendingvis
@@ -58,6 +60,8 @@ fork_miza_20000_dying_feature_noloaded
 fork_mb_gamestate_deaths_27000_dying_pendingvis_noloaded
 fork_mb_gamestate_scripts_30000_noloaded
 fork_cam_CAM_2A_60000
+fork_gamestate_cobra_300000_noloaded
+fork_gamestate_bonecrusher_300000_noloaded
 '
 
 echo "== fork cells"

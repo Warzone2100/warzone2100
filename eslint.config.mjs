@@ -3,6 +3,7 @@ import n from "eslint-plugin-n";
 import prettier from "eslint-plugin-prettier";
 import eslintPluginJsonc from "eslint-plugin-jsonc";
 import js from "@eslint/js";
+import wzScriptState from "./tools/eslint/saved-script-state.mjs";
 
 export default defineConfig([ 
     globalIgnores(["!**/.*", "**/node_modules/.*"]),
@@ -199,6 +200,46 @@ export default defineConfig([
             "no-throw-literal": "error",
             "no-useless-call": "error",
             "no-void": "error",
+        },
+    },
+
+    // ES modules (this file, the local ESLint plugin)
+    {
+        files: ["**/*.mjs"],
+        languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "module",
+        },
+    },
+
+    // Game scripts: state that a saved game would not keep (see tools/eslint/saved-script-state.mjs)
+    {
+        files: ["data/**/*.js"],
+        // Map generator scripts run once, to make the map, not during the game
+        ignores: ["data/mp/multiplay/maps/**"],
+        plugins: {
+            wz: wzScriptState,
+        },
+        settings: {
+            wz: {
+                // Scripts split across files that share one global scope (others: the files of the same directory)
+                scriptGroups: [
+                    ["data/mp/multiplay/skirmish/semperfi.js", "data/mp/multiplay/skirmish/semperfi_includes/"],
+                    ["data/mp/multiplay/skirmish/nb_generic.js", "data/mp/multiplay/skirmish/nb_hover.js",
+                        "data/mp/multiplay/skirmish/nb_turtle.js", "data/mp/multiplay/skirmish/nb_includes/",
+                        "data/mp/multiplay/skirmish/nb_common/", "data/mp/multiplay/skirmish/nb_rulesets/"],
+                    ["data/mp/multiplay/skirmish/Cobra.js", "data/mp/multiplay/skirmish/cobra_includes/",
+                        "data/mp/multiplay/skirmish/cobra_rulesets/"],
+                    ["data/mp/multiplay/skirmish/nexus.js", "data/mp/multiplay/skirmish/nexus_includes/",
+                        "data/mp/multiplay/skirmish/nexus_standards/"],
+                    ["data/mp/multiplay/skirmish/bonecrusher/"],
+                    ["data/mp/multiplay/script/rules/"],
+                    ["data/base/script/campaign/"],
+                ],
+            },
+        },
+        rules: {
+            "wz/saved-script-state": "error",
         },
     },
 
