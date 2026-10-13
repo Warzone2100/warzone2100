@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_RESEARCH_H__
 #define __INCLUDED_SRC_RESEARCH_H__
 
+#include <map>
+#include <string>
+
 #include <nonstd/optional.hpp>
 
 #include "lib/framework/wzconfig.h"
@@ -107,6 +110,11 @@ std::vector<uint16_t> fillResearchList(UDWORD playerID, nonstd::optional<UWORD> 
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger);
 
+/// Re-apply the results of a research topic a restored game had already completed: the availability changes and the
+/// upgrades of researchResult, without the display, the script event or the player stats. For GameState documents
+/// without an upgrades section.
+void researchResultRestore(UDWORD researchIndex, UBYTE player);
+
 //this just inits all the research arrays
 bool ResearchShutDown();
 //this free the memory used for the research
@@ -180,5 +188,19 @@ enum class BodyClass
 };
 uint32_t getNumBodyClassArmourUpgrades(uint32_t player, BodyClass bodyClass);
 uint32_t getNumBodyClassThermalArmourUpgrades(uint32_t player, BodyClass bodyClass);
+
+// The per-player bookkeeping that research upgrades keep next to the stat upgrade tables, for saving and
+// restoring it verbatim (ordered maps, so the saved form is stable)
+struct ResearchUpgradeBookkeeping
+{
+	std::map<std::string, uint32_t> numBodyClassArmourUpgrades;
+	std::map<std::string, uint32_t> numBodyClassThermalUpgrades;
+	std::map<std::string, uint32_t> numWeaponImpactClassUpgrades;
+	/// Cumulative scaled changes per component and parameter (ResearchUpgradeCalculationMode::Improved)
+	std::map<std::string, std::map<std::string, int64_t>> rawUpgradeChange;
+};
+ResearchUpgradeBookkeeping getResearchUpgradeBookkeeping(unsigned player);
+void setResearchUpgradeBookkeeping(unsigned player, const ResearchUpgradeBookkeeping &bookkeeping);
+void setSelfRepairEnabled(UBYTE player, bool enabled);
 
 #endif // __INCLUDED_SRC_RESEARCH_H__

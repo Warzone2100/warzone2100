@@ -89,6 +89,8 @@
 
 #include <vector>
 #include <algorithm>
+#include <map>
+#include <type_traits>
 #include <array>
 #include <memory>
 #include <unordered_map>
@@ -546,7 +548,9 @@ static nlohmann::ordered_json writeResearch()
 	return j;
 }
 
-static void readResearch(const nlohmann::ordered_json &j, uint32_t version)
+// replayUpgrades: re-apply the upgrade effects of the completed research, for documents without an upgrades
+// section (written before it existed).
+static void readResearch(const nlohmann::ordered_json &j, uint32_t version, bool replayUpgrades)
 {
 	if (version != RESEARCH_SECTION_VERSION)
 	{
@@ -577,19 +581,19 @@ static void readResearch(const nlohmann::ordered_json &j, uint32_t version)
 			r.currentPoints = jtopics[t].at("points").get<uint32_t>();
 			r.ResearchStatus = jtopics[t].at("status").get<uint8_t>();
 			r.possible = jtopics[t].at("possible").get<uint8_t>();
-			// Re-apply the UPGRADE EFFECTS of completed research. We serialize only the research STATUS;
-			// the derived upgrade values (structure/component power, research, production, body, ...) live
+			// Documents without an upgrades section: re-apply the UPGRADE EFFECTS of completed research.
+			// The derived upgrade values (structure/component power, research, production, body, ...) live
 			// in the global stat tables and, on a cold load, start at their un-researched defaults. Without
 			// this a loaded game runs with wrong rates - i.e. getBuildingPowerPoints (upgrade.power +
 			// upgrade.modulePower*capacity) is too low, so power generation, economy and research progress
 			// all diverge. Mirrors loadSaveResearch. The !resAlreadyCompleted guard avoids double-applying
 			// when the research is already applied in the live globals (the in-process round-trip).
-			// bDisplay/bTrigger=false: no console/UI and no TRIGGER_RESEARCH script event (those fired
-			// in the original run) - any RNG it consumes is overwritten by the determinism counters
-			// applied last in gameStateFromJson.
-			if (IsResearchCompleted(&r) && !resAlreadyCompleted)
+			// This replay is approximate: it misses upgrades set directly by scripts, and does not take back
+			// research completed after the snapshot (in-process restore). It raises no eventResearched and
+			// does not count the topics in the player stats again: the saving game already did both.
+			if (replayUpgrades && IsResearchCompleted(&r) && !resAlreadyCompleted)
 			{
-				researchResult(static_cast<UDWORD>(t), static_cast<UBYTE>(p), false, nullptr, false);
+				researchResultRestore(static_cast<UDWORD>(t), static_cast<UBYTE>(p));
 			}
 		}
 	}
@@ -618,6 +622,272 @@ static void readResearch(const nlohmann::ordered_json &j, uint32_t version)
 	readDefaults("sensor", aDefaultSensor, asSensorStats.size());
 	readDefaults("ecm", aDefaultECM, asECMStats.size());
 	readDefaults("repair", aDefaultRepair, asRepairStats.size());
+}
+
+// MARK: - Section: stat upgrades
+// The per-player upgrade tables of every component and structure stat (what research results and scripts
+// change through Upgrades[player]), and the research bookkeeping kept next to them.
+// Saved as the fields that differ from the stat's base values.
+// The structure build limit is part of the same table, but has its own section (limits).
+
+constexpr uint32_t UPGRADES_SECTION_VERSION = 1;
+
+template<typename U, typename F>
+static void visitComponentUpgrade(U &u, F &&f)
+{
+	f("hitpoints", u.hitpoints);
+	f("hitpointPct", u.hitpointPct);
+}
+
+template<typename U, typename F>
+static void visitBodyUpgrade(U &u, F &&f)
+{
+	visitComponentUpgrade(u, f);
+	f("power", u.power);
+	f("armour", u.armour);
+	f("thermal", u.thermal);
+	f("resistance", u.resistance);
+}
+
+template<typename U, typename F>
+static void visitBrainUpgrade(U &u, F &&f)
+{
+	visitComponentUpgrade(u, f);
+	f("rankThresholds", u.rankThresholds);
+	f("maxDroids", u.maxDroids);
+	f("maxDroidsMult", u.maxDroidsMult);
+}
+
+template<typename U, typename F>
+static void visitPropulsionUpgrade(U &u, F &&f)
+{
+	visitComponentUpgrade(u, f);
+	f("hitpointPctOfBody", u.hitpointPctOfBody);
+}
+
+template<typename U, typename F>
+static void visitRangeUpgrade(U &u, F &&f) // sensor, ECM
+{
+	visitComponentUpgrade(u, f);
+	f("range", u.range);
+}
+
+template<typename U, typename F>
+static void visitRepairUpgrade(U &u, F &&f)
+{
+	visitComponentUpgrade(u, f);
+	f("repairPoints", u.repairPoints);
+}
+
+template<typename U, typename F>
+static void visitWeaponUpgrade(U &u, F &&f)
+{
+	visitComponentUpgrade(u, f);
+	f("shortRange", u.shortRange);
+	f("maxRange", u.maxRange);
+	f("minRange", u.minRange);
+	f("hitChance", u.hitChance);
+	f("shortHitChance", u.shortHitChance);
+	f("firePause", u.firePause);
+	f("numRounds", u.numRounds);
+	f("reloadTime", u.reloadTime);
+	f("damage", u.damage);
+	f("empRadius", u.empRadius);
+	f("radius", u.radius);
+	f("radiusDamage", u.radiusDamage);
+	f("periodicalDamage", u.periodicalDamage);
+	f("periodicalDamageRadius", u.periodicalDamageRadius);
+	f("periodicalDamageTime", u.periodicalDamageTime);
+	f("minimumDamage", u.minimumDamage);
+}
+
+template<typename U, typename F>
+static void visitConstructUpgrade(U &u, F &&f)
+{
+	visitComponentUpgrade(u, f);
+	f("constructPoints", u.constructPoints);
+}
+
+template<typename U, typename F>
+static void visitStructureUpgrade(U &u, F &&f) // all but the limit
+{
+	f("research", u.research);
+	f("moduleResearch", u.moduleResearch);
+	f("repair", u.repair);
+	f("power", u.power);
+	f("modulePower", u.modulePower);
+	f("production", u.production);
+	f("moduleProduction", u.moduleProduction);
+	f("rearm", u.rearm);
+	f("armour", u.armour);
+	f("thermal", u.thermal);
+	f("hitpoints", u.hitpoints);
+	f("resistance", u.resistance);
+}
+
+// An entry per (stat, player) whose upgrades differ from the stat's base: the id, the player and those fields.
+template<typename Stats, typename Visit>
+static nlohmann::ordered_json writeUpgradeTable(const Stats *stats, size_t count, Visit visit)
+{
+	const auto fields = [&visit](const auto &u)
+	{
+		nlohmann::ordered_json o = nlohmann::ordered_json::object();
+		visit(u, [&o](const char *name, const auto &value) { o[name] = value; });
+		return o;
+	};
+	nlohmann::ordered_json arr = nlohmann::ordered_json::array();
+	for (size_t i = 0; i < count; ++i)
+	{
+		const nlohmann::ordered_json jbase = fields(stats[i].base);
+		for (unsigned p = 0; p < MAX_PLAYERS; ++p)
+		{
+			const nlohmann::ordered_json jcur = fields(stats[i].upgrade[p]);
+			nlohmann::ordered_json entry = nlohmann::ordered_json::object();
+			for (auto it = jcur.begin(); it != jcur.end(); ++it)
+			{
+				if (it.value() != jbase.at(it.key()))
+				{
+					if (entry.empty())
+					{
+						entry["id"] = stats[i].id.toUtf8();
+						entry["player"] = p;
+					}
+					entry[it.key()] = it.value();
+				}
+			}
+			if (!entry.empty())
+			{
+				arr.push_back(std::move(entry));
+			}
+		}
+	}
+	return arr;
+}
+
+template<typename Stats, typename Visit, typename Reset>
+static void readUpgradeTable(const nlohmann::ordered_json &arr, const char *table, Stats *stats, size_t count, Visit visit, Reset resetUpgrade)
+{
+	if (!arr.is_array())
+	{
+		throw StateError(std::string("upgrades.") + table + " must be an array");
+	}
+	for (size_t i = 0; i < count; ++i)
+	{
+		for (unsigned p = 0; p < MAX_PLAYERS; ++p)
+		{
+			resetUpgrade(stats[i], p);
+		}
+	}
+	std::unordered_map<std::string, size_t> indexById;
+	for (size_t i = 0; i < count; ++i)
+	{
+		indexById.emplace(stats[i].id.toUtf8(), i);
+	}
+	for (const nlohmann::ordered_json &entry : arr)
+	{
+		const std::string id = entry.at("id").get<std::string>();
+		const auto found = indexById.find(id);
+		if (found == indexById.end())
+		{
+			throw StateError(std::string("upgrades.") + table + ": unknown stat id " + id + " (different stats/mods?)");
+		}
+		const unsigned player = entry.at("player").get<unsigned>();
+		if (player >= MAX_PLAYERS)
+		{
+			throw StateError(std::string("upgrades.") + table + ": player out of range");
+		}
+		size_t applied = 0;
+		visit(stats[found->second].upgrade[player], [&entry, &applied](const char *name, auto &field)
+		{
+			const auto value = entry.find(name);
+			if (value != entry.end())
+			{
+				field = value->template get<std::remove_reference_t<decltype(field)>>();
+				++applied;
+			}
+		});
+		if (applied + 2 != entry.size()) // id, player and known fields only
+		{
+			throw StateError(std::string("upgrades.") + table + ": unknown upgrade field for " + id);
+		}
+	}
+}
+
+static nlohmann::ordered_json writeUpgrades()
+{
+	nlohmann::ordered_json j = nlohmann::ordered_json::object();
+	j["version"] = UPGRADES_SECTION_VERSION;
+
+	nlohmann::ordered_json jtables = nlohmann::ordered_json::object();
+	jtables["Body"] = writeUpgradeTable(asBodyStats.data(), asBodyStats.size(), [](const auto &u, auto &&f) { visitBodyUpgrade(u, f); });
+	jtables["Brain"] = writeUpgradeTable(asBrainStats.data(), asBrainStats.size(), [](const auto &u, auto &&f) { visitBrainUpgrade(u, f); });
+	jtables["Propulsion"] = writeUpgradeTable(asPropulsionStats.data(), asPropulsionStats.size(), [](const auto &u, auto &&f) { visitPropulsionUpgrade(u, f); });
+	jtables["Sensor"] = writeUpgradeTable(asSensorStats.data(), asSensorStats.size(), [](const auto &u, auto &&f) { visitRangeUpgrade(u, f); });
+	jtables["ECM"] = writeUpgradeTable(asECMStats.data(), asECMStats.size(), [](const auto &u, auto &&f) { visitRangeUpgrade(u, f); });
+	jtables["Repair"] = writeUpgradeTable(asRepairStats.data(), asRepairStats.size(), [](const auto &u, auto &&f) { visitRepairUpgrade(u, f); });
+	jtables["Weapon"] = writeUpgradeTable(asWeaponStats.data(), asWeaponStats.size(), [](const auto &u, auto &&f) { visitWeaponUpgrade(u, f); });
+	jtables["Construct"] = writeUpgradeTable(asConstructStats.data(), asConstructStats.size(), [](const auto &u, auto &&f) { visitConstructUpgrade(u, f); });
+	jtables["Building"] = writeUpgradeTable(asStructureStats, numStructureStats, [](const auto &u, auto &&f) { visitStructureUpgrade(u, f); });
+	j["tables"] = std::move(jtables);
+
+	nlohmann::ordered_json jplayers = nlohmann::ordered_json::array();
+	for (unsigned p = 0; p < MAX_PLAYERS; ++p)
+	{
+		const ResearchUpgradeBookkeeping b = getResearchUpgradeBookkeeping(p);
+		nlohmann::ordered_json jp = nlohmann::ordered_json::object();
+		jp["selfRepair"] = selfRepairEnabled(static_cast<UBYTE>(p));
+		jp["armourUpgrades"] = b.numBodyClassArmourUpgrades;
+		jp["thermalUpgrades"] = b.numBodyClassThermalUpgrades;
+		jp["weaponImpactUpgrades"] = b.numWeaponImpactClassUpgrades;
+		jp["rawUpgradeChange"] = b.rawUpgradeChange;
+		jplayers.push_back(std::move(jp));
+	}
+	j["players"] = std::move(jplayers);
+	return j;
+}
+
+static void readUpgrades(const nlohmann::ordered_json &j, uint32_t version)
+{
+	if (version != UPGRADES_SECTION_VERSION)
+	{
+		throw StateError("unsupported upgrades section version");
+	}
+
+	const nlohmann::ordered_json &jtables = j.at("tables");
+	const auto resetTo = [](auto &stats, unsigned p) { stats.upgrade[p] = stats.base; };
+	readUpgradeTable(jtables.at("Body"), "Body", asBodyStats.data(), asBodyStats.size(), [](auto &u, auto &&f) { visitBodyUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("Brain"), "Brain", asBrainStats.data(), asBrainStats.size(), [](auto &u, auto &&f) { visitBrainUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("Propulsion"), "Propulsion", asPropulsionStats.data(), asPropulsionStats.size(), [](auto &u, auto &&f) { visitPropulsionUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("Sensor"), "Sensor", asSensorStats.data(), asSensorStats.size(), [](auto &u, auto &&f) { visitRangeUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("ECM"), "ECM", asECMStats.data(), asECMStats.size(), [](auto &u, auto &&f) { visitRangeUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("Repair"), "Repair", asRepairStats.data(), asRepairStats.size(), [](auto &u, auto &&f) { visitRepairUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("Weapon"), "Weapon", asWeaponStats.data(), asWeaponStats.size(), [](auto &u, auto &&f) { visitWeaponUpgrade(u, f); }, resetTo);
+	readUpgradeTable(jtables.at("Construct"), "Construct", asConstructStats.data(), asConstructStats.size(), [](auto &u, auto &&f) { visitConstructUpgrade(u, f); }, resetTo);
+	// Structures: the limit is left alone (restored by the limits section)
+	readUpgradeTable(jtables.at("Building"), "Building", asStructureStats, numStructureStats, [](auto &u, auto &&f) { visitStructureUpgrade(u, f); },
+		[](STRUCTURE_STATS &stats, unsigned p)
+		{
+			const unsigned limit = stats.upgrade[p].limit;
+			stats.upgrade[p] = stats.base;
+			stats.upgrade[p].limit = limit;
+		});
+
+	const nlohmann::ordered_json &jplayers = j.at("players");
+	if (!jplayers.is_array() || jplayers.size() != MAX_PLAYERS)
+	{
+		throw StateError("upgrades.players must have MAX_PLAYERS entries");
+	}
+	for (unsigned p = 0; p < MAX_PLAYERS; ++p)
+	{
+		const nlohmann::ordered_json &jp = jplayers[p];
+		ResearchUpgradeBookkeeping b;
+		b.numBodyClassArmourUpgrades = jp.at("armourUpgrades").get<std::map<std::string, uint32_t>>();
+		b.numBodyClassThermalUpgrades = jp.at("thermalUpgrades").get<std::map<std::string, uint32_t>>();
+		b.numWeaponImpactClassUpgrades = jp.at("weaponImpactUpgrades").get<std::map<std::string, uint32_t>>();
+		b.rawUpgradeChange = jp.at("rawUpgradeChange").get<std::map<std::string, std::map<std::string, int64_t>>>();
+		setResearchUpgradeBookkeeping(p, b);
+		setSelfRepairEnabled(static_cast<UBYTE>(p), jp.at("selfRepair").get<bool>());
+	}
 }
 
 // MARK: - Section: component / structure-type availability
@@ -4679,6 +4949,7 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	j["diplomacy"] = writeDiplomacy();
 	j["power"] = writePower();
 	j["research"] = writeResearch();
+	j["upgrades"] = writeUpgrades();
 	j["combatModifiers"] = writeCombatModifiers();
 	j["simMisc"] = writeSimMisc();
 	j["campaign"] = writeCampaign();
@@ -4784,7 +5055,14 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	{
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: research");
 		const nlohmann::ordered_json &sec = j.at("research");
-		readResearch(sec, sec.value("version", 0u));
+		readResearch(sec, sec.value("version", 0u), /*replayUpgrades=*/!j.contains("upgrades"));
+	}
+	// Before the limits section, which sets the structure limits kept in the same upgrade tables
+	if (j.contains("upgrades"))
+	{
+		debug(LOG_GAMESTATE_SERIAL, "restoring section: upgrades");
+		const nlohmann::ordered_json &sec = j.at("upgrades");
+		readUpgrades(sec, sec.value("version", 0u));
 	}
 	// Per-player experience-gain multiplier. Reset to 100 at level init, so restore it here (after that
 	// reset, before/independent of object building - it only affects runtime combat XP, not construction).
