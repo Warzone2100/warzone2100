@@ -46,16 +46,13 @@ struct BackendEntry
 	std::unique_ptr<WZWebmVideoCodec> (*create)(const char *codecId, unsigned width, unsigned height);
 };
 
-// Fallback order once the requested backend has been tried.
+// Auto's preference order, and the fallback order once the requested backend has been tried.
 const BackendEntry backendTable[] = {
 #if defined(WZ_ENABLE_VIDEO_BACKEND_MF)
 	{ WZWebmCodecBackend::MediaFoundation, "mediafoundation", wzMediaFoundationVideoCodecAvailable, wzCreateMediaFoundationVideoCodec },
 #endif
 	{ WZWebmCodecBackend::Libvpx, "libvpx", wzVpxVideoCodecAvailable, wzCreateVpxVideoCodec },
 };
-
-// native backends are opt-in for now
-constexpr WZWebmCodecBackend autoBackend = WZWebmCodecBackend::Libvpx;
 
 WZWebmCodecBackend preferredBackend = WZWebmCodecBackend::Auto;
 
@@ -120,7 +117,7 @@ static std::unique_ptr<WZWebmVideoCodec> tryCreate(const BackendEntry& entry, co
 
 std::unique_ptr<WZWebmVideoCodec> wzWebmVideoCodecCreate(const char *codecId, unsigned width, unsigned height, WZWebmCodecBackend preference)
 {
-	const WZWebmCodecBackend wanted = (preference == WZWebmCodecBackend::Auto) ? autoBackend : preference;
+	const WZWebmCodecBackend wanted = (preference == WZWebmCodecBackend::Auto) ? backendTable[0].id : preference;
 
 	// pass 0: the requested backend. pass 1: everything else, in registry order.
 	for (int pass = 0; pass < 2; ++pass)
