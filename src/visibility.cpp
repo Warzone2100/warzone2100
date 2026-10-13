@@ -270,6 +270,48 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 	}
 }
 
+/// The height of the bands that lift-propulsion droids' vision height is taken from.
+static const int VIS_LIFT_HEIGHT_BAND = 64;
+
+static bool usesLiftVisionHeight(const DROID *psDroid)
+{
+	return psDroid->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT;
+}
+
+int visLiftHeightBand(const DROID *psDroid)
+{
+	// Floor division, so a band is VIS_LIFT_HEIGHT_BAND high below 0 too
+	const int z = psDroid->pos.z;
+	return (z >= 0) ? z / VIS_LIFT_HEIGHT_BAND : -((-z + VIS_LIFT_HEIGHT_BAND - 1) / VIS_LIFT_HEIGHT_BAND);
+}
+
+/// The height an object's tile coverage is computed from (before adding its model's height).
+///
+/// The coverage is only recomputed on some events (a droid entering a tile, a structure being completed, ...),
+/// and has to match a recompute from the object's current state at any tick boundary (all a loaded game can do).
+/// So it can't use the exact height at the time of the event, which keeps changing afterwards:
+/// - a ground droid sees from the terrain height at the center of its tile
+/// - a lift-propulsion droid (flying or landed) sees from the middle of its current height band (visOriginBand),
+///   and is recomputed whenever it changes band (moveUpdateDroid)
+/// - a structure sees from its own height, which only changes when the terrain under it does
+static int visOriginHeight(BASE_OBJECT *psObj, const WorldMapState& mapState)
+{
+	if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = static_cast<DROID *>(psObj);
+		if (usesLiftVisionHeight(psDroid))
+		{
+			psDroid->visOriginBand = visLiftHeightBand(psDroid);
+			return psDroid->visOriginBand * VIS_LIFT_HEIGHT_BAND + VIS_LIFT_HEIGHT_BAND / 2;
+		}
+		if (worldOnMap(mapState, psObj->pos.x, psObj->pos.y))
+		{
+			return map_Height(mapState, world_coord(map_coord(psObj->pos.x)) + TILE_UNITS / 2, world_coord(map_coord(psObj->pos.y)) + TILE_UNITS / 2);
+		}
+	}
+	return psObj->pos.z;
+}
+
 /* The terrain revealing ray callback */
 static void doWaveTerrain(BASE_OBJECT *psObj, WorldMapState& mapState)
 {
@@ -280,7 +322,7 @@ static void doWaveTerrain(BASE_OBJECT *psObj, WorldMapState& mapState)
 
 	const int sx = psObj->pos.x;
 	const int sy = psObj->pos.y;
-	const int sz = psObj->pos.z + ((psObj->sDisplay.imd != nullptr) ? MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y) : MIN_VIS_HEIGHT);
+	const int sz = visOriginHeight(psObj, mapState) + ((psObj->sDisplay.imd != nullptr) ? MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y) : MIN_VIS_HEIGHT);
 	const unsigned radius = objSensorRange(psObj);
 	const int rayPlayer = psObj->player;
 	size_t size;
