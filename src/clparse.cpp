@@ -49,6 +49,7 @@
 #include "corridordump.h"
 #include "multiplay.h"
 #include "version.h"
+#include "lib/sequence/video_decoder.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "multilobbycommands.h"
@@ -387,6 +388,7 @@ typedef enum
 	CLI_TEXTURECOMPRESSION,
 	CLI_NOTEXTURECOMPRESSION,
 	CLI_GFXBACKEND,
+	CLI_VIDEODECODER,
 	CLI_GFXDEBUG,
 	CLI_GAMEPAD,
 	CLI_JSBACKEND,
@@ -497,6 +499,7 @@ static const struct poptOption *getOptionsTable()
 #endif
 			")"
 		},
+		{ "videodecoder", POPT_ARG_STRING, CLI_VIDEODECODER, N_("Set video decode backend"), nullptr },	// filled in below
 		{ "gfxdebug", POPT_ARG_NONE, CLI_GFXDEBUG, N_("Use gfx backend debug"), nullptr },
 		{ "gamepad", POPT_ARG_STRING, CLI_GAMEPAD, N_("Set gamepad support mode"), "(auto, on, off)" },
 		{ "jsbackend", POPT_ARG_STRING, CLI_JSBACKEND, N_("Set JS backend"),
@@ -573,6 +576,13 @@ static const struct poptOption *getOptionsTable()
 			if (TranslatedOptionsTable[i].argDescrip != nullptr)
 			{
 				TranslatedOptionsTable[i].argDescrip = gettext(TranslatedOptionsTable[i].argDescrip);
+			}
+
+			// only lib/sequence knows which video decode backends this build has
+			if (TranslatedOptionsTable[i].enumeration == CLI_VIDEODECODER)
+			{
+				static const std::string videoDecoderArgDescrip = "(" + videoDecoderBackendList() + ")";
+				TranslatedOptionsTable[i].argDescrip = videoDecoderArgDescrip.c_str();
 			}
 		}
 
@@ -1181,6 +1191,20 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				else
 				{
 					qFatal("Unsupported / invalid gfxbackend value");
+				}
+				break;
+			}
+
+		case CLI_VIDEODECODER:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Unrecognised video decode backend");
+				}
+				if (!war_setVideoDecoderBackend(WzString::fromUtf8(token)))
+				{
+					qFatal("Unsupported / invalid videodecoder value (available: %s)", videoDecoderBackendList().c_str());
 				}
 				break;
 			}

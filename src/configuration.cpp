@@ -511,6 +511,14 @@ bool loadConfig()
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
 	war_setFMVGamma(iniSectionGetFloat(iniGeneral, "fmvGamma", war_getFMVGamma()).value());
+	if (iniGeneral.has("videodecoder"))
+	{
+		WzString videoDecoderStr = WzString::fromUtf8(iniGetString("videodecoder", "auto").value().c_str());
+		if (!war_setVideoDecoderBackend(videoDecoderStr))
+		{
+			debug(LOG_WARNING, "Unsupported / invalid videodecoder value: %s; defaulting to: auto", videoDecoderStr.toUtf8().c_str());
+		}
+	}
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
 	if (!createdConfigFile && configVersion < 2)
@@ -1019,6 +1027,7 @@ bool saveConfig()
 	iniSetInteger("FMVmode", (int)(war_GetFMVmode()));		// sequences
 	iniSetInteger("scanlines", (int)war_getScanlineMode());
 	iniSetFloat("fmvGamma", war_getFMVGamma());
+	iniSetString("videodecoder", war_getVideoDecoderBackend().toUtf8());
 	iniSetInteger("subtitles", (int)(seq_GetSubtitles()));		// subtitles
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);

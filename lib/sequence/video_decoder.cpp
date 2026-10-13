@@ -24,6 +24,7 @@
 #include "ogg_decoder.h"
 #if defined(WZ_ENABLE_WEBM)
 # include "webm_decoder.h"
+# include "webm_video_codec.h"
 #endif
 
 #include <algorithm>
@@ -152,6 +153,34 @@ bool videoDecoderWebmSupported()
 	return true;
 #else
 	return false;
+#endif
+}
+
+std::string videoDecoderBackendList()
+{
+	std::string result = "auto";
+#if defined(WZ_ENABLE_WEBM)
+	for (const char *name : wzWebmCodecBackendNames())
+	{
+		result += ", ";
+		result += name;
+	}
+#endif
+	return result;
+}
+
+bool videoDecoderSetPreferredBackend(const WzString& name)
+{
+#if defined(WZ_ENABLE_WEBM)
+	WZWebmCodecBackend backend;
+	if (!wzWebmCodecBackendFromName(name, backend))
+	{
+		return false;
+	}
+	wzWebmSetPreferredCodecBackend(backend);
+	return true;
+#else
+	return name.compare("auto") == 0;
 #endif
 }
 

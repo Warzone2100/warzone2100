@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_WARZONECONFIG_H__
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzstring.h"
 #include "lib/sequence/sequence.h"
 #include "lib/sound/sounddefs.h"
 #include "multiplaydefs.h"
@@ -180,6 +181,8 @@ void war_setFMVGamma(float gamma);
 float war_getFMVGamma();
 video_backend war_getGfxBackend();
 void war_setGfxBackend(video_backend backend);
+WzString war_getVideoDecoderBackend();
+bool war_setVideoDecoderBackend(const WzString& backend);
 JS_BACKEND war_getJSBackend();
 void war_setJSBackend(JS_BACKEND backend);
 bool war_getAutoAdjustDisplayScale();

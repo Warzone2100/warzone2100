@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <vector>
 
 enum class WZVideoColorMatrix
@@ -123,6 +124,11 @@ std::unique_ptr<WZVideoDecoder> videoDecoderOpen(std::shared_ptr<VideoProvider> 
 
 /** Whether this build includes WebM (VP8/VP9) support (WZ_ENABLE_WEBM) */
 bool videoDecoderWebmSupported();
+
+/** The names videoDecoderSetPreferredBackend() accepts, comma-separated */
+std::string videoDecoderBackendList();
+
+bool videoDecoderSetPreferredBackend(const WzString& name);
 
 /** Choose which audio track to play, by language:
  *  1. the track matching preferredLanguage (if non-empty),
