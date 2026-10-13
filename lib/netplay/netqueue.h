@@ -319,6 +319,13 @@ public:
 		return pendingGameTimeUpdateMessages;
 	}
 
+	/// The number of messages not yet read (popMessage) - what snapshotUnreadMessages() would return
+	size_t numUnreadMessages() const;
+
+	/// Whether the queue's messages are sent over the network / read by the game (setWillNeverGetMessages*)
+	inline bool getsMessagesForNet() const { return canGetMessagesForNet; }
+	inline bool getsMessages() const { return canGetMessages; }
+
 private:
 	void popOldMessages();                                             ///< Pops any messages that are no longer needed.
 

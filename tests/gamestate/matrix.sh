@@ -69,15 +69,20 @@ gamestate_bonecrusher 300000 330000 --rewind 5000
 cam:CAM_2A 60000 120000 --rewind 5000
 '
 
-# Replay rewinds (replayrewind.sh): a recorded skirmish game played back with an in-process rewind
+# Replay rewinds (replayrewind.sh): a recorded skirmish game played back with an in-process rewind,
+# run on to the replay's end.
+# The second highground cell seeks back over most of the replay.
 REPLAY_CELLS='
 highground 60000 90000 5000
+highground 3000 90000 50000
 miza 300000 330000 20000
 '
+# Replay rewind faults (replayrewind.sh with FAULT):
+# damaged replay read positions must be rejected before the restore changes anything
+REPLAY_FAULT_KINDS='replay-position no-replay-positions'
 
-# Rewind faults (rewindfault.sh): a damaged snapshot must be rejected before the restore changes anything
-# (the live game goes on, IDENTICAL), over-limit must restore,
-# and a throw during the restore must stop the game cleanly
+# Rewind faults (rewindfault.sh): a damaged snapshot must be rejected before the restore changes anything (the live
+# game goes on, IDENTICAL), over-limit must restore, and a throw during the restore must stop the game cleanly
 FAULT_KINDS='truncate section-version:power bad-stat duplicate-id dangling-ref overlap edge off-map over-limit throw-at:pass1 throw-at:sections'
 
 # Double-save cells: savegames written by the fork cells above, loaded and saved again straight away.
@@ -116,6 +121,9 @@ if echo "replayrewind" | grep -qE "$FILTER"; then
 		[ -n "$cell" ] || continue
 		# shellcheck disable=SC2086
 		"$HERE/replayrewind.sh" "$BIN" $cell
+	done
+	for kind in $REPLAY_FAULT_KINDS; do
+		FAULT=$kind "$HERE/replayrewind.sh" "$BIN" highground 60000 90000 5000
 	done
 fi
 if echo "rewindfault" | grep -qE "$FILTER"; then
