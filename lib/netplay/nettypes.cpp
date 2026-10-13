@@ -150,6 +150,27 @@ std::vector<std::vector<uint8_t>> NETgameQueueCapturePending(unsigned player)
 	return queue->snapshotUnreadMessages();
 }
 
+void NETgameQueueReset(unsigned player)
+{
+	ASSERT_OR_RETURN(, player < MAX_GAMEQUEUE_SLOTS, "Invalid game queue slot %u", player);
+	NetQueue *old = gameQueues[player];
+	if (old == nullptr)
+	{
+		return;
+	}
+	NetQueue *fresh = new NetQueue;
+	if (!old->getsMessagesForNet())
+	{
+		fresh->setWillNeverGetMessagesForNet();
+	}
+	if (!old->getsMessages())
+	{
+		fresh->setWillNeverGetMessages();
+	}
+	delete old;
+	gameQueues[player] = fresh;
+}
+
 size_t NETgameQueueRestorePending(unsigned player, const std::vector<std::vector<uint8_t>> &rawMessages)
 {
 	ASSERT_OR_RETURN(0, player < MAX_GAMEQUEUE_SLOTS, "Invalid game queue slot %u", player);
@@ -694,9 +715,40 @@ void NETbytesOutputToVector(const std::vector<uint8_t> &data, std::vector<uint8_
 
 ReplayOptionsHandler::~ReplayOptionsHandler() { }
 
+// The messages NETloadReplay put into each game queue, in read order:
+// the raw message bytes back to back, and where each message starts.
+// (Kept read-only for the whole playback, see NETreplayReadPositions.)
+struct LoadedReplayQueue
+{
+	std::vector<uint8_t> bytes;
+	std::vector<uint32_t> offsets;
+
+	void add(const NetMessage &message)
+	{
+		offsets.push_back(static_cast<uint32_t>(bytes.size()));
+		message.rawDataAppendToVector(bytes);
+	}
+	size_t count() const { return offsets.size(); }
+	optional<NetMessage> message(size_t i) const
+	{
+		const size_t end = (i + 1 < offsets.size()) ? offsets[i + 1] : bytes.size();
+		return NetMessage::tryFromRawData(bytes.data() + offsets[i], end - offsets[i]);
+	}
+};
+static std::array<LoadedReplayQueue, MAX_GAMEQUEUE_SLOTS> loadedReplayQueues;
+
+static void clearLoadedReplayQueues()
+{
+	for (auto &q : loadedReplayQueues)
+	{
+		q = LoadedReplayQueue();
+	}
+}
+
 // TODO Call this function somewhere.
 bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler)
 {
+	clearLoadedReplayQueues();
 	uint32_t replayFormatVer = 0;
 	if (!NETreplayLoadStart(filename, optionsHandler, replayFormatVer))
 	{
@@ -717,6 +769,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 			gotReplayEnded = true;
 			break;
 		}
+		loadedReplayQueues[player].add(*newMessage);
 		gameQueues[player]->pushMessage(std::move(*newMessage));
 	}
 	if (!gotReplayEnded && replayFormatVer >= 2)
@@ -727,7 +780,9 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 		return false;
 	}
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
-	gameQueues[NetPlay.hostPlayer]->pushMessage(NetMessageBuilder(REPLAY_ENDED, 0).build());
+	NetMessage replayEnded = NetMessageBuilder(REPLAY_ENDED, 0).build();
+	loadedReplayQueues[NetPlay.hostPlayer].add(replayEnded);
+	gameQueues[NetPlay.hostPlayer]->pushMessage(std::move(replayEnded));
 	NETreplayLoadStop();
 	bIsReplay = true;
 	return true;
@@ -748,6 +803,96 @@ void NETshutdownReplay()
 	}
 
 	bIsReplay = false;
+	clearLoadedReplayQueues();
+}
+
+std::vector<uint32_t> NETreplayReadPositions()
+{
+	if (!bIsReplay)
+	{
+		return {};
+	}
+	std::vector<uint32_t> positions(MAX_GAMEQUEUE_SLOTS, 0);
+	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
+	{
+		const size_t unread = gameQueues[p] ? gameQueues[p]->numUnreadMessages() : 0;
+		ASSERT(unread <= loadedReplayQueues[p].count(), "Game queue %u has more unread messages (%zu) than the replay loaded (%zu)", p, unread, loadedReplayQueues[p].count());
+		positions[p] = static_cast<uint32_t>(loadedReplayQueues[p].count() - std::min(unread, loadedReplayQueues[p].count()));
+	}
+	return positions;
+}
+
+bool NETreplayCheckReadPositions(const std::vector<uint32_t> &positions, std::string *error)
+{
+	auto fail = [&](const std::string &why) {
+		if (error != nullptr)
+		{
+			*error = why;
+		}
+		return false;
+	};
+	if (!bIsReplay)
+	{
+		return fail("not playing a replay");
+	}
+	if (positions.size() != MAX_GAMEQUEUE_SLOTS)
+	{
+		return fail("replay read positions for " + std::to_string(positions.size()) + " game queues, not " + std::to_string(MAX_GAMEQUEUE_SLOTS));
+	}
+	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
+	{
+		if (positions[p] > loadedReplayQueues[p].count())
+		{
+			return fail("replay read position " + std::to_string(positions[p]) + " of game queue " + std::to_string(p) + " is past its "
+			            + std::to_string(loadedReplayQueues[p].count()) + " message(s)");
+		}
+		if (loadedReplayQueues[p].count() > 0 && gameQueues[p] == nullptr)
+		{
+			return fail("game queue " + std::to_string(p) + " doesn't exist");
+		}
+	}
+	return true;
+}
+
+bool NETreplayRestoreReadPositions(const std::vector<uint32_t> &positions)
+{
+	std::string error;
+	if (!NETreplayCheckReadPositions(positions, &error))
+	{
+		debug(LOG_ERROR, "Can't restore the replay read positions: %s", error.c_str());
+		return false;
+	}
+	for (unsigned p = 0; p < MAX_GAMEQUEUE_SLOTS; ++p)
+	{
+		if (gameQueues[p] == nullptr || loadedReplayQueues[p].count() == 0)
+		{
+			continue;  // a queue the replay doesn't feed (the viewer's own) is the caller's
+		}
+		NETgameQueueReset(p);
+		const LoadedReplayQueue &loaded = loadedReplayQueues[p];
+		for (size_t i = positions[p]; i < loaded.count(); ++i)
+		{
+			optional<NetMessage> message = loaded.message(i);
+			ASSERT_OR_RETURN(false, message.has_value(), "Kept replay message %zu of game queue %u can't be read back", i, p);
+			gameQueues[p]->pushMessage(std::move(message.value()));
+		}
+	}
+	return true;
+}
+
+size_t NETreplayLoadedCount(unsigned player)
+{
+	return player < MAX_GAMEQUEUE_SLOTS ? loadedReplayQueues[player].count() : 0;
+}
+
+size_t NETreplayLoadedSize()
+{
+	size_t size = 0;
+	for (const auto &q : loadedReplayQueues)
+	{
+		size += q.bytes.size() + q.offsets.size() * sizeof(uint32_t);
+	}
+	return size;
 }
 
 // New overloads implementation
