@@ -5587,8 +5587,6 @@ void buildingComplete(STRUCTURE *psBuilding, GameWorld& world)
 	psBuilding->currentBuildPts = structureBuildPointsToCompletion(*psBuilding);
 	psBuilding->status = SS_BUILT;
 
-	visTilesUpdate(psBuilding, world.map);
-
 	if (psBuilding->prebuiltImd != nullptr)
 	{
 		// We finished building a module, now use the combined IMD.
@@ -5597,6 +5595,9 @@ void buildingComplete(STRUCTURE *psBuilding, GameWorld& world)
 		psBuilding->prebuiltImd = nullptr;
 		psBuilding->sDisplay.imd = IMDs[imdIndex];
 	}
+
+	// After the model is final: the vision height comes from it
+	visTilesUpdate(psBuilding, world.map);
 
 	switch (psBuilding->pStructureType->type)
 	{

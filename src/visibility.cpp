@@ -322,7 +322,13 @@ static void doWaveTerrain(BASE_OBJECT *psObj, WorldMapState& mapState)
 
 	const int sx = psObj->pos.x;
 	const int sy = psObj->pos.y;
-	const int sz = visOriginHeight(psObj, mapState) + ((psObj->sDisplay.imd != nullptr) ? MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y) : MIN_VIS_HEIGHT);
+	// A structure getting a module sees from its completed part (the module's own model is in sDisplay.imd meanwhile)
+	const iIMDBaseShape *visImd = psObj->sDisplay.imd;
+	if (psObj->type == OBJ_STRUCTURE && static_cast<const STRUCTURE *>(psObj)->prebuiltImd != nullptr)
+	{
+		visImd = static_cast<const STRUCTURE *>(psObj)->prebuiltImd;
+	}
+	const int sz = visOriginHeight(psObj, mapState) + ((visImd != nullptr) ? MAX(MIN_VIS_HEIGHT, visImd->max.y) : MIN_VIS_HEIGHT);
 	const unsigned radius = objSensorRange(psObj);
 	const int rayPlayer = psObj->player;
 	size_t size;
@@ -483,7 +489,8 @@ void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState)
 	if (psObj->type == OBJ_STRUCTURE)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObj;
-		if (psStruct->status != SS_BUILT ||
+		// A structure getting a module (prebuiltImd set) keeps the vision of its completed part.
+		if ((psStruct->status != SS_BUILT && psStruct->prebuiltImd == nullptr) ||
 		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER || psStruct->pStructureType->type == REF_GATE)
 		{
 			// unbuilt structures and walls do not confer visibility.
