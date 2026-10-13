@@ -315,6 +315,57 @@ const char *getLanguageName()
 	return language;
 }
 
+#if !defined(__EMSCRIPTEN__) && !defined(WZ_OS_WIN)
+const char *unixSystemLANGUAGE = nullptr;
+const char *unixSystemLANG = nullptr;
+static unsigned int getMatchingLanguage(const char *locale)
+{
+	if (locale == nullptr)
+	{
+		return -1;
+	}
+	static char localeName[6] = { '\0' };
+	sstrcpy(localeName, locale);
+	char *delim = NULL;
+	unsigned int i;
+	// cut anything after a '.' to get rid of the encoding part
+	delim = strchr(localeName, '.');
+	if (delim)
+	{
+		*delim = '\0';
+	}
+	for (i = 0; i < ARRAY_SIZE(map); i++)
+	{
+		if (strcmp(localeName, map[i].language) == 0 || strcmp(localeName, map[i].localeFallback) == 0)
+		{
+			return i;
+		}
+	}
+	// if language is xx_XX, cut the _XX part for short language
+	delim = strchr(localeName, '_');
+	if (delim)
+	{
+		*delim = '\0';
+		for (i = 0; i < ARRAY_SIZE(map); i++)
+		{
+			if (strcmp(localeName, map[i].language) == 0 || strcmp(localeName, map[i].localeFallback) == 0)
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+static unsigned int getUnixSystemLanguage()
+{
+	unsigned int ret = getMatchingLanguage(unixSystemLANGUAGE);
+	if (ret != -1)
+	{
+		return ret;
+	}
+	return getMatchingLanguage(unixSystemLANG);
+}
+#endif
 
 #if defined(ENABLE_NLS)
 #  if defined(WZ_OS_WIN)
@@ -443,6 +494,14 @@ bool setLanguage(const char *language)
 #  elif defined(__EMSCRIPTEN__)
 			return setLocaleEmscripten(map[i].localeFilename);
 #  else
+			if (i == 0)
+			{
+				unsigned int detectedI = getUnixSystemLanguage();
+				if (detectedI != -1)
+				{
+					return setLocaleUnix(map[detectedI].locale) || setLocaleUnix(map[detectedI].localeFallback) || setLocaleUnix_LANGUAGEFallback(map[detectedI].localeFilename);
+				}
+			}
 			return setLocaleUnix(map[i].locale) || setLocaleUnix(map[i].localeFallback) || setLocaleUnix_LANGUAGEFallback(map[i].localeFilename);
 #  endif
 		}
@@ -705,6 +764,11 @@ void initI18n()
 
 	// Should come *after* bindTextDomain
 	canUseLANGUAGEEnvVar = checkSupportsLANGUAGEenvVarOverride();
+
+#if !defined(__EMSCRIPTEN__) && !defined(WZ_OS_WIN)
+	unixSystemLANGUAGE = getenv("LANGUAGE");
+	unixSystemLANG = getenv("LANG");
+#endif
 
 	if (!setLanguage(defaultLanguage.c_str())) // set to system default
 	{
