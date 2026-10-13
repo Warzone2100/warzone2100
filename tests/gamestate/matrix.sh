@@ -42,6 +42,9 @@ mb:gamestate_scripts 30000 100000
 mb:gamestate_scripts 30000 100000 --no-loaded
 mb:gamestate_scripts 45000 120000 --no-loaded
 mb:gamestate_scripts 30000 100000 --rewind 5000
+mb:dead_grid 6000 19900 --no-loaded --dying
+mb:dead_grid 10000 19900 --no-loaded --dying
+mb:dead_grid 17000 19900 --no-loaded --dying
 cam:CAM_2A 60000 120000
 cam:CAM_2A 60000 120000 --no-loaded
 cam:CAM_2A 30000 150000 --no-loaded --dying
@@ -70,6 +73,9 @@ echo "$CELLS" | grep -E "$FILTER" | while read -r cell; do
 	# shellcheck disable=SC2086
 	"$HERE/forkcrc.sh" "$BIN" $cell | head -1
 done
+if echo "deadgrid" | grep -qE "$FILTER"; then
+	"$HERE/deadgrid.sh" "$BIN" | head -1
+fi
 echo "== double-save cells"
 echo "$DOUBLESAVES" | grep -E "$FILTER" | while read -r save; do
 	[ -n "$save" ] || continue

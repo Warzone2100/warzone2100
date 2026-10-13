@@ -313,6 +313,7 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 	{
 		STRUCTURE *structure = castStructure(object);
 		if (structure == nullptr ||  // Must be a structure.
+		    structure->died ||  // Must not be dead (the grid keeps it until the end of the tick).
 		    structure == psFailedTarget ||  // Must not have just failed to reach it.
 		    !aiCheckAlliances(psDroid->player, structure->player))  // Must be a friendly structure.
 		{
