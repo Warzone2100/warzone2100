@@ -10,6 +10,7 @@
 # "mb:" tests are movement bench scenarios, which run without AI scripts, so they isolate engine restore fidelity:
 # - mb:gamestate_deaths kills objects of every shape on purpose
 # - mb:gamestate_scripts has script groups and labels a load must restore
+# The betweenticks cell (betweenticks.sh) is saved between two ticks with coverage changes pending.
 # "cam:" tests are campaign games, which run campaign scripts but no AI bots
 # (keep their end ticks short of the level ending).
 # The skirmish tests run bundled AIs.
@@ -77,6 +78,9 @@ echo "$CELLS" | grep -E "$FILTER" | while read -r cell; do
 	# shellcheck disable=SC2086
 	"$HERE/forkcrc.sh" "$BIN" $cell | sed -n '1p;/COVERAGE DIFFERS/,+1p'
 done
+if echo "betweenticks" | grep -qE "$FILTER"; then
+	"$HERE/betweenticks.sh" "$BIN" | sed -n '1p;/COVERAGE DIFFERS/,+1p'
+fi
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
 fi

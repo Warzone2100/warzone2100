@@ -41,17 +41,20 @@ struct GameWorld;
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState);
 
-/// Called at the end of every tick: recompute the tile coverage of the objects in the world that the changes recorded
-/// since the last call may have changed (terrain heights, see WorldMapState::heightChanges), so the coverage stays
-/// what a recompute from the current state gives.
-void visFlushCoverageChanges(GameWorld& world);
+/// Recompute, in both worlds, the tile coverage of the objects that the changes recorded since the last call may
+/// have changed (terrain heights, see WorldMapState::heightChanges, and range upgrades, see visNoteRangeChange),
+/// so the coverage stays what a recompute from the current state gives. Called at the start and end of every tick.
+void visFlushCoverageChanges();
+
+/// Whether there are changes the next visFlushCoverageChanges() will apply (test tooling).
+bool visCoverageChangesPending();
 
 /// A player's sensor or jammer range changed (an upgrade): visFlushCoverageChanges() recomputes the tile coverage of
-/// all their droids and structures.
+/// all their droids and structures, in both worlds.
 void visNoteRangeChange(int player);
 
 /// Recompute the tile coverage of every droid and structure in the world from its current state, and drop the
-/// pending changes for it (a world swapped in, or restored from a save).
+/// pending changes for it (a world restored from a save).
 void visRecomputeCoverage(GameWorld& world);
 
 /// Lift propulsion: the height band of the droid's current height, which its vision height is taken from.
@@ -162,13 +165,22 @@ struct CoverageCheckResult
 	size_t checked = 0;          ///< droids and structures compared
 	size_t differing = 0;        ///< of those, how many have different watched tiles after a recompute
 	std::string firstDifference; ///< a description of the first one that differs
+	size_t inconsistentTiles = 0; ///< tile/player pairs whose watcher, sensor or jammer count isn't the sum of the watched tiles
+	std::string firstInconsistentTile;
+	size_t unexplored = 0;       ///< objects (and spotters) with a watched tile not explored for every player they share vision with
+	std::string firstUnexplored;
 };
 
 /// Test tooling: recompute the tile coverage of every droid and structure in the world from its current state,
-/// compare it with the coverage it has, and put everything back as it was (the world is left unchanged).
-/// The coverage is meant to be a function of the current state at the end of every tick,
-/// so that a loaded game, which can only recompute it, gets the same coverage.
-/// Any difference is coverage that depends on how the game got there.
+/// compare it with the coverage it has, and put everything back as it was.
+/// The coverage is meant to be a function of the current state at the end of every tick (a loaded game can only
+/// recompute it), so any difference is coverage that depends on how the game got there.
+/// Also checks, on the coverage as it is:
+/// - that every tile's per-player watcher, sensor and jammer counts are the sum of the watched tiles of the world's
+///   objects (including those whose visibility removal is pending) and spotters, so a recompute can rebuild them
+/// - that every watched tile is explored for every player the object shares vision with (alliancebits),
+///   which lets a restore keep the exploration its recompute marks
+///   (forming a shared-vision alliance shares the explored tiles, see hqReward)
 CoverageCheckResult visCheckCoverage(GameWorld& world);
 
 #endif // __INCLUDED_SRC_VISIBILITY__
