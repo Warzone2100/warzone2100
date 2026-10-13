@@ -498,7 +498,55 @@ bool scripting_engine::shutdownScripts()
 		delete script;
 	}
 	scripts.clear();
+	instanceSources.clear();
 	return true;
+}
+
+bool reloadScriptInstances()
+{
+	return scripting_engine::instance().reloadScriptInstances();
+}
+
+bool scripting_engine::reloadScriptInstances()
+{
+	std::vector<InstanceSource> sources;
+	for (auto *instance : scripts)
+	{
+		auto it = instanceSources.find(instance);
+		ASSERT_OR_RETURN(false, it != instanceSources.end(), "No source recorded for script %s of player %d", instance->scriptName().c_str(), instance->player());
+		sources.push_back(it->second);
+	}
+	// Release everything the old instances hold, as shutdownScripts() does (without its performance dump, and
+	// keeping the UI that isn't the scripts')
+	const bool wasReady = scriptsReady;
+	scriptsReady = false;
+	jsDebugShutdown();
+	for (auto *instance : scripts)
+	{
+		delete monitors.at(instance);
+		unregisterFunctions(instance);
+	}
+	timers.clear();
+	lastTimerID = 0;
+	timerIDMap.clear();
+	monitors.clear();
+	for (auto *instance : scripts)
+	{
+		delete instance;
+	}
+	scripts.clear();
+	instanceSources.clear();
+	bool ok = true;
+	for (const InstanceSource &source : sources)
+	{
+		if (loadPlayerScript(source.path, source.player, source.difficulty, source.binding, false) == nullptr)
+		{
+			debug(LOG_ERROR, "Could not load script %s for player %d again", source.path.toUtf8().c_str(), source.player);
+			ok = false;
+		}
+	}
+	scriptsReady = wasReady;
+	return ok;
 }
 
 bool updateScripts()
@@ -578,6 +626,11 @@ static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path
 }
 
 wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding)
+{
+	return loadPlayerScript(path, player, difficulty, binding, true);
+}
+
+wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding, bool clearLog)
 {
 	ASSERT_OR_RETURN(nullptr, player >= 0 && (player < MAX_PLAYERS || player == selectedPlayer), "Player index %d out of bounds", player);
 
@@ -727,8 +780,11 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVarsToSave, wzapi::GlobalVariableFlags::ReadOnly); // ensure these are saved
 
-	// Clear previous log file
-	PHYSFS_delete((std::string("logs/") + pNewInstance->scriptName() + ".log").c_str());
+	// Clear previous log file (not when the instance is loaded again by a restore: it continues the same game)
+	if (clearLog)
+	{
+		PHYSFS_delete((std::string("logs/") + pNewInstance->scriptName() + ".log").c_str());
+	}
 
 	// Attempt to ready instance for execution
 	if (!pNewInstance->readyInstanceForExecution())
@@ -751,6 +807,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	MONITOR *monitor = new MONITOR;
 	monitors[pNewInstance] = monitor;
+	instanceSources[pNewInstance] = InstanceSource{path, player, difficulty, binding};
 
 	debug(LOG_SAVE, "Created script engine %zu for player %d from %s", scripts.size() - 1, player, path.toUtf8().c_str());
 	return pNewInstance;

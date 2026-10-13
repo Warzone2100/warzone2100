@@ -180,6 +180,10 @@ void setGameTimeNetState(const GameTimeNetState &s)
 		if (i < s.gameQueueCheckTime.size())  { gameQueueCheckTime[i]  = s.gameQueueCheckTime[i]; }
 		if (i < s.gameQueueCheckCrc.size())   { gameQueueCheckCrc[i]   = s.gameQueueCheckCrc[i]; }
 	}
+	// The wall-clock samples of the wait for the next tick belong to the game this state replaces
+	// (an in-process restore), not to the restored one
+	updateReadyTime = 0;
+	updateWantedTime = 0;
 }
 
 UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange)
