@@ -71,6 +71,7 @@
 #include "frend.h"
 #include "frontend.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "gateway.h"
 #include "hci.h"
 #include "intdisplay.h"
@@ -1994,6 +1995,8 @@ LoadingTask<> stageThreeInitialiseTask(ResourceLoadingController& controller)
 bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
+
+	clearPendingGameStateCaptures();  // requested for the world being shut down
 
 	resetHostLaunch();
 

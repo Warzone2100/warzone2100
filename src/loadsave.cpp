@@ -45,6 +45,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "frontend.h"
@@ -1201,7 +1202,7 @@ bool autoSave(bool force)
 	// queue for next main loop run, so we have a chance to render the "AutoSaving..." message before a potential delay while autosaving
 	wzAsyncExecOnMainThread([]() {
 		ASSERT_OR_RETURN(, gameInitialised, "Skipping autosave - game no longer initialized");
-		doAutoSave();
+		requestGameStateCapture([]() { doAutoSave(); });  // at the next safe point (see gamestate_capture.h)
 	});
 
 	return true; // autosave queued

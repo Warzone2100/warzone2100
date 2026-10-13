@@ -48,6 +48,7 @@
 #include "lib/netplay/netplay.h"
 
 #include "game.h"
+#include "gamestate_capture.h"
 #include "projectile.h"
 #include "power.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -2735,15 +2736,18 @@ void intRunMissionResult()
 
 				if (!bRequestLoad)
 				{
-					char msg[256] = {'\0'};
-
 					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
 					// (the "Save Game" button is no longer added)
 					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
-					saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION);
-					sstrcpy(msg, _("GAME SAVED :"));
-					sstrcat(msg, savegameWithoutExtension(sRequestResult));
-					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+					// At the next safe point (see gamestate_capture.h)
+					std::string path = sRequestResult;
+					requestGameStateCapture([path]() {
+						char msg[256] = {'\0'};
+						saveGame(path.c_str(), GTYPE_SAVE_MIDMISSION);
+						sstrcpy(msg, _("GAME SAVED :"));
+						sstrcat(msg, savegameWithoutExtension(path.c_str()));
+						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+					});
 				}
 			}
 		}

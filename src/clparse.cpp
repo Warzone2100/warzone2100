@@ -387,6 +387,7 @@ typedef enum
 	CLI_GAMESTATE_TESTSEED,
 	CLI_GAMESTATE_CHECKCOVERAGE,
 	CLI_GAMESTATE_SAVEAFTERMESSAGES,
+	CLI_GAMESTATE_SAVEBEFOREMESSAGES,
 	CLI_GAMESTATE_SAVEWHENCOVERAGEPENDING,
 	CLI_PERFCOUNTERS,
 	CLI_TMP_PREFER_OLD_SAVE,
@@ -500,7 +501,8 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
 		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
 		{ "gamestate-resave-on-load", POPT_ARG_STRING, CLI_GAMESTATE_RESAVEONLOAD, "After loading a savegame, save it again to the given path before the first tick, and quit", "savegame path", true },
-		{ "gamestate-save-after-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEAFTERMESSAGES, "Test only: take the --gamestate-save-at-tick save right after the received messages are processed, instead of right after a tick", nullptr, true },
+		{ "gamestate-save-after-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEAFTERMESSAGES, "Test only: take the --gamestate-save-at-tick save right after the messages for the next tick are processed (the default)", nullptr, true },
+		{ "gamestate-save-before-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEBEFOREMESSAGES, "Test only: take the --gamestate-save-at-tick save and the rewind snapshot right after a tick, before the messages for the next tick are processed", nullptr, true },
 		{ "gamestate-save-when-coverage-pending", POPT_ARG_NONE, CLI_GAMESTATE_SAVEWHENCOVERAGEPENDING, "Test only: delay --gamestate-save-at-tick until tile coverage changes are pending", nullptr, true },
 		{ "gamestate-check-coverage", POPT_ARG_STRING, CLI_GAMESTATE_CHECKCOVERAGE, "Test only: every given number of ticks, and before a harness save or rewind snapshot, check that every object's tile coverage matches a recompute from its current state", "ticks", true },
 		{ "gamestate-test-seed", POPT_ARG_STRING, CLI_GAMESTATE_TESTSEED, "Test only: seed the new game's random seed and the scripts' Math.random() from this number instead of the clock, so a run can be repeated", "seed", true },
@@ -1045,7 +1047,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			gamestate::harness::setTestSeed(static_cast<uint32_t>(strtoul(token, nullptr, 10)));
 			break;
 		case CLI_GAMESTATE_SAVEAFTERMESSAGES:
-			gamestate::harness::setSaveAfterMessages(true);
+			gamestate::harness::setSaveBeforeMessages(false);
+			break;
+		case CLI_GAMESTATE_SAVEBEFOREMESSAGES:
+			gamestate::harness::setSaveBeforeMessages(true);
 			break;
 		case CLI_GAMESTATE_SAVEWHENCOVERAGEPENDING:
 			gamestate::harness::setSaveWhenCoveragePending(true);

@@ -21,10 +21,12 @@
 #                     pending destruction
 #     --dying-filter <filter>  like --dying, with a --gamestate-dying-filter (ex. 3,structure)
 #     --no-loaded     load with --gamestate-test-suppress-loaded-event (no eventGameLoaded / research replay)
-#     --after-messages  save right after the game loop has processed the received messages, rather than right after a
-#                     tick (--gamestate-save-after-messages)
+#     --before-messages  save (or take the rewind snapshot) right after a tick, before the game loop processes the
+#                     messages for the next tick, rather than at the save point that menu saves use
+#                     (--gamestate-save-before-messages)
+#     --after-messages  the save point (the default, accepted for older command lines)
 #     --coverage-pending  save (at or after <save tick>) once tile coverage changes are pending, as after a range
-#                     upgrade between ticks (--gamestate-save-when-coverage-pending), with --after-messages
+#                     upgrade between ticks (--gamestate-save-when-coverage-pending)
 #     --rewind <k>    instead of a save + load, snapshot in-process at <save tick> and restore it <k> ticks later
 #
 # Environment: OUT (default /tmp/gamestate-forkcrc) holds the config dir, traces and logs.
@@ -52,7 +54,8 @@ while [ $# -gt 0 ]; do
 		--dying) DYING=--gamestate-save-when-dying ;;
 		--dying-filter) shift; DYING="--gamestate-save-when-dying --gamestate-dying-filter=${1:?dying filter}"; DYINGTAG=".dying_$(echo "$1" | tr ',' '_')" ;;
 		--no-loaded) NOLOADED=--gamestate-test-suppress-loaded-event ;;
-		--after-messages) SAVEPOINT="$SAVEPOINT --gamestate-save-after-messages"; SAVEPOINTTAG="$SAVEPOINTTAG.aftermsg" ;;
+		--before-messages) SAVEPOINT="$SAVEPOINT --gamestate-save-before-messages"; SAVEPOINTTAG="$SAVEPOINTTAG.beforemsg" ;;
+		--after-messages) ;;
 		--coverage-pending) SAVEPOINT="$SAVEPOINT --gamestate-save-when-coverage-pending"; SAVEPOINTTAG="$SAVEPOINTTAG.covpending" ;;
 		--rewind) shift; REWIND=${1:?rewind ticks} ;;
 		*) echo "unknown option $1" >&2; exit 2 ;;
@@ -97,6 +100,20 @@ coverage_report() {
 	return "$1"
 }
 
+# checks_report <status>: report a game message read between a capture and the next tick
+# (the capture missed it: gamestate_capture.cpp), and the coverage differences (coverage_report).
+# Returns the status to exit with.
+checks_report() {
+	s=$1
+	n=$(cat "$OUT/$TAG.A.log" "$OUT/$TAG.B.log" | grep -c 'the capture missed it')
+	if [ "$n" -gt 0 ]; then
+		echo "$TAG: $n GAME MESSAGE(S) READ AFTER A CAPTURE; first:"
+		cat "$OUT/$TAG.A.log" "$OUT/$TAG.B.log" | grep 'the capture missed it' | head -1 | sed 's/^.*\] /  /'
+		[ "$s" -eq 0 ] && s=1
+	fi
+	coverage_report "$s"
+}
+
 run_a() { # $1 = extra args
 	timeout "$RUN_TIMEOUT" "$BIN" $ACOMMON "$START" --gamestate-crc-trace="$OUT/$TAG.A.trace" \
 		--gamestate-exit-at-tick="$ENDTICK" $1 > "$OUT/$TAG.A.log" 2>&1
@@ -111,7 +128,7 @@ if [ -n "$REWIND" ]; then
 	timeout "$RUN_TIMEOUT" "$BIN" $ACOMMON "$START" --gamestate-crc-trace="$OUT/$TAG.A.trace" \
 		--gamestate-exit-at-tick="$ENDTICK" > "$OUT/$TAG.A.log" 2>&1 || { echo "$TAG RUN A FAILED"; exit 2; }
 	timeout "$RUN_TIMEOUT" "$BIN" $ACOMMON "$START" --gamestate-crc-trace="$OUT/$TAG.B.trace" \
-		--gamestate-rewind-test="$SAVETICK:$REWIND" $DYING --gamestate-exit-at-tick="$ENDTICK" > "$OUT/$TAG.B.log" 2>&1 \
+		--gamestate-rewind-test="$SAVETICK:$REWIND" $DYING $SAVEPOINT --gamestate-exit-at-tick="$ENDTICK" > "$OUT/$TAG.B.log" 2>&1 \
 		|| { echo "$TAG RUN B (rewind) FAILED"; exit 2; }
 	AT=$(sed -n 's/.*rewind snapshot taken at gameTime \([0-9]*\).*/\1/p' "$OUT/$TAG.B.log" | head -1)
 	[ -n "$AT" ] || { echo "$TAG NO REWIND SNAPSHOT"; exit 2; }
@@ -127,7 +144,7 @@ if [ -n "$REWIND" ]; then
 		STATUS=$?
 		echo "$TAG (snapshot at $AT; runs not reproducible, re-simulated ticks vs first pass): $RESULT"
 	fi
-	coverage_report $STATUS
+	checks_report $STATUS
 	exit $?
 fi
 
@@ -149,5 +166,5 @@ if [ $STATUS -eq 1 ]; then
 	run_b "--gamestate-crc-detail-tick=$TICK" || exit 2
 	python3 -I "$HERE/difflog.py" "$OUT/$TAG.A.trace.detail.txt" "$OUT/$TAG.B.trace.detail.txt" | head -40
 fi
-coverage_report $STATUS
+checks_report $STATUS
 exit $?

@@ -4,12 +4,11 @@
 # so the tile coverage changes it implies are still pending at the save.
 #
 # A global test mod (built here from the repository's movement bench script)
-# makes mb:perf_battle send a script sync request at 20 s.
-# Its eventSyncRequest handler, which runs between two ticks when the request comes back through the game queue,
+# makes mb:perf_battle send a script sync request at 20 s,
+# and its eventSyncRequest handler (run between two ticks, when the request comes back)
 # raises player 0's sensor ranges.
-# Run A saves at the first point after 20 s, between ticks, where coverage changes are pending
-# (--after-messages --coverage-pending), and run B loads that save.
-# The traces must be identical.
+# Run A saves at the first point after 20 s where coverage changes are pending (--coverage-pending),
+# and run B loads that save.
 #
 # usage: betweenticks.sh <warzone2100 binary>
 # Environment: as forkcrc.sh (OUT, RUN_TIMEOUT, SEED, CHECK_COVERAGE).
@@ -59,4 +58,4 @@ with zipfile.ZipFile(dest, "w") as z:
             z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
 EOF
 
-EXTRA="--mod=betweenticks.wz" OUT="$OUT" exec "$HERE/forkcrc.sh" "$BIN" mb:perf_battle 20000 60000 --no-loaded --after-messages --coverage-pending
+EXTRA="--mod=betweenticks.wz" OUT="$OUT" exec "$HERE/forkcrc.sh" "$BIN" mb:perf_battle 20000 60000 --no-loaded --coverage-pending
