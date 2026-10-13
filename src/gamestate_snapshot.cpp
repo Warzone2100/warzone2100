@@ -35,7 +35,19 @@
 GameStateSnapshot takeGameStateSnapshot()
 {
 	GameStateSnapshot snapshot;
-	snapshot.document = gamestate::serializeGameState();
+	const nlohmann::ordered_json document = gamestate::gameStateToJson();
+	// Check it now, while the game it was taken from is at hand: a snapshot that couldn't be restored is a serializer
+	// bug, better caught here than when a restore needs it
+	try
+	{
+		gamestate::checkGameStateDocument(document);
+	}
+	catch (const std::exception &e)
+	{
+		ASSERT(false, "A snapshot of this game fails its own check: %s", e.what());
+		throw;
+	}
+	snapshot.document = document.dump();
 	// Like a savegame's pending-resume section: the game-queue messages not read yet (scheduled for later ticks by
 	// the lockstep latency) belong to the snapshot's timeline
 	snapshot.gameQueue.assign(MAX_GAMEQUEUE_SLOTS, {});
@@ -46,6 +58,18 @@ GameStateSnapshot takeGameStateSnapshot()
 	snapshot.queuedOrders = captureQueuedDroidInfo();
 	snapshot.gameTime = gameTime;
 	return snapshot;
+}
+
+static bool restoreFailed = false;
+
+bool gameStateRestoreFailed()
+{
+	return restoreFailed;
+}
+
+void clearGameStateRestoreFailed()
+{
+	restoreFailed = false;
 }
 
 GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapshot, std::string *error)
@@ -60,7 +84,15 @@ GameStateRestoreResult restoreGameStateSnapshot(const GameStateSnapshot &snapsho
 		{
 			*error = e.what();
 		}
-		return gamestate::gameStateLastRestoreStage() == nullptr ? GameStateRestoreResult::Rejected : GameStateRestoreResult::Failed;
+		if (gamestate::gameStateLastRestoreStage() == nullptr)
+		{
+			return GameStateRestoreResult::Rejected;
+		}
+		// Half restored: objects may point at freed ones (the live projectiles until the sections stage, for one), so
+		// the game must neither tick nor be drawn nor be saved
+		restoreFailed = true;
+		debug(LOG_ERROR, "In-process restore failed at stage %s; the game is stopped", gamestate::gameStateLastRestoreStage());
+		return GameStateRestoreResult::Failed;
 	}
 	// Replace the live game-queue contents (messages for the abandoned timeline's future ticks) with the snapshot's,
 	// as the cold load does with a savegame's pending-resume section

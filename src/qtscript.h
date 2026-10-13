@@ -145,6 +145,11 @@ bool saveScriptStates(const char *filename);
 //     first so restoring onto the running match does not duplicate them. -1 matches the saved
 //     "me"/scriptName verbatim (savegame-style).
 bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer = -1);
+/// The saved script instances the last loadScriptStates(json) found no running instance for (their state was skipped).
+size_t scriptStatesLastUnmatchedInstances();
+/// Whether a script instance with this script name runs for this player
+bool scriptInstanceRunning(int player, const std::string &scriptName);
+size_t scriptInstanceCount();
 bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer = -1);
 
 /// Whether the script subsystem is initialized and scripts are running.
@@ -375,6 +380,8 @@ public:
 	bool saveScriptStates2(const char *filename);
 	bool saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer = -1);
 	bool loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer = -1);
+	/// Saved instances the last loadScriptStates2 found no running instance for (their state was not restored)
+	size_t lastUnmatchedInstances = 0;
 
 	bool unregisterFunctions(wzapi::scripting_instance *instance);
 	void prepareLabels();

@@ -41,8 +41,9 @@
 #include <functional>
 
 /// Whether a capture of the game state taken now would be exact: every game message the next tick needs has been
-/// processed (checkPlayerGameTime(NET_ALL_PLAYERS)), and no level change or savegame load is pending.
-/// With setGameStateCaptureBeforeMessagesAllowed(true) (test-only), the first condition is waived.
+/// processed (checkPlayerGameTime(NET_ALL_PLAYERS)), no level change or savegame load is pending, and the game isn't
+/// stopped by a failed in-process restore (gameStateRestoreFailed()).
+/// With setGameStateCaptureBeforeMessagesAllowed(true), the first condition is waived.
 bool gameStateCaptureSafe();
 
 /// Run capture now if gameStateCaptureSafe(), else queue it to run, in order, at the first safe point (in the game loop,
