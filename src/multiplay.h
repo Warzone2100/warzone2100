@@ -306,6 +306,9 @@ bool SendBuildFinished(const STRUCTURE *psStruct);
 bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj);
 void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl, const OrderSource &source);
 
+// features . multiplay
+bool SendDestroyFeature(const FEATURE *psFeature);
+
 // droids . multibot
 bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 bool SendDestroyDroid(const DROID *psDroid);
