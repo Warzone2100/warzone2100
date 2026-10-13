@@ -25,7 +25,8 @@ facility while it repairs, a wall and an oil drum, and its `eventDestroyed` hand
 `mb:gamestate_scripts` is another: it saves while some members of a script group are aboard a transporter (which drops
 them after the save), and with object labels armed for one player only (`resetLabel(label, player)`) on objects first
 seen after the save; a group member missing after a load, or an `eventObjectSeen` the original game did not have, spawns
-a droid.
+a droid. `gamestate_cobra` and `gamestate_bonecrusher` are `miza` with every slot running Cobra or BoneCrusher (`miza`
+itself runs SemperFi, NullBot and the default AI, Nexus), so that the matrix covers every bundled AI.
 
 `mb:gamestate_deaths` is a scenario for these tests:
 every few seconds it kills, in one tick, several droids (some while being repaired), a commander,
