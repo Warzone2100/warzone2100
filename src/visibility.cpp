@@ -30,6 +30,7 @@
 #include "lib/sound/audio_id.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
+#include <algorithm>
 #include <limits>
 
 #include "visibility.h"
@@ -50,6 +51,7 @@
 #include "wavecast.h"
 #include "profiling.h"
 #include "perfcounters.h"
+#include "game_world.h"
 
 // rate to change visibility level
 static const int VIS_LEVEL_INC = 255 * 2;
@@ -1161,4 +1163,72 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 		return DEG(1) + angletan;
 	}
 
+}
+
+CoverageCheckResult visCheckCoverage(GameWorld& world)
+{
+	CoverageCheckResult result;
+	WorldMapState &mapState = world.map;
+	if (!mapState.tiles)
+	{
+		return result;
+	}
+	struct SavedObject
+	{
+		BASE_OBJECT *psObj;
+		std::vector<TILEPOS> watchedTiles;
+		bool jammedTiles;
+	};
+	std::vector<SavedObject> saved;
+	auto save = [&saved](BASE_OBJECT *psObj) {
+		if (!psObj->died)
+		{
+			saved.push_back({psObj, psObj->watchedTiles, psObj->flags.test(OBJECT_FLAG_JAMMED_TILES)});
+		}
+	};
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (DROID *psDroid : world.objects.droids[player])
+		{
+			save(psDroid);
+		}
+		for (STRUCTURE *psStruct : world.objects.structures[player])
+		{
+			save(psStruct);
+		}
+	}
+	// Recomputing changes the per-tile counts, bits and exploration: keep the whole tile array to put back.
+	const size_t numTiles = static_cast<size_t>(mapState.width) * static_cast<size_t>(mapState.height);
+	std::vector<MAPTILE> savedTiles(mapState.tiles.get(), mapState.tiles.get() + numTiles);
+
+	for (const SavedObject &s : saved)
+	{
+		visTilesUpdate(s.psObj, mapState);
+	}
+	for (const SavedObject &s : saved)
+	{
+		++result.checked;
+		const std::vector<TILEPOS> &now = s.psObj->watchedTiles;
+		const bool same = now.size() == s.watchedTiles.size()
+			&& std::equal(now.begin(), now.end(), s.watchedTiles.begin(), [](const TILEPOS &a, const TILEPOS &b) {
+				return a.x == b.x && a.y == b.y && a.type == b.type;
+			});
+		if (!same || s.psObj->flags.test(OBJECT_FLAG_JAMMED_TILES) != s.jammedTiles)
+		{
+			if (result.differing++ == 0)
+			{
+				result.firstDifference = astringf("%s %u of player %d at (%d, %d, %d): %zu watched tiles, %zu after a recompute",
+					s.psObj->type == OBJ_DROID ? "droid" : "structure", s.psObj->id, (int)s.psObj->player,
+					s.psObj->pos.x, s.psObj->pos.y, s.psObj->pos.z, s.watchedTiles.size(), now.size());
+			}
+		}
+	}
+
+	for (SavedObject &s : saved)
+	{
+		s.psObj->watchedTiles = std::move(s.watchedTiles);
+		s.psObj->flags.set(OBJECT_FLAG_JAMMED_TILES, s.jammedTiles);
+	}
+	std::copy(savedTiles.begin(), savedTiles.end(), mapState.tiles.get());
+	return result;
 }

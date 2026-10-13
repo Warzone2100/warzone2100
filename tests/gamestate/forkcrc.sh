@@ -25,7 +25,10 @@
 #
 # Environment: OUT (default /tmp/gamestate-forkcrc) holds the config dir, traces and logs;
 #              RUN_TIMEOUT (default 600) is the per-run time limit in seconds (a stalled run counts as failed);
-#              SEED (default 1) is passed as --gamestate-test-seed, so every run of a cell plays the same game.
+#              SEED (default 1) is passed as --gamestate-test-seed, so every run of a cell plays the same game;
+#              CHECK_COVERAGE (default 0, off) is passed as --gamestate-check-coverage=<ticks> to every run: check that
+#              the tile coverage at every <ticks>th tick, and at the save or snapshot, matches a recompute from the
+#              current state (a loaded game can only recompute it). A difference is reported, and fails the cell.
 # Exit status: 0 identical, 1 differs, 2 a run failed.
 set -u
 
@@ -52,6 +55,9 @@ done
 HERE=$(cd "$(dirname "$0")" && pwd)
 RUN_TIMEOUT=${RUN_TIMEOUT:-600}
 SEED=${SEED:-1}
+CHECK_COVERAGE=${CHECK_COVERAGE:-0}
+COVOPT=
+[ "$CHECK_COVERAGE" -gt 0 ] && COVOPT="--gamestate-check-coverage=$CHECK_COVERAGE"
 OUT=${OUT:-/tmp/gamestate-forkcrc}
 SAVEDIR=skirmish
 case "$TEST" in
@@ -67,8 +73,21 @@ mkdir -p "$OUT" "$CFG"
 SAVENAME="fork_$(echo "$TAG" | tr '.' '_')"
 rm -rf "$CFG/savegames/$SAVEDIR/$SAVENAME" "$CFG/savegames/$SAVEDIR/$SAVENAME.gam"
 
-COMMON="--configdir=$CFG --headless --autogame --gamestate-test-seed=$SEED"
+COMMON="--configdir=$CFG --headless --autogame --gamestate-test-seed=$SEED $COVOPT"
 [ -n "$ACOMMON" ] || ACOMMON="$COMMON"
+case "$ACOMMON" in *check-coverage*) ;; *) ACOMMON="$ACOMMON $COVOPT" ;; esac
+
+# coverage_report <status>: with CHECK_COVERAGE, report the coverage checks that found a difference.
+# Returns the status to exit with (a difference fails an otherwise identical cell).
+coverage_report() {
+	[ -n "$COVOPT" ] || return "$1"
+	n=$(cat "$OUT/$TAG.A.log" "$OUT/$TAG.B.log" | grep -c 'coverage check (')
+	[ "$n" -eq 0 ] && return "$1"
+	echo "$TAG: COVERAGE DIFFERS in $n check(s); first:"
+	cat "$OUT/$TAG.A.log" "$OUT/$TAG.B.log" | grep 'coverage check (' | head -1 | sed 's/^.*GameState harness: /  /'
+	[ "$1" -eq 0 ] && return 1
+	return "$1"
+}
 
 run_a() { # $1 = extra args
 	timeout "$RUN_TIMEOUT" "$BIN" $ACOMMON "$START" --gamestate-crc-trace="$OUT/$TAG.A.trace" \
@@ -100,7 +119,8 @@ if [ -n "$REWIND" ]; then
 		STATUS=$?
 		echo "$TAG (snapshot at $AT; runs not reproducible, re-simulated ticks vs first pass): $RESULT"
 	fi
-	exit $STATUS
+	coverage_report $STATUS
+	exit $?
 fi
 
 run_a "--gamestate-save-at-tick=$SAVETICK:savegames/$SAVEDIR/$SAVENAME.gam $DYING" || { echo "$TAG RUN A FAILED"; exit 2; }
@@ -122,4 +142,5 @@ if [ $STATUS -eq 1 ]; then
 	run_b "--gamestate-crc-detail-tick=$TICK" || exit 2
 	python3 -I "$HERE/difflog.py" "$OUT/$TAG.A.trace.detail.txt" "$OUT/$TAG.B.trace.detail.txt" | head -40
 fi
-exit $STATUS
+coverage_report $STATUS
+exit $?
