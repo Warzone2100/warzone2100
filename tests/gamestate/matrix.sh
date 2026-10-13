@@ -7,6 +7,7 @@
 # Cells are "<test> <save tick> <end tick> [forkcrc options]".
 # "mb:" tests are movement bench scenarios, which run without AI scripts, so they isolate engine restore fidelity:
 # - mb:gamestate_deaths kills objects of every shape on purpose
+# - mb:gamestate_scripts has script groups and labels a load must restore
 # "cam:" tests are campaign games, which run campaign scripts but no AI bots
 # (keep their end ticks short of the level ending).
 # The skirmish tests run bundled AIs.
@@ -35,6 +36,10 @@ miza 20000 60000 --no-loaded --dying-filter feature
 mb:gamestate_deaths 27000 150000 --no-loaded --dying-filter pendingvis
 mb:gamestate_deaths 40000 150000 --no-loaded --dying-filter pendingvis
 mb:gamestate_deaths 40000 150000 --rewind 5000 --dying-filter pendingvis
+mb:gamestate_scripts 30000 100000
+mb:gamestate_scripts 30000 100000 --no-loaded
+mb:gamestate_scripts 45000 120000 --no-loaded
+mb:gamestate_scripts 30000 100000 --rewind 5000
 cam:CAM_2A 60000 120000
 cam:CAM_2A 60000 120000 --no-loaded
 cam:CAM_2A 30000 150000 --no-loaded --dying
@@ -51,6 +56,7 @@ fork_miza_300000
 fork_mb_perf_battle_20000_dying_noloaded
 fork_miza_20000_dying_feature_noloaded
 fork_mb_gamestate_deaths_27000_dying_pendingvis_noloaded
+fork_mb_gamestate_scripts_30000_noloaded
 fork_cam_CAM_2A_60000
 '
 

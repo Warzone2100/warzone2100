@@ -81,6 +81,7 @@
 #include "display3d.h" // setSkyBox / getCurrentSkybox* / radarPermitted (presentation section)
 #include "advvis.h"    // get/setRevealStatus (presentation section)
 #include "component.h" // get/setPlayerColour (presentation section)
+#include "difficulty.h"   // resetDamageModifiers (campaign section)
 #include "campaigninfo.h" // get/setCampaignNumber + get/setCamTweakOptions (campaign section)
 #include "lib/framework/physfs_ext.h" // PHYSFS_exists (skybox page existence guard)
 #include "lib/ivis_opengl/pietypes.h"  // LIGHTING_TYPE / PIELIGHT
@@ -5106,6 +5107,9 @@ static void readCampaign(const nlohmann::ordered_json &j, uint32_t version)
 		}
 		setCamTweakOptions(std::move(opts));
 	}
+	// The damage modifiers depend on the tweaks (ps1Modifiers), and stage two computed them before the tweaks were
+	// back. In a skirmish or MP game this sets them to 100/100, as a game start does.
+	resetDamageModifiers();
 }
 
 // MARK: - Section: presentation state (renderer / UI display globals)
@@ -5260,6 +5264,16 @@ static void readPresentation(const nlohmann::ordered_json &j, uint32_t version)
 			}
 		}
 	}
+}
+
+void applyGameStatePresentation(const nlohmann::ordered_json &gameStateDoc)
+{
+	if (!gameStateDoc.is_object() || !gameStateDoc.contains("presentation"))
+	{
+		return;
+	}
+	const nlohmann::ordered_json &sec = gameStateDoc.at("presentation");
+	readPresentation(sec, sec.value("version", 0u));
 }
 
 // MARK: - Top-level document

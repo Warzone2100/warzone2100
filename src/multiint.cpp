@@ -514,6 +514,27 @@ const char *getAIName(int player)
 	}
 }
 
+static WzString launchScriptsIni;
+static WzString launchScriptsPath;
+static WzString restoredLaunchScriptsIni;
+static WzString restoredLaunchScriptsPath;
+
+const WzString &getLaunchScriptsIni()
+{
+	return launchScriptsIni;
+}
+
+const WzString &getLaunchScriptsPath()
+{
+	return launchScriptsPath;
+}
+
+void setRestoredLaunchScripts(const WzString &ini, const WzString &path)
+{
+	restoredLaunchScriptsIni = ini;
+	restoredLaunchScriptsPath = path;
+}
+
 void loadMultiScripts()
 {
 	bool defaultRules = true;
@@ -551,6 +572,23 @@ void loadMultiScripts()
 		path = "autohost/";
 		loadExtra = true;
 	}
+
+	// A savegame of a game launched with such a settings file runs its scripts too
+	launchScriptsIni.clear();
+	launchScriptsPath.clear();
+	if (getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost)
+	{
+		launchScriptsIni = ininame;
+		launchScriptsPath = path;
+	}
+	else if (!loadExtra && !restoredLaunchScriptsIni.isEmpty())
+	{
+		ininame = launchScriptsIni = restoredLaunchScriptsIni;
+		path = launchScriptsPath = restoredLaunchScriptsPath;
+		loadExtra = true;
+	}
+	restoredLaunchScriptsIni.clear();
+	restoredLaunchScriptsPath.clear();
 
 	// Reset assigned counter
 	for (auto it = aidata.begin(); it < aidata.end(); ++it)

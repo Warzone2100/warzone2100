@@ -69,6 +69,14 @@ struct WzMultiButton : public W_BUTTON
 void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget);
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
+
+/// The settings file whose "scripts" group (extra / rules scripts) the current game was started with, and the
+/// directory those scripts are in: a --skirmish test or --autohost configuration. Both empty for other games.
+/// Recorded in savegames, so that a loaded game runs the same scripts.
+const WzString &getLaunchScriptsIni();
+const WzString &getLaunchScriptsPath();
+/// Set by a savegame load: the next loadMultiScripts uses these when the game was not itself launched with them.
+void setRestoredLaunchScripts(const WzString &ini, const WzString &path);
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called

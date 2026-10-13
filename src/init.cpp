@@ -1784,6 +1784,8 @@ static bool stageThreeInitialiseSync()
 	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	pie_InitLighting();
 	getCurrentLightmapData().reset(gameWorld.map.width, gameWorld.map.height);
+	// A GameState load restored the sun, lights, skybox and camera before the view was reset just above
+	gamestate::savegame::applyDeferredColdLoadView();
 
 	if (fromSave)
 	{
@@ -1797,19 +1799,29 @@ static bool stageThreeInitialiseSync()
 	orderSourceReset();
 	orderProvenanceReset();
 
-	if (bMultiPlayer)
-	{
-		multiGameInit();
-		initTemplates();
-	}
-
-	preProcessVisibility(gameWorld.map);
-
 	// A new-format (GameState) cold load already restored its scripting section during the level load
 	// (applyDeferredScripting in levFinalizeLevelLoad, before this), so prepareScripts' queued
 	// research-event replay below sees the restored script globals. Consume the reconstruct marker to
 	// learn it was a cold load (ex. so the bInTutorial reset further down does not clobber the restored value).
 	const bool wasColdLoad = gamestate::savegame::takeColdLoadReconstructFlag();
+
+	if (bMultiPlayer)
+	{
+		multiGameInit(wasColdLoad);
+		// A GameState load restored the saved game's templates,
+		// which already took in the local stored designs when that game started.
+		// Adding them again would take object ids the saving game did not, and could add designs it never had.
+		if (wasColdLoad)
+		{
+			initTemplateStore();
+		}
+		else
+		{
+			initTemplates();
+		}
+	}
+
+	preProcessVisibility(gameWorld.map);
 	// Test harness (--gamestate-test-suppress-loaded-event): restore fidelity without the load-time script events
 	const bool suppressLoadEvents = wasColdLoad && gamestate::harness::suppressLoadedEvent();
 	if (suppressLoadEvents)
@@ -1853,6 +1865,17 @@ static bool stageThreeInitialiseSync()
 	setAllPauseStates(false);
 
 	countUpdate();
+
+	// A GameState load rebuilt the world with the network messages off (coldLoadGameInit).
+	// Turn them on as a game start does, before any script code runs,
+	// so scripts send their orders as they did in the saving game.
+	// (turnOffMultiMsg(false) turns them on whatever they were before, so a restore path that calls the pair
+	// would have sent messages after it.)
+	if (wasColdLoad)
+	{
+		ASSERT(!bMultiMessages, "Network messages were turned on during the GameState restore");
+		bMultiMessages = bMultiPlayer;
+	}
 
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{

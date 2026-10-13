@@ -438,6 +438,48 @@ void sendQueuedDroidInfo()
 	queuedOrders.clear();
 }
 
+std::vector<std::vector<uint8_t>> captureQueuedDroidInfo()
+{
+	std::vector<std::vector<uint8_t>> raw;
+	raw.reserve(queuedOrders.size());
+	for (const QueuedDroidInfo &info : queuedOrders)
+	{
+		// One GAME_DROIDINFO message per order, so the queue keeps its order
+		MessageWriter w(NETQUEUE{}, GAME_DROIDINFO);
+		NETQueuedDroidInfo(w, info);
+		uint32_t droidId = info.droidId;
+		NETuint32_t(w, droidId);
+		const NetMessage msg = w.msgBuilder.build();
+		raw.emplace_back(msg.rawData().begin(), msg.rawData().end());
+	}
+	return raw;
+}
+
+size_t restoreQueuedDroidInfo(const std::vector<std::vector<uint8_t>> &raw)
+{
+	queuedOrders.clear();
+	for (const std::vector<uint8_t> &one : raw)
+	{
+		optional<NetMessage> msg = NetMessage::tryFromRawData(one.data(), one.size());
+		if (!msg.has_value() || msg->rawData().size() != one.size() || msg->type() != GAME_DROIDINFO)
+		{
+			debug(LOG_ERROR, "Discarding a malformed queued droid order");
+			continue;
+		}
+		MessageReader r(msg.value());
+		QueuedDroidInfo info;
+		NETQueuedDroidInfo(r, info);
+		NETuint32_t(r, info.droidId);
+		if (!r.valid() || r.remaining() != 0 || info.player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "Discarding a malformed queued droid order");
+			continue;
+		}
+		queuedOrders.push_back(info);
+	}
+	return queuedOrders.size();
+}
+
 DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, STRUCTURE_STATS const *psStats)
 {
 	DROID_ORDER_DATA sOrder;
