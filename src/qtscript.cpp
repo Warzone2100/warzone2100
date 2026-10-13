@@ -934,6 +934,9 @@ bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyP
 
 		instanceObj["isReceivingAllEvents"] = instance->isReceivingAllEvents();
 
+		// What the instance was loaded from, so a load can log that the script changed since the save
+		instanceObj["sourceHash"] = instance->sourceHash();
+
 		// Math.random() PRNG state, so a resumed instance continues the identical sequence rather than
 		// re-seeding from wall-clock time (which would desync host-side AI decisions across a restore)
 		instanceObj["mathRandomState"] = instance->saveMathRandomState();
@@ -1354,6 +1357,13 @@ bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int
 			if (recvIt != instanceObj.end() && recvIt->is_boolean())
 			{
 				instance->setReceiveAllEvents(recvIt->get<bool>());
+			}
+
+			// What the instance was loaded from when the game was saved (see saveScriptStates2)
+			auto sourceIt = instanceObj.find("sourceHash");
+			if (sourceIt != instanceObj.end() && sourceIt->is_string() && sourceIt->get<std::string>() != instance->sourceHash())
+			{
+				debug(LOG_INFO, "Script %s of player %d changed since the game was saved", instance->scriptName().c_str(), instance->player());
 			}
 
 			// Math.random() PRNG state (see saveScriptStates2)
