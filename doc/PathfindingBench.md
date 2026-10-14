@@ -15,6 +15,7 @@ between two builds.
     tests/movebench/run.sh --check         # verify every arrangement reproduces
     tests/movebench/run.sh --baseline      # regenerate the recorded baseline
     tests/movebench/crcs.sh                # capture every finalPositionsCrc, for refactors
+    tests/movebench/wallline.sh            # sum units straying out through a wall line's gaps
 
 Arguments after the mode flags pass through to the game binary, so a mechanism
 under test rides along, ex. `run.sh --score --movementspread=field`. To score

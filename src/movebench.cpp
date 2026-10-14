@@ -131,6 +131,10 @@ const BenchScenario scenarios[] =
 	// alone on open ground, so the corner scrum is isolated from every piece
 	// of corridor machinery.
 	{ "open_corner",         "movebench_open_corner.json",         4000, 0x5EEDBEEF, false },
+	// A clone-wars army shuffled back and forth behind a line of spaced wall
+	// segments on flat ground, every goal behind the line. Reports on stderr
+	// how many units strayed out through the gaps in front of it.
+	{ "wallline",            "movebench_wallline.json",            2500, 0x5EEDBEEF, false },
 	{ "counterflow_w3",      "movebench_counterflow_w3.json",      5000, 0x5EEDBEEF },
 	{ "counterflow_w4",      "movebench_counterflow_w4.json",      5000, 0x5EEDBEEF },
 	{ "shift0",             "movebench_shift0.json",             1200, 0x5EEDBEEF },

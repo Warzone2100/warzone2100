@@ -232,6 +232,33 @@ function benchSpawnClones(player, kind, cx, cy, count)
 	return made;
 }
 
+// Like benchSpawnClones, but cycles through a list of kinds, so a cloned army
+// mixes propulsions with different speeds, turn rates and skid.
+function benchSpawnMixedClones(player, kinds, cx, cy, count)
+{
+	var digit = ARRANGE_STEPS * ARRANGE_STEPS;
+	var index = Math.floor(benchArrangement() / Math.pow(digit, benchBlockIndex)) % digit;
+	benchBlockIndex++;
+	var ax = cx + (index % ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+	var ay = cy + Math.floor(index / ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+
+	var made = [];
+	for (var i = 0; made.length < count && i < count * 3; i++)
+	{
+		var k = ROSTER[kinds[made.length % kinds.length]];
+		var ang = (40503 * i % 65536) * Math.PI / 32768;
+		var rad = 50 * Math.sqrt(i + 1);
+		var tx = Math.floor((ax * 128 + 64 + rad * Math.sin(ang)) / 128);
+		var ty = Math.floor((ay * 128 + 64 + rad * Math.cos(ang)) / 128);
+		var d = addDroid(player, tx, ty, k.name, k.body, k.prop, "", "", k.weap);
+		if (d)
+		{
+			made.push(d);
+		}
+	}
+	return made;
+}
+
 // Orders every droid to a single destination. Used by the blob scenario, where
 // converging on one point is the phenomenon under test rather than an artifact.
 function benchOrderAllTo(droids, x, y)
