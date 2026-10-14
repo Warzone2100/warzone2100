@@ -104,6 +104,8 @@ struct HudSettings
 	HudPanelTint panelTint = HudPanelTint::Full;
 	bool reduceMotion = false;
 	bool rememberFilters = false;
+	/// The HUD's notices (ex. a research report arrived), at the top of the screen
+	bool toasts = true;
 	uint32_t tooltipDelay = 200;
 	bool showModulesInTutorial = false;
 

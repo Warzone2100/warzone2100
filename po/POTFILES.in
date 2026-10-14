@@ -483,8 +483,10 @@ src/hud/hudrowsummary.cpp
 src/hud/hudsettings.cpp
 src/hud/hudspectator.cpp
 src/hud/hudstatusline.cpp
+src/hud/hudtoast.cpp
 src/hud/hudunittypes.cpp
 src/hud/intel/intelkit.cpp
+src/hud/intel/intelnotices.cpp
 src/hud/intel/intelpanel.cpp
 src/hud/intel/intelview.cpp
 src/hud/intel/playersview.cpp

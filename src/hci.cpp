@@ -97,6 +97,7 @@
 #include "hud/hudreticule.h"
 #include "hud/hudmodel.h"
 #include "hud/hudskin.h"
+#include "hud/intel/intelnotices.h"
 #include "hud/intel/intelpanel.h"
 #include "hud/hudiconbutton.h"
 #include "hud/hud.h"
@@ -592,6 +593,10 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	}
 
 	look.highlighted = buttonIsHighlighted(psButton);
+	if (psWidget->UserData == RETBUT_INTELMAP)
+	{
+		look.count = hudIntelButtonCount();
+	}
 	currentHudSkin().drawReticuleButton(look);
 	retbutstats[psWidget->UserData].flashTime = flashTime;
 	retbutstats[psWidget->UserData].flashing = flashing;

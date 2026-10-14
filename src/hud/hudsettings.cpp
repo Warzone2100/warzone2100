@@ -67,7 +67,7 @@ bool sameLook(const HudSettings &a, const HudSettings &b)
 
 bool HudSettings::operator==(const HudSettings &other) const
 {
-	return sameLook(*this, other) && accent == other.accent && panelTint == other.panelTint && reduceMotion == other.reduceMotion && rememberFilters == other.rememberFilters
+	return sameLook(*this, other) && accent == other.accent && panelTint == other.panelTint && reduceMotion == other.reduceMotion && rememberFilters == other.rememberFilters && toasts == other.toasts
 		&& tooltipDelay == other.tooltipDelay && showModulesInTutorial == other.showModulesInTutorial;
 }
 
@@ -245,6 +245,7 @@ void hudLoadSettings(const std::function<nonstd::optional<int> (const std::strin
 	settings.panelTint = static_cast<HudPanelTint>(std::max(0, std::min(get("hudPanelTint", 0), static_cast<int>(HudPanelTint::None))));
 	settings.reduceMotion = get("hudReduceMotion", 0) != 0;
 	settings.rememberFilters = get("hudRememberFilters", 0) != 0;
+	settings.toasts = get("hudToasts", 1) != 0;
 	settings.tooltipDelay = static_cast<uint32_t>(std::max(0, std::min(get("hudTooltipDelay", 200), 2000)));
 	settings.showModulesInTutorial = get("hudModulesInTutorial", 0) != 0;
 	hudSetSettings(settings);
@@ -264,6 +265,7 @@ void hudSaveSettings(const std::function<void (const std::string &key, int value
 	setInteger("hudPanelTint", static_cast<int>(currentSettings.panelTint));
 	setInteger("hudReduceMotion", currentSettings.reduceMotion ? 1 : 0);
 	setInteger("hudRememberFilters", currentSettings.rememberFilters ? 1 : 0);
+	setInteger("hudToasts", currentSettings.toasts ? 1 : 0);
 	setInteger("hudTooltipDelay", static_cast<int>(currentSettings.tooltipDelay));
 	setInteger("hudModulesInTutorial", currentSettings.showModulesInTutorial ? 1 : 0);
 	setInteger("hudSpectatorStripLines", spectatorStripTwoLines ? 2 : 1);

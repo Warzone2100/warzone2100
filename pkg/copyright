@@ -641,11 +641,13 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/hudspectator.*
        src/hud/hudstatusline.*
        src/hud/hudtext.h
+       src/hud/hudtoast.*
        src/hud/hudunittypes.*
        src/hud/hudwidgets.*
        src/hud/hudworldbars.*
        src/hud/intel/intelkit.*
        src/hud/intel/intelmodel.*
+       src/hud/intel/intelnotices.*
        src/hud/intel/intelpanel.*
        src/hud/intel/intelview.*
        src/hud/intel/playersview.*

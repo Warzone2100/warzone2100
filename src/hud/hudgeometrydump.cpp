@@ -28,6 +28,7 @@
 #include <nlohmann/json.hpp> // Must come before WZ includes
 
 #include "hudgeometrydump.h"
+#include "hudtoast.h"
 #include "hudconnection.h"
 #include "hudids.h"
 #include "hudpagecontrol.h"
@@ -171,7 +172,7 @@ bool addResearchReport(const std::string &viewName, bool read)
 		return false;
 	}
 	message->pViewData = viewData;
-	hudIntelNoteMessage(message);
+	hudIntelNoteMessage(message, !read);
 	// (Researched, as a report's topic is, without a second report)
 	if (const RESEARCH *research = getResearchForMsg(viewData))
 	{
@@ -216,9 +217,33 @@ bool setAllianceForTests(const std::string &setting)
 	return true;
 }
 
+/// "<view>:<campaign|mission>": a script's message, as hackAddMessage gives it (not played at once)
+bool addScriptMessageForTests(const std::string &setting)
+{
+	const size_t colon = setting.find(':');
+	if (colon == std::string::npos || selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+	VIEWDATA *viewData = getViewData(WzString::fromUtf8(setting.substr(0, colon)));
+	if (viewData == nullptr)
+	{
+		return false;
+	}
+	MESSAGE *message = addMessage(setting.substr(colon + 1) == "mission" ? MSG_MISSION : MSG_CAMPAIGN, false, selectedPlayer);
+	if (message == nullptr)
+	{
+		return false;
+	}
+	message->pViewData = viewData;
+	hudIntelNoteMessage(message, true);
+	return true;
+}
+
 bool applyState(const std::string &name)
 {
 	clearSelection();
+	hudToastClearAll();
 	if (name.find("guide=") == std::string::npos)
 	{
 		// (closing it takes effect after the frame: a guide state shows its topic in the open guide)
@@ -265,6 +290,7 @@ bool applyState(const std::string &name)
 		else if (part == "intel") { addIntelScreen(); ok = hudIntelScreenIsOpen() && ok; }
 		else if (part.rfind("report=", 0) == 0) { ok = addResearchReport(part.substr(7), false) && ok; }
 		else if (part.rfind("readreport=", 0) == 0) { ok = addResearchReport(part.substr(11), true) && ok; }
+		else if (part.rfind("message=", 0) == 0) { ok = addScriptMessageForTests(part.substr(8)) && ok; }
 		else if (part.rfind("intel.", 0) == 0) { ok = hudIntelScreenApplyForTests(part.substr(6)) && ok; }
 		else if (part.rfind("alliance=", 0) == 0) { ok = setAllianceForTests(part.substr(9)) && ok; }
 		else if (part.rfind("teamplans=", 0) == 0) { ok = teamStrategyFillForTests(std::strtoul(part.substr(10).c_str(), nullptr, 10)) > 0 && ok; }

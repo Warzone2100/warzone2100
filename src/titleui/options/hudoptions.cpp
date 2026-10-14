@@ -252,4 +252,25 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 		);
 		form->addOption(optionInfo, valueChanger, true);
 	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.toasts", N_("Notices"), N_("In the campaign, with the Modern skin: a notice at the top of the screen when a research report or a briefing arrives, with a View button to open it."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(hudSettings().toasts);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.toasts = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
 }

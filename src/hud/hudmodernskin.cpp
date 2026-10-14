@@ -594,6 +594,18 @@ public:
 			const float d = 7.f;
 			pie_DrawRoundedBox(x + w - d, y, x + w, y + d, palette.stateWarn, d / 2.f, pal_RGBA(0, 0, 0, 200), 1.f);
 		}
+		if (look.count > 0)
+		{
+			// The count on the accent, at the button's top left (the warning dot is at its top right)
+			countText.setText(WzString::fromUtf8(look.count > 99 ? std::string("99+") : std::to_string(look.count)), font_bar);
+			countDigits.setText(WzString::fromUtf8("0123456789"), font_bar);
+			const float d = 14.f;
+			const float bw = std::max(d, static_cast<float>(countText.width()) + 7.f);
+			const float bx = std::round(x - 3.f);
+			const float by = std::round(y - 3.f);
+			pie_DrawRoundedBox(bx, by, bx + bw, by + d, palette.accent, d / 2.f, pal_RGBA(0, 0, 0, 220), 1.f);
+			countText.renderCenteredOnInk(WzRect(static_cast<int>(bx), static_cast<int>(by), static_cast<int>(bw), static_cast<int>(d)), palette.textPrimary, &countDigits);
+		}
 	}
 
 	void drawPowerBar(PowerBar &bar, int xOffset, int yOffset) override
@@ -1343,6 +1355,8 @@ public:
 	void releaseCaches() override
 	{
 		powerText = WzText();
+		countText = WzText();
+		countDigits = WzText();
 		costText = WzText();
 		needText = WzText();
 		bangText = WzText();
@@ -1355,6 +1369,8 @@ public:
 
 private:
 	WzText powerText;
+	WzText countText;
+	WzText countDigits;
 	WzText costText;
 	WzText needText;
 	WzText bangText;

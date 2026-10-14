@@ -77,8 +77,11 @@ std::string hudIntelLevelTitle(const std::string &level);
 std::string hudIntelCurrentLevel();
 size_t hudIntelUnreadCount();
 
-/// A research report or a script's campaign or mission message arrived (once its view data is set)
-void hudIntelNoteMessage(const MESSAGE *message);
+/// A research report or a script's campaign or mission message arrived (once its view data is set).
+/// `announce`: it doesn't play at once (src/hud/intel/intelnotices.h)
+void hudIntelNoteMessage(const MESSAGE *message, bool announce = true);
+/// The entry a message makes (its time and level not filled in), when the screen lists it
+nonstd::optional<HudIntelEntry> hudIntelEntryFor(const MESSAGE *message);
 /// A campaign or a game starts, or a save is loaded: the log starts empty
 void hudIntelReset();
 

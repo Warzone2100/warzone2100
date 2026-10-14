@@ -44,6 +44,8 @@ bool hudIntelScreenEnabled();
 void hudIntelScreenOpen(MESSAGE *message, bool play);
 /// Opens it on a view: 0 the players, 1 the intelligence, 2 the team strategy (when the game has it)
 void hudIntelScreenOpenOn(int view);
+/// Opens it (as the intelligence button does) on an item: its kind (HudIntelKind) and view data name (a toast's View)
+void hudIntelScreenShowEntry(int kind, const std::string &key);
 /// Closes it and lets the game go on
 void hudIntelScreenClose();
 bool hudIntelScreenIsOpen();
