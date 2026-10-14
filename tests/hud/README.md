@@ -62,6 +62,10 @@ The intelligence screen:
   - the team strategy view's `focus=<class>`
 - `report=<view>` gives the local player a research report for its topic (researched, as a report's topic is), and
   `readreport=<view>` one already read (ex. `readreport=RES_CY_AH1+report=RES_CYW_MG4,intel`).
+- `message=<view>:<campaign|mission>` gives the local player a script's message that doesn't play at once.
+  A new report or message shows the Modern skin's notice at the top of the screen (`src/hud/hudtoast.h`), and adds
+  to the count on the reticule's intelligence button (ex. `report=RES_CYW_MG4+report=RES_TOWER1`: two reports, in
+  one notice).
 - `alliance=<player>:<formed|requested|invitation|broken>` sets the local player's alliance with a player (no
   message is sent).
 - `teamplans=<n>` makes up to n of the local player's AI teammates count as players who were human, with sample

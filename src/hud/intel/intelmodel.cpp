@@ -28,6 +28,7 @@
 #include <nlohmann/json.hpp> // Must come before WZ includes
 
 #include "intelmodel.h"
+#include "intelnotices.h"
 
 #include "lib/framework/frame.h"
 #include "lib/gamelib/gtime.h"
@@ -323,7 +324,30 @@ size_t hudIntelUnreadCount()
 	return count;
 }
 
-void hudIntelNoteMessage(const MESSAGE *message)
+nonstd::optional<HudIntelEntry> hudIntelEntryFor(const MESSAGE *message)
+{
+	if (message == nullptr || !listed(*message))
+	{
+		return nonstd::nullopt;
+	}
+	HudIntelEntry entry;
+	entry.kind = *kindOf(*message);
+	entry.key = message->pViewData->name.toUtf8();
+	entry.message = const_cast<MESSAGE *>(message);
+	entry.unread = !message->read;
+	if (entry.kind == HudIntelKind::Research)
+	{
+		entry.research = researchFor(message->pViewData);
+		describeResearch(entry, message->pViewData);
+	}
+	else
+	{
+		describeBriefing(entry, *message->pViewData);
+	}
+	return entry;
+}
+
+void hudIntelNoteMessage(const MESSAGE *message, bool announce)
 {
 	if (message == nullptr || message->player != selectedPlayer || !listed(*message))
 	{
@@ -336,6 +360,10 @@ void hudIntelNoteMessage(const MESSAGE *message)
 	if (existing != logItems.end() && kind == HudIntelKind::Research)
 	{
 		return;
+	}
+	if (announce)
+	{
+		hudIntelAnnounce(message);
 	}
 	LogItem &item = logItems[key];
 	item.kind = kind;

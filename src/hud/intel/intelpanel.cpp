@@ -32,6 +32,7 @@
 #include "teamstrategyview.h"
 
 #include "../hudskin.h"
+#include "../hudtoast.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -302,6 +303,7 @@ public:
 	std::function<void ()> onSizeChanged;
 	/// The item it opens on (the first unread one otherwise)
 	const MESSAGE *firstMessage = nullptr;
+	nonstd::optional<std::pair<HudIntelKind, std::string>> firstEntry;
 
 	bool hasView(PanelView which) const
 	{
@@ -333,8 +335,12 @@ public:
 			// (Selecting an item marks it read, so not before the view is shown)
 			if (!view->hasSelection())
 			{
-				view->selectMessage(firstMessage);
+				if (!firstEntry.has_value() || !view->selectEntry(firstEntry->first, firstEntry->second))
+				{
+					view->selectMessage(firstMessage);
+				}
 				firstMessage = nullptr;
+				firstEntry.reset();
 			}
 			break;
 		case PanelView::Players:
@@ -492,7 +498,7 @@ private:
 class IntelRoot : public W_FORM
 {
 public:
-	void initialize(nonstd::optional<PanelView> first, const MESSAGE *message)
+	void initialize(nonstd::optional<PanelView> first, const MESSAGE *message, nonstd::optional<std::pair<HudIntelKind, std::string>> entry)
 	{
 		// (As with the Classic screen, clicks outside the panel reach the interface under it, ex. the reticule's buttons.
 		// The world takes no clicks while the game's updates are paused)
@@ -507,6 +513,7 @@ public:
 			}
 		};
 		panel->firstMessage = message;
+		panel->firstEntry = std::move(entry);
 		panel->initialize(first);
 		setCalcLayout([](WIDGET *widget) {
 			widget->setGeometry(0, 0, static_cast<int>(screenWidth), static_cast<int>(screenHeight));
@@ -689,12 +696,23 @@ bool hudIntelScreenEnabled()
 namespace
 {
 
+/// The item the screen opens on (from a toast's View button)
+nonstd::optional<std::pair<HudIntelKind, std::string>> requestedEntry;
+
 void openScreen(nonstd::optional<PanelView> first, MESSAGE *message, bool play)
 {
 	if (overlay)
 	{
 		return;
 	}
+	auto entry = std::move(requestedEntry);
+	requestedEntry.reset();
+	if (entry.has_value())
+	{
+		first = PanelView::Intelligence;
+	}
+	// (Any notice would point into the screen, which is now open)
+	hudToastClearAll();
 	pauseGame();
 	// (As with the research tree, the game's keys are held while the screen is up, except the background context's,
 	// ex. the multiplayer menu's key, which closes it)
@@ -705,7 +723,7 @@ void openScreen(nonstd::optional<PanelView> first, MESSAGE *message, bool play)
 	overlay->psForm->setTransparentToMouse(true);
 	auto root = std::make_shared<IntelRoot>();
 	overlay->psForm->attach(root);
-	root->initialize(first, message);
+	root->initialize(first, message, std::move(entry));
 	root->callCalcLayout();
 	if (play && root->panel->view)
 	{
@@ -741,6 +759,19 @@ void hudIntelScreenOpen(MESSAGE *message, bool play)
 void hudIntelScreenOpenOn(int view)
 {
 	openScreen(static_cast<PanelView>(view), nullptr, false);
+}
+
+void hudIntelScreenShowEntry(int kind, const std::string &key)
+{
+	if (overlay)
+	{
+		hudIntelScreenClose();
+		intResetScreen(true);
+	}
+	requestedEntry = std::make_pair(static_cast<HudIntelKind>(kind), key);
+	psCurrentMsg = nullptr;
+	addIntelScreen();
+	requestedEntry.reset();
 }
 
 void hudIntelScreenClose()
