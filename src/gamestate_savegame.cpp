@@ -30,6 +30,7 @@
 #include "lib/netplay/nettypes.h"     // NETgameQueueCapturePending/RestorePending, MAX_GAMEQUEUE_SLOTS
 #include "lib/netplay/sync_debug.h"   // syncCrcDetailArmOnSaveOrLoad (CRC-trace detail diagnostic)
 
+#include "movebench.h"      // movementBenchGame, movementBenchSetRestored
 #include "multiplay.h"      // game, ingame, bMultiPlayer, MULTIPLAYERGAME, MULTISTRUCTLIMITS
 #include "multiplaydefs.h"  // clampPlayerReconnectWaitSeconds, PLAYER_LEAVE_MODE, BLIND_MODE
 #include "campaigninfo.h"   // getCampaignName/Number, setCampaignName/Number
@@ -252,6 +253,13 @@ nlohmann::ordered_json writeSetupHeader(SaveType saveType)
 	jopt["playerLeaveMode"] = static_cast<uint8_t>(game.playerLeaveMode);
 	jopt["playerReconnectWaitSeconds"] = game.playerReconnectWaitSeconds;
 	jopt["pathfindingBackend"] = game.pathfindingBackend;
+	if (movementBenchGame())
+	{
+		nlohmann::ordered_json jbench = nlohmann::ordered_json::object();
+		jbench["scenario"] = movementBenchGameScenario();
+		jbench["arrangement"] = movementBenchArrangement();
+		jopt["movementBench"] = std::move(jbench);
+	}
 	j["options"] = std::move(jopt);
 
 	j["players"] = writePlayers();
@@ -376,6 +384,17 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(jopt.at("playerReconnectWaitSeconds").get<uint32_t>());
 	// default to the legacy A* planner for snapshots written before this setting existed
 	game.pathfindingBackend = jopt.value("pathfindingBackend", static_cast<uint16_t>(0));
+	// A movement bench scenario stays one when loaded, since its scripts run their top level again and keep
+	// calling the bench script functions. Absent for any other game.
+	const auto jbench = jopt.find("movementBench");
+	if (jbench != jopt.end() && jbench->is_object())
+	{
+		movementBenchSetRestored(jbench->value("scenario", std::string()), jbench->value("arrangement", static_cast<uint32_t>(0)));
+	}
+	else
+	{
+		movementBenchSetRestored(std::string(), 0);
+	}
 
 	readPlayers(j.at("players"));
 	readStructureLimits(j.at("structureLimits"));

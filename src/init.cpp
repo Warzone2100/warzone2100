@@ -83,6 +83,7 @@
 #include "miscimd.h"
 #include "mission.h"
 #include "modding.h"
+#include "movebench.h"
 #include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
@@ -1984,6 +1985,7 @@ bool stageThreeShutDown()
 	}
 	orderSourceReset();
 	orderProvenanceReset();
+	movementBenchSetRestored(std::string(), 0);
 
 	//call this here before mission data is released
 	if (!missionShutDown())

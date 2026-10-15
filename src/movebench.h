@@ -77,6 +77,17 @@ bool movementBenchSelectScenario(const std::string &name);
 /// True if a scenario was selected for this run.
 bool movementBenchActive();
 
+/// True if this game is a bench scenario, run here or restored from a save. Its scripts get the bench script
+/// functions. A restored scenario is not a bench run: no scorecard, no tick budget.
+bool movementBenchGame();
+
+/// The scenario this game is, run here or restored from a save, or empty.
+std::string movementBenchGameScenario();
+
+/// Records the scenario and arrangement of a save being loaded (none, for an empty or unknown name).
+/// Called when a save's setup is read, before its scripts load.
+void movementBenchSetRestored(const std::string &name, uint32_t arrangement);
+
 /// The tests/ config file the active scenario launches. Empty if inactive.
 const std::string &movementBenchTestConfig();
 
