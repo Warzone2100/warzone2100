@@ -774,6 +774,19 @@ uint32_t wzapi::benchArrangement(WZAPI_NO_PARAMS)
 	return movementBenchArrangement();
 }
 
+// benchTileBlocked(propulsionName, x, y)
+//
+// Returns whether a map tile is blocked for a droid with the given propulsion, as the path finder sees it:
+// cliffs, water, structures, blocking features and the map border. Registered only for a movement bench
+// scenario, run or restored from a save, so it is not part of the scripting API.
+bool wzapi::benchTileBlocked(WZAPI_PARAMS(std::string propulsionName, int x, int y))
+{
+	SCRIPT_ASSERT(true, context, movementBenchGame(), "benchTileBlocked() is only available in a movement bench scenario");
+	int propulsionIndex = getCompFromName(COMP_PROPULSION, WzString::fromUtf8(propulsionName));
+	SCRIPT_ASSERT(true, context, propulsionIndex > 0, "No such propulsion: %s", propulsionName.c_str());
+	return fpathBlockingTile(gameWorld.map, x, y, asPropulsionStats[propulsionIndex].propulsionType);
+}
+
 //-- ## setCampaignNumber(campaignNumber)
 //--
 //-- Set the campaign number. (3.3+ only)

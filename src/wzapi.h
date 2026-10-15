@@ -1016,6 +1016,7 @@ namespace wzapi
 	bool restoreLimboMissionData(WZAPI_NO_PARAMS);
 	uint32_t getMultiTechLevel(WZAPI_NO_PARAMS);
 	uint32_t benchArrangement(WZAPI_NO_PARAMS);
+	bool benchTileBlocked(WZAPI_PARAMS(std::string propulsionName, int x, int y));
 	bool setCampaignNumber(WZAPI_PARAMS(int campaignNumber));
 	int32_t getMissionType(WZAPI_NO_PARAMS);
 	bool getRevealStatus(WZAPI_NO_PARAMS);

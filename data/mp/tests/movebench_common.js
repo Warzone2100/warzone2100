@@ -78,10 +78,17 @@ function benchSpawnFixed(player, kind, x0, y0, cols, rowDir, count, spacing)
 	var k = ROSTER[kind];
 	var step = spacing || 1;
 	var made = [];
-	for (var i = 0; i < count; i++)
+	// A slot on blocked ground is skipped, and the block runs on into the next slots so the count holds.
+	var skipped = 0;
+	for (var i = 0; i < count + skipped && i < count * 2; i++)
 	{
 		var x = x0 + (i % cols) * step;
 		var y = y0 + Math.floor(i / cols) * rowDir * step;
+		if (benchTileBlocked(k.prop, x, y))
+		{
+			skipped++;
+			continue;
+		}
 		var d = addDroid(player, x, y, k.name, k.body, k.prop, "", "", k.weap);
 		if (d !== null)
 		{
@@ -135,11 +142,17 @@ function benchSpawnMixedBlock(player, kinds, x0, y0, cols, rowDir, count)
 	y0 += Math.floor(index / ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
 
 	var made = [];
-	for (var i = 0; i < count; i++)
+	var skipped = 0;   // as in benchSpawnFixed
+	for (var i = 0; i < count + skipped && i < count * 2; i++)
 	{
 		var k = ROSTER[kinds[i % kinds.length]];
 		var x = x0 + (i % cols);
 		var y = y0 + Math.floor(i / cols) * rowDir;
+		if (benchTileBlocked(k.prop, x, y))
+		{
+			skipped++;
+			continue;
+		}
 		var d = addDroid(player, x, y, k.name, k.body, k.prop, "", "", k.weap);
 		if (d !== null)
 		{
@@ -180,15 +193,15 @@ function benchSpawnCluster(player, kind, cx, cy, count)
 
 	var k = ROSTER[kind];
 	var made = [];
-	for (var r = 0; made.length < count; r++)
+	for (var r = 0; made.length < count && r < 64; r++)
 	{
 		for (var dy = -r; dy <= r && made.length < count; dy++)
 		{
 			for (var dx = -r; dx <= r && made.length < count; dx++)
 			{
-				if (Math.max(Math.abs(dx), Math.abs(dy)) != r)
+				if (Math.max(Math.abs(dx), Math.abs(dy)) != r || benchTileBlocked(k.prop, ax + dx, ay + dy))
 				{
-					continue;
+					continue;   // not on this ring, or blocked
 				}
 				var d = addDroid(player, ax + dx, ay + dy, k.name, k.body, k.prop, "", "", k.weap);
 				if (d)
@@ -223,6 +236,10 @@ function benchSpawnClones(player, kind, cx, cy, count)
 		var rad = 50 * Math.sqrt(i + 1);
 		var tx = Math.floor((ax * 128 + 64 + rad * Math.sin(ang)) / 128);
 		var ty = Math.floor((ay * 128 + 64 + rad * Math.cos(ang)) / 128);
+		if (benchTileBlocked(k.prop, tx, ty))
+		{
+			continue;
+		}
 		var d = addDroid(player, tx, ty, k.name, k.body, k.prop, "", "", k.weap);
 		if (d)
 		{
@@ -250,6 +267,10 @@ function benchSpawnMixedClones(player, kinds, cx, cy, count)
 		var rad = 50 * Math.sqrt(i + 1);
 		var tx = Math.floor((ax * 128 + 64 + rad * Math.sin(ang)) / 128);
 		var ty = Math.floor((ay * 128 + 64 + rad * Math.cos(ang)) / 128);
+		if (benchTileBlocked(k.prop, tx, ty))
+		{
+			continue;
+		}
 		var d = addDroid(player, tx, ty, k.name, k.body, k.prop, "", "", k.weap);
 		if (d)
 		{

@@ -113,6 +113,12 @@ MULTI_SKIRMISH2-4 types, so a hidden map stays out of skirmish and
 multiplayer map selection while levFindDataSet() still resolves it by name
 for the bench configs.
 
+Spawn units with the helpers in data/mp/tests/movebench_common.js. They skip
+tiles the unit's propulsion cannot use (cliffs, water, structures, blocking
+features, the map border) through benchTileBlocked(), a script function that
+exists only in a movement bench scenario. addDroid() alone does not check, and
+a unit spawned on blocked ground can stay pinned for the whole run.
+
 ## Pathfinding bench
 
     tests/pathbench/run.sh                 # scorecard for canned route requests

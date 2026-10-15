@@ -53,6 +53,7 @@
 #include "research.h"
 #include "multilimit.h"
 #include "multigifts.h"
+#include "movebench.h"
 #include "multimenu.h"
 #include "template.h"
 #include "lighting.h"
@@ -3870,6 +3871,7 @@ IMPL_JS_FUNC(isSpectator, wzapi::isSpectator)
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
 IMPL_JS_FUNC(benchArrangement, wzapi::benchArrangement)
+IMPL_JS_FUNC(benchTileBlocked, wzapi::benchTileBlocked)
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
 IMPL_JS_FUNC(getMissionType, wzapi::getMissionType)
 IMPL_JS_FUNC(getRevealStatus, wzapi::getRevealStatus)
@@ -4085,6 +4087,10 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(restoreLimboMissionData, 0); // WZAPI
 	JS_REGISTER_FUNC(getMultiTechLevel, 0); // WZAPI
 	JS_REGISTER_FUNC(benchArrangement, 0); // WZAPI
+	if (movementBenchGame())
+	{
+		JS_REGISTER_FUNC(benchTileBlocked, 3); // WZAPI, movement bench scenarios only
+	}
 	JS_REGISTER_FUNC(setCampaignNumber, 1); // WZAPI
 	JS_REGISTER_FUNC(getMissionType, 0); // WZAPI
 	JS_REGISTER_FUNC(getRevealStatus, 0); // WZAPI
