@@ -183,6 +183,7 @@ uint32_t arrangementIndex = 0;
 bool watching = false;
 
 const BenchScenario *activeScenario = nullptr;
+const BenchScenario *restoredScenario = nullptr;   ///< the scenario a loaded save was, if any
 MovementMetrics      metrics;
 std::string          activeTestConfig;
 
@@ -743,6 +744,26 @@ bool movementBenchSelectScenario(const std::string &name)
 bool movementBenchActive()
 {
 	return activeScenario != nullptr;
+}
+
+bool movementBenchGame()
+{
+	return activeScenario != nullptr || restoredScenario != nullptr;
+}
+
+std::string movementBenchGameScenario()
+{
+	const BenchScenario *scenario = activeScenario != nullptr ? activeScenario : restoredScenario;
+	return scenario != nullptr ? scenario->name : std::string();
+}
+
+void movementBenchSetRestored(const std::string &name, uint32_t arrangement)
+{
+	restoredScenario = name.empty() ? nullptr : findScenario(name);
+	if (restoredScenario != nullptr)
+	{
+		arrangementIndex = arrangement;
+	}
 }
 
 bool movementBenchWatching()
