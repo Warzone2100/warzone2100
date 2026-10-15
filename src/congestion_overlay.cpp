@@ -150,6 +150,16 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 			const int32_t fx = flowDroid ? iSinR(psDroid->rot.direction, FLOW_UNIT) : 0;
 			const int32_t fy = flowDroid ? iCosR(psDroid->rot.direction, FLOW_UNIT) : 0;
 
+			// The droid's own overlay records its stamp and goal, for the searches that leave its group out.
+			if (consumeFlow && flowDroid && building[owner])
+			{
+				const Vector2i goalPos = psDroid->sMove.destination;
+				const uint32_t goal = goalPos != Vector2i(0, 0) && worldOnMap(gameWorld.map, goalPos.x, goalPos.y)
+				                      ? static_cast<uint32_t>(map_coord(goalPos.x) + map_coord(goalPos.y) * width) + 1 : 0;
+				building[owner]->ownStamps.push_back({psDroid->id, static_cast<int16_t>(cx), static_cast<int16_t>(cy),
+				                                      static_cast<int16_t>(fx), static_cast<int16_t>(fy), goal});
+			}
+
 			for (int player = 0; player < MAX_PLAYERS; ++player)
 			{
 				const auto &overlay = building[player];
@@ -203,4 +213,48 @@ std::vector<std::shared_ptr<const DynamicCostOverlay>> buildCongestionOverlays(u
 		}
 	}
 	return result;
+}
+
+std::shared_ptr<const GroupFlowMap> buildGroupFlowMap(const DynamicCostOverlay &overlay, uint32_t key)
+{
+	auto built = std::make_shared<GroupFlowMap>();
+	built->key = key;
+	int x0 = INT32_MAX, y0 = INT32_MAX, x1 = INT32_MIN, y1 = INT32_MIN;
+	for (const OwnFlowStamp &stamp : overlay.ownStamps)
+	{
+		if (stamp.goal == key)
+		{
+			x0 = std::min<int>(x0, stamp.cx - FOOTPRINT_RADIUS);
+			y0 = std::min<int>(y0, stamp.cy - FOOTPRINT_RADIUS);
+			x1 = std::max<int>(x1, stamp.cx + FOOTPRINT_RADIUS);
+			y1 = std::max<int>(y1, stamp.cy + FOOTPRINT_RADIUS);
+		}
+	}
+	if (x0 > x1)
+	{
+		return built;   // no droid has this goal
+	}
+	built->x0 = x0;
+	built->y0 = y0;
+	built->w = x1 - x0 + 1;
+	built->h = y1 - y0 + 1;
+	built->fx.assign(static_cast<size_t>(built->w) * static_cast<size_t>(built->h), 0);
+	built->fy.assign(static_cast<size_t>(built->w) * static_cast<size_t>(built->h), 0);
+	for (const OwnFlowStamp &stamp : overlay.ownStamps)
+	{
+		if (stamp.goal != key)
+		{
+			continue;
+		}
+		for (int dy = -FOOTPRINT_RADIUS; dy <= FOOTPRINT_RADIUS; ++dy)
+		{
+			for (int dx = -FOOTPRINT_RADIUS; dx <= FOOTPRINT_RADIUS; ++dx)
+			{
+				const size_t i = static_cast<size_t>(stamp.cx + dx - x0) + static_cast<size_t>(stamp.cy + dy - y0) * static_cast<size_t>(built->w);
+				built->fx[i] += stamp.fx;
+				built->fy[i] += stamp.fy;
+			}
+		}
+	}
+	return built;
 }
