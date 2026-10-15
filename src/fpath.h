@@ -46,6 +46,7 @@ enum FPATH_MOVETYPE
 
 struct PathBlockingMap;
 struct DynamicCostOverlay;
+struct GroupFlowMap;
 
 struct PATHJOB
 {
@@ -59,6 +60,8 @@ struct PATHJOB
 	int		owner;		///< Player owner
 	std::shared_ptr<const PathBlockingMap> blockingMap;   ///< Map of blocking tiles.
 	std::shared_ptr<const DynamicCostOverlay> overlay;    ///< Soft occupancy cost, null for the legacy backend.
+	std::shared_ptr<const GroupFlowMap> groupFlow;        ///< The droid's group's flow, left out of the price.
+	uint32_t        groupKey = 0;   ///< groupFlow's key, or 0.
 	bool		acceptNearest;
 	bool            deleted;        ///< Droid was deleted, so throw away result when complete. Must still process this PATHJOB, since processing order can affect resulting paths (but can't affect the path length).
 };

@@ -183,16 +183,19 @@ struct PathfindContext
 	{
 		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * gameWorld.map.width];
 	}
-	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
+	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, uint32_t groupKey_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
 		// The overlay pointer is part of the key too, so a context built for one cohort's traffic is never reused for another's.
-		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && overlay == overlay_ && tileS == tileS_ && dstIgnore == dstIgnore_;
+		// So is the group, whose flow the search leaves out.
+		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && overlay == overlay_ && groupKey == groupKey_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
+	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, const std::shared_ptr<const DynamicCostOverlay> &overlay_, const std::shared_ptr<const GroupFlowMap> &groupFlow_, uint32_t groupKey_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
 		overlay = overlay_;
+		groupFlow = groupFlow_;
+		groupKey = groupKey_;
 		tileS = tileS_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
@@ -222,6 +225,8 @@ struct PathfindContext
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
 	std::shared_ptr<const PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 	std::shared_ptr<const DynamicCostOverlay> overlay;  ///< Flow soft cost consumed by fpathNewNode, null for the legacy backend.
+	std::shared_ptr<const GroupFlowMap> groupFlow;      ///< The searching droid's group's flow, or null.
+	uint32_t        groupKey = 0;       ///< groupFlow's key, or 0.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
@@ -314,8 +319,18 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 			const int32_t fy = context.overlay->flowY[tileIdx];
 			if (context.overlay->consumeFlow)
 			{
-				tileHasFlow = fx != 0 || fy != 0;
-				const int32_t dot = delta.x * fx + delta.y * fy;
+				// The searching droid's own group is not opposing traffic, so its flow comes out first.
+				int32_t ox = fx;
+				int32_t oy = fy;
+				int32_t gx = 0;
+				int32_t gy = 0;
+				if (context.groupFlow && context.groupFlow->lookup(pos.x, pos.y, gx, gy))
+				{
+					ox -= gx;
+					oy -= gy;
+				}
+				tileHasFlow = ox != 0 || oy != 0;
+				const int32_t dot = delta.x * ox + delta.y * oy;
 				// No flow pricing close to this search's own destination: a goal
 				// crowd faces outward, and charging arrivals for their own crowd
 				// sends them circling it instead of parking. Note the cached
@@ -518,9 +533,9 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, const std::shared_ptr<const DynamicCostOverlay> &overlay, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, const PATHJOB &job, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
 {
-	context.assign(blockingMap, overlay, tileS, dstIgnore);
+	context.assign(job.blockingMap, job.overlay, job.groupFlow, job.groupKey, tileS, dstIgnore);
 
 	// Add the start point to the open list
 	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
@@ -995,7 +1010,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	auto contextIterator = fpathContexts.begin();
 	for (; contextIterator != fpathContexts.end(); ++contextIterator)
 	{
-		if (!contextIterator->matches(psJob->blockingMap, psJob->overlay, tileDest, dstIgnore))
+		if (!contextIterator->matches(psJob->blockingMap, psJob->overlay, psJob->groupKey, tileDest, dstIgnore))
 		{
 			// This context is not for the same droid type and same destination.
 			continue;
@@ -1034,7 +1049,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(*contextIterator, psJob->blockingMap, psJob->overlay, tileOrig, tileOrig, tileDest, dstIgnore);
+		fpathInitContext(*contextIterator, *psJob, tileOrig, tileOrig, tileDest, dstIgnore);
 		endCoord = fpathAStarExplore(*contextIterator, tileDest);
 		contextIterator->nearestCoord = endCoord;
 	}
@@ -1113,7 +1128,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->blockingMap, psJob->overlay, tileDest, context.nearestCoord, tileOrig, dstIgnore);
+			fpathInitContext(context, *psJob, tileDest, context.nearestCoord, tileOrig, dstIgnore);
 		}
 	}
 	else

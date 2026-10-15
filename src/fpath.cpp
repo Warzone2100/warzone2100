@@ -25,6 +25,7 @@
  */
 
 #include <future>
+#include <thread>
 #include <unordered_map>
 
 #include "lib/framework/frame.h"
@@ -639,6 +640,12 @@ queuePathfinding:
 	// changes which of the equal-length paths comes back.
 	job.overlay = (game.pathfindingBackend & (PF_FLOW_COST | PF_CROWD_MASS)) != 0
 	              ? fpathActiveBackend().overlayForOwner(owner) : nullptr;
+	// The search leaves the droid's own group's flow out, and the group is part of the context's key.
+	if (job.overlay && job.overlay->consumeFlow)
+	{
+		job.groupFlow = fpathActiveBackend().groupFlowForDroid(owner, id);
+		job.groupKey = job.groupFlow ? job.groupFlow->key : 0;
+	}
 
 	debug(LOG_NEVER, "starting new job for droid %d 0x%x", id, id);
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one
@@ -768,6 +775,8 @@ public:
 	void updateTick(const WorldMapState& mapState) override
 	{
 		LegacyAStarBackend::updateTick(mapState);
+		groupCaches.clear();
+		tickThread = std::this_thread::get_id();
 		// Flow cost has its own flag. The directional bias flag also selects
 		// this backend but shapes routes after the search instead, so it must
 		// not switch soft costs on as a side effect. It does build the
@@ -793,6 +802,13 @@ public:
 	{
 		LegacyAStarBackend::shutdown();
 		overlays.clear();
+		groupCaches.clear();
+	}
+
+	void hardReset() override
+	{
+		LegacyAStarBackend::hardReset();
+		groupCaches.clear();
 	}
 
 	std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const override
@@ -804,10 +820,58 @@ public:
 		return overlays[owner];
 	}
 
+	std::shared_ptr<const GroupFlowMap> groupFlowForDroid(int owner, uint32_t droidId) override
+	{
+		const std::shared_ptr<const DynamicCostOverlay> overlay = overlayForOwner(owner);
+		if (!overlay || overlay->ownStamps.empty())
+		{
+			return nullptr;
+		}
+		// An overlay exists, so updateTick has run and recorded the game thread.
+		ASSERT_OR_RETURN(nullptr, std::this_thread::get_id() == tickThread, "Group flow cache used off the game thread");
+		if (groupCaches.size() < overlays.size())
+		{
+			groupCaches.resize(overlays.size());
+		}
+		GroupCache &cache = groupCaches[owner];
+		if (cache.overlay != overlay)
+		{
+			// Holding the overlay keeps its address from being reused, so a match is always this overlay.
+			cache = GroupCache();
+			cache.overlay = overlay;
+			for (const OwnFlowStamp &stamp : overlay->ownStamps)
+			{
+				cache.goalById[stamp.droidId] = stamp.goal;
+			}
+		}
+		const auto self = cache.goalById.find(droidId);
+		if (self == cache.goalById.end() || self->second == 0)
+		{
+			return nullptr;
+		}
+		auto &groupMap = cache.maps[self->second];
+		if (!groupMap)
+		{
+			groupMap = buildGroupFlowMap(*overlay, self->second);
+		}
+		return groupMap;
+	}
+
 private:
 	// Indexed by player, rebuilt each tick, read-only once built. The search
 	// reads the owner's overlay through overlayForOwner.
 	std::vector<std::shared_ptr<const DynamicCostOverlay>> overlays;
+
+	// Per player, the group maps handed out this tick. Game thread only, and cleared whenever the overlays
+	// change (workers only see the finished maps, through their jobs).
+	struct GroupCache
+	{
+		std::shared_ptr<const DynamicCostOverlay> overlay;
+		std::unordered_map<uint32_t, uint32_t> goalById;
+		std::unordered_map<uint32_t, std::shared_ptr<const GroupFlowMap>> maps;
+	};
+	std::vector<GroupCache> groupCaches;
+	std::thread::id tickThread;
 };
 
 bool pathfindingOverlayEnabled()

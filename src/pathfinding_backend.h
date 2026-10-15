@@ -53,6 +53,7 @@
 
 struct WorldMapState;
 struct DynamicCostOverlay;
+struct GroupFlowMap;
 
 /// Congestion features a game has turned on, held as a bitmask in the synced
 /// game.pathfindingBackend setting. Each is independent so a run can enable one
@@ -165,6 +166,11 @@ public:
 	/// search with no overlay. Built once per tick in updateTick, so it is valid
 	/// for the rest of the tick. Legacy has none.
 	virtual std::shared_ptr<const DynamicCostOverlay> overlayForOwner(int owner) const { return nullptr; }
+
+	/// The flow of the group a droid belongs to this tick, the owner's droids that were heading for the same
+	/// goal tile when the owner's overlay was built, or null if it had no goal or there is no overlay.
+	/// Game thread only (it fills a per-tick cache). The returned map is immutable.
+	virtual std::shared_ptr<const GroupFlowMap> groupFlowForDroid(int owner, uint32_t droidId) { return nullptr; }
 };
 
 /// The backend this game is running. All clients must be running the same one.
