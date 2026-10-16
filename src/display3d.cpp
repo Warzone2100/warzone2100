@@ -4146,9 +4146,10 @@ static void updateCameraForFrame()
 }
 
 /// Spring constants of the height follower, y'' = -stiffness * (y - target) - damping * y'.
-/// Separate from the war camera's ACCEL_CONSTANT / VELOCITY_CONSTANT (same values for now).
-static constexpr double HEIGHT_FOLLOW_STIFFNESS = 12.0;
-static constexpr double HEIGHT_FOLLOW_DAMPING = 4.0;
+/// Critically damped (damping = 2 sqrt(stiffness)),
+/// and separate from the war camera's ACCEL_CONSTANT / VELOCITY_CONSTANT.
+static constexpr double HEIGHT_FOLLOW_STIFFNESS = 16.0;
+static constexpr double HEIGHT_FOLLOW_DAMPING = 8.0;
 
 /// Smoothly adjust player height to match the desired height
 static void trackHeight(float desiredHeight)
