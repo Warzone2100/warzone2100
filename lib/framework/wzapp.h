@@ -136,6 +136,7 @@ void wzGamepadApplyMode(); ///< Applies the current gamepad mode setting, initia
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation
 uint32_t wzGetTicks();		///< Milliseconds since start of game
+uint64_t wzGetTicksNS();	///< Nanoseconds since start of game (monotonic, high resolution)
 enum DialogType {
 	Dialog_Error,
 	Dialog_Warning,

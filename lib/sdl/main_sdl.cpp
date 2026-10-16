@@ -659,6 +659,11 @@ uint32_t wzGetTicks()
 	return static_cast<uint32_t>(SDL_GetTicks());
 }
 
+uint64_t wzGetTicksNS()
+{
+	return static_cast<uint64_t>(SDL_GetTicksNS());
+}
+
 void wzDisplayDialog(DialogType type, const char *title, const char *message)
 {
 	if (!WZbackend.has_value())

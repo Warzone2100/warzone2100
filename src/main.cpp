@@ -1325,6 +1325,11 @@ struct ScreenFrameScope
 void mainLoop()
 {
 	camtrace::frameBegin();
+#if defined(__EMSCRIPTEN__)
+	// The browser presents the previous frame after the main loop callback returns,
+	// so the start of this callback is the point aligned with presentation
+	frameTimeUpdate();
+#endif
 	frameUpdate(); // General housekeeping
 
 	ScreenFrameScope frameScope;
@@ -1365,7 +1370,15 @@ void mainLoop()
 				break;
 			}
 		realTimeUpdate(); // Update realTime.
+#if !defined(__EMSCRIPTEN__)
+		frameTimeUpdate(); // Right after the frame was presented
+#endif
 		camtrace::markRealTimeUpdate(realTime, deltaRealTime);
+	}
+	else
+	{
+		// Paused on focus loss, so keep the time spent here from reaching the camera as one step
+		frameTimeRebase();
 	}
 
 	if ((forcedAutosaveTime != 0) && (gameTime > forcedAutosaveTime))
