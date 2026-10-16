@@ -54,6 +54,10 @@ static Rational modifier;
 /// The real time, the last time graphicsTime updated.
 static uint32_t prevRealTime;
 
+/// wzGetTicks() at gameTimeUpdateBegin(), the start of this gameLoop() call
+static uint32_t loopStartRealTime = 0;
+static bool haveLoopStartRealTime = false;
+
 /**
   * Count how many times gameTimeStop has been called without a game time start.
   * We use this to ensure that we can properly nest stop commands.
@@ -213,6 +217,8 @@ void gameTimeUpdateBegin()
 	deltaGameTime = 0;
 	deltaGraphicsTime = 0;
 	extraGameTicksProcessed = 0;
+	loopStartRealTime = wzGetTicks();
+	haveLoopStartRealTime = true;
 }
 
 /* Call this each loop to update the game timer */
@@ -248,11 +254,13 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 	ASSERT(newDeltaGraphicsTime >= 0, "Something very wrong.");
 
 	uint32_t newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
+	bool graphicsTimeFollowsClock = true;  // false when graphicsTime is held at gameTime below
 
 	if (newGraphicsTime > gameTime && !mayUpdate)
 	{
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		graphicsTimeFollowsClock = false;
 	}
 
 	if (updateWantedTime == 0 && newGraphicsTime >= gameTime)
@@ -267,6 +275,7 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		graphicsTimeFollowsClock = false;
 		if (!waitingOnPlayersStartTime.has_value())
 		{
 			waitingOnPlayersStartTime = realTime;
@@ -321,11 +330,22 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 	}
 	else
 	{
+		uint32_t graphicsRealTime = currTime;
 		if (extraGameTicksProcessed > 0)
 		{
 			// If extra game ticks have been processed, newGraphicsTime/newDeltaGraphicsTime must be "fast-forwarded" to appropriate values based on gameTime
 			newGraphicsTime = gameTime;
 			newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		}
+		else if (graphicsTimeFollowsClock && haveLoopStartRealTime)
+		{
+			// Advance graphicsTime to the start of this loop rather than now,
+			// which is later by the cost of any sim ticks that ran in this loop.
+			// NOTE: The tick decisions above still use now, and quantiseFraction() works on absolute times,
+			// so this only delays graphicsTime within the frame and leaves tick scheduling unchanged.
+			graphicsRealTime = clip(loopStartRealTime, prevRealTime, currTime);
+			newDeltaGraphicsTime = quantiseFraction(modifier.n, modifier.d, graphicsRealTime, prevRealTime);
+			newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
 		}
 
 		// Update the graphics time.
@@ -333,7 +353,7 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		deltaGraphicsTime = newDeltaGraphicsTime;
 
 		// Update prevRealTime, since graphicsTime changed.
-		prevRealTime      = currTime;
+		prevRealTime      = graphicsRealTime;
 	}
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
