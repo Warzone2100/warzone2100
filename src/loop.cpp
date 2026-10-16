@@ -50,6 +50,7 @@
 #include "corridordump.h"
 #include "corridor_gate.h"
 #include "perfcounters.h"
+#include "cameratrace.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -795,7 +796,9 @@ GAMECODE gameLoop()
 
 		unsigned before = wzGetTicks();
 		syncDebug("Begin game state update, gameTime = %d", gameTime);
+		camtrace::tickBegin();
 		gameStateUpdate();
+		camtrace::tickEnd();
 		gameStatePerfEndOfTick();
 		syncDebug("End game state update, gameTime = %d", gameTime);
 		// No-op unless a --gamestate-* harness option was set.
@@ -824,6 +827,7 @@ GAMECODE gameLoop()
 		before = wzGetTicks();
 		renderReturn = renderLoop();
 		pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
+		camtrace::markPresentEnd();
 		after = wzGetTicks();
 	});
 

@@ -99,6 +99,7 @@
 #include "modding.h"
 #include "multiplay.h"
 #include "perfcounters.h"
+#include "cameratrace.h"
 #include "ordersource.h"
 #include "notifications.h"
 #include "screens/gamepadlayoutscreen.h"
@@ -1323,6 +1324,7 @@ struct ScreenFrameScope
  */
 void mainLoop()
 {
+	camtrace::frameBegin();
 	frameUpdate(); // General housekeeping
 
 	ScreenFrameScope frameScope;
@@ -1363,6 +1365,7 @@ void mainLoop()
 				break;
 			}
 		realTimeUpdate(); // Update realTime.
+		camtrace::markRealTimeUpdate(realTime, deltaRealTime);
 	}
 
 	if ((forcedAutosaveTime != 0) && (gameTime > forcedAutosaveTime))
@@ -1917,6 +1920,7 @@ void mainShutdown()
 #endif
 	wzCmdInterfaceShutdown();
 	perf::close();
+	camtrace::close();
 	setSyncCrcTraceFile("");
 	cleanupOldLogFiles();
 	hashRequestShutdown();
