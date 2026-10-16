@@ -28,6 +28,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/math_ext.h"
 #include "gtime.h"
+#include "framepacer.h"
 #include "src/multiplay.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/sync_debug.h"
@@ -47,6 +48,7 @@ UDWORD extraGameTicksProcessed = 0;
 static uint64_t frameTimeLastNs = 0;
 static bool frameTimeHaveLast = false;
 static double frameTimeDelta = 0.0;
+static FramePacer framePacer;
 
 /** The current clock modifier. Set to speed up the game. */
 static Rational modifier;
@@ -386,16 +388,14 @@ void realTimeUpdate(void)
 void frameTimeUpdate()
 {
 	const uint64_t now = wzGetTicksNS();
-	if (!frameTimeHaveLast || now < frameTimeLastNs)
+	double measured = -1.0; // first frame after a rebase
+	if (frameTimeHaveLast && now >= frameTimeLastNs)
 	{
-		frameTimeDelta = 0.0;
+		measured = static_cast<double>(now - frameTimeLastNs) * 1e-9;
 	}
-	else
-	{
-		constexpr double maxFrameSeconds = static_cast<double>(GTIME_MAXFRAME) / static_cast<double>(GAME_TICKS_PER_SEC);
-		// At most GTIME_MAXFRAME, so a freeze doesn't scroll across the map
-		frameTimeDelta = std::min(static_cast<double>(now - frameTimeLastNs) * 1e-9, maxFrameSeconds);
-	}
+	// At most GTIME_MAXFRAME, so a freeze doesn't scroll across the map
+	static_assert(FramePacer::maxDelta * GAME_TICKS_PER_SEC <= GTIME_MAXFRAME + 1, "FramePacer::maxDelta should match GTIME_MAXFRAME");
+	frameTimeDelta = framePacer.update(measured);
 	frameTimeLastNs = now;
 	frameTimeHaveLast = true;
 }
@@ -404,6 +404,23 @@ void frameTimeRebase()
 {
 	frameTimeHaveLast = false;
 	frameTimeDelta = 0.0;
+	framePacer.reset();
+}
+
+void frameTimeSetPresentationInfo(bool vsync, double nominalRefreshPeriod)
+{
+	framePacer.setVsync(vsync);
+	framePacer.setNominalRefreshPeriod(nominalRefreshPeriod);
+}
+
+void frameTimeAddPresentation(uint64_t presentId, double displayTime)
+{
+	framePacer.addPresentation(presentId, displayTime);
+}
+
+const FramePacer& frameTimePacer()
+{
+	return framePacer;
 }
 
 double frameTimeDeltaSeconds()
