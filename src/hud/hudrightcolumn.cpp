@@ -32,9 +32,11 @@
 #include "lib/widget/widget.h"
 
 #include "../hci.h"
+#include "../radar.h"
 
 #include <algorithm>
 #include <array>
+#include <tuple>
 
 constexpr int GAP = 10;
 constexpr int FALLBACK_RIGHT_MARGIN = 20;
@@ -47,9 +49,10 @@ void hudRightColumnSet(HudRightColumnSlot slot, const std::shared_ptr<WIDGET> &w
 	slots[static_cast<size_t>(slot)] = widget;
 }
 
-void hudLayoutRightColumn()
+/// The column's right edge and top: under the options button's card (a square centered in the button), right-aligned
+/// with it
+static std::pair<int, int> columnOrigin()
 {
-	// Under the options button's card (a square centered in the button), right-aligned with it
 	int right = static_cast<int>(screenWidth) - FALLBACK_RIGHT_MARGIN;
 	int top = FALLBACK_TOP;
 	if (WIDGET *options = psWScreen ? widgGetFromID(psWScreen, IDRET_OPTIONS) : nullptr)
@@ -61,6 +64,14 @@ void hudLayoutRightColumn()
 			top = options->screenPosY() + options->height() + GAP;
 		}
 	}
+	return {right, top};
+}
+
+void hudLayoutRightColumn()
+{
+	int right;
+	int top;
+	std::tie(right, top) = columnOrigin();
 	for (const auto &slot : slots)
 	{
 		auto widget = slot.lock();
@@ -71,4 +82,24 @@ void hudLayoutRightColumn()
 		widget->setGeometry(right - widget->width(), top, widget->width(), widget->height());
 		top += widget->height() + GAP;
 	}
+}
+
+int hudRightColumnAvailableHeight(HudRightColumnSlot slot)
+{
+	int bottom = static_cast<int>(screenHeight);
+	auto radar = getRadarWidget();
+	if (radar && radar->visible())
+	{
+		bottom = radar->screenPosY();
+	}
+	int availableHeight = bottom - GAP - columnOrigin().second;
+	for (size_t i = 0; i < slots.size(); ++i)
+	{
+		auto widget = slots[i].lock();
+		if (i != static_cast<size_t>(slot) && widget && widget->visible())
+		{
+			availableHeight -= widget->height() + GAP;
+		}
+	}
+	return std::max(0, availableHeight);
 }

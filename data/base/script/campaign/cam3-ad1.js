@@ -337,6 +337,7 @@ function checkMissileSilos()
 
 		if (safeToWinObjs.length > 0)
 		{
+			camSetObjectiveState("silos", "done");
 			return true;
 		}
 	}
@@ -353,7 +354,7 @@ function checkMissileSilos()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Build a forward base at the silos"));
+	camSetExtraObjectiveMessage({id: "silos", text: _("Build a forward base at the silos"), marker: "CM3D1_OBJ1"});
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");

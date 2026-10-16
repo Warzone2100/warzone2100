@@ -99,6 +99,7 @@
 #include "hud/hudskin.h"
 #include "hud/intel/intelnotices.h"
 #include "hud/intel/intelpanel.h"
+#include "hud/intel/objectivescard.h"
 #include "hud/hudiconbutton.h"
 #include "hud/hud.h"
 #include "hud/huddetail.h"
@@ -596,6 +597,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	if (psWidget->UserData == RETBUT_INTELMAP)
 	{
 		look.count = hudIntelButtonCount();
+		look.dot = hudObjectivesUnseen();
 	}
 	currentHudSkin().drawReticuleButton(look);
 	retbutstats[psWidget->UserData].flashTime = flashTime;

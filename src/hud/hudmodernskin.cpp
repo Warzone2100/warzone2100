@@ -594,6 +594,14 @@ public:
 			const float d = 7.f;
 			pie_DrawRoundedBox(x + w - d, y, x + w, y + d, palette.stateWarn, d / 2.f, pal_RGBA(0, 0, 0, 200), 1.f);
 		}
+		if (look.count == 0 && look.dot)
+		{
+			// The dot in the accent, where the count goes
+			const float d = 9.f;
+			const float bx = std::round(x - 1.f);
+			const float by = std::round(y - 1.f);
+			pie_DrawRoundedBox(bx, by, bx + d, by + d, palette.accent, d / 2.f, pal_RGBA(0, 0, 0, 220), 1.f);
+		}
 		if (look.count > 0)
 		{
 			// The count on the accent, at the button's top left (the warning dot is at its top right)

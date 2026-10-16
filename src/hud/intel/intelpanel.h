@@ -51,8 +51,8 @@ void hudIntelScreenClose();
 bool hudIntelScreenIsOpen();
 
 /// For the HUD geometry dump: "view=<players|intelligence|strategy>", then the current view's settings:
-/// - the intelligence's "select=<row>", "pinned=1", "filter=<all|briefings|research|unread>", "order=<newest|kind>",
-///   "search=<text>", "tree=1" (the selected report in the research tree)
+/// - the intelligence's "select=<row>", "objective=<n>", "pinned=1", "filter=<all|objectives|briefings|research|unread>",
+///   "order=<newest|kind>", "search=<text>", "tree=1" (the selected report in the research tree)
 /// - the players' "menu=<give|more>:<row>", "confirm=<row>", "focus=<row>"
 /// - the team strategy's "focus=<class>"
 bool hudIntelScreenApplyForTests(const std::string &setting);

@@ -128,6 +128,28 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 	{
 		const auto module = static_cast<HudModuleId>(i);
 		auto optionInfo = OptionInfo(WzString("interface.") + hudModuleOptionKey(module), hudModuleNameMsgid(module), hudModuleDescriptionMsgid(module));
+		if (module == HudModuleId::Objectives)
+		{
+			// (Whether the card shows is one of the Objectives option's choices)
+			auto valueChanger = OptionsDropdown<HudObjectivesShow>::make(
+				[]() {
+					OptionChoices<HudObjectivesShow> result;
+					result.choices = {
+						{ _("Card"), _("A card under the in-game options button. It opens when they change, then folds back to a button."), HudObjectivesShow::Card },
+						{ _("Pop-up"), _("Timed pop-up over the reticule when they change. Closes automatically."), HudObjectivesShow::PopUp },
+						{ _("Off"), _("Only in the intelligence screen, with a dot on its button when they change."), HudObjectivesShow::Off },
+					};
+					result.setCurrentIdxForValue(hudObjectivesShow());
+					return result;
+				},
+				[](const auto& newValue) -> bool {
+					hudSetObjectivesShow(newValue);
+					return true;
+				}, true
+			);
+			form->addOption(optionInfo, valueChanger, true);
+			continue;
+		}
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[module]() {
 				OptionChoices<bool> result;

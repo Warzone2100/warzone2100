@@ -27,6 +27,7 @@
 
 #include "intelview.h"
 #include "intelkit.h"
+#include "objectivescard.h"
 
 #include "../hudskin.h"
 #include "../hudtext.h"
@@ -34,6 +35,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -46,6 +48,7 @@
 #include "lib/widget/scrollablelist.h"
 
 #include "../../intelmap.h"
+#include "../../objectives.h"
 #include "../../mapdisplay.h"
 #include "../../messagedef.h"
 #include "../../research.h"
@@ -79,6 +82,22 @@ constexpr int BUTTON_HEIGHT_COMPACT = 32;
 constexpr int THUMB_WIDTH = 40;
 constexpr int THUMB_HEIGHT = 34;
 constexpr int GAP = 8;
+
+/// The filters, in the order they're offered
+constexpr IntelFilter FILTER_ORDER[] = {IntelFilter::All, IntelFilter::Objectives, IntelFilter::Briefings, IntelFilter::Research, IntelFilter::Unread};
+
+const char *filterName(IntelFilter filter)
+{
+	switch (filter)
+	{
+	case IntelFilter::All: return N_("All");
+	case IntelFilter::Objectives: return N_("Objectives");
+	case IntelFilter::Briefings: return N_("Briefings");
+	case IntelFilter::Research: return N_("Research");
+	case IntelFilter::Unread: return N_("Unread");
+	}
+	return "";
+}
 
 /// (Draws nothing: the search field draws the edit box's background, with its icon)
 void displayNothing(WIDGET *, UDWORD, UDWORD) {}
@@ -466,6 +485,210 @@ private:
 	WzText metaLine;
 };
 
+/// An objective: its state and text, its tags (primary or secondary, its state, when it was added), its progress, the
+/// mission's objectives with when each last changed, and the briefing they came with
+class IntelObjectivePane : public WIDGET
+{
+public:
+	IntelObjectivePane(const Objective &objective, bool compact): objective(objective), compact(compact) {}
+
+	void initialize(const HudIntelEntry *briefing, std::function<void ()> openBriefing)
+	{
+		all = objectivesFor(selectedPlayer);
+		if (briefing != nullptr)
+		{
+			auto link = std::make_shared<BriefingLink>(*briefing);
+			link->addOnClickHandler([openBriefing](W_BUTTON &) {
+				if (openBriefing)
+				{
+					widgScheduleTask(openBriefing);
+				}
+			});
+			briefingLink = link;
+			attach(link);
+		}
+	}
+
+	void geometryChanged() override
+	{
+		titleLines = hudWrapText(objective.text, titleFont(), std::max(80, width() - TITLE_X), 3);
+		if (briefingLink)
+		{
+			const int top = briefingTop();
+			briefingLink->setGeometry(0, top + SECTION_LABEL, width(), compact ? 40 : 58);
+			briefingLink->show(top + SECTION_LABEL + briefingLink->height() <= height());
+		}
+	}
+
+	void display(int xOffset, int yOffset) override
+	{
+		const HudColors &colors = skin().colors();
+		const int x0 = xOffset + x();
+		const int y0 = yOffset + y();
+		const iV_fonts font = titleFont();
+		const int lineHeight = iV_GetTextLineSize(font);
+		const PIELIGHT stateColor = hudObjectiveColor(objective);
+		const int iconSize = compact ? 18 : 22;
+		skin().drawNamedIcon(hudObjectiveIcon(objective), WzRect(x0, y0 + (lineHeight - iconSize) / 2, iconSize, iconSize), stateColor);
+		titleTexts.resize(titleLines.size());
+		for (size_t i = 0; i < titleLines.size(); ++i)
+		{
+			drawLine(titleTexts[i], titleLines[i], font, x0 + TITLE_X, y0 + static_cast<int>(i) * lineHeight, width() - TITLE_X, colors.textPrimary);
+		}
+		int y = y0 + static_cast<int>(titleLines.size()) * lineHeight + 8;
+
+		const int tagCenter = y + 10;
+		int tagX = x0 + TITLE_X;
+		const std::string kind = objective.options.primary ? _("Primary objective") : _("Secondary objective");
+		tagX += drawTag(tags[0], kind, tagX, tagCenter, objective.options.primary ? colors.stateWarn : colors.textSecondary, false) + 6;
+		tagX += drawTag(tags[1], stateName(objective.options.state), tagX, tagCenter, objective.options.state == ObjectiveState::Active ? colors.textSecondary : stateColor, false) + 6;
+		const std::string added = astringf(_("Added at %s"), hudFormatDuration(objective.addedAt / GAME_TICKS_PER_SEC).c_str());
+		if (tagX + tagWidth(tags[2], added) <= x0 + width())
+		{
+			drawTag(tags[2], added, tagX, tagCenter, colors.textSecondary, false);
+		}
+		y += 28;
+
+		if (objective.options.progress.has_value())
+		{
+			const auto &progress = *objective.options.progress;
+			const std::string count = astringf(_("%d of %d"), progress.first, progress.second);
+			const int barX = x0 + TITLE_X + drawLine(progressLine, count, font_regular_bold, x0 + TITLE_X, y, 120, colors.textPrimary) + 12;
+			const int barWidth = std::min(200, x0 + width() - barX);
+			const int barY = y + iV_GetTextLineSize(font_regular_bold) / 2 - 2;
+			const float fraction = std::max(0.f, std::min(1.f, static_cast<float>(progress.first) / static_cast<float>(progress.second)));
+			if (barWidth > 20)
+			{
+				pie_DrawRoundedBox(static_cast<float>(barX), static_cast<float>(barY), static_cast<float>(barX + barWidth), static_cast<float>(barY + 4),
+				                   alpha(colors.textSecondary, 70), 2.f);
+				pie_DrawRoundedBox(static_cast<float>(barX), static_cast<float>(barY), static_cast<float>(barX) + static_cast<float>(barWidth) * fraction,
+				                   static_cast<float>(barY + 4), stateColor, 2.f);
+			}
+			y += 26;
+		}
+		drawDivider(x0, y, x0 + width(), y + 1);
+		y += 12;
+
+		drawLine(sectionText, _("This mission"), font_regular_bold, x0, y, width(), colors.stateWarn);
+		y += SECTION_LABEL;
+		const int rowHeight = compact ? 24 : 28;
+		listTexts.resize(all.size());
+		timeTexts.resize(all.size());
+		for (size_t i = 0; i < all.size() && y + rowHeight <= y0 + briefingTop(); ++i)
+		{
+			const Objective &item = all[i];
+			const bool current = item.id == objective.id && item.options.player == objective.options.player;
+			skin().drawNamedIcon(hudObjectiveIcon(item), WzRect(x0 + 2, y + (rowHeight - 16) / 2, 16, 16), hudObjectiveColor(item));
+			const std::string when = timeOf(item);
+			timeTexts[i].setText(WzString::fromUtf8(when), font_small);
+			const int whenWidth = when.empty() ? 0 : timeTexts[i].width() + 12;
+			std::string text = item.text;
+			if (item.options.progress.has_value())
+			{
+				text += astringf("  %d/%d", item.options.progress->first, item.options.progress->second);
+			}
+			const iV_fonts rowFont = current ? font_regular_bold : font_regular;
+			const int textTop = y + (rowHeight - iV_GetTextLineSize(rowFont)) / 2;
+			drawLine(listTexts[i], text, rowFont, x0 + 26, textTop, width() - 26 - whenWidth,
+			         item.options.state == ObjectiveState::Active ? colors.textPrimary : colors.textSecondary);
+			if (!when.empty())
+			{
+				drawLine(timeTexts[i], when, font_small, x0 + width(), y + (rowHeight - iV_GetTextLineSize(font_small)) / 2, whenWidth, colors.textSecondary, true);
+			}
+			y += rowHeight;
+		}
+
+		if (briefingLink && briefingLink->visible())
+		{
+			drawLine(briefingText, _("From the briefing"), font_regular_bold, x0, y0 + briefingTop(), width(), colors.stateWarn);
+		}
+	}
+
+private:
+	static constexpr int TITLE_X = 32;
+	static constexpr int SECTION_LABEL = 26;
+
+	/// The briefing, as a card: its picture, title and time, opened with a click
+	class BriefingLink : public W_BUTTON
+	{
+	public:
+		explicit BriefingLink(const HudIntelEntry &entry): entry(entry) {}
+
+	protected:
+		void display(int xOffset, int yOffset) override
+		{
+			const WzRect rect(xOffset + x(), yOffset + y(), width(), height());
+			const HudColors &colors = skin().colors();
+			skin().drawCard(rect, isHighlighted() ? HudCardState::Highlighted : HudCardState::Normal);
+			const int thumb = rect.height() - 12;
+			drawThumb(entry, WzRect(rect.x() + 6, rect.y() + 6, thumb * 3 / 2, thumb));
+			const int textX = rect.x() + 6 + thumb * 3 / 2 + 12;
+			const int textWidth = rect.right() - 30 - textX;
+			const bool small = rect.height() < 50;
+			drawLine(title, entry.title, small ? font_regular : font_regular_bold, textX, rect.y() + (small ? 4 : 10), textWidth, colors.textPrimary);
+			std::string meta = _("Mission briefing");
+			const std::string time = timeText(entry);
+			if (!time.empty())
+			{
+				meta += " · " + time;
+			}
+			drawLine(metaLine, meta, font_small, textX, rect.y() + (small ? 22 : 31), textWidth, colors.textSecondary);
+			skin().drawNamedIcon("chevron-right", WzRect(rect.right() - 24, rect.y() + (rect.height() - 14) / 2, 14, 14), colors.textSecondary);
+		}
+
+	private:
+		HudIntelEntry entry;
+		WzText title;
+		WzText metaLine;
+	};
+
+	iV_fonts titleFont() const
+	{
+		return compact ? font_regular_bold : font_large;
+	}
+
+	int briefingTop() const
+	{
+		return briefingLink ? std::max(0, height() - (compact ? 40 : 58) - SECTION_LABEL) : height();
+	}
+
+	static std::string stateName(ObjectiveState state)
+	{
+		switch (state)
+		{
+		case ObjectiveState::Done: return _("Done");
+		case ObjectiveState::Failed: return _("Failed");
+		case ObjectiveState::Active: break;
+		}
+		return _("Active");
+	}
+
+	static std::string timeOf(const Objective &item)
+	{
+		const std::string time = hudFormatDuration(item.stateAt / GAME_TICKS_PER_SEC);
+		switch (item.options.state)
+		{
+		case ObjectiveState::Done: return astringf(_("done at %s"), time.c_str());
+		case ObjectiveState::Failed: return astringf(_("failed at %s"), time.c_str());
+		case ObjectiveState::Active: break;
+		}
+		return astringf(_("since %s"), time.c_str());
+	}
+
+	Objective objective;
+	bool compact;
+	std::vector<Objective> all;
+	std::shared_ptr<W_BUTTON> briefingLink;
+	std::vector<std::string> titleLines;
+	std::vector<WzText> titleTexts;
+	WzText tags[3];
+	WzText progressLine;
+	WzText sectionText;
+	std::vector<WzText> listTexts;
+	std::vector<WzText> timeTexts;
+	WzText briefingText;
+};
+
 /// The item's pane: its contents above, its buttons below
 class IntelDetail : public WIDGET
 {
@@ -552,7 +775,7 @@ void IntelView::initialize(bool compactLayout)
 	}
 	else
 	{
-		for (IntelFilter which : {IntelFilter::All, IntelFilter::Briefings, IntelFilter::Research, IntelFilter::Unread})
+		for (IntelFilter which : FILTER_ORDER)
 		{
 			auto chip = HudChip::make(WzString());
 			chip->onPressed = [weakSelf, which](HudChip &, bool) {
@@ -632,6 +855,7 @@ bool IntelView::passes(const HudIntelEntry &item) const
 	case IntelFilter::Briefings: if (item.kind == HudIntelKind::Research) { return false; } break;
 	case IntelFilter::Research: if (item.kind != HudIntelKind::Research) { return false; } break;
 	case IntelFilter::Unread: if (!item.unread) { return false; } break;
+	case IntelFilter::Objectives: return false;
 	}
 	return search.empty() || item.searchText.find(search) != std::string::npos;
 }
@@ -644,9 +868,43 @@ void IntelView::rebuildList()
 	const int rowHeight = compact ? ROW_HEIGHT_COMPACT : ROW_HEIGHT;
 	const int rowWidth = (compact ? LIST_WIDTH_COMPACT : LIST_WIDTH);
 
-	// The latest mission briefing, pinned (with the filters that show briefings, and no search)
+	objectivesSeen = objectivesRevision();
+	const bool withObjectives = selectedPlayer < MAX_PLAYERS && objectivesAny(selectedPlayer);
+	if (!withObjectives && filter == IntelFilter::Objectives)
+	{
+		filter = IntelFilter::All;
+	}
+	// The objectives, pinned (with the filters that show them, and no search)
+	if (objectivesCard)
+	{
+		detach(objectivesCard);
+		objectivesCard.reset();
+	}
+	if (withObjectives && (filter == IntelFilter::All || filter == IntelFilter::Objectives) && search.empty())
+	{
+		objectivesCard = ObjectivesCard::make(ObjectivesCardMode::Pinned);
+		std::weak_ptr<IntelView> weakView = std::static_pointer_cast<IntelView>(shared_from_this());
+		objectivesCard->isSelected = [weakView](const Objective &objective) {
+			auto view = weakView.lock();
+			return view && view->selectedObjective.has_value() && *view->selectedObjective == hudObjectiveKey(objective);
+		};
+		objectivesCard->onSelect = [weakView](const Objective &objective) {
+			if (auto view = weakView.lock())
+			{
+				view->selectObjective(hudObjectiveKey(objective));
+			}
+		};
+		objectivesCard->onMore = [weakView]() {
+			if (auto view = weakView.lock())
+			{
+				view->setFilter(IntelFilter::Objectives);
+			}
+		};
+		attach(objectivesCard);
+	}
+	// Or, when there are none, the latest mission briefing (with the filters that show briefings, and no search)
 	pinned.reset();
-	if ((filter == IntelFilter::All || filter == IntelFilter::Briefings) && search.empty())
+	if (!withObjectives && (filter == IntelFilter::All || filter == IntelFilter::Briefings) && search.empty())
 	{
 		for (size_t i = 0; i < entries.size(); ++i)
 		{
@@ -749,11 +1007,30 @@ void IntelView::rebuildList()
 	detach(emptyLabel);
 	emptyLabel = std::make_shared<IntelNote>(entries.empty() ? _("No intelligence yet") : _("Nothing matches"));
 	attach(emptyLabel);
-	emptyLabel->show(shown.empty() && !pinned.has_value());
+	emptyLabel->show(shown.empty() && !pinned.has_value() && !objectivesCard);
 	updateChips();
 	layoutChildren();
 	// What the filters or the search hide doesn't stay shown beside the list
-	if (selected.has_value() && std::find(shown.begin(), shown.end(), *selected) == shown.end() && (!pinned.has_value() || *pinned != *selected))
+	if (selectedObjective.has_value())
+	{
+		const auto objectives = objectivesCard ? objectivesFor(selectedPlayer) : std::vector<Objective>();
+		const bool stillThere = std::any_of(objectives.begin(), objectives.end(), [this](const Objective &objective) {
+			return hudObjectiveKey(objective) == *selectedObjective;
+		});
+		if (!stillThere)
+		{
+			selectedObjective.reset();
+			if (!shown.empty())
+			{
+				select(shown.front(), false);
+			}
+			else
+			{
+				rebuildDetail();
+			}
+		}
+	}
+	else if (selected.has_value() && std::find(shown.begin(), shown.end(), *selected) == shown.end() && (!pinned.has_value() || *pinned != *selected))
 	{
 		if (!shown.empty())
 		{
@@ -767,28 +1044,41 @@ void IntelView::rebuildList()
 	}
 }
 
+size_t IntelView::filterCount(IntelFilter which) const
+{
+	if (which == IntelFilter::Objectives)
+	{
+		return selectedPlayer < MAX_PLAYERS ? objectivesFor(selectedPlayer).size() : 0;
+	}
+	size_t n = 0;
+	for (const HudIntelEntry &item : entries)
+	{
+		switch (which)
+		{
+		case IntelFilter::All: ++n; break;
+		case IntelFilter::Briefings: n += item.kind != HudIntelKind::Research ? 1 : 0; break;
+		case IntelFilter::Research: n += item.kind == HudIntelKind::Research ? 1 : 0; break;
+		case IntelFilter::Unread: n += item.unread ? 1 : 0; break;
+		case IntelFilter::Objectives: break;
+		}
+	}
+	return n;
+}
+
+bool IntelView::filterShown(IntelFilter which) const
+{
+	// (Most games have no objectives)
+	return which != IntelFilter::Objectives || (selectedPlayer < MAX_PLAYERS && objectivesAny(selectedPlayer));
+}
+
 void IntelView::updateChips()
 {
-	const auto count = [this](IntelFilter which) {
-		size_t n = 0;
-		for (const HudIntelEntry &item : entries)
-		{
-			switch (which)
-			{
-			case IntelFilter::All: ++n; break;
-			case IntelFilter::Briefings: n += item.kind != HudIntelKind::Research ? 1 : 0; break;
-			case IntelFilter::Research: n += item.kind == HudIntelKind::Research ? 1 : 0; break;
-			case IntelFilter::Unread: n += item.unread ? 1 : 0; break;
-			}
-		}
-		return n;
-	};
-	const char *names[] = {N_("All"), N_("Briefings"), N_("Research"), N_("Unread")};
-	const IntelFilter filters[] = {IntelFilter::All, IntelFilter::Briefings, IntelFilter::Research, IntelFilter::Unread};
 	for (size_t i = 0; i < chips.size(); ++i)
 	{
-		chips[i]->setText(WzString::fromUtf8(astringf("%s %zu", gettext(names[i]), count(filters[i]))));
-		chips[i]->setActive(filter == filters[i]);
+		const IntelFilter which = FILTER_ORDER[i];
+		chips[i]->setText(WzString::fromUtf8(astringf("%s %zu", gettext(filterName(which)), filterCount(which))));
+		chips[i]->setActive(filter == which);
+		chips[i]->show(filterShown(which));
 	}
 	if (auto button = std::dynamic_pointer_cast<IntelButton>(orderChip))
 	{
@@ -796,8 +1086,7 @@ void IntelView::updateChips()
 	}
 	if (auto button = std::dynamic_pointer_cast<IntelButton>(filterButton))
 	{
-		size_t which = static_cast<size_t>(filter);
-		button->setLabel(astringf("%s %zu", gettext(names[which]), count(filters[which])));
+		button->setLabel(astringf("%s %zu", gettext(filterName(filter)), filterCount(filter)));
 	}
 }
 
@@ -826,10 +1115,13 @@ void IntelView::openFilterMenu(const std::shared_ptr<WIDGET> &anchor, bool withF
 	};
 	if (withFilters)
 	{
-		const char *names[] = {N_("All"), N_("Briefings"), N_("Research"), N_("Unread")};
-		for (IntelFilter which : {IntelFilter::All, IntelFilter::Briefings, IntelFilter::Research, IntelFilter::Unread})
+		for (IntelFilter which : FILTER_ORDER)
 		{
-			addItem(gettext(names[static_cast<size_t>(which)]), filter == which, [weakSelf, which]() {
+			if (!filterShown(which))
+			{
+				continue;
+			}
+			addItem(gettext(filterName(which)), filter == which, [weakSelf, which]() {
 				if (auto self = weakSelf.lock())
 				{
 					self->setFilter(which);
@@ -858,8 +1150,9 @@ void IntelView::select(size_t index, bool byPointer)
 	{
 		return;
 	}
-	const bool changed = !selected.has_value() || *selected != index;
+	const bool changed = !selected.has_value() || *selected != index || selectedObjective.has_value();
 	selected = index;
+	selectedObjective.reset();
 	HudIntelEntry &item = entries[index];
 	if (item.message != nullptr && !item.message->read)
 	{
@@ -895,8 +1188,50 @@ void IntelView::select(size_t index, bool byPointer)
 	}
 }
 
+bool IntelView::selectObjective(const std::string &key)
+{
+	const auto objectives = selectedPlayer < MAX_PLAYERS ? objectivesFor(selectedPlayer) : std::vector<Objective>();
+	const Objective *chosen = nullptr;
+	for (const Objective &objective : objectives)
+	{
+		if (key.empty() ? objective.options.state == ObjectiveState::Active : hudObjectiveKey(objective) == key)
+		{
+			chosen = &objective;
+			break;
+		}
+	}
+	if (chosen == nullptr && key.empty() && !objectives.empty())
+	{
+		chosen = &objectives.front();
+	}
+	if (chosen == nullptr)
+	{
+		return false;
+	}
+	if (!objectivesCard)
+	{
+		filter = IntelFilter::All;
+		search.clear();
+		searchBox->setString(WzString());
+		rebuildList();
+	}
+	const std::string chosenKey = hudObjectiveKey(*chosen);
+	const bool changed = !selectedObjective.has_value() || *selectedObjective != chosenKey;
+	selected.reset();
+	selectedObjective = chosenKey;
+	if (changed)
+	{
+		rebuildDetail();
+	}
+	return true;
+}
+
 bool IntelView::selectEntry(HudIntelKind kind, const std::string &key)
 {
+	if (static_cast<int>(kind) == INTEL_OBJECTIVES_KIND)
+	{
+		return selectObjective(key);
+	}
 	for (size_t i = 0; i < entries.size(); ++i)
 	{
 		if (entries[i].kind == kind && entries[i].key == key)
@@ -933,6 +1268,10 @@ void IntelView::selectMessage(const MESSAGE *message)
 	else if (pinned.has_value())
 	{
 		select(*pinned, false);
+	}
+	else if (objectivesCard)
+	{
+		selectObjective(std::string());
 	}
 }
 
@@ -1007,11 +1346,6 @@ void IntelView::rebuildDetail()
 		detach(detail);
 		detail.reset();
 	}
-	if (!selected.has_value())
-	{
-		return;
-	}
-	const HudIntelEntry &item = entries[*selected];
 	std::weak_ptr<IntelView> weakSelf = std::static_pointer_cast<IntelView>(shared_from_this());
 	const WzRect rect = detailRect();
 	const int buttonHeight = compact ? BUTTON_HEIGHT_COMPACT : BUTTON_HEIGHT;
@@ -1019,6 +1353,58 @@ void IntelView::rebuildDetail()
 	pane->barHeight = buttonHeight;
 	auto bar = std::make_shared<IntelBar>();
 	bar->divided = !compact;
+	if (selectedObjective.has_value())
+	{
+		const auto objectives = selectedPlayer < MAX_PLAYERS ? objectivesFor(selectedPlayer) : std::vector<Objective>();
+		auto it = std::find_if(objectives.begin(), objectives.end(), [this](const Objective &objective) {
+			return hudObjectiveKey(objective) == *selectedObjective;
+		});
+		if (it == objectives.end())
+		{
+			return;
+		}
+		// (The latest mission briefing, which set them)
+		nonstd::optional<size_t> briefing;
+		for (size_t i = 0; i < entries.size(); ++i)
+		{
+			if (entries[i].kind == HudIntelKind::Briefing && entries[i].message != nullptr)
+			{
+				briefing = i;
+				break;
+			}
+		}
+		auto contents = std::make_shared<IntelObjectivePane>(*it, compact);
+		contents->initialize(briefing.has_value() ? &entries[*briefing] : nullptr, [weakSelf, briefing]() {
+			auto self = weakSelf.lock();
+			if (self && briefing.has_value())
+			{
+				self->select(*briefing, true);
+			}
+		});
+		contents->setGeometry(0, 0, rect.width(), rect.height() - buttonHeight - 20);
+		pane->contents = contents;
+		pane->attach(contents);
+		if (it->options.state == ObjectiveState::Active && hudObjectiveHasPlace(*it))
+		{
+			const Objective target = *it;
+			auto show = IntelButton::make(_("Show on map"), "show-on-map", true, buttonHeight);
+			show->addOnClickHandler([target](W_BUTTON &) {
+				widgScheduleTask([target]() { hudShowObjectiveOnMap(target); });
+			});
+			bar->add(show);
+		}
+		pane->bar = bar;
+		pane->attach(bar);
+		detail = pane;
+		attach(pane);
+		layoutChildren();
+		return;
+	}
+	if (!selected.has_value())
+	{
+		return;
+	}
+	const HudIntelEntry &item = entries[*selected];
 
 	if (item.kind == HudIntelKind::Research)
 	{
@@ -1129,6 +1515,10 @@ void IntelView::layoutChildren()
 		int x0 = 16;
 		for (auto &chip : chips)
 		{
+			if (!chip->visible())
+			{
+				continue;
+			}
 			const int w = chip->idealWidth() + 8;
 			chip->setGeometry(x0, 4, w, CHIP_HEIGHT);
 			x0 += w + 6;
@@ -1141,6 +1531,15 @@ void IntelView::layoutChildren()
 
 	WzRect rect = listRect();
 	int listTop = rect.y();
+	if (objectivesCard)
+	{
+		// (With the Objectives filter, the whole list, otherwise up to about half of it, then "3 more")
+		objectivesCard->setGeometry(rect.x(), listTop, rect.width() - SCROLLBAR_WIDTH, std::max(1, objectivesCard->height()));
+		const int limit = filter == IntelFilter::Objectives ? rect.height() : std::max(120, rect.height() * 45 / 100);
+		const int h = std::min(objectivesCard->fullHeight(), limit);
+		objectivesCard->setGeometry(rect.x(), listTop, rect.width() - SCROLLBAR_WIDTH, h);
+		listTop += h + 6;
+	}
 	if (pinnedCard)
 	{
 		const int h = compact ? PINNED_HEIGHT_COMPACT : PINNED_HEIGHT;
@@ -1159,7 +1558,7 @@ void IntelView::layoutChildren()
 void IntelView::geometryChanged()
 {
 	layoutChildren();
-	if (detail && selected.has_value())
+	if (detail && hasSelection())
 	{
 		rebuildDetail();
 	}
@@ -1207,6 +1606,12 @@ bool IntelView::applyForTests(const std::string &key, const std::string &value)
 		select(shown[row], false);
 		return true;
 	}
+	if (key == "objective")
+	{
+		const size_t row = static_cast<size_t>(std::strtoul(value.c_str(), nullptr, 10));
+		const auto objectives = selectedPlayer < MAX_PLAYERS ? objectivesFor(selectedPlayer) : std::vector<Objective>();
+		return row < objectives.size() && selectObjective(hudObjectiveKey(objectives[row]));
+	}
 	if (key == "pinned")
 	{
 		if (!pinned.has_value())
@@ -1218,13 +1623,13 @@ bool IntelView::applyForTests(const std::string &key, const std::string &value)
 	}
 	if (key == "filter")
 	{
-		const char *names[] = {"all", "briefings", "research", "unread"};
-		for (size_t i = 0; i < 4; ++i)
+		const char *names[] = {"all", "briefings", "research", "unread", "objectives"};
+		for (size_t i = 0; i < 5; ++i)
 		{
 			if (value == names[i])
 			{
 				setFilter(static_cast<IntelFilter>(i));
-				return true;
+				return filterShown(filter);
 			}
 		}
 		return false;
@@ -1260,6 +1665,14 @@ void IntelView::run(W_CONTEXT *)
 	{
 		search = text;
 		rebuildList();
+	}
+	if (objectivesSeen != objectivesRevision())
+	{
+		rebuildList();
+		if (selectedObjective.has_value())
+		{
+			rebuildDetail();
+		}
 	}
 }
 

@@ -56,8 +56,9 @@ The intelligence screen:
 
 - `intel` opens the Modern skin's intelligence screen (in a game with other players, on its players view).
 - `intel.<setting>=<value>` sets it up: `view=<players|intelligence|strategy>`, then the current view's settings:
-  - the intelligence view's `select=<row>`, `pinned=1`, `filter=<all|briefings|research|unread>`,
-    `order=<newest|kind>`, `search=<text>` and `tree=1` (the selected report in the research tree)
+  - the intelligence view's `select=<row>`, `objective=<n>` (the nth objective), `pinned=1`,
+    `filter=<all|objectives|briefings|research|unread>`, `order=<newest|kind>`, `search=<text>` and `tree=1` (the
+    selected report in the research tree)
   - the players view's `menu=<give|more>:<row>`, `confirm=<row>` (breaking the alliance) and `focus=<row>`
   - the team strategy view's `focus=<class>`
 - `report=<view>` gives the local player a research report for its topic (researched, as a report's topic is), and
@@ -66,6 +67,16 @@ The intelligence screen:
   A new report or message shows the Modern skin's notice at the top of the screen (`src/hud/hudtoast.h`), and adds
   to the count on the reticule's intelligence button (ex. `report=RES_CYW_MG4+report=RES_TOWER1`: two reports, in
   one notice).
+- `objectives.<setting>` sets up the objectives (`src/hud/intel/objectivescard.h`):
+  - `sample=<proximity view>`: a mission's objectives as a script would set them (one done, one with a place on the
+    map, one with a count, and a secondary one; ex. `objectives.sample=C2A_BASE1` in `--game=CAM_2A`)
+  - `card=<expanded|line|minimized>`: the card's state (the card shows with `hud.objectives=1`)
+  - `changed=<id>`: one just changed (marked new and highlighted)
+  - `remind`: a script's reminder (`showObjectives()`)
+  - `popup`: the pop-up over the reticule
+
+  What these set is cleared before the next state, but the objectives the game's scripts set stay. The card and the
+  pop-up are shown at rest (no motion), and the pop-up and a reminder don't run out.
 - `alliance=<player>:<formed|requested|invitation|broken>` sets the local player's alliance with a player (no
   message is sent).
 - `teamplans=<n>` makes up to n of the local player's AI teammates count as players who were human, with sample

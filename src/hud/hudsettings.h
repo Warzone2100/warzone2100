@@ -82,8 +82,9 @@ enum class HudModuleId : uint8_t
 	ReadableBars,
 	PanelFilters,
 	SpectatorStrip,
+	Objectives,
 };
-constexpr size_t HUD_MODULE_COUNT = static_cast<size_t>(HudModuleId::SpectatorStrip) + 1;
+constexpr size_t HUD_MODULE_COUNT = static_cast<size_t>(HudModuleId::Objectives) + 1;
 
 /// A preset sets the skin and the toggles (it's derived from them, never stored)
 enum class HudPreset : uint8_t
@@ -106,6 +107,9 @@ struct HudSettings
 	bool rememberFilters = false;
 	/// The HUD's notices (ex. a research report arrived), at the top of the screen
 	bool toasts = true;
+	/// With the objectives card off: the objectives pop up over the reticule when they change (else: only a dot on
+	/// the intelligence button)
+	bool objectivesPopUp = true;
 	uint32_t tooltipDelay = 200;
 	bool showModulesInTutorial = false;
 
@@ -129,6 +133,16 @@ bool hudModuleEnabled(HudModuleId module);
 bool hudModuleActive(HudModuleId module);
 bool hudDetailedTooltips();
 bool hudReduceMotion();
+
+/// How the objectives show (the Objectives option): the card (its module), a pop-up over the reticule, or neither
+enum class HudObjectivesShow : uint8_t
+{
+	Card,
+	PopUp,
+	Off
+};
+HudObjectivesShow hudObjectivesShow();
+void hudSetObjectivesShow(HudObjectivesShow show);
 
 const char *hudModuleOptionKey(HudModuleId module);
 /// A module's name and description, untranslated (for the options screen, which translates them itself)

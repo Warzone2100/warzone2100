@@ -81,6 +81,7 @@ data/base/images/hud/icons/channel-off.svg
 data/base/images/hud/icons/channel.svg
 data/base/images/hud/icons/chevron-down.svg
 data/base/images/hud/icons/chevron-right.svg
+data/base/images/hud/icons/chevron-up.svg
 data/base/images/hud/icons/connection-desync.svg
 data/base/images/hud/icons/connection-left.svg
 data/base/images/hud/icons/connection-waiting.svg
@@ -94,9 +95,14 @@ data/base/images/hud/icons/intelligence.svg
 data/base/images/hud/icons/kick.svg
 data/base/images/hud/icons/loop.svg
 data/base/images/hud/icons/mark-unread.svg
+data/base/images/hud/icons/minimize.svg
 data/base/images/hud/icons/mission-clock.svg
 data/base/images/hud/icons/more.svg
 data/base/images/hud/icons/never.svg
+data/base/images/hud/icons/objective-active.svg
+data/base/images/hud/icons/objective-done.svg
+data/base/images/hud/icons/objective-failed.svg
+data/base/images/hud/icons/objective-secondary.svg
 data/base/images/hud/icons/objective.svg
 data/base/images/hud/icons/obsolete-hidden.svg
 data/base/images/hud/icons/obsolete-shown.svg
@@ -137,6 +143,7 @@ data/base/images/hud/icons/research-structure.fill.svg
 data/base/images/hud/icons/research-structure.svg
 data/base/images/hud/icons/research-tree.svg
 data/base/images/hud/icons/search.svg
+data/base/images/hud/icons/show-on-map.svg
 data/base/images/hud/icons/statistics.svg
 data/base/images/hud/icons/strip-collapse.svg
 data/base/images/hud/icons/strip-expand.svg

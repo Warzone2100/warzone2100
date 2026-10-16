@@ -30,6 +30,7 @@ function camSetArtifacts(artifacts)
 	{
 		__camSetupArtifactData(alabel);
 	}
+	__camUpdateObjectives();
 }
 
 //;; ## camAddArtifact(artiLabel, artiTech)
@@ -49,6 +50,7 @@ function camAddArtifact(artiLabel, artiTech)
 	}
 	__camArtifacts[artiLabel] = { tech: artiTech };
 	__camSetupArtifactData(artiLabel);
+	__camUpdateObjectives();
 }
 
 //;; ## camDeleteArtifact(artiLabel)
@@ -86,6 +88,7 @@ function camDeleteArtifact(artiLabel, warnIfNotFound)
 		}
 	}
 	delete __camArtifacts[artiLabel];
+	__camUpdateObjectives();
 }
 
 //;; ## camAllArtifactsPickedUp()

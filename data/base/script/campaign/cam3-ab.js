@@ -232,11 +232,13 @@ function eventResearched(research, structure, player)
 		if (camClassicMode())
 		{
 			winFlag = true;
+			camSetObjectiveState("resistance", "done");
 		}
 	}
 	else if (research.name === cam_resistance_circuits.fourth)
 	{
 		winFlag = true;
+		camSetObjectiveState("resistance", "done");
 		hackFailChance = 100;
 		camSetNexusState(false);
 	}
@@ -274,7 +276,7 @@ function resistanceResearched()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Research resistance circuits and survive the assault from Nexus"));
+	camSetExtraObjectiveMessage({id: "resistance", text: _("Research resistance circuits and survive the assault from Nexus")});
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");

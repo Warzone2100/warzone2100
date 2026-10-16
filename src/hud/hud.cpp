@@ -34,6 +34,7 @@
 #include "hudpanelfilters.h"
 #include "hudrowsummary.h"
 #include "hudworldbars.h"
+#include "intel/objectivescard.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -136,6 +137,7 @@ void hudInitialize()
 	interfaceShown = true;
 	rebuildPending = false;
 	hudSkinChanged();
+	hudObjectivesInitialize();
 	createModules();
 }
 
@@ -143,6 +145,7 @@ void hudShutdown()
 {
 	hudCloseTransientUi();
 	destroyModules();
+	hudObjectivesShutdown();
 	modernHudSkin().releaseCaches();
 	hudReleaseJobBadges();
 	hudReleaseReadableBars();
@@ -172,6 +175,7 @@ void hudFrame()
 	if (initialized)
 	{
 		hudDetailUpdate();
+		hudObjectivesFrame();
 	}
 }
 
