@@ -23,6 +23,8 @@
 
 #include "animation.h"
 
+#include <cmath>
+
 ValueTracker* ValueTracker::startTracking(int value)
 {
 	this->initial = value;
@@ -78,7 +80,8 @@ ValueTracker* ValueTracker::update()
 	}
 
 	auto deltaRemaining = (this->initial + this->targetDelta - this->current);
-	auto adjustedChange = deltaRemaining * static_cast<double>(realTimeAdjustedIncrement(this->speed));
+	// Close a fixed fraction of the remaining distance per unit of time (exponential, at `speed` per second)
+	auto adjustedChange = deltaRemaining * (1.0 - std::exp(-static_cast<double>(this->speed) * frameTimeDeltaSeconds()));
 
 	// prevent "over-shooting" / rubber-banding
 	if (deltaRemaining >= 0.0 && adjustedChange > deltaRemaining)
