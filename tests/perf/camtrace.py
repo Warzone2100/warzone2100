@@ -284,11 +284,18 @@ def main():
               % (len(tracked), ran, 100.0 * ran / len(tracked), rest, gated, 100.0 * gated / len(tracked)))
         describe("solver dt", [r["h_dt_ms"] for r in tracked if r["h_upd"] == 1], fmt="%8.1f")
         steps = [b["desired_h"] - a["desired_h"] for a, b in zip(tracked, tracked[1:]) if b["desired_h"] != a["desired_h"]]
+        # How steeply the target changes per unit of camera movement.
+        # A continuous target stays within the terrain's own slopes (about 1-2),
+        # while a stepped one jumps tens of units over a few units of travel.
+        slopes = []
+        for a, b in zip(tracked, tracked[1:]):
+            moved = math.hypot(b["cam_x"] - a["cam_x"], b["cam_z"] - a["cam_z"])
+            if moved >= 1 and not b["warcam"]:
+                slopes.append(abs(b["desired_h"] - a["desired_h"]) / moved)
+        jumps = sum(1 for x in slopes if x > 3.0)
         avg_steps = [b["avg_h"] - a["avg_h"] for a, b in zip(tracked, tracked[1:]) if b["avg_h"] != a["avg_h"]]
-        big_steps = [abs(x) for x in steps if abs(x) > 5]
-        print("  desired-height changes: %d, largest %d u, steps over 5 u: %d (sizes: %s)"
-              % (len(steps), max([abs(x) for x in steps], default=0), len(big_steps),
-                 ", ".join("%+d x%d" % (k, steps.count(k)) for k in sorted(set(x for x in steps if abs(x) > 5))[:12])))
+        print("  desired-height changes: %d, largest %d u; change per unit of camera travel p99 %.2f, max %.2f; jumps (> 3 u/u): %d"
+              % (len(steps), max([abs(x) for x in steps], default=0), pct(slopes, 99) if slopes else 0.0, max(slopes, default=0.0), jumps))
         print("  average-terrain changes: %d, mean |step| %.1f u" % (len(avg_steps), statistics.fmean([abs(s) for s in avg_steps]) if avg_steps else 0.0))
         # Stalls: frames drawn while the camera is still away from its target but whose height didn't change.
         # NOTE: Traces from builds that ran trackHeight() after drawing
