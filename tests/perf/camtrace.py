@@ -244,18 +244,27 @@ def main():
         print("  no moving frames (use --cameraautopan, or hold a scroll key)")
 
     # ---- truncation --------------------------------------------------------------------
-    lost, stepmag = [], []
+    # x_exact/z_exact are the exact world-space steps, and x_dif/z_dif what was applied to the integer position.
+    # Per update they always differ by under a unit.
+    # What matters is whether the difference is thrown away (net loss grows with every update)
+    # or carried to the next frame (net loss stays under a unit).
+    # Frames clamped by the scroll limits are left out.
+    per_update, stepmag = [], []
+    net = total = 0.0
     for r in frames:
-        if r["scroll_upd"] and r["x_exact"] is not None:
+        if r["scroll_upd"] and r["x_exact"] is not None and not r["limit_hit"]:
             ex = math.hypot(r["x_exact"], r["z_exact"])
             if ex > 0:
-                lost.append(math.hypot(r["x_exact"] - r["x_dif"], r["z_exact"] - r["z_dif"]))
+                per_update.append(math.hypot(r["x_exact"] - r["x_dif"], r["z_exact"] - r["z_dif"]))
                 stepmag.append(ex)
+                # shortfall along the direction of travel: positive when motion was lost
+                net += ((r["x_exact"] - r["x_dif"]) * r["x_exact"] + (r["z_exact"] - r["z_dif"]) * r["z_exact"]) / ex
+                total += ex
     print("\nScroll truncation")
-    if lost:
-        describe("units discarded per update", lost, unit="u")
+    if per_update:
+        describe("exact minus applied, per update", per_update, unit="u")
         describe("exact step per update", stepmag, unit="u")
-        print("  total discarded: %.2f%% of exact motion" % (100.0 * sum(lost) / sum(stepmag)))
+        print("  net motion lost along the direction of travel: %.1f u of %.0f u (%.3f%%)" % (net, total, 100.0 * net / total))
         upd = sum(1 for r in frames if r["scroll_upd"])
         print("  scroll updated on %d of %d frames that sampled it" % (upd, sum(1 for r in frames if r["t_scroll"] is not None)))
     else:

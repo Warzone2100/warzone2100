@@ -56,7 +56,7 @@ void tickEnd();
 void markPresentEnd();      ///< right after pie_ScreenFrameRenderEnd() in gameLoop()
 
 /// Horizontal scroll (display.cpp)
-void markScrollSample(std::chrono::steady_clock::time_point now, bool updated);
+void markScrollSample(bool updated);
 void markScrollStep(double dtSeconds, double stepLeftRight, double stepUpDown, double speedLeftRight, double speedUpDown,
                     double xExact, double zExact, int xDif, int zDif);
 void applyAutoPan(int &scrollDirLeftRight, int &scrollDirUpDown);
@@ -97,7 +97,7 @@ inline void markRealTimeUpdate(uint32_t, uint32_t) {}
 inline void tickBegin() {}
 inline void tickEnd() {}
 inline void markPresentEnd() {}
-inline void markScrollSample(std::chrono::steady_clock::time_point, bool) {}
+inline void markScrollSample(bool) {}
 inline void markScrollStep(double, double, double, double, double, double, double, int, int) {}
 inline void applyAutoPan(int &, int &) {}
 inline void notifyScrollLimitHit() {}

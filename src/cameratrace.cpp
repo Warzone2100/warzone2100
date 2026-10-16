@@ -288,13 +288,13 @@ void markPresentEnd()
 	cur.gameTimeMs = gameTime;
 }
 
-void markScrollSample(std::chrono::steady_clock::time_point now, bool updated)
+void markScrollSample(bool updated)
 {
 	if (!g_enabled)
 	{
 		return;
 	}
-	cur.tScroll = sinceOrigin(now);
+	cur.tScroll = nowNs();
 	cur.scrollUpdated = updated ? 1 : 0;
 }
 
