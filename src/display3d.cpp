@@ -1161,6 +1161,7 @@ void draw3DScene()
 
 	wzPerfEnd(PERF_MISC);
 
+	camtrace::markStage(camtrace::Stage::SceneEnd);
 	perf::endOfFrame();
 }
 

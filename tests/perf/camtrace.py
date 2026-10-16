@@ -117,6 +117,38 @@ def main():
     multi = sum(1 for r in frames if (r["ticks"] or 0) > 1)
     print("  frames running more than one tick: %d" % multi)
 
+    # Long frames: which stage of the frame they spent their time in,
+    # and whether they lock to a phase of game time (a once-per-game-second event shows up as one dominant phase).
+    long_idx = [i + 1 for i, d in enumerate(present_dt) if d > 1.5 * median_dt]
+    if long_idx:
+        phases = {}
+        for i in long_idx:
+            ph = (frames[i]["game_time"] or 0) % 1000
+            phases[ph] = phases.get(ph, 0) + 1
+        top = sorted(phases.items(), key=lambda kv: -kv[1])[:3]
+        print("  long frames by gameTime %% 1000: %s" % ", ".join("%d ms: %d" % kv for kv in top))
+    if frames[0].get("t_render_begin") is not None or any(r.get("t_render_begin") is not None for r in frames[:50]):
+        stages = [("prev present -> loop start", lambda a, b: b["t_loop"] - a["t_present"]),
+                  ("loop start -> render (ticks)", lambda a, b: b["t_render_begin"] - b["t_loop"]),
+                  ("audio_Update", lambda a, b: b["t_audio_end"] - b["t_render_begin"]),
+                  ("widgets/input -> 3D draw", lambda a, b: b["t_draw"] - b["t_audio_end"]),
+                  ("3D scene", lambda a, b: b["t_scene_end"] - b["t_draw"]),
+                  ("UI, radar, overlays", lambda a, b: b["t_render_end"] - b["t_scene_end"]),
+                  ("submit + present (incl. vsync wait)", lambda a, b: b["t_present"] - b["t_render_end"])]
+        long_set = set(long_idx)
+        print("  frame stages, median ms (normal frames | long frames):")
+        for name, fn in stages:
+            normal, slow = [], []
+            for i in range(1, len(frames)):
+                a, b = frames[i - 1], frames[i]
+                try:
+                    v = fn(a, b) * ms
+                except TypeError:
+                    continue
+                (slow if i in long_set else normal).append(v)
+            if normal:
+                print("    %-38s %7.2f | %s" % (name, pct(normal, 50), ("%7.2f" % pct(slow, 50)) if slow else "      -"))
+
     # ---- sample point ------------------------------------------------------------------
     print("\nScroll sample point (time after loop start)")
     s_tick = [(r["t_scroll"] - r["t_loop"]) * ms for r in frames if r["t_scroll"] is not None and r["t_loop"] is not None and (r["ticks"] or 0) > 0]
