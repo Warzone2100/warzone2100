@@ -285,7 +285,10 @@ def main():
         describe("solver dt", [r["h_dt_ms"] for r in tracked if r["h_upd"] == 1], fmt="%8.1f")
         steps = [b["desired_h"] - a["desired_h"] for a, b in zip(tracked, tracked[1:]) if b["desired_h"] != a["desired_h"]]
         avg_steps = [b["avg_h"] - a["avg_h"] for a, b in zip(tracked, tracked[1:]) if b["avg_h"] != a["avg_h"]]
-        print("  desired-height changes: %d (sizes: %s)" % (len(steps), ", ".join("%+d x%d" % (k, steps.count(k)) for k in sorted(set(steps))[:12])))
+        big_steps = [abs(x) for x in steps if abs(x) > 5]
+        print("  desired-height changes: %d, largest %d u, steps over 5 u: %d (sizes: %s)"
+              % (len(steps), max([abs(x) for x in steps], default=0), len(big_steps),
+                 ", ".join("%+d x%d" % (k, steps.count(k)) for k in sorted(set(x for x in steps if abs(x) > 5))[:12])))
         print("  average-terrain changes: %d, mean |step| %.1f u" % (len(avg_steps), statistics.fmean([abs(s) for s in avg_steps]) if avg_steps else 0.0))
         # Stalls: frames drawn while the camera is still away from its target but whose height didn't change.
         # trackHeight() runs after the frame is drawn, so the update feeding frame n+1 is recorded on frame n.
