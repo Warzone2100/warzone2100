@@ -301,9 +301,10 @@ def main():
         if moving:
             print("  frames with no vertical motion while away from target: %d of %d (%.1f%%), %d of them because the 16 ms gate skipped the update"
                   % (stalls, moving, 100.0 * stalls / moving, gated_stalls))
-        snaps = [r for r in tracked if r["h_upd"] == 1 and r["h_dt_ms"] is not None and r["h_dt_ms"] > 100]
+        stale = max(100.0, 2.5 * median_dt)
+        snaps = [r for r in tracked if r["h_upd"] == 1 and r["h_dt_ms"] is not None and r["h_dt_ms"] > stale]
         if snaps:
-            print("  solver steps with dt > 100 ms (stale timestamp, camera snaps to target): %d, largest %d ms" % (len(snaps), max(r["h_dt_ms"] for r in snaps)))
+            print("  solver steps with dt > %.0f ms (stale timestamp, camera snaps to target): %d, largest %.0f ms" % (stale, len(snaps), max(r["h_dt_ms"] for r in snaps)))
         overshoot = sum(1 for a, b in zip(tracked, tracked[1:]) if a["h_sep_after"] is not None and b["h_sep_after"] is not None
                         and a["desired_h"] == b["desired_h"] and a["h_sep_after"] * b["h_sep_after"] < 0)
         print("  overshoot sign flips at constant target: %d" % overshoot)
