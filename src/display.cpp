@@ -90,6 +90,7 @@
 #include "mapgrid.h"
 #include "main.h"
 #include "game_world.h"
+#include "cameratrace.h"
 
 InputManager gInputManager;
 KeyFunctionConfiguration gKeyFuncConfig;
@@ -1396,6 +1397,7 @@ static void handleCameraScrolling()
 			scrollDirLeftRight++;
 		}
 	}
+	camtrace::applyAutoPan(scrollDirLeftRight, scrollDirUpDown); // debug-only: --cameraautopan
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
 
@@ -1407,7 +1409,9 @@ static void handleCameraScrolling()
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
 	auto now = std::chrono::steady_clock::now();
 	auto timeDiff = now - scrollRefTime;
-	if (std::chrono::duration_cast<std::chrono::nanoseconds>(timeDiff) >= std::chrono::nanoseconds(4000000)) // throttle max update rate to avoid really jerky scrolling
+	const bool scrollUpdate = std::chrono::duration_cast<std::chrono::nanoseconds>(timeDiff) >= std::chrono::nanoseconds(4000000); // throttle max update rate to avoid really jerky scrolling
+	camtrace::markScrollSample(now, scrollUpdate);
+	if (scrollUpdate)
 	{
 		scrollRefTime = now;
 
@@ -1421,15 +1425,21 @@ static void handleCameraScrolling()
 		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2.0 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, timeDiff_double);
 
 		/* Get x component of movement */
-		xDif = (int) (cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight + sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
+		const double xExact = cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight + sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown;
+		xDif = (int) xExact;
 		/* Get y component of movement */
-		yDif = (int) (sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight - cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
+		const double yExact = sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight - cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown;
+		yDif = (int) yExact;
+		camtrace::markScrollStep(timeDiff_double, scrollStepLeftRight, scrollStepUpDown, scrollSpeedLeftRight, scrollSpeedUpDown, xExact, yExact, xDif, yDif);
 
 		/* Adjust player's position by these components */
 		playerPos.p.x += xDif;
 		playerPos.p.z += yDif;
 
-		CheckScrollLimits(gameWorld.map);
+		if (CheckScrollLimits(gameWorld.map))
+		{
+			camtrace::notifyScrollLimitHit();
+		}
 	}
 
 	// Reset scroll directions
