@@ -158,19 +158,33 @@ FramePacer::Estimate FramePacer::estimateRefresh() const
 	size_t n = 0;
 	if (presentedIntervals_.values.size() >= kMinSamples)
 	{
-		// Display intervals are whole periods (a missed vblank shows as two)
+		// Display intervals are whole periods (a missed vblank shows as two).
+		// When most frames take several vblanks, the median is a multiple of the period.
 		const double median = presentedIntervals_.percentile(0.5);
-		double sumIntervals = 0.0, sumPeriods = 0.0;
-		for (double v : presentedIntervals_.values)
+		double period = median, bestFit = -1.0;
+		for (int divisor = 1; divisor <= 4; ++divisor)
 		{
-			const double k = std::round(v / median);
-			if (k >= 1.0 && std::abs(v - k * median) <= kSnapTolerance * median)
+			const double base = median / divisor;
+			double sumIntervals = 0.0, sumPeriods = 0.0;
+			size_t fits = 0;
+			for (double v : presentedIntervals_.values)
 			{
-				sumIntervals += v;
-				sumPeriods += k;
+				const double k = std::round(v / base);
+				if (k >= 1.0 && std::abs(v - k * base) <= kSnapTolerance * base)
+				{
+					sumIntervals += v;
+					sumPeriods += k;
+					++fits;
+				}
+			}
+			const double fit = static_cast<double>(fits) / static_cast<double>(presentedIntervals_.values.size());
+			if (fits > 0 && fit > bestFit + 0.05)
+			{
+				period = sumIntervals / sumPeriods;
+				bestFit = fit;
 			}
 		}
-		candidates[n++] = {sumPeriods > 0.0 ? sumIntervals / sumPeriods : median, true};
+		candidates[n++] = {period, true};
 	}
 	if (nominalRefresh_ > 0.0)
 	{
@@ -198,7 +212,14 @@ FramePacer::Estimate FramePacer::estimateRefresh() const
 				period = refined;
 			}
 		}
-		// A later candidate has to fit clearly better than an earlier, more trustworthy one
+		// A later candidate has to fit clearly better than an earlier, more trustworthy one.
+		// A whole fraction of a period that already fits only fits better by admitting samples between vblanks.
+		const double ratio = (best.period > 0.0) ? best.period / period : 0.0;
+		const bool fractionOfBest = std::round(ratio) >= 2.0 && std::abs(ratio - std::round(ratio)) <= kSnapTolerance;
+		if (fractionOfBest && best.fitFraction >= kStopFitFraction)
+		{
+			continue;
+		}
 		if (best.period <= 0.0 || fraction > best.fitFraction + 0.05)
 		{
 			best.period = period;

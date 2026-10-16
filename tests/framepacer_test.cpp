@@ -274,6 +274,46 @@ int main()
 		check(std::abs(pacer.lastMotionDelta() - 0.05) < 1e-12, "vsync off, stall: motion left at the floor", pacer.lastMotionDelta(), 0.05);
 	}
 	{
+		// Sim tick frames that the swapchain absorbed, each a late sample followed by an early one
+		FramePacer pacer;
+		std::mt19937 rng(13);
+		std::uniform_real_distribution<double> noise(-0.0004, 0.0004);
+		pacer.update(-1.0);
+		double maxPeriodError = 0.0;
+		for (int i = 0; i < 2000; ++i)
+		{
+			double m = hz120;
+			if (i % 10 == 0)
+			{
+				m = 1.5 * hz120;
+			}
+			else if (i % 10 == 1)
+			{
+				m = 0.5 * hz120;
+			}
+			pacer.update(m + noise(rng));
+			if (i >= 100)
+			{
+				maxPeriodError = std::max(maxPeriodError, std::abs(pacer.refreshPeriod() - hz120));
+			}
+		}
+		check(maxPeriodError < 0.0002, "absorbed tick frames: period is not halved", maxPeriodError, 0.0);
+	}
+	{
+		// Frames that mostly take two vblanks, with display times
+		FramePacer pacer;
+		const Sim s = makeSim(hz120, 400, {2, 2, 2, 3, 2, 2, 2, 2, 3, 2}, 0.0008, 14);
+		pacer.update(-1.0);
+		double t = 0.0;
+		for (size_t i = 0; i < s.measured.size(); ++i)
+		{
+			pacer.update(s.measured[i]);
+			pacer.addPresentation(i, t);
+			t += s.displayed[i];
+		}
+		check(std::abs(pacer.refreshPeriod() - hz120) < 1e-6, "two vblanks per frame: period from display times", pacer.refreshPeriod(), hz120);
+	}
+	{
 		// 119.88 Hz with a nominal 120 Hz
 		const double p = 1.0 / 119.88;
 		FramePacer pacer;
