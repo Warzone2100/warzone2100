@@ -36,6 +36,7 @@
 
 #include <time.h>
 #include <algorithm>
+#include <cmath>
 
 
 /* See header file for documentation */
@@ -49,6 +50,17 @@ static uint64_t frameTimeLastNs = 0;
 static bool frameTimeHaveLast = false;
 static double frameTimeDelta = 0.0;
 static FramePacer framePacer;
+
+/// The paced frame clock on the wzGetTicks() millisecond scale, with the fraction kept.
+/// graphicsTime advances to it.
+/// It advances by each paced delta and is pulled towards the post-present sample,
+/// less half a refresh period while rounding
+/// (so the pacer's lead over the measured time stays behind the current time).
+static double graphicsClockMs = 0.0;
+static bool graphicsClockValid = false;
+static constexpr double kGraphicsClockLagPeriods = 0.5;  ///< lag behind the sample while rounding, in periods
+static constexpr double kGraphicsClockGain = 0.02;       ///< share of the offset from the sample removed per frame
+static constexpr double kGraphicsClockResyncMs = 100.0;  ///< offset that makes the clock jump to the sample
 
 /** The current clock modifier. Set to speed up the game. */
 static Rational modifier;
@@ -339,13 +351,14 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 			newGraphicsTime = gameTime;
 			newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
 		}
-		else if (graphicsTimeFollowsClock && haveLoopStartRealTime)
+		else if (graphicsTimeFollowsClock && (graphicsClockValid || haveLoopStartRealTime))
 		{
-			// Advance graphicsTime to the start of this loop rather than now,
-			// which is later by the cost of any sim ticks that ran in this loop.
+			// Advance graphicsTime to the paced frame clock (or without one, the start of this loop)
+			// rather than now, which is later by the cost of any sim ticks that ran in this loop.
 			// NOTE: The tick decisions above still use now, and quantiseFraction() works on absolute times,
 			// so this only delays graphicsTime within the frame and leaves tick scheduling unchanged.
-			graphicsRealTime = clip(loopStartRealTime, prevRealTime, currTime);
+			const uint32_t target = graphicsClockValid ? static_cast<uint32_t>(std::max(0.0, std::floor(graphicsClockMs))) : loopStartRealTime;
+			graphicsRealTime = clip(target, prevRealTime, currTime);
 			newDeltaGraphicsTime = quantiseFraction(modifier.n, modifier.d, graphicsRealTime, prevRealTime);
 			newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
 		}
@@ -398,6 +411,19 @@ void frameTimeUpdate()
 	frameTimeDelta = framePacer.update(measured);
 	frameTimeLastNs = now;
 	frameTimeHaveLast = true;
+
+	const double lagMs = framePacer.snapped() ? kGraphicsClockLagPeriods * framePacer.refreshPeriod() * 1000.0 : 0.0;
+	const double targetMs = static_cast<double>(now) * 1e-6 - lagMs;
+	graphicsClockMs += frameTimeDelta * 1000.0;
+	if (!graphicsClockValid || measured < 0.0 || std::abs(graphicsClockMs - targetMs) > kGraphicsClockResyncMs)
+	{
+		graphicsClockMs = targetMs;
+	}
+	else
+	{
+		graphicsClockMs += kGraphicsClockGain * (targetMs - graphicsClockMs);
+	}
+	graphicsClockValid = true;
 }
 
 void frameTimeRebase()
@@ -405,6 +431,7 @@ void frameTimeRebase()
 	frameTimeHaveLast = false;
 	frameTimeDelta = 0.0;
 	framePacer.reset();
+	graphicsClockValid = false;
 }
 
 void frameTimeSetPresentationInfo(bool vsync, double nominalRefreshPeriod)
