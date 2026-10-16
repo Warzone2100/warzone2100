@@ -27,6 +27,10 @@
 #   and the median interval (what a fixed-refresh display shows when nothing drops).
 # - graphicsTime pacing: how far graphicsTime (which positions units, projectiles and effects)
 #   advanced each frame compared with what the display showed, by tick / after-tick / other frames.
+# - frame pacing: how often the frame clock was rounded to the refresh period, and its drift.
+# - actual display times: if <trace>.present.csv exists (a backend with presentation timing),
+#   the true display interval of each frame,
+#   and the camera, frame clock and graphicsTime errors against it rather than against the median interval.
 # - truncation: fraction of each scroll step thrown away by the conversion to integer.
 # - height: how often trackHeight() ran, its dt, how the desired height steps,
 #   and how often the camera height stood still for a frame in the middle of a height move.
@@ -273,6 +277,76 @@ def main():
         print("  RMS (display view): %.3f ms of motion, i.e. %.1f%% of a %.2f ms frame" % (rms, 100.0 * rms / median_dt, median_dt))
     else:
         print("  no moving frames (use --cameraautopan, or hold a scroll key)")
+
+    # ---- frame pacing and actual display times ------------------------------------------
+    paced = [r for r in frames if r.get("dt_ms") is not None]
+    if paced:
+        print("\nFrame pacing (frameTimeDeltaSeconds)")
+        snapped = sum(1 for r in paced if r["pace_snapped"])
+        from_pres = sum(1 for r in paced if r["pace_from_presentation"])
+        periods = [r["pace_period_ms"] for r in paced if r["pace_period_ms"]]
+        print("  snapped to the refresh period on %d of %d frames (%.1f%%); period %.4f ms%s"
+              % (snapped, len(paced), 100.0 * snapped / len(paced), periods[-1] if periods else 0.0,
+                 ", from presentation times" if from_pres > len(paced) // 2 else ""))
+        describe("|paced - measured| per frame", [abs(r["dt_ms"] - r["dt_measured_ms"]) for r in paced])
+        describe("|drift|", [abs(r["pace_drift_ms"]) for r in paced if r["pace_drift_ms"] is not None])
+
+    present_path = args.trace + ".present.csv"
+    display = {}
+    try:
+        with open(present_path, newline="") as f:
+            for r in csv.DictReader(f):
+                display[int(r["present_id"])] = int(r["actual_present_ns"]) * 1e-6
+    except OSError:
+        pass
+    if display:
+        # Each row's present_id is the frame it presented.
+        # Its display interval is the time from the previous present reaching the screen to this one doing so.
+        print("\nActual display times (%d frames reported by the presentation engine)" % len(display))
+        shown = []
+        for a, b in pairs:
+            pa, pb = a.get("present_id"), b.get("present_id")
+            if pa is None or pb is None or pb != pa + 1 or pa not in display or pb not in display:
+                continue
+            shown.append((a, b, display[pb] - display[pa]))
+        if shown:
+            ivals = [x for _, _, x in shown]
+            period = pct(ivals, 50)
+            describe("display interval", ivals)
+            late = sum(1 for x in ivals if x > 1.5 * period)
+            print("  frames shown more than one refresh after the previous: %d (%.2f%%)" % (late, 100.0 * late / len(ivals)))
+            # The frame clock is sampled after each present,
+            # so the delta recorded on frame a is the one frame b animates by,
+            # and b's display interval is what it should have been.
+            describe("|frame time delta - display interval|", [abs(a["dt_ms"] - x) for a, b, x in shown if a.get("dt_ms") is not None])
+            # Visible discontinuities: a frame held on screen for longer than it animated (a missed vblank),
+            # or one that animated by more than it was shown for (a catch-up jump).
+            signed = [a["dt_ms"] - x for a, b, x in shown if a.get("dt_ms") is not None]
+            held = sum(1 for e in signed if e < -0.5 * period)
+            jumped = sum(1 for e in signed if e > 0.5 * period)
+            print("  frames animated by half a refresh or more less than shown (holds): %d, more than shown (jumps): %d"
+                  % (held, jumped))
+            describe("|measured interval - display interval|", [abs(a["dt_measured_ms"] - x) for a, b, x in shown if a.get("dt_measured_ms") is not None])
+            # Camera motion per displayed frame against the true display interval
+            errs = []
+            for a, b, x in shown:
+                if a["speed_lr"] is None or b["speed_lr"] is None:
+                    continue
+                va, vb = (a["speed_lr"], a["speed_ud"]), (b["speed_lr"], b["speed_ud"])
+                sa, sb = math.hypot(*va), math.hypot(*vb)
+                if sa < 255 or sb < 255 or va[0] * vb[0] + va[1] * vb[1] <= 0 or a["limit_hit"] or b["limit_hit"] or a["warcam"] or b["warcam"]:
+                    continue
+                moved = math.hypot(b["cam_x"] - a["cam_x"], b["cam_z"] - a["cam_z"])
+                errs.append(moved / (0.5 * (sa + sb)) * 1000.0 - x)
+            if errs:
+                describe("camera motion - display interval", [abs(e) for e in errs])
+                rms = math.sqrt(statistics.fmean([e * e for e in errs]))
+                print("  RMS against actual display times: %.3f ms of motion, %.1f%% of a %.2f ms refresh" % (rms, 100.0 * rms / period, period))
+            gt = []
+            for a, b, x in shown:
+                if a["graphics_time"] is not None and b["graphics_time"] is not None and b["graphics_time"] != a["graphics_time"]:
+                    gt.append(abs((b["graphics_time"] - a["graphics_time"]) - x))
+            describe("|graphicsTime step - display interval|", gt)
 
     # ---- truncation --------------------------------------------------------------------
     # x_exact/z_exact are the exact world-space steps, and x_dif/z_dif what was applied to the integer position.

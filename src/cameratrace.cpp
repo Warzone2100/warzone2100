@@ -26,6 +26,9 @@
 #if defined(WZ_PERF_COUNTERS)
 
 #include "lib/gamelib/gtime.h"
+#include "lib/gamelib/framepacer.h"
+
+#include <string>
 
 #include <algorithm>
 #include <cinttypes>
@@ -44,8 +47,9 @@ using Clock = std::chrono::steady_clock;
 static constexpr int64_t kUnset = std::numeric_limits<int64_t>::min();
 static constexpr double kNaN = std::numeric_limits<double>::quiet_NaN();
 
-FILE *outFile = nullptr;
-Clock::time_point origin;
+static FILE *outFile = nullptr;
+static FILE *presentFile = nullptr;   ///< <trace>.present.csv
+static Clock::time_point origin;
 
 struct FrameRecord
 {
@@ -85,6 +89,10 @@ struct FrameRecord
 	int64_t realTimeMs = kUnset, deltaRealTimeMs = kUnset;
 
 	int64_t tRenderBegin = kUnset, tAudioEnd = kUnset, tSceneEnd = kUnset, tRenderEnd = kUnset;
+
+	int64_t presentId = kUnset;
+	double dtMeasured = kNaN, dt = kNaN, pacePeriod = kNaN, paceDrift = kNaN;
+	int64_t paceSnapped = kUnset, paceFromPresentation = kUnset;
 };
 
 static FrameRecord cur;
@@ -134,7 +142,8 @@ static const char *columns =
 	",radar"
 	",t_present,graphics_time,delta_graphics_time,game_time"
 	",t_realtime,real_time,delta_real_time"
-	",t_render_begin,t_audio_end,t_scene_end,t_render_end";
+	",t_render_begin,t_audio_end,t_scene_end,t_render_end"
+	",present_id,dt_measured_ms,dt_ms,pace_period_ms,pace_snapped,pace_from_presentation,pace_drift_ms";
 
 static void writeRow(const FrameRecord &r)
 {
@@ -153,6 +162,8 @@ static void writeRow(const FrameRecord &r)
 	putInt(r.tPresent); putInt(r.graphicsTimeMs); putInt(r.deltaGraphicsTimeMs); putInt(r.gameTimeMs);
 	putInt(r.tRealTime); putInt(r.realTimeMs); putInt(r.deltaRealTimeMs);
 	putInt(r.tRenderBegin); putInt(r.tAudioEnd); putInt(r.tSceneEnd); putInt(r.tRenderEnd);
+	putInt(r.presentId); putDouble(r.dtMeasured); putDouble(r.dt); putDouble(r.pacePeriod);
+	putInt(r.paceSnapped); putInt(r.paceFromPresentation); putDouble(r.paceDrift);
 	fputc('\n', outFile);
 }
 
@@ -187,6 +198,12 @@ bool open(const char *path)
 	}
 	setvbuf(outFile, nullptr, _IOFBF, 1 << 20);
 	fprintf(outFile, "%s\n", columns);
+	const std::string presentPath = std::string(path) + ".present.csv";
+	presentFile = fopen(presentPath.c_str(), "w");
+	if (presentFile != nullptr)
+	{
+		fprintf(presentFile, "present_id,actual_present_ns,received_frame\n");
+	}
 	origin = Clock::now();
 	cur = FrameRecord();
 	frameOpen = false;
@@ -205,6 +222,11 @@ void close()
 		}
 		fclose(outFile);
 		outFile = nullptr;
+	}
+	if (presentFile != nullptr)
+	{
+		fclose(presentFile);
+		presentFile = nullptr;
 	}
 	frameOpen = false;
 	g_enabled = false;
@@ -445,6 +467,36 @@ void markRadarRedraw()
 	{
 		cur.radarRedraw = 1;
 	}
+}
+
+void markPresentId(uint64_t presentId)
+{
+	if (g_enabled)
+	{
+		cur.presentId = static_cast<int64_t>(presentId);
+	}
+}
+
+void markPresentationTiming(uint64_t presentId, uint64_t actualPresentTimeNs)
+{
+	if (g_enabled && presentFile != nullptr)
+	{
+		fprintf(presentFile, "%" PRIu64 ",%" PRIu64 ",%" PRIu64 "\n", presentId, actualPresentTimeNs, cur.frame);
+	}
+}
+
+void markFrameTime(const FramePacer &pacer)
+{
+	if (!g_enabled)
+	{
+		return;
+	}
+	cur.dtMeasured = pacer.lastMeasuredDelta() * 1e3;
+	cur.dt = pacer.lastDelta() * 1e3;
+	cur.pacePeriod = pacer.refreshPeriod() * 1e3;
+	cur.paceSnapped = pacer.snapped() ? 1 : 0;
+	cur.paceFromPresentation = pacer.usingPresentationTimes() ? 1 : 0;
+	cur.paceDrift = pacer.drift() * 1e3;
 }
 
 void markStage(Stage stage)

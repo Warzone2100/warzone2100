@@ -123,8 +123,19 @@ void frameTimeUpdate();
 /// Make the next frameTimeUpdate() report a delta of 0
 /// (ex. after loading, focus loss, or anything else that stalled frames).
 void frameTimeRebase();
-/// Seconds between the two most recent frameTimeUpdate() samples, at most GTIME_MAXFRAME (0 after a rebase)
+/// Seconds to advance presentation-smoothness code by for this frame (0 after a rebase).
+/// The time between the two most recent frameTimeUpdate() samples, paced to the display (see FramePacer)
+/// and at most GTIME_MAXFRAME.
 double frameTimeDeltaSeconds();
+/// Tell the frame pacer whether presentation is synchronized to the display,
+/// and the display's nominal refresh period in seconds if the backend knows it (0 if not).
+/// Call before frameTimeUpdate().
+void frameTimeSetPresentationInfo(bool vsync, double nominalRefreshPeriod);
+/// Tell the frame pacer that the present with this id reached the display at this time (seconds, any clock).
+void frameTimeAddPresentation(uint64_t presentId, double displayTime);
+class FramePacer;
+/// The frame pacer, for diagnostics
+const FramePacer& frameTimePacer();
 
 /* Returns true if gameTime is stopped. */
 bool gameTimeIsStopped();
