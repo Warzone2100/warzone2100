@@ -130,7 +130,20 @@ static inline void solveDifferential2ndOrder(float *y_, float *dydt_, double acc
 	// Solution is y = g_1 exp(h_1 t) + g_2 exp(h_2 t), where h_i are the solutions to h^2 + f h + a = 0, which are -f/2 +- sqrt(f^2/4 - a).
 	// At t = 0, g_1 = (y' - h_2 y) / (h_1 - h_2) and g_2 = (y' - h_1 y) / (h_2 - h_1).
 
-	std::complex<double> d = friction * friction / 4 - acceleration;
+	const double discriminant = friction * friction / 4 - acceleration;
+	if (std::abs(discriminant) <= 1e-9 * (friction * friction / 4 + std::abs(acceleration)))
+	{
+		// Critically damped (h_1 == h_2 == -f/2), where the general form divides by zero.
+		// Solution is y = (c_1 + c_2 t) exp(-r t) with r = f/2, c_1 = y(0), c_2 = y'(0) + r y(0).
+		const double r = friction / 2;
+		const double c2 = dydt + r * y;
+		const double e = std::exp(-r * dt);
+		*y_    = static_cast<float>((y + c2 * dt) * e);
+		*dydt_ = static_cast<float>((c2 - r * (y + c2 * dt)) * e);
+		return;
+	}
+
+	std::complex<double> d = discriminant;
 
 	std::complex<double> sqd    = std::sqrt(d);
 	std::complex<double> h1     = -friction / 2 + sqd;
