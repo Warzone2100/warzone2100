@@ -115,7 +115,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static UDWORD	getTargettingGfx();
 static void	drawGroupNumber(BASE_OBJECT *psObject);
-static void	trackHeight(int desiredHeight);
+static void	trackHeight(float desiredHeight);
 static void	renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
@@ -139,7 +139,7 @@ static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static	int	calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ);
-static	int	calculateCameraHeight(int height);
+static	float	calculateCameraHeight(float averageTerrainHeight);
 static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
@@ -307,7 +307,7 @@ char DROIDDOING[512];
 static const int geoOffset = 192;
 
 /// The average terrain height for the center of the area the camera is looking at
-static int averageCentreTerrainHeight;
+static float averageCentreTerrainHeight;
 
 /// Set by init3DView() to start the next height update at the target
 static bool trackHeightStartAtTarget = true;
@@ -1148,8 +1148,8 @@ void draw3DScene()
 	{
 		/* Move the autonomous camera if necessary */
 		updatePlayerAverageCentreTerrainHeight();
-		const int desiredCameraHeight = calculateCameraHeight(averageCentreTerrainHeight);
-		camtrace::markHeightTarget(averageCentreTerrainHeight, desiredCameraHeight);
+		const float desiredCameraHeight = calculateCameraHeight(averageCentreTerrainHeight);
+		camtrace::markHeightTarget(static_cast<int>(std::lround(averageCentreTerrainHeight)), static_cast<int>(std::lround(desiredCameraHeight)));
 		trackHeight(desiredCameraHeight);
 	}
 	else
@@ -1221,9 +1221,27 @@ static int calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tile
 	return result;
 }
 
+/// The 9x9-tile average of calcAverageTerrainHeight() at each tile's center,
+/// interpolated bilinearly to the world position
+static float calcInterpolatedAverageTerrainHeight(WorldMapState& mapState, int worldX, int worldZ)
+{
+	const float u = (static_cast<float>(worldX) - TILE_UNITS / 2) / TILE_UNITS;
+	const float v = (static_cast<float>(worldZ) - TILE_UNITS / 2) / TILE_UNITS;
+	const int tileX = static_cast<int>(std::floor(u));
+	const int tileZ = static_cast<int>(std::floor(v));
+	const float fx = u - static_cast<float>(tileX);
+	const float fz = v - static_cast<float>(tileZ);
+
+	const float h00 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX, tileZ));
+	const float h10 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX + 1, tileZ));
+	const float h01 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX, tileZ + 1));
+	const float h11 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX + 1, tileZ + 1));
+	return (h00 * (1.f - fx) + h10 * fx) * (1.f - fz) + (h01 * (1.f - fx) + h11 * fx) * fz;
+}
+
 static void updatePlayerAverageCentreTerrainHeight()
 {
-	averageCentreTerrainHeight = calcAverageTerrainHeight(gameWorld.map, playerXTile, playerZTile);
+	averageCentreTerrainHeight = calcInterpolatedAverageTerrainHeight(gameWorld.map, playerPos.p.x, playerPos.p.z);
 }
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
@@ -2499,7 +2517,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 
 	if(playerPos.p.y < averageCentreTerrainHeight)
 	{
-		playerPos.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
+		playerPos.p.y = static_cast<int>(std::lround(calculateCameraHeight(averageCentreTerrainHeight)));
 	}
 
 	if (getWarCamStatus())
@@ -4106,18 +4124,20 @@ static void renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat
 	pie_DrawSkybox(skybox_scale, projectionMatrix, skyboxViewMatrix * glm::translate(glm::vec3(0.f, -500, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
-static int calculateCameraHeight(int _mapHeight)
+/// Camera height for a given averaged terrain height
+/// (raised by half of HEIGHT_TRACK_INCREMENTS to keep the established framing)
+static float calculateCameraHeight(float averageTerrainHeight)
 {
-	return static_cast<int>(std::ceil(static_cast<float>(_mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
+	return averageTerrainHeight + static_cast<float>(CAMERA_PIVOT_HEIGHT + HEIGHT_TRACK_INCREMENTS / 2);
 }
 
-int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY)
+int calculateCameraHeightAt(WorldMapState& mapState, int worldX, int worldZ)
 {
-	return calculateCameraHeight(calcAverageTerrainHeight(mapState, tileX, tileY));
+	return static_cast<int>(std::lround(calculateCameraHeight(calcInterpolatedAverageTerrainHeight(mapState, worldX, worldZ))));
 }
 
 /// Smoothly adjust player height to match the desired height
-static void trackHeight(int desiredHeight)
+static void trackHeight(float desiredHeight)
 {
 	// Follower state is kept in floating point and only rounded when committed to the camera position.
 	// The solver is exact for any dt and runs once per frame on the frame clock.
@@ -4138,7 +4158,7 @@ static void trackHeight(int desiredHeight)
 	if (trackHeightStartAtTarget)
 	{
 		// The first update of a game starts at the target
-		trackedHeight = static_cast<float>(desiredHeight);
+		trackedHeight = desiredHeight;
 		heightSpeed = 0.0f;
 		haveTrackedHeight = true;
 		trackHeightStartAtTarget = false;
@@ -4152,11 +4172,11 @@ static void trackHeight(int desiredHeight)
 		haveTrackedHeight = true;
 	}
 
-	float separation = static_cast<float>(desiredHeight) - trackedHeight;	// How far are we from desired height?
+	float separation = desiredHeight - trackedHeight;	// How far are we from desired height?
 	if (std::fabs(separation) < 0.5f && heightSpeed > -5.f && heightSpeed < 5.f)
 	{
 		// Close enough that the committed height is the target, and slow enough to stop
-		trackedHeight = static_cast<float>(desiredHeight);
+		trackedHeight = desiredHeight;
 		heightSpeed = 0.0f;
 		camtrace::markHeightUpdate(dt * 1000.0, 0.f, 0.f, 0.f, true);
 	}
@@ -4166,7 +4186,7 @@ static void trackHeight(int desiredHeight)
 		// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
 		solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, dt);
 		camtrace::markHeightUpdate(dt * 1000.0, separationBefore, separation, heightSpeed);
-		trackedHeight = static_cast<float>(desiredHeight) - separation;
+		trackedHeight = desiredHeight - separation;
 	}
 
 	/* Adjust the height accordingly */
