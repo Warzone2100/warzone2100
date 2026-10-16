@@ -83,6 +83,8 @@ struct FrameRecord
 
 	int64_t tRealTime = kUnset;
 	int64_t realTimeMs = kUnset, deltaRealTimeMs = kUnset;
+
+	int64_t tRenderBegin = kUnset, tAudioEnd = kUnset, tSceneEnd = kUnset, tRenderEnd = kUnset;
 };
 
 static FrameRecord cur;
@@ -131,7 +133,8 @@ static const char *columns =
 	",t_draw,cam_x,cam_y,cam_z,cam_rx,cam_ry,view_dist,warcam"
 	",radar"
 	",t_present,graphics_time,delta_graphics_time,game_time"
-	",t_realtime,real_time,delta_real_time";
+	",t_realtime,real_time,delta_real_time"
+	",t_render_begin,t_audio_end,t_scene_end,t_render_end";
 
 static void writeRow(const FrameRecord &r)
 {
@@ -149,6 +152,7 @@ static void writeRow(const FrameRecord &r)
 	putInt(r.radarRedraw);
 	putInt(r.tPresent); putInt(r.graphicsTimeMs); putInt(r.deltaGraphicsTimeMs); putInt(r.gameTimeMs);
 	putInt(r.tRealTime); putInt(r.realTimeMs); putInt(r.deltaRealTimeMs);
+	putInt(r.tRenderBegin); putInt(r.tAudioEnd); putInt(r.tSceneEnd); putInt(r.tRenderEnd);
 	fputc('\n', outFile);
 }
 
@@ -412,6 +416,22 @@ void markRadarRedraw()
 	if (g_enabled)
 	{
 		cur.radarRedraw = 1;
+	}
+}
+
+void markStage(Stage stage)
+{
+	if (!g_enabled)
+	{
+		return;
+	}
+	const int64_t t = nowNs();
+	switch (stage)
+	{
+	case Stage::RenderBegin: cur.tRenderBegin = t; break;
+	case Stage::AudioEnd:    cur.tAudioEnd = t; break;
+	case Stage::SceneEnd:    cur.tSceneEnd = t; break;
+	case Stage::RenderEnd:   cur.tRenderEnd = t; break;
 	}
 }
 

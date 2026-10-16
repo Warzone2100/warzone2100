@@ -70,6 +70,16 @@ void markDraw(int x, int y, int z, int rotX, int rotY, float viewDistance, bool 
 
 /// Radar (radar.cpp)
 void markRadarRedraw();
+
+/// Stages of the render half of the frame
+enum class Stage
+{
+	RenderBegin,  ///< renderLoop() entered (loop.cpp)
+	AudioEnd,     ///< audio_Update() returned (loop.cpp)
+	SceneEnd,     ///< end of draw3DScene() (display3d.cpp)
+	RenderEnd,    ///< renderLoop() returned, before pie_ScreenFrameRenderEnd() (loop.cpp)
+};
+void markStage(Stage stage);
 }
 
 #else // !defined(WZ_PERF_COUNTERS)
@@ -95,6 +105,8 @@ inline void markHeightTarget(int, int) {}
 inline void markHeightUpdate(uint32_t, float, float, float, bool = false) {}
 inline void markDraw(int, int, int, int, int, float, bool) {}
 inline void markRadarRedraw() {}
+enum class Stage { RenderBegin, AudioEnd, SceneEnd, RenderEnd };
+inline void markStage(Stage) {}
 }
 
 #endif // defined(WZ_PERF_COUNTERS)
