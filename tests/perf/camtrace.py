@@ -25,6 +25,8 @@
 #   Error is expressed in "ms of motion", which is independent of camera speed.
 #   Reported against both the measured present interval
 #   and the median interval (what a fixed-refresh display shows when nothing drops).
+# - graphicsTime pacing: how far graphicsTime (which positions units, projectiles and effects)
+#   advanced each frame compared with what the display showed, by tick / after-tick / other frames.
 # - truncation: fraction of each scroll step thrown away by the conversion to integer.
 # - height: how often trackHeight() ran, its dt, how the desired height steps,
 #   and how often the camera height stood still for a frame in the middle of a height move.
@@ -189,6 +191,35 @@ def main():
     describe("post-present sample, tick/after-tick", post_tick)
     if clamped:
         print("  scroll dt hit the 0.5 s clamp (or >= 0.25 s) on %d frame(s): a catch-up jump" % clamped)
+
+    # ---- graphicsTime pacing ------------------------------------------------------------
+    # graphicsTime drives the interpolated positions of units, projectiles and effects.
+    # Compares how far it advanced each frame with the interval the display showed (refresh multiples),
+    # split by whether a sim tick ran in that frame or the one before.
+    gt_tick, gt_after, gt_other = [], [], []
+    for i in range(1, len(frames)):
+        a, b = frames[i - 1], frames[i]
+        if a["graphics_time"] is None or b["graphics_time"] is None:
+            continue
+        step = b["graphics_time"] - a["graphics_time"]
+        if step == 0:
+            continue  # paused, waiting for players, or quitting
+        shown = median_dt * max(1, round(present_dt[i - 1] / median_dt))
+        err = step - shown
+        if (b["ticks"] or 0) > 0:
+            gt_tick.append(err)
+        elif (a["ticks"] or 0) > 0:
+            gt_after.append(err)
+        else:
+            gt_other.append(err)
+    print("\ngraphicsTime step minus display interval (units/effects pacing; signed ms)")
+    describe("frames with sim tick", gt_tick, fmt="%8.2f")
+    describe("frame after a tick frame", gt_after, fmt="%8.2f")
+    describe("other frames", gt_other, fmt="%8.2f")
+    all_gt = gt_tick + gt_after + gt_other
+    if all_gt:
+        print("  mean |error| %.2f ms; frames off by more than 2 ms: %.1f%%"
+              % (statistics.fmean([abs(x) for x in all_gt]), 100.0 * sum(1 for x in all_gt if abs(x) > 2) / len(all_gt)))
 
     # ---- pan judder --------------------------------------------------------------------
     # Moving frames: speed above a floor at both ends of the pair and pointing the same way,
