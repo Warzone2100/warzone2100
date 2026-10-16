@@ -62,6 +62,10 @@ void markScrollStep(double dtSeconds, double stepLeftRight, double stepUpDown, d
 void applyAutoPan(int &scrollDirLeftRight, int &scrollDirUpDown);
 void notifyScrollLimitHit();
 
+/// --cameraheightspring=<stiffness>,<damping> replaces the height follower's spring constants
+bool setHeightSpring(const char *spec);
+void overrideHeightSpring(double &stiffness, double &damping);
+
 /// Height follow and draw (display3d.cpp)
 void markHeightTarget(int averageTerrainHeight, int desiredHeight);
 /// resting: the follower sat at the target
@@ -91,6 +95,8 @@ constexpr bool g_autoPan = false;
 
 bool open(const char *path);             ///< reports that this build has no camera trace and fails
 bool setAutoPan(const char *spec);       ///< reports that this build has no camera trace and fails
+bool setHeightSpring(const char *spec);  ///< reports that this build has no camera trace and fails
+inline void overrideHeightSpring(double &, double &) {}
 inline void close() {}
 inline void frameBegin() {}
 inline void markRealTimeUpdate(uint32_t, uint32_t) {}

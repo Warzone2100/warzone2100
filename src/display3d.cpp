@@ -4145,6 +4145,11 @@ static void updateCameraForFrame()
 	}
 }
 
+/// Spring constants of the height follower, y'' = -stiffness * (y - target) - damping * y'.
+/// Separate from the war camera's ACCEL_CONSTANT / VELOCITY_CONSTANT (same values for now).
+static constexpr double HEIGHT_FOLLOW_STIFFNESS = 12.0;
+static constexpr double HEIGHT_FOLLOW_DAMPING = 4.0;
+
 /// Smoothly adjust player height to match the desired height
 static void trackHeight(float desiredHeight)
 {
@@ -4192,8 +4197,10 @@ static void trackHeight(float desiredHeight)
 	else if (dt > 0.0)
 	{
 		const float separationBefore = separation;
-		// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
-		solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, dt);
+		// d²/dt² player.p.y = -stiffness * (player.p.y - desiredHeight) - damping * d/dt player.p.y
+		double stiffness = HEIGHT_FOLLOW_STIFFNESS, damping = HEIGHT_FOLLOW_DAMPING;
+		camtrace::overrideHeightSpring(stiffness, damping); // debug-only: --cameraheightspring
+		solveDifferential2ndOrder(&separation, &heightSpeed, stiffness, damping, dt);
 		camtrace::markHeightUpdate(dt * 1000.0, separationBefore, separation, heightSpeed);
 		trackedHeight = desiredHeight - separation;
 	}

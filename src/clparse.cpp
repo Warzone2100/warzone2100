@@ -400,6 +400,7 @@ typedef enum
 	CLI_PERFCOUNTERS,
 	CLI_CAMERATRACE,
 	CLI_CAMERAAUTOPAN,
+	CLI_CAMERAHEIGHTSPRING,
 	CLI_TMP_PREFER_OLD_SAVE,
 	CLI_DRS_FRACTION,
 	CLI_RESOLUTION,
@@ -526,6 +527,7 @@ static const struct poptOption *getOptionsTable()
 		{ "perfcounters", POPT_ARG_STRING, CLI_PERFCOUNTERS, N_("Write per-tick performance counters to the given CSV file"), N_("file") },
 		{ "cameratrace", POPT_ARG_STRING, CLI_CAMERATRACE, N_("Write a per-frame camera timing trace to the given CSV file"), N_("file") },
 		{ "cameraautopan", POPT_ARG_STRING, CLI_CAMERAAUTOPAN, N_("Drive the camera scroll input with a repeating move / coast / reverse pattern"), N_("lr,ud[,legSeconds[,idleSeconds]]") },
+		{ "cameraheightspring", POPT_ARG_STRING, CLI_CAMERAHEIGHTSPRING, N_("Override the camera height follower's spring constants"), N_("stiffness,damping") },
 		{ "tmp-prefer-old-save", POPT_ARG_NONE, CLI_TMP_PREFER_OLD_SAVE, N_("Prefer the legacy load path for a save folder that has both the old and new-format data (temporary)"), nullptr },
 		{ "drs-fraction", POPT_ARG_STRING, CLI_DRS_FRACTION, N_("Pin the dynamic resolution scene render fraction for testing, bypassing GPU timing feedback"), N_("fraction 0.5 - 1.0") },
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
@@ -1150,6 +1152,14 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Missing pattern for --cameraautopan");
 			}
 			camtrace::setAutoPan(token);
+			break;
+		case CLI_CAMERAHEIGHTSPRING:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing value for --cameraheightspring");
+			}
+			camtrace::setHeightSpring(token);
 			break;
 		case CLI_TMP_PREFER_OLD_SAVE:
 			gamestate::savegame::setPreferLegacyLoadOverride(true);
