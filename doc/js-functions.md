@@ -318,6 +318,45 @@ Set the fog reveal status. (3.3+ only)
 
 Perform automatic save
 
+## setObjective(id, text[, options])
+
+Adds an objective for the players, or replaces the one with the same ```id``` (for the same player): what they
+have to do, shown by the HUD (in the intelligence screen, and in the configured Objectives display), or printed to
+the console when the HUD doesn't show it. The objectives are kept with the game (saved, and loaded with it), and a
+new level starts with none. ```text``` is shown as given (translate it with ```_()```). ```options``` (an object,
+whatever is left out takes its default):
+
+* ```state```: ```"active"``` (the default), ```"done"``` or ```"failed"```
+* ```primary```: ```true``` (the default), or ```false``` for a secondary objective, listed after the primary ones
+* ```progress```: ```[current, total]```, ex. ```[2, 3]``` for 2 of 3 artifacts collected
+* ```marker```: the name of a proximity message's view data: the HUD's "Show on map" centers the view on it
+* ```order```: a number, the display order among the primary (or secondary) objectives (by default 0, equal ones
+  listed as they were added)
+* ```player```: the player whose objective it is (by default, or -1, every player's)
+
+An invalid option is a script error. (4.8+ only)
+
+## removeObjective(id[, player])
+
+Removes the objective ```id```: the player's, or every player's (no player). Returns false when there was none.
+(4.8+ only)
+
+## clearObjectives([player])
+
+Removes the player's objectives, or every objective (no player). (4.8+ only)
+
+## setObjectivesTitle(title)
+
+Sets the title over the objectives (the HUD's objectives card), for every player: ex. the mission's name. An empty
+```title``` gives back the default ("Objectives"). It's kept with the objectives (saved, and loaded with them), and a
+new level starts without one. ```title``` is shown as given (translate it with ```_()```). (4.8+ only)
+
+## showObjectives([player[, reminder]])
+
+Brings the player's objectives to their attention (by default, the script's player): the HUD shows them, or the
+console lists those still to do. With ```reminder``` true, a periodic reminder: only printed to the console, where
+the objectives scroll away (the HUD keeps them in view). (4.8+ only)
+
 ## hackNetOff()
 
 Turn off network transmissions. FIXME - find a better way.

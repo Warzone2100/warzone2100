@@ -80,6 +80,7 @@
 #include "qtscript.h"
 #include "hci.h"             // resolveReticuleCallbacks
 #include "message.h"
+#include "objectives.h"
 #include "messagedef.h"
 #include "multiplay.h" // CreateBeaconViewData
 #include "multistat.h" // PLAYERSTATS, get/setMultiStats
@@ -5393,6 +5394,7 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope)
 	j["spotters"] = writeSpotters();
 	j["commandDesignators"] = writeCommandDesignators();
 	j["messages"] = writeMessages();
+	j["objectives"] = objectivesWrite();
 	j["presentation"] = writePresentation();
 	j["scriptPlayerData"] = writeScriptPlayerData();
 	j["scripting"] = writeScripting(scriptScope);
@@ -5636,6 +5638,11 @@ void checkGameStateDocument(const nlohmann::ordered_json &j)
 				documentCheckFail(std::string("section ") + section.first + " is missing");
 			}
 			checkSectionVersion(j.at(section.first), section.first, section.second);
+		}
+		// (Optional: documents from before objectives existed have none)
+		if (j.contains("objectives"))
+		{
+			checkSectionVersion(j.at("objectives"), "objectives", OBJECTIVES_SECTION_VERSION);
 		}
 
 		DocumentIndex index;
@@ -6077,6 +6084,21 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 		debug(LOG_GAMESTATE_SERIAL, "restoring section: messages");
 		const nlohmann::ordered_json &sec = j.at("messages");
 		readMessages(sec, sec.value("version", 0u));
+	}
+	// The scripts' objectives (none in documents from before they existed)
+	debug(LOG_GAMESTATE_SERIAL, "restoring section: objectives");
+	if (j.contains("objectives"))
+	{
+		const nlohmann::ordered_json &sec = j.at("objectives");
+		if (sec.value("version", 0u) != OBJECTIVES_SECTION_VERSION)
+		{
+			throw StateError("unsupported objectives section version");
+		}
+		objectivesRead(sec);
+	}
+	else
+	{
+		objectivesRead(nlohmann::ordered_json::object());
 	}
 	// Renderer-only environment (sun/lighting/fog/weather). No object or terrain dependency, restored
 	// after the level-data load has already re-applied tileset defaults, so this overrides them.

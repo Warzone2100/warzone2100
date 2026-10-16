@@ -35,6 +35,7 @@
 #include "hudpanelextension.h"
 #include "intel/intelmodel.h"
 #include "intel/intelpanel.h"
+#include "intel/objectivescard.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -260,6 +261,7 @@ bool applyState(const std::string &name)
 	hoveredAt = 0;
 	hudSetTouchInputForTests(false);
 	hudShowConnectionWarningsForTests(false, false);
+	hudObjectivesResetForTests();
 	bool ok = true;
 	size_t start = 0;
 	while (start <= name.size())
@@ -292,6 +294,7 @@ bool applyState(const std::string &name)
 		else if (part.rfind("readreport=", 0) == 0) { ok = addResearchReport(part.substr(11), true) && ok; }
 		else if (part.rfind("message=", 0) == 0) { ok = addScriptMessageForTests(part.substr(8)) && ok; }
 		else if (part.rfind("intel.", 0) == 0) { ok = hudIntelScreenApplyForTests(part.substr(6)) && ok; }
+		else if (part.rfind("objectives.", 0) == 0) { ok = hudObjectivesApplyForTests(part.substr(11)) && ok; }
 		else if (part.rfind("alliance=", 0) == 0) { ok = setAllianceForTests(part.substr(9)) && ok; }
 		else if (part.rfind("teamplans=", 0) == 0) { ok = teamStrategyFillForTests(std::strtoul(part.substr(10).c_str(), nullptr, 10)) > 0 && ok; }
 		else if (part.rfind("hover=", 0) == 0) { hoverKey = part.substr(6); }

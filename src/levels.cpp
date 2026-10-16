@@ -60,6 +60,8 @@
 #include "wrappers.h"
 #include "activity.h"
 #include "hud/intel/intelmodel.h"
+#include "objectives.h"
+#include "hud/intel/objectivescard.h"
 #include <wzmaplib/map_package.h>
 
 #include <unordered_set>
@@ -1492,6 +1494,8 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	       "The LC_NUMERIC locale is not \"C\" - this may break level-data parsing depending on the user's system locale settings");
 
 	levelLoadType = params.saveType;
+	objectivesReset();   // (A save brings its own)
+	hudObjectivesLevelStarts(params.pSaveName != nullptr);
 	if (params.pSaveName != nullptr)
 	{
 		// (The save's own log, if it has one, comes with its local state)

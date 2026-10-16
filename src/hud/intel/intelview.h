@@ -48,8 +48,15 @@ enum class IntelFilter : uint8_t
 	All,
 	Briefings,
 	Research,
-	Unread
+	Unread,
+	Objectives
 };
+
+/// (hudIntelScreenShowEntry(), selectEntry()) the objectives: the one named by its key (hudObjectiveKey()), or the first
+/// still to do
+constexpr int INTEL_OBJECTIVES_KIND = -1;
+
+class ObjectivesCard;
 
 enum class IntelOrder : uint8_t
 {
@@ -57,9 +64,10 @@ enum class IntelOrder : uint8_t
 	ByKind
 };
 
-/// The intelligence screen's list and the item it shows: the filters and search, the latest mission briefing pinned,
-/// the reports and briefings newest first, grouped (new, then by mission), and the selected one beside them.
-/// Compact: the filters and search fold into the header's accessory.
+/// The intelligence screen's list and the item it shows: the filters and search, the objectives card pinned (or, when
+/// the scripts set none, the latest mission briefing), the reports and briefings newest first, grouped (new, then by
+/// mission), and the selected item or objective beside them. Compact: the filters and search fold into the header's
+/// accessory.
 class IntelView : public WIDGET
 {
 public:
@@ -67,7 +75,7 @@ public:
 
 	/// Selects the entry of `message` (or the first unread, or the first)
 	void selectMessage(const MESSAGE *message);
-	bool hasSelection() const { return selected.has_value(); }
+	bool hasSelection() const { return selected.has_value() || selectedObjective.has_value(); }
 	/// Selects an entry by its kind and view data name (ex. a row of the players view's latest intelligence)
 	bool selectEntry(HudIntelKind kind, const std::string &key);
 	/// Plays the selected briefing's videos, full screen
@@ -96,6 +104,8 @@ public:
 	bool isSelected(size_t index) const;
 	bool isCompact() const { return compact; }
 	void select(size_t index, bool byPointer);
+	/// An objective, by its key (hudObjectiveKey()): the first still to do when empty
+	bool selectObjective(const std::string &key);
 	std::string subtitle(const HudIntelEntry &entry) const;
 
 private:
@@ -106,6 +116,8 @@ private:
 	void updateChips();
 	bool passes(const HudIntelEntry &entry) const;
 	void setFilter(IntelFilter newFilter);
+	bool filterShown(IntelFilter which) const;
+	size_t filterCount(IntelFilter which) const;
 	void setOrder(IntelOrder newOrder);
 	void openFilterMenu(const std::shared_ptr<WIDGET> &anchor, bool withFilters);
 	void markUnread();
@@ -120,14 +132,17 @@ private:
 	std::vector<size_t> shown;                        ///< the list's rows, in order (indexes into entries)
 	nonstd::optional<size_t> selected;
 	nonstd::optional<size_t> pinned;
+	nonstd::optional<std::string> selectedObjective;  ///< (its key) instead of an entry
+	uint32_t objectivesSeen = 0;                      ///< the objectives' revision the list shows
 	IntelFilter filter = IntelFilter::All;
 	IntelOrder order = IntelOrder::Newest;
 	std::string search;
 	std::shared_ptr<ScrollableListWidget> list;
 	std::shared_ptr<WIDGET> pinnedCard;
+	std::shared_ptr<ObjectivesCard> objectivesCard;
 	std::shared_ptr<WIDGET> emptyLabel;
 	std::shared_ptr<WIDGET> detail;
-	std::vector<std::shared_ptr<HudChip>> chips;      ///< (full layout) All, Briefings, Research, Unread
+	std::vector<std::shared_ptr<HudChip>> chips;      ///< (full layout) All, Objectives, Briefings, Research, Unread
 	std::shared_ptr<WIDGET> orderChip;                ///< (full layout) the order's menu
 	std::shared_ptr<W_EDITBOX> searchBox;
 	std::shared_ptr<WIDGET> searchField;              ///< the search box with its icon

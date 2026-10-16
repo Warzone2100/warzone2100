@@ -332,6 +332,7 @@ function eventResearched(research, structure, player)
 			else if (videoInfo[i].res === mis_researchTargets.missileCode3)
 			{
 				winFlag = true;
+				camSetObjectiveState("codes", "done");
 			}
 		}
 	}
@@ -383,7 +384,7 @@ function checkMissileSilos()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Protect the missile silos and research for the missile codes"));
+	camSetExtraObjectiveMessage({id: "codes", text: _("Protect the missile silos and research for the missile codes")});
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");

@@ -30,6 +30,7 @@
 #include "hudidle.h"
 #include "hudspectator.h"
 #include "hudstatusline.h"
+#include "intel/objectivescard.h"
 
 std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
 {
@@ -39,6 +40,7 @@ std::unique_ptr<HudModule> hudMakeModule(HudModuleId id)
 	case HudModuleId::IdleIndicators: return hudMakeIdleIndicators();
 	case HudModuleId::SelectionReadout: return hudMakeSelectionReadout();
 	case HudModuleId::SpectatorStrip: return hudMakeSpectatorStrip();
+	case HudModuleId::Objectives: return hudMakeObjectivesCard();
 	case HudModuleId::PowerDetails:
 	case HudModuleId::ObjectBadges:
 	case HudModuleId::RowSummary:

@@ -830,6 +830,17 @@ namespace wzapi
 		const int val3 = -1;
 	};
 
+	/// setObjective()'s options, as the script gives them (unchecked)
+	struct objective_options
+	{
+		optional<std::string> state;
+		optional<bool> primary;
+		optional<std::vector<int>> progress;
+		optional<std::string> marker;
+		optional<int> order;
+		optional<int> player;
+	};
+
 	struct label_or_position_values
 	{
 	private:
@@ -1050,6 +1061,11 @@ namespace wzapi
 	bool getRevealStatus(WZAPI_NO_PARAMS);
 	bool setRevealStatus(WZAPI_PARAMS(bool status));
 	bool autoSave(WZAPI_NO_PARAMS);
+	bool setObjective(WZAPI_PARAMS(std::string id, std::string text, optional<objective_options> options));
+	bool removeObjective(WZAPI_PARAMS(std::string id, optional<int> player));
+	bool clearObjectives(WZAPI_PARAMS(optional<int> player));
+	bool setObjectivesTitle(WZAPI_PARAMS(std::string title));
+	bool showObjectives(WZAPI_PARAMS(optional<int> player, optional<bool> reminder));
 
 	// horrible hacks follow -- do not rely on these being present!
 	no_return_value hackNetOff(WZAPI_NO_PARAMS);

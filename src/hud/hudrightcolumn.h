@@ -36,6 +36,7 @@ class WIDGET;
 /// stack top to bottom in this order, a gap apart, so none overlaps another and each keeps its place in the order.
 enum class HudRightColumnSlot
 {
+	Objectives,   ///< the objectives card, or its chip (intel/objectivescard.h)
 	Connection,   ///< the connection warnings (hudconnection.h)
 	Count
 };
@@ -44,5 +45,8 @@ enum class HudRightColumnSlot
 void hudRightColumnSet(HudRightColumnSlot slot, const std::shared_ptr<WIDGET> &widget);
 /// Places the column's visible widgets, each frame after they are updated
 void hudLayoutRightColumn();
+/// The height a slot's widget has: down to the radar (when it's shown), less what the column's other visible widgets
+/// take
+int hudRightColumnAvailableHeight(HudRightColumnSlot slot);
 
 #endif // __INCLUDED_SRC_HUD_HUDRIGHTCOLUMN_H__

@@ -29,6 +29,10 @@ const mis_nexusResClassic = [
 
 function eventDestroyed(obj)
 {
+	if (obj.player === CAM_NEXUS && obj.type === STRUCTURE && obj.stattype === HQ)
+	{
+		camSetObjectiveState("hq", "done");
+	}
 	if (camGetNexusState() && obj.player === CAM_NEXUS && obj.type === STRUCTURE && obj.stattype === HQ)
 	{
 		camSetNexusState(false);
@@ -185,7 +189,7 @@ function destroyPlayerVtols()
 
 function activateNexus()
 {
-	const HINT_TIP = _("Destroy the Nexus HQ to disable the Nexus Intruder Program");
+	const HINT_TIP = {id: "hq", text: _("Destroy the Nexus HQ to disable the Nexus Intruder Program")};
 	const HINT_TIP_WARN = _("Warning: HQ shielded against VTOL attacks");
 	const objectiveMessages = [HINT_TIP, HINT_TIP_WARN];
 	camSetExtraObjectiveMessage(objectiveMessages);

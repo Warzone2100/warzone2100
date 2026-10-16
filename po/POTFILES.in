@@ -489,6 +489,7 @@ src/hud/intel/intelkit.cpp
 src/hud/intel/intelnotices.cpp
 src/hud/intel/intelpanel.cpp
 src/hud/intel/intelview.cpp
+src/hud/intel/objectivescard.cpp
 src/hud/intel/playersview.cpp
 src/hud/intel/teamstrategyview.cpp
 src/ingameop.cpp
@@ -536,6 +537,7 @@ src/multivote.cpp
 src/musicmanager.cpp
 src/nethelpers.cpp
 src/notifications.cpp
+src/objectives.cpp
 src/objects.cpp
 src/objmem.cpp
 src/oprint.cpp

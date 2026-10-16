@@ -105,6 +105,7 @@ struct HudReticuleButtonLook
 	bool highlighted = false;
 	bool panelOpen = false;
 	unsigned count = 0;          ///< a number to show on it (the intelligence button's unread items), when the skin shows one
+	bool dot = false;            ///< a dot in its place, without a count (the intelligence button: the objectives changed unseen)
 };
 
 enum class HudCardState : uint8_t
