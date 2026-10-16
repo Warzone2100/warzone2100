@@ -118,7 +118,8 @@ void realTimeUpdate();
  *  right after the frame is presented on native builds,
  *  and at the start of the main loop callback on Emscripten
  *  (where presentation happens after the callback returns).
- *  Call frameTimeUpdate() once per frame at that point. */
+ *  Call frameTimeUpdate() once per frame at that point.
+ *  While it is called, graphicsTime follows the same paced clock in whole milliseconds. */
 void frameTimeUpdate();
 /// Make the next frameTimeUpdate() report a delta of 0
 /// (ex. after loading, focus loss, or anything else that stalled frames).
