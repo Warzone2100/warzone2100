@@ -151,7 +151,8 @@ extern bool tuiTargetOrigin;
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
 bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
 
-int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY);
+/// Camera height the height follower aims for at the given world position.
+int calculateCameraHeightAt(WorldMapState& mapState, int worldX, int worldZ);
 
 // RCAS sharpness for FSR1 upscaling, in stops (0 is sharpest, 2 is the least sharp)
 void display3d_setUpscalingSharpness(float stops);
