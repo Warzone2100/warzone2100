@@ -291,7 +291,8 @@ def main():
                  ", ".join("%+d x%d" % (k, steps.count(k)) for k in sorted(set(x for x in steps if abs(x) > 5))[:12])))
         print("  average-terrain changes: %d, mean |step| %.1f u" % (len(avg_steps), statistics.fmean([abs(s) for s in avg_steps]) if avg_steps else 0.0))
         # Stalls: frames drawn while the camera is still away from its target but whose height didn't change.
-        # trackHeight() runs after the frame is drawn, so the update feeding frame n+1 is recorded on frame n.
+        # NOTE: Traces from builds that ran trackHeight() after drawing
+        # record the update feeding frame n+1 on frame n, so a skipped update on either frame counts.
         moving = stalls = gated_stalls = 0
         for a, b in zip(tracked, tracked[1:]):
             if abs(a["desired_h"] - a["cam_y"]) <= 2:
@@ -299,7 +300,7 @@ def main():
             moving += 1
             if b["cam_y"] == a["cam_y"]:
                 stalls += 1
-                if a["h_upd"] == 0:
+                if a["h_upd"] == 0 or b["h_upd"] == 0:
                     gated_stalls += 1
         if moving:
             print("  frames with no vertical motion while away from target: %d of %d (%.1f%%), %d of them because the 16 ms gate skipped the update"
