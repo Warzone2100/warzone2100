@@ -1459,6 +1459,8 @@ struct LevLoadJobParams
 
 LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobParams params)
 {
+	co_await setLoadingDomain(_("Level data"));
+
 	if (params.name.empty())
 	{
 		co_return load_fail();

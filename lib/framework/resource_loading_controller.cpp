@@ -24,7 +24,10 @@
 
 #include "resource_loading_controller.h"
 
+#include <algorithm>
 #include <chrono>
+#include <iterator>
+#include <new>
 #include <ratio>
 #include <utility>
 
@@ -62,13 +65,13 @@ void ResourceLoadingController::FrameYield::await_suspend(std::coroutine_handle<
 ResourceLoadingController::ExecutionFrame& ResourceLoadingController::topFrame()
 {
 	ASSERT(hasActiveExecution(), "topFrame without active execution");
-	return executionStack.top();
+	return executionStack.back();
 }
 
 const ResourceLoadingController::ExecutionFrame& ResourceLoadingController::topFrame() const
 {
 	ASSERT(hasActiveExecution(), "topFrame without active execution");
-	return executionStack.top();
+	return executionStack.back();
 }
 
 void ResourceLoadingController::pushFrame(std::coroutine_handle<> handle, FramePolicy policy,
@@ -78,7 +81,8 @@ void ResourceLoadingController::pushFrame(std::coroutine_handle<> handle, FrameP
 	ASSERT(!handle.done(), "pushFrame with already-completed coroutine");
 	ASSERT(!sessionFinished, "pushFrame after load session finished");
 	ASSERT(promiseBase != nullptr, "pushFrame with null promiseBase");
-	executionStack.push(ExecutionFrame{handle, ExecutionFrameState::Paused, policy, promiseBase});
+	noteFrameAlive(promiseBase);
+	executionStack.push_back(ExecutionFrame{handle, ExecutionFrameState::Paused, policy, promiseBase});
 }
 
 void ResourceLoadingController::popAndDestroyTop() noexcept
@@ -87,8 +91,8 @@ void ResourceLoadingController::popAndDestroyTop() noexcept
 	{
 		return;
 	}
-	const std::coroutine_handle<> handle = executionStack.top().handle;
-	executionStack.pop();
+	const std::coroutine_handle<> handle = executionStack.back().handle;
+	executionStack.pop_back();
 	if (handle)
 	{
 		handle.destroy();
@@ -99,9 +103,9 @@ void ResourceLoadingController::onFrameFinished(bool succeeded) noexcept
 {
 	ASSERT(!sessionFinished, "onFrameFinished after load session finished");
 	ASSERT(hasActiveExecution(), "onFrameFinished without active execution");
-	const std::coroutine_handle<> finished = executionStack.top().handle;
+	const std::coroutine_handle<> finished = executionStack.back().handle;
 	ASSERT(finished.done(), "onFrameFinished for a coroutine that is not done");
-	executionStack.pop();
+	executionStack.pop_back();
 	if (executionStack.empty())
 	{
 		sessionRootHandle = finished;
@@ -179,6 +183,108 @@ void ResourceLoadingController::resetTaskState() noexcept
 	sessionFinished = false;
 	terminalSucceeded = true;
 	ASSERT(!hasActiveExecution() && !sessionFinished, "resetTaskState must clear execution state");
+	ASSERT(loadingDomains.empty(), "loading domain stack leaked");
+	ASSERT(liveFrames.empty(), "live loading frames leaked");
+}
+
+void ResourceLoadingController::pushLoadingDomain(LoadingTaskPromiseBase* owner, std::string name)
+{
+	ASSERT(owner != nullptr, "pushLoadingDomain with null owner");
+	ASSERT(!name.empty(), "pushLoadingDomain with empty name");
+
+	std::string next = loadingDomainPathCache;
+	if (!loadingDomains.empty())
+	{
+		next += " / ";
+	}
+	next += name;
+
+	loadingDomains.push_back(LoadingDomainSegment{owner, std::move(name)});
+	loadingDomainPathCache = std::move(next);
+}
+
+void ResourceLoadingController::popLoadingDomain(LoadingTaskPromiseBase* owner) noexcept
+{
+	ASSERT(owner != nullptr, "popLoadingDomain with null owner");
+	if (owner == nullptr)
+	{
+		return;
+	}
+
+	const auto it = std::find_if(loadingDomains.rbegin(), loadingDomains.rend(),
+		[owner](const LoadingDomainSegment& segment) { return segment.owner == owner; });
+	ASSERT(it != loadingDomains.rend(), "popLoadingDomain owner is not on the domain stack");
+	if (it == loadingDomains.rend())
+	{
+		return;
+	}
+	ASSERT(it == loadingDomains.rbegin(), "loading domain pop is not LIFO");
+
+	loadingDomains.erase(std::next(it).base());
+
+	try
+	{
+		std::string next;
+		for (size_t i = 0; i < loadingDomains.size(); ++i)
+		{
+			if (i != 0)
+			{
+				next += " / ";
+			}
+			next += loadingDomains[i].name;
+		}
+		loadingDomainPathCache = std::move(next);
+	}
+	catch (const std::bad_alloc&)
+	{
+		loadingDomainPathCache.clear();
+	}
+}
+
+std::string_view ResourceLoadingController::loadingDomainPath() const noexcept
+{
+	return loadingDomainPathCache;
+}
+
+void ResourceLoadingController::noteFrameAlive(LoadingTaskPromiseBase* promise)
+{
+	ASSERT(promise != nullptr, "noteFrameAlive with null promise");
+	if (promise == nullptr)
+	{
+		return;
+	}
+	const bool alreadyLive = std::find(liveFrames.begin(), liveFrames.end(), promise) != liveFrames.end();
+	ASSERT(!alreadyLive, "noteFrameAlive for a promise that is already live");
+	if (alreadyLive)
+	{
+		return;
+	}
+	liveFrames.push_back(promise);
+}
+
+void ResourceLoadingController::noteFrameDead(LoadingTaskPromiseBase* promise) noexcept
+{
+	if (promise == nullptr)
+	{
+		return;
+	}
+	const auto it = std::find(liveFrames.begin(), liveFrames.end(), promise);
+	if (it != liveFrames.end())
+	{
+		liveFrames.erase(it);
+	}
+}
+
+bool ResourceLoadingController::isLiveFrame(const LoadingTaskPromiseBase* promise) const noexcept
+{
+	return promise != nullptr
+	    && std::find(liveFrames.begin(), liveFrames.end(), promise) != liveFrames.end();
+}
+
+bool ResourceLoadingController::isOnExecutionStack(const LoadingTaskPromiseBase* promise) const noexcept
+{
+	return std::any_of(executionStack.begin(), executionStack.end(),
+		[promise](const ExecutionFrame& frame) { return frame.promiseBase == promise; });
 }
 
 void ResourceLoadingController::requestImpl(LoadingTaskHandle task, FramePolicy policy)

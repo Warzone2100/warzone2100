@@ -1180,6 +1180,8 @@ static LoadResult<> mapLoadFail(WorldMapState& mapState)
 /* Initialise the map structure */
 LoadingTask<> mapLoad(ResourceLoadingController& controller, char const *filename, WorldMapState& mapState)
 {
+	co_await setLoadingDomain(_("Map"));
+
 	gwShutDown(mapState);
 	mapState = {};
 
