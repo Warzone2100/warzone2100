@@ -116,6 +116,7 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 static UDWORD	getTargettingGfx();
 static void	drawGroupNumber(BASE_OBJECT *psObject);
 static void	trackHeight(float desiredHeight);
+static void	updateCameraForFrame();
 static void	renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
@@ -1133,29 +1134,13 @@ void draw3DScene()
 		}
 	}
 
+	/* Finish moving the camera for this frame, then draw from where it is */
+	updateCameraForFrame();
+
 	/* Now, draw the terrain */
 	drawTiles(&playerPos, getCurrentLightingData(), getCurrentLightmapData(), getCurrentLightingManager());
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
-
-	while (playerPos.r.y > DEG(360))
-	{
-		playerPos.r.y -= DEG(360);
-	}
-
-	/* If we don't have an active camera track, then track terrain height! */
-	if (!getWarCamStatus())
-	{
-		/* Move the autonomous camera if necessary */
-		updatePlayerAverageCentreTerrainHeight();
-		const float desiredCameraHeight = calculateCameraHeight(averageCentreTerrainHeight);
-		camtrace::markHeightTarget(static_cast<int>(std::lround(averageCentreTerrainHeight)), static_cast<int>(std::lround(desiredCameraHeight)));
-		trackHeight(desiredCameraHeight);
-	}
-	else
-	{
-		processWarCam();
-	}
 
 	structureEffects(); // add fancy effects to structures
 
@@ -4134,6 +4119,30 @@ static float calculateCameraHeight(float averageTerrainHeight)
 int calculateCameraHeightAt(WorldMapState& mapState, int worldX, int worldZ)
 {
 	return static_cast<int>(std::lround(calculateCameraHeight(calcInterpolatedAverageTerrainHeight(mapState, worldX, worldZ))));
+}
+
+/// The last step of moving the camera each frame, after scrolling, panning and rotating.
+/// Follows the terrain height, or lets the war camera move the camera. Runs before the scene is drawn.
+static void updateCameraForFrame()
+{
+	while (playerPos.r.y > DEG(360))
+	{
+		playerPos.r.y -= DEG(360);
+	}
+
+	/* If we don't have an active camera track, then track terrain height! */
+	if (!getWarCamStatus())
+	{
+		/* Move the autonomous camera if necessary */
+		updatePlayerAverageCentreTerrainHeight();
+		const float desiredCameraHeight = calculateCameraHeight(averageCentreTerrainHeight);
+		camtrace::markHeightTarget(static_cast<int>(std::lround(averageCentreTerrainHeight)), static_cast<int>(std::lround(desiredCameraHeight)));
+		trackHeight(desiredCameraHeight);
+	}
+	else
+	{
+		processWarCam();
+	}
 }
 
 /// Smoothly adjust player height to match the desired height
