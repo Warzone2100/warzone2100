@@ -127,6 +127,7 @@ void frameTimeRebase();
 /// Seconds to advance presentation-smoothness code by for this frame (0 after a rebase).
 /// The time between the two most recent frameTimeUpdate() samples, paced to the display (see FramePacer)
 /// and at most GTIME_MAXFRAME.
+/// Leaves out the part of a stall beyond a slow frame, which graphicsTime still advances by.
 double frameTimeDeltaSeconds();
 /// Tell the frame pacer whether presentation is synchronized to the display,
 /// and the display's nominal refresh period in seconds if the backend knows it (0 if not).

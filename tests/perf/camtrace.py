@@ -290,6 +290,11 @@ def main():
                  ", from presentation times" if from_pres > len(paced) // 2 else ""))
         describe("|paced - measured| per frame", [abs(r["dt_ms"] - r["dt_measured_ms"]) for r in paced])
         describe("|drift|", [abs(r["pace_drift_ms"]) for r in paced if r["pace_drift_ms"] is not None])
+        left_out = [r["dt_ms"] - r["dt_motion_ms"] for r in paced if r.get("dt_motion_ms") is not None]
+        left_out = [x for x in left_out if x > 1e-6]
+        if left_out:
+            print("  stall time left out of camera motion on %d frames: %.1f ms in total, largest %.1f ms"
+                  % (len(left_out), sum(left_out), max(left_out)))
 
     present_path = args.trace + ".present.csv"
     display = {}

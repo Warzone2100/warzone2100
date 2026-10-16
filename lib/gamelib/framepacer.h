@@ -25,6 +25,7 @@
  *  (a late sample followed by an early one counts as two periods then none, and a missed vblank only shows up in the measured interval a few frames later).
  *
  *  The sum of the deltas stays in step with the measured time, and a stall of several periods is shown at once.
+ *  The motion delta leaves out the part of a stall beyond a slow frame.
  *
  *  The refresh period comes from either the reported display intervals, the measured intervals, or the backend's nominal value.
  *  Without vsync, or when the samples don't keep to the grid (ex. variable refresh rate), the measured interval is used as-is.
@@ -61,6 +62,9 @@ public:
 	/// Called once per frame with the measured time in seconds since the previous call
 	/// (negative for the first frame after reset()). Returns the delta to animate by.
 	double update(double measuredDelta);
+
+	/// The last delta without the part of a stall beyond a slow frame, for motion like the camera's.
+	double lastMotionDelta() const { return motion_; }
 
 	// Diagnostics, valid after update()
 	double lastMeasuredDelta() const { return measured_; }
@@ -115,6 +119,7 @@ private:
 
 	double measured_ = 0.0;
 	double delta_ = 0.0;
+	double motion_ = 0.0;
 	double refresh_ = 0.0;
 	bool snapped_ = false;
 	bool snapping_ = false;       ///< recent samples keep to the period grid

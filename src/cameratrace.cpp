@@ -91,7 +91,7 @@ struct FrameRecord
 	int64_t tRenderBegin = kUnset, tAudioEnd = kUnset, tSceneEnd = kUnset, tRenderEnd = kUnset;
 
 	int64_t presentId = kUnset;
-	double dtMeasured = kNaN, dt = kNaN, pacePeriod = kNaN, paceDrift = kNaN;
+	double dtMeasured = kNaN, dt = kNaN, dtMotion = kNaN, pacePeriod = kNaN, paceDrift = kNaN;
 	int64_t paceSnapped = kUnset, paceFromPresentation = kUnset;
 };
 
@@ -143,7 +143,7 @@ static const char *columns =
 	",t_present,graphics_time,delta_graphics_time,game_time"
 	",t_realtime,real_time,delta_real_time"
 	",t_render_begin,t_audio_end,t_scene_end,t_render_end"
-	",present_id,dt_measured_ms,dt_ms,pace_period_ms,pace_snapped,pace_from_presentation,pace_drift_ms";
+	",present_id,dt_measured_ms,dt_ms,pace_period_ms,pace_snapped,pace_from_presentation,pace_drift_ms,dt_motion_ms";
 
 static void writeRow(const FrameRecord &r)
 {
@@ -163,7 +163,7 @@ static void writeRow(const FrameRecord &r)
 	putInt(r.tRealTime); putInt(r.realTimeMs); putInt(r.deltaRealTimeMs);
 	putInt(r.tRenderBegin); putInt(r.tAudioEnd); putInt(r.tSceneEnd); putInt(r.tRenderEnd);
 	putInt(r.presentId); putDouble(r.dtMeasured); putDouble(r.dt); putDouble(r.pacePeriod);
-	putInt(r.paceSnapped); putInt(r.paceFromPresentation); putDouble(r.paceDrift);
+	putInt(r.paceSnapped); putInt(r.paceFromPresentation); putDouble(r.paceDrift); putDouble(r.dtMotion);
 	fputc('\n', outFile);
 }
 
@@ -493,6 +493,7 @@ void markFrameTime(const FramePacer &pacer)
 	}
 	cur.dtMeasured = pacer.lastMeasuredDelta() * 1e3;
 	cur.dt = pacer.lastDelta() * 1e3;
+	cur.dtMotion = pacer.lastMotionDelta() * 1e3;
 	cur.pacePeriod = pacer.refreshPeriod() * 1e3;
 	cur.paceSnapped = pacer.snapped() ? 1 : 0;
 	cur.paceFromPresentation = pacer.usingPresentationTimes() ? 1 : 0;
