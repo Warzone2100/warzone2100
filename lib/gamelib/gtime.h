@@ -112,6 +112,20 @@ void gameTimeUpdateEnd();
 /// Updates the realTime timer, and corresponding deltaRealTime.
 void realTimeUpdate();
 
+/** High-resolution frame clock, for presentation-smoothness code such as camera motion.
+ *  Like realTime it never pauses and isn't scaled by the game speed,
+ *  but it has nanosecond resolution and is sampled once per frame at a point aligned with presentation:
+ *  right after the frame is presented on native builds,
+ *  and at the start of the main loop callback on Emscripten
+ *  (where presentation happens after the callback returns).
+ *  Call frameTimeUpdate() once per frame at that point. */
+void frameTimeUpdate();
+/// Make the next frameTimeUpdate() report a delta of 0
+/// (ex. after loading, focus loss, or anything else that stalled frames).
+void frameTimeRebase();
+/// Seconds between the two most recent frameTimeUpdate() samples, at most GTIME_MAXFRAME (0 after a rebase)
+double frameTimeDeltaSeconds();
+
 /* Returns true if gameTime is stopped. */
 bool gameTimeIsStopped();
 

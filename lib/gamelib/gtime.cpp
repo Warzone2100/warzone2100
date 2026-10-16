@@ -34,6 +34,7 @@
 
 
 #include <time.h>
+#include <algorithm>
 
 
 /* See header file for documentation */
@@ -41,6 +42,11 @@ UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0,
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 UDWORD extraGameTicksProcessed = 0;
+
+/// High-resolution frame clock state (see frameTimeUpdate())
+static uint64_t frameTimeLastNs = 0;
+static bool frameTimeHaveLast = false;
+static double frameTimeDelta = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
 static Rational modifier;
@@ -114,6 +120,7 @@ void gameTimeInit(void)
 	deltaRealTime = 0;
 	prevRealTime = realTime;
 	realTimeFraction = 0.f;
+	frameTimeRebase();
 
 	modifier = 1;
 
@@ -356,6 +363,34 @@ void realTimeUpdate(void)
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
 }
 
+void frameTimeUpdate()
+{
+	const uint64_t now = wzGetTicksNS();
+	if (!frameTimeHaveLast || now < frameTimeLastNs)
+	{
+		frameTimeDelta = 0.0;
+	}
+	else
+	{
+		constexpr double maxFrameSeconds = static_cast<double>(GTIME_MAXFRAME) / static_cast<double>(GAME_TICKS_PER_SEC);
+		// At most GTIME_MAXFRAME, so a freeze doesn't scroll across the map
+		frameTimeDelta = std::min(static_cast<double>(now - frameTimeLastNs) * 1e-9, maxFrameSeconds);
+	}
+	frameTimeLastNs = now;
+	frameTimeHaveLast = true;
+}
+
+void frameTimeRebase()
+{
+	frameTimeHaveLast = false;
+	frameTimeDelta = 0.0;
+}
+
+double frameTimeDeltaSeconds()
+{
+	return frameTimeDelta;
+}
+
 // reset the game time modifiers
 void gameTimeResetMod(void)
 {
@@ -412,6 +447,7 @@ void gameTimeReset(UDWORD time)
 	gameTimeResetMod();
 	realTime = wzGetTicks();
 	deltaRealTime = 0;
+	frameTimeRebase();
 }
 
 void getTimeComponents(unsigned time, int *hours, int *minutes, int *seconds, int *milliseconds)
