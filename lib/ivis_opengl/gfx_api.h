@@ -643,6 +643,25 @@ namespace gfx_api
 		/// The most recently completed measurement (compare frameNum to detect new samples)
 		optional<GpuFrameTiming> getLastGpuFrameTiming() const { return _lastGpuFrameTiming; }
 
+		/// When a presented frame actually reached the display, as reported by the presentation engine
+		struct PresentationTiming
+		{
+			/// Identifies the present (see lastPresentId()), increasing by one per present
+			uint64_t presentId = 0;
+			/// When the frame was first visible, in nanoseconds on the presentation engine's clock
+			/// (only differences between reports are meaningful)
+			uint64_t actualPresentTimeNs = 0;
+		};
+		/// True when the backend can report when presented frames reached the display
+		virtual bool supportsPresentationTiming() const { return false; }
+		/// Appends the presentation times reported since the last call, oldest first.
+		/// Each frame is reported a few frames after it was presented, and some may never be.
+		virtual void getPresentationTimings(std::vector<PresentationTiming>& out) { (void)out; }
+		/// The id given to the most recent present (0 before the first)
+		virtual uint64_t lastPresentId() const { return 0; }
+		/// The display's refresh period in nanoseconds, if the backend knows it (0 otherwise)
+		virtual uint64_t refreshDurationNs() { return 0; }
+
 		/// How the reduced-resolution scene is upscaled to the drawable
 		enum class scene_upscaling_mode : uint8_t
 		{
