@@ -172,7 +172,10 @@ struct AutoPan
 };
 static AutoPan autoPan;
 
-} // anonymous namespace
+static bool heightSpringSet = false;
+static double heightSpringStiffness = 0.0;
+static double heightSpringDamping = 0.0;
+
 
 bool open(const char *path)
 {
@@ -225,6 +228,31 @@ bool setAutoPan(const char *spec)
 	g_autoPan = true;
 	debug(LOG_INFO, "Camera auto-pan: direction (%d, %d), %.2fs legs, %.2fs coast", leftRight, upDown, leg, idle);
 	return true;
+}
+
+bool setHeightSpring(const char *spec)
+{
+	double stiffness = 0.0, damping = 0.0;
+	if (sscanf(spec, "%lf,%lf", &stiffness, &damping) != 2 || !(stiffness > 0.0) || !(damping >= 0.0))
+	{
+		debug(LOG_ERROR, "Bad --cameraheightspring value \"%s\": expected <stiffness>,<damping> with stiffness > 0 and damping >= 0", spec);
+		return false;
+	}
+	heightSpringSet = true;
+	heightSpringStiffness = stiffness;
+	heightSpringDamping = damping;
+	debug(LOG_INFO, "Camera height spring: stiffness %.3f, damping %.3f (damping ratio %.2f, slope lag %.2f s)",
+	      stiffness, damping, damping / (2.0 * std::sqrt(stiffness)), damping / stiffness);
+	return true;
+}
+
+void overrideHeightSpring(double &stiffness, double &damping)
+{
+	if (heightSpringSet)
+	{
+		stiffness = heightSpringStiffness;
+		damping = heightSpringDamping;
+	}
 }
 
 void frameBegin()
@@ -450,6 +478,12 @@ bool open(const char *)
 bool setAutoPan(const char *)
 {
 	debug(LOG_ERROR, "This build has no camera auto-pan. Configure with -DWZ_PERF_COUNTERS=ON.");
+	return false;
+}
+
+bool setHeightSpring(const char *)
+{
+	debug(LOG_ERROR, "This build has no camera height spring override. Configure with -DWZ_PERF_COUNTERS=ON.");
 	return false;
 }
 }
