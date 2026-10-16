@@ -35,6 +35,7 @@ static constexpr double kPeriodSmoothing = 0.02;   ///< per-frame weight of a ne
 static constexpr double kPeriodChange = 0.02;      ///< relative change taken as a new refresh rate
 static constexpr double kPhaseGain = 0.05;         ///< share of each offset from the grid moved into the phase
 static constexpr int kSpreadMaxExtra = 2;          ///< most extra periods spread over the following frames
+static constexpr double kUnroundedStallMin = 0.05; ///< shortest unrounded delta that can count as a stall, in seconds
 
 void FramePacer::Ring::push(double v, size_t capacity)
 {
@@ -234,6 +235,7 @@ double FramePacer::update(double measuredDelta)
 	{
 		measured_ = 0.0;
 		delta_ = 0.0;
+		motion_ = 0.0;
 		havePhase_ = false;
 		spreadFilled_ = false;
 		return delta_;
@@ -303,6 +305,12 @@ double FramePacer::update(double measuredDelta)
 	{
 		spreadFilled_ = false;
 		delta_ = measured_;
+		double allowance = maxDelta;
+		if (measuredIntervals_.values.size() >= kMinSamples)
+		{
+			allowance = std::max((1 + kSpreadMaxExtra) * measuredIntervals_.percentile(0.5), kUnroundedStallMin);
+		}
+		motion_ = std::min(delta_, allowance);
 		return delta_;
 	}
 	snapped_ = true;
@@ -330,5 +338,7 @@ double FramePacer::update(double measuredDelta)
 		delta_ = std::clamp(delta_, 0.0, maxDelta);
 		spreadFilled_ = false;
 	}
+	const int leftOut = std::max(0, immediate - kSpreadMaxExtra);
+	motion_ = std::max(0.0, delta_ - leftOut * refresh_);
 	return delta_;
 }
