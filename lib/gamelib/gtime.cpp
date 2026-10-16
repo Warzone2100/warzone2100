@@ -49,6 +49,7 @@ UDWORD extraGameTicksProcessed = 0;
 static uint64_t frameTimeLastNs = 0;
 static bool frameTimeHaveLast = false;
 static double frameTimeDelta = 0.0;
+static double frameTimeMotionDelta = 0.0;
 static FramePacer framePacer;
 
 /// The paced frame clock on the wzGetTicks() millisecond scale, with the fraction kept.
@@ -409,6 +410,7 @@ void frameTimeUpdate()
 	// At most GTIME_MAXFRAME, so a freeze doesn't scroll across the map
 	static_assert(FramePacer::maxDelta * GAME_TICKS_PER_SEC <= GTIME_MAXFRAME + 1, "FramePacer::maxDelta should match GTIME_MAXFRAME");
 	frameTimeDelta = framePacer.update(measured);
+	frameTimeMotionDelta = framePacer.lastMotionDelta();
 	frameTimeLastNs = now;
 	frameTimeHaveLast = true;
 
@@ -430,6 +432,7 @@ void frameTimeRebase()
 {
 	frameTimeHaveLast = false;
 	frameTimeDelta = 0.0;
+	frameTimeMotionDelta = 0.0;
 	framePacer.reset();
 	graphicsClockValid = false;
 }
@@ -452,7 +455,7 @@ const FramePacer& frameTimePacer()
 
 double frameTimeDeltaSeconds()
 {
-	return frameTimeDelta;
+	return frameTimeMotionDelta;
 }
 
 // reset the game time modifiers

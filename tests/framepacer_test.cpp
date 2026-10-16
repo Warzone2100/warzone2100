@@ -241,6 +241,37 @@ int main()
 		const double d = pacer.update(6.0 * hz120 + 0.0003);
 		check(pacer.snapped(), "stall: snapped");
 		check(std::abs(d - 6.0 * hz120) < 2e-5, "stall: six periods shown at once", d, 6.0 * hz120);
+		check(std::abs(pacer.lastMotionDelta() - 3.0 * hz120) < 2e-5, "stall: motion left at a slow frame", pacer.lastMotionDelta(), 3.0 * hz120);
+	}
+	{
+		// Missed vblanks and slow frames keep all their motion
+		FramePacer pacer;
+		const Sim s = makeSim(hz120, 2000, {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1}, 0.0006, 12);
+		pacer.update(-1.0);
+		double maxDiff = 0.0;
+		for (size_t i = 0; i < s.measured.size(); ++i)
+		{
+			pacer.update(s.measured[i]);
+			maxDiff = std::max(maxDiff, std::abs(pacer.lastMotionDelta() - pacer.lastDelta()));
+		}
+		check(maxDiff < 1e-12, "slow frames: motion is the delta", maxDiff, 0.0);
+	}
+	{
+		// Without vsync, sim tick frames keep their motion and a stall is left out
+		FramePacer pacer;
+		pacer.setVsync(false);
+		pacer.update(-1.0);
+		double maxDiff = 0.0;
+		for (int i = 0; i < 600; ++i)
+		{
+			const double m = (i % 30 == 0) ? 0.015 : 0.0033;
+			pacer.update(m);
+			maxDiff = std::max(maxDiff, std::abs(pacer.lastMotionDelta() - m));
+		}
+		check(maxDiff < 1e-12, "vsync off, sim ticks: motion is the measured delta", maxDiff, 0.0);
+		const double d = pacer.update(0.1);
+		check(std::abs(d - 0.1) < 1e-12, "vsync off, stall: delta is the measured one", d, 0.1);
+		check(std::abs(pacer.lastMotionDelta() - 0.05) < 1e-12, "vsync off, stall: motion left at the floor", pacer.lastMotionDelta(), 0.05);
 	}
 	{
 		// 119.88 Hz with a nominal 120 Hz
