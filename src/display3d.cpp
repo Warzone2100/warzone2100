@@ -1520,6 +1520,7 @@ bool init3DView()
 
 	/* Get all the init stuff out of here? */
 	initWarCam();
+	trackHeightStartAtTarget = true;
 
 	/* Init the game messaging system */
 	initConsoleMessages();
@@ -4118,34 +4119,59 @@ int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY)
 /// Smoothly adjust player height to match the desired height
 static void trackHeight(int desiredHeight)
 {
-	static const uint32_t minTrackHeightInterval = GAME_TICKS_PER_SEC / 60;
-	static uint32_t lastHeightAdjustmentRealTime = 0;
+	// Follower state is kept in floating point and only rounded when committed to the camera position.
+	// The solver is exact for any dt and runs once per frame on the frame clock.
 	static float heightSpeed = 0.0f;
+	static float trackedHeight = 0.0f;   // follower position, which playerPos.p.y is the rounding of
+	static int lastCommittedHeight = 0;
+	static bool haveTrackedHeight = false;
+	static UDWORD lastTrackFrame = UDWORD_MAX;
 
-	uint32_t deltaTrackHeightRealTime = realTime - lastHeightAdjustmentRealTime;
-	if (deltaTrackHeightRealTime < minTrackHeightInterval)
+	double dt = frameTimeDeltaSeconds();
+	const UDWORD frame = frameGetFrameNumber();
+	if (frame == lastTrackFrame)
 	{
-		// avoid processing this too rapidly, such as when vsync is disabled
-		return;
+		dt = 0.0;
 	}
-	lastHeightAdjustmentRealTime = realTime;
+	lastTrackFrame = frame;
 
-	if ((desiredHeight == playerPos.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
+	if (trackHeightStartAtTarget)
 	{
+		// The first update of a game starts at the target
+		trackedHeight = static_cast<float>(desiredHeight);
 		heightSpeed = 0.0f;
-		camtrace::markHeightUpdate(deltaTrackHeightRealTime, 0.f, 0.f, 0.f, true);
-		return;
+		haveTrackedHeight = true;
+		trackHeightStartAtTarget = false;
+	}
+	else if (!haveTrackedHeight || playerPos.p.y != lastCommittedHeight)
+	{
+		// Something else set the camera height (ex. war camera, radar jump, loading, setViewPos),
+		// so carry on from there at rest
+		trackedHeight = static_cast<float>(playerPos.p.y);
+		heightSpeed = 0.0f;
+		haveTrackedHeight = true;
 	}
 
-	float separation = desiredHeight - playerPos.p.y;	// How far are we from desired height?
-	const float separationBefore = separation;
-
-	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
-	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, (float) deltaTrackHeightRealTime / (float) GAME_TICKS_PER_SEC);
-	camtrace::markHeightUpdate(deltaTrackHeightRealTime, separationBefore, separation, heightSpeed);
+	float separation = static_cast<float>(desiredHeight) - trackedHeight;	// How far are we from desired height?
+	if (std::fabs(separation) < 0.5f && heightSpeed > -5.f && heightSpeed < 5.f)
+	{
+		// Close enough that the committed height is the target, and slow enough to stop
+		trackedHeight = static_cast<float>(desiredHeight);
+		heightSpeed = 0.0f;
+		camtrace::markHeightUpdate(dt * 1000.0, 0.f, 0.f, 0.f, true);
+	}
+	else if (dt > 0.0)
+	{
+		const float separationBefore = separation;
+		// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
+		solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, dt);
+		camtrace::markHeightUpdate(dt * 1000.0, separationBefore, separation, heightSpeed);
+		trackedHeight = static_cast<float>(desiredHeight) - separation;
+	}
 
 	/* Adjust the height accordingly */
-	playerPos.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
+	playerPos.p.y = static_cast<int>(std::lround(trackedHeight));
+	lastCommittedHeight = playerPos.p.y;
 }
 
 /// Select the next energy bar display mode

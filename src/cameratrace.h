@@ -64,8 +64,8 @@ void notifyScrollLimitHit();
 
 /// Height follow and draw (display3d.cpp)
 void markHeightTarget(int averageTerrainHeight, int desiredHeight);
-/// resting: passed the 16 ms throttle but sat at the target
-void markHeightUpdate(uint32_t dtMs, float separationBefore, float separationAfter, float heightSpeed, bool resting = false);
+/// resting: the follower sat at the target
+void markHeightUpdate(double dtMs, float separationBefore, float separationAfter, float heightSpeed, bool resting = false);
 void markDraw(int x, int y, int z, int rotX, int rotY, float viewDistance, bool warCamActive);
 
 /// Radar (radar.cpp)
@@ -102,7 +102,7 @@ inline void markScrollStep(double, double, double, double, double, double, doubl
 inline void applyAutoPan(int &, int &) {}
 inline void notifyScrollLimitHit() {}
 inline void markHeightTarget(int, int) {}
-inline void markHeightUpdate(uint32_t, float, float, float, bool = false) {}
+inline void markHeightUpdate(double, float, float, float, bool = false) {}
 inline void markDraw(int, int, int, int, int, float, bool) {}
 inline void markRadarRedraw() {}
 enum class Stage { RenderBegin, AudioEnd, SceneEnd, RenderEnd };

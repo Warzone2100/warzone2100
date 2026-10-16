@@ -68,7 +68,7 @@ struct FrameRecord
 
 	int64_t averageHeight = kUnset, desiredHeight = kUnset;
 	int heightUpdated = 0;
-	int64_t heightDtMs = kUnset;
+	double heightDtMs = kNaN;
 	double separationBefore = kNaN, separationAfter = kNaN, heightSpeed = kNaN;
 
 	int64_t tDraw = kUnset;
@@ -145,7 +145,7 @@ static void writeRow(const FrameRecord &r)
 	putDouble(r.stepLeftRight); putDouble(r.stepUpDown); putDouble(r.speedLeftRight); putDouble(r.speedUpDown);
 	putDouble(r.xExact); putDouble(r.zExact); putInt(r.xDif); putInt(r.zDif);
 	putInt(r.autoPanLeftRight); putInt(r.autoPanUpDown); putInt(r.limitHit);
-	putInt(r.averageHeight); putInt(r.desiredHeight); putInt(r.heightUpdated); putInt(r.heightDtMs);
+	putInt(r.averageHeight); putInt(r.desiredHeight); putInt(r.heightUpdated); putDouble(r.heightDtMs);
 	putDouble(r.separationBefore); putDouble(r.separationAfter); putDouble(r.heightSpeed);
 	putInt(r.tDraw); putInt(r.camX); putInt(r.camY); putInt(r.camZ); putInt(r.camRotX); putInt(r.camRotY);
 	putDouble(r.viewDistance); putInt(r.warCam);
@@ -382,7 +382,7 @@ void markHeightTarget(int averageTerrainHeight, int desiredHeight)
 	cur.desiredHeight = desiredHeight;
 }
 
-void markHeightUpdate(uint32_t dtMs, float separationBefore, float separationAfter, float heightSpeed, bool resting)
+void markHeightUpdate(double dtMs, float separationBefore, float separationAfter, float heightSpeed, bool resting)
 {
 	if (!g_enabled)
 	{
