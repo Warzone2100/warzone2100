@@ -54,6 +54,7 @@
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "order.h"
+#include "cameratrace.h"
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -381,6 +382,7 @@ void drawRadar(GameWorld& world)
 		applyMinimapOverlay();
 		pie_DownLoadRadar(radarBitmap);
 		frameSkip = RADAR_FRAME_SKIP;
+		camtrace::markRadarRedraw();
 	}
 	frameSkip--;
 	glm::mat4 radarMatrix = glm::translate(glm::vec3(radarCenterX, radarCenterY, 0));
