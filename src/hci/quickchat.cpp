@@ -2335,111 +2335,30 @@ void WzQuickChatForm::initializeInGame(optional<WzQuickChatMode> startingMode)
 	}
 }
 
+static void addSections(const std::shared_ptr<WzQuickChatPanel>& panel, const std::vector<WzQuickChatSectionInfo>& sections)
+{
+	for (const auto& info : sections)
+	{
+		auto section = WzQuickChatSection::make(WzString::fromUtf8(info.title));
+		for (auto message : info.messages)
+		{
+			section->addChatOption(message);
+		}
+		panel->addSection(section);
+	}
+}
+
 std::shared_ptr<WzQuickChatPanel> WzQuickChatForm::createInGameGlobalPanel()
 {
 	auto panel = WzQuickChatPanel::make(_("Global"), WzQuickChatPanel::WzQuickChatSendToMode::GlobalSendOptions);
-
-	auto requests = WzQuickChatSection::make(_("Requests"));
-	requests->addChatOption(WzQuickChatMessage::REQUEST_PLEASE_WAIT);					// Please wait
-	requests->addChatOption(WzQuickChatMessage::REQUEST_LETS_GO);						// Let's go!
-	panel->addSection(requests);
-
-	// Notices
-	auto notices = WzQuickChatSection::make(_("Notices"));
-	notices->addChatOption(WzQuickChatMessage::NOTICE_ALMOST_READY);					// Almost ready
-	notices->addChatOption(WzQuickChatMessage::NOTICE_READY);							// Ready
-	notices->addChatOption(WzQuickChatMessage::NOTICE_BRB);								// Be right back
-	notices->addChatOption(WzQuickChatMessage::NOTICE_I_AM_BACK);						// I'm back
-	panel->addSection(notices);
-
-	// Taunts
-	auto taunts = WzQuickChatSection::make(_("Taunts"));
-	taunts->addChatOption(WzQuickChatMessage::REACTIONS_TAUNT_GET_READY);					// Get ready...
-	taunts->addChatOption(WzQuickChatMessage::REACTIONS_TAUNT_YOURE_GOING_TO_REGRET_THAT);	// You're going to regret that
-	taunts->addChatOption(WzQuickChatMessage::REACTIONS_TAUNT_BARELY_A_SCRATCH);			// Barely a scratch!
-	panel->addSection(taunts);
-
-	// Reactions
-	auto reactions = WzQuickChatSection::make(_("Reactions"));
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_YES);						// Yes
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NO);							// No
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_MAYBE);						// Maybe
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NOT_YET);					// Not Yet
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_SOON);						// Soon
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_THANK_YOU);					// Thank you
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NO_PROBLEM);					// No problem
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_WELL_PLAYED);				// Well-played
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_CENSORED);					// @#%*!
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_SORRY_DO_NOT_UNDERSTAND_PLEASE_USE_QUICK_CHAT);	// Sorry, I don't understand. Please use Quick Chat?
-	panel->addSection(reactions);
-
+	addSections(panel, quickChatInGameSections(WzQuickChatMode::Global));
 	return panel;
 }
 
 std::shared_ptr<WzQuickChatPanel> WzQuickChatForm::createInGameTeamPanel(const std::vector<uint32_t>& playerTeammates)
 {
 	auto panel = WzQuickChatPanel::make(_("Team"), WzQuickChatPanel::WzQuickChatSendToMode::TeamSendOptions);
-
-	// Coordination
-	auto requests = WzQuickChatSection::make(_("Coordination"));
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_ATTACK_NOW);				// Attack now?
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_GROUP_UP);					// Group up
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_SPLIT_UP);					// Split up
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_FOCUS_ATTACKS_WHERE_MARKED);// Focus attacks where I've marked
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_RETREAT);					// Retreat!
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_NEED_HELP);					// I need help!
-	requests->addChatOption(WzQuickChatMessage::REQUEST_PLEASE_WAIT);					// Please wait
-	requests->addChatOption(WzQuickChatMessage::REQUEST_LETS_GO);						// Let's go!
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_LEFT_SIDE);					// Left side
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_RIGHT_SIDE);				// Right side
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_TRANSFER_UNITS);//**COND**	// Can someone please transfer me some units?
-	requests->addChatOption(WzQuickChatMessage::TEAM_REQUEST_TRANSFER_REBUILD);//**COND**// Can someone please transfer me trucks so I can rebuild?
-	panel->addSection(requests);
-
-	// Notices
-	auto notices = WzQuickChatSection::make(_("Notices"));
-	notices->addChatOption(WzQuickChatMessage::NOTICE_ALMOST_READY);					// Almost ready
-	notices->addChatOption(WzQuickChatMessage::NOTICE_READY);							// Ready
-	notices->addChatOption(WzQuickChatMessage::NOTICE_BRB);								// Be right back
-	notices->addChatOption(WzQuickChatMessage::NOTICE_I_AM_BACK);						// I'm back
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_ATTACKING_NOW);				// Attacking now
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_ON_MY_WAY);					// On my way!
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_OPPONENTS_COMING);			// They're coming!
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_BEING_ATTACKED);				// I'm being attacked!
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_RUSHING_OILS);				// I'm rushing oils
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_OPPONENTS_RUSHING_OILS);		// They're rushing oils!
-	notices->addChatOption(WzQuickChatMessage::TEAM_NOTICE_DONT_HAVE_POWER);//**COND**	// I don't have enough power
-	panel->addSection(notices);
-
-	// Suggestions
-	auto suggestions = WzQuickChatSection::make(_("Suggestions"));
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_BUILD_MORE_UNITS);		// I suggest building more units
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_BUILD_DIFFERENT_UNITS);	// I suggest building different units
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_CHECK_TEAM_STRATEGY);		// I suggest checking the team strategy table
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_RESEARCH_DIFFERENT_TECH);	// I suggest researching different tech
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_KEEP_RESEARCH_BUSY);		// Be sure to keep research centers busy
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_BUILD_ANTI_AIR);			// I suggest building anti-air
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_REPAIR_UNITS);			// I suggest repairing your units
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_BUILD_REPAIR_FACILITIES);	// I suggest building repair facilities
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_BUILD_POWER_GEN);			// I suggest building more power generators
-	suggestions->addChatOption(WzQuickChatMessage::TEAM_SUGGESTION_BUILD_CAPTURE_OILS);		// I suggest capturing oil resources
-	panel->addSection(suggestions);
-
-	// Reactions
-	auto reactions = WzQuickChatSection::make(_("Reactions"));
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_YES);							// Yes
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NO);							// No
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_MAYBE);						// Maybe
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NOT_YET);						// Not Yet
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_SOON);						// Soon
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_THANK_YOU);					// Thank you
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_NO_PROBLEM);					// No problem
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_WELL_PLAYED);					// Well-played
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_CENSORED);					// @#%*!
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_SORRY_DO_NOT_UNDERSTAND_PLEASE_USE_QUICK_CHAT);	// Sorry, I don't understand. Please use Quick Chat?
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_TEAM_THAT_DIDNT_GO_WELL);		// That didn't go well...
-	reactions->addChatOption(WzQuickChatMessage::REACTIONS_TEAM_I_HAVE_ANOTHER_PLAN);	// I have another plan
-	panel->addSection(reactions);
+	addSections(panel, quickChatInGameSections(WzQuickChatMode::Team));
 
 	if (playerTeammates.size() > 1)
 	{
@@ -2462,14 +2381,7 @@ std::shared_ptr<WzQuickChatPanel> WzQuickChatForm::createInGameCheatPanel()
 std::shared_ptr<WzQuickChatPanel> WzQuickChatForm::createInGameEndGamePanel()
 {
 	auto panel = WzQuickChatPanel::make(_("End-Game"), WzQuickChatPanel::WzQuickChatSendToMode::GlobalSendOptions);
-
-	// End-Game Reactions
-	auto endReactions = WzQuickChatSection::make(_("Reactions"));
-	endReactions->addChatOption(WzQuickChatMessage::REACTIONS_ENDGAME_GOOD_GAME);			// Good game
-	endReactions->addChatOption(WzQuickChatMessage::REACTIONS_ENDGAME_I_GIVE_UP);			// I give up
-	endReactions->addChatOption(WzQuickChatMessage::REACTIONS_ENDGAME_SORRY_HAVE_TO_LEAVE);	// Sorry, I have to leave
-	panel->addSection(endReactions);
-
+	addSections(panel, quickChatInGameSections(WzQuickChatMode::EndGame));
 	panel->setMinSectionsPerRowForLayout(4);
 	return panel;
 }
@@ -3217,6 +3129,55 @@ std::shared_ptr<W_FORM> createQuickChatForm(WzQuickChatContext context, const st
 	auto result = WzQuickChatForm::make(context, startingPanel);
 	result->onQuickChatSent = onQuickChatSent;
 	return result;
+}
+
+std::vector<WzQuickChatSectionInfo> quickChatInGameSections(WzQuickChatMode mode)
+{
+	using M = WzQuickChatMessage;
+	switch (mode)
+	{
+		case WzQuickChatMode::Global:
+			return {
+				{_("Requests"), {M::REQUEST_PLEASE_WAIT, M::REQUEST_LETS_GO}},
+				{_("Notices"), {M::NOTICE_ALMOST_READY, M::NOTICE_READY, M::NOTICE_BRB, M::NOTICE_I_AM_BACK}},
+				{_("Taunts"), {M::REACTIONS_TAUNT_GET_READY, M::REACTIONS_TAUNT_YOURE_GOING_TO_REGRET_THAT, M::REACTIONS_TAUNT_BARELY_A_SCRATCH}},
+				{_("Reactions"), {M::REACTIONS_YES, M::REACTIONS_NO, M::REACTIONS_MAYBE, M::REACTIONS_NOT_YET, M::REACTIONS_SOON, M::REACTIONS_THANK_YOU,
+				                  M::REACTIONS_NO_PROBLEM, M::REACTIONS_WELL_PLAYED, M::REACTIONS_CENSORED, M::REACTIONS_SORRY_DO_NOT_UNDERSTAND_PLEASE_USE_QUICK_CHAT}},
+			};
+		case WzQuickChatMode::Team:
+			return {
+				{_("Coordination"), {M::TEAM_REQUEST_ATTACK_NOW, M::TEAM_REQUEST_GROUP_UP, M::TEAM_REQUEST_SPLIT_UP, M::TEAM_REQUEST_FOCUS_ATTACKS_WHERE_MARKED,
+				                     M::TEAM_REQUEST_RETREAT, M::TEAM_REQUEST_NEED_HELP, M::REQUEST_PLEASE_WAIT, M::REQUEST_LETS_GO, M::TEAM_REQUEST_LEFT_SIDE,
+				                     M::TEAM_REQUEST_RIGHT_SIDE, M::TEAM_REQUEST_TRANSFER_UNITS, M::TEAM_REQUEST_TRANSFER_REBUILD}},
+				{_("Notices"), {M::NOTICE_ALMOST_READY, M::NOTICE_READY, M::NOTICE_BRB, M::NOTICE_I_AM_BACK, M::TEAM_NOTICE_ATTACKING_NOW, M::TEAM_NOTICE_ON_MY_WAY,
+				                M::TEAM_NOTICE_OPPONENTS_COMING, M::TEAM_NOTICE_BEING_ATTACKED, M::TEAM_NOTICE_RUSHING_OILS, M::TEAM_NOTICE_OPPONENTS_RUSHING_OILS,
+				                M::TEAM_NOTICE_DONT_HAVE_POWER}},
+				{_("Suggestions"), {M::TEAM_SUGGESTION_BUILD_MORE_UNITS, M::TEAM_SUGGESTION_BUILD_DIFFERENT_UNITS, M::TEAM_SUGGESTION_CHECK_TEAM_STRATEGY,
+				                    M::TEAM_SUGGESTION_RESEARCH_DIFFERENT_TECH, M::TEAM_SUGGESTION_KEEP_RESEARCH_BUSY, M::TEAM_SUGGESTION_BUILD_ANTI_AIR,
+				                    M::TEAM_SUGGESTION_REPAIR_UNITS, M::TEAM_SUGGESTION_BUILD_REPAIR_FACILITIES, M::TEAM_SUGGESTION_BUILD_POWER_GEN,
+				                    M::TEAM_SUGGESTION_BUILD_CAPTURE_OILS}},
+				{_("Reactions"), {M::REACTIONS_YES, M::REACTIONS_NO, M::REACTIONS_MAYBE, M::REACTIONS_NOT_YET, M::REACTIONS_SOON, M::REACTIONS_THANK_YOU,
+				                  M::REACTIONS_NO_PROBLEM, M::REACTIONS_WELL_PLAYED, M::REACTIONS_CENSORED, M::REACTIONS_SORRY_DO_NOT_UNDERSTAND_PLEASE_USE_QUICK_CHAT,
+				                  M::REACTIONS_TEAM_THAT_DIDNT_GO_WELL, M::REACTIONS_TEAM_I_HAVE_ANOTHER_PLAN}},
+			};
+		case WzQuickChatMode::EndGame:
+			return {
+				{_("Reactions"), {M::REACTIONS_ENDGAME_GOOD_GAME, M::REACTIONS_ENDGAME_I_GIVE_UP, M::REACTIONS_ENDGAME_SORRY_HAVE_TO_LEAVE}},
+			};
+		case WzQuickChatMode::Cheats:
+			break;
+	}
+	return {};
+}
+
+std::vector<uint32_t> quickChatTeammates()
+{
+	return getPlayerTeammates(selectedPlayer, true, true);
+}
+
+WzQuickChatTargeting quickChatDefaultTeamTargeting()
+{
+	return defaultTeamChatTargeting;
 }
 
 bool to_WzQuickChatMessage(uint32_t value, WzQuickChatMessage& output)

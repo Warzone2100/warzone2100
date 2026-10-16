@@ -21,6 +21,7 @@
 
 #include "lib/widget/widget.h"
 #include "lib/widget/form.h"
+#include "lib/framework/wzstring.h"
 
 #include <functional>
 
@@ -29,6 +30,15 @@ enum class WzChatMode
 	Team,
 	Glob
 };
+
+/// Sends what the local player typed, as the chat screen's box does: cheat codes, and in All the "." (allies) and number
+/// (players) prefixes. Team goes to allies. Nothing is sent when free chat is off (the console says why).
+void chatSendTypedText(const WzString &text, WzChatMode mode);
+/// Whether the local player may type messages: the host's permission and the "Quick Chat Only" option
+bool chatFreeChatEnabled();
+bool chatFreeChatDisabledByHost();
+/// Whether quick chat is there for the local player (skirmish and multiplayer, players but not spectators)
+bool chatQuickChatAvailable();
 
 /// The chat screen closes on a click outside its widgets, except inside the cutout, which it leaves to the screens below
 std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused, const std::shared_ptr<WIDGET> &cutout = nullptr);

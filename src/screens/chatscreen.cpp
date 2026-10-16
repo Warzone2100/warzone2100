@@ -288,6 +288,62 @@ static void parseChatMessageModifiers(InGameChatMessage &message)
 	}
 }
 
+void chatSendTypedText(const WzString &text, WzChatMode mode)
+{
+	const std::string utf8 = text.toUtf8();
+	auto message = InGameChatMessage(selectedPlayer, utf8.c_str());
+	bool processedCheatCode = attemptCheatCode(message.text);		// parse the message
+
+	bool skipSendingMessage = (bMultiPlayer && (selectedPlayer >= MAX_CONNECTED_PLAYERS || !ingame.hostChatPermissions[selectedPlayer])) || isLocalQuickChatOnlyMode();
+
+	if (!skipSendingMessage)
+	{
+		switch (mode)
+		{
+			case WzChatMode::Glob:
+				parseChatMessageModifiers(message);
+				break;
+			case WzChatMode::Team:
+				message.toAllies = true;
+				break;
+		}
+
+		if (strlen(message.text))
+		{
+			message.send();
+		}
+	}
+	else
+	{
+		if (strlen(message.text) && !processedCheatCode && selectedPlayer < MAX_CONNECTED_PLAYERS)
+		{
+			if (isFreeChatDisabledByHost())
+			{
+				addConsoleMessage(_("Did not send message - free chat is disabled by host. Please use Quick Chat."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE, false);
+			}
+			else
+			{
+				addConsoleMessage(_("Did not send message - free chat is set to \"Quick Chat Only\" in your Options. Please use Quick Chat."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE, false);
+			}
+		}
+	}
+}
+
+bool chatFreeChatEnabled()
+{
+	return isFreeChatEnabledForLocalPlayer();
+}
+
+bool chatFreeChatDisabledByHost()
+{
+	return isFreeChatDisabledByHost();
+}
+
+bool chatQuickChatAvailable()
+{
+	return bMultiPlayer && selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator;
+}
+
 void WzInGameChatBoxForm::geometryChanged()
 {
 	int remainingWidth = width();
@@ -332,43 +388,7 @@ void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX
 
 			// must process the enteredText inside a scheduled task as side effects of attemptCheatCode may modify the overlay screens / widgets
 
-			const char* pStr = enteredText.toUtf8().c_str();
-			auto message = InGameChatMessage(selectedPlayer, pStr);
-			bool processedCheatCode = attemptCheatCode(message.text);		// parse the message
-
-			bool skipSendingMessage = (bMultiPlayer && (selectedPlayer >= MAX_CONNECTED_PLAYERS || !ingame.hostChatPermissions[selectedPlayer])) || isLocalQuickChatOnlyMode();
-
-			if (!skipSendingMessage)
-			{
-				switch (currChatMode)
-				{
-					case WzChatMode::Glob:
-						parseChatMessageModifiers(message);
-						break;
-					case WzChatMode::Team:
-						message.toAllies = true;
-						break;
-				}
-
-				if (strlen(message.text))
-				{
-					message.send();
-				}
-			}
-			else
-			{
-				if (strlen(message.text) && !processedCheatCode && selectedPlayer < MAX_CONNECTED_PLAYERS)
-				{
-					if (isFreeChatDisabledByHost())
-					{
-						addConsoleMessage(_("Did not send message - free chat is disabled by host. Please use Quick Chat."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE, false);
-					}
-					else
-					{
-						addConsoleMessage(_("Did not send message - free chat is set to \"Quick Chat Only\" in your Options. Please use Quick Chat."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE, false);
-					}
-				}
-			}
+			chatSendTypedText(enteredText, currChatMode);
 
 			auto parent = weakParent.lock();
 			ASSERT_OR_RETURN(, parent != nullptr, "No parent?");
@@ -598,7 +618,7 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 {
 	bool freeChatEnabled = isFreeChatEnabledForLocalPlayer();
 	// for now, quick chat is only available in skirmish / multiplayer mode, for players
-	bool quickChatEnabled = (bMultiPlayer && selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator);
+	bool quickChatEnabled = chatQuickChatAvailable();
 
 	auto weakSelf = std::weak_ptr<WzInGameChatScreen_CLICKFORM>(std::dynamic_pointer_cast<WzInGameChatScreen_CLICKFORM>(shared_from_this()));
 	consoleBox = WzInGameChatBoxForm::make(initialChatMode, [weakSelf](W_EDITBOX&) -> bool {
