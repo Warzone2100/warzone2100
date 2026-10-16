@@ -119,6 +119,7 @@ const std::vector<const char*> deviceExtensions = {
 const std::vector<const char*> optionalDeviceExtensions = {
 	VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME,
 	VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
+	VK_GOOGLE_DISPLAY_TIMING_EXTENSION_NAME, // when presented frames reach the display, for frame pacing
 	"VK_KHR_portability_subset" // According to VUID-VkDeviceCreateInfo-pProperties-04451, if device supports this extension it *must* be enabled
 };
 
@@ -4581,6 +4582,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 
 	try {
 		swapchain = dev.createSwapchainKHR(createSwapchainInfo, nullptr, vkDynLoader);
+		refreshDurationSwapchain = vk::SwapchainKHR(); // re-query for the new swapchain (handles can be reused)
 	}
 	// Potential future TODO: Handle surface lost?
 	catch (const vk::SystemError &e) {
@@ -5259,6 +5261,9 @@ bool VkRoot::createLogicalDevice()
 	enabledDeviceExtensions = deviceExtensions;
 	auto supportedOptionalExtensions = findSupportedDeviceExtensions(physicalDevice, optionalDeviceExtensions, vkDynLoader);
 	enabledDeviceExtensions.insert(std::end(enabledDeviceExtensions), supportedOptionalExtensions.begin(), supportedOptionalExtensions.end());
+	hasDisplayTiming = std::any_of(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), [](const char *extension) {
+		return strcmp(extension, VK_GOOGLE_DISPLAY_TIMING_EXTENSION_NAME) == 0;
+	});
 
 	// create logical device
 	std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
@@ -7333,6 +7338,81 @@ void VkRoot::destroyGpuTimingQueryPool()
 	gpuTimingReadIdx = 0;
 	gpuTimingFrameOpen = false;
 	_gpuFrameTimingEnabled = false;
+}
+
+bool VkRoot::supportsPresentationTiming() const
+{
+	return hasDisplayTiming;
+}
+
+void VkRoot::attachPresentTiming(vk::PresentInfoKHR& presentInfo, vk::PresentTimesInfoGOOGLE& timesInfo, vk::PresentTimeGOOGLE& time)
+{
+	if (!hasDisplayTiming)
+	{
+		return;
+	}
+	++presentIdCounter;
+	// desiredPresentTime 0: present as soon as possible, as without the extension
+	time = vk::PresentTimeGOOGLE(static_cast<uint32_t>(presentIdCounter), 0);
+	timesInfo = vk::PresentTimesInfoGOOGLE(1, &time);
+	timesInfo.setPNext(presentInfo.pNext);
+	presentInfo.setPNext(&timesInfo);
+}
+
+uint64_t VkRoot::lastPresentId() const
+{
+	return presentIdCounter;
+}
+
+void VkRoot::getPresentationTimings(std::vector<gfx_api::context::PresentationTiming>& out)
+{
+	if (!hasDisplayTiming || !swapchain || !dev)
+	{
+		return;
+	}
+	uint32_t count = 0;
+	vk::Result result = dev.getPastPresentationTimingGOOGLE(swapchain, &count, nullptr, vkDynLoader);
+	if (result != vk::Result::eSuccess || count == 0)
+	{
+		return;
+	}
+	std::vector<vk::PastPresentationTimingGOOGLE> timings(count);
+	result = dev.getPastPresentationTimingGOOGLE(swapchain, &count, timings.data(), vkDynLoader);
+	if (result != vk::Result::eSuccess && result != vk::Result::eIncomplete)
+	{
+		return;
+	}
+	timings.resize(count);
+	for (const auto& timing : timings)
+	{
+		// The presentation engine has the low 32 bits of the id, so restore the rest from the counter
+		uint64_t id = (presentIdCounter & ~static_cast<uint64_t>(0xFFFFFFFFu)) | timing.presentID;
+		if (id > presentIdCounter)
+		{
+			id -= static_cast<uint64_t>(1) << 32;
+		}
+		if (id == 0 || timing.actualPresentTime == 0)
+		{
+			continue;
+		}
+		out.push_back(gfx_api::context::PresentationTiming{id, timing.actualPresentTime});
+	}
+}
+
+uint64_t VkRoot::refreshDurationNs()
+{
+	if (!hasDisplayTiming || !swapchain || !dev)
+	{
+		return 0;
+	}
+	if (refreshDurationSwapchain != swapchain)
+	{
+		vk::RefreshCycleDurationGOOGLE duration;
+		const vk::Result result = dev.getRefreshCycleDurationGOOGLE(swapchain, &duration, vkDynLoader);
+		refreshDurationCachedNs = (result == vk::Result::eSuccess) ? duration.refreshDuration : 0;
+		refreshDurationSwapchain = swapchain;
+	}
+	return refreshDurationCachedNs;
 }
 
 void VkRoot::pollGpuFrameTimings()

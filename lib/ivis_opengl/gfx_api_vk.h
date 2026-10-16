@@ -902,6 +902,16 @@ private:
 		void onChanged() override;
 	};
 
+	// Presentation timing (VK_GOOGLE_display_timing)
+	bool hasDisplayTiming = false;
+	uint64_t presentIdCounter = 0;          ///< ids handed to the presentation engine (low 32 bits)
+	vk::SwapchainKHR refreshDurationSwapchain; ///< swapchain refreshDurationCachedNs was queried for
+	uint64_t refreshDurationCachedNs = 0;
+public:
+	/// Chain onto a VkPresentInfoKHR to tag the present for timing feedback (no-op without support)
+	void attachPresentTiming(vk::PresentInfoKHR& presentInfo, vk::PresentTimesInfoGOOGLE& timesInfo, vk::PresentTimeGOOGLE& time);
+private:
+
 	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
 	bool initGpuTimestampSupport();
 	void destroyGpuTimingQueryPool();
@@ -944,6 +954,10 @@ public:
 	virtual bool setSceneDynamicResolution(bool enabled) override;
 	virtual bool supportsGpuFrameTiming() const override;
 	virtual bool setGpuFrameTimingEnabled(bool enabled) override;
+	virtual bool supportsPresentationTiming() const override;
+	virtual void getPresentationTimings(std::vector<gfx_api::context::PresentationTiming>& out) override;
+	virtual uint64_t lastPresentId() const override;
+	virtual uint64_t refreshDurationNs() override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;

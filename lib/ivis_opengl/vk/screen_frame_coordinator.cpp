@@ -413,6 +413,9 @@ void ScreenFrameCoordinator::presentAndAdvanceRing(ScreenFramePipelineState& sta
 		.setPImageIndices(&_root.currentSwapchainIndex)
 		.setWaitSemaphoreCount(1)
 		.setPWaitSemaphores(&buffering_mechanism::get_swapchain_resources(_root.currentSwapchainIndex).renderFinishedSemaphore);
+	::vk::PresentTimesInfoGOOGLE presentTimesInfo;
+	::vk::PresentTimeGOOGLE presentTime;
+	_root.attachPresentTiming(presentInfo, presentTimesInfo, presentTime);
 
 	::vk::Result presentResult = ::vk::Result::eSuccess;
 	try {
