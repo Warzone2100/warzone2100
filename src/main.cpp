@@ -66,6 +66,7 @@
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/gamelib/framepacer.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
@@ -1302,6 +1303,32 @@ static void runTitleLoop()
 	}
 }
 
+/// Tell the frame pacer what the graphics backend knows about presentation, then sample the frame clock
+static void updateFrameClock()
+{
+	if (gfx_api::context::isInitialized())
+	{
+		auto& ctx = gfx_api::context::get();
+		const auto swapMode = ctx.getSwapInterval();
+		const bool vsync = (swapMode == gfx_api::context::swap_interval_mode::vsync || swapMode == gfx_api::context::swap_interval_mode::adaptive_vsync);
+		frameTimeSetPresentationInfo(vsync, static_cast<double>(ctx.refreshDurationNs()) * 1e-9);
+		if (ctx.supportsPresentationTiming())
+		{
+			static std::vector<gfx_api::context::PresentationTiming> timings;
+			timings.clear();
+			ctx.getPresentationTimings(timings);
+			for (const auto& timing : timings)
+			{
+				frameTimeAddPresentation(timing.presentId, static_cast<double>(timing.actualPresentTimeNs) * 1e-9);
+				camtrace::markPresentationTiming(timing.presentId, timing.actualPresentTimeNs);
+			}
+		}
+		camtrace::markPresentId(ctx.lastPresentId());
+	}
+	frameTimeUpdate();
+	camtrace::markFrameTime(frameTimePacer());
+}
+
 namespace
 {
 
@@ -1329,7 +1356,7 @@ void mainLoop()
 #if defined(__EMSCRIPTEN__)
 	// The browser presents the previous frame after the main loop callback returns,
 	// so the start of this callback is the point aligned with presentation
-	frameTimeUpdate();
+	updateFrameClock();
 #endif
 	frameUpdate(); // General housekeeping
 
@@ -1375,7 +1402,7 @@ void mainLoop()
 			}
 		realTimeUpdate(); // Update realTime.
 #if !defined(__EMSCRIPTEN__)
-		frameTimeUpdate(); // Right after the frame was presented
+		updateFrameClock(); // Right after the frame was presented
 #endif
 		camtrace::markRealTimeUpdate(realTime, deltaRealTime);
 	}

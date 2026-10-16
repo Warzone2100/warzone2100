@@ -35,6 +35,8 @@
 #include <chrono>
 #include <cstdint>
 
+class FramePacer;
+
 #if defined(WZ_PERF_COUNTERS)
 
 namespace camtrace
@@ -75,6 +77,12 @@ void markDraw(int x, int y, int z, int rotX, int rotY, float viewDistance, bool 
 /// Radar (radar.cpp)
 void markRadarRedraw();
 
+/// Frame clock and presentation feedback (main.cpp).
+/// Presentation times go to <trace>.present.csv (they arrive a few frames after the frame they belong to).
+void markPresentId(uint64_t presentId);
+void markPresentationTiming(uint64_t presentId, uint64_t actualPresentTimeNs);
+void markFrameTime(const FramePacer &pacer);
+
 /// Stages of the render half of the frame
 enum class Stage
 {
@@ -111,6 +119,9 @@ inline void markHeightTarget(int, int) {}
 inline void markHeightUpdate(double, float, float, float, bool = false) {}
 inline void markDraw(int, int, int, int, int, float, bool) {}
 inline void markRadarRedraw() {}
+inline void markPresentId(uint64_t) {}
+inline void markPresentationTiming(uint64_t, uint64_t) {}
+inline void markFrameTime(const FramePacer &) {}
 enum class Stage { RenderBegin, AudioEnd, SceneEnd, RenderEnd };
 inline void markStage(Stage) {}
 }
