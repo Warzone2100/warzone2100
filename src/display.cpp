@@ -150,11 +150,15 @@ static SDWORD	rotX;
 static SDWORD	rotY;
 std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::make_unique<ValueTracker>();
 std::unique_ptr<ValueTracker> rotationVerticalTracker = std::make_unique<ValueTracker>();
-static std::chrono::steady_clock::time_point scrollRefTime;
 static double	scrollSpeedLeftRight; //use two directions and add them because its simple
 static double	scrollStepLeftRight;
 static double	scrollSpeedUpDown;
 static double	scrollStepUpDown;
+static double	scrollRemainderX = 0.0;      ///< sub-unit scroll movement along x not yet applied
+static double	scrollRemainderZ = 0.0;      ///< sub-unit scroll movement along z not yet applied
+static Vector2i	scrollLastCommitted(0, 0);   ///< camera position after the last scroll step
+static bool	scrollStepPending = false;   ///< next scroll step uses a dt of 0 (set by resetScroll())
+static UDWORD	scrollLastFrame = UDWORD_MAX; ///< frame number of the last scroll step
 static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
 static bool	ignoreRMBC	= true;
@@ -1406,41 +1410,63 @@ static void handleCameraScrolling()
 		setWarCamActive(false);  // Don't let this thing override the user trying to scroll.
 	}
 
-	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
-	auto now = std::chrono::steady_clock::now();
-	auto timeDiff = now - scrollRefTime;
-	const bool scrollUpdate = std::chrono::duration_cast<std::chrono::nanoseconds>(timeDiff) >= std::chrono::nanoseconds(4000000); // throttle max update rate to avoid really jerky scrolling
-	camtrace::markScrollSample(now, scrollUpdate);
-	if (scrollUpdate)
+	// Integrate over the frame clock, once per frame.
+	// Frames on which this doesn't run (ex. box drag, menus, gestures) aren't integrated.
+	double dt = frameTimeDeltaSeconds();
+	if (frameGetFrameNumber() == scrollLastFrame || scrollStepPending)
 	{
-		scrollRefTime = now;
-
-		std::chrono::duration<double> timeDiff_as_seconds_double = std::chrono::duration_cast<std::chrono::duration<double>>(timeDiff);
-		auto timeDiff_double = timeDiff_as_seconds_double.count();
-		timeDiff_double = std::min(timeDiff_double, 0.5);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
-
-		scrollStepLeftRight = 0.0;
-		scrollStepUpDown = 0.0;
-		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2.0 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, timeDiff_double);
-		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2.0 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, timeDiff_double);
-
-		/* Get x component of movement */
-		const double xExact = cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight + sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown;
-		xDif = (int) xExact;
-		/* Get y component of movement */
-		const double yExact = sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight - cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown;
-		yDif = (int) yExact;
-		camtrace::markScrollStep(timeDiff_double, scrollStepLeftRight, scrollStepUpDown, scrollSpeedLeftRight, scrollSpeedUpDown, xExact, yExact, xDif, yDif);
-
-		/* Adjust player's position by these components */
-		playerPos.p.x += xDif;
-		playerPos.p.z += yDif;
-
-		if (CheckScrollLimits(gameWorld.map))
-		{
-			camtrace::notifyScrollLimitHit();
-		}
+		dt = 0.0;
 	}
+	scrollLastFrame = frameGetFrameNumber();
+	scrollStepPending = false;
+	camtrace::markScrollSample(true);
+
+	scrollStepLeftRight = 0.0;
+	scrollStepUpDown = 0.0;
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2.0 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, dt);
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2.0 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, dt);
+
+	/* World-space components of the movement */
+	const double cosR = cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0));
+	const double sinR = sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0));
+	const double xStep = cosR * scrollStepLeftRight + sinR * scrollStepUpDown;
+	const double zStep = sinR * scrollStepLeftRight - cosR * scrollStepUpDown;
+
+	// Carry the fractional part of the movement to the next frame.
+	// Start afresh if anything else moved the camera since the last scroll step.
+	if (playerPos.p.x != scrollLastCommitted.x || playerPos.p.z != scrollLastCommitted.y)
+	{
+		scrollRemainderX = 0.0;
+		scrollRemainderZ = 0.0;
+	}
+	const double xWanted = xStep + scrollRemainderX;
+	const double zWanted = zStep + scrollRemainderZ;
+	xDif = static_cast<int>(std::lround(xWanted));
+	yDif = static_cast<int>(std::lround(zWanted));
+	scrollRemainderX = xWanted - xDif;
+	scrollRemainderZ = zWanted - yDif;
+	camtrace::markScrollStep(dt, scrollStepLeftRight, scrollStepUpDown, scrollSpeedLeftRight, scrollSpeedUpDown, xStep, zStep, xDif, yDif);
+
+	/* Adjust player's position by these components */
+	playerPos.p.x += xDif;
+	playerPos.p.z += yDif;
+
+	const Vector2i unclamped(playerPos.p.x, playerPos.p.z);
+	if (CheckScrollLimits(gameWorld.map))
+	{
+		// Only drop the remainder on an axis that was clamped.
+		// NOTE: CheckScrollLimits() also reports a camera resting exactly on the limit.
+		if (playerPos.p.x != unclamped.x)
+		{
+			scrollRemainderX = 0.0;
+		}
+		if (playerPos.p.z != unclamped.y)
+		{
+			scrollRemainderZ = 0.0;
+		}
+		camtrace::notifyScrollLimitHit();
+	}
+	scrollLastCommitted = Vector2i(playerPos.p.x, playerPos.p.z);
 
 	// Reset scroll directions
 	scrollDirLeftRight = 0;
@@ -1458,7 +1484,9 @@ void displayRenderLoop()
  */
 void resetScroll()
 {
-	scrollRefTime = std::chrono::steady_clock::now();
+	scrollStepPending = true;
+	scrollRemainderX = 0.0;
+	scrollRemainderZ = 0.0;
 	scrollSpeedUpDown = 0.0;
 	scrollSpeedLeftRight = 0.0;
 	scrollDirLeftRight = 0;
