@@ -949,6 +949,13 @@ if(WZ_BUILD_MATH_EXT_TEST)
 	target_link_libraries(math_ext_test PRIVATE framework)
 endif()
 
+# Unit test for FramePacer (lib/gamelib/framepacer.h)
+option(WZ_BUILD_FRAMEPACER_TEST "Build the frame pacer unit test (tests/framepacer_test.cpp)" OFF)
+if(WZ_BUILD_FRAMEPACER_TEST)
+	add_executable(framepacer_test "${PROJECT_SOURCE_DIR}/tests/framepacer_test.cpp" "${PROJECT_SOURCE_DIR}/lib/gamelib/framepacer.cpp")
+	target_include_directories(framepacer_test PRIVATE "${PROJECT_SOURCE_DIR}")
+endif()
+
 # In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
 option(WZ_BUILD_RENDER_GRAPH_TEST "Build the render-graph pass sequence unit test (tests/render_graph_pass_sequence_test.cpp)" OFF)
 if(WZ_BUILD_RENDER_GRAPH_TEST)
