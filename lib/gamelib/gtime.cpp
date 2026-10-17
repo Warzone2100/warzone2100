@@ -453,6 +453,17 @@ const FramePacer& frameTimePacer()
 	return framePacer;
 }
 
+void frameTimePredictLate()
+{
+	if (!frameTimeHaveLast)
+	{
+		return;
+	}
+	const uint64_t now = wzGetTicksNS();
+	const double elapsed = (now >= frameTimeLastNs) ? static_cast<double>(now - frameTimeLastNs) * 1e-9 : 0.0;
+	frameTimeMotionDelta = framePacer.lastMotionDelta() + framePacer.predictLate(elapsed);
+}
+
 double frameTimeDeltaSeconds()
 {
 	return frameTimeMotionDelta;
