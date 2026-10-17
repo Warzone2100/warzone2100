@@ -129,7 +129,7 @@ void frameTimeRebase();
 /// and at most GTIME_MAXFRAME.
 /// Leaves out the part of a stall beyond a slow frame, which graphicsTime still advances by.
 double frameTimeDeltaSeconds();
-/// Add to frameTimeDeltaSeconds() the periods of a frame that has already missed its vblank,
+/// Add to frameTimeDeltaSeconds() the extra time of a frame that is already running late,
 /// once such predictions have proven right (see FramePacer::predictLate()).
 /// Call once per frame after the game ticks, before anything uses frameTimeDeltaSeconds().
 void frameTimePredictLate();
