@@ -596,6 +596,64 @@ function attackerCountsGood(recycle)
 	return __amountOfAttackers >= (__MIN_ATTACK_DROIDS + __recycleExtras + __highOilExtras);
 }
 
+//Next 3 functions adapted from NullBot
+function cancelAllProduction () 
+{//just iterates over all factories and cancels production
+    const _list = enumStruct(_STRUCTURES.factory).concat(enumStruct(_STRUCTURES.cyborgFactory).concat(enumStruct(_STRUCTURES.vtolFactory)));
+    let result = false;
+
+    if (!isDefined(_list))
+    {
+        return false;//no factories
+    }
+
+    for (let i = 0; i < _list.length; ++i)
+    {
+        if(cancelProduction(_list[i]))
+        {
+            result = true;        
+        }
+    }
+    return result;
+}
+
+function emergencyRecycleTank() 
+{
+    const _list = enumDroid(me);
+
+    if (!isDefined(_list))
+    {
+        return false;//no tanks
+    }
+
+    for (let i = 0; i < _list.length; ++i)
+    {
+        if (_list[i].droidType !== DROID_CONSTRUCT && _list[i].order !== DORDER_RECYCLE && orderDroid(_list[i], DORDER_RECYCLE))  
+        {
+            return true;        
+        }
+    }
+    return emergencyRecycleTruck();
+}
+
+function emergencyRecycleTruck () 
+{
+    const _truckList = enumGroup(constructGroup).concat(enumGroup(oilGrabberGroup)).concat(enumGroup(constructGroupNTWExtra));
+
+    if (isDefined(_truckList) && _truckList.length > 1)
+    {
+         for (let i = 0; i < _truckList.length; ++i)
+        {
+            if (_truckList[i].id !== null && isDefined(_truckList[i]) && 
+                _truckList[i].order !== DORDER_RECYCLE && orderDroid(_truckList[i], DORDER_RECYCLE))  
+            {
+                return true;        
+            }
+        }   
+    }
+    return false;
+}
+
 
 //Produce a unit when factories allow it.
 function produce()
