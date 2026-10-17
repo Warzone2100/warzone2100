@@ -1,9 +1,23 @@
-file(GLOB HEADERS "*.h")
-file(GLOB SRC "*.cpp")
+set(HEADERS
+	ogg_decoder.h
+	sequence.h
+	video_decoder.h
+	video_edits.h
+	video_provider.h
+	video_timeline.h
+)
+set(SRC
+	ogg_decoder.cpp
+	sequence.cpp
+	video_decoder.cpp
+	video_edits.cpp
+	video_provider.cpp
+	video_timeline.cpp
+)
 
-if(NOT WZ_ENABLE_WEBM)
-	list(REMOVE_ITEM SRC "${CMAKE_CURRENT_SOURCE_DIR}/webm_decoder.cpp")
-	list(REMOVE_ITEM HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/webm_decoder.h")
+if(WZ_ENABLE_WEBM)
+	list(APPEND HEADERS webm_decoder.h webm_video_codec.h vp9_bitstream.h)
+	list(APPEND SRC webm_decoder.cpp webm_video_codec.cpp video_codec_vpx.cpp vp9_bitstream.cpp)
 endif()
 
 find_package(OggVorbis REQUIRED)
@@ -31,4 +45,11 @@ if(WZ_ENABLE_WEBM)
 	endif()
 	target_compile_definitions(sequence PRIVATE "WZ_ENABLE_WEBM")
 	target_link_libraries(sequence PRIVATE ${_wz_vpx_lib} mkvparser)
+
+	if(WZ_ENABLE_VIDEO_BACKEND_MF AND CMAKE_SYSTEM_NAME MATCHES "Windows")
+		# mfplat.dll is loaded at runtime instead, so the game still starts without Media Foundation
+		target_sources(sequence PRIVATE "video_codec_mf_win.cpp")
+		target_compile_definitions(sequence PRIVATE "WZ_ENABLE_VIDEO_BACKEND_MF")
+		target_link_libraries(sequence PRIVATE mfuuid strmiids ole32 oleaut32)
+	endif()
 endif()

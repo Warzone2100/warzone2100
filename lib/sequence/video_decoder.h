@@ -26,12 +26,19 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <vector>
 
 enum class WZVideoColorMatrix
 {
 	BT601,
 	BT709,
+};
+
+enum class WZVideoPlaneFormat
+{
+	I420,	// separate U and V planes
+	NV12,	// interleaved UV plane (u points at it, v is unused)
 };
 
 /** One decoded video frame, as YUV 4:2:0 planes.
@@ -41,11 +48,12 @@ enum class WZVideoColorMatrix
  */
 struct WZVideoFrameYUV
 {
+	WZVideoPlaneFormat format = WZVideoPlaneFormat::I420;
 	const uint8_t *y = nullptr;
 	const uint8_t *u = nullptr;
 	const uint8_t *v = nullptr;
 	int yStride = 0;
-	int uvStride = 0;
+	int uvStride = 0;			// bytes per chroma row (NV12: two bytes per chroma sample)
 	unsigned width = 0;			// visible frame dimensions
 	unsigned height = 0;
 	double pts = 0.0;			// presentation time, in seconds
@@ -116,6 +124,11 @@ std::unique_ptr<WZVideoDecoder> videoDecoderOpen(std::shared_ptr<VideoProvider> 
 
 /** Whether this build includes WebM (VP8/VP9) support (WZ_ENABLE_WEBM) */
 bool videoDecoderWebmSupported();
+
+/** The names videoDecoderSetPreferredBackend() accepts, comma-separated */
+std::string videoDecoderBackendList();
+
+bool videoDecoderSetPreferredBackend(const WzString& name);
 
 /** Choose which audio track to play, by language:
  *  1. the track matching preferredLanguage (if non-empty),

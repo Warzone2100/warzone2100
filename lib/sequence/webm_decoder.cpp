@@ -21,25 +21,22 @@
 
 /** @file webm_decoder.cpp
  *
- * WebM (Matroska) video decoding: libwebm's mkvparser for demuxing, libvpx for
- * VP8/VP9 video, and lib/sound's packet decoders for Opus/Vorbis audio.
- *
- * The video codec is isolated behind WebmVideoCodec so that a future codec
- * decoder only needs one new class and no demuxer changes.
+ * WebM (Matroska) video decoding: libwebm's mkvparser for demuxing, a
+ * WZWebmVideoCodec backend for VP8/VP9 video, and lib/sound's packet decoders
+ * for Opus/Vorbis audio.
  */
 
 #include "lib/framework/frame.h"
 #include "webm_decoder.h"
+#include "webm_video_codec.h"
 #include "lib/sound/codec_packet.h"
 
 #include <mkvparser/mkvparser.h>
-#include <vpx/vpx_decoder.h>
-#include <vpx/vp8dx.h>
 
 #include <algorithm>
 #include <cstring>
 #include <deque>
-#include <thread>
+#include <string>
 #include <vector>
 
 namespace
@@ -104,123 +101,6 @@ private:
 	std::shared_ptr<VideoProvider> m_provider;
 };
 
-/** The codec-specific part of WebM video decoding */
-class WebmVideoCodec
-{
-public:
-	virtual ~WebmVideoCodec() { }
-	/** Feed one compressed frame */
-	virtual bool decode(const uint8_t *data, size_t len) = 0;
-	/** Get the (borrowed) displayable frame from the last decode; false if none
-	 * (e.g. an invisible alt-ref frame). Planes are valid until the next decode(). */
-	virtual bool getFrame(WZVideoFrameYUV& out) = 0;
-
-	/** Color description from the container - used where the bitstream lacks one */
-	WZVideoColorMatrix containerColorMatrix = WZVideoColorMatrix::BT601;
-	bool containerFullRange = false;
-};
-
-class VpxVideoCodec final : public WebmVideoCodec
-{
-public:
-	static std::unique_ptr<VpxVideoCodec> create(const char *codecId)
-	{
-		vpx_codec_iface_t *iface = nullptr;
-		if (strcmp(codecId, "V_VP8") == 0)
-		{
-			iface = vpx_codec_vp8_dx();
-		}
-		else if (strcmp(codecId, "V_VP9") == 0)
-		{
-			iface = vpx_codec_vp9_dx();
-		}
-		if (!iface)
-		{
-			return nullptr;
-		}
-
-		auto codec = std::unique_ptr<VpxVideoCodec>(new VpxVideoCodec());
-		vpx_codec_dec_cfg_t cfg;
-		memset(&cfg, 0, sizeof(cfg));
-		cfg.threads = static_cast<unsigned>(std::max(1u, std::min(4u, std::thread::hardware_concurrency())));
-		if (vpx_codec_dec_init(&codec->m_ctx, iface, &cfg, 0) != VPX_CODEC_OK)
-		{
-			debug(LOG_ERROR, "vpx_codec_dec_init() failed: %s", vpx_codec_error(&codec->m_ctx));
-			return nullptr;
-		}
-		codec->m_initialized = true;
-		debug(LOG_VIDEO, "Initialized libvpx %s decoder (%u threads)", codecId, cfg.threads);
-		return codec;
-	}
-
-	~VpxVideoCodec() override
-	{
-		if (m_initialized)
-		{
-			vpx_codec_destroy(&m_ctx);
-		}
-	}
-
-	bool decode(const uint8_t *data, size_t len) override
-	{
-		if (vpx_codec_decode(&m_ctx, data, static_cast<unsigned>(len), nullptr, 0) != VPX_CODEC_OK)
-		{
-			debug(LOG_WARNING, "vpx_codec_decode() failed: %s", vpx_codec_error(&m_ctx));
-			return false;
-		}
-		return true;
-	}
-
-	bool getFrame(WZVideoFrameYUV& out) override
-	{
-		vpx_codec_iter_t iter = nullptr;
-		vpx_image_t *img = vpx_codec_get_frame(&m_ctx, &iter);
-		if (!img)
-		{
-			return false;
-		}
-		if (img->fmt != VPX_IMG_FMT_I420)
-		{
-			if (!m_formatErrorLogged)
-			{
-				debug(LOG_ERROR, "Video is not 8-bit YUV420 (vpx format %d); only VP8/VP9 profile 0 is supported", (int)img->fmt);
-				m_formatErrorLogged = true;
-			}
-			return false;
-		}
-		out.y = img->planes[VPX_PLANE_Y];
-		out.u = img->planes[VPX_PLANE_U];
-		out.v = img->planes[VPX_PLANE_V];
-		out.yStride = img->stride[VPX_PLANE_Y];
-		out.uvStride = img->stride[VPX_PLANE_U];
-		out.width = img->d_w;
-		out.height = img->d_h;
-		switch (img->cs)
-		{
-		case VPX_CS_BT_709:
-			out.colorMatrix = WZVideoColorMatrix::BT709;
-			break;
-		case VPX_CS_BT_601:
-		case VPX_CS_SMPTE_170:
-			out.colorMatrix = WZVideoColorMatrix::BT601;
-			break;
-		default:	// unknown (VP8 has no color space field) or unsupported
-			out.colorMatrix = containerColorMatrix;
-			break;
-		}
-		// VP8 streams always report studio range
-		out.fullRange = (img->range == VPX_CR_FULL_RANGE) || (img->cs == VPX_CS_UNKNOWN && containerFullRange);
-		return true;
-	}
-
-private:
-	VpxVideoCodec() { }
-
-	vpx_codec_ctx_t m_ctx;
-	bool m_initialized = false;
-	bool m_formatErrorLogged = false;
-};
-
 /** Parse a Vorbis-in-Matroska CodecPrivate blob: the three Vorbis header
  * packets stored with Xiph lacing. */
 bool parseVorbisCodecPrivate(const uint8_t *data, size_t len,
@@ -277,9 +157,10 @@ struct TrackCursor
 class WebmVideoDecoder final : public WZVideoDecoder
 {
 public:
-	explicit WebmVideoDecoder(std::shared_ptr<VideoProvider> provider)
+	WebmVideoDecoder(std::shared_ptr<VideoProvider> provider, WZWebmCodecBackend backendPreference)
 	: m_provider(std::move(provider))
 	, m_reader(m_provider)
+	, m_backendPreference(backendPreference)
 	{ }
 
 	bool open();
@@ -317,16 +198,21 @@ private:
 	bool demuxNextBlock(TrackCursor& cursor);
 	/** The end time of the last video frame, found from the last cue point (or a full scan without cues) */
 	double findVideoDuration() const;
+	/** Switch to another backend, once per decoder. \returns false when there is none */
+	bool replaceVideoCodec();
 
 private:
 	std::shared_ptr<VideoProvider> m_provider;
 	MkvReaderAdapter m_reader;
+	WZWebmCodecBackend m_backendPreference = WZWebmCodecBackend::Auto;
 
 	std::unique_ptr<mkvparser::Segment, void(*)(mkvparser::Segment*)> m_segment{nullptr, [](mkvparser::Segment *s) { delete s; }};
 	TrackCursor m_video;
 	TrackCursor m_audio;
 
-	std::unique_ptr<WebmVideoCodec> m_videoCodec;
+	std::unique_ptr<WZWebmVideoCodec> m_videoCodec;
+	std::string m_videoCodecId;
+	bool m_videoCodecReplaced = false;
 	long long m_videoTrackNumber = -1;
 	WZVideoTrackMetadata m_videoMetadata;
 
@@ -338,6 +224,11 @@ private:
 	bool m_audioDecodeStarted = false;
 
 	unsigned m_consecutiveNoOutput = 0;
+	double m_lastVideoPacketPts = 0.0;
+	bool m_videoDraining = false;
+	double m_videoDecodeStartPts = 0.0;		// where decoding last (re)started
+	double m_lastVideoFramePts = -1.0;		// the last frame returned since then (-1 = none)
+	double m_videoResumeAfterPts = -1.0;	// frames up to here were returned by a replaced codec
 
 	uint64_t m_audioSamplesOut = 0;
 	double m_audioBasePts = 0.0;
@@ -390,26 +281,28 @@ bool WebmVideoDecoder::open()
 
 		if (track->GetType() == mkvparser::Track::kVideo && !m_videoCodec)
 		{
-			m_videoCodec = VpxVideoCodec::create(codecId);
-			if (!m_videoCodec)
-			{
-				debug(LOG_ERROR, "Unsupported video codec '%s' in %s", codecId, m_provider->filename().toUtf8().c_str());
-				return false;
-			}
 			const auto *videoTrack = static_cast<const mkvparser::VideoTrack *>(track);
 			m_videoTrackNumber = track->GetNumber();
 			m_videoMetadata.width = static_cast<unsigned>(videoTrack->GetWidth());
 			m_videoMetadata.height = static_cast<unsigned>(videoTrack->GetHeight());
 			const unsigned long long defaultDurationNs = track->GetDefaultDuration();
 			m_videoMetadata.fps = (defaultDurationNs > 0) ? 1e9 / static_cast<double>(defaultDurationNs) : 0.0;
+			debug(LOG_VIDEO, "WebM video track %lld: %s %ux%u %.02f fps",
+			      m_videoTrackNumber, codecId, m_videoMetadata.width, m_videoMetadata.height, m_videoMetadata.fps);
+
+			m_videoCodecId = codecId;
+			m_videoCodec = wzWebmVideoCodecCreate(codecId, m_videoMetadata.width, m_videoMetadata.height, m_backendPreference);
+			if (!m_videoCodec)
+			{
+				debug(LOG_ERROR, "Unsupported video codec '%s' in %s", codecId, m_provider->filename().toUtf8().c_str());
+				return false;
+			}
 			if (const mkvparser::Colour *colour = videoTrack->GetColour())
 			{
 				// Matroska MatrixCoefficients (ISO/IEC 23091-4): 1 = BT.709, 5 and 6 = BT.601
 				m_videoCodec->containerColorMatrix = (colour->matrix_coefficients == 1) ? WZVideoColorMatrix::BT709 : WZVideoColorMatrix::BT601;
 				m_videoCodec->containerFullRange = (colour->range == 2);
 			}
-			debug(LOG_VIDEO, "WebM video track %lld: %s %ux%u %.02f fps",
-			      m_videoTrackNumber, codecId, m_videoMetadata.width, m_videoMetadata.height, m_videoMetadata.fps);
 		}
 		else if (track->GetType() == mkvparser::Track::kAudio)
 		{
@@ -644,33 +537,58 @@ bool WebmVideoDecoder::nextVideoFrame(WZVideoFrameYUV& out)
 
 	for (;;)
 	{
-		if (!m_video.queue.empty())
+		// a buffering backend may hold several frames
+		if (m_videoCodec->getFrame(out))
 		{
-			DemuxedPacket packet = std::move(m_video.queue.front());
-			m_video.queue.pop_front();
-			// a failed decode (corrupt packet) or missing output (invisible
-			// alt-ref frame) is skippable - but a stream where *every* packet
-			// produces nothing (e.g. an unsupported VP9 profile) must fail
-			// loudly and promptly, not play black / grind through the file
-			if (!m_videoCodec->decode(packet.data.data(), packet.data.size())
-			    || !m_videoCodec->getFrame(out))
+			if (!m_videoCodec->providesFramePts())
 			{
-				if (++m_consecutiveNoOutput >= 16)
-				{
-					debug(LOG_ERROR, "Video stream produced no displayable frames (unsupported profile/format?): %s", m_provider->filename().toUtf8().c_str());
-					return false;
-				}
-				continue;
+				out.pts = m_lastVideoPacketPts;
 			}
 			m_consecutiveNoOutput = 0;
-			out.pts = packet.pts;
+			if (out.pts <= m_videoResumeAfterPts)
+			{
+				continue;
+			}
+			m_lastVideoFramePts = out.pts;
 			return true;
 		}
 
-		if (!demuxNextBlock(m_video))
+		if (m_videoCodec->failed() && replaceVideoCodec())
+		{
+			continue;
+		}
+		if (m_videoDraining)
 		{
 			return false;
 		}
+
+		if (m_video.queue.empty())
+		{
+			if (!demuxNextBlock(m_video))
+			{
+				m_videoCodec->drain();
+				m_videoDraining = true;
+			}
+			continue;
+		}
+
+		// a packet without output is skippable (corrupt, an invisible alt-ref frame, a pipeline filling),
+		// but a stream that never decodes (ex. an unsupported VP9 profile) must fail promptly
+		if (m_consecutiveNoOutput >= 32)
+		{
+			if (replaceVideoCodec())
+			{
+				continue;
+			}
+			debug(LOG_ERROR, "Video stream produced no displayable frames (unsupported profile/format?): %s", m_provider->filename().toUtf8().c_str());
+			return false;
+		}
+
+		DemuxedPacket packet = std::move(m_video.queue.front());
+		m_video.queue.pop_front();
+		m_lastVideoPacketPts = packet.pts;
+		m_videoCodec->decode(packet.data.data(), packet.data.size(), packet.pts);
+		++m_consecutiveNoOutput;
 	}
 }
 
@@ -687,6 +605,43 @@ bool WebmVideoDecoder::seekVideo(double pts)
 	m_video.resumeAtEntry = true;
 	m_video.queue.clear();
 	m_consecutiveNoOutput = 0;
+	m_videoCodec->flush();
+	m_videoDraining = false;
+	m_videoDecodeStartPts = pts;
+	m_lastVideoFramePts = -1.0;
+	m_videoResumeAfterPts = -1.0;
+	return true;
+}
+
+bool WebmVideoDecoder::replaceVideoCodec()
+{
+	if (m_videoCodecReplaced)
+	{
+		return false;
+	}
+	m_videoCodecReplaced = true;
+	auto replacement = wzWebmVideoCodecCreateReplacement(m_videoCodecId.c_str(), m_videoMetadata.width, m_videoMetadata.height, *m_videoCodec);
+	if (!replacement)
+	{
+		return false;
+	}
+	debug(LOG_WARNING, "Video decode backend '%s' stopped producing frames, switching to '%s': %s",
+	      m_videoCodec->backendName(), replacement->backendName(), m_provider->filename().toUtf8().c_str());
+	replacement->containerColorMatrix = m_videoCodec->containerColorMatrix;
+	replacement->containerFullRange = m_videoCodec->containerFullRange;
+	m_videoCodec = std::move(replacement);
+
+	// restart at a key frame, skipping the frames already shown
+	const double resumeAfterPts = m_lastVideoFramePts;
+	const double seekPts = (resumeAfterPts >= 0.0) ? resumeAfterPts : m_videoDecodeStartPts;
+	if (!seekVideo(seekPts))
+	{
+		debug(LOG_WARNING, "Video can't seek to %.3fs, continuing from the next key frame", seekPts);
+		m_consecutiveNoOutput = 0;
+		m_videoDraining = false;
+		return true;
+	}
+	m_videoResumeAfterPts = resumeAfterPts;
 	return true;
 }
 
@@ -736,7 +691,7 @@ std::unique_ptr<WZVideoDecoder> webmVideoDecoderOpen(std::shared_ptr<VideoProvid
 	{
 		return nullptr;
 	}
-	auto decoder = std::make_unique<WebmVideoDecoder>(std::move(provider));
+	auto decoder = std::make_unique<WebmVideoDecoder>(std::move(provider), wzWebmPreferredCodecBackend());
 	if (!decoder->open())
 	{
 		return nullptr;

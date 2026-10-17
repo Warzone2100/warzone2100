@@ -16,6 +16,7 @@ OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
 OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
 OPTION(WZ_ENABLE_WEBM "Enable WebM (VP8/VP9) video support (requires libvpx)" ON)
+OPTION(WZ_ENABLE_VIDEO_BACKEND_MF "Enable the Windows Media Foundation video decode backend" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
 if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	OPTION(ENABLE_DOCS "Enable documentation generation" ON)
@@ -922,6 +923,13 @@ option(WZ_BUILD_TERRAIN_SURFACE_TEST "Build the terrain surface math unit test (
 if(WZ_BUILD_TERRAIN_SURFACE_TEST)
 	add_executable(terrain_surface_test "${PROJECT_SOURCE_DIR}/tests/terrain_surface_test.cpp")
 	target_include_directories(terrain_surface_test PRIVATE "${PROJECT_SOURCE_DIR}/src")
+endif()
+
+# Standalone unit test for the (dependency-free) VP9 bitstream helpers
+option(WZ_BUILD_VP9_BITSTREAM_TEST "Build the VP9 bitstream helpers unit test (tests/vp9_bitstream_test.cpp)" OFF)
+if(WZ_BUILD_VP9_BITSTREAM_TEST)
+	add_executable(vp9_bitstream_test "${PROJECT_SOURCE_DIR}/tests/vp9_bitstream_test.cpp" "${PROJECT_SOURCE_DIR}/lib/sequence/vp9_bitstream.cpp")
+	target_include_directories(vp9_bitstream_test PRIVATE "${PROJECT_SOURCE_DIR}")
 endif()
 
 # In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
