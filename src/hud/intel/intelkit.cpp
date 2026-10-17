@@ -28,6 +28,8 @@
 #include "intelkit.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -36,6 +38,7 @@
 #include "lib/widget/popover.h"
 #include "lib/widget/slider.h"
 
+#include "../hudsettings.h"
 #include "../hudtext.h"
 #include "../hudwidgets.h"
 
@@ -148,6 +151,29 @@ void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect)
 	const int luminance = (color.byte.r * 299 + color.byte.g * 587 + color.byte.b * 114) / 1000;
 	// (Half a pixel higher: centered numbers look low)
 	text.number.renderCenteredOnInk(WzRect(rect.x(), rect.y(), rect.width(), rect.height() - 1), luminance > 128 ? pal_RGBA(10, 10, 10, 255) : pal_RGBA(250, 250, 250, 255), &text.digits);
+}
+
+void drawSpinner(int cx, int cy, int radius, PIELIGHT color)
+{
+	constexpr int DOTS = 8;
+	const float dot = std::max(2.f, radius / 2.5f);
+	const int lead = hudReduceMotion() ? 0 : static_cast<int>((realTime / 110) % DOTS);
+	for (int i = 0; i < DOTS; ++i)
+	{
+		const float angle = static_cast<float>(i) * 2.f * static_cast<float>(M_PI) / DOTS;
+		const float x = cx + std::sin(angle) * (radius - dot / 2.f);
+		const float y = cy - std::cos(angle) * (radius - dot / 2.f);
+		const int age = (lead - i + DOTS) % DOTS;
+		PIELIGHT c = color;
+		c.byte.a = static_cast<uint8_t>(color.byte.a * (1.f - age * 0.11f));
+		pie_DrawRoundedBox(x - dot / 2.f, y - dot / 2.f, x + dot / 2.f, y + dot / 2.f, c, dot / 2.f, pal_RGBA(0, 0, 0, 0), 0.f);
+	}
+}
+
+void dimRect(const WzRect &rect, uint8_t amount)
+{
+	pie_UniTransBoxFill(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
+	                    alpha(skin().colors().panelBackground, amount));
 }
 
 std::string sentenceCase(const std::string &text)

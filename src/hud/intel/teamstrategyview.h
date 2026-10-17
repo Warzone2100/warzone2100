@@ -33,6 +33,7 @@
 
 #include "../../hci/teamstrategy.h"
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
@@ -42,6 +43,29 @@
 class ScrollableListWidget;
 namespace gfx_api { struct texture; }
 
+/// A teammate's state before the game starts (the pre-game screen), shown in their row
+enum class HudPlanRowStatus : uint8_t
+{
+	None,
+	Loading,
+	Ready,
+	Left
+};
+
+/// What the pre-game screen changes in the view
+struct HudTeamStrategyEmbedding
+{
+	std::string factsLine;                                        ///< instead of "3 on your team · …"
+	std::function<HudPlanRowStatus (uint32_t player)> status;
+	/// Whether a player's name opens a menu (the host's, for a player still loading), and opening it under `anchor`
+	std::function<bool (uint32_t player)> playerHasMenu;
+	std::function<void (uint32_t player, const std::shared_ptr<WIDGET> &anchor)> openPlayerMenu;
+	int legendRightGutter = 0;                                    ///< kept free at the legend's right
+	bool plain = false;                                           ///< no group headings, and a slim legend
+
+	bool sending = true;                                          ///< the local plan goes to the team as it changes
+};
+
 /// The team strategy view: what each of the team plans to build, a weapon class or unit type a column, the local
 /// player's row first and theirs to set (src/hci/teamstrategy.cpp's plans and rules).
 /// Compact: transposed, a class a row and a player a column.
@@ -49,7 +73,17 @@ class HudTeamStrategyView : public WIDGET
 {
 public:
 	static std::shared_ptr<HudTeamStrategyView> make(bool compact);
+	static std::shared_ptr<HudTeamStrategyView> make(bool compact, HudTeamStrategyEmbedding embedding);
 	~HudTeamStrategyView() override;
+
+	/// On: the local plan goes to the team now, and each change as it's made
+	void setSending(bool sending);
+	/// Read-only: the plans shown, dimmed, and not changed (the game is starting)
+	void setReadOnly(bool readOnly) { readOnlyPlans = readOnly; }
+	bool isReadOnly() const { return readOnlyPlans; }
+	HudPlanRowStatus rowStatus(uint32_t player) const;
+	void setFactsLine(std::string line) { embed.factsLine = std::move(line); }
+	const HudTeamStrategyEmbedding &embedding() const { return embed; }
 
 	/// The height it needs for its rows at `width` (more scroll)
 	int heightFor(int width) const;
@@ -101,8 +135,13 @@ private:
 	void initialize(bool compactLayout);
 	void layoutChildren();
 	WzRect tableRect() const;
+	int factsHeight() const;
+	int headerHeight() const;
+	int legendHeight() const;
 
 	bool compact = false;
+	bool readOnlyPlans = false;
+	HudTeamStrategyEmbedding embed;
 	std::vector<uint32_t> players;      ///< the local player first, then the teammates
 	std::vector<gfx_api::texture *> images;
 	std::shared_ptr<ScrollableListWidget> list;

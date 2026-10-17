@@ -311,6 +311,8 @@ public:
 	virtual bool drawsConnectionPanel() const { return false; }
 	/// Shows the intelligence screen of src/hud/intel (in single player) instead of the Classic one
 	virtual bool drawsIntelligenceScreen() const { return false; }
+	/// Whether it draws the screen before a networked game starts (src/hud/pregamescreen.h)
+	virtual bool drawsPregameScreen() const { return false; }
 	/// Draws the radar's frame (and, when `north`, its north arrow) before the minimap, in the minimap's own space
 	/// (`mapSpace`: the map from 0, 0 to width, height, turned with the camera when the radar turns). False: the radar
 	/// draws its Classic images

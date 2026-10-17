@@ -49,6 +49,9 @@ namespace
 {
 
 constexpr int FACTS_HEIGHT = 34;
+constexpr int FACTS_HEIGHT_PLAIN = 28;
+constexpr int HEADER_HEIGHT_PLAIN = 100;
+constexpr int LEGEND_HEIGHT_PLAIN = 30;
 constexpr int HEADER_HEIGHT = 130;
 constexpr int HEADER_HEIGHT_COMPACT = 40;
 constexpr int LEGEND_HEIGHT = 44;
@@ -83,16 +86,11 @@ const char *stateName(WzStrategyPlanningState state)
 
 /// A plan's tile: empty (not specified), the class's picture on blue (planned) or amber with a corner mark (main focus),
 /// or a red cross (never)
-void drawTile(gfx_api::texture *image, const WzRect &rect, WzStrategyPlanningState state, bool disabled, bool outlined)
+void tileColors(WzStrategyPlanningState state, PIELIGHT &fill, PIELIGHT &border)
 {
 	const HudColors &colors = skin().colors();
-	const float x0 = static_cast<float>(rect.x());
-	const float y0 = static_cast<float>(rect.y());
-	const float x1 = static_cast<float>(rect.right());
-	const float y1 = static_cast<float>(rect.bottom());
-	const float radius = 5.f;
-	PIELIGHT fill = pal_RGBA(12, 17, 25, 200);
-	PIELIGHT border = pal_RGBA(120, 150, 190, 46);
+	fill = pal_RGBA(12, 17, 25, 200);
+	border = pal_RGBA(120, 150, 190, 46);
 	switch (state)
 	{
 	case WzStrategyPlanningState::NotSpecified:
@@ -110,6 +108,19 @@ void drawTile(gfx_api::texture *image, const WzRect &rect, WzStrategyPlanningSta
 		border = alpha(colors.stateBad, 150);
 		break;
 	}
+}
+
+void drawTile(gfx_api::texture *image, const WzRect &rect, WzStrategyPlanningState state, bool disabled, bool outlined)
+{
+	const HudColors &colors = skin().colors();
+	const float x0 = static_cast<float>(rect.x());
+	const float y0 = static_cast<float>(rect.y());
+	const float x1 = static_cast<float>(rect.right());
+	const float y1 = static_cast<float>(rect.bottom());
+	const float radius = 5.f;
+	PIELIGHT fill;
+	PIELIGHT border;
+	tileColors(state, fill, border);
 	if (disabled)
 	{
 		fill.byte.a = static_cast<uint8_t>(fill.byte.a / 3);
@@ -170,7 +181,7 @@ public:
 		}
 		if (auto strong = view.lock())
 		{
-			if (player == selectedPlayer && !HudTeamStrategyView::classDisabled(index))
+			if (player == selectedPlayer && !HudTeamStrategyView::classDisabled(index) && !strong->isReadOnly())
 			{
 				strong->step(index, mouseButton == WKEY_PRIMARY);
 			}
@@ -181,7 +192,7 @@ public:
 	{
 		// (As in the Classic view, a held click steps back)
 		auto strong = view.lock();
-		if (key != WKEY_PRIMARY || !strong || player != selectedPlayer || HudTeamStrategyView::classDisabled(index))
+		if (key != WKEY_PRIMARY || !strong || player != selectedPlayer || HudTeamStrategyView::classDisabled(index) || strong->isReadOnly())
 		{
 			return false;
 		}
@@ -195,7 +206,12 @@ public:
 		const WzStrategyPlanningState current = HudTeamStrategyView::state(player, index);
 		const std::string name = HudTeamStrategyView::className(index, false);
 		std::string tip;
-		if (player == selectedPlayer)
+		auto owner = view.lock();
+		if (player == selectedPlayer && owner && owner->isReadOnly())
+		{
+			tip = astringf("%s · %s", name.c_str(), stateName(current));
+		}
+		else if (player == selectedPlayer)
 		{
 			if (HudTeamStrategyView::classDisabled(index))
 			{
@@ -236,8 +252,11 @@ public:
 		const int tile = strong->tileSize();
 		const WzRect rect(xOffset + x() + (width() - tile) / 2, yOffset + y() + (height() - tile) / 2, tile, tile);
 		const bool own = player == selectedPlayer;
-		const bool outlined = own && ((isHighlighted() && !HudTeamStrategyView::classDisabled(index)) || strong->isFocused(player, index));
-		drawTile(strong->image(index), rect, HudTeamStrategyView::state(player, index), HudTeamStrategyView::classDisabled(index), outlined);
+		const HudPlanRowStatus status = strong->rowStatus(player);
+		const bool away = !own && (status == HudPlanRowStatus::Loading || status == HudPlanRowStatus::Left);
+		const bool dimmed = HudTeamStrategyView::classDisabled(index) || away || strong->isReadOnly();
+		const bool outlined = own && !strong->isReadOnly() && ((isHighlighted() && !HudTeamStrategyView::classDisabled(index)) || strong->isFocused(player, index));
+		drawTile(strong->image(index), rect, HudTeamStrategyView::state(player, index), dimmed, outlined);
 	}
 
 private:
@@ -247,6 +266,79 @@ private:
 	std::string lastTip;
 	bool heldStepped = false;
 };
+
+/// (Pre-game) A player's name or chip, which opens their menu (the host's, for a player still loading)
+class PlayerMenuButton : public W_BUTTON
+{
+public:
+	PlayerMenuButton(const std::shared_ptr<HudTeamStrategyView> &view, uint32_t player, std::string tip): view(view), player(player), tipText(std::move(tip)) {}
+
+	std::string getTip() override { return tipText; }
+
+	bool available() const
+	{
+		auto strong = view.lock();
+		return strong && strong->embedding().playerHasMenu && strong->embedding().openPlayerMenu && strong->embedding().playerHasMenu(player);
+	}
+
+	void released(W_CONTEXT *context, WIDGET_KEY key) override
+	{
+		const bool clicked = (state & WBUT_DOWN) != 0;
+		W_BUTTON::released(context, key);
+		auto strong = view.lock();
+		if (clicked && strong && available())
+		{
+			strong->embedding().openPlayerMenu(player, shared_from_this());
+		}
+	}
+
+	void display(int xOffset, int yOffset) override
+	{
+		if (!available() || !isHighlighted())
+		{
+			return;
+		}
+		pie_DrawRoundedBox(static_cast<float>(xOffset + x() + 4), static_cast<float>(yOffset + y() + 3), static_cast<float>(xOffset + x() + width() - 4),
+		                   static_cast<float>(yOffset + y() + height() - 3), pal_RGBA(255, 255, 255, 12), 4.f, pal_RGBA(120, 150, 190, 90), 1.f);
+	}
+
+private:
+	std::weak_ptr<HudTeamStrategyView> view;
+	uint32_t player;
+	std::string tipText;
+};
+
+/// (Pre-game) A teammate's state: its icon (or spinner), centered on (cx, cy)
+void drawStatusMark(HudPlanRowStatus status, int cx, int cy, int size)
+{
+	const HudColors &colors = skin().colors();
+	switch (status)
+	{
+	case HudPlanRowStatus::None:
+		break;
+	case HudPlanRowStatus::Loading:
+		drawSpinner(cx, cy, size / 2, colors.accent);
+		break;
+	case HudPlanRowStatus::Ready:
+		skin().drawNamedIcon("objective-done", WzRect(cx - size / 2, cy - size / 2, size, size), colors.stateOk);
+		break;
+	case HudPlanRowStatus::Left:
+		skin().drawNamedIcon("connection-left", WzRect(cx - size / 2, cy - size / 2, size, size), colors.stateBad);
+		break;
+	}
+}
+
+const char *statusName(HudPlanRowStatus status)
+{
+	switch (status)
+	{
+	case HudPlanRowStatus::None: return "";
+	case HudPlanRowStatus::Loading: return _("Loading…");
+	case HudPlanRowStatus::Ready: return _("Ready");
+	case HudPlanRowStatus::Left: return _("Left");
+	}
+	return "";
+}
 
 /// (Full layout) A player's row: the chip and name ("Your plan" under the local player's), and the cells
 class PlanRow : public WIDGET
@@ -262,6 +354,11 @@ public:
 			cells.push_back(cell);
 			attach(cell);
 		}
+		if (owner->embedding().openPlayerMenu && player != selectedPlayer)
+		{
+			nameButton = std::make_shared<PlayerMenuButton>(owner, player, std::string());
+			attach(nameButton);
+		}
 	}
 
 	void geometryChanged() override
@@ -275,6 +372,10 @@ public:
 		for (size_t i = 0; i < cells.size(); ++i)
 		{
 			cells[i]->setGeometry(l.columnX(i), 0, l.pitch, height());
+		}
+		if (nameButton)
+		{
+			nameButton->setGeometry(0, 0, l.nameWidth - 6, height());
 		}
 	}
 
@@ -293,20 +394,43 @@ public:
 			pie_UniTransBoxFill(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()), pal_RGBA(255, 255, 255, 7));
 		}
 		const int cy = rect.y() + rect.height() / 2;
-		drawPositionChip(chipText, player, WzRect(rect.x() + 12, cy - CHIP / 2, CHIP, CHIP));
-		const int x0 = rect.x() + 12 + CHIP + 10;
 		auto strong = view.lock();
+		const HudPlanRowStatus status = (strong && !you) ? strong->rowStatus(player) : HudPlanRowStatus::None;
+		const bool away = status == HudPlanRowStatus::Loading || status == HudPlanRowStatus::Left;
+		const WzRect chip(rect.x() + 12, cy - CHIP / 2, CHIP, CHIP);
+		drawPositionChip(chipText, player, chip);
+		if (away)
+		{
+			dimRect(chip, 150);
+		}
+		const int x0 = rect.x() + 12 + CHIP + 10;
 		const int nameWidth = (strong ? strong->layout().nameWidth : NAME_WIDTH) - (x0 - rect.x()) - 8;
 		const iV_fonts font = you ? font_regular_bold : font_regular;
 		const int lineSize = static_cast<int>(iV_GetTextLineSize(font));
-		if (you && rect.height() >= ROW_TALL)
+		const PIELIGHT nameColor = away ? colors.textSecondary : colors.textPrimary;
+		const bool tall = rect.height() >= ROW_TALL;
+		if (you && tall)
 		{
 			drawLine(name, getPlayerName(player), font, x0, cy - lineSize + 2, nameWidth, colors.textPrimary);
 			drawLine(sub, _("Your plan"), font_small, x0, cy + 3, nameWidth, colors.accent);
 		}
+		else if (status != HudPlanRowStatus::None && tall)
+		{
+			drawLine(name, getPlayerName(player), font, x0, cy - lineSize + 2, nameWidth, nameColor);
+			const int mark = 11;
+			drawStatusMark(status, x0 + mark / 2, cy + 3 + static_cast<int>(iV_GetTextLineSize(font_small)) / 2, mark);
+			const PIELIGHT subColor = status == HudPlanRowStatus::Ready ? colors.stateOk : (status == HudPlanRowStatus::Left ? colors.stateBad : colors.textSecondary);
+			drawLine(sub, statusName(status), font_small, x0 + mark + 5, cy + 3, nameWidth - mark - 5, subColor);
+		}
+		else if (status != HudPlanRowStatus::None)
+		{
+			const int mark = 13;
+			drawLine(name, getPlayerName(player), font, x0, cy - lineSize / 2, nameWidth - mark - 6, nameColor);
+			drawStatusMark(status, x0 + nameWidth - mark / 2, cy, mark);
+		}
 		else
 		{
-			drawLine(name, getPlayerName(player), font, x0, cy - lineSize / 2, nameWidth, colors.textPrimary);
+			drawLine(name, getPlayerName(player), font, x0, cy - lineSize / 2, nameWidth, nameColor);
 		}
 	}
 
@@ -315,6 +439,7 @@ private:
 	uint32_t player;
 	size_t rowIndex;
 	std::vector<std::shared_ptr<PlanCell>> cells;
+	std::shared_ptr<PlayerMenuButton> nameButton;
 	ChipText chipText;
 	WzText name;
 	WzText sub;
@@ -400,13 +525,35 @@ private:
 class PlayerHead : public WIDGET
 {
 public:
-	PlayerHead(uint32_t player, bool named): player(player), named(named)
+	PlayerHead(const std::shared_ptr<HudTeamStrategyView> &view, uint32_t player, bool named): view(view), player(player), named(named)
 	{
 		const unsigned position = player < MAX_CONNECTED_PLAYERS ? NetPlay.players[player].position : 0;
 		tip = astringf("%u · %s", position, getPlayerName(player));
 	}
 
-	std::string getTip() override { return tip; }
+	void initialize(const std::shared_ptr<HudTeamStrategyView> &owner)
+	{
+		if (owner->embedding().openPlayerMenu && player != selectedPlayer)
+		{
+			menuButton = std::make_shared<PlayerMenuButton>(owner, player, tip);
+			attach(menuButton);
+		}
+	}
+
+	void geometryChanged() override
+	{
+		if (menuButton)
+		{
+			menuButton->setGeometry(0, 0, width(), height());
+		}
+	}
+
+	std::string getTip() override
+	{
+		auto strong = view.lock();
+		const HudPlanRowStatus status = strong ? strong->rowStatus(player) : HudPlanRowStatus::None;
+		return status == HudPlanRowStatus::None || player == selectedPlayer ? tip : tip + " · " + statusName(status);
+	}
 
 	void display(int xOffset, int yOffset) override
 	{
@@ -424,9 +571,29 @@ public:
 		{
 			drawPositionChip(chipText, player, WzRect(rect.x() + (rect.width() - CHIP_COMPACT) / 2, cy - CHIP_COMPACT / 2, CHIP_COMPACT, CHIP_COMPACT));
 		}
+		auto strong = view.lock();
+		const HudPlanRowStatus status = (strong && player != selectedPlayer) ? strong->rowStatus(player) : HudPlanRowStatus::None;
+		if (status != HudPlanRowStatus::None)
+		{
+			const int chipX = named ? rect.x() + 8 : rect.x() + (rect.width() - CHIP_COMPACT) / 2;
+			const WzRect chip(chipX, cy - CHIP_COMPACT / 2, CHIP_COMPACT, CHIP_COMPACT);
+			if (status == HudPlanRowStatus::Loading || status == HudPlanRowStatus::Left)
+			{
+				dimRect(chip, 150);
+			}
+			// The state's mark on the chip's bottom right corner, on a disc of the panel's color
+			const int mark = 12;
+			const int mx = chip.right();
+			const int my = chip.bottom();
+			pie_DrawRoundedBox(static_cast<float>(mx - mark / 2 - 2), static_cast<float>(my - mark / 2 - 2), static_cast<float>(mx + mark / 2 + 2),
+			                   static_cast<float>(my + mark / 2 + 2), skin().colors().panelBackground, mark / 2.f + 2.f, pal_RGBA(0, 0, 0, 0), 0.f);
+			drawStatusMark(status, mx, my, mark);
+		}
 	}
 
 private:
+	std::weak_ptr<HudTeamStrategyView> view;
+	std::shared_ptr<PlayerMenuButton> menuButton;
 	uint32_t player;
 	bool named;
 	std::string tip;
@@ -482,9 +649,29 @@ bool HudTeamStrategyView::classDisabled(size_t index)
 
 std::shared_ptr<HudTeamStrategyView> HudTeamStrategyView::make(bool compact)
 {
+	return make(compact, HudTeamStrategyEmbedding());
+}
+
+std::shared_ptr<HudTeamStrategyView> HudTeamStrategyView::make(bool compact, HudTeamStrategyEmbedding embedding)
+{
 	auto view = std::make_shared<HudTeamStrategyView>();
+	view->embed = std::move(embedding);
 	view->initialize(compact);
 	return view;
+}
+
+void HudTeamStrategyView::setSending(bool sending)
+{
+	if (sending && !embed.sending)
+	{
+		teamStrategySendLocalPlan();
+	}
+	embed.sending = sending;
+}
+
+HudPlanRowStatus HudTeamStrategyView::rowStatus(uint32_t player) const
+{
+	return embed.status ? embed.status(player) : HudPlanRowStatus::None;
 }
 
 HudTeamStrategyView::~HudTeamStrategyView()
@@ -534,8 +721,12 @@ void HudTeamStrategyView::initialize(bool compactLayout)
 	{
 		players.push_back(player);
 	}
-	// (As the Classic view in game: the local plan goes to the team as it opens)
-	teamStrategySendLocalPlan();
+	// (As in the Classic view during a game, the local plan goes to the team when the view opens. Before the game
+	// starts, it goes when the planning starts)
+	if (embed.sending)
+	{
+		teamStrategySendLocalPlan();
+	}
 
 	list = ScrollableListWidget::make();
 	list->setScrollbarWidth(SCROLLBAR);
@@ -548,7 +739,8 @@ void HudTeamStrategyView::initialize(bool compactLayout)
 		const bool named = players.size() <= NAMED_HEADS_UP_TO;
 		for (uint32_t player : players)
 		{
-			auto head = std::make_shared<PlayerHead>(player, named);
+			auto head = std::make_shared<PlayerHead>(self, player, named);
+			head->initialize(self);
 			heads.push_back(head);
 			attach(head);
 		}
@@ -592,11 +784,26 @@ int HudTeamStrategyView::tileSize() const
 	return lay.rowHeight >= ROW_TALL ? 34 : 30;
 }
 
+int HudTeamStrategyView::factsHeight() const
+{
+	return compact ? 4 : (embed.plain ? FACTS_HEIGHT_PLAIN : FACTS_HEIGHT);
+}
+
+int HudTeamStrategyView::headerHeight() const
+{
+	return compact ? HEADER_HEIGHT_COMPACT : (embed.plain ? HEADER_HEIGHT_PLAIN : HEADER_HEIGHT);
+}
+
+int HudTeamStrategyView::legendHeight() const
+{
+	return compact ? LEGEND_HEIGHT_COMPACT : (embed.plain ? LEGEND_HEIGHT_PLAIN : LEGEND_HEIGHT);
+}
+
 WzRect HudTeamStrategyView::tableRect() const
 {
 	const int pad = compact ? PAD_COMPACT : PAD;
-	const int top = compact ? 4 : FACTS_HEIGHT;
-	const int legend = compact ? LEGEND_HEIGHT_COMPACT : LEGEND_HEIGHT;
+	const int top = factsHeight();
+	const int legend = legendHeight();
 	return WzRect(pad, top, std::max(0, width() - 2 * pad), std::max(0, height() - top - legend));
 }
 
@@ -607,7 +814,7 @@ int HudTeamStrategyView::heightFor(int width) const
 		return 4 + HEADER_HEIGHT_COMPACT + 2 * SECTION_COMPACT + static_cast<int>(classCount()) * ROW_COMPACT + LEGEND_HEIGHT_COMPACT;
 	}
 	const int rowHeight = static_cast<int>(players.size()) <= TALL_ROWS_UP_TO ? ROW_TALL : ROW_SHORT;
-	return FACTS_HEIGHT + HEADER_HEIGHT + static_cast<int>(std::max<size_t>(players.size(), 1)) * rowHeight + LEGEND_HEIGHT;
+	return factsHeight() + headerHeight() + static_cast<int>(std::max<size_t>(players.size(), 1)) * rowHeight + legendHeight();
 }
 
 void HudTeamStrategyView::layoutChildren()
@@ -626,7 +833,7 @@ void HudTeamStrategyView::layoutChildren()
 	}
 	else
 	{
-		l.header = HEADER_HEIGHT;
+		l.header = headerHeight();
 		l.nameWidth = NAME_WIDTH;
 		l.groupGap = GROUP_GAP;
 		l.pitch = std::max(34, std::min(46, (rowWidth - NAME_WIDTH - GROUP_GAP - 8) / static_cast<int>(classCount())));
@@ -670,11 +877,11 @@ void HudTeamStrategyView::step(size_t index, bool forward)
 	const PlanClass c = planClass(index);
 	if (c.unit)
 	{
-		teamStrategyStepUnitPlan(c.unitType, forward, true);
+		teamStrategyStepUnitPlan(c.unitType, forward, embed.sending);
 	}
 	else
 	{
-		teamStrategyStepWeaponPlan(c.weapon, forward, true);
+		teamStrategyStepWeaponPlan(c.weapon, forward, embed.sending);
 	}
 }
 
@@ -706,6 +913,10 @@ void HudTeamStrategyView::moveFocus(int delta)
 
 void HudTeamStrategyView::stepFocus(bool forward)
 {
+	if (readOnlyPlans)
+	{
+		return;
+	}
 	if (!focusShown || players.empty() || players.front() != selectedPlayer || classDisabled(focus))
 	{
 		focusShown = true;
@@ -740,18 +951,22 @@ void HudTeamStrategyView::display(int xOffset, int yOffset)
 	if (!compact)
 	{
 		const size_t teammates = players.empty() ? 0 : players.size() - 1;
-		const std::string line = teammates == 0 ? std::string(_("No teammates."))
+		const std::string line = !embed.factsLine.empty() ? embed.factsLine
+		                       : teammates == 0 ? std::string(_("No teammates."))
 		                                        : astringf(_("%zu on your team · what each of you plans to build"), players.size());
-		drawLine(factsText, line, font_small, tx, rect.y() + 10, table.width(), colors.textSecondary);
+		drawLine(factsText, line, font_small, tx, rect.y() + (embed.plain ? 9 : 10), table.width(), colors.textSecondary);
 
 		// The header band: the groups, and each column's name (sideways) over its picture
 		const Layout &l = lay;
 		const size_t weapons = static_cast<size_t>(WSC_NUM_WEAPON_SUBCLASSES);
-		drawLine(groupTexts[0], _("WEAPONS"), font_small, tx + l.columnX(0) + 4, ty + 4, l.pitch * 6, colors.textSecondary);
-		drawLine(groupTexts[1], _("UNITS"), font_small, tx + l.columnX(weapons) + 4, ty + 4, l.pitch * 3, colors.textSecondary);
-		drawLine(groupTexts[2], _("Player"), font_small, tx + 12, ty + l.header - 22, l.nameWidth - 20, colors.textSecondary);
+		if (!embed.plain)
+		{
+			drawLine(groupTexts[0], _("WEAPONS"), font_small, tx + l.columnX(0) + 4, ty + 4, l.pitch * 6, colors.textSecondary);
+			drawLine(groupTexts[1], _("UNITS"), font_small, tx + l.columnX(weapons) + 4, ty + 4, l.pitch * 3, colors.textSecondary);
+			drawLine(groupTexts[2], _("Player"), font_small, tx + 12, ty + l.header - 22, l.nameWidth - 20, colors.textSecondary);
+		}
 		const int dividerX = tx + l.columnX(weapons) - l.groupGap / 2;
-		drawDivider(dividerX, ty, dividerX + 1, rect.bottom() - (compact ? LEGEND_HEIGHT_COMPACT : LEGEND_HEIGHT) - 4);
+		drawDivider(dividerX, ty + (embed.plain ? 8 : 0), dividerX + 1, rect.bottom() - legendHeight() - 4);
 		const int icon = 22;
 		for (size_t i = 0; i < classCount(); ++i)
 		{
@@ -765,7 +980,7 @@ void HudTeamStrategyView::display(int xOffset, int yOffset)
 			const bool hot = hovered.has_value() && *hovered == i;
 			WzText &text = columnNames[i];
 			const int bottom = ty + l.header - 6 - icon - 6;
-			const int availableHeight = bottom - (ty + 22);
+			const int availableHeight = bottom - (ty + (embed.plain ? 4 : 22));
 			text.setText(WzString::fromUtf8(className(i, true)), font_small, std::max(availableHeight, 1));
 			const float textX = static_cast<float>(cx) - text.lineSize() / 2.f - static_cast<float>(text.aboveBase());
 			text.render(textX, static_cast<float>(bottom), disabled ? colors.stateDisabled : (hot ? colors.textPrimary : colors.textSecondary), 270.f);
@@ -781,23 +996,38 @@ void HudTeamStrategyView::display(int xOffset, int yOffset)
 		drawDivider(tx, ty + HEADER_HEIGHT_COMPACT - 1, tx + table.width(), ty + HEADER_HEIGHT_COMPACT);
 	}
 
-	// The legend
-	const int legendHeight = compact ? LEGEND_HEIGHT_COMPACT : LEGEND_HEIGHT;
-	const int cy = rect.bottom() - legendHeight / 2 - 2;
+	// The legend (plain: small swatches)
+	const int cy = rect.bottom() - legendHeight() / 2 - 2;
 	int lx = tx;
 	const WzStrategyPlanningState states[] = {WzStrategyPlanningState::NotSpecified, WzStrategyPlanningState::Planned,
 	                                          WzStrategyPlanningState::HeavilyPlanned, WzStrategyPlanningState::Never};
-	const int sample = compact ? 22 : 22;
+	const int sample = embed.plain ? 11 : 22;
 	for (size_t i = 0; i < 4; ++i)
 	{
-		drawTile(image(1), WzRect(lx, cy - sample / 2, sample, sample), states[i], false, false);
-		lx += sample + 8;
+		if (embed.plain)
+		{
+			PIELIGHT fill;
+			PIELIGHT border;
+			tileColors(states[i], fill, border);
+			if (states[i] == WzStrategyPlanningState::NotSpecified)
+			{
+				border = pal_RGBA(120, 150, 190, 90);
+			}
+			pie_DrawRoundedBox(static_cast<float>(lx), static_cast<float>(cy - sample / 2), static_cast<float>(lx + sample), static_cast<float>(cy - sample / 2 + sample),
+			                   fill, 2.f, border, 1.f);
+		}
+		else
+		{
+			drawTile(image(1), WzRect(lx, cy - sample / 2, sample, sample), states[i], false, false);
+		}
+		lx += sample + (embed.plain ? 6 : 8);
 		legendTexts[i].setText(WzString::fromUtf8(stateName(states[i])), font_small);
-		legendTexts[i].render(static_cast<float>(lx), std::round(static_cast<float>(cy) - legendTexts[i].lineSize() / 2.f - legendTexts[i].aboveBase()), colors.textPrimary);
-		lx += legendTexts[i].width() + 22;
+		legendTexts[i].render(static_cast<float>(lx), std::round(static_cast<float>(cy) - legendTexts[i].lineSize() / 2.f - legendTexts[i].aboveBase()),
+		                      embed.plain ? colors.textSecondary : colors.textPrimary);
+		lx += legendTexts[i].width() + (embed.plain ? 16 : 22);
 	}
 	legendTexts[4].setText(WzString::fromUtf8(hudPointerIsTouch() ? _("Tap: next · hold: back") : _("Click: next · right-click or hold: back")), font_small);
-	if (lx + legendTexts[4].width() <= rect.right() - 8)
+	if (lx + legendTexts[4].width() <= rect.right() - 8 - embed.legendRightGutter)
 	{
 		legendTexts[4].render(static_cast<float>(lx), std::round(static_cast<float>(cy) - legendTexts[4].lineSize() / 2.f - legendTexts[4].aboveBase()), colors.textSecondary);
 	}

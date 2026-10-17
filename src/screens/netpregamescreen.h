@@ -30,5 +30,18 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/form.h"
 
+#include <cstdint>
+
 std::shared_ptr<W_SCREEN> createGameStartScreen(std::function<void ()> onCloseFunc);
 void shutdownGameStartScreen();
+
+/// The team planning stage's length, and the final countdown's
+constexpr int WZ_TEAMPLANNING_COUNTDOWN_MS = 20000;
+constexpr int WZ_FINAL_COUNTDOWN_MS = 3000;
+
+/// The host kicks a player who is still loading, or starts a vote to (with more than two players, unless a spectator)
+void pregameKickLoadingPlayer(uint32_t player);
+/// Whether the local player can do that to `player` (the host, a human player still loading)
+bool pregameCanKickLoadingPlayer(uint32_t player);
+/// Whether it would start a vote rather than kick
+bool pregameKickStartsVote(uint32_t player);
