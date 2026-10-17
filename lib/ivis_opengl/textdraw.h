@@ -48,6 +48,12 @@ enum iV_fonts
 	font_video_2,
 	font_video_3,
 	font_video_4,
+	font_display_1, // display text: DejaVu Sans Condensed Bold, sized and letter-spaced by iV_BindDisplayFont
+	font_display_2,
+	font_display_3,
+	font_display_4,
+	font_display_5,
+	font_display_6,
 	font_count
 };
 
@@ -174,6 +180,10 @@ void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBol
 bool iV_BindVideoFont(iV_fonts fontID, float pointSize);
 /// Unbinds all video text fonts and frees their faces.
 void iV_UnbindVideoFonts();
+/// Sets the size (in points) and letter spacing (in ems) of a display text font (font_display_1 ... font_display_6).
+/// Text in it re-renders at the new size. (DejaVu Sans Bold if DejaVu Sans Condensed Bold can't be loaded, CJK text
+/// in the bundled CJK font's bold without the spacing)
+bool iV_BindDisplayFont(iV_fonts fontID, float pointSize, float letterSpacing = 0.f);
 
 int iV_GetEllipsisWidth(iV_fonts fontID);
 void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour, float rotation = 0.0f);
