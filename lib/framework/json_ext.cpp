@@ -89,6 +89,7 @@ public:
 	}
 
 	template<class Exception>
+	[[noreturn]]
 	bool parse_error(std::size_t, const std::string &, const Exception &ex)
 	{
 		throw ex;  // (as ordered_json::parse does)
