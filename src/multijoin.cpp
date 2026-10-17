@@ -152,7 +152,7 @@ void destroyPlayerResources(GameWorld& world, UDWORD player, bool quietly)
 		}
 		else				// show effects
 		{
-			destroyDroid(d, gameTime, world);
+			destroyDroid(d, deathTimeNow(), world);
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
@@ -168,7 +168,7 @@ void destroyPlayerResources(GameWorld& world, UDWORD player, bool quietly)
 		}
 		else			// show effects
 		{
-			destroyStruct(psStruct, gameTime, world);
+			destroyStruct(psStruct, deathTimeNow(), world);
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
@@ -190,7 +190,7 @@ static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE 
 			}
 			else			// show effects
 			{
-				destroyStruct(psStruct, gameTime, gameWorld);
+				destroyStruct(psStruct, deathTimeNow(), gameWorld);
 			}
 			destroyedAnyStructs = true;
 		}
@@ -390,7 +390,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 
 		if (!transferredDroid)
 		{
-			destroyDroid(d, gameTime, gameWorld);
+			destroyDroid(d, deathTimeNow(), gameWorld);
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});

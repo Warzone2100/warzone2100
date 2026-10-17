@@ -55,6 +55,7 @@
 #include "display3d.h"
 #include "edit3d.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "hci.h"
 #include "ordersource.h"
 #include "ingameop.h"
@@ -81,6 +82,7 @@
 #include "hci/research.h"
 #include "hci/manufacture.h"
 #include "hci/commander.h"
+#include "uiobjectrefs.h"
 #include "notifications.h"
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
@@ -88,6 +90,7 @@
 #include "screens/researchtreescreen.h"
 #include "screens/spectatorgameoverscreen.h"
 #include "hci/quickchat.h"
+#include "hci/replay_controller.h"
 #include "warzoneconfig.h"
 
 // Empty edit window
@@ -320,14 +323,17 @@ struct RETBUTSTATS
 	int flashTime = 0;
 	std::shared_ptr<W_BUTTON> button = nullptr;
 	playerCallbackFunc callbackFunc = nullptr;
+	ReticuleCallbackRef callbackRef;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
+static ScriptInterfaceRequest scriptInterfaceRequest = ScriptInterfaceRequest::None;
 
 void clearReticuleCallbacks()
 {
 	for (auto& i : retbutstats)
 	{
 		i.callbackFunc = nullptr;
+		i.callbackRef = ReticuleCallbackRef();
 	}
 }
 
@@ -397,13 +403,21 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 	}
 }
 
+// The tooltip as shown: the scripts may pass it untranslated (N_()), so translate it here.
+// Text passed translated (_()) isn't a message of the catalog, and gettext returns it unchanged.
+// (Not the empty text: gettext("") is the catalog's header.)
+static std::string reticuleTipText(const std::string &tip)
+{
+	return tip.empty() ? tip : std::string(gettext(tip.c_str()));
+}
+
 optional<std::string> getReticuleButtonDisplayFilename(int ButId)
 {
 	ASSERT_OR_RETURN(nullopt, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
 	return retbutstats[ButId].filename.toUtf8();
 }
 
-void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc)
+void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc, const ReticuleCallbackRef& callbackRef)
 {
 	ASSERT_OR_RETURN(, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
 
@@ -414,6 +428,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	retbutstats[ButId].flashing = false;
 	retbutstats[ButId].flashTime = 0;
 	retbutstats[ButId].callbackFunc = callbackFunc;
+	retbutstats[ButId].callbackRef = callbackFunc ? callbackRef : ReticuleCallbackRef();
 	ReticuleEnabled[ButId].Enabled = false;
 
 	if (!retbutstats[ButId].button) // not quite set up yet
@@ -425,13 +440,60 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 
 	if (!retbutstats[ButId].tip.empty())
 	{
-		retbutstats[ButId].button->setTip(retbutstats[ButId].tip);
+		retbutstats[ButId].button->setTip(reticuleTipText(retbutstats[ButId].tip));
 	}
 
 	if (!retbutstats[ButId].filename.isEmpty())
 	{
 		ReticuleEnabled[ButId].Enabled = true;
 		retbutstats[ButId].button->setState(0);
+	}
+}
+
+std::vector<ReticuleButtonState> getReticuleButtonStates()
+{
+	std::vector<ReticuleButtonState> states(NUMRETBUTS);
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		states[i].tip = retbutstats[i].tip;
+		states[i].filename = retbutstats[i].filename.toUtf8();
+		states[i].filenameDown = retbutstats[i].filenameDown.toUtf8();
+		states[i].flashing = retbutstats[i].flashing;
+		states[i].callback = retbutstats[i].callbackRef;
+	}
+	return states;
+}
+
+void restoreReticuleButtonStates(const std::vector<ReticuleButtonState> &states, const std::function<playerCallbackFunc (const ReticuleCallbackRef &)> &resolveCallback)
+{
+	for (int i = 0; i < NUMRETBUTS && i < static_cast<int>(states.size()); i++)
+	{
+		const ReticuleButtonState &state = states[i];
+		playerCallbackFunc callbackFunc = (!state.callback.empty() && resolveCallback) ? resolveCallback(state.callback) : nullptr;
+		if (!state.callback.empty() && !callbackFunc)
+		{
+			debug(LOG_WARNING, "Reticule button %d: no function %s in script %s of player %d to call", i, state.callback.function.c_str(), state.callback.scriptName.c_str(), state.callback.player);
+		}
+		setReticuleStats(i, state.tip, state.filename, state.filenameDown, callbackFunc, state.callback);
+		// (after setReticuleStats, which stops the flashing)
+		setReticuleFlash(i, state.flashing);
+	}
+}
+
+void resolveReticuleCallbacks(const std::function<playerCallbackFunc (const ReticuleCallbackRef &)> &resolveCallback)
+{
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		RETBUTSTATS &stats = retbutstats[i];
+		if (stats.callbackRef.empty())
+		{
+			continue;
+		}
+		stats.callbackFunc = resolveCallback ? resolveCallback(stats.callbackRef) : nullptr;
+		if (!stats.callbackFunc)
+		{
+			debug(LOG_WARNING, "Reticule button %d: no function %s in script %s of player %d to call", i, stats.callbackRef.function.c_str(), stats.callbackRef.scriptName.c_str(), stats.callbackRef.player);
+		}
 	}
 }
 
@@ -543,376 +605,6 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	retbutstats[psWidget->UserData].downTime = DownTime;
 }
 
-#define REPLAY_ACTION_BUTTONS_PADDING 5
-#define REPLAY_ACTION_BUTTONS_SPACING 5
-#define REPLAY_ACTION_BUTTONS_IMAGE_SIZE 16
-#define REPLAY_ACTION_BUTTONS_WIDTH (REPLAY_ACTION_BUTTONS_IMAGE_SIZE + (REPLAY_ACTION_BUTTONS_PADDING * 2))
-#define REPLAY_ACTION_BUTTONS_HEIGHT REPLAY_ACTION_BUTTONS_WIDTH
-
-constexpr size_t WZ_MAX_REPLAY_FASTFORWARD_TICKS = 3;
-
-class ReplayControllerWidget : public W_FORM
-{
-public:
-	ReplayControllerWidget() : W_FORM() {}
-	~ReplayControllerWidget() { }
-
-public:
-	static std::shared_ptr<ReplayControllerWidget> make();
-
-public:
-	virtual void display(int xOffset, int yOffset) override;
-	virtual void geometryChanged() override;
-	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
-	virtual void run(W_CONTEXT *psContext) override;
-
-private:
-	class W_REPLAY_CONTROL_BUTTON : public W_BUTTON
-	{
-	public:
-		W_REPLAY_CONTROL_BUTTON(W_BUTINIT const *init)
-		: W_BUTTON(init)
-		{ }
-		W_REPLAY_CONTROL_BUTTON()
-		: W_BUTTON()
-		{ }
-
-		~W_REPLAY_CONTROL_BUTTON()
-		{
-			if (pButtonImage)
-			{
-				delete pButtonImage;
-			}
-		}
-
-	public:
-		void display(int xOffset, int yOffset) override
-		{
-			W_BUTTON *psButton = this;
-
-			int x0 = psButton->x() + xOffset;
-			int y0 = psButton->y() + yOffset;
-			int x1 = x0 + psButton->width();
-			int y1 = y0 + psButton->height();
-
-			bool isDown = (psButton->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-			bool isDisabled = (psButton->getState() & WBUT_DISABLE) != 0;
-			bool isHighlight = !isDisabled && ((psButton->getState() & WBUT_HIGHLIGHT) != 0);
-
-			// Display the button.
-			auto light_border = pal_RGBA(255, 255, 255, 100);
-			auto fill_color = isDown || isDisabled ? pal_RGBA(10, 0, 70, 200) : pal_RGBA(25, 0, 110, 175);
-			iV_ShadowBox(x0, y0, x1, y1, 0, isDown ? pal_RGBA(0,0,0,0) : light_border, isDisabled ? light_border : WZCOL_FORM_DARK, fill_color);
-
-			// Highlight
-			if (isHighlight)
-			{
-				iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
-			}
-
-			// Outline
-			switch (outline)
-			{
-				case OutlineState::None:
-					break;
-				case OutlineState::Double:
-					iV_Box(x0 + 3, y0 + 3, x1 - 3, y1 - 3, pal_RGBA(218, 207, 255, 200));
-					// fall-through
-				case OutlineState::Single:
-					iV_Box(x0 + 1, y0 + 1, x1 - 1, y1 - 1, pal_RGBA(218, 207, 255, 200));
-					break;
-			}
-
-			// Display the image, if present
-			int imageLeft = x1 - REPLAY_ACTION_BUTTONS_PADDING - REPLAY_ACTION_BUTTONS_IMAGE_SIZE;
-			int imageTop = (psButton->y() + yOffset) + REPLAY_ACTION_BUTTONS_PADDING;
-
-			if (pButtonImage)
-			{
-				iV_DrawImageAnisotropic(*(pButtonImage), Vector2i(imageLeft, imageTop), Vector2f(0,0), Vector2f(REPLAY_ACTION_BUTTONS_IMAGE_SIZE, REPLAY_ACTION_BUTTONS_IMAGE_SIZE), 0.f, WZCOL_WHITE);
-			}
-		}
-	public:
-		gfx_api::texture* pButtonImage = nullptr;
-		enum class OutlineState {
-			None,
-			Single,
-			Double
-		};
-		OutlineState outline = OutlineState::None;
-	};
-
-	enum class ReplayGameStatus
-	{
-		PLAY,
-		PAUSE,
-	};
-	ReplayGameStatus getReplayGameStatus() const
-	{
-		ReplayGameStatus status = (!gameTimeIsStopped()) ? ReplayGameStatus::PLAY : ReplayGameStatus::PAUSE;
-		// sanity check
-		return status;
-	}
-
-	void setReplayGameStatus(ReplayGameStatus newStatus)
-	{
-		switch (newStatus)
-		{
-			case ReplayGameStatus::PLAY:
-				setAudioPause(false);
-				setConsolePause(false);
-				if (gameTimeIsStopped())
-				{
-					gameTimeStart();
-				}
-				break;
-			case ReplayGameStatus::PAUSE:
-				if (!gameTimeIsStopped())
-				{
-					gameTimeStop();
-				}
-				setAudioPause(true);
-				setConsolePause(true);
-				break;
-		}
-
-		auto sharedThis = std::dynamic_pointer_cast<ReplayControllerWidget>(shared_from_this());
-		widgScheduleTask([sharedThis](){
-			sharedThis->refreshButtonStates();
-		});
-	}
-
-	void toggleFastForward(bool reverseDirection = false)
-	{
-		auto currFastForward = getMaxFastForwardTicks();
-		size_t newFastForward = 0;
-		if (currFastForward == 0)
-		{
-			newFastForward = (!reverseDirection) ? 1 : WZ_MAX_REPLAY_FASTFORWARD_TICKS;
-		}
-		else if (currFastForward == 1)
-		{
-			newFastForward = (!reverseDirection) ? WZ_MAX_REPLAY_FASTFORWARD_TICKS : 0;
-		}
-		else if (reverseDirection && currFastForward == WZ_MAX_REPLAY_FASTFORWARD_TICKS)
-		{
-			newFastForward = 1;
-		}
-		setMaxFastForwardTicks(newFastForward, true);
-
-		auto sharedThis = std::dynamic_pointer_cast<ReplayControllerWidget>(shared_from_this());
-		widgScheduleTask([sharedThis](){
-			sharedThis->refreshButtonStates();
-		});
-	}
-
-	void refreshButtonStates()
-	{
-		auto status = getReplayGameStatus();
-		switch (status)
-		{
-			case ReplayGameStatus::PLAY:
-				// play button shoud be disabled
-				playButton->setState(WBUT_DISABLE);
-				// pause + fast-forward buttons should be enabled
-				pauseButton->setState(0);
-				break;
-			case ReplayGameStatus::PAUSE:
-				// play button should be enabled
-				playButton->setState(0);
-				// pause + fast-forward buttons should be disabled
-				pauseButton->setState(WBUT_DISABLE);
-				break;
-		}
-
-		// fast-forward state is based on getMaxFastForwardTicks
-		auto maxFastForwardTicks = getMaxFastForwardTicks();
-		if (maxFastForwardTicks > 0)
-		{
-			// fast-forward is enabled
-			fastForwardButton->outline = (maxFastForwardTicks >= WZ_MAX_REPLAY_FASTFORWARD_TICKS) ? W_REPLAY_CONTROL_BUTTON::OutlineState::Double : W_REPLAY_CONTROL_BUTTON::OutlineState::Single;
-		}
-		else
-		{
-			// normal speed
-			fastForwardButton->outline = W_REPLAY_CONTROL_BUTTON::OutlineState::None;
-		}
-		lastUpdateTime = realTime;
-	}
-
-private:
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON> makeReplayActionButton(const char* imagePath)
-	{
-		auto button = std::make_shared<W_REPLAY_CONTROL_BUTTON>();
-		button->style |= WBUT_SECONDARY;
-		button->FontID = font_regular;
-		button->pButtonImage = WZ_Notification_Image(imagePath).loadImageToTexture();
-		button->setGeometry(0, 0, REPLAY_ACTION_BUTTONS_WIDTH, REPLAY_ACTION_BUTTONS_HEIGHT);
-		return button;
-	}
-
-private:
-	std::shared_ptr<W_LABEL>					titleLabel;
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON>	pauseButton;
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON>	playButton;
-	std::shared_ptr<W_REPLAY_CONTROL_BUTTON>	fastForwardButton;
-	UDWORD										lastUpdateTime = 0;
-	UDWORD										autoStateRefreshInterval = GAME_TICKS_PER_SEC * 3;
-};
-
-std::shared_ptr<ReplayControllerWidget> ReplayControllerWidget::make()
-{
-	auto result = std::make_shared<ReplayControllerWidget>();
-
-	// Add title text
-	result->titleLabel = std::make_shared<W_LABEL>();
-	result->titleLabel->setFont(font_regular_bold, WZCOL_FORM_TEXT);
-	result->titleLabel->setString(WzString::fromUtf8(_("Replay")));
-	result->titleLabel->setGeometry(REPLAY_ACTION_BUTTONS_SPACING, REPLAY_ACTION_BUTTONS_SPACING, result->titleLabel->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
-	result->titleLabel->setCacheNeverExpires(true);
-	result->attach(result->titleLabel);
-	result->titleLabel->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(psWidget->parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		int x0 = psParent->width() - (psWidget->width() + REPLAY_ACTION_BUTTONS_SPACING);
-		psWidget->setGeometry(x0, REPLAY_ACTION_BUTTONS_SPACING, psWidget->width(), psWidget->height());
-	}));
-
-	int buttonsY0 = result->titleLabel->y() + result->titleLabel->height() + REPLAY_ACTION_BUTTONS_SPACING;
-
-	// Add pauseButton button
-	result->pauseButton = result->makeReplayActionButton("images/replay/pause.png");
-	result->pauseButton->setTip(_("Pause"));
-	result->attach(result->pauseButton);
-	result->pauseButton->addOnClickHandler([](W_BUTTON& button) {
-		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(button.parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		psParent->setReplayGameStatus(ReplayGameStatus::PAUSE);
-	});
-	result->pauseButton->move(0, buttonsY0);
-	result->pauseButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		int x0 = REPLAY_ACTION_BUTTONS_SPACING;
-		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), psWidget->height());
-	}));
-
-	// Add "play" button
-	result->playButton = result->makeReplayActionButton("images/replay/play.png");
-	result->playButton->setTip(_("Resume"));
-	result->attach(result->playButton);
-	result->playButton->addOnClickHandler([](W_BUTTON& button) {
-		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(button.parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		psParent->setReplayGameStatus(ReplayGameStatus::PLAY);
-	});
-	result->playButton->move(0, buttonsY0);
-	result->playButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(psWidget->parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		int x0 = psParent->pauseButton->x() + psParent->pauseButton->width() + REPLAY_ACTION_BUTTONS_SPACING;
-		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), psWidget->height());
-	}));
-
-	// Add "fast-forwards" button
-	result->fastForwardButton = result->makeReplayActionButton("images/replay/fast_forward.png");
-	result->fastForwardButton->setTip(_("Fast-Forward"));
-	result->attach(result->fastForwardButton);
-	result->fastForwardButton->addOnClickHandler([](W_BUTTON& button) {
-		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(button.parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		psParent->toggleFastForward(button.getOnClickButtonPressed() == WKEY_SECONDARY);
-	});
-	result->fastForwardButton->move(0, buttonsY0);
-	result->fastForwardButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		auto psParent = std::dynamic_pointer_cast<ReplayControllerWidget>(psWidget->parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		int x0 = psParent->playButton->x() + psParent->playButton->width() + REPLAY_ACTION_BUTTONS_SPACING;
-		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), psWidget->height());
-	}));
-
-	// set overall width
-	int neededWidth = (REPLAY_ACTION_BUTTONS_SPACING * 4) + result->pauseButton->width() + result->playButton->width() + result->fastForwardButton->width();
-	neededWidth = std::max<int>(neededWidth, REPLAY_ACTION_BUTTONS_SPACING + result->titleLabel->width() + REPLAY_ACTION_BUTTONS_SPACING);
-	int neededHeight = result->pauseButton->y() + result->pauseButton->height() + REPLAY_ACTION_BUTTONS_SPACING;
-	result->setGeometry(result->x(), result->y(), neededWidth, neededHeight);
-
-	result->refreshButtonStates();
-
-	return result;
-}
-
-void ReplayControllerWidget::display(int xOffset, int yOffset)
-{
-	// currently, no-op
-}
-
-void ReplayControllerWidget::geometryChanged()
-{
-	if (titleLabel)
-	{
-		titleLabel->callCalcLayout();
-	}
-	if (pauseButton)
-	{
-		pauseButton->callCalcLayout();
-	}
-	if (playButton)
-	{
-		playButton->callCalcLayout();
-	}
-	if (fastForwardButton)
-	{
-		fastForwardButton->callCalcLayout();
-	}
-}
-
-void ReplayControllerWidget::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
-{
-	// call default implementation (which ultimately propagates to all children
-	W_FORM::screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
-}
-
-void ReplayControllerWidget::run(W_CONTEXT *psContext)
-{
-	if (realTime - lastUpdateTime >= autoStateRefreshInterval)
-	{
-		// trigger update call
-		auto replayController = std::dynamic_pointer_cast<ReplayControllerWidget>(shared_from_this());
-		widgScheduleTask([replayController](){
-			replayController->refreshButtonStates();
-		});
-		lastUpdateTime = realTime;
-	}
-}
-
-static std::shared_ptr<W_SCREEN> replayOverlayScreen;
-
-bool createReplayControllerOverlay()
-{
-	ASSERT(psWScreen != nullptr, "psWScreen is not initialized yet?");
-	ASSERT_OR_RETURN(false, replayOverlayScreen == nullptr, "Already initialized");
-
-	// Initialize the replay overlay screen
-	replayOverlayScreen = W_SCREEN::make();
-	replayOverlayScreen->psForm->hide();
-
-	// Create the Replay Controller form
-	auto replayControllerForm = ReplayControllerWidget::make();
-	replayOverlayScreen->psForm->attach(replayControllerForm);
-
-	// Position the Replay Controller form
-	replayControllerForm->setCalcLayout([](WIDGET *psWidget) {
-		auto psOptionsButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(widgFormGetFromID(psWScreen->psForm, IDRET_OPTIONS));
-		bool visibleOptionsbutton = (psOptionsButton != nullptr && psOptionsButton->visible());
-		int x0 = screenWidth - (visibleOptionsbutton ? psOptionsButton->getMarginX() + psOptionsButton->width() : 0) - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
-		int y0 = 0;
-		psWidget->move(std::max<int>(0, x0), y0);
-	});
-
-	widgRegisterOverlayScreenOnTopOfScreen(replayOverlayScreen, psWScreen);
-
-	return true;
-}
-
 /* Initialise the in game interface */
 bool intInitialise()
 {
@@ -1012,11 +704,7 @@ void interfaceShutDown()
 {
 	intRemoveIntelMapNoAnim(); // always call to ensure overlay screen is destroyed
 
-	if (replayOverlayScreen)
-	{
-		widgRemoveOverlayScreen(replayOverlayScreen);
-		replayOverlayScreen = nullptr;
-	}
+	destroyReplayControllerOverlay();
 
 	groupsUI = nullptr;
 
@@ -1042,6 +730,7 @@ void interfaceShutDown()
 	{
 		i = RETBUTSTATS();
 	}
+	scriptInterfaceRequest = ScriptInterfaceRequest::None;
 
 	shutdownChatScreen();
 	closeResearchTreeScreen();
@@ -1080,6 +769,29 @@ void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj)
 		psSelectedBuilder = nullptr;
 	}
 	// intDoScreenRefresh handles refreshing the backing stores for any open interfaceController
+}
+
+void hciVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	visitUiObjectRef(psSelectedBuilder, visit);
+	BuildController::visitUiObjectRefs(visit);
+	ResearchController::visitUiObjectRefs(visit);
+	ManufactureController::visitUiObjectRefs(visit);
+	CommanderController::visitUiObjectRefs(visit);
+	// The open form's list of objects is rebuilt from the object lists at the start of the next frame,
+	// before any widget runs or is drawn (intDoScreenRefresh). Until then, nothing reads it.
+	if (interfaceController != nullptr)
+	{
+		bool refresh = false;
+		interfaceController->findObject([&visit, &refresh](BASE_OBJECT *psObj) {
+			refresh = refresh || visit(psObj);
+			return false;
+		});
+		if (refresh)
+		{
+			intRefreshScreen();
+		}
+	}
 }
 
 bool intAddRadarWidget()
@@ -1445,24 +1157,28 @@ INT_RETVAL intRunWidgets()
 		{
 			// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
 			// GTYPE_SAVE_START is deprecated, so use MIDMISSION
-			if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
-			{
-				char msg[256] = {'\0'};
-
-				sstrcpy(msg, _("GAME SAVED: "));
-				sstrcat(msg, savegameWithoutExtension(saveGameName));
-				addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-
-				if (widgGetFromID(psWScreen, IDMISSIONRES_SAVE))
+			// At the next safe point (see gamestate_capture.h)
+			std::string path = sRequestResult;
+			requestGameStateCapture([path]() {
+				if (saveGame(path.c_str(), GTYPE_SAVE_MIDMISSION))
 				{
-					widgDelete(psWScreen, IDMISSIONRES_SAVE);
+					char msg[256] = {'\0'};
+
+					sstrcpy(msg, _("GAME SAVED: "));
+					sstrcat(msg, savegameWithoutExtension(saveGameName));
+					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+
+					if (widgGetFromID(psWScreen, IDMISSIONRES_SAVE))
+					{
+						widgDelete(psWScreen, IDMISSIONRES_SAVE);
+					}
 				}
-			}
-			else
-			{
-				ASSERT(false, "intRunWidgets: saveGame Failed");
-				deleteSaveGame_classic(sRequestResult);
-			}
+				else
+				{
+					ASSERT(false, "intRunWidgets: saveGame Failed");
+					deleteSaveGame_classic(path.c_str());
+				}
+			});
 		}
 	}
 
@@ -1800,7 +1516,7 @@ INT_RETVAL intRunWidgets()
 							}
 							else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 							{
-								removeFeature(psFeature, gameWorld);
+								SendDestroyFeature(psFeature);
 							}
 						}
 						else
@@ -2305,9 +2021,9 @@ bool intAddInGameOptionsButton()
 		psExistingBut->show(!hiddenOptionsButton);
 
 		// Trigger Re-position of the Replay Controller form
-		if (replayOverlayScreen && (oldButtonHiddenStatus != hiddenOptionsButton))
+		if (oldButtonHiddenStatus != hiddenOptionsButton)
 		{
-			replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
+			replayOverlayScreenSizeDidChange();
 		}
 		return false;
 	}
@@ -2343,10 +2059,7 @@ bool intAddInGameOptionsButton()
 	}
 
 	// Trigger Re-position of the Replay Controller form
-	if (replayOverlayScreen)
-	{
-		replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
-	}
+	replayOverlayScreenSizeDidChange();
 
 	return true;
 }
@@ -2389,7 +2102,7 @@ bool intAddReticule()
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.x = ReticuleOffsets[i].x;
 		sButInit.y = ReticuleOffsets[i].y;
-		sButInit.pTip = retbutstats[i].tip;
+		sButInit.pTip = reticuleTipText(retbutstats[i].tip);
 		sButInit.style = WBUT_SECONDARY;
 		sButInit.UserData = i;
 		retbutstats[i].downTime = 0;
@@ -2717,6 +2430,21 @@ static bool intAddCommand()
 {
 	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
 	return setController(std::make_shared<CommanderController>(), INT_CMDORDER, IOBJ_COMMAND);
+}
+
+bool intTestShowForm(unsigned which)
+{
+	switch (which % 6)
+	{
+	case 0: return intAddBuild();
+	case 1: return intAddManufacture();
+	case 2: return intAddResearch();
+	case 3: return intAddCommand();
+	case 4: return intAddOrder(nullptr);
+	default:
+		intResetScreen(true);
+		return true;
+	}
 }
 
 //sets up the Intelligence Screen as far as the interface is concerned
@@ -3155,6 +2883,24 @@ void intShowInterface()
 	intAddReticule();
 	intShowPowerBar();
 	intShowGroupSelectionMenu();
+}
+
+ScriptInterfaceRequest getScriptInterfaceRequest()
+{
+	return scriptInterfaceRequest;
+}
+
+void scriptShowInterface(bool show)
+{
+	scriptInterfaceRequest = show ? ScriptInterfaceRequest::Shown : ScriptInterfaceRequest::Hidden;
+	if (show)
+	{
+		intShowInterface();
+	}
+	else
+	{
+		intHideInterface();
+	}
 }
 
 void intHideInterface(bool forceHidePowerbar)

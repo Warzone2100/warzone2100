@@ -57,6 +57,23 @@ void objmemShutdown();
 /* General housekeeping for the object system */
 void objmemUpdate();
 
+// The time to stamp on an object that dies (BASE_OBJECT::died, or the impactTime passed to destroyDroid() and the
+// like). objmemUpdate() runs at the end of every tick: it raises eventDestroyed for the objects that died in that
+// tick, and frees the ones that died before it.
+
+/// gameTime. In a tick, the object gets eventDestroyed at the end of that tick. Between ticks, it is freed at the end
+/// of the next tick without eventDestroyed. Game and level setup removals rely on that.
+uint32_t deathTimeNow();
+
+/// The first moment of the tick being processed, or between ticks of the next one, so the object always gets
+/// eventDestroyed. For deaths caused by a message processed between ticks (every client processes it before that
+/// same tick).
+uint32_t deathTimeInTick();
+
+/* Free every object pending destruction now, whenever it died, without raising eventDestroyed.
+ * For the end of a level, when no tick will see them again. */
+void objmemFreeAllDestroyed();
+
 /* Remove tile visibility for objects killed this tick in the given world, against that
  * world's own map. Safe to call repeatedly; clears the world's pending-removal queue. */
 void flushPendingVisRemoval(GameWorld& world);
@@ -99,6 +116,9 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objS
 
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState);
+
+/*Remove a single Feature from its lists (the reverse of addFeature)*/
+void removeFeatureFromList(FEATURE *psFeatureToRemove, WorldObjectState& objState);
 
 /* Destroy a feature */
 void killFeature(FEATURE *psDel, WorldObjectState& objState);

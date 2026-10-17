@@ -543,6 +543,12 @@ bool truncateTemplateName(WzString &name)
 	return true;
 }
 
+bool initTemplateStore()
+{
+	if (selectedPlayer >= MAX_PLAYERS) { return false; }
+	return templateStoreLoad();
+}
+
 bool initTemplates()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return false; }
@@ -800,6 +806,15 @@ bool loadDroidTemplates(const char *filename)
 	}
 
 	return true;
+}
+
+DROID_TEMPLATE *addReplacedTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate)
+{
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
+	ASSERT_OR_RETURN(nullptr, psTemplate != nullptr, "null template");
+	DROID_TEMPLATE *raw = psTemplate.get();
+	replacedDroidTemplates[player].push_back(std::move(psTemplate));
+	return raw;
 }
 
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)

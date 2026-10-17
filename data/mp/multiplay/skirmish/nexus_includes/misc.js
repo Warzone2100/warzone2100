@@ -5,6 +5,12 @@ function defined(what)
 	return typeof what !== "undefined";
 }
 
+// The last run time of each throttled action, by the calling function's name and the throttle name.
+// A var global, so that a saved game keeps it (properties set on a function object start over on load).
+// Every caller of throttleThis() must therefore be a named function with a name of its own.
+// NOTE: an anonymous caller falls back to a table kept on the function object, which a saved game loses.
+var throttleTimes = {};
+
 //A simple throttle function to make sure something is not executed too much.
 function throttleThis(throttleThis, time)
 {
@@ -19,23 +25,40 @@ function throttleThis(throttleThis, time)
 		time = 2000;
 	}
 
-	if (!defined(debugGetCallerFuncObject().throttleTimes))
+	const caller = debugGetCallerFuncObject();
+	let times;
+
+	if (caller.name === "")
 	{
-		debugGetCallerFuncObject().throttleTimes = {};
+		if (!defined(caller.throttleTimes))
+		{
+			caller.throttleTimes = {};
+		}
+
+		times = caller.throttleTimes;
+	}
+	else
+	{
+		if (!defined(throttleTimes[caller.name]))
+		{
+			throttleTimes[caller.name] = {};
+		}
+
+		times = throttleTimes[caller.name];
 	}
 
-	if (!defined(debugGetCallerFuncObject().throttleTimes[throttleThis]))
+	if (!defined(times[throttleThis]))
 	{
-		debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
+		times[throttleThis] = gameTime;
 		return false;
 	}
 
-	if (gameTime - debugGetCallerFuncObject().throttleTimes[throttleThis] < time)
+	if (gameTime - times[throttleThis] < time)
 	{
 		return true;
 	}
 
-	debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
+	times[throttleThis] = gameTime;
 
 	return false;
 }

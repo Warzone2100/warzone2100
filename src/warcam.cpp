@@ -39,6 +39,7 @@
 #include "lib/gamelib/gtime.h"
 
 #include "warcam.h"
+#include "uiobjectrefs.h"
 
 #include "objects.h"
 #include "display.h"
@@ -118,6 +119,12 @@ static bool camTrackCamera();
 static void camRadarJump();
 
 //-----------------------------------------------------------------------------------
+void warCamVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	// (A tracked droid cleared here stops the tracking at the next frame, as its death does: camTrackCamera)
+	visitUiObjectRef(trackingCamera.target, visit);
+}
+
 /* Sets the camera to inactive to begin with */
 void	initWarCam()
 {
@@ -173,6 +180,11 @@ static void processLeaderSelection()
 
 	bSuccess = false;
 	bestSoFar = UDWORD_MAX;
+
+	if (trackingCamera.target == nullptr || trackingCamera.target->died)
+	{
+		return;  // (the tracking has just stopped: processWarCam)
+	}
 
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
@@ -334,6 +346,14 @@ void	processWarCam()
 		trackingCamera.status = CAM_INACTIVE;
 		break;
 	}
+}
+
+//-----------------------------------------------------------------------------------
+void camTestTrackDroid(DROID *psDroid)
+{
+	ASSERT_OR_RETURN(, psDroid != nullptr && !psDroid->died, "No live droid to track");
+	camAlignWithTarget(psDroid);
+	trackingCamera.status = CAM_TRACK_DROID;
 }
 
 //-----------------------------------------------------------------------------------
@@ -825,8 +845,8 @@ static bool camTrackCamera()
 	PROPULSION_STATS *psPropStats;
 	bool bFlying = false;
 
-	/* Most importantly - see if the target we're tracking is dead! */
-	if (trackingCamera.target->died)
+	/* Most importantly - see if the target we're tracking is dead! (or freed: uiobjectrefs.h) */
+	if (trackingCamera.target == nullptr || trackingCamera.target->died)
 	{
 		return (false);
 	}

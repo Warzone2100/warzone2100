@@ -41,6 +41,9 @@ constexpr size_t MAX_TEMPLATE_NAME_LENGTH = MAX_STR_LENGTH - 1;
 bool truncateTemplateName(WzString &name);
 
 bool initTemplates();
+/// Load the local player's template store without adding its designs to the game: for a GameState load, whose
+/// templates are the saved game's. Designs made afterwards are still stored.
+bool initTemplateStore();
 
 /// Refill the UI template list (localTemplates) from droidTemplates[player]
 /// NOTE: this invalidates every pointer into localTemplates, so it is only safe before any UI or pending production order exists
@@ -55,6 +58,10 @@ DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate);
 
 void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func);
 DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId);
+
+/// Keep a template that is no longer in the player's template list alive (like the template addTemplate() replaces),
+/// for factories and production runs that still refer to it. Used when restoring a saved game.
+DROID_TEMPLATE *addReplacedTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate);
 size_t templateCount(int player);
 
 void clearTemplates(int player);

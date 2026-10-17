@@ -24,6 +24,7 @@
 #include "hci.h"
 #include "intdisplay.h"
 #include "intorder.h"
+#include "uiobjectrefs.h"
 #include "objects.h"
 #include "order.h"
 #include "game_world.h"
@@ -396,6 +397,16 @@ static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 
 static std::vector<DROID *> SelectedDroids;
 static STRUCTURE *psSelectedFactory = nullptr;
+
+void intOrderVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	// (A droid cleared here is dropped from the list, as intRunOrder drops a dead one.
+	// With none left, intRunOrder closes the form.)
+	SelectedDroids.erase(std::remove_if(SelectedDroids.begin(), SelectedDroids.end(), [&visit](DROID *psDroid) {
+		return psDroid != nullptr && visit(psDroid);
+	}), SelectedDroids.end());
+	visitUiObjectRef(psSelectedFactory, visit);
+}
 static std::vector<AVORDER> AvailableOrders;
 
 

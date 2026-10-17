@@ -97,6 +97,7 @@
 #include "movebench.h"
 #include "qtscript.h"
 #include "random.h"
+#include "gamestate_harness.h"
 #include "notifications.h"
 #include "radar.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -514,6 +515,27 @@ const char *getAIName(int player)
 	}
 }
 
+static WzString launchScriptsIni;
+static WzString launchScriptsPath;
+static WzString restoredLaunchScriptsIni;
+static WzString restoredLaunchScriptsPath;
+
+const WzString &getLaunchScriptsIni()
+{
+	return launchScriptsIni;
+}
+
+const WzString &getLaunchScriptsPath()
+{
+	return launchScriptsPath;
+}
+
+void setRestoredLaunchScripts(const WzString &ini, const WzString &path)
+{
+	restoredLaunchScriptsIni = ini;
+	restoredLaunchScriptsPath = path;
+}
+
 void loadMultiScripts()
 {
 	bool defaultRules = true;
@@ -551,6 +573,23 @@ void loadMultiScripts()
 		path = "autohost/";
 		loadExtra = true;
 	}
+
+	// A savegame of a game launched with such a settings file runs its scripts too
+	launchScriptsIni.clear();
+	launchScriptsPath.clear();
+	if (getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost)
+	{
+		launchScriptsIni = ininame;
+		launchScriptsPath = path;
+	}
+	else if (!loadExtra && !restoredLaunchScriptsIni.isEmpty())
+	{
+		ininame = launchScriptsIni = restoredLaunchScriptsIni;
+		path = launchScriptsPath = restoredLaunchScriptsPath;
+		loadExtra = true;
+	}
+	restoredLaunchScriptsIni.clear();
+	restoredLaunchScriptsPath.clear();
 
 	// Reset assigned counter
 	for (auto it = aidata.begin(); it < aidata.end(); ++it)
@@ -3957,7 +3996,13 @@ static void SendFireUp()
 
 	// Pick a random random seed for the synchronised random number generator.
 	// The movement benchmark pins it instead, so a scenario reproduces exactly.
-	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : rand();
+	// (So does --gamestate-test-seed.)
+	const auto testSeed = gamestate::harness::testGameSeed();
+	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : testSeed.has_value() ? testSeed.value() : rand();
+	if (testSeed.has_value())
+	{
+		debug(LOG_INFO, "Game random seed: %u (--gamestate-test-seed)", randomSeed);
+	}
 
 	debug(LOG_INFO, "Sending NET_FIREUP");
 

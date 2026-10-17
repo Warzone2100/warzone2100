@@ -49,6 +49,7 @@
 #include "modding.h"
 #include "main.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "qtscript.h"
 #include "fpath.h"
 #include "pathfinding_backend.h"
@@ -3617,9 +3618,26 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	size_t			fileExtension;
 	char			CurrentFileName[PATH_MAX] = {'\0'};
 
-	executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_SAVING); });
+	// eventGameSaving is deprecated and isn't raised: script code run here, between the last tick and the capture,
+	// would change the game being saved, so the save would differ from the game that goes on.
 
 	ASSERT_OR_RETURN(false, aFileName && strlen(aFileName) > 4, "Bad savegame filename");
+	// A script's loadLevel() has already set aLevelName to the next level, so a save now would record
+	// the next level's name with this level's world (which missionDestroyObjects() may already have emptied of
+	// the other players' objects).
+	// The callers check this first.
+	if (levelChangePending())
+	{
+		debug(LOG_ERROR, "Not saving %s: a level change or a savegame load is pending", aFileName);
+		return false;
+	}
+	// Likewise, a save taken before the messages for the next tick have been processed may resume differently
+	// (see gamestate_capture.h): callers go through requestGameStateCapture(), which waits for them.
+	if (!gameStateCaptureSafe())
+	{
+		debug(LOG_ERROR, "Not saving %s: the messages for the next tick have not all been processed yet", aFileName);
+		return false;
+	}
 	sstrcpy(CurrentFileName, aFileName);
 	debug(LOG_WZ, "saveGame: %s", CurrentFileName);
 

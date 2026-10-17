@@ -71,6 +71,11 @@
 #include "frend.h"
 #include "frontend.h"
 #include "game.h"
+#include "gamestate_capture.h"
+#include "gamestate_snapshot.h"
+#include "gamestate_snapshot_ring.h"
+#include "gamestate_replay_seek.h"
+#include "uiobjectrefs.h"
 #include "gateway.h"
 #include "hci.h"
 #include "intdisplay.h"
@@ -106,6 +111,7 @@
 #include "ingameop.h"
 #include "qtscript.h"
 #include "gamestate_savegame.h"
+#include "gamestate_harness.h"
 #include "template.h"
 #include "activity.h"
 #include "spectatorwidgets.h"
@@ -1142,6 +1148,11 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 //
 void systemShutdown()
 {
+	// Nothing reads the UI's object references any more.
+	// Objects freed from here on (and static ones at exit) don't clear them,
+	// as their holders are being shut down too (uiobjectrefs.h).
+	setUiObjectRefsEnabled(false);
+
 	if (bLoadSaveUp)
 	{
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
@@ -1782,6 +1793,8 @@ static bool stageThreeInitialiseSync()
 	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	pie_InitLighting();
 	getCurrentLightmapData().reset(gameWorld.map.width, gameWorld.map.height);
+	// A GameState load restored the sun, lights, skybox and camera before the view was reset just above
+	gamestate::savegame::applyDeferredColdLoadView();
 
 	if (fromSave)
 	{
@@ -1795,19 +1808,35 @@ static bool stageThreeInitialiseSync()
 	orderSourceReset();
 	orderProvenanceReset();
 
-	if (bMultiPlayer)
-	{
-		multiGameInit();
-		initTemplates();
-	}
-
-	preProcessVisibility(gameWorld.map);
-
 	// A new-format (GameState) cold load already restored its scripting section during the level load
 	// (applyDeferredScripting in levFinalizeLevelLoad, before this), so prepareScripts' queued
 	// research-event replay below sees the restored script globals. Consume the reconstruct marker to
 	// learn it was a cold load (ex. so the bInTutorial reset further down does not clobber the restored value).
 	const bool wasColdLoad = gamestate::savegame::takeColdLoadReconstructFlag();
+
+	if (bMultiPlayer)
+	{
+		multiGameInit(wasColdLoad);
+		// A GameState load restored the saved game's templates,
+		// which already took in the local stored designs when that game started.
+		// Adding them again would take object ids the saving game did not, and could add designs it never had.
+		if (wasColdLoad)
+		{
+			initTemplateStore();
+		}
+		else
+		{
+			initTemplates();
+		}
+	}
+
+	preProcessVisibility(gameWorld.map);
+	// Test harness (--gamestate-test-suppress-loaded-event): restore fidelity without the load-time script events
+	const bool suppressLoadEvents = wasColdLoad && gamestate::harness::suppressLoadedEvent();
+	if (suppressLoadEvents)
+	{
+		discardQueuedResearchEvents();
+	}
 
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
@@ -1818,6 +1847,14 @@ static bool stageThreeInitialiseSync()
 
 	mapInit(gameWorld);
 	gridReset(gameWorld);
+	// eventGameInit and eventStartLevel run after this, and can add or remove objects:
+	// rebuild the grid at the start of the first update.
+	// Not after a GameState load: the grid built here is the one the saved game had,
+	// and a later rebuild would take in changes made before the first update that its grid did not have.
+	if (!wasColdLoad)
+	{
+		gridMarkDirty();
+	}
 
 	//if mission screen is up, close it.
 	if (MissionResUp)
@@ -1846,9 +1883,42 @@ static bool stageThreeInitialiseSync()
 
 	countUpdate();
 
+	// A GameState load rebuilt the world with the network messages off (coldLoadGameInit).
+	// Turn them on as a game start does, before any script code runs,
+	// so scripts send their orders as they did in the saving game.
+	// (turnOffMultiMsg(false) turns them on whatever they were before, so a restore path that calls the pair
+	// would have sent messages after it.)
+	if (wasColdLoad)
+	{
+		ASSERT(!bMultiMessages, "Network messages were turned on during the GameState restore");
+		bMultiMessages = bMultiPlayer;
+	}
+
+	// A GameState load restores the interface the scripts had set up.
+	// A save that has all of it (and the scripts' state, which every GameState save has) restores the game as it was,
+	// and runs no eventGameLoaded: the scripts go on as if it had never been saved.
+	// An older one (a legacy save, or a GameState save from before 4.8 without the interface) still runs it,
+	// for the scripts to set up again what it didn't keep.
+	bool restoredInterface = false;
+	if (wasColdLoad)
+	{
+		restoredInterface = gamestate::savegame::applyDeferredColdLoadInterface();
+	}
+
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{
-		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
+		if (suppressLoadEvents)
+		{
+			debug(LOG_INFO, "Not firing eventGameLoaded (--gamestate-test-suppress-loaded-event)");
+		}
+		else if (restoredInterface)
+		{
+			debug(LOG_SAVE, "Not firing eventGameLoaded: the save restored the game as it was");
+		}
+		else
+		{
+			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
+		}
 	}
 	else
 	{
@@ -1915,7 +1985,12 @@ static bool stageThreeInitialiseSync()
 		// desync). The first post-resume boundary (> gameTime) is reproduced by applyResumeSyncDebugCrc()
 		// above and so is left verifiable. See setSyncCheckFloorTime.
 		setSyncCheckFloorTime(gameTime);
+
+		// Test harness (--gamestate-resave-on-load): save again now, after the load completed and before the first tick
+		gamestate::harness::onColdLoadComplete();
 	}
+	// Test harness (--gamestate-test-continue-levels): log the replaced textures
+	gamestate::harness::noteLevelStarted();
 
 	return true;
 }
@@ -1945,6 +2020,11 @@ LoadingTask<> stageThreeInitialiseTask(ResourceLoadingController& controller)
 bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
+
+	clearPendingGameStateCaptures();  // requested for the world being shut down
+	clearGameStateRestoreFailed();
+	gamestate::replaySeekCancel();
+	gamestate::snapshotRingStop();  // (before the stats it reads are released)
 
 	resetHostLaunch();
 

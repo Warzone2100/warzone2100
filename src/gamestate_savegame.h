@@ -76,6 +76,14 @@ struct SetupHeaderInfo
 	Sha256 mapHash;
 	bool builtInMap = false;
 	std::vector<SavegameMod> mods;
+	// The AI script file of each slot with an AI ({slot, js}), to resolve the slots' AI indices once the save's mods
+	// are mounted (resolveSavedAIs)
+	std::vector<std::pair<unsigned, std::string>> aiScripts;
+	// The start and derrick positions the scripts were given when the game started (world coordinates for the start
+	// positions, tile coordinates for the derricks), if the document has them
+	bool hasScriptPositions = false;
+	std::vector<Vector2i> startPositions;
+	std::vector<Vector2i> derrickPositions;
 	// Informational engine provenance recorded at save time.
 	// Not used to gate the restore; surfaced for diagnostics only.
 	std::string engineVersionString;
@@ -90,6 +98,13 @@ nlohmann::ordered_json writeSetupHeader(SaveType saveType);
 /// orchestration-relevant subset (save type, level name + map hash, mod list).
 /// Throws gamestate::StateError on malformed data.
 SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j);
+
+/// Point the slots' AI indices (PLAYER::ai, an index into the AI list) at the AI scripts the save recorded.
+/// The list order depends on the local configuration (the default AI comes first) and on the mounted mods,
+/// so an index saved on one machine can name another AI here.
+/// Reads the AI list again if it lacks one of the saved scripts: call it once the save's mods are mounted.
+/// A slot whose script isn't found keeps its saved index, with a warning.
+void resolveSavedAIs(const SetupHeaderInfo &header);
 
 /// Collect the currently loaded mods as {name, hash}, de-duplicated while preserving
 /// load order. Exposed for the header writer and the load-menu sidecar.
@@ -225,6 +240,17 @@ void applyDeferredScripting();
 /// Replay the cold-load's deferred messages section. Call once, AFTER the level's data files (VIEWDATA)
 /// have loaded and BEFORE the deferred scripting pass. No-op unless a cold load is pending.
 void applyDeferredColdLoadMessages();
+
+/// Apply the cold load's presentation section and camera rotation again, once stageThreeInitialise has reset the
+/// view (init3DView, pie_InitLighting). No-op unless a cold load is pending.
+void applyDeferredColdLoadView();
+
+/// Apply the saved interface the scripts set up (whether it is shown, the reticule buttons),
+/// once the scripts are loaded and the interface is up, where eventGameLoaded runs (stageThreeInitialise).
+/// Returns whether the save restored all the interface the scripts set up
+/// (that, and the replaced textures of its presentation section), and so needs no eventGameLoaded.
+/// No-op (false) unless a cold load is pending.
+bool applyDeferredColdLoadInterface();
 
 } // namespace savegame
 } // namespace gamestate

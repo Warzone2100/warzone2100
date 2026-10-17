@@ -77,7 +77,9 @@
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
 #include "modding.h"
+#include "gamestate_replay_seek.h"
 #include "multiplay.h"
+#include "gamestate_capture.h"
 #include "ordersource_wire.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
@@ -1470,6 +1472,7 @@ bool recvMessage()
 		if (queue.queueType == QUEUE_GAME)
 		{
 			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
+			gameStateCaptureCheckGameMessage(queue.index, messageTypeToString(type));
 		}
 
 		if (!shouldProcessMessage(queue, type))
@@ -1555,9 +1558,17 @@ bool recvMessage()
 					// ignore
 					break;
 				}
+				debug(LOG_INFO, "Replay ended at gameTime %u", gameTime);
+				gamestate::noteReplayEnded();
 				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				showSpectatorGameOverScreen();
+				if (headlessGameMode())
+				{
+					// Nobody is there to press ESC: quit, as a headless game does when it is over (gameOverMessage)
+					debug(LOG_WARNING, "Headless replay playback completed successfully!");
+					wzQuit(0);
+				}
 				break;
 			default:
 				processedMessage1 = false;
@@ -2448,6 +2459,15 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Features
 
+// Ask every player to remove a feature (the debug mode's demolish tool)
+bool SendDestroyFeature(const FEATURE *psFeature)
+{
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_FEATURE);
+	uint32_t id = psFeature->id;
+	NETuint32_t(w, id);
+	return NETend(w);
+}
+
 // process a destroy feature msg.
 bool recvDestroyFeature(NETQUEUE queue)
 {
@@ -2482,7 +2502,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getStatsName(pF->psStats));
 	// Remove the feature locally
 	turnOffMultiMsg(true);
-	destroyFeature(pF, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+	destroyFeature(pF, deathTimeInTick(), gameWorld);
 	turnOffMultiMsg(false);
 
 	return true;
@@ -3041,7 +3061,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 			}
 			else			// show effects
 			{
-				destroyStruct(psStruct, gameTime, gameWorld);
+				destroyStruct(psStruct, deathTimeNow(), gameWorld);
 			}
 		}
 
@@ -3055,7 +3075,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 			}
 			else				// show effects
 			{
-				destroyDroid(d, gameTime, gameWorld);
+				destroyDroid(d, deathTimeNow(), gameWorld);
 			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
@@ -3077,7 +3097,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 				}
 				else			// show effects
 				{
-					destroyStruct(psStruct, gameTime, gameWorld);
+					destroyStruct(psStruct, deathTimeNow(), gameWorld);
 				}
 			}
 			return IterationResult::CONTINUE_ITERATION;
@@ -3096,39 +3116,44 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 	if (playerIndex == selectedPlayer)
 	{
-		// reset the widget screen to just the reticule (close all panels)
-		auto savedIntMode = intMode;
-		intResetScreen(false, true);
-		intMode = savedIntMode; // restore intMode from before intResetScreen call (or it may not be possible to click "continue game" on the mission results screen)
-
-		// disable various reticule buttons
-		std::array<UDWORD, 5> reticuleButtonsToDisable{IDRET_MANUFACTURE, IDRET_RESEARCH, IDRET_BUILD, IDRET_DESIGN, IDRET_COMMAND};
-		for (UDWORD buttonID : reticuleButtonsToDisable)
-		{
-			if (intCheckReticuleButEnabled(buttonID))
-			{
-				setReticuleStats(buttonID, "", "", "");
-			}
-		}
-
-		// hide the power bar
-		forceHidePowerBar(true);
-
-		if (!headlessGameMode())
-		{
-			// enable "god mode" for map + object visibility (+ minimap)
-			enableGodMode();
-		}
-
-		// add spectator mode message
-		bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();
-		addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
-		addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? 30 : 15);
-
-		specLayerInit(!streamer_spectator_mode());
+		setUpLocalSpectatorInterface();
 	}
 
 	turnOffMultiMsg(false);
 
 	return true;
+}
+
+void setUpLocalSpectatorInterface()
+{
+	// reset the widget screen to just the reticule (close all panels)
+	auto savedIntMode = intMode;
+	intResetScreen(false, true);
+	intMode = savedIntMode; // restore intMode from before intResetScreen call (or it may not be possible to click "continue game" on the mission results screen)
+
+	// disable various reticule buttons
+	std::array<UDWORD, 5> reticuleButtonsToDisable{IDRET_MANUFACTURE, IDRET_RESEARCH, IDRET_BUILD, IDRET_DESIGN, IDRET_COMMAND};
+	for (UDWORD buttonID : reticuleButtonsToDisable)
+	{
+		if (intCheckReticuleButEnabled(buttonID))
+		{
+			setReticuleStats(buttonID, "", "", "");
+		}
+	}
+
+	// hide the power bar
+	forceHidePowerBar(true);
+
+	if (!headlessGameMode())
+	{
+		// enable "god mode" for map + object visibility (+ minimap)
+		enableGodMode();
+	}
+
+	// add spectator mode message
+	bool lowUISpectatorMode = streamer_spectator_mode() || NETisReplay();
+	addConsoleMessage(_("Spectator Mode"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? MAX_CONSOLE_MESSAGE_DURATION : 15);
+	addConsoleMessage(_("You are a spectator. Enjoy watching the game!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, (!lowUISpectatorMode) ? 30 : 15);
+
+	specLayerInit(!streamer_spectator_mode());
 }

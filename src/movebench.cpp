@@ -172,6 +172,14 @@ const BenchScenario scenarios[] =
 	{ "perf_scout_patrol",   "movebench_perf_scout_patrol.json",    1500, 0x5EEDBEEF, false },
 	{ "perf_repair_search",  "movebench_perf_repair_search.json",   2000, 0x5EEDBEEF, false },
 	{ "perf_repair_facility","movebench_perf_repair_facility.json", 2000, 0x5EEDBEEF, false },
+	// Not a benchmark: deaths of every shape the GameState save / load tests need (tests/gamestate).
+	{ "gamestate_deaths",    "movebench_gamestate_deaths.json",     2000, 0x5EEDBEEF, false },
+	// Not a benchmark: script groups and labels the GameState save / load tests need (tests/gamestate).
+	{ "gamestate_scripts",   "movebench_gamestate_scripts.json",    1500, 0x5EEDBEEF, false },
+	// Not a benchmark: script state an in-process restore has to roll back (prints rewindscript: lines).
+	{ "gamestate_rewind",    "movebench_gamestate_rewind.json",      600, 0x5EEDBEEF, false },
+	// Not a benchmark: grid readers and objects that died earlier in the same tick (prints deadgrid: lines).
+	{ "dead_grid",           "movebench_dead_grid.json",             200, 0x5EEDBEEF, false },
 };
 
 optional<uint32_t> seedOverride;

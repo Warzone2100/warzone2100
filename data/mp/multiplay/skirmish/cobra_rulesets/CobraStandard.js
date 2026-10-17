@@ -53,7 +53,9 @@ const propulsionStats = [
 ];
 */
 
-const _WEAPON_STATS =
+// A var global, so a saved game keeps the defense lists defendNTWMap() reverses in place
+// (subPersonalities, also a var global, refers to the same lists).
+var _WEAPON_STATS =
 {
 	machineguns:
 	{

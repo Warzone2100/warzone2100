@@ -30,6 +30,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <array>
+#include <vector>
 
 class WzString;
 struct BASE_OBJECT;
@@ -93,6 +94,10 @@ bool scriptInit();
 void scriptSetStartPos(int position, int x, int  y);
 void scriptSetDerrickPos(int x, int y);
 Vector2i getPlayerStartPosition(int player);
+/// The derrick positions given to the scripts (derrickPositions), in tile coordinates, in their order
+std::vector<Vector2i> scriptGetDerrickPositions();
+/// Forget the derrick positions (for a GameState load, which then sets the saved ones)
+void scriptClearDerrickPositions();
 
 /// Initialize script system
 bool initScripts();
@@ -102,6 +107,16 @@ bool shutdownScripts();
 
 /// Run after all data is loaded, but before game is started.
 bool prepareScripts(bool loadGame);
+
+/// Load every script instance again from the file it was loaded from, in the same order, for the same player,
+/// difficulty and binding, dropping all of their state (globals, closures, groups, labels and timers).
+/// For an in-process restore (gamestate_snapshot.h), which then applies the snapshot's script state.
+/// No event is raised. A script callback held by the UI (setReticuleButton's) goes inert.
+/// Returns false if an instance could not be loaded again.
+bool reloadScriptInstances();
+
+/// Drop the eventResearched calls queued while scripts were not ready (the savegame-load replay). Test harness only.
+void discardQueuedResearchEvents();
 
 /// Run this each logical frame to update frame-dependent script states
 bool updateScripts();
@@ -130,6 +145,14 @@ bool saveScriptStates(const char *filename);
 //     first so restoring onto the running match does not duplicate them. -1 matches the saved
 //     "me"/scriptName verbatim (savegame-style).
 bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer = -1);
+/// The saved script instances the last loadScriptStates(json) found no running instance for (their state was skipped).
+size_t scriptStatesLastUnmatchedInstances();
+/// Whether a script instance with this script name runs for this player
+bool scriptInstanceRunning(int player, const std::string &scriptName);
+/// A callback calling the named function of the script instance of this player and name (as setReticuleButton's), or
+/// none if no such instance is running
+playerCallbackFunc scriptNamedCallback(int player, const std::string &scriptName, const std::string &function);
+size_t scriptInstanceCount();
 bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer = -1);
 
 /// Whether the script subsystem is initialized and scripts are running.
@@ -319,6 +342,17 @@ private:
 	typedef std::map<wzapi::scripting_instance *, GROUPMAP *> ENGINEMAP;
 	ENGINEMAP groups;
 
+	/// What each instance was loaded from, to load it again (reloadScriptInstances)
+	struct InstanceSource
+	{
+		WzString path;
+		int player;
+		AIDifficulty difficulty;
+		wzapi::ScriptBinding binding;
+	};
+	std::map<wzapi::scripting_instance *, InstanceSource> instanceSources;
+	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding, bool clearLog);
+
 	/// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 	/// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 	/// host, we do not need to worry about each peer simulating the world differently.
@@ -336,6 +370,7 @@ public:
 	bool shutdownScripts();
 
 	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding);
+	bool reloadScriptInstances();
 
 	// Set/write variables in the script's global context, run after loading script,
 	// but before triggering any events.
@@ -348,6 +383,8 @@ public:
 	bool saveScriptStates2(const char *filename);
 	bool saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer = -1);
 	bool loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer = -1);
+	/// Saved instances the last loadScriptStates2 found no running instance for (their state was not restored)
+	size_t lastUnmatchedInstances = 0;
 
 	bool unregisterFunctions(wzapi::scripting_instance *instance);
 	void prepareLabels();

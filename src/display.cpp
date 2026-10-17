@@ -40,6 +40,7 @@
 
 #include "action.h"
 #include "display.h"
+#include "uiobjectrefs.h"
 #include "ordersource.h"
 #include "droid.h"
 #include "fpath.h"
@@ -158,6 +159,13 @@ static bool	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static bool cameraAccel = true;
+
+void displayVisitUiObjectRefs(const UiObjectRefVisitor &visit)
+{
+	// (Set and read in the same cursor evaluation, and cleared so they don't outlive their droid)
+	visitUiObjectRef(psSelectedVtol, visit);
+	visitUiObjectRef(psDominantSelected, visit);
+}
 
 bool	rotActive = false;
 bool	gameStats = false;

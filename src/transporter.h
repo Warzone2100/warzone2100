@@ -63,6 +63,8 @@ bool transporterIsEmpty(const DROID *psTransporter);
 
 /*launches the defined transporter to the offworld map*/
 bool launchTransporter(DROID *psTransporter);
+/// --gamestate-test-reinforce: put a home base droid aboard the transporter waiting off-world, and launch it
+bool transporterTestLaunchReinforcements();
 
 /*checks how long the transporter has been travelling to see if it should
 have arrived - returns true when there*/

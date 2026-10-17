@@ -798,6 +798,11 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 			// ignore everything but people
 			continue;
 		}
+		if (psObj->died)
+		{
+			// Already dead (ex. squished earlier in this tick): the grid keeps dead objects until the end of the tick
+			continue;
+		}
 
 		ASSERT_OR_RETURN(, psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_PERSON, "squished - eerk");
 
@@ -2815,11 +2820,14 @@ void moveUpdateDroid(DROID *psDroid)
 		moveUpdateGroundModel(psDroid, moveSpeed, moveDir);
 	}
 
-	if (map_coord(oldx) != map_coord(psDroid->pos.x)
-	    || map_coord(oldy) != map_coord(psDroid->pos.y))
+	const bool movedTile = map_coord(oldx) != map_coord(psDroid->pos.x) || map_coord(oldy) != map_coord(psDroid->pos.y);
+	// The tile coverage depends on the tile, and for lift propulsion on the height band (see visTilesUpdate)
+	if (movedTile || (psPropStats->propulsionType == PROPULSION_TYPE_LIFT && visLiftHeightBand(psDroid) != psDroid->visOriginBand))
 	{
 		visTilesUpdate((BASE_OBJECT *)psDroid, gameWorld.map);
-
+	}
+	if (movedTile)
+	{
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)
 		checkLocalFeatures(psDroid);
 

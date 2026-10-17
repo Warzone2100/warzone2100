@@ -265,6 +265,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
  * Hopefully by this time, no pointers still refer to it! */
 bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 {
+	gridMarkDirty();  // The grid may still point to it
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
@@ -358,6 +359,27 @@ void objmemUpdate()
 	}
 }
 
+uint32_t deathTimeNow()
+{
+	return gameTime;
+}
+
+uint32_t deathTimeInTick()
+{
+	return gameTime - deltaGameTime + 1;
+}
+
+void objmemFreeAllDestroyed()
+{
+	flushPendingVisRemoval(gameWorld);
+	flushPendingVisRemoval(mission.gameWorld);
+	for (BASE_OBJECT *psObj : psDestroyedObj)
+	{
+		objmemDestroy(psObj, true);
+	}
+	psDestroyedObj.clear();
+}
+
 uint32_t generateNewObjectId()
 {
 	// Generate even ID for unsynchronized objects. This is needed for debug objects, templates and other border lines cases that should preferably be removed one day.
@@ -430,7 +452,7 @@ static inline void destroyObject(WorldObjectState& objState, PerPlayerObjectList
 		objState.pendingVisRemoval.emplace_back((BASE_OBJECT*)object);
 
 		// Set destruction time
-		object->died = gameTime;
+		object->died = deathTimeNow();
 	}
 	scriptRemoveObject(object);
 }
@@ -624,6 +646,7 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 {
 	using Traits = GlobalEntityContainerTraits<Entity>;
 	auto& entityContainer = Traits::getContainer();
+	gridMarkDirty();  // The grid may still point to them
 	for (auto& list : entityLists)
 	{
 		for (auto* ent : list)
@@ -806,6 +829,20 @@ void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState)
 	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		addObjectToFuncList(objState.oils, psFeatureToAdd, 0);
+	}
+}
+
+/*Remove a single Feature from its lists (the reverse of addFeature)*/
+void removeFeatureFromList(FEATURE *psFeatureToRemove, WorldObjectState& objState)
+{
+	ASSERT(psFeatureToRemove->type == OBJ_FEATURE, "removeFeatureFromList: pointer is not a feature");
+	auto &list = objState.features[0];
+	auto it = std::find(list.begin(), list.end(), psFeatureToRemove);
+	ASSERT_OR_RETURN(, it != list.end(), "Feature %p not found in list", static_cast<void *>(psFeatureToRemove));
+	list.erase(it);
+	if (psFeatureToRemove->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		removeObjectFromFuncList(objState.oils, psFeatureToRemove, 0);
 	}
 }
 

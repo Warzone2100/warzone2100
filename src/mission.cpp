@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "mission.h"
+#include "gamestate_harness.h" // continueLevels (test-only)
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -48,6 +49,7 @@
 #include "lib/netplay/netplay.h"
 
 #include "game.h"
+#include "gamestate_capture.h"
 #include "projectile.h"
 #include "power.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -839,12 +841,13 @@ void addTransporterTimerInterface()
 #define	EDGE_SIZE	1
 
 /* fly in transporters at start of level */
-void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
+DROID *missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 {
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY;
+	DROID *psFlownIn = nullptr;
 
-	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
+	ASSERT_OR_RETURN(nullptr, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
 
 	iLandX = getLandingX(iPlayer);
 	iLandY = getLandingY(iPlayer);
@@ -852,7 +855,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 	iZ = (UWORD)(map_Height(gameWorld.map, iX, iY) + OFFSCREEN_HEIGHT);
 
 	//get the droids for the mission
-	mutating_list_iterate(mission.gameWorld.objects.droids[iPlayer], [iPlayer, bTrackTransporter, iX, iY, iZ, iLandX, iLandY](DROID* psTransporter)
+	mutating_list_iterate(mission.gameWorld.objects.droids[iPlayer], [iPlayer, bTrackTransporter, iX, iY, iZ, iLandX, iLandY, &psFlownIn](DROID* psTransporter)
 	{
 		SDWORD iDx, iDy;
 
@@ -906,12 +909,14 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 
 				audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_FLIGHT, moveCheckDroidMovingAndVisible);
 
+				psFlownIn = psTransporter;
 				//only want to fly one transporter in at a time now - AB 14/01/99
 				return IterationResult::BREAK_ITERATION;
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
+	return psFlownIn;
 }
 
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
@@ -1010,6 +1015,7 @@ static void saveMissionData()
 	removeSpotters();
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
+	gridMarkDirty();  // The grid holds the objects of the world that just left
 
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
@@ -1047,6 +1053,7 @@ void restoreMissionData()
 	audio_StopAll();
 
 	//clear all the lists
+	proj_ReleaseExpectedDamage();
 	proj_FreeAllProjectiles();
 	clearReferencesToOffWorldObjects();
 	freeAllDroids(gameWorld);
@@ -1068,6 +1075,7 @@ void restoreMissionData()
 	fpathActiveBackend().waitForIdle();
 	gameWorld = std::move(mission.gameWorld);
 	mission.gameWorld = {};
+	gridMarkDirty();  // The grid holds the objects of the world that just left
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		for (DROID* psObj : gameWorld.objects.droids[inc])
@@ -2286,7 +2294,41 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
 
-//update function for the transporter timer
+/* Each tick, after the droids and the mission timer (gameStateUpdate):
+   reinforcements the player launched during an off-world mission (their transporter waits at the home base,
+   DACTION_TRANSPORTWAITTOFLYIN) start flying in TRANSPORTER_REINFORCE_LEADIN before the reinforcement time is up,
+   so they land about when the transporter timer reaches 0. */
+void missionReinforcementUpdate()
+{
+	if (selectedPlayer >= MAX_PLAYERS || mission.ETA < 0 || mission.ETA == LZ_COMPROMISED_TIME)
+	{
+		return;
+	}
+	const auto &homeDroids = mission.gameWorld.objects.droids[selectedPlayer];
+	const auto waiting = std::find_if(homeDroids.begin(), homeDroids.end(), [](const DROID *psDroid) {
+		return psDroid->isTransporter() && psDroid->action == DACTION_TRANSPORTWAITTOFLYIN;
+	});
+	if (waiting == homeDroids.end())
+	{
+		return;
+	}
+	const SDWORD timeRemaining = mission.ETA - static_cast<SDWORD>(gameTime - g_iReinforceTime);
+	if (timeRemaining >= TRANSPORTER_REINFORCE_LEADIN)
+	{
+		return;
+	}
+	// (An empty transporter, sent to move droids to safety, isn't flown in: the action update brings it back
+	// when the time is up)
+	if (DROID *psTransporter = missionFlyTransportersIn(selectedPlayer, false))
+	{
+		executeFnAndProcessScriptQueuedRemovals([psTransporter]()
+		{
+			triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
+		});
+	}
+}
+
+//update function for the transporter timer (display only: missionReinforcementUpdate flies the reinforcements in)
 void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
@@ -2320,19 +2362,6 @@ void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 				if (timeRemaining < 0)
 				{
 					timeRemaining = 0;
-				}
-				if (timeRemaining < TRANSPORTER_REINFORCE_LEADIN)
-				{
-					// arrived: tell the transporter to move to the new onworld
-					// location if not already doing so
-					if (psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN)
-					{
-						missionFlyTransportersIn(selectedPlayer, false);
-						executeFnAndProcessScriptQueuedRemovals([psTransporter]()
-						{
-							triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
-						});
-					}
 				}
 			}
 			fillTimeDisplay(*Label, timeRemaining, false);
@@ -2733,15 +2762,18 @@ void intRunMissionResult()
 
 				if (!bRequestLoad)
 				{
-					char msg[256] = {'\0'};
-
 					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
 					// (the "Save Game" button is no longer added)
 					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
-					saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION);
-					sstrcpy(msg, _("GAME SAVED :"));
-					sstrcat(msg, savegameWithoutExtension(sRequestResult));
-					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+					// At the next safe point (see gamestate_capture.h)
+					std::string path = sRequestResult;
+					requestGameStateCapture([path]() {
+						char msg[256] = {'\0'};
+						saveGame(path.c_str(), GTYPE_SAVE_MIDMISSION);
+						sstrcpy(msg, _("GAME SAVED :"));
+						sstrcat(msg, savegameWithoutExtension(path.c_str()));
+						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+					});
 				}
 			}
 		}
@@ -2884,6 +2916,17 @@ bool setUpMission(LEVEL_TYPE type)
 		{
 			bPlaySuccess = false;
 		}
+		// --gamestate-test-continue-levels: go on as the continue button does,
+		// with game updates paused as the result screen pauses them until stageThreeInitialise
+		// (no frame may draw the world before the next level starts).
+		// Game time isn't paused, as only the result screen's removal would start it again.
+		if (gamestate::harness::continueLevels())
+		{
+			clearCampaignName();
+			setGameUpdatePause(true);
+			launchMission();
+			return true;
+		}
 		// Give the option of save/continue
 		if (!intAddMissionResult(true, bPlaySuccess, true))
 		{
@@ -2906,6 +2949,16 @@ bool setUpMission(LEVEL_TYPE type)
 			intResetScreen(false);
 		}
 
+		// --gamestate-test-continue-levels: go on as the continue button does,
+		// with game updates paused as the result screen pauses them until stageThreeInitialise
+		// (no frame may draw the world before the next level starts).
+		// Game time isn't paused, as only the result screen's removal would start it again.
+		if (gamestate::harness::continueLevels())
+		{
+			setGameUpdatePause(true);
+			launchMission();
+			return true;
+		}
 		// Give the option of save / continue
 		if (!intAddMissionResult(true, true, true))
 		{
@@ -3185,6 +3238,7 @@ void missionDestroyObjects()
 	UBYTE Player;
 
 	debug(LOG_SAVE, "called");
+	proj_ReleaseExpectedDamage();
 	proj_FreeAllProjectiles();
 	for (Player = 0; Player < MAX_PLAYERS; Player++)
 	{
@@ -3239,8 +3293,10 @@ void missionDestroyObjects()
 	{
 		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
 	}
-	gameTime++;	// Wonderful hack to ensure objects destroyed above get free'ed up by objmemUpdate.
-	objmemUpdate();	// Actually free objects removed above
+	// The level is ending: free every object pending destruction.
+	// (objmemUpdate() would miss those removed by a GAME_DEBUG_REMOVE_* message after the last tick,
+	// which die at gameTime + 1.)
+	objmemFreeAllDestroyed();
 }
 
 void processPreviousCampDroids()

@@ -306,10 +306,18 @@ bool SendBuildFinished(const STRUCTURE *psStruct);
 bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj);
 void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl, const OrderSource &source);
 
+// features . multiplay
+bool SendDestroyFeature(const FEATURE *psFeature);
+
 // droids . multibot
 bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
+/// The local droid orders queued since the last sendQueuedDroidInfo(), one encoded message each, in queue order
+/// (not in any game queue yet, so a GameState save keeps them in its pending-resume section).
+std::vector<std::vector<uint8_t>> captureQueuedDroidInfo();
+/// Replace the queued local droid orders with ones from captureQueuedDroidInfo(). Returns how many were restored.
+size_t restoreQueuedDroidInfo(const std::vector<std::vector<uint8_t>> &raw);
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add, const OrderSource &source);
 
 bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state, const OrderSource &source);
@@ -327,7 +335,7 @@ void to_json(nlohmann::json& j, const JoinConnectionDescription& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription& v);
 
 void playerResponding();
-bool multiGameInit();
+bool multiGameInit(bool fromSnapshot = false);  ///< fromSnapshot: a GameState load (the restored world is authoritative)
 bool multiGameShutdown();
 bool multiStartScreenInit();
 
@@ -385,6 +393,9 @@ bool shouldHideHostFreeText();
 
 bool setGameStoryLogPlayerDataValue(uint32_t playerIndex, const std::string& key_str, const std::string& value_str);
 bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
+/// Set up the local player's spectator interface and god-mode view (also for a game loaded with the local player
+/// already a spectator).
+void setUpLocalSpectatorInterface();
 
 class WZGameReplayOptionsHandler : public ReplayOptionsHandler
 {

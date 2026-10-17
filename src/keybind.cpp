@@ -77,6 +77,7 @@
 #include "multigifts.h"
 #include "loadsave.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "droid.h"
 #include "move.h"
 #include "spectatorwidgets.h"
@@ -2716,20 +2717,30 @@ void kf_QuickSave()
 		return; // Bail out if we're running a replay
 	}
 
-	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
-	const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
-	if (WZ_PHYSFS_isDirectory(quickSaveFolder))
+	if (levelChangePending())
 	{
-		deleteSaveGame(quickSaveFolder);
+		// Before the old quicksave is deleted: saveGame() would refuse
+		console(_("QuickSave not possible while the level is changing"));
+		return;
 	}
-	if (saveGame(filename, GTYPE_SAVE_MIDMISSION)) // still expects a .gam filename... TODO: FIX
-	{
-		console(_("QuickSave"));
-	}
-	else
-	{
-		console(_("QuickSave failed"));
-	}
+
+	// At the next safe point (see gamestate_capture.h)
+	requestGameStateCapture([]() {
+		const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
+		const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
+		if (WZ_PHYSFS_isDirectory(quickSaveFolder))
+		{
+			deleteSaveGame(quickSaveFolder);
+		}
+		if (saveGame(filename, GTYPE_SAVE_MIDMISSION)) // still expects a .gam filename... TODO: FIX
+		{
+			console(_("QuickSave"));
+		}
+		else
+		{
+			console(_("QuickSave failed"));
+		}
+	});
 }
 
 void kf_QuickLoad()

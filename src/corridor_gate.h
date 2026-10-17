@@ -129,6 +129,15 @@ struct CorridorFlowWorld
 /// restored carry has measured that player's flow against the world's current corridor map.
 std::optional<CorridorGateCarry> corridorGateCarry(const GameWorld &world, unsigned player);
 
+/// Whether this world's corridor flow has already been updated against (and announced into the sync
+/// stream) the corridor map the world now holds. A save records it so a restored world does not
+/// announce the map again on its first update, which the saved run would not have done.
+bool corridorGateMapAnnounced(const GameWorld &world);
+
+/// Marks the world's current corridor map as already announced, as it was when the save was written.
+/// Call after the carries are restored. Players without a carry get the empty flow the saved run held.
+void corridorGateRestoreMapAnnounced(GameWorld &world);
+
 /// Restores a saved carry into this world's flow for one player.
 /// Applied immediately, and only if it was recorded against the corridor map the world now holds.
 void corridorGateRestoreCarry(GameWorld &world, unsigned player, const CorridorGateCarry &carry);

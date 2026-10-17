@@ -78,13 +78,34 @@ nlohmann::ordered_json gameStateToJson(ScriptScope scriptScope = ScriptScope::Al
 /// Restore live match state from a JSON document. Throws StateError on bad data.
 /// deferMessages skips the "messages" section (intel/proximity), for the disk cold-load where the level's
 /// VIEWDATA is not yet loaded when this runs. The caller replays it later via applyGameStateMessages().
-void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope = ScriptScope::AllInstances, bool deferMessages = false);
+/// inProcess: an in-process restore of a snapshot taken by this game (gamestate_snapshot.h), not a cold load.
+/// Every script instance is loaded again before the scripting section is applied, as on a cold load.
+void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope = ScriptScope::AllInstances, bool deferMessages = false, bool inProcess = false);
+
+/// The number of non-null object references the last gameStateFromJson could not resolve (restored as null).
+/// An honest snapshot has none.
+uint32_t gameStateLastRestoreUnresolvedReferences();
+
+/// Check what a GameState document alone decides, as an in-process restore does before changing anything
+/// (sections, map, objects, and that every object reference outside the scripts resolves within the document).
+/// Throws StateError on the first problem.
+void checkGameStateDocument(const nlohmann::ordered_json &j);
+
+/// The stage of the last gameStateFromJson (or deserializeGameState) a failure happened in:
+/// nullptr if it failed before changing any live state, else the last stage it reached
+/// ("teardown", "terrain", "globals", "formations", "worlds", "dying", "pass1", "pass2", "post", "sections",
+/// "scripting", "derived", "counters", or "done" on success).
+const char *gameStateLastRestoreStage();
+
+/// Make gameStateFromJson throw a StateError when it reaches that stage (--gamestate-rewind-fault).
+/// Empty: never.
+void setGameStateRestoreFaultStage(const std::string &stage);
 
 /// Serialize the current live match state to a (canonical, compact) JSON string.
 std::string serializeGameState(ScriptScope scriptScope = ScriptScope::AllInstances);
 
 /// Restore live match state from a JSON string. Throws StateError on bad data.
-void deserializeGameState(const std::string &jsonText, ScriptScope scriptScope = ScriptScope::AllInstances);
+void deserializeGameState(const std::string &jsonText, ScriptScope scriptScope = ScriptScope::AllInstances, bool inProcess = false);
 
 /// Parse a JSON document with a hard nesting-depth cap, throwing StateError past the limit.
 /// Used at the untrusted-input ingress parses.
@@ -106,6 +127,11 @@ void applyGameStateScripting(const nlohmann::ordered_json &gameStateDoc, ScriptS
 /// messages after the level's VIEWDATA has finished loading (gameStateFromJson deferMessages skips it
 /// during the early world restore). No-op if the section is absent.
 void applyGameStateMessages(const nlohmann::ordered_json &gameStateDoc);
+
+/// Apply ONLY the "presentation" section of a GameState document (sun, lighting, fog color, weather, skybox, ...).
+/// The disk cold-load applies it again once stageThreeInitialise has reset the view (init3DView, pie_InitLighting).
+/// No-op if the section is absent.
+void applyGameStatePresentation(const nlohmann::ordered_json &gameStateDoc);
 
 /// In-engine determinism harness self-test (round-trip + RNG-sequence fidelity + byte-stability).
 /// Needs no game data - safe to run very early. Returns true if all checks pass.

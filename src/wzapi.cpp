@@ -27,6 +27,7 @@
 #include "lib/framework/wzpaths.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/file.h"
+#include "lib/framework/crc.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
@@ -77,6 +78,7 @@
 #include "advvis.h"
 #include "loadsave.h"
 #include "wzapi.h"
+#include "visibility.h"
 #include "ordersource.h"
 #include "order.h"
 #include "chat.h"
@@ -206,9 +208,39 @@ bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, 
 	{
 		calcDataHash(reinterpret_cast<const uint8_t *>(*ppFileData), *pFileSize, DATA_SCRIPT);
 	}
+	noteSourceFile(path, *ppFileData, *pFileSize);
 
 	loadedFilePath = path;
 	return true;
+}
+
+void wzapi::scripting_instance::noteSourceFile(const std::string& path, const char *data, size_t size)
+{
+	// Line endings as LF, so that the same script copied between systems hashes the same
+	std::string text;
+	text.reserve(size);
+	for (size_t i = 0; i < size; ++i)
+	{
+		if (data[i] == '\r' && i + 1 < size && data[i + 1] == '\n')
+		{
+			continue;
+		}
+		text.push_back(data[i]);
+	}
+	m_sourceFiles.emplace_back(path, sha256Sum(text.data(), text.size()).toString());
+}
+
+std::string wzapi::scripting_instance::sourceHash() const
+{
+	std::string list;
+	for (const auto &file : m_sourceFiles)
+	{
+		list += file.first;
+		list += '\n';
+		list += file.second;
+		list += '\n';
+	}
+	return sha256Sum(list.data(), list.size()).toString();
 }
 
 std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> wzapi::scripting_instance::debugGetScriptGlobalSpecialStringValues()
@@ -297,6 +329,18 @@ std::string wzapi::translate(WZAPI_PARAMS(std::string str))
 {
 	if (str.empty()) return str;
 	return std::string(gettext(str.c_str()));
+}
+
+//-- ## N_(string)
+//--
+//-- Mark string for translation, without translating it (returns it unchanged).
+//-- For text the game translates itself where it shows it (the tooltip of setReticuleButton()),
+//-- so that it is shown in the player's language even when it was set before a change of language,
+//-- or in a game saved by a player using another language. (4.8+ only)
+//--
+std::string wzapi::markForTranslation(WZAPI_PARAMS(std::string str))
+{
+	return str;
 }
 
 //-- ## syncRandom(limit)
@@ -3119,8 +3163,10 @@ wzapi::no_return_value wzapi::setMiniMap(WZAPI_PARAMS(bool visible))
 //--
 //-- Add reticule button. buttonId is which button to change, where zero is zero is the middle button, then going clockwise from
 //-- the uppermost button. filename is button graphics and filenameDown is for highlighting. The tooltip is the text you see when
-//-- you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
-//-- for such changes to take effect. (3.2+ only)
+//-- you mouse over the button: the game translates it where it shows it, so pass it marked with N_() rather than translated
+//-- with _(), and it is shown in the player's language even in a saved game loaded with another one (4.8+). Finally, the
+//-- callback is which scripting function to call. Hide and show the user interface for such changes to take effect.
+//-- (3.2+ only)
 //--
 wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int buttonId, std::string tooltip, std::string filename, std::string filenameDown, optional<std::string> callbackFuncName))
 {
@@ -3135,7 +3181,14 @@ wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int buttonId, std::
 	{
 		return {}; // no-op
 	}
-	setReticuleStats(buttonId, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func));
+	ReticuleCallbackRef callbackRef;
+	if (!func.isEmpty())
+	{
+		callbackRef.scriptName = context.currentInstance()->scriptName();
+		callbackRef.player = context.player();
+		callbackRef.function = func.toUtf8();
+	}
+	setReticuleStats(buttonId, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func), callbackRef);
 	return {};
 }
 
@@ -3167,7 +3220,7 @@ wzapi::no_return_value wzapi::showReticuleWidget(WZAPI_PARAMS(int buttonId))
 //--
 wzapi::no_return_value wzapi::showInterface(WZAPI_NO_PARAMS)
 {
-	intShowInterface();
+	scriptShowInterface(true);
 	return {};
 }
 
@@ -3177,7 +3230,7 @@ wzapi::no_return_value wzapi::showInterface(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::hideInterface(WZAPI_NO_PARAMS)
 {
-	intHideInterface();
+	scriptShowInterface(false);
 	return {};
 }
 
@@ -3831,6 +3884,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			psStats->upgrade[player].range = value;
 			dirtyAllDroids(player);
 			dirtyAllStructures(player);
+			visNoteRangeChange(player); // the tile coverage is refreshed at the end of the tick
 		}
 		else if (name == "HitPoints")
 		{
@@ -3856,6 +3910,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			psStats->upgrade[player].range = value;
 			dirtyAllDroids(player);
 			dirtyAllStructures(player);
+			visNoteRangeChange(player); // the tile coverage is refreshed at the end of the tick
 		}
 		else if (name == "HitPoints")
 		{
@@ -4402,6 +4457,36 @@ wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(cons
 	}
 	int type = it->second;
 	return wzapi::setUpgradeStats(context, getPlayer(), name, type, getIndex(), newValue);
+}
+
+const std::vector<wzapi::PerPlayerUpgrades>& wzapi::getUpgradesObjectCached()
+{
+	// Valid while statsGeneration() is unchanged.
+	// The list sizes and storage are checked too, to catch a change that didn't bump the generation.
+	static std::vector<PerPlayerUpgrades> cached;
+	static bool haveCached = false;
+	static uint32_t cachedGeneration = 0;
+	static std::vector<std::pair<const void *, size_t>> cachedLists;
+	const std::vector<std::pair<const void *, size_t>> lists = {
+		{asBodyStats.data(), asBodyStats.size()}, {asSensorStats.data(), asSensorStats.size()},
+		{asPropulsionStats.data(), asPropulsionStats.size()}, {asECMStats.data(), asECMStats.size()},
+		{asRepairStats.data(), asRepairStats.size()}, {asConstructStats.data(), asConstructStats.size()},
+		{asBrainStats.data(), asBrainStats.size()}, {asWeaponStats.data(), asWeaponStats.size()},
+		{asStructureStats, numStructureStats},
+	};
+	if (haveCached && cachedGeneration == statsGeneration())
+	{
+		if (lists == cachedLists)
+		{
+			return cached;
+		}
+		ASSERT(false, "The stats lists changed without a statsGenerationBump()");
+	}
+	cached = getUpgradesObject();
+	haveCached = true;
+	cachedGeneration = statsGeneration();
+	cachedLists = lists;
+	return cached;
 }
 
 std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
@@ -5067,9 +5152,9 @@ void wzapi::processScriptQueuedObjectRemovals()
 		{
 			switch (psObj->type)
 			{
-			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime, gameWorld); break;
-			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime, gameWorld); break;
-			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime, gameWorld); break;
+			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, deathTimeNow(), gameWorld); break;
+			case OBJ_DROID: destroyDroid((DROID*)psObj, deathTimeNow(), gameWorld); break;
+			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, deathTimeNow(), gameWorld); break;
 			default: ASSERT(false, "Wrong game object type"); break;
 			}
 		}

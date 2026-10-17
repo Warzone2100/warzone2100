@@ -67,6 +67,10 @@ std::vector<std::vector<uint8_t>> NETgameQueueCapturePending(unsigned player);
 /// queue, in the given order. Must be called while the queue is empty (before the first post-load tick).
 /// Returns the number restored; 0 if the queue slot is not allocated (caller should treat as "not restored").
 size_t NETgameQueueRestorePending(unsigned player, const std::vector<std::vector<uint8_t>> &rawMessages);
+/// Empty a player's game queue, keeping whether it sends its messages over the network and whether the game reads them
+/// (unlike NETinitQueue, which makes a queue that does both).
+/// For an in-process restore, before its messages are put back.
+void NETgameQueueReset(unsigned player);
 
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
 void NETinsertMessageFromNet(NETQUEUE queue, NetMessage&& message);     ///< Dump whole NetMessages into the queue.
@@ -242,6 +246,28 @@ public:
 bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHandler);
 bool NETisReplay();
 void NETshutdownReplay();
+
+/// During replay playback: how many messages of each game queue (MAX_GAMEQUEUE_SLOTS entries) the game has read.
+/// The replay's messages are kept, read-only, for the whole playback,
+/// so these positions are all an in-process snapshot needs to put the queues back.
+std::vector<uint32_t> NETreplayReadPositions();
+/// Whether positions from NETreplayReadPositions() can be restored in this playback (error says why not).
+bool NETreplayCheckReadPositions(const std::vector<uint32_t> &positions, std::string *error = nullptr);
+/// Put each game queue the replay feeds back to the given read position:
+/// the replay's messages from there on, in order (with the REPLAY_ENDED marker last).
+/// A queue the replay doesn't feed (NETreplayLoadedCount() == 0: the viewer's own,
+/// which only gets what the viewer sends itself) is left to the caller.
+/// Returns false, changing nothing, if the positions don't fit this playback.
+bool NETreplayRestoreReadPositions(const std::vector<uint32_t> &positions);
+/// During replay playback: the file being played back (as given to NETloadReplay).
+const std::string &NETreplayFilename();
+/// During replay playback: the game time the recorded game had when the recording stopped
+/// (from the replay's end-of-game info), which playback reaches at the replay's end. 0 if unknown.
+uint32_t NETreplayEndGameTime();
+/// How many of the replay's messages were loaded into a game queue (0: the replay doesn't feed it).
+size_t NETreplayLoadedCount(unsigned player);
+/// The memory the kept replay messages take (bytes), for the logs.
+size_t NETreplayLoadedSize();
 
 bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates = 2);
 

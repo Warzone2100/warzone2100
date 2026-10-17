@@ -45,6 +45,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "frontend.h"
@@ -1138,6 +1139,13 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 
 static bool doAutoSave()
 {
+	if (levelChangePending())
+	{
+		// Queued (by autoSave()) just before a level change was requested: saveGame() would refuse, so don't free an
+		// autosave slot for it
+		debug(LOG_INFO, "Skipping autosave: a level change or a savegame load is pending");
+		return false;
+	}
 	const char *dir = bMultiPlayer ? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
 	// Backward compatibility: remove later
 	if (!freeAutoSaveSlot_old(dir))
@@ -1184,12 +1192,17 @@ bool autoSave(bool force)
 	{
 		return false;
 	}
+	// (see saveGame())
+	if (levelChangePending())
+	{
+		return false;
+	}
 
 	console(_("AutoSaving..."));
 	// queue for next main loop run, so we have a chance to render the "AutoSaving..." message before a potential delay while autosaving
 	wzAsyncExecOnMainThread([]() {
 		ASSERT_OR_RETURN(, gameInitialised, "Skipping autosave - game no longer initialized");
-		doAutoSave();
+		requestGameStateCapture([]() { doAutoSave(); });  // at the next safe point (see gamestate_capture.h)
 	});
 
 	return true; // autosave queued

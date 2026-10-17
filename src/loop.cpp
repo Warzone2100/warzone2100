@@ -44,6 +44,7 @@
 
 #include "loop.h"
 #include "gamestate_serialize.h"
+#include "gamestate_harness.h"
 #include "movebench.h"
 #include "pathbench.h"
 #include "corridordump.h"
@@ -73,6 +74,10 @@
 #include "input/gamepadbindings.h"
 #include "loadsave.h"
 #include "game.h"
+#include "gamestate_capture.h"
+#include "gamestate_snapshot.h"
+#include "gamestate_snapshot_ring.h"
+#include "gamestate_replay_seek.h"
 #include "multijoin.h"
 #include "lighting.h"
 #include "intimage.h"
@@ -152,6 +157,11 @@ static bool backdropWasActiveBeforeVideo = false;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
+bool levelChangePending()
+{
+	return loopMissionState != LMS_NORMAL;
+}
+
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 LEVEL_TYPE prevMissionType = LEVEL_TYPE::LDS_NONE;
@@ -160,6 +170,28 @@ static void resetVideoSkipStates()
 {
 	videoTimeSkipState.begin = std::chrono::steady_clock::now();
 	videoTimeSkipState.canSkip = false;
+}
+
+// A save from the in-game save menu, at the next safe point (see gamestate_capture.h):
+// now, unless a networked game is waiting for a player's messages for the next tick.
+static void saveGameFromMenu(const std::string &path)
+{
+	requestGameStateCapture([path]() {
+		char msgbuffer[256] = {'\0'};
+		if (saveGame(path.c_str(), GTYPE_SAVE_MIDMISSION))
+		{
+			sstrcpy(msgbuffer, _("GAME SAVED: "));
+			sstrcat(msgbuffer, savegameWithoutExtension(path.c_str()));
+			addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+		else
+		{
+			ASSERT(false, "saveGame(\"%s\") failed", path.c_str());
+			sstrcpy(msgbuffer, _("Could not save game!"));
+			addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+			deleteSaveGame_classic(path.c_str());
+		}
+	});
 }
 
 static GAMECODE renderLoop()
@@ -179,6 +211,7 @@ static GAMECODE renderLoop()
 	{
 		/* Always refresh the widgets' backing stores if needed, even if we don't process clicks below */
 		intDoScreenRefresh();
+		gamestate::harness::afterScreenRefresh();
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
 		if (!getRotActive() && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
@@ -275,41 +308,15 @@ static GAMECODE renderLoop()
 			}
 			else
 			{
-				char msgbuffer[256] = {'\0'};
-
 				if (saveInMissionRes())
 				{
 					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
 					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
-					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
-					{
-						sstrcpy(msgbuffer, _("GAME SAVED: "));
-						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-					}
-					else
-					{
-						ASSERT(false, "Mission Results: saveGame Failed");
-						sstrcpy(msgbuffer, _("Could not save game!"));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						deleteSaveGame_classic(sRequestResult);
-					}
+					saveGameFromMenu(sRequestResult);
 				}
 				else if (bMultiPlayer || saveMidMission())
 				{
-					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))//mid mission from [esc] menu
-					{
-						sstrcpy(msgbuffer, _("GAME SAVED: "));
-						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-					}
-					else
-					{
-						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed");
-						sstrcpy(msgbuffer, _("Could not save game!"));
-						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						deleteSaveGame_classic(sRequestResult);
-					}
+					saveGameFromMenu(sRequestResult); //mid mission from [esc] menu
 				}
 				else
 				{
@@ -321,7 +328,8 @@ static GAMECODE renderLoop()
 
 	/* Check for quit */
 	bool quitting = false;
-	if (intRetVal == INT_QUIT)
+	// (A replay seek that can't restore any snapshot plays the replay again from the start: see gamestate_replay_seek.h)
+	if (intRetVal == INT_QUIT || gamestate::replayRestartPending())
 	{
 		if (!loop_GetVideoStatus())
 		{
@@ -346,7 +354,10 @@ static GAMECODE renderLoop()
 			{
 				processMouseClickInput();
 			}
-			displayWorld();
+			if (!gameStateRestoreFailed())  // a half-restored world isn't drawn
+			{
+				displayWorld();
+			}
 		}
 		else
 		{
@@ -543,6 +554,16 @@ static void gameStateUpdate()
 	sendPlayerGameTime();
 	NETflush();  // Make sure the game time tick message is really sent over the network.
 
+	// The grid was built at the end of the last update.
+	// Rebuild it first if objects were freed or worlds swapped since then (between updates), or if a level just started.
+	gridResetIfDirty(gameWorld);
+
+	// Apply the tile coverage changes made between ticks (a range upgrade from a research gift, ...)
+	// before anything in this tick reads the coverage.
+	// Every client has processed the same messages at this point,
+	// unlike right after recvMessage, which runs at frame-dependent times.
+	visFlushCoverageChanges();
+
 	if (!paused && !scriptPaused())
 	{
 		executeFnAndProcessScriptQueuedRemovals([]() { updateScripts(); });
@@ -553,9 +574,6 @@ static void gameStateUpdate()
 
 	// Update the visibility change stuff
 	visUpdateLevel();
-
-	// Put all droids/structures/features into the grid.
-	gridReset(gameWorld);
 
 	// Check which objects are visible.
 	executeFnAndProcessScriptQueuedRemovals([]() { processVisibility(); });
@@ -613,6 +631,7 @@ static void gameStateUpdate()
 	}
 
 	missionTimerUpdate();
+	missionReinforcementUpdate();
 
 	executeFnAndProcessScriptQueuedRemovals([]() { proj_UpdateAll(); });
 
@@ -623,6 +642,15 @@ static void gameStateUpdate()
 
 	// Free dead droid memory.
 	executeFnAndProcessScriptQueuedRemovals([]() { objmemUpdate(); });
+
+	// Put all droids/structures/features into the grid, for everything that reads it until the end of the next
+	// update (see gridReset). Must follow objmemUpdate directly: the grid may point to the objects it freed.
+	gridReset(gameWorld);
+
+	// Bring the tile coverage of the objects that this tick's terrain changes and range upgrades may have changed
+	// up to date, so that at the end of every tick it is what a recompute from the current state gives
+	// (which is all a loaded game can do).
+	visFlushCoverageChanges();
 
 	// accumulate occasional stats / snapshots
 	if (!paused && !scriptPaused())
@@ -705,12 +733,20 @@ GAMECODE gameLoop()
 
 	size_t numRegularUpdatesTicks = 0;
 	size_t numFastForwardTicks = 0;
+	const uint32_t loopStartTicks = wzGetTicks();
+	constexpr uint32_t SEEK_FASTFORWARD_MS_PER_FRAME = 100;
 	gameTimeUpdateBegin();
 	while (true)
 	{
 		// Receive NET_BLAH messages.
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
 		executeFnAndProcessScriptQueuedRemovals([]() { recvMessage(); });
+		// Saves and snapshots requested while the messages for the next tick were still to arrive (networked games)
+		runPendingGameStateCaptures();
+		gamestate::harness::afterMessages();  // (the harness save point)
+		// (Both do nothing unless started)
+		gamestate::replaySeekAtCapturePoint();
+		gamestate::snapshotRingAtCapturePoint();
 
 		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected
@@ -722,9 +758,22 @@ GAMECODE gameLoop()
 			&& checkPlayerGameTime(NET_ALL_PLAYERS);	// and there must be a new game tick available to process from all players
 
 		bool forceTryGameTickUpdate = canFastForwardGameTime && ((!fastForwardTicksFixedToNormalTickRate && numForcedUpdatesLastCall > 0) || numRegularUpdatesTicks > 0) && NETgameIsBehindPlayersByAtLeast(4);
+		// A replay seek fast-forwards to its target as fast as the ticks run, rendering a frame every so often
+		if (gamestate::replaySeekFastForwarding() && wzGetTicks() - loopStartTicks < SEEK_FASTFORWARD_MS_PER_FRAME && checkPlayerGameTime(NET_ALL_PLAYERS))
+		{
+			forceTryGameTickUpdate = true;
+		}
+
+		// No game state update once a level change or a savegame load has been requested
+		// (in a tick, by a script's loadLevel()): renderLoop() hands over to it in the next frames,
+		// which block for a while, and the ticks run until then would depend on how long those frames take.
+		// (The world would also go on without its scripts.)
+		// Game time stops at the tick that made the request, and the next level starts from that tick.
+		// Nor after an in-process restore failed halfway (gamestate_snapshot.h): the world isn't consistent.
+		const bool mayTick = !levelChangePending() && !gameStateRestoreFailed();
 
 		// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
-		auto timeUpdateResult = gameTimeUpdate(renderBudget > 0 || previousUpdateWasRender, forceTryGameTickUpdate);
+		auto timeUpdateResult = gameTimeUpdate(mayTick && (renderBudget > 0 || previousUpdateWasRender), mayTick && forceTryGameTickUpdate);
 
 		if (timeUpdateResult == GameTimeUpdateResult::GAME_TIME_UPDATED_FORCED)
 		{
@@ -740,6 +789,7 @@ GAMECODE gameLoop()
 		{
 			break;  // Not doing a game state update.
 		}
+		gameStateCaptureOnTick();
 
 		ASSERT(!paused && !gameUpdatePaused(), "Nonsensical pause values.");
 
@@ -748,6 +798,9 @@ GAMECODE gameLoop()
 		gameStateUpdate();
 		gameStatePerfEndOfTick();
 		syncDebug("End game state update, gameTime = %d", gameTime);
+		// No-op unless a --gamestate-* harness option was set.
+		// Between two ticks, so a save sees what a menu save sees.
+		gamestate::harness::tick();
 		unsigned after = wzGetTicks();
 
 		renderBudget -= (after - before) * renderFraction.n;

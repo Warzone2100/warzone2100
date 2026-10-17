@@ -24,15 +24,23 @@ An event that is run when a video show stopped playing.
 
 ## eventGameLoaded()
 
-An event that is run when game is loaded from a saved game. There is usually no need to use this event.
+An event that is run when a game is loaded from a save written by an earlier version of the game.
+A save written since 4.8 restores the game as it was saved, including the scripts' global (`var`) variables,
+their timers, groups and labels, and the interface they set up
+(the reticule buttons, whether the interface is shown, replaced textures, the minimap, the sky and lighting).
+This event isn't run then, and the game goes on as if it had never been saved.
+NOTE: a script that keeps state anywhere else
+(`let` or `const` variables it changes, closures, properties of functions) loses it when a game is loaded.
+(Changed in 4.8.)
 
 ## eventGameSaving()
 
-An event that is run before game is saved. There is usually no need to use this event.
+Deprecated: no longer raised.
 
 ## eventGameSaved()
 
 An event that is run after game is saved. There is usually no need to use this event.
+It runs after the game state was captured, so a handler must not change the game state.
 
 ## eventTransporterLaunch(transport)
 
@@ -188,6 +196,14 @@ be set to null. The player parameter gives the player it is called for.
 
 An event that is run whenever an object is destroyed. Careful passing
 the parameter object around, since it is about to vanish!
+
+It is run at the end of the game update in which the object was
+destroyed. It isn't run for objects removed between two updates:
+- while a game or level is being set up, by the game itself or by
+  removeObject() in eventGameInit or eventStartLevel
+- by removeObject() in another event that runs between updates
+  (eventGameLoaded, eventPlayerLeft, the UI and menu events, ...)
+- when a player leaves the game.
 
 ## eventPickup(feature, droid)
 

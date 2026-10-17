@@ -32,6 +32,7 @@
 
 #include "multiplay.h"      // game, ingame, bMultiPlayer, MULTIPLAYERGAME, MULTISTRUCTLIMITS
 #include "multiplaydefs.h"  // clampPlayerReconnectWaitSeconds, PLAYER_LEAVE_MODE, BLIND_MODE
+#include "difficulty.h"     // get/setDifficultyLevel (setup header)
 #include "campaigninfo.h"   // getCampaignName/Number, setCampaignName/Number
 #include "challenge.h"      // challengeActive / challengeFileName (setup header)
 #include "frontend.h"       // aLevelName
@@ -39,14 +40,17 @@
 #include "screens/guidescreen.h" // save/restoreLoadedGuideTopics + guide popup toggle
 #include "map.h"            // builtInMap, useTerrainOverrides, mapReloadGroundTypes
 #include "game_world.h"     // gameWorld
-#include "structure.h"      // initFactoryNumFlag
+#include "structure.h"      // initFactoryNumFlag, structureExists
+#include "template.h"       // playerBuiltHQ
+#include "qtscript.h"       // getPlayerStartPosition, scriptSetStartPos, scriptGetDerrickPositions, ...
 #include "message.h"        // releaseAllProxDisp
 #include "display3d.h"      // playerPos (camera) - local view state
 #include "radar.h"          // Get/SetRadarZoom - local view state
 #include "mission.h"        // Cheated - local meta flag, clear/resetMissionWidgets
 #include "effects.h"        // serialize/restoreActiveEffects - local display state
+#include "hci.h"            // get/restoreReticuleButtonStates - local interface state
 #include "multistat.h"      // loadMultiStats, setMultiStats, getMultiStats
-#include "multiint.h"       // sPlayer
+#include "multiint.h"       // sPlayer, getAIData, readAIs
 #include "modding.h"        // getLoadedMods, setOverrideMods, clearOverrideMods
 #include "init.h"           // rebuildSearchPath, buildMapList, searchPathMode
 #include "levels.h"         // levShutDown, levInitialise, levFindDataSet, makeLevLoadDataLoadingTask
@@ -58,6 +62,7 @@
 #include <physfs.h>
 #include "ZipIOProvider.h"  // WzMapZipIO - libzip-backed .wz zip container
 
+#include <algorithm>
 #include <ctime>
 #include <map>
 #include <memory>
@@ -104,7 +109,8 @@ std::vector<SavegameMod> collectLoadedMods()
 static nlohmann::ordered_json writePlayers()
 {
 	nlohmann::ordered_json jplayers = nlohmann::ordered_json::array();
-	for (unsigned p = 0; p < MAX_PLAYERS && p < NetPlay.players.size(); ++p)
+	// Every slot, including the spectator slots after the MAX_PLAYERS player slots
+	for (unsigned p = 0; p < MAX_CONNECTED_PLAYERS && p < NetPlay.players.size(); ++p)
 	{
 		const PLAYER &pl = NetPlay.players[p];
 		nlohmann::ordered_json jp = nlohmann::ordered_json::object();
@@ -119,6 +125,12 @@ static nlohmann::ordered_json writePlayers()
 		jp["faction"] = static_cast<uint8_t>(pl.faction);
 		jp["difficulty"] = static_cast<int>(static_cast<int8_t>(pl.difficulty));
 		jp["ai"] = static_cast<int>(pl.ai);
+		// The index above is into the local AI list, whose order differs between machines: save the script too
+		const std::vector<AIDATA> &ais = getAIData();
+		if (bMultiPlayer && pl.ai >= 0 && static_cast<size_t>(pl.ai) < ais.size())
+		{
+			jp["aiScript"] = std::string(ais[pl.ai].js);
+		}
 		jp["allocated"] = pl.allocated;
 		jp["isSpectator"] = pl.isSpectator;
 		jp["autoGame"] = pl.autoGame;
@@ -128,7 +140,7 @@ static nlohmann::ordered_json writePlayers()
 	return jplayers;
 }
 
-static void readPlayers(const nlohmann::ordered_json &jplayers)
+static void readPlayers(const nlohmann::ordered_json &jplayers, SetupHeaderInfo &info)
 {
 	if (!jplayers.is_array())
 	{
@@ -137,7 +149,7 @@ static void readPlayers(const nlohmann::ordered_json &jplayers)
 	for (const nlohmann::ordered_json &jp : jplayers)
 	{
 		const int idx = jp.at("index").get<int>();
-		if (idx < 0 || idx >= static_cast<int>(MAX_PLAYERS) || idx >= static_cast<int>(NetPlay.players.size()))
+		if (idx < 0 || idx >= static_cast<int>(MAX_CONNECTED_PLAYERS) || idx >= static_cast<int>(NetPlay.players.size()))
 		{
 			continue; // slot not present on this build/runtime - skip rather than fail
 		}
@@ -157,10 +169,52 @@ static void readPlayers(const nlohmann::ordered_json &jplayers)
 		pl.faction = uintToFactionID(jp.at("faction").get<uint8_t>()).value_or(FACTION_NORMAL);
 		pl.difficulty = static_cast<AIDifficulty>(static_cast<int8_t>(jp.at("difficulty").get<int>()));
 		pl.ai = static_cast<int8_t>(jp.at("ai").get<int>());
+		if (jp.contains("aiScript"))
+		{
+			info.aiScripts.emplace_back(static_cast<unsigned>(idx), jp.at("aiScript").get<std::string>());
+		}
 		pl.allocated = jp.at("allocated").get<bool>();
 		pl.isSpectator = jp.at("isSpectator").get<bool>();
 		pl.autoGame = jp.at("autoGame").get<bool>();
 		pl.ready = jp.at("ready").get<bool>();
+	}
+}
+
+void resolveSavedAIs(const SetupHeaderInfo &header)
+{
+	if (header.aiScripts.empty() || !bMultiPlayer)
+	{
+		return; // older documents keep the saved indices, and a campaign has no AI slots
+	}
+	const auto findScript = [](const std::string &script) {
+		const std::vector<AIDATA> &ais = getAIData();
+		return std::find_if(ais.begin(), ais.end(), [&script](const AIDATA &ai) { return script == ai.js; });
+	};
+	// The list was read at startup. Read it again only when the save names an AI it lacks (ex. from a mod the save
+	// mounted), as the list read now is what the menus show afterwards.
+	const bool allFound = std::all_of(header.aiScripts.begin(), header.aiScripts.end(), [&findScript](const std::pair<unsigned, std::string> &slotScript) {
+		return findScript(slotScript.second) != getAIData().end();
+	});
+	if (!allFound)
+	{
+		readAIs();
+	}
+	const std::vector<AIDATA> &ais = getAIData();
+	for (const auto &slotScript : header.aiScripts)
+	{
+		const unsigned slot = slotScript.first;
+		const std::string &script = slotScript.second;
+		if (slot >= NetPlay.players.size())
+		{
+			continue;
+		}
+		auto it = findScript(script);
+		if (it == ais.end())
+		{
+			debug(LOG_ERROR, "Player %u's AI script %s isn't available; keeping AI index %d", slot, script.c_str(), static_cast<int>(NetPlay.players[slot].ai));
+			continue;
+		}
+		NetPlay.players[slot].ai = static_cast<int8_t>(it - ais.begin());
 	}
 }
 
@@ -200,6 +254,9 @@ nlohmann::ordered_json writeSetupHeader(SaveType saveType)
 	// Session identity that MP would have established at setup.
 	j["multiplayer"] = bMultiPlayer;
 	j["selectedPlayer"] = selectedPlayer;
+	// The local player's own slot (its game queue, the player it sends as).
+	// selectedPlayer differs from it after a debug player switch.
+	j["realSelectedPlayer"] = realSelectedPlayer;
 	j["hostPlayer"] = NetPlay.hostPlayer;
 	j["playerCount"] = NetPlay.playercount;
 	j["bComms"] = NetPlay.bComms;
@@ -224,6 +281,34 @@ nlohmann::ordered_json writeSetupHeader(SaveType saveType)
 	// reconstructed from (like mapName/gameType), if multiplayer challenges are ever supported.
 	jlevel["challengeActive"] = challengeActive;
 	jlevel["challengeFileName"] = challengeFileName.toUtf8();
+	// The campaign difficulty: the damage modifiers and the campaign scripts' difficulty follow it.
+	// A skirmish or MP game's AIs have their own difficulty.
+	if (!bMultiPlayer)
+	{
+		jlevel["campaignDifficulty"] = static_cast<uint8_t>(getDifficultyLevel());
+	}
+	// The settings file whose scripts a --skirmish test or --autohost game was started with (loadMultiScripts)
+	if (!getLaunchScriptsIni().isEmpty())
+	{
+		jlevel["launchScriptsIni"] = getLaunchScriptsIni().toUtf8();
+		jlevel["launchScriptsPath"] = getLaunchScriptsPath().toUtf8();
+	}
+	// The start positions and derrick positions the scripts are given (startPositions, derrickPositions).
+	// A game start takes them from the map's objects while placing them (the HQ or first truck of each player,
+	// the derricks), which a save load doesn't do, and they don't change during the level
+	nlohmann::ordered_json jstarts = nlohmann::ordered_json::array();
+	for (int p = 0; p < MAX_PLAYERS; ++p)
+	{
+		const Vector2i pos = getPlayerStartPosition(p);
+		jstarts.push_back(nlohmann::ordered_json::array({ pos.x, pos.y }));
+	}
+	jlevel["startPositions"] = std::move(jstarts);
+	nlohmann::ordered_json jderricks = nlohmann::ordered_json::array();
+	for (const Vector2i &pos : scriptGetDerrickPositions())
+	{
+		jderricks.push_back(nlohmann::ordered_json::array({ pos.x, pos.y }));
+	}
+	jlevel["derrickPositions"] = std::move(jderricks);
 	j["level"] = std::move(jlevel);
 
 	// Mods / addon campaigns: an array of {name, hash}, de-duped preserving load order.
@@ -291,6 +376,12 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	{
 		throw StateError("setup.selectedPlayer out of range");
 	}
+	// Older documents: the local player's slot is selectedPlayer, as a game start sets it
+	realSelectedPlayer = j.value("realSelectedPlayer", selectedPlayer);
+	if (realSelectedPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		throw StateError("setup.realSelectedPlayer out of range");
+	}
 	NetPlay.hostPlayer = j.at("hostPlayer").get<uint32_t>();
 	if (NetPlay.hostPlayer >= MAX_CONNECTED_PLAYERS)
 	{
@@ -327,6 +418,36 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	{
 		challengeFileName = WzString::fromUtf8(jlevel.at("challengeFileName").get<std::string>());
 	}
+	// Older documents have no campaign difficulty: they keep the current one (the user's setting)
+	if (jlevel.contains("campaignDifficulty"))
+	{
+		const uint8_t difficulty = jlevel.at("campaignDifficulty").get<uint8_t>();
+		if (difficulty > static_cast<uint8_t>(DL_INSANE))
+		{
+			throw StateError("level.campaignDifficulty out of range");
+		}
+		setDifficultyLevel(static_cast<DIFFICULTY_LEVEL>(difficulty));
+	}
+	if (jlevel.contains("startPositions") && jlevel.contains("derrickPositions"))
+	{
+		const nlohmann::ordered_json &jstarts = jlevel.at("startPositions");
+		const nlohmann::ordered_json &jderricks = jlevel.at("derrickPositions");
+		if (!jstarts.is_array() || jstarts.size() != MAX_PLAYERS || !jderricks.is_array())
+		{
+			throw StateError("level.startPositions / derrickPositions malformed");
+		}
+		for (const nlohmann::ordered_json &p : jstarts)
+		{
+			info.startPositions.emplace_back(p.at(0).get<int>(), p.at(1).get<int>());
+		}
+		for (const nlohmann::ordered_json &p : jderricks)
+		{
+			info.derrickPositions.emplace_back(p.at(0).get<int>(), p.at(1).get<int>());
+		}
+		info.hasScriptPositions = true;
+	}
+	setRestoredLaunchScripts(WzString::fromUtf8(jlevel.value("launchScriptsIni", std::string())),
+	                         WzString::fromUtf8(jlevel.value("launchScriptsPath", std::string())));
 
 	// Mods: parse into the info struct (for the cold-load remount/validation step) and rebuild
 	// game.modHashes from the recorded hashes so a resumed game knows what it expects.
@@ -377,7 +498,7 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	// default to the legacy A* planner for snapshots written before this setting existed
 	game.pathfindingBackend = jopt.value("pathfindingBackend", static_cast<uint16_t>(0));
 
-	readPlayers(j.at("players"));
+	readPlayers(j.at("players"), info);
 	readStructureLimits(j.at("structureLimits"));
 	ingame.flags = j.at("flags").get<uint8_t>();
 
@@ -641,6 +762,70 @@ constexpr uint32_t SAVEGAME_MAX_UNCOMPRESSED = 512u * 1024u * 1024u;
 // The loaded (unlocked) guide topics + the popup-disable toggle are persisted here: they are in-game session state
 // driven by the addGuideTopic() wzapi (campaign progression), matching the legacy per-savegame guidetopics.json.
 
+// The interface the scripts set up for the local player (version 1: whether they showed or hid it, and the reticule
+// buttons), so that a load needn't have the scripts set it up again (eventGameLoaded).
+constexpr uint32_t LOCAL_INTERFACE_VERSION = 1;
+
+static std::unique_ptr<nlohmann::ordered_json> g_coldLoadInterfaceDoc; // applied in stageThreeInitialise
+static uint32_t g_coldLoadPresentationVersion = 0; // version 2 has the replaced textures
+
+static nlohmann::ordered_json writeLocalInterface()
+{
+	nlohmann::ordered_json j = nlohmann::ordered_json::object();
+	j["version"] = LOCAL_INTERFACE_VERSION;
+	switch (getScriptInterfaceRequest())
+	{
+		case ScriptInterfaceRequest::Shown: j["shown"] = true; break;
+		case ScriptInterfaceRequest::Hidden: j["shown"] = false; break;
+		case ScriptInterfaceRequest::None: break;
+	}
+	nlohmann::ordered_json buttons = nlohmann::ordered_json::array();
+	for (const ReticuleButtonState &state : getReticuleButtonStates())
+	{
+		nlohmann::ordered_json b = nlohmann::ordered_json::object();
+		if (!state.tip.empty()) { b["tip"] = state.tip; }
+		if (!state.filename.empty()) { b["image"] = state.filename; }
+		if (!state.filenameDown.empty()) { b["imageDown"] = state.filenameDown; }
+		if (state.flashing) { b["flashing"] = true; }
+		if (!state.callback.empty())
+		{
+			b["callback"] = { {"script", state.callback.scriptName}, {"player", state.callback.player}, {"function", state.callback.function} };
+		}
+		buttons.push_back(std::move(b));
+	}
+	j["reticule"] = std::move(buttons);
+	return j;
+}
+
+static void readLocalInterface(const nlohmann::ordered_json &j)
+{
+	// Shown or hidden first: adding the reticule stops its buttons flashing
+	if (j.contains("shown"))
+	{
+		scriptShowInterface(j.at("shown").get<bool>());
+	}
+	std::vector<ReticuleButtonState> states;
+	for (const nlohmann::ordered_json &b : j.at("reticule"))
+	{
+		ReticuleButtonState state;
+		state.tip = b.value("tip", std::string());
+		state.filename = b.value("image", std::string());
+		state.filenameDown = b.value("imageDown", std::string());
+		state.flashing = b.value("flashing", false);
+		if (b.contains("callback"))
+		{
+			const nlohmann::ordered_json &c = b.at("callback");
+			state.callback.scriptName = c.at("script").get<std::string>();
+			state.callback.player = c.at("player").get<int>();
+			state.callback.function = c.at("function").get<std::string>();
+		}
+		states.push_back(std::move(state));
+	}
+	restoreReticuleButtonStates(states, [](const ReticuleCallbackRef &ref) {
+		return scriptNamedCallback(ref.player, ref.scriptName, ref.function);
+	});
+}
+
 static nlohmann::ordered_json writeLocalState()
 {
 	nlohmann::ordered_json j = nlohmann::ordered_json::object();
@@ -651,6 +836,9 @@ static nlohmann::ordered_json writeLocalState()
 	j["camera"] = std::move(cam);
 	j["radarZoom"] = GetRadarZoom();
 	j["cheated"] = Cheated; // meta: disables autosave / flags scores - not networked, not sim
+	// Whether the local player has ever built an HQ: the factories offer only trucks until then.
+	// It stays set when the HQ is destroyed, so it can't be derived from the restored world.
+	j["playerBuiltHQ"] = playerBuiltHQ;
 
 	// (The in-flight game-action queue backlog lives in the separate pendingResume container section, not
 	// here - it is pending future input, not local view/meta state.)
@@ -668,6 +856,8 @@ static nlohmann::ordered_json writeLocalState()
 	// one that was saved, ex. a destroyed oil derrick still burning. Per-client and display-only, so
 	// it belongs here rather than in the game state document. Empty in headless mode.
 	j["effects"] = serializeActiveEffects();
+
+	j["interface"] = writeLocalInterface();
 	return j;
 }
 
@@ -692,6 +882,8 @@ static void readLocalState(const nlohmann::ordered_json &j)
 		SetRadarZoom(gameWorld.map, j.at("radarZoom").get<uint8_t>());
 	}
 	Cheated = j.value("cheated", Cheated);
+	// Older documents: whether the local player has an HQ now, as a game start does
+	playerBuiltHQ = j.contains("playerBuiltHQ") ? j.at("playerBuiltHQ").get<bool>() : structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true);
 
 	// Loaded (unlocked) guide topics + popup-disable toggle (see writeLocalState).
 	if (j.contains("guideTopics") && j.at("guideTopics").is_object())
@@ -702,6 +894,14 @@ static void readLocalState(const nlohmann::ordered_json &j)
 			restoreLoadedGuideTopics(guide.at("loaded").get<std::vector<std::string>>());
 		}
 		setGameGuideDisableTopicPopups(guide.value("disableTopicPopups", false));
+	}
+
+	// The interface is applied later, once the scripts are loaded and the interface is up
+	// (applyDeferredColdLoadInterface)
+	g_coldLoadInterfaceDoc.reset();
+	if (j.contains("interface") && j.at("interface").is_object())
+	{
+		g_coldLoadInterfaceDoc = std::make_unique<nlohmann::ordered_json>(j.at("interface"));
 	}
 
 	// The saved effect list (see writeLocalState). Applied after the world restore, so it also clears
@@ -743,6 +943,14 @@ static nlohmann::ordered_json writePendingResume()
 		players.push_back(std::move(msgs));
 	}
 	gq["players"] = std::move(players);
+	// The local droid orders queued since the last sendQueuedDroidInfo() (UI, script and some simulation orders) are
+	// one step earlier: not encoded or sent yet. The saving game sends them before its next tick, so they belong here.
+	nlohmann::ordered_json queued = nlohmann::ordered_json::array();
+	for (const std::vector<uint8_t> &raw : captureQueuedDroidInfo())
+	{
+		queued.push_back(base64Encode(raw));
+	}
+	gq["queuedOrders"] = std::move(queued);
 	j["gameQueue"] = std::move(gq);
 	return j;
 }
@@ -765,6 +973,20 @@ static void applyPendingResume(const nlohmann::ordered_json &j)
 			"(0x%" PRIx32 ", 0x%" PRIx32 "); not restoring pending game-queue messages (proceeding "
 			"without in-flight commands)", savedMajor, savedMinor, NETGetMajorVersion(), NETGetMinorVersion());
 		return;
+	}
+	if (gq.contains("queuedOrders") && gq.at("queuedOrders").is_array())
+	{
+		std::vector<std::vector<uint8_t>> raws;
+		for (const nlohmann::ordered_json &one : gq.at("queuedOrders"))
+		{
+			raws.push_back(base64Decode(one.get<std::string>()));
+		}
+		// Back into the buffer, so the first frame or tick sends them as the saving game would have
+		const size_t restoredOrders = restoreQueuedDroidInfo(raws);
+		if (restoredOrders != raws.size())
+		{
+			debug(LOG_INFO, "Restored only %zu of %zu queued droid order(s)", restoredOrders, raws.size());
+		}
 	}
 	if (!gq.contains("players") || !gq.at("players").is_array())
 	{
@@ -1328,6 +1550,44 @@ static std::unique_ptr<nlohmann::ordered_json> g_coldLoadGameStateDoc;
 static std::unique_ptr<nlohmann::ordered_json> g_coldLoadLocalStateDoc; // disk-only view/meta, applied post-restore
 static std::unique_ptr<nlohmann::ordered_json> g_coldLoadPendingResumeDoc; // disk-only pending game-queue backlog, re-injected post-restore
 static bool g_coldLoadReconstruct = false; // set at end of coldLoadRestoreWorld, consumed by stageThreeInitialise
+// The presentation section and the camera rotation, applied again after stageThreeInitialise resets the view
+static std::unique_ptr<nlohmann::ordered_json> g_coldLoadViewDoc;
+// The scripts' start and derrick positions from the setup header, applied once the scenario load is done
+static std::unique_ptr<SetupHeaderInfo> g_coldLoadScriptPositions;
+
+// Give the scripts the start and derrick positions the saving game had.
+// A game start sets them while it places the map's objects.
+// This runs at the same point of a cold load (right after the scenario load),
+// so the scripts created before it see what they see in a game start, and those created after it the saved values.
+static bool applyColdLoadScriptPositions()
+{
+	if (!g_coldLoadScriptPositions)
+	{
+		return true; // older documents: whatever the scenario load set (nothing, for a save load)
+	}
+	const SetupHeaderInfo &positions = *g_coldLoadScriptPositions;
+	// Not checked against the map: the positions don't have to be on it.
+	// A level only sets those its map has objects for, so the others are still the previous level's
+	// (ex. in the off-world mission SUB_2_1, player 0's is still the home map's, off the SUB_2_1 map)
+	for (int p = 0; p < MAX_PLAYERS && static_cast<size_t>(p) < positions.startPositions.size(); ++p)
+	{
+		const Vector2i &pos = positions.startPositions[p];
+		scriptSetStartPos(p, pos.x, pos.y);
+	}
+	scriptClearDerrickPositions();
+	for (const Vector2i &pos : positions.derrickPositions)
+	{
+		// A derrick position is kept as two 8-bit tile coordinates (scriptSetDerrickPos)
+		if (pos.x < 0 || pos.y < 0 || pos.x > UINT8_MAX || pos.y > UINT8_MAX)
+		{
+			debug(LOG_ERROR, "Invalid savegame derrick position (%d, %d)", pos.x, pos.y);
+			return false;
+		}
+		scriptSetDerrickPos(world_coord(pos.x), world_coord(pos.y));
+	}
+	g_coldLoadScriptPositions.reset();
+	return true;
+}
 
 bool isNewFormatSaveFolder(const std::string &folderPath)
 {
@@ -1375,6 +1635,62 @@ void applyDeferredScripting()
 	g_coldLoadGameStateDoc.reset();
 }
 
+void applyDeferredColdLoadView()
+{
+	if (!g_coldLoadViewDoc)
+	{
+		return;
+	}
+	try
+	{
+		gamestate::applyGameStatePresentation(*g_coldLoadViewDoc);
+		if (g_coldLoadViewDoc->contains("camera"))
+		{
+			const nlohmann::ordered_json &cam = g_coldLoadViewDoc->at("camera");
+			playerPos.r.x = cam.value("rx", playerPos.r.x);
+			playerPos.r.y = cam.value("ry", playerPos.r.y);
+			playerPos.r.z = cam.value("rz", playerPos.r.z);
+		}
+	}
+	catch (const std::exception &e)
+	{
+		debug(LOG_ERROR, "Failed to apply the saved view again: %s", e.what());
+	}
+	g_coldLoadViewDoc.reset();
+}
+
+bool applyDeferredColdLoadInterface()
+{
+	const uint32_t presentationVersion = g_coldLoadPresentationVersion;
+	g_coldLoadPresentationVersion = 0;
+	if (!g_coldLoadInterfaceDoc)
+	{
+		return false;
+	}
+	bool applied = false;
+	try
+	{
+		const uint32_t version = g_coldLoadInterfaceDoc->value("version", 0u);
+		if (version > LOCAL_INTERFACE_VERSION)
+		{
+			debug(LOG_ERROR, "The saved interface is from a newer version (%u); not restoring it", version);
+		}
+		else
+		{
+			readLocalInterface(*g_coldLoadInterfaceDoc);
+			applied = true;
+		}
+	}
+	catch (const std::exception &e)
+	{
+		debug(LOG_ERROR, "Ignoring invalid saved interface: %s", e.what());
+	}
+	g_coldLoadInterfaceDoc.reset();
+	// Everything the scripts set up for the interface is back only with the replaced textures too
+	// (presentation version 2)
+	return applied && presentationVersion >= 2;
+}
+
 void applyDeferredColdLoadMessages()
 {
 	if (!g_coldLoadGameStateDoc)
@@ -1409,6 +1725,11 @@ bool coldLoadRestoreWorld()
 	initFactoryNumFlag();
 	releaseAllProxDisp();
 
+	if (!applyColdLoadScriptPositions())
+	{
+		return false;
+	}
+
 	try
 	{
 		// Build the world from the snapshot: terrain (overwritten in place over the scenario map),
@@ -1432,6 +1753,21 @@ bool coldLoadRestoreWorld()
 	if (gameWorld.map.tiles)
 	{
 		mapReloadGroundTypes();
+	}
+
+	// stageThreeInitialise resets the view after this
+	// (init3DView the sun, skybox, fog color and camera rotation, pie_InitLighting the light colors),
+	// so keep what it resets to apply again then
+	g_coldLoadViewDoc = std::make_unique<nlohmann::ordered_json>(nlohmann::ordered_json::object());
+	g_coldLoadPresentationVersion = 0;
+	if (g_coldLoadGameStateDoc->contains("presentation"))
+	{
+		(*g_coldLoadViewDoc)["presentation"] = g_coldLoadGameStateDoc->at("presentation");
+		g_coldLoadPresentationVersion = g_coldLoadGameStateDoc->at("presentation").value("version", 0u);
+	}
+	if (g_coldLoadLocalStateDoc && g_coldLoadLocalStateDoc->is_object() && g_coldLoadLocalStateDoc->contains("camera"))
+	{
+		(*g_coldLoadViewDoc)["camera"] = g_coldLoadLocalStateDoc->at("camera");
 	}
 
 	// Apply the disk-only local view/meta (camera, radar zoom, cheated) now that the map exists. Absent
@@ -1506,6 +1842,11 @@ LoadingTask<> coldLoadGameInit(ResourceLoadingController &controller, const std:
 		debug(LOG_ERROR, "levReleaseAll failed before cold load. Attempting to load anyway");
 	}
 
+	// Rebuild the world with the network messages off (a load from a running game still has them on),
+	// so restore-time calls that check bMultiMessages change the world directly instead of sending a message
+	// (ex. buildDroid, secondarySetState). stageThreeInitialise turns them on before the scripts' load event.
+	bMultiMessages = false;
+
 	// Read the GameState blob (gamestate.wz) from the folder: restores the setup/identity globals
 	// (incl. aLevelName + game.hash) and hands back the embedded GameState document to apply after
 	// the level is loaded. The folder's legacy save-info.json / .json files are ignored.
@@ -1535,12 +1876,22 @@ LoadingTask<> coldLoadGameInit(ResourceLoadingController &controller, const std:
 		co_return load_fail();
 	}
 
+	// Here, once the save's mods are mounted: the AI list depends on them
+	resolveSavedAIs(header);
+
 	// Stash the GameState document for the restore hook + the deferred scripting replay (both run
 	// inside the level load below, not after it - see coldLoadRestoreWorld / applyDeferredScripting).
 	// The disk-only local view/meta is stashed alongside and applied at the end of coldLoadRestoreWorld.
 	g_coldLoadGameStateDoc = std::make_unique<nlohmann::ordered_json>(std::move(gsDoc));
 	g_coldLoadLocalStateDoc = std::make_unique<nlohmann::ordered_json>(std::move(localDoc));
 	g_coldLoadPendingResumeDoc = std::make_unique<nlohmann::ordered_json>(std::move(pendingDoc));
+	g_coldLoadViewDoc.reset();
+	g_coldLoadInterfaceDoc.reset();
+	g_coldLoadScriptPositions.reset();
+	if (header.hasScriptPositions)
+	{
+		g_coldLoadScriptPositions = std::make_unique<SetupHeaderInfo>(header);
+	}
 	g_coldLoadReconstruct = false;
 
 	// Load the level in RECONSTRUCT mode: the normal scenario load runs - so the map's
@@ -1562,6 +1913,9 @@ LoadingTask<> coldLoadGameInit(ResourceLoadingController &controller, const std:
 		g_coldLoadGameStateDoc.reset();
 		g_coldLoadLocalStateDoc.reset();
 		g_coldLoadPendingResumeDoc.reset();
+		g_coldLoadViewDoc.reset();
+		g_coldLoadInterfaceDoc.reset();
+		g_coldLoadScriptPositions.reset();
 		g_coldLoadReconstruct = false;
 		debug(LOG_ERROR, "Failed to load/reconstruct savegame '%s'", folderPath.c_str());
 		co_return load_fail();

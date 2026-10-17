@@ -39,6 +39,7 @@
 #include "frontend.h"
 #include "gamestate_serialize.h"
 #include "gamestate_savegame.h"
+#include "gamestate_harness.h"
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
@@ -74,6 +75,8 @@ struct poptOption
 	int enumeration;
 	const char *descrip;
 	const char *argDescrip;
+	// Not listed by --help, and its descriptions aren't translated (the GameState test harness options)
+	bool hidden = false;
 };
 
 typedef struct _poptContext
@@ -212,6 +215,10 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 	fprintf(output, _("Usage: %s [OPTION...]\n"), ctx->argv[0]);
 	for (int i = 0; i < ctx->size; i++)
 	{
+		if (ctx->table[i].hidden)
+		{
+			continue;
+		}
 		char txt[128];
 		ssprintf(txt, "  --%s", ctx->table[i].string);
 
@@ -369,6 +376,25 @@ typedef enum
 	CLI_GAMESTATE_CRCTRACE,
 	CLI_GAMESTATE_CRCDETAIL,
 	CLI_GAMESTATE_CRCDETAIL_ONSAVE,
+	CLI_GAMESTATE_SAVEATTICK,
+	CLI_GAMESTATE_SAVEWHENDYING,
+	CLI_GAMESTATE_DYINGFILTER,
+	CLI_GAMESTATE_EXITATTICK,
+	CLI_GAMESTATE_REWINDTEST,
+	CLI_GAMESTATE_REWINDFAULT,
+	CLI_GAMESTATE_SNAPSHOTRING,
+	CLI_GAMESTATE_SEEKTEST,
+	CLI_GAMESTATE_SEEKFAULT,
+	CLI_GAMESTATE_UISTRESS,
+	CLI_GAMESTATE_TESTREINFORCE,
+	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
+	CLI_GAMESTATE_TESTCONTINUELEVELS,
+	CLI_GAMESTATE_RESAVEONLOAD,
+	CLI_GAMESTATE_TESTSEED,
+	CLI_GAMESTATE_CHECKCOVERAGE,
+	CLI_GAMESTATE_SAVEAFTERMESSAGES,
+	CLI_GAMESTATE_SAVEBEFOREMESSAGES,
+	CLI_GAMESTATE_SAVEWHENCOVERAGEPENDING,
 	CLI_PERFCOUNTERS,
 	CLI_TMP_PREFER_OLD_SAVE,
 	CLI_DRS_FRACTION,
@@ -467,11 +493,31 @@ static const struct poptOption *getOptionsTable()
 		{ "loadreplay", POPT_ARG_STRING, CLI_LOADREPLAY, N_("Load a replay"),     N_("replay file") },
 		{ "window", POPT_ARG_NONE, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr },
 		{ "version", POPT_ARG_NONE, CLI_VERSION,    N_("Show version information and exit"), nullptr },
-		{ "gamestate-selftest", POPT_ARG_NONE, CLI_GAMESTATE_SELFTEST, N_("Run the GameState serialization determinism self-test and exit"), nullptr },
-		{ "gamestate-roundtrip", POPT_ARG_STRING, CLI_GAMESTATE_ROUNDTRIP, N_("Run the GameState reconstruct round-trip test at the given game tick and exit"), N_("game tick") },
-		{ "gamestate-crc-trace", POPT_ARG_STRING, CLI_GAMESTATE_CRCTRACE, N_("Write a per-tick sync-CRC trace to the given file (for the load sync test)"), N_("file") },
-		{ "gamestate-crc-detail-tick", POPT_ARG_STRING, CLI_GAMESTATE_CRCDETAIL, N_("At this game tick, dump the full sync-debug log to <crc-trace-file>.detail.txt (diff original vs loaded run to pinpoint a divergence)"), N_("game tick") },
-		{ "gamestate-crc-detail-on-save", POPT_ARG_NONE, CLI_GAMESTATE_CRCDETAIL_ONSAVE, N_("Auto-dump a window of full sync-debug logs to <crc-trace-file>.detail.txt around each GameState save/load (no need to know the save tick)"), nullptr },
+		// The GameState test harness (tests/gamestate/README.md)
+		{ "gamestate-selftest", POPT_ARG_NONE, CLI_GAMESTATE_SELFTEST, "Run the GameState serialization determinism self-test and exit", nullptr, true },
+		{ "gamestate-roundtrip", POPT_ARG_STRING, CLI_GAMESTATE_ROUNDTRIP, "Run the GameState reconstruct round-trip test at the given game tick and exit", "game tick", true },
+		{ "gamestate-crc-trace", POPT_ARG_STRING, CLI_GAMESTATE_CRCTRACE, "Write a per-tick sync-CRC trace to the given file (for the load sync test)", "file", true },
+		{ "gamestate-crc-detail-tick", POPT_ARG_STRING, CLI_GAMESTATE_CRCDETAIL, "At this game tick, dump the full sync-debug log to <crc-trace-file>.detail.txt (diff original vs loaded run to pinpoint a divergence)", "game tick", true },
+		{ "gamestate-crc-detail-on-save", POPT_ARG_NONE, CLI_GAMESTATE_CRCDETAIL_ONSAVE, "Auto-dump a window of full sync-debug logs to <crc-trace-file>.detail.txt around each GameState save/load (no need to know the save tick)", nullptr, true },
+		{ "gamestate-save-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_SAVEATTICK, "Write a savegame at the given game tick and keep running (for the load sync test)", "tick:savegame path", true },
+		{ "gamestate-save-when-dying", POPT_ARG_NONE, CLI_GAMESTATE_SAVEWHENDYING, "Delay --gamestate-save-at-tick until a tick that ends with objects pending destruction", nullptr, true },
+		{ "gamestate-dying-filter", POPT_ARG_STRING, CLI_GAMESTATE_DYINGFILTER, "With --gamestate-save-when-dying: what the objects pending destruction must include (comma-separated: a minimum count, droid, structure, feature, pendingvis)", "filter", true },
+		{ "gamestate-exit-at-tick", POPT_ARG_STRING, CLI_GAMESTATE_EXITATTICK, "Quit at the given game tick", "game tick", true },
+		{ "gamestate-rewind-fault", POPT_ARG_STRING, CLI_GAMESTATE_REWINDFAULT, "Test only: damage the --gamestate-rewind-test snapshot before restoring it", "kind[,continue]", true },
+		{ "gamestate-snapshot-ring", POPT_ARG_STRING, CLI_GAMESTATE_SNAPSHOTRING, "During replay playback, keep in-process snapshots of the game every given game time, for seeking back (headless too), or turn that off", "interval ms[,budget KB[,zlib level]][,sync] | off", true },
+		{ "gamestate-seek-test", POPT_ARG_STRING, CLI_GAMESTATE_SEEKTEST, "Test only: during replay playback, seek to a game time when another is reached", "at:target[,at:target...]", true },
+		{ "gamestate-seek-fault", POPT_ARG_STRING, CLI_GAMESTATE_SEEKFAULT, "Test only: damage the snapshots replay seeks restore (the first given number of them), as --gamestate-rewind-fault does", "kind[,restores]", true },
+		{ "gamestate-test-reinforce", POPT_ARG_STRING, CLI_GAMESTATE_TESTREINFORCE, "Test only: at this game tick, during an off-world campaign mission, send reinforcements as the player does", "tick", true },
+		{ "gamestate-ui-stress", POPT_ARG_STRING, CLI_GAMESTATE_UISTRESS, "Test only: every given number of ticks, point the UI at the droid most likely to die next, and check every frame that the UI references no freed object", "ticks", true },
+		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
+		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
+		{ "gamestate-test-continue-levels", POPT_ARG_NONE, CLI_GAMESTATE_TESTCONTINUELEVELS, "Test only: go on to the next campaign level without the mission result screen, and log the replaced textures when each level starts", nullptr, true },
+		{ "gamestate-resave-on-load", POPT_ARG_STRING, CLI_GAMESTATE_RESAVEONLOAD, "After loading a savegame, save it again to the given path before the first tick, and quit", "savegame path", true },
+		{ "gamestate-save-after-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEAFTERMESSAGES, "Test only: take the --gamestate-save-at-tick save right after the messages for the next tick are processed (the default)", nullptr, true },
+		{ "gamestate-save-before-messages", POPT_ARG_NONE, CLI_GAMESTATE_SAVEBEFOREMESSAGES, "Test only: take the --gamestate-save-at-tick save and the rewind snapshot right after a tick, before the messages for the next tick are processed", nullptr, true },
+		{ "gamestate-save-when-coverage-pending", POPT_ARG_NONE, CLI_GAMESTATE_SAVEWHENCOVERAGEPENDING, "Test only: delay --gamestate-save-at-tick until tile coverage changes are pending", nullptr, true },
+		{ "gamestate-check-coverage", POPT_ARG_STRING, CLI_GAMESTATE_CHECKCOVERAGE, "Test only: every given number of ticks, and before a harness save or rewind snapshot, check that every object's tile coverage matches a recompute from its current state", "ticks", true },
+		{ "gamestate-test-seed", POPT_ARG_STRING, CLI_GAMESTATE_TESTSEED, "Test only: seed the new game's random seed and the scripts' Math.random() from this number instead of the clock, so a run can be repeated", "seed", true },
 		{ "perfcounters", POPT_ARG_STRING, CLI_PERFCOUNTERS, N_("Write per-tick performance counters to the given CSV file"), N_("file") },
 		{ "tmp-prefer-old-save", POPT_ARG_NONE, CLI_TMP_PREFER_OLD_SAVE, N_("Prefer the legacy load path for a save folder that has both the old and new-format data (temporary)"), nullptr },
 		{ "drs-fraction", POPT_ARG_STRING, CLI_DRS_FRACTION, N_("Pin the dynamic resolution scene render fraction for testing, bypassing GPU timing feedback"), N_("fraction 0.5 - 1.0") },
@@ -563,6 +609,10 @@ static const struct poptOption *getOptionsTable()
 		for (i = 0; i < table_size; ++i)
 		{
 			TranslatedOptionsTable[i] = optionsTable[i];
+			if (TranslatedOptionsTable[i].hidden)
+			{
+				continue;
+			}
 
 			// If there is a description, make sure to translate it with gettext
 			if (TranslatedOptionsTable[i].descrip != nullptr)
@@ -940,6 +990,127 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 		case CLI_GAMESTATE_CRCDETAIL_ONSAVE:
 			setSyncCrcDetailOnSave(20); // dump a 20-tick window around each save/load (overlaps saving vs loaded run, with headroom for debugging divergences a few ticks past resume)
+			break;
+		case CLI_GAMESTATE_SAVEATTICK:
+		{
+			token = poptGetOptArg(poptCon);
+			const char *sep = (token != nullptr) ? strchr(token, ':') : nullptr;
+			if (sep == nullptr || sep == token || !strchr(sep + 1, '/'))
+			{
+				qFatal("Bad value for --gamestate-save-at-tick (expected <tick>:<savegame path>, ex. 60000:savegames/skirmish/fork.gam)");
+			}
+			gamestate::harness::setSaveAtTick(static_cast<uint32_t>(strtoul(token, nullptr, 10)), std::string(sep + 1));
+			break;
+		}
+		case CLI_GAMESTATE_SAVEWHENDYING:
+			gamestate::harness::setSaveWhenDying(true);
+			break;
+		case CLI_GAMESTATE_DYINGFILTER:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setDyingFilter(token))
+			{
+				qFatal("Bad value for --gamestate-dying-filter (expected a comma-separated list of: a minimum count, droid, structure, feature, pendingvis)");
+			}
+			break;
+		case CLI_GAMESTATE_EXITATTICK:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing game tick value for --gamestate-exit-at-tick");
+			}
+			gamestate::harness::setExitAtTick(static_cast<uint32_t>(strtoul(token, nullptr, 10)));
+			break;
+		case CLI_GAMESTATE_REWINDFAULT:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setRewindFault(token))
+			{
+				qFatal("Bad value for --gamestate-rewind-fault (see gamestate_harness.h for the kinds)");
+			}
+			break;
+		case CLI_GAMESTATE_SNAPSHOTRING:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setSnapshotRing(token))
+			{
+				qFatal("Bad value for --gamestate-snapshot-ring (expected <interval ms>[,<budget KB>[,<zlib level>]][,sync] or off)");
+			}
+			break;
+		case CLI_GAMESTATE_SEEKFAULT:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setSeekFault(token))
+			{
+				qFatal("Bad value for --gamestate-seek-fault (expected <kind>[,<restores>], kinds as --gamestate-rewind-fault)");
+			}
+			break;
+		case CLI_GAMESTATE_SEEKTEST:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setSeekTest(token))
+			{
+				qFatal("Bad value for --gamestate-seek-test (expected <at>:<target>[,<at>:<target>...])");
+			}
+			break;
+		case CLI_GAMESTATE_TESTREINFORCE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setTestReinforce(token))
+			{
+				qFatal("Bad value for --gamestate-test-reinforce (expected <tick>)");
+			}
+			break;
+		case CLI_GAMESTATE_UISTRESS:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !gamestate::harness::setUiStress(token))
+			{
+				qFatal("Bad value for --gamestate-ui-stress (expected <ticks>)");
+			}
+			break;
+		case CLI_GAMESTATE_REWINDTEST:
+		{
+			token = poptGetOptArg(poptCon);
+			const char *sep = (token != nullptr) ? strchr(token, ':') : nullptr;
+			if (sep == nullptr || sep == token || sep[1] == '\0')
+			{
+				qFatal("Bad value for --gamestate-rewind-test (expected <tick>:<ticks later>)");
+			}
+			gamestate::harness::setRewindTest(static_cast<uint32_t>(strtoul(token, nullptr, 10)), static_cast<uint32_t>(strtoul(sep + 1, nullptr, 10)));
+			break;
+		}
+		case CLI_GAMESTATE_SUPPRESSLOADEDEVENT:
+			gamestate::harness::setSuppressLoadedEvent(true);
+			break;
+		case CLI_GAMESTATE_TESTCONTINUELEVELS:
+			gamestate::harness::setContinueLevels(true);
+			break;
+		case CLI_GAMESTATE_RESAVEONLOAD:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !strchr(token, '/'))
+			{
+				qFatal("Bad savegame path for --gamestate-resave-on-load (needs to be a full path, ex. savegames/skirmish/resave.gam)");
+			}
+			gamestate::harness::setResaveOnLoad(token);
+			break;
+		case CLI_GAMESTATE_TESTSEED:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || *token == '\0')
+			{
+				qFatal("Missing seed value for --gamestate-test-seed");
+			}
+			gamestate::harness::setTestSeed(static_cast<uint32_t>(strtoul(token, nullptr, 10)));
+			break;
+		case CLI_GAMESTATE_SAVEAFTERMESSAGES:
+			gamestate::harness::setSaveBeforeMessages(false);
+			break;
+		case CLI_GAMESTATE_SAVEBEFOREMESSAGES:
+			gamestate::harness::setSaveBeforeMessages(true);
+			break;
+		case CLI_GAMESTATE_SAVEWHENCOVERAGEPENDING:
+			gamestate::harness::setSaveWhenCoveragePending(true);
+			break;
+		case CLI_GAMESTATE_CHECKCOVERAGE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strtoul(token, nullptr, 10) == 0)
+			{
+				qFatal("Bad value for --gamestate-check-coverage (expected a number of ticks)");
+			}
+			gamestate::harness::setCheckCoverage(static_cast<uint32_t>(strtoul(token, nullptr, 10)));
 			break;
 		case CLI_PERFCOUNTERS:
 			token = poptGetOptArg(poptCon);

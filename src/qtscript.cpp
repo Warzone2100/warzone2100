@@ -59,9 +59,11 @@
 #include "console.h"
 #include "clparse.h"
 #include "mission.h"
+#include "objmem.h"
 #include "modding.h"
 #include "version.h"
 #include "game.h"
+#include "gamestate_capture.h"
 #include "warzoneconfig.h"
 #include "challenge.h"
 #include "multistat.h"
@@ -325,6 +327,22 @@ void scriptSetDerrickPos(int x, int y)
 	derricks.insert(out);
 }
 
+std::vector<Vector2i> scriptGetDerrickPositions()
+{
+	std::vector<Vector2i> result;
+	result.reserve(derricks.size());
+	for (uint16_t pos : derricks)
+	{
+		result.emplace_back(pos >> 8, pos & 0xff);
+	}
+	return result;
+}
+
+void scriptClearDerrickPositions()
+{
+	derricks.clear();
+}
+
 bool scriptInit()
 {
 	int i;
@@ -422,6 +440,15 @@ bool prepareScripts(bool loadGame)
 	return true;
 }
 
+void discardQueuedResearchEvents()
+{
+	if (!eventQueue.empty())
+	{
+		debug(LOG_INFO, "Discarding %zu queued eventResearched call(s)", eventQueue.size());
+	}
+	std::queue<struct researchEvent>().swap(eventQueue);
+}
+
 bool initScripts()
 {
 	return true;
@@ -471,7 +498,55 @@ bool scripting_engine::shutdownScripts()
 		delete script;
 	}
 	scripts.clear();
+	instanceSources.clear();
 	return true;
+}
+
+bool reloadScriptInstances()
+{
+	return scripting_engine::instance().reloadScriptInstances();
+}
+
+bool scripting_engine::reloadScriptInstances()
+{
+	std::vector<InstanceSource> sources;
+	for (auto *instance : scripts)
+	{
+		auto it = instanceSources.find(instance);
+		ASSERT_OR_RETURN(false, it != instanceSources.end(), "No source recorded for script %s of player %d", instance->scriptName().c_str(), instance->player());
+		sources.push_back(it->second);
+	}
+	// Release everything the old instances hold, as shutdownScripts() does (without its performance dump, and
+	// keeping the UI that isn't the scripts')
+	const bool wasReady = scriptsReady;
+	scriptsReady = false;
+	jsDebugShutdown();
+	for (auto *instance : scripts)
+	{
+		delete monitors.at(instance);
+		unregisterFunctions(instance);
+	}
+	timers.clear();
+	lastTimerID = 0;
+	timerIDMap.clear();
+	monitors.clear();
+	for (auto *instance : scripts)
+	{
+		delete instance;
+	}
+	scripts.clear();
+	instanceSources.clear();
+	bool ok = true;
+	for (const InstanceSource &source : sources)
+	{
+		if (loadPlayerScript(source.path, source.player, source.difficulty, source.binding, false) == nullptr)
+		{
+			debug(LOG_ERROR, "Could not load script %s for player %d again", source.path.toUtf8().c_str(), source.player);
+			ok = false;
+		}
+	}
+	scriptsReady = wasReady;
+	return ok;
 }
 
 bool updateScripts()
@@ -551,6 +626,11 @@ static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path
 }
 
 wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding)
+{
+	return loadPlayerScript(path, player, difficulty, binding, true);
+}
+
+wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty, wzapi::ScriptBinding binding, bool clearLog)
 {
 	ASSERT_OR_RETURN(nullptr, player >= 0 && (player < MAX_PLAYERS || player == selectedPlayer), "Player index %d out of bounds", player);
 
@@ -700,8 +780,11 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVarsToSave, wzapi::GlobalVariableFlags::ReadOnly); // ensure these are saved
 
-	// Clear previous log file
-	PHYSFS_delete((std::string("logs/") + pNewInstance->scriptName() + ".log").c_str());
+	// Clear previous log file (not when the instance is loaded again by a restore: it continues the same game)
+	if (clearLog)
+	{
+		PHYSFS_delete((std::string("logs/") + pNewInstance->scriptName() + ".log").c_str());
+	}
 
 	// Attempt to ready instance for execution
 	if (!pNewInstance->readyInstanceForExecution())
@@ -724,6 +807,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	MONITOR *monitor = new MONITOR;
 	monitors[pNewInstance] = monitor;
+	instanceSources[pNewInstance] = InstanceSource{path, player, difficulty, binding};
 
 	debug(LOG_SAVE, "Created script engine %zu for player %d from %s", scripts.size() - 1, player, path.toUtf8().c_str());
 	return pNewInstance;
@@ -750,6 +834,39 @@ bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer)
 bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer)
 {
 	return scripting_engine::instance().loadScriptStates2(result, targetPlayer);
+}
+
+size_t scriptStatesLastUnmatchedInstances()
+{
+	return scripting_engine::instance().lastUnmatchedInstances;
+}
+
+bool scriptInstanceRunning(int player, const std::string &scriptName)
+{
+	// As findInstanceForPlayer matches them, without its assert
+	const WzString name = WzString::fromUtf8(scriptName).normalized(WzString::NormalizationForm_KD);
+	return std::any_of(scripts.begin(), scripts.end(), [&](const wzapi::scripting_instance *instance) {
+		return instance->player() == player && WzString::fromUtf8(instance->scriptName()).normalized(WzString::NormalizationForm_KD).compare(name) == 0;
+	});
+}
+
+playerCallbackFunc scriptNamedCallback(int player, const std::string &scriptName, const std::string &function)
+{
+	// As findInstanceForPlayer matches them, without its assert
+	const WzString name = WzString::fromUtf8(scriptName).normalized(WzString::NormalizationForm_KD);
+	for (auto *instance : scripts)
+	{
+		if (instance->player() == player && WzString::fromUtf8(instance->scriptName()).normalized(WzString::NormalizationForm_KD).compare(name) == 0)
+		{
+			return instance->namedCallback(WzString::fromUtf8(function));
+		}
+	}
+	return nullptr;
+}
+
+size_t scriptInstanceCount()
+{
+	return scripts.size();
 }
 
 bool scriptsAreReady()
@@ -781,6 +898,8 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer)
 {
 	root = nlohmann::ordered_json::object();
+	// Reserve room for the keys below: an ordered_json object copies its entries (and all they hold) each time it grows.
+	root.get_ref<nlohmann::ordered_json::object_t &>().reserve(8);
 	root["version"] = SCRIPTSTATE_VERSION;
 
 	// One object per script instance, bundling its globals, group memberships, and per-instance flags
@@ -797,6 +916,7 @@ bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyP
 		}
 
 		nlohmann::ordered_json instanceObj = nlohmann::ordered_json::object();
+		instanceObj.get_ref<nlohmann::ordered_json::object_t &>().reserve(8);  // (as root above: globals isn't copied)
 		// 'me'/'scriptName' identify the instance on load (findInstanceForPlayer)
 		instanceObj["me"] = instance->player();
 		instanceObj["scriptName"] = instance->scriptName();
@@ -813,6 +933,9 @@ bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyP
 		instanceObj["groups"] = std::move(groupsResult);
 
 		instanceObj["isReceivingAllEvents"] = instance->isReceivingAllEvents();
+
+		// What the instance was loaded from, so a load can log that the script changed since the save
+		instanceObj["sourceHash"] = instance->sourceHash();
 
 		// Math.random() PRNG state, so a resumed instance continues the identical sequence rather than
 		// re-seeding from wall-clock time (which would desync host-side AI decisions across a restore)
@@ -1069,6 +1192,7 @@ static T jsonValueOr(const JsonType &j, const char *key, T fallback, bool *misma
 bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer)
 {
 	bool anySkipped = false;
+	lastUnmatchedInstances = 0;
 	const int version = jsonValueOr(root, "version", 1);
 	ASSERT_OR_RETURN(false, version >= 2, "Invalid version: %d", version);
 
@@ -1153,6 +1277,8 @@ bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int
 			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 			if (!instance)
 			{
+				debug(LOG_SAVE, "No script instance %s for player %d: its saved state is not restored", scriptName.toUtf8().c_str(), player);
+				++lastUnmatchedInstances;
 				continue;
 			}
 
@@ -1231,6 +1357,13 @@ bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int
 			if (recvIt != instanceObj.end() && recvIt->is_boolean())
 			{
 				instance->setReceiveAllEvents(recvIt->get<bool>());
+			}
+
+			// What the instance was loaded from when the game was saved (see saveScriptStates2)
+			auto sourceIt = instanceObj.find("sourceHash");
+			if (sourceIt != instanceObj.end() && sourceIt->is_string() && sourceIt->get<std::string>() != instance->sourceHash())
+			{
+				debug(LOG_INFO, "Script %s of player %d changed since the game was saved", instance->scriptName().c_str(), instance->player());
 			}
 
 			// Math.random() PRNG state (see saveScriptStates2)
@@ -1431,15 +1564,23 @@ void jsShowDebug()
 //__
 //__ ## eventGameLoaded()
 //__
-//__ An event that is run when game is loaded from a saved game. There is usually no need to use this event.
+//__ An event that is run when a game is loaded from a save written by an earlier version of the game.
+//__ A save written since 4.8 restores the game as it was saved, including the scripts' global (`var`) variables,
+//__ their timers, groups and labels, and the interface they set up
+//__ (the reticule buttons, whether the interface is shown, replaced textures, the minimap, the sky and lighting).
+//__ This event isn't run then, and the game goes on as if it had never been saved.
+//__ NOTE: a script that keeps state anywhere else
+//__ (`let` or `const` variables it changes, closures, properties of functions) loses it when a game is loaded.
+//__ (Changed in 4.8.)
 //__
 //__ ## eventGameSaving()
 //__
-//__ An event that is run before game is saved. There is usually no need to use this event.
+//__ Deprecated: no longer raised.
 //__
 //__ ## eventGameSaved()
 //__
 //__ An event that is run after game is saved. There is usually no need to use this event.
+//__ It runs after the game state was captured, so a handler must not change the game state.
 //__
 //__ ## eventDeliveryPointMoving()
 //__
@@ -1623,8 +1764,11 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 	if ((trigger == TRIGGER_START_LEVEL || trigger == TRIGGER_GAME_LOADED) && !saveandquit_enabled().empty())
 	{
 		// --saveandquit produces a normal mid-mission save (which, unlike the old START path, also captures script state)
-		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_MIDMISSION);
-		wzQuit(0);
+		// At the next safe point (see gamestate_capture.h)
+		requestGameStateCapture([]() {
+			saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_MIDMISSION);
+			wzQuit(0);
+		});
 	}
 
 	return true;
@@ -1884,6 +2028,14 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 //__
 //__ An event that is run whenever an object is destroyed. Careful passing
 //__ the parameter object around, since it is about to vanish!
+//__
+//__ It is run at the end of the game update in which the object was
+//__ destroyed. It isn't run for objects removed between two updates:
+//__ - while a game or level is being set up, by the game itself or by
+//__   removeObject() in eventGameInit or eventStartLevel
+//__ - by removeObject() in another event that runs between updates
+//__   (eventGameLoaded, eventPlayerLeft, the UI and menu events, ...)
+//__ - when a player leaves the game.
 //__
 bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 {
@@ -2627,7 +2779,8 @@ bool scripting_engine::groupAddObject(const BASE_OBJECT *psObj, int groupId, wza
 
 bool scripting_engine::loadGroup(wzapi::scripting_instance *instance, int groupId, int objId)
 {
-	BASE_OBJECT *psObj = IdToPointer(objId, ANYPLAYER);
+	// Not IdToPointer(): a group member can be off the map, in a transporter's cargo or on the mission list
+	BASE_OBJECT *psObj = getBaseObjFromId(objId);
 	ASSERT_OR_RETURN(false, psObj, "Non-existent object %d in group %d in savegame", objId, groupId);
 	return groupAddObject(psObj, groupId, instance);
 }
@@ -2973,7 +3126,7 @@ bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LA
 			p.type = objectType;
 			p.player = entryPlayer;
 			p.triggered = jsonValueOr(entry, "triggered", -1); // deactivated by default
-			p.subscriber = ALL_PLAYERS; // object labels do not carry a subscriber
+			p.subscriber = entrySubscriber;
 			if (IdToObject((OBJECT_TYPE)p.type, p.id, p.player) == nullptr)
 			{
 				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
@@ -3059,6 +3212,7 @@ bool scripting_engine::writeLabelMap(const LABELMAP& labels, nlohmann::ordered_j
 			entry["id"] = l.id;
 			entry["player"] = l.player;
 			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber; // set by resetLabel(label, player): only that player's objects trigger it
 		}
 		result.push_back(std::move(entry));
 	}

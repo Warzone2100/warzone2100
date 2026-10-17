@@ -144,7 +144,6 @@ static bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer);
 static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD player);
-static void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState);
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(const STRUCTURE *psStruct);
 static void parseFavoriteStructs();
@@ -531,6 +530,7 @@ bool loadStructureStats(WzConfig &ini)
 	std::vector<WzString> list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = 0;
+	statsGenerationBump();
 	bool loadSucceeded = false;
 	const size_t allocatedStats = list.size();
 	auto releaseOnFailure = gsl::finally([&loadSucceeded, allocatedStats] {
@@ -884,6 +884,7 @@ static void releaseStructureStats(size_t count)
 	delete[] asStructureStats;
 	asStructureStats = nullptr;
 	numStructureStats = 0;
+	statsGenerationBump();
 }
 
 bool structureStatsShutDown()
@@ -1557,7 +1558,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 	return buildStructureDir(world, pStructureType, x, y, direction, player, FromSave, generateSynchronisedObjectId());
 }
 
-STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/, bool deferWallRemoval/*= false*/)
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/, bool deferWallRemoval/*= false*/, bool ignoreLimits/*= false*/)
 {
 	STRUCTURE *psBuilding = nullptr;
 
@@ -1574,7 +1575,7 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		ASSERT_OR_RETURN(nullptr, max < numStructureStats, "Invalid structure type");
 
 		// Don't allow more than interface limits
-		if (asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
+		if (!ignoreLimits && asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
 		{
 			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %u, max %u)!",
 			      player, getStatsName(pStructureType), asStructureStats[max].curCount[player],
@@ -3930,7 +3931,7 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 
 	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY) && !bMission)
 	{
-		visTilesUpdate(psBuilding, world.map);
+		// (A range upgrade refreshes the tile coverage at the end of the tick, see visNoteRangeChange)
 		psBuilding->flags.set(OBJECT_FLAG_DIRTY, false);
 	}
 
@@ -3942,7 +3943,8 @@ void structureUpdate(STRUCTURE *psBuilding, GameWorld& world)
 
 			for (BASE_OBJECT *gridObj : gridStartIterate(psBuilding->pos.x, psBuilding->pos.y, TILE_UNITS))
 			{
-				if (isDroid(gridObj))
+				// Not one that died or left the map earlier in this tick: the grid keeps it until the end of the tick
+				if (isDroid(gridObj) && !gridObj->died)
 				{
 					found = true;
 					break;
@@ -4690,7 +4692,7 @@ bool validLocation(GameWorld& world, BASE_STATS *psStats, Vector2i pos, uint16_t
 
 
 //remove a structure from the map
-static void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState)
+void removeStructFromMap(STRUCTURE *psStruct, WorldMapState& mapState)
 {
 	auxStructureNonblocking(psStruct, mapState);
 
@@ -5587,8 +5589,6 @@ void buildingComplete(STRUCTURE *psBuilding, GameWorld& world)
 	psBuilding->currentBuildPts = structureBuildPointsToCompletion(*psBuilding);
 	psBuilding->status = SS_BUILT;
 
-	visTilesUpdate(psBuilding, world.map);
-
 	if (psBuilding->prebuiltImd != nullptr)
 	{
 		// We finished building a module, now use the combined IMD.
@@ -5597,6 +5597,9 @@ void buildingComplete(STRUCTURE *psBuilding, GameWorld& world)
 		psBuilding->prebuiltImd = nullptr;
 		psBuilding->sDisplay.imd = IMDs[imdIndex];
 	}
+
+	// After the model is final: the vision height comes from it
+	visTilesUpdate(psBuilding, world.map);
 
 	switch (psBuilding->pStructureType->type)
 	{
