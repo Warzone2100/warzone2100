@@ -76,6 +76,10 @@ struct ChipText
 };
 /// A player's position number on a chip of their color (as the connection panel's)
 void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect);
+/// A loading spinner: dots around a circle, turning (still with reduced motion)
+void drawSpinner(int cx, int cy, int radius, PIELIGHT color);
+/// Something drawn over `rect` in the panel's color, to dim it (a chip whose player is still loading)
+void dimRect(const WzRect &rect, uint8_t amount);
 /// An all-capital headline ("TRANSPORT MISSION") in sentence case, others as written
 std::string sentenceCase(const std::string &text);
 /// An entry's kind ("Research · Cyborgs", "Briefing · Transport mission")

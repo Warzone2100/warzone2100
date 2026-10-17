@@ -79,6 +79,7 @@ data/base/images/hud/icons/category-support.svg
 data/base/images/hud/icons/category-trucks.svg
 data/base/images/hud/icons/channel-off.svg
 data/base/images/hud/icons/channel.svg
+data/base/images/hud/icons/chat.svg
 data/base/images/hud/icons/chevron-down.svg
 data/base/images/hud/icons/chevron-right.svg
 data/base/images/hud/icons/chevron-up.svg
@@ -123,6 +124,7 @@ data/base/images/hud/icons/order-return-recycle.svg
 data/base/images/hud/icons/order-return-repair.svg
 data/base/images/hud/icons/players.svg
 data/base/images/hud/icons/power.svg
+data/base/images/hud/icons/quick-chat.svg
 data/base/images/hud/icons/rate-of-fire.fill.svg
 data/base/images/hud/icons/rate-of-fire.svg
 data/base/images/hud/icons/repair.svg

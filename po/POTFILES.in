@@ -472,6 +472,7 @@ src/hci/replay_controller.cpp
 src/hci/research.cpp
 src/hci/teamstrategy.cpp
 src/hud/hudbuildcategories.cpp
+src/hud/hudchatbar.cpp
 src/hud/hudconnection.cpp
 src/hud/huddetailcontents.cpp
 src/hud/hudidle.cpp
@@ -492,6 +493,7 @@ src/hud/intel/intelview.cpp
 src/hud/intel/objectivescard.cpp
 src/hud/intel/playersview.cpp
 src/hud/intel/teamstrategyview.cpp
+src/hud/pregamescreen.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp
