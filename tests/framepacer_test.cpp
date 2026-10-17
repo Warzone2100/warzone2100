@@ -314,6 +314,49 @@ int main()
 		check(std::abs(pacer.refreshPeriod() - hz120) < 1e-6, "two vblanks per frame: period from display times", pacer.refreshPeriod(), hz120);
 	}
 	{
+		// Sim tick frames that miss their vblank, predicted once the predictions keep coming true
+		FramePacer pacer;
+		std::mt19937 rng(15);
+		std::uniform_real_distribution<double> noise(-0.0003, 0.0003);
+		pacer.update(-1.0);
+		double maxError = 0.0, sumMotion = 0.0, sumShown = 0.0;
+		bool predicted = false;
+		for (int i = 0; i < 2000; ++i)
+		{
+			const bool tick = (i % 12 == 0);
+			const double motion = pacer.lastMotionDelta() + pacer.predictLate(tick ? 1.05 * hz120 : 0.1 * hz120);
+			const double shown = tick ? 2.0 * hz120 : hz120;
+			pacer.update(shown + noise(rng));
+			if (i >= 1000)
+			{
+				predicted = predicted || pacer.lastPrediction() > 0.0;
+				maxError = std::max(maxError, std::abs(motion - shown));
+				sumMotion += motion;
+				sumShown += shown;
+			}
+		}
+		check(predicted, "missed vblanks: predicted");
+		check(maxError < 1e-4, "missed vblanks: motion follows the display", maxError, 0.0);
+		check(std::abs(sumMotion - sumShown) < hz120, "missed vblanks: no drift", std::abs(sumMotion - sumShown), 0.0);
+	}
+	{
+		// The same frames absorbed by a queue (a late sample followed by an early one, shown on time)
+		FramePacer pacer;
+		std::mt19937 rng(16);
+		std::uniform_real_distribution<double> noise(-0.0003, 0.0003);
+		pacer.update(-1.0);
+		bool predicted = false;
+		for (int i = 0; i < 2000; ++i)
+		{
+			const bool tick = (i % 12 == 0);
+			pacer.predictLate(tick ? 1.05 * hz120 : 0.1 * hz120);
+			predicted = predicted || pacer.lastPrediction() > 0.0;
+			const double m = tick ? 1.6 * hz120 : ((i % 12 == 1) ? 0.4 * hz120 : hz120);
+			pacer.update(m + noise(rng));
+		}
+		check(!predicted, "absorbed late frames: never predicted");
+	}
+	{
 		// 119.88 Hz with a nominal 120 Hz
 		const double p = 1.0 / 119.88;
 		FramePacer pacer;

@@ -25,7 +25,7 @@
  *  (a late sample followed by an early one counts as two periods then none, and a missed vblank only shows up in the measured interval a few frames later).
  *
  *  The sum of the deltas stays in step with the measured time, and a stall of several periods is shown at once.
- *  The motion delta leaves out the part of a stall beyond a slow frame.
+ *  The motion delta leaves out the part of a stall beyond a slow frame, and can be advanced for a frame that has already missed its vblank before drawing.
  *
  *  The refresh period comes from either the reported display intervals, the measured intervals, or the backend's nominal value.
  *  Without vsync, or when the samples don't keep to the grid (ex. variable refresh rate), the measured interval is used as-is.
@@ -66,6 +66,11 @@ public:
 	/// The last delta without the part of a stall beyond a slow frame, for motion like the camera's.
 	double lastMotionDelta() const { return motion_; }
 
+	/// Called once per frame before drawing, with the time in seconds since the last update().
+	/// Returns the extra motion delta for a frame that has already missed its vblank,
+	/// once such predictions have proven right (the next update() takes it back from the following motion deltas).
+	double predictLate(double elapsed);
+
 	// Diagnostics, valid after update()
 	double lastMeasuredDelta() const { return measured_; }
 	double lastDelta() const { return delta_; }
@@ -73,6 +78,7 @@ public:
 	bool snapped() const { return snapped_; }            ///< whether the last delta was rounded
 	bool usingPresentationTimes() const { return refreshFromPresentation_; }
 	double drift() const { return phase_ * refresh_; }   ///< offset of the last sample from the period grid
+	double lastPrediction() const { return prediction_; }  ///< extra motion delta from the last predictLate()
 
 	/// Longest delta update() returns, in seconds
 	static constexpr double maxDelta = 1.0 / 6.0;
@@ -97,8 +103,10 @@ private:
 	double fitFraction(double period, double *refinedPeriod) const;
 	void spreadFill(int periods);
 	int spreadMedian() const;
+	void judgeLate(int extra, int candidate);
 
 	static constexpr size_t kSpreadFrames = 8;
+	static constexpr size_t kJudgeFrames = 4;
 
 	bool vsync_ = true;
 	double nominalRefresh_ = 0.0;
@@ -108,14 +116,26 @@ private:
 	uint64_t lastPresentId_ = 0;
 	double lastPresentTime_ = 0.0;
 
-	int spread_[kSpreadFrames] = {};  ///< periods per frame over the last kSpreadFrames frames
-	size_t spreadNext_ = 0;           ///< next slot of spread_ to overwrite
-	int spreadSum_ = 0;               ///< sum of spread_
-	bool spreadFilled_ = false;       ///< spread_ holds values for the current run of rounded frames
+	int spread_[kSpreadFrames] = {};           ///< periods per frame over the last kSpreadFrames frames
+	int predictedSpread_[kSpreadFrames] = {};  ///< periods predictLate() added in advance, in the same slots as spread_
+	size_t spreadNext_ = 0;                    ///< next slot of spread_ to overwrite
+	int spreadSum_ = 0;                        ///< sum of spread_
+	int predictedSum_ = 0;                     ///< sum of predictedSpread_
+	bool spreadFilled_ = false;                ///< spread_ holds values for the current run of rounded frames
 
 	bool havePhase_ = false;      ///< phase_ follows the current run of samples
 	double phase_ = 0.0;          ///< position of the last sample relative to the period grid, in periods
 	Ring phaseFits_;              ///< 1 for each recent sample within kSnapTolerance of the grid, else 0
+
+	int judgeExtra_[kJudgeFrames] = {};      ///< periods counted beyond the typical frame, over the last kJudgeFrames frames
+	int judgeCandidate_[kJudgeFrames] = {};  ///< extra periods predictLate() expected, in the same slots as judgeExtra_
+	size_t judgeNext_ = 0;                   ///< next slot of judgeExtra_ to overwrite
+	size_t judgeCount_ = 0;                  ///< slots of judgeExtra_ holding frames of the current run
+	Ring lateHits_;               ///< 1 for each recent late-frame prediction that the counted periods bore out, else 0
+	bool predicting_ = false;     ///< late-frame predictions are applied
+	int candidate_ = 0;           ///< extra periods predictLate() expects for the current frame
+	int predicted_ = 0;           ///< extra periods predictLate() added to the current frame's motion
+	double prediction_ = 0.0;
 
 	double measured_ = 0.0;
 	double delta_ = 0.0;
