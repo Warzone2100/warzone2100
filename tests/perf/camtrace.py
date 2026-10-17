@@ -290,17 +290,23 @@ def main():
                  ", from presentation times" if from_pres > len(paced) // 2 else ""))
         describe("|paced - measured| per frame", [abs(r["dt_ms"] - r["dt_measured_ms"]) for r in paced])
         describe("|drift|", [abs(r["pace_drift_ms"]) for r in paced if r["pace_drift_ms"] is not None])
-        # Predicted periods are taken back from the motion delta a fraction of a period at a time,
-        # while a stall is left out in whole periods
-        left_out = [r["dt_ms"] - r["dt_motion_ms"] for r in paced
-                    if r.get("dt_motion_ms") is not None and r["pace_period_ms"]
-                    and r["dt_ms"] - r["dt_motion_ms"] > 0.75 * r["pace_period_ms"]]
+        # Predicted time is taken back from the motion delta a fraction of a period at a time while rounding,
+        # and at once otherwise, while a stall is left out in whole periods
+        left_out = []
+        for r in paced:
+            if r.get("dt_motion_ms") is None or not r["pace_period_ms"]:
+                continue
+            gap = r["dt_ms"] - r["dt_motion_ms"]
+            if not r["pace_snapped"]:
+                gap -= r.get("dt_predicted_ms") or 0.0
+            if gap > (0.75 * r["pace_period_ms"] if r["pace_snapped"] else 1e-3):
+                left_out.append(gap)
         if left_out:
             print("  stall time left out of camera motion on %d frames: %.1f ms in total, largest %.1f ms"
                   % (len(left_out), sum(left_out), max(left_out)))
         predicted = [r["dt_predicted_ms"] for r in paced if r.get("dt_predicted_ms")]
         if predicted:
-            print("  frames predicted to miss their vblank: %d, %.1f ms of camera motion added in advance"
+            print("  frames predicted to be late: %d, %.1f ms of camera motion added in advance"
                   % (len(predicted), sum(predicted)))
 
     present_path = args.trace + ".present.csv"
@@ -321,6 +327,13 @@ def main():
             if pa is None or pb is None or pb != pa + 1 or pa not in display or pb not in display:
                 continue
             shown.append((a, b, display[pb] - display[pa]))
+        # Without vsync, frames can share a display time or arrive out of order (ex. tearing),
+        # so the reported times say little about when each frame became visible
+        unordered = sum(1 for _, _, x in shown if x <= 0.0)
+        if shown and unordered > 0.01 * len(shown):
+            print("  %d of %d display intervals are zero or negative (display times not tied to vblanks, ex. vsync off):"
+                  " not compared" % (unordered, len(shown)))
+            shown = []
         if shown:
             ivals = [x for _, _, x in shown]
             period = pct(ivals, 50)

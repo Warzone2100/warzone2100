@@ -357,6 +357,53 @@ int main()
 		check(!predicted, "absorbed late frames: never predicted");
 	}
 	{
+		// Without vsync, a sim tick frame is shown when it is presented, which the prediction anticipates
+		FramePacer pacer;
+		pacer.setVsync(false);
+		std::mt19937 rng(17);
+		std::uniform_real_distribution<double> noise(-0.0002, 0.0002);
+		pacer.update(-1.0);
+		double maxError = 0.0, sumMotion = 0.0, sumShown = 0.0;
+		bool predicted = false;
+		for (int i = 0; i < 4000; ++i)
+		{
+			const bool tick = (i % 40 == 0);
+			const double elapsed = tick ? 0.006 : 0.00005;
+			const double motion = pacer.lastMotionDelta() + pacer.predictLate(elapsed);
+			const double shown = (tick ? elapsed + 0.001 : 0.0023) + noise(rng);
+			pacer.update(shown);
+			if (i >= 2000)
+			{
+				predicted = predicted || pacer.lastPrediction() > 0.0;
+				if (tick)
+				{
+					maxError = std::max(maxError, std::abs(motion - shown));
+				}
+				sumMotion += motion;
+				sumShown += shown;
+			}
+		}
+		check(predicted, "vsync off, late frames: predicted");
+		check(maxError < 0.0007, "vsync off, late frames: motion follows the presents", maxError, 0.0);
+		check(std::abs(sumMotion - sumShown) < 0.003, "vsync off, late frames: no drift", std::abs(sumMotion - sumShown), 0.0);
+	}
+	{
+		// Without rounding, late frames that a queue absorbs (a long interval then short ones) are never predicted
+		FramePacer pacer;
+		pacer.setVsync(false);
+		pacer.update(-1.0);
+		bool predicted = false;
+		for (int i = 0; i < 4000; ++i)
+		{
+			const bool tick = (i % 40 == 0);
+			pacer.predictLate(tick ? 0.006 : 0.00005);
+			predicted = predicted || pacer.lastPrediction() > 0.0;
+			const int after = i % 40;
+			pacer.update(tick ? 0.007 : ((after == 1 || after == 2) ? 0.0001 : ((after == 3) ? 0.0015 : 0.0023)));
+		}
+		check(!predicted, "vsync off, absorbed late frames: never predicted");
+	}
+	{
 		// 119.88 Hz with a nominal 120 Hz
 		const double p = 1.0 / 119.88;
 		FramePacer pacer;

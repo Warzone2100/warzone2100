@@ -38,6 +38,7 @@ static constexpr int kSpreadMaxExtra = 2;          ///< most extra periods sprea
 static constexpr double kUnroundedStallMin = 0.05; ///< shortest unrounded delta that can count as a stall, in seconds
 static constexpr size_t kLateWindow = 32;          ///< recent late-frame predictions checked against the counted periods
 static constexpr double kLateMargin = 0.00125;     ///< time a frame still needs after predictLate() to make a vblank, in seconds
+static constexpr double kUnroundedLateMin = 0.5;   ///< least extra time that counts as late when not rounding, in typical frame intervals
 
 void FramePacer::Ring::push(double v, size_t capacity)
 {
@@ -91,6 +92,8 @@ void FramePacer::setVsync(bool vsync)
 		vsync_ = vsync;
 		havePhase_ = false;
 		spreadFilled_ = false;
+		roundedLate_ = LateCheck();
+		unroundedLate_ = LateCheck();
 	}
 }
 
@@ -232,29 +235,35 @@ FramePacer::Estimate FramePacer::estimateRefresh() const
 	return best;
 }
 
-void FramePacer::judgeLate(int extra, int candidate)
+void FramePacer::LateCheck::judge(bool hit)
 {
-	// A queue that absorbs a late frame usually takes its extra periods back with an early sample soon after,
+	hits.push(hit ? 1.0 : 0.0, kLateWindow);
+	if (hits.values.size() >= kMinSamples && hits.mean() >= kStartFitFraction)
+	{
+		predicting = true;
+	}
+	else if (hits.mean() < kStopFitFraction)
+	{
+		predicting = false;
+	}
+}
+
+void FramePacer::judgeLate(double extra, double candidate, double slack, bool rounded)
+{
+	// A queue that absorbs a late frame usually takes its extra time back with an early sample soon after,
 	// so a prediction is judged once the following frames have had the chance
 	if (judgeCount_ == kJudgeFrames)
 	{
 		const size_t oldest = judgeNext_;
-		if (judgeCandidate_[oldest] > 0)
+		if (judgeCandidate_[oldest] > 0.0)
 		{
-			int net = judgeExtra_[oldest] + std::min(0, extra);
+			double net = judgeExtra_[oldest] + std::min(0.0, extra);
 			for (size_t i = 1; i < kJudgeFrames; ++i)
 			{
-				net += std::min(0, judgeExtra_[(oldest + i) % kJudgeFrames]);
+				net += std::min(0.0, judgeExtra_[(oldest + i) % kJudgeFrames]);
 			}
-			lateHits_.push(net >= judgeCandidate_[oldest] ? 1.0 : 0.0, kLateWindow);
-			if (lateHits_.values.size() >= kMinSamples && lateHits_.mean() >= kStartFitFraction)
-			{
-				predicting_ = true;
-			}
-			else if (lateHits_.mean() < kStopFitFraction)
-			{
-				predicting_ = false;
-			}
+			const bool hit = net >= judgeCandidate_[oldest] - judgeSlack_[oldest];
+			(judgeRounded_[oldest] ? roundedLate_ : unroundedLate_).judge(hit);
 		}
 	}
 	else
@@ -263,6 +272,8 @@ void FramePacer::judgeLate(int extra, int candidate)
 	}
 	judgeExtra_[judgeNext_] = extra;
 	judgeCandidate_[judgeNext_] = candidate;
+	judgeSlack_[judgeNext_] = slack;
+	judgeRounded_[judgeNext_] = rounded;
 	judgeNext_ = (judgeNext_ + 1) % kJudgeFrames;
 }
 
@@ -301,7 +312,8 @@ double FramePacer::update(double measuredDelta)
 		havePhase_ = false;
 		spreadFilled_ = false;
 		predicted_ = 0;
-		candidate_ = 0;
+		predictedSeconds_ = 0.0;
+		candidateSeconds_ = 0.0;
 		judgeCount_ = 0;
 		return delta_;
 	}
@@ -366,23 +378,34 @@ double FramePacer::update(double measuredDelta)
 		snapping_ = false;
 	}
 
-	// The periods this frame's motion already got from predictLate() are taken back from the following frames
+	// The time this frame's motion already got from predictLate() is taken back from the following frames
 	const int predicted = predicted_;
-	const int candidate = candidate_;
+	const double predictedSeconds = predictedSeconds_;
+	const double candidateSeconds = candidateSeconds_;
+	const bool candidateRounded = candidateRounded_;
+	const double slack = 0.5 * (candidateRounded ? refresh_ : candidateSeconds);
 	predicted_ = 0;
-	candidate_ = 0;
+	predictedSeconds_ = 0.0;
+	candidateSeconds_ = 0.0;
 
 	if (!snapping_)
 	{
 		spreadFilled_ = false;
-		judgeCount_ = 0;
 		delta_ = measured_;
 		double allowance = maxDelta;
+		double extra = 0.0;
 		if (measuredIntervals_.values.size() >= kMinSamples)
 		{
-			allowance = std::max((1 + kSpreadMaxExtra) * measuredIntervals_.percentile(0.5), kUnroundedStallMin);
+			const double typical = measuredIntervals_.percentile(0.5);
+			allowance = std::max((1 + kSpreadMaxExtra) * typical, kUnroundedStallMin);
+			extra = measured_ - typical;
 		}
-		motion_ = std::max(0.0, std::min(delta_, allowance) - predicted * refresh_);
+		judgeLate(extra, candidateSeconds, slack, candidateRounded);
+		if (candidateSeconds > 0.0 && !candidateRounded)
+		{
+			lateRemaining_.push(std::max(0.0, measured_ - lastElapsed_), kLateWindow);
+		}
+		motion_ = std::max(0.0, std::min(delta_, allowance) - predictedSeconds);
 		return delta_;
 	}
 	snapped_ = true;
@@ -395,15 +418,17 @@ double FramePacer::update(double measuredDelta)
 	}
 	int immediate = 0;
 	const int typical = spreadMedian();
-	judgeLate(periods - typical, candidate);
-	int paidBack = 0;
+	judgeLate((periods - typical) * refresh_, candidateSeconds, slack, candidateRounded);
+	// Whole periods are taken back in step with the average, and anything else at once
+	double paidBack = predictedSeconds - predicted * refresh_;
+	int spreadPredicted = predicted;
 	if (periods > typical + kSpreadMaxExtra)
 	{
 		immediate = periods - typical;
 		periods = typical;
-		paidBack = predicted;
+		paidBack = predictedSeconds;
+		spreadPredicted = 0;
 	}
-	const int spreadPredicted = predicted - paidBack;
 	spreadSum_ += periods - spread_[spreadNext_];
 	spread_[spreadNext_] = periods;
 	predictedSum_ += spreadPredicted - predictedSpread_[spreadNext_];
@@ -417,32 +442,62 @@ double FramePacer::update(double measuredDelta)
 		spreadFilled_ = false;
 	}
 	const int leftOut = std::max(0, immediate - kSpreadMaxExtra);
-	const double takenBack = static_cast<double>(predictedSum_) / static_cast<double>(kSpreadFrames) + paidBack;
-	motion_ = std::max(0.0, delta_ - (leftOut + takenBack) * refresh_);
+	const double takenBack = static_cast<double>(predictedSum_) / static_cast<double>(kSpreadFrames) * refresh_ + paidBack;
+	motion_ = std::max(0.0, delta_ - leftOut * refresh_ - takenBack);
 	return delta_;
 }
 
 double FramePacer::predictLate(double elapsed)
 {
 	predicted_ = 0;
-	candidate_ = 0;
+	predictedSeconds_ = 0.0;
+	candidateSeconds_ = 0.0;
 	prediction_ = 0.0;
-	if (!snapping_ || !spreadFilled_ || refresh_ <= 0.0 || elapsed < 0.0)
+	if (elapsed < 0.0)
 	{
 		return 0.0;
 	}
-	// The vblank a typical frame is shown at has already passed
-	const int extra = static_cast<int>(std::floor(phase_ + (elapsed + kLateMargin) / refresh_)) + 1 - spreadMedian();
-	if (extra <= 0)
+	lastElapsed_ = elapsed;
+	if (snapping_ && spreadFilled_ && refresh_ > 0.0)
 	{
-		return 0.0;
+		// The vblank a typical frame is shown at has already passed
+		const int extra = static_cast<int>(std::floor(phase_ + (elapsed + kLateMargin) / refresh_)) + 1 - spreadMedian();
+		if (extra <= 0)
+		{
+			return 0.0;
+		}
+		const int candidate = std::min(extra, kSpreadMaxExtra);
+		candidateSeconds_ = candidate * refresh_;
+		candidateRounded_ = true;
+		if (!roundedLate_.predicting)
+		{
+			return 0.0;
+		}
+		predicted_ = candidate;
+		predictedSeconds_ = candidateSeconds_;
 	}
-	candidate_ = std::min(extra, kSpreadMaxExtra);
-	if (!predicting_)
+	else
 	{
-		return 0.0;
+		// Without rounding a frame is shown when it is presented,
+		// for a late frame about as long after this call as recent late frames took
+		if (snapping_ || measuredIntervals_.values.size() < kMinSamples)
+		{
+			return 0.0;
+		}
+		const double typical = measuredIntervals_.percentile(0.5);
+		const double extra = elapsed + lateRemaining_.percentile(0.5) - typical;
+		if (extra <= kUnroundedLateMin * typical)
+		{
+			return 0.0;
+		}
+		candidateSeconds_ = std::min(extra, kUnroundedStallMin);
+		candidateRounded_ = false;
+		if (!unroundedLate_.predicting)
+		{
+			return 0.0;
+		}
+		predictedSeconds_ = candidateSeconds_;
 	}
-	predicted_ = candidate_;
-	prediction_ = predicted_ * refresh_;
+	prediction_ = predictedSeconds_;
 	return prediction_;
 }
