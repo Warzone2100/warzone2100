@@ -315,6 +315,7 @@ struct FTFace
 	FT_Face &face() { return m_face; }
 
 	hb_font_t *m_font;
+	int32_t letterSpacing = 0; // added after each glyph that advances, except the last (in 26.6 fixed-point pixels)
 	std::shared_ptr<std::vector<char>> pFileData;
 
 private:
@@ -1164,6 +1165,7 @@ struct TextShaper
 
 		int32_t x = 0;
 		int32_t y = 0;
+		int32_t trailingSpacing = 0;
 
 		// Shaping a run resets the shared HarfBuzz buffer its glyph arrays point into, so each run is
 		// shaped and consumed in the same step rather than shaping them all up front. Runs shape
@@ -1181,6 +1183,12 @@ struct TextShaper
 
 				x += run.glyphPositions[glyphIndex].x_advance;
 				y += run.glyphPositions[glyphIndex].y_advance;
+				if (run.glyphPositions[glyphIndex].x_advance != 0)
+				{
+					x += run.fontFace->letterSpacing;
+					shapingResult.glyphes.back().advance += run.fontFace->letterSpacing;
+					trailingSpacing = run.fontFace->letterSpacing;
+				}
 			}
 		};
 
@@ -1198,7 +1206,7 @@ struct TextShaper
 		}
 #endif // defined(WZ_FRIBIDI_ENABLED)
 
-		shapingResult.x_advance += x;
+		shapingResult.x_advance += x - trailingSpacing;
 		shapingResult.y_advance += y;
 
 		// Step 7: Finalize.
@@ -1289,14 +1297,17 @@ static WZFontCollection* baseFonts = nullptr;
 static WZFontCollection* cjkFonts = nullptr;
 static bool failedToLoadCJKFonts = false;
 
-// Video text fonts: faces are created on demand at the bound size (a char size of 0 is unbound)
-struct VideoFontSlot
+// Video and display text fonts: faces are created on demand at the bound size (a char size of 0 is unbound)
+struct SizedFontSlot
 {
 	int32_t charSize = 0; // 26.6 points
+	float letterSpacing = 0.f; // ems
 	std::unique_ptr<FTFace> base;
 	std::unique_ptr<FTFace> cjk;
 };
-static VideoFontSlot videoFontSlots[font_video_4 - font_video_1 + 1];
+static SizedFontSlot videoFontSlots[font_video_4 - font_video_1 + 1];
+static SizedFontSlot displayFontSlots[font_display_6 - font_display_1 + 1];
+static bool failedToLoadDisplayFont = false;
 
 static optional<size_t> videoFontSlotIndex(iV_fonts fontID)
 {
@@ -1305,6 +1316,15 @@ static optional<size_t> videoFontSlotIndex(iV_fonts fontID)
 		return nullopt;
 	}
 	return static_cast<size_t>(fontID - font_video_1);
+}
+
+static optional<size_t> displayFontSlotIndex(iV_fonts fontID)
+{
+	if (fontID < font_display_1 || fontID > font_display_6)
+	{
+		return nullopt;
+	}
+	return static_cast<size_t>(fontID - font_display_1);
 }
 
 struct iVFontsHash
@@ -1365,7 +1385,7 @@ static bool usesCJKFont(hb_script_t script)
 
 static FTFace *getVideoFontFace(size_t index, hb_script_t script)
 {
-	VideoFontSlot &slot = videoFontSlots[index];
+	SizedFontSlot &slot = videoFontSlots[index];
 	ASSERT_OR_RETURN(nullptr, slot.charSize > 0, "Video font %zu is not bound", index + 1);
 	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
@@ -1390,6 +1410,47 @@ static FTFace *getVideoFontFace(size_t index, hb_script_t script)
 	return slot.base.get();
 }
 
+static FTFace *getDisplayFontFace(size_t index, hb_script_t script)
+{
+	SizedFontSlot &slot = displayFontSlots[index];
+	ASSERT_OR_RETURN(nullptr, slot.charSize > 0, "Display font %zu is not bound", index + 1);
+	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
+	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
+	try {
+		if (usesCJKFont(script) && initializeCJKFontsIfNeeded())
+		{
+			if (!slot.cjk)
+			{
+				slot.cjk = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, slot.charSize, horizDPI, vertDPI, 700);
+			}
+			return slot.cjk.get();
+		}
+		if (!slot.base)
+		{
+			if (!failedToLoadDisplayFont)
+			{
+				try {
+					slot.base = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSansCondensed-Bold.ttf", slot.charSize, horizDPI, vertDPI);
+				}
+				catch (const std::exception &e) {
+					debug(LOG_WARNING, "Failed to load the display font, using DejaVu Sans Bold:\n%s", e.what());
+					failedToLoadDisplayFont = true;
+				}
+			}
+			if (!slot.base)
+			{
+				slot.base = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", slot.charSize, horizDPI, vertDPI);
+			}
+			slot.base->letterSpacing = static_cast<int32_t>(std::lround(slot.letterSpacing * static_cast<float>(slot.charSize) * horizDPI / DEFAULT_DPI));
+		}
+	}
+	catch (const std::exception &e) {
+		debug(LOG_ERROR, "Failed to load display font:\n%s", e.what());
+		return nullptr;
+	}
+	return slot.base.get();
+}
+
 static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 {
 	if (auto index = videoFontSlotIndex(FontID))
@@ -1399,6 +1460,14 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 			return *face;
 		}
 		FontID = font_regular;
+	}
+	if (auto index = displayFontSlotIndex(FontID))
+	{
+		if (FTFace *face = getDisplayFontFace(index.value(), script))
+		{
+			return *face;
+		}
+		FontID = font_regular_bold;
 	}
 	if (usesCJKFont(script) && initializeCJKFontsIfNeeded())
 	{
@@ -1537,6 +1606,11 @@ void iV_TextShutdown()
 		slot.base.reset();
 		slot.cjk.reset();
 	}
+	for (auto &slot : displayFontSlots)
+	{
+		slot.base.reset();
+		slot.cjk.reset();
+	}
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
@@ -1554,8 +1628,8 @@ void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int ve
 	iV_TextInit(horizScalePercentage, vertScalePercentage);
 }
 
-// The glyph cache is keyed by face pointer, so it is cleared whenever video font faces are freed
-static void releaseVideoFontFaces(VideoFontSlot &slot)
+// The glyph cache is keyed by face pointer, so it is cleared whenever sized font faces are freed
+static void releaseSizedFontFaces(SizedFontSlot &slot)
 {
 	if (!slot.base && !slot.cjk)
 	{
@@ -1575,12 +1649,12 @@ bool iV_BindVideoFont(iV_fonts fontID, float pointSize)
 	ASSERT_OR_RETURN(false, index.has_value(), "Not a video font: %d", static_cast<int>(fontID));
 	ASSERT_OR_RETURN(false, pointSize > 0.f, "Invalid video font size: %f", pointSize);
 	int32_t charSize = std::max<int32_t>(1, static_cast<int32_t>(std::lround(pointSize * 64.f)));
-	VideoFontSlot &slot = videoFontSlots[index.value()];
+	SizedFontSlot &slot = videoFontSlots[index.value()];
 	if (slot.charSize == charSize)
 	{
 		return true;
 	}
-	releaseVideoFontFaces(slot);
+	releaseSizedFontFaces(slot);
 	slot.charSize = charSize;
 	fontGeneration[fontID] = ++lastFontGeneration;
 	return true;
@@ -1590,15 +1664,33 @@ void iV_UnbindVideoFonts()
 {
 	for (size_t i = 0; i < ARRAY_SIZE(videoFontSlots); ++i)
 	{
-		VideoFontSlot &slot = videoFontSlots[i];
+		SizedFontSlot &slot = videoFontSlots[i];
 		if (slot.charSize == 0)
 		{
 			continue;
 		}
-		releaseVideoFontFaces(slot);
+		releaseSizedFontFaces(slot);
 		slot.charSize = 0;
 		fontGeneration[font_video_1 + i] = ++lastFontGeneration;
 	}
+}
+
+bool iV_BindDisplayFont(iV_fonts fontID, float pointSize, float letterSpacing)
+{
+	auto index = displayFontSlotIndex(fontID);
+	ASSERT_OR_RETURN(false, index.has_value(), "Not a display font: %d", static_cast<int>(fontID));
+	ASSERT_OR_RETURN(false, pointSize > 0.f, "Invalid display font size: %f", pointSize);
+	int32_t charSize = std::max<int32_t>(1, static_cast<int32_t>(std::lround(pointSize * 64.f)));
+	SizedFontSlot &slot = displayFontSlots[index.value()];
+	if (slot.charSize == charSize && slot.letterSpacing == letterSpacing)
+	{
+		return true;
+	}
+	releaseSizedFontFaces(slot);
+	slot.charSize = charSize;
+	slot.letterSpacing = letterSpacing;
+	fontGeneration[fontID] = ++lastFontGeneration;
+	return true;
 }
 
 static WzText& iV_Internal_GetEllipsis(iV_fonts fontID)
@@ -1764,6 +1856,14 @@ optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
 			case font_small:
 				return font_bar;
 
+			case font_display_1: // display fonts are bold
+			case font_display_2:
+			case font_display_3:
+			case font_display_4:
+			case font_display_5:
+			case font_display_6:
+				return fontID;
+
 			case font_video_1:
 			case font_video_2:
 			case font_video_3:
@@ -1797,6 +1897,12 @@ optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
 			case font_video_4:
 				return fontID; // already non-bolded
 
+			case font_display_1: // no non-bold display fonts
+			case font_display_2:
+			case font_display_3:
+			case font_display_4:
+			case font_display_5:
+			case font_display_6:
 			case font_count:
 				return nullopt;
 		}
@@ -1828,11 +1934,17 @@ optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID)
 		case font_small:
 			return nullopt;
 
-		// video fonts are sized by their caller
+		// video and display fonts are sized by their caller
 		case font_video_1:
 		case font_video_2:
 		case font_video_3:
 		case font_video_4:
+		case font_display_1:
+		case font_display_2:
+		case font_display_3:
+		case font_display_4:
+		case font_display_5:
+		case font_display_6:
 		case font_count:
 			return nullopt;
 	}
