@@ -822,6 +822,8 @@ GAMECODE gameLoop()
 		NETflush();  // Make sure that we aren't waiting too long to send data.
 	}
 
+	frameTimePredictLate();
+
 	unsigned before, after;
 	GAMECODE renderReturn;
 	executeFnAndProcessScriptQueuedRemovals([&before, &after, &renderReturn]()

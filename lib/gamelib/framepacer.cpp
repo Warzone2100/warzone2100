@@ -36,6 +36,8 @@ static constexpr double kPeriodChange = 0.02;      ///< relative change taken as
 static constexpr double kPhaseGain = 0.05;         ///< share of each offset from the grid moved into the phase
 static constexpr int kSpreadMaxExtra = 2;          ///< most extra periods spread over the following frames
 static constexpr double kUnroundedStallMin = 0.05; ///< shortest unrounded delta that can count as a stall, in seconds
+static constexpr size_t kLateWindow = 32;          ///< recent late-frame predictions checked against the counted periods
+static constexpr double kLateMargin = 0.00125;     ///< time a frame still needs after predictLate() to make a vblank, in seconds
 
 void FramePacer::Ring::push(double v, size_t capacity)
 {
@@ -230,13 +232,52 @@ FramePacer::Estimate FramePacer::estimateRefresh() const
 	return best;
 }
 
+void FramePacer::judgeLate(int extra, int candidate)
+{
+	// A queue that absorbs a late frame usually takes its extra periods back with an early sample soon after,
+	// so a prediction is judged once the following frames have had the chance
+	if (judgeCount_ == kJudgeFrames)
+	{
+		const size_t oldest = judgeNext_;
+		if (judgeCandidate_[oldest] > 0)
+		{
+			int net = judgeExtra_[oldest] + std::min(0, extra);
+			for (size_t i = 1; i < kJudgeFrames; ++i)
+			{
+				net += std::min(0, judgeExtra_[(oldest + i) % kJudgeFrames]);
+			}
+			lateHits_.push(net >= judgeCandidate_[oldest] ? 1.0 : 0.0, kLateWindow);
+			if (lateHits_.values.size() >= kMinSamples && lateHits_.mean() >= kStartFitFraction)
+			{
+				predicting_ = true;
+			}
+			else if (lateHits_.mean() < kStopFitFraction)
+			{
+				predicting_ = false;
+			}
+		}
+	}
+	else
+	{
+		++judgeCount_;
+	}
+	judgeExtra_[judgeNext_] = extra;
+	judgeCandidate_[judgeNext_] = candidate;
+	judgeNext_ = (judgeNext_ + 1) % kJudgeFrames;
+}
+
 void FramePacer::spreadFill(int periods)
 {
 	for (int &v : spread_)
 	{
 		v = periods;
 	}
+	for (int &v : predictedSpread_)
+	{
+		v = 0;
+	}
 	spreadNext_ = 0;
+	predictedSum_ = 0;
 	spreadSum_ = periods * static_cast<int>(kSpreadFrames);
 	spreadFilled_ = true;
 }
@@ -259,6 +300,9 @@ double FramePacer::update(double measuredDelta)
 		motion_ = 0.0;
 		havePhase_ = false;
 		spreadFilled_ = false;
+		predicted_ = 0;
+		candidate_ = 0;
+		judgeCount_ = 0;
 		return delta_;
 	}
 	measured_ = std::min(measuredDelta, maxDelta);
@@ -322,16 +366,23 @@ double FramePacer::update(double measuredDelta)
 		snapping_ = false;
 	}
 
+	// The periods this frame's motion already got from predictLate() are taken back from the following frames
+	const int predicted = predicted_;
+	const int candidate = candidate_;
+	predicted_ = 0;
+	candidate_ = 0;
+
 	if (!snapping_)
 	{
 		spreadFilled_ = false;
+		judgeCount_ = 0;
 		delta_ = measured_;
 		double allowance = maxDelta;
 		if (measuredIntervals_.values.size() >= kMinSamples)
 		{
 			allowance = std::max((1 + kSpreadMaxExtra) * measuredIntervals_.percentile(0.5), kUnroundedStallMin);
 		}
-		motion_ = std::min(delta_, allowance);
+		motion_ = std::max(0.0, std::min(delta_, allowance) - predicted * refresh_);
 		return delta_;
 	}
 	snapped_ = true;
@@ -344,13 +395,19 @@ double FramePacer::update(double measuredDelta)
 	}
 	int immediate = 0;
 	const int typical = spreadMedian();
+	judgeLate(periods - typical, candidate);
+	int paidBack = 0;
 	if (periods > typical + kSpreadMaxExtra)
 	{
 		immediate = periods - typical;
 		periods = typical;
+		paidBack = predicted;
 	}
+	const int spreadPredicted = predicted - paidBack;
 	spreadSum_ += periods - spread_[spreadNext_];
 	spread_[spreadNext_] = periods;
+	predictedSum_ += spreadPredicted - predictedSpread_[spreadNext_];
+	predictedSpread_[spreadNext_] = spreadPredicted;
 	spreadNext_ = (spreadNext_ + 1) % kSpreadFrames;
 
 	delta_ = (static_cast<double>(spreadSum_) / static_cast<double>(kSpreadFrames) + immediate) * refresh_;
@@ -360,6 +417,32 @@ double FramePacer::update(double measuredDelta)
 		spreadFilled_ = false;
 	}
 	const int leftOut = std::max(0, immediate - kSpreadMaxExtra);
-	motion_ = std::max(0.0, delta_ - leftOut * refresh_);
+	const double takenBack = static_cast<double>(predictedSum_) / static_cast<double>(kSpreadFrames) + paidBack;
+	motion_ = std::max(0.0, delta_ - (leftOut + takenBack) * refresh_);
 	return delta_;
+}
+
+double FramePacer::predictLate(double elapsed)
+{
+	predicted_ = 0;
+	candidate_ = 0;
+	prediction_ = 0.0;
+	if (!snapping_ || !spreadFilled_ || refresh_ <= 0.0 || elapsed < 0.0)
+	{
+		return 0.0;
+	}
+	// The vblank a typical frame is shown at has already passed
+	const int extra = static_cast<int>(std::floor(phase_ + (elapsed + kLateMargin) / refresh_)) + 1 - spreadMedian();
+	if (extra <= 0)
+	{
+		return 0.0;
+	}
+	candidate_ = std::min(extra, kSpreadMaxExtra);
+	if (!predicting_)
+	{
+		return 0.0;
+	}
+	predicted_ = candidate_;
+	prediction_ = predicted_ * refresh_;
+	return prediction_;
 }
