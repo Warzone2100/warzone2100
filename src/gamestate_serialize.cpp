@@ -5634,9 +5634,9 @@ void checkGameStateDocument(const nlohmann::ordered_json &j)
 
 		DocumentIndex index;
 		checkWorld(j.at("world"), checkMapTerrain(j.at("mapTerrain")), index, "world");
-		const nlohmann::ordered_json &mission = j.at("mission");
-		checkWorld(mission.at("world"), checkMapTerrain(mission.at("mapTerrain")), index, "off-world");
-		for (const auto &d : mission.at("limboDroids"))
+		const nlohmann::ordered_json &missionSection = j.at("mission");
+		checkWorld(missionSection.at("world"), checkMapTerrain(missionSection.at("mapTerrain")), index, "off-world");
+		for (const auto &d : missionSection.at("limboDroids"))
 		{
 			checkDroidParts(d);
 			index.add(OBJ_DROID, d.at("player").get<unsigned>(), d.at("id").get<uint32_t>());
