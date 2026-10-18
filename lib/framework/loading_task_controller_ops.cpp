@@ -77,11 +77,11 @@ void suspendAwaitChild(std::coroutine_handle<> parent,
 
 void activateLoadingDomain(LoadingTaskPromiseBase* promise, std::string name)
 {
-	ASSERT(promise != nullptr, "setLoadingDomain with null promise");
-	ASSERT(promise->controller != nullptr,
-	       "setLoadingDomain outside a ResourceLoadingController task");
-	ASSERT(!promise->loadingDomainActive, "setLoadingDomain called twice in one LoadingTask");
-	ASSERT(!name.empty(), "setLoadingDomain with empty name");
+	ASSERT_OR_RETURN(, promise != nullptr, "setLoadingDomain with null promise");
+	ASSERT_OR_RETURN(, promise->controller != nullptr,
+	                 "setLoadingDomain outside a ResourceLoadingController task");
+	ASSERT_OR_RETURN(, !promise->loadingDomainActive, "setLoadingDomain called twice in one LoadingTask");
+	ASSERT_OR_RETURN(, !name.empty(), "setLoadingDomain with empty name");
 
 	promise->loadingDomainName = name;
 	promise->controller->pushLoadingDomain(promise, std::move(name));
