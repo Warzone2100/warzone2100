@@ -797,7 +797,7 @@ void inGameConsoleAdd(const std::shared_ptr<W_SCREEN> &screen)
 	currentConsole = console;
 }
 
-void inGameConsoleKeepOnTop()
+void inGameConsoleKeepOnTop(const std::shared_ptr<WIDGET> &under)
 {
 	auto console = currentConsole.lock();
 	if (!console)
@@ -805,12 +805,37 @@ void inGameConsoleKeepOnTop()
 		return;
 	}
 	auto parent = console->parent();
-	if (!parent || parent->children().back() == console)
+	if (!parent)
 	{
 		return;
 	}
+	const auto &children = parent->children();
+	auto at = under && under->parent() == parent && !console->isExpanded() ? std::find(children.begin(), children.end(), under) : children.end();
+	if (at == children.end())
+	{
+		if (children.back() != console)
+		{
+			parent->detach(console);
+			parent->attach(console);
+		}
+		return;
+	}
+	if (at != children.begin() && *(at - 1) == console)
+	{
+		return;
+	}
+	// Attach them again in order: the console, then `under` and everything above it
+	const std::vector<std::shared_ptr<WIDGET>> over(at, children.end());
 	parent->detach(console);
+	for (const auto &w : over)
+	{
+		parent->detach(w);
+	}
 	parent->attach(console);
+	for (const auto &w : over)
+	{
+		parent->attach(w);
+	}
 }
 
 ConsoleRect inGameConsoleExpandedRect()

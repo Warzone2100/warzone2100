@@ -48,6 +48,7 @@
 #include "netplay.h"
 
 static PHYSFS_file *replaySaveHandle = nullptr;
+static std::string replaySaveFilename;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
@@ -120,6 +121,7 @@ static bool NETreplaySaveWritePreamble(const nlohmann::json& settings, ReplayOpt
 
 std::string NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename)
 {
+	replaySaveFilename.clear();
 	if (NETisReplay())
 	{
 		// Have already loaded and will be running a replay - don't bother saving another
@@ -163,6 +165,7 @@ std::string NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler c
 		return "";
 	}
 
+	replaySaveFilename = filename;
 	WZ_PHYSFS_SETBUFFER(replaySaveHandle, 1024 * 32)//;
 
 	PHYSFS_writeSBE32(replaySaveHandle, magicReplayNumber);
@@ -222,6 +225,11 @@ std::string NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler c
 	}
 
 	return filename;
+}
+
+std::string const &NETreplaySaveFilename()
+{
+	return replaySaveFilename;
 }
 
 bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)

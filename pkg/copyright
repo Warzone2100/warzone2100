@@ -375,6 +375,7 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/connection-desync.svg
        data/base/images/hud/icons/connection-left.svg
        data/base/images/hud/icons/connection-waiting.svg
+       data/base/images/hud/icons/defeat.svg
        data/base/images/hud/icons/delivery-point.fill.svg
        data/base/images/hud/icons/delivery-point.svg
        data/base/images/hud/icons/favorite.fill.svg
@@ -442,6 +443,7 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/technology.svg
        data/base/images/hud/icons/units.svg
        data/base/images/hud/icons/upgrade.svg
+       data/base/images/hud/icons/victory.svg
        data/base/images/hud/icons/visibility.svg
        data/base/images/hud/icons/volume-off.svg
        data/base/images/hud/icons/volume.svg
@@ -624,11 +626,13 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/hud.*
        src/hud/hudbadges.*
        src/hud/hudbuildcategories.*
+       src/hud/hudchart.*
        src/hud/hudchatbar.*
        src/hud/hudclassicskin.h
        src/hud/hudconnection.*
        src/hud/huddetail.*
        src/hud/huddetailcontents.*
+       src/hud/hudgameresults.cpp
        src/hud/hudgeometrydump.*
        src/hud/hudiconbutton.*
        src/hud/hudidle.*
@@ -643,6 +647,8 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/hudpanelfilters.*
        src/hud/hudradarblips.*
        src/hud/hudranks.*
+       src/hud/hudresults.*
+       src/hud/hudresultsdata.*
        src/hud/hudreticule.*
        src/hud/hudrightcolumn.*
        src/hud/hudrowsummary.*

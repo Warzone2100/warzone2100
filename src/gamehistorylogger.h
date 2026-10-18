@@ -100,6 +100,7 @@ public:
 			uint64_t recentPowerWon = 0;
 			uint64_t recentResearchPotential = 0;
 			uint64_t recentResearchPerformance = 0;
+			uint64_t armyValue = 0; // the power cost of its units
 			std::string usertype; // from end_conditions.js
 			optional<uint32_t> playerLeftGameTime = nullopt;
 		};

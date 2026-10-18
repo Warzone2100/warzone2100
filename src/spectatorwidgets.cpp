@@ -44,6 +44,7 @@
 #include "hud/hudspectator.h"
 #include "hud/hudwidgets.h"
 #include "hud/intel/intelpanel.h"
+#include "screens/spectatorgameoverscreen.h"
 
 #include <unordered_set>
 #include <unordered_map>
@@ -115,10 +116,10 @@ static bool statsButtonHidden = false;
 #define SPEC_STATS_CARD_BUTTON_X 16
 #define SPEC_STATS_CARD_BUTTON_Y 18
 
-// The Modern skin's intelligence screen covers the button's corner, as it does the options button's
+// The Modern skin's intelligence and results screens cover the button's corner, as they do the options button's
 static bool specStatsButtonCovered()
 {
-	return hudIntelScreenIsOpen();
+	return hudIntelScreenIsOpen() || spectatorGameOverScreenShowsHudResults();
 }
 
 void intDisplayImageHilightOnceStarted(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
