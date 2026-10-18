@@ -216,6 +216,16 @@ public:
 		ResourceLoadingController* childController = nullptr;
 		uint64_t childGeneration = 0;
 
+		explicit ChildTaskAwaiter(LoadingTask* awaited) noexcept
+			: child(awaited)
+		{}
+
+		// The destructor may destroy the child frame.
+		ChildTaskAwaiter(const ChildTaskAwaiter&) = delete;
+		ChildTaskAwaiter& operator=(const ChildTaskAwaiter&) = delete;
+		ChildTaskAwaiter(ChildTaskAwaiter&&) = delete;
+		ChildTaskAwaiter& operator=(ChildTaskAwaiter&&) = delete;
+
 		~ChildTaskAwaiter()
 		{
 			if (child_handle && childPromise)
