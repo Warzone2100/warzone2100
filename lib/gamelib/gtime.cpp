@@ -227,6 +227,12 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 	// Do not update the game time if gameTimeStop has been called
 	if (stopCount != 0)
 	{
+		if (extraGameTicksProcessed > 0)
+		{
+			// Time was stopped right after extra game ticks (ex. a replay seek done while paused):
+			// as below, graphicsTime must catch up with them, or objects are drawn far from where the ticks left them
+			graphicsTime = gameTime;
+		}
 		return GameTimeUpdateResult::NO_UPDATE;
 	}
 
