@@ -103,21 +103,32 @@ void releaseLoadingDomain(LoadingTaskPromiseBase* promise) noexcept
 	controller->noteFrameDead(promise);
 }
 
-void destroyDetachedChildFrame(std::coroutine_handle<> handle,
-                               LoadingTaskPromiseBase* promise) noexcept
+void destroyDetachedChildFrame(ResourceLoadingController* controller,
+                               std::coroutine_handle<> handle,
+                               const LoadingTaskPromiseBase* promise,
+                               uint64_t generation) noexcept
 {
 	if (!handle || promise == nullptr)
 	{
 		return;
 	}
-	ResourceLoadingController& controller = ResourceLoadingController::instance();
+	// Registration threw, so the controller never owned this frame.
+	if (generation == 0)
+	{
+		handle.destroy();
+		return;
+	}
+	if (controller == nullptr)
+	{
+		return;
+	}
 	// Live-set lookup only. `handle.done()` would be dangling if the frame is already destroyed.
-	if (!controller.isLiveFrame(promise))
+	if (!controller->isLiveFrame(promise, generation))
 	{
 		return;
 	}
 	// Still on the execution stack, so `popAndDestroyTop` owns this frame.
-	if (controller.isOnExecutionStack(promise))
+	if (controller->isOnExecutionStack(promise))
 	{
 		return;
 	}

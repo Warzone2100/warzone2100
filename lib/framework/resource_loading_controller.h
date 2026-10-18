@@ -33,6 +33,7 @@
 #include "lib/framework/wzapp.h"
 
 #include <coroutine>
+#include <cstdint>
 #include <memory>
 #include <queue>
 #include <string>
@@ -139,7 +140,8 @@ private:
 	friend void loading_task_detail::activateLoadingDomain(LoadingTaskPromiseBase*, std::string);
 	friend void loading_task_detail::releaseLoadingDomain(LoadingTaskPromiseBase*) noexcept;
 	friend void loading_task_detail::destroyDetachedChildFrame(
-	    std::coroutine_handle<>, LoadingTaskPromiseBase*) noexcept;
+	    ResourceLoadingController*, std::coroutine_handle<>,
+	    const LoadingTaskPromiseBase*, uint64_t) noexcept;
 
 	struct ExecutionFrame
 	{
@@ -174,7 +176,8 @@ private:
 	void popLoadingDomain(LoadingTaskPromiseBase* owner) noexcept;
 	void noteFrameAlive(LoadingTaskPromiseBase* promise);
 	void noteFrameDead(LoadingTaskPromiseBase* promise) noexcept;
-	bool isLiveFrame(const LoadingTaskPromiseBase* promise) const noexcept;
+	// `promise` is compared, never dereferenced (a reused address has a new generation).
+	bool isLiveFrame(const LoadingTaskPromiseBase* promise, uint64_t generation) const noexcept;
 	bool isOnExecutionStack(const LoadingTaskPromiseBase* promise) const noexcept;
 
 	struct LoadingDomainSegment
@@ -183,13 +186,20 @@ private:
 		std::string name;
 	};
 
+	struct LiveFrame
+	{
+		const LoadingTaskPromiseBase* promise = nullptr;
+		uint64_t generation = 0;
+	};
+
 	std::unique_ptr<ResourceLoadingSubmission> activeSubmission;
 	std::queue<std::unique_ptr<ResourceLoadingSubmission>> pendingSubmissions; // FIFO while active
 
 	std::vector<ExecutionFrame> executionStack; // root + nested children
 	std::vector<LoadingDomainSegment> loadingDomains;
 	std::string loadingDomainPathCache;
-	std::vector<LoadingTaskPromiseBase*> liveFrames;
+	std::vector<LiveFrame> liveFrames;
+	uint64_t nextFrameGeneration = 1; // 0 means never registered
 	std::coroutine_handle<> sessionRootHandle{}; // root handle kept until submission completes
 	bool terminalSucceeded = true;
 	bool sessionFinished = false;

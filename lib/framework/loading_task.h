@@ -33,6 +33,7 @@
 #include "lib/framework/wzapp.h"
 
 #include <coroutine>
+#include <cstdint>
 #include <exception>
 #include <optional>
 #include <string>
@@ -64,6 +65,7 @@ struct LoadingTaskPromiseBase
 
 	std::string loadingDomainName;
 	bool loadingDomainActive = false;
+	uint64_t frameGeneration = 0; // set when the frame enters the controller's live set
 };
 
 /// <summary>
@@ -210,12 +212,16 @@ public:
 		LoadingTask* child = nullptr;
 		mutable std::coroutine_handle<promise_type> child_handle{};
 		LoadingTaskPromiseBase* childPromise = nullptr;
+		// Copied in `await_suspend` (the destructor must not read `childPromise`).
+		ResourceLoadingController* childController = nullptr;
+		uint64_t childGeneration = 0;
 
 		~ChildTaskAwaiter()
 		{
 			if (child_handle && childPromise)
 			{
-				loading_task_detail::destroyDetachedChildFrame(child_handle, childPromise);
+				loading_task_detail::destroyDetachedChildFrame(
+				    childController, child_handle, childPromise, childGeneration);
 				child_handle = {};
 				childPromise = nullptr;
 			}
@@ -252,7 +258,23 @@ public:
 			child_handle = child_coro;
 			childPromise = static_cast<LoadingTaskPromiseBase*>(&child_coro.promise());
 
-			loading_task_detail::suspendAwaitChild(parent, child_coro, childPromise);
+			try
+			{
+				loading_task_detail::suspendAwaitChild(parent, child_coro, childPromise);
+			}
+			catch (...)
+			{
+				recordChildRegistration();
+				throw;
+			}
+			recordChildRegistration();
+		}
+
+	private:
+		void recordChildRegistration() noexcept
+		{
+			childController = childPromise->controller;
+			childGeneration = childPromise->frameGeneration;
 		}
 	};
 
