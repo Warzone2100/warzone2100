@@ -262,13 +262,18 @@ void ResourceLoadingController::noteFrameAlive(LoadingTaskPromiseBase* promise)
 	{
 		return;
 	}
-	const bool alreadyLive = std::find(liveFrames.begin(), liveFrames.end(), promise) != liveFrames.end();
+	const bool alreadyLive = std::any_of(liveFrames.begin(), liveFrames.end(),
+		[promise](const LiveFrame& frame) { return frame.promise == promise; });
 	ASSERT(!alreadyLive, "noteFrameAlive for a promise that is already live");
 	if (alreadyLive)
 	{
 		return;
 	}
-	liveFrames.push_back(promise);
+	const uint64_t generation = nextFrameGeneration;
+	liveFrames.push_back(LiveFrame{promise, generation});
+	// Set after the push, so a frame whose push threw keeps generation 0.
+	++nextFrameGeneration;
+	promise->frameGeneration = generation;
 }
 
 void ResourceLoadingController::noteFrameDead(LoadingTaskPromiseBase* promise) noexcept
@@ -277,17 +282,23 @@ void ResourceLoadingController::noteFrameDead(LoadingTaskPromiseBase* promise) n
 	{
 		return;
 	}
-	const auto it = std::find(liveFrames.begin(), liveFrames.end(), promise);
+	const auto it = std::find_if(liveFrames.begin(), liveFrames.end(),
+		[promise](const LiveFrame& frame) { return frame.promise == promise; });
 	if (it != liveFrames.end())
 	{
 		liveFrames.erase(it);
 	}
 }
 
-bool ResourceLoadingController::isLiveFrame(const LoadingTaskPromiseBase* promise) const noexcept
+bool ResourceLoadingController::isLiveFrame(const LoadingTaskPromiseBase* promise,
+                                            uint64_t generation) const noexcept
 {
-	return promise != nullptr
-	    && std::find(liveFrames.begin(), liveFrames.end(), promise) != liveFrames.end();
+	return promise != nullptr && generation != 0
+	    && std::any_of(liveFrames.begin(), liveFrames.end(),
+	                   [promise, generation](const LiveFrame& frame)
+	                   {
+	                       return frame.promise == promise && frame.generation == generation;
+	                   });
 }
 
 bool ResourceLoadingController::isOnExecutionStack(const LoadingTaskPromiseBase* promise) const noexcept

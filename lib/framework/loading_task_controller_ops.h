@@ -26,8 +26,10 @@
 #pragma once
 
 #include <coroutine>
+#include <cstdint>
 #include <string>
 
+class ResourceLoadingController;
 struct LoadingTaskPromiseBase;
 
 namespace loading_task_detail
@@ -64,10 +66,14 @@ void activateLoadingDomain(LoadingTaskPromiseBase* promise, std::string name);
 void releaseLoadingDomain(LoadingTaskPromiseBase* promise) noexcept;
 
 /// <summary>
-/// Destroys a completed child frame that is no longer on the execution stack.
+/// Destroys a completed child frame that is no longer on the execution stack,
+/// or one that never registered (`generation == 0`).
 /// A frame the controller already destroyed, or one still running, is left alone.
+/// `promise` is compared, never dereferenced.
 /// </summary>
-void destroyDetachedChildFrame(std::coroutine_handle<> handle,
-                               LoadingTaskPromiseBase* promise) noexcept;
+void destroyDetachedChildFrame(ResourceLoadingController* controller,
+                               std::coroutine_handle<> handle,
+                               const LoadingTaskPromiseBase* promise,
+                               uint64_t generation) noexcept;
 
 } // namespace loading_task_detail
