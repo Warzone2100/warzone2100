@@ -1132,7 +1132,8 @@ namespace gfx_api
 		glm::vec4 minRangeColor;
 		float fillAlpha;
 		float sdfBand;
-		float padding1;
+		/// 1 when linear lighting is on
+		float linearLighting;
 		float padding2;
 	};
 	static_assert(sizeof(constant_buffer_type<SHADER_RANGE_RING_COMPOSITE>) == 240, "Range ring composite cbuffer std140 size");

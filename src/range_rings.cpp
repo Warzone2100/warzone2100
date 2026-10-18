@@ -534,6 +534,7 @@ void recordComposite(const gfx_api::RenderPassContext& passCtx)
 	constants.minRangeColor = glm::vec4(0.75f, 0.35f, 1.00f, 1.f);
 	constants.fillAlpha = FILL_ALPHA;
 	constants.sdfBand = s_sdfCamera.sdfBand;
+	constants.linearLighting = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
 	display3d_drawFullscreenTriangle<gfx_api::RangeRingCompositePSO>(constants, scene, depth, sdf);
 }
 

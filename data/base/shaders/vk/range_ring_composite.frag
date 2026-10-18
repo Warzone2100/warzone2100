@@ -1,6 +1,7 @@
 #version 450
 
 #include "view_position.glsl"
+#include "srgb.glsl"
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 invProjectionMatrix;
@@ -13,7 +14,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 minRangeColor;
 	float fillAlpha;
 	float sdfBand;
-	float padding1;
+	float linearLighting;
 	float padding2;
 };
 
@@ -74,7 +75,15 @@ void main()
 			float minRange = channelOverlay(field.b, band, maxW);
 			vec3 overlay = sensorColor.rgb * sensor + weaponColor.rgb * weapon + minRangeColor.rgb * minRange;
 			float a = clamp(max(max(sensor, weapon), minRange), 0.0, 1.0);
-			result = lit * (1.0 - a) + overlay; // premultiplied-style overlay
+			if (linearLighting > 0.5)
+			{
+				// The ring colors were tuned for display values, so they are composed in display space
+				result = wzSrgbToLinear(wzLinearToSrgb(lit) * (1.0 - a) + overlay);
+			}
+			else
+			{
+				result = lit * (1.0 - a) + overlay; // premultiplied-style overlay
+			}
 		}
 	}
 
