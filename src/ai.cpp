@@ -277,7 +277,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 // Returns the target attack weight if it's greater than currentBest
 // (otherwise, may shortcut various costly calculations, and returns <= 0)
 /// lineOfFireAlreadyVerified says the caller runs lineOfFire(..., wallsBlock = true) before accepting a
-/// candidate, which implies the unblocked trace below.
+/// candidate, which is the same trace as the one below.
 static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot, bool lineOfFireAlreadyVerified = false)
 {
 	SDWORD			targetTypeBonus = 0, damageRatio = 0, attackWeight = 0, noTarget = -1;
@@ -553,9 +553,9 @@ static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *p
 		{
 			return std::min<int>(0, attackWeight);
 		}
-		if (!lineOfFireAlreadyVerified && !lineOfFire(psAttacker, psTarget, weapon_slot, false))
+		if (!lineOfFireAlreadyVerified && !lineOfFire(psAttacker, psTarget, weapon_slot, true))
 		{
-			attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain
+			attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain or structures
 		}
 	}
 
