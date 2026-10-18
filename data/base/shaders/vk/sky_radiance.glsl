@@ -1,5 +1,6 @@
 // Direction-indexed lookup of the 2D skybox texpage.
-// Uses viewToSkyLocal, skyFogColor, and skyboxTexture from the including shader.
+// Uses viewToSkyLocal, skyFogColor, skyboxTexture and linearLighting from the including shader.
+// Returns a display value, also under linear lighting.
 // Matches pie_DrawSkybox: four walls share the same strip (u 0..2 per wall),
 // v follows the mesh bands (top=0.01, middle=0.85, baseline=0.99).
 
@@ -67,5 +68,11 @@ vec3 wzSampleSkyRadiance(vec3 viewDir)
 	{
 		fogAmt = 1.0 - clamp((y - SKY_MESH_MIDDLE_Y) / (1.0 - SKY_MESH_MIDDLE_Y), 0.0, 1.0);
 	}
-	return mix(wzSampleSkyboxLod0(vec2(wzSkyWallU(d, p, ad), v)), skyFogColor.rgb, fogAmt);
+	vec3 sky = wzSampleSkyboxLod0(vec2(wzSkyWallU(d, p, ad), v));
+	if (linearLighting > 0.5)
+	{
+		// The skybox arrives linear but the fog color is a display value, so re-encode the sky before mixing
+		sky = wzLinearToSrgb(sky);
+	}
+	return mix(sky, skyFogColor.rgb, fogAmt);
 }

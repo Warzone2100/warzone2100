@@ -161,6 +161,7 @@ void drawSSRGenerate(
 	constants.skyFogColor = glm::vec4(fog.r, fog.g, fog.b, renderState.fogEnabled ? 1.f : 0.f);
 	constants.stepCount = static_cast<float>(activeSettings().stepCount);
 	constants.skyboxAvailable = skyboxTexture != nullptr ? 1.f : 0.f;
+	constants.linearLighting = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
 
 	display3d_drawFullscreenTriangle<gfx_api::SSRGeneratePSO>(constants, depthTexture, normalsTexture, sceneTexture, skyboxTexture);
 }
@@ -234,6 +235,7 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 	constants.invProjectionMatrix = glm::inverse(fc.perspectiveMatrix);
 	constants.intensity = s_tuning.intensity * s_tuning.overWaterMix;
 	constants.F0 = s_tuning.F0;
+	constants.linearLighting = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.sceneUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.ssrUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 2, constants.normalsUvScaleClamp);
