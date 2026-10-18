@@ -1521,7 +1521,7 @@ bool droidUpdateRepair(DROID *psDroid)
 	structureRepair(psStruct, psDroid, iRepairRate);
 
 	/* if not finished repair return true else complete repair and return false */
-	if (psStruct->body < psStruct->structureBody())
+	if (psStruct->isDamaged())
 	{
 		return true;
 	}
