@@ -40,8 +40,10 @@
 
 /// Attaches the console to the root form of the in-game screen
 void inGameConsoleAdd(const std::shared_ptr<W_SCREEN> &screen);
-/// Moves the console back above any form attached after it (ex. the HUD's)
-void inGameConsoleKeepOnTop();
+/// Moves the console back above any form attached after it (ex. the HUD's). Given `under` (the Modern skin's results),
+/// puts it just below that instead while the console isn't expanded for its history or chat, as the Classic results
+/// are drawn over the console's passing messages
+void inGameConsoleKeepOnTop(const std::shared_ptr<WIDGET> &under = nullptr);
 
 /// Where the expanded console goes on the current screen (see consoleExpandedRect())
 ConsoleRect inGameConsoleExpandedRect();

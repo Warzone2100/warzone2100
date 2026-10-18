@@ -86,6 +86,7 @@ data/base/images/hud/icons/chevron-up.svg
 data/base/images/hud/icons/connection-desync.svg
 data/base/images/hud/icons/connection-left.svg
 data/base/images/hud/icons/connection-waiting.svg
+data/base/images/hud/icons/defeat.svg
 data/base/images/hud/icons/delivery-point.fill.svg
 data/base/images/hud/icons/delivery-point.svg
 data/base/images/hud/icons/favorite.fill.svg
@@ -153,6 +154,7 @@ data/base/images/hud/icons/team-strategy.svg
 data/base/images/hud/icons/technology.svg
 data/base/images/hud/icons/units.svg
 data/base/images/hud/icons/upgrade.svg
+data/base/images/hud/icons/victory.svg
 data/base/images/hud/icons/visibility.svg
 data/base/images/hud/icons/volume-off.svg
 data/base/images/hud/icons/volume.svg

@@ -989,6 +989,25 @@ public:
 	bool drawsConnectionPanel() const override { return true; }
 	bool drawsIntelligenceScreen() const override { return true; }
 	bool drawsPregameScreen() const override { return true; }
+	bool drawsResultsScreens() const override { return true; }
+
+	PIELIGHT followAccent(PIELIGHT color, float tint) const override
+	{
+		const Oklch from = toOklch(accentColor(HudAccent::Blue));
+		const Oklch to = toOklch(accentColor(accentInUse));
+		Oklch shade = toOklch(color);
+		shade.c *= std::min(1.f, to.c / from.c) * tint;
+		shade.h += to.h - from.h;
+		return fromOklch(shade, color.byte.a);
+	}
+
+	PIELIGHT inHueOf(PIELIGHT color, PIELIGHT hueOf, float chroma) const override
+	{
+		Oklch shade = toOklch(color);
+		shade.c = chroma;
+		shade.h = toOklch(hueOf).h;
+		return fromOklch(shade, color.byte.a);
+	}
 
 	bool drawReplayBar(const WzRect &rect) override
 	{

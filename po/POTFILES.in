@@ -475,10 +475,13 @@ src/hud/hudbuildcategories.cpp
 src/hud/hudchatbar.cpp
 src/hud/hudconnection.cpp
 src/hud/huddetailcontents.cpp
+src/hud/hudgameresults.cpp
 src/hud/hudidle.cpp
 src/hud/hudmodel.cpp
 src/hud/hudmodernskin.cpp
 src/hud/hudpanelfilters.cpp
+src/hud/hudresults.cpp
+src/hud/hudresultsdata.cpp
 src/hud/hudreticule.cpp
 src/hud/hudrowsummary.cpp
 src/hud/hudsettings.cpp
@@ -566,6 +569,7 @@ src/screens/ingameopscreen.cpp
 src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
 src/screens/researchtreescreen.cpp
+src/screens/spectatorgameoverscreen.cpp
 src/selection.cpp
 src/selectionidle.cpp
 src/seqdisp.cpp

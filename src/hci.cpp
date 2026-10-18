@@ -102,6 +102,7 @@
 #include "hud/intel/objectivescard.h"
 #include "hud/hudiconbutton.h"
 #include "hud/hud.h"
+#include "hud/hudresults.h"
 #include "hud/huddetail.h"
 #include "hud/huddetailcontents.h"
 
@@ -1778,7 +1779,7 @@ void intDisplayWidgets()
 		(desiredRadarVisibility) ? radarWidget->show() : radarWidget->hide();
 	}
 
-	inGameConsoleKeepOnTop();
+	inGameConsoleKeepOnTop(hudResultsRoot());
 	widgDisplayScreen(psWScreen);
 
 	if (bLoadSaveUp)

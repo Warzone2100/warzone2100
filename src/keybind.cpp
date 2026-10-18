@@ -37,6 +37,7 @@
 #include "edit3d.h"
 #include "keybind.h"
 #include "hud/intel/intelpanel.h"
+#include "hud/hudresults.h"
 #include "screens/researchtreescreen.h"
 #include "hci/ingameconsole.h"
 #include "mechanics.h"
@@ -1313,7 +1314,11 @@ void	kf_ToggleDroidInfo()
 void	kf_addInGameOptions()
 {
 	setWidgetsStatus(true);
-	intResetScreen(false);
+	// (the Modern skin's results stay, under the menu, and are back when it closes)
+	if (!(MissionResUp && hudResultsEnabled()))
+	{
+		intResetScreen(false);
+	}
 	intAddInGameOptions();
 }
 

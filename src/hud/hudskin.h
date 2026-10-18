@@ -313,6 +313,13 @@ public:
 	virtual bool drawsIntelligenceScreen() const { return false; }
 	/// Whether it draws the screen before a networked game starts (src/hud/pregamescreen.h)
 	virtual bool drawsPregameScreen() const { return false; }
+	/// Whether it draws the mission and game results (src/hud/hudresults.h)
+	virtual bool drawsResultsScreens() const { return false; }
+	/// `color` (one of the panels' blue-grays) moved to the accent's hue with `tint` of the accent's chroma
+	/// (0: a gray, 1: as the accent's own shades), as the panels follow the accent. The Classic skin keeps it
+	virtual PIELIGHT followAccent(PIELIGHT color, float tint) const { (void)tint; return color; }
+	/// `color` (its lightness) in the hue of `hueOf`, with the chroma given (OKLCH): a dark tint of a state's color
+	virtual PIELIGHT inHueOf(PIELIGHT color, PIELIGHT hueOf, float chroma) const { (void)hueOf; (void)chroma; return color; }
 	/// Draws the radar's frame (and, when `north`, its north arrow) before the minimap, in the minimap's own space
 	/// (`mapSpace`: the map from 0, 0 to width, height, turned with the camera when the radar turns). False: the radar
 	/// draws its Classic images

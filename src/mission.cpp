@@ -28,6 +28,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "hud/hudresults.h"
 #include "mission.h"
 #include "gamestate_harness.h" // continueLevels (test-only)
 
@@ -2605,6 +2606,45 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	// ensure these widgets are deleted before attempting to create
 	intDestroyMissionResultWidgets();
 
+	if (hudResultsEnabled())
+	{
+		// the Modern skin's screens, with the same buttons (and ids) as below
+		const bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+		std::vector<HudResultsButton> buttons;
+		if (result || bMultiPlayer)
+		{
+			// (in multiplayer, the game can't go on for long once over: only in a skirmish)
+			if ((!bMultiPlayer && !testPlayerHasWon()) || (bMultiPlayer && !NetPlay.bComms && !multiplayerHostQuit))
+			{
+				buttons.push_back({IDMISSIONRES_CONTINUE, _("Continue Game"), !bMultiPlayer, nullptr});
+			}
+			if (bMultiPlayer || testPlayerHasWon())
+			{
+				buttons.push_back({IDMISSIONRES_QUIT, _("Quit To Main Menu"), true, nullptr});
+			}
+		}
+		else
+		{
+			buttons.push_back({IDMISSIONRES_QUIT, _("Quit To Main Menu"), false, nullptr});
+			buttons.push_back({IDMISSIONRES_LOAD, _("Load Saved Game"), true, nullptr});
+		}
+		auto root = bMultiPlayer ? hudMakeGameResults(false, result, customTitle ? customTitle : "", std::move(buttons))
+		                         : hudMakeCampaignResults(result, std::move(buttons));
+		root->id = IDMISSIONRES_BACKFORM;
+		if (!root->children().empty())
+		{
+			root->children().front()->id = IDMISSIONRES_FORM;
+		}
+		psWScreen->psForm->attach(root);
+		intMode = INT_MISSIONRES;
+		MissionResUp = true;
+		if (result && bPlaySuccess)
+		{
+			audio_QueueTrack(ID_SOUND_OBJECTIVE_ACCOMPLISHED);
+		}
+		return true;
+	}
+
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
 	sFormInit.style			= WFORM_PLAIN;
@@ -2771,6 +2811,14 @@ void intRemoveMissionResultNoAnim()
 
 	intShowPowerBar();
 	intShowGroupSelectionMenu();
+}
+
+void intSetMissionResultVisible(bool visible)
+{
+	if (WIDGET *results = widgGetFromID(psWScreen, IDMISSIONRES_BACKFORM))
+	{
+		results->show(visible);
+	}
 }
 
 void intRunMissionResult()

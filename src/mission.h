@@ -124,6 +124,8 @@ void resetLimboMission();
 extern bool MissionResUp;
 
 void intRemoveMissionResultNoAnim();
+/// Hides the results (while the in-game menu is open over them), or shows them again
+void intSetMissionResultVisible(bool visible);
 void intProcessMissionResult(UDWORD id);
 void intRunMissionResult();
 
