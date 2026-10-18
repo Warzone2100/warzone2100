@@ -270,6 +270,7 @@ lib/framework/lexer_input.cpp
 lib/framework/mac_wrapper.cpp
 lib/framework/memory_pool.cpp
 lib/framework/physfs_ext.cpp
+lib/framework/resource_loading_controller.cpp
 lib/framework/stdio_ext.cpp
 lib/framework/stringsearch.cpp
 lib/framework/strres.cpp

@@ -160,7 +160,10 @@ static void drawLoadingDomainLabel()
 	const int aboveBase = iV_GetTextAboveBase(font);
 	const float baseline = static_cast<float>(loadingBar.barLeftY - gapPx - lineSize - aboveBase);
 
-	WzString shown = WzString::fromUtf8(std::string(_("Loading")) + " " + std::string(path));
+	const std::string pathStr(path);
+	// TRANSLATORS: Label above the loading bar.
+	// %s is the nested loading steps, as in "Game / Level data / Map".
+	WzString shown = WzString::format(_("Loading %s"), pathStr.c_str());
 	const unsigned int barWidth = static_cast<unsigned int>(loadingBar.boxWidth);
 	if (iV_GetTextWidth(shown, font) > barWidth)
 	{

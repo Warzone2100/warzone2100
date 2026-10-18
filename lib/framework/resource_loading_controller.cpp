@@ -31,6 +31,11 @@
 #include <ratio>
 #include <utility>
 
+static std::string loadingDomainSeparator()
+{
+	return " / ";
+}
+
 struct ResourceLoadingController::ResourceLoadingSubmission
 {
 	LoadingTaskHandle task;
@@ -198,7 +203,7 @@ void ResourceLoadingController::pushLoadingDomain(LoadingTaskPromiseBase* owner,
 	std::string next = loadingDomainPathCache;
 	if (!loadingDomains.empty())
 	{
-		next += " / ";
+		next += loadingDomainSeparator();
 	}
 	next += name;
 
@@ -227,12 +232,13 @@ void ResourceLoadingController::popLoadingDomain(LoadingTaskPromiseBase* owner) 
 
 	try
 	{
+		const std::string separator = loadingDomainSeparator();
 		std::string next;
 		for (size_t i = 0; i < loadingDomains.size(); ++i)
 		{
 			if (i != 0)
 			{
-				next += " / ";
+				next += separator;
 			}
 			next += loadingDomains[i].name;
 		}
