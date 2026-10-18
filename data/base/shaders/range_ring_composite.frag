@@ -2,6 +2,7 @@
 // (This shader supports GLSL 1.40 - 1.50 core.)
 
 #include "view_position.glsl"
+#include "srgb.glsl"
 
 layout(std140) uniform cbuffer {
 	mat4 invProjectionMatrix;
@@ -14,7 +15,7 @@ layout(std140) uniform cbuffer {
 	vec4 minRangeColor;
 	float fillAlpha;
 	float sdfBand;
-	float padding1;
+	float linearLighting;
 	float padding2;
 };
 uniform sampler2D sceneTexture;
@@ -89,7 +90,15 @@ void main()
 			float minRange = channelOverlay(field.b, band, maxW);
 			vec3 overlay = sensorColor.rgb * sensor + weaponColor.rgb * weapon + minRangeColor.rgb * minRange;
 			float a = clamp(max(max(sensor, weapon), minRange), 0.0, 1.0);
-			result = lit * (1.0 - a) + overlay; // premultiplied-style overlay
+			if (linearLighting > 0.5)
+			{
+				// The ring colors were tuned for display values, so they are composed in display space
+				result = wzSrgbToLinear(wzLinearToSrgb(lit) * (1.0 - a) + overlay);
+			}
+			else
+			{
+				result = lit * (1.0 - a) + overlay; // premultiplied-style overlay
+			}
 		}
 	}
 
