@@ -95,6 +95,10 @@ struct LoadingBarLayout
 static LoadingBarLayout loadingBar;
 static std::vector<STAR> loadingStars;
 
+static std::string loadingDomainLabelPath;
+static WzString loadingDomainLabelFullText;
+static WidthLimitedWzText loadingDomainLabelText;
+
 static STAR newStar(const LoadingBarLayout& layout)
 {
 	STAR s;
@@ -156,24 +160,22 @@ static void drawLoadingDomainLabel()
 
 	constexpr iV_fonts font = font_medium;
 	constexpr int gapPx = 4;
+
+	if (path != loadingDomainLabelPath)
+	{
+		loadingDomainLabelPath.assign(path);
+		// TRANSLATORS: Label above the loading bar.
+		// %s is the nested loading steps, as in "Game / Level data / Map".
+		loadingDomainLabelFullText = WzString::format(_("Loading %s"), loadingDomainLabelPath.c_str());
+	}
+	// No-op unless the text, font or width changed.
+	const size_t barWidth = static_cast<size_t>(loadingBar.boxWidth);
+	loadingDomainLabelText.setTruncatableText(loadingDomainLabelFullText, font, barWidth);
+
 	const int lineSize = iV_GetTextLineSize(font);
 	const int aboveBase = iV_GetTextAboveBase(font);
 	const float baseline = static_cast<float>(loadingBar.barLeftY - gapPx - lineSize - aboveBase);
-
-	const std::string pathStr(path);
-	// TRANSLATORS: Label above the loading bar.
-	// %s is the nested loading steps, as in "Game / Level data / Map".
-	WzString shown = WzString::format(_("Loading %s"), pathStr.c_str());
-	const unsigned int barWidth = static_cast<unsigned int>(loadingBar.boxWidth);
-	if (iV_GetTextWidth(shown, font) > barWidth)
-	{
-		WidthLimitedWzText limited;
-		limited.setTruncatableText(shown, font, barWidth);
-		shown = limited.getText();
-	}
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(shown.toUtf8().c_str(), static_cast<float>(loadingBar.barLeftX), baseline, font);
+	loadingDomainLabelText.render(static_cast<float>(loadingBar.barLeftX), baseline, WZCOL_TEXT_BRIGHT);
 }
 
 static void renderLoadingScreenPass()
@@ -422,6 +424,10 @@ void closeLoadingScreen()
 	loadingStars.clear();
 	loadingStars.shrink_to_fit();
 	loadingBar = {};
+	// Release the cached texture before graphics shutdown.
+	loadingDomainLabelPath.clear();
+	loadingDomainLabelFullText = WzString();
+	loadingDomainLabelText = WidthLimitedWzText();
 #if defined(__EMSCRIPTEN__)
 	wzemscripten_display_web_loading_indicator(0);
 #endif
