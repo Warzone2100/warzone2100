@@ -952,7 +952,8 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO>
 	{
 		float ssaoIntensity;
-		float padding0;
+		/// 1 when linear lighting is on
+		float linearLighting;
 		float padding1;
 		float padding2;
 		glm::vec4 sceneUvScaleClamp;
