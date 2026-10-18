@@ -185,6 +185,9 @@ void ResourceLoadingController::resetTaskState() noexcept
 	ASSERT(!hasActiveExecution() && !sessionFinished, "resetTaskState must clear execution state");
 	ASSERT(loadingDomains.empty(), "loading domain stack leaked");
 	ASSERT(liveFrames.empty(), "live loading frames leaked");
+	loadingDomains.clear();
+	loadingDomainPathCache.clear();
+	liveFrames.clear();
 }
 
 void ResourceLoadingController::pushLoadingDomain(LoadingTaskPromiseBase* owner, std::string name)
