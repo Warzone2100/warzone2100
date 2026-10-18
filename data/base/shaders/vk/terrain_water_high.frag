@@ -73,13 +73,13 @@ vec4 main_bumpMapping()
 	vec3 color;
 	if (linearLighting != 0)
 	{
-		// The water was tuned for display values, so each lit term is computed in linear and encoded, and the
-		// composition runs in display space
-		vec3 lit = diffuseLight.rgb * wzSrgbToLinear(vec3(diffuseFactor)).r * wzSrgbToLinear(waterColor);
-		vec3 spec = specularLight.rgb * wzSrgbToLinear(vec3(specularFactor * diffuseFactor)).r;
+		// The water was tuned for display values, so it is evaluated in display space
+		vec3 ambientD = wzLinearToSrgb(ambientLight.rgb);
+		vec3 diffuseD = wzLinearToSrgb(diffuseLight.rgb);
+		vec3 specularD = wzLinearToSrgb(specularLight.rgb);
 		// The noise pages decode on sample, and the amount was tuned for their encoded values
 		float noise = wzLinearToSrgb(vec3(noise1)).r * wzLinearToSrgb(vec3(noise2)).r;
-		vec3 display = wzLinearToSrgb(ambientLight.rgb) * foam + wzLinearToSrgb(lit) + vec3(noise*noise*0.5) + wzLinearToSrgb(spec);
+		vec3 display = ambientD * foam + diffuseD * diffuseFactor * waterColor + vec3(noise*noise*0.5) + specularD * specularFactor * diffuseFactor;
 		display = mix(display, (display + fresnelTint) * 0.5, fresnel);
 		display = blendAddEffectLighting(display, lightmap.rgb / 1.5);
 		display *= lightmap.a;
