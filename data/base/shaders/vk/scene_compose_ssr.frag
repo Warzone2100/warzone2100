@@ -8,7 +8,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 depthUvScaleClamp;
 	float intensity;
 	float F0;
-	float padding0;
+	float linearLighting;
 	float padding1;
 };
 
@@ -21,6 +21,7 @@ layout(location = 0) in vec2 texCoords;
 layout(location = 0) out vec4 FragColor;
 
 #include "view_position.glsl"
+#include "srgb.glsl"
 
 const float SSR_WEIGHT_EPSILON = 1e-3;
 const float NORMAL_LENGTH_EPSILON = 1e-5;
@@ -63,5 +64,13 @@ void main()
 	// ssr is premultiplied; unpremultiply for the mix color, keep a as the weight.
 	vec3 refl = ssr.rgb / max(ssr.a, SSR_WEIGHT_EPSILON);
 	float mixAmt = clamp(ssrWeight * F * ssr.a * intensity, 0.0, 1.0);
-	FragColor = vec4(mix(scene, refl, mixAmt), 1.0);
+	if (linearLighting > 0.5)
+	{
+		// Both the reflection and its strength are display values, so the mix runs in display space
+		FragColor = vec4(wzSrgbToLinear(mix(wzLinearToSrgb(scene), refl, mixAmt)), 1.0);
+	}
+	else
+	{
+		FragColor = vec4(mix(scene, refl, mixAmt), 1.0);
+	}
 }

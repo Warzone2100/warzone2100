@@ -13,6 +13,10 @@ layout(std140) uniform cbuffer {
 	float stepCount;          // runtime march cap; loop still bound by MAX_STEPS
 	float skyboxAvailable;
 	vec2 projZCoeffs;         // x = P[2][2], y = P[3][2]; see wzGetViewZ
+	float linearLighting;
+	float padding0;
+	float padding1;
+	float padding2;
 };
 
 uniform sampler2D depthTexture;
@@ -34,6 +38,7 @@ varying vec2 texCoords;
 #endif
 
 #include "view_position.glsl"
+#include "srgb.glsl"
 #include "sky_radiance.glsl"
 
 // Water SSR: march reflect(V, N) with homogeneous (1/w) steps. A hit is the ray's
@@ -54,6 +59,7 @@ varying vec2 texCoords;
 //
 // Output is premultiplied: vec4(rgb * confidence, confidence). Empty is (0,0,0,0).
 // Alpha is still the hit/miss classifier (HIT_CONFIDENCE_MIN). Compose unpremultiplies.
+// Under linear lighting the color is stored display encoded, to keep precision in dark reflections
 
 // Empty/sky prepass depth. Same convention as SSAO generate.
 const float SKY_DEPTH_THRESHOLD = 0.9999;
@@ -369,5 +375,9 @@ void main()
 	vec2 sceneUv = clamp(hitUV / max(prepassUvScaleClamp.xy, vec2(UV_EPSILON)) * sceneUvScaleClamp.xy,
 		vec2(0.0), sceneUvScaleClamp.zw);
 	vec3 color = texture(sceneTexture, sceneUv).rgb;
+	if (linearLighting > 0.5)
+	{
+		color = wzLinearToSrgb(color);
+	}
 	writePremul(color, confidence);
 }

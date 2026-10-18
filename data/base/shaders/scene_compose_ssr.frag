@@ -9,7 +9,7 @@ layout(std140) uniform cbuffer {
 	vec4 depthUvScaleClamp;
 	float intensity;
 	float F0;
-	float padding0;
+	float linearLighting;
 	float padding1;
 };
 
@@ -32,6 +32,7 @@ varying vec2 texCoords;
 #endif
 
 #include "view_position.glsl"
+#include "srgb.glsl"
 
 const float SSR_WEIGHT_EPSILON = 1e-3;
 const float NORMAL_LENGTH_EPSILON = 1e-5;
@@ -83,5 +84,13 @@ void main()
 	// ssr is premultiplied; unpremultiply for the mix color, keep a as the weight.
 	vec3 refl = ssr.rgb / max(ssr.a, SSR_WEIGHT_EPSILON);
 	float mixAmt = clamp(ssrWeight * F * ssr.a * intensity, 0.0, 1.0);
-	writeColor(vec4(mix(scene, refl, mixAmt), 1.0));
+	if (linearLighting > 0.5)
+	{
+		// Both the reflection and its strength are display values, so the mix runs in display space
+		writeColor(vec4(wzSrgbToLinear(mix(wzLinearToSrgb(scene), refl, mixAmt)), 1.0));
+	}
+	else
+	{
+		writeColor(vec4(mix(scene, refl, mixAmt), 1.0));
+	}
 }
