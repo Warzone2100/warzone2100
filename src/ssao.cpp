@@ -271,6 +271,7 @@ void recordCompose(const gfx_api::RenderPassContext& passCtx)
 
 	gfx_api::constant_buffer_type<SHADER_SCENE_COMPOSE_SSAO> constants {};
 	constants.ssaoIntensity = s_tuning.intensity;
+	constants.linearLighting = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.sceneUvScaleClamp);
 	display3d_fillPassReadUvScaleClamp(passCtx, 1, constants.aoUvScaleClamp);
 	display3d_drawFullscreenTriangle<gfx_api::SceneComposeSSAOPSO>(constants, scene, ao, prepassNormals);

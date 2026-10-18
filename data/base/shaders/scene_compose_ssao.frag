@@ -1,9 +1,11 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.40 - 1.50 core.)
 
+#include "srgb.glsl"
+
 layout(std140) uniform cbuffer {
 	float ssaoIntensity;
-	float padding0;
+	float linearLighting;
 	float padding1;
 	float padding2;
 	vec4 sceneUvScaleClamp;
@@ -39,7 +41,17 @@ void main()
 	float ao = texture(ssaoTexture, aoUv).r;
 	// A is SSAO weight (1 = apply). Water prepass writes 0, so lakes get no AO.
 	float weight = texture(prepassNormals, sceneUv).a;
-	vec3 litAo = scene * mix(1.0, ao, ssaoIntensity * weight);
+	float aoFactor = mix(1.0, ao, ssaoIntensity * weight);
+	vec3 litAo;
+	if (linearLighting > 0.5)
+	{
+		// The AO strength was tuned for display values, so it darkens in display space
+		litAo = wzSrgbToLinear(wzLinearToSrgb(scene) * aoFactor);
+	}
+	else
+	{
+		litAo = scene * aoFactor;
+	}
 
 	#ifdef NEWGL
 	FragColor = vec4(litAo, 1.0);
