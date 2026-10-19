@@ -4,15 +4,15 @@
 
 > For convenience, you will probably want either [Homebrew](https://brew.sh) or [Macports](https://www.macports.org/install.php) installed for setting up certain prerequisites. If you don't have either yet, **Homebrew** is recommended.
 
-1. **macOS 13+**
-    - While building may work on prior versions of macOS, CI only tests on macOS 13+.
+1. **macOS 15+**
+    - While building may work on prior versions of macOS, CI only tests on macOS 15+.
 
-2. **Xcode 14+** (tested w/: Xcode 14.x)
-    - If you do not have Xcode 14.3.1+ you can get it for free at the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) or [Apple's website](http://developer.apple.com/technology/xcode.html).
+2. **Xcode 16+** (tested w/: Xcode 16.x)
+    - If you do not have Xcode 16.4+ you can get it for free at the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) or [Apple's website](http://developer.apple.com/technology/xcode.html).
     - Earlier versions of Xcode may work, but are not tested by CI.
 
-3. **CMake 3.24+** (required to generate the Xcode project)
-    - If you do not have CMake 3.24+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
+3. **CMake 3.31+** (required to generate the Xcode project)
+    - If you do not have CMake 3.31+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
 
 4. **Autoconf** (required to compile some vcpkg ports)
     - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
@@ -116,11 +116,11 @@ You can also simply open the project in Xcode, and build the `warzone2100` schem
 
 ## Deployment:
 
-The macOS port produces a 64-bit [self-contained application bundle](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13) that requires **macOS 10.14+**\* to run.
+The macOS port produces a 64-bit [self-contained application bundle](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13) that requires **macOS 10.15+**\* to run.
 
 > \* See _Setup & Configuration_ for how to set the minimum deployment target.
 
-If built on macOS 10.14+, the application will support both the OpenGL and Vulkan (Metal) backends on macOS.
+If built on macOS 10.15+, the application will support both the OpenGL and Vulkan (Metal) backends on macOS.
 
 ## Additional Information:
 
