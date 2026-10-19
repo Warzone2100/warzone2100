@@ -799,7 +799,15 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) * num / den,
 	                   aBegin.height() + (aEnd.height() - aBegin.height()) * num / den);
 
-	(hudSkinned ? currentHudSkin() : classicHudSkin()).drawPanelFrame(aCur, aOpen);
+	HudSkin &skin = hudSkinned ? currentHudSkin() : classicHudSkin();
+	if (opaque && skin.id() != HudSkinId::Classic && aCur == aOpen)
+	{
+		PIELIGHT backing = skin.colors().panelBackgroundBottom;
+		backing.byte.a = 255;
+		pie_DrawRoundedBox(static_cast<float>(aCur.x()), static_cast<float>(aCur.y()), static_cast<float>(aCur.right()),
+		                   static_cast<float>(aCur.bottom()), backing, skin.metrics().panelRadius);
+	}
+	skin.drawPanelFrame(aCur, aOpen);
 }
 
 // Display an image for a widget.

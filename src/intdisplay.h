@@ -258,9 +258,13 @@ public:
 	bool isClosing() const;
 	/// Framed by the HUD skin (the HUD's panels, other forms keep the Classic frame)
 	void setHudSkinned(bool skinned) { hudSkinned = skinned; }
+	/// Framed by the HUD skin, and opaque in a skin whose panels let what's under them show
+	/// (ex. a screen that covers the HUD)
+	void setHudSkinnedOpaque() { hudSkinned = true; opaque = true; }
 
 private:
 	bool            hudSkinned = false;
+	bool            opaque = false;
 	unsigned        startTime;              ///< Animation start time
 	int             currentAction;          ///< Opening/open/closing/closed.
 	W_ANIMATED_ON_CLOSE_FUNC	onCloseAnimFinished;

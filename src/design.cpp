@@ -69,6 +69,8 @@
 #include "multiplay.h"
 #include "qtscript.h"
 #include "animation.h"
+#include "hud/huddesign.h"
+#include "hud/hudgeometrydump.h"
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
@@ -363,6 +365,11 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
+		if (displaySkinned(xOffset, yOffset))
+		{
+			return;
+		}
+
 		auto x0 = xOffset + x() + PADDING;
 		auto y0 = yOffset + y() + PADDING;
 
@@ -398,6 +405,31 @@ protected:
 		}
 	}
 
+	bool displaySkinned(int xOffset, int yOffset)
+	{
+		if (!hudDrawsDesignScreen())
+		{
+			return false;
+		}
+		HudDesignBarLook look;
+		look.x = xOffset + x();
+		look.y = yOffset + y();
+		look.width = width();
+		look.height = height();
+		look.metrics = skinnedMetrics;
+		look.fraction = majorSize / 100.f;
+		look.value = WzString::format("%.*f", precision, majorValue / (float)denominator).toUtf8();
+		auto delta = minorValue - majorValue;
+		if (minorValue != 0 && delta != 0)
+		{
+			updateAnimation();
+			look.compared = minorAnimation.getCurrent() / 100.f;
+			look.better = (delta < 0) == lessIsBetter;
+			look.delta = WzString::format("%+.*f", precision, delta / (float)denominator).toUtf8();
+		}
+		return hudDesignDrawStatBar(look, valueText, deltaText);
+	}
+
 	void updateAnimation()
 	{
 		if (minorSize != minorAnimation.getFinalData())
@@ -414,6 +446,7 @@ protected:
 	WzText valueText;
 	WzText deltaText;
 	uint32_t maxValueTextWidth = iV_GetTextWidth("00000", font_regular);
+	HudDesignBarMetrics skinnedMetrics = hudDesignBarMetrics();
 	Animation<float> minorAnimation = Animation<float>(realTime, EASE_IN, 200).setInitialData(0).setFinalData(0);
 	const uint32_t PADDING = 3;
 	bool lessIsBetter = false;
@@ -436,8 +469,11 @@ protected:
 	{
 		auto x0 = xOffset + x();
 		auto y0 = yOffset + y();
-		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_LEFT, x0, y0);
-		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + width() - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
+		if (!hudDrawsDesignScreen())
+		{
+			iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_LEFT, x0, y0);
+			iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + width() - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
+		}
 		DesignStatsBar::display(xOffset, yOffset);
 	}
 };
@@ -642,6 +678,7 @@ bool intAddDesign(bool bShowCentreScreen)
 
 	/* Add the main design form */
 	auto desForm = std::make_shared<IntFormAnimated>(false);
+	desForm->setHudSkinnedOpaque();
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wnull-dereference"
@@ -663,7 +700,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sEdInit.width = DES_NAMEBOXWIDTH;
 	sEdInit.height = DES_NAMEBOXHEIGHT;
 	sEdInit.pText = _("New Vehicle");
-	sEdInit.pBoxDisplay = intDisplayEditBox;
+	sEdInit.pBoxDisplay = hudDesignDisplayEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return false;
@@ -719,7 +756,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BODY);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BODY);
 	sButInit.pTip = _("Vehicle Body");
-	sButInit.pDisplay = intDisplayButtonFlash;
+	sButInit.pDisplay = hudDesignDisplayButtonFlash;
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_BODYH, IMAGE_DES_BODY);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -735,7 +772,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.pTip = _("Vehicle Propulsion");
-	sButInit.pDisplay = intDisplayButtonFlash;
+	sButInit.pDisplay = hudDesignDisplayButtonFlash;
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_PROPULSIONH, IMAGE_DES_PROPULSION);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -752,7 +789,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.pDisplay = intDisplayButtonFlash;
+	sButInit.pDisplay = hudDesignDisplayButtonFlash;
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -771,7 +808,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.pDisplay = intDisplayButtonFlash;
+	sButInit.pDisplay = hudDesignDisplayButtonFlash;
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -791,7 +828,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.pDisplay = intDisplayButtonFlash;
+	sButInit.pDisplay = hudDesignDisplayButtonFlash;
 	sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DES_TURRETH, IMAGE_DES_TURRET);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -806,7 +843,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = (UWORD)(DES_PARTFORMHEIGHT - sButInit.height - DES_PARTSEPARATIONY);
 	sButInit.pTip = _("Delete Design");
-	sButInit.pDisplay = intDisplayButtonHilight;
+	sButInit.pDisplay = hudDesignDisplayButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_BINH, IMAGE_DES_BIN);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -823,7 +860,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sButInit.y = DES_PARTFORMHEIGHT - 2 * sButInit.height - 2 * DES_PARTSEPARATIONY;
 	sButInit.pTip = _("Store Template");
 	sButInit.FontID = font_regular;
-	sButInit.pDisplay = intDisplayButtonHilight;
+	sButInit.pDisplay = hudDesignDisplayButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
 
 	if (bMultiPlayer && !widgAddButton(psWScreen, &sButInit))
@@ -833,6 +870,7 @@ bool intAddDesign(bool bShowCentreScreen)
 
 	/* add central stats form */
 	auto statsForm = std::make_shared<IntFormAnimated>(false);
+	statsForm->setHudSkinnedOpaque();
 	parent->attach(statsForm);
 	statsForm->id = IDDES_STATSFORM;
 	statsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -898,7 +936,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARHEIGHT;
 	sLabInit.pTip = _("Kinetic Armour");
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 	//just to confuse things even more - the graphics were named incorrectly!
 	sLabInit.UserData = IMAGE_DES_ARMOUR_EXPLOSIVE;
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -908,7 +946,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sLabInit.id = IDDES_BODYARMOURHLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sLabInit.pTip = _("Thermal Armour");
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 	sLabInit.UserData = IMAGE_DES_ARMOUR_KINETIC;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -917,7 +955,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sLabInit.id = IDDES_BODYPOWERLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sLabInit.pTip = _("Engine Output");
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 	sLabInit.UserData = IMAGE_DES_POWER;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -926,7 +964,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sLabInit.id = IDDES_BODYWEIGHTLAB;
 	sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sLabInit.pTip = _("Weight");
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 	sLabInit.UserData = IMAGE_DES_WEIGHT;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -955,7 +993,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sLabInit.x = DES_POWERX;
 	sLabInit.y = DES_POWERY;
 	sLabInit.pTip = _("Total Power Required");
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 	sLabInit.UserData = IMAGE_DES_POWER;
 	widgAddLabel(psWScreen, &sLabInit);
 
@@ -979,7 +1017,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sLabInit.y = (SWORD)(DES_POWERY + DES_POWERSEPARATIONY +
 	                     iV_GetImageHeight(IntImages, IMAGE_DES_BODYPOINTS));
 	sLabInit.pTip = _("Total Body Points");
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 	sLabInit.UserData = IMAGE_DES_BODYPOINTS;
 	widgAddLabel(psWScreen, &sLabInit);
 
@@ -1047,6 +1085,7 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 
 	/* add a form to place the tabbed form on */
 	auto templbaseForm = std::make_shared<IntFormAnimated>(false);
+	templbaseForm->setHudSkinnedOpaque();
 	parent->attach(templbaseForm);
 	templbaseForm->id = IDDES_TEMPLBASE;
 	templbaseForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -1058,6 +1097,7 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 
 	/* Add the design templates form */
 	auto templList = IntListTabWidget::make();
+	templList->setHudSkinned();
 	templbaseForm->attach(templList);
 	templList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *templList = static_cast<IntListTabWidget *>(psWidget);
@@ -1100,6 +1140,7 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 	{
 		/* Set the tip and add the button */
 		auto button = std::make_shared<IntStatsButton>();
+		button->setHudSkinned(true);
 		templList->attach(button);
 		button->id = nextButtonId;
 		button->setStatsAndTip(psTempl);
@@ -1115,10 +1156,7 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 		ssprintf(TempString, "%s - %d", _("Power Usage"), calcTemplatePower(psTempl));
 		sBarInit.pTip = TempString;
 		sBarInit.formID = nextButtonId;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		button->attach(std::make_shared<HudButtonBar>(&sBarInit));
 
 		/* if the current template matches psSelected lock the button */
 		if (psTempl == psSelected)
@@ -1510,7 +1548,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT / 3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARHEIGHT;
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 
 	/* See what type of system stats we've got */
 	if (psStats->hasType(STAT_SENSOR))
@@ -1804,7 +1842,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT / 3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARNAMEHEIGHT;	//DES_CLICKBARHEIGHT;
-	sLabInit.pDisplay = intDisplayImage;
+	sLabInit.pDisplay = hudDesignDisplayStatIcon;
 
 	/* See what type of propulsion we've got */
 	switch (desPropMode)
@@ -1928,6 +1966,7 @@ static ListTabWidget *intAddComponentForm()
 
 	/* add a form to place the tabbed form on */
 	auto rightBase = std::make_shared<IntFormAnimated>(false);
+	rightBase->setHudSkinnedOpaque();
 	parent->attach(rightBase);
 	rightBase->id = IDDES_RIGHTBASE;
 	rightBase->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -1936,6 +1975,7 @@ static ListTabWidget *intAddComponentForm()
 
 	//now a single form
 	auto compList = IntListTabWidget::make();
+	compList->setHudSkinned();
 	rightBase->attach(compList);
 	compList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *compList = static_cast<IntListTabWidget *>(psWidget);
@@ -1963,7 +2003,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_WEAPONS);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_WEAPONS);
 	sButInit.pTip = _("Weapons");
-	sButInit.pDisplay = intDisplayButtonHilight;
+	sButInit.pDisplay = hudDesignDisplayButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_EXTRAHI , IMAGE_DES_WEAPONS);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -1982,7 +2022,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 		sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_SYSTEMS);
 		sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_SYSTEMS);
 		sButInit.pTip = _("Systems");
-		sButInit.pDisplay = intDisplayButtonHilight;
+		sButInit.pDisplay = hudDesignDisplayButton;
 		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DES_EXTRAHI , IMAGE_DES_SYSTEMS);
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
@@ -2067,6 +2107,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, ComponentIterator co
 
 		/* Set the tip and add the button */
 		auto button = std::make_shared<IntStatsButton>();
+		button->setHudSkinned(true);
 		compList->attach(button);
 		button->id = nextButtonId;
 		button->setStatsAndTip(&currStats);
@@ -2152,6 +2193,7 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 
 			// Set the tip and add the button
 			auto button = std::make_shared<IntStatsButton>();
+			button->setHudSkinned(true);
 			compList->attach(button);
 			button->id = nextButtonId;
 			button->setStatsAndTip(&stats);
@@ -2986,7 +3028,7 @@ static void intSetButtonFlash(UDWORD id, bool bFlash)
 
 	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 
-	psWidget->displayFunction = bFlash ? intDisplayButtonFlash : intDisplayButtonHilight;
+	psWidget->displayFunction = bFlash ? hudDesignDisplayButtonFlash : hudDesignDisplayButton;
 }
 
 /*
@@ -3749,10 +3791,13 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	//scale the object around the BUTTON_RADIUS so that half size objects are draw are draw 75% the size of normal objects
 	SDWORD falseScale = (DESIGN_COMPONENT_SCALE * COMPONENT_RADIUS) / templateRadius / 2 + (DESIGN_COMPONENT_SCALE / 2);
 
-	iV_DrawImage(IntImages, (UWORD)(IMAGE_DES_STATBACKLEFT), x0, y0);
-	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATBACKMID, x0 + iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT), y0,
-	                    Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), defaultProjectionMatrix(), true);
-	iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
+	if (!hudDesignDrawStatForm(x0, y0, Form->width(), Form->height(), (Form->getState() & WBUT_HIGHLIGHT) != 0))
+	{
+		iV_DrawImage(IntImages, (UWORD)(IMAGE_DES_STATBACKLEFT), x0, y0);
+		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATBACKMID, x0 + iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT), y0,
+		                    Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), defaultProjectionMatrix(), true);
+		iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
+	}
 
 	/* display current component */
 	pie_SetGeometricOffset(xOffset + psWidget->width() / 4, yOffset + psWidget->height() / 2);
@@ -3779,15 +3824,21 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int x1 = x0 + Form->width();
 	int y1 = y0 + Form->height();
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+	if (!hudDesignDrawView(x0, y0, x1 - x0, y1 - y0))
+	{
+		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+	}
 
 	pie_SetGeometricOffset((DES_CENTERFORMX + DES_3DVIEWX) + (DES_3DVIEWWIDTH / 2),
 	                       (DES_CENTERFORMY + DES_3DVIEWY) + (DES_3DVIEWHEIGHT / 4) + 32);
 
 	Vector3i Rotation = {-30, iRY, 0};
 
-	/* inc rotation */
-	iRY += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	/* inc rotation (not during the HUD geometry dump) */
+	if (!hudGeometryDumpActive())
+	{
+		iRY += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+	}
 	iRY %= 360;
 
 	//fixed depth scale the pie
@@ -3809,7 +3860,10 @@ static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	int x1 = x0 + psWidget->width();
 	int y1 = y0 + psWidget->height();
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+	if (!hudDesignDrawForm(*psWidget, x0, y0))
+	{
+		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+	}
 }
 
 
