@@ -2529,6 +2529,24 @@ bool intTestShowForm(unsigned which)
 	}
 }
 
+bool intTestShowDesign()
+{
+	intResetScreen(true);
+	widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
+	intShowPowerBar();
+	if (!intAddDesign(false))
+	{
+		return false;
+	}
+	intMode = INT_DESIGN;
+	if (widgGetFromID(psWScreen, IDDES_TEMPLSTART + 1) == nullptr)
+	{
+		return false;
+	}
+	intProcessDesign(IDDES_TEMPLSTART + 1);
+	return true;
+}
+
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen()
 {

@@ -27,6 +27,7 @@ The panel states, which are the default ones:
 - `order`: the order panel, for the local player's first droid.
 - `timers`: the campaign's timer row (the mission timer, and the transporter's ETA and load button), in any game.
 - `launch`: the same, with the launch button.
+- `design`: the design screen, on the first design after the new one.
 
 The panels are opened with the test hook `--gamestate-ui-stress` uses (`intTestShowForm()`).
 

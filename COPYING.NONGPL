@@ -71,6 +71,9 @@ data/base/images/hud/icons/alliance-broken.svg
 data/base/images/hud/icons/alliance.svg
 data/base/images/hud/icons/ally-research.fill.svg
 data/base/images/hud/icons/ally-research.svg
+data/base/images/hud/icons/armor-kinetic.svg
+data/base/images/hud/icons/armor-thermal.svg
+data/base/images/hud/icons/build-points.svg
 data/base/images/hud/icons/category-all.svg
 data/base/images/hud/icons/category-base.svg
 data/base/images/hud/icons/category-combat.svg
@@ -87,13 +90,17 @@ data/base/images/hud/icons/connection-desync.svg
 data/base/images/hud/icons/connection-left.svg
 data/base/images/hud/icons/connection-waiting.svg
 data/base/images/hud/icons/defeat.svg
+data/base/images/hud/icons/delete.svg
 data/base/images/hud/icons/delivery-point.fill.svg
 data/base/images/hud/icons/delivery-point.svg
+data/base/images/hud/icons/engine.svg
 data/base/images/hud/icons/favorite.fill.svg
 data/base/images/hud/icons/favorite.svg
 data/base/images/hud/icons/filter.svg
 data/base/images/hud/icons/gift.svg
+data/base/images/hud/icons/hit-points.svg
 data/base/images/hud/icons/intelligence.svg
+data/base/images/hud/icons/jamming-range.svg
 data/base/images/hud/icons/kick.svg
 data/base/images/hud/icons/loop.svg
 data/base/images/hud/icons/mark-unread.svg
@@ -146,8 +153,14 @@ data/base/images/hud/icons/research-structure.fill.svg
 data/base/images/hud/icons/research-structure.svg
 data/base/images/hud/icons/research-tree.svg
 data/base/images/hud/icons/search.svg
+data/base/images/hud/icons/sensor-range.svg
 data/base/images/hud/icons/show-on-map.svg
+data/base/images/hud/icons/speed-air.svg
+data/base/images/hud/icons/speed-offroad.svg
+data/base/images/hud/icons/speed-road.svg
+data/base/images/hud/icons/speed-water.svg
 data/base/images/hud/icons/statistics.svg
+data/base/images/hud/icons/store.svg
 data/base/images/hud/icons/strip-collapse.svg
 data/base/images/hud/icons/strip-expand.svg
 data/base/images/hud/icons/team-strategy.svg
@@ -158,6 +171,7 @@ data/base/images/hud/icons/victory.svg
 data/base/images/hud/icons/visibility.svg
 data/base/images/hud/icons/volume-off.svg
 data/base/images/hud/icons/volume.svg
+data/base/images/hud/icons/weight.svg
 	- MIT License, Copyright (c) 2020-2026 Paweł Kuna (https://github.com/tabler/tabler-icons)
 data/base/images/hud/icons/order-embark.svg
 data/base/images/hud/icons/order-fire-support.svg

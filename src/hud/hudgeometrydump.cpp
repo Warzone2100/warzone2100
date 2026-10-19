@@ -276,6 +276,7 @@ bool applyState(const std::string &name)
 		else if (part == "research") { ok = intTestShowForm(2) && ok; }
 		else if (part == "commander") { ok = intTestShowForm(3) && ok; }
 		else if (part == "order") { ok = selectFirstDroid() && intTestShowForm(4) && ok; }
+		else if (part == "design") { ok = intTestShowDesign() && ok; }
 		else if (part == "select") { ok = selectFirstDroid() && ok; }
 		else if (part == "selectall") { ok = selectAllDroids() && ok; }
 		else if (part == "touch") { hudSetTouchInputForTests(true); }
@@ -653,7 +654,7 @@ bool hudSetGeometryDump(const std::string &spec)
 	stateNames.assign(parts.begin() + std::min<size_t>(parts.size(), 2), parts.end());
 	if (stateNames.empty())
 	{
-		stateNames = {"none", "build", "manufacture", "research", "commander", "order", "timers", "launch"};
+		stateNames = {"none", "build", "manufacture", "research", "commander", "order", "timers", "launch", "design"};
 	}
 	armed = true;
 	return true;

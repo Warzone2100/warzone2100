@@ -990,6 +990,7 @@ public:
 	bool drawsIntelligenceScreen() const override { return true; }
 	bool drawsPregameScreen() const override { return true; }
 	bool drawsResultsScreens() const override { return true; }
+	bool drawsDesignScreen() const override { return true; }
 
 	PIELIGHT followAccent(PIELIGHT color, float tint) const override
 	{

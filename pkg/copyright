@@ -360,6 +360,9 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/alliance.svg
        data/base/images/hud/icons/ally-research.fill.svg
        data/base/images/hud/icons/ally-research.svg
+       data/base/images/hud/icons/armor-kinetic.svg
+       data/base/images/hud/icons/armor-thermal.svg
+       data/base/images/hud/icons/build-points.svg
        data/base/images/hud/icons/category-all.svg
        data/base/images/hud/icons/category-base.svg
        data/base/images/hud/icons/category-combat.svg
@@ -376,13 +379,17 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/connection-left.svg
        data/base/images/hud/icons/connection-waiting.svg
        data/base/images/hud/icons/defeat.svg
+       data/base/images/hud/icons/delete.svg
        data/base/images/hud/icons/delivery-point.fill.svg
        data/base/images/hud/icons/delivery-point.svg
+       data/base/images/hud/icons/engine.svg
        data/base/images/hud/icons/favorite.fill.svg
        data/base/images/hud/icons/favorite.svg
        data/base/images/hud/icons/filter.svg
        data/base/images/hud/icons/gift.svg
+       data/base/images/hud/icons/hit-points.svg
        data/base/images/hud/icons/intelligence.svg
+       data/base/images/hud/icons/jamming-range.svg
        data/base/images/hud/icons/kick.svg
        data/base/images/hud/icons/loop.svg
        data/base/images/hud/icons/mark-unread.svg
@@ -435,8 +442,14 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/research-structure.svg
        data/base/images/hud/icons/research-tree.svg
        data/base/images/hud/icons/search.svg
+       data/base/images/hud/icons/sensor-range.svg
        data/base/images/hud/icons/show-on-map.svg
+       data/base/images/hud/icons/speed-air.svg
+       data/base/images/hud/icons/speed-offroad.svg
+       data/base/images/hud/icons/speed-road.svg
+       data/base/images/hud/icons/speed-water.svg
        data/base/images/hud/icons/statistics.svg
+       data/base/images/hud/icons/store.svg
        data/base/images/hud/icons/strip-collapse.svg
        data/base/images/hud/icons/strip-expand.svg
        data/base/images/hud/icons/team-strategy.svg
@@ -447,6 +460,7 @@ Files: data/base/images/hud/icons/accuracy.svg
        data/base/images/hud/icons/visibility.svg
        data/base/images/hud/icons/volume-off.svg
        data/base/images/hud/icons/volume.svg
+       data/base/images/hud/icons/weight.svg
 Copyright: 2020-2026 Paweł Kuna
 License: Expat
 Comment: Tabler Icons (https://tabler.io/icons), some adapted
@@ -630,6 +644,7 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/hudchatbar.*
        src/hud/hudclassicskin.h
        src/hud/hudconnection.*
+       src/hud/huddesign.*
        src/hud/huddetail.*
        src/hud/huddetailcontents.*
        src/hud/hudgameresults.cpp
