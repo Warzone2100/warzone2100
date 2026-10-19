@@ -2,7 +2,7 @@
 --------
 
 `warzone2100_win_installer.exe` -- For Windows (7-11+)
-`warzone2100_macOS_universal.zip`  -- For macOS (10.14+)
+`warzone2100_macOS_universal.zip`  -- For macOS (10.15+)
 `warzone2100_ubuntu22.04_amd64.deb` -- For Ubuntu 22.04
 `warzone2100_ubuntu24.04_amd64.deb` -- For Ubuntu 24.04+
 `warzone2100_src.tar.xz` -- The tarball for Linux / BSD / other systems. (full source / data)
