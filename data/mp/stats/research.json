@@ -2816,7 +2816,7 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade10",
 		"imdName": "blresch4.PIE",
-		"name": "Quantum Network Brain",
+		"name": "Quantum Network Research Brain",
 		"category": "Research",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade09"
@@ -2837,7 +2837,7 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade11",
 		"imdName": "blresch4.PIE",
-		"name": "Quantum Network Brain Mk2",
+		"name": "Quantum Network Research Brain Mk2",
 		"category": "Research",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade10"
@@ -2858,7 +2858,7 @@
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade12",
 		"imdName": "blresch4.PIE",
-		"name": "Quantum Network Brain Mk3",
+		"name": "Quantum Network Research Brain Mk3",
 		"category": "Research",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade11"
