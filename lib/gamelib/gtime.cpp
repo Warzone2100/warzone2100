@@ -28,12 +28,15 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/math_ext.h"
 #include "gtime.h"
+#include "framepacer.h"
 #include "src/multiplay.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/sync_debug.h"
 
 
 #include <time.h>
+#include <algorithm>
+#include <cmath>
 
 
 /* See header file for documentation */
@@ -42,11 +45,33 @@ float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 UDWORD extraGameTicksProcessed = 0;
 
+/// High-resolution frame clock state (see frameTimeUpdate())
+static uint64_t frameTimeLastNs = 0;
+static bool frameTimeHaveLast = false;
+static double frameTimeDelta = 0.0;
+static double frameTimeMotionDelta = 0.0;
+static FramePacer framePacer;
+
+/// The paced frame clock on the wzGetTicks() millisecond scale, with the fraction kept.
+/// graphicsTime advances to it.
+/// It advances by each paced delta and is pulled towards the post-present sample,
+/// less half a refresh period while rounding
+/// (so the pacer's lead over the measured time stays behind the current time).
+static double graphicsClockMs = 0.0;
+static bool graphicsClockValid = false;
+static constexpr double kGraphicsClockLagPeriods = 0.5;  ///< lag behind the sample while rounding, in periods
+static constexpr double kGraphicsClockGain = 0.02;       ///< share of the offset from the sample removed per frame
+static constexpr double kGraphicsClockResyncMs = 100.0;  ///< offset that makes the clock jump to the sample
+
 /** The current clock modifier. Set to speed up the game. */
 static Rational modifier;
 
 /// The real time, the last time graphicsTime updated.
 static uint32_t prevRealTime;
+
+/// wzGetTicks() at gameTimeUpdateBegin(), the start of this gameLoop() call
+static uint32_t loopStartRealTime = 0;
+static bool haveLoopStartRealTime = false;
 
 /**
   * Count how many times gameTimeStop has been called without a game time start.
@@ -114,6 +139,7 @@ void gameTimeInit(void)
 	deltaRealTime = 0;
 	prevRealTime = realTime;
 	realTimeFraction = 0.f;
+	frameTimeRebase();
 
 	modifier = 1;
 
@@ -206,6 +232,8 @@ void gameTimeUpdateBegin()
 	deltaGameTime = 0;
 	deltaGraphicsTime = 0;
 	extraGameTicksProcessed = 0;
+	loopStartRealTime = wzGetTicks();
+	haveLoopStartRealTime = true;
 }
 
 /* Call this each loop to update the game timer */
@@ -241,11 +269,13 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 	ASSERT(newDeltaGraphicsTime >= 0, "Something very wrong.");
 
 	uint32_t newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
+	bool graphicsTimeFollowsClock = true;  // false when graphicsTime is held at gameTime below
 
 	if (newGraphicsTime > gameTime && !mayUpdate)
 	{
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		graphicsTimeFollowsClock = false;
 	}
 
 	if (updateWantedTime == 0 && newGraphicsTime >= gameTime)
@@ -260,6 +290,7 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		// Pause time at current game time, since we are waiting GAME_GAME_TIME from other players.
 		newGraphicsTime = gameTime;
 		newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		graphicsTimeFollowsClock = false;
 		if (!waitingOnPlayersStartTime.has_value())
 		{
 			waitingOnPlayersStartTime = realTime;
@@ -314,11 +345,23 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 	}
 	else
 	{
+		uint32_t graphicsRealTime = currTime;
 		if (extraGameTicksProcessed > 0)
 		{
 			// If extra game ticks have been processed, newGraphicsTime/newDeltaGraphicsTime must be "fast-forwarded" to appropriate values based on gameTime
 			newGraphicsTime = gameTime;
 			newDeltaGraphicsTime = newGraphicsTime - graphicsTime;
+		}
+		else if (graphicsTimeFollowsClock && (graphicsClockValid || haveLoopStartRealTime))
+		{
+			// Advance graphicsTime to the paced frame clock (or without one, the start of this loop)
+			// rather than now, which is later by the cost of any sim ticks that ran in this loop.
+			// NOTE: The tick decisions above still use now, and quantiseFraction() works on absolute times,
+			// so this only delays graphicsTime within the frame and leaves tick scheduling unchanged.
+			const uint32_t target = graphicsClockValid ? static_cast<uint32_t>(std::max(0.0, std::floor(graphicsClockMs))) : loopStartRealTime;
+			graphicsRealTime = clip(target, prevRealTime, currTime);
+			newDeltaGraphicsTime = quantiseFraction(modifier.n, modifier.d, graphicsRealTime, prevRealTime);
+			newGraphicsTime = graphicsTime + newDeltaGraphicsTime;
 		}
 
 		// Update the graphics time.
@@ -326,7 +369,7 @@ GameTimeUpdateResult gameTimeUpdate(bool mayUpdate, bool forceTryGameTickUpdate)
 		deltaGraphicsTime = newDeltaGraphicsTime;
 
 		// Update prevRealTime, since graphicsTime changed.
-		prevRealTime      = currTime;
+		prevRealTime      = graphicsRealTime;
 	}
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
@@ -354,6 +397,76 @@ void realTimeUpdate(void)
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
+}
+
+void frameTimeUpdate()
+{
+	const uint64_t now = wzGetTicksNS();
+	double measured = -1.0; // first frame after a rebase
+	if (frameTimeHaveLast && now >= frameTimeLastNs)
+	{
+		measured = static_cast<double>(now - frameTimeLastNs) * 1e-9;
+	}
+	// At most GTIME_MAXFRAME, so a freeze doesn't scroll across the map
+	static_assert(FramePacer::maxDelta * GAME_TICKS_PER_SEC <= GTIME_MAXFRAME + 1, "FramePacer::maxDelta should match GTIME_MAXFRAME");
+	frameTimeDelta = framePacer.update(measured);
+	frameTimeMotionDelta = framePacer.lastMotionDelta();
+	frameTimeLastNs = now;
+	frameTimeHaveLast = true;
+
+	const double lagMs = framePacer.snapped() ? kGraphicsClockLagPeriods * framePacer.refreshPeriod() * 1000.0 : 0.0;
+	const double targetMs = static_cast<double>(now) * 1e-6 - lagMs;
+	graphicsClockMs += frameTimeDelta * 1000.0;
+	if (!graphicsClockValid || measured < 0.0 || std::abs(graphicsClockMs - targetMs) > kGraphicsClockResyncMs)
+	{
+		graphicsClockMs = targetMs;
+	}
+	else
+	{
+		graphicsClockMs += kGraphicsClockGain * (targetMs - graphicsClockMs);
+	}
+	graphicsClockValid = true;
+}
+
+void frameTimeRebase()
+{
+	frameTimeHaveLast = false;
+	frameTimeDelta = 0.0;
+	frameTimeMotionDelta = 0.0;
+	framePacer.reset();
+	graphicsClockValid = false;
+}
+
+void frameTimeSetPresentationInfo(bool vsync, double nominalRefreshPeriod)
+{
+	framePacer.setVsync(vsync);
+	framePacer.setNominalRefreshPeriod(nominalRefreshPeriod);
+}
+
+void frameTimeAddPresentation(uint64_t presentId, double displayTime)
+{
+	framePacer.addPresentation(presentId, displayTime);
+}
+
+const FramePacer& frameTimePacer()
+{
+	return framePacer;
+}
+
+void frameTimePredictLate()
+{
+	if (!frameTimeHaveLast)
+	{
+		return;
+	}
+	const uint64_t now = wzGetTicksNS();
+	const double elapsed = (now >= frameTimeLastNs) ? static_cast<double>(now - frameTimeLastNs) * 1e-9 : 0.0;
+	frameTimeMotionDelta = framePacer.lastMotionDelta() + framePacer.predictLate(elapsed);
+}
+
+double frameTimeDeltaSeconds()
+{
+	return frameTimeMotionDelta;
 }
 
 // reset the game time modifiers
@@ -412,6 +525,7 @@ void gameTimeReset(UDWORD time)
 	gameTimeResetMod();
 	realTime = wzGetTicks();
 	deltaRealTime = 0;
+	frameTimeRebase();
 }
 
 void getTimeComponents(unsigned time, int *hours, int *minutes, int *seconds, int *milliseconds)

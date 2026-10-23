@@ -50,6 +50,7 @@
 #include "corridordump.h"
 #include "corridor_gate.h"
 #include "perfcounters.h"
+#include "cameratrace.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -197,12 +198,14 @@ static void saveGameFromMenu(const std::string &path)
 static GAMECODE renderLoop()
 {
 	WZ_PROFILE_SCOPE(renderLoop);
+	camtrace::markStage(camtrace::Stage::RenderBegin);
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
 		handleInGameHostQuit();
 	}
 
 	audio_Update();
+	camtrace::markStage(camtrace::Stage::AudioEnd);
 
 	wzShowMouse(!isGamepadActiveInput());
 
@@ -795,7 +798,9 @@ GAMECODE gameLoop()
 
 		unsigned before = wzGetTicks();
 		syncDebug("Begin game state update, gameTime = %d", gameTime);
+		camtrace::tickBegin();
 		gameStateUpdate();
+		camtrace::tickEnd();
 		gameStatePerfEndOfTick();
 		syncDebug("End game state update, gameTime = %d", gameTime);
 		// No-op unless a --gamestate-* harness option was set.
@@ -817,13 +822,17 @@ GAMECODE gameLoop()
 		NETflush();  // Make sure that we aren't waiting too long to send data.
 	}
 
+	frameTimePredictLate();
+
 	unsigned before, after;
 	GAMECODE renderReturn;
 	executeFnAndProcessScriptQueuedRemovals([&before, &after, &renderReturn]()
 	{
 		before = wzGetTicks();
 		renderReturn = renderLoop();
+		camtrace::markStage(camtrace::Stage::RenderEnd);
 		pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
+		camtrace::markPresentEnd();
 		after = wzGetTicks();
 	});
 

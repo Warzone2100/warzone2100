@@ -103,6 +103,7 @@
 #include "game_world.h"
 #include "corridor_map.h"
 #include "perfcounters.h"
+#include "cameratrace.h"
 
 
 /********************  Prototypes  ********************/
@@ -114,7 +115,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static UDWORD	getTargettingGfx();
 static void	drawGroupNumber(BASE_OBJECT *psObject);
-static void	trackHeight(int desiredHeight);
+static void	trackHeight(float desiredHeight);
+static void	updateCameraForFrame();
 static void	renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
@@ -138,7 +140,7 @@ static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static	int	calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ);
-static	int	calculateCameraHeight(int height);
+static	float	calculateCameraHeight(float averageTerrainHeight);
 static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
@@ -306,7 +308,10 @@ char DROIDDOING[512];
 static const int geoOffset = 192;
 
 /// The average terrain height for the center of the area the camera is looking at
-static int averageCentreTerrainHeight;
+static float averageCentreTerrainHeight;
+
+/// Set by init3DView() to start the next height update at the target
+static bool trackHeightStartAtTarget = true;
 
 /** The time at which a sensor target was last assigned
  * Used to draw a visual effect.
@@ -1129,32 +1134,19 @@ void draw3DScene()
 		}
 	}
 
+	/* Finish moving the camera for this frame, then draw from where it is */
+	updateCameraForFrame();
+
 	/* Now, draw the terrain */
 	drawTiles(&playerPos, getCurrentLightingData(), getCurrentLightmapData(), getCurrentLightingManager());
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
-	while (playerPos.r.y > DEG(360))
-	{
-		playerPos.r.y -= DEG(360);
-	}
-
-	/* If we don't have an active camera track, then track terrain height! */
-	if (!getWarCamStatus())
-	{
-		/* Move the autonomous camera if necessary */
-		updatePlayerAverageCentreTerrainHeight();
-		trackHeight(calculateCameraHeight(averageCentreTerrainHeight));
-	}
-	else
-	{
-		processWarCam();
-	}
-
 	structureEffects(); // add fancy effects to structures
 
 	wzPerfEnd(PERF_MISC);
 
+	camtrace::markStage(camtrace::Stage::SceneEnd);
 	perf::endOfFrame();
 }
 
@@ -1214,9 +1206,27 @@ static int calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tile
 	return result;
 }
 
+/// The 9x9-tile average of calcAverageTerrainHeight() at each tile's center,
+/// interpolated bilinearly to the world position
+static float calcInterpolatedAverageTerrainHeight(WorldMapState& mapState, int worldX, int worldZ)
+{
+	const float u = (static_cast<float>(worldX) - TILE_UNITS / 2) / TILE_UNITS;
+	const float v = (static_cast<float>(worldZ) - TILE_UNITS / 2) / TILE_UNITS;
+	const int tileX = static_cast<int>(std::floor(u));
+	const int tileZ = static_cast<int>(std::floor(v));
+	const float fx = u - static_cast<float>(tileX);
+	const float fz = v - static_cast<float>(tileZ);
+
+	const float h00 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX, tileZ));
+	const float h10 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX + 1, tileZ));
+	const float h01 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX, tileZ + 1));
+	const float h11 = static_cast<float>(calcAverageTerrainHeight(mapState, tileX + 1, tileZ + 1));
+	return (h00 * (1.f - fx) + h10 * fx) * (1.f - fz) + (h01 * (1.f - fx) + h11 * fx) * fz;
+}
+
 static void updatePlayerAverageCentreTerrainHeight()
 {
-	averageCentreTerrainHeight = calcAverageTerrainHeight(gameWorld.map, playerXTile, playerZTile);
+	averageCentreTerrainHeight = calcInterpolatedAverageTerrainHeight(gameWorld.map, playerPos.p.x, playerPos.p.z);
 }
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
@@ -1268,6 +1278,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	/* Find our position in tile coordinates */
 	playerXTile = map_coord(player->p.x);
 	playerZTile = map_coord(player->p.z);
+
+	camtrace::markDraw(player->p.x, player->p.y, player->p.z, player->r.x, player->r.y, distance, getWarCamStatus());
 
 	/* ---------------------------------------------------------------- */
 	/* Set up the geometry                                              */
@@ -1511,6 +1523,7 @@ bool init3DView()
 
 	/* Get all the init stuff out of here? */
 	initWarCam();
+	trackHeightStartAtTarget = true;
 
 	/* Init the game messaging system */
 	initConsoleMessages();
@@ -2489,7 +2502,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 
 	if(playerPos.p.y < averageCentreTerrainHeight)
 	{
-		playerPos.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
+		playerPos.p.y = static_cast<int>(std::lround(calculateCameraHeight(averageCentreTerrainHeight)));
 	}
 
 	if (getWarCamStatus())
@@ -4096,44 +4109,106 @@ static void renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat
 	pie_DrawSkybox(skybox_scale, projectionMatrix, skyboxViewMatrix * glm::translate(glm::vec3(0.f, -500, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
-static int calculateCameraHeight(int _mapHeight)
+/// Camera height for a given averaged terrain height
+/// (raised by half of HEIGHT_TRACK_INCREMENTS to keep the established framing)
+static float calculateCameraHeight(float averageTerrainHeight)
 {
-	return static_cast<int>(std::ceil(static_cast<float>(_mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
+	return averageTerrainHeight + static_cast<float>(CAMERA_PIVOT_HEIGHT + HEIGHT_TRACK_INCREMENTS / 2);
 }
 
-int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY)
+int calculateCameraHeightAt(WorldMapState& mapState, int worldX, int worldZ)
 {
-	return calculateCameraHeight(calcAverageTerrainHeight(mapState, tileX, tileY));
+	return static_cast<int>(std::lround(calculateCameraHeight(calcInterpolatedAverageTerrainHeight(mapState, worldX, worldZ))));
 }
+
+/// The last step of moving the camera each frame, after scrolling, panning and rotating.
+/// Follows the terrain height, or lets the war camera move the camera. Runs before the scene is drawn.
+static void updateCameraForFrame()
+{
+	while (playerPos.r.y > DEG(360))
+	{
+		playerPos.r.y -= DEG(360);
+	}
+
+	/* If we don't have an active camera track, then track terrain height! */
+	if (!getWarCamStatus())
+	{
+		/* Move the autonomous camera if necessary */
+		updatePlayerAverageCentreTerrainHeight();
+		const float desiredCameraHeight = calculateCameraHeight(averageCentreTerrainHeight);
+		camtrace::markHeightTarget(static_cast<int>(std::lround(averageCentreTerrainHeight)), static_cast<int>(std::lround(desiredCameraHeight)));
+		trackHeight(desiredCameraHeight);
+	}
+	else
+	{
+		processWarCam();
+	}
+}
+
+/// Spring constants of the height follower, y'' = -stiffness * (y - target) - damping * y'.
+/// Critically damped (damping = 2 sqrt(stiffness)),
+/// and separate from the war camera's ACCEL_CONSTANT / VELOCITY_CONSTANT.
+static constexpr double HEIGHT_FOLLOW_STIFFNESS = 16.0;
+static constexpr double HEIGHT_FOLLOW_DAMPING = 8.0;
 
 /// Smoothly adjust player height to match the desired height
-static void trackHeight(int desiredHeight)
+static void trackHeight(float desiredHeight)
 {
-	static const uint32_t minTrackHeightInterval = GAME_TICKS_PER_SEC / 60;
-	static uint32_t lastHeightAdjustmentRealTime = 0;
+	// Follower state is kept in floating point and only rounded when committed to the camera position.
+	// The solver is exact for any dt and runs once per frame on the frame clock.
 	static float heightSpeed = 0.0f;
+	static float trackedHeight = 0.0f;   // follower position, which playerPos.p.y is the rounding of
+	static int lastCommittedHeight = 0;
+	static bool haveTrackedHeight = false;
+	static UDWORD lastTrackFrame = UDWORD_MAX;
 
-	uint32_t deltaTrackHeightRealTime = realTime - lastHeightAdjustmentRealTime;
-	if (deltaTrackHeightRealTime < minTrackHeightInterval)
+	double dt = frameTimeDeltaSeconds();
+	const UDWORD frame = frameGetFrameNumber();
+	if (frame == lastTrackFrame)
 	{
-		// avoid processing this too rapidly, such as when vsync is disabled
-		return;
+		dt = 0.0;
 	}
-	lastHeightAdjustmentRealTime = realTime;
+	lastTrackFrame = frame;
 
-	if ((desiredHeight == playerPos.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
+	if (trackHeightStartAtTarget)
 	{
+		// The first update of a game starts at the target
+		trackedHeight = desiredHeight;
 		heightSpeed = 0.0f;
-		return;
+		haveTrackedHeight = true;
+		trackHeightStartAtTarget = false;
+	}
+	else if (!haveTrackedHeight || playerPos.p.y != lastCommittedHeight)
+	{
+		// Something else set the camera height (ex. war camera, radar jump, loading, setViewPos),
+		// so carry on from there at rest
+		trackedHeight = static_cast<float>(playerPos.p.y);
+		heightSpeed = 0.0f;
+		haveTrackedHeight = true;
 	}
 
-	float separation = desiredHeight - playerPos.p.y;	// How far are we from desired height?
-
-	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
-	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, (float) deltaTrackHeightRealTime / (float) GAME_TICKS_PER_SEC);
+	float separation = desiredHeight - trackedHeight;	// How far are we from desired height?
+	if (std::fabs(separation) < 0.5f && heightSpeed > -5.f && heightSpeed < 5.f)
+	{
+		// Close enough that the committed height is the target, and slow enough to stop
+		trackedHeight = desiredHeight;
+		heightSpeed = 0.0f;
+		camtrace::markHeightUpdate(dt * 1000.0, 0.f, 0.f, 0.f, true);
+	}
+	else if (dt > 0.0)
+	{
+		const float separationBefore = separation;
+		// d²/dt² player.p.y = -stiffness * (player.p.y - desiredHeight) - damping * d/dt player.p.y
+		double stiffness = HEIGHT_FOLLOW_STIFFNESS, damping = HEIGHT_FOLLOW_DAMPING;
+		camtrace::overrideHeightSpring(stiffness, damping); // debug-only: --cameraheightspring
+		solveDifferential2ndOrder(&separation, &heightSpeed, stiffness, damping, dt);
+		camtrace::markHeightUpdate(dt * 1000.0, separationBefore, separation, heightSpeed);
+		trackedHeight = desiredHeight - separation;
+	}
 
 	/* Adjust the height accordingly */
-	playerPos.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
+	playerPos.p.y = static_cast<int>(std::lround(trackedHeight));
+	lastCommittedHeight = playerPos.p.y;
 }
 
 /// Select the next energy bar display mode

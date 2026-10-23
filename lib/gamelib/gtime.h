@@ -112,6 +112,37 @@ void gameTimeUpdateEnd();
 /// Updates the realTime timer, and corresponding deltaRealTime.
 void realTimeUpdate();
 
+/** High-resolution frame clock, for presentation-smoothness code such as camera motion.
+ *  Like realTime it never pauses and isn't scaled by the game speed,
+ *  but it has nanosecond resolution and is sampled once per frame at a point aligned with presentation:
+ *  right after the frame is presented on native builds,
+ *  and at the start of the main loop callback on Emscripten
+ *  (where presentation happens after the callback returns).
+ *  Call frameTimeUpdate() once per frame at that point.
+ *  While it is called, graphicsTime follows the same paced clock in whole milliseconds. */
+void frameTimeUpdate();
+/// Make the next frameTimeUpdate() report a delta of 0
+/// (ex. after loading, focus loss, or anything else that stalled frames).
+void frameTimeRebase();
+/// Seconds to advance presentation-smoothness code by for this frame (0 after a rebase).
+/// The time between the two most recent frameTimeUpdate() samples, paced to the display (see FramePacer)
+/// and at most GTIME_MAXFRAME.
+/// Leaves out the part of a stall beyond a slow frame, which graphicsTime still advances by.
+double frameTimeDeltaSeconds();
+/// Add to frameTimeDeltaSeconds() the extra time of a frame that is already running late,
+/// once such predictions have proven right (see FramePacer::predictLate()).
+/// Call once per frame after the game ticks, before anything uses frameTimeDeltaSeconds().
+void frameTimePredictLate();
+/// Tell the frame pacer whether presentation is synchronized to the display,
+/// and the display's nominal refresh period in seconds if the backend knows it (0 if not).
+/// Call before frameTimeUpdate().
+void frameTimeSetPresentationInfo(bool vsync, double nominalRefreshPeriod);
+/// Tell the frame pacer that the present with this id reached the display at this time (seconds, any clock).
+void frameTimeAddPresentation(uint64_t presentId, double displayTime);
+class FramePacer;
+/// The frame pacer, for diagnostics
+const FramePacer& frameTimePacer();
+
 /* Returns true if gameTime is stopped. */
 bool gameTimeIsStopped();
 
