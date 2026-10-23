@@ -27,6 +27,7 @@
 
 #include "pregamescreen.h"
 #include "hudchatbar.h"
+#include "hudconsole.h"
 #include "intel/intelkit.h"
 #include "intel/teamstrategyview.h"
 
@@ -830,45 +831,9 @@ struct ChatLine
 	WzText rendered;
 };
 
-/// Splits a console line ("[01:18] Kestrel (Allies): gl hf", the time when the console's timestamps are on) into its
-/// parts (a line it can't split stays whole)
 void parseChatLine(ChatLine &line, const std::string &raw)
 {
-	std::string text = raw;
-	if (text.size() > 2 && text[0] == '[')
-	{
-		const size_t close = text.find("] ");
-		if (close != std::string::npos && close < 12)
-		{
-			text = text.substr(close + 2);
-		}
-	}
-	if (line.sender >= 0 && line.sender < MAX_CONNECTED_PLAYERS)
-	{
-		const std::string name = getPlayerName(line.sender);
-		if (!name.empty() && text.compare(0, name.size(), name) == 0)
-		{
-			const std::string rest = text.substr(name.size());
-			if (rest.size() > 2 && rest[0] == ' ' && rest[1] == '(')
-			{
-				const size_t close = rest.find("): ");
-				if (close != std::string::npos)
-				{
-					line.name = name;
-					line.channel = rest.substr(2, close - 2);
-					line.text = rest.substr(close + 3);
-					return;
-				}
-			}
-			if (rest.compare(0, 2, ": ") == 0)
-			{
-				line.name = name;
-				line.text = rest.substr(2);
-				return;
-			}
-		}
-	}
-	line.text = text;
+	hudParseChatLine(raw, line.sender, line.name, line.channel, line.text);
 }
 
 class PregamePanel;

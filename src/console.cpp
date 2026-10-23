@@ -190,7 +190,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		else
 		{
 			// The console widget wraps the feed and the history to its width
-			ActiveMessages.push_back({nextActiveMessageId++, WzString::fromUtf8(lines), realTime, newMsgDuration, jusType, player});	// everything gets logged here for a specific period of time
+			ActiveMessages.push_back({nextActiveMessageId++, WzString::fromUtf8(lines), realTime, newMsgDuration, jusType, player, team});	// everything gets logged here for a specific period of time
 			++activeMessagesRevision;
 			history.add(WzString::fromUtf8(lines), jusType, player, team, gameTime);
 		}

@@ -474,12 +474,14 @@ src/hci/teamstrategy.cpp
 src/hud/hudbuildcategories.cpp
 src/hud/hudchatbar.cpp
 src/hud/hudconnection.cpp
+src/hud/hudconsole.cpp
 src/hud/huddetailcontents.cpp
 src/hud/hudgameresults.cpp
 src/hud/hudidle.cpp
 src/hud/hudmodel.cpp
 src/hud/hudmodernskin.cpp
 src/hud/hudpanelfilters.cpp
+src/hud/hudquickchat.cpp
 src/hud/hudresults.cpp
 src/hud/hudresultsdata.cpp
 src/hud/hudreticule.cpp

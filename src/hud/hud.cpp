@@ -42,6 +42,7 @@
 #include "lib/widget/form.h"
 
 #include "../hci.h"
+#include "../hci/ingameconsole.h"
 #include "../ingameop.h"
 #include "../intelmap.h"
 #include "../mission.h"
@@ -121,6 +122,7 @@ void rebuildNow()
 	}
 	createModules();
 	specStatsViewSkinChanged();
+	inGameConsoleSkinChanged();
 	if (openPanel != IOBJ_NONE)
 	{
 		intReopenObjectPanel(openPanel);

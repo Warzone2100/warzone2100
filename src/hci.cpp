@@ -86,6 +86,7 @@
 #include "notifications.h"
 #include "hci/groups.h"
 #include "hci/ingameconsole.h"
+#include "hud/hudconsole.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
 #include "screens/researchtreescreen.h"
@@ -2946,11 +2947,14 @@ void chatDialog(int mode, bool startWithQuickChatFocused)
 		const bool consoleWasExpanded = inGameConsoleIsExpanded();
 		const ConsoleHistoryFilter previousFilter = inGameConsoleFilter();
 		inGameConsoleExpand((mode == CHAT_GLOB) ? ConsoleHistoryFilter::All : ConsoleHistoryFilter::Team);
+		inGameConsoleSetChatOpen(true);
 		createChatScreen([consoleWasExpanded, previousFilter]() {
 			ChatDialogUp = false;
+			inGameConsoleSetChatOpen(false);
 			if (consoleWasExpanded)
 			{
-				inGameConsoleExpand(previousFilter);
+				// (In the skin, the history shows the chat bar's channel)
+				inGameConsoleExpand(hudConsoleSkinned() ? inGameConsoleFilter() : previousFilter);
 			}
 			else
 			{

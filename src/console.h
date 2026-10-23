@@ -63,6 +63,7 @@ struct ConsoleFeedMessage
 	UDWORD duration;	///< MAX_CONSOLE_MESSAGE_DURATION for a line that stays
 	CONSOLE_TEXT_JUSTIFICATION justification;
 	int player;
+	bool team;			///< Sent to a team (or a private message)
 };
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];

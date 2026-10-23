@@ -136,13 +136,15 @@ void displayScrollbar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	pie_DrawRoundedBox(static_cast<float>(x0), static_cast<float>(y0 + top), static_cast<float>(x0 + 3), static_cast<float>(y0 + top + handle), color, 1.5f);
 }
 
-void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect)
+void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect, float opacity)
 {
 	static const std::string POSITION_NAMES = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-	const PIELIGHT color = pal_GetTeamColour(getPlayerColour(player));
+	PIELIGHT color = pal_GetTeamColour(getPlayerColour(player));
 	const auto lighter = [](uint8_t c) { return static_cast<uint8_t>(c + (255 - c) / 5); };
+	const uint8_t alpha = static_cast<uint8_t>(255 * std::max(0.f, std::min(1.f, opacity)));
+	color.byte.a = alpha;
 	pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()), color, 3.f,
-	                   pal_RGBA(lighter(color.byte.r), lighter(color.byte.g), lighter(color.byte.b), 255), 1.f);
+	                   pal_RGBA(lighter(color.byte.r), lighter(color.byte.g), lighter(color.byte.b), alpha), 1.f);
 	const unsigned position = std::min<unsigned>(NetPlay.players[player].position, static_cast<unsigned>(POSITION_NAMES.size() - 1));
 	const iV_fonts font = rect.height() >= 22 ? font_regular_bold : font_bar;
 	text.number.setText(WzString::fromUtf8(std::string(1, POSITION_NAMES[position])), font);
@@ -150,7 +152,41 @@ void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect)
 	text.digits.setText(WzString::fromUtf8("0123456789"), font);
 	const int luminance = (color.byte.r * 299 + color.byte.g * 587 + color.byte.b * 114) / 1000;
 	// (Half a pixel higher: centered numbers look low)
-	text.number.renderCenteredOnInk(WzRect(rect.x(), rect.y(), rect.width(), rect.height() - 1), luminance > 128 ? pal_RGBA(10, 10, 10, 255) : pal_RGBA(250, 250, 250, 255), &text.digits);
+	text.number.renderCenteredOnInk(WzRect(rect.x(), rect.y(), rect.width(), rect.height() - 1), luminance > 128 ? pal_RGBA(10, 10, 10, alpha) : pal_RGBA(250, 250, 250, alpha), &text.digits);
+}
+
+int keyCapWidth(WzText &text, const std::string &key)
+{
+	text.setText(WzString::fromUtf8(key), font_small);
+	return std::max(KEY_CAP_HEIGHT, text.width() + 8);
+}
+
+int drawKeyCap(WzText &text, const std::string &key, int x, int cy, KeyCapLook look)
+{
+	const HudColors &colors = skin().colors();
+	const int w = keyCapWidth(text, key);
+	const WzRect rect(x, cy - KEY_CAP_HEIGHT / 2, w, KEY_CAP_HEIGHT);
+	PIELIGHT fill = pal_RGBA(0, 0, 0, 0);
+	PIELIGHT border = alpha(colors.textSecondary, 150);
+	PIELIGHT ink = colors.textPrimary;
+	switch (look)
+	{
+	case KeyCapLook::Normal:
+		break;
+	case KeyCapLook::Lit:
+		fill = alpha(colors.accent, 56);
+		border = alpha(colors.accent, 210);
+		break;
+	case KeyCapLook::Dim:
+		border = alpha(colors.textSecondary, 60);
+		ink = alpha(colors.textSecondary, 120);
+		break;
+	}
+	pie_DrawRoundedBox(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()), fill, 3.f,
+	                   border, 1.f);
+	// (Half a pixel higher: centered numbers look low)
+	text.renderCenteredOnInk(WzRect(rect.x(), rect.y(), rect.width(), rect.height() - 1), ink);
+	return w;
 }
 
 void drawSpinner(int cx, int cy, int radius, PIELIGHT color)
@@ -304,7 +340,11 @@ protected:
 		}
 		const PIELIGHT color = !item.enabled ? colors.stateDisabled : (item.danger ? colors.stateBad : colors.textPrimary);
 		const int iconSize = 16;
-		if (!item.icon.empty())
+		if (item.player.has_value())
+		{
+			drawPositionChip(chip, *item.player, WzRect(rect.x() + 12, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize));
+		}
+		else if (!item.icon.empty())
 		{
 			skin().drawNamedIcon(item.icon, WzRect(rect.x() + 12, rect.y() + (rect.height() - iconSize) / 2, iconSize, iconSize),
 			                     !item.enabled ? colors.stateDisabled : (item.danger ? colors.stateBad : colors.accent));
@@ -332,6 +372,7 @@ protected:
 private:
 	WzText label;
 	WzText detail;
+	ChipText chip;
 };
 
 }

@@ -75,7 +75,14 @@ struct ChipText
 	WzText digits;
 };
 /// A player's position number on a chip of their color (as the connection panel's)
-void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect);
+void drawPositionChip(ChipText &text, unsigned player, const WzRect &rect, float opacity = 1.f);
+
+/// A key's cap: Normal (a hint), Lit (the keys that apply now), Dim (the keys that apply later)
+enum class KeyCapLook { Normal, Lit, Dim };
+constexpr int KEY_CAP_HEIGHT = 16;
+int keyCapWidth(WzText &text, const std::string &key);
+/// The cap of `key` (ex. "Tab", "1"), from `x`, centered on `cy`, and returns its width
+int drawKeyCap(WzText &text, const std::string &key, int x, int cy, KeyCapLook look = KeyCapLook::Normal);
 /// A loading spinner: dots around a circle, turning (still with reduced motion)
 void drawSpinner(int cx, int cy, int radius, PIELIGHT color);
 /// Something drawn over `rect` in the panel's color, to dim it (a chip whose player is still loading)
@@ -105,6 +112,7 @@ public:
 		bool enabled = true;
 		bool danger = false;
 		nonstd::optional<bool> toggle;        ///< a switch's state: the item stays open when clicked
+		nonstd::optional<unsigned> player;    ///< a player's position chip, instead of the icon
 		std::function<void ()> onChosen;
 	};
 

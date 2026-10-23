@@ -37,6 +37,9 @@
 #include "../chat.h"
 #include "../cheat.h"
 #include "../hci/quickchat.h"
+#include "../hud/hudchatbar.h"
+#include "../hud/hudconsole.h"
+#include "../hud/hudquickchat.h"
 #include "../hci/chatoptions.h"
 #include "../hci/ingameconsole.h"
 
@@ -551,8 +554,13 @@ public:
 	std::function<void ()> onCancelPressed;
 	std::weak_ptr<WIDGET> cutoutWidget;
 private:
+	void initializeChatBar(WzChatMode initialChatMode);
+
 	std::shared_ptr<WzInGameChatBoxForm> consoleBox;
 	std::shared_ptr<W_FORM> quickChatForm;
+	/// In a skin that draws the console: the chat bar, in the expanded console's bottom row,
+	/// instead of the box and quick chat
+	std::shared_ptr<HudChatBar> chatBar;
 };
 
 WzInGameChatScreen_CLICKFORM::WzInGameChatScreen_CLICKFORM(W_FORMINIT const *init) : W_CLICKFORM(init) {}
@@ -585,6 +593,17 @@ std::shared_ptr<WzInGameChatScreen_CLICKFORM> WzInGameChatScreen_CLICKFORM::make
 
 void WzInGameChatScreen_CLICKFORM::giveQuickChatFocus()
 {
+	if (chatBar)
+	{
+		if (!chatBar->quickChatOpen())
+		{
+			giveChatBoxFocus();
+			return;
+		}
+		// (The strip takes the keys)
+		chatBar->toggleQuickChat();
+		return;
+	}
 	if (!quickChatForm)
 	{
 		giveChatBoxFocus();
@@ -604,6 +623,15 @@ void WzInGameChatScreen_CLICKFORM::giveQuickChatFocus()
 
 bool WzInGameChatScreen_CLICKFORM::giveChatBoxFocus()
 {
+	if (chatBar)
+	{
+		if (!chatFreeChatEnabled())
+		{
+			return false;
+		}
+		chatBar->startTyping();
+		return true;
+	}
 	if (!consoleBox)
 	{
 		return false;
@@ -619,6 +647,12 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 	bool freeChatEnabled = isFreeChatEnabledForLocalPlayer();
 	// for now, quick chat is only available in skirmish / multiplayer mode, for players
 	bool quickChatEnabled = chatQuickChatAvailable();
+
+	if (hudConsoleSkinned() && inGameConsolePanel() != nullptr)
+	{
+		initializeChatBar(initialChatMode);
+		return;
+	}
 
 	auto weakSelf = std::weak_ptr<WzInGameChatScreen_CLICKFORM>(std::dynamic_pointer_cast<WzInGameChatScreen_CLICKFORM>(shared_from_this()));
 	consoleBox = WzInGameChatBoxForm::make(initialChatMode, [weakSelf](W_EDITBOX&) -> bool {
@@ -640,7 +674,33 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 	consoleBox->setChatBoxEnabledStatus(freeChatEnabled, quickChatEnabled);
 
 	// for now, quick chat is only available in skirmish / multiplayer mode, for players
-	if (quickChatEnabled)
+	if (quickChatEnabled && hudQuickChatEnabled())
+	{
+		// The Modern skin's, docked as the Classic one is
+		auto quickChat = HudQuickChat::make(initialChatMode == WzChatMode::Team, screenWidth < 680);
+		quickChat->onSent = [weakSelf]() {
+			auto strongParentForm = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+			auto parentScreen = std::dynamic_pointer_cast<WzInGameChatScreen>(strongParentForm->screenPointer.lock());
+			ASSERT_OR_RETURN(, parentScreen != nullptr, "No screen?");
+			parentScreen->closeScreen();
+		};
+		quickChat->onTypeRequested = [weakSelf]() {
+			auto strongParentForm = weakSelf.lock();
+			if (strongParentForm && isFreeChatEnabledForLocalPlayer())
+			{
+				strongParentForm->giveChatBoxFocus();
+			}
+		};
+		quickChatForm = quickChat;
+		attach(quickChatForm);
+		quickChatForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			int quickChatWidth = std::min<int32_t>(screenWidth - 20, psWidget->idealWidth());
+			int y0 = inGameConsoleExpandedRect().bottom() + CHAT_DOCK_GAP + CHAT_CONSOLEBOXH + CHAT_DOCK_GAP;
+			psWidget->setGeometry((screenWidth - quickChatWidth) / 2, y0, quickChatWidth, std::min<int32_t>(psWidget->idealHeight(), screenHeight - y0));
+		}));
+	}
+	else if (quickChatEnabled)
 	{
 		quickChatForm = createQuickChatForm(WzQuickChatContext::InGame, [weakSelf]() {
 				// on quick-chat sent
@@ -673,11 +733,47 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 	recalcLayout();
 }
 
+void WzInGameChatScreen_CLICKFORM::initializeChatBar(WzChatMode initialChatMode)
+{
+	auto weakSelf = std::weak_ptr<WzInGameChatScreen_CLICKFORM>(std::dynamic_pointer_cast<WzInGameChatScreen_CLICKFORM>(shared_from_this()));
+	chatBar = HudChatBar::make(screenWidth < HUD_CHAT_BAR_COMPACT_WIDTH, initialChatMode);
+	chatBar->setEmbedded(true);
+	chatBar->onFinished = [weakSelf]() {
+		auto strongParentForm = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+		auto parentScreen = std::dynamic_pointer_cast<WzInGameChatScreen>(strongParentForm->screenPointer.lock());
+		if (parentScreen)
+		{
+			parentScreen->closeScreen();
+		}
+	};
+	// The history shows the channel the message goes to
+	chatBar->onModeChanged = [](WzChatMode mode) {
+		inGameConsoleExpand(mode == WzChatMode::Team ? ConsoleHistoryFilter::Team : ConsoleHistoryFilter::All);
+	};
+	attach(chatBar);
+	chatBar->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		const ConsoleRect console = inGameConsoleExpandedRect();
+		const int row = hudConsoleChatRowHeight();
+		psWidget->setGeometry(console.x, console.bottom() - row, console.width, row);
+	}));
+	// Quick chat as a strip under the bar, the card growing to hold it
+	chatBar->onStripResized = [](int height) {
+		inGameConsoleSetChatExtra(height);
+	};
+	recalcLayout();
+	chatBar->showQuickChatStrip();
+}
+
 void WzInGameChatScreen_CLICKFORM::recalcLayout()
 {
 	if (consoleBox)
 	{
 		consoleBox->callCalcLayout();
+	}
+	if (chatBar)
+	{
+		chatBar->callCalcLayout();
 	}
 }
 
@@ -690,6 +786,10 @@ void WzInGameChatScreen_CLICKFORM::clearFocusAndEditing()
 	if (consoleBox)
 	{
 		consoleBox->endChatBoxEditing();
+	}
+	if (chatBar)
+	{
+		chatBar->stopTyping();
 	}
 }
 
@@ -785,7 +885,7 @@ void WzInGameChatScreen_CLICKFORM::run(W_CONTEXT *psContext)
 		}
 	}
 
-	if (keyPressed(KEY_TAB))
+	if (keyPressed(KEY_TAB) && !chatBar)
 	{
 		// no child widget consumed the TAB keypress - swap focus between quick chat and chat box
 		bool currFocusOnChatbox = false;
