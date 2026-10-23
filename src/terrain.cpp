@@ -2053,7 +2053,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
-		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		pie_GetSceneLighting0(LIGHT_EMISSIVE), pie_GetSceneLighting0(LIGHT_AMBIENT), pie_GetSceneLighting0(LIGHT_DIFFUSE), pie_GetSceneLighting0(LIGHT_SPECULAR),
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
@@ -2105,7 +2105,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
-		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		pie_GetSceneLighting0(LIGHT_EMISSIVE), pie_GetSceneLighting0(LIGHT_AMBIENT), pie_GetSceneLighting0(LIGHT_DIFFUSE), pie_GetSceneLighting0(LIGHT_SPECULAR),
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
@@ -2439,7 +2439,7 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 	PSO::get().bind_constants({
 		ModelViewProjection, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
-		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		pie_GetSceneLighting0(LIGHT_EMISSIVE), pie_GetSceneLighting0(LIGHT_AMBIENT), pie_GetSceneLighting0(LIGHT_DIFFUSE), pie_GetSceneLighting0(LIGHT_SPECULAR),
 		waterOffset*10, gfx_api::context::get().getSceneMipLodBias(), 0.f,
 		gfx_api::context::get().linearLightingEnabled() ? 1 : 0
 	});
@@ -2496,7 +2496,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 	gfx_api::constant_buffer_type<SHADER_WATER_HIGH> uniforms = {
 		ModelViewProjection, viewMatrix, lightmapValues.ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
-		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		pie_GetSceneLighting0(LIGHT_EMISSIVE), pie_GetSceneLighting0(LIGHT_AMBIENT), pie_GetSceneLighting0(LIGHT_DIFFUSE), pie_GetSceneLighting0(LIGHT_SPECULAR),
 		{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 		waterOffset*10, gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(dimension.first), static_cast<int>(dimension.second),

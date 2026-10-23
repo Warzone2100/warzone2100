@@ -98,31 +98,41 @@ void pie_InitLighting()
 {
 	// set scene color, ambient, diffuse and specular light intensities of sun
 	// diffuse lighting is turned off because players dislike it
-	gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {
+	// These are display values, like the ones scripts (setSunIntensity) and saved games set.
+	// They stay that way here, and are decoded where they go to a scene shader (sceneLighting()).
+	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {
 		{0.0f, 0.0f, 0.0f, 1.0f}, // LIGHT_EMISSIVE
 		{0.5f, 0.5f, 0.5f, 1.0f}, // LIGHT_AMBIENT
 		{1.0f, 1.0f, 1.0f, 1.0f}, // LIGHT_DIFFUSE
 		{1.0f, 1.0f, 1.0f, 1.0f}  // LIGHT_SPECULAR
 	};
-	if (gfx_api::context::get().linearLightingEnabled())
-	{
-		// The light constants are display values, so convert them to linear like other colors
-		for (size_t entry = 0; entry < LIGHT_MAX; ++entry)
-		{
-			for (size_t channel = 0; channel < 3; ++channel)
-			{
-				defaultLight[entry][channel] = srgbChannelToLinear(defaultLight[entry][channel]);
-			}
-		}
-	}
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
 	memcpy(lightingDefault, defaultLight, sizeof(lightingDefault));
+}
+
+//! A light parameter for a scene shader.
+//! The light constants are display values, so under linear lighting they are converted to linear like other colors.
+static glm::vec4 sceneLighting(const gfx_api::gfxFloat (&c)[4])
+{
+	glm::vec4 result(c[0], c[1], c[2], c[3]);
+	if (gfx_api::context::get().linearLightingEnabled())
+	{
+		result.r = srgbChannelToLinear(result.r);
+		result.g = srgbChannelToLinear(result.g);
+		result.b = srgbChannelToLinear(result.b);
+	}
+	return result;
 }
 
 glm::vec4 pie_GetLighting0(LIGHTING_TYPE entry)
 {
 	auto c = lighting0[entry];
 	return glm::vec4(c[0], c[1], c[2], c[3]);
+}
+
+glm::vec4 pie_GetSceneLighting0(LIGHTING_TYPE entry)
+{
+	return sceneLighting(lighting0[entry]);
 }
 
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4])
@@ -316,10 +326,10 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
 	const PIELIGHT colour = WZCOL_WHITE;
-	glm::vec4 sceneColor(lightingDefault[LIGHT_EMISSIVE][0], lightingDefault[LIGHT_EMISSIVE][1], lightingDefault[LIGHT_EMISSIVE][2], lightingDefault[LIGHT_EMISSIVE][3]);
-	glm::vec4 ambient(lightingDefault[LIGHT_AMBIENT][0], lightingDefault[LIGHT_AMBIENT][1], lightingDefault[LIGHT_AMBIENT][2], lightingDefault[LIGHT_AMBIENT][3]);
-	glm::vec4 diffuse(lightingDefault[LIGHT_DIFFUSE][0], lightingDefault[LIGHT_DIFFUSE][1], lightingDefault[LIGHT_DIFFUSE][2], lightingDefault[LIGHT_DIFFUSE][3]);
-	glm::vec4 specular(lightingDefault[LIGHT_SPECULAR][0], lightingDefault[LIGHT_SPECULAR][1], lightingDefault[LIGHT_SPECULAR][2], lightingDefault[LIGHT_SPECULAR][3]);
+	glm::vec4 sceneColor = sceneLighting(lightingDefault[LIGHT_EMISSIVE]);
+	glm::vec4 ambient = sceneLighting(lightingDefault[LIGHT_AMBIENT]);
+	glm::vec4 diffuse = sceneLighting(lightingDefault[LIGHT_DIFFUSE]);
+	glm::vec4 specular = sceneLighting(lightingDefault[LIGHT_SPECULAR]);
 	gfx_api::Draw3DShapeOpaque::get().bind();
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
@@ -1690,10 +1700,10 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	perFrameUniformsShaderOnce.reset();
 
 	// Generate global (per-frame) uniforms
-	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
-	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
-	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
-	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
+	glm::vec4 sceneColor = sceneLighting(lighting0[LIGHT_EMISSIVE]);
+	glm::vec4 ambient = sceneLighting(lighting0[LIGHT_AMBIENT]);
+	glm::vec4 diffuse = sceneLighting(lighting0[LIGHT_DIFFUSE]);
+	glm::vec4 specular = sceneLighting(lighting0[LIGHT_SPECULAR]);
 	const auto& renderState = getCurrentRenderState();
 	const bool forwardFogEnabled = fogMode == MeshFogMode::ForwardDistance && pie_GetFogEnabled();
 	const glm::vec4 fogColor = pie_SceneColourToVec4(pie_GetFogColour());
