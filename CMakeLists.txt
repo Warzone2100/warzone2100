@@ -933,6 +933,13 @@ if(WZ_BUILD_VP9_BITSTREAM_TEST)
 endif()
 
 # In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
+option(WZ_BUILD_SANDBOX_TEST "Build the sandbox unit test (tests/sandbox_test.cpp)" OFF)
+if(WZ_BUILD_SANDBOX_TEST)
+	add_executable(sandbox_test "${PROJECT_SOURCE_DIR}/tests/sandbox_test.cpp")
+	target_include_directories(sandbox_test PRIVATE "${PROJECT_SOURCE_DIR}")
+	target_link_libraries(sandbox_test PRIVATE sandbox)
+endif()
+
 option(WZ_BUILD_RENDER_GRAPH_TEST "Build the render-graph pass sequence unit test (tests/render_graph_pass_sequence_test.cpp)" OFF)
 if(WZ_BUILD_RENDER_GRAPH_TEST)
 	add_executable(render_graph_pass_sequence_test "${PROJECT_SOURCE_DIR}/tests/render_graph_pass_sequence_test.cpp")

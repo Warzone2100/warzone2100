@@ -63,6 +63,8 @@
 #include "lib/framework/wztime.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "lib/sandbox/sandbox.h"
+#include "wzsandbox.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -1459,100 +1461,6 @@ extern "C" {
 	__declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
 }
 
-typedef BOOL (WINAPI *SetDefaultDllDirectoriesFunction)(
-  DWORD DirectoryFlags
-);
-#if !defined(LOAD_LIBRARY_SEARCH_APPLICATION_DIR)
-# define LOAD_LIBRARY_SEARCH_APPLICATION_DIR	0x00000200
-#endif
-#if !defined(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS)
-# define LOAD_LIBRARY_SEARCH_DEFAULT_DIRS		0x00001000
-#endif
-#if !defined(LOAD_LIBRARY_SEARCH_SYSTEM32)
-# define LOAD_LIBRARY_SEARCH_SYSTEM32			0x00000800
-#endif
-
-typedef BOOL (WINAPI *SetDllDirectoryWFunction)(
-  LPCWSTR lpPathName
-);
-
-typedef BOOL (WINAPI *SetSearchPathModeFunction)(
-  DWORD Flags
-);
-#if !defined(BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE)
-# define BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE	0x00000001
-#endif
-#if !defined(BASE_SEARCH_PATH_PERMANENT)
-# define BASE_SEARCH_PATH_PERMANENT					0x00008000
-#endif
-
-typedef BOOL (WINAPI *SetProcessDEPPolicyFunction)(
-  DWORD dwFlags
-);
-#if !defined(PROCESS_DEP_ENABLE)
-# define PROCESS_DEP_ENABLE		0x00000001
-#endif
-
-void osSpecificFirstChanceProcessSetup_Win()
-{
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
-	HMODULE hKernel32 = GetModuleHandleW(L"kernel32");
-
-	SetDefaultDllDirectoriesFunction _SetDefaultDllDirectories = reinterpret_cast<SetDefaultDllDirectoriesFunction>(reinterpret_cast<void*>(GetProcAddress(hKernel32, "SetDefaultDllDirectories")));
-
-	if (_SetDefaultDllDirectories)
-	{
-		// Use SetDefaultDllDirectories to limit directories to search
-		_SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_APPLICATION_DIR | LOAD_LIBRARY_SEARCH_SYSTEM32);
-	}
-
-	SetDllDirectoryWFunction _SetDllDirectoryW = reinterpret_cast<SetDllDirectoryWFunction>(reinterpret_cast<void*>(GetProcAddress(hKernel32, "SetDllDirectoryW")));
-
-	if (_SetDllDirectoryW)
-	{
-		// Remove the current working directory from the default DLL search order
-		_SetDllDirectoryW(L"");
-	}
-
-	SetSearchPathModeFunction _SetSearchPathMode = reinterpret_cast<SetSearchPathModeFunction>(reinterpret_cast<void*>(GetProcAddress(hKernel32, "SetSearchPathMode")));
-	if (_SetSearchPathMode)
-	{
-		// Enable safe search mode for the process
-		_SetSearchPathMode(BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
-	}
-#endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
-
-    // Enable heap terminate-on-corruption.
-    // A correct application can continue to run even if this call fails,
-    // so it is safe to ignore the return value and call the function as follows:
-    // (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
-    //
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
-	typedef BOOL (WINAPI *HSI)
-		   (HANDLE, HEAP_INFORMATION_CLASS, PVOID, SIZE_T);
-	HSI pHsi = reinterpret_cast<HSI>(reinterpret_cast<void*>(GetProcAddress(hKernel32, "HeapSetInformation")));
-	if (pHsi)
-	{
-		#ifndef HeapEnableTerminationOnCorruption
-		#   define HeapEnableTerminationOnCorruption (HEAP_INFORMATION_CLASS)1
-		#endif
-
-		(void)((pHsi)(NULL, HeapEnableTerminationOnCorruption, NULL, 0));
-	}
-#else
-	(void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
-#endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
-
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
-	SetProcessDEPPolicyFunction _SetProcessDEPPolicy = reinterpret_cast<SetProcessDEPPolicyFunction>(reinterpret_cast<void*>(GetProcAddress(hKernel32, "SetProcessDEPPolicy")));
-	if (_SetProcessDEPPolicy)
-	{
-		// Ensure DEP is enabled
-		_SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
-	}
-#endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
-}
-
 static bool winCheckIfRunningUnderWine(std::string* output_wineinfostr = nullptr, std::string* output_platform = nullptr)
 {
 #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
@@ -1702,11 +1610,11 @@ void osSpecificPostInit_Win()
 # include "emscripten_helpers.h"
 #endif
 
-void osSpecificFirstChanceProcessSetup()
+void osSpecificFirstChanceProcessSetup(int argc, const char * const *argv)
 {
-#if defined(WZ_OS_WIN)
-	osSpecificFirstChanceProcessSetup_Win();
-#elif defined(WZ_OS_UNIX)
+	wzSandboxHarden(argc, argv);
+
+#if defined(WZ_OS_UNIX)
 	// Before anything else is run, and before creating any threads, ignore SIGPIPE
 	// see: https://curl.haxx.se/libcurl/c/CURLOPT_NOSIGNAL.html
 	struct sigaction sa;
@@ -1717,8 +1625,6 @@ void osSpecificFirstChanceProcessSetup()
 
 	// Initialize time conversion information
 	tzset();
-#else
-	// currently, no-op
 #endif
 
 #if defined(__EMSCRIPTEN__) // must be separate, because WZ_OS_UNIX is also defined for emscripten builds
@@ -1779,6 +1685,9 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 	auto systemRamMiB = wzGetCurrentSystemRAM();
 	std::string systemRamString = std::to_string(systemRamMiB);
 	crashHandlingProviderSetTag("wz.system_ram", systemRamString);
+
+	const wz::sandbox::Status& sandboxStatus = wz::sandbox::status();
+	crashHandlingProviderSetTag("wz.sandbox", sandboxStatus.backend + "/" + wz::sandbox::tierName(sandboxStatus.effective) + "/" + sandboxStatus.detail);
 
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
 	// Truncate absurdly long backend info values (if needed - common culprit is GL_EXTENSIONS)
@@ -1935,12 +1844,24 @@ void mainShutdown()
 	ActivityManager::instance().shutdown();
 }
 
+static code_part sandboxLogPart(wz::sandbox::LogLevel level)
+{
+	switch (level)
+	{
+	case wz::sandbox::LogLevel::Error:
+		return LOG_ERROR;
+	case wz::sandbox::LogLevel::Info:
+		break;
+	}
+	return LOG_INFO;
+}
+
 int realmain(int argc, char *argv[])
 {
 	utfargc = argc;
 	utfargv = (char **)argv;
 
-	osSpecificFirstChanceProcessSetup();
+	osSpecificFirstChanceProcessSetup(argc, argv);
 
 	debug_init();
 #if defined(__EMSCRIPTEN__)
@@ -1968,13 +1889,25 @@ int realmain(int argc, char *argv[])
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
 
+	/** Confine the process before anything creates a thread or parses a file */
+	const std::string platformPrefDir = getWzPlatformPrefDir();
+	wzSandboxEarlySetup(utfargc, utfargv, platformPrefDir);
+
+	// The log file callback does not exist yet, so this reaches only stderr. Logged again below.
+	const wz::sandbox::Status& sandboxStatus = wz::sandbox::status();
+	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
+	for (const wz::sandbox::LogLine& line : wz::sandbox::pendingLog())
+	{
+		debug(sandboxLogPart(line.level), "Sandbox: %s", line.text.c_str());
+	}
+
 	/** Initialize crash-handling provider, if configured */
 	/** NOTE: Should come as early as possible in process init, but needs to be after initialize_PhysicsFS because we need the platform pref dir for storing temporary crash files... */
 	bool debugCrashHandler = false;
 	bool bCrashHandlingProvider = useCrashHandlingProvider(utfargc, utfargv, debugCrashHandler);
 	if (bCrashHandlingProvider)
 	{
-		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
+		bCrashHandlingProvider = initCrashHandlingProvider(platformPrefDir, getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
 		if (!bCrashHandlingProvider)
 		{
 			debug(LOG_WZ, "Failed to init crash handling provider");
@@ -2096,6 +2029,11 @@ int realmain(int argc, char *argv[])
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 	debug(LOG_WZ, "Backend: %s", BACKEND);
+	debug(LOG_INFO, "Sandbox: %s (%s), tier %s", sandboxStatus.backend.c_str(), sandboxStatus.detail.c_str(), wz::sandbox::tierName(sandboxStatus.effective));
+	for (const wz::sandbox::LogLine& line : wz::sandbox::pendingLog())
+	{
+		debug(sandboxLogPart(line.level), "Sandbox: %s", line.text.c_str());
+	}
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
 	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
 
