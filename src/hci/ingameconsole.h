@@ -67,5 +67,12 @@ void inGameConsoleScroll(ConsoleScroll scroll);
 
 /// The expanded history's panel, or nullptr when there's no console
 std::shared_ptr<WIDGET> inGameConsolePanel();
+/// Tells the console whether the chat screen is open (in a skin that draws the console, the chat screen's bar then
+/// replaces the panel's own)
+void inGameConsoleSetChatOpen(bool open);
+/// The height the chat screen adds under the expanded console while open (its quick chat strip), in the console's card
+void inGameConsoleSetChatExtra(int height);
+/// The HUD's skin changed: the console follows it
+void inGameConsoleSkinChanged();
 
 #endif // __INCLUDED_SRC_HCI_INGAMECONSOLE_H__

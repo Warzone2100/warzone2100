@@ -313,10 +313,14 @@ public:
 	virtual bool drawsIntelligenceScreen() const { return false; }
 	/// Whether it draws the screen before a networked game starts (src/hud/pregamescreen.h)
 	virtual bool drawsPregameScreen() const { return false; }
+	/// Whether it draws quick chat (src/hud/hudquickchat.h)
+	virtual bool drawsQuickChat() const { return false; }
 	/// Whether it draws the mission and game results (src/hud/hudresults.h)
 	virtual bool drawsResultsScreens() const { return false; }
 	/// Whether it draws the design screen (src/hud/huddesign.h)
 	virtual bool drawsDesignScreen() const { return false; }
+	/// Whether it draws the in-game console and its chat (src/hud/hudconsole.h)
+	virtual bool drawsConsole() const { return false; }
 	/// `color` (one of the panels' blue-grays) moved to the accent's hue with `tint` of the accent's chroma
 	/// (0: a gray, 1: as the accent's own shades), as the panels follow the accent. The Classic skin keeps it
 	virtual PIELIGHT followAccent(PIELIGHT color, float tint) const { (void)tint; return color; }

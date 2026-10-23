@@ -644,6 +644,7 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/hudchatbar.*
        src/hud/hudclassicskin.h
        src/hud/hudconnection.*
+       src/hud/hudconsole.*
        src/hud/huddesign.*
        src/hud/huddetail.*
        src/hud/huddetailcontents.*
@@ -660,6 +661,7 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/hudpagecontrol.*
        src/hud/hudpanelextension.*
        src/hud/hudpanelfilters.*
+       src/hud/hudquickchat.*
        src/hud/hudradarblips.*
        src/hud/hudranks.*
        src/hud/hudresults.*

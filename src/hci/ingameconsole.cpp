@@ -44,6 +44,9 @@
 #include "../challenge.h"
 #include "../console.h"
 #include "../hci.h"
+#include "../hud/intel/intelkit.h"
+#include "../hud/hudchatbar.h"
+#include "../hud/hudconsole.h"
 #include "../hud/hudskin.h"
 #include "../input/manager.h"
 #include "../loop.h"
@@ -200,6 +203,7 @@ private:
 	{
 		uint32_t id;
 		std::vector<ConsoleWrappedLine> lines;
+		HudConsolePrefix prefix;	///< (in a skin that draws the console)
 	};
 	struct Row
 	{
@@ -213,6 +217,7 @@ private:
 		uint32_t entryId = 0;
 		uint32_t line = 0;
 		std::vector<ConsoleTextFragment> fragments;
+		HudConsolePrefixTexts prefixTexts;
 	};
 
 	std::shared_ptr<ScrollBarWidget> scrollBar;
@@ -229,6 +234,10 @@ void ConsoleHistoryView::initialize()
 	scrollBar = ScrollBarWidget::make();
 	attach(scrollBar);
 	scrollBar->setStickToBottom(true);
+	if (hudConsoleSkinned())
+	{
+		scrollBar->setSliderDisplay(intelkit::displayScrollbar);
+	}
 }
 
 int ConsoleHistoryView::textWidth() const
@@ -328,9 +337,20 @@ void ConsoleHistoryView::update()
 	{
 		wrapped.pop_front();
 	}
+	const bool skinned = hudConsoleSkinned();
 	for (size_t i = wrapped.size(); i < entries.size(); ++i)
 	{
-		wrapped.push_back({entries[i].id, wrapConsoleText(entries[i].text, textWidth())});
+		if (skinned)
+		{
+			// As a chat line, the text wrapped after its prefix
+			WzString text;
+			HudConsolePrefix prefix = hudConsolePrefix(entries[i].text, entries[i].player, entries[i].channel == ConsoleChannel::Team, pitch, text);
+			wrapped.push_back({entries[i].id, wrapConsoleText(text, textWidth() - prefix.width), std::move(prefix)});
+		}
+		else
+		{
+			wrapped.push_back({entries[i].id, wrapConsoleText(entries[i].text, textWidth()), {}});
+		}
 	}
 
 	rows.clear();
@@ -407,6 +427,9 @@ void ConsoleHistoryView::display(int xOffset, int yOffset)
 	const int position = static_cast<int>(scrollBar->position());
 	const WzRect clip(x0, y0, textWidth(), height());
 
+	const bool skinned = hudConsoleSkinned();
+	// (In the skin's card, a few lines sit at the bottom, by the chat bar)
+	const int bottomGap = skinned ? std::max(0, height() - static_cast<int>(rows.size()) * pitch) : 0;
 	const size_t first = static_cast<size_t>(position / pitch);
 	const size_t last = std::min(rows.size(), static_cast<size_t>((position + height() + pitch - 1) / pitch));
 	for (size_t i = first; i < last; ++i)
@@ -423,9 +446,27 @@ void ConsoleHistoryView::display(int xOffset, int yOffset)
 		}
 
 		const ConsoleHistoryEntry &entry = entries[row.entryIndex];
+		const int rowTop = y0 + bottomGap + static_cast<int>(i) * pitch - position;
+		const int baseline = rowTop + LINE_PADDING_Y - aboveBase;
+		if (skinned)
+		{
+			const HudConsolePrefix &prefix = wrapped[row.entryIndex].prefix;
+			// (Chat lines start at the left. The console's own notices keep their justification)
+			const int lineX = prefix.name.empty() ? justifiedX(entry.justification, prefix.width + line.width, x0, x0 + textWidth()) : x0;
+			// (A prefix cut off at the view's edge isn't drawn, as its text isn't)
+			if (row.line == 0 && rowTop >= y0 && rowTop + pitch <= y0 + height())
+			{
+				hudConsoleDrawPrefix(slot.prefixTexts, prefix, lineX, rowTop, pitch, 1.f, false);
+			}
+			const PIELIGHT textColor = hudConsoleTextColor(entry.player, 1.f);
+			for (auto &fragment : slot.fragments)
+			{
+				fragment.text.renderClipped(Vector2f(lineX + prefix.width + fragment.offset, baseline), textColor, clip);
+			}
+			continue;
+		}
 		const PIELIGHT color = (currentFilter == ConsoleHistoryFilter::Team) ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor(entry.player);
 		const int lineX = justifiedX(entry.justification, line.width, x0, x0 + textWidth());
-		const int baseline = y0 + static_cast<int>(i) * pitch - position + LINE_PADDING_Y - aboveBase;
 		for (auto &fragment : slot.fragments)
 		{
 			fragment.text.renderClipped(Vector2f(lineX + fragment.offset, baseline), color, clip);
@@ -442,10 +483,22 @@ public:
 		const int x0 = x() + xOffset;
 		const int y0 = y() + yOffset;
 		const bool isHighlight = (getState() & WBUT_HIGHLIGHT) != 0;
-		pie_DrawRoundedBox(x0, y0, x0 + width(), y0 + height(), MARKER_FILL_COLOR, height() / 2.f, isHighlight ? WZCOL_TEXT_BRIGHT : MARKER_BORDER_COLOR, 1.f);
 		text.setText(pText, FontID);
-		const int textX = x0 + (width() - text.width()) / 2;
 		const int textY = y0 + (height() - text.lineSize()) / 2 - text.aboveBase();
+		if (hudConsoleSkinned())
+		{
+			// The skin's accent button, an arrow down before the text
+			HudSkin &skin = currentHudSkin();
+			const HudColors &colors = skin.colors();
+			pie_DrawRoundedBox(x0, y0, x0 + width(), y0 + height(), isHighlight ? pal_RGBA(26, 70, 112, 245) : pal_RGBA(18, 52, 86, 240), skin.metrics().cardRadius, colors.accent, 1.f);
+			const int icon = height() - 8;
+			const int contentX = x0 + (width() - icon - 4 - text.width()) / 2;
+			skin.drawNamedIcon("chevron-down", WzRect(contentX, y0 + 4, icon, icon), colors.textPrimary);
+			text.render(contentX + icon + 4, textY, colors.textPrimary);
+			return;
+		}
+		pie_DrawRoundedBox(x0, y0, x0 + width(), y0 + height(), MARKER_FILL_COLOR, height() / 2.f, isHighlight ? WZCOL_TEXT_BRIGHT : MARKER_BORDER_COLOR, 1.f);
+		const int textX = x0 + (width() - text.width()) / 2;
 		text.render(textX, textY, WZCOL_TEXT_BRIGHT);
 	}
 
@@ -473,6 +526,11 @@ public:
 	{
 		return view->filter();
 	}
+	/// Whether it was built for a skin that draws the console
+	bool skinned() const
+	{
+		return chatRow != nullptr;
+	}
 	void setFilter(ConsoleHistoryFilter filter);
 	void scroll(ConsoleScroll scroll)
 	{
@@ -486,7 +544,14 @@ private:
 	std::shared_ptr<WzMultiMenuTabs> tabs;
 	std::shared_ptr<ConsoleHistoryView> view;
 	std::shared_ptr<ConsoleNewMessagesButton> newMessages;
+	/// In a skin that draws the console: the chat bar as the bottom row, in place of the tabs (while chat is open,
+	/// the chat screen's own bar takes its place)
+	std::shared_ptr<HudChatBar> chatRow;
 };
+
+static bool consoleChatOpen = false;
+/// The chat screen's quick chat strip, under the card's bottom row while chatting
+static int consoleChatExtra = 0;
 
 void ConsoleHistoryPanel::initialize()
 {
@@ -504,6 +569,30 @@ void ConsoleHistoryPanel::initialize()
 	newMessages->setString(_("New messages"));
 	newMessages->FontID = font_regular;
 	newMessages->hide();
+
+	if (hudConsoleSkinned())
+	{
+		tabs->hide();
+		chatRow = HudChatBar::make(screenWidth < HUD_CHAT_BAR_COMPACT_WIDTH, WzChatMode::Glob);
+		chatRow->setEmbedded(true);
+		auto chatMode = [](const std::shared_ptr<HudChatBar> &bar) {
+			return (bar && bar->mode() == WzChatMode::Team) ? CHAT_TEAM : CHAT_GLOB;
+		};
+		std::weak_ptr<HudChatBar> weakRow = chatRow;
+		chatRow->setIdle([weakRow, chatMode]() {
+			chatDialog(chatMode(weakRow.lock()), false);
+		}, [weakRow, chatMode]() {
+			chatDialog(chatMode(weakRow.lock()), true);
+		});
+		std::weak_ptr<ConsoleHistoryPanel> weakPanel = std::static_pointer_cast<ConsoleHistoryPanel>(shared_from_this());
+		chatRow->onModeChanged = [weakPanel](WzChatMode mode) {
+			if (auto panel = weakPanel.lock())
+			{
+				panel->setFilter(mode == WzChatMode::Team ? ConsoleHistoryFilter::Team : ConsoleHistoryFilter::All);
+			}
+		};
+		attach(chatRow);
+	}
 
 	std::weak_ptr<ConsoleHistoryView> weakView = view;
 	tabs->addOnChooseHandler([weakView](MultibuttonWidget &, int newValue) {
@@ -523,16 +612,29 @@ void ConsoleHistoryPanel::initialize()
 void ConsoleHistoryPanel::setFilter(ConsoleHistoryFilter filter)
 {
 	tabs->choose(static_cast<int>(filter));
+	if (chatRow)
+	{
+		chatRow->setMode(filter == ConsoleHistoryFilter::Team ? WzChatMode::Team : WzChatMode::Glob);
+	}
 }
 
 void ConsoleHistoryPanel::geometryChanged()
 {
+	const int markerHeight = iV_GetTextLineSize(font_regular) + 4;
+	if (chatRow)
+	{
+		const int row = hudConsoleChatRowHeight();
+		view->setGeometry(HUD_CONSOLE_PADDING, HUD_CONSOLE_PADDING, width() - 2 * HUD_CONSOLE_PADDING, height() - 2 * HUD_CONSOLE_PADDING - row);
+		chatRow->setGeometry(0, height() - row, width(), row);
+		const int markerWidth = iV_GetTextWidth(newMessages->pText, font_regular) + 2 * markerHeight;
+		newMessages->setGeometry((width() - markerWidth) / 2, view->y() + view->height() - markerHeight - 2, markerWidth, markerHeight);
+		return;
+	}
 	const int inner = width() - 2 * CONSOLE_PANEL_PADDING;
 	tabs->setGeometry(CONSOLE_PANEL_PADDING, CONSOLE_PANEL_PADDING, tabs->idealWidth(), CONSOLE_TAB_HEIGHT);
 	const int viewTop = CONSOLE_PANEL_PADDING + CONSOLE_TAB_HEIGHT + CONSOLE_TAB_GAP;
 	view->setGeometry(CONSOLE_PANEL_PADDING + LINE_PADDING_X, viewTop, inner - LINE_PADDING_X, height() - viewTop - CONSOLE_PANEL_PADDING);
 
-	const int markerHeight = iV_GetTextLineSize(font_regular) + 4;
 	const int markerWidth = iV_GetTextWidth(newMessages->pText, font_regular) + 2 * markerHeight;
 	newMessages->setGeometry((width() - markerWidth) / 2, view->y() + view->height() - markerHeight - 2, markerWidth, markerHeight);
 }
@@ -541,6 +643,17 @@ void ConsoleHistoryPanel::display(int xOffset, int yOffset)
 {
 	const int x0 = x() + xOffset;
 	const int y0 = y() + yOffset;
+	if (chatRow)
+	{
+		// One card: the lines, a divider, the chat bar (and while chatting, quick chat under it)
+		const WzRect card(x0, y0, width(), height() + (consoleChatOpen ? consoleChatExtra : 0));
+		currentHudSkin().drawPanelFrame(card, card);
+		const int dividerY = y0 + height() - hudConsoleChatRowHeight();
+		intelkit::drawDivider(x0 + 1, dividerY, x0 + width() - 1, dividerY);
+		chatRow->show(!consoleChatOpen);
+		newMessages->show(view->hasUnseenMessages());
+		return;
+	}
 	// The panel hangs from the top of the screen, so only its bottom corners are rounded
 	pie_DrawRoundedBox(x0, y0, x0 + width(), y0 + height(), PANEL_FILL_COLOR, glm::vec4(0.f, 0.f, PANEL_CORNER_RADIUS, PANEL_CORNER_RADIUS), PANEL_BORDER_COLOR, 1.f);
 	newMessages->show(view->hasUnseenMessages());
@@ -574,6 +687,8 @@ public:
 		return panel->filter();
 	}
 	void setExpanded(bool value, ConsoleHistoryFilter filter);
+	/// After a change of skin: the feed laid out again, the history built for the skin
+	void skinChanged();
 	void scroll(ConsoleScroll scroll)
 	{
 		panel->scroll(scroll);
@@ -590,6 +705,7 @@ public:
 
 private:
 	bool consoleShown() const;
+	void makePanel();
 	void updateFeed();
 
 	struct FeedLine
@@ -601,6 +717,8 @@ private:
 	{
 		uint32_t id;
 		std::vector<FeedLine> lines;
+		HudConsolePrefix prefix;	///< (in a skin that draws the console)
+		HudConsolePrefixTexts prefixTexts;
 	};
 
 	std::shared_ptr<ConsoleHistoryPanel> panel;
@@ -612,7 +730,7 @@ private:
 
 static std::weak_ptr<InGameConsoleWidget> currentConsole;
 
-void InGameConsoleWidget::initialize()
+void InGameConsoleWidget::makePanel()
 {
 	panel = ConsoleHistoryPanel::make();
 	attach(panel);
@@ -621,6 +739,30 @@ void InGameConsoleWidget::initialize()
 		const ConsoleRect rect = inGameConsoleExpandedRect();
 		psWidget->setGeometry(rect.x, rect.y, rect.width, rect.height);
 	}));
+}
+
+void InGameConsoleWidget::skinChanged()
+{
+	feed.clear();
+	feedLaidOut = false;
+	if (panel->skinned() == hudConsoleSkinned())
+	{
+		return;
+	}
+	const bool wasExpanded = expanded;
+	const ConsoleHistoryFilter shownFilter = panel->filter();
+	setExpanded(false, shownFilter);
+	detach(panel);
+	makePanel();
+	if (wasExpanded)
+	{
+		setExpanded(true, shownFilter);
+	}
+}
+
+void InGameConsoleWidget::initialize()
+{
+	makePanel();
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(0, 0, screenWidth, screenHeight);
 	}));
@@ -642,6 +784,11 @@ void InGameConsoleWidget::setExpanded(bool value, ConsoleHistoryFilter filter)
 	panel->show(expanded);
 	if (expanded)
 	{
+		if (hudConsoleSkinned())
+		{
+			// (Its place depends on the options button's, which comes after the console)
+			panel->callCalcLayout();
+		}
 		panel->scroll(ConsoleScroll::Newest);
 	}
 	// Page Up, Page Down, Home, End and Esc act on the history while it's open
@@ -662,11 +809,20 @@ void InGameConsoleWidget::updateFeed()
 	}
 
 	const auto &messages = getConsoleFeed();
-	const int wrapWidth = consoleColumnWidth(width()) - 2 * LINE_PADDING_X;
+	int wrapWidth = consoleColumnWidth(width()) - 2 * LINE_PADDING_X;
 	const int left = CONSOLE_SIDE_MARGIN;
 	const int right = width() - CONSOLE_SIDE_MARGIN;
 	const int pitch = consoleLinePitch();
+	const bool skinned = hudConsoleSkinned();
 	int top = (!challengeActive && game.type == LEVEL_TYPE::SKIRMISH) ? FEED_TOP_SKIRMISH : FEED_TOP_WITH_TIMERS;
+	// (In the skin, the feed stops short of the options button)
+	int clearRight = right;
+	if (skinned)
+	{
+		const int screenLeft = screenPosX() + left;
+		wrapWidth = std::min(wrapWidth, hudConsoleRight(screenLeft, screenPosY() + top, screenLeft + wrapWidth + 2 * LINE_PADDING_X) - screenLeft - 2 * LINE_PADDING_X);
+		clearRight = hudConsoleRight(screenLeft, screenPosY() + top, screenPosX() + right) - screenPosX();
+	}
 
 	// Both lists are in the order the messages arrived, so the lines of the ones still there can be kept
 	std::vector<FeedMessage> updated;
@@ -686,11 +842,18 @@ void InGameConsoleWidget::updateFeed()
 		{
 			FeedMessage wrappedMessage;
 			wrappedMessage.id = message.id;
-			for (auto &line : wrapConsoleText(message.text, wrapWidth))
+			WzString text = message.text;
+			if (skinned)
+			{
+				// As a chat line, the text wrapped after its prefix
+				wrappedMessage.prefix = hudConsolePrefix(message.text, message.player, message.team, pitch, text);
+			}
+			const int indent = wrappedMessage.prefix.width;
+			for (auto &line : wrapConsoleText(text, wrapWidth - indent))
 			{
 				FeedLine feedLine;
 				setFragmentTexts(feedLine.fragments, line.fragments);
-				const int plateWidth = (line.width > 0) ? line.width + 2 * LINE_PADDING_X : 0;
+				const int plateWidth = (line.width > 0 || indent > 0) ? indent + line.width + 2 * LINE_PADDING_X : 0;
 				feedLine.plate = WzRect(0, 0, plateWidth, pitch);
 				wrappedMessage.lines.push_back(std::move(feedLine));
 			}
@@ -700,7 +863,13 @@ void InGameConsoleWidget::updateFeed()
 		for (auto &line : updated.back().lines)
 		{
 			const int plateWidth = line.plate.width();
-			line.plate = WzRect(justifiedX(message.justification, plateWidth, left, right), top, plateWidth, pitch);
+			// (Chat lines start at the left. The console's own notices keep their justification)
+			int plateX = (skinned && !updated.back().prefix.name.empty()) ? left : justifiedX(message.justification, plateWidth, left, right);
+			if (plateX + plateWidth > clearRight)
+			{
+				plateX = std::max(left, clearRight - plateWidth);
+			}
+			line.plate = WzRect(plateX, top, plateWidth, pitch);
 			top += pitch;
 		}
 	}
@@ -762,11 +931,33 @@ void InGameConsoleWidget::display(int xOffset, int yOffset)
 
 	const auto &messages = getConsoleFeed();
 	const int aboveBase = iV_GetTextAboveBase(font_regular);
+	const bool skinned = hudConsoleSkinned();
 	for (size_t i = 0; i < feed.size() && i < messages.size(); ++i)
 	{
 		const float opacity = feedLineOpacity(messages[i]);
 		if (opacity <= 0.f)
 		{
+			continue;
+		}
+		if (skinned)
+		{
+			// No backplates: the text is outlined over the 3D view, like the skin's other overlay text
+			const PIELIGHT textColor = hudConsoleTextColor(messages[i].player, opacity);
+			const int indent = feed[i].prefix.width;
+			for (size_t lineIndex = 0; lineIndex < feed[i].lines.size(); ++lineIndex)
+			{
+				auto &line = feed[i].lines[lineIndex];
+				const int x0 = xOffset + x() + line.plate.x() + LINE_PADDING_X;
+				const int y0 = yOffset + y() + line.plate.y();
+				if (lineIndex == 0)
+				{
+					hudConsoleDrawPrefix(feed[i].prefixTexts, feed[i].prefix, x0, y0, line.plate.height(), opacity, true);
+				}
+				for (auto &fragment : line.fragments)
+				{
+					currentHudSkin().drawOverlayText(fragment.text, x0 + indent + fragment.offset, y0 + LINE_PADDING_Y - aboveBase, textColor);
+				}
+			}
 			continue;
 		}
 		const PIELIGHT textColor = withOpacity(getConsoleTextColor(messages[i].player), opacity);
@@ -840,7 +1031,30 @@ void inGameConsoleKeepOnTop(const std::shared_ptr<WIDGET> &under)
 
 ConsoleRect inGameConsoleExpandedRect()
 {
-	return consoleExpandedRect(screenWidth, screenHeight, consoleLinePitch());
+	const ConsoleRect rect = consoleExpandedRect(screenWidth, screenHeight, consoleLinePitch());
+	return hudConsoleSkinned() ? hudConsoleExpandedRect(rect) : rect;
+}
+
+void inGameConsoleSetChatOpen(bool open)
+{
+	consoleChatOpen = open;
+	if (!open)
+	{
+		consoleChatExtra = 0;
+	}
+}
+
+void inGameConsoleSetChatExtra(int height)
+{
+	consoleChatExtra = std::max(0, height);
+}
+
+void inGameConsoleSkinChanged()
+{
+	if (auto console = currentConsole.lock())
+	{
+		console->skinChanged();
+	}
 }
 
 bool inGameConsoleIsExpanded()
