@@ -2195,7 +2195,7 @@ bool intAddPower()
 		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 	}));
 
-	hudDetailRegister(psBarGraph, HudDetailProvider{hudPowerDetail, HudDetailPlacement::Above});
+	hudDetailRegister(psBarGraph, HudDetailProvider{hudPowerDetail, HudDetailPlacement::Above, 0, nullptr});
 	psBarGraph->setHelp(WidgetHelp()
 		.setTitle(_("Power"))
 		.setDescription(_("The power you have left once everything queued is paid for. Pointing at something to build shows its cost on the bar. It turns red when the queue costs more than you have.")));

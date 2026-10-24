@@ -279,6 +279,8 @@ public:
 	virtual bool drawPageTab(const WzRect &, TabSelectionButtonRole, bool, bool) { return false; }
 	/// A page control's frame, around its segments
 	virtual void drawPageControlFrame(const WzRect &rect) = 0;
+	/// Over a list's page just turned by a swipe (IntListTabWidget), as it comes in: `remaining` from 1 to 0
+	virtual void drawPageTurnFade(const WzRect &rect, float remaining) { (void)rect; (void)remaining; }
 	/// A page control's segment: the color of its number or arrow sign, or nothing if it drew the arrow
 	virtual nonstd::optional<PIELIGHT> drawPageSegment(const HudPageSegmentLook &look) = 0;
 	/// The mission and transporter timers' background

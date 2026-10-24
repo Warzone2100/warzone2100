@@ -69,7 +69,7 @@ bool sameLook(const HudSettings &a, const HudSettings &b)
 bool HudSettings::operator==(const HudSettings &other) const
 {
 	return sameLook(*this, other) && accent == other.accent && panelTint == other.panelTint && reduceMotion == other.reduceMotion && rememberFilters == other.rememberFilters && toasts == other.toasts
-		&& objectivesPopUp == other.objectivesPopUp && tooltipDelay == other.tooltipDelay && showModulesInTutorial == other.showModulesInTutorial;
+		&& objectivesPopUp == other.objectivesPopUp && tooltipDelay == other.tooltipDelay && longPressDelay == other.longPressDelay && showModulesInTutorial == other.showModulesInTutorial;
 }
 
 const HudSettings &hudSettings()
@@ -272,6 +272,7 @@ void hudLoadSettings(const std::function<nonstd::optional<int> (const std::strin
 	settings.toasts = get("hudToasts", 1) != 0;
 	settings.objectivesPopUp = get("hudObjectivesPopUp", 1) != 0;
 	settings.tooltipDelay = static_cast<uint32_t>(std::max(0, std::min(get("hudTooltipDelay", 200), 2000)));
+	settings.longPressDelay = static_cast<uint32_t>(std::max(200, std::min(get("hudLongPressDelay", 400), 1500)));
 	settings.showModulesInTutorial = get("hudModulesInTutorial", 0) != 0;
 	hudSetSettings(settings);
 	spectatorStripTwoLines = get("hudSpectatorStripLines", 2) != 1;
@@ -293,6 +294,7 @@ void hudSaveSettings(const std::function<void (const std::string &key, int value
 	setInteger("hudToasts", currentSettings.toasts ? 1 : 0);
 	setInteger("hudObjectivesPopUp", currentSettings.objectivesPopUp ? 1 : 0);
 	setInteger("hudTooltipDelay", static_cast<int>(currentSettings.tooltipDelay));
+	setInteger("hudLongPressDelay", static_cast<int>(currentSettings.longPressDelay));
 	setInteger("hudModulesInTutorial", currentSettings.showModulesInTutorial ? 1 : 0);
 	setInteger("hudSpectatorStripLines", spectatorStripTwoLines ? 2 : 1);
 }

@@ -122,6 +122,30 @@ public:
 		return hudGroupDetail(static_cast<unsigned>(groupNumber));
 	}
 
+	std::shared_ptr<WIDGET> makeHudDetailPeek() override
+	{
+		auto detail = hudGroupDetail(static_cast<unsigned>(groupNumber));
+		return detail != nullptr ? detail : hudGroupEmptyDetail(static_cast<unsigned>(groupNumber));
+	}
+
+	std::vector<HudDetailAction> hudDetailActions() override
+	{
+		return hudSecondaryActions();
+	}
+
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		unsigned selected = 0;
+		if (selectedPlayer < MAX_PLAYERS)
+		{
+			for (const DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
+			{
+				selected += (psDroid->selected && !psDroid->died) ? 1 : 0;
+			}
+		}
+		return {secondaryAction(_("Assign the selection"), "units", false, selected > 0, selected > 0 ? WzString::fromUtf8(astringf(ngettext("%u unit", "%u units", selected), selected)) : WzString())};
+	}
+
 	uint32_t hudDetailPanelId() const override
 	{
 		return IDOBJ_GROUP;

@@ -807,6 +807,13 @@ public:
 		                   static_cast<float>(rect.bottom()), withAlpha(tints.fieldFill, 200), params.cardRadius, tints.cardBorder, params.borderWidth);
 	}
 
+	void drawPageTurnFade(const WzRect &rect, float remaining) override
+	{
+		// The new page comes up from the panel's own color
+		pie_UniTransBoxFill(static_cast<float>(rect.x()), static_cast<float>(rect.y()), static_cast<float>(rect.right()), static_cast<float>(rect.bottom()),
+		                    withAlpha(palette.panelBackground, static_cast<uint8_t>(230.f * remaining)));
+	}
+
 	nonstd::optional<PIELIGHT> drawPageSegment(const HudPageSegmentLook &look) override
 	{
 		const float x0 = static_cast<float>(look.rect.x());

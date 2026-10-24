@@ -510,6 +510,21 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto factory = controller->getObjectAt(objectIndex);
+		if (factory == nullptr || !StructureIsManufacturingPending(factory))
+		{
+			return {};
+		}
+		// (as the right-click: a first one puts it on hold, the next cancels it)
+		if (StructureIsOnHoldPending(factory))
+		{
+			return {secondaryAction(_("Cancel production"), "never", true)};
+		}
+		return {secondaryAction(_("Pause production"), "replay-pause")};
+	}
+
 	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto factory = controller->getObjectAt(objectIndex);
@@ -642,6 +657,22 @@ private:
 	void clickPrimary() override
 	{
 		adjustFactoryProduction(true);
+	}
+
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		STRUCTURE *factory = controller->getHighlightedObject();
+		DROID_TEMPLATE *psTemplate = getStats();
+		if (factory == nullptr || psTemplate == nullptr)
+		{
+			return {};
+		}
+		auto production = getProduction(factory, psTemplate);
+		if (!production.isValid() || production.numRemaining() <= 0)
+		{
+			return {};
+		}
+		return {secondaryAction(_("Remove one"), "minimize", false, true, WzString::fromUtf8(astringf(_("%d in the queue"), production.numRemaining())))};
 	}
 
 	void clickSecondary(bool synthesizedFromHold) override

@@ -30,9 +30,11 @@
 #include "hudgeometrydump.h"
 #include "hudtoast.h"
 #include "hudconnection.h"
+#include "huddetail.h"
 #include "hudids.h"
 #include "hudpagecontrol.h"
 #include "hudpanelextension.h"
+#include "hudsettings.h"
 #include "intel/intelmodel.h"
 #include "intel/intelpanel.h"
 #include "intel/objectivescard.h"
@@ -68,6 +70,7 @@
 
 // (lib/sdl: the pointer is moved for the states that point at a widget)
 void wzWarpMouseToLogicalPos(int logicalX, int logicalY);
+void wzSimulateTouch(int phase, int logicalX, int logicalY);
 
 namespace
 {
@@ -83,6 +86,8 @@ constexpr int FRAME_TO_CLICK = 2;
 constexpr int FRAME_TO_HOVER = 3;
 constexpr uint32_t HOVER_SETTLE_MS = 900;
 constexpr int FRAMES_AFTER_HOVER = 5;
+constexpr int DRAG_STEPS = 6;              ///< (a drag's moves, a frame each)
+constexpr uint32_t DRAG_SETTLE_MS = 1500;    ///< (after a drag's release, for what it set going)
 constexpr uint32_t MAX_SCREENSHOT_WAIT_MS = 30000;
 constexpr int HIT_MAP_STEP = 2;
 constexpr uint32_t DEFAULT_WIDGET_ID = 0xFFFFEEEEu; // (the ID WIDGET() gives a widget without one)
@@ -97,6 +102,40 @@ int frameInState = 0;
 std::string hoverKey;
 std::vector<std::string> clickKeys;
 uint32_t hoveredAt = 0;
+// drag=<widget key>:<dx>:<dy>: a finger down at the widget's center, moved by (dx, dy) and up
+std::string dragKey;
+Vector2i dragFrom(0, 0);
+Vector2i dragBy(0, 0);
+uint32_t dragEndedAt = 0;
+// hold=<widget key>[:held|:<n>|:out]: a finger held still on the widget past the long-press, then lifted (and the nth
+// action of its popover tapped, or a tap elsewhere), or kept down (held) until the screenshot
+std::string holdKey;
+std::string holdThen;
+Vector2i holdAt(0, 0);
+int holdPhase = 0;
+uint32_t holdPhaseAt = 0;
+bool fingerDown = false;
+
+bool parseDrag(const std::string &spec)
+{
+	// (<key>:<dx>:<dy>: the states' list is comma-separated)
+	const size_t second = spec.rfind(':');
+	const size_t first = (second == std::string::npos || second == 0) ? std::string::npos : spec.rfind(':', second - 1);
+	if (first == std::string::npos)
+	{
+		return false;
+	}
+	dragKey = spec.substr(0, first);
+	try
+	{
+		dragBy = Vector2i(std::stoi(spec.substr(first + 1, second - first - 1)), std::stoi(spec.substr(second + 1)));
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
+}
 uint32_t lastStateDoneAt = 0;
 std::vector<std::string> screenshots;
 nlohmann::json result;
@@ -259,6 +298,17 @@ bool applyState(const std::string &name)
 	hoverKey.clear();
 	clickKeys.clear();
 	hoveredAt = 0;
+	dragKey.clear();
+	dragEndedAt = 0;
+	if (fingerDown)
+	{
+		wzSimulateTouch(2, holdAt.x, holdAt.y);
+		fingerDown = false;
+	}
+	holdKey.clear();
+	holdThen.clear();
+	holdPhase = 0;
+	hudDetailClose();
 	hudSetTouchInputForTests(false);
 	hudShowConnectionWarningsForTests(false, false);
 	hudObjectivesResetForTests();
@@ -300,6 +350,17 @@ bool applyState(const std::string &name)
 		else if (part.rfind("teamplans=", 0) == 0) { ok = teamStrategyFillForTests(std::strtoul(part.substr(10).c_str(), nullptr, 10)) > 0 && ok; }
 		else if (part.rfind("hover=", 0) == 0) { hoverKey = part.substr(6); }
 		else if (part.rfind("click=", 0) == 0) { clickKeys.push_back(part.substr(6)); }
+		else if (part.rfind("drag=", 0) == 0) { ok = parseDrag(part.substr(5)) && ok; }
+		else if (part.rfind("hold=", 0) == 0)
+		{
+			holdKey = part.substr(5);
+			const size_t colon = holdKey.rfind(':');
+			if (colon != std::string::npos && colon > 0 && holdKey[colon - 1] != '/')
+			{
+				holdThen = holdKey.substr(colon + 1);
+				holdKey.resize(colon);
+			}
+		}
 		else
 		{
 			debug(LOG_ERROR, "HUD geometry dump: unknown state %s", part.c_str());
@@ -715,6 +776,110 @@ void hudGeometryDumpFrame()
 		for (const auto &key : clickKeys)
 		{
 			available = clickWidget(key) && available;
+		}
+	}
+	else if (!dragKey.empty() && frameInState >= FRAME_TO_CLICK && frameInState <= FRAME_TO_CLICK + DRAG_STEPS + 1)
+	{
+		// A finger: down, DRAG_STEPS moves (a frame each), up
+		const int step = frameInState - FRAME_TO_CLICK;
+		if (step == 0)
+		{
+			auto widget = findWidget(dragKey);
+			if (widget == nullptr)
+			{
+				debug(LOG_ERROR, "HUD geometry dump: no widget %s to drag", dragKey.c_str());
+				available = false;
+				dragKey.clear();
+			}
+			else
+			{
+				const WzRect rect = widget->screenGeometry();
+				dragFrom = Vector2i(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+				wzSimulateTouch(0, dragFrom.x, dragFrom.y);
+			}
+		}
+		else if (step <= DRAG_STEPS)
+		{
+			wzSimulateTouch(1, dragFrom.x + dragBy.x * step / DRAG_STEPS, dragFrom.y + dragBy.y * step / DRAG_STEPS);
+		}
+		else
+		{
+			wzSimulateTouch(2, dragFrom.x + dragBy.x, dragFrom.y + dragBy.y);
+			dragEndedAt = realTime;
+		}
+	}
+	else if (dragEndedAt != 0 && realTime - dragEndedAt < DRAG_SETTLE_MS)
+	{
+		// (what the drag set going settles)
+	}
+	else if (!holdKey.empty() && frameInState >= FRAME_TO_CLICK && holdPhase < 5)
+	{
+		const uint32_t since = realTime - holdPhaseAt;
+		auto next = [](int phase) { holdPhase = phase; holdPhaseAt = realTime; };
+		if (holdPhase == 0)
+		{
+			auto widget = findWidget(holdKey);
+			if (widget == nullptr)
+			{
+				debug(LOG_ERROR, "HUD geometry dump: no widget %s to hold", holdKey.c_str());
+				available = false;
+				next(5);
+			}
+			else
+			{
+				const WzRect rect = widget->screenGeometry();
+				holdAt = Vector2i(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+				wzSimulateTouch(0, holdAt.x, holdAt.y);
+				fingerDown = true;
+				next(1);
+			}
+		}
+		else if (holdPhase == 1 && (hudDetailPeeking() || since >= hudSettings().longPressDelay + 2500))
+		{
+			// (frames can be slow here: the finger lifts once the popover is up)
+			if (holdThen == "held")
+			{
+				next(5);
+			}
+			else
+			{
+				wzSimulateTouch(2, holdAt.x, holdAt.y);
+				fingerDown = false;
+				next(holdThen.empty() ? 4 : 2);
+			}
+		}
+		else if (holdPhase == 2 && (hudDetailPinned() || since >= 5000))
+		{
+			auto rects = hudDetailPeekActionRectsForTests();
+			if (holdThen == "out")
+			{
+				// (a tap far from the popover: it only closes it)
+				rects = {WzRect(static_cast<int>(pie_GetVideoBufferWidth()) / 2, 40, 1, 1)};
+			}
+			const size_t n = static_cast<size_t>(std::max(1, std::atoi(holdThen.c_str())));
+			if (n > rects.size())
+			{
+				debug(LOG_ERROR, "HUD geometry dump: no action %zu to tap", n);
+				available = false;
+				next(5);
+			}
+			else
+			{
+				holdAt = Vector2i(rects[n - 1].x() + rects[n - 1].width() / 2, rects[n - 1].y() + rects[n - 1].height() / 2);
+				wzSimulateTouch(0, holdAt.x, holdAt.y);
+				fingerDown = true;
+				next(3);
+			}
+		}
+		else if (holdPhase == 3 && since >= 60)
+		{
+			wzSimulateTouch(2, holdAt.x, holdAt.y);
+			fingerDown = false;
+			next(4);
+		}
+		else if (holdPhase == 4 && since >= 600)
+		{
+			next(5);
 		}
 	}
 	else if (frameInState == FRAME_TO_HOVER && !hoverKey.empty())

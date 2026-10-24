@@ -185,6 +185,59 @@ void DynamicIntFancyButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
 	}
 }
 
+HudDetailAction DynamicIntFancyButton::secondaryAction(const WzString &label, const char *icon, bool destructive, bool enabled, const WzString &note)
+{
+	HudDetailAction action;
+	action.label = label;
+	action.icon = icon;
+	action.note = note;
+	action.destructive = destructive;
+	action.enabled = enabled;
+	std::weak_ptr<WIDGET> weakSelf = shared_from_this();
+	action.run = [weakSelf]() {
+		if (auto button = std::dynamic_pointer_cast<DynamicIntFancyButton>(weakSelf.lock()))
+		{
+			button->runSecondary();
+		}
+	};
+	return action;
+}
+
+std::vector<HudDetailAction> hudObjectColumnActions(const std::shared_ptr<WIDGET> &holder)
+{
+	std::vector<HudDetailAction> result;
+	if (holder == nullptr)
+	{
+		return result;
+	}
+	for (bool objectFirst : {true, false})
+	{
+		for (const auto &child : holder->children())
+		{
+			auto button = dynamic_cast<DynamicIntFancyButton *>(child.get());
+			if (button == nullptr || (dynamic_cast<ObjectButton *>(button) != nullptr) != objectFirst)
+			{
+				continue;
+			}
+			for (auto &action : button->hudSecondaryActions())
+			{
+				result.push_back(std::move(action));
+			}
+		}
+	}
+	return result;
+}
+
+std::vector<HudDetailAction> ObjectButton::hudDetailActions()
+{
+	return hudObjectColumnActions(parent());
+}
+
+std::vector<HudDetailAction> ObjectButton::hudSecondaryActions()
+{
+	return {secondaryAction(_("Go to"), "show-on-map")};
+}
+
 bool DynamicIntFancyButton::clickHeld(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	if (key == WKEY_PRIMARY)
@@ -485,6 +538,7 @@ void ObjectsForm::addNewButton(size_t buttonIndex)
 	auto statButton = makeStatsButton(buttonIndex);
 	buttonHolder->attach(statButton);
 	std::weak_ptr<ObjectsForm> weakForm = std::static_pointer_cast<ObjectsForm>(shared_from_this());
+	std::weak_ptr<WIDGET> weakHolder = buttonHolder;
 	hudDetailRegister(statButton, HudDetailProvider{[weakForm, buttonIndex]() -> std::shared_ptr<WIDGET> {
 		auto form = weakForm.lock();
 		if (form == nullptr || buttonIndex >= form->objectsController().objectsSize())
@@ -492,7 +546,9 @@ void ObjectsForm::addNewButton(size_t buttonIndex)
 			return nullptr;
 		}
 		return hudObjectDetail(form->objectsController().getObjectAt(buttonIndex));
-	}, HudDetailPlacement::Above, IDOBJ_FORM});
+	}, HudDetailPlacement::Above, IDOBJ_FORM, [weakHolder]() {
+		return hudObjectColumnActions(weakHolder.lock());
+	}});
 	statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	statButton->style |= WFORM_SECONDARY;
 

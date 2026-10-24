@@ -442,6 +442,17 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto droid = controller->getObjectAt(objectIndex);
+		auto highlighted = controller->getHighlightedObject();
+		if (droid == nullptr || highlighted == nullptr)
+		{
+			return {};
+		}
+		return {secondaryAction(_("Build with this truck"), "category-trucks", false, droid == highlighted || !highlighted->selected)};
+	}
+
 	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
@@ -557,6 +568,20 @@ private:
 		widgScheduleTask([clickedStats, controllerRef]() {
 			controllerRef->startBuildPosition(clickedStats);
 		});
+	}
+
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto stats = controller->getStatsAt(buildOptionIndex);
+		if (stats == nullptr)
+		{
+			return {};
+		}
+		if (controller->shouldShowFavorites() || asStructureStats[stats->index].isFavorite)
+		{
+			return {secondaryAction(_("Remove from favorites"), "favorite")};
+		}
+		return {secondaryAction(_("Add to favorites"), "favorite")};
 	}
 
 	void clickSecondary(bool synthesizedFromHold) override

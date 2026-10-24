@@ -304,6 +304,17 @@ private:
 		controller->displayOrderForm();
 	}
 
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto droid = controller->getObjectAt(objectIndex);
+		auto highlighted = controller->getHighlightedObject();
+		if (droid == nullptr)
+		{
+			return {};
+		}
+		return {secondaryAction(_("Orders"), "order-circle", false, droid == highlighted || (highlighted && !highlighted->selected))};
+	}
+
 	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto droid = controller->getObjectAt(objectIndex);

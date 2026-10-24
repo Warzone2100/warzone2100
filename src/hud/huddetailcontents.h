@@ -55,5 +55,7 @@ std::shared_ptr<WIDGET> hudReticuleDetail(int slot, const std::string &tip, cons
 std::shared_ptr<WIDGET> hudPowerDetail();
 /// A group (1-9, 0) of the groups bar
 std::shared_ptr<WIDGET> hudGroupDetail(unsigned group);
+/// An empty group, for a long-press (its name only: the popover offers to assign the selection to it)
+std::shared_ptr<WIDGET> hudGroupEmptyDetail(unsigned group);
 
 #endif // __INCLUDED_SRC_HUD_HUDDETAILCONTENTS_H__

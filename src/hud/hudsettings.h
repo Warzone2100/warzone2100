@@ -111,6 +111,8 @@ struct HudSettings
 	/// the intelligence button)
 	bool objectivesPopUp = true;
 	uint32_t tooltipDelay = 200;
+	/// With touch, how long a press is held for the element's popover (the Modern skin's long-press)
+	uint32_t longPressDelay = 400;
 	bool showModulesInTutorial = false;
 
 	bool operator==(const HudSettings &other) const;

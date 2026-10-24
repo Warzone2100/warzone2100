@@ -47,6 +47,7 @@ static constexpr int BADGE_HEIGHT = 15;
 static constexpr int TITLE_HEIGHT = 18;
 static constexpr int STATS_Y = 41;
 static constexpr int COMPACT_STATS_Y = 24;
+static constexpr int SUBTITLE_Y = 21;
 static constexpr int STATUS_HEIGHT = 14;
 static constexpr float READABLE_COLOR_LUMINANCE = 140.f;
 static constexpr int BADGE_GAP = 5;
@@ -730,14 +731,19 @@ void DetailPanelContents::geometryChanged()
 	{
 		m_model->setGeometry(PADDING, PADDING, m_modelSize, m_modelSize);
 	}
+	const int cornerWidth = m_corner ? m_corner->idealWidth() : 0;
+	if (m_corner)
+	{
+		m_corner->setGeometry(width() - PADDING / 2 - cornerWidth, PADDING / 2, cornerWidth, m_corner->idealHeight());
+	}
 	if (m_title)
 	{
-		m_title->setGeometry(textX, PADDING + 2, textWidth, TITLE_HEIGHT);
+		m_title->setGeometry(textX, PADDING + 2, std::max(10, textWidth - (m_corner ? cornerWidth : 0)), TITLE_HEIGHT);
 	}
 	// The line under the title names the group, if the subject is in one.
 	// The badge leads and the subtitle (if any) follows it.
 	int subtitleX = textX;
-	const int subtitleY = PADDING + 21;
+	const int subtitleY = PADDING + SUBTITLE_Y;
 	if (m_group)
 	{
 		const int groupWidth = std::min(m_group->idealWidth(), std::max(10, width() - subtitleX - PADDING));
@@ -785,15 +791,49 @@ void DetailPanelContents::geometryChanged()
 		}
 	}
 	const int bodyY = PADDING + headerHeight() + statusBarHeight() + PADDING;
-	const int reservedActionsHeight = m_actions ? ACTIONS_HEIGHT + PADDING : 0;
+	const int reservedActionsHeight = m_actions ? actionsHeight() + PADDING : 0;
 	if (m_body)
 	{
 		m_body->setGeometry(PADDING, bodyY, std::max(10, width() - PADDING * 2), std::max(10, height() - bodyY - PADDING - reservedActionsHeight));
 	}
 	if (m_actions)
 	{
-		m_actions->setGeometry(PADDING, height() - PADDING - ACTIONS_HEIGHT, std::max(10, width() - PADDING * 2), ACTIONS_HEIGHT);
+		m_actions->setGeometry(PADDING, height() - PADDING - actionsHeight(), std::max(10, width() - PADDING * 2), actionsHeight());
 	}
+}
+
+void DetailPanelContents::setActions(std::shared_ptr<WIDGET> actions)
+{
+	if (m_actions)
+	{
+		detach(m_actions);
+	}
+	m_actions = std::move(actions);
+	if (m_actions)
+	{
+		attach(m_actions);
+	}
+	recalcHeight();
+	geometryChanged();
+}
+
+void DetailPanelContents::setCorner(std::shared_ptr<WIDGET> corner)
+{
+	if (m_corner)
+	{
+		detach(m_corner);
+	}
+	m_corner = std::move(corner);
+	if (m_corner)
+	{
+		attach(m_corner);
+	}
+	geometryChanged();
+}
+
+int DetailPanelContents::actionsHeight() const
+{
+	return m_actions ? std::max(ACTIONS_HEIGHT, m_actions->idealHeight()) : 0;
 }
 
 void DetailPanelContents::setMaxHeight(int32_t maxHeight)
@@ -826,6 +866,11 @@ int DetailPanelContents::headerHeight() const
 	{
 		text = statsY() + BADGE_HEIGHT;
 	}
+	else if (m_group || m_subtitle)
+	{
+		// (the line under the title, with nothing under it to keep the header tall)
+		text = SUBTITLE_Y + BADGE_HEIGHT;
+	}
 	return std::max(m_model ? m_modelSize : 0, text);
 }
 
@@ -849,7 +894,7 @@ bool DetailPanelContents::anythingUnderHeader() const
 void DetailPanelContents::recalcHeight()
 {
 	const int bodyY = PADDING + headerHeight() + statusBarHeight() + PADDING;
-	const int reservedActionsHeight = m_actions ? ACTIONS_HEIGHT + PADDING : 0;
+	const int reservedActionsHeight = m_actions ? actionsHeight() + PADDING : 0;
 	if (!m_body || m_body->idealHeight() <= 0)
 	{
 		setGeometry(x(), y(), width(), bodyY + (m_actions ? PADDING / 2 + reservedActionsHeight : 0));
