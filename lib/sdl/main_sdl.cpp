@@ -174,12 +174,6 @@ static bool wzChangeDisplayScaleImmediate(unsigned int displayScale);
 
 static std::vector<optional<screeninfo>> displaylist;	// holds all our possible display lists
 
-std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
-enum wzSDLAppEventCodes
-{
-	MAINTHREADEXEC
-};
-
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
 #define DOUBLE_CLICK_INTERVAL 250
 
@@ -1123,35 +1117,6 @@ bool wzSemaphoreWaitTimeout(WZ_SEMAPHORE *semaphore, int32_t timeoutMS)
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 {
 	SDL_SignalSemaphore((SDL_Semaphore *)semaphore);
-}
-
-// Asynchronously executes exec->doExecOnMainThread() on the main thread
-// `exec` should be a subclass of `WZ_MAINTHREADEXEC`
-//
-// `exec` must be allocated on the heap since the main event loop takes ownership of it
-// and will handle deleting it once it has been processed.
-// It is not safe to access `exec` after calling wzAsyncExecOnMainThread.
-//
-// No guarantees are made about when execFunc() will be called relative to the
-// calling of this function - this function may return before, during, or after
-// execFunc()'s execution on the main thread.
-void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
-{
-	Uint32 _wzSDLAppEvent = wzSDLAppEvent.load();
-	assert(_wzSDLAppEvent != ((Uint32)-1));
-	if (_wzSDLAppEvent == ((Uint32)-1)) {
-		// The app-defined event has not yet been registered with SDL
-		return;
-	}
-	SDL_Event execEvent;
-	SDL_memset(&execEvent, 0, sizeof(execEvent));
-	execEvent.type = _wzSDLAppEvent;
-	execEvent.user.code = wzSDLAppEventCodes::MAINTHREADEXEC;
-	execEvent.user.data1 = exec;
-	assert(execEvent.user.data1 != nullptr);
-	execEvent.user.data2 = 0;
-	SDL_PushEvent(&execEvent);
-	// receiver handles deleting `exec` on the main thread after doExecOnMainThread() has been called
 }
 
 /*!
@@ -2998,17 +2963,6 @@ bool wzSDLOneTimeInit()
 		}
 	}
 
-	if (wzSDLAppEvent == ((Uint32)-1))
-	{
-		wzSDLAppEvent = SDL_RegisterEvents(1);
-		if (wzSDLAppEvent == ((Uint32)-1))
-		{
-			// Failed to register app-defined event with SDL
-			debug(LOG_ERROR, "Error: Failed to register app-defined SDL event (%s).", SDL_GetError());
-			return false;
-		}
-	}
-
 	return true;
 }
 
@@ -4174,6 +4128,10 @@ void wzEventLoopOneFrame(void* arg)
 	}
 #endif
 
+	// Run work posted with wzAsyncExecOnMainThread.
+	// (Before polling, so SDL events that an exec causes - ex. from SDL_SetWindowSize - are handled this frame.)
+	wzProcessMainThreadExecs();
+
 	/* Deal with any windows messages */
 	while (SDL_PollEvent(&event))
 	{
@@ -4250,24 +4208,6 @@ void wzEventLoopOneFrame(void* arg)
 			}
 			break;
 		}
-
-		if (wzSDLAppEvent == event.type)
-		{
-			// Custom WZ App Event
-			switch (event.user.code)
-			{
-				case wzSDLAppEventCodes::MAINTHREADEXEC:
-					if (event.user.data1 != nullptr)
-					{
-						WZ_MAINTHREADEXEC * pExec = static_cast<WZ_MAINTHREADEXEC *>(event.user.data1);
-						pExec->doExecOnMainThread();
-						delete pExec;
-					}
-					break;
-				default:
-					break;
-			}
-		}
 	}
 
 	processScreenSizeChangeNotificationIfNeeded();
@@ -4313,6 +4253,7 @@ void wzPumpEventsWhileLoading()
 void wzShutdown()
 {
 	// order is important!
+	wzShutdownMainThreadExecs(); // the main loop has stopped, so nothing will run them
 	wzGamepadShutdown();
 	sdlFreeCursors();
 	if (WZwindow != nullptr)
