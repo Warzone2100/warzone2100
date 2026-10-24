@@ -386,6 +386,14 @@ static GLenum to_gl(const gfx_api::buffer::usage& usage)
 			return GL_ELEMENT_ARRAY_BUFFER;
 		case gfx_api::buffer::usage::vertex_buffer:
 			return GL_ARRAY_BUFFER;
+		case gfx_api::buffer::usage::storage_buffer:
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			return GL_SHADER_STORAGE_BUFFER;
+#else
+			// the static GLES bindings lack GL_SHADER_STORAGE_BUFFER
+			debug(LOG_FATAL, "Storage buffers are unavailable with static GLES bindings");
+			break;
+#endif
 		default:
 			debug(LOG_FATAL, "Unrecognised buffer usage");
 	}
@@ -2551,8 +2559,446 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	return new gl_pipeline_id(psoID.value(), pipeline->broken); // always return a new indirect reference
 }
 
+#if !defined(WZ_STATIC_GL_BINDINGS)
+static GLuint glTextureName(gfx_api::abstract_texture* texture)
+{
+	if (auto* image = dynamic_cast<gl_texture*>(texture))
+	{
+		return image->id();
+	}
+	if (auto* image = dynamic_cast<gl_texture_array*>(texture))
+	{
+		return image->id();
+	}
+	if (auto* image = dynamic_cast<gl_gpurendered_texture*>(texture))
+	{
+		return image->id();
+	}
+	return 0;
+}
+
+#endif
+
+struct gl_compute_pipeline_handle final : public gfx_api::compute_pipeline_state_object
+{
+	gl_context* ctx = nullptr;
+	size_t index = 0;
+
+	gl_compute_pipeline_handle(gl_context& context, size_t registryIndex, bool isBroken)
+		: ctx(&context), index(registryIndex)
+	{
+		broken = isBroken;
+	}
+
+	gl_compute_pipeline_state_object* current() const
+	{
+		return ctx->createdComputePipelines[index].pso;
+	}
+
+	void bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override
+	{
+		if (auto* program = current())
+		{
+			program->bind_sampled_textures(descs, textures);
+		}
+	}
+	void bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override
+	{
+		if (auto* program = current())
+		{
+			program->bind_storage_images(descs, textures);
+		}
+	}
+	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers) override
+	{
+		if (auto* program = current())
+		{
+			program->bind_storage_buffers(descs, buffers);
+		}
+	}
+};
+
+gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& ctx, const gfx_api::compute_pipeline_create_info& createInfo, const gfx_api::lighting_constants& lightingConstants)
+	: sampled(createInfo.sampled)
+	, storage_images(createInfo.storage_images)
+	, storage_buffers(createInfo.storage_buffers)
+	, owningContext(&ctx)
+{
+	const gfx_api::shader_program_desc& shaderInfo = gfx_api::shader_catalog(createInfo.shader_mode);
+	for (const auto& blockType : createInfo.uniform_blocks)
+	{
+		if (blockType == std::type_index(typeid(gfx_api::PointLightsUniforms)))
+		{
+			broken = true;
+			debug(LOG_ERROR, "Compute pipeline \"%s\" cannot use PointLightsUniforms", shaderInfo.friendly_name);
+			return;
+		}
+	}
+	if (!ctx.supportsComputeShaders())
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute shaders are unavailable; \"%s\" was not compiled", shaderInfo.friendly_name);
+		return;
+	}
+
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	const std::string sourcePath = gl_stage_path(shaderInfo, gfx_api::shader_stage_kind::compute);
+	std::string source = gl_pipeline_state_object::readShaderBuf(sourcePath);
+	if (source.empty())
+	{
+		broken = true;
+		debug(LOG_ERROR, "Failed to read compute shader [%s]", sourcePath.c_str());
+		return;
+	}
+	if (source.find("#version") != std::string::npos)
+	{
+		broken = true;
+		ASSERT(false, "Compute shader [%s] must not contain #version", sourcePath.c_str());
+		debug(LOG_ERROR, "Compute shader [%s] must not contain #version", sourcePath.c_str());
+		return;
+	}
+	patchShaderPointLightsDefines(source, lightingConstants, ctx.lightDataTransport());
+
+	const char* header = ctx.gles ? "#version 310 es\n" : "#version 430\n";
+	program = glCreateProgram();
+	computeShader = glCreateShader(GL_COMPUTE_SHADER);
+	const char* strings[2] = { header, source.c_str() };
+	glShaderSource(computeShader, 2, strings, nullptr);
+	glCompileShader(computeShader);
+	GLint status = GL_FALSE;
+	glGetShaderiv(computeShader, GL_COMPILE_STATUS, &status);
+	if (!status)
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute shader compilation has failed [%s]", sourcePath.c_str());
+		gl_pipeline_state_object::printShaderInfoLog(LOG_ERROR, computeShader);
+		return;
+	}
+	glAttachShader(program, computeShader);
+	glLinkProgram(program);
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (!status)
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute program link has failed [%s]", shaderInfo.friendly_name);
+		gl_pipeline_state_object::printProgramInfoLog(LOG_ERROR, program);
+		return;
+	}
+
+	GLint workGroup[3] = {};
+	glGetProgramiv(program, GL_COMPUTE_WORK_GROUP_SIZE, workGroup);
+	const gfx_api::shader_local_size& local = shaderInfo.local_size;
+	if (workGroup[0] <= 0 || workGroup[1] <= 0 || workGroup[2] <= 0
+		|| workGroup[0] != static_cast<GLint>(local.x)
+		|| workGroup[1] != static_cast<GLint>(local.y)
+		|| workGroup[2] != static_cast<GLint>(local.z))
+	{
+		broken = true;
+		debug(LOG_ERROR, "Compute program \"%s\" workgroup (%d, %d, %d) does not match the catalog (%u, %u, %u)",
+			shaderInfo.friendly_name, workGroup[0], workGroup[1], workGroup[2], local.x, local.y, local.z);
+		return;
+	}
+
+	GLint previousProgram = 0;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &previousProgram);
+	glUseProgram(program);
+	for (const auto& texture : sampled)
+	{
+		if (texture.glsl_name == nullptr)
+		{
+			continue;
+		}
+		const GLint location = glGetUniformLocation(program, texture.glsl_name);
+		if (location >= 0)
+		{
+			glUniform1i(location, static_cast<GLint>(texture.id));
+		}
+	}
+	glUseProgram(static_cast<GLuint>(previousProgram));
+
+	uniformBlockSizes.resize(createInfo.uniform_block_names.size(), 0);
+	uniformBlockRanges.resize(createInfo.uniform_block_names.size(), {gl_uniform_block_allocator::Allocation{}, 0});
+	uniform_bind_functions.resize(createInfo.uniform_block_names.size());
+	uniformBlockTypes = createInfo.uniform_blocks;
+	for (size_t slot = 0; slot < createInfo.uniform_block_names.size(); ++slot)
+	{
+		const char* blockName = createInfo.uniform_block_names[slot] != nullptr ? createInfo.uniform_block_names[slot] : "";
+		const GLuint blockIndex = glGetUniformBlockIndex(program, blockName);
+		if (blockIndex == GL_INVALID_INDEX)
+		{
+			continue;
+		}
+		GLint blockSize = 0;
+		glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+		if (blockSize > ctx.maxUniformBlockSize)
+		{
+			broken = true;
+			debug(LOG_ERROR, "%s: uniform block \"%s\" needs %d bytes, more than the %d the driver allows",
+				shaderInfo.friendly_name, blockName, blockSize, ctx.maxUniformBlockSize);
+			return;
+		}
+		uniformBlockSizes[slot] = blockSize;
+		glUniformBlockBinding(program, blockIndex, static_cast<GLuint>(slot));
+		uniform_bind_functions[slot] = [this, slot](const void* buffer, size_t size) {
+			ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range", slot);
+			if (uniformBlockSizes[slot] == 0 || owningContext == nullptr)
+			{
+				return;
+			}
+			const GLsizeiptr dataSize = static_cast<GLsizeiptr>(size);
+			const GLsizeiptr rangeSize = std::max<GLsizeiptr>(dataSize, uniformBlockSizes[slot]);
+			auto allocation = owningContext->activeUniformBlockAllocator().alloc(rangeSize);
+			ASSERT_OR_RETURN(, allocation.valid(), "Failed to allocate uniform block storage");
+			owningContext->writeUniformRange(allocation, buffer, dataSize);
+			owningContext->bindUniformRange(static_cast<GLuint>(slot), allocation.buffer, allocation.offset, rangeSize);
+			uniformBlockRanges[slot] = {allocation, rangeSize};
+		};
+	}
+#else
+	(void)lightingConstants;
+	broken = true;
+	debug(LOG_ERROR, "Compute shaders are unavailable with static GL bindings");
+#endif
+}
+
+gl_compute_pipeline_state_object::~gl_compute_pipeline_state_object()
+{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (computeShader)
+	{
+		glDeleteShader(computeShader);
+	}
+	if (program)
+	{
+		glDeleteProgram(program);
+	}
+#endif
+}
+
+void gl_compute_pipeline_state_object::bind()
+{
+	glUseProgram(program);
+	for (size_t slot = 0; slot < uniformBlockRanges.size(); ++slot)
+	{
+		const auto& range = uniformBlockRanges[slot];
+		if (range.first.valid() && owningContext != nullptr)
+		{
+			owningContext->bindUniformRange(static_cast<GLuint>(slot), range.first.buffer, range.first.offset, range.second);
+		}
+	}
+}
+
+void gl_compute_pipeline_state_object::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < uniform_bind_functions.size(); ++i)
+	{
+		auto* buffer = std::get<0>(uniform_blocks[i]);
+		if (buffer == nullptr || !uniform_bind_functions[first + i])
+		{
+			continue;
+		}
+		uniform_bind_functions[first + i](buffer, std::get<1>(uniform_blocks[i]));
+	}
+}
+
+void gl_compute_pipeline_state_object::set_frame_uniform(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type, uint32_t currentGeneration)
+{
+	ASSERT_OR_RETURN(, slot < uniformBlockSizes.size(), "Uniform block slot %zu is out of range", slot);
+	ASSERT_OR_RETURN(, owningContext != nullptr, "No owning context");
+	if (uniformBlockSizes[slot] == 0)
+	{
+		return;
+	}
+	ASSERT(slot >= uniformBlockTypes.size() || uniformBlockTypes[slot] == type,
+		"Uniform block slot %zu holds %s, not %s", slot, uniformBlockTypes[slot].name(), type.name());
+	const bool usable = allocation.valid()
+		&& allocation.generation == currentGeneration
+		&& static_cast<GLsizeiptr>(allocation.size) >= uniformBlockSizes[slot];
+	if (!usable)
+	{
+		owningContext->bindUniformRange(static_cast<GLuint>(slot), 0, 0, 0);
+		uniformBlockRanges[slot] = {gl_uniform_block_allocator::Allocation{}, 0};
+		return;
+	}
+	const gl_uniform_block_allocator::Allocation range{static_cast<GLuint>(allocation.handle), static_cast<GLintptr>(allocation.offset), nullptr};
+	const GLsizeiptr rangeSize = static_cast<GLsizeiptr>(allocation.size);
+	owningContext->bindUniformRange(static_cast<GLuint>(slot), range.buffer, range.offset, rangeSize);
+	uniformBlockRanges[slot] = {range, rangeSize};
+}
+
+void gl_compute_pipeline_state_object::bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	ASSERT_OR_RETURN(, !broken && program, "compute pipeline is broken");
+	ASSERT(textures.size() == descs.size(), "Sampled texture count mismatch");
+	for (size_t i = 0; i < textures.size(); ++i)
+	{
+		const auto& desc = descs[i];
+		glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + desc.id));
+		if (textures[i] != nullptr)
+		{
+			textures[i]->bind();
+			if (owningContext != nullptr)
+			{
+				owningContext->applySamplerState(textures[i]->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, desc);
+			}
+		}
+	}
+	glActiveTexture(GL_TEXTURE0);
+}
+
+void gl_compute_pipeline_state_object::bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	ASSERT_OR_RETURN(, !broken && program, "compute pipeline is broken");
+	ASSERT(textures.size() == descs.size(), "Storage image count mismatch");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	GLint maxUnits = 0;
+	glGetIntegerv(GL_MAX_IMAGE_UNITS, &maxUnits);
+	for (size_t i = 0; i < textures.size(); ++i)
+	{
+		const GLuint slot = static_cast<GLuint>(descs[i].slot);
+		ASSERT(static_cast<GLint>(slot) < maxUnits, "Compute image unit %u is above GL_MAX_IMAGE_UNITS (%d)", slot, maxUnits);
+		GLenum internalFormat = GL_RGBA8;
+		const bool gles = owningContext != nullptr && owningContext->gles;
+		if (auto* image = dynamic_cast<gl_texture*>(textures[i]))
+		{
+			internalFormat = to_gl_internalformat(image->internal_format, gles);
+		}
+		else if (auto* imageArray = dynamic_cast<gl_texture_array*>(textures[i]))
+		{
+			internalFormat = to_gl_internalformat(imageArray->internal_format, gles);
+		}
+		glBindImageTexture(slot, glTextureName(textures[i]), 0, GL_FALSE, 0, GL_READ_WRITE, internalFormat);
+	}
+#else
+	(void)descs;
+	(void)textures;
+#endif
+}
+
+void gl_compute_pipeline_state_object::bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers)
+{
+	ASSERT_OR_RETURN(, !broken && program, "compute pipeline is broken");
+	ASSERT(buffers.size() == descs.size(), "Storage buffer count mismatch");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	GLint maxBindings = 0;
+	glGetIntegerv(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS, &maxBindings);
+	for (size_t i = 0; i < buffers.size(); ++i)
+	{
+		const GLuint slot = static_cast<GLuint>(descs[i].slot);
+		ASSERT(static_cast<GLint>(slot) < maxBindings, "Compute storage buffer binding %u is above GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS (%d)", slot, maxBindings);
+		ASSERT(buffers[i] != nullptr, "compute storage buffer is null");
+		auto* buffer = static_cast<gl_buffer*>(buffers[i]);
+		ASSERT(buffer->usage == gfx_api::buffer::usage::storage_buffer, "compute storage buffer has the wrong usage");
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, slot, buffer->buffer);
+	}
+#else
+	(void)descs;
+	(void)buffers;
+#endif
+}
+
+gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info)
+{
+	if (!computeShadersSupported)
+	{
+		const gfx_api::shader_program_desc& shaderInfo = gfx_api::shader_catalog(info.shader_mode);
+		GLint major = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+		GLint minor = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+		debug(LOG_ERROR, "Compute shaders require desktop GL 4.3 or GLES 3.1 (context is %d.%d); \"%s\" is broken",
+			major, minor, shaderInfo.friendly_name);
+		auto* unsupported = new gfx_api::compute_pipeline_state_object();
+		unsupported->broken = true;
+		return unsupported;
+	}
+
+	auto* created = new gl_compute_pipeline_state_object(*this, info, shadowConstants);
+	if (auto* previous = dynamic_cast<gl_compute_pipeline_handle*>(existing))
+	{
+		auto& entry = createdComputePipelines[previous->index];
+		delete entry.pso;
+		entry.createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
+		entry.pso = created;
+		return new gl_compute_pipeline_handle(*this, previous->index, created->broken);
+	}
+	createdComputePipelines.push_back(ComputePipelineRegistry{ std::make_shared<gfx_api::compute_pipeline_create_info>(info), created });
+	return new gl_compute_pipeline_handle(*this, createdComputePipelines.size() - 1, created->broken);
+}
+
+void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
+{
+	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
+	auto* handle = dynamic_cast<gl_compute_pipeline_handle*>(pso);
+	ASSERT_OR_RETURN(, handle != nullptr, "compute pipeline is not ready");
+	auto* program = handle->current();
+	ASSERT_OR_RETURN(, program != nullptr && !program->broken && program->program, "compute pipeline is broken");
+	currentComputeProgram = program;
+	program->bind();
+}
+
+void gl_context::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ)
+{
+	ASSERT(isComputePassActive(), "dispatch_compute outside a compute pass");
+	ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+	ASSERT(groupsX >= 1 && groupsY >= 1 && groupsZ >= 1, "compute dispatch axis is 0");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	glDispatchCompute(groupsX, groupsY, groupsZ);
+#endif
+}
+
+bool gl_context::supportsComputeShaders() const
+{
+	return computeShadersSupported;
+}
+
+gfx_api::texture* gl_context::create_storage_texture(size_t width, size_t height, gfx_api::pixel_format format, const std::string& debugName)
+{
+	if (width == 0 || height == 0)
+	{
+		return nullptr;
+	}
+	if (!textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, format, gfx_api::pixel_format_usage::storage_image))
+	{
+		debug(LOG_ERROR, "Format is not supported as a storage image: %s", debugName.c_str());
+		return nullptr;
+	}
+#if defined(WZ_STATIC_GL_BINDINGS)
+	debug(LOG_ERROR, "Immutable storage textures are unavailable with static GL bindings");
+	return nullptr;
+#else
+	if (glTexStorage2D == nullptr)
+	{
+		debug(LOG_ERROR, "glTexStorage2D is unavailable");
+		return nullptr;
+	}
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
+	auto* new_texture = new gl_texture();
+	new_texture->gles = gles;
+	new_texture->mip_count = 1;
+	new_texture->internal_format = format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	new_texture->debugName = debugName;
+#endif
+	new_texture->bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (!debugName.empty())
+	{
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, debugName.c_str());
+	}
+#endif
+	glTexStorage2D(GL_TEXTURE_2D, 1, to_gl_internalformat(format, gles), static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+	new_texture->unbind();
+	return new_texture;
+#endif
+}
+
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
+	ASSERT(!isComputePassActive(), "graphics pipeline bind inside a compute pass");
 	gl_pipeline_id* newPSOId = static_cast<gl_pipeline_id*>(pso);
 	// lookup pipeline
 	auto& pipelineInfo = createdPipelines[newPSOId->psoID];
@@ -2716,6 +3162,88 @@ static float* to_gl(gfx_api::border_color border)
 	return transparentBlackFloats;
 }
 
+void gl_context::applySamplerState(GLenum target, const gfx_api::texture_input& desc)
+{
+	switch (desc.sampler)
+	{
+		case gfx_api::sampler_type::nearest_clamped:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case gfx_api::sampler_type::nearest_border:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+#if !defined(__EMSCRIPTEN__)
+			if (hasBorderClampSupport)
+			{
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				break;
+			}
+#else
+			// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
+#endif
+			break;
+		case gfx_api::sampler_type::bilinear:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case gfx_api::sampler_type::bilinear_repeat:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			break;
+		case gfx_api::sampler_type::bilinear_border:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#if !defined(__EMSCRIPTEN__)
+			if (hasBorderClampSupport)
+			{
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				glTexParameterfv(target, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				break;
+			}
+#else
+			// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
+#endif
+			break;
+		case gfx_api::sampler_type::bilinear_mip_clamped:
+			// Integer textureLod levels only: no blending between mips, which keeps each cascade on its own mip.
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case gfx_api::sampler_type::anisotropic_repeat:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			if (GLAD_GL_EXT_texture_filter_anisotropic)
+			{
+				glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
+			}
+			break;
+		case gfx_api::sampler_type::anisotropic:
+			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			if (GLAD_GL_EXT_texture_filter_anisotropic)
+			{
+				glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
+			}
+			break;
+	}
+}
+
 void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::abstract_texture*>& textures)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
@@ -2750,89 +3278,31 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 			// we're using a default texture, so skip changing filters
 			continue;
 		}
-		switch (desc.sampler)
-		{
-			case gfx_api::sampler_type::nearest_clamped:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				break;
-			case gfx_api::sampler_type::nearest_border:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-#if !defined(__EMSCRIPTEN__)
-				if (hasBorderClampSupport)
-				{
-					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
-					break;
-				}
-#else
-				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
-#endif
-				break;
-			case gfx_api::sampler_type::bilinear:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				break;
-			case gfx_api::sampler_type::bilinear_repeat:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				break;
-			case gfx_api::sampler_type::bilinear_border:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-#if !defined(__EMSCRIPTEN__)
-				if (hasBorderClampSupport)
-				{
-					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
-					break;
-				}
-#else
-				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
-#endif
-				break;
-			case gfx_api::sampler_type::anisotropic_repeat:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				if (GLAD_GL_EXT_texture_filter_anisotropic)
-				{
-					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
-				}
-				break;
-			case gfx_api::sampler_type::anisotropic:
-				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				if (GLAD_GL_EXT_texture_filter_anisotropic)
-				{
-					glTexParameterf(type, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, maxTextureAnisotropy));
-				}
-				break;
-		}
+		applySamplerState(type, desc);
 	}
 	glActiveTexture(GL_TEXTURE0);
 }
 
 void gl_context::set_constants(const void* buffer, const size_t& size)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+		currentComputeProgram->set_uniforms(0, { std::make_tuple(buffer, size) });
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_constants(buffer, size);
 }
 
 void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+		currentComputeProgram->set_uniforms(first, uniform_blocks);
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_uniforms(first, uniform_blocks);
 }
@@ -2857,6 +3327,12 @@ gfx_api::frame_uniform_allocation gl_context::upload_frame_uniform_raw(const voi
 
 void gl_context::set_frame_uniform_at(size_t slot, const gfx_api::frame_uniform_allocation& allocation, std::type_index type)
 {
+	if (isComputePassActive())
+	{
+		ASSERT_OR_RETURN(, currentComputeProgram != nullptr, "currentComputeProgram == NULL");
+		currentComputeProgram->set_frame_uniform(slot, allocation, type, frameUniformGeneration());
+		return;
+	}
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_frame_uniform(slot, allocation, type, frameUniformGeneration());
 }
@@ -2879,6 +3355,7 @@ bool gl_context::ensurePatchVertices4()
 
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	if (primitive == gfx_api::primitive_type::patch_list_4)
@@ -2890,6 +3367,7 @@ void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::
 
 void gl_context::draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT_OR_RETURN(, hasInstancedRenderingSupport, "Instanced rendering is unavailable");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
@@ -2899,6 +3377,7 @@ void gl_context::draw_instanced(const std::size_t& offset, const std::size_t &co
 
 void gl_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	if (primitive == gfx_api::primitive_type::patch_list_4)
 	{
@@ -2909,6 +3388,7 @@ void gl_context::draw_elements(const size_t& offset, const size_t &count, const 
 
 void gl_context::draw_elements_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index, std::size_t instance_count)
 {
+	ASSERT(!isComputePassActive(), "draw inside a compute pass");
 	ASSERT_OR_RETURN(, hasInstancedRenderingSupport, "Instanced rendering is unavailable");
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
 	ASSERT(instance_count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "instance_count (%zu) exceeds GLsizei max", count);
@@ -3761,7 +4241,7 @@ bool gl_context::enableDebugMessageCallbacks()
 
 void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
 {
-	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	if (!(GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
 	{
 		return;
 	}
@@ -3784,7 +4264,7 @@ void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length,
 
 void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
 {
-	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	if (!(GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
 	{
 		return;
 	}
@@ -3807,7 +4287,7 @@ void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, co
 
 void gl_context::wzGLPopDebugGroup()
 {
-	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	if (!(GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
 	{
 		return;
 	}
@@ -3924,6 +4404,28 @@ bool gl_context::initGLContext()
 	addDumpInfo(opengl.version);
 	debug(LOG_INFO, "%s", opengl.version);
 
+	const GLint glMajor = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
+	const GLint glMinor = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+	if (!gles)
+	{
+		computeShadersSupported = glMajor > 4 || (glMajor == 4 && glMinor >= 3);
+	}
+	else
+	{
+		computeShadersSupported = glMajor > 3 || (glMajor == 3 && glMinor >= 1);
+	}
+#if defined(WZ_STATIC_GL_BINDINGS)
+	computeShadersSupported = false;
+#else
+	// Glad loads these from desktop core 4.2/4.3 and from GLES 3.0/3.1.
+	// A context that advertises the version but did not resolve an entry point cannot dispatch.
+	if (computeShadersSupported && (glDispatchCompute == nullptr || glBindImageTexture == nullptr || glTexStorage2D == nullptr))
+	{
+		computeShadersSupported = false;
+	}
+#endif
+	debug(LOG_INFO, "  * Compute shader support %s detected", computeShadersSupported ? "was" : "was NOT");
+
 	formattedRendererInfoString = calculateFormattedRendererInfoString();
 
 	if (isBlocklistedGraphicsDriver())
@@ -3934,7 +4436,7 @@ bool gl_context::initGLContext()
 	}
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	khr_debug = (/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug);
+	khr_debug = (GLAD_GL_VERSION_4_3 || GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug);
 #else
 	khr_debug = false;
 #endif
@@ -3970,6 +4472,8 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 4.2 %s supported!", GLAD_GL_VERSION_4_2 ? "is" : "is NOT");
+		debug(LOG_3D, "  * OpenGL 4.3 %s supported!", GLAD_GL_VERSION_4_3 ? "is" : "is NOT");
 
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
@@ -4543,9 +5047,75 @@ void gl_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /
 {
 }
 
+const gfx_api::RenderPassDesc* gl_context::activePassDesc() const
+{
+	return hasActivePass ? &_activePassDesc : nullptr;
+}
+
+void gl_context::emitPrePassBarriers(const gfx_api::ExecutionBatch& batch,
+	const std::vector<gfx_api::CompiledPass>& compiledPasses)
+{
+	if (batch.count == 0 || batch.startIndex > compiledPasses.size()
+		|| batch.count > compiledPasses.size() - batch.startIndex)
+	{
+		return;
+	}
+#if defined(WZ_STATIC_GL_BINDINGS)
+	// GLES3/gl3.h has no glMemoryBarrier. These bits are only set for compute.
+	return;
+#else
+	GLbitfield mask = 0;
+	const size_t batchEnd = batch.startIndex + batch.count;
+	for (size_t b = batch.startIndex; b < batchEnd; ++b)
+	{
+		for (const gfx_api::ImageBarrierOp& barrierOp : compiledPasses[b].prePassBarriers)
+		{
+			// Texture fetches after image stores need TEXTURE_FETCH as well, whichever stage samples:
+			// SHADER_IMAGE_ACCESS only orders imageLoad/imageStore.
+			const bool sampled = barrierOp.srcUse == gfx_api::ImageUse::ComputeSampled
+				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeSampled
+				|| (barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
+					&& (barrierOp.dstUse == gfx_api::ImageUse::GraphicsSampled
+						|| barrierOp.dstUse == gfx_api::ImageUse::GraphicsDepthSampled));
+			const bool storage = barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
+				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeStorage;
+			if (sampled)
+			{
+				mask |= GL_TEXTURE_FETCH_BARRIER_BIT;
+			}
+			if (storage)
+			{
+				mask |= GL_SHADER_IMAGE_ACCESS_BARRIER_BIT;
+			}
+		}
+		if (!compiledPasses[b].prePassBufferBarriers.empty())
+		{
+			mask |= GL_SHADER_STORAGE_BARRIER_BIT;
+		}
+	}
+	if (mask != 0 && glMemoryBarrier != nullptr)
+	{
+		glMemoryBarrier(mask);
+	}
+#endif
+}
+
 void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
 	ASSERT_OR_RETURN(, !hasActivePass, "beginPass called while another pass is active");
+	if (pass.kind == gfx_api::PassKind::Compute)
+	{
+		ASSERT_OR_RETURN(, pass.colorAttachments.empty() && !pass.depthAttachment.has_value() && !pass.resolveAttachment.has_value(),
+			"Compute pass cannot have graphics attachments");
+		setComputePassActive(true);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		_dynamicPassFBO = 0;
+		_activePassDesc = pass;
+		hasActivePass = true;
+		frameHasDrawCommands = true;
+		return;
+	}
+	setComputePassActive(false);
 	ASSERT_OR_RETURN(, !_dynamicPassFBO, "Stale pass framebuffer binding");
 	ASSERT_OR_RETURN(, pass.viewportSize.has_value(), "Pass requires resolved viewportSize");
 	ASSERT_OR_RETURN(, !pass.colorAttachments.empty()
@@ -4596,6 +5166,13 @@ void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::C
 void gl_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
 {
 	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
+	if (isComputePassActive())
+	{
+		setComputePassActive(false);
+		_activePassDesc = gfx_api::RenderPassDesc();
+		hasActivePass = false;
+		return;
+	}
 
 	const uint32_t passWidth = _activePassDesc.viewportSize.has_value()
 		? _activePassDesc.viewportSize->first
@@ -5124,6 +5701,13 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG16_UNORM)
 	}
 
+	// RGBA16F
+	// Desktop OpenGL 3.0+ / OpenGL ES 3.0+ (sampling). Image load/store support is queried per format below.
+	if ((!gles && GLAD_GL_VERSION_3_0) || (gles && GLAD_GL_ES_VERSION_3_0))
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16G16B16A16_SFLOAT)
+	}
+
 	// S3TC
 	// Desktop OpenGL: GL_EXT_texture_compression_s3tc
 	// OpenGL ES: (May be supported by the same GL_EXT_texture_compression_s3tc, other extensions)
@@ -5497,11 +6081,15 @@ void gl_context::initLightDataTransport()
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
 	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
 	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
-	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding to bind them, so it stays on the uniform block for now
-	const bool hasStorageBuffers = !gles && (GLAD_GL_ARB_shader_storage_buffer_object != 0) && (glShaderStorageBlockBinding != nullptr)
-		&& (GLAD_GL_ARB_program_interface_query != 0) && (glGetProgramResourceIndex != nullptr)
-		// The shader declares its storage buffers readonly, which needs GLSL 420 or this extension
+	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding, so it stays on the uniform block.
+	// Desktop 4.3 has shader storage blocks, program-interface query, and readonly storage as core.
+	// Below 4.3 the same three pieces are the ARB extensions, including GL_ARB_shader_image_load_store for readonly.
+	const bool storageEntryPoints = (glShaderStorageBlockBinding != nullptr) && (glGetProgramResourceIndex != nullptr);
+	const bool storageCore43 = GLAD_GL_VERSION_4_3 != 0;
+	const bool storageViaArb = (GLAD_GL_ARB_shader_storage_buffer_object != 0)
+		&& (GLAD_GL_ARB_program_interface_query != 0)
 		&& (GLAD_GL_ARB_shader_image_load_store != 0);
+	const bool hasStorageBuffers = !gles && storageEntryPoints && (storageCore43 || storageViaArb);
 
 	// Preference order:
 	// 1. storage buffer (spends no sampler, and the index can be scalarized)
@@ -6390,6 +6978,11 @@ void gl_context::shutdown()
 		}
 	}
 	createdPipelines.clear();
+	for (auto& entry : createdComputePipelines)
+	{
+		delete entry.pso;
+	}
+	createdComputePipelines.clear();
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	if (!debugLiveTextures.empty())
@@ -6515,6 +7108,20 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 				anyBroken = anyBroken || pipelineInfo.pso->broken;
 			}
 		}
+		for (auto& entry : createdComputePipelines)
+		{
+			if (entry.pso == nullptr || entry.createInfo == nullptr)
+			{
+				continue;
+			}
+			if (gfx_api::shader_catalog(entry.createInfo->shader_mode).spec_constants == 0)
+			{
+				continue;
+			}
+			delete entry.pso;
+			entry.pso = new gl_compute_pipeline_state_object(*this, *entry.createInfo, shadowConstants);
+			anyBroken = anyBroken || entry.pso->broken;
+		}
 		return !anyBroken;
 	};
 
@@ -6544,6 +7151,15 @@ bool gl_context::debugRecompileAllPipelines()
 			delete pipelineInfo.pso;
 			pipelineInfo.pso = new gl_pipeline_state_object(*this, pipelineInfo.createInfo, shadowConstants);
 		}
+	}
+	for (auto& entry : createdComputePipelines)
+	{
+		if (entry.pso == nullptr || entry.createInfo == nullptr)
+		{
+			continue;
+		}
+		delete entry.pso;
+		entry.pso = new gl_compute_pipeline_state_object(*this, *entry.createInfo, shadowConstants);
 	}
 	return true;
 }
@@ -6611,6 +7227,16 @@ bool gl_context::PipelineSurfaceAllocator::create(gfx_api::PipelineSurfaceId id,
 	case gfx_api::SurfaceProvisionMode::Allocate:
 		switch (createSpec.storageKind)
 		{
+		case gfx_api::SurfaceStorageKind::StorageColor2D:
+		{
+			gfx_api::texture* image = root.create_storage_texture(createSpec.width, createSpec.height, createSpec.format, "<storage texture>");
+			if (image == nullptr)
+			{
+				return false;
+			}
+			gpu.texture.reset(image);
+			break;
+		}
 		case gfx_api::SurfaceStorageKind::SampledColor2D:
 		{
 			GLenum colorInternalFormat = to_gl_internalformat(createSpec.format, root.gles);

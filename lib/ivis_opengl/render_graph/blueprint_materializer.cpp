@@ -97,6 +97,7 @@ std::vector<RenderPassDesc> BlueprintMaterializer::materialize(const PassGraphTo
 	{
 		RenderPassDesc desc;
 		desc.debugName = bpPass.debugName;
+		desc.kind = bpPass.kind;
 		desc.passId = bpPass.id;
 
 		const size_t funcIndex = static_cast<size_t>(bpPass.id);
@@ -109,24 +110,53 @@ std::vector<RenderPassDesc> BlueprintMaterializer::materialize(const PassGraphTo
 		ASSERT_OR_RETURN({}, static_cast<bool>(desc.recordFunc), "missing record func for pass %s (PassId=%u)",
 			bpPass.debugName.c_str(), static_cast<unsigned>(bpPass.id));
 
-		desc.colorAttachments.reserve(bpPass.colorAttachments.size());
-		for (const BlueprintAttachment& colorAttachment : bpPass.colorAttachments)
-		{
-			desc.colorAttachments.emplace_back(resolveAttachment(colorAttachment));
-		}
-		if (bpPass.depthAttachment.has_value())
-		{
-			desc.depthAttachment = resolveAttachment(bpPass.depthAttachment.value());
-		}
-		if (bpPass.resolveAttachment.has_value())
-		{
-			desc.resolveAttachment = resolveAttachment(bpPass.resolveAttachment.value());
-		}
+		auto& ctx = gfx_api::context::get();
+		const auto resolveComputeImage = [&ctx](const BlueprintComputeImage& image) {
+			ComputeImageUse use;
+			use.texture = ctx.getPipelineSurface(image.surface);
+			use.arrayLayer = image.arrayLayer;
+			use.mipLevel = image.mipLevel;
+			const SurfaceStorageKind storageKind = ctx.resolvedPipelineSurface(image.surface).storageKind;
+			use.isDepth = storageKind == SurfaceStorageKind::DepthStencilAttachment
+				|| storageKind == SurfaceStorageKind::SampledDepthArray
+				|| storageKind == SurfaceStorageKind::SampledDepth2D;
+			return use;
+		};
 
-		const auto viewport = resolveViewport(bpPass);
-		if (viewport.first > 0 && viewport.second > 0)
+		if (bpPass.kind == PassKind::Compute)
 		{
-			desc.viewportSize = viewport;
+			desc.sampledInputs.reserve(bpPass.sampledInputs.size());
+			for (const BlueprintComputeImage& image : bpPass.sampledInputs)
+			{
+				desc.sampledInputs.push_back(resolveComputeImage(image));
+			}
+			desc.storageImages.reserve(bpPass.storageImages.size());
+			for (const BlueprintComputeImage& image : bpPass.storageImages)
+			{
+				desc.storageImages.push_back(resolveComputeImage(image));
+			}
+		}
+		else
+		{
+			desc.colorAttachments.reserve(bpPass.colorAttachments.size());
+			for (const BlueprintAttachment& colorAttachment : bpPass.colorAttachments)
+			{
+				desc.colorAttachments.emplace_back(resolveAttachment(colorAttachment));
+			}
+			if (bpPass.depthAttachment.has_value())
+			{
+				desc.depthAttachment = resolveAttachment(bpPass.depthAttachment.value());
+			}
+			if (bpPass.resolveAttachment.has_value())
+			{
+				desc.resolveAttachment = resolveAttachment(bpPass.resolveAttachment.value());
+			}
+
+			const auto viewport = resolveViewport(bpPass);
+			if (viewport.first > 0 && viewport.second > 0)
+			{
+				desc.viewportSize = viewport;
+			}
 		}
 
 		const PassHandle myHandle = passes.size();

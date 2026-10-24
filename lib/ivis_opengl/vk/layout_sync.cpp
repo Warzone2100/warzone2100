@@ -77,16 +77,45 @@ LayoutSync layoutConsumerSync(::vk::ImageLayout layout)
 	}
 }
 
-BarrierRecipe getBarrierRecipe(CompileImageLayout oldLayout, CompileImageLayout newLayout)
+BarrierRecipe getBarrierRecipe(CompileImageLayout oldLayout, CompileImageLayout newLayout,
+	gfx_api::ImageUse srcUse, gfx_api::ImageUse dstUse)
 {
-	const LayoutSync src = layoutProducerSync(toVkImageLayout(oldLayout));
-	const LayoutSync dst = layoutConsumerSync(toVkImageLayout(newLayout));
-
 	BarrierRecipe recipe;
-	recipe.srcStage = src.stage;
-	recipe.srcAccess = src.access;
-	recipe.dstStage = dst.stage;
-	recipe.dstAccess = dst.access;
+
+	if (srcUse == gfx_api::ImageUse::ComputeStorage)
+	{
+		recipe.srcStage = ::vk::PipelineStageFlagBits::eComputeShader;
+		recipe.srcAccess = ::vk::AccessFlagBits::eShaderWrite;
+	}
+	else if (srcUse == gfx_api::ImageUse::ComputeSampled)
+	{
+		recipe.srcStage = ::vk::PipelineStageFlagBits::eComputeShader;
+		recipe.srcAccess = ::vk::AccessFlags();
+	}
+	else
+	{
+		const LayoutSync src = layoutProducerSync(toVkImageLayout(oldLayout));
+		recipe.srcStage = src.stage;
+		recipe.srcAccess = src.access;
+	}
+
+	if (dstUse == gfx_api::ImageUse::ComputeStorage)
+	{
+		recipe.dstStage = ::vk::PipelineStageFlagBits::eComputeShader;
+		recipe.dstAccess = ::vk::AccessFlagBits::eShaderRead | ::vk::AccessFlagBits::eShaderWrite;
+	}
+	else if (dstUse == gfx_api::ImageUse::ComputeSampled)
+	{
+		recipe.dstStage = ::vk::PipelineStageFlagBits::eComputeShader;
+		recipe.dstAccess = ::vk::AccessFlagBits::eShaderRead;
+	}
+	else
+	{
+		const LayoutSync dst = layoutConsumerSync(toVkImageLayout(newLayout));
+		recipe.dstStage = dst.stage;
+		recipe.dstAccess = dst.access;
+	}
+
 	return recipe;
 }
 

@@ -82,6 +82,7 @@ void PrePassBarrierEmitter::emitBatch(const gfx_api::ExecutionBatch& batch,
 		batch.startIndex, batch.count, compiledPasses.size());
 
 	_scratch.clear();
+	_bufferScratch.clear();
 	::vk::PipelineStageFlags srcStage {};
 	::vk::PipelineStageFlags dstStage {};
 	// A given subresource transitions at most once per batch (batch members share one render pass
@@ -111,9 +112,14 @@ void PrePassBarrierEmitter::emitBatch(const gfx_api::ExecutionBatch& batch,
 				? _tracker.get(subresource)
 				: toVkImageLayout(barrierOp.oldLayout);
 
-			// InGraph transitions already satisfied are no-ops; External reads still need a
-			// pure execution/memory barrier to establish the producer -> consumer dependency.
-			if (vkOldLayout == vkNewLayout && barrierOp.producerScope == gfx_api::ReadProducerScope::InGraph)
+			const bool graphicsSampled =
+				(barrierOp.srcUse == gfx_api::ImageUse::GraphicsSampled || barrierOp.srcUse == gfx_api::ImageUse::GraphicsDepthSampled)
+				&& (barrierOp.dstUse == gfx_api::ImageUse::GraphicsSampled || barrierOp.dstUse == gfx_api::ImageUse::GraphicsDepthSampled);
+			// Graphics sampled to graphics sampled with the same layout is already covered.
+			// A compute use keeps the barrier even when the layout does not change.
+			if (vkOldLayout == vkNewLayout
+				&& barrierOp.producerScope == gfx_api::ReadProducerScope::InGraph
+				&& graphicsSampled)
 			{
 				continue;
 			}
@@ -121,15 +127,48 @@ void PrePassBarrierEmitter::emitBatch(const gfx_api::ExecutionBatch& batch,
 			const gfx_api::CompileImageLayout recipeOldLayout = barrierOp.producerScope == gfx_api::ReadProducerScope::External
 				? fromVkImageLayout(vkOldLayout)
 				: barrierOp.oldLayout;
-			const BarrierRecipe recipe = getBarrierRecipe(recipeOldLayout, barrierOp.newLayout);
+			const BarrierRecipe recipe = getBarrierRecipe(recipeOldLayout, barrierOp.newLayout, barrierOp.srcUse, barrierOp.dstUse);
 			appendImageBarrier(_scratch, srcStage, dstStage,
 				barrierOp.texture, barrierOp.arrayLayer, barrierOp.mipLevel,
 				vkOldLayout, vkNewLayout,
 				recipe.srcStage, recipe.dstStage, recipe.srcAccess, recipe.dstAccess);
 		}
+
+		for (const gfx_api::BufferBarrierOp& barrierOp : compiledPasses[b].prePassBufferBarriers)
+		{
+			if (barrierOp.buf == nullptr)
+			{
+				continue;
+			}
+			::vk::PipelineStageFlags bufferSrcStage = ::vk::PipelineStageFlagBits::eTopOfPipe;
+			::vk::AccessFlags bufferSrcAccess;
+			if (barrierOp.srcUse == gfx_api::BufferUse::TransferWrite)
+			{
+				bufferSrcStage = ::vk::PipelineStageFlagBits::eTransfer;
+				bufferSrcAccess = ::vk::AccessFlagBits::eTransferWrite;
+			}
+			else if (barrierOp.srcUse == gfx_api::BufferUse::ComputeReadWrite)
+			{
+				bufferSrcStage = ::vk::PipelineStageFlagBits::eComputeShader;
+				bufferSrcAccess = ::vk::AccessFlagBits::eShaderWrite;
+			}
+			const ::vk::PipelineStageFlags bufferDstStage = ::vk::PipelineStageFlagBits::eComputeShader;
+			const ::vk::AccessFlags bufferDstAccess = ::vk::AccessFlagBits::eShaderRead | ::vk::AccessFlagBits::eShaderWrite;
+			srcStage |= bufferSrcStage;
+			dstStage |= bufferDstStage;
+			auto* vkBuffer = static_cast<VkBuf*>(barrierOp.buf);
+			_bufferScratch.push_back(::vk::BufferMemoryBarrier()
+				.setBuffer(vkBuffer->object)
+				.setOffset(0)
+				.setSize(vkBuffer->buffer_size == 0 ? VK_WHOLE_SIZE : vkBuffer->buffer_size)
+				.setSrcAccessMask(bufferSrcAccess)
+				.setDstAccessMask(bufferDstAccess)
+				.setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+				.setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED));
+		}
 	}
 
-	if (_scratch.empty())
+	if (_scratch.empty() && _bufferScratch.empty())
 	{
 		return;
 	}
@@ -138,7 +177,7 @@ void PrePassBarrierEmitter::emitBatch(const gfx_api::ExecutionBatch& batch,
 	buffering_mechanism::get_current_resources().drawCmdBuffer().pipelineBarrier(
 		srcStage ? srcStage : ::vk::PipelineStageFlagBits::eTopOfPipe,
 		dstStage ? dstStage : ::vk::PipelineStageFlagBits::eFragmentShader,
-		::vk::DependencyFlags(), nullptr, nullptr, _scratch, _root.vkDynLoader);
+		::vk::DependencyFlags(), nullptr, _bufferScratch, _scratch, _root.vkDynLoader);
 }
 
 } // namespace gfx_api::vk

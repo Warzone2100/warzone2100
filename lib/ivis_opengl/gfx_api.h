@@ -39,6 +39,7 @@
 #include "lib/framework/loading_task_fwd.h"
 #include "screen.h"
 #include "pietypes.h"
+#include "shader_catalog.h"
 #include "gfx_api_formats_def.h"
 #include "render_graph/pipeline_surfaces.h"
 #include "render_graph/render_pass.h"
@@ -143,8 +144,9 @@ namespace gfx_api
 		{
 			 vertex_buffer,
 			 index_buffer,
+			 storage_buffer,
 		};
-		static const size_t USAGE_COUNT = 2;
+		static const size_t USAGE_COUNT = 3;
 
 		// Create a new data store for the buffer. Any existing data store will be deleted.
 		// The new data store is created with the specified `size` in bytes.
@@ -290,6 +292,8 @@ namespace gfx_api
 		nearest_clamped,
 		nearest_border,
 		anisotropic_repeat,
+		/// Bilinear within an explicitly chosen mip, clamped to edge (`textureLod` with integer levels).
+		bilinear_mip_clamped,
 	};
 
 	enum class border_color
@@ -305,6 +309,25 @@ namespace gfx_api
 	{
 		fragment,
 		tessellation_evaluation,
+		compute,
+	};
+
+	constexpr uint32_t kStorageImageBindingBase = 16;
+	constexpr uint32_t kStorageBufferBindingBase = 32;
+	constexpr uint32_t kMaxComputeSlotsPerKind = 14;
+
+	struct storage_image_input
+	{
+		const std::size_t slot;
+		const std::size_t binding;
+		const char* glsl_name;
+	};
+
+	struct storage_buffer_input
+	{
+		const std::size_t slot;
+		const std::size_t binding;
+		const char* glsl_name;
 	};
 
 	struct texture_input
@@ -409,6 +432,33 @@ namespace gfx_api
 
 	const char* to_string(data_buffer_transport transport);
 
+	struct compute_pipeline_create_info
+	{
+		SHADER_MODE shader_mode = SHADER_NONE;
+		std::vector<std::type_index> uniform_blocks;
+		std::vector<const char*> uniform_block_names;
+		std::vector<texture_input> sampled;
+		std::vector<storage_image_input> storage_images;
+		std::vector<storage_buffer_input> storage_buffers;
+	};
+
+	// Backend compute pipelines inherit this so the helper can bind resources without a draw path.
+	struct compute_pipeline_state_object : pipeline_state_object
+	{
+		virtual void bind_sampled_textures(const std::vector<texture_input>&, const std::vector<abstract_texture*>&)
+		{
+			ASSERT(false, "compute sampled bind is not implemented");
+		}
+		virtual void bind_storage_images(const std::vector<storage_image_input>&, const std::vector<abstract_texture*>&)
+		{
+			ASSERT(false, "compute storage-image bind is not implemented");
+		}
+		virtual void bind_storage_buffers(const std::vector<storage_buffer_input>&, const std::vector<buffer*>&)
+		{
+			ASSERT(false, "compute storage-buffer bind is not implemented");
+		}
+	};
+
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -443,6 +493,14 @@ namespace gfx_api
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw, const std::string& debugName = "") = 0;
 		virtual pipeline_state_object* build_pipeline(pipeline_state_object* existing_pso,
 													  const pipeline_create_info& createInfo) = 0;
+		virtual bool supportsComputeShaders() const { return false; }
+		virtual pipeline_state_object* build_compute_pipeline(
+			pipeline_state_object* existing,
+			const compute_pipeline_create_info& info) = 0;
+		virtual void bind_compute_pipeline(pipeline_state_object* pso) = 0;
+		virtual void dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ) = 0;
+		virtual texture* create_storage_texture(size_t width, size_t height,
+			pixel_format format, const std::string& debugName) = 0;
 		virtual void bind_pipeline(pipeline_state_object*, bool notextures) = 0;
 		virtual void bind_index_buffer(buffer&, const index_type&) = 0;
 		virtual void unbind_index_buffer(buffer&) = 0;
@@ -749,6 +807,9 @@ namespace gfx_api
 		uint64_t getRenderGraphEpoch() const { return _renderGraphEpoch; }
 		// tessellation shader support (primitive_type::patch_list_4 + TCS/TES pipeline stages)
 		virtual bool supportsTessellationShaders() const { return false; }
+		bool isComputePassActive() const { return _computePassActive; }
+		/// Pass desc live for the current begin/record/end. Null when no pass is active.
+		virtual const RenderPassDesc* activePassDesc() const { return nullptr; }
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -774,6 +835,7 @@ namespace gfx_api
 		// True while executeCompiledRenderGraph() is running. Draw/bind APIs must only be called from record callbacks.
 		bool renderGraphExecuting() const { return _renderGraphExecuting; }
 		void setRenderGraphExecuting(bool executing) { _renderGraphExecuting = executing; }
+		void setComputePassActive(bool active) { _computePassActive = active; }
 		void bumpRenderGraphEpoch() { ++_renderGraphEpoch; }
 
 		static SceneEffectSurfaces normalizeSceneEffectSurfaces(SceneEffectSurfaces cfg)
@@ -806,6 +868,7 @@ namespace gfx_api
 	private:
 		uint32_t _frameUniformGeneration = 0;
 		bool _renderGraphExecuting = false;
+		bool _computePassActive = false;
 		uint64_t _renderGraphEpoch = 1;
 		bool _screenGeometryDirty = true;
 		optional<float> _mipLodBias;
@@ -929,6 +992,8 @@ namespace gfx_api
 		shader_stage stage = shader_stage::fragment>
 	struct texture_description
 	{
+		static constexpr shader_stage sampled_stage = stage;
+
 		static texture_input get_desc()
 		{
 			return texture_input{ texture_unit, sampler, target, border, stage, glsl_name };
@@ -972,6 +1037,7 @@ namespace gfx_api
 
 		void bind()
 		{
+			ASSERT(!gfx_api::context::get().isComputePassActive(), "graphics bind during a compute pass");
 			if (this->nextpso != nullptr && !this->nextpso->broken)
 			{
 				if (this->pso != nullptr) delete this->pso;
@@ -1074,6 +1140,7 @@ namespace gfx_api
 
 		bool recompile()
 		{
+			ASSERT(!shader_is_compute(shader_catalog(shader)), "graphics pipeline cannot use a compute shader");
 			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), texture_descriptions(), untuple<vertex_buffer>(vertex_buffer_inputs{}), untuple_block_names(uniform_inputs{})));
 			return nextpso != nullptr && !nextpso->broken;
 		}
@@ -1130,6 +1197,301 @@ namespace gfx_api
 		}
 
 		template<typename...Args>
+		static std::vector<const char*> untuple_block_names(const std::tuple<Args...>&)
+		{
+			return std::vector<const char*>({ uniform_block_name<Args>::value... });
+		}
+	};
+
+	template<std::size_t slot, const char* glsl_name>
+	struct storage_image_description
+	{
+		static constexpr std::size_t binding = kStorageImageBindingBase + slot;
+		static storage_image_input get_desc()
+		{
+			static_assert(slot < kMaxComputeSlotsPerKind, "storage image slot collides with the light SSBO range");
+			return storage_image_input{ slot, binding, glsl_name };
+		}
+	};
+
+	template<std::size_t slot, const char* glsl_name>
+	struct storage_buffer_description
+	{
+		static constexpr std::size_t binding = kStorageBufferBindingBase + slot;
+		static storage_buffer_input get_desc()
+		{
+			static_assert(slot < kMaxComputeSlotsPerKind, "storage buffer slot is out of range");
+			return storage_buffer_input{ slot, binding, glsl_name };
+		}
+	};
+
+	template<typename... Ts>
+	struct sampled_inputs_are_compute : std::integral_constant<bool,
+		(... && (Ts::sampled_stage == shader_stage::compute))> {};
+
+	template<>
+	struct sampled_inputs_are_compute<> : std::true_type {};
+
+	template<typename Tuple>
+	struct tuple_sampled_are_compute;
+
+	template<typename... Ts>
+	struct tuple_sampled_are_compute<std::tuple<Ts...>> : sampled_inputs_are_compute<Ts...> {};
+
+	template<typename UniformInputs, typename SampledInputs, typename StorageImageInputs, typename StorageBufferInputs, SHADER_MODE Shader>
+	struct compute_pipeline_helper
+	{
+		static compute_pipeline_helper& get()
+		{
+			static compute_pipeline_helper object;
+			return object;
+		}
+
+		void bind()
+		{
+			ASSERT(gfx_api::context::get().isComputePassActive(), "compute bind outside a compute pass");
+			if (this->nextpso != nullptr && !this->nextpso->broken)
+			{
+				if (this->pso != nullptr)
+				{
+					delete this->pso;
+				}
+				this->pso = this->nextpso;
+				this->nextpso = nullptr;
+			}
+			gfx_api::context::get().bind_compute_pipeline(pso);
+		}
+
+		template<typename... Args>
+		void bind_textures(Args&&... args)
+		{
+			static_assert(sizeof...(args) == std::tuple_size<SampledInputs>::value, "Wrong number of textures");
+			ASSERT(gfx_api::context::get().isComputePassActive(), "bind_textures outside a compute pass");
+			if constexpr (sizeof...(args) > 0)
+			{
+				const abstract_texture* bound[] = { args... };
+				if (!computePassDeclares(bound, sizeof...(args), true))
+				{
+					return;
+				}
+			}
+			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
+			ASSERT(compute != nullptr, "compute pipeline is not bound");
+			compute->bind_sampled_textures(sampled_descriptions(), { args... });
+		}
+
+		template<typename... Args>
+		void bind_storage_images(Args&&... args)
+		{
+			static_assert(sizeof...(args) == std::tuple_size<StorageImageInputs>::value, "Wrong number of storage images");
+			ASSERT(gfx_api::context::get().isComputePassActive(), "bind_storage_images outside a compute pass");
+			if constexpr (sizeof...(args) > 0)
+			{
+				const abstract_texture* bound[] = { args... };
+				if (!computePassDeclares(bound, sizeof...(args), false))
+				{
+					return;
+				}
+			}
+			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
+			ASSERT(compute != nullptr, "compute pipeline is not bound");
+			compute->bind_storage_images(storage_image_descriptions(), { args... });
+		}
+
+		template<typename... Args>
+		void bind_storage_buffers(Args&&... args)
+		{
+			static_assert(sizeof...(args) == std::tuple_size<StorageBufferInputs>::value, "Wrong number of storage buffers");
+			ASSERT(gfx_api::context::get().isComputePassActive(), "bind_storage_buffers outside a compute pass");
+			if constexpr (sizeof...(args) > 0)
+			{
+				const buffer* bound[] = { args... };
+				const RenderPassDesc* pass = gfx_api::context::get().activePassDesc();
+				ASSERT(pass != nullptr, "bind_storage_buffers without an active pass");
+				if (pass == nullptr)
+				{
+					return;
+				}
+				for (const buffer* buf : bound)
+				{
+					bool declared = false;
+					for (const ComputeBufferUse& entry : pass->storageBuffers)
+					{
+						if (entry.buf == buf && buf != nullptr)
+						{
+							declared = true;
+							break;
+						}
+					}
+					ASSERT(declared, "storage buffer is not declared on the compute pass");
+					if (!declared)
+					{
+						return;
+					}
+				}
+			}
+			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
+			ASSERT(compute != nullptr, "compute pipeline is not bound");
+			compute->bind_storage_buffers(storage_buffer_descriptions(), { args... });
+		}
+
+	private:
+		static bool computePassDeclares(const abstract_texture* const* bound, size_t count, bool sampled)
+		{
+			if (count == 0)
+			{
+				return true;
+			}
+			const RenderPassDesc* pass = gfx_api::context::get().activePassDesc();
+			ASSERT(pass != nullptr, "compute bind without an active pass");
+			if (pass == nullptr)
+			{
+				return false;
+			}
+			const std::vector<ComputeImageUse>& declared = sampled ? pass->sampledInputs : pass->storageImages;
+			for (size_t i = 0; i < count; ++i)
+			{
+				bool found = false;
+				for (const ComputeImageUse& image : declared)
+				{
+					if (image.texture == bound[i] && image.texture != nullptr)
+					{
+						found = true;
+						break;
+					}
+				}
+				ASSERT(found, "compute image is not declared on the pass");
+				if (!found)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+	public:
+
+		template<typename... Args>
+		void set_uniforms(Args&&... args)
+		{
+			static_assert(sizeof...(args) == std::tuple_size<UniformInputs>::value, "Wrong number of uniform inputs");
+			gfx_api::context::get().set_uniforms(0, { std::make_tuple(static_cast<const void*>(&args), sizeof(args))... });
+		}
+
+		template<typename... Args>
+		void set_uniforms_at(const size_t& first, Args&&... args)
+		{
+			gfx_api::context::get().set_uniforms(first, { std::make_tuple(static_cast<const void*>(&args), sizeof(args))... });
+		}
+
+		template<size_t slot, typename T>
+		void set_uniforms_at(const T& data, size_t size)
+		{
+			static_assert(slot < std::tuple_size<UniformInputs>::value, "Uniform slot is out of range for this pipeline");
+			static_assert(std::is_same<typename std::tuple_element<slot, UniformInputs>::type, T>::value, "Wrong uniform block type for this slot");
+			ASSERT(size <= sizeof(T), "size (%zu) exceeds the block (%zu)", size, sizeof(T));
+			gfx_api::context::get().set_uniforms(slot, { std::make_tuple(static_cast<const void*>(&data), size) });
+		}
+
+		template<size_t slot, typename T>
+		void set_uniforms_at(const T& data)
+		{
+			static_assert(slot < std::tuple_size<UniformInputs>::value, "Uniform slot is out of range for this pipeline");
+			static_assert(std::is_same<typename std::tuple_element<slot, UniformInputs>::type, T>::value, "Wrong uniform block type for this slot");
+			gfx_api::context::get().set_uniforms(slot, { std::make_tuple(static_cast<const void*>(&data), sizeof(T)) });
+		}
+
+		template<size_t slot, typename T>
+		void set_uniforms_at(const frame_uniform_block_ref<T>& ref)
+		{
+			static_assert(slot < std::tuple_size<UniformInputs>::value, "Uniform slot is out of range for this pipeline");
+			static_assert(std::is_same<typename std::tuple_element<slot, UniformInputs>::type, T>::value, "Wrong uniform block type for this slot");
+			gfx_api::context::get().set_frame_uniform_at(slot, ref.allocation(), std::type_index(typeid(T)));
+		}
+
+		void dispatch(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ = 1)
+		{
+			ASSERT(gfx_api::context::get().isComputePassActive(), "dispatch outside a compute pass");
+			gfx_api::context::get().dispatch_compute(groupsX, groupsY, groupsZ);
+		}
+
+		void dispatch_covering(uint32_t threadsX, uint32_t threadsY, uint32_t threadsZ = 1)
+		{
+			ASSERT(threadsX >= 1 && threadsY >= 1 && threadsZ >= 1, "compute dispatch axis is 0");
+			const shader_local_size local = shader_catalog(Shader).local_size;
+			dispatch(groups(threadsX, local.x), groups(threadsY, local.y), groups(threadsZ, local.z));
+		}
+
+		bool recompile()
+		{
+			ASSERT(shader_is_compute(shader_catalog(Shader)), "compute_pipeline_helper requires a compute catalog row");
+			// texture_input and the storage inputs have const members, so the vectors are copy-constructed, not assigned.
+			compute_pipeline_create_info info{
+				Shader,
+				untuple_typeinfo(UniformInputs{}),
+				untuple_block_names(UniformInputs{}),
+				sampled_descriptions(),
+				storage_image_descriptions(),
+				storage_buffer_descriptions()
+			};
+			for (size_t i = 0; i < info.sampled.size(); ++i)
+			{
+				ASSERT(info.sampled[i].id == i, "Sampled texture %zu declares unit %zu", i, info.sampled[i].id);
+				ASSERT(info.sampled[i].id < kMaxComputeSlotsPerKind, "Sampled texture unit %zu is out of range", info.sampled[i].id);
+				ASSERT(info.sampled[i].stage == shader_stage::compute, "Compute sampled texture must use shader_stage::compute");
+			}
+			nextpso = gfx_api::context::get().build_compute_pipeline(pso, info);
+			return nextpso != nullptr && !nextpso->broken;
+		}
+
+	private:
+		static_assert(tuple_sampled_are_compute<SampledInputs>::value, "compute sampled textures must use shader_stage::compute");
+
+		pipeline_state_object* pso = nullptr;
+		pipeline_state_object* nextpso = nullptr;
+
+		compute_pipeline_helper()
+		{
+			recompile();
+		}
+
+		static uint32_t groups(uint32_t threads, uint32_t local)
+		{
+			ASSERT(local > 0, "compute local size is 0");
+			return (threads + local - 1u) / local;
+		}
+
+		template<typename Output, typename... Args>
+		static std::vector<Output> untuple(const std::tuple<Args...>&)
+		{
+			return std::vector<Output>({ Args::get_desc()... });
+		}
+
+		static const std::vector<texture_input>& sampled_descriptions()
+		{
+			static const std::vector<texture_input> descriptions = untuple<texture_input>(SampledInputs{});
+			return descriptions;
+		}
+
+		static const std::vector<storage_image_input>& storage_image_descriptions()
+		{
+			static const std::vector<storage_image_input> descriptions = untuple<storage_image_input>(StorageImageInputs{});
+			return descriptions;
+		}
+
+		static const std::vector<storage_buffer_input>& storage_buffer_descriptions()
+		{
+			static const std::vector<storage_buffer_input> descriptions = untuple<storage_buffer_input>(StorageBufferInputs{});
+			return descriptions;
+		}
+
+		template<typename... Args>
+		std::vector<std::type_index> untuple_typeinfo(const std::tuple<Args...>&) const
+		{
+			return std::vector<std::type_index>({ std::type_index(typeid(Args))... });
+		}
+
+		template<typename... Args>
 		static std::vector<const char*> untuple_block_names(const std::tuple<Args...>&)
 		{
 			return std::vector<const char*>({ uniform_block_name<Args>::value... });

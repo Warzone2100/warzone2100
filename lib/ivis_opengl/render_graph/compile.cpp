@@ -192,8 +192,16 @@ RenderPassContext::RenderPassContext(const RenderPassDesc& desc, std::vector<Res
 {
 }
 
+void RenderPassDesc::addStorageBuffer(buffer* buf)
+{
+	ASSERT(buf != nullptr, "compute storage buffer is null");
+	ASSERT(kind == PassKind::Compute, "addStorageBuffer on a graphics pass");
+	storageBuffers.push_back(ComputeBufferUse{ buf });
+}
+
 abstract_texture* RenderPassContext::getRead(size_t index) const
 {
+	ASSERT(_desc.kind == PassKind::Graphics, "getRead on a compute pass");
 	if (index >= _resolvedReads.size())
 	{
 		return nullptr;
@@ -210,11 +218,45 @@ const ResolvedRead& RenderPassContext::resolvedRead(size_t index) const
 
 abstract_texture* RenderPassContext::getWrite(size_t index) const
 {
+	ASSERT(_desc.kind == PassKind::Graphics, "getWrite on a compute pass");
 	if (index >= _desc.colorAttachments.size())
 	{
 		return nullptr;
 	}
 	return _desc.colorAttachments[index].texture;
+}
+
+abstract_texture* RenderPassContext::getSampledInput(size_t index) const
+{
+	ASSERT(_desc.kind == PassKind::Compute, "getSampledInput on a graphics pass");
+	ASSERT(index < _desc.sampledInputs.size(), "Sampled input %zu is out of range", index);
+	if (index >= _desc.sampledInputs.size())
+	{
+		return nullptr;
+	}
+	return _desc.sampledInputs[index].texture;
+}
+
+abstract_texture* RenderPassContext::getStorageImage(size_t index) const
+{
+	ASSERT(_desc.kind == PassKind::Compute, "getStorageImage on a graphics pass");
+	ASSERT(index < _desc.storageImages.size(), "Storage image %zu is out of range", index);
+	if (index >= _desc.storageImages.size())
+	{
+		return nullptr;
+	}
+	return _desc.storageImages[index].texture;
+}
+
+buffer* RenderPassContext::getStorageBuffer(size_t index) const
+{
+	ASSERT(_desc.kind == PassKind::Compute, "getStorageBuffer on a graphics pass");
+	ASSERT(index < _desc.storageBuffers.size(), "Storage buffer %zu is out of range", index);
+	if (index >= _desc.storageBuffers.size())
+	{
+		return nullptr;
+	}
+	return _desc.storageBuffers[index].buf;
 }
 
 const AttachmentDesc& RenderPassContext::writeAttachment(size_t index) const

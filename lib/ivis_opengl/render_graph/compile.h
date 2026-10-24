@@ -48,6 +48,36 @@ enum class CompileImageLayout : uint8_t
 	ColorAttachment,
 	DepthAttachment,
 	Present,
+	/// `vk::ImageLayout::eGeneral`. Compute storage images stay in this layout.
+	Storage,
+};
+
+/// How a subresource was last used. Layout alone cannot tell a fragment sample from a compute sample.
+enum class ImageUse : uint8_t
+{
+	None,
+	GraphicsSampled,
+	GraphicsDepthSampled,
+	ColorAttachment,
+	DepthAttachment,
+	Present,
+	ComputeSampled,
+	ComputeStorage,
+};
+
+/// How a storage buffer was last accessed. The first use is a transfer write.
+enum class BufferUse : uint8_t
+{
+	None,
+	TransferWrite,
+	ComputeReadWrite,
+};
+
+/// Last layout and use of one image subresource.
+struct SubresourceSyncState
+{
+	CompileImageLayout layout = CompileImageLayout::Undefined;
+	ImageUse use = ImageUse::None;
 };
 
 /// Layout transition to emit before a pass records (per subresource).
@@ -64,6 +94,16 @@ struct ImageBarrierOp
 	ReadProducerScope producerScope = ReadProducerScope::InGraph;
 	CompileImageLayout oldLayout = CompileImageLayout::Undefined;
 	CompileImageLayout newLayout = CompileImageLayout::Undefined;
+	ImageUse srcUse = ImageUse::None;
+	ImageUse dstUse = ImageUse::None;
+};
+
+/// Buffer dependency to emit before a compute pass. Always recorded; queue families stay ignored.
+struct BufferBarrierOp
+{
+	buffer* buf = nullptr;
+	BufferUse srcUse = BufferUse::TransferWrite;
+	BufferUse dstUse = BufferUse::ComputeReadWrite;
 };
 
 /// Layout state to record after a pass completes (feeds next pass barrier planning).
@@ -111,6 +151,7 @@ struct CompiledPass
 	/// Inputs resolved from `desc.reads` for `RenderPassContext::getRead`.
 	std::vector<ResolvedRead> resolvedReads;
 	std::vector<ImageBarrierOp> prePassBarriers;
+	std::vector<BufferBarrierOp> prePassBufferBarriers;
 	std::vector<LayoutStateUpdate> postPassLayoutUpdates;
 	CompiledPassLayoutMetadata renderPassLayouts;
 };
