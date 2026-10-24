@@ -932,6 +932,15 @@ if(WZ_BUILD_VP9_BITSTREAM_TEST)
 	target_include_directories(vp9_bitstream_test PRIVATE "${PROJECT_SOURCE_DIR}")
 endif()
 
+# Standalone unit test for the (dependency-free) main-thread exec queue
+option(WZ_BUILD_MAINTHREADEXEC_TEST "Build the main-thread exec queue unit test (tests/mainthreadexec_test.cpp)" OFF)
+if(WZ_BUILD_MAINTHREADEXEC_TEST)
+	find_package(Threads REQUIRED)
+	add_executable(mainthreadexec_test "${PROJECT_SOURCE_DIR}/tests/mainthreadexec_test.cpp")
+	target_include_directories(mainthreadexec_test PRIVATE "${PROJECT_SOURCE_DIR}")
+	target_link_libraries(mainthreadexec_test PRIVATE Threads::Threads)
+endif()
+
 # In-memory golden PassId sequences from PassGraphTopologyBlueprint::fromSnapshot (no GPU)
 option(WZ_BUILD_RENDER_GRAPH_TEST "Build the render-graph pass sequence unit test (tests/render_graph_pass_sequence_test.cpp)" OFF)
 if(WZ_BUILD_RENDER_GRAPH_TEST)

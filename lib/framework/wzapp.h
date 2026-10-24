@@ -25,6 +25,7 @@
 
 #include "frame.h"
 #include "wzstring.h"
+#include "mainthreadexec.h"
 #include <vector>
 #include <functional>
 #include <nonstd/optional.hpp>
@@ -34,34 +35,6 @@ using nonstd::nullopt;
 struct WZ_THREAD;
 struct WZ_MUTEX;
 struct WZ_SEMAPHORE;
-
-class WZ_MAINTHREADEXEC
-{
-public:
-	WZ_MAINTHREADEXEC() { }
-	virtual ~WZ_MAINTHREADEXEC() { };
-
-	// subclass should override this
-	virtual void doExecOnMainThread() { };
-};
-
-class WZ_MAINTHREADEXECFUNC: public WZ_MAINTHREADEXEC
-{
-public:
-	typedef std::function<void ()> execFuncType;
-public:
-	WZ_MAINTHREADEXECFUNC(const execFuncType &execFunc)
-	: execFunc(execFunc)
-	{ }
-	virtual ~WZ_MAINTHREADEXECFUNC() { };
-
-	void doExecOnMainThread()
-	{
-		execFunc();
-	};
-private:
-	execFuncType execFunc;
-};
 
 struct screeninfo
 {
@@ -187,19 +160,34 @@ WZ_DECL_NONNULL(1) void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) bool wzSemaphoreWaitTimeout(WZ_SEMAPHORE *semaphore, int32_t timeoutMS);
 WZ_DECL_NONNULL(1) void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
+
+// Asynchronously executes exec->doExecOnMainThread() on the main thread, then deletes `exec` (also on the main thread).
+// `exec` must be allocated on the heap, and ownership passes to this function:
+// it is not safe to access `exec` after calling wzAsyncExecOnMainThread.
+//
+// Thread-safe.
+// May be called from any thread, at any time - including before the backend has initialized (queued execs run once the main loop starts).
+// Execs run in the order they were posted, from the main loop.
+// An exec posted from inside another exec runs on a later frame.
+// After shutdown (wzShutdownMainThreadExecs), posts are ignored and `exec` is deliberately leaked.
+//
+// No guarantees are made about when it runs relative to the calling of this function -
+// this function may return before, during, or after its execution on the main thread.
 WZ_DECL_NONNULL(1) void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec);
 
-// Asynchronously executes execFunc() on the main thread.
-// This function must be thread-safe, and may be safely called from any thread.
-//
-// No guarantees are made about when execFunc() will be called relative to the
-// calling of this function - this function may return before, during, or after
-// execFunc()'s execution on the main thread.
+// Asynchronously executes execFunc() on the main thread (see above).
 inline void wzAsyncExecOnMainThread(const std::function<void ()> &execFunc)
 {
 	wzAsyncExecOnMainThread(new WZ_MAINTHREADEXECFUNC(execFunc));
-	// receiver handles deleting the parameter on the main thread after doExecOnMainThread() has been called
 }
+
+// Runs the execs queued by wzAsyncExecOnMainThread.
+// NOTE: Main thread only. Called by the backend's event loop once per frame.
+void wzProcessMainThreadExecs();
+
+// Stops accepting execs, and abandons any still queued (they never run).
+// NOTE: Main thread only. Called by the backend during shutdown, after the main loop has stopped.
+void wzShutdownMainThreadExecs();
 
 #if !defined(HAVE_STD_THREAD)
 # define HAVE_STD_THREAD 0
