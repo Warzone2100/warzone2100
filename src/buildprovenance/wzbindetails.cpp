@@ -25,6 +25,7 @@
 #include "lib/framework/wzapp.h"
 
 #include <atomic>
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -45,18 +46,12 @@ std::vector<std::function<void(const ExeDetails&)>> pendingCallbacks;
 WZ_THREAD* hashThread = nullptr;
 std::atomic<bool> stopRequested(false);
 
-ExeDetails computeExeDetails()
+ExeDetails computeExeDetails(const HashableFile& exeFile)
 {
 	ExeDetails details;
-	optional<HashableFile> exeFile = HashableFile::ownExecutable();
-	if (!exeFile.has_value())
-	{
-		details.errorDetails = "Unable to determine own executable path on this platform";
-		return details;
-	}
-	details.path = exeFile.value().displayPath();
-	details.pathConfidence = exeFile.value().pathConfidence();
-	optional<HashableFile::WholeFileHash> hashResult = exeFile.value().hashWholeFile(&stopRequested);
+	details.path = exeFile.displayPath();
+	details.pathConfidence = exeFile.pathConfidence();
+	optional<HashableFile::WholeFileHash> hashResult = exeFile.hashWholeFile(&stopRequested);
 	if (!hashResult.has_value())
 	{
 		details.errorDetails = stopRequested.load() ? "Cancelled by shutdown" : "Failed to read own executable";
@@ -65,7 +60,7 @@ ExeDetails computeExeDetails()
 	details.fileSize = hashResult.value().fileSize;
 	details.rawHash = hashResult.value().hash;
 #if defined(WZ_OS_MAC)
-	auto canonicalSlices = exeFile.value().machoCanonicalHashes(&stopRequested);
+	auto canonicalSlices = exeFile.machoCanonicalHashes(&stopRequested);
 	if (canonicalSlices.has_value())
 	{
 		details.machoCanonicalSlices = std::move(canonicalSlices.value());
@@ -102,12 +97,27 @@ void deliverResult(ExeDetails details)
 	}
 }
 
-int selfExeHashThreadFunc(void*)
+// Delivers on the main thread, asynchronously.
+// Safe to call from any thread.
+void postResult(ExeDetails details)
 {
-	ExeDetails details = computeExeDetails();
 	wzAsyncExecOnMainThread([details]() {
 		deliverResult(details);
 	});
+}
+
+ExeDetails unavailableDetails(const char* errorDetails)
+{
+	ExeDetails details;
+	details.errorDetails = errorDetails;
+	return details;
+}
+
+// `data` is a heap-allocated HashableFile, which this thread takes ownership of
+int selfExeHashThreadFunc(void* data)
+{
+	std::unique_ptr<HashableFile> exeFile(static_cast<HashableFile*>(data));
+	postResult(computeExeDetails(*exeFile));
 	return 0;
 }
 
@@ -120,15 +130,23 @@ void selfExeDetailsInit()
 		return;
 	}
 	state = ComputeState::Running;
-	hashThread = wzThreadCreate(selfExeHashThreadFunc, nullptr, "wzSelfExeHash");
+
+	optional<HashableFile> exeFile = HashableFile::ownExecutable();
+	if (!exeFile.has_value())
+	{
+		postResult(unavailableDetails("Unable to determine own executable path on this platform"));
+		return;
+	}
+
+	auto threadExeFile = std::make_unique<HashableFile>(std::move(exeFile.value()));
+	hashThread = wzThreadCreate(selfExeHashThreadFunc, threadExeFile.get(), "wzSelfExeHash");
 	if (hashThread == nullptr)
 	{
 		ASSERT(false, "Failed to create self-exe hashing thread");
-		ExeDetails details;
-		details.errorDetails = "Unable to start thread";
-		deliverResult(std::move(details));
+		postResult(unavailableDetails("Unable to start thread"));
 		return;
 	}
+	(void)threadExeFile.release(); // now owned by the thread
 	wzThreadStart(hashThread);
 }
 
