@@ -127,8 +127,13 @@ protected:
 	virtual void clickSecondary(bool synthesizedFromHold) {}
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
 	bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	/// Its right-click as an action, for a long-press's popover
+	HudDetailAction secondaryAction(const WzString &label, const char *icon, bool destructive = false, bool enabled = true, const WzString &note = WzString());
 public:
 	DynamicIntFancyButton();
+	/// What its right-click does now, for a long-press's popover (none: nothing)
+	virtual std::vector<HudDetailAction> hudSecondaryActions() { return {}; }
+	void runSecondary() { clickSecondary(true); }
 };
 
 class StatsButton: public DynamicIntFancyButton
@@ -156,6 +161,8 @@ public:
 
 	std::shared_ptr<WIDGET> makeHudDetail() override;
 	uint32_t hudDetailPanelId() const override { return IDOBJ_FORM; }
+	std::vector<HudDetailAction> hudDetailActions() override;
+	std::vector<HudDetailAction> hudSecondaryActions() override;
 
 protected:
 	bool isHighlighted() const override
@@ -177,6 +184,10 @@ private:
 	Vector2i jumpPosition = {0, 0};
 };
 
+/// The right-click actions of both buttons in a column of the object row (the task button over the object), the
+/// object's first
+std::vector<HudDetailAction> hudObjectColumnActions(const std::shared_ptr<WIDGET> &holder);
+
 class StatsFormButton : public StatsButton, public HudDetailSource
 {
 public:
@@ -187,6 +198,7 @@ public:
 		return HudDetailPlacement::Right;
 	}
 	uint32_t hudDetailPanelId() const override { return IDSTAT_FORM; }
+	std::vector<HudDetailAction> hudDetailActions() override { return hudSecondaryActions(); }
 
 protected:
 	std::string getTip() override

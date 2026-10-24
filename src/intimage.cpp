@@ -34,6 +34,8 @@
 
 #include "intimage.h"
 #include "hud/hudskin.h"
+#include "hud/hudsettings.h"
+#include "lib/gamelib/gtime.h"
 
 #define INCEND	(0)
 
@@ -261,6 +263,33 @@ void IntListTabWidget::initialize()
 void IntListTabWidget::setHudSkinned()
 {
 	intSetHudPageTabs(*tabWidget());
+	hudSkinned = true;
+}
+
+void IntListTabWidget::pageTurnedByTouch(size_t, size_t)
+{
+	if (hudSkinned && !hudReduceMotion())
+	{
+		pageTurnedAt = realTime;
+	}
+}
+
+void IntListTabWidget::displayRecursive(WidgetGraphicsContext const &context)
+{
+	ListTabWidget::displayRecursive(context);
+	if (!pageTurnedAt.has_value())
+	{
+		return;
+	}
+	const float t = static_cast<float>(realTime - pageTurnedAt.value()) / 160.f;
+	if (t >= 1.f)
+	{
+		pageTurnedAt.reset();
+		return;
+	}
+	const ListWidget *list = listWidget();
+	const float eased = (1.f - t) * (1.f - t);
+	currentHudSkin().drawPageTurnFade(WzRect(list->screenPosX(), list->screenPosY(), list->width(), list->height()), eased);
 }
 
 void intSetupPageTabs(TabSelectionWidget &tabs, TabAlignment tabAlignment)

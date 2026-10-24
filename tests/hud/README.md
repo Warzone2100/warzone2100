@@ -40,6 +40,13 @@ Selection and input:
 - `click=<key>` clicks a widget first (ex. a filter chip), so the state shows its effect. A clicked filter changes
   which items are listed, so such states are for screenshots and behavior checks, not for the contract.
 - `touch` makes clicks count as taps (ex. `research+touch+click=/14000/2113929490@1` opens the page picker).
+- `drag=<key>:<dx>:<dy>` drags a simulated finger from a widget's center by (dx, dy) over six frames, then lifts it
+  and waits for what it set going (ex. `research+drag=/14000/14004:-80:0` swipes the research list to its next page).
+- `hold=<key>[:held|:<n>|:out]` holds a simulated finger on a widget until the Modern skin's long-press opens its
+  popover, then lifts it (the popover stays, pinned). With `<n>` it then taps the popover's nth action, and with
+  `out` it taps elsewhere, which only closes it. `:held` keeps the finger down for the screenshot. An action's
+  effect stays for the following states (ex. `manufacture+click=/14000/14004#3+hold=/3000/3500#4:2` pauses the
+  factory's production, and a following `manufacture+hold=/3000/3500#4` then offers to cancel it).
 
 Other elements:
 

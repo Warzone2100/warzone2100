@@ -87,6 +87,10 @@ public:
 	// The tallest the panel may be. (Whatever the body cannot fit, scrolls.)
 	// Call before the popover is made, since that takes the size as it stands.
 	void setMaxHeight(int32_t maxHeight);
+	// Actions along the bottom (at their ideal height), set after the panel is made
+	void setActions(std::shared_ptr<WIDGET> actions);
+	// A small widget in the header's top right corner (ex. a close button), which the title leaves room for
+	void setCorner(std::shared_ptr<WIDGET> corner);
 
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override;
@@ -99,6 +103,7 @@ private:
 	int statsY() const;
 	bool statusInBar() const;
 	int statusBarHeight() const;
+	int actionsHeight() const;
 	// Whether the header has anything under it to be divided from.
 	bool anythingUnderHeader() const;
 
@@ -111,6 +116,7 @@ private:
 	std::vector<std::shared_ptr<WIDGET>> m_stats;
 	std::shared_ptr<WIDGET> m_body;
 	std::shared_ptr<WIDGET> m_actions;		// null on a panel that only describes
+	std::shared_ptr<WIDGET> m_corner;
 	int32_t m_maxHeight = MAX_PANEL_HEIGHT;
 	DetailPanelStyle m_style;
 	DetailStatusPlacement m_statusPlacement = DetailStatusPlacement::Automatic;

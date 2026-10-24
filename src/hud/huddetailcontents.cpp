@@ -745,3 +745,8 @@ std::shared_ptr<WIDGET> hudGroupDetail(unsigned group)
 	}
 	return finish(objectModel(representative), WzString::fromUtf8(astringf(_("Group %u"), group)), nullptr, nullptr, nullptr, std::move(statCells), body.widget());
 }
+
+std::shared_ptr<WIDGET> hudGroupEmptyDetail(unsigned group)
+{
+	return finish(nullptr, WzString::fromUtf8(astringf(_("Group %u"), group)), subtitleLabel(WzString::fromUtf8(_("Empty"))), nullptr, nullptr, {}, nullptr);
+}

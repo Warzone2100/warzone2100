@@ -67,9 +67,15 @@ public:
 
 	/// Its page tabs drawn by the HUD skin (the HUD's lists, others keep the Classic tabs)
 	void setHudSkinned();
+	void displayRecursive(WidgetGraphicsContext const &context) override;
+
+protected:
+	void pageTurnedByTouch(size_t from, size_t to) override;
 
 private:
 	TabAlignment tabAlignment = TabAlignment::LeftAligned;
+	bool hudSkinned = false;
+	nonstd::optional<uint32_t> pageTurnedAt;  ///< (a swipe's page, coming in)
 };
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.

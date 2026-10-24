@@ -509,6 +509,21 @@ private:
 		controller->refresh();
 	}
 
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto facility = controller->getObjectAt(objectIndex);
+		if (facility == nullptr || !structureIsResearchingPending(facility))
+		{
+			return {};
+		}
+		// (as the right-click: a first one puts it on hold, the next cancels it)
+		if (StructureIsOnHoldPending(facility))
+		{
+			return {secondaryAction(_("Cancel research"), "never", true)};
+		}
+		return {secondaryAction(_("Pause research"), "replay-pause")};
+	}
+
 	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto facility = controller->getObjectAt(objectIndex);

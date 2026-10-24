@@ -2331,6 +2331,54 @@ void wzWarpMouseToLogicalPos(int logicalX, int logicalY)
 	SDL_WarpMouseInWindow(WZwindow, (float)logicalX * current_displayScaleFactor, (float)logicalY * current_displayScaleFactor);
 }
 
+void wzSimulateTouch(int phase, int logicalX, int logicalY)
+{
+	ASSERT_OR_RETURN(, WZwindow != nullptr, "No window available");
+	const float x = (float)logicalX * current_displayScaleFactor;
+	const float y = (float)logicalY * current_displayScaleFactor;
+	const SDL_WindowID windowID = SDL_GetWindowID(WZwindow);
+	int sizeW = 1;
+	int sizeH = 1;
+	SDL_GetWindowSize(WZwindow, &sizeW, &sizeH);
+
+	SDL_Event finger;
+	SDL_zero(finger);
+	finger.type = (phase == 0) ? SDL_EVENT_FINGER_DOWN : (phase == 1 ? SDL_EVENT_FINGER_MOTION : SDL_EVENT_FINGER_UP);
+	finger.tfinger.fingerID = 1;
+	finger.tfinger.x = x / (float)std::max(1, sizeW);
+	finger.tfinger.y = y / (float)std::max(1, sizeH);
+	finger.tfinger.pressure = (phase == 2) ? 0.f : 1.f;
+	finger.tfinger.windowID = windowID;
+
+	SDL_Event motion;
+	SDL_zero(motion);
+	motion.type = SDL_EVENT_MOUSE_MOTION;
+	motion.motion.windowID = windowID;
+	motion.motion.which = SDL_TOUCH_MOUSEID;
+	motion.motion.state = (phase == 1) ? SDL_BUTTON_LMASK : 0;
+	motion.motion.x = x;
+	motion.motion.y = y;
+
+	SDL_Event button;
+	SDL_zero(button);
+	button.type = (phase == 0) ? SDL_EVENT_MOUSE_BUTTON_DOWN : SDL_EVENT_MOUSE_BUTTON_UP;
+	button.button.windowID = windowID;
+	button.button.which = SDL_TOUCH_MOUSEID;
+	button.button.button = SDL_BUTTON_LEFT;
+	button.button.down = (phase == 0);
+	button.button.clicks = 1;
+	button.button.x = x;
+	button.button.y = y;
+
+	// (in the order SDL reports them: the finger, then the mouse events made from it)
+	SDL_PushEvent(&finger);
+	SDL_PushEvent(&motion);
+	if (phase != 1)
+	{
+		SDL_PushEvent(&button);
+	}
+}
+
 static int copied_argc = 0;
 static char** copied_argv = nullptr;
 

@@ -124,6 +124,29 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 		);
 		form->addOption(optionInfo, valueChanger, true);
 	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.longPressDelay", N_("Touch Long-Press"), N_("On a touchscreen, with the Modern skin: how long to hold a button for its details and other actions. A shorter press is a tap."));
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			[]() {
+				OptionChoices<uint32_t> result;
+				result.choices = {
+					{ _("Short (0.3 s)"), "", 300 },
+					{ _("Normal (0.4 s)"), "", 400 },
+					{ _("Long (0.6 s)"), "", 600 },
+					{ _("Very long (0.8 s)"), "", 800 },
+				};
+				result.setCurrentIdxForValue(hudSettings().longPressDelay);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.longPressDelay = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
 	for (size_t i = 0; i < HUD_MODULE_COUNT; ++i)
 	{
 		const auto module = static_cast<HudModuleId>(i);
