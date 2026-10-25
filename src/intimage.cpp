@@ -260,6 +260,22 @@ void IntListTabWidget::initialize()
 	intSetupPageTabs(*tabWidget(), tabAlignment);
 }
 
+void IntListTabWidget::setTabRowHidden()
+{
+	tabRowHidden = true;
+	tabWidget()->hide();
+	geometryChanged();
+}
+
+void IntListTabWidget::geometryChanged()
+{
+	ListTabWidget::geometryChanged();
+	if (tabRowHidden)
+	{
+		listWidget()->setGeometry(0, 0, width(), height());
+	}
+}
+
 void IntListTabWidget::setHudSkinned()
 {
 	intSetHudPageTabs(*tabWidget());

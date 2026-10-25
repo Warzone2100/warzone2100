@@ -477,6 +477,7 @@ src/hud/hudconnection.cpp
 src/hud/hudconsole.cpp
 src/hud/huddetailcontents.cpp
 src/hud/hudgameresults.cpp
+src/hud/hudheadermenu.cpp
 src/hud/hudidle.cpp
 src/hud/hudmodel.cpp
 src/hud/hudmodernskin.cpp

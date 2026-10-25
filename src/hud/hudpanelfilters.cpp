@@ -31,6 +31,7 @@
 
 #include "hudbuildcategories.h"
 #include "hudids.h"
+#include "hudlayout.h"
 #include "hudpanelextension.h"
 #include "hudsettings.h"
 #include "hudskin.h"
@@ -38,6 +39,7 @@
 
 #include "lib/framework/wzapp.h"
 #include "lib/widget/editbox.h"
+#include "lib/widget/label.h"
 #include "lib/widget/popovermenu.h"
 
 #include "../hci.h"
@@ -80,6 +82,13 @@ std::array<FilterState, 3> remembered;
 constexpr int PAD = 4;
 constexpr int GAP = 3;
 constexpr int COMPACT_WIDTH = 22;
+// The Compact layout's tab beside the panel
+constexpr int TAB_WIDTH = 30;
+constexpr int TAB_GAP = 2;
+constexpr int MENU_SEARCH_WIDTH = 150;
+constexpr int MENU_SEARCH_HEIGHT = 22;
+// Larger Touch Targets: the menu's choices and search field
+constexpr int TOUCH_MENU_ITEM_HEIGHT = 36;
 constexpr size_t MAX_CATEGORIES = 4;
 constexpr uint32_t REFRESH_MS = 500;
 
@@ -88,6 +97,62 @@ void displaySearchBox(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	auto box = static_cast<W_EDITBOX *>(widget);
 	currentHudSkin().drawInputField(WzRect(static_cast<int>(xOffset) + box->x(), static_cast<int>(yOffset) + box->y(), box->width(), box->height()), box->isEditing());
 }
+/// The research filter's search field in its menu (the Compact layout's tab), kept in step with the panel's own
+class MenuSearchField : public WIDGET
+{
+public:
+	static std::shared_ptr<MenuSearchField> make(const WzString &text, std::function<void (const WzString &)> changed)
+	{
+		auto field = std::make_shared<MenuSearchField>();
+		field->changed = std::move(changed);
+		field->initialize(text);
+		return field;
+	}
+
+	int32_t idealWidth() override { return MENU_SEARCH_WIDTH; }
+	int32_t idealHeight() override { return std::max(MENU_SEARCH_HEIGHT + 4, hudLargerTouchTargets() ? TOUCH_MENU_ITEM_HEIGHT : 0); }
+
+protected:
+	void geometryChanged() override
+	{
+		box->setGeometry(2, 2 + (height() - 4 - MENU_SEARCH_HEIGHT) / 2, width() - 4, MENU_SEARCH_HEIGHT);
+	}
+
+	void display(int, int) override
+	{
+		if (box->getString() != last)
+		{
+			last = box->getString();
+			changed(last);
+		}
+	}
+
+private:
+	void initialize(const WzString &text)
+	{
+		W_EDBINIT init;
+		init.FontID = font_small;
+		init.pBoxDisplay = displaySearchBox;
+		box = std::make_shared<W_EDITBOX>(&init);
+		box->setString(text);
+		box->setPlaceholder(WzString::fromUtf8(_("Search")));
+		PIELIGHT muted = currentHudSkin().colors().textSecondary;
+		muted.byte.a = 150;
+		box->setPlaceholderTextColor(muted);
+		box->setMaxStringSize(40);
+		box->setOnEscapeHandler([](W_EDITBOX &editBox) {
+			editBox.setString(WzString());
+			editBox.stopEditing();
+		});
+		attach(box);
+		last = text;
+	}
+
+	std::shared_ptr<W_EDITBOX> box;
+	std::function<void (const WzString &)> changed;
+	WzString last;
+};
+
 /// (Demolish, which is listed whatever the category)
 const char *const ANY_CATEGORY = "*";
 
@@ -135,11 +200,41 @@ public:
 		content->panel = panel;
 		content->state = hudSettings().rememberFilters ? remembered[static_cast<size_t>(panel)] : FilterState();
 		content->initialize();
+		// (the menu goes with the panel)
+		std::weak_ptr<PanelFiltersContent> weakContent = content;
+		form->addOnCloseStarted([weakContent]() {
+			auto strongContent = weakContent.lock();
+			auto menu = strongContent != nullptr ? strongContent->openedMenu.lock() : nullptr;
+			if (menu != nullptr)
+			{
+				menu->closeMenu();
+			}
+		});
 		return content;
+	}
+
+	~PanelFiltersContent() override
+	{
+		if (auto menu = openedMenu.lock())
+		{
+			menu->closeMenu();
+		}
 	}
 
 	HudExtensionFit fit(int panelWidth, int panelHeight, int availableHeightAbove, int availableWidthRight) override
 	{
+		if (hudCompactLayout())
+		{
+			// A tab beside the header's row, which opens the menu
+			compact = true;
+			HudExtensionFit tab;
+			if ((panel == FilterPanel::Research || categories.size() >= 2) && availableWidthRight >= TAB_GAP + TAB_WIDTH)
+			{
+				tab.right = TAB_GAP + TAB_WIDTH;
+				tab.rightTabHeight = hudCompactStatsHeaderHeight();
+			}
+			return tab;
+		}
 		int needed = 0;
 		if (panel == FilterPanel::Research)
 		{
@@ -181,6 +276,11 @@ protected:
 		{
 			return;
 		}
+		if (compact && hudCompactLayout())
+		{
+			compactButton->setGeometry(TAB_GAP, 1, TAB_WIDTH, height() - 2);
+			return;
+		}
 		if (compact)
 		{
 			compactButton->setGeometry(2, hudCloseButtonGutter(), COMPACT_WIDTH - 4, HUD_CHIP_HEIGHT);
@@ -214,7 +314,11 @@ protected:
 private:
 	void initialize()
 	{
-		compactButton = HudChip::make(WzString::fromUtf8("▾"), _("Filter"));
+		compactButton = HudChip::make(WzString::fromUtf8("▾"), panel == FilterPanel::Research ? _("Search and filter") : _("Filter"));
+		if (hudCompactLayout())
+		{
+			compactButton->setIcon(panel == FilterPanel::Research ? "search" : "filter");
+		}
 		compactButton->onPressed = [this](HudChip &, bool) { openMenu(compactButton); };
 		attach(compactButton);
 		if (panel == FilterPanel::Research)
@@ -435,6 +539,10 @@ private:
 		auto addItem = [weakSelf, &menu](const WzString &text, const std::string &category, bool current) {
 			auto item = WzClickableOptionsChoiceWidget::make(font_small);
 			item->setString(current ? WzString::fromUtf8("✓ ") + text : text);
+			if (hudLargerTouchTargets())
+			{
+				item->setPadding(10, std::max(5, (TOUCH_MENU_ITEM_HEIGHT - iV_GetTextLineSize(font_small) + 1) / 2));
+			}
 			item->addOnClickHandler([weakSelf, category](WzClickableOptionsChoiceWidget &, WIDGET_KEY) {
 				if (auto self = weakSelf.lock())
 				{
@@ -444,13 +552,31 @@ private:
 			item->setGeometry(0, 0, item->idealWidth(), item->idealHeight());
 			menu->addMenuItem(item, true);
 		};
+		if (searchBox && !searchBox->visible())
+		{
+			// (the panel's own field is folded away)
+			std::weak_ptr<W_EDITBOX> weakBox = searchBox;
+			menu->addMenuItem(MenuSearchField::make(searchBox->getString(), [weakBox](const WzString &text) {
+				if (auto box = weakBox.lock())
+				{
+					box->setString(text);
+				}
+			}), false);
+		}
+		auto heading = std::make_shared<W_LABEL>();
+		heading->setFont(font_small, currentHudSkin().colors().textSecondary);
+		heading->setString(WzString::fromUtf8(_("Show")));
+		heading->setGeometry(0, 0, heading->getMaxLineWidth() + 12, iV_GetTextLineSize(font_small) + 4);
+		heading->setTransparentToMouse(true);
+		menu->addMenuItem(heading, false);
 		const std::string current = panel == FilterPanel::Research ? laneId() : state.category;
-		addItem(WzString::fromUtf8(panel == FilterPanel::Research ? _("All categories") : _("All")), std::string(), current.empty());
+		addItem(WzString::fromUtf8(_("All")), std::string(), current.empty());
 		for (const auto &category : categories)
 		{
 			addItem(category.name, category.id, category.id == current);
 		}
 		hudOpenMenu(menu, anchor);
+		openedMenu = menu;
 	}
 
 	void apply()
@@ -489,6 +615,7 @@ private:
 	std::shared_ptr<HudChip> compactButton;
 	std::shared_ptr<W_EDITBOX> searchBox;
 	std::shared_ptr<HudChip> laneButton;
+	std::weak_ptr<PopoverMenuWidget> openedMenu;
 	std::unordered_map<BASE_STATS *, std::string> categoryCache;
 	std::unordered_map<BASE_STATS *, WzString> searchCache;
 };
@@ -515,6 +642,11 @@ std::shared_ptr<HudExtensionContent> hudMakePanelFilters(const std::shared_ptr<S
 		return PanelFiltersContent::make(form, FilterPanel::Research);
 	}
 	return nullptr;
+}
+
+int hudPanelFiltersTabWidth()
+{
+	return hudCompactLayout() && hudModuleActive(HudModuleId::PanelFilters) ? TAB_GAP + TAB_WIDTH : 0;
 }
 
 void hudResetPanelFilters()

@@ -26,6 +26,7 @@
 */
 
 #include "hud.h"
+#include "hudlayout.h"
 #include "hudbadges.h"
 #include "huddetail.h"
 #include "hudmodel.h"
@@ -113,6 +114,7 @@ void createModules()
 void rebuildNow()
 {
 	rebuildPending = false;
+	hudLayoutBuilt();
 	const OBJECT_MODE openPanel = intOpenObjectPanel();
 	hudCloseTransientUi();
 	destroyModules();
@@ -122,6 +124,7 @@ void rebuildNow()
 	}
 	createModules();
 	specStatsViewSkinChanged();
+	intRebuildGroupSelectionMenu();
 	inGameConsoleSkinChanged();
 	if (openPanel != IOBJ_NONE)
 	{
@@ -138,6 +141,7 @@ void hudInitialize()
 	initialized = true;
 	interfaceShown = true;
 	rebuildPending = false;
+	hudLayoutBuilt();
 	hudSkinChanged();
 	hudObjectivesInitialize();
 	createModules();
@@ -164,7 +168,9 @@ void hudUpdate()
 	else if (rebuildPending && !InGameOpUp && !MissionResUp)
 	{
 		// Meanwhile, keep up what holds the rebuild back: the intelligence screen (opened again in the new skin)
+		// and the groups panel beside the design screen
 		intRebuildIntelMap();
+		intRebuildGroupSelectionMenu();
 	}
 	for (auto &module : modules)
 	{

@@ -671,14 +671,26 @@ private:
 	}
 
 	// Nothing takes the delivery point's place (manufacture's) on their left
-	WzRect layoutCompactHeader(int drop) override
+	WzRect layoutCompactHeader(int drop, int grow, bool) override
 	{
-		obsoleteButton->move(4, STAT_SLDY + drop);
-		favoriteButton->move(obsoleteButton->x() + obsoleteButton->width() + 4, STAT_SLDY + drop);
+		const int y = STAT_SLDY + drop - grow;
+		sizeHeaderButton(*obsoleteButton, grow);
+		sizeHeaderButton(*favoriteButton, grow);
+		obsoleteButton->move(4, y);
+		favoriteButton->move(obsoleteButton->x() + obsoleteButton->width() + 4, y);
 		hudSetMovedPanelControl(obsoleteButton);
 		hudSetMovedPanelControl(favoriteButton);
 		const int right = favoriteButton->x() + favoriteButton->width();
-		return WzRect(4, STAT_SLDY + drop, right - 4, std::max(obsoleteButton->height(), favoriteButton->height()));
+		return WzRect(4, y, right - 4, std::max(obsoleteButton->height(), favoriteButton->height()));
+	}
+
+	std::vector<HudHeaderMenuEntry> headerMenuEntries() override
+	{
+		HudHeaderMenuEntry obsolete;
+		obsolete.button = obsoleteButton;
+		HudHeaderMenuEntry favorites;
+		favorites.button = favoriteButton;
+		return {obsolete, favorites};
 	}
 
 	void addObsoleteButton()

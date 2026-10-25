@@ -308,6 +308,8 @@ bool intHelpOverlayIsUp();
 bool intAddReticule();
 bool intAddInGameOptionsButton();
 bool intShowGroupSelectionMenu();
+/// Builds the groups panel again when it was built for the other layout
+void intRebuildGroupSelectionMenu();
 bool intAddPower();
 void intRemoveReticule();
 void intHideInGameOptionsButton();

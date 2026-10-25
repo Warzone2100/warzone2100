@@ -38,7 +38,7 @@ public:
 	const HudColors &colors() const override;
 	const HudMetrics &metrics() const override;
 
-	void drawPanelFrame(const WzRect &rect, const WzRect &openRect) override;
+	void drawPanelFrame(const WzRect &rect, const WzRect &openRect, bool accentEdge = true) override;
 	void drawFancyButtonBackground(const HudFancyButtonLook &look) override;
 	void drawFancyButtonHighlight(const HudFancyButtonLook &look) override;
 	void drawFancyButtonOnHold(const HudFancyButtonLook &look) override;

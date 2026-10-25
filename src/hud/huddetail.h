@@ -102,5 +102,7 @@ std::vector<WzRect> hudDetailPeekActionRectsForTests();
 /// Contents width the popovers aim for, and the most they may take of the screen's height
 int hudDetailWidth();
 int hudDetailMaxHeight();
+/// The popovers' small form (the Compact layout): no model, and what's least needed left out
+bool hudDetailSmall();
 
 #endif // __INCLUDED_SRC_HUD_HUDDETAIL_H__

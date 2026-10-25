@@ -64,6 +64,24 @@ enum class HudPanelTint : uint8_t
 	None,
 };
 
+/// Where the HUD's elements go. Standard keeps them where they always were, Compact fits a height of 360, and Auto is
+/// Compact below a height of 480 (510 with Larger Touch Targets)
+enum class HudLayoutChoice : uint8_t
+{
+	Auto = 0,
+	Standard = 1,
+	Compact = 2,
+};
+
+/// The reticule. Full is the Classic cluster. Compact is the same hexes in a band two high, giving its height to the
+/// stats panel in the Compact layout. Auto is Compact in the Compact layout
+enum class HudReticuleChoice : uint8_t
+{
+	Auto = 0,
+	Full = 1,
+	Compact = 2,
+};
+
 enum class HudTooltips : uint8_t
 {
 	Simple = 0,
@@ -113,6 +131,14 @@ struct HudSettings
 	uint32_t tooltipDelay = 200;
 	/// With touch, how long a press is held for the element's popover (the Modern skin's long-press)
 	uint32_t longPressDelay = 400;
+	HudLayoutChoice layout = HudLayoutChoice::Auto;
+	HudReticuleChoice reticule = HudReticuleChoice::Auto;
+	/// Taller panel header controls, and in the Compact layout one menu button for them (not tied to touch detection)
+#if defined(__ANDROID__)
+	bool largerTouchTargets = true;
+#else
+	bool largerTouchTargets = false;
+#endif
 	bool showModulesInTutorial = false;
 
 	bool operator==(const HudSettings &other) const;

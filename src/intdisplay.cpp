@@ -724,6 +724,10 @@ void IntFormAnimated::closeAnimateDelete(const W_ANIMATED_ON_CLOSE_FUNC& _onClos
 	currentAction = 3;
 	disableChildren = true;
 	onCloseAnimFinished = _onCloseAnimFinished;
+	for (const auto &handler : onCloseStarted)
+	{
+		handler();
+	}
 }
 
 bool IntFormAnimated::isClosing() const
@@ -733,7 +737,7 @@ bool IntFormAnimated::isClosing() const
 
 void IntFormAnimated::display(int xOffset, int yOffset)
 {
-	WzRect aOpen(xOffset + x(), yOffset + y(), width(), height());
+	WzRect aOpen(xOffset + x(), yOffset + y(), std::max(0, width() - frameRightTrim), height());
 	WzRect aClosed(aOpen.x() + aOpen.width() / 4, aOpen.y() + aOpen.height() / 2 - 4, aOpen.width() / 2, 8);
 	WzRect aBegin;
 	WzRect aEnd;
@@ -807,7 +811,7 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		pie_DrawRoundedBox(static_cast<float>(aCur.x()), static_cast<float>(aCur.y()), static_cast<float>(aCur.right()),
 		                   static_cast<float>(aCur.bottom()), backing, skin.metrics().panelRadius);
 	}
-	skin.drawPanelFrame(aCur, aOpen);
+	skin.drawPanelFrame(aCur, aOpen, accentEdge);
 }
 
 // Display an image for a widget.

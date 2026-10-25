@@ -26,6 +26,7 @@
 */
 
 #include "hudsettings.h"
+#include "hudlayout.h"
 #include "hud.h"
 
 #include "lib/framework/frame.h"
@@ -69,7 +70,8 @@ bool sameLook(const HudSettings &a, const HudSettings &b)
 bool HudSettings::operator==(const HudSettings &other) const
 {
 	return sameLook(*this, other) && accent == other.accent && panelTint == other.panelTint && reduceMotion == other.reduceMotion && rememberFilters == other.rememberFilters && toasts == other.toasts
-		&& objectivesPopUp == other.objectivesPopUp && tooltipDelay == other.tooltipDelay && longPressDelay == other.longPressDelay && showModulesInTutorial == other.showModulesInTutorial;
+		&& objectivesPopUp == other.objectivesPopUp && tooltipDelay == other.tooltipDelay && longPressDelay == other.longPressDelay && layout == other.layout && reticule == other.reticule
+		&& largerTouchTargets == other.largerTouchTargets && showModulesInTutorial == other.showModulesInTutorial;
 }
 
 const HudSettings &hudSettings()
@@ -139,6 +141,10 @@ void hudSetSettings(const HudSettings &settings)
 		|| previous.showModulesInTutorial != settings.showModulesInTutorial)
 	{
 		hudRequestRebuild();
+	}
+	if (previous.layout != settings.layout || previous.reticule != settings.reticule || previous.largerTouchTargets != settings.largerTouchTargets)
+	{
+		hudLayoutSettingsChanged();
 	}
 }
 
@@ -273,6 +279,11 @@ void hudLoadSettings(const std::function<nonstd::optional<int> (const std::strin
 	settings.objectivesPopUp = get("hudObjectivesPopUp", 1) != 0;
 	settings.tooltipDelay = static_cast<uint32_t>(std::max(0, std::min(get("hudTooltipDelay", 200), 2000)));
 	settings.longPressDelay = static_cast<uint32_t>(std::max(200, std::min(get("hudLongPressDelay", 400), 1500)));
+	const int layout = get("hudLayout", static_cast<int>(HudLayoutChoice::Auto));
+	settings.layout = layout >= 0 && layout <= static_cast<int>(HudLayoutChoice::Compact) ? static_cast<HudLayoutChoice>(layout) : HudLayoutChoice::Auto;
+	const int reticule = get("hudReticule", static_cast<int>(HudReticuleChoice::Auto));
+	settings.reticule = reticule >= 0 && reticule <= static_cast<int>(HudReticuleChoice::Compact) ? static_cast<HudReticuleChoice>(reticule) : HudReticuleChoice::Auto;
+	settings.largerTouchTargets = get("hudLargerTouchTargets", HudSettings().largerTouchTargets ? 1 : 0) != 0;
 	settings.showModulesInTutorial = get("hudModulesInTutorial", 0) != 0;
 	hudSetSettings(settings);
 	spectatorStripTwoLines = get("hudSpectatorStripLines", 2) != 1;
@@ -295,6 +306,9 @@ void hudSaveSettings(const std::function<void (const std::string &key, int value
 	setInteger("hudObjectivesPopUp", currentSettings.objectivesPopUp ? 1 : 0);
 	setInteger("hudTooltipDelay", static_cast<int>(currentSettings.tooltipDelay));
 	setInteger("hudLongPressDelay", static_cast<int>(currentSettings.longPressDelay));
+	setInteger("hudLayout", static_cast<int>(currentSettings.layout));
+	setInteger("hudReticule", static_cast<int>(currentSettings.reticule));
+	setInteger("hudLargerTouchTargets", currentSettings.largerTouchTargets ? 1 : 0);
 	setInteger("hudModulesInTutorial", currentSettings.showModulesInTutorial ? 1 : 0);
 	setInteger("hudSpectatorStripLines", spectatorStripTwoLines ? 2 : 1);
 }

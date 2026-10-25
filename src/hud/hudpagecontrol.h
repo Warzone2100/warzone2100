@@ -56,6 +56,9 @@ public:
 	/// beside it)
 	void setVisualHeight(int height);
 	int visualHeight() const { return drawnHeight; }
+	/// One segment, the current page of how many ("2 / 3"), that opens the picker (Larger Touch Targets, in the Compact
+	/// layout's header)
+	void setSingleSegment(bool single);
 
 protected:
 	void geometryChanged() override;
@@ -78,6 +81,7 @@ private:
 	std::vector<std::shared_ptr<Segment>> segments;
 	int frameWidth = 0;
 	int drawnHeight = 13;
+	bool singleSegment = false;
 	std::shared_ptr<PopoverWidget> picker;
 };
 

@@ -254,8 +254,9 @@ public:
 	virtual const HudColors &colors() const = 0;
 	virtual const HudMetrics &metrics() const = 0;
 
-	/// An IntFormAnimated panel's frame, at its current (maybe animating) rectangle
-	virtual void drawPanelFrame(const WzRect &rect, const WzRect &openRect) = 0;
+	/// An IntFormAnimated panel's frame, at its current (maybe animating) rectangle. accentEdge: the skin's accent along
+	/// its top, when it has one
+	virtual void drawPanelFrame(const WzRect &rect, const WzRect &openRect, bool accentEdge = true) = 0;
 	virtual void drawFancyButtonBackground(const HudFancyButtonLook &look) = 0;
 	virtual void drawFancyButtonHighlight(const HudFancyButtonLook &look) = 0;
 	/// A factory or research facility on hold

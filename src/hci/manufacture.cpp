@@ -770,14 +770,19 @@ private:
 	}
 
 	// The buttons 2 px apart, with the loop count on the loop button, to leave room for the pages
-	WzRect layoutCompactHeader(int drop) override
+	WzRect layoutCompactHeader(int drop, int grow, bool) override
 	{
-		const int y = STAT_SLDY + drop;
+		const int y = STAT_SLDY + drop - grow;
+		const AtlasImage deliveryPointImage(IntImages, IMAGE_FDP_UP);
+		sizeHeaderButton(*deliveryPointButton, grow, deliveryPointImage);
+		sizeHeaderButton(*obsoleteButton, grow);
+		sizeHeaderButton(*loopProductionButton, grow);
 		// (the delivery point button takes its size from its images when it's first drawn)
 		deliveryPointButton->move(4, y);
-		obsoleteButton->move(deliveryPointButton->x() + AtlasImage(IntImages, IMAGE_FDP_UP).width() + 2, y);
+		obsoleteButton->move(deliveryPointButton->x() + deliveryPointImage.width() + grow + 2, y);
 		loopProductionButton->move(obsoleteButton->x() + obsoleteButton->width() + 2, y);
-		loopProductionButton->countBadge = true;
+		// (in the header menu, its item shows the count)
+		loopProductionButton->countBadge = !usesHeaderMenu();
 		loopProductionLabel->setGeometry(loopProductionButton->geometry());
 		loopProductionLabel->setTransparentToMouse(true);
 		loopProductionLabel->drawn = false;
@@ -792,6 +797,26 @@ private:
 	size_t compactHeaderMaxPages() const override
 	{
 		return 2;
+	}
+
+	std::vector<HudHeaderMenuEntry> headerMenuEntries() override
+	{
+		HudHeaderMenuEntry deliveryPoint;
+		deliveryPoint.button = deliveryPointButton;
+		deliveryPoint.closesMenu = true;
+		HudHeaderMenuEntry obsolete;
+		obsolete.button = obsoleteButton;
+		HudHeaderMenuEntry loop;
+		loop.button = loopProductionButton;
+		std::weak_ptr<ManufactureController> weakController = controller;
+		loop.stepperValue = [weakController]() {
+			auto strongController = weakController.lock();
+			const std::string count = strongController != nullptr ? loopCountText(getProductionLoops(strongController->getHighlightedObject())) : std::string();
+			return WzString::fromUtf8(count.empty() ? _("Off") : count);
+		};
+		loop.stepperLessTip = _("One loop fewer");
+		loop.stepperMoreTip = _("One loop more");
+		return {deliveryPoint, obsolete, loop};
 	}
 
 	void addObsoleteButton()

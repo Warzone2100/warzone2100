@@ -325,12 +325,12 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 		group = makeDetailPanelBadge(groupName, pal_RGBA(40, 40, 40, 255), WZCOL_FORM_TEXT);
 	}
 
-	const int modelSize = options.compact ? COMPACT_MODEL_SIZE : MODEL_SIZE;
+	const int modelSize = options.small ? 0 : (options.compact ? COMPACT_MODEL_SIZE : MODEL_SIZE);
 	// The title and the badges beside the model do not wrap, and a long progression name next to a
 	// long status runs off the end of the header without this.
 	{
 		const int32_t asked = width;
-		const int textX = PADDING + modelSize + PADDING;
+		const int textX = PADDING + (modelSize > 0 ? modelSize + PADDING : 0);
 		// A status shown as a bar spans the panel rather than sharing the header row, so
 		// what it wants bounds the panel and not that row
 		const bool statusIsBar = !stats.empty();
@@ -501,12 +501,16 @@ std::shared_ptr<DetailPanelContents> makeResearchTopicDetailContents(const Resea
 	}
 	body->addItem(after);
 
-	auto model = makeDetailPanelModel([subject](int x0, int y0, int modelWidth, int modelHeight) {
-		if (subject < asResearch.size())
-		{
-			renderResearchFittedToBuffer(&asResearch[subject], x0 + modelWidth / 2, y0 + modelHeight / 2,
-			                             static_cast<UDWORD>(std::min(modelWidth, modelHeight)));
-		}
-	});
+	std::shared_ptr<WIDGET> model;
+	if (modelSize > 0)
+	{
+		model = makeDetailPanelModel([subject](int x0, int y0, int modelWidth, int modelHeight) {
+			if (subject < asResearch.size())
+			{
+				renderResearchFittedToBuffer(&asResearch[subject], x0 + modelWidth / 2, y0 + modelHeight / 2,
+				                             static_cast<UDWORD>(std::min(modelWidth, modelHeight)));
+			}
+		});
+	}
 	return DetailPanelContents::make(std::move(model), std::move(title), std::move(subtitle), std::move(group), std::move(status), std::move(stats), std::move(body), makeActionRow(actions), width, options.style, DetailStatusPlacement::Automatic, modelSize);
 }

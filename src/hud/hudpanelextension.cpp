@@ -26,6 +26,8 @@
 */
 
 #include "hudpanelextension.h"
+#include "hudlayout.h"
+#include "../intdisplay.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -38,6 +40,12 @@
 #include <vector>
 
 constexpr int CLOSE_INSET = 3;
+
+/// (larger with Larger Touch Targets)
+static int closeSize()
+{
+	return CLOSE_WIDTH + hudTouchHeaderGrowth();
+}
 
 static std::vector<std::weak_ptr<WIDGET>> movedCloseButtons;
 static std::vector<std::weak_ptr<WIDGET>> movedPanelControls;
@@ -103,7 +111,8 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 		auto anchor = weakAnchor.lock();
 		auto content = weakContent.lock();
 		const WzRect full = layoutSpec.classicRect();
-		const int inset = layoutSpec.topInset ? std::max(0, std::min(layoutSpec.topInset(), full.height())) : 0;
+		// (a negative inset raises the panel, ex. for a taller header)
+		const int inset = layoutSpec.topInset ? std::max(-full.y(), std::min(layoutSpec.topInset(), full.height())) : 0;
 		const WzRect classic(full.x(), full.y() + inset, full.width(), full.height() - inset);
 		const int above = layoutSpec.availableHeightAbove ? std::max(0, layoutSpec.availableHeightAbove(classic)) : 0;
 		const int right = layoutSpec.availableWidthRight ? std::max(0, layoutSpec.availableWidthRight(classic)) : 0;
@@ -134,23 +143,42 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 			}
 			else
 			{
-				content->setGeometry(classic.width(), fit.top, fit.right, fit.right > 0 ? classic.height() : 0);
+				const int strip = fit.rightTabHeight > 0 ? std::min(fit.rightTabHeight, classic.height()) : classic.height();
+				content->setGeometry(classic.width(), fit.top, fit.right, fit.right > 0 ? strip : 0);
 			}
+		}
+		// A tab: the panel's frame and hits leave out the room under it
+		const bool tab = band == 0 && fit.right > 0 && fit.rightTabHeight > 0;
+		if (auto form = dynamic_cast<IntFormAnimated *>(psWidget))
+		{
+			form->setFrameRightTrim(tab ? fit.right : 0);
+		}
+		if (tab)
+		{
+			const int bodyWidth = classic.width();
+			const int tabBottom = fit.top + fit.rightTabHeight;
+			psWidget->setCustomHitTest([bodyWidth, tabBottom](const WIDGET *widget, int x, int y) {
+				return x - widget->x() < bodyWidth || y - widget->y() < tabBottom;
+			});
+		}
+		else
+		{
+			psWidget->setCustomHitTest(nullptr);
 		}
 		if (auto closeButton = weakCloseButton.lock())
 		{
 			const int width = classic.width() + fit.right;
 			if (band > 0)
 			{
-				closeButton->setGeometry(width - CLOSE_WIDTH - CLOSE_INSET, std::max(0, std::min((band - CLOSE_HEIGHT) / 2, CLOSE_INSET + 1)), CLOSE_WIDTH, CLOSE_HEIGHT);
+				closeButton->setGeometry(width - closeSize() - CLOSE_INSET, std::max(0, std::min((band - closeSize()) / 2, CLOSE_INSET + 1)), closeSize(), closeSize());
 			}
 			else if (fit.right > 0)
 			{
-				closeButton->setGeometry(width - (fit.right + CLOSE_WIDTH) / 2, fit.top + CLOSE_INSET, CLOSE_WIDTH, CLOSE_HEIGHT);
+				closeButton->setGeometry(width - (fit.right + closeSize()) / 2, fit.top + CLOSE_INSET, closeSize(), closeSize());
 			}
 			else
 			{
-				closeButton->setGeometry(classic.width() - CLOSE_WIDTH, fit.top, CLOSE_WIDTH, CLOSE_HEIGHT);
+				closeButton->setGeometry(classic.width() - closeSize(), fit.top, closeSize(), closeSize());
 			}
 		}
 		if (layoutSpec.afterLayout)
@@ -162,7 +190,7 @@ void hudExtendPanel(const std::shared_ptr<WIDGET> &panel, const std::shared_ptr<
 
 int hudCloseButtonGutter()
 {
-	return CLOSE_WIDTH + CLOSE_INSET * 2;
+	return closeSize() + CLOSE_INSET * 2;
 }
 
 bool hudIsMovedCloseButton(const WIDGET &widget)

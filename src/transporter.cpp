@@ -60,6 +60,7 @@
 #include "multiplay.h"
 #include "hci/groups.h"
 #include "wzapi.h"
+#include "hud/hudlayout.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CLOSE			9002	//The close button icon
@@ -378,8 +379,11 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	sButInit.formID = 0;
 	sButInit.id = IDTRANS_LAUNCH;
 	sButInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
-	sButInit.x = RET_X;
+	sButInit.x = hudTransporterButtonX(RET_X);
 	sButInit.y = (SWORD)TIMER_Y;
+	sButInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(hudTransporterButtonX(RET_X), TIMER_Y);
+	});
 	sButInit.width = (UWORD)(10 + iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP));
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 	sButInit.pTip = _("Launch Transport");
@@ -398,7 +402,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	W_LABINIT sLabInit;
 	sLabInit.formID = IDTRANS_LAUNCH;
 	sLabInit.id = IDTRANS_CAPACITY;
-	sLabInit.x = (SWORD)(sButInit.x + 40);
+	sLabInit.x = (SWORD)(RET_X + 40);
 	sLabInit.y = 0;
 	sLabInit.width = 16;
 	sLabInit.height = 16;

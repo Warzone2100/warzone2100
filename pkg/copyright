@@ -650,10 +650,12 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/hud/huddetailcontents.*
        src/hud/hudgameresults.cpp
        src/hud/hudgeometrydump.*
+       src/hud/hudheadermenu.*
        src/hud/hudiconbutton.*
        src/hud/hudidle.*
        src/hud/hudids.h
        src/hud/hudkeys.*
+       src/hud/hudlayout.*
        src/hud/hudmodel.*
        src/hud/hudmodernskin.cpp
        src/hud/hudmodules.*
@@ -737,6 +739,8 @@ Files: data/base/images/hud/icons/order-repair-heavy.fill.svg
        src/wzpropertyproviders.*
        tests/console_test.cpp
        tests/framepacer_test.cpp
+       tests/hud/compact.py
+       tests/hud/compact.sh
        tests/hud/contract.py
        tests/hud/contract.sh
        tests/hud/geometry.sh

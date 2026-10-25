@@ -71,6 +71,8 @@ struct ResearchDetailOptions
 	bool routineStatus = true;
 	/// The list of what the topic requires
 	bool requirements = true;
+	/// (compact) For a small screen: no model
+	bool small = false;
 };
 
 /// Contents for a popover describing one research topic.

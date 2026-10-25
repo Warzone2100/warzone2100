@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include <map>
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/bitimage.h"//bitmap routines
 
@@ -29,6 +30,7 @@
 #include "order.h"
 #include "game_world.h"
 #include "hud/hudskin.h"
+#include "hud/hudlayout.h"
 
 #include <set>
 #include <algorithm>
@@ -42,6 +44,8 @@
 #define ORDER_BUTY		16
 #define ORDER_BUTGAP	4
 #define ORDER_BOTTOMY	318	+ E_H
+#define ORDER_COMPACT_TOP	2
+#define ORDER_COLUMN_OFFSET	(ORDER_WIDTH - ORDER_BUTX / 2)
 
 #define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
@@ -623,6 +627,25 @@ bool intDrawOrderButton(HudSkin &skin, UWORD imageId, const WzRect &rect, bool d
 // Returns true if the form was displayed ok.
 //
 //changed to a BASE_OBJECT to accommodate the factories - AB 21/04/99
+// In the Compact layout's two-column orders panel: where the unit goes and what becomes of it (halt type, return to,
+// recycle, production), rather than how it fights
+static bool inRightOrderColumn(SECONDARY_ORDER order)
+{
+	switch (order)
+	{
+	case DSO_HALTTYPE:
+	case DSO_RETURN_TO_LOC:
+	case DSO_RECYCLE:
+	case DSO_ASSIGN_PRODUCTION:
+	case DSO_ASSIGN_CYBORG_PRODUCTION:
+	case DSO_ASSIGN_VTOL_PRODUCTION:
+	case DSO_CLEAR_PRODUCTION:
+		return true;
+	default:
+		return false;
+	}
+}
+
 bool intAddOrder(BASE_OBJECT *psObj)
 {
 	bool Animate = true;
@@ -751,6 +774,15 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	Height = 0;
 	NumDisplayedOrders = 0;
+	// Each button, its order's column (when two are needed) and its row's place in one column
+	struct PlacedButton
+	{
+		UDWORD id;
+		bool rightColumn;
+		int rowY;
+		int rowHeight;
+	};
+	std::vector<PlacedButton> placedButtons;
 
 	for (unsigned j = 0; j < AvailableOrders.size() && NumDisplayedOrders < MAX_DISPLAYABLE_ORDERS; ++j)
 	{
@@ -867,6 +899,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			{
 				return false;
 			}
+			placedButtons.push_back({sButInit.id, inRightOrderColumn(OrderButtons[OrdIndex].Order), sButInit.y, sButInit.height + ORDER_BUTGAP});
 
 			// Set the default state for the button.
 			switch (OrderButtons[OrdIndex].ButType)
@@ -941,9 +974,50 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
-	orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
-		psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
-	});
+	if (hudCompactLayout() && ORDER_BOTTOMY - newHeight < ORDER_COMPACT_TOP)
+	{
+		// Too tall for the Compact layout: two columns, the unit's own behavior on the left, where it goes and
+		// what happens to it on the right
+		std::map<int, int> newRowY[2];
+		int columnHeight[2] = {0, 0};
+		for (const auto &placed : placedButtons)
+		{
+			auto &rows = newRowY[placed.rightColumn ? 1 : 0];
+			if (rows.find(placed.rowY) == rows.end())
+			{
+				rows[placed.rowY] = ORDER_BUTY + columnHeight[placed.rightColumn ? 1 : 0];
+				columnHeight[placed.rightColumn ? 1 : 0] += placed.rowHeight;
+			}
+		}
+		for (const auto &placed : placedButtons)
+		{
+			if (auto button = widgGetFromID(psWScreen, placed.id))
+			{
+				button->move(button->x() + (placed.rightColumn ? ORDER_COLUMN_OFFSET : 0), newRowY[placed.rightColumn ? 1 : 0][placed.rowY]);
+			}
+		}
+		const int twoColumnHeight = std::max(columnHeight[0], columnHeight[1]) + CLOSE_HEIGHT + ORDER_BUTGAP;
+		constexpr int twoColumnWidth = ORDER_WIDTH + ORDER_COLUMN_OFFSET;
+		if (auto closeButton = widgGetFromID(psWScreen, IDORDER_CLOSE))
+		{
+			closeButton->move(twoColumnWidth - CLOSE_WIDTH, 0);
+		}
+		orderForm->setCalcLayout([twoColumnHeight](WIDGET *psWidget) {
+			// Wider than the left column: above the object row too when the commander's shows beside it
+			int bottom = ORDER_BOTTOMY;
+			if (intMode == INT_CMDORDER)
+			{
+				bottom = std::min(bottom, hudObjectsPanelRect().y() - BASE_GAP);
+			}
+			psWidget->setGeometry(ORDER_X, std::max(ORDER_COMPACT_TOP, bottom - twoColumnHeight), twoColumnWidth, twoColumnHeight);
+		});
+	}
+	else
+	{
+		orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
+			psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
+		});
+	}
 
 	OrderUp = true;
 	setSecondaryWindowUp(true);

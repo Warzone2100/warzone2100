@@ -125,6 +125,71 @@ void addHudOptions(const std::shared_ptr<OptionsForm> &form)
 		form->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("interface.hud.layout", N_("HUD Layout"), N_("How the in-game panels are arranged."));
+		auto valueChanger = OptionsDropdown<HudLayoutChoice>::make(
+			[]() {
+				OptionChoices<HudLayoutChoice> result;
+				result.choices = {
+					{ _("Auto"), _("Compact below a screen height of 480 (510 with Larger Touch Targets), otherwise Standard."), HudLayoutChoice::Auto },
+					{ _("Standard"), _("The traditional arrangement, designed for normal screen sizes."), HudLayoutChoice::Standard },
+					{ _("Compact"), _("For small screens, down to a height of 360: the build, research and manufacture panel runs down from the top of the screen, the unit groups take one slim row, the minimap is smaller, and the unit orders take two columns when one doesn't fit."), HudLayoutChoice::Compact },
+				};
+				result.setCurrentIdxForValue(hudSettings().layout);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.layout = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.reticule", N_("Reticule"), N_("The buttons at the bottom left that open the build, manufacture, research, design, intelligence and commander panels."));
+		auto valueChanger = OptionsDropdown<HudReticuleChoice>::make(
+			[]() {
+				OptionChoices<HudReticuleChoice> result;
+				result.choices = {
+					{ _("Auto"), _("Compact with the Compact layout, otherwise Full."), HudReticuleChoice::Auto },
+					{ _("Full"), _("The standard reticule."), HudReticuleChoice::Full },
+					{ _("Compact"), _("Its buttons in a band two hexes high. Provides room in the Compact layout to see more content of other panels."), HudReticuleChoice::Compact },
+				};
+				result.setCurrentIdxForValue(hudSettings().reticule);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.reticule = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("interface.hud.largerTouchTargets", N_("Larger Touch Targets"), N_("Taller buttons in the panels' headers, for fingers on a touchscreen. In the Compact layout, they're gathered in one menu button."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(hudSettings().largerTouchTargets);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				HudSettings settings = hudSettings();
+				settings.largerTouchTargets = newValue;
+				hudSetSettings(settings);
+				return true;
+			}, true
+		);
+		form->addOption(optionInfo, valueChanger, true);
+	}
+	{
 		auto optionInfo = OptionInfo("interface.hud.longPressDelay", N_("Touch Long-Press"), N_("On a touchscreen, with the Modern skin: how long to hold a button for its details and other actions. A shorter press is a tap."));
 		auto valueChanger = OptionsDropdown<uint32_t>::make(
 			[]() {
