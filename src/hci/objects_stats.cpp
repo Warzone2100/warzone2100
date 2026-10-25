@@ -19,6 +19,7 @@
 
 #include "lib/widget/button.h"
 #include "lib/widget/bar.h"
+#include "lib/ivis_opengl/pieclip.h"
 #include "objects_stats.h"
 #include "../display3d.h"
 #include "../qtscript.h"
@@ -34,6 +35,7 @@
 #include "../hud/hudrowsummary.h"
 #include "../hud/hudsettings.h"
 #include "../hud/hudskin.h"
+#include "../hud/hudlayout.h"
 
 #include <algorithm>
 #include <iterator>
@@ -44,6 +46,9 @@ static constexpr int PAGE_ROW_PAD = 2;
 static constexpr int PAGE_ROW_HEIGHT_OWN = 16;
 static constexpr int PAGE_ROW_VISUAL_HEIGHT = 13;
 static constexpr int HEADER_GAP = 4;
+static constexpr int HEADER_MENU_X = 4;
+static constexpr int HEADER_CONTROLS_TOP = 1;
+static constexpr int TOUCH_CLOSE_WIDTH = 24;
 
 void BaseObjectsController::clearSelection()
 {
@@ -399,7 +404,7 @@ void ObjectsForm::initialize()
 	id = IDOBJ_FORM;
 	setHudSkinned(true);
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - (getGroupButtonEnabled() ? 80 : 0), OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
+		psWidget->setGeometry(hudObjectsPanelRect());
 	}));
 
 	addCloseButton();
@@ -572,7 +577,7 @@ void StatsForm::initialize()
 	id = IDSTAT_FORM;
 	setHudSkinned(true);
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
+		psWidget->setGeometry(hudStatsPanelRect());
 	}));
 
 	addCloseButton();
@@ -608,6 +613,13 @@ void StatsForm::addTabList()
 	optionList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
 	optionList->setChildSpacing(STAT_GAP, STAT_GAP);
 	int statListWidth = STAT_BUTWIDTH * 2 + STAT_GAP;
+	if (hudCompactLayout())
+	{
+		// The page control goes in the header's row (addHudExtension): the rows start under the header
+		optionList->setTabRowHidden();
+		optionList->setGeometry((STAT_WIDTH - statListWidth) / 2, hudCompactStatsHeaderHeight(), statListWidth, hudCompactStatsRows() * (STAT_BUTHEIGHT + STAT_GAP) - STAT_GAP);
+		return;
+	}
 	optionList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, STAT_HEIGHT - STAT_TABFORMY);
 }
 
@@ -776,30 +788,73 @@ std::shared_ptr<WIDGET> ObjectButton::makeHudDetail()
 void StatsForm::addHudExtension()
 {
 	auto self = std::static_pointer_cast<StatsForm>(shared_from_this());
+	std::weak_ptr<StatsForm> weakSelf = self;
+	// (in the Compact layout there's no room above the panel for the filters: they fold into a tab beside it)
+	const bool compact = hudCompactLayout();
+	const bool touchHeader = !compact && hudLargerTouchTargets();
 	auto content = hudModuleActive(HudModuleId::PanelFilters) ? hudMakePanelFilters(self) : nullptr;
-	if (content == nullptr && currentHudSkin().panelTopPadding() <= 0)
+	if (compact)
 	{
+		addPageControl();
+		if (hudCompactHeaderMenu() && !headerMenuEntries().empty())
+		{
+			headerMenu = HudHeaderMenuButton::make([weakSelf]() {
+				auto strongSelf = weakSelf.lock();
+				return strongSelf != nullptr ? strongSelf->headerMenuEntries() : std::vector<HudHeaderMenuEntry>();
+			});
+			headerMenu->id = IDHUD_STATS_MENU;
+			attach(headerMenu);
+			pageControl->setSingleSegment(true);
+		}
+	}
+	if (content == nullptr && currentHudSkin().panelTopPadding() <= 0 && !touchHeader)
+	{
+		if (compact)
+		{
+			setCalcLayout([weakSelf](WIDGET *psWidget) {
+				psWidget->setGeometry(hudStatsPanelRect());
+				if (auto strongSelf = weakSelf.lock())
+				{
+					strongSelf->layoutHudHeader();
+				}
+			});
+			callCalcLayout();
+		}
 		return;
 	}
 	HudPanelExtensionSpec spec;
 	spec.contentId = IDHUD_STATS_CONTENT;
-	spec.classicRect = []() { return WzRect(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT); };
+	spec.classicRect = []() { return hudStatsPanelRect(); };
 	spec.availableHeightAbove = [](const WzRect &classic) { return classic.y() - hudTopBand(); };
-	spec.availableWidthRight = [](const WzRect &classic) { return OBJ_BACKX - classic.right(); };
-	spec.closeButton = content != nullptr ? closeButton : nullptr;
-	if (content != nullptr)
+	// (Compact: the tab is in the top row, clear of the object row)
+	spec.availableWidthRight = [](const WzRect &classic) {
+		return hudCompactLayout() ? static_cast<int>(pie_GetVideoBufferWidth()) - classic.right() : OBJ_BACKX - classic.right();
+	};
+	spec.closeButton = content != nullptr && !compact ? closeButton : nullptr;
+	if (content != nullptr || compact || touchHeader)
 	{
-		addPageControl();
-		std::weak_ptr<StatsForm> weakSelf = self;
-		spec.topInset = [weakSelf]() {
-			auto strongSelf = weakSelf.lock();
-			return strongSelf != nullptr && strongSelf->compactHeaderInRow() ? COMPACT_HEADER_DROP : 0;
-		};
 		spec.afterLayout = [weakSelf]() {
 			if (auto strongSelf = weakSelf.lock())
 			{
 				strongSelf->layoutHudHeader();
 			}
+		};
+	}
+	if (content != nullptr && !compact)
+	{
+		addPageControl();
+	}
+	if ((content != nullptr && !compact) || touchHeader)
+	{
+		// (raised by the taller header's growth)
+		spec.topInset = [weakSelf]() {
+			auto strongSelf = weakSelf.lock();
+			if (strongSelf == nullptr)
+			{
+				return 0;
+			}
+			const int drop = strongSelf->pageControl != nullptr && strongSelf->compactHeaderInRow() ? COMPACT_HEADER_DROP : 0;
+			return drop - strongSelf->headerGrowth();
 		};
 	}
 	hudExtendPanel(self, content, spec);
@@ -829,22 +884,78 @@ bool StatsForm::compactHeaderInRow() const
 	return optionList->pages() <= compactHeaderMaxPages();
 }
 
+int StatsForm::headerGrowth() const
+{
+	// Only up into free room, clear of the band under the screen's top edge (ex. the campaign's timers)
+	const int growth = hudTouchHeaderGrowth();
+	return hudStatsPanelRect().y() - hudTopBand() >= growth ? growth : 0;
+}
+
+void StatsForm::sizeHeaderButton(W_BUTTON &button, int grow, AtlasImage fallback)
+{
+	const AtlasImage image = !button.images.normal.isNull() ? button.images.normal : fallback;
+	if (grow > 0 && !image.isNull())
+	{
+		button.setImageButtonSize(image.width() + grow, image.height() + grow);
+	}
+	else
+	{
+		button.setImageButtonSize(0, 0);
+	}
+}
+
 void StatsForm::layoutHudHeader()
 {
+	const int grow = headerGrowth();
+	if (grow > 0 && closeButton != nullptr && !hudIsMovedCloseButton(*closeButton))
+	{
+		closeButton->setGeometry(STAT_WIDTH - CLOSE_WIDTH - grow, -grow, CLOSE_WIDTH + grow, CLOSE_HEIGHT + grow);
+	}
 	if (pageControl == nullptr)
 	{
+		if (!hudCompactLayout() && hudLargerTouchTargets())
+		{
+			layoutCompactHeader(0, grow, false);
+		}
 		return;
 	}
 	const int listLeft = optionList->x();
 	const int listRight = optionList->x() + optionList->width();
+	if (hudCompactLayout())
+	{
+		// Always in the header's row (with arrows when its pages don't all fit), up to the close button
+		WzRect header = layoutCompactHeader(0, 0, true);
+		if (headerMenu != nullptr)
+		{
+			// The menu button in place of the header's buttons, all of them as tall
+			for (const auto &entry : headerMenuEntries())
+			{
+				if (entry.button != nullptr)
+				{
+					entry.button->hide();
+				}
+			}
+			header = WzRect(HEADER_MENU_X, HEADER_CONTROLS_TOP, HUD_HEADER_MENU_BUTTON_WIDTH, HUD_TOUCH_HEADER_CONTROL_HEIGHT);
+			headerMenu->setGeometry(header);
+			if (closeButton != nullptr)
+			{
+				closeButton->setGeometry(STAT_WIDTH - TOUCH_CLOSE_WIDTH, HEADER_CONTROLS_TOP, TOUCH_CLOSE_WIDTH, HUD_TOUCH_HEADER_CONTROL_HEIGHT);
+			}
+		}
+		pageControl->setVisualHeight(header.height());
+		const int left = header.width() > 0 ? header.x() + header.width() + HEADER_GAP : listLeft;
+		const int right = closeButton != nullptr ? closeButton->x() - HEADER_GAP : listRight;
+		pageControl->setGeometry(left, header.y() - PAGE_ROW_PAD, std::max(0, right - left), header.height() + PAGE_ROW_PAD * 2);
+		return;
+	}
 	if (!compactHeaderInRow())
 	{
-		layoutCompactHeader(0);
-		pageControl->setVisualHeight(PAGE_ROW_VISUAL_HEIGHT);
+		layoutCompactHeader(0, grow, false);
+		pageControl->setVisualHeight(grow > 0 ? PAGE_ROW_HEIGHT_OWN : PAGE_ROW_VISUAL_HEIGHT);
 		pageControl->setGeometry(listLeft, STAT_TABFORMY - 1, listRight - listLeft, PAGE_ROW_HEIGHT_OWN);
 		return;
 	}
-	const WzRect header = layoutCompactHeader(COMPACT_HEADER_DROP);
+	const WzRect header = layoutCompactHeader(COMPACT_HEADER_DROP, grow, true);
 	// As tall as the header's controls, and level with them (its hit area a little taller)
 	pageControl->setVisualHeight(header.height());
 	const int top = header.y() - PAGE_ROW_PAD;
@@ -874,7 +985,7 @@ void ObjectsForm::addHudExtension()
 	}
 	HudPanelExtensionSpec spec;
 	spec.contentId = IDHUD_OBJECTS_CONTENT;
-	spec.classicRect = []() { return WzRect(OBJ_BACKX, OBJ_BACKY - (getGroupButtonEnabled() ? 80 : 0), OBJ_BACKWIDTH, OBJ_BACKHEIGHT); };
+	spec.classicRect = []() { return hudObjectsPanelRect(); };
 	spec.availableHeightAbove = [](const WzRect &classic) { return classic.y() - hudTopBand(); };
 	spec.closeButton = content != nullptr ? closeButton : nullptr;
 	// The strip shows the page tabs, so it may cover their row

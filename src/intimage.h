@@ -67,7 +67,10 @@ public:
 
 	/// Its page tabs drawn by the HUD skin (the HUD's lists, others keep the Classic tabs)
 	void setHudSkinned();
+	/// No row for the page tabs: the list takes all of its height (something else shows the pages)
+	void setTabRowHidden();
 	void displayRecursive(WidgetGraphicsContext const &context) override;
+	void geometryChanged() override;
 
 protected:
 	void pageTurnedByTouch(size_t from, size_t to) override;
@@ -75,6 +78,7 @@ protected:
 private:
 	TabAlignment tabAlignment = TabAlignment::LeftAligned;
 	bool hudSkinned = false;
+	bool tabRowHidden = false;
 	nonstd::optional<uint32_t> pageTurnedAt;  ///< (a swipe's page, coming in)
 };
 

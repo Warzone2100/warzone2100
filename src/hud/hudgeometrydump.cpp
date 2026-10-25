@@ -494,16 +494,36 @@ private:
 
 std::shared_ptr<WIDGET> findWidget(const std::string &key)
 {
+	auto find = [&key](const ScreenWalker &walker) -> std::shared_ptr<WIDGET> {
+		for (const auto &entry : walker.keys)
+		{
+			if (entry.second == key)
+			{
+				return std::const_pointer_cast<WIDGET>(entry.first->shared_from_this());
+			}
+		}
+		return nullptr;
+	};
+	if (key.rfind("overlay", 0) == 0)
+	{
+		// (with the overlays' keys as the dump gives them, ex. a popover's items)
+		std::shared_ptr<WIDGET> found;
+		size_t index = 0;
+		widgForEachOverlayScreen([&](const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder) -> bool {
+			if (psScreen == nullptr || psScreen->psForm == nullptr)
+			{
+				return true;
+			}
+			ScreenWalker walker("overlay" + std::to_string(zOrder) + ":" + std::to_string(index++));
+			walker.walk(psScreen->psForm);
+			found = find(walker);
+			return found == nullptr;
+		});
+		return found;
+	}
 	ScreenWalker walker("");
 	walker.walk(psWScreen->psForm);
-	for (const auto &entry : walker.keys)
-	{
-		if (entry.second == key)
-		{
-			return std::const_pointer_cast<WIDGET>(entry.first->shared_from_this());
-		}
-	}
-	return nullptr;
+	return find(walker);
 }
 
 bool clickWidget(const std::string &key)
@@ -767,16 +787,15 @@ void hudGeometryDumpFrame()
 	flushConsoleMessages();
 	static bool available = false;
 	const std::string &name = stateNames[stateIndex];
+	const int laterClicks = clickKeys.size() > 1 ? static_cast<int>(clickKeys.size()) - 1 : 0;
 	if (frameInState == 0)
 	{
 		available = applyState(name);
 	}
-	else if (frameInState == FRAME_TO_CLICK && !clickKeys.empty())
+	else if (frameInState >= FRAME_TO_CLICK && static_cast<size_t>(frameInState - FRAME_TO_CLICK) < clickKeys.size())
 	{
-		for (const auto &key : clickKeys)
-		{
-			available = clickWidget(key) && available;
-		}
+		// One a frame (ex. an item of the popover the one before opened)
+		available = clickWidget(clickKeys[static_cast<size_t>(frameInState - FRAME_TO_CLICK)]) && available;
 	}
 	else if (!dragKey.empty() && frameInState >= FRAME_TO_CLICK && frameInState <= FRAME_TO_CLICK + DRAG_STEPS + 1)
 	{
@@ -887,7 +906,7 @@ void hudGeometryDumpFrame()
 		available = hoverWidget(hoverKey) && available;
 		hoveredAt = realTime;
 	}
-	else if (frameInState >= FRAMES_BEFORE_DUMP && (hoveredAt == 0 || (realTime - hoveredAt >= HOVER_SETTLE_MS && frameInState >= FRAME_TO_HOVER + FRAMES_AFTER_HOVER)))
+	else if (frameInState >= FRAMES_BEFORE_DUMP + laterClicks && (hoveredAt == 0 || (realTime - hoveredAt >= HOVER_SETTLE_MS && frameInState >= FRAME_TO_HOVER + FRAMES_AFTER_HOVER)))
 	{
 		result["states"].push_back(dumpState(name, available));
 		screenshots.push_back(screenshotName(name));

@@ -12,6 +12,8 @@ Under software rendering (Mesa llvmpipe) the 3D view may come out black, but the
 | `geometry.sh <bin> <out> <logical WxH> <scale %> [<config line>...]` | Takes one dump: starts the `highground` skirmish test (`TEST`) at the given logical screen size and display scale, with any extra `[General]` config lines (ex. `groupmenu=0`, `hudSkin=1`) over the Classic HUD's settings, stops game time at 3000 ms (`AT`), puts the HUD in each state in turn (`STATES`, by default the panel states), and writes `<out>.json`, with one screenshot per state in `<out>.shots/`. |
 | `contract.sh <bin> [<variant>=<config line>[;<config line>...]]...` | The contract test. For each size of the matrix (`MATRIX=quick` or `full`, or a list like `1366x768@100`), with the groups bar on and off, it takes a Classic reference dump and checks each variant's dump against it with `contract.py`. `DETERMINISM=1` takes the reference twice and compares the two. `BASELINE=<dir>` compares the Classic dumps and screenshots with those in the `OUT` of a run of another build (ex. upstream master with only the commit that adds these tests): the Classic HUD must be pixel-identical. States the baseline build doesn't have (ex. `timers`) are skipped. |
 | `contract.py <reference.json> <candidate.json> [--top-band <px>] [--quiet] [--new-states]` | Checks a dump against a Classic reference dump of the same size and scale (below). `--new-states` skips the states the reference doesn't have. |
+| `compact.sh <bin>` | The compact test. For each size at the engine's minimum height (`SIZES`, default `640x480@200 854x480@200`; lower heights, ex. `640x360@200`, need `MIN_WZ_GAMESCREEN_HEIGHT` lowered), in both skins, with Larger Touch Targets off and on (and with them the panel filters, whose tab goes beside the stats panel), it takes a dump in the Compact layout and checks it with `compact.py`. |
+| `compact.py <dump.json> [--larger-targets] [--quiet]` | Checks a dump in the Compact layout on its own rules (below). |
 | `imgcmp.py <reference shots> <candidate shots> [--tolerance <delta>] [--max-pixels <n>]` | Compares two sets of screenshots, state by state. |
 
 ## The dump
@@ -39,6 +41,9 @@ Selection and input:
   `build+hover=/14000/14004#5`). The screenshot shows it, and the popover is listed in `overlayWidgets`.
 - `click=<key>` clicks a widget first (ex. a filter chip), so the state shows its effect. A clicked filter changes
   which items are listed, so such states are for screenshots and behavior checks, not for the contract.
+  Several clicks come one a frame, and an overlay's key (`overlay<z>:<n>#<i>`, as the dump gives it) clicks in a
+  popover the previous click opened (ex. `build+click=/14000/2113929491+click=overlay0:2#3`: the Compact layout's
+  header menu, with Larger Touch Targets, then its first item).
 - `touch` makes clicks count as taps (ex. `research+touch+click=/14000/2113929490@1` opens the page picker).
 - `drag=<key>:<dx>:<dy>` drags a simulated finger from a widget's center by (dx, dy) over six frames, then lifts it
   and waits for what it set going (ex. `research+drag=/14000/14004:-80:0` swipes the research list to its next page).
@@ -142,3 +147,17 @@ Against the Classic reference of the same size, scale and settings:
    kept for the console and timers.
 
 By rule 4, a detail popover may never take a click.
+
+## The compact contract (`compact.py`)
+
+The Compact layout moves the Classic widgets, so it has rules of its own, checked on each state of one dump:
+
+1. Every widget, and every overlay widget, is inside the screen.
+2. The panels (the screen's top-level widgets) don't overlap, except the radar's square, which is as large as the map
+   rotated by 45° and empty in its corners, and the console, which covers the screen but takes the mouse only on its
+   lines.
+3. With Larger Touch Targets (`--larger-targets`), the stats panels' header controls (the menu button, the page
+   control, the close button) are at least 18 px high, and the items of their menus (the header menu, the panel
+   filters' menu) at least 36 px.
+
+The Standard layout's contract (above) is unchanged: Compact is never the Classic reference's layout.

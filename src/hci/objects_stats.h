@@ -23,6 +23,7 @@
 #include "../hci.h"
 #include "../intdisplay.h"
 #include "../hud/huddetail.h"
+#include "../hud/hudheadermenu.h"
 
 #include <limits>
 
@@ -291,11 +292,17 @@ protected:
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
 	virtual BaseStatsController &getController() const = 0;
-	/// With the page control in place of the page tabs (panel filters): puts the header's controls side by side, `drop`
-	/// below their Classic row, and returns their bounds
-	virtual WzRect layoutCompactHeader(int drop) { return WzRect(0, STAT_SLDY + drop, 0, 13); }
+	/// With the page control in place of the page tabs (panel filters), or Larger Touch Targets: puts the header's
+	/// controls side by side, `drop` below their Classic row, `grow` larger (up from their bottom edge), and returns
+	/// their bounds. `besidePages`: the page control is in their row
+	virtual WzRect layoutCompactHeader(int drop, int grow, bool besidePages) { return WzRect(0, STAT_SLDY + drop - grow, 0, 13 + grow); }
+	/// `grow` px wider and taller than its images (Larger Touch Targets), or their size
+	static void sizeHeaderButton(W_BUTTON &button, int grow, AtlasImage fallback = AtlasImage());
 	/// With more pages than this, the page control takes the page tabs' row, and the header keeps its own
 	virtual size_t compactHeaderMaxPages() const { return std::numeric_limits<size_t>::max(); }
+	/// The header's buttons, for the header menu that takes their place (the Compact layout with Larger Touch Targets)
+	virtual std::vector<HudHeaderMenuEntry> headerMenuEntries() { return {}; }
+	bool usesHeaderMenu() const { return headerMenu != nullptr; }
 
 	std::shared_ptr<IntListTabWidget> optionList;
 	std::shared_ptr<W_BUTTON> closeButton;
@@ -304,6 +311,8 @@ protected:
 private:
 	void addPageControl();
 	bool compactHeaderInRow() const;
+	/// Larger Touch Targets, Standard layout: the header's controls are this much taller, the panel this much higher
+	int headerGrowth() const;
 	void layoutHudHeader();
 	void updateButtons();
 	void updateFilteredButtons();
@@ -311,6 +320,7 @@ private:
 
 	size_t buttonsCount = 0;
 	std::shared_ptr<HudPageControl> pageControl;
+	std::shared_ptr<HudHeaderMenuButton> headerMenu;
 	std::function<bool (BASE_STATS *)> optionFilter;
 	std::vector<size_t> shownIndices;
 	bool filteredLayout = false;

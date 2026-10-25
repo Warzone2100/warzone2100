@@ -261,10 +261,19 @@ public:
 	/// Framed by the HUD skin, and opaque in a skin whose panels let what's under them show
 	/// (ex. a screen that covers the HUD)
 	void setHudSkinnedOpaque() { hudSkinned = true; opaque = true; }
+	/// The frame leaves out the form's right edge, this wide (ex. a panel extension's tab, which draws its own)
+	void setFrameRightTrim(int trim) { frameRightTrim = trim; }
+	/// Without the skin's accent along its top
+	void setAccentEdge(bool shown) { accentEdge = shown; }
+	/// Called when it starts closing, its children no longer drawn (ex. to close a popover they opened)
+	void addOnCloseStarted(std::function<void ()> handler) { onCloseStarted.push_back(std::move(handler)); }
 
 private:
 	bool            hudSkinned = false;
+	bool            accentEdge = true;
 	bool            opaque = false;
+	int             frameRightTrim = 0;
+	std::vector<std::function<void ()>> onCloseStarted;
 	unsigned        startTime;              ///< Animation start time
 	int             currentAction;          ///< Opening/open/closing/closed.
 	W_ANIMATED_ON_CLOSE_FUNC	onCloseAnimFinished;

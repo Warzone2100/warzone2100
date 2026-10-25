@@ -39,6 +39,8 @@ class StatsForm;
 class HudExtensionContent;
 
 std::shared_ptr<HudExtensionContent> hudMakePanelFilters(const std::shared_ptr<StatsForm> &form);
+/// The Compact layout: the room the filters' tab takes beside the stats panel's header (none without the module)
+int hudPanelFiltersTabWidth();
 /// Forget the filters (a new game)
 void hudResetPanelFilters();
 /// Put the keyboard focus in the open panel's search field (a key function). False if there is none

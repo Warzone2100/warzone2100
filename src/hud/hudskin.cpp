@@ -38,6 +38,8 @@
 #include "../intimage.h"
 #include "../main.h"
 
+#include <algorithm>
+
 /// The research panel's View Tree button's colors, which go with the Classic images' buttons
 const PIELIGHT BUTTON_FILL = pal_RGBA(47, 51, 87, 255);
 const PIELIGHT BUTTON_FILL_OVER = pal_RGBA(72, 78, 125, 255);
@@ -78,7 +80,7 @@ const HudMetrics &ClassicHudSkin::metrics() const
 	return classicMetrics;
 }
 
-void ClassicHudSkin::drawPanelFrame(const WzRect &rect, const WzRect &)
+void ClassicHudSkin::drawPanelFrame(const WzRect &rect, const WzRect &, bool)
 {
 	RenderWindowFrame(FRAME_NORMAL, rect.x(), rect.y(), rect.width(), rect.height());
 }
@@ -169,8 +171,11 @@ void ClassicHudSkin::drawButtonBar(W_BARGRAPH &bar, int xOffset, int yOffset)
 	bar.W_BARGRAPH::display(xOffset, yOffset);
 }
 
-void ClassicHudSkin::drawCloseButton(int x, int y, int, int, bool highlighted)
+void ClassicHudSkin::drawCloseButton(int x, int y, int width, int height, bool highlighted)
 {
+	// (in the middle of a larger button: Larger Touch Targets)
+	x += std::max(0, (width - static_cast<int>(iV_GetImageWidth(IntImages, IMAGE_CLOSE))) / 2);
+	y += std::max(0, (height - static_cast<int>(iV_GetImageHeight(IntImages, IMAGE_CLOSE))) / 2);
 	iV_DrawImage(IntImages, IMAGE_CLOSE, x, y);
 	if (highlighted)
 	{

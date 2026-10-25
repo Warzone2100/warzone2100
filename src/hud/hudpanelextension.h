@@ -43,6 +43,8 @@ struct HudExtensionFit
 {
 	int top = 0;
 	int right = 0;
+	/// The room to the right is a tab this high at the top, not a strip down the panel's side
+	int rightTabHeight = 0;
 };
 
 /// What a module puts in a panel extension
@@ -64,7 +66,8 @@ struct HudPanelExtensionSpec
 	std::shared_ptr<WIDGET> closeButton;
 	/// How much of the top of the panel's contents a band may cover: rows the content takes over (ex. page tabs)
 	int bandOverlap = 0;
-	/// Rows at the top of the panel's contents it no longer shows: the panel's top edge moves down by as much
+	/// Rows at the top of the panel's contents it no longer shows: the panel's top edge moves down by as much (or up,
+	/// when negative)
 	std::function<int ()> topInset;
 	/// After each layout of the panel
 	std::function<void ()> afterLayout;

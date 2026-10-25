@@ -235,6 +235,11 @@ std::shared_ptr<WIDGET> finish(std::shared_ptr<WIDGET> model, const WzString &ti
                                std::shared_ptr<WIDGET> status, std::vector<std::shared_ptr<WIDGET>> stats, std::shared_ptr<WIDGET> body)
 {
 	const int width = hudDetailWidth();
+	if (hudDetailSmall())
+	{
+		// (the button it describes shows it, beside the popover)
+		model.reset();
+	}
 	auto contents = DetailPanelContents::make(std::move(model), makeDetailPanelTitle(title), std::move(subtitle), std::move(group), std::move(status),
 	                                          std::move(stats), std::move(body), nullptr, width, hudPanelStyle(), DetailStatusPlacement::Automatic,
 	                                          COMPACT_MODEL_SIZE);
@@ -480,6 +485,7 @@ std::shared_ptr<WIDGET> hudResearchDetail(RESEARCH *research)
 	ResearchDetailOptions options;
 	options.style = hudPanelStyle();
 	options.compact = true;
+	options.small = hudDetailSmall();
 	options.routineStatus = false;
 	options.requirements = false;
 	ResearchDetailSubject subject = researchDetailSubjectForPlayer(research->index, selectedPlayer);

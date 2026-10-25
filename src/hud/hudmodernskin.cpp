@@ -398,7 +398,7 @@ public:
 	const HudColors &colors() const override { return palette; }
 	const HudMetrics &metrics() const override { return sizes; }
 
-	void drawPanelFrame(const WzRect &rect, const WzRect &openRect) override
+	void drawPanelFrame(const WzRect &rect, const WzRect &openRect, bool accentEdge = true) override
 	{
 		if (rect.width() <= 0 || rect.height() <= 0)
 		{
@@ -421,7 +421,7 @@ public:
 		}
 		pie_DrawGradientRoundedBox(x0, y0, x1, y1, palette.panelBackground, palette.panelBackgroundBottom, false, 1.f,
 		                           radius, palette.panelBorder, params.borderWidth);
-		if (rect.height() > radius * 2.f + 4.f)
+		if (accentEdge && rect.height() > radius * 2.f + 4.f)
 		{
 			pie_DrawRoundedBox(x0 + 1.f, y0 + 1.f, x1 - 1.f, y0 + 1.f + params.accentEdge,
 			                   withAlpha(palette.accent, params.accentEdgeAlpha), glm::vec4(radius - 1.f, radius - 1.f, 0.f, 0.f),

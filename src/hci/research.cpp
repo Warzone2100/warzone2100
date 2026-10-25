@@ -906,13 +906,32 @@ protected:
 		addViewTreeButton();
 	}
 
-	WzRect layoutCompactHeader(int drop) override
+	WzRect layoutCompactHeader(int drop, int grow, bool besidePages) override
 	{
+		if (!besidePages)
+		{
+			// Across the top, as in Classic (Larger Touch Targets)
+			const int right = STAT_WIDTH - CLOSE_WIDTH - grow - RESEARCH_HEADER_PAD;
+			viewTreeButton->setGeometry(RESEARCH_HEADER_PAD, (STAT_TABFORMY - RESEARCH_HEADER_BUTTON_HEIGHT) / 2 - grow,
+			                            std::max(10, right - RESEARCH_HEADER_PAD), RESEARCH_HEADER_BUTTON_HEIGHT + grow);
+			hudSetMovedPanelControl(viewTreeButton);
+			return viewTreeButton->geometry();
+		}
 		// As tall as the other panels' header buttons, in the same row
-		viewTreeButton->setGeometry(RESEARCH_HEADER_PAD, STAT_SLDY + drop, RESEARCH_COMPACT_VIEW_TREE_WIDTH, RESEARCH_COMPACT_HEADER_HEIGHT);
+		viewTreeButton->setGeometry(RESEARCH_HEADER_PAD, STAT_SLDY + drop - grow, RESEARCH_COMPACT_VIEW_TREE_WIDTH, RESEARCH_COMPACT_HEADER_HEIGHT + grow);
 		viewTreeButton->centeredOnInk = true;
 		hudSetMovedPanelControl(viewTreeButton);
 		return viewTreeButton->geometry();
+	}
+
+	std::vector<HudHeaderMenuEntry> headerMenuEntries() override
+	{
+		HudHeaderMenuEntry viewTree;
+		viewTree.button = viewTreeButton;
+		viewTree.label = WzString::fromUtf8(_("View Tree"));
+		viewTree.noIcon = true;
+		viewTree.closesMenu = true;
+		return {viewTree};
 	}
 
 private:

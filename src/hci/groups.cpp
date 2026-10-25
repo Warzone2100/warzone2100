@@ -23,6 +23,10 @@
 #include "../group.h"
 #include "../game_world.h"
 #include "../hud/huddetailcontents.h"
+#include "../hud/hudlayout.h"
+#include "../hud/hudskin.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 static bool groupButtonEnabled = true;
 
@@ -35,6 +39,10 @@ bool getGroupButtonEnabled()
 {
 	return groupButtonEnabled;
 }
+
+static constexpr int SLIM_CHIP_WIDTH = 29;
+static constexpr int SLIM_CHIP_HEIGHT = 20;
+static constexpr int SLIM_CHIP_GAP = 2;
 
 class GroupsUIController: public std::enable_shared_from_this<GroupsUIController>
 {
@@ -114,6 +122,10 @@ private:
 	std::shared_ptr<W_LABEL> groupDamagedCountLabel;
 	size_t groupNumber;
 	uint32_t lastUpdatedGlowAlphaTime = 0;
+	bool slim = false;
+	WzText slimNumberText;
+	WzText slimCountText;
+	WzText slimDamagedText;
 protected:
 	GroupButton() : DynamicIntFancyButton() { }
 public:
@@ -196,6 +208,16 @@ public:
 		setHelp(helpInfo);
 	}
 
+	/// One chip of the Compact layout's slim groups bar: the group's number, its unit count and its damaged count
+	void setSlim()
+	{
+		slim = true;
+		groupNumberLabel->hide();
+		groupCountLabel->hide();
+		groupDamagedCountLabel->hide();
+		slimNumberText.setText(WzString::format("%zu", groupNumber), font_small);
+	}
+
 	void clickPrimary() override
 	{
 		controller->selectGroup(groupNumber);
@@ -235,6 +257,12 @@ protected:
 				groupInfo->currAttackGlowAlpha -= static_cast<uint8_t>(fadeAmount);
 			}
 			lastUpdatedGlowAlphaTime = realTime;
+		}
+
+		if (slim)
+		{
+			displaySlim(xOffset, yOffset, *groupInfo);
+			return;
 		}
 
 		if (!groupInfo->numberInGroup && !groupInfo->numberDamagedInGroup)
@@ -279,6 +307,38 @@ protected:
 		return false;
 	}
 private:
+	void displaySlim(int xOffset, int yOffset, const GroupsUIController::GroupDisplayInfo &groupInfo)
+	{
+		HudSkin &skin = currentHudSkin();
+		const HudColors &colors = skin.colors();
+		const WzRect rect(xOffset + x(), yOffset + y(), width(), height());
+		const bool active = (getState() & (WBUT_DOWN | WBUT_HIGHLIGHT)) != 0;
+		const bool empty = groupInfo.numberInGroup == 0 && groupInfo.numberDamagedInGroup == 0;
+		skin.drawCard(rect, active ? HudCardState::Highlighted : HudCardState::Normal);
+		if (groupInfo.currAttackGlowAlpha > 0)
+		{
+			pie_UniTransBoxFill(rect.x() + 1, rect.y() + 1, rect.right() - 1, rect.bottom() - 1, pal_RGBA(170, 0, 0, groupInfo.currAttackGlowAlpha));
+		}
+		const int baseline = rect.y() + (rect.height() - slimNumberText.lineSize()) / 2 - slimNumberText.aboveBase();
+		slimNumberText.render(static_cast<float>(rect.x() + 3), static_cast<float>(baseline), empty ? colors.textSecondary : colors.textPrimary);
+		if (empty)
+		{
+			return;
+		}
+		int right = rect.right() - 3;
+		if (groupInfo.numberDamagedInGroup > 0)
+		{
+			slimDamagedText.setText(WzString::format("+%zu", groupInfo.numberDamagedInGroup), font_small);
+			right -= slimDamagedText.width();
+			slimDamagedText.render(static_cast<float>(right), static_cast<float>(baseline), colors.stateBad);
+		}
+		if (groupInfo.numberInGroup > 0)
+		{
+			slimCountText.setText(WzString::format("%zu", groupInfo.numberInGroup), font_small);
+			slimCountText.render(static_cast<float>(right - slimCountText.width()), static_cast<float>(baseline), colors.textSecondary);
+		}
+	}
+
 	#define MAX_DAMAGE_GLOW_ALPHA 100
 	inline uint8_t accumulatedDamageToTargetGlowAlpha(uint64_t accumulatedDamage, uint64_t totalGroupMaxHealth, uint64_t unitsKilled)
 	{
@@ -305,8 +365,9 @@ void GroupsForum::initialize()
 	// the layout should be like this when the build menu is open
 	id = IDOBJ_GROUP;
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(GROUP_BACKX, GROUP_BACKY, GROUP_BACKWIDTH, GROUP_BACKHEIGHT);
+		psWidget->setGeometry(hudGroupsPanelRect());
 	}));
+	slim = hudCompactLayout();
 	addTabList();
 	// create the 11 buttons for each group
 	for (size_t i = 1; i <= 10; i++)
@@ -316,7 +377,15 @@ void GroupsForum::initialize()
 		groupsList->addWidgetToLayout(buttonHolder);
 		auto groupButton = makeGroupButton(i % 10);
 		buttonHolder->attach(groupButton);
-		groupButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+		if (slim)
+		{
+			groupButton->setSlim();
+			groupButton->setGeometry(0, 0, SLIM_CHIP_WIDTH, SLIM_CHIP_HEIGHT);
+		}
+		else
+		{
+			groupButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+		}
 	}
 
 	WzString descriptionStr = _("View and configure groups of units, which can be quickly selected and ordered.");
@@ -424,6 +493,16 @@ void GroupsForum::addTabList()
 {
 	attach(groupsList = IntListTabWidget::make(TabAlignment::RightAligned));
 	groupsList->setHudSkinned();
+	if (slim)
+	{
+		// All ten in one row
+		groupsList->setTabRowHidden();
+		groupsList->setChildSize(SLIM_CHIP_WIDTH, SLIM_CHIP_HEIGHT);
+		groupsList->setChildSpacing(SLIM_CHIP_GAP, SLIM_CHIP_GAP);
+		const int width = SLIM_CHIP_WIDTH * 10 + SLIM_CHIP_GAP * 9;
+		groupsList->setGeometry((OBJ_BACKWIDTH - width) / 2, (hudGroupsPanelRect().height() - SLIM_CHIP_HEIGHT) / 2, width, SLIM_CHIP_HEIGHT);
+		return;
+	}
 	groupsList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	groupsList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int groupListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;

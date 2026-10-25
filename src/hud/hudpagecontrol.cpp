@@ -84,8 +84,9 @@ public:
 
 	/// `cellLeft` and `cellWidth`: the part of it that it draws in, past the frame's border or the separator on its left
 	void set(TabSelectionButtonRole newRole, size_t newPage, bool newSelected, bool newSeparator, bool newLarge, bool disabled,
-	         int newCellLeft = 0, int newCellWidth = -1)
+	         int newCellLeft = 0, int newCellWidth = -1, size_t ofPages = 0)
 	{
+		summary = ofPages > 0;
 		cellLeft = newCellLeft;
 		cellWidth = newCellWidth;
 		role = newRole;
@@ -94,6 +95,10 @@ public:
 		separator = newSeparator;
 		large = newLarge;
 		WzString text = WzString::number(page + 1);
+		if (summary)
+		{
+			text = WzString::number(page + 1) + WzString::fromUtf8(" / ") + WzString::number(ofPages);
+		}
 		if (role != TabSelectionButtonRole::Tab)
 		{
 			text = WzString::fromUtf8(role == TabSelectionButtonRole::PreviousPage ? "‹" : "›");
@@ -111,6 +116,7 @@ public:
 
 	TabSelectionButtonRole role = TabSelectionButtonRole::Tab;
 	size_t page = 0;
+	bool summary = false;
 
 protected:
 	void display(int xOffset, int yOffset) override
@@ -197,6 +203,15 @@ void HudPageControl::setVisualHeight(int height)
 	}
 }
 
+void HudPageControl::setSingleSegment(bool single)
+{
+	if (single != singleSegment)
+	{
+		singleSegment = single;
+		layoutSegments();
+	}
+}
+
 void HudPageControl::geometryChanged()
 {
 	layoutSegments();
@@ -225,7 +240,11 @@ void HudPageControl::layoutSegments()
 	std::vector<Slot> slots;
 	const int inside = width() - FRAME_BORDER * 2;
 	auto cellsFor = [](int availableWidth, int count) { return (availableWidth - SEPARATOR * (count - 1)) / count; };
-	if (pageCount > 1 && inside > 0)
+	if (pageCount > 1 && inside > 0 && singleSegment)
+	{
+		slots.push_back({TabSelectionButtonRole::Tab, current, inside});
+	}
+	else if (pageCount > 1 && inside > 0)
 	{
 		// All the pages when they fit, else the ones around the current page between arrows
 		const int minimum = std::max(MIN_CELL_WIDTH, static_cast<int>(iV_GetTextWidth(WzString::number(pageCount), font_small)) + CELL_PADDING);
@@ -296,7 +315,8 @@ void HudPageControl::layoutSegments()
 		// Between two pages, neither of them the current one
 		const bool separator = n > 0 && slot.role == TabSelectionButtonRole::Tab && slots[n - 1].role == TabSelectionButtonRole::Tab
 			&& slot.page != current && slots[n - 1].page != current;
-		segments[n]->set(slot.role, slot.page, slot.role == TabSelectionButtonRole::Tab && slot.page == current, separator, false, disabled, lead, slot.width);
+		segments[n]->set(slot.role, slot.page, !singleSegment && slot.role == TabSelectionButtonRole::Tab && slot.page == current, separator, false, disabled,
+		                 lead, slot.width, singleSegment ? pageCount : 0);
 		segments[n]->setGeometry(left, 0, lead + slot.width + trail, height());
 		segments[n]->show();
 		x = left + lead + slot.width;
@@ -311,7 +331,7 @@ void HudPageControl::pressed(const Segment &segment)
 	{
 		return;
 	}
-	if (wantsPicker())
+	if (wantsPicker() || segment.summary)
 	{
 		openPicker();
 		return;

@@ -57,6 +57,7 @@
 #include "cameratrace.h"
 #include "display3d_render_graph.h"
 #include "hud/hudskin.h"
+#include "hud/hudlayout.h"
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -213,6 +214,14 @@ static void radarSize(int ZoomLevel)
 	float zoom = static_cast<float>(ZoomLevel) * RadarZoomMultiplier / 16.0f;
 	radarWidth = static_cast<size_t>(radarTexWidth * zoom);
 	radarHeight = static_cast<size_t>(radarTexHeight * zoom);
+	// (the Compact layout caps it)
+	const size_t maxSize = hudRadarMaxSize();
+	const size_t largest = std::max(radarWidth, radarHeight);
+	if (maxSize > 0 && largest > maxSize)
+	{
+		radarWidth = radarWidth * maxSize / largest;
+		radarHeight = radarHeight * maxSize / largest;
+	}
 	if (rotateRadar)
 	{
 		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - static_cast<int>(MAX(radarHeight, radarWidth)) / 2;

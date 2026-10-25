@@ -103,6 +103,8 @@
 #include "hud/intel/objectivescard.h"
 #include "hud/hudiconbutton.h"
 #include "hud/hud.h"
+#include "hud/hudlayout.h"
+#include "hud/hudpagecontrol.h"
 #include "hud/hudresults.h"
 #include "hud/huddetail.h"
 #include "hud/huddetailcontents.h"
@@ -377,21 +379,37 @@ void setReticuleFlash(int ButId, bool flash)
 }
 
 // set up the button's size & hit-testing based on the dimensions of the "normal" image
-void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
+static AtlasImageDef *reticuleButtonImage(const WzString &filename)
 {
-	AtlasImageDef *image = nullptr;
 	if (!filename.isEmpty())
 	{
-		image = iV_GetImage(filename);
+		return iV_GetImage(filename);
 	}
-	else
+	ASSERT(IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY, "IMAGE_RETICULE_GREY isn't in IntImages?");
+	if (IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY)
 	{
-		ASSERT(IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY, "IMAGE_RETICULE_GREY isn't in IntImages?");
-		if (IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY)
-		{
-			image = &(IntImages->imageDefs[IMAGE_RETICULE_GREY]);
-		}
+		return &(IntImages->imageDefs[IMAGE_RETICULE_GREY]);
 	}
+	return nullptr;
+}
+
+/// Places a reticule button. In the cluster: at its image's size and offset. In the band: fitted to its hex
+static void layoutReticuleButton(WIDGET *button, int slot)
+{
+	const AtlasImageDef *image = reticuleButtonImage(retbutstats[slot].filename);
+	const int width = image ? image->Width / 2 : button->width();
+	const int height = image ? image->Height / 2 : button->height();
+	if (hudCompactReticule())
+	{
+		button->setGeometry(hudReticuleBandButtonRect(slot, width, height));
+		return;
+	}
+	button->setGeometry(ReticuleOffsets[slot].x, ReticuleOffsets[slot].y, width, height);
+}
+
+void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
+{
+	AtlasImageDef *image = reticuleButtonImage(filename);
 
 	if (image)
 	{
@@ -451,6 +469,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	}
 
 	setReticuleButtonDimensions(*retbutstats[ButId].button, retbutstats[ButId].filename);
+	retbutstats[ButId].button->callCalcLayout();
 
 	if (!retbutstats[ButId].tip.empty())
 	{
@@ -1852,6 +1871,7 @@ void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHe
 {
 	if (psWScreen == nullptr) return;
 	psWScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	hudLayoutScreenSizeChanged();
 }
 
 /* Are we in build select mode*/
@@ -1948,6 +1968,21 @@ bool intShowGroupSelectionMenu()
 		groupsUI.reset();
 	}
 	return true;
+}
+
+void intRebuildGroupSelectionMenu()
+{
+	if (!groupsUI || groupsUI->builtSlim() == hudCompactLayout())
+	{
+		return;
+	}
+	const bool shown = widgGetFromID(psWScreen, IDOBJ_GROUP) != nullptr && groupsUI->visible();
+	widgDelete(psWScreen, IDOBJ_GROUP);
+	groupsUI.reset();
+	if (shown)
+	{
+		intShowGroupSelectionMenu();
+	}
 }
 
 // MARK: W_INGAMEOPTIONS_BUTTON
@@ -2120,9 +2155,11 @@ bool intAddReticule()
 	retForm->setHudSkinned(true);
 	parent->attach(retForm);
 	retForm->id = IDRET_FORM;
-	retForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
-	}));
+	retForm->setCalcLayout([](WIDGET *psWidget) {
+		psWidget->setGeometry(hudReticuleRect());
+		// (Like the radar, the compact band has no accent along its top)
+		static_cast<IntFormAnimated *>(psWidget)->setAccentEdge(!hudCompactReticule());
+	});
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
 		// Set the x,y members of a button widget initialiser
@@ -2146,6 +2183,9 @@ bool intAddReticule()
 		retForm->attach(button);
 		retbutstats[i].button = button;
 		setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
+		button->setCalcLayout([i](WIDGET *psWidget) {
+			layoutReticuleButton(psWidget, i);
+		});
 		button->setHelp(reticuleButtonHelp(i));
 	}
 	ReticuleUp = true;
@@ -2312,7 +2352,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 	parent->attach(statForm);
 	statForm->id = IDSTAT_FORM;
 	statForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
+		psWidget->setGeometry(hudStatsPanelRect());
 	}));
 
 	/* Add the close button */
@@ -2339,7 +2379,20 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 	statList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
 	statList->setChildSpacing(STAT_GAP, STAT_GAP);
 	int statListWidth = STAT_BUTWIDTH * 2 + STAT_GAP;
-	statList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, STAT_HEIGHT - STAT_TABFORMY);
+	if (hudCompactLayout())
+	{
+		// The rows under the close button's row, the pages in it
+		const WzRect rect = hudStatsPanelRect();
+		statList->setTabRowHidden();
+		statList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, rect.height() - STAT_TABFORMY);
+		auto pages = HudPageControl::make(statList);
+		statForm->attach(pages);
+		pages->setGeometry(4, 1, STAT_WIDTH - CLOSE_WIDTH - 8, CLOSE_HEIGHT);
+	}
+	else
+	{
+		statList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, STAT_HEIGHT - STAT_TABFORMY);
+	}
 
 	/* Add the stat buttons */
 	int nextButtonId = IDSTAT_START;

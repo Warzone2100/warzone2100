@@ -26,6 +26,7 @@
 */
 
 #include "huddetail.h"
+#include "hudlayout.h"
 #include "hudsettings.h"
 #include "hudskin.h"
 
@@ -76,6 +77,7 @@ std::weak_ptr<WIDGET> peekRequested;
 std::shared_ptr<WIDGET> peekRequestedContents;
 
 constexpr int ACTION_HEIGHT = 26;
+constexpr int ACTION_HEIGHT_LARGER_TARGETS = 36;
 constexpr int ACTION_GAP = 6;
 constexpr int ACTION_PAD = 9;
 constexpr int ACTION_ICON = 13;
@@ -296,7 +298,7 @@ private:
 class PeekActionRow : public WIDGET
 {
 public:
-	int32_t idealHeight() override { return ACTION_HEIGHT; }
+	int32_t idealHeight() override { return hudLargerTouchTargets() ? ACTION_HEIGHT_LARGER_TARGETS : ACTION_HEIGHT; }
 
 	void geometryChanged() override
 	{
@@ -534,6 +536,11 @@ int hudDetailWidth()
 int hudDetailMaxHeight()
 {
 	return static_cast<int>(pie_GetVideoBufferHeight()) * 55 / 100;
+}
+
+bool hudDetailSmall()
+{
+	return hudCompactLayout();
 }
 
 void hudDetailUpdate()

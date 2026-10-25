@@ -102,6 +102,7 @@
 #include "hud/hudpanelextension.h"
 #include "hud/intel/intelmodel.h"
 #include "lib/framework/loading_task.h"
+#include "hud/hudlayout.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2173,8 +2174,11 @@ bool intAddTransporterTimer()
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANTIMER_BUTTON;
 	sFormInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
-	sFormInit.x = TRAN_FORM_X;
+	sFormInit.x = hudTransporterButtonX(TRAN_FORM_X);
 	sFormInit.y = TRAN_FORM_Y;
+	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(hudTransporterButtonX(TRAN_FORM_X), TRAN_FORM_Y);
+	});
 	sFormInit.width = iV_GetImageWidth(IntImages, IMAGE_TRANSETA_UP);
 	sFormInit.height = iV_GetImageHeight(IntImages, IMAGE_TRANSETA_UP);
 	sFormInit.pTip = _("Load Transport");
