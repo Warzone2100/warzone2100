@@ -31,12 +31,6 @@
 struct VIEWDATA;
 
 /* Research struct type definitions */
-enum TECH_CODE
-{
-	TC_MAJOR,
-	TC_MINOR,
-};
-
 struct RES_COMP_REPLACEMENT
 {
 	COMPONENT_STATS *pOldComponent;
@@ -45,7 +39,7 @@ struct RES_COMP_REPLACEMENT
 
 struct RESEARCH : public BASE_STATS
 {
-	UBYTE			techCode;
+	bool			isMajor;			///< True if this is a major research topic (shows intelligence message)
 	UWORD       	subGroup;			/* Subgroup of the item - an iconID from 'Framer' to depict in the button*/
 
 	UWORD			researchPoints;		/* Number of research points required to
