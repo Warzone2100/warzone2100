@@ -18,6 +18,7 @@ const CYBORG_COMPONENTS = [
 	"CyborgLightBody",
 	"CyborgHeavyBody",
 	"CyborgLegs",
+	"CyborgLegsSuper",
 ];
 
 const TWO_TURRET_BODY = [
@@ -118,13 +119,13 @@ const STANDARD_CYBORG_ENGINEER_TEMPLATES = [
 ];
 
 const STANDARD_SUPER_CYBORG_TEMPLATES = [
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-Mcannon",] },
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-HPV",] },
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-Acannon",] },
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-TK",] },
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-A-T",] },
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-PulseLsr",] },
-	{ body: "CyborgHeavyBody", prop: "CyborgLegs", weaps: ["Cyb-Hvywpn-RailGunner",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-Mcannon",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-HPV",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-Acannon",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-TK",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-A-T",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-PulseLsr",] },
+	{ body: "CyborgHeavyBody", prop: "CyborgLegsSuper", weaps: ["Cyb-Hvywpn-RailGunner",] },
 ];
 
 const STANDARD_VTOL_TEMPLATES = [
