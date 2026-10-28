@@ -4038,6 +4038,7 @@ void VkRoot::shutdown()
 	resetAllPipelineSurfaceSlots();
 
 	destroyGpuTimingQueryPool();
+	destroyPerfQueryPool();
 
 	if (dev)
 	{
@@ -7062,6 +7063,11 @@ void VkRoot::sealAndSubmitTransferGraphics(ScreenFramePipelineState& state)
 		};
 		frameResources.submitCommandBuffers(submitParams, state);
 
+		if (state.submitDrawBuffer && perfSample.queriesReset && perfSample.frameNum == frameNum)
+		{
+			perfSample.submitted = true;
+		}
+
 		if (state.submitDrawBuffer)
 		{
 			_screenshotReadback.markCurrentCaptureSubmitted(
@@ -7087,6 +7093,7 @@ void VkRoot::sealActivePassForFrameFinish()
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
 	frameResources.drawCmdBuffer().endRenderPass(vkDynLoader);
+	perfSamplePassEnd(frameResources.drawCmdBuffer());
 	frameResources.endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
 	_activeDynamicFramebuffer = vk::Framebuffer();
 	if (_activePassTargetsSwapchain)
@@ -7301,6 +7308,7 @@ void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::Compi
 	// Named after the execution batch's first graph pass (the others appear as markers inside it)
 	buffering_mechanism::get_current_resources().beginDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass,
 		(!pass.debugName.empty()) ? pass.debugName.c_str() : "Render pass");
+	perfSamplePassBegin(drawCmdBuffer, pass.debugName);
 
 	_fboAttachmentsScratch.clear();
 	const size_t resolveAttachmentCount = pass.resolveAttachment.has_value() ? 1 : 0;
@@ -7375,6 +7383,7 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
 
 	buffering_mechanism::get_current_resources().drawCmdBuffer().endRenderPass(vkDynLoader);
+	perfSamplePassEnd(buffering_mechanism::get_current_resources().drawCmdBuffer());
 	buffering_mechanism::get_current_resources().endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
 	_activeDynamicFramebuffer = vk::Framebuffer();
 	if (_activePassTargetsSwapchain)
@@ -7953,32 +7962,186 @@ void VkRoot::debugSceneEnd(const char *descr)
 	--queueDebugLabelDepth;
 }
 
+// MARK: Performance sample (debugPerf*)
+//
+// As in the GL backend, a perf point only times GPU work recorded between its begin and end
+// (points outside the frame's draw recording read 0).
+
 bool VkRoot::debugPerfAvailable()
 {
-	// TODO: Implement
-	return false;
+	return hasGpuTimestampSupport && static_cast<bool>(dev);
 }
-
-struct perfQueryDetails
-{
-	uint32_t start_copy = 0;
-	uint32_t start_draw = 0;
-
-	uint32_t end_copy = 0;
-	uint32_t end_draw = 0;
-};
-
-bool perfStarted = false;
 
 bool VkRoot::debugPerfStart(size_t sample)
 {
-	// TODO: Implement
-	return false;
+	if (!debugPerfAvailable())
+	{
+		return false;
+	}
+	if (perfSample.armed)
+	{
+		return true; // already sampling
+	}
+	if (!perfQueryPool)
+	{
+		try {
+			perfQueryPool = dev.createQueryPool(
+				vk::QueryPoolCreateInfo()
+					.setQueryType(vk::QueryType::eTimestamp)
+					.setQueryCount(2 * PERF_SAMPLE_QUERY_PAIRS)
+				, nullptr, vkDynLoader);
+		}
+		catch (const vk::SystemError& e)
+		{
+			debug(LOG_ERROR, "Failed to create performance sample query pool: %s", e.what());
+			return false;
+		}
+	}
+	perfSample = PerfSample();
+	perfSample.armed = true;
+
+	char text[80];
+	ssprintf(text, "Starting performance sample %02zu", sample);
+	debugStringMarker(text);
+	return true;
 }
 
 void VkRoot::debugPerfStop()
 {
-	// TODO: Implement
+	// The pool is kept until shutdown, as a stopped sample's query reset may still be in flight
+	perfSample = PerfSample();
+}
+
+bool VkRoot::perfSamplePrepareWrite()
+{
+	if (!perfSample.armed || !perfQueryPool || !_screenFrameOpen || !drawCmdBufferRecording())
+	{
+		return false;
+	}
+	if (perfSample.queriesReset)
+	{
+		// One frame per sample
+		return perfSample.frameNum == frameNum && !perfSample.submitted;
+	}
+	if (perfLastResetFrameNum.has_value() && perfLastResetFrameNum.value() == frameNum)
+	{
+		// A sample restarted within this frame waits for the next one (its reset would follow the old timestamps)
+		return false;
+	}
+	// The reset must be outside a render pass instance, so it goes into the copy stream,
+	// which is submitted ahead of this frame's draw command buffer
+	// (vkCmdResetQueryPool is ordered before later query commands in submission order)
+	transferRecorder().cmd().resetQueryPool(perfQueryPool, 0, 2 * PERF_SAMPLE_QUERY_PAIRS, vkDynLoader);
+	perfSample.queriesReset = true;
+	perfSample.frameNum = frameNum;
+	perfLastResetFrameNum = frameNum;
+	return true;
+}
+
+void VkRoot::perfSamplePassBegin(vk::CommandBuffer cmdBuffer, const std::string& name)
+{
+	perfSample.passOpen = false;
+	if (perfSample.passNames.size() >= PERF_SAMPLE_MAX_PASSES || !perfSamplePrepareWrite())
+	{
+		return;
+	}
+	const uint32_t pair = static_cast<uint32_t>(PERF_COUNT + perfSample.passNames.size());
+	cmdBuffer.writeTimestamp(vk::PipelineStageFlagBits::eTopOfPipe, perfQueryPool, 2 * pair, vkDynLoader);
+	perfSample.passNames.push_back(name);
+	perfSample.passComplete.push_back(false);
+	perfSample.passOpen = true;
+}
+
+void VkRoot::perfSamplePassEnd(vk::CommandBuffer cmdBuffer)
+{
+	if (!perfSample.passOpen)
+	{
+		return;
+	}
+	perfSample.passOpen = false;
+	if (!perfSamplePrepareWrite())
+	{
+		return;
+	}
+	const uint32_t pair = static_cast<uint32_t>(PERF_COUNT + perfSample.passNames.size() - 1);
+	cmdBuffer.writeTimestamp(vk::PipelineStageFlagBits::eBottomOfPipe, perfQueryPool, 2 * pair + 1, vkDynLoader);
+	perfSample.passComplete.back() = true;
+}
+
+void VkRoot::perfSampleReadResults()
+{
+	if (perfSample.resultsRead)
+	{
+		return;
+	}
+	perfSample.resultsRead = true;
+	if (!perfSample.queriesReset)
+	{
+		debug(LOG_INFO, "Performance sample: no GPU work was recorded while it was running");
+		return;
+	}
+	if (!perfSample.submitted)
+	{
+		debug(LOG_INFO, "Performance sample: the sampled frame was not drawn, so it has no GPU timings");
+		return;
+	}
+
+	// NOTE: only read pairs that were both written, as waiting on an unwritten query never returns
+	const auto readPairNs = [this](uint32_t pair, uint64_t& outNs) -> bool {
+		uint64_t ticks[2] = {0, 0};
+		const vk::Result result = dev.getQueryPoolResults(perfQueryPool, 2 * pair, 2, sizeof(ticks), ticks, sizeof(uint64_t),
+			vk::QueryResultFlagBits::e64 | vk::QueryResultFlagBits::eWait, vkDynLoader);
+		if (result != vk::Result::eSuccess)
+		{
+			debug(LOG_ERROR, "Performance sample: reading GPU timestamps failed: %s", vk::to_string(result).c_str());
+			return false;
+		}
+		const uint64_t deltaTicks = ((ticks[1] & gpuTimestampMask) - (ticks[0] & gpuTimestampMask)) & gpuTimestampMask;
+		outNs = static_cast<uint64_t>(static_cast<double>(deltaTicks) * static_cast<double>(gpuTimestampPeriod));
+		return true;
+	};
+
+	for (size_t pp = 0; pp < perfSample.pointState.size(); ++pp)
+	{
+		if (perfSample.pointState[pp] == PerfPointState::Complete && !readPairNs(static_cast<uint32_t>(pp), perfSample.pointNs[pp]))
+		{
+			return;
+		}
+	}
+
+	double totalMs = 0.0;
+	size_t timedPasses = 0;
+	debug(LOG_INFO, "Performance sample: GPU time per render pass (frame %zu):", perfSample.frameNum);
+	for (size_t i = 0; i < perfSample.passNames.size(); ++i)
+	{
+		uint64_t ns = 0;
+		if (!perfSample.passComplete[i])
+		{
+			debug(LOG_INFO, "  %10s  %s", "(not timed)", perfSample.passNames[i].c_str());
+			continue;
+		}
+		if (!readPairNs(static_cast<uint32_t>(PERF_COUNT + i), ns))
+		{
+			return;
+		}
+		const double ms = static_cast<double>(ns) / 1e6;
+		totalMs += ms;
+		++timedPasses;
+		debug(LOG_INFO, "  %7.3f ms  %s", ms, perfSample.passNames[i].c_str());
+	}
+	debug(LOG_INFO, "  %7.3f ms  total of %zu render passes%s", totalMs, timedPasses,
+		(perfSample.passNames.size() >= PERF_SAMPLE_MAX_PASSES) ? " (limit reached: later passes not timed)" : "");
+}
+
+void VkRoot::destroyPerfQueryPool()
+{
+	if (perfQueryPool && dev)
+	{
+		dev.destroyQueryPool(perfQueryPool, nullptr, vkDynLoader);
+	}
+	perfQueryPool = vk::QueryPool();
+	perfSample = PerfSample();
+	perfLastResetFrameNum = nullopt;
 }
 
 void VkRoot::debugPerfBegin(PERF_POINT pp, const char *descr)
@@ -7988,8 +8151,15 @@ void VkRoot::debugPerfBegin(PERF_POINT pp, const char *descr)
 	{
 		buffering_mechanism::get_current_resources().beginDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::User, descr);
 	}
-	if (!perfStarted) return;
-	// TODO: Implement
+	const size_t point = static_cast<size_t>(pp);
+	if (point >= perfSample.pointState.size() || perfSample.pointState[point] != PerfPointState::NotWritten || !perfSamplePrepareWrite())
+	{
+		// Only a point's first occurrence in the frame is timed (its queries can't be rewritten without a reset)
+		return;
+	}
+	buffering_mechanism::get_current_resources().drawCmdBuffer().writeTimestamp(vk::PipelineStageFlagBits::eTopOfPipe,
+		perfQueryPool, static_cast<uint32_t>(2 * point), vkDynLoader);
+	perfSample.pointState[point] = PerfPointState::BeginWritten;
 }
 
 void VkRoot::debugPerfEnd(PERF_POINT pp)
@@ -7998,14 +8168,25 @@ void VkRoot::debugPerfEnd(PERF_POINT pp)
 	{
 		buffering_mechanism::get_current_resources().endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::User);
 	}
-	if (!perfStarted) return;
-	// TODO: Implement
+	const size_t point = static_cast<size_t>(pp);
+	if (point >= perfSample.pointState.size() || perfSample.pointState[point] != PerfPointState::BeginWritten || !perfSamplePrepareWrite())
+	{
+		return;
+	}
+	buffering_mechanism::get_current_resources().drawCmdBuffer().writeTimestamp(vk::PipelineStageFlagBits::eBottomOfPipe,
+		perfQueryPool, static_cast<uint32_t>(2 * point + 1), vkDynLoader);
+	perfSample.pointState[point] = PerfPointState::Complete;
 }
 
 uint64_t VkRoot::debugGetPerfValue(PERF_POINT pp)
 {
-	// TODO: Implement
-	return 0;
+	const size_t point = static_cast<size_t>(pp);
+	if (point >= perfSample.pointNs.size())
+	{
+		return 0;
+	}
+	perfSampleReadResults();
+	return perfSample.pointNs[point];
 }
 
 std::map<std::string, std::string> VkRoot::getBackendGameInfo()
