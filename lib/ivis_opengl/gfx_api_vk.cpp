@@ -1140,9 +1140,11 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 		debug(LOG_ERROR, "buffering swap: waitForFences resulted in vk::Result::eTimeout");
 		handleUnrecoverableError(vk::Result::eTimeout);
 	}
-	dev.resetFences(fences, vkDynLoader);
 	buffering_mechanism::get_current_resources().resetDescriptorPools();
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
+	// Reset last, so a throwing reset above leaves the fence signaled
+	// (the next wait on it would otherwise never return)
+	dev.resetFences(fences, vkDynLoader);
 	buffering_mechanism::get_current_resources().drawCmdBufferBegun = false;
 	buffering_mechanism::get_current_resources().copyCmdBufferBegun = false;
 	buffering_mechanism::get_current_resources().transferWorkRecorded = false;
@@ -2762,7 +2764,11 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 
-	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mip_level (%zu) exceeds uint32_t max", mip_level);
+	ASSERT_OR_RETURN(false, layer < layer_count, "layer (%zu) out of range (layers: %zu)", layer, layer_count);
+	ASSERT_OR_RETURN(false, mip_level < mipmap_levels, "mip_level (%zu) out of range (mip levels: %zu)", mip_level, mipmap_levels);
+	const size_t mipWidth = std::max<size_t>(texWidth >> mip_level, 1);
+	const size_t mipHeight = std::max<size_t>(texHeight >> mip_level, 1);
+	ASSERT_OR_RETURN(false, width <= mipWidth && height <= mipHeight, "Image (%zu x %zu) is larger than mip level %zu (%zu x %zu)", width, height, mip_level, mipWidth, mipHeight);
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
 
@@ -6773,8 +6779,9 @@ void perFrameResources_t::ensureTransferRecordingBegun(const WZ_vk::DispatchLoad
 			debug(LOG_ERROR, "ensureTransferRecordingBegun: waitForFences resulted in vk::Result::eTimeout");
 			handleUnrecoverableError(vk::Result::eTimeout);
 		}
-		dev.resetFences(fences, vkDynLoader);
 		cmdCopy.reset(vk::CommandBufferResetFlagBits::eReleaseResources, vkDynLoader);
+		// Reset last (see buffering_mechanism::swap)
+		dev.resetFences(fences, vkDynLoader);
 		copyCmdBufferSubmittedSincePoolReset = false;
 	}
 
