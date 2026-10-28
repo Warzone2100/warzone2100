@@ -491,6 +491,8 @@ struct VkTexture final : public gfx_api::texture
 	size_t mipmap_levels = 0;
 	size_t tex_width = 0;
 	size_t tex_height = 0;
+	/// Per mip level: uploaded (eShaderReadOnlyOptimal), or not yet (eUndefined)
+	std::vector<bool> mipLevelInitialized;
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;

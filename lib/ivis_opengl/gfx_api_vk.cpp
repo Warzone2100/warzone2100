@@ -2216,7 +2216,7 @@ size_t VkTexture::format_size(const vk::Format& format)
 }
 
 VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& _internal_format, const std::string& filename)
-	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), tex_width(width), tex_height(height), root(&root)
+	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), tex_width(width), tex_height(height), mipLevelInitialized(mipmap_count, false), root(&root)
 {
 	ASSERT(width > 0 && height > 0, "0 width/height textures are unsupported");
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
@@ -2419,7 +2419,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 	size_t height = image.height();
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
 
-	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mip_level (%zu) exceeds uint32_t max", mip_level);
+	ASSERT_OR_RETURN(false, mip_level < mipLevelInitialized.size(), "mip_level (%zu) out of range (mip levels: %zu)", mip_level, mipLevelInitialized.size());
 	ASSERT(offset_x <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset_x (%zu) exceeds uint32_t max", offset_x);
 	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset_y (%zu) exceeds uint32_t max", offset_y);
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
@@ -2438,12 +2438,19 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 
+	// Transitioning from eUndefined may discard the level's contents,
+	// which is only fine when the upload overwrites all of it
+	const size_t mipWidth = std::max<size_t>(tex_width >> mip_level, 1);
+	const size_t mipHeight = std::max<size_t>(tex_height >> mip_level, 1);
+	const bool overwritesWholeLevel = (offset_x == 0) && (offset_y == 0) && (width >= mipWidth) && (height >= mipHeight);
+	const vk::ImageLayout oldLayout = (mipLevelInitialized[mip_level] && !overwritesWholeLevel) ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::eUndefined;
+
 	auto transfer = root->transferRecorder();
 	const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
 			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 1, 0, 1))
-			.setOldLayout(vk::ImageLayout::eUndefined)
+			.setOldLayout(oldLayout)
 			.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 	};
@@ -2471,6 +2478,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 	};
 	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
+	mipLevelInitialized[mip_level] = true;
 
 	root->noteExternalSubresourceLayout(
 		gfx_api::layoutSubresourceKey(static_cast<gfx_api::abstract_texture*>(this),
