@@ -62,7 +62,7 @@ struct GroupFlowMap;
 /// The values are serialized, so they are fixed, only append.
 /// A new feature also joins the --pathfindingbackend valid list in clparse.cpp
 /// and the default mask in multiplay.h.
-enum PathfindingFeature : uint16_t
+enum PathfindingFeature : uint32_t
 {
 	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping after the search
 	PF_CORRIDOR_LANES    = 1 << 1,   ///< steer into lanes through detected corridors
