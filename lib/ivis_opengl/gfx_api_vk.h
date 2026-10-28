@@ -965,6 +965,46 @@ private:
 	/// Write the frame's end timestamp before the draw command buffer ends (must be outside a render pass)
 	void writeGpuTimingEndIfOpen(vk::CommandBuffer cmdBuffer);
 
+	// Performance sample (debugPerf*): GPU time of each perf point and render pass, for one frame
+	// (read, blocking, once the frontend asks for the results)
+	static constexpr uint32_t PERF_SAMPLE_MAX_PASSES = 64;
+	static constexpr uint32_t PERF_SAMPLE_QUERY_PAIRS = static_cast<uint32_t>(PERF_COUNT) + PERF_SAMPLE_MAX_PASSES;
+	/// How far a perf point's timestamp query pair has been written in the sampled frame
+	enum class PerfPointState : uint8_t
+	{
+		/// Neither timestamp written
+		NotWritten = 0,
+		/// The begin timestamp is written
+		BeginWritten,
+		/// Both the begin and end timestamps are written (the pair can be read)
+		Complete,
+	};
+	struct PerfSample
+	{
+		bool armed = false;         // between debugPerfStart() and debugPerfStop()
+		bool queriesReset = false;  // the query reset is recorded (in frameNum's copy stream)
+		size_t frameNum = 0;        // the frame whose draw command buffer carries the timestamps
+		bool submitted = false;     // frameNum's draw command buffer was submitted
+		bool resultsRead = false;
+		std::array<PerfPointState, PERF_COUNT> pointState {}; // value-initialized to NotWritten
+		std::array<uint64_t, PERF_COUNT> pointNs {};
+		std::vector<std::string> passNames;            // pass i uses query pair PERF_COUNT + i
+		std::vector<bool> passComplete;
+		bool passOpen = false;
+	};
+	PerfSample perfSample;
+	vk::QueryPool perfQueryPool;
+	/// Frame whose copy stream holds the most recent query reset (including a stopped sample's)
+	optional<size_t> perfLastResetFrameNum;
+	/// True if a sample timestamp may be written now (records the query reset before the first one)
+	bool perfSamplePrepareWrite();
+	/// Timestamps around a render pass (recorded outside the render pass instance)
+	void perfSamplePassBegin(vk::CommandBuffer cmdBuffer, const std::string& name);
+	void perfSamplePassEnd(vk::CommandBuffer cmdBuffer);
+	/// Read the sample's results (waits for the GPU) and log the per-render-pass times, once per sample
+	void perfSampleReadResults();
+	void destroyPerfQueryPool();
+
 public:
 	vk::Format get_format(const gfx_api::pixel_format& format) const;
 
