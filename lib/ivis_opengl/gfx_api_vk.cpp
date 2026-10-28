@@ -2797,11 +2797,13 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 
 	if (!transitionedToTransferDstFormat)
 	{
+		// Covers the whole image, so it must keep the layers and levels this batch doesn't re-upload
+		const vk::ImageLayout oldLayout = (contentsInitialized) ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::eUndefined;
 		const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 			vk::ImageMemoryBarrier()
 				.setImage(object)
 				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0,  static_cast<uint32_t>(layer_count)))
-				.setOldLayout(vk::ImageLayout::eUndefined)
+				.setOldLayout(oldLayout)
 				.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 		};
@@ -2827,19 +2829,40 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 
 void VkTextureArray::flush()
 {
-	auto transfer = root->transferRecorder();
-	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
-		vk::ImageMemoryBarrier()
-			.setImage(object)
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0, static_cast<uint32_t>(layer_count)))
-			.setOldLayout(vk::ImageLayout::eUndefined)
-			.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
-			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
-			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
-	};
-	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
-		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
-	transitionedToTransferDstFormat = false;
+	if (transitionedToTransferDstFormat)
+	{
+		auto transfer = root->transferRecorder();
+		const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
+			vk::ImageMemoryBarrier()
+				.setImage(object)
+				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0, static_cast<uint32_t>(layer_count)))
+				.setOldLayout(vk::ImageLayout::eTransferDstOptimal)
+				.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
+				.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
+				.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+		};
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
+		transitionedToTransferDstFormat = false;
+		contentsInitialized = true;
+	}
+	else if (!contentsInitialized)
+	{
+		// Nothing was uploaded, but the image must still be samplable
+		auto transfer = root->transferRecorder();
+		const auto imageMemoryBarriers_NoUpload = std::array<vk::ImageMemoryBarrier, 1> {
+			vk::ImageMemoryBarrier()
+				.setImage(object)
+				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0, static_cast<uint32_t>(layer_count)))
+				.setOldLayout(vk::ImageLayout::eUndefined)
+				.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
+				.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+		};
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eFragmentShader,
+			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_NoUpload);
+		contentsInitialized = true;
+	}
+	// else: already eShaderReadOnlyOptimal
 
 	for (uint32_t layer = 0; layer < static_cast<uint32_t>(layer_count); ++layer)
 	{

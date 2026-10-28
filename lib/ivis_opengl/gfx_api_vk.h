@@ -536,7 +536,10 @@ struct VkTextureArray final : public gfx_api::texture_array
 	size_t layer_count;
 	size_t texWidth;
 	size_t texHeight;
+	/// Whole image in eTransferDstOptimal (between the first upload_layer() and flush())
 	bool transitionedToTransferDstFormat = false;
+	/// Whole image in eShaderReadOnlyOptimal (from the first flush(), eUndefined before)
+	bool contentsInitialized = false;
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;
