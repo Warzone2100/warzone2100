@@ -86,6 +86,38 @@ find_program( GLSLC "glslc"
 			  PATHS "$ENV{VULKAN_SDK}/bin"
 )
 
+OPTION(WZ_VULKAN_SHADERS_OPTIMIZE "Optimize the Vulkan SPIR-V shaders with spirv-opt" ON)
+OPTION(WZ_VULKAN_SHADERS_DEBUG_INFO "Compile the Vulkan SPIR-V shaders with debug information, for shader debuggers such as RenderDoc (turns optimization off)" OFF)
+
+# spirv-opt rather than glslc -O, which also removes unused stage inputs / outputs, bindings and spec constants
+# (the validation layers then report the vertex attributes and outputs that are no longer consumed).
+# The --preserve-* options that prevent this need a recent SPIRV-Tools, so they are probed for.
+set(_wz_vk_spirv_opt "")
+if(WZ_VULKAN_SHADERS_OPTIMIZE AND WZ_VULKAN_SHADERS_DEBUG_INFO)
+	message(STATUS "WZ_VULKAN_SHADERS_DEBUG_INFO is on - Vulkan shaders will not be optimized (optimized code is hard to step through)")
+elseif(WZ_VULKAN_SHADERS_OPTIMIZE)
+	find_program( SPIRV_OPT "spirv-opt"
+				  PATHS "$ENV{VULKAN_SDK}/bin"
+	)
+	if(SPIRV_OPT)
+		execute_process(COMMAND "${SPIRV_OPT}" --help
+			OUTPUT_VARIABLE _wz_spirv_opt_help
+			ERROR_QUIET
+			RESULT_VARIABLE _wz_spirv_opt_help_result)
+		if(_wz_spirv_opt_help_result EQUAL 0
+			AND _wz_spirv_opt_help MATCHES "--preserve-interface"
+			AND _wz_spirv_opt_help MATCHES "--preserve-bindings"
+			AND _wz_spirv_opt_help MATCHES "--preserve-spec-constants")
+			set(_wz_vk_spirv_opt "${SPIRV_OPT}")
+			message(STATUS "Vulkan shaders will be optimized with: ${SPIRV_OPT}")
+		else()
+			message(WARNING "${SPIRV_OPT} does not support --preserve-interface / --preserve-bindings / --preserve-spec-constants (update SPIRV-Tools / the Vulkan SDK) - Vulkan shaders will not be optimized")
+		endif()
+	else()
+		message(STATUS "spirv-opt not found - Vulkan shaders will not be optimized (install SPIRV-Tools / the Vulkan SDK, or set SPIRV_OPT)")
+	endif()
+endif()
+
 file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/generic.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/construction_line.vert"
@@ -249,17 +281,52 @@ if(GLSLC)
 	message(STATUS "Found glslc: ${GLSLC}")
 	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk")
 	file(MAKE_DIRECTORY "${_output_dir}")
+	set(_glslc_extra_args)
+	if(WZ_VULKAN_SHADERS_DEBUG_INFO)
+		list(APPEND _glslc_extra_args "-g")
+		message(STATUS "Vulkan shaders will include debug information")
+	endif()
+	if(_wz_vk_spirv_opt)
+		# glslc's unoptimized output stays out of base/shaders, which is packaged as game data
+		set(_unoptimized_dir "${CMAKE_CURRENT_BINARY_DIR}/vk_shaders_unoptimized")
+		file(MAKE_DIRECTORY "${_unoptimized_dir}")
+	endif()
+	# Changes with the shader build options, so toggling one rebuilds the shaders
+	# (Makefile generators don't track command line changes)
+	set(_vk_shader_options_stamp "${CMAKE_CURRENT_BINARY_DIR}/vk_shader_build_options.txt")
+	set(_vk_shader_options "spirv-opt: ${_wz_vk_spirv_opt}\ndebug info: ${WZ_VULKAN_SHADERS_DEBUG_INFO}\n")
+	set(_vk_shader_options_previous "")
+	if(EXISTS "${_vk_shader_options_stamp}")
+		file(READ "${_vk_shader_options_stamp}" _vk_shader_options_previous)
+	endif()
+	if(NOT _vk_shader_options_previous STREQUAL _vk_shader_options)
+		file(WRITE "${_vk_shader_options_stamp}" "${_vk_shader_options}")
+	endif()
 	foreach(SHADER ${VK_SHADERS})
 		get_filename_component(SHADER_FILE_PATH ${SHADER} DIRECTORY)
 		get_filename_component(SHADER_FILE ${SHADER} NAME)
 		set(_output_name "${SHADER_FILE}.spv")
-		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
-			COMMAND "${GLSLC}"
-			ARGS "-c" "-I" "${_vk_generated_dir}" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
-			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
-			DEPENDS "${SHADER}" "${_vk_generated_constants}" ${VK_SHADER_INCLUDES}
-			VERBATIM
-		)
+		if(_wz_vk_spirv_opt)
+			add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
+				BYPRODUCTS "${_unoptimized_dir}/${_output_name}"
+				COMMAND "${GLSLC}"
+				ARGS "-c" ${_glslc_extra_args} "-I" "${_vk_generated_dir}" "${SHADER}" "-o" "${_unoptimized_dir}/${_output_name}"
+				COMMAND "${_wz_vk_spirv_opt}"
+				ARGS "-O" "--target-env=vulkan1.0" "--preserve-interface" "--preserve-bindings" "--preserve-spec-constants"
+					"${_unoptimized_dir}/${_output_name}" "-o" "${_output_dir}/${_output_name}"
+				WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
+				DEPENDS "${SHADER}" "${_vk_generated_constants}" ${VK_SHADER_INCLUDES} "${_vk_shader_options_stamp}"
+				VERBATIM
+			)
+		else()
+			add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
+				COMMAND "${GLSLC}"
+				ARGS "-c" ${_glslc_extra_args} "-I" "${_vk_generated_dir}" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
+				WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
+				DEPENDS "${SHADER}" "${_vk_generated_constants}" ${VK_SHADER_INCLUDES} "${_vk_shader_options_stamp}"
+				VERBATIM
+			)
+		endif()
 		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
 	endforeach()
 	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})

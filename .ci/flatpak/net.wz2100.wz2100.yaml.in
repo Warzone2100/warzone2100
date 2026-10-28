@@ -73,7 +73,6 @@ modules:
       - -DSHADERC_SKIP_TESTS=ON
       - -DSHADERC_SKIP_EXAMPLES=ON
       - -DENABLE_CODE_COVERAGE=OFF
-      - -DSKIP_SPIRV_TOOLS_INSTALL=ON
       - -DSKIP_GLSLANG_INSTALL=ON
     sources:
       - type: git
