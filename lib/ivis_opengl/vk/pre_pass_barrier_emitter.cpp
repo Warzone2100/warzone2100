@@ -105,6 +105,18 @@ void PrePassBarrierEmitter::emitBatch(const gfx_api::ExecutionBatch& batch,
 			}
 
 			const ::vk::ImageLayout vkNewLayout = toVkImageLayout(barrierOp.newLayout);
+
+			// Upload-owned textures (VkTexture / VkTextureArray) track their own layout,
+			// and their upload barriers already cover every sampling stage
+			if (const auto uploadOwnedLayout = _root.uploadOwnedTextureLayout(subresource); uploadOwnedLayout.has_value())
+			{
+				ASSERT(barrierOp.producerScope == gfx_api::ReadProducerScope::External && vkNewLayout == uploadOwnedLayout.value(),
+					"Render graph wants upload-owned texture %p (layer %" PRIu32 ", mip %" PRIu32 ") in %s, but it is in %s (only sampling it as uploaded is supported)",
+					static_cast<void*>(barrierOp.texture), barrierOp.arrayLayer, barrierOp.mipLevel,
+					::vk::to_string(vkNewLayout).c_str(), ::vk::to_string(uploadOwnedLayout.value()).c_str());
+				continue;
+			}
+
 			// External reads: real previous layout lives in the runtime tracker.
 			// InGraph ops carry their old layout from the compiled timeline.
 			const ::vk::ImageLayout vkOldLayout = barrierOp.producerScope == gfx_api::ReadProducerScope::External

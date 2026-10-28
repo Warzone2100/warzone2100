@@ -59,8 +59,9 @@ struct ImageBarrierOp
 	bool isDepth = false;
 	/// Whether the producer of `texture` is tracked in the compile-time layout timeline.
 	/// External: backend resolves `oldLayout` from the runtime tracker and emits an
-	/// execution/memory barrier even when old == new layout. InGraph: prior layout is
-	/// known at compile time; render-pass subpass dependencies cover matching layouts.
+	/// execution/memory barrier even when old == new layout (unless the backend tracks the
+	/// texture's layout itself). InGraph: prior layout is known at compile time; render-pass
+	/// subpass dependencies cover matching layouts.
 	ReadProducerScope producerScope = ReadProducerScope::InGraph;
 	CompileImageLayout oldLayout = CompileImageLayout::Undefined;
 	CompileImageLayout newLayout = CompileImageLayout::Undefined;
