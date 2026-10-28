@@ -918,6 +918,74 @@ void perFrameResources_t::ensureDrawCmdBufferBegun()
 	{
 		cmdDraw.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), *pVkDynLoader);
 		drawCmdBufferBegun = true;
+		drawCmdDebugLabels.clear();
+	}
+}
+
+void perFrameResources_t::beginDrawCmdDebugLabel(DebugLabelKind kind, const char* name)
+{
+	if (!debugLabelsEnabled || !drawCmdBufferBegun)
+	{
+		return;
+	}
+	cmdDraw.beginDebugUtilsLabelEXT(vk::DebugUtilsLabelEXT().setPLabelName((name != nullptr) ? name : ""), *pVkDynLoader);
+	drawCmdDebugLabels.push_back(kind);
+}
+
+void perFrameResources_t::endDrawCmdDebugLabel(DebugLabelKind kind)
+{
+	if (!drawCmdBufferBegun || drawCmdDebugLabels.empty())
+	{
+		return;
+	}
+	switch (kind)
+	{
+		case DebugLabelKind::User:
+			if (drawCmdDebugLabels.back() == DebugLabelKind::User)
+			{
+				cmdDraw.endDebugUtilsLabelEXT(*pVkDynLoader);
+				drawCmdDebugLabels.pop_back();
+			}
+			break;
+		case DebugLabelKind::Pass:
+			if (std::find(drawCmdDebugLabels.begin(), drawCmdDebugLabels.end(), DebugLabelKind::Pass) == drawCmdDebugLabels.end())
+			{
+				break;
+			}
+			while (!drawCmdDebugLabels.empty())
+			{
+				const DebugLabelKind closed = drawCmdDebugLabels.back();
+				cmdDraw.endDebugUtilsLabelEXT(*pVkDynLoader);
+				drawCmdDebugLabels.pop_back();
+				if (closed == DebugLabelKind::Pass)
+				{
+					break;
+				}
+			}
+			break;
+	}
+}
+
+void perFrameResources_t::insertDrawCmdDebugLabel(const char* name)
+{
+	if (!debugLabelsEnabled || !drawCmdBufferBegun || name == nullptr)
+	{
+		return;
+	}
+	cmdDraw.insertDebugUtilsLabelEXT(vk::DebugUtilsLabelEXT().setPLabelName(name), *pVkDynLoader);
+}
+
+void perFrameResources_t::endAllDrawCmdDebugLabels()
+{
+	if (!drawCmdBufferBegun)
+	{
+		drawCmdDebugLabels.clear();
+		return;
+	}
+	while (!drawCmdDebugLabels.empty())
+	{
+		cmdDraw.endDebugUtilsLabelEXT(*pVkDynLoader);
+		drawCmdDebugLabels.pop_back();
 	}
 }
 
@@ -934,6 +1002,7 @@ void perFrameResources_t::endDrawCmdBufferIfRecording()
 {
 	if (drawCmdBufferBegun)
 	{
+		endAllDrawCmdDebugLabels();
 		cmdDraw.end(*pVkDynLoader);
 		drawCmdBufferBegun = false;
 	}
@@ -1146,6 +1215,7 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 	// (the next wait on it would otherwise never return)
 	dev.resetFences(fences, vkDynLoader);
 	buffering_mechanism::get_current_resources().drawCmdBufferBegun = false;
+	buffering_mechanism::get_current_resources().drawCmdDebugLabels.clear();
 	buffering_mechanism::get_current_resources().copyCmdBufferBegun = false;
 	buffering_mechanism::get_current_resources().transferWorkRecorded = false;
 	buffering_mechanism::get_current_resources().copyCmdBufferSubmittedSincePoolReset = false;
@@ -3958,6 +4028,10 @@ bool VkRoot::shouldDraw()
 
 void VkRoot::shutdown()
 {
+	closeQueueDebugLabels();
+	// No labels without a device (_initialize() enables them again)
+	debugQueueLabelsEnabled = false;
+	debugCmdLabelsEnabled = false;
 	_screenFrameOpen = false;
 	destroySwapchainAndSwapchainSpecificStuff(true);
 	// ShadowMap and other non-swapchain surfaces after swapchain/buffering teardown (GPU idle, FBs flushed).
@@ -4678,6 +4752,10 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		debug(LOG_ERROR, "buffering_mechanism init: %s: %s", vk::to_string(resultErr).c_str(), e.what());
 		throw;
 	}
+	for (auto& frameResources : buffering_mechanism::perFrameResources)
+	{
+		frameResources->debugLabelsEnabled = debugCmdLabelsEnabled;
+	}
 
 	depthStencilAttachmentFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
 	sceneColorVkFormat = findSceneColorBufferFormat(physicalDevice, vkDynLoader, hdrSceneEnabled());
@@ -5098,6 +5176,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	hasGpuTimestampSupport = initGpuTimestampSupport();
 	debug(LOG_3D, "* GPU timestamp query support: %s", hasGpuTimestampSupport ? "true" : "false");
+	initDebugLabelSupport();
 
 	ASSERT(renderPasses.empty(), "Non-empty renderPasses vector?");
 	renderPasses.clear();
@@ -6870,6 +6949,10 @@ void perFrameResources_t::ensureTransferRecordingBegun(const WZ_vk::DispatchLoad
 		vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit),
 		vkDynLoader);
 	copyCmdBufferBegun = true;
+	if (debugLabelsEnabled)
+	{
+		cmdCopy.insertDebugUtilsLabelEXT(vk::DebugUtilsLabelEXT().setPLabelName("Uploads"), vkDynLoader);
+	}
 }
 
 void perFrameResources_t::sealTransferStream(const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
@@ -7004,6 +7087,7 @@ void VkRoot::sealActivePassForFrameFinish()
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
 	frameResources.drawCmdBuffer().endRenderPass(vkDynLoader);
+	frameResources.endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
 	_activeDynamicFramebuffer = vk::Framebuffer();
 	if (_activePassTargetsSwapchain)
 	{
@@ -7028,6 +7112,8 @@ void VkRoot::sealDrawCommandBufferForPresent()
 
 	vk::CommandBuffer drawCmdBuffer = frameResources.drawCmdBuffer();
 	auto* swapchainColor = getPipelineSurface(gfx_api::PipelineSurfaceId::SwapchainColor);
+
+	frameResources.endAllDrawCmdDebugLabels();
 
 	writeGpuTimingEndIfOpen(drawCmdBuffer);
 
@@ -7212,6 +7298,10 @@ void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::Compi
 
 	writeGpuTimingBeginIfNeeded(drawCmdBuffer);
 
+	// Named after the execution batch's first graph pass (the others appear as markers inside it)
+	buffering_mechanism::get_current_resources().beginDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass,
+		(!pass.debugName.empty()) ? pass.debugName.c_str() : "Render pass");
+
 	_fboAttachmentsScratch.clear();
 	const size_t resolveAttachmentCount = pass.resolveAttachment.has_value() ? 1 : 0;
 	_fboAttachmentsScratch.reserve(pass.colorAttachments.size()
@@ -7285,6 +7375,7 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
 
 	buffering_mechanism::get_current_resources().drawCmdBuffer().endRenderPass(vkDynLoader);
+	buffering_mechanism::get_current_resources().endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
 	_activeDynamicFramebuffer = vk::Framebuffer();
 	if (_activePassTargetsSwapchain)
 	{
@@ -7783,19 +7874,83 @@ uint64_t VkRoot::get_estimated_vram_mb(bool dedicatedOnly)
 
 // DEBUG-handling
 
+// MARK: Debug labels (VK_EXT_debug_utils)
+//
+// Within a frame, labels go into the draw command buffer.
+// Scenes, which span many frames, and markers issued outside the frame's draw recording go on the queue.
+
+void VkRoot::initDebugLabelSupport()
+{
+	debugCmdLabelsEnabled = debugUtilsExtEnabled
+		&& vkDynLoader.vkCmdBeginDebugUtilsLabelEXT != nullptr
+		&& vkDynLoader.vkCmdEndDebugUtilsLabelEXT != nullptr
+		&& vkDynLoader.vkCmdInsertDebugUtilsLabelEXT != nullptr;
+	debugQueueLabelsEnabled = debugUtilsExtEnabled
+		&& vkDynLoader.vkQueueBeginDebugUtilsLabelEXT != nullptr
+		&& vkDynLoader.vkQueueEndDebugUtilsLabelEXT != nullptr
+		&& vkDynLoader.vkQueueInsertDebugUtilsLabelEXT != nullptr;
+	queueDebugLabelDepth = 0;
+	debug(LOG_3D, "Debug labels: command buffer: %s, queue: %s",
+		debugCmdLabelsEnabled ? "yes" : "no", debugQueueLabelsEnabled ? "yes" : "no");
+}
+
+void VkRoot::closeQueueDebugLabels()
+{
+	if (debugQueueLabelsEnabled && graphicsQueue)
+	{
+		for (; queueDebugLabelDepth > 0; --queueDebugLabelDepth)
+		{
+			graphicsQueue.endDebugUtilsLabelEXT(vkDynLoader);
+		}
+	}
+	queueDebugLabelDepth = 0;
+}
+
+bool VkRoot::drawCmdBufferRecording() const
+{
+	return buffering_mechanism::isInitialized() && buffering_mechanism::get_current_resources().drawCmdBufferBegun;
+}
+
 void VkRoot::debugStringMarker(const char *str)
 {
-	// TODO: Implement
+	if (str == nullptr)
+	{
+		return;
+	}
+	if (renderGraphExecuting() && !hasActivePass)
+	{
+		// The graph executor's marker for a batch's first pass (the render pass region that follows has its name)
+		return;
+	}
+	if (debugCmdLabelsEnabled && drawCmdBufferRecording())
+	{
+		buffering_mechanism::get_current_resources().insertDrawCmdDebugLabel(str);
+	}
+	else if (debugQueueLabelsEnabled && graphicsQueue)
+	{
+		// (between queue submissions, so before the current frame's work)
+		graphicsQueue.insertDebugUtilsLabelEXT(vk::DebugUtilsLabelEXT().setPLabelName(str), vkDynLoader);
+	}
 }
 
 void VkRoot::debugSceneBegin(const char *descr)
 {
-	// TODO: Implement
+	if (!debugQueueLabelsEnabled || !graphicsQueue)
+	{
+		return;
+	}
+	graphicsQueue.beginDebugUtilsLabelEXT(vk::DebugUtilsLabelEXT().setPLabelName((descr != nullptr) ? descr : ""), vkDynLoader);
+	++queueDebugLabelDepth;
 }
 
 void VkRoot::debugSceneEnd(const char *descr)
 {
-	// TODO: Implement
+	if (!debugQueueLabelsEnabled || !graphicsQueue || queueDebugLabelDepth == 0)
+	{
+		return;
+	}
+	graphicsQueue.endDebugUtilsLabelEXT(vkDynLoader);
+	--queueDebugLabelDepth;
 }
 
 bool VkRoot::debugPerfAvailable()
@@ -7828,12 +7983,21 @@ void VkRoot::debugPerfStop()
 
 void VkRoot::debugPerfBegin(PERF_POINT pp, const char *descr)
 {
+	// Each perf point is also a label region, as in the GL backend
+	if (debugCmdLabelsEnabled && drawCmdBufferRecording())
+	{
+		buffering_mechanism::get_current_resources().beginDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::User, descr);
+	}
 	if (!perfStarted) return;
 	// TODO: Implement
 }
 
 void VkRoot::debugPerfEnd(PERF_POINT pp)
 {
+	if (debugCmdLabelsEnabled && drawCmdBufferRecording())
+	{
+		buffering_mechanism::get_current_resources().endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::User);
+	}
 	if (!perfStarted) return;
 	// TODO: Implement
 }

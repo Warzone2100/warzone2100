@@ -280,7 +280,31 @@ public:
 
 	void ensureDrawCmdBufferBegun();
 	void endCopyCmdBufferIfRecording();
+	/// Ends the draw command buffer if it is recording (closing any debug labels still open on it first).
 	void endDrawCmdBufferIfRecording();
+
+	// MARK: Debug labels (VK_EXT_debug_utils) on the draw command buffer
+	//
+	// Each draw command buffer is kept self-balanced (labels still open when it ends are closed then),
+	// as a recorded draw command buffer is not always submitted.
+	enum class DebugLabelKind : uint8_t
+	{
+		/// A render pass region (VkRoot::beginPass / endPass)
+		Pass,
+		/// A region opened through gfx_api (perf points)
+		User,
+	};
+	/// Set by VkRoot when VK_EXT_debug_utils command buffer labels are usable.
+	bool debugLabelsEnabled = false;
+	/// Open a label region on the (recording) draw command buffer.
+	void beginDrawCmdDebugLabel(DebugLabelKind kind, const char* name);
+	/// Close the innermost region of this kind
+	/// (Pass: with any User regions still open inside it, User: only if it is innermost, else the end is ignored).
+	void endDrawCmdDebugLabel(DebugLabelKind kind);
+	/// Insert a single label on the (recording) draw command buffer.
+	void insertDrawCmdDebugLabel(const char* name);
+	/// Close every label region still open on the draw command buffer.
+	void endAllDrawCmdDebugLabels();
 
 	bool drawCmdBufferBegun = false;
 	bool copyCmdBufferBegun = false;
@@ -308,6 +332,9 @@ private:
 
 	// upload / transfer commands
 	vk::CommandBuffer cmdCopy;
+
+	// Label regions currently open on cmdDraw, innermost last
+	std::vector<DebugLabelKind> drawCmdDebugLabels;
 
 	// all render passes recorded sequentially in graph order
 	vk::CommandBuffer cmdDraw;
@@ -834,6 +861,12 @@ struct VkRoot final : gfx_api::context
 	bool validationLayer = false;
 	bool debugCallbacksEnabled = true;
 	bool debugUtilsExtEnabled = false;
+	/// VK_EXT_debug_utils command buffer labels are usable (begin / end / insert all resolved)
+	bool debugCmdLabelsEnabled = false;
+	/// VK_EXT_debug_utils queue labels are usable (begin / end / insert all resolved)
+	bool debugQueueLabelsEnabled = false;
+	/// Queue label regions currently open on graphicsQueue (debugSceneBegin / debugSceneEnd)
+	size_t queueDebugLabelDepth = 0;
 
 	bool frameHasDrawCommands = false;
 	bool hasActivePass = false;
@@ -919,6 +952,12 @@ private:
 
 	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
 	bool initGpuTimestampSupport();
+	/// Resolve VK_EXT_debug_utils label support (after device creation)
+	void initDebugLabelSupport();
+	/// Close any queue label regions still open (before the queue goes away)
+	void closeQueueDebugLabels();
+	/// True while the current ring slot's draw command buffer is recording
+	bool drawCmdBufferRecording() const;
 	void destroyGpuTimingQueryPool();
 	void pollGpuFrameTimings();
 	/// Write the frame's begin timestamp on first use of the draw command buffer (must be outside a render pass)
