@@ -2163,6 +2163,29 @@ size_t VkBuf::current_buffer_size()
 
 void VkBuf::bind() {}
 
+// MARK: Texture upload synchronization
+
+// Source scope of the barrier before a texture upload's copy
+struct TextureUploadSourceScope
+{
+	vk::PipelineStageFlags stages;
+	vk::AccessFlags access;
+};
+
+// `hasContents`: the texels already hold uploaded data
+static TextureUploadSourceScope textureUploadSourceScope(const VkRoot& root, bool hasContents)
+{
+	if (!hasContents)
+	{
+		// Never written or read, so nothing to wait for
+		return {vk::PipelineStageFlagBits::eTopOfPipe, vk::AccessFlags()};
+	}
+	// The copy overwrites texels that may still be
+	// - read by earlier draws (ex. the previous frame, still in flight), which needs an execution dependency
+	// - written by an earlier copy, which also needs that write made available
+	return {root.textureSamplingStages() | vk::PipelineStageFlagBits::eTransfer, vk::AccessFlagBits::eTransferWrite};
+}
+
 // MARK: VkTexture
 
 size_t VkTexture::format_size(const gfx_api::pixel_format& format)
@@ -2445,17 +2468,19 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 	const bool overwritesWholeLevel = (offset_x == 0) && (offset_y == 0) && (width >= mipWidth) && (height >= mipHeight);
 	const vk::ImageLayout oldLayout = (mipLevelInitialized[mip_level] && !overwritesWholeLevel) ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::eUndefined;
 
+	const TextureUploadSourceScope srcScope = textureUploadSourceScope(*root, mipLevelInitialized[mip_level]);
+
 	auto transfer = root->transferRecorder();
 	const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
 			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 1, 0, 1))
 			.setOldLayout(oldLayout)
+			.setSrcAccessMask(srcScope.access)
 			.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 	};
-	// TODO: Should this be eBottomOfPipe, eTopOfPipe, or something else? // FIXME
-	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+	transfer.pipelineBarrier(srcScope.stages, vk::PipelineStageFlagBits::eTransfer,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy);
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
@@ -2476,7 +2501,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 	};
-	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, root->textureSamplingStages(),
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
 	mipLevelInitialized[mip_level] = true;
 
@@ -2799,15 +2824,17 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 	{
 		// Covers the whole image, so it must keep the layers and levels this batch doesn't re-upload
 		const vk::ImageLayout oldLayout = (contentsInitialized) ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::eUndefined;
+		const TextureUploadSourceScope srcScope = textureUploadSourceScope(*root, contentsInitialized);
 		const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 			vk::ImageMemoryBarrier()
 				.setImage(object)
 				.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_levels), 0,  static_cast<uint32_t>(layer_count)))
 				.setOldLayout(oldLayout)
+				.setSrcAccessMask(srcScope.access)
 				.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 		};
-		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+		transfer.pipelineBarrier(srcScope.stages, vk::PipelineStageFlagBits::eTransfer,
 			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy);
 
 		transitionedToTransferDstFormat = true;
@@ -2841,7 +2868,7 @@ void VkTextureArray::flush()
 				.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 		};
-		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, root->textureSamplingStages(),
 			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
 		transitionedToTransferDstFormat = false;
 		contentsInitialized = true;
@@ -2858,7 +2885,7 @@ void VkTextureArray::flush()
 				.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 		};
-		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eFragmentShader,
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, root->textureSamplingStages(),
 			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_NoUpload);
 		contentsInitialized = true;
 	}
@@ -5787,6 +5814,18 @@ bool VkRoot::supportsTessellationShaders() const
 {
 	// enabled at device creation whenever the physical device supports it
 	return physDeviceFeatures.tessellationShader;
+}
+
+vk::PipelineStageFlags VkRoot::textureSamplingStages() const
+{
+	// Must match the stages VkPSO makes texture bindings visible to
+	vk::PipelineStageFlags stages = vk::PipelineStageFlagBits::eFragmentShader;
+	if (supportsTessellationShaders())
+	{
+		// (only valid in a barrier with the tessellationShader feature enabled)
+		stages |= vk::PipelineStageFlagBits::eTessellationEvaluationShader;
+	}
+	return stages;
 }
 
 bool VkRoot::supportsInstancedRendering()
