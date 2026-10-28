@@ -974,6 +974,8 @@ public:
 	bool isScreenFrameOpen() const { return _screenFrameOpen; }
 	/// Typed wrapper for per-frame GPU upload / copy command recording.
 	gfx_api::vk::TransferRecorder transferRecorder() const;
+	/// Every pipeline stage a texture binding is visible to (see VkPSO)
+	vk::PipelineStageFlags textureSamplingStages() const;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
 	virtual gfx_api::PipelineSurfaceUsage pipelineSurfaceUsage(gfx_api::PipelineSurfaceId id) const override;
