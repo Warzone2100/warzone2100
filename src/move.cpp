@@ -1302,6 +1302,9 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 }
 
 
+// How far two droids brushing past each other may overlap, in world units (never more than half their combined radius).
+const int32_t SOFT_PASS_MAX_OVERLAP = 12;
+
 // True when two droids in plain transit are headed the same way, so they may
 // brush past each other on a reduced footprint. Both must be mid-move on a
 // bare move action - anything stopped, targeting or firing keeps the full
@@ -1394,7 +1397,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 			const bool allied = psObj->player == psDroid->player || aiCheckAlliances(psObj->player, psDroid->player);
 			if (allied && moveSoftPass(psDroid, static_cast<const DROID *>(psObj)))
 			{
-				rad /= 2;
+				rad = std::max(rad / 2, rad - SOFT_PASS_MAX_OVERLAP);
 			}
 		}
 		radSq = rad * rad;
