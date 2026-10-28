@@ -1056,9 +1056,11 @@ public:
 	virtual void draw_elements_instanced(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type& primitive, const gfx_api::index_type& index, std::size_t instance_count) override;
 	// debug apis for recompiling pipelines
 	virtual bool debugRecompileAllPipelines() override;
-	/// Records post-upload / external-producer layout for one subresource.
-	void noteExternalSubresourceLayout(const gfx_api::LayoutSubresourceKey& subresource,
-		vk::ImageLayout layout) const;
+	/// Layout of a VkTexture / VkTextureArray subresource, as tracked by the texture itself
+	/// (nullopt for other images).
+	/// NOTE: this is the layout at the time of the call,
+	/// so a frame's uploads must be recorded before its render graph executes.
+	optional<vk::ImageLayout> uploadOwnedTextureLayout(const gfx_api::LayoutSubresourceKey& subresource) const;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	bool initPixelFormatsSupport();

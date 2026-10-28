@@ -44,6 +44,8 @@ class FrameLayoutTracker;
 ///
 /// Honors `ReadProducerScope::External` (runtime old layout, always emit) vs
 /// `ReadProducerScope::InGraph` (compile-time old layout, skip when old == new).
+/// Upload-owned textures (`VkTexture` / `VkTextureArray`) are skipped, as their uploads already
+/// synchronize with sampling.
 /// Invoked from `VkRoot::emitPrePassBarriers` before `beginPass`.
 /// </summary>
 class PrePassBarrierEmitter

@@ -2505,11 +2505,6 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
 	mipLevelInitialized[mip_level] = true;
 
-	root->noteExternalSubresourceLayout(
-		gfx_api::layoutSubresourceKey(static_cast<gfx_api::abstract_texture*>(this),
-			0, static_cast<uint32_t>(mip_level)),
-		vk::ImageLayout::eShaderReadOnlyOptimal);
-
 	return true;
 }
 
@@ -2890,16 +2885,6 @@ void VkTextureArray::flush()
 		contentsInitialized = true;
 	}
 	// else: already eShaderReadOnlyOptimal
-
-	for (uint32_t layer = 0; layer < static_cast<uint32_t>(layer_count); ++layer)
-	{
-		for (uint32_t mip = 0; mip < static_cast<uint32_t>(mipmap_levels); ++mip)
-		{
-			root->noteExternalSubresourceLayout(
-				gfx_api::layoutSubresourceKey(static_cast<gfx_api::abstract_texture*>(this), layer, mip),
-				vk::ImageLayout::eShaderReadOnlyOptimal);
-		}
-	}
 }
 
 size_t VkTextureArray::backend_internal_value() const
@@ -6401,13 +6386,39 @@ void VkRoot::setImageLayout(gfx_api::abstract_texture* texture, vk::ImageLayout 
 
 void VkRoot::setImageLayout(const gfx_api::LayoutSubresourceKey& subresource, vk::ImageLayout layout)
 {
+	ASSERT(!uploadOwnedTextureLayout(subresource).has_value(),
+		"Upload-owned textures track their own layout and must not enter the frame layout tracker");
 	_frameLayoutTracker.set(subresource, layout);
 }
 
-void VkRoot::noteExternalSubresourceLayout(const gfx_api::LayoutSubresourceKey& subresource,
-	vk::ImageLayout layout) const
+optional<vk::ImageLayout> VkRoot::uploadOwnedTextureLayout(const gfx_api::LayoutSubresourceKey& subresource) const
 {
-	_frameLayoutTracker.set(subresource, layout);
+	if (subresource.texture == nullptr)
+	{
+		return nullopt;
+	}
+	switch (static_cast<VulkanBackendInternalTextureType>(subresource.texture->backend_internal_value()))
+	{
+		case VulkanBackendInternalTextureType::Texture:
+		{
+			const auto* texture = static_cast<const VkTexture*>(subresource.texture);
+			ASSERT(subresource.arrayLayer == 0, "VkTexture has a single layer (asked for layer %" PRIu32 ")", subresource.arrayLayer);
+			const bool levelInitialized = (subresource.mipLevel < texture->mipLevelInitialized.size())
+				&& texture->mipLevelInitialized[subresource.mipLevel];
+			return (levelInitialized) ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::eUndefined;
+		}
+		case VulkanBackendInternalTextureType::TextureArray:
+		{
+			const auto* textureArray = static_cast<const VkTextureArray*>(subresource.texture);
+			if (textureArray->transitionedToTransferDstFormat)
+			{
+				return vk::ImageLayout::eTransferDstOptimal;
+			}
+			return (textureArray->contentsInitialized) ? vk::ImageLayout::eShaderReadOnlyOptimal : vk::ImageLayout::eUndefined;
+		}
+		default:
+			return nullopt;
+	}
 }
 
 vk::ImageLayout VkRoot::getImageLayout(gfx_api::abstract_texture* texture) const
