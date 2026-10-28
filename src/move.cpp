@@ -1267,6 +1267,34 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		}
 	}
 
+	// The slides above work from the blocking tile's center point or drop one axis,
+	// without checking where they end, so they can still end on a blocking tile.
+	// Keep only an axis that stays clear, else stop.
+	if (pathfindingSlideClearEnabled() && (tx != ntx || ty != nty))
+	{
+		const auto endsBlocked = [&](int32_t vx, int32_t vy) {
+			return fpathBlockingTile(gameWorld.map,
+			                         map_coord(psDroid->pos.x + gameTimeAdjustedAverage(vx, EXTRA_PRECISION)),
+			                         map_coord(psDroid->pos.y + gameTimeAdjustedAverage(vy, EXTRA_PRECISION)), propulsion);
+		};
+		if (endsBlocked(*pmx, *pmy))
+		{
+			if (!endsBlocked(*pmx, 0))
+			{
+				*pmy = 0;
+			}
+			else if (!endsBlocked(0, *pmy))
+			{
+				*pmx = 0;
+			}
+			else
+			{
+				*pmx = 0;
+				*pmy = 0;
+			}
+		}
+	}
+
 	slideDir = iAtan2(*pmx, *pmy);
 	if (ntx != tx)
 	{
