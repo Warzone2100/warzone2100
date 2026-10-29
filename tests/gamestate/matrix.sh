@@ -164,6 +164,9 @@ fi
 if echo "deadgrid" | grep -qE "$FILTER"; then
 	"$HERE/deadgrid.sh" "$BIN" | head -1
 fi
+if echo "camtakeover" | grep -qE "$FILTER"; then
+	"$HERE/camtakeover.sh" "$BIN" | grep -v '^  '
+fi
 if echo "replayrewind" | grep -qE "$FILTER"; then
 	echo "$REPLAY_CELLS" | while read -r cell; do
 		[ -n "$cell" ] || continue
