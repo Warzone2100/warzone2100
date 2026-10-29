@@ -30,6 +30,7 @@
 #include "widgint.h"
 #include "editbox.h"
 #include "form.h"
+#include "virtualkeyboard.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
 
@@ -310,6 +311,51 @@ void W_EDITBOX::setCursorPosPixels(int xPos)
 }
 
 
+static std::weak_ptr<W_EDITBOX> currentlyEditingBox;
+
+std::shared_ptr<W_EDITBOX> W_EDITBOX::currentEditBox()
+{
+	auto editBox = currentlyEditingBox.lock();
+	if (editBox && !editBox->isEditing())
+	{
+		return nullptr;
+	}
+	return editBox;
+}
+
+void W_EDITBOX::pasteFromClipboard()
+{
+	if (!wzHasClipboardText())
+	{
+		return;
+	}
+	WzString clipText = wzGetClipboardText();
+	if (onPasteTransformFunc)
+	{
+		// call custom onPasteTransformFunc to process the pasted data
+		clipText = onPasteTransformFunc(clipText);
+	}
+	else
+	{
+		// default behavior:
+		// remove any \r, \n chars
+		clipText.replace(WzUniCodepoint::fromASCII('\r'), "");
+		clipText.replace(WzUniCodepoint::fromASCII('\n'), "");
+	}
+	// Truncate the clipboard text if it will overflow
+	int newLength = aText.length() + clipText.length();
+	if (newLength >= maxStringSize)
+	{
+		clipText.truncate(maxStringSize - aText.length());
+	}
+	aText.insert(insPos, clipText);
+	insPos += clipText.length();
+
+	/* Update the printable text */
+	fitStringEnd();
+	debug(LOG_INPUT, "EditBox paste");
+}
+
 void W_EDITBOX::run(W_CONTEXT *psContext)
 {
 	/* Note the edit state */
@@ -322,10 +368,11 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	}
 	dirty = true;
 	StartTextInput(this, {screenPosX(), screenPosY(), width(), height()});
-	/* If there is a mouse click outside of the edit box - stop editing */
+	currentlyEditingBox = std::static_pointer_cast<W_EDITBOX>(shared_from_this());
+	/* If there is a mouse click outside of the edit box (and the on-screen keyboard) - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;
-	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
+	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my) && !virtualKeyboardContainsScreenPoint(mouseX(), mouseY()))
 	{
 		StopTextInput(this);
 		if (auto lockedScreen = screenPointer.lock())
@@ -435,6 +482,9 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			fitStringStart();
 			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
+		case INPBUF_PASTE :
+			pasteFromClipboard();
+			break;
 		case INPBUF_TAB :
 			debug(LOG_INPUT, "EditBox cursor tab");
 			if (onTabHandler)
@@ -495,38 +545,8 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 				case KEY_V:
-				{
-					if (!wzHasClipboardText())
-					{
-						break;
-					}
-					WzString clipText = wzGetClipboardText();
-					if (onPasteTransformFunc)
-					{
-						// call custom onPasteTransformFunc to process the pasted data
-						clipText = onPasteTransformFunc(clipText);
-					}
-					else
-					{
-						// default behavior:
-						// remove any \r, \n chars
-						clipText.replace(WzUniCodepoint::fromASCII('\r'), "");
-						clipText.replace(WzUniCodepoint::fromASCII('\n'), "");
-					}
-					// Truncate the clipboard text if it will overflow
-					int newLength = aText.length() + clipText.length();
-					if (newLength >= maxStringSize)
-					{
-						clipText.truncate(maxStringSize - aText.length());
-					}
-					aText.insert(insPos, clipText);
-					insPos += clipText.length();
-
-					/* Update the printable text */
-					fitStringEnd();
-					debug(LOG_INPUT, "EditBox paste");
+					pasteFromClipboard();
 					break;
-				}
 				default:
 					break;
 				}
@@ -671,6 +691,11 @@ void W_EDITBOX::stopEditing()
 	if ((editState & WEDBS_MASK) == WEDBS_FIXED)
 	{
 		return;
+	}
+
+	if (currentlyEditingBox.lock().get() == this)
+	{
+		currentlyEditingBox.reset();
 	}
 
 	/* Stop editing the widget */

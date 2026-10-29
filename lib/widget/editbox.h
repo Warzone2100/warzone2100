@@ -62,6 +62,9 @@ public:
 	void stopEditing();
 	bool isEditing();
 
+	// The edit box being edited, if any
+	static std::shared_ptr<W_EDITBOX> currentEditBox();
+
 	bool isGamepadCursorMagnetTarget() const override
 	{
 		return (state & WEDBS_DISABLE) == 0;
@@ -118,6 +121,7 @@ private:
 	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
 	void fitStringEnd();
 	void setCursorPosPixels(int xPos);
+	void pasteFromClipboard();
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 	optional<PIELIGHT> fixedPlaceholderTextColor;
