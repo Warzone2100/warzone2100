@@ -9,8 +9,10 @@ data/texpages/bdrops/backdrop6.png
 	- CC0		- Copyright (c) 2010-2011 jorzi
 data/base/texpages/page-25-sky-urban.png
 	- CC0, original work by cybersphinx
-data/base/keyboards/*.json
+data/base/keyboards/*.json (except accents.json)
 	- Generated from xkeyboard-config 2.41 (https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config) - MIT/X11-style licenses, see data/base/keyboards/COPYING.xkeyboard-config
+data/base/keyboards/accents.json
+	- Generated from Unicode CLDR 48 (https://cldr.unicode.org) - Unicode License v3, Copyright (c) 2004-2026 Unicode, Inc., see data/base/keyboards/COPYING.unicode
 3rdparty/ControllerImage/*
 	- zlib, Copyright (c) 2023-2025 Ryan C. Gordon <icculus@icculus.org> and others (https://github.com/icculus/ControllerImage)
 3rdparty/date/*

@@ -26,6 +26,20 @@ with libxkbcommon and records the characters every physical key produces.
 - `geometry` is `ansi` (backslash key at the end of the top letter row) or
   `iso` (backslash key at the end of the home row, extra key before Z).
 
+## Accents (`accents.json`)
+
+Holding a letter key on the on-screen keyboard offers accented and related
+letters. `accents.json` lists them per game language, from the
+[Unicode CLDR](https://cldr.unicode.org) exemplar characters (the main set,
+then the auxiliary set): `languages` maps a language code (as the game
+reports it, ex. `de` or `pt_BR`) to the plain letters and the letters offered
+on them, ex. `"e": ["é", "è", "ê", "ë"]`. Letters are grouped by their
+canonical decomposition, or by a related letter for those that don't
+decompose (`æ` on `a`, `ß` on `s`, Ukrainian `є` on `е`). Only precomposed
+Latin, Cyrillic and Greek letters are included. The game offers the
+letters of the current game language, then those of the layout's language.
+Uppercase variants are derived at runtime.
+
 ## Regenerating
 
 ```sh
@@ -37,7 +51,20 @@ This needs libxkbcommon and an xkeyboard-config data tree (by default
 from the installed `xkeyboard-config.pc`, or pass `--xkb-version`. Add
 layouts by extending `LAYOUTS` in the script.
 
+```sh
+npm pack cldr-misc-full@48.2.0 && tar xzf cldr-misc-full-48.2.0.tgz
+python3 tools/keyboard-layouts/generate_accents.py --cldr package
+```
+
+This regenerates `accents.json` from the JSON form of CLDR
+([cldr-json](https://github.com/unicode-org/cldr-json)). Add languages by
+extending `LANGUAGES` in the script.
+
 ## License
 
-The generated data is derived from xkeyboard-config, which is distributed
-under the permissive licenses reproduced in `COPYING.xkeyboard-config`.
+The generated layout data is derived from xkeyboard-config, which is
+distributed under the permissive licenses reproduced in
+`COPYING.xkeyboard-config`.
+
+`accents.json` is derived from Unicode CLDR, distributed under the Unicode
+License v3 reproduced in `COPYING.unicode`.
