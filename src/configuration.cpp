@@ -34,6 +34,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piestate.h" // for fog
+#include "lib/widget/virtualkeyboard.h"
 
 #include "ai.h"
 #include "component.h"
@@ -624,6 +625,13 @@ bool loadConfig()
 	war_SetGamepadRumble(iniGetBool("gamepadRumble", true).value());
 	war_SetGamepadShowLayoutOnConnect(iniGetBool("gamepadShowLayoutOnConnect", true).value());
 	war_SetGamepadLayoutSeenDevices(iniGetString("gamepadLayoutSeenDevices", "").value());
+	auto intOnScreenKeyboardModeValue = iniGetInteger("onScreenKeyboardMode", static_cast<int>(VirtualKeyboardMode::Automatic)).value();
+	if (intOnScreenKeyboardModeValue < static_cast<int>(VirtualKeyboardMode::Automatic) || intOnScreenKeyboardModeValue > static_cast<int>(VirtualKeyboardMode::Disabled))
+	{
+		intOnScreenKeyboardModeValue = static_cast<int>(VirtualKeyboardMode::Automatic);
+	}
+	virtualKeyboardSetMode(static_cast<VirtualKeyboardMode>(intOnScreenKeyboardModeValue));
+	virtualKeyboardSetLayoutPreference(iniGetString("onScreenKeyboardLayout", VIRTUAL_KEYBOARD_LAYOUT_AUTO).value());
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -1057,6 +1065,8 @@ bool saveConfig()
 	iniSetBool("gamepadRumble", war_GetGamepadRumble());
 	iniSetBool("gamepadShowLayoutOnConnect", war_GetGamepadShowLayoutOnConnect());
 	iniSetString("gamepadLayoutSeenDevices", war_GetGamepadLayoutSeenDevices());
+	iniSetInteger("onScreenKeyboardMode", static_cast<int>(virtualKeyboardGetMode()));
+	iniSetString("onScreenKeyboardLayout", virtualKeyboardGetLayoutPreference());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
