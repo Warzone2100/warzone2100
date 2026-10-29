@@ -89,6 +89,13 @@ bool gamepadRightStickConsumedByUI();
 void gamepadSetCaptureMode(bool enabled);
 bool gamepadInCaptureMode();
 
+// While text entry mode is on (an on-screen keyboard is up), only the
+// south button still synthesizes a click - to press the key under the
+// cursor - and the other buttons are left for typing shortcuts. In-flight
+// synthetic input still releases normally
+void gamepadSetTextEntryMode(bool enabled);
+bool gamepadInTextEntryMode();
+
 // Sets this frame's cursor attraction target in logical screen coordinates.
 // The target expires after the next cursor update, so callers refresh it
 // every frame it should apply
@@ -112,6 +119,9 @@ void gamepadSetCursorFlickAnchor(int screenX, int screenY);
 // Glides the cursor to the given logical screen position - any new stick
 // input cancels the glide
 void gamepadCursorHopTo(int screenX, int screenY);
+
+// Moves the cursor to the given logical screen position at once
+void gamepadCursorJumpTo(int screenX, int screenY);
 
 // Whether the connected controller reports rumble support
 bool gamepadHasRumble();

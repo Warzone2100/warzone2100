@@ -127,6 +127,18 @@ bool gamepadInCaptureMode()
 	return captureModeActive;
 }
 
+static bool textEntryModeActive = false;
+
+void gamepadSetTextEntryMode(bool enabled)
+{
+	textEntryModeActive = enabled;
+}
+
+bool gamepadInTextEntryMode()
+{
+	return textEntryModeActive;
+}
+
 static bool magnetTargetFresh = false;
 static float magnetTargetX = 0.f;
 static float magnetTargetY = 0.f;
@@ -1066,17 +1078,19 @@ bool gamepadSyntheticClickHeld()
 static int shiftAssertCount = 0;
 static int shiftReleaseQueue = 0;
 
-static void handleClickButton(GAMEPAD_INPUT gamepadButton, MOUSE_KEY_CODE mouseButton, SyntheticClickState& state)
+static void handleClickButton(GAMEPAD_INPUT gamepadButton, MOUSE_KEY_CODE mouseButton, SyntheticClickState& state, bool suppressPress = false)
 {
 	const Vector2i pos((int)mouseX(), (int)mouseY());
 
-	// holding the right shoulder reserves the face buttons for chorded actions
-	if (actualButtonPressed(gamepadButton) && !state.held && !actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) && !captureModeActive)
+	// holding the right shoulder reserves the face buttons for chorded actions,
+	// except during text entry (where the shoulders move the text cursor)
+	const bool chordReserved = actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) && !textEntryModeActive;
+	if (actualButtonPressed(gamepadButton) && !state.held && !chordReserved && !captureModeActive && !suppressPress)
 	{
 		// holding the left shoulder makes this an additive/queueing click - assert
 		// shift so the existing modifier checks in the click handling apply, unless
 		// the physical shift key is already doing the job
-		if (actualButtonDown(GPAD_BTN_LEFT_SHOULDER))
+		if (actualButtonDown(GPAD_BTN_LEFT_SHOULDER) && !textEntryModeActive)
 		{
 			if (shiftAssertCount > 0 || !keyDown(KEY_LSHIFT))
 			{
@@ -1129,12 +1143,14 @@ static void updateSyntheticInput()
 		}
 	}
 
+	// during text entry South still presses the on-screen key under the cursor,
+	// and the other buttons are the keyboard's typing shortcuts
 	handleClickButton(GPAD_BTN_SOUTH, MOUSE_LMB, syntheticLeftClick);
-	handleClickButton(GPAD_BTN_EAST, MOUSE_RMB, syntheticRightClick);
+	handleClickButton(GPAD_BTN_EAST, MOUSE_RMB, syntheticRightClick, textEntryModeActive);
 
-	handleKeyButton(GPAD_BTN_START, KEY_ESC, captureModeActive);
+	handleKeyButton(GPAD_BTN_START, KEY_ESC, captureModeActive || textEntryModeActive);
 	// the right shoulder reserves west for its chorded action
-	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN, actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) || captureModeActive);
+	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN, actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) || captureModeActive || textEntryModeActive);
 
 	// the right shoulder chords the cursor stick click into a recenter, for
 	// when the cursor gets lost along a screen edge. An instant jump - a
@@ -1272,6 +1288,17 @@ void gamepadCursorHopTo(int screenX, int screenY)
 	bankedTravelX = 0.f;
 	bankedTravelY = 0.f;
 	bankAwaitingHop = false;
+}
+
+void gamepadCursorJumpTo(int screenX, int screenY)
+{
+	virtualCursorX = (float)screenX;
+	virtualCursorY = (float)screenY;
+	hopActive = false;
+	bankedTravelX = 0.f;
+	bankedTravelY = 0.f;
+	bankAwaitingHop = false;
+	inputSetMousePos(screenX, screenY);
 }
 
 static void ageButtonStates(INPUT_STATE* states)
