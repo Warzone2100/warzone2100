@@ -264,6 +264,9 @@ optional<PanGestureDeltaScreenPts> consumePanGestureDeltaUpdate();
 #define INPBUF_CR		KEY_RETURN
 #define INPBUF_ESC		KEY_ESC
 
+/* Control codes outside the key code range */
+#define INPBUF_PASTE	(KEY_MAXSCAN + 1)	///< paste the clipboard into the text being edited
+
 /** Return the next key press or 0 if no key in the buffer.
  * The key returned will have been remapped to the correct ascii code for the
  * US layout (approximately) key map.
@@ -278,6 +281,25 @@ MousePresses const &inputGetClicks();
 
 /** Clear the input buffer. */
 void inputClearBuffer();
+
+/* Text entry from an on-screen keyboard, through the input buffer read by inputGetKey() */
+
+/** Types a character into the text being edited. */
+void inputInjectText(utf_32_char unicode);
+/** Sends an editing key (ex. KEY_BACKSPACE, KEY_RETURN, the arrow keys) to the text being edited. */
+void inputInjectEditingKey(KEY_CODE code);
+/** Pastes the clipboard into the text being edited. */
+void inputInjectPaste();
+
+/** Counts key presses on physical keyboards (not synthesized input). */
+uint32_t inputPhysicalKeyPressCount();
+/** Whether the most recent pointer input came from a touchscreen. */
+bool inputLastPointerInputWasTouch();
+/** Whether a physical keyboard seems to be connected. */
+bool inputHasPhysicalKeyboard();
+/** The character a key types in the current OS keyboard layout, or 0 for none.
+ * Keys are named as in XKB (ex. "AD01" is the key labeled Q on a US keyboard). */
+utf_32_char inputCharacterInCurrentLayout(const char *xkbKeyName, bool shift, bool altGr);
 
 /* This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.

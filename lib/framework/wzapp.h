@@ -135,6 +135,10 @@ struct WzTextInputRect
 void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect);
 void StopTextInput(void* pTextInputResigner);
 bool isInTextInputMode();
+
+// Whether starting text input will show the platform's on-screen keyboard (ex. on touch devices)
+bool wzSystemScreenKeyboardWillShow();
+void wzSetSystemScreenKeyboardSuppressed(bool suppressed);
 bool wzSeemsLikeNonTouchPlatform();
 
 // NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
