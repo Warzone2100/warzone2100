@@ -1,4 +1,4 @@
-# Keyboard layout generator
+# Keyboard layout generators
 
 `generate_layouts.py` produces the on-screen keyboard layout data in
 `data/base/keyboards/` from [xkeyboard-config](https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config),
@@ -17,3 +17,17 @@ python3 tools/keyboard-layouts/generate_layouts.py [--xkb-root DIR] [--xkb-versi
 
 The committed data was generated from xkeyboard-config 2.41. See
 `data/base/keyboards/README.md` for the file format and license details.
+
+## Accents
+
+`generate_accents.py` produces `data/base/keyboards/accents.json`, the letters
+offered when a key is held, from the [Unicode CLDR](https://cldr.unicode.org)
+exemplar characters of each game language. It reads the JSON form of CLDR, as
+published in the `cldr-misc-full` npm package:
+
+```sh
+npm pack cldr-misc-full@48.2.0 && tar xzf cldr-misc-full-48.2.0.tgz
+python3 tools/keyboard-layouts/generate_accents.py --cldr package [--out FILE]
+```
+
+The committed data was generated from CLDR 48.2.0.
