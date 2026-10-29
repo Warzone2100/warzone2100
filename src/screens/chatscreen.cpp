@@ -26,6 +26,7 @@
 #include "lib/widget/label.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/netplay/netplay.h"
@@ -578,6 +579,7 @@ bool WzInGameChatScreen_CLICKFORM::giveChatBoxFocus()
 		return false;
 	}
 
+	virtualKeyboardRequestForNextTextEntry();
 	consoleBox->startChatBoxEditing();
 	return true;
 }
