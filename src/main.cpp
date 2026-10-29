@@ -103,6 +103,7 @@
 #include "notifications.h"
 #include "screens/gamepadlayoutscreen.h"
 #include "input/gamepadcursor.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "qtscript.h"
 #include "visibility.h"
 #include "research.h"
@@ -1337,6 +1338,9 @@ void mainLoop()
 
 	wzSetCursor(CURSOR_DEFAULT); // if cursor isn't set by anything in the mainLoop, it should revert to default.
 
+	// before screens that swallow pending input (ex. the in-game chat) see it
+	virtualKeyboardProcessGamepadInput();
+
 	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
 	{
 		bool frameEnded = false;
@@ -1372,6 +1376,7 @@ void mainLoop()
 	}
 
 	wzApplyCursor();
+	virtualKeyboardUpdate();
 	gamepadCursorUpdateWidgetMagnet();
 	gamepadLayoutMaybeAutoShow();
 	runNotifications();

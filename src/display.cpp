@@ -36,6 +36,7 @@
 #include "lib/ivis_opengl/render_graph/render_pass.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "profiling.h"
 
 #include "action.h"
@@ -1254,6 +1255,11 @@ void processGamepadCameraInput()
 	}
 	if (!isGamepadActiveInput())
 	{
+		return;
+	}
+	if (virtualKeyboardIsVisible())
+	{
+		// the shoulders and triggers are typing shortcuts while the on-screen keyboard is up
 		return;
 	}
 

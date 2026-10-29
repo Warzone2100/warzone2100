@@ -398,6 +398,7 @@ lib/widget/slider.cpp
 lib/widget/table.cpp
 lib/widget/tip.cpp
 lib/widget/verifyprompt.cpp
+lib/widget/virtualkeyboard.cpp
 lib/widget/widget.cpp
 lib/wzmaplib/plugins/ZipIOProvider/src/ZipIOProvider.cpp
 lib/wzmaplib/src/map.cpp

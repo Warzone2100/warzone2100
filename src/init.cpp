@@ -51,6 +51,7 @@
 
 #include "input/manager.h"
 #include "input/gamepadcursor.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "screens/gamepadlayoutscreen.h"
 #include "advvis.h"
 #include "atmos.h"
@@ -1092,6 +1093,8 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 		return false;
 	}
 
+	virtualKeyboardInit();
+
 	if (!notificationsInitialize())
 	{
 		return false;
@@ -1200,6 +1203,7 @@ void systemShutdown()
 	levShutDown();
 	notificationsShutDown();
 	closeGamepadLayoutScreen();
+	virtualKeyboardShutdown();
 	gamepadCursorShutdown();
 	widgShutDown();
 	fpathActiveBackend().shutdown();
