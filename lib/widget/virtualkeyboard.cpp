@@ -47,6 +47,7 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include <algorithm>
+#include <cstring>
 #include <functional>
 #include <limits>
 #include <map>
@@ -59,9 +60,11 @@ static constexpr uint32_t NAV_REPEAT_DELAY_MS = 350;
 static constexpr uint32_t NAV_REPEAT_INTERVAL_MS = 90;
 // How long a key lights up when triggered from a gamepad shortcut
 static constexpr uint32_t KEY_FLASH_MS = 120;
-// how long virtualKeyboardRequestForNextTextEntry() waits for an edit box to start editing
+// How long a letter key is held to offer its accents
+static constexpr uint32_t LONG_PRESS_MS = 400;
+// How long virtualKeyboardRequestForNextTextEntry() waits for an edit box to start editing
 static constexpr uint32_t NEXT_SESSION_REQUEST_MS = 1000;
-// a request this soon after a physical key press is assumed to come from that key
+// A request this soon after a physical key press is taken to come from that key
 static constexpr uint32_t PHYSICAL_KEY_REQUEST_WINDOW_MS = 250;
 
 static constexpr int PANEL_MARGIN = 8;
@@ -69,6 +72,8 @@ static constexpr int PANEL_PADDING = 8;
 static constexpr int KEY_GAP = 4;
 static constexpr int MIN_KEY_UNIT = 24;
 static constexpr int MAX_KEY_UNIT = 64;
+
+static constexpr size_t NO_KEY = std::numeric_limits<size_t>::max();
 
 class VirtualKeyboardForm;
 
@@ -101,6 +106,9 @@ struct VirtualKeyboardState
 	uint32_t lastPhysicalKeyPressTime = 0;
 
 	std::map<std::string, wzkb::LayoutData> layoutCache;
+
+	wzkb::AccentData accents;
+	bool accentsLoaded = false;
 };
 
 static VirtualKeyboardState& state()
@@ -170,6 +178,88 @@ static wzkb::LayoutData resolveLayout()
 	return cachedLayout(preference);
 }
 
+static const wzkb::AccentData& accentData()
+{
+	auto& vk = state();
+	if (!vk.accentsLoaded)
+	{
+		vk.accentsLoaded = true;
+		wzkb::loadAccents(vk.accents);
+	}
+	return vk.accents;
+}
+
+// The languages whose accents a held key offers, in order
+static std::vector<std::string> accentLanguages(const wzkb::LayoutData& layout)
+{
+	std::vector<std::string> languages;
+	auto add = [&languages](const std::string& language) {
+		if (!language.empty() && std::find(languages.begin(), languages.end(), language) == languages.end())
+		{
+			languages.push_back(language);
+		}
+	};
+	const char* gameLanguage = getLanguage();
+	add(gameLanguage ? gameLanguage : "");
+	std::string layoutLanguage = wzkb::languageForLayoutId(layout.id);
+	if (layoutLanguage.empty())
+	{
+		// the system layout is built on the game language's layout
+		layoutLanguage = wzkb::languageForLayoutId(languageLayoutId());
+	}
+	add(layoutLanguage);
+	add("en");
+	return languages;
+}
+
+// MARK: - Gamepad button glyphs
+
+// Textures of the connected controller's button glyphs, made on first use and dropped when the controller changes
+class GamepadGlyphCache
+{
+public:
+	gfx_api::texture* glyph(GAMEPAD_INPUT button, unsigned int size)
+	{
+		const char* guid = gamepadDeviceGUID();
+		if (deviceGUID != guid || pixelSize != size)
+		{
+			textures.clear();
+			deviceGUID = guid;
+			pixelSize = size;
+		}
+		auto it = textures.find(button);
+		if (it == textures.end())
+		{
+			// failures are cached too, as nullptr
+			it = textures.emplace(button, makeTexture(button, size)).first;
+		}
+		return it->second.get();
+	}
+
+private:
+	static std::unique_ptr<gfx_api::texture> makeTexture(GAMEPAD_INPUT button, unsigned int size)
+	{
+		std::vector<unsigned char> rgba;
+		unsigned int width = 0;
+		unsigned int height = 0;
+		if (!gamepadGetButtonGlyph(button, size, rgba, width, height))
+		{
+			return nullptr;
+		}
+		iV_Image image;
+		if (!image.allocate(width, height, 4, false))
+		{
+			return nullptr;
+		}
+		memcpy(image.bmp_w(), rgba.data(), rgba.size());
+		return std::unique_ptr<gfx_api::texture>(gfx_api::context::get().loadTextureFromUncompressedImage(std::move(image), gfx_api::texture_type::user_interface, "virtualkeyboardglyph"));
+	}
+
+	std::map<GAMEPAD_INPUT, std::unique_ptr<gfx_api::texture>> textures;
+	std::string deviceGUID;
+	unsigned int pixelSize = 0;
+};
+
 // MARK: - Typing into the edit box
 
 static void injectText(const WzString& text)
@@ -222,6 +312,64 @@ private:
 	WzText labelText;
 	WzString cachedLabel;
 	iV_fonts cachedFont = font_count;
+	WzText accentHintText;
+	WzString cachedAccentHint;
+};
+
+// MARK: - Pop-up
+
+// One item in the pop-up (a letter offered when a letter key is held)
+class PopupItemWidget : public WIDGET
+{
+public:
+	PopupItemWidget(VirtualKeyboardForm* owner, size_t index)
+		: WIDGET()
+		, owner(owner)
+		, index(index)
+	{ }
+
+	void clicked(W_CONTEXT*, WIDGET_KEY key) override;
+	void highlight(W_CONTEXT*) override;
+	void highlightLost() override
+	{
+		hovered = false;
+	}
+	bool isGamepadCursorMagnetTarget() const override
+	{
+		return true;
+	}
+	void display(int xOffset, int yOffset) override;
+
+	bool hovered = false;
+
+private:
+	VirtualKeyboardForm* owner;
+	size_t index;
+	WzText labelText;
+	WzString cachedLabel;
+	iV_fonts cachedFont = font_count;
+};
+
+// The pop-up's panel, holding its items
+class PopupWidget : public WIDGET
+{
+public:
+	PopupWidget() : WIDGET() { }
+
+	void display(int xOffset, int yOffset) override
+	{
+		const float x0 = static_cast<float>(xOffset + x());
+		const float y0 = static_cast<float>(yOffset + y());
+		pie_DrawRoundedBox(x0, y0, x0 + static_cast<float>(width()), y0 + static_cast<float>(height()),
+			pal_RGBA(20, 24, 36, 250), 6.f, pal_RGBA(170, 190, 240, 255), 1.f);
+	}
+};
+
+// A gamepad shortcut shown below the keys: its buttons' glyphs (or names) and what they do
+struct GamepadHint
+{
+	std::vector<GAMEPAD_INPUT> buttons;
+	WzString label;
 };
 
 // MARK: - Keyboard form
@@ -233,9 +381,12 @@ public:
 
 	void setLayout(const wzkb::LayoutData& newLayout)
 	{
+		closePopup();
+		longPressKey = NO_KEY;
 		layout = newLayout;
 		grid = wzkb::buildGrid(layout);
 		typing.reset();
+		accentLanguageCodes = accentLanguages(layout);
 		for (auto& keyWidget : keyWidgets)
 		{
 			detach(keyWidget);
@@ -275,6 +426,7 @@ public:
 			return;
 		}
 		layoutDirty = false;
+		closePopup();
 		lastEditBoxRect = editBoxRect;
 		lastScreenWidth = screenWidth;
 		lastScreenHeight = screenHeight;
@@ -285,7 +437,8 @@ public:
 		keyHeight = std::clamp(unit * 4 / 5, 22, 52);
 		labelFont = (unit >= 44) ? font_medium : font_regular;
 		echoHeight = std::max(iV_GetTextLineSize(font_regular) + 8, keyHeight * 4 / 5);
-		hintHeight = showHints ? iV_GetTextLineSize(font_small) + 4 : 0;
+		glyphSize = std::clamp(keyHeight / 2, 18, 26);
+		hintHeight = showHints ? std::max(iV_GetTextLineSize(font_small), glyphSize) + 2 : 0;
 
 		const int panelWidth = unit * static_cast<int>(wzkb::GRID_WIDTH_UNITS) + 2 * PANEL_PADDING;
 		int panelHeight = PANEL_PADDING + echoHeight + KEY_GAP + wzkb::GRID_ROWS * keyHeight + (wzkb::GRID_ROWS - 1) * KEY_GAP + PANEL_PADDING;
@@ -379,6 +532,45 @@ public:
 		focusIndex = index;
 	}
 
+	// The letters a held key offers, besides its own
+	std::vector<WzString> keyVariants(size_t index) const
+	{
+		if (index >= grid.size() || grid[index].special != wzkb::SpecialKey::None)
+		{
+			return {};
+		}
+		const auto* levels = layout.key(grid[index].xkbName);
+		if (!levels)
+		{
+			return {};
+		}
+		const wzkb::KeyOutput& output = typing.currentOutput(*levels);
+		if (output.isDead() || output.text.isEmpty())
+		{
+			return {};
+		}
+		return wzkb::accentVariants(accentData(), accentLanguageCodes, output.text);
+	}
+
+	// A key was pressed (by mouse, touch, or South on the gamepad cursor)
+	void keyPressed(size_t index)
+	{
+		if (popupOpen())
+		{
+			// a press anywhere else dismisses the pop-up
+			closePopup();
+			return;
+		}
+		focusIndex = index;
+		if (!keyVariants(index).empty())
+		{
+			// types on release, unless held for its accents
+			longPressKey = index;
+			return;
+		}
+		activateKey(index);
+	}
+
 	void activateKey(size_t index)
 	{
 		if (index >= grid.size())
@@ -435,6 +627,16 @@ public:
 	// Triggers a special key from a gamepad shortcut, lighting it up
 	void activateSpecialKey(wzkb::SpecialKey special)
 	{
+		if (popupOpen())
+		{
+			// Backspace backs out of the pop-up
+			const bool cancel = (special == wzkb::SpecialKey::Backspace);
+			closePopup(cancel);
+			if (cancel)
+			{
+				return;
+			}
+		}
 		for (size_t i = 0; i < grid.size(); ++i)
 		{
 			if (grid[i].special == special)
@@ -449,6 +651,14 @@ public:
 	// Moves the gamepad focus (and the cursor) to the next key in a direction
 	void moveFocus(int dx, int dy)
 	{
+		if (popupOpen())
+		{
+			if (dx != 0)
+			{
+				movePopupFocus(dx);
+			}
+			return;
+		}
 		if (grid.empty())
 		{
 			return;
@@ -474,15 +684,51 @@ public:
 		gamepadCursorJumpTo(keyWidget->screenPosX() + keyWidget->width() / 2, keyWidget->screenPosY() + keyWidget->height() / 2);
 	}
 
-	// Key repeat for held keys, and releasing keys whose button went up off the key
+	// Long presses, key repeat, and releasing keys whose button went up off the key
 	void updateHeldKeys()
 	{
 		const bool buttonDown = mouseDown(MOUSE_LMB) || gamepadSyntheticClickHeld();
 		const uint32_t now = wzGetTicks();
+
+		if (longPressKey < keyWidgets.size())
+		{
+			auto& keyWidget = keyWidgets[longPressKey];
+			const bool stillHeld = keyWidget->held && buttonDown;
+			if (stillHeld && !popupOpen() && now - keyWidget->heldSince >= LONG_PRESS_MS)
+			{
+				openPopup(longPressKey);
+			}
+			else if (!stillHeld)
+			{
+				keyWidget->held = false;
+				const size_t key = longPressKey;
+				longPressKey = NO_KEY;
+				if (!popupOpen())
+				{
+					// a tap
+					activateKey(key);
+				}
+				else
+				{
+					// released over a letter types it, and anywhere else leaves the pop-up open
+					const size_t item = popupItemAt(mouseX(), mouseY());
+					if (item != NO_KEY)
+					{
+						chooseAccent(item);
+					}
+				}
+			}
+		}
+		else if (popupOpen() && mousePressed(MOUSE_LMB) && popupItemAt(mouseX(), mouseY()) == NO_KEY
+			&& !geometry().contains(mouseX(), mouseY()))
+		{
+			// pressed outside the keyboard
+			closePopup();
+		}
 		for (size_t i = 0; i < keyWidgets.size(); ++i)
 		{
 			auto& keyWidget = keyWidgets[i];
-			if (!keyWidget->held)
+			if (!keyWidget->held || i == longPressKey)
 			{
 				continue;
 			}
@@ -514,7 +760,150 @@ public:
 
 	iV_fonts keyLabelFont() const { return labelFont; }
 
+	// The first letter a held key would offer, shown small in its corner
+	WzString accentHint(size_t index) const
+	{
+		if (keyHeight < 30)
+		{
+			return WzString();  // no room
+		}
+		const auto variants = keyVariants(index);
+		return variants.empty() ? WzString() : variants.front();
+	}
+
+	// MARK: Pop-up
+
+	bool popupOpen() const { return popup != nullptr; }
+
+	// Opens the pop-up of a held key's letters, above the key
+	void openPopup(size_t keyIndex)
+	{
+		closePopup();
+		const auto* levels = layout.key(grid[keyIndex].xkbName);
+		if (!levels)
+		{
+			return;
+		}
+		popupLabels.clear();
+		popupLabels.push_back(typing.currentOutput(*levels).text);
+		for (const auto& variant : keyVariants(keyIndex))
+		{
+			popupLabels.push_back(variant);
+		}
+		const int itemWidth = std::max(unit - KEY_GAP, keyHeight);
+		const size_t maxItems = static_cast<size_t>(std::max(2, (width() - 2 * PANEL_PADDING) / (itemWidth + KEY_GAP)));
+		if (popupLabels.size() > maxItems)
+		{
+			popupLabels.resize(maxItems);
+		}
+
+		const auto& key = keyWidgets[keyIndex];
+		const int count = static_cast<int>(popupLabels.size());
+		const int popupWidth = count * itemWidth + (count - 1) * KEY_GAP + 2 * KEY_GAP;
+		const int popupHeight = keyHeight + 2 * KEY_GAP;
+		int popupX = key->x() + key->width() / 2 - popupWidth / 2;
+		popupX = std::clamp(popupX, PANEL_PADDING / 2, std::max(PANEL_PADDING / 2, width() - PANEL_PADDING / 2 - popupWidth));
+		const int popupY = std::max(2, key->y() - popupHeight - KEY_GAP / 2);
+
+		popup = std::make_shared<PopupWidget>();
+		popup->setGeometry(popupX, popupY, popupWidth, popupHeight);
+		for (int i = 0; i < count; ++i)
+		{
+			auto item = std::make_shared<PopupItemWidget>(this, static_cast<size_t>(i));
+			item->setGeometry(KEY_GAP + i * (itemWidth + KEY_GAP), KEY_GAP, itemWidth, keyHeight);
+			popup->attach(item);
+			popupItems.push_back(item);
+		}
+		// last, so it draws over the keys and gets their clicks
+		attach(popup);
+		popupKey = keyIndex;
+		popupFocus = (count > 1) ? 1 : 0;
+		if (isGamepadActiveInput())
+		{
+			// onto the first accented letter - releasing South there types it
+			moveCursorToPopupFocus();
+		}
+	}
+
+	// returnFocus: put the gamepad cursor back on the key the pop-up came from
+	void closePopup(bool returnFocus = false)
+	{
+		if (!popup)
+		{
+			return;
+		}
+		detach(popup);
+		popup.reset();
+		popupItems.clear();
+		popupLabels.clear();
+		// a key still held for the pop-up doesn't type when it's released
+		longPressKey = NO_KEY;
+		if (returnFocus && isGamepadActiveInput() && popupKey < keyWidgets.size())
+		{
+			focusIndex = popupKey;
+			moveCursorToFocus();
+		}
+		popupKey = NO_KEY;
+	}
+
+	void chooseAccent(size_t item)
+	{
+		if (item >= popupLabels.size())
+		{
+			return;
+		}
+		const WzString letter = popupLabels[item];
+		closePopup(true);
+		injectText(typing.pressVariant(letter));
+	}
+
+	void popupItemHovered(size_t item)
+	{
+		popupFocus = item;
+	}
+
+	size_t popupItemAt(int screenX, int screenY) const
+	{
+		for (size_t i = 0; i < popupItems.size(); ++i)
+		{
+			const auto& item = popupItems[i];
+			if (WzRect(item->screenPosX(), item->screenPosY(), item->width(), item->height()).contains(screenX, screenY))
+			{
+				return i;
+			}
+		}
+		return NO_KEY;
+	}
+
+	const WzString& popupLabel(size_t item) const { return popupLabels[item]; }
+
+	bool popupItemHasFocus(size_t item) const
+	{
+		return item == popupFocus && isGamepadActiveInput();
+	}
+
 private:
+	void movePopupFocus(int dx)
+	{
+		if (popupItems.empty())
+		{
+			return;
+		}
+		const int last = static_cast<int>(popupItems.size()) - 1;
+		popupFocus = static_cast<size_t>(std::clamp(static_cast<int>(popupFocus) + dx, 0, last));
+		moveCursorToPopupFocus();
+	}
+
+	void moveCursorToPopupFocus()
+	{
+		if (popupFocus >= popupItems.size())
+		{
+			return;
+		}
+		const auto& item = popupItems[popupFocus];
+		gamepadCursorJumpTo(item->screenPosX() + item->width() / 2, item->screenPosY() + item->height() / 2);
+	}
+
 	// Shows the text being edited
 	void displayEchoLine(int x0, int y0, int boxWidth, int boxHeight)
 	{
@@ -565,36 +954,125 @@ private:
 		}
 	}
 
-	// Gamepad shortcuts, named after the connected controller's buttons
+	std::vector<GamepadHint> currentHints() const
+	{
+		auto text = [](const char* utf8) { return WzString::fromUtf8(utf8); };
+		std::vector<GamepadHint> hints;
+		if (popupOpen())
+		{
+			hints.push_back({ { GPAD_BTN_DPAD_LEFT, GPAD_BTN_DPAD_RIGHT }, text(_("Choose")) });
+			hints.push_back({ { GPAD_BTN_SOUTH }, text(_("Type")) });
+			hints.push_back({ { GPAD_BTN_EAST }, text(_("Cancel")) });
+			return hints;
+		}
+		hints.push_back({ { GPAD_BTN_EAST }, text("⌫") });
+		hints.push_back({ { GPAD_BTN_WEST }, text("␣") });
+		hints.push_back({ { GPAD_BTN_NORTH }, text("⇧") });
+		hints.push_back({ { GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_RIGHT_SHOULDER }, text("← →") });
+		if (layout.hasAltGrLevel())
+		{
+			hints.push_back({ { GPAD_BTN_LEFT_TRIGGER }, text("AltGr") });
+		}
+		hints.push_back({ { GPAD_BTN_START }, text("⏎") });
+		hints.push_back({ { GPAD_BTN_BACK }, text(_("Hide")) });
+		if (anyKeyHasAccents())
+		{
+			// TRANSLATORS: shown after a gamepad button: hold it on a letter of the on-screen keyboard for accented letters
+			hints.push_back({ { GPAD_BTN_SOUTH }, text(_("Hold: Accents")) });
+		}
+		return hints;
+	}
+
+	bool anyKeyHasAccents() const
+	{
+		for (size_t i = 0; i < grid.size(); ++i)
+		{
+			if (!keyVariants(i).empty())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// Gamepad shortcuts, with the connected controller's button glyphs
 	void displayHints(int x0, int y0, int hintWidth)
 	{
-		const std::pair<const char*, const char*> shortcuts[] = {
-			{ gamepadButtonName(GPAD_BTN_EAST), "⌫" },
-			{ gamepadButtonName(GPAD_BTN_WEST), "␣" },
-			{ gamepadButtonName(GPAD_BTN_NORTH), "⇧" },
-			{ gamepadButtonName(GPAD_BTN_START), "⏎" },
-			{ _("D-Pad"), _("Move") },
-			{ gamepadButtonName(GPAD_BTN_BACK), _("Hide") },
-		};
-		std::string hintsUtf8;
-		for (const auto& shortcut : shortcuts)
+		const auto hints = currentHints();
+		constexpr int GLYPH_GAP = 2;
+		constexpr int LABEL_GAP = 4;
+		constexpr int HINT_GAP = 14;
+
+		// lay out the hints that fit
+		struct Placed { const GamepadHint* hint; WzText* label; int width; };
+		std::vector<Placed> placed;
+		int totalWidth = 0;
+		hintTexts.resize(hints.size());
+		hintLabelsCached.resize(hints.size());
+		for (size_t i = 0; i < hints.size(); ++i)
 		{
-			if (!hintsUtf8.empty())
+			const auto& hint = hints[i];
+			if (!(hintLabelsCached[i] == hint.label))
 			{
-				hintsUtf8 += "   ";
+				hintLabelsCached[i] = hint.label;
+				hintTexts[i].setText(hint.label, font_small);
 			}
-			hintsUtf8 += shortcut.first;
-			hintsUtf8 += " ";
-			hintsUtf8 += shortcut.second;
+			int width = hintTexts[i].width() + LABEL_GAP;
+			for (auto button : hint.buttons)
+			{
+				width += buttonWidth(button) + GLYPH_GAP;
+			}
+			const int widthWithGap = width + (placed.empty() ? 0 : HINT_GAP);
+			if (totalWidth + widthWithGap > hintWidth)
+			{
+				break;
+			}
+			totalWidth += widthWithGap;
+			placed.push_back({ &hint, &hintTexts[i], width });
 		}
-		const WzString hints = WzString::fromUtf8(hintsUtf8);
-		if (hintsCached != hints)
+
+		int x = x0 + std::max(0, (hintWidth - totalWidth) / 2);
+		const int textY = y0 + (hintHeight - iV_GetTextLineSize(font_small)) / 2 - iV_GetTextAboveBase(font_small);
+		for (const auto& entry : placed)
 		{
-			hintsCached = hints;
-			hintsText.setText(hints, font_small);
+			for (auto button : entry.hint->buttons)
+			{
+				if (gfx_api::texture* glyph = glyphCache.glyph(button, static_cast<unsigned int>(glyphSize * 2)))
+				{
+					iV_DrawImageAnisotropic(*glyph, Vector2i(x, y0 + (hintHeight - glyphSize) / 2), Vector2f(0.f, 0.f), Vector2f(static_cast<float>(glyphSize), static_cast<float>(glyphSize)), 0.f, WZCOL_WHITE);
+				}
+				else
+				{
+					buttonNameText(button).render(static_cast<float>(x), static_cast<float>(textY), WZCOL_TEXT_BRIGHT);
+				}
+				x += buttonWidth(button) + GLYPH_GAP;
+			}
+			entry.label->render(static_cast<float>(x + LABEL_GAP), static_cast<float>(textY), WZCOL_TEXT_MEDIUM);
+			x += LABEL_GAP + entry.label->width() + HINT_GAP;
 		}
-		const int textX = x0 + std::max(0, (hintWidth - hintsText.width()) / 2);
-		hintsText.render(static_cast<float>(textX), static_cast<float>(y0 - iV_GetTextAboveBase(font_small)), WZCOL_TEXT_MEDIUM, 0.f, hintWidth);
+	}
+
+	// A button's glyph width, or its name's when there is no glyph
+	int buttonWidth(GAMEPAD_INPUT button)
+	{
+		if (glyphCache.glyph(button, static_cast<unsigned int>(glyphSize * 2)))
+		{
+			return glyphSize;
+		}
+		return buttonNameText(button).width();
+	}
+
+	WzText& buttonNameText(GAMEPAD_INPUT button)
+	{
+		// names follow the connected controller (ex. A or Cross)
+		const char* name = gamepadButtonName(button);
+		auto& entry = buttonNames[button];
+		if (entry.first != name)
+		{
+			entry.first = name;
+			entry.second.setText(WzString::fromUtf8(name), font_small);
+		}
+		return entry.second;
 	}
 
 	wzkb::LayoutData layout;
@@ -619,8 +1097,18 @@ private:
 	WzString echoCached;
 	WzText pendingText;
 	WzString pendingCached;
-	WzText hintsText;
-	WzString hintsCached;
+	std::vector<WzText> hintTexts;
+	std::vector<WzString> hintLabelsCached;
+	std::map<GAMEPAD_INPUT, std::pair<std::string, WzText>> buttonNames;
+	GamepadGlyphCache glyphCache;
+
+	std::vector<std::string> accentLanguageCodes;
+	size_t longPressKey = NO_KEY;  // a key with accents being pressed, not typed yet
+	std::shared_ptr<PopupWidget> popup;
+	std::vector<std::shared_ptr<PopupItemWidget>> popupItems;
+	std::vector<WzString> popupLabels;
+	size_t popupKey = NO_KEY;
+	size_t popupFocus = 0;
 };
 
 void VirtualKeyWidget::clicked(W_CONTEXT*, WIDGET_KEY key)
@@ -631,8 +1119,7 @@ void VirtualKeyWidget::clicked(W_CONTEXT*, WIDGET_KEY key)
 	}
 	held = true;
 	heldSince = lastRepeat = wzGetTicks();
-	owner->keyHovered(index);
-	owner->activateKey(index);
+	owner->keyPressed(index);
 }
 
 void VirtualKeyWidget::highlight(W_CONTEXT*)
@@ -687,6 +1174,58 @@ void VirtualKeyWidget::display(int xOffset, int yOffset)
 	const float textX = x0 + static_cast<float>(std::max(3, (width() - labelText.width()) / 2));
 	const float textY = y0 + static_cast<float>((height() - labelText.lineSize()) / 2 - labelText.aboveBase());
 	labelText.render(textX, textY, WZCOL_TEXT_BRIGHT, 0.f, maxLabelWidth);
+
+	// a hint that holding the key offers accents
+	const WzString accentHint = special ? WzString() : owner->accentHint(index);
+	if (!accentHint.isEmpty())
+	{
+		if (!(accentHint == cachedAccentHint))
+		{
+			cachedAccentHint = accentHint;
+			accentHintText.setText(accentHint, font_small);
+		}
+		accentHintText.render(x1 - static_cast<float>(accentHintText.width() + 3), y0 + 2.f - static_cast<float>(accentHintText.aboveBase()), pal_RGBA(140, 150, 180, 255));
+	}
+}
+
+// MARK: - Pop-up items
+
+void PopupItemWidget::clicked(W_CONTEXT*, WIDGET_KEY key)
+{
+	if (key == WKEY_PRIMARY)
+	{
+		owner->chooseAccent(index);
+	}
+}
+
+void PopupItemWidget::highlight(W_CONTEXT*)
+{
+	hovered = true;
+	owner->popupItemHovered(index);
+}
+
+void PopupItemWidget::display(int xOffset, int yOffset)
+{
+	const float x0 = static_cast<float>(xOffset + x());
+	const float y0 = static_cast<float>(yOffset + y());
+	const float x1 = x0 + static_cast<float>(width());
+	const float y1 = y0 + static_cast<float>(height());
+	const bool focused = owner->popupItemHasFocus(index);
+	const bool active = focused || hovered;
+	pie_DrawRoundedBox(x0, y0, x1, y1, active ? pal_RGBA(100, 120, 170, 255) : pal_RGBA(46, 52, 70, 255), 4.f,
+		active ? pal_RGBA(220, 230, 255, 255) : pal_RGBA(70, 78, 100, 255), active ? 2.f : 1.f);
+
+	const WzString& label = owner->popupLabel(index);
+	const iV_fonts font = owner->keyLabelFont();
+	if (!(label == cachedLabel) || font != cachedFont)
+	{
+		cachedLabel = label;
+		cachedFont = font;
+		labelText.setText(label, font);
+	}
+	const float textX = x0 + static_cast<float>(std::max(3, (width() - labelText.width()) / 2));
+	const float textY = y0 + static_cast<float>((height() - labelText.lineSize()) / 2 - labelText.aboveBase());
+	labelText.render(textX, textY, WZCOL_TEXT_BRIGHT, 0.f, width() - 6);
 }
 
 // MARK: - Showing and hiding
@@ -726,6 +1265,7 @@ static void hideKeyboard()
 	{
 		return;
 	}
+	vk.form->closePopup();
 	widgRemoveOverlayScreen(vk.screen);
 	gamepadSetTextEntryMode(false);
 	vk.visible = false;
@@ -788,7 +1328,14 @@ static void handleGamepadInput()
 	}
 	if (gamepadButtonPressed(GPAD_BTN_BACK))
 	{
-		state().sessionRequested = false;
+		if (form.popupOpen())
+		{
+			form.closePopup(true);
+		}
+		else
+		{
+			state().sessionRequested = false;
+		}
 	}
 }
 

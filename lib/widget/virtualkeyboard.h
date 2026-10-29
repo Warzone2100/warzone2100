@@ -28,6 +28,8 @@
  *  or through an action reported with virtualKeyboardRequestForNextTextEntry() (ex. opening the chat).
  *  An edit box that code focuses by itself (ex. the lobby chat regaining focus) doesn't bring it up.
  *  Hiding it, or typing on a physical keyboard, withdraws the request until the edit box is pressed again.
+ *
+ *  Holding a letter key offers its accented and related letters in a pop-up above it.
  */
 
 #ifndef __INCLUDED_LIB_WIDGET_VIRTUALKEYBOARD_H__
