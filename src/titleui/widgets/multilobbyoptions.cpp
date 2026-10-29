@@ -30,6 +30,7 @@
 #include "lib/widget/multibutform.h"
 #include "lib/widget/margin.h"
 #include "lib/widget/editbox.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "lib/widget/popover.h"
 #include "lib/widget/popovermenu.h"
 #include "infobutton.h"
@@ -904,6 +905,7 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				auto strongEditBox = psWeakGameNameEditBox.lock();
 				ASSERT_OR_RETURN(, strongEditBox != nullptr, "Null edit box");
 				// give the edit box the focus
+				virtualKeyboardRequestForNextTextEntry();
 				W_CONTEXT context = W_CONTEXT::ZeroContext();
 				context.mx			= strongEditBox->screenPosX() + strongEditBox->width();
 				context.my			= strongEditBox->screenPosY();
@@ -1353,6 +1355,7 @@ void WzMultiLobbyOptionsImpl::displayPasswordOverlayForm(const std::shared_ptr<W
 	widgScheduleTask([weakPasswordPopover](){
 		auto strongPasswordPopover = weakPasswordPopover.lock();
 		ASSERT_OR_RETURN(, strongPasswordPopover != nullptr, "No widget");
+		virtualKeyboardRequestForNextTextEntry();
 		strongPasswordPopover->givePasswordFieldFocus();
 	});
 }

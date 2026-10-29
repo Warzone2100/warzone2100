@@ -26,6 +26,7 @@
 #include "lib/widget/label.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "lib/widget/scrollablelist.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
@@ -649,6 +650,7 @@ void WzJoiningStatusForm::displayPasswordPrompt(const PasswordSubmitFunc& submit
 		recalcLayout();
 	}
 	passwordPrompt->setDisabled(false);
+	virtualKeyboardRequestForNextTextEntry();
 	passwordPrompt->givePasswordBoxFocus();
 }
 

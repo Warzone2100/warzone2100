@@ -32,6 +32,7 @@
 #include "lib/widget/paragraph.h"
 #include "lib/widget/popovermenu.h"
 #include "lib/widget/editbox.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "src/multiplay.h"
@@ -1074,6 +1075,7 @@ void ConnectToForm::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 		widgScheduleTask([weakSelf]() {
 			auto strongSelf = weakSelf.lock();
 			ASSERT_OR_RETURN(, strongSelf != nullptr, "Widget gone?");
+			virtualKeyboardRequestForNextTextEntry();
 			W_CONTEXT context = W_CONTEXT::ZeroContext();
 			strongSelf->inputBox->simulateClick(&context);
 		});
