@@ -30,6 +30,7 @@
 #include "../../screens/gamepadlayoutscreen.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/gamepad_input.h"
+#include "lib/widget/virtualkeyboard.h"
 #include "lib/sound/audio.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
@@ -1579,6 +1580,55 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 		valueChanger->addOnClickHandler([](W_BUTTON&) {
 			showGamepadLayoutScreen();
 		});
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	result->addSection(OptionsSection(N_("On-Screen Keyboard"), N_("A keyboard for entering text with a gamepad or touch")), true);
+	{
+		auto optionInfo = OptionInfo("onScreenKeyboard.mode", N_("On-Screen Keyboard"), N_("When to show a keyboard on screen while editing text"));
+		auto valueChanger = OptionsDropdown<VirtualKeyboardMode>::make(
+			[]() {
+				OptionChoices<VirtualKeyboardMode> result;
+				result.choices = {
+					{ _("Auto"), _("Shown while typing with a gamepad or touch, unless the system shows its own"), VirtualKeyboardMode::Automatic },
+					{ _("Built-in"), _("The game's keyboard is always shown while editing text, instead of the system's"), VirtualKeyboardMode::BuiltIn },
+					{ _("System"), _("Only the system's on-screen keyboard, where there is one"), VirtualKeyboardMode::System },
+					{ _("Off"), _("No on-screen keyboard"), VirtualKeyboardMode::Disabled },
+				};
+				result.setCurrentIdxForValue(virtualKeyboardGetMode());
+				return result;
+			},
+			[](const auto& newMode) -> bool {
+				virtualKeyboardSetMode(newMode);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("onScreenKeyboard.layout", N_("Keyboard Layout"), N_("Automatic matches your keyboard's layout when one is connected, and the game language otherwise"));
+		optionInfo.addAvailabilityCondition([](const OptionInfo&) -> OptionInfo::AvailabilityResult {
+			const auto mode = virtualKeyboardGetMode();
+			OptionInfo::AvailabilityResult result;
+			result.available = (mode == VirtualKeyboardMode::Automatic || mode == VirtualKeyboardMode::BuiltIn);
+			result.localizedUnavailabilityReason = _("The built-in on-screen keyboard is not in use");
+			return result;
+		});
+		auto valueChanger = OptionsDropdown<std::string>::make(
+			[]() {
+				OptionChoices<std::string> result;
+				for (const auto& choice : virtualKeyboardLayoutChoices())
+				{
+					result.choices.push_back({ choice.second, "", choice.first });
+				}
+				result.setCurrentIdxForValue(virtualKeyboardGetLayoutPreference());
+				return result;
+			},
+			[](const auto& newLayout) -> bool {
+				virtualKeyboardSetLayoutPreference(newLayout);
+				return true;
+			}, true
+		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
 
