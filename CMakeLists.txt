@@ -949,6 +949,15 @@ if(WZ_BUILD_RENDER_GRAPH_TEST)
 	target_link_libraries(render_graph_pass_sequence_test PRIVATE ivis-opengl framework)
 endif()
 
+# On-screen keyboard layouts and typing logic (lib/widget/kblayout.cpp), against the shipped data files
+option(WZ_BUILD_VIRTUAL_KEYBOARD_TEST "Build the on-screen keyboard unit test (tests/virtual_keyboard_test.cpp)" OFF)
+if(WZ_BUILD_VIRTUAL_KEYBOARD_TEST)
+	add_executable(virtual_keyboard_test "${PROJECT_SOURCE_DIR}/tests/virtual_keyboard_test.cpp" "${PROJECT_SOURCE_DIR}/lib/widget/kblayout.cpp")
+	target_include_directories(virtual_keyboard_test PRIVATE "${PROJECT_SOURCE_DIR}")
+	target_compile_definitions(virtual_keyboard_test PRIVATE "WZ_KEYBOARDS_DIR=\"${PROJECT_SOURCE_DIR}/data/base/keyboards\"")
+	target_link_libraries(virtual_keyboard_test PRIVATE framework utf8proc nlohmann_json optional-lite)
+endif()
+
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Target system is Windows
