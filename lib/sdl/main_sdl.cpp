@@ -234,6 +234,15 @@ static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 void* GetTextEventsOwner = nullptr;
 
+/* On-screen keyboard support */
+static uint32_t physicalKeyPressCount = 0;
+static bool lastPointerInputWasTouch = false;
+static bool systemScreenKeyboardSuppressed = false;
+
+#if SDL_VERSION_ATLEAST(3, 4, 12)
+# define WZ_SDL_STEAM_SCREEN_KEYBOARD_HINT_SUPPORTED
+#endif
+
 /* Touch / finger handling */
 
 // Struct to store cached state of each active finger
@@ -395,6 +404,53 @@ bool isInTextInputMode()
 	ASSERT((SDL_TextInputActive(WZwindow) != false) == result,
 	       "How did GetTextEvents state and SDL_IsTextInputActive get out of sync?");
 	return result;
+}
+
+bool wzSystemScreenKeyboardWillShow()
+{
+	// mirrors SDL's logic for showing the screen keyboard when text input starts
+	if (systemScreenKeyboardSuppressed || !SDL_HasScreenKeyboardSupport())
+	{
+		return false;
+	}
+	const char *hintName = SDL_HINT_ENABLE_SCREEN_KEYBOARD;
+	const char *hint = SDL_GetHint(hintName);
+#if defined(WZ_SDL_STEAM_SCREEN_KEYBOARD_HINT_SUPPORTED)
+	if (!hint)
+	{
+		// Steam sets this for games launched in Big Picture mode (only used by the X11 video driver)
+		const char *videoDriver = SDL_GetCurrentVideoDriver();
+		if (videoDriver && SDL_strcmp(videoDriver, "x11") == 0)
+		{
+			hintName = SDL_HINT_ENABLE_STEAM_SCREEN_KEYBOARD;
+			hint = SDL_GetHint(hintName);
+		}
+	}
+#endif
+	if (!hint || SDL_strcasecmp(hint, "auto") == 0)
+	{
+		return !SDL_HasKeyboard();
+	}
+	return SDL_GetHintBoolean(hintName, false);
+}
+
+void wzSetSystemScreenKeyboardSuppressed(bool suppressed)
+{
+	if (suppressed == systemScreenKeyboardSuppressed)
+	{
+		return;
+	}
+	systemScreenKeyboardSuppressed = suppressed;
+	if (suppressed)
+	{
+		// overrides SDL's default, and (with SDL 3.4.12+) the Steam keyboard hint too
+		SDL_SetHintWithPriority(SDL_HINT_ENABLE_SCREEN_KEYBOARD, "0", SDL_HINT_OVERRIDE);
+	}
+	else
+	{
+		SDL_ResetHint(SDL_HINT_ENABLE_SCREEN_KEYBOARD);
+	}
+	debug(LOG_INPUT, "Platform screen keyboards %s", suppressed ? "suppressed" : "allowed");
 }
 
 bool wzHasTouchInputDevices()
@@ -1319,6 +1375,95 @@ void inputAddEditingKey(KEY_CODE code)
 	}
 }
 
+void inputInjectText(utf_32_char unicode)
+{
+	if (unicode == 0)
+	{
+		return;
+	}
+	inputAddBuffer(0, unicode);
+}
+
+void inputInjectEditingKey(KEY_CODE code)
+{
+	inputAddEditingKey(code);
+}
+
+void inputInjectPaste()
+{
+	inputAddBuffer(INPBUF_PASTE, 0);
+}
+
+uint32_t inputPhysicalKeyPressCount()
+{
+	return physicalKeyPressCount;
+}
+
+bool inputLastPointerInputWasTouch()
+{
+	return lastPointerInputWasTouch;
+}
+
+bool inputHasPhysicalKeyboard()
+{
+	return SDL_HasKeyboard();
+}
+
+static SDL_Scancode xkbKeyNameToSDLScancode(const char *xkbKeyName)
+{
+	struct Entry { const char *name; SDL_Scancode scancode; };
+	static const Entry entries[] = {
+		{"TLDE", SDL_SCANCODE_GRAVE},
+		{"AE01", SDL_SCANCODE_1}, {"AE02", SDL_SCANCODE_2}, {"AE03", SDL_SCANCODE_3}, {"AE04", SDL_SCANCODE_4},
+		{"AE05", SDL_SCANCODE_5}, {"AE06", SDL_SCANCODE_6}, {"AE07", SDL_SCANCODE_7}, {"AE08", SDL_SCANCODE_8},
+		{"AE09", SDL_SCANCODE_9}, {"AE10", SDL_SCANCODE_0}, {"AE11", SDL_SCANCODE_MINUS}, {"AE12", SDL_SCANCODE_EQUALS},
+		{"AD01", SDL_SCANCODE_Q}, {"AD02", SDL_SCANCODE_W}, {"AD03", SDL_SCANCODE_E}, {"AD04", SDL_SCANCODE_R},
+		{"AD05", SDL_SCANCODE_T}, {"AD06", SDL_SCANCODE_Y}, {"AD07", SDL_SCANCODE_U}, {"AD08", SDL_SCANCODE_I},
+		{"AD09", SDL_SCANCODE_O}, {"AD10", SDL_SCANCODE_P}, {"AD11", SDL_SCANCODE_LEFTBRACKET}, {"AD12", SDL_SCANCODE_RIGHTBRACKET},
+		{"BKSL", SDL_SCANCODE_BACKSLASH},
+		{"AC01", SDL_SCANCODE_A}, {"AC02", SDL_SCANCODE_S}, {"AC03", SDL_SCANCODE_D}, {"AC04", SDL_SCANCODE_F},
+		{"AC05", SDL_SCANCODE_G}, {"AC06", SDL_SCANCODE_H}, {"AC07", SDL_SCANCODE_J}, {"AC08", SDL_SCANCODE_K},
+		{"AC09", SDL_SCANCODE_L}, {"AC10", SDL_SCANCODE_SEMICOLON}, {"AC11", SDL_SCANCODE_APOSTROPHE},
+		{"LSGT", SDL_SCANCODE_NONUSBACKSLASH},
+		{"AB01", SDL_SCANCODE_Z}, {"AB02", SDL_SCANCODE_X}, {"AB03", SDL_SCANCODE_C}, {"AB04", SDL_SCANCODE_V},
+		{"AB05", SDL_SCANCODE_B}, {"AB06", SDL_SCANCODE_N}, {"AB07", SDL_SCANCODE_M}, {"AB08", SDL_SCANCODE_COMMA},
+		{"AB09", SDL_SCANCODE_PERIOD}, {"AB10", SDL_SCANCODE_SLASH},
+	};
+	for (const auto& entry : entries)
+	{
+		if (SDL_strcmp(entry.name, xkbKeyName) == 0)
+		{
+			return entry.scancode;
+		}
+	}
+	return SDL_SCANCODE_UNKNOWN;
+}
+
+utf_32_char inputCharacterInCurrentLayout(const char *xkbKeyName, bool shift, bool altGr)
+{
+	const SDL_Scancode scancode = xkbKeyNameToSDLScancode(xkbKeyName);
+	if (scancode == SDL_SCANCODE_UNKNOWN)
+	{
+		return 0;
+	}
+	SDL_Keymod modifiers = SDL_KMOD_NONE;
+	if (shift)
+	{
+		modifiers |= SDL_KMOD_SHIFT;
+	}
+	if (altGr)
+	{
+		modifiers |= SDL_KMOD_MODE;
+	}
+	// key_event = false, so SDL_HINT_KEYCODE_OPTIONS (ex. latin_letters) doesn't change the layout's character
+	const SDL_Keycode keycode = SDL_GetKeyFromScancode(scancode, modifiers, false);
+	if (keycode == SDLK_UNKNOWN || (keycode & (SDLK_SCANCODE_MASK | SDLK_EXTENDED_MASK)) != 0)
+	{
+		return 0;
+	}
+	return static_cast<utf_32_char>(keycode);
+}
+
 // Returns the human-readable name for the key *in the current keyboard layout*
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
@@ -1666,6 +1811,7 @@ static void inputHandleTouchFingerEvent(const SDL_TouchFingerEvent &touchFingerE
 	switch (touchFingerEvent.type)
 	{
 		case SDL_EVENT_FINGER_DOWN:
+			lastPointerInputWasTouch = true;
 			// Register new finger contact. Store incoming position as both current and previous.
 			debug(LOG_NEVER, "Finger down: %" PRIu64, touchFingerEvent.fingerID);
 			touchPoints.push_back({
@@ -1877,6 +2023,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 	{
 	case SDL_EVENT_KEY_DOWN :
 	{
+		++physicalKeyPressCount;
 		unsigned vk = 0;
 		switch (keyEvent->key)
 		{
@@ -2092,6 +2239,10 @@ void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i log
  */
 static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 {
+	if (buttonEvent->which != SDL_TOUCH_MOUSEID)
+	{
+		lastPointerInputWasTouch = false;
+	}
 	Vector2i logicalPos((int)((float)buttonEvent->x / current_displayScaleFactor), (int)((float)buttonEvent->y / current_displayScaleFactor));
 	if (wzGamepadNotifyNonGamepadInput())
 	{
@@ -2150,6 +2301,10 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	switch (motionEvent->type)
 	{
 	case SDL_EVENT_MOUSE_MOTION :
+		if (motionEvent->which != SDL_TOUCH_MOUSEID)
+		{
+			lastPointerInputWasTouch = false;
+		}
 		if (wzGamepadNotifyNonGamepadInput())
 		{
 			// discard the stale pre-warp position - the warp's own motion event follows
