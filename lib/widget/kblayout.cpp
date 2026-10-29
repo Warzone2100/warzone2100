@@ -266,6 +266,159 @@ WzString composeDeadKey(uint32_t deadMark, const WzString& deadLabel, const WzSt
 	return result;
 }
 
+// MARK: - Accents
+
+static std::string languagePart(const std::string& languageCode)
+{
+	return languageCode.substr(0, languageCode.find_first_of("_-.@"));
+}
+
+const AccentData::LetterGroups* AccentData::forLanguage(const std::string& languageCode) const
+{
+	if (languageCode.empty())
+	{
+		return nullptr;
+	}
+	auto it = languages.find(languageCode);
+	if (it == languages.end())
+	{
+		it = languages.find(languagePart(languageCode));
+	}
+	return (it != languages.end()) ? &it->second : nullptr;
+}
+
+bool parseAccentJSON(const char* data, size_t length, AccentData& output, std::string* error)
+{
+	auto fail = [error](const std::string& message) {
+		if (error)
+		{
+			*error = message;
+		}
+		return false;
+	};
+
+	nlohmann::json root = nlohmann::json::parse(data, data + length, nullptr, false);
+	if (root.is_discarded() || !root.is_object())
+	{
+		return fail("not a JSON object");
+	}
+	auto format = root.find("format");
+	if (format == root.end() || !format->is_number_integer() || format->get<int>() != 1)
+	{
+		return fail("unsupported or missing format version");
+	}
+	auto languages = root.find("languages");
+	if (languages == root.end() || !languages->is_object())
+	{
+		return fail("missing languages");
+	}
+
+	AccentData accents;
+	for (auto language = languages->begin(); language != languages->end(); ++language)
+	{
+		if (!language.value().is_object())
+		{
+			return fail("invalid entry for language " + language.key());
+		}
+		auto& groups = accents.languages[language.key()];
+		for (auto group = language.value().begin(); group != language.value().end(); ++group)
+		{
+			if (!group.value().is_array())
+			{
+				return fail("invalid letters for " + group.key() + " in " + language.key());
+			}
+			auto& letters = groups[group.key()];
+			for (const auto& letter : group.value())
+			{
+				if (!letter.is_string() || letter.get<std::string>().empty())
+				{
+					return fail("invalid letter for " + group.key() + " in " + language.key());
+				}
+				letters.push_back(WzString::fromUtf8(letter.get<std::string>()));
+			}
+		}
+	}
+	output = std::move(accents);
+	return true;
+}
+
+std::string languageForLayoutId(const std::string& layoutId)
+{
+	if (layoutId == "us")
+	{
+		return "en";
+	}
+	if (layoutId == "de" || layoutId == "fr" || layoutId == "ru")
+	{
+		return layoutId;
+	}
+	return std::string();
+}
+
+static WzString mapCodepoints(const WzString& text, utf8proc_int32_t (*mapping)(utf8proc_int32_t))
+{
+	std::vector<uint32_t> codepoints = text.toUtf32();
+	for (auto& codepoint : codepoints)
+	{
+		codepoint = static_cast<uint32_t>(mapping(static_cast<utf8proc_int32_t>(codepoint)));
+	}
+	return WzString::fromUtf32(codepoints);
+}
+
+std::vector<WzString> accentVariants(const AccentData& accents, const std::vector<std::string>& languageCodes, const WzString& text)
+{
+	std::vector<WzString> variants;
+	const std::vector<uint32_t> codepoints = text.toUtf32();
+	if (codepoints.size() != 1)
+	{
+		return variants;
+	}
+	const WzString lower = mapCodepoints(text, utf8proc_tolower);
+	const bool isUppercase = !(lower == text);
+
+	auto add = [&variants, &text](const WzString& variant) {
+		if (!(variant == text) && std::find(variants.begin(), variants.end(), variant) == variants.end())
+		{
+			variants.push_back(variant);
+		}
+	};
+	for (const auto& languageCode : languageCodes)
+	{
+		const AccentData::LetterGroups* groups = accents.forLanguage(languageCode);
+		if (!groups)
+		{
+			continue;
+		}
+		// letters listed under the key's own character (ex. Turkish İ under I)
+		auto own = groups->find(text.toUtf8());
+		if (own != groups->end())
+		{
+			for (const auto& variant : own->second)
+			{
+				add(variant);
+			}
+		}
+		if (!isUppercase)
+		{
+			continue;
+		}
+		// uppercase forms of the letters under its lowercase character
+		auto lowerGroup = groups->find(lower.toUtf8());
+		if (lowerGroup != groups->end())
+		{
+			for (const auto& variant : lowerGroup->second)
+			{
+				const WzString upper = mapCodepoints(variant, utf8proc_toupper);
+				if (!(upper == variant))  // skip letters with no single-character uppercase form
+				{
+					add(upper);
+				}
+			}
+		}
+	}
+	return variants;
+}
+
 // MARK: - Keyboard geometry
 
 static void addCharacterKey(std::vector<GridKey>& grid, const LayoutData& layout, const char* name, float x, int row)
@@ -498,6 +651,11 @@ WzString TypingState::displayLabel(const KeyLevels& levels) const
 	return levels[static_cast<size_t>(currentLevel(levels))].label;
 }
 
+const KeyOutput& TypingState::currentOutput(const KeyLevels& levels) const
+{
+	return levels[static_cast<size_t>(currentLevel(levels))];
+}
+
 WzString TypingState::pressCharacterKey(const KeyLevels& levels)
 {
 	const KeyOutput& output = levels[static_cast<size_t>(currentLevel(levels))];
@@ -558,6 +716,22 @@ WzString TypingState::pressSpace()
 		return label;
 	}
 	return WzString::fromUtf8(" ");
+}
+
+WzString TypingState::pressVariant(const WzString& text)
+{
+	if (shift == ShiftState::Once)
+	{
+		shift = ShiftState::Off;
+	}
+	if (pendingDeadMark != 0)
+	{
+		WzString composed = composeDeadKey(pendingDeadMark, pendingDeadLabelText, text);
+		pendingDeadMark = 0;
+		pendingDeadLabelText.clear();
+		return composed;
+	}
+	return text;
 }
 
 void TypingState::pressShift()

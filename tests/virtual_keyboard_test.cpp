@@ -351,6 +351,127 @@ static void testDeriveAndFallback()
 	CHECK_STR(keyOf(derived, "AD02")[0].text.toUtf8(), "w", "unknown keys keep the template");
 }
 
+static bool loadShippedAccents(AccentData& accents)
+{
+	const std::string path = std::string(WZ_KEYBOARDS_DIR) + "/accents.json";
+	std::ifstream file(path, std::ios::binary);
+	if (!file)
+	{
+		std::printf("cannot open %s\n", path.c_str());
+		return false;
+	}
+	std::string contents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	std::string error;
+	if (!parseAccentJSON(contents.data(), contents.size(), accents, &error))
+	{
+		std::printf("cannot parse %s: %s\n", path.c_str(), error.c_str());
+		return false;
+	}
+	return true;
+}
+
+static std::string joined(const std::vector<WzString>& variants)
+{
+	std::string result;
+	for (const auto& variant : variants)
+	{
+		if (!result.empty())
+		{
+			result += " ";
+		}
+		result += variant.toUtf8();
+	}
+	return result;
+}
+
+static std::vector<WzString> variantsOf(const AccentData& accents, std::vector<std::string> languages, const char* text)
+{
+	return accentVariants(accents, languages, WzString::fromUtf8(text));
+}
+
+static void testAccents()
+{
+	AccentData accents;
+	CHECK_TRUE(loadShippedAccents(accents), "accents.json loads");
+	CHECK_TRUE(accents.languages.size() >= 30, "accents for the game's languages (%zu)", accents.languages.size());
+	for (const auto& language : accents.languages)
+	{
+		CHECK_TRUE(!language.second.empty(), "language %s has letters", language.first.c_str());
+		for (const auto& group : language.second)
+		{
+			CHECK_TRUE(WzString::fromUtf8(group.first).toUtf32().size() == 1, "%s: group key %s is one character", language.first.c_str(), group.first.c_str());
+			CHECK_TRUE(!group.second.empty(), "%s: group %s has letters", language.first.c_str(), group.first.c_str());
+			for (const auto& variant : group.second)
+			{
+				CHECK_TRUE(!variant.isEmpty() && !(variant == WzString::fromUtf8(group.first)), "%s: variant of %s", language.first.c_str(), group.first.c_str());
+			}
+		}
+	}
+	for (const auto& id : builtinLayoutIds())
+	{
+		const std::string language = languageForLayoutId(id);
+		CHECK_TRUE(!language.empty() && accents.forLanguage(language) != nullptr, "layout %s has accents for its language", id.c_str());
+	}
+
+	// language lookup
+	CHECK_TRUE(accents.forLanguage("pt_BR") != nullptr && accents.forLanguage("pt_BR") != accents.forLanguage("pt"), "regional entry");
+	CHECK_TRUE(accents.forLanguage("de_AT") == accents.forLanguage("de"), "falls back to the language");
+	CHECK_TRUE(accents.forLanguage("") == nullptr, "no language");
+	CHECK_TRUE(accents.forLanguage("xx") == nullptr, "unknown language");
+
+	// variants
+	const auto enE = variantsOf(accents, {"en"}, "e");
+	CHECK_TRUE(!enE.empty() && enE[0].toUtf8() == "é", "English e offers é first (%s)", joined(enE).c_str());
+	const auto enUpperE = variantsOf(accents, {"en"}, "E");
+	CHECK_TRUE(enUpperE.size() == enE.size() && enUpperE[0].toUtf8() == "É", "uppercase variants (%s)", joined(enUpperE).c_str());
+	const auto frEnE = variantsOf(accents, {"fr", "en"}, "e");
+	CHECK_STR(frEnE.empty() ? std::string() : frEnE[0].toUtf8(), "é", "French first");
+	for (size_t i = 0; i < frEnE.size(); ++i)
+	{
+		for (size_t j = i + 1; j < frEnE.size(); ++j)
+		{
+			CHECK_TRUE(!(frEnE[i] == frEnE[j]), "no duplicates when merging languages");
+		}
+	}
+	CHECK_TRUE(frEnE.size() > variantsOf(accents, {"fr"}, "e").size(), "merging adds the second language's letters");
+	CHECK_STR(joined(variantsOf(accents, {"de"}, "s")), "ß ş", "German s");
+	CHECK_STR(joined(variantsOf(accents, {"de"}, "S")), "ẞ Ş", "uppercase variants of German s (capital sharp s)");
+	const auto trUpperI = variantsOf(accents, {"tr"}, "I");
+	CHECK_TRUE(!trUpperI.empty() && trUpperI[0].toUtf8() == "İ", "Turkish I offers İ first (%s)", joined(trUpperI).c_str());
+	const auto trI = variantsOf(accents, {"tr"}, "i");
+	CHECK_TRUE(!trI.empty() && trI[0].toUtf8() == "ı", "Turkish i offers ı first (%s)", joined(trI).c_str());
+	const auto ruE = variantsOf(accents, {"ru"}, "е");
+	CHECK_TRUE(!ruE.empty() && ruE[0].toUtf8() == "ё", "Russian е offers ё (%s)", joined(ruE).c_str());
+	const auto ruUpperE = variantsOf(accents, {"ru"}, "Е");
+	CHECK_TRUE(!ruUpperE.empty() && ruUpperE[0].toUtf8() == "Ё", "Russian Е offers Ё (%s)", joined(ruUpperE).c_str());
+	CHECK_TRUE(!variantsOf(accents, {"uk", "ru"}, "г").empty() && variantsOf(accents, {"uk", "ru"}, "г")[0].toUtf8() == "ґ", "Ukrainian ґ on г");
+	CHECK_TRUE(variantsOf(accents, {"en"}, "1").empty(), "digits have no variants");
+	CHECK_TRUE(variantsOf(accents, {"en"}, "ab").empty(), "only single characters");
+	CHECK_TRUE(variantsOf(accents, {"en"}, "é").empty(), "accented letters have no variants of their own");
+	CHECK_TRUE(variantsOf(accents, {}, "e").empty(), "no languages");
+
+	// typing a variant
+	LayoutData fr;
+	loadShippedLayout("fr", fr);
+	TypingState state;
+	state.pressShift();
+	CHECK_STR(state.pressVariant(WzString::fromUtf8("É")).toUtf8(), "É", "variant typed as is");
+	CHECK_TRUE(state.shiftState() == TypingState::ShiftState::Off, "a variant uses up a one-off Shift");
+	typeKey(state, fr, "AD11");
+	CHECK_STR(state.pressVariant(WzString::fromUtf8("o")).toUtf8(), "ô", "a pending dead key combines with a variant");
+	CHECK_TRUE(!state.hasPendingDeadKey(), "dead key consumed by the variant");
+	CHECK_STR(keyOf(fr, "AD03")[0].text.toUtf8(), state.currentOutput(keyOf(fr, "AD03")).text.toUtf8(), "current output");
+
+	// parse errors
+	AccentData parsed;
+	const std::string wrongFormat = R"({"format": 2, "languages": {}})";
+	CHECK_TRUE(!parseAccentJSON(wrongFormat.data(), wrongFormat.size(), parsed), "unknown format version is rejected");
+	const std::string badLetters = R"({"format": 1, "languages": {"en": {"e": "é"}}})";
+	CHECK_TRUE(!parseAccentJSON(badLetters.data(), badLetters.size(), parsed), "letters must be a list");
+	const std::string good = R"({"format": 1, "languages": {"en": {"e": ["é", "è"]}}})";
+	CHECK_TRUE(parseAccentJSON(good.data(), good.size(), parsed) && joined(variantsOf(parsed, {"en_US"}, "e")) == "é è", "minimal file");
+}
+
 int main()
 {
 	testShippedLayoutsParse();
@@ -362,6 +483,7 @@ int main()
 	testDeadKeys();
 	testLanguageDefaults();
 	testDeriveAndFallback();
+	testAccents();
 
 	std::printf("%s: %d checks, %d failures\n", failures == 0 ? "PASS" : "FAIL", checks, failures);
 	return failures == 0 ? 0 : 1;
