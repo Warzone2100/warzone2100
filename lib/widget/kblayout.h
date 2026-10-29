@@ -100,6 +100,31 @@ LayoutData deriveLayout(const LayoutData& templateLayout, const std::string& id,
 // and just the label if the text is a space.
 WzString composeDeadKey(uint32_t deadMark, const WzString& deadLabel, const WzString& text);
 
+// MARK: - Accents
+
+// The letters offered when a key is held (data/base/keyboards/accents.json), per language and plain letter
+struct AccentData
+{
+	using LetterGroups = std::unordered_map<std::string, std::vector<WzString>>;  // plain letter (UTF-8) -> letters offered
+	std::unordered_map<std::string, LetterGroups> languages;  // by game language code (ex. "de", "pt_BR")
+
+	// The groups for a language code, falling back to the language alone (ex. "de_AT" -> "de")
+	const LetterGroups* forLanguage(const std::string& languageCode) const;
+};
+
+// Parses accents.json. Returns false and fills error on failure
+bool parseAccentJSON(const char* data, size_t length, AccentData& output, std::string* error = nullptr);
+
+// Loads data/base/keyboards/accents.json through PhysFS
+bool loadAccents(AccentData& output);
+
+// The language a built-in layout is for (ex. "us" -> "en"), or empty if none
+std::string languageForLayoutId(const std::string& layoutId);
+
+// The letters to offer for a key typing `text`, from each language in turn and without duplicates.
+// Uppercase text gets uppercase letters.
+std::vector<WzString> accentVariants(const AccentData& accents, const std::vector<std::string>& languageCodes, const WzString& text);
+
 // MARK: - Keyboard geometry
 
 enum class SpecialKey : uint8_t
@@ -146,12 +171,16 @@ public:
 	Level currentLevel(const KeyLevels& levels) const;
 	// What a character key displays right now
 	WzString displayLabel(const KeyLevels& levels) const;
+	// What a character key types right now (before any pending dead key)
+	const KeyOutput& currentOutput(const KeyLevels& levels) const;
 
 	// Presses a character key and returns the text to type
 	// (empty for a dead key, which combines with the next key)
 	WzString pressCharacterKey(const KeyLevels& levels);
 	// Typing a space resolves a pending dead key to its label
 	WzString pressSpace();
+	// Like pressCharacterKey(), for a letter picked from a held key's accents
+	WzString pressVariant(const WzString& text);
 
 	// Shift: tap for one character, tap again to lock, again to release
 	void pressShift();

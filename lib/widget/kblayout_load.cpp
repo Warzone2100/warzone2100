@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file
- *  Loading on-screen keyboard layouts from the game data
+ *  Loading on-screen keyboard layouts and accents from the game data
  *  (apart from kblayout.cpp, which stays free of file-system dependencies).
  */
 
@@ -52,6 +52,24 @@ bool loadLayout(const std::string& id, LayoutData& output)
 	if (!parseLayoutJSON(buffer.data(), buffer.size(), output, &error))
 	{
 		debug(LOG_ERROR, "Invalid keyboard layout %s: %s", path.c_str(), error.c_str());
+		return false;
+	}
+	return true;
+}
+
+bool loadAccents(AccentData& output)
+{
+	const std::string path = std::string(LAYOUT_DIRECTORY) + "accents.json";
+	std::vector<char> buffer;
+	if (!loadFileToBufferVector(path.c_str(), buffer, false, false))
+	{
+		debug(LOG_WARNING, "Could not load keyboard accents: %s", path.c_str());
+		return false;
+	}
+	std::string error;
+	if (!parseAccentJSON(buffer.data(), buffer.size(), output, &error))
+	{
+		debug(LOG_ERROR, "Invalid keyboard accents %s: %s", path.c_str(), error.c_str());
 		return false;
 	}
 	return true;
