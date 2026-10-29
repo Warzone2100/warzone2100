@@ -1490,19 +1490,37 @@ bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState)
 	uint32_t numMapTiles = output.width * output.height;
 	output.mMapTiles.clear();
 	output.mMapTiles.reserve(numMapTiles);
+	uint32_t numClampedTiles = 0;
 	for (uint32_t i = 0; i < numMapTiles; i++)
 	{
 		WzMap::MapData::MapTile mapDataTile = {};
 		mapDataTile.texture = mapState.tiles[i].texture;
+		int32_t height;
 		if (terrainType(&mapState.tiles[i]) == TER_WATER)
 		{
-			mapDataTile.height = (mapState.tiles[i].waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
+			height = (mapState.tiles[i].waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
 		}
 		else
 		{
-			mapDataTile.height = mapState.tiles[i].height;
+			height = mapState.tiles[i].height;
 		}
+		// The map format can't store a height outside this range
+		if (height < TILE_MIN_HEIGHT || height > TILE_MAX_HEIGHT)
+		{
+			if (numClampedTiles == 0)
+			{
+				debug(LOG_ERROR, "Clamping tile (%" PRIu32 ", %" PRIu32 ") height %" PRIi32,
+				      i % output.width, i / output.width, height);
+			}
+			++numClampedTiles;
+			height = std::clamp<int32_t>(height, TILE_MIN_HEIGHT, TILE_MAX_HEIGHT);
+		}
+		mapDataTile.height = static_cast<uint16_t>(height);
 		output.mMapTiles.push_back(std::move(mapDataTile));
+	}
+	if (numClampedTiles > 1)
+	{
+		debug(LOG_ERROR, "Clamped %" PRIu32 " tile heights", numClampedTiles);
 	}
 
 	// Write out the gateway data
