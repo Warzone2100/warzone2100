@@ -3646,6 +3646,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	fileExtension = strlen(CurrentFileName) - 3;
 	gameTimeStop();
 	sanityUpdate(gameWorld.objects);
+	bool legacyFilesComplete = true;
 
 	/* Write the data to the file */
 	if (!writeGameFile(CurrentFileName, saveType))
@@ -3668,7 +3669,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeMapFile(CurrentFileName, gameWorld.map))
 	{
 		debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	// Save some game info
@@ -3687,7 +3689,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeDroidFile(CurrentFileName, gameWorld.objects.droids))
 	{
 		debug(LOG_ERROR, "writeDroidFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the structures filename
@@ -3697,7 +3700,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeStructFile(CurrentFileName, gameWorld.objects))
 	{
 		debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the templates filename
@@ -3707,7 +3711,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeTemplateFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeTemplateFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the features filename
@@ -3717,7 +3722,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeFeatureFile(CurrentFileName, gameWorld.objects))
 	{
 		debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the terrain types filename
@@ -3727,7 +3733,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeTerrainTypeMapFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeTerrainTypeMapFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the strucutLimits filename
@@ -3737,7 +3744,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeStructLimitsFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeStructLimitsFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the component lists filename
@@ -3747,7 +3755,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeCompListFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeCompListFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 	//create the structure type lists filename
 	CurrentFileName[fileExtension] = '\0';
@@ -3756,7 +3765,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeStructTypeListFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeStructTypeListFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the research filename
@@ -3766,7 +3776,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeResearchFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeResearchFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the message filename
@@ -3776,7 +3787,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeMessageFile(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeMessageFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	CurrentFileName[fileExtension] = '\0';
@@ -3785,7 +3797,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeVisibilityData(CurrentFileName, gameWorld.map))
 	{
 		debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	CurrentFileName[fileExtension] = '\0';
@@ -3794,7 +3807,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeFXData(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeFXData(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//added at V15 save
@@ -3804,7 +3818,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeScoreData(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeScoreData(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	CurrentFileName[fileExtension] = '\0';
@@ -3813,7 +3828,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeFiresupportDesignators(CurrentFileName))
 	{
 		debug(LOG_ERROR, "saveGame: writeFiresupportDesignators(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	// save the script state if necessary
@@ -3825,7 +3841,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		if (!writeScriptState(CurrentFileName))
 		{
 			debug(LOG_ERROR, "saveGame: writeScriptState(\"%s\") failed", CurrentFileName);
-			goto error;
+			legacyFilesComplete = false;
+			goto legacyFilesDone;
 		}
 	}
 
@@ -3841,7 +3858,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeDroidFile(CurrentFileName, mission.gameWorld.objects.droids))
 	{
 		debug(LOG_ERROR, "writeDroidFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	//create the limbo filename
@@ -3869,7 +3887,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	if (!writeDroidFile(CurrentFileName, apsLimboDroids))
 	{
 		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		legacyFilesComplete = false;
+		goto legacyFilesDone;
 	}
 
 	if (saveGameOnMission)
@@ -3881,7 +3900,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		if (!writeMapFile(CurrentFileName, mission.gameWorld.map))
 		{
 			debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", CurrentFileName);
-			goto error;
+			legacyFilesComplete = false;
+			goto legacyFilesDone;
 		}
 
 		//save the map file
@@ -3891,7 +3911,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		if (!writeVisibilityData(CurrentFileName, mission.gameWorld.map))
 		{
 			debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", CurrentFileName);
-			goto error;
+			legacyFilesComplete = false;
+			goto legacyFilesDone;
 		}
 
 		//create the structures filename
@@ -3901,7 +3922,8 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		if (!writeStructFile(CurrentFileName, mission.gameWorld.objects))
 		{
 			debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", CurrentFileName);
-			goto error;
+			legacyFilesComplete = false;
+			goto legacyFilesDone;
 		}
 
 		//create the features filename
@@ -3911,10 +3933,12 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		if (!writeFeatureFile(CurrentFileName, mission.gameWorld.objects))
 		{
 			debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", CurrentFileName);
-			goto error;
+			legacyFilesComplete = false;
+			goto legacyFilesDone;
 		}
 	}
 
+legacyFilesDone:
 	// strip the last filename
 	CurrentFileName[fileExtension - 1] = '\0';
 
@@ -3934,7 +3958,15 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		if (!gamestate::savegame::writeGameStateBlobToFolder(CurrentFileName, sgType))
 		{
 			debug(LOG_ERROR, "Failed to write GameState savegame blob for %s", CurrentFileName);
+			if (!legacyFilesComplete)
+			{
+				goto error;
+			}
 			// Non-fatal: the legacy save above already succeeded.
+		}
+		else if (!legacyFilesComplete)
+		{
+			debug(LOG_ERROR, "Legacy savegame files in %s are incomplete", CurrentFileName);
 		}
 	}
 
