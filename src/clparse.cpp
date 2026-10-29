@@ -439,6 +439,7 @@ typedef enum
 	CLI_NET_PORTMAPPING,
 	CLI_WZ_CRASH_RPT,
 	CLI_WZ_DEBUG_CRASH_HANDLER,
+	CLI_SANDBOX,
 	CLI_STREAMER_SPECTATOR,
 	CLI_LOBBY_SLASHCOMMANDS,
 	CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT,
@@ -572,6 +573,7 @@ static const struct poptOption *getOptionsTable()
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
 		{ "portmapping", POPT_ARG_STRING, CLI_NET_PORTMAPPING,   N_("Enable / disable port mapping when hosting"), N_("[1, true, 0, false]") },
+		{ "sandbox", POPT_ARG_STRING, CLI_SANDBOX, N_("Set the process confinement tier"), N_("(off, write, strict)") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
 		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
@@ -799,6 +801,7 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 #endif
 		case CLI_WZ_CRASH_RPT:
 		case CLI_WZ_DEBUG_CRASH_HANDLER:
+		case CLI_SANDBOX:
 			// this is currently a no-op because it must be parsed even earlier than ParseCommandLineEarly
 			break;
 		case CLI_CONVERT_SPECULAR_MAP:
@@ -917,6 +920,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 #endif
 		case CLI_WZ_CRASH_RPT:
 		case CLI_WZ_DEBUG_CRASH_HANDLER:
+		case CLI_SANDBOX:
 		case CLI_CONVERT_SPECULAR_MAP:
 			// These options are parsed in ParseCommandLineEarly() already, so ignore them
 			break;
