@@ -7163,12 +7163,11 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	//make sure power is not used to build
 	bPowerOn = powerCalculated;
 	powerCalculated = false;
-	//build a new one for the attacking player - set last element to true so it doesn't adjust x/y
-	psNewStruct = buildStructure(gameWorld, psType, x, y, attackPlayer, true);
+	//build a new one for the attacking player - set FromSave to true so it doesn't adjust x/y
+	psNewStruct = buildStructureDir(gameWorld, psType, x, y, direction, attackPlayer, true);
 	capacity = psStructure->capacity;
 	if (psNewStruct)
 	{
-		psNewStruct->rot.direction = direction;
 		if (capacity)
 		{
 			switch (psType->type)
