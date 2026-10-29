@@ -1461,13 +1461,16 @@ static int foundationHeight(const STRUCTURE *psStruct, const WorldMapState& mapS
 	{
 		for (int width = 0; width <= b.size.x; width++)
 		{
-			int height = map_TileHeight(mapState, b.map.x + width, b.map.y + breadth);
+			const int x = b.map.x + width;
+			const int y = b.map.y + breadth;
+			// generateRiverbed() lowers the ground of a water vertex far below the water
+			int height = isWaterVertex(mapState, x, y) ? map_WaterHeight(mapState, x, y) : map_TileHeight(mapState, x, y);
 			foundationMin = std::min(foundationMin, height);
 			foundationMax = std::max(foundationMax, height);
 		}
 	}
 	//return the average of max/min height
-	return (foundationMin + foundationMax) / 2;
+	return clip<int>((foundationMin + foundationMax) / 2, TILE_MIN_HEIGHT, TILE_MAX_HEIGHT);
 }
 
 

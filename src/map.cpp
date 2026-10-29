@@ -897,16 +897,6 @@ bool mapReloadGroundTypes()
 	return true;
 }
 
-static bool isWaterVertex(WorldMapState& mapState, int x, int y)
-{
-	if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
-	{
-		return false;
-	}
-	return terrainType(mapTile(mapState, x, y)) == TER_WATER && terrainType(mapTile(mapState, x - 1, y)) == TER_WATER
-	       && terrainType(mapTile(mapState, x, y - 1)) == TER_WATER && terrainType(mapTile(mapState, x - 1, y - 1)) == TER_WATER;
-}
-
 static void generateRiverbed(WorldMapState& mapState)
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.

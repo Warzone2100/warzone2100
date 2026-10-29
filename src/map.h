@@ -478,6 +478,16 @@ static inline WZ_DECL_PURE int32_t map_WaterHeight(const WorldMapState& mapState
 	return mapState.tiles[x + (y * mapState.width)].waterLevel;
 }
 
+static inline WZ_DECL_PURE bool isWaterVertex(const WorldMapState& mapState, int x, int y)
+{
+	if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
+	{
+		return false;
+	}
+	return terrainType(mapTile(mapState, x, y)) == TER_WATER && terrainType(mapTile(mapState, x - 1, y)) == TER_WATER
+	       && terrainType(mapTile(mapState, x, y - 1)) == TER_WATER && terrainType(mapTile(mapState, x - 1, y - 1)) == TER_WATER;
+}
+
 /// Return max(ground, water) height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE int32_t map_TileHeightSurface(const WorldMapState& mapState, int32_t x, int32_t y)
 {
