@@ -1103,7 +1103,7 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_BLOOM_DOWNSAMPLE>
 	{
 		glm::vec4 uvScaleClamp; // of the source
-		glm::vec4 params;       // xy = 1 / source texture size, w = threshold (first step only, else 0)
+		glm::vec4 params;       // xy = 1 / source size, z = 1 for the 9-tap fit, w = threshold (first step only)
 	};
 
 	template<>

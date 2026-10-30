@@ -5,7 +5,7 @@
 
 layout(std140) uniform cbuffer {
 	vec4 uvScaleClamp; // of the source
-	vec4 params;       // xy = 1 / source texture size, w = threshold (first step only, else 0)
+	vec4 params;       // xy = 1 / source size, z = 1 for the 9-tap fit, w = threshold (first step only)
 };
 
 uniform sampler2D sourceTexture;
@@ -29,5 +29,6 @@ varying vec2 texCoords;
 void main()
 {
 	vec2 uv = texCoords * uvScaleClamp.xy;
-	FragColor = vec4(bloomDownsample13(uv, params.xy, params.w), 1.0);
+	vec3 c = (params.z > 0.5) ? bloomDownsample9(uv, params.xy) : bloomDownsample13(uv, params.xy, params.w);
+	FragColor = vec4(c, 1.0);
 }

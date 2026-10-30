@@ -32,12 +32,28 @@
 #include "lib/ivis_opengl/render_graph/render_pass_id.h"
 
 #include <algorithm>
+#include <array>
 
 namespace bloom_pass
 {
 
 // Tent radius, in texels of the level being read
 constexpr float UPSAMPLE_RADIUS = 1.0f;
+
+static constexpr std::array<gfx_api::PipelineSurfaceId, gfx_api::BLOOM_LEVELS> LEVELS = {
+	gfx_api::PipelineSurfaceId::BloomMip0, gfx_api::PipelineSurfaceId::BloomMip1, gfx_api::PipelineSurfaceId::BloomMip2,
+	gfx_api::PipelineSurfaceId::BloomMip3, gfx_api::PipelineSurfaceId::BloomMip4, gfx_api::PipelineSurfaceId::BloomMip5,
+};
+static_assert(static_cast<uint32_t>(gfx_api::PassId::BloomDownsample5) - static_cast<uint32_t>(gfx_api::PassId::BloomDownsample0)
+	== gfx_api::BLOOM_LEVELS - 1, "the downsample passes are numbered in order");
+
+static bool halvesExactly(gfx_api::PipelineSurfaceId source, gfx_api::PipelineSurfaceId destination)
+{
+	auto& ctx = gfx_api::context::get();
+	const auto from = ctx.usedPipelineSurfaceExtent(source);
+	const auto to = ctx.usedPipelineSurfaceExtent(destination);
+	return from.first == 2 * to.first && from.second == 2 * to.second;
+}
 
 static glm::vec2 inverseTextureSize(gfx_api::abstract_texture* texture)
 {
@@ -81,9 +97,13 @@ void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 	gfx_api::constant_buffer_type<SHADER_BLOOM_DOWNSAMPLE> constants {};
 	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
 	const glm::vec2 texel = inverseTextureSize(source);
-	// Only the first step, reading the scene, thresholds
-	const bool first = passCtx.passId() == gfx_api::PassId::BloomDownsample0;
-	constants.params = glm::vec4(texel.x, texel.y, 0.f, first ? level().threshold : 0.f);
+	// The first step thresholds, which isn't linear, so it keeps the 13 taps.
+	const uint32_t step = static_cast<uint32_t>(passCtx.passId()) - static_cast<uint32_t>(gfx_api::PassId::BloomDownsample0);
+	ASSERT_OR_RETURN(, step < gfx_api::BLOOM_LEVELS, "BloomDownsample: unexpected pass");
+	const bool first = step == 0;
+	const auto& read = passCtx.resolvedRead(0);
+	const bool fit = !first && read.pipelineSurfaceId.has_value() && halvesExactly(*read.pipelineSurfaceId, LEVELS[step]);
+	constants.params = glm::vec4(texel.x, texel.y, fit ? 1.f : 0.f, first ? level().threshold : 0.f);
 	display3d_drawFullscreenTriangle<gfx_api::BloomDownsamplePSO>(constants, source);
 }
 
