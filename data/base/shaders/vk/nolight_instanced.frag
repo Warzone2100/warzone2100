@@ -24,6 +24,12 @@ void main()
 	vec4 texColour = texture(Texture, texCoord, WZ_MIP_LOAD_BIAS);
 
 	vec4 fragColour = texColour * colour;
+	if (additiveCoreBoost > 0.0 && fogOutput == WZ_FOG_OUTPUT_ADDITIVE)
+	{
+		// Lifts the bright core above display white (the dim edges stay as they are)
+		float peak = max(fragColour.r, max(fragColour.g, fragColour.b)) * fragColour.a;
+		fragColour.rgb *= 1.0 + additiveCoreBoost * smoothstep(0.25, 0.6, peak);
+	}
 	if (fogRange.z > 0.5 && fogOutput != WZ_FOG_OUTPUT_DISABLED)
 	{
 		float fogAmount = wzDistanceFogAmount(length(posViewSpace), fogRange.x, fogRange.y);

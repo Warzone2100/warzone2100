@@ -40,6 +40,8 @@ struct Level
 /// The current setting's bloom level
 Level level();
 float intensity();
+/// Gain on additive effects' bright cores for the current setting (0 while bloom is off)
+float additiveCoreBoost();
 
 /// Downsample step i: reads the scene (i = 0) or level i - 1, writes level i
 void recordDownsample(const gfx_api::RenderPassContext& passCtx);

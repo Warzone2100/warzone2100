@@ -65,6 +65,11 @@ float intensity()
 	return level().intensity;
 }
 
+float additiveCoreBoost()
+{
+	return (intensity() > 0.f) ? 1.5f : 0.f;
+}
+
 void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 {
 	ASSERT_OR_RETURN(, passCtx.readCount() == 1, "BloomDownsample: expected one read");

@@ -1203,7 +1203,8 @@ namespace gfx_api
 		glm::vec4 fogRange; // x = begin, y = end, z = forward fog enabled, w = padding
 		float timeState; // graphicsCycle
 		float mipLoadBias;
-		float pad0 = 0.f;
+		/// Gain on additive effects' bright cores (0 = none)
+		float additiveCoreBoost = 0.f;
 		float pad1 = 0.f;
 	};
 
@@ -1327,7 +1328,8 @@ namespace gfx_api
 		int viewportheight;
 		float mipLoadBias;
 		int bucketDimensionUsed;
-		float pad1 = 0.f;
+		/// Gain on additive effects' bright cores (0 = none)
+		float additiveCoreBoost = 0.f;
 		float pad2 = 0.f;
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
