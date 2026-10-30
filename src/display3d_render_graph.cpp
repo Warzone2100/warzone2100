@@ -41,6 +41,7 @@
 #include "ssr.h"
 #include "fog_pass.h"
 #include "tonemap_pass.h"
+#include "bloom_pass.h"
 #include "range_rings.h"
 #include "terrain.h"
 
@@ -290,6 +291,17 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSRBlurV, ssr::recordBlurV);
 	table.set(gfx_api::PassId::SSRCompose, ssr::recordCompose);
 	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
+	for (gfx_api::PassId id : {gfx_api::PassId::BloomDownsample0, gfx_api::PassId::BloomDownsample1, gfx_api::PassId::BloomDownsample2,
+		gfx_api::PassId::BloomDownsample3, gfx_api::PassId::BloomDownsample4, gfx_api::PassId::BloomDownsample5})
+	{
+		table.set(id, bloom_pass::recordDownsample);
+	}
+	for (gfx_api::PassId id : {gfx_api::PassId::BloomUpsample0, gfx_api::PassId::BloomUpsample1, gfx_api::PassId::BloomUpsample2,
+		gfx_api::PassId::BloomUpsample3, gfx_api::PassId::BloomUpsample4})
+	{
+		table.set(id, bloom_pass::recordUpsample);
+	}
+	table.set(gfx_api::PassId::BloomComposite, bloom_pass::recordComposite);
 	table.set(gfx_api::PassId::SceneTonemap, tonemap_pass::recordApply);
 	table.set(gfx_api::PassId::RangeRingSdfSensor, range_rings::recordSdfSensor);
 	table.set(gfx_api::PassId::RangeRingSdfWeapon, range_rings::recordSdfWeapon);

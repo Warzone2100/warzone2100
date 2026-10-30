@@ -124,6 +124,7 @@ struct WARZONE_GLOBALS
 	bool muzzleFlashLighting = true;
 	bool projectileLighting = true;
 	HDR_LIGHTING_MODE hdrLightingMode = HDR_LIGHTING_MODE::AUTO; // floating point scene color and linear space lighting
+	BLOOM_MODE bloomMode = BLOOM_MODE::LOW;
 	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
 	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
 	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
@@ -999,6 +1000,16 @@ bool war_getMuzzleFlashLighting()
 void war_setMuzzleFlashLighting(bool muzzleFlashesEnabled)
 {
 	warGlobs.muzzleFlashLighting = muzzleFlashesEnabled;
+}
+
+BLOOM_MODE war_getBloomMode()
+{
+	return warGlobs.bloomMode;
+}
+
+void war_setBloomMode(BLOOM_MODE mode)
+{
+	warGlobs.bloomMode = mode;
 }
 
 HDR_LIGHTING_MODE war_getHdrLightingMode()

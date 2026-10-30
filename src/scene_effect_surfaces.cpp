@@ -24,6 +24,7 @@
 
 #include "scene_effect_surfaces.h"
 
+#include "bloom_pass.h"
 #include "display3d.h"
 #include "ssao.h"
 #include "ssr.h"
@@ -43,6 +44,7 @@ bool applySceneEffectSurfaces()
 	cfg.ssrResolution = {ssrSettings.generateDivisor, ssrSettings.blurDivisor};
 	cfg.fog = pie_GetFogEnabled();
 	cfg.rangeRings = rangeOnScreen;
+	cfg.bloom = bloom_pass::intensity() > 0.f;
 	if (!gfx_api::context::get().setSceneEffectSurfaces(cfg))
 	{
 		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d ssr=%d fog=%d rangeRings=%d)",
