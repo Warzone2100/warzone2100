@@ -81,6 +81,24 @@ vec3 bloomDownsample13(vec2 uv, vec2 texel, float threshold)
 		/ max(wc + w0 + w1 + w2 + w3, 1e-4);
 }
 
+// 9 taps fitted to the 13-tap filter's weights, after Gjoel and Svendsen (GDC 2016).
+// Only valid when the destination is exactly half the source size.
+vec3 bloomDownsample9(vec2 uv, vec2 texel)
+{
+	const float EDGE = 1.7940618;
+	const float CORNER = 1.75;
+	vec3 center = bloomTap(uv, texel);
+	vec3 edges = bloomTap(uv + texel * vec2(-EDGE, 0.0), texel)
+		+ bloomTap(uv + texel * vec2(EDGE, 0.0), texel)
+		+ bloomTap(uv + texel * vec2(0.0, -EDGE), texel)
+		+ bloomTap(uv + texel * vec2(0.0, EDGE), texel);
+	vec3 corners = bloomTap(uv + texel * vec2(-CORNER, -CORNER), texel)
+		+ bloomTap(uv + texel * vec2(CORNER, -CORNER), texel)
+		+ bloomTap(uv + texel * vec2(-CORNER, CORNER), texel)
+		+ bloomTap(uv + texel * vec2(CORNER, CORNER), texel);
+	return center * 0.24634435 + edges * 0.12575353 + corners * 0.06266039;
+}
+
 vec3 bloomUpsampleTent(vec2 uv, vec2 texel, float radius)
 {
 	return bloomTent(sourceTexture, uv, texel, radius, uvScaleClamp.zw);
