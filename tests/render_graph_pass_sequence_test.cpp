@@ -70,6 +70,18 @@ static const char* passIdName(PassId id)
 	case PassId::ScenePass: return "ScenePass";
 	case PassId::SceneTransparent: return "SceneTransparent";
 	case PassId::SceneTonemap: return "SceneTonemap";
+	case PassId::BloomDownsample0: return "BloomDownsample0";
+	case PassId::BloomDownsample1: return "BloomDownsample1";
+	case PassId::BloomDownsample2: return "BloomDownsample2";
+	case PassId::BloomDownsample3: return "BloomDownsample3";
+	case PassId::BloomDownsample4: return "BloomDownsample4";
+	case PassId::BloomDownsample5: return "BloomDownsample5";
+	case PassId::BloomUpsample0: return "BloomUpsample0";
+	case PassId::BloomUpsample1: return "BloomUpsample1";
+	case PassId::BloomUpsample2: return "BloomUpsample2";
+	case PassId::BloomUpsample3: return "BloomUpsample3";
+	case PassId::BloomUpsample4: return "BloomUpsample4";
+	case PassId::BloomComposite: return "BloomComposite";
 	case PassId::SSAOGenerate: return "SSAOGenerate";
 	case PassId::SSAODownsample: return "SSAODownsample";
 	case PassId::SSAOBlurH: return "SSAOBlurH";
@@ -170,6 +182,67 @@ static void expectInGame(const char* name, const RenderTopologySnapshot& snapsho
 	expectPassIds(name, snapshot, withInGameTail(head));
 }
 
+static const gfx_api::BlueprintPass* findPass(const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id)
+{
+	for (const auto& pass : blueprint.passes())
+	{
+		if (pass.id == id)
+		{
+			return &pass;
+		}
+	}
+	return nullptr;
+}
+
+/// The pass exists, writes `surface` with `load` as its first color attachment, and reads exactly `producer`
+static void expectPassWiring(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	gfx_api::PipelineSurfaceId surface, gfx_api::AttachmentLoadOp load, PassId producer)
+{
+	++checks;
+	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
+	const bool ok = pass != nullptr
+		&& !pass->colorAttachments.empty()
+		&& pass->colorAttachments[0].surfaceId == surface
+		&& pass->colorAttachments[0].loadOp == load
+		&& pass->reads.size() == 1
+		&& pass->reads[0].producerPass == producer;
+	if (!ok)
+	{
+		++failures;
+		std::printf("FAIL %s: %s wiring\n", name, passIdName(id));
+	}
+}
+
+static const std::vector<PassId>& bloomPasses()
+{
+	static const std::vector<PassId> passes = {
+		PassId::BloomDownsample0, PassId::BloomDownsample1, PassId::BloomDownsample2,
+		PassId::BloomDownsample3, PassId::BloomDownsample4, PassId::BloomDownsample5,
+		PassId::BloomUpsample4, PassId::BloomUpsample3, PassId::BloomUpsample2,
+		PassId::BloomUpsample1, PassId::BloomUpsample0, PassId::BloomComposite,
+	};
+	return passes;
+}
+
+static std::vector<PassId> withBloom(std::vector<PassId> before, std::vector<PassId> after)
+{
+	before.insert(before.end(), bloomPasses().begin(), bloomPasses().end());
+	before.insert(before.end(), after.begin(), after.end());
+	return before;
+}
+
+static void expectInGame(const char* name, const RenderTopologySnapshot& snapshot, std::vector<PassId> head)
+{
+	head.insert(head.end(), {
+		PassId::TargettingEffects,
+		PassId::SceneOverlays,
+		PassId::SceneDebugOverlays,
+		PassId::GameStartFade,
+		PassId::InGameUI,
+	});
+	expectPassIds(name, snapshot, head);
+}
+
 int main()
 {
 	expectInGame("bare", inGameBase(), {PassId::ScenePass, PassId::SceneBlit});
@@ -196,6 +269,65 @@ int main()
 		expectInGame("hdr-fog", snapshot, {
 			PassId::ScenePrepass, PassId::ScenePass, PassId::FogApply,
 			PassId::SceneTransparent, PassId::SceneTonemap, PassId::SceneBlit});
+	}
+
+	{
+		// Without an HDR scene, bloom changes nothing
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.bloom = true;
+		expectInGame("bloom-without-hdr", snapshot, {PassId::ScenePass, PassId::SceneBlit});
+	}
+
+	{
+		// Bloom alone needs neither the prepass nor the transparent split
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.bloom = true;
+		snapshot.features |= RenderFeatures::HdrScene;
+		expectInGame("hdr-bloom", snapshot, withBloom({PassId::ScenePass}, {PassId::SceneTonemap, PassId::SceneBlit}));
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		using gfx_api::AttachmentLoadOp;
+		using gfx_api::PipelineSurfaceId;
+		expectPassWiring("hdr-bloom", blueprint, PassId::BloomDownsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::DontCare, PassId::ScenePass);
+		expectPassWiring("hdr-bloom", blueprint, PassId::BloomDownsample5, PipelineSurfaceId::BloomMip5, AttachmentLoadOp::DontCare, PassId::BloomDownsample4);
+		expectPassWiring("hdr-bloom", blueprint, PassId::BloomUpsample4, PipelineSurfaceId::BloomMip4, AttachmentLoadOp::Load, PassId::BloomDownsample5);
+		expectPassWiring("hdr-bloom", blueprint, PassId::BloomUpsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::Load, PassId::BloomUpsample1);
+		expectPassWiring("hdr-bloom", blueprint, PassId::BloomComposite, PipelineSurfaceId::SceneColor, AttachmentLoadOp::Load, PassId::BloomUpsample0);
+		expectPassWiring("hdr-bloom", blueprint, PassId::SceneTonemap, PipelineSurfaceId::TonemapColor, AttachmentLoadOp::DontCare, PassId::BloomComposite);
+	}
+
+	{
+		// After the transparents, onto the last post effect's output
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.fog = true;
+		snapshot.sceneEffects.bloom = true;
+		snapshot.features |= RenderFeatures::HdrScene;
+		expectInGame("hdr-fog-bloom", snapshot, withBloom({PassId::ScenePrepass, PassId::ScenePass, PassId::FogApply,
+			PassId::SceneTransparent}, {PassId::SceneTonemap, PassId::SceneBlit}));
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		expectPassWiring("hdr-fog-bloom", blueprint, PassId::BloomDownsample0, gfx_api::PipelineSurfaceId::BloomMip0,
+			gfx_api::AttachmentLoadOp::DontCare, PassId::SceneTransparent);
+		expectPassWiring("hdr-fog-bloom", blueprint, PassId::BloomComposite, gfx_api::PipelineSurfaceId::FogColor,
+			gfx_api::AttachmentLoadOp::Load, PassId::BloomUpsample0);
+	}
+
+	{
+		// Scene MSAA: bloom reads and writes the resolved scene
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneMsaa = true;
+		snapshot.sceneEffects.bloom = true;
+		snapshot.features |= RenderFeatures::HdrScene;
+		expectInGame("hdr-bloom-msaa", snapshot, withBloom({PassId::ScenePass}, {PassId::SceneTonemap, PassId::SceneBlit}));
+	}
+
+	{
+		// The presentation tail is unchanged (SMAA and upscaling work on the tonemapped scene)
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.bloom = true;
+		snapshot.features |= RenderFeatures::HdrScene | RenderFeatures::Smaa;
+		expectInGame("hdr-bloom-smaa", snapshot, withBloom({PassId::ScenePass},
+			{PassId::SceneTonemap, PassId::SmaaEdges, PassId::SmaaWeights, PassId::SmaaBlend}));
 	}
 
 	{

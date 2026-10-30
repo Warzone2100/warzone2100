@@ -46,7 +46,8 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	SurfaceLifetimePolicy lifetimePolicy,
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count,
 	BlurResolutionStage blurResolutionStage = BlurResolutionStage::None,
-	ScenePostEffectId sceneEffect = ScenePostEffectId::Count)
+	ScenePostEffectId sceneEffect = ScenePostEffectId::Count,
+	uint32_t extentDivisor = 1)
 {
 	PipelineSurfaceCatalogEntry entry;
 	entry.usage = usage;
@@ -62,7 +63,27 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	entry.formatCompanion = formatCompanion;
 	entry.blurResolutionStage = blurResolutionStage;
 	entry.sceneEffect = sceneEffect;
+	entry.extentDivisor = extentDivisor;
 	return entry;
+}
+
+constexpr PipelineSurfaceCatalogEntry makeBloomLevelEntry(uint32_t divisor)
+{
+	return makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::BloomActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::None,
+		ScenePostEffectId::Count,
+		divisor);
 }
 
 const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
@@ -361,6 +382,18 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::None,
 		ScenePostEffectId::RangeRings),
+	// BloomMip0 - 1/2 of the scene
+	makeBloomLevelEntry(2u),
+	// BloomMip1 - 1/4 of the scene
+	makeBloomLevelEntry(4u),
+	// BloomMip2 - 1/8 of the scene
+	makeBloomLevelEntry(8u),
+	// BloomMip3 - 1/16 of the scene
+	makeBloomLevelEntry(16u),
+	// BloomMip4 - 1/32 of the scene
+	makeBloomLevelEntry(32u),
+	// BloomMip5 - 1/64 of the scene
+	makeBloomLevelEntry(64u),
 	// TonemapColor: scene mapped to display range, the first display referred surface
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -548,6 +581,8 @@ bool evalEnablePolicy(const PipelineSurfaceCatalogEntry& cat, const PipelineSurf
 		return inputs.prepassNeeds != PrepassNeed::None;
 	case SurfaceEnablePolicy::ScenePrepassNormalsActive:
 		return hasFlag(inputs.prepassNeeds, PrepassNeed::Normals);
+	case SurfaceEnablePolicy::BloomActive:
+		return inputs.effects.bloom && inputs.hdrScene;
 	}
 	ASSERT(false, "Unknown SurfaceEnablePolicy");
 	return false;
@@ -627,7 +662,7 @@ void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurface
 		break;
 	case SurfaceExtentPolicy::MatchSceneDivided:
 	{
-		uint32_t divisor = 1;
+		uint32_t divisor = cat.extentDivisor;
 		if (cat.blurResolutionStage != BlurResolutionStage::None)
 		{
 			const BlurResolution& resolution = inputs.effects.blurResolution(cat.sceneEffect);
