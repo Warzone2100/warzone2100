@@ -934,6 +934,7 @@ namespace gfx_api
 	inline constexpr char kSampler_noiseTexture[] = "noiseTexture";
 	inline constexpr char kSampler_occlusionTexture[] = "occlusionTexture";
 	inline constexpr char kSampler_sceneTexture[] = "sceneTexture";
+	inline constexpr char kSampler_bloomTexture[] = "bloomTexture";
 	inline constexpr char kSampler_ssaoTexture[] = "ssaoTexture";
 	inline constexpr char kSampler_prepassNormals[] = "prepassNormals";
 	inline constexpr char kSampler_prepassDepth[] = "prepassDepth";

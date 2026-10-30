@@ -102,21 +102,19 @@ void recordUpsample(const gfx_api::RenderPassContext& passCtx)
 	display3d_drawFullscreenTriangle<gfx_api::BloomUpsamplePSO>(constants, source);
 }
 
-void recordComposite(const gfx_api::RenderPassContext& passCtx)
+void fillTonemapBloom(const gfx_api::RenderPassContext& passCtx, uint32_t readIndex,
+	gfx_api::constant_buffer_type<SHADER_SCENE_TONEMAP>& constants)
 {
-	ASSERT_OR_RETURN(, passCtx.readCount() == 1, "BloomComposite: expected one read");
-	gfx_api::abstract_texture* source = passCtx.getRead(0);
-	if (source == nullptr)
+	gfx_api::abstract_texture* level0 = passCtx.getRead(readIndex);
+	if (level0 == nullptr)
 	{
 		return;
 	}
-	gfx_api::constant_buffer_type<SHADER_BLOOM_COMPOSITE> constants {};
-	display3d_fillPassReadUvScaleClamp(passCtx, 0, constants.uvScaleClamp);
-	const glm::vec2 texel = inverseTextureSize(source);
-	constants.params = glm::vec4(texel.x, texel.y, UPSAMPLE_RADIUS, intensity());
+	display3d_fillPassReadUvScaleClamp(passCtx, readIndex, constants.bloomUvScaleClamp);
+	const glm::vec2 texel = inverseTextureSize(level0);
 	// Level 0 holds the sum of every level
-	constants.params2 = glm::vec4(1.f / static_cast<float>(gfx_api::BLOOM_LEVELS), 0.f, 0.f, 0.f);
-	display3d_drawFullscreenTriangle<gfx_api::BloomCompositePSO>(constants, source);
+	constants.bloomParams = glm::vec4(texel.x, texel.y, UPSAMPLE_RADIUS,
+		intensity() / static_cast<float>(gfx_api::BLOOM_LEVELS));
 }
 
 } // namespace bloom_pass

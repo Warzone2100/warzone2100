@@ -62,7 +62,7 @@ enum class PassId : uint16_t
 	RangeRingComposite,
 	SceneTransparent,
 	/// Bloom (bloom_pass.cpp): downsample i writes level i, upsample i adds level i + 1 onto level i,
-	/// and the composite adds level 0 onto the scene.
+	/// and the tonemap adds level 0 onto the scene.
 	BloomDownsample0,
 	BloomDownsample1,
 	BloomDownsample2,
@@ -74,7 +74,6 @@ enum class PassId : uint16_t
 	BloomUpsample2,
 	BloomUpsample3,
 	BloomUpsample4,
-	BloomComposite,
 	SceneTonemap,
 	SceneBlit,
 	SceneUpscaleEASU,

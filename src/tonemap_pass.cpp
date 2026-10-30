@@ -26,6 +26,7 @@
 
 #include "tonemap_pass.h"
 
+#include "bloom_pass.h"
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
 
@@ -37,7 +38,7 @@ namespace tonemap_pass
 
 void recordApply(const gfx_api::RenderPassContext& passCtx)
 {
-	ASSERT(passCtx.readCount() == 1, "SceneTonemap: 0 scene color");
+	ASSERT(passCtx.readCount() == 1 || passCtx.readCount() == 2, "SceneTonemap: expected the scene color (and the bloom)");
 	gfx_api::abstract_texture* scene = passCtx.getRead(0);
 	if (scene == nullptr)
 	{
@@ -49,7 +50,13 @@ void recordApply(const gfx_api::RenderPassContext& passCtx)
 	// Where the shoulder starts: low enough to bend toward white, high enough to leave most of it untouched
 	constants.tonemapKnee = 0.75f;
 	constants.encodeOutput = gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f;
-	display3d_drawFullscreenTriangle<gfx_api::SceneTonemapPSO>(constants, scene);
+	gfx_api::abstract_texture* bloom = nullptr;
+	if (passCtx.readCount() == 2)
+	{
+		bloom_pass::fillTonemapBloom(passCtx, 1, constants);
+		bloom = passCtx.getRead(1);
+	}
+	display3d_drawFullscreenTriangle<gfx_api::SceneTonemapPSO>(constants, scene, bloom);
 }
 
 } // namespace tonemap_pass

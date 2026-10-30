@@ -2,6 +2,8 @@
 // Expects `sourceTexture` and its `uvScaleClamp`
 // (xy = used extent / texture size, zw = largest UV inside the used extent).
 
+#include "bloom_tent.glsl"
+
 vec3 bloomTap(vec2 uv, vec2 texel)
 {
 	return texture(sourceTexture, clamp(uv, 0.5 * texel, uvScaleClamp.zw)).rgb;
@@ -79,14 +81,7 @@ vec3 bloomDownsample13(vec2 uv, vec2 texel, float threshold)
 		/ max(wc + w0 + w1 + w2 + w3, 1e-4);
 }
 
-// 3x3 tent around `uv` (`radius` in source texels)
 vec3 bloomUpsampleTent(vec2 uv, vec2 texel, float radius)
 {
-	vec2 d = texel * radius;
-	vec3 sum = bloomTap(uv, texel) * 4.0;
-	sum += (bloomTap(uv + vec2(-d.x, 0.0), texel) + bloomTap(uv + vec2(d.x, 0.0), texel)
-		+ bloomTap(uv + vec2(0.0, -d.y), texel) + bloomTap(uv + vec2(0.0, d.y), texel)) * 2.0;
-	sum += bloomTap(uv + vec2(-d.x, -d.y), texel) + bloomTap(uv + vec2(d.x, -d.y), texel)
-		+ bloomTap(uv + vec2(-d.x, d.y), texel) + bloomTap(uv + vec2(d.x, d.y), texel);
-	return sum * (1.0 / 16.0);
+	return bloomTent(sourceTexture, uv, texel, radius, uvScaleClamp.zw);
 }
