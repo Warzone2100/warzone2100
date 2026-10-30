@@ -45,6 +45,7 @@ bool applySceneEffectSurfaces()
 	cfg.fog = pie_GetFogEnabled();
 	cfg.rangeRings = rangeOnScreen;
 	cfg.bloom = bloom_pass::intensity() > 0.f;
+	pie_SetAdditiveCoreBoost(bloom_pass::additiveCoreBoost());
 	if (!gfx_api::context::get().setSceneEffectSurfaces(cfg))
 	{
 		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d ssr=%d fog=%d rangeRings=%d)",

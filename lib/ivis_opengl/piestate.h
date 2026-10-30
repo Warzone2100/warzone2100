@@ -76,6 +76,9 @@ bool pie_GetFogStatus();
 void pie_SetFogColour(PIELIGHT colour);
 PIELIGHT pie_GetFogColour() WZ_DECL_PURE;
 void pie_UpdateFogDistance(float begin, float end);
+/// Gain on the bright cores of additive effects (0 = none). Applied only while the scene is HDR.
+void pie_SetAdditiveCoreBoost(float boost);
+float pie_GetAdditiveCoreBoost();
 //render states
 RENDER_STATE getCurrentRenderState();
 const Vector3f& getDefaultSunPosition();

@@ -94,6 +94,18 @@ bool pie_GetFogEnabled()
 	return rendStates.fogEnabled;
 }
 
+static float additiveCoreBoost = 0.f;
+
+void pie_SetAdditiveCoreBoost(float boost)
+{
+	additiveCoreBoost = boost;
+}
+
+float pie_GetAdditiveCoreBoost()
+{
+	return additiveCoreBoost;
+}
+
 bool pie_GetFogStatus()
 {
 	return rendStates.fog;
