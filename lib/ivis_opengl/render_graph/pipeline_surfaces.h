@@ -78,6 +78,8 @@ struct SceneEffectSurfaces
 	BlurResolution ssrResolution;
 	bool fog = false;
 	bool rangeRings = false;
+	/// Bloom requested (its passes and surfaces exist only while the scene is HDR)
+	bool bloom = false;
 
 	bool operator==(const SceneEffectSurfaces& other) const
 	{
@@ -86,7 +88,8 @@ struct SceneEffectSurfaces
 			&& ssr == other.ssr
 			&& ssrResolution == other.ssrResolution
 			&& fog == other.fog
-			&& rangeRings == other.rangeRings;
+			&& rangeRings == other.rangeRings
+			&& bloom == other.bloom;
 	}
 
 	bool enabled(ScenePostEffectId id) const
@@ -166,6 +169,13 @@ enum class PipelineSurfaceId : uint8_t
 	RangeRingSdfDepth,
 	/// Scene-sized lit scene with range-ring overlay applied; feeds SMAA/blit/FSR.
 	RangeRingColor,
+	/// Bloom levels, 1/2 .. 1/64 of the scene
+	BloomMip0,
+	BloomMip1,
+	BloomMip2,
+	BloomMip3,
+	BloomMip4,
+	BloomMip5,
 	/// Display referred output of the tonemap pass, present only when the scene is HDR.
 	TonemapColor,
 	ShadowMap,
@@ -212,6 +222,9 @@ enum class BlurResolutionStage : uint8_t
 	Generate,
 	Blur,
 };
+
+/// Number of bloom levels (`PipelineSurfaceId::BloomMip0` ..)
+constexpr uint32_t BLOOM_LEVELS = 6;
 
 inline uint32_t divideSurfaceExtent(uint32_t size, uint32_t divisor)
 {
@@ -316,6 +329,8 @@ enum class SurfaceEnablePolicy : uint8_t
 	ScenePrepassActive,
 	/// Scene prepass normals only when `prepassNeeds` includes Normals (example: SSAO).
 	ScenePrepassNormalsActive,
+	/// Bloom requested and the scene is HDR.
+	BloomActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).
@@ -361,6 +376,8 @@ struct PipelineSurfaceCatalogEntry
 	BlurResolutionStage blurResolutionStage = BlurResolutionStage::None;
 	/// Owner used by ScenePostEffect/SeparateBlurBuffers and divided blur extents.
 	ScenePostEffectId sceneEffect = ScenePostEffectId::Count;
+	/// Fixed divisor for `MatchSceneDivided` rows without a blur-resolution stage (bloom levels).
+	uint32_t extentDivisor = 1;
 };
 
 /// Runtime identity produced by resolve; consumed by ensure / matches.

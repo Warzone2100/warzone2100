@@ -47,7 +47,8 @@ uint64_t RenderTopologySnapshot::topologyHash() const
 		sceneEffects.ssao ? 1u : 0u,
 		sceneEffects.ssr ? 1u : 0u,
 		sceneEffects.fog ? 1u : 0u,
-		sceneEffects.rangeRings ? 1u : 0u);
+		sceneEffects.rangeRings ? 1u : 0u,
+		sceneEffects.bloom ? 1u : 0u);
 	return static_cast<uint64_t>(h);
 }
 
