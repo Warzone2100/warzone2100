@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_CLPARSE_H__
 #define __INCLUDED_SRC_CLPARSE_H__
 
+#include <cstdint>
+
 // parse the commandline
 bool ParseCommandLine(int argc, const char * const *argv);
 
@@ -47,6 +49,6 @@ int min_autostart_player_count();
 
 /// The --pathfindingbackend override, or -1 if not set. Test/dev hook to force a
 /// backend for a run instead of taking it from the lobby or config.
-int cli_pathfinding_backend();
+int64_t cli_pathfinding_backend();
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

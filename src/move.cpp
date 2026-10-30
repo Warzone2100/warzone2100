@@ -1267,6 +1267,34 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		}
 	}
 
+	// The slides above work from the blocking tile's center point or drop one axis,
+	// without checking where they end, so they can still end on a blocking tile.
+	// Keep only an axis that stays clear, else stop.
+	if (pathfindingSlideClearEnabled() && (tx != ntx || ty != nty))
+	{
+		const auto endsBlocked = [&](int32_t vx, int32_t vy) {
+			return fpathBlockingTile(gameWorld.map,
+			                         map_coord(psDroid->pos.x + gameTimeAdjustedAverage(vx, EXTRA_PRECISION)),
+			                         map_coord(psDroid->pos.y + gameTimeAdjustedAverage(vy, EXTRA_PRECISION)), propulsion);
+		};
+		if (endsBlocked(*pmx, *pmy))
+		{
+			if (!endsBlocked(*pmx, 0))
+			{
+				*pmy = 0;
+			}
+			else if (!endsBlocked(0, *pmy))
+			{
+				*pmx = 0;
+			}
+			else
+			{
+				*pmx = 0;
+				*pmy = 0;
+			}
+		}
+	}
+
 	slideDir = iAtan2(*pmx, *pmy);
 	if (ntx != tx)
 	{
@@ -1301,6 +1329,9 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	CHECK_DROID(psDroid);
 }
 
+
+// How far two droids brushing past each other may overlap, in world units (never more than half their combined radius).
+const int32_t SOFT_PASS_MAX_OVERLAP = 12;
 
 // True when two droids in plain transit are headed the same way, so they may
 // brush past each other on a reduced footprint. Both must be mid-move on a
@@ -1394,7 +1425,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 			const bool allied = psObj->player == psDroid->player || aiCheckAlliances(psObj->player, psDroid->player);
 			if (allied && moveSoftPass(psDroid, static_cast<const DROID *>(psObj)))
 			{
-				rad /= 2;
+				rad = std::max(rad / 2, rad - SOFT_PASS_MAX_OVERLAP);
 			}
 		}
 		radSq = rad * rad;

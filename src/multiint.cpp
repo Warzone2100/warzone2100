@@ -3991,7 +3991,7 @@ static void SendFireUp()
 	// before the first tick.
 	if (cli_pathfinding_backend() >= 0)
 	{
-		game.pathfindingBackend = static_cast<uint16_t>(cli_pathfinding_backend());
+		game.pathfindingBackend = static_cast<uint32_t>(cli_pathfinding_backend());
 	}
 
 	// Pick a random random seed for the synchronised random number generator.
@@ -5150,7 +5150,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 			game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 			sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 			game.techLevel = ini.value("techLevel", game.techLevel).toInt();
-			game.pathfindingBackend = static_cast<uint16_t>(ini.value("pathfindingBackend", game.pathfindingBackend).toInt());
+			game.pathfindingBackend = ini.value("pathfindingBackend", game.pathfindingBackend).toUInt();
 
 			// Allow making the host a spectator (for MP games)
 			spectatorHost = ini.value("spectatorHost", false).toBool();
@@ -7912,7 +7912,7 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 		p.blindMode = BLIND_MODE::NONE;
 	}
 	// default to the legacy A* planner for replays recorded before this setting existed
-	p.pathfindingBackend = j.value("pathfindingBackend", static_cast<uint16_t>(0));
+	p.pathfindingBackend = j.value("pathfindingBackend", static_cast<uint32_t>(0));
 }
 
 inline void to_json(nlohmann::json& j, const MULTISTRUCTLIMITS& p) {

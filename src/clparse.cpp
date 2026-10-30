@@ -104,7 +104,7 @@ static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
 static bool wz_lobby_slashcommands_hostexit = false;
 static int wz_min_autostart_players = -1;
-static int wz_pathfinding_backend = -1;
+static int64_t wz_pathfinding_backend = -1;
 static std::string wz_lobby_game_to_connect_str;
 
 // Parse the --pathfindingbackend argument: a combined feature mask, or a
@@ -112,34 +112,35 @@ static std::string wz_lobby_game_to_connect_str;
 // named as a known mask plus the flags under test, ex. 7,8. A value with
 // bits no feature defines is rejected, so a mask from an older numbering
 // fails loudly instead of silently running a different stack.
-static int parsePathfindingBackendArg(const char *arg)
+static int64_t parsePathfindingBackendArg(const char *arg)
 {
-	constexpr unsigned validMask = PF_DIRECTIONAL_BIAS | PF_CORRIDOR_LANES | PF_FLOW_COST
+	constexpr uint32_t validMask = PF_DIRECTIONAL_BIAS | PF_CORRIDOR_LANES | PF_FLOW_COST
 	                               | PF_SOFT_COLLISION | PF_CROWD_MASS | PF_BEND_HOLD
 	                               | PF_BEND_HAND | PF_WIDE_LANES | PF_HAND_JOINT
 	                               | PF_WIDE_QUEUE | PF_TURN_VOTE
 	                               | PF_SETTLE_TIME | PF_BACKOFF
 	                               | PF_PARKED_OBSTACLE
 	                               | PF_STILL_BUMP
-	                               | PF_BUILD_FROM_HERE;
-	unsigned mask = 0;
+	                               | PF_BUILD_FROM_HERE
+	                               | PF_SLIDE_CLEAR;
+	uint32_t mask = 0;
 	const char *p = arg;
 	while (*p != '\0')
 	{
 		char *end = nullptr;
-		const long value = strtol(p, &end, 10);
-		if (end == p || (*end != '\0' && *end != ',') || value < 0 || value > 65535)
+		const long long value = strtoll(p, &end, 10);
+		if (end == p || (*end != '\0' && *end != ',') || value < 0 || value > UINT32_MAX)
 		{
-			qFatal("Bad pathfinding backend value \"%s\": expected a mask or comma-separated feature values 0-65535", arg);
+			qFatal("Bad pathfinding backend value \"%s\": expected a mask or comma-separated feature values 0-4294967295", arg);
 		}
-		mask |= static_cast<unsigned>(value);
+		mask |= static_cast<uint32_t>(value);
 		p = (*end == ',') ? end + 1 : end;
 	}
 	if ((mask & ~validMask) != 0)
 	{
-		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time, 4096 backoff, 8192 parked obstacle, 16384 still bump, 32768 build from here", arg);
+		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time, 4096 backoff, 8192 parked obstacle, 16384 still bump, 32768 build from here, 65536 slide clear", arg);
 	}
-	return static_cast<int>(mask);
+	return static_cast<int64_t>(mask);
 }
 
 #if defined(WZ_OS_WIN)
@@ -565,7 +566,7 @@ static const struct poptOption *getOptionsTable()
 		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
 		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
 		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
-		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time, 4096 backoff, 8192 parked obstacle, 16384 still bump, 32768 build from here)"), N_("features") },
+		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy with every feature off, 1 directional bias, 2 corridor lanes, 4 flow cost, 8 soft collision, 16 crowd mass, 32 bend hold, 64 bend hand, 128 wide lanes, 256 hand joint, 512 wide queue, 1024 turn vote, 2048 settle time, 4096 backoff, 8192 parked obstacle, 16384 still bump, 32768 build from here, 65536 slide clear)"), N_("features") },
 		{ "corridordump", POPT_ARG_STRING, CLI_CORRIDORDUMP,   N_("Detect corridors on the named map, dump the geometry, and quit"), N_("map") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
@@ -1905,7 +1906,7 @@ bool lobby_slashcommands_hostexit_enabled()
 	return wz_lobby_slashcommands_hostexit;
 }
 
-int cli_pathfinding_backend()
+int64_t cli_pathfinding_backend()
 {
 	return wz_pathfinding_backend;
 }
