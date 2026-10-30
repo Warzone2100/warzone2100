@@ -21,12 +21,13 @@
 /** @file bloom_pass.h
  * Bloom: a dual-filter chain on the floating point scene, before the tonemap (see `appendSceneReferredPasses`).
  * Six 13-tap downsamples to 1/64 of the scene, five tent upsamples back up,
- * then a composite that adds the result onto the scene.
+ * then the tonemap adds the result onto the scene.
  */
 
 #pragma once
 
 #include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_pipelines.h"
 
 namespace bloom_pass
 {
@@ -47,7 +48,8 @@ float additiveCoreBoost();
 void recordDownsample(const gfx_api::RenderPassContext& passCtx);
 /// Upsample step i: reads level i + 1, adds onto level i
 void recordUpsample(const gfx_api::RenderPassContext& passCtx);
-/// Adds level 0 onto the scene
-void recordComposite(const gfx_api::RenderPassContext& passCtx);
+/// Fills the tonemap's bloom constants from its read `readIndex` (bloom level 0)
+void fillTonemapBloom(const gfx_api::RenderPassContext& passCtx, uint32_t readIndex,
+	gfx_api::constant_buffer_type<SHADER_SCENE_TONEMAP>& constants);
 
 } // namespace bloom_pass

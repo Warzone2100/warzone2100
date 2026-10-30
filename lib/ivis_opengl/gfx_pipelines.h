@@ -1082,6 +1082,8 @@ namespace gfx_api
 		float encodeOutput;
 		float padding0;
 		float padding1;
+		glm::vec4 bloomUvScaleClamp; // of bloom level 0
+		glm::vec4 bloomParams;       // xy = 1 / bloom level 0 size, z = tent radius, w = bloom strength (0 = no bloom)
 	};
 
 	using SceneTonemapPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
@@ -1092,7 +1094,8 @@ namespace gfx_api
 		>
 	>,
 	std::tuple<
-		texture_description<0, sampler_type::bilinear, kSampler_sceneTexture, pixel_format_target::texture_2d> // scene
+		texture_description<0, sampler_type::bilinear, kSampler_sceneTexture, pixel_format_target::texture_2d>, // scene
+		texture_description<1, sampler_type::bilinear, kSampler_bloomTexture, pixel_format_target::texture_2d> // bloom level 0
 	>, SHADER_SCENE_TONEMAP>;
 
 	// Bloom (bloom_pass.cpp)
@@ -1110,16 +1113,9 @@ namespace gfx_api
 		glm::vec4 params;       // xy = 1 / its texture size, z = tent radius
 	};
 
-	template<>
-	struct constant_buffer_type<SHADER_BLOOM_COMPOSITE>
-	{
-		glm::vec4 uvScaleClamp; // of bloom level 0
-		glm::vec4 params;       // xy = 1 / its texture size, z = tent radius, w = intensity
-		glm::vec4 params2;      // x = 1 / number of levels
-	};
 
-	template<REND_MODE BlendMode, uint8_t ColorMask, SHADER_MODE Shader>
-	using BloomPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<BlendMode, DEPTH_CMP_ALWAYS_WRT_OFF, ColorMask, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	template<REND_MODE BlendMode, SHADER_MODE Shader>
+	using BloomPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<BlendMode, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<Shader>>,
 	std::tuple<
 		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
@@ -1130,11 +1126,9 @@ namespace gfx_api
 		texture_description<0, sampler_type::bilinear, kSampler_sourceTexture, pixel_format_target::texture_2d>
 	>, Shader>;
 
-	using BloomDownsamplePSO = BloomPSO<REND_OPAQUE, 255, SHADER_BLOOM_DOWNSAMPLE>;
+	using BloomDownsamplePSO = BloomPSO<REND_OPAQUE, SHADER_BLOOM_DOWNSAMPLE>;
 	// REND_ADDITIVE scales by the source alpha, so the bloom shaders write alpha 1
-	using BloomUpsamplePSO = BloomPSO<REND_ADDITIVE, 255, SHADER_BLOOM_UPSAMPLE>;
-	// The color mask keeps the scene's alpha
-	using BloomCompositePSO = BloomPSO<REND_ADDITIVE, 0x7, SHADER_BLOOM_COMPOSITE>;
+	using BloomUpsamplePSO = BloomPSO<REND_ADDITIVE, SHADER_BLOOM_UPSAMPLE>;
 
 	template<>
 	struct constant_buffer_type<SHADER_RANGE_RING_SDF>

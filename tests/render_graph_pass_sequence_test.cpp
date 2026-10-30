@@ -81,7 +81,6 @@ static const char* passIdName(PassId id)
 	case PassId::BloomUpsample2: return "BloomUpsample2";
 	case PassId::BloomUpsample3: return "BloomUpsample3";
 	case PassId::BloomUpsample4: return "BloomUpsample4";
-	case PassId::BloomComposite: return "BloomComposite";
 	case PassId::SSAOGenerate: return "SSAOGenerate";
 	case PassId::SSAODownsample: return "SSAODownsample";
 	case PassId::SSAOBlurH: return "SSAOBlurH";
@@ -213,13 +212,31 @@ static void expectPassWiring(const char* name, const gfx_api::PassGraphTopologyB
 	}
 }
 
+/// The pass exists and reads exactly `producers`, in order
+static void expectPassReads(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	const std::vector<PassId>& producers)
+{
+	++checks;
+	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
+	bool ok = pass != nullptr && pass->reads.size() == producers.size();
+	for (size_t i = 0; ok && i < producers.size(); ++i)
+	{
+		ok = pass->reads[i].producerPass == producers[i];
+	}
+	if (!ok)
+	{
+		++failures;
+		std::printf("FAIL %s: %s reads\n", name, passIdName(id));
+	}
+}
+
 static const std::vector<PassId>& bloomPasses()
 {
 	static const std::vector<PassId> passes = {
 		PassId::BloomDownsample0, PassId::BloomDownsample1, PassId::BloomDownsample2,
 		PassId::BloomDownsample3, PassId::BloomDownsample4, PassId::BloomDownsample5,
 		PassId::BloomUpsample4, PassId::BloomUpsample3, PassId::BloomUpsample2,
-		PassId::BloomUpsample1, PassId::BloomUpsample0, PassId::BloomComposite,
+		PassId::BloomUpsample1, PassId::BloomUpsample0,
 	};
 	return passes;
 }
@@ -292,8 +309,7 @@ int main()
 		expectPassWiring("hdr-bloom", blueprint, PassId::BloomDownsample5, PipelineSurfaceId::BloomMip5, AttachmentLoadOp::DontCare, PassId::BloomDownsample4);
 		expectPassWiring("hdr-bloom", blueprint, PassId::BloomUpsample4, PipelineSurfaceId::BloomMip4, AttachmentLoadOp::Load, PassId::BloomDownsample5);
 		expectPassWiring("hdr-bloom", blueprint, PassId::BloomUpsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::Load, PassId::BloomUpsample1);
-		expectPassWiring("hdr-bloom", blueprint, PassId::BloomComposite, PipelineSurfaceId::SceneColor, AttachmentLoadOp::Load, PassId::BloomUpsample0);
-		expectPassWiring("hdr-bloom", blueprint, PassId::SceneTonemap, PipelineSurfaceId::TonemapColor, AttachmentLoadOp::DontCare, PassId::BloomComposite);
+		expectPassReads("hdr-bloom", blueprint, PassId::SceneTonemap, {PassId::ScenePass, PassId::BloomUpsample0});
 	}
 
 	{
@@ -308,12 +324,11 @@ int main()
 		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
 		expectPassWiring("hdr-fog-bloom", blueprint, PassId::BloomDownsample0, gfx_api::PipelineSurfaceId::BloomMip0,
 			gfx_api::AttachmentLoadOp::DontCare, PassId::SceneTransparent);
-		expectPassWiring("hdr-fog-bloom", blueprint, PassId::BloomComposite, gfx_api::PipelineSurfaceId::FogColor,
-			gfx_api::AttachmentLoadOp::Load, PassId::BloomUpsample0);
+		expectPassReads("hdr-fog-bloom", blueprint, PassId::SceneTonemap, {PassId::SceneTransparent, PassId::BloomUpsample0});
 	}
 
 	{
-		// Scene MSAA: bloom reads and writes the resolved scene
+		// Scene MSAA: bloom reads the resolved scene
 		RenderTopologySnapshot snapshot = inGameBase();
 		snapshot.sceneMsaa = true;
 		snapshot.sceneEffects.bloom = true;

@@ -301,7 +301,6 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	{
 		table.set(id, bloom_pass::recordUpsample);
 	}
-	table.set(gfx_api::PassId::BloomComposite, bloom_pass::recordComposite);
 	table.set(gfx_api::PassId::SceneTonemap, tonemap_pass::recordApply);
 	table.set(gfx_api::PassId::RangeRingSdfSensor, range_rings::recordSdfSensor);
 	table.set(gfx_api::PassId::RangeRingSdfWeapon, range_rings::recordSdfWeapon);

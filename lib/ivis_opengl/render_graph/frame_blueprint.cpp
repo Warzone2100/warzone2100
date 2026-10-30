@@ -29,6 +29,7 @@
 #include "lib/framework/wzapp.h"
 
 #include <array>
+#include <optional>
 #include <string>
 
 namespace gfx_api
@@ -37,7 +38,8 @@ namespace gfx_api
 namespace
 {
 
-PassId appendBloomPasses(BlueprintBuilder& builder, PassId incomingColor, PipelineSurfaceId incomingColorSurface)
+/// Returns the pass that leaves the finished bloom in BloomMip0
+PassId appendBloomPasses(BlueprintBuilder& builder, PassId incomingColor)
 {
 	static constexpr std::array<PassId, BLOOM_LEVELS> kDownsample = {
 		PassId::BloomDownsample0, PassId::BloomDownsample1, PassId::BloomDownsample2,
@@ -70,23 +72,25 @@ PassId appendBloomPasses(BlueprintBuilder& builder, PassId incomingColor, Pipeli
 			.readFrom(previous, AttachmentRole::PrimaryColor);
 		previous = kUpsample[i];
 	}
-	builder.beginPass(PassId::BloomComposite, "BloomComposite")
-		.color(incomingColorSurface, AttachmentLoadOp::Load, AttachmentStoreOp::Store)
-		.viewport(ViewportRule::SceneColorTarget)
-		.readFrom(previous, AttachmentRole::PrimaryColor);
-	return PassId::BloomComposite;
+	return previous;
 }
 
-/// Adds the passes on the scene-referred color, between the transparents (and post effects) and the tonemap.
-/// Returns the new incoming color pass.
-PassId appendSceneReferredPasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot,
-	PassId incomingColor, PipelineSurfaceId incomingColorSurface)
+struct SceneReferredPasses
 {
+	PassId color;                ///< the new incoming color pass
+	std::optional<PassId> bloom; ///< the pass leaving the bloom for the tonemap to add, if bloom is on
+};
+
+/// Adds the passes on the scene-referred color, between the transparents (and post effects) and the tonemap
+SceneReferredPasses appendSceneReferredPasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot,
+	PassId incomingColor)
+{
+	SceneReferredPasses result {incomingColor, std::nullopt};
 	if (snapshot.sceneEffects.bloom && (snapshot.features & RenderFeatures::HdrScene))
 	{
-		incomingColor = appendBloomPasses(builder, incomingColor, incomingColorSurface);
+		result.bloom = appendBloomPasses(builder, incomingColor);
 	}
-	return incomingColor;
+	return result;
 }
 
 void appendPresentation(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot, PassId incomingColor)
@@ -256,7 +260,8 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		incomingColor = PassId::SceneTransparent;
 	}
 
-	incomingColor = appendSceneReferredPasses(builder, snapshot, incomingColor, incomingColorSurface);
+	const SceneReferredPasses sceneReferred = appendSceneReferredPasses(builder, snapshot, incomingColor);
+	incomingColor = sceneReferred.color;
 
 	// Everything above is scene referred, and the tonemap brings it to display range before presentation
 	if (snapshot.features & RenderFeatures::HdrScene)
@@ -265,6 +270,10 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.color(PipelineSurfaceId::TonemapColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::SceneColorTarget)
 			.readFrom(incomingColor, AttachmentRole::PrimaryColor);
+		if (sceneReferred.bloom.has_value())
+		{
+			builder.readFrom(sceneReferred.bloom.value(), AttachmentRole::PrimaryColor);
+		}
 		incomingColor = PassId::SceneTonemap;
 	}
 
