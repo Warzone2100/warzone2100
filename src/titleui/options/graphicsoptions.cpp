@@ -91,6 +91,14 @@ OptionInfo::AvailabilityResult RemasteredTerrainAppearanceAvailable(const Option
 	return result;
 }
 
+OptionInfo::AvailabilityResult HdrSceneInEffect(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = gfx_api::context::get().hdrSceneInEffect();
+	result.localizedUnavailabilityReason = _("Requires HDR Lighting (after a restart).");
+	return result;
+}
+
 OptionInfo::AvailabilityResult HdrLightingSupported(const OptionInfo&)
 {
 	OptionInfo::AvailabilityResult result;
@@ -428,6 +436,30 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				war_setHdrLightingMode(newValue);
 				return true;
 			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	{
+		auto optionInfo = OptionInfo("gfx.bloom", N_("Bloom"), N_("Bright lights and highlights glow softly into their surroundings."));
+		optionInfo.addAvailabilityCondition(HdrSceneInEffect);
+		auto valueChanger = OptionsDropdown<BLOOM_MODE>::make(
+			[]() {
+				OptionChoices<BLOOM_MODE> result;
+				result.choices = {
+					{ _("Off"), "", BLOOM_MODE::OFF },
+					{ _("Low"), "", BLOOM_MODE::LOW },
+					{ _("Medium"), "", BLOOM_MODE::MEDIUM },
+					{ _("High"), "", BLOOM_MODE::HIGH },
+				};
+				result.setCurrentIdxForValue(war_getBloomMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setBloomMode(newValue);
+				applySceneEffectSurfaces();
+				return true;
+			}, false
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
