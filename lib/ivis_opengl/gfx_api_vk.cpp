@@ -2229,14 +2229,21 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 		// First upload this frame - add barrier to ensure that any reads/writes from prior frames are finished
 		const auto bufferMemoryBarrier_BeforeCopy = std::array<vk::BufferMemoryBarrier, 1> {
 			vk::BufferMemoryBarrier()
-				.setSrcAccessMask(vk::AccessFlagBits::eVertexAttributeRead | vk::AccessFlagBits::eTransferWrite)
+				.setSrcAccessMask(vk::AccessFlagBits::eVertexAttributeRead
+					| vk::AccessFlagBits::eTransferWrite
+					| vk::AccessFlagBits::eShaderRead
+					| vk::AccessFlagBits::eShaderWrite)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 				.setBuffer(object)
 				.setOffset(0)
 				.setSize(vk::WholeSize)
 		};
 
-		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+		transfer.pipelineBarrier(
+			vk::PipelineStageFlagBits::eVertexInput
+				| vk::PipelineStageFlagBits::eTransfer
+				| vk::PipelineStageFlagBits::eComputeShader,
+			vk::PipelineStageFlagBits::eTransfer,
 			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_BeforeCopy, nullptr);
 	}
 	else
@@ -2244,14 +2251,18 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 		// Same frame, same buffer — explicit transfer WAW barrier (sync2 validation).
 		const auto bufferMemoryBarrier_WAW = std::array<vk::BufferMemoryBarrier, 1> {
 			vk::BufferMemoryBarrier()
-				.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
+				.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite
+					| vk::AccessFlagBits::eShaderRead
+					| vk::AccessFlagBits::eShaderWrite)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 				.setBuffer(object)
 				.setOffset(start)
 				.setSize(size)
 		};
 
-		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+		transfer.pipelineBarrier(
+			vk::PipelineStageFlagBits::eTransfer | vk::PipelineStageFlagBits::eComputeShader,
+			vk::PipelineStageFlagBits::eTransfer,
 			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_WAW, nullptr);
 	}
 
