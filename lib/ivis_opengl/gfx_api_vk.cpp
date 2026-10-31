@@ -6414,8 +6414,11 @@ bool VkRoot::supportsTessellationShaders() const
 
 vk::PipelineStageFlags VkRoot::textureSamplingStages() const
 {
-	// Must match the stages VkPSO makes texture bindings visible to
-	vk::PipelineStageFlags stages = vk::PipelineStageFlagBits::eFragmentShader;
+	// Fragment and compute both sample VkTexture / VkTextureArray.
+	// Tessellation evaluation does too, when the device feature is enabled
+	// (that stage is invalid in a barrier otherwise).
+	vk::PipelineStageFlags stages = vk::PipelineStageFlagBits::eFragmentShader
+		| vk::PipelineStageFlagBits::eComputeShader;
 	if (supportsTessellationShaders())
 	{
 		// (only valid in a barrier with the tessellationShader feature enabled)
