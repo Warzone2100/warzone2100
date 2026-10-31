@@ -2932,6 +2932,10 @@ void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 	auto* program = handle->current();
 	ASSERT_OR_RETURN(, program != nullptr && !program->broken && program->program, "compute pipeline is broken");
 	currentComputeProgram = program;
+	// glUseProgram below does not go through bind_pipeline, which is what
+	// updates current_program. Leave the graphics cache empty so the next
+	// graphics bind cannot skip glUseProgram.
+	current_program = nullptr;
 	program->bind();
 }
 
