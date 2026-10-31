@@ -6094,15 +6094,14 @@ void gl_context::initLightDataTransport()
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureImageUnits);
 	const bool hasUnitsForLightSamplers = maxTextureImageUnits > lightIndexTextureUnit;
 	const bool hasTexelBuffers = !gles && GLAD_GL_VERSION_3_1 && (glTexBuffer != nullptr) && hasUnitsForLightSamplers;
-	// OpenGL ES 3.1 has storage buffers, but no glShaderStorageBlockBinding, so it stays on the uniform block.
-	// Desktop 4.3 has shader storage blocks, program-interface query, and readonly storage as core.
-	// Below 4.3 the same three pieces are the ARB extensions, including GL_ARB_shader_image_load_store for readonly.
+	// The fragment header still requires the ARB extensions under #version 330.
+	// A 4.3 core context that does not advertise them cannot compile that shader.
+	// Entry points alone are not enough.
 	const bool storageEntryPoints = (glShaderStorageBlockBinding != nullptr) && (glGetProgramResourceIndex != nullptr);
-	const bool storageCore43 = GLAD_GL_VERSION_4_3 != 0;
 	const bool storageViaArb = (GLAD_GL_ARB_shader_storage_buffer_object != 0)
 		&& (GLAD_GL_ARB_program_interface_query != 0)
 		&& (GLAD_GL_ARB_shader_image_load_store != 0);
-	const bool hasStorageBuffers = !gles && storageEntryPoints && (storageCore43 || storageViaArb);
+	const bool hasStorageBuffers = !gles && storageEntryPoints && storageViaArb;
 
 	// Preference order:
 	// 1. storage buffer (spends no sampler, and the index can be scalarized)
