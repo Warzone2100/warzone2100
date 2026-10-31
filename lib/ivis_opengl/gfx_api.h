@@ -1278,6 +1278,7 @@ namespace gfx_api
 				this->pso = this->nextpso;
 				this->nextpso = nullptr;
 			}
+			ASSERT_OR_RETURN(, pso != nullptr && !pso->broken, "compute pipeline failed to build");
 			gfx_api::context::get().bind_compute_pipeline(pso);
 		}
 
@@ -1295,7 +1296,7 @@ namespace gfx_api
 				}
 			}
 			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
-			ASSERT(compute != nullptr, "compute pipeline is not bound");
+			ASSERT_OR_RETURN(, compute != nullptr && !compute->broken, "compute pipeline is not bound");
 			compute->bind_sampled_textures(sampled_descriptions(), { args... });
 		}
 
@@ -1313,7 +1314,7 @@ namespace gfx_api
 				}
 			}
 			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
-			ASSERT(compute != nullptr, "compute pipeline is not bound");
+			ASSERT_OR_RETURN(, compute != nullptr && !compute->broken, "compute pipeline is not bound");
 			compute->bind_storage_images(storage_image_descriptions(), { args... });
 		}
 
@@ -1350,7 +1351,7 @@ namespace gfx_api
 				}
 			}
 			auto* compute = dynamic_cast<compute_pipeline_state_object*>(pso);
-			ASSERT(compute != nullptr, "compute pipeline is not bound");
+			ASSERT_OR_RETURN(, compute != nullptr && !compute->broken, "compute pipeline is not bound");
 			compute->bind_storage_buffers(storage_buffer_descriptions(), { args... });
 		}
 
