@@ -5779,10 +5779,8 @@ gfx_api::pixel_format_usage::flags VkRoot::getPixelFormatUsageSupport(gfx_api::p
 	}
 
 	// [storage_image support]
-	//	- Following feature bits are required:
-	//		- VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT (of course)
-	//		- TODO: Will we need to check any other bits for WZ's use-cases?
-	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eLinear /* ? */, vk::FormatFeatureFlagBits::eStorageImage, vkDynLoader))
+	// Storage images are created optimal-tiled (VkRenderedImage / create_storage_texture).
+	if (checkFormatSupport(physicalDevice, vulkan_format, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eStorageImage, vkDynLoader))
 	{
 		retVal |= gfx_api::pixel_format_usage::storage_image;
 	}
