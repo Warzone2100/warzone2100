@@ -5144,9 +5144,22 @@ void gl_context::initPixelFormatsSupport()
 		}
 
 		// The sRGB forms require a second extension
-		// Desktop OpenGL: GL_EXT_texture_sRGB
+		// Desktop OpenGL: GL_EXT_texture_sRGB (or, on macOS: EXT_texture_sRGB_decode + EXT_texture_compression_s3tc)
 		// OpenGL ES: GL_EXT_texture_compression_s3tc_srgb
+		bool supports_s3tc_srgb = false;
 		if ((!gles && GLAD_GL_EXT_texture_sRGB) || (gles && GLAD_GL_EXT_texture_compression_s3tc_srgb))
+		{
+			supports_s3tc_srgb = true;
+		}
+#if defined(__APPLE__)
+		// macOS workaround: macOS OpenGL driver doesn't advertise EXT_texture_sRGB (even when it's supported by the core standard),
+		// but the presence of EXT_texture_sRGB_decode implies support for the S3TC sRGB formats
+		if (!gles && GLAD_GL_VERSION_3_0 && GLAD_GL_EXT_texture_sRGB_decode)
+		{
+			supports_s3tc_srgb = true;
+		}
+#endif
+		if (supports_s3tc_srgb)
 		{
 			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_SRGB) // DXT1
 			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_SRGB) // DXT3
