@@ -1709,6 +1709,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	const glm::vec4 fogColor = pie_SceneColourToVec4(pie_GetFogColour());
 	// fogRange.w carries the linear lighting flag for the fog mix in the forward shaders
 	const glm::vec4 fogRange(renderState.fogBegin, renderState.fogEnd, forwardFogEnabled ? 1.f : 0.f, gfx_api::context::get().linearLightingEnabled() ? 1.f : 0.f);
+	const float additiveCoreBoost = gfx_api::context::get().hdrSceneInEffect() ? pie_GetAdditiveCoreBoost() : 0.f;
 
 	if (useInstancedRendering)
 	{
@@ -1720,7 +1721,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			sceneColor, ambient, diffuse, specular, fogColor, fogRange,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 			pie_GetShaderTime(), static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getSceneMipLodBias(),
-			static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), 0.f, 0.f,
+			static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed), additiveCoreBoost, 0.f,
 			getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, pointLights, shadowMap, drawParts, depthPassMode);
@@ -1731,7 +1732,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
 			glm::vec4(cameraPos, 0.f),
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor, fogRange,
-			pie_GetShaderTime(), gfx_api::context::get().getSceneMipLodBias()
+			pie_GetShaderTime(), gfx_api::context::get().getSceneMipLodBias(), additiveCoreBoost
 		};
 		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts);
 	}

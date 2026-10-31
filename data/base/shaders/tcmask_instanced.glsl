@@ -24,7 +24,7 @@ layout(std140) uniform globaluniforms {
 	int viewportHeight;
 	float WZ_MIP_LOAD_BIAS;
 	int bucketDimensionUsed;
-	float pad1;
+	float additiveCoreBoost; // gain on additive effects' bright cores (0 = none)
 	float pad2;
 	// Last because its length follows the grid dimension
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];

@@ -7,8 +7,11 @@ layout(std140) uniform cbuffer {
 	float encodeOutput;
 	float padding0;
 	float padding1;
+	vec4 bloomUvScaleClamp; // of bloom level 0
+	vec4 bloomParams;       // xy = 1 / bloom level 0 size, z = tent radius, w = bloom strength (0 = no bloom)
 };
 uniform sampler2D sceneTexture;
+uniform sampler2D bloomTexture;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -29,6 +32,7 @@ out vec4 FragColor;
 #endif
 
 #include "srgb.glsl"
+#include "bloom_tent.glsl"
 
 // Leaves values below the knee unchanged and rolls values above it off smoothly toward 1
 vec3 tonemapShoulder(vec3 color, float knee)
@@ -43,6 +47,11 @@ void main()
 {
 	vec2 uv = clamp(texCoords * uvScaleClamp.xy, vec2(0.0), uvScaleClamp.zw);
 	vec4 scene = texture(sceneTexture, uv);
+	if (bloomParams.w > 0.0)
+	{
+		vec2 bloomUv = texCoords * bloomUvScaleClamp.xy;
+		scene.rgb += bloomTent(bloomTexture, bloomUv, bloomParams.xy, bloomParams.z, bloomUvScaleClamp.zw) * bloomParams.w;
+	}
 
 	vec3 result = tonemapShoulder(scene.rgb, tonemapKnee);
 	if (encodeOutput > 0.5)

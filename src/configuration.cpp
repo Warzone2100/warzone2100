@@ -855,6 +855,25 @@ bool loadConfig()
 		war_setMuzzleFlashLighting(value.value_or(true));
 	}
 	{
+		std::string bloomValue = iniGetString("bloom", "low").value();
+		if (bloomValue == "off")
+		{
+			war_setBloomMode(BLOOM_MODE::OFF);
+		}
+		else if (bloomValue == "medium")
+		{
+			war_setBloomMode(BLOOM_MODE::MEDIUM);
+		}
+		else if (bloomValue == "high")
+		{
+			war_setBloomMode(BLOOM_MODE::HIGH);
+		}
+		else
+		{
+			war_setBloomMode(BLOOM_MODE::LOW);
+		}
+	}
+	{
 		std::string hdrLightingValue = iniGetString("hdrLighting", "auto").value();
 		if (hdrLightingValue == "on")
 		{
@@ -1179,6 +1198,13 @@ bool saveConfig()
 		case HDR_LIGHTING_MODE::OFF: iniSetString("hdrLighting", "off"); break;
 		case HDR_LIGHTING_MODE::ON: iniSetString("hdrLighting", "on"); break;
 		case HDR_LIGHTING_MODE::AUTO: iniSetString("hdrLighting", "auto"); break;
+	}
+	switch (war_getBloomMode())
+	{
+		case BLOOM_MODE::OFF: iniSetString("bloom", "off"); break;
+		case BLOOM_MODE::LOW: iniSetString("bloom", "low"); break;
+		case BLOOM_MODE::MEDIUM: iniSetString("bloom", "medium"); break;
+		case BLOOM_MODE::HIGH: iniSetString("bloom", "high"); break;
 	}
 	switch (war_getSsaoMode())
 	{

@@ -25,7 +25,7 @@ layout(std140) uniform globaluniforms {
 	vec4 fogRange;
 	float graphicsCycle;
 	float WZ_MIP_LOAD_BIAS;
-	float pad0;
+	float additiveCoreBoost; // gain on additive effects' bright cores (0 = none)
 	float pad1;
 };
 

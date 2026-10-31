@@ -287,6 +287,17 @@ void war_setHdrLightingMode(HDR_LIGHTING_MODE mode);
 /// Whether HDR lighting is asked for: On, or Auto with per-pixel point lights and normal mapped terrain
 bool war_getHdrLighting();
 
+/// Bloom strength (takes effect only while the scene is HDR)
+enum class BLOOM_MODE : uint8_t
+{
+	OFF,
+	LOW,
+	MEDIUM,
+	HIGH,
+};
+BLOOM_MODE war_getBloomMode();
+void war_setBloomMode(BLOOM_MODE mode);
+
 enum class SSAO_MODE : uint8_t
 {
 	OFF,

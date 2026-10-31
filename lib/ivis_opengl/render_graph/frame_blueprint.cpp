@@ -28,6 +28,8 @@
 
 #include "lib/framework/wzapp.h"
 
+#include <array>
+#include <optional>
 #include <string>
 
 namespace gfx_api
@@ -35,6 +37,61 @@ namespace gfx_api
 
 namespace
 {
+
+/// Returns the pass that leaves the finished bloom in BloomMip0
+PassId appendBloomPasses(BlueprintBuilder& builder, PassId incomingColor)
+{
+	static constexpr std::array<PassId, BLOOM_LEVELS> kDownsample = {
+		PassId::BloomDownsample0, PassId::BloomDownsample1, PassId::BloomDownsample2,
+		PassId::BloomDownsample3, PassId::BloomDownsample4, PassId::BloomDownsample5,
+	};
+	static constexpr std::array<PassId, BLOOM_LEVELS - 1> kUpsample = {
+		PassId::BloomUpsample0, PassId::BloomUpsample1, PassId::BloomUpsample2,
+		PassId::BloomUpsample3, PassId::BloomUpsample4,
+	};
+	static constexpr std::array<PipelineSurfaceId, BLOOM_LEVELS> kLevel = {
+		PipelineSurfaceId::BloomMip0, PipelineSurfaceId::BloomMip1, PipelineSurfaceId::BloomMip2,
+		PipelineSurfaceId::BloomMip3, PipelineSurfaceId::BloomMip4, PipelineSurfaceId::BloomMip5,
+	};
+
+	PassId previous = incomingColor;
+	for (uint32_t i = 0; i < BLOOM_LEVELS; ++i)
+	{
+		builder.beginPass(kDownsample[i], "BloomDownsample" + std::to_string(i))
+			.color(kLevel[i], AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::ColorTarget)
+			.readFrom(previous, AttachmentRole::PrimaryColor);
+		previous = kDownsample[i];
+	}
+	// Each level keeps its own downsample and gains everything below it
+	for (uint32_t i = BLOOM_LEVELS - 1; i-- > 0;)
+	{
+		builder.beginPass(kUpsample[i], "BloomUpsample" + std::to_string(i))
+			.color(kLevel[i], AttachmentLoadOp::Load, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::ColorTarget)
+			.readFrom(previous, AttachmentRole::PrimaryColor);
+		previous = kUpsample[i];
+	}
+	return previous;
+}
+
+struct SceneReferredPasses
+{
+	PassId color;                ///< the new incoming color pass
+	std::optional<PassId> bloom; ///< the pass leaving the bloom for the tonemap to add, if bloom is on
+};
+
+/// Adds the passes on the scene-referred color, between the transparents (and post effects) and the tonemap
+SceneReferredPasses appendSceneReferredPasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot,
+	PassId incomingColor)
+{
+	SceneReferredPasses result {incomingColor, std::nullopt};
+	if (snapshot.sceneEffects.bloom && (snapshot.features & RenderFeatures::HdrScene))
+	{
+		result.bloom = appendBloomPasses(builder, incomingColor);
+	}
+	return result;
+}
 
 void appendPresentation(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot, PassId incomingColor)
 {
@@ -203,6 +260,9 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 		incomingColor = PassId::SceneTransparent;
 	}
 
+	const SceneReferredPasses sceneReferred = appendSceneReferredPasses(builder, snapshot, incomingColor);
+	incomingColor = sceneReferred.color;
+
 	// Everything above is scene referred, and the tonemap brings it to display range before presentation
 	if (snapshot.features & RenderFeatures::HdrScene)
 	{
@@ -210,6 +270,10 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.color(PipelineSurfaceId::TonemapColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
 			.viewport(ViewportRule::SceneColorTarget)
 			.readFrom(incomingColor, AttachmentRole::PrimaryColor);
+		if (sceneReferred.bloom.has_value())
+		{
+			builder.readFrom(sceneReferred.bloom.value(), AttachmentRole::PrimaryColor);
+		}
 		incomingColor = PassId::SceneTonemap;
 	}
 
