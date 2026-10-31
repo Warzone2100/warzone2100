@@ -47,6 +47,10 @@ LayoutSync layoutProducerSync(::vk::ImageLayout layout)
 		return { ::vk::PipelineStageFlagBits::eFragmentShader, ::vk::AccessFlagBits::eShaderRead };
 	case ::vk::ImageLayout::ePresentSrcKHR:
 		return { ::vk::PipelineStageFlagBits::eBottomOfPipe, ::vk::AccessFlags() };
+	case ::vk::ImageLayout::eGeneral:
+		// Compute storage images stay in GENERAL. The use enum is not kept
+		// across graphs; the layout is.
+		return { ::vk::PipelineStageFlagBits::eComputeShader, ::vk::AccessFlagBits::eShaderWrite };
 	case ::vk::ImageLayout::eUndefined:
 	default:
 		return { ::vk::PipelineStageFlagBits::eTopOfPipe, ::vk::AccessFlags() };
@@ -71,6 +75,9 @@ LayoutSync layoutConsumerSync(::vk::ImageLayout layout)
 		return { ::vk::PipelineStageFlagBits::eFragmentShader, ::vk::AccessFlagBits::eShaderRead };
 	case ::vk::ImageLayout::ePresentSrcKHR:
 		return { ::vk::PipelineStageFlagBits::eBottomOfPipe, ::vk::AccessFlags() };
+	case ::vk::ImageLayout::eGeneral:
+		return { ::vk::PipelineStageFlagBits::eComputeShader,
+			::vk::AccessFlagBits::eShaderRead | ::vk::AccessFlagBits::eShaderWrite };
 	case ::vk::ImageLayout::eUndefined:
 	default:
 		return { ::vk::PipelineStageFlagBits::eTopOfPipe, ::vk::AccessFlags() };
