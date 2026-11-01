@@ -3022,6 +3022,10 @@ void gl_context::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t g
 	ASSERT(groupsX >= 1 && groupsY >= 1 && groupsZ >= 1, "compute dispatch axis is 0");
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	glDispatchCompute(groupsX, groupsY, groupsZ);
+	if (!currentComputeProgram->storage_images.empty())
+	{
+		imageStoresAwaitFetchBarrier = true;
+	}
 #endif
 }
 
@@ -5153,11 +5157,17 @@ void gl_context::emitPrePassBarriers(const gfx_api::ExecutionBatch& batch,
 		{
 			// Texture fetches after image stores need TEXTURE_FETCH as well, whichever stage samples:
 			// SHADER_IMAGE_ACCESS only orders imageLoad/imageStore.
+			const bool graphicsSampledRead = barrierOp.dstUse == gfx_api::ImageUse::GraphicsSampled
+				|| barrierOp.dstUse == gfx_api::ImageUse::GraphicsDepthSampled;
+			// A read whose producer is in an earlier graph has no srcUse, so it relies on
+			// imageStoresAwaitFetchBarrier instead.
+			const bool externalAfterImageStore = graphicsSampledRead
+				&& barrierOp.producerScope == gfx_api::ReadProducerScope::External
+				&& imageStoresAwaitFetchBarrier;
 			const bool sampled = barrierOp.srcUse == gfx_api::ImageUse::ComputeSampled
 				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeSampled
-				|| (barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
-					&& (barrierOp.dstUse == gfx_api::ImageUse::GraphicsSampled
-						|| barrierOp.dstUse == gfx_api::ImageUse::GraphicsDepthSampled));
+				|| (barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage && graphicsSampledRead)
+				|| externalAfterImageStore;
 			const bool storage = barrierOp.srcUse == gfx_api::ImageUse::ComputeStorage
 				|| barrierOp.dstUse == gfx_api::ImageUse::ComputeStorage;
 			if (sampled)
@@ -5177,6 +5187,11 @@ void gl_context::emitPrePassBarriers(const gfx_api::ExecutionBatch& batch,
 	if (mask != 0 && glMemoryBarrier != nullptr)
 	{
 		glMemoryBarrier(mask);
+		if ((mask & GL_TEXTURE_FETCH_BARRIER_BIT) != 0)
+		{
+			// The barrier covers every image store issued before it.
+			imageStoresAwaitFetchBarrier = false;
+		}
 	}
 #endif
 }

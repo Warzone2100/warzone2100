@@ -384,6 +384,8 @@ struct gl_context final : public gfx_api::context
 
 	gl_pipeline_state_object* current_program = nullptr;
 	gl_compute_pipeline_state_object* currentComputeProgram = nullptr;
+	// A dispatch has run with storage images bound since the last GL_TEXTURE_FETCH_BARRIER_BIT.
+	bool imageStoresAwaitFetchBarrier = false;
 	GLuint scratchbuffer = 0;
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
