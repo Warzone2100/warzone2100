@@ -131,6 +131,7 @@ struct WARZONE_GLOBALS
 	SMAA_MODE smaaMode = SMAA_MODE::OFF;
 	SSAO_MODE ssaoMode = SSAO_MODE::OFF; // screen-space ambient occlusion (default off)
 	SSR_MODE ssrMode = SSR_MODE::OFF; // screen-space reflections (default off)
+	CONTACT_SHADOWS_MODE contactShadowsMode = CONTACT_SHADOWS_MODE::OFF; // screen-space contact shadows (default off)
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -1066,6 +1067,16 @@ SSR_MODE war_getSsrMode()
 void war_setSsrMode(SSR_MODE mode)
 {
 	warGlobs.ssrMode = mode;
+}
+
+CONTACT_SHADOWS_MODE war_getContactShadowsMode()
+{
+	return warGlobs.contactShadowsMode;
+}
+
+void war_setContactShadowsMode(CONTACT_SHADOWS_MODE mode)
+{
+	warGlobs.contactShadowsMode = mode;
 }
 
 bool war_getGroupsMenuEnabled()

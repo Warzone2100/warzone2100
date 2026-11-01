@@ -67,9 +67,10 @@ struct BlurResolution
 	}
 };
 
-/// Independent SSAO/SSR/fog/range-ring catalog requests.
-/// When any effect is enabled the scene prepass provides depth for the separated forward transparents, plus effect-specific capabilities via `prepassNeeds(cfg)`.
-/// With all effects off the transparents draw fused in ScenePass and no prepass runs.
+/// Independent SSAO/SSR/fog/range-ring/contact-shadow catalog requests.
+/// When any post-effect is enabled the scene prepass provides depth for the separated forward transparents, plus effect-specific capabilities via `prepassNeeds(cfg)`.
+/// Contact shadows can also enable the prepass as lighting-prepare while transparents stay fused.
+/// With all requests off the transparents draw fused in ScenePass and no prepass runs.
 struct SceneEffectSurfaces
 {
 	bool ssao = false;
@@ -80,6 +81,8 @@ struct SceneEffectSurfaces
 	bool rangeRings = false;
 	/// Bloom requested (its passes and surfaces exist only while the scene is HDR)
 	bool bloom = false;
+	bool contactShadows = false;
+	BlurResolution contactShadowsResolution;
 
 	bool operator==(const SceneEffectSurfaces& other) const
 	{
@@ -89,7 +92,9 @@ struct SceneEffectSurfaces
 			&& ssrResolution == other.ssrResolution
 			&& fog == other.fog
 			&& rangeRings == other.rangeRings
-			&& bloom == other.bloom;
+			&& bloom == other.bloom
+			&& contactShadows == other.contactShadows
+			&& contactShadowsResolution == other.contactShadowsResolution;
 	}
 
 	bool enabled(ScenePostEffectId id) const
