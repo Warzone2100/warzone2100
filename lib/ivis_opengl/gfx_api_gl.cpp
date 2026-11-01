@@ -980,6 +980,15 @@ static_assert(lightDataTextureUnit != lightIndexTextureUnit, "Light data sampler
 // Bound from here rather than declared in the shader.
 constexpr GLuint lightDataStorageBinding = 0;
 constexpr GLuint lightIndexStorageBinding = 1;
+// Compute storage buffers share these binding points and start after the light blocks, on every context
+// (including GLES, where the light blocks are never bound). Storage images use image units, a separate table,
+// and take their slot as the unit. Desktop 4.3 guarantees only 8 of each (GLES 3.1: 4), so Vulkan's binding
+// numbers (16+, 32+) can't be reused.
+constexpr GLuint computeStorageBufferBindingBase = lightIndexStorageBinding + 1;
+static GLuint glComputeStorageBufferBinding(size_t slot)
+{
+	return computeStorageBufferBindingBase + static_cast<GLuint>(slot);
+}
 static const std::vector<std::pair<const char*, GLuint>> lightStorageBlocks = {
 	{"lightData", lightDataStorageBinding}, {"lightIndexData", lightIndexStorageBinding}
 };
@@ -2727,7 +2736,7 @@ gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& c
 		const GLint location = glGetUniformLocation(program, image.glsl_name);
 		if (location >= 0)
 		{
-			glUniform1i(location, static_cast<GLint>(image.binding));
+			glUniform1i(location, static_cast<GLint>(image.slot));
 		}
 	}
 	for (const auto& storageBuffer : storage_buffers)
@@ -2739,7 +2748,7 @@ gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& c
 		const GLuint blockIndex = glGetProgramResourceIndex(program, GL_SHADER_STORAGE_BLOCK, storageBuffer.glsl_name);
 		if (blockIndex != GL_INVALID_INDEX)
 		{
-			glShaderStorageBlockBinding(program, blockIndex, static_cast<GLuint>(storageBuffer.binding));
+			glShaderStorageBlockBinding(program, blockIndex, glComputeStorageBufferBinding(storageBuffer.slot));
 		}
 	}
 	glUseProgram(static_cast<GLuint>(previousProgram));
@@ -2883,7 +2892,7 @@ void gl_compute_pipeline_state_object::bind_storage_images(const std::vector<gfx
 	glGetIntegerv(GL_MAX_IMAGE_UNITS, &maxUnits);
 	for (size_t i = 0; i < textures.size(); ++i)
 	{
-		const GLuint unit = static_cast<GLuint>(descs[i].binding);
+		const GLuint unit = static_cast<GLuint>(descs[i].slot);
 		ASSERT(static_cast<GLint>(unit) < maxUnits, "Compute image unit %u is above GL_MAX_IMAGE_UNITS (%d)", unit, maxUnits);
 		GLenum internalFormat = GL_RGBA8;
 		const bool gles = owningContext != nullptr && owningContext->gles;
@@ -2912,9 +2921,8 @@ void gl_compute_pipeline_state_object::bind_storage_buffers(const std::vector<gf
 	glGetIntegerv(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS, &maxBindings);
 	for (size_t i = 0; i < buffers.size(); ++i)
 	{
-		const GLuint binding = static_cast<GLuint>(descs[i].binding);
+		const GLuint binding = glComputeStorageBufferBinding(descs[i].slot);
 		ASSERT(static_cast<GLint>(binding) < maxBindings, "Compute storage buffer binding %u is above GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS (%d)", binding, maxBindings);
-		ASSERT(binding >= gfx_api::kStorageBufferBindingBase, "Compute storage buffer binding %u collides with the light SSBO range", binding);
 		ASSERT(buffers[i] != nullptr, "compute storage buffer is null");
 		auto* buffer = static_cast<gl_buffer*>(buffers[i]);
 		ASSERT(buffer->usage == gfx_api::buffer::usage::storage_buffer, "compute storage buffer has the wrong usage");

@@ -312,6 +312,8 @@ namespace gfx_api
 		compute,
 	};
 
+	// Vulkan descriptor bindings for compute resources, in the same set as the sampled textures
+	// (bindings 0 to kMaxComputeSlotsPerKind - 1). OpenGL assigns its own (see glComputeStorageBufferBinding).
 	constexpr uint32_t kStorageImageBindingBase = 16;
 	constexpr uint32_t kStorageBufferBindingBase = 32;
 	constexpr uint32_t kMaxComputeSlotsPerKind = 14;
@@ -1255,7 +1257,7 @@ namespace gfx_api
 		static constexpr std::size_t binding = kStorageImageBindingBase + slot;
 		static storage_image_input get_desc()
 		{
-			static_assert(slot < kMaxComputeSlotsPerKind, "storage image slot collides with the light SSBO range");
+			static_assert(slot < kMaxComputeSlotsPerKind, "storage image slot would overlap the storage buffer bindings");
 			return storage_image_input{ slot, binding, glsl_name };
 		}
 	};
