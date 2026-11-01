@@ -3519,6 +3519,50 @@ void VkComputePSO::flushResourceSet()
 		vk::PipelineBindPoint::eCompute, layout, textures_first_set, sets[0], {}, *pVkDynLoader);
 }
 
+VkComputePSOId::VkComputePSOId(VkRoot& root, size_t psoID, bool isBroken)
+	: root(&root)
+	, psoID(psoID)
+{
+	broken = isBroken;
+}
+
+VkComputePSOId::~VkComputePSOId()
+{
+}
+
+VkComputePSO* VkComputePSOId::current() const
+{
+	if (root == nullptr || psoID >= root->createdComputePipelines.size())
+	{
+		return nullptr;
+	}
+	return root->createdComputePipelines[psoID].pso;
+}
+
+void VkComputePSOId::bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	if (VkComputePSO* pso = current())
+	{
+		pso->bind_sampled_textures(descs, textures);
+	}
+}
+
+void VkComputePSOId::bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
+{
+	if (VkComputePSO* pso = current())
+	{
+		pso->bind_storage_images(descs, textures);
+	}
+}
+
+void VkComputePSOId::bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers)
+{
+	if (VkComputePSO* pso = current())
+	{
+		pso->bind_storage_buffers(descs, buffers);
+	}
+}
+
 gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline_state_object* existing, const gfx_api::compute_pipeline_create_info& info)
 {
 	VkComputePSO* created = nullptr;
@@ -3529,30 +3573,38 @@ gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline
 	catch (const vk::SystemError& e)
 	{
 		debug(LOG_ERROR, "Failed to build compute pipeline: %s", e.what());
-		return nullptr;
+		created = nullptr;
 	}
-	auto* previous = dynamic_cast<VkComputePSO*>(existing);
-	for (auto& entry : createdComputePipelines)
+
+	const bool isBroken = created == nullptr || created->broken || !created->object;
+	auto createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
+
+	if (existing == nullptr)
 	{
-		if (entry.pso == previous)
-		{
-			if (entry.pso != nullptr)
-			{
-				buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
-			}
-			entry.createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
-			entry.pso = created;
-			return created;
-		}
+		createdComputePipelines.push_back(ComputePipelineRegistry{ createInfo, created });
+		return new VkComputePSOId(*this, createdComputePipelines.size() - 1, isBroken);
 	}
-	createdComputePipelines.push_back(ComputePipelineRegistry{ std::make_shared<gfx_api::compute_pipeline_create_info>(info), created });
-	return created;
+
+	auto* previous = dynamic_cast<VkComputePSOId*>(existing);
+	ASSERT_OR_RETURN(nullptr, previous != nullptr && previous->root == this, "existing compute pipeline is not a VkComputePSOId");
+	ASSERT_OR_RETURN(nullptr, previous->psoID < createdComputePipelines.size(), "compute pipeline index is out of range");
+
+	auto& entry = createdComputePipelines[previous->psoID];
+	if (entry.pso != nullptr)
+	{
+		buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+	}
+	entry.createInfo = std::move(createInfo);
+	entry.pso = created;
+	return new VkComputePSOId(*this, previous->psoID, isBroken);
 }
 
 void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 {
 	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
-	auto* compute = dynamic_cast<VkComputePSO*>(pso);
+	auto* id = dynamic_cast<VkComputePSOId*>(pso);
+	ASSERT_OR_RETURN(, id != nullptr, "compute pipeline is not ready");
+	auto* compute = id->current();
 	ASSERT_OR_RETURN(, compute != nullptr && !compute->broken && compute->object, "compute pipeline is not ready");
 	compute->boundSampled.clear();
 	compute->boundStorageImages.clear();
