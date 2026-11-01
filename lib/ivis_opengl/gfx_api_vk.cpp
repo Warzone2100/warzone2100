@@ -3554,6 +3554,9 @@ void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
 	auto* compute = dynamic_cast<VkComputePSO*>(pso);
 	ASSERT_OR_RETURN(, compute != nullptr && !compute->broken && compute->object, "compute pipeline is not ready");
+	compute->boundSampled.clear();
+	compute->boundStorageImages.clear();
+	compute->boundStorageBuffers.clear();
 	currentComputePSO = compute;
 	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
 	frameHasDrawCommands = true;
