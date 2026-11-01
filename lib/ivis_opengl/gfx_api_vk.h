@@ -519,6 +519,24 @@ struct VkComputePSO final : public gfx_api::compute_pipeline_state_object
 	VkComputePSO& operator=(const VkComputePSO&) = delete;
 };
 
+struct VkComputePSOId final : public gfx_api::compute_pipeline_state_object
+{
+	VkRoot* root = nullptr;
+	size_t psoID = 0;
+
+	VkComputePSOId(VkRoot& root, size_t psoID, bool isBroken);
+	~VkComputePSOId() override;
+
+	VkComputePSO* current() const;
+
+	void bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
+	void bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
+	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers) override;
+
+	VkComputePSOId(const VkComputePSOId&) = delete;
+	VkComputePSOId& operator=(const VkComputePSOId&) = delete;
+};
+
 struct VkBuf final : public gfx_api::buffer
 {
 	vk::Device dev;
@@ -912,6 +930,7 @@ struct VkRoot final : gfx_api::context
 		VkComputePSO* pso = nullptr;
 	};
 	std::vector<ComputePipelineRegistry> createdComputePipelines;
+	friend struct VkComputePSOId;
 	VkComputePSO* currentComputePSO = nullptr;
 	bool graphicsQueueSupportsCompute = false;
 
