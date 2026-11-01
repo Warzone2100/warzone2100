@@ -3612,7 +3612,7 @@ gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline
 	auto& entry = createdComputePipelines[previous->psoID];
 	if (entry.pso != nullptr)
 	{
-		buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+		retireComputePSO(entry.pso);
 	}
 	entry.createInfo = std::move(createInfo);
 	entry.pso = created;
@@ -3622,6 +3622,8 @@ gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline
 void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 {
 	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
+	// Cleared first, so a failed bind can't leave the previous pipeline to be dispatched.
+	currentComputePSO = nullptr;
 	auto* id = dynamic_cast<VkComputePSOId*>(pso);
 	ASSERT_OR_RETURN(, id != nullptr, "compute pipeline is not ready");
 	auto* compute = id->current();
@@ -3632,6 +3634,19 @@ void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
 	frameHasDrawCommands = true;
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindPipeline(vk::PipelineBindPoint::eCompute, compute->object, vkDynLoader);
+}
+
+void VkRoot::retireComputePSO(VkComputePSO* pso)
+{
+	if (pso == nullptr)
+	{
+		return;
+	}
+	if (pso == currentComputePSO)
+	{
+		currentComputePSO = nullptr;
+	}
+	buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(pso);
 }
 
 void VkRoot::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ)
@@ -4664,6 +4679,7 @@ void VkRoot::shutdown()
 			}
 		}
 		createdPipelines.clear();
+		currentComputePSO = nullptr;
 		for (auto& entry : createdComputePipelines)
 		{
 			delete entry.pso;
@@ -8173,6 +8189,7 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 		setComputePassActive(false);
 		_activePassDesc = nullptr;
 		hasActivePass = false;
+		currentComputePSO = nullptr;
 		return;
 	}
 
@@ -9123,7 +9140,7 @@ bool VkRoot::setShadowConstants(gfx_api::lighting_constants newValues)
 		{
 			continue;
 		}
-		buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+		retireComputePSO(entry.pso);
 		entry.pso = new VkComputePSO(dev, physDeviceProps.limits, *entry.createInfo, vkDynLoader, *this);
 	}
 
@@ -9156,7 +9173,7 @@ bool VkRoot::debugRecompileAllPipelines()
 		{
 			continue;
 		}
-		buffering_mechanism::get_current_resources().compute_pso_to_delete.emplace_back(entry.pso);
+		retireComputePSO(entry.pso);
 		entry.pso = new VkComputePSO(dev, physDeviceProps.limits, *entry.createInfo, vkDynLoader, *this);
 	}
 	return true;

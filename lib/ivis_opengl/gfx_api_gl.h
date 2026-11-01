@@ -677,6 +677,8 @@ private:
 		gl_compute_pipeline_state_object* pso = nullptr;
 	};
 	std::vector<ComputePipelineRegistry> createdComputePipelines;
+	// Deletes a compute program and forgets it if it is the current one.
+	void retireComputeProgram(gl_compute_pipeline_state_object* program);
 
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;

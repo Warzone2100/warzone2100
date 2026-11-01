@@ -2980,7 +2980,7 @@ gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipe
 	if (auto* previous = dynamic_cast<gl_compute_pipeline_handle*>(existing))
 	{
 		auto& entry = createdComputePipelines[previous->index];
-		delete entry.pso;
+		retireComputeProgram(entry.pso);
 		entry.createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
 		entry.pso = created;
 		return new gl_compute_pipeline_handle(*this, previous->index, created->broken);
@@ -2992,6 +2992,8 @@ gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipe
 void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 {
 	ASSERT(isComputePassActive(), "bind_compute_pipeline outside a compute pass");
+	// Cleared first, so a failed bind can't leave the previous program to be dispatched.
+	currentComputeProgram = nullptr;
 	auto* handle = dynamic_cast<gl_compute_pipeline_handle*>(pso);
 	ASSERT_OR_RETURN(, handle != nullptr, "compute pipeline is not ready");
 	auto* program = handle->current();
@@ -3002,6 +3004,15 @@ void gl_context::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 	// graphics bind cannot skip glUseProgram.
 	current_program = nullptr;
 	program->bind();
+}
+
+void gl_context::retireComputeProgram(gl_compute_pipeline_state_object* program)
+{
+	if (program == currentComputeProgram)
+	{
+		currentComputeProgram = nullptr;
+	}
+	delete program;
 }
 
 void gl_context::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t groupsZ)
@@ -5241,6 +5252,7 @@ void gl_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
 		setComputePassActive(false);
 		_activePassDesc = gfx_api::RenderPassDesc();
 		hasActivePass = false;
+		currentComputeProgram = nullptr;
 		return;
 	}
 
@@ -7062,7 +7074,7 @@ void gl_context::shutdown()
 	createdPipelines.clear();
 	for (auto& entry : createdComputePipelines)
 	{
-		delete entry.pso;
+		retireComputeProgram(entry.pso);
 	}
 	createdComputePipelines.clear();
 
@@ -7200,7 +7212,7 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 			{
 				continue;
 			}
-			delete entry.pso;
+			retireComputeProgram(entry.pso);
 			entry.pso = new gl_compute_pipeline_state_object(*this, *entry.createInfo, shadowConstants);
 			anyBroken = anyBroken || entry.pso->broken;
 		}
@@ -7240,7 +7252,7 @@ bool gl_context::debugRecompileAllPipelines()
 		{
 			continue;
 		}
-		delete entry.pso;
+		retireComputeProgram(entry.pso);
 		entry.pso = new gl_compute_pipeline_state_object(*this, *entry.createInfo, shadowConstants);
 	}
 	return true;

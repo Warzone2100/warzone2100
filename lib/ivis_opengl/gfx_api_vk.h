@@ -933,6 +933,8 @@ struct VkRoot final : gfx_api::context
 		VkComputePSO* pso = nullptr;
 	};
 	std::vector<ComputePipelineRegistry> createdComputePipelines;
+	// Queues a compute pipeline for deletion and forgets it if it is the current one.
+	void retireComputePSO(VkComputePSO* pso);
 	friend struct VkComputePSOId;
 	VkComputePSO* currentComputePSO = nullptr;
 	bool graphicsQueueSupportsCompute = false;
