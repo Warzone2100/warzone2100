@@ -3610,6 +3610,16 @@ gfx_api::pipeline_state_object* VkRoot::build_compute_pipeline(gfx_api::pipeline
 	ASSERT_OR_RETURN(nullptr, previous->psoID < createdComputePipelines.size(), "compute pipeline index is out of range");
 
 	auto& entry = createdComputePipelines[previous->psoID];
+	const bool entryWorks = entry.pso != nullptr && !entry.pso->broken && entry.pso->object;
+	if (isBroken && entryWorks)
+	{
+		// Every id for this entry would resolve to the failed pipeline, so keep the working one and return a
+		// broken object that names no entry. (`created` was never recorded, so it can be deleted now.)
+		delete created;
+		auto* failed = new gfx_api::compute_pipeline_state_object();
+		failed->broken = true;
+		return failed;
+	}
 	if (entry.pso != nullptr)
 	{
 		retireComputePSO(entry.pso);

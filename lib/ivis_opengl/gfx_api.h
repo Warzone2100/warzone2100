@@ -1489,8 +1489,21 @@ namespace gfx_api
 				ASSERT(info.sampled[i].id < kMaxComputeSlotsPerKind, "Sampled texture unit %zu is out of range", info.sampled[i].id);
 				ASSERT(info.sampled[i].stage == shader_stage::compute, "Compute sampled texture must use shader_stage::compute");
 			}
-			nextpso = gfx_api::context::get().build_compute_pipeline(pso, info);
-			return nextpso != nullptr && !nextpso->broken;
+			// Every handle the helper holds names the same backend pipeline, so a pending one can serve as
+			// `existing` before the first bind.
+			pipeline_state_object* existing = (pso != nullptr) ? pso : nextpso;
+			pipeline_state_object* built = gfx_api::context::get().build_compute_pipeline(existing, info);
+			const bool ok = built != nullptr && !built->broken;
+			if (!ok && nextpso != nullptr && !nextpso->broken)
+			{
+				// Keep a working rebuild that is still waiting for bind().
+				delete built;
+				return false;
+			}
+			// bind() never swaps in a failed attempt, so it's deleted here.
+			delete nextpso;
+			nextpso = built;
+			return ok;
 		}
 
 	private:

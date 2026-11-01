@@ -2980,6 +2980,16 @@ gfx_api::pipeline_state_object* gl_context::build_compute_pipeline(gfx_api::pipe
 	if (auto* previous = dynamic_cast<gl_compute_pipeline_handle*>(existing))
 	{
 		auto& entry = createdComputePipelines[previous->index];
+		const bool entryWorks = entry.pso != nullptr && !entry.pso->broken && entry.pso->program;
+		if (created->broken && entryWorks)
+		{
+			// Every handle to this entry would resolve to the failed program, so keep the working one and
+			// return a broken object that names no entry.
+			delete created;
+			auto* failed = new gfx_api::compute_pipeline_state_object();
+			failed->broken = true;
+			return failed;
+		}
 		retireComputeProgram(entry.pso);
 		entry.createInfo = std::make_shared<gfx_api::compute_pipeline_create_info>(info);
 		entry.pso = created;
