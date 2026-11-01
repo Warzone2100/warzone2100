@@ -4696,7 +4696,13 @@ void VkRoot::finalizeActiveRecording()
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
 
-	if (hasActivePass)
+	if (hasActivePass && isComputePassActive())
+	{
+		setComputePassActive(false);
+		_activePassDesc = nullptr;
+		currentComputePSO = nullptr;
+	}
+	else if (hasActivePass)
 	{
 		if (frameResources.drawCmdBufferBegun)
 		{
@@ -7704,6 +7710,14 @@ void VkRoot::sealActivePassForFrameFinish()
 	}
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
+	if (isComputePassActive())
+	{
+		setComputePassActive(false);
+		_activePassDesc = nullptr;
+		currentComputePSO = nullptr;
+		hasActivePass = false;
+		return;
+	}
 	frameResources.drawCmdBuffer().endRenderPass(vkDynLoader);
 	perfSamplePassEnd(frameResources.drawCmdBuffer());
 	frameResources.endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
