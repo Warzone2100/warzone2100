@@ -3432,7 +3432,7 @@ void VkComputePSO::bind_sampled_textures(const std::vector<gfx_api::texture_inpu
 	ASSERT_OR_RETURN(, !broken && object, "compute pipeline is broken");
 	ASSERT(textures.size() == descs.size(), "Sampled texture count mismatch");
 	boundSampled = textures;
-	flushResourceSet();
+	resourcesDirty = true;
 }
 
 void VkComputePSO::bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures)
@@ -3440,7 +3440,7 @@ void VkComputePSO::bind_storage_images(const std::vector<gfx_api::storage_image_
 	ASSERT_OR_RETURN(, !broken && object, "compute pipeline is broken");
 	ASSERT(textures.size() == descs.size(), "Storage image count mismatch");
 	boundStorageImages = textures;
-	flushResourceSet();
+	resourcesDirty = true;
 }
 
 void VkComputePSO::bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers)
@@ -3448,15 +3448,29 @@ void VkComputePSO::bind_storage_buffers(const std::vector<gfx_api::storage_buffe
 	ASSERT_OR_RETURN(, !broken && object, "compute pipeline is broken");
 	ASSERT(buffers.size() == descs.size(), "Storage buffer count mismatch");
 	boundStorageBuffers = buffers;
-	flushResourceSet();
+	resourcesDirty = true;
 }
 
-void VkComputePSO::flushResourceSet()
+void VkComputePSO::resetBindings()
 {
-	ASSERT(boundSampled.empty() || boundSampled.size() == sampled.size(), "Sampled bind does not match the compute pipeline");
-	ASSERT(boundStorageImages.empty() || boundStorageImages.size() == storage_images.size(), "Storage image bind does not match the compute pipeline");
-	ASSERT(boundStorageBuffers.empty() || boundStorageBuffers.size() == storage_buffers.size(), "Storage buffer bind does not match the compute pipeline");
-	const size_t descriptorTotal = boundSampled.size() + boundStorageImages.size() + boundStorageBuffers.size();
+	boundSampled.clear();
+	boundStorageImages.clear();
+	boundStorageBuffers.clear();
+	resourcesDirty = true;
+}
+
+bool VkComputePSO::flushResourceSet()
+{
+	if (!resourcesDirty)
+	{
+		return true;
+	}
+	// Each declared resource must be bound again after every pipeline bind.
+	ASSERT_OR_RETURN(false, boundSampled.size() == sampled.size(), "Compute dispatch with %zu of %zu sampled textures bound", boundSampled.size(), sampled.size());
+	ASSERT_OR_RETURN(false, boundStorageImages.size() == storage_images.size(), "Compute dispatch with %zu of %zu storage images bound", boundStorageImages.size(), storage_images.size());
+	ASSERT_OR_RETURN(false, boundStorageBuffers.size() == storage_buffers.size(), "Compute dispatch with %zu of %zu storage buffers bound", boundStorageBuffers.size(), storage_buffers.size());
+	// The pool allocates every descriptor in the layout, bound or not.
+	const size_t descriptorTotal = sampled.size() + storage_images.size() + storage_buffers.size();
 	const uint32_t descriptorCount = static_cast<uint32_t>(std::max<size_t>(descriptorTotal, 1));
 	const auto sets = const_cast<VkRoot*>(root)->allocateDescriptorSet(resource_set_layout, vk::DescriptorType::eStorageImage, descriptorCount);
 
@@ -3521,6 +3535,8 @@ void VkComputePSO::flushResourceSet()
 	}
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(
 		vk::PipelineBindPoint::eCompute, layout, textures_first_set, sets[0], {}, *pVkDynLoader);
+	resourcesDirty = false;
+	return true;
 }
 
 VkComputePSOId::VkComputePSOId(VkRoot& root, size_t psoID, bool isBroken)
@@ -3610,9 +3626,8 @@ void VkRoot::bind_compute_pipeline(gfx_api::pipeline_state_object* pso)
 	ASSERT_OR_RETURN(, id != nullptr, "compute pipeline is not ready");
 	auto* compute = id->current();
 	ASSERT_OR_RETURN(, compute != nullptr && !compute->broken && compute->object, "compute pipeline is not ready");
-	compute->boundSampled.clear();
-	compute->boundStorageImages.clear();
-	compute->boundStorageBuffers.clear();
+	// Resources bound to an earlier use of this pipeline may have been destroyed since.
+	compute->resetBindings();
 	currentComputePSO = compute;
 	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
 	frameHasDrawCommands = true;
@@ -3628,6 +3643,10 @@ void VkRoot::dispatch_compute(uint32_t groupsX, uint32_t groupsY, uint32_t group
 	ASSERT(groupsY >= 1 && groupsY <= limits.maxComputeWorkGroupCount[1], "groupsY %u is outside the device limit", groupsY);
 	ASSERT(groupsZ >= 1 && groupsZ <= limits.maxComputeWorkGroupCount[2], "groupsZ %u is outside the device limit", groupsZ);
 	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
+	if (!currentComputePSO->flushResourceSet())
+	{
+		return;
+	}
 	frameHasDrawCommands = true;
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->dispatch(groupsX, groupsY, groupsZ, vkDynLoader);
 }

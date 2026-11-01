@@ -502,6 +502,8 @@ struct VkComputePSO final : public gfx_api::compute_pipeline_state_object
 	std::vector<gfx_api::abstract_texture*> boundSampled;
 	std::vector<gfx_api::abstract_texture*> boundStorageImages;
 	std::vector<gfx_api::buffer*> boundStorageBuffers;
+	// Bound resources changed since the descriptor set was last written (in dispatch_compute).
+	bool resourcesDirty = true;
 
 	VkComputePSO(vk::Device dev,
 		const vk::PhysicalDeviceLimits& limits,
@@ -513,7 +515,8 @@ struct VkComputePSO final : public gfx_api::compute_pipeline_state_object
 	void bind_sampled_textures(const std::vector<gfx_api::texture_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
 	void bind_storage_images(const std::vector<gfx_api::storage_image_input>& descs, const std::vector<gfx_api::abstract_texture*>& textures) override;
 	void bind_storage_buffers(const std::vector<gfx_api::storage_buffer_input>& descs, const std::vector<gfx_api::buffer*>& buffers) override;
-	void flushResourceSet();
+	void resetBindings();
+	bool flushResourceSet();
 
 	VkComputePSO(const VkComputePSO&) = delete;
 	VkComputePSO& operator=(const VkComputePSO&) = delete;
