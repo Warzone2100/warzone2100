@@ -65,12 +65,15 @@ enum class ImageUse : uint8_t
 	ComputeStorage,
 };
 
-/// How a storage buffer was last accessed. The first use is a transfer write.
+/// How a storage buffer was last accessed.
 enum class BufferUse : uint8_t
 {
 	None,
 	TransferWrite,
 	ComputeReadWrite,
+	/// Not used yet in this graph. The last write may be a host upload (a transfer)
+	/// or a dispatch in an earlier graph.
+	External,
 };
 
 /// Last layout and use of one image subresource.
@@ -103,7 +106,7 @@ struct ImageBarrierOp
 struct BufferBarrierOp
 {
 	buffer* buf = nullptr;
-	BufferUse srcUse = BufferUse::TransferWrite;
+	BufferUse srcUse = BufferUse::External;
 	BufferUse dstUse = BufferUse::ComputeReadWrite;
 };
 

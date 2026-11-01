@@ -164,6 +164,12 @@ void PrePassBarrierEmitter::emitBatch(const gfx_api::ExecutionBatch& batch,
 				bufferSrcStage = ::vk::PipelineStageFlagBits::eComputeShader;
 				bufferSrcAccess = ::vk::AccessFlagBits::eShaderWrite;
 			}
+			else if (barrierOp.srcUse == gfx_api::BufferUse::External)
+			{
+				// Either a transfer or a dispatch may have written it last.
+				bufferSrcStage = ::vk::PipelineStageFlagBits::eTransfer | ::vk::PipelineStageFlagBits::eComputeShader;
+				bufferSrcAccess = ::vk::AccessFlagBits::eTransferWrite | ::vk::AccessFlagBits::eShaderWrite;
+			}
 			const ::vk::PipelineStageFlags bufferDstStage = ::vk::PipelineStageFlagBits::eComputeShader;
 			const ::vk::AccessFlags bufferDstAccess = ::vk::AccessFlagBits::eShaderRead | ::vk::AccessFlagBits::eShaderWrite;
 			srcStage |= bufferSrcStage;

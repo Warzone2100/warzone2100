@@ -496,7 +496,7 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 				BufferBarrierOp op;
 				op.buf = bufferUse.buf;
 				const auto recorded = bufferUses.find(bufferUse.buf);
-				op.srcUse = recorded == bufferUses.end() ? BufferUse::TransferWrite : recorded->second;
+				op.srcUse = recorded == bufferUses.end() ? BufferUse::External : recorded->second;
 				op.dstUse = BufferUse::ComputeReadWrite;
 				compiledPass.prePassBufferBarriers.push_back(op);
 				bufferUses[bufferUse.buf] = BufferUse::ComputeReadWrite;
