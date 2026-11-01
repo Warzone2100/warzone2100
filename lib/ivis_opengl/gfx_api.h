@@ -803,6 +803,7 @@ namespace gfx_api
 			};
 			normalizeBlurResolution(cfg.ssaoResolution);
 			normalizeBlurResolution(cfg.ssrResolution);
+			normalizeBlurResolution(cfg.contactShadowsResolution);
 			return cfg;
 		}
 		void storeSceneEffectSurfaces(SceneEffectSurfaces cfg)

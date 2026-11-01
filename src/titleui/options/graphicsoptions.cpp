@@ -30,6 +30,7 @@
 #include "../../display.h"
 #include "../../display3d.h"
 #include "../../scene_effect_surfaces.h"
+#include "../../contact_shadows.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -331,6 +332,31 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 					return false;
 				}
 				war_setShadowFilterSize(newFilterSize);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.contactShadows", N_("Contact Shadows"),
+			N_("Screen-space contact shadows. Adds small-scale shadow detail next to shadow mapping. May impact performance."));
+		optionInfo.addAvailabilityCondition(SupportsShadowMapping);
+		auto valueChanger = OptionsDropdown<CONTACT_SHADOWS_MODE>::make(
+			[]() {
+				OptionChoices<CONTACT_SHADOWS_MODE> result;
+				result.choices = {
+					{ _("Off"), "", CONTACT_SHADOWS_MODE::OFF },
+					{ _("Low"), "", CONTACT_SHADOWS_MODE::LOW },
+					{ _("Normal"), "", CONTACT_SHADOWS_MODE::NORMAL },
+					{ _("High"), "", CONTACT_SHADOWS_MODE::HIGH },
+				};
+				result.setCurrentIdxForValue(war_getContactShadowsMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setContactShadowsMode(newValue);
+				applySceneEffectSurfaces();
+				contact_shadows::syncLightingConstant();
 				return true;
 			}, false
 		);
