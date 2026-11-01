@@ -4698,6 +4698,11 @@ void VkRoot::finalizeActiveRecording()
 
 	if (hasActivePass && isComputePassActive())
 	{
+		if (frameResources.drawCmdBufferBegun)
+		{
+			perfSamplePassEnd(frameResources.drawCmdBuffer());
+			frameResources.endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
+		}
 		setComputePassActive(false);
 		_activePassDesc = nullptr;
 		currentComputePSO = nullptr;
@@ -7712,6 +7717,11 @@ void VkRoot::sealActivePassForFrameFinish()
 	auto& frameResources = buffering_mechanism::get_current_resources();
 	if (isComputePassActive())
 	{
+		if (frameResources.drawCmdBufferBegun)
+		{
+			perfSamplePassEnd(frameResources.drawCmdBuffer());
+			frameResources.endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
+		}
 		setComputePassActive(false);
 		_activePassDesc = nullptr;
 		currentComputePSO = nullptr;
@@ -7903,8 +7913,14 @@ void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::Compi
 		setComputePassActive(true);
 		_activePassDesc = &pass;
 		hasActivePass = true;
-		buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		frameResources.ensureDrawCmdBufferBegun();
 		frameHasDrawCommands = true;
+		vk::CommandBuffer drawCmdBuffer = frameResources.drawCmdBuffer();
+		writeGpuTimingBeginIfNeeded(drawCmdBuffer);
+		frameResources.beginDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass,
+			(!pass.debugName.empty()) ? pass.debugName.c_str() : "Compute pass");
+		perfSamplePassBegin(drawCmdBuffer, pass.debugName);
 		return;
 	}
 	setComputePassActive(false);
@@ -8022,6 +8038,12 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
 	if (isComputePassActive())
 	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		if (frameResources.drawCmdBufferBegun)
+		{
+			perfSamplePassEnd(frameResources.drawCmdBuffer());
+			frameResources.endDrawCmdDebugLabel(perFrameResources_t::DebugLabelKind::Pass);
+		}
 		if (compiledPass != nullptr)
 		{
 			applyCompiledPostPassLayouts(*compiledPass);
