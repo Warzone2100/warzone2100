@@ -90,6 +90,10 @@ enum class PassId : uint16_t
 	LoadingBackdrop,
 	LoadingScreen,
 	VideoPlayback,
+	ContactShadowGenerate,
+	ContactShadowDownsample,
+	ContactShadowBlurH,
+	ContactShadowBlurV,
 	/// Array size and invalid/unset pass id (not a real pass).
 	Count
 };

@@ -39,6 +39,7 @@
 #include "scene_prepass.h"
 #include "ssao.h"
 #include "ssr.h"
+#include "contact_shadows.h"
 #include "fog_pass.h"
 #include "tonemap_pass.h"
 #include "bloom_pass.h"
@@ -290,6 +291,10 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSRBlurH, ssr::recordBlurH);
 	table.set(gfx_api::PassId::SSRBlurV, ssr::recordBlurV);
 	table.set(gfx_api::PassId::SSRCompose, ssr::recordCompose);
+	table.set(gfx_api::PassId::ContactShadowGenerate, contact_shadows::recordGenerate);
+	table.set(gfx_api::PassId::ContactShadowDownsample, contact_shadows::recordDownsample);
+	table.set(gfx_api::PassId::ContactShadowBlurH, contact_shadows::recordBlurH);
+	table.set(gfx_api::PassId::ContactShadowBlurV, contact_shadows::recordBlurV);
 	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
 	for (gfx_api::PassId id : {gfx_api::PassId::BloomDownsample0, gfx_api::PassId::BloomDownsample1, gfx_api::PassId::BloomDownsample2,
 		gfx_api::PassId::BloomDownsample3, gfx_api::PassId::BloomDownsample4, gfx_api::PassId::BloomDownsample5})

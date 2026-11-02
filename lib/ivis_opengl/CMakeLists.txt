@@ -95,6 +95,7 @@ file(GLOB SRC
 	"render_graph/pass_resolve.cpp"
 	"render_graph/pipeline_surfaces.cpp"
 	"render_graph/scene_post_effects.cpp"
+	"render_graph/separable_blur_prepare.cpp"
 	"render_graph/topology.cpp"
 	"gfx_api_vk.cpp"
 	"imdload.cpp"

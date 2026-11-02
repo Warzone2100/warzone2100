@@ -187,7 +187,7 @@ uint64_t PassGraphTopologyBlueprint::topologyHash() const
 }
 
 void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
-	uint32_t numShadowCascades)
+	uint32_t numShadowCascades, bool readContactShadows)
 {
 	builder.beginPass(id, "ScenePass");
 	if (sceneMsaa)
@@ -206,10 +206,14 @@ void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
 	{
 		builder.readFrom(shadowCascadePassId(i), AttachmentRole::Depth);
 	}
+	if (readContactShadows)
+	{
+		builder.readFrom(PassId::ContactShadowBlurV, AttachmentRole::PrimaryColor);
+	}
 }
 
 void addSceneTransparentPassToBuilder(BlueprintBuilder& builder, PipelineSurfaceId incomingColor,
-	uint32_t numShadowCascades)
+	uint32_t numShadowCascades, bool readContactShadows)
 {
 	builder.beginPass(PassId::SceneTransparent, "SceneTransparent")
 		.color(incomingColor, AttachmentLoadOp::Load, AttachmentStoreOp::Store)
@@ -219,6 +223,10 @@ void addSceneTransparentPassToBuilder(BlueprintBuilder& builder, PipelineSurface
 	for (uint32_t i = 0; i < numShadowCascades; ++i)
 	{
 		builder.readFrom(shadowCascadePassId(i), AttachmentRole::Depth);
+	}
+	if (readContactShadows)
+	{
+		builder.readFrom(PassId::ContactShadowBlurV, AttachmentRole::PrimaryColor);
 	}
 }
 
