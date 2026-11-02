@@ -466,8 +466,8 @@ _("All wheels upgraded automatically")
 // TRANSLATORS: 
 // data/mp/challenges/hidebehind.json: $.player_1.name
 // data/mp/challenges/hidebehind.json: $.player_2.name
-// data/mp/tests/miza.json: $.player_1.name
-// data/mp/tests/miza.json: $.player_2.name
+// data/mp/tests/gamestate_bonecrusher.json: $.player_1.name
+// ... + 5 refs
 _("Ally")  
 // TRANSLATORS: 
 // data/base/campaigns/alpha.json: $.name
@@ -1117,14 +1117,14 @@ _("Best Targets: Base Structures, infantry, wheeled vehicles")
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-_("Best Targets: Bunkers and Hardpoints")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 // ... + 2 refs
 _("Best Targets: Bunkers and hardpoints")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+_("Best Targets: Bunkers and Hardpoints")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 _("Best Targets: Bunkers, defenses, base structures")  
@@ -1624,6 +1624,9 @@ _("Construction Unit")
 // data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 _("Controls up to ten commanders")  
 // TRANSLATORS: 
+// data/mp/tests/corridordump.json: $.challenge.name
+_("Corridor Dump")  
+// TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
 // data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[3]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -1909,6 +1912,9 @@ _("Detects and locks-on to VTOL engine emissions")
 // data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
 _("Determines range to target")  
 // TRANSLATORS: 
+// data/base/keyboards/de.json: $.name
+_("Deutsch (QWERTZ)")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_CR1.text[2]
 // data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[2]
 _("Directs and collates information for command turrets")  
@@ -2001,7 +2007,7 @@ _("Enables self-repair")
 // data/mp/challenges/hidebehind.json: $.player_3.name
 // data/mp/challenges/hidebehind.json: $.player_4.name
 // data/mp/challenges/hidebehind.json: $.player_5.name
-// ... + 7 refs
+// ... + 17 refs
 _("Enemy")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Vehicle-Engine01.category
@@ -2015,6 +2021,9 @@ _("Engine")
 // data/mp/stats/research.json: $.R-Sys-Engineering01.name
 // ... + 2 refs
 _("Engineering")  
+// TRANSLATORS: 
+// data/base/keyboards/us.json: $.name
+_("English (US, QWERTY)")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_V_B07.text[3]
 // data/mp/messages/resmessages3.json: $.RES_V_B07.text[3]
@@ -2245,6 +2254,9 @@ _("Flashlight Retribution Hover")
 // data/base/stats/weapons.json: $.Laser3BEAMMk1.name
 // data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 _("Flashlight")  
+// TRANSLATORS: 
+// data/base/keyboards/fr.json: $.name
+_("Français (AZERTY)")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine02.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine02.name
@@ -4204,6 +4216,147 @@ _("Mortar")
 // data/base/stats/weapons.json: $.MG1-Tower.name
 _("Mounted Machinegun")  
 // TRANSLATORS: 
+// data/mp/tests/movebench_blob.json: $.challenge.name
+_("MoveBench blob")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_corner.json: $.challenge.name
+_("MoveBench corner")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_corner_mixed.json: $.challenge.name
+_("MoveBench corner_mixed")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w1.json: $.challenge.name
+_("MoveBench Counterflow (gap 1)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w3.json: $.challenge.name
+_("MoveBench Counterflow (gap 3)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w4.json: $.challenge.name
+_("MoveBench Counterflow (gap 4)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w6.json: $.challenge.name
+_("MoveBench Counterflow (gap 6)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_w8.json: $.challenge.name
+_("MoveBench Counterflow (gap 8)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_hostile.json: $.challenge.name
+_("MoveBench Counterflow (hostile)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_tracked.json: $.challenge.name
+_("MoveBench Counterflow (tracked)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_counterflow_cyborg.json: $.challenge.name
+_("MoveBench counterflow_cyborg")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_crossing.json: $.challenge.name
+_("MoveBench crossing")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_dead_grid.json: $.challenge.name
+_("MoveBench Dead Grid Readers")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_enemyblock_press.json: $.challenge.name
+_("MoveBench Enemy Block (pressure)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_enemyblock.json: $.challenge.name
+_("MoveBench Enemy Block")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_gamestate_deaths.json: $.challenge.name
+_("MoveBench GameState Deaths")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_gamestate_rewind.json: $.challenge.name
+_("MoveBench GameState Rewind")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_gamestate_scripts.json: $.challenge.name
+_("MoveBench GameState Scripts")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_helpbuild_hover_slot.json: $.challenge.name
+_("MoveBench helpbuild hover slot")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_helpbuild_hover.json: $.challenge.name
+_("MoveBench helpbuild hover")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_helpbuild_tracked_slot.json: $.challenge.name
+_("MoveBench helpbuild tracked slot")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_helpbuild_tracked.json: $.challenge.name
+_("MoveBench helpbuild tracked")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_mountain_chain_cross.json: $.challenge.name
+_("MoveBench Mountain Chain Cross")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_mountain_chain.json: $.challenge.name
+_("MoveBench Mountain Chain")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_oneway_tracked.json: $.challenge.name
+_("MoveBench One-way (tracked)")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_open_corner.json: $.challenge.name
+_("MoveBench Open Corner")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_openfield.json: $.challenge.name
+_("MoveBench openfield")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking_hover_stale.json: $.challenge.name
+_("MoveBench parking hover stale")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking_hover.json: $.challenge.name
+_("MoveBench parking hover")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking_light_stale.json: $.challenge.name
+_("MoveBench parking light stale")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking_light.json: $.challenge.name
+_("MoveBench parking light")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking_stale.json: $.challenge.name
+_("MoveBench parking stale")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_parking.json: $.challenge.name
+_("MoveBench parking")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_artillery.json: $.challenge.name
+_("MoveBench Perf Artillery")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_battle.json: $.challenge.name
+_("MoveBench Perf Battle")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_cyborg_blob.json: $.challenge.name
+_("MoveBench Perf Cyborg Blob")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_repair_facility.json: $.challenge.name
+_("MoveBench Perf Repair Facility")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_repair_search.json: $.challenge.name
+_("MoveBench Perf Repair Search")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_scout_patrol.json: $.challenge.name
+_("MoveBench Perf Scout Patrol")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_vtol_rearm.json: $.challenge.name
+_("MoveBench Perf VTOL Rearm")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_perf_walled_assault.json: $.challenge.name
+_("MoveBench Perf Walled Assault")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_rush_corner.json: $.challenge.name
+_("MoveBench Rush Corner")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_rush_turn.json: $.challenge.name
+_("MoveBench Rush Turn")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_separating.json: $.challenge.name
+_("MoveBench separating")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_strafe.json: $.challenge.name
+_("MoveBench Strafe")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_tworoute.json: $.challenge.name
+_("MoveBench Two-route counterflow")  
+// TRANSLATORS: 
+// data/mp/tests/movebench_wallline.json: $.challenge.name
+_("MoveBench Wall Line")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Vehicle-Body14.name
 _("Multi Turret Body - Dragon")  
 // TRANSLATORS: 
@@ -4626,6 +4779,9 @@ _("Particle Gun Emplacement")
 // data/mp/stats/research.json: $.R-Wpn-ParticleGun.name
 // data/mp/stats/weapons.json: $.ParticleGun.name
 _("Particle Gun")  
+// TRANSLATORS: 
+// data/mp/tests/pathbench.json: $.challenge.name
+_("PathBench")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotMor.name
 // data/base/stats/structure.json: $.Emplacement-RotMor.name
@@ -6623,6 +6779,9 @@ _("Wrecked Vehicle")
 // TRANSLATORS: 
 // data/mp/stats/body.json: $.Body13SUP.name
 _("Wyvern")  
+// TRANSLATORS: 
+// data/base/keyboards/ru.json: $.name
+_("Русский (ЙЦУКЕН)")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[6]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[6]
