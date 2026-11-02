@@ -24,6 +24,7 @@
 
 #include "blueprint.h"
 #include "scene_post_effects.h"
+#include "separable_blur_prepare.h"
 #include "topology.h"
 
 #include "lib/framework/wzapp.h"
@@ -91,6 +92,24 @@ SceneReferredPasses appendSceneReferredPasses(BlueprintBuilder& builder, const R
 		result.bloom = appendBloomPasses(builder, incomingColor);
 	}
 	return result;
+}
+
+void emitContactShadowPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot)
+{
+	const ClearValue unoccluded = ClearValue::colorClear(1.f, 1.f, 1.f, 1.f);
+	builder.beginPass(PassId::ContactShadowGenerate, "ContactShadowGenerate")
+		.color(PipelineSurfaceId::ContactShadowRaw, AttachmentLoadOp::Clear, AttachmentStoreOp::Store, unoccluded)
+		.viewport(ViewportRule::ColorTarget)
+		.readFrom(PassId::ScenePrepass, AttachmentRole::Depth)
+		.readFrom(PassId::ScenePrepass, AttachmentRole::Color, 0);
+	emitSeparableBlurPasses(builder, snapshot, {
+		PassId::ContactShadowGenerate, PassId::ContactShadowDownsample,
+		PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+		PipelineSurfaceId::ContactShadowRaw, PipelineSurfaceId::ContactShadowBlurH,
+		PipelineSurfaceId::ContactShadowBlurred,
+		"ContactShadowDownsample", "ContactShadowBlurH", "ContactShadowBlurV",
+		unoccluded, RenderFeatures::ContactShadowsDownsample,
+	});
 }
 
 void appendPresentation(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot, PassId incomingColor)
@@ -229,7 +248,13 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::SceneColorTarget);
 	}
 
-	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
+	if (snapshot.sceneEffects.contactShadows)
+	{
+		emitContactShadowPreparePasses(builder, snapshot);
+	}
+
+	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades,
+		snapshot.sceneEffects.contactShadows);
 
 	PassId incomingColor = PassId::ScenePass;
 	PipelineSurfaceId incomingColorSurface = PipelineSurfaceId::SceneColor;
@@ -256,7 +281,8 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 	// and scene MSAA covers the transparents again.
 	if (anyScenePostEffectEnabled(snapshot))
 	{
-		addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades);
+		addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades,
+			snapshot.sceneEffects.contactShadows);
 		incomingColor = PassId::SceneTransparent;
 	}
 
