@@ -59,8 +59,9 @@ struct BarrierRecipe
 	::vk::AccessFlags dstAccess = ::vk::AccessFlagBits::eShaderRead;
 };
 
-/// Builds a `BarrierRecipe` from compile-time `CompileImageLayout` old/new pair.
-BarrierRecipe getBarrierRecipe(CompileImageLayout oldLayout, CompileImageLayout newLayout);
+/// Builds a `BarrierRecipe`. Compute uses select the stage; graphics uses keep the layout sync.
+BarrierRecipe getBarrierRecipe(CompileImageLayout oldLayout, CompileImageLayout newLayout,
+	gfx_api::ImageUse srcUse, gfx_api::ImageUse dstUse);
 
 } // namespace gfx_api::vk
 
