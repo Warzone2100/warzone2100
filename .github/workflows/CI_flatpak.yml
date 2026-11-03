@@ -454,7 +454,10 @@ jobs:
       WZ_TARGET_ARCH: ${{ matrix.arch }}
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
     container:
-      image: fedora:latest
+      # fedora:latest pinned to its multi-arch index of 2026-11-03, so the
+      # publish job runs the image that was reviewed rather than whatever
+      # the tag points at on the day.
+      image: fedora:latest@sha256:a7d72ba2745b100a3351087472e5ee7b2450af7cf331e7673007e3817612839c
       options: --privileged
     steps:
       - name: Install Dependencies
