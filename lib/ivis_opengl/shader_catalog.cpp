@@ -99,6 +99,8 @@ constexpr std::array<shader_program_desc, SHADER_MAX> make_catalog_table()
 	t[SHADER_SCENE_COMPOSE_SSAO] = make_program("Scene compose SSAO program", "postprocess_fullscreen.vert", "scene_compose_ssao.frag");
 	t[SHADER_SSR_GENERATE] = make_program("SSR generate program", "postprocess_fullscreen.vert", "ssr_generate.frag");
 	t[SHADER_SSR_BLUR] = make_program("SSR blur program", "postprocess_fullscreen.vert", "ssr_blur.frag");
+	t[SHADER_CONTACT_SHADOW_GENERATE] = make_program("Contact shadow generate program", "postprocess_fullscreen.vert", "contact_shadow_generate.frag");
+	t[SHADER_CONTACT_SHADOW_BLUR] = make_program("Contact shadow blur program", "postprocess_fullscreen.vert", "ssao_blur.frag");
 	t[SHADER_SCENE_COMPOSE_SSR] = make_program("Scene compose SSR program", "postprocess_fullscreen.vert", "scene_compose_ssr.frag");
 	t[SHADER_SCENE_FOG] = make_program("Scene fog program", "postprocess_fullscreen.vert", "scene_fog.frag");
 	t[SHADER_SCENE_TONEMAP] = make_program("Scene tonemap program", "postprocess_fullscreen.vert", "scene_tonemap.frag");

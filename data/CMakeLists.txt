@@ -174,6 +174,7 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_compose_ssao.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssr_generate.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/ssr_blur.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/contact_shadow_generate.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_compose_ssr.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_fog.frag"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/scene_tonemap.frag"
