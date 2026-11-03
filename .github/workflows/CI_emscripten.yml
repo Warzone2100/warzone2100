@@ -203,6 +203,8 @@ jobs:
           WZ_FULL_OUTPUT_ZIP_PATH: ./dl-archive/warzone2100_${{ env.WZ_BUILD_DESC }}_archive.zip
 
   publish_dev_build:
+    permissions:
+      contents: read
     strategy:
       matrix:
         architecture: ["wasm32"]
@@ -224,6 +226,8 @@ jobs:
     secrets: inherit
 
   publish_release_build:
+    permissions:
+      contents: read
     strategy:
       matrix:
         architecture: ["wasm32"]
