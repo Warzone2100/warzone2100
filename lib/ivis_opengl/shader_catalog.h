@@ -71,6 +71,7 @@ enum shader_spec_constant : uint8_t
 	spec_shadow_filter_size  = 1u << 1, // 2
 	spec_shadow_cascades     = 1u << 2, // 3
 	spec_point_light_enabled = 1u << 3, // 4
+	spec_contact_shadows     = 1u << 4, // 5
 };
 using shader_spec_mask = uint8_t;
 

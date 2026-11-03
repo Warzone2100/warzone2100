@@ -126,6 +126,7 @@ void init()
 		delete s_dummyLit;
 		s_dummyLit = nullptr;
 	}
+	syncLightingConstant();
 }
 
 void shutdown()
@@ -136,6 +137,13 @@ void shutdown()
 
 void syncLightingConstant()
 {
+	if (!gfx_api::context::isInitialized())
+	{
+		return;
+	}
+	auto c = gfx_api::context::get().getShadowConstants();
+	c.contactShadowsEnabled = activeSettings().enabled;
+	gfx_api::context::get().setShadowConstants(c);
 }
 
 gfx_api::texture* dummyLitTexture()

@@ -32,7 +32,7 @@ namespace
 {
 
 constexpr shader_spec_mask SPEC_SHADOW =
-	spec_shadow_mode | spec_shadow_filter_size | spec_shadow_cascades;
+	spec_shadow_mode | spec_shadow_filter_size | spec_shadow_cascades | spec_contact_shadows;
 constexpr shader_spec_mask SPEC_SHADOW_AND_LIGHTS =
 	SPEC_SHADOW | spec_point_light_enabled;
 

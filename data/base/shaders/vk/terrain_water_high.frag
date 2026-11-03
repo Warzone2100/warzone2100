@@ -7,6 +7,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_CONTACT_SHADOWS = 0;
 
 // Set 2 rather than 1, because the point light block takes a set of its own ahead of these
 layout(set = 2, binding = 0) uniform sampler2DArray tex;
@@ -15,6 +16,7 @@ layout(set = 2, binding = 2) uniform sampler2DArray tex_sm;
 layout(set = 2, binding = 3) uniform sampler2D lightmap_tex;
 // depth map
 layout(set = 2, binding = 4) uniform sampler2DArrayShadow shadowMap;
+layout(set = 2, binding = 5) uniform sampler2D contactShadowTex;
 
 layout(location = 1) in vec4 uv1_uv2;
 layout(location = 2) in vec2 uvLightmap;
