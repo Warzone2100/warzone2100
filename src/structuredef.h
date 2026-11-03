@@ -283,8 +283,11 @@ struct STRUCTURE : public BASE_OBJECT
 	bool isIdle() const;
 	// Return true if structure is a factory of any type.
 	bool isFactory() const;
-	uint32_t structureBody() const;
-	// Just returns true if the structure's present body points aren't as high as the original
+	// Max body points of the fully built structure (incl. upgrades).
+	uint32_t fullMaxBody() const;
+	// Max body points at the structure's current build progress. Equals fullMaxBody() once built.
+	uint32_t currMaxBody() const;
+	// Returns true if the structure's body points are below its current max body points
 	bool isDamaged() const;
 	// is this a blueprint and not a real structure?
 	bool isBlueprint() const;
