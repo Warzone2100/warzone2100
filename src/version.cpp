@@ -120,6 +120,11 @@ std::string version_getVersionedAppDirFolderName()
 		versionedWriteDirFolderNameSuffix = vcs_extra_str;
 	}
 
+	// the suffix must be a single folder name on every platform (a branch name may contain a '/', for example)
+	std::replace_if(versionedWriteDirFolderNameSuffix.begin(), versionedWriteDirFolderNameSuffix.end(), [](char c) {
+		return static_cast<unsigned char>(c) < 0x20 || strchr("/\\:*?\"<>|", c) != nullptr;
+	}, '-');
+
 	if (!versionedWriteDirFolderNameSuffix.empty())
 	{
 #if defined(WZ_OS_WIN) || defined(WZ_OS_MAC)
