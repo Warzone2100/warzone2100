@@ -959,9 +959,10 @@ enum SHADER_VERSION_ES
 	VERSION_ES_310
 };
 
-// Terrain claims units 0 to 12, so the light data samplers sit above that and still inside the required 16 minimum.
-constexpr GLint lightDataTextureUnit = 13;
-constexpr GLint lightIndexTextureUnit = 14;
+// Terrain (including tess baked maps + contact shadow) claims units 0 to 13, so the light
+// data samplers sit above that and still inside the required 16 minimum.
+constexpr GLint lightDataTextureUnit = 14;
+constexpr GLint lightIndexTextureUnit = 15;
 // 16 per stage is the minimum every target guarantees
 static_assert(lightDataTextureUnit < 16 && lightIndexTextureUnit < 16,
 	"Light data samplers must stay inside the 16 texture image units the spec minimum guarantees");
@@ -2029,7 +2030,12 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 	const auto re_3 = std::regex("#define WZ_SHADOW_CASCADES_COUNT .*", std::regex_constants::ECMAScript);
 	bool foundAndReplaced_shadowCascadesCount = regex_replace_wrapper(fragmentShaderStr, re_3, astringf("#define WZ_SHADOW_CASCADES_COUNT %u", shadowConstants.shadowCascadesCount));
 
-	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
+	const auto re_4 = std::regex("#define WZ_CONTACT_SHADOWS .*", std::regex_constants::ECMAScript);
+	bool foundAndReplaced_contactShadows = regex_replace_wrapper(fragmentShaderStr, re_4,
+		astringf("#define WZ_CONTACT_SHADOWS %u", shadowConstants.contactShadowsEnabled ? 1u : 0u));
+
+	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount
+		|| foundAndReplaced_contactShadows;
 }
 
 static void bindUsedVertexAttribLocations(GLuint program, const std::unordered_set<std::size_t>& expectedVertexAttribLoc)

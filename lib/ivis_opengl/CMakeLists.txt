@@ -12,6 +12,7 @@ file(GLOB HEADERS
 	"culling.h"
 	"gfx_api.h"
 	"gfx_pipelines.h"
+	"scene_lighting_inputs.h"
 	"gfx_api_formats_def.h"
 	"gfx_api_frame_resource_cache.h"
 	"gfx_api_gl.h"

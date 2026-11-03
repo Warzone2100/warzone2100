@@ -58,5 +58,6 @@ bool applySceneEffectSurfaces()
 			static_cast<int>(cfg.contactShadows));
 		return false;
 	}
+	contact_shadows::syncLightingConstant();
 	return true;
 }

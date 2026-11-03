@@ -26,6 +26,7 @@
 #include <glm/fwd.hpp>
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/scene_lighting_inputs.h"
 #include <wzmaplib/terrain_type.h>
 #include "terrain_defs.h"
 #include "lib/framework/loading_task_fwd.h"
@@ -66,10 +67,10 @@ void drawWaterDepthNormalPrepass(const glm::mat4& projection, const glm::mat4& v
 /// Water surface depth alone, for a prepass with no normals attachment (PrepassNeed::Normals absent).
 void drawWaterDepthOnlyPrepass(const glm::mat4& projection, const glm::mat4& view);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
-	const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap,
+	const ShadowCascadesInfo& shadowMVPMatrix, const gfx_api::SceneLightingInputs& lighting,
 	const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights);
 void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
-	const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap,
+	const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting,
 	const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights);
 
 gfx_api::texture* getTerrainLightmapTexture();
