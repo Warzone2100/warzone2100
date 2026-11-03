@@ -26,6 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
+          persist-credentials: false
           ref: 'master'
 
       - name: Crowdin Action

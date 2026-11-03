@@ -65,6 +65,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
       with:
+        persist-credentials: false
         fetch-depth: 0
         path: 'src'
     - name: Configure Repo Checkout
@@ -244,6 +245,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 0
           path: 'src'
       - name: Configure Repo Checkout
@@ -433,6 +435,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 0
           path: 'src'
       - name: Configure Repo Checkout
@@ -587,6 +590,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 1
           path: 'src'
       - name: Prep Environment

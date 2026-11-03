@@ -344,6 +344,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 1
           path: 'src'
       - name: Prep Environment
@@ -487,6 +488,7 @@ jobs:
           echo "::endgroup::"
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           path: 'src'
           set-safe-directory: true
       - name: Prep Environment

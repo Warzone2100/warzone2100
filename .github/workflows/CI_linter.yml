@@ -21,6 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
       with:
+        persist-credentials: false
         # Full git history is needed to get a proper list of changed files within `super-linter`
         fetch-depth: 0
     - name: Lint Code Base

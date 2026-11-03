@@ -93,6 +93,7 @@ jobs:
       - name: Checkout snap-stable-build@master
         uses: actions/checkout@v6
         with:
+          persist-credentials: false
           repository: 'Warzone2100/snap-stable-build'
           ref: master
           path: snap-stable-build

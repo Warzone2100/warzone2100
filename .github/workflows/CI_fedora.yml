@@ -27,6 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 0
           path: 'src'
       - name: Prepare Git Repo for autorevision
@@ -67,6 +68,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 0
           path: 'src'
       - name: Prepare Git Repo for autorevision

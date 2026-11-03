@@ -84,6 +84,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
       with:
+        persist-credentials: false
         fetch-depth: 0
         path: 'src'
     - name: Configure Repo Checkout
@@ -687,6 +688,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 1
           path: 'src'
       - name: Download x64 Archive
@@ -754,6 +756,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 1
           path: 'src'
       - name: Build wzbuildmanifest tool
@@ -841,6 +844,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 0
           path: 'src'
       - name: Configure Repo Checkout
@@ -1203,6 +1207,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           fetch-depth: 1
           path: 'src'
       - name: Prep Environment
