@@ -98,7 +98,7 @@ jobs:
       - name: Prep Environment
         run: |
           mkdir empty-folder
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.1.0
         with:
           persist-credentials: false
           fetch-depth: 0

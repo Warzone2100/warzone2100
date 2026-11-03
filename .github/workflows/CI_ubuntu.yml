@@ -72,7 +72,7 @@ jobs:
       # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.1.0
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -188,7 +188,7 @@ jobs:
           echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
           echo "WZ_FULL_OUTPUT_DEB_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
       - name: 'Upload Artifact - (.DEB)'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         if: success() && (matrix.publish_artifact == true)
         with:
           path: ${{ env.WZ_FULL_OUTPUT_DEB_PATH }}
@@ -207,14 +207,14 @@ jobs:
           mv "./warzone2100_debugsymbols.7z" "${WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH}"
           echo "WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH=${WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH}" >> $GITHUB_ENV
       - name: 'Upload Artifact - (Debug Symbols)'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         if: success() && (matrix.publish_artifact == true) && (github.repository == 'Warzone2100/warzone2100')
         with:
           path: ${{ env.WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH }}
           archive: false
           if-no-files-found: 'error'
       - name: Upload debug info (for Sentry)
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         if: success() && (matrix.publish_artifact == true)
         with:
           name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
@@ -225,14 +225,14 @@ jobs:
       - name: Generate artifact attestation (.deb)
         # Run on push to master branch (development build), or tag release automation build
         if: success() && (matrix.publish_artifact == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v3.0.0
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_DEB_PATH }}'
       - name: Generate artifact attestation (debug symbols)
         # Run on push to master branch (development build), or tag release automation build
         if: success() && (matrix.publish_artifact == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v3.0.0
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_DEBUG_SYMBOLS_PATH }}'
@@ -246,7 +246,7 @@ jobs:
           echo "RELEASE_ASSETS_LIST=${RELEASE_ASSETS_LIST}" >> $GITHUB_ENV
       - name: 'Upload Artifact - (Release Assets List)'
         if: success() && (matrix.deploy_release == true) && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           path: ${{ env.RELEASE_ASSETS_LIST }}
           archive: false
@@ -269,7 +269,7 @@ jobs:
     outputs:
       signedfiles: ${{ steps.output-result.outputs.signedfiles }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.1.0
         with:
           persist-credentials: false
           fetch-depth: 1
@@ -286,14 +286,14 @@ jobs:
           echo "WZ_BUILDMANIFEST_TOOL=${GITHUB_WORKSPACE}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
       - name: Download Release Assets Lists
         if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: 'release_assets_*.txt'
           path: ./dl-lists
           merge-multiple: true
       - name: Download .DEB Packages
         if: success() && vars.WZ_BUILDMANIFEST_KEY_ID != ''
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: 'warzone2100_*.deb'
           path: ./dl-debs
@@ -334,13 +334,13 @@ jobs:
           ls -l "${GITHUB_WORKSPACE}/signed-debs"
       - name: 'Generate artifact attestations - (Manifest-Signed Packages)'
         if: (steps.sign.outcome == 'success')
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v3.0.0
         continue-on-error: true
         with:
           subject-path: '${{ github.workspace }}/signed-debs/*'
       - name: 'Upload Artifact - Manifest-Signed Packages'
         if: (steps.sign.outcome == 'success')
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: 'wz_ubuntu_manifest_signed'
           path: '${{ github.workspace }}/signed-debs/*'
@@ -371,19 +371,19 @@ jobs:
       - name: Prep Environment
         run: mkdir upload-assets && mkdir upload-assets-signed
       - name: Download Release Assets Lists
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: 'release_assets_*.txt'
           path: ./release-lists
           merge-multiple: true
       - name: Download .DEB Packages
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: 'warzone2100_*.deb'
           path: ./upload-assets
           merge-multiple: true
       - name: Download Debug Symbols
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: 'warzone2100_*.DEBUGSYMBOLS.7z'
           path: ./upload-assets
@@ -392,7 +392,7 @@ jobs:
         run: ls -LRl ./upload-assets
       - name: Download Manifest-Signed Packages
         if: success() && (needs.sign-build-manifest.outputs.signedfiles == 'true')
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: 'wz_ubuntu_manifest_signed'
           path: ./upload-assets-signed
@@ -436,7 +436,7 @@ jobs:
         run: |
           echo "GITHUB_REF=${GITHUB_REF}"
           echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.1.0
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -494,7 +494,7 @@ jobs:
           echo "Generated warzone2100 tarball: \"warzone2100_src.tar.xz\""
           echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
           echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: success()
         with:
           name: warzone2100_src
@@ -503,7 +503,7 @@ jobs:
       - name: Generate artifact attestation
         # Run on push to master branch (development build), or tag release automation build
         if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v3.0.0
         continue-on-error: true
         with:
           subject-path: '${{ env.OUTPUT_DIR }}/warzone2100_src.tar.xz'
@@ -529,7 +529,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.1.0
         with:
           persist-credentials: false
           fetch-depth: 1
@@ -539,7 +539,7 @@ jobs:
           mkdir dl-debug-symbols
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           pattern: 'debugsymbols_*'
           path: ./dl-debug-symbols

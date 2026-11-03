@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.1.0
       with:
         persist-credentials: false
         fetch-depth: 0
@@ -106,7 +106,7 @@ jobs:
         EOENV
     - name: Build .SNAP
       id: snapcraft
-      uses: snapcore/action-build@v1
+      uses: snapcore/action-build@v1.3.0
     - name: Gather .SNAP
       run: |
         OUTPUT_DIR="${HOME}/output"
@@ -119,7 +119,7 @@ jobs:
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_SNAP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v7
+    - uses: actions/upload-artifact@v7.0.2
       if: success()
       with:
         name: 'warzone2100_linux_${{ matrix.arch }}_snap'
@@ -128,7 +128,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v3
+      uses: actions/attest-build-provenance@v3.0.0
       continue-on-error: true
       with:
         subject-path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'
