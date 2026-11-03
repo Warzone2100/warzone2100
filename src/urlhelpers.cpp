@@ -19,6 +19,7 @@
 
 #include "urlhelpers.h"
 #include "lib/framework/frame.h"
+#include "lib/sandbox/sandbox.h"
 
 #if defined(WZ_OS_WIN)
 # include <shellapi.h> /* For ShellExecuteEx  */
@@ -109,6 +110,12 @@ bool win_utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
 #if !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC)
 bool xdg_open(const char *url)
 {
+	if (wz::sandbox::status().active)
+	{
+		// A browser or file manager that xdg-open starts fresh inherits the confinement, while one already running does not
+		debug(LOG_INFO, "Reached the xdg-open fallback while confined");
+	}
+
 // for linux
 # if defined(HAVE_POSIX_SPAWNP)
 	char progName[] = "xdg-open";
