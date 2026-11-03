@@ -913,6 +913,8 @@ namespace gfx_api
 		glm::vec4 valueUvScaleClamp;
 		glm::vec4 depthUvScaleClamp;
 	};
+	static_assert(sizeof(DepthAwareBlurConstants) == 48, "Depth-aware blur cbuffer must match std140");
+	static_assert(offsetof(DepthAwareBlurConstants, valueUvScaleClamp) % 16 == 0, "Blur UV clamp must sit where std140 puts a vec4");
 
 	template<>
 	struct constant_buffer_type<SHADER_SSAO_BLUR> : DepthAwareBlurConstants {};
@@ -1020,6 +1022,54 @@ namespace gfx_api
 		texture_description<0, sampler_type::nearest_clamped, kSampler_ssrTexture, pixel_format_target::texture_2d>, // premul SSR
 		texture_description<1, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>  // depth
 	>, SHADER_SSR_BLUR>;
+
+	template<>
+	struct constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>
+	{
+		glm::mat4 invProjectionMatrix;
+		glm::mat4 projectionMatrix;
+		glm::mat4 viewMatrix;
+		glm::vec4 sunDirWorld;
+		glm::vec4 params;              // x=maxRayLength, y=thicknessCap, z=nearPlane, w=rayBias
+		glm::vec4 fadeParams;          // x=minRayStart, y=fadeStartViewZ, z=fadeEndViewZ, w=edgeFadeWidth
+		glm::vec4 generatePixelUV;     // xy = 1 / generate viewport
+		glm::vec4 prepassUvScaleClamp;
+		glm::vec2 projZCoeffs;
+		float stepCount;
+		float padding = 0.f;
+	};
+	// 3 mat4 + 5 vec4 + one std140 vec2/float/float group. The vec2 starts on a
+	// 16-byte boundary, so the two floats pack beside it and the block ends on one.
+	static_assert(sizeof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>) == 288, "Contact-shadow generate cbuffer must match std140");
+	static_assert(offsetof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>, projZCoeffs) % 16 == 0, "projZCoeffs must sit where std140 puts a vec2 after a vec4");
+	static_assert(offsetof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>, stepCount) == offsetof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>, projZCoeffs) + sizeof(glm::vec2), "stepCount must follow projZCoeffs with no gap");
+
+	using ContactShadowGeneratePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, kSampler_normalsTexture, pixel_format_target::texture_2d>
+	>, SHADER_CONTACT_SHADOW_GENERATE>;
+
+	template<>
+	struct constant_buffer_type<SHADER_CONTACT_SHADOW_BLUR> : DepthAwareBlurConstants {};
+
+	using ContactShadowBlurPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_CONTACT_SHADOW_BLUR>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, kSampler_occlusionTexture, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>
+	>, SHADER_CONTACT_SHADOW_BLUR>;
 
 	template<>
 	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSR>

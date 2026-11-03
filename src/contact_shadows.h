@@ -53,6 +53,7 @@ ContactShadowSettings activeSettings();
 void init();
 void shutdown();
 void syncLightingConstant();
+gfx_api::texture* dummyLitTexture();
 
 void recordGenerate(const gfx_api::RenderPassContext& passCtx);
 void recordDownsample(const gfx_api::RenderPassContext& passCtx);

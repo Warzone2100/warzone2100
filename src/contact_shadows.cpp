@@ -30,8 +30,20 @@
 
 #include "contact_shadows.h"
 
+#include "display3d_render_graph.h"
+#include "display3d_render_internal.h"
+#include "depth_aware_blur.h"
+
 #include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piematrix.h"
+
+Vector3f getTheSun();
+
+#include <algorithm>
+#include <cstdint>
 
 namespace contact_shadows
 {
@@ -74,36 +86,114 @@ ContactShadowSettings activeSettings()
 	return s;
 }
 
+namespace
+{
+
+struct Tuning
+{
+	float maxRayLength = 96.f;
+	float thicknessCap = 24.f;
+	float rayBias = 2.f;
+	float minRayStart = 0.5f;
+	float fadeStartViewZ = 1500.f;
+	float fadeEndViewZ = 4000.f;
+	float edgeFadeWidth = 0.05f;
+	float blurDepthSigma = 0.0015f;
+};
+
+Tuning s_tuning {};
+gfx_api::texture* s_dummyLit = nullptr;
+
+} // namespace
+
 void init()
 {
+	if (s_dummyLit != nullptr)
+	{
+		return;
+	}
+	iV_Image white;
+	if (!white.allocate(1, 1, 1, true))
+	{
+		debug(LOG_ERROR, "Failed to allocate contact-shadow dummy texture");
+		return;
+	}
+	white.bmp_w()[0] = 255;
+	s_dummyLit = gfx_api::context::get().createTextureForCompatibleImageUploads(1, white, "contact_shadow_dummy");
+	if (s_dummyLit == nullptr || !s_dummyLit->upload(0, white))
+	{
+		debug(LOG_ERROR, "Failed to upload contact-shadow dummy texture");
+		delete s_dummyLit;
+		s_dummyLit = nullptr;
+	}
 }
 
 void shutdown()
 {
+	delete s_dummyLit;
+	s_dummyLit = nullptr;
 }
 
 void syncLightingConstant()
 {
 }
 
+gfx_api::texture* dummyLitTexture()
+{
+	return s_dummyLit;
+}
+
 void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 {
-	(void)passCtx;
+	ASSERT(passCtx.readCount() == 2, "Contact shadow generate: 0 depth, 1 normals");
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	gfx_api::abstract_texture* depth = passCtx.getRead(0);
+	gfx_api::abstract_texture* normals = passCtx.getRead(1);
+	if (depth == nullptr || normals == nullptr)
+	{
+		return;
+	}
+
+	const auto& fc = pie_GetInGame3DFrameContext();
+	gfx_api::constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE> c {};
+	c.invProjectionMatrix = glm::inverse(fc.perspectiveMatrix);
+	c.projectionMatrix = fc.perspectiveMatrix;
+	c.viewMatrix = fc.viewMatrix;
+	c.sunDirWorld = glm::vec4(glm::normalize(-getTheSun()), 0.f);
+	c.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thicknessCap,
+		pie_getPerspectiveZClose(), s_tuning.rayBias);
+	c.fadeParams = glm::vec4(s_tuning.minRayStart, s_tuning.fadeStartViewZ,
+		s_tuning.fadeEndViewZ, s_tuning.edgeFadeWidth);
+	const auto vp = passCtx.writeViewportSize();
+	const float invW = (vp && vp->first > 0) ? 1.f / static_cast<float>(vp->first) : 0.f;
+	const float invH = (vp && vp->second > 0) ? 1.f / static_cast<float>(vp->second) : 0.f;
+	c.generatePixelUV = glm::vec4(invW, invH, 0.f, 0.f);
+	c.projZCoeffs = glm::vec2(fc.perspectiveMatrix[2][2], fc.perspectiveMatrix[3][2]);
+	c.stepCount = float(activeSettings().stepCount);
+	display3d_fillPassReadUvScaleClamp(passCtx, 0, c.prepassUvScaleClamp);
+	display3d_drawFullscreenTriangle<gfx_api::ContactShadowGeneratePSO>(c, depth, normals);
 }
 
 void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 {
-	(void)passCtx;
+	post_effect_blur::recordBilinearResample(passCtx, "ContactShadow downsample");
 }
 
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
 {
-	(void)passCtx;
+	post_effect_blur::recordDepthAwareBlur<SHADER_CONTACT_SHADOW_BLUR, gfx_api::ContactShadowBlurPSO>(
+		passCtx, post_effect_blur::Axis::Horizontal, s_tuning.blurDepthSigma,
+		static_cast<uint32_t>(activeSettings().blurTapPairs), "ContactShadow blur");
 }
 
 void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 {
-	(void)passCtx;
+	post_effect_blur::recordDepthAwareBlur<SHADER_CONTACT_SHADOW_BLUR, gfx_api::ContactShadowBlurPSO>(
+		passCtx, post_effect_blur::Axis::Vertical, s_tuning.blurDepthSigma,
+		static_cast<uint32_t>(activeSettings().blurTapPairs), "ContactShadow blur");
 }
 
 } // namespace contact_shadows
