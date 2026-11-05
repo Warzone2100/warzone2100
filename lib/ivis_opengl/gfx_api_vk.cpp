@@ -2016,6 +2016,11 @@ VkPSO::VkPSO(vk::Device _dev,
 		appendSpecializationConstant_uint32(4, static_cast<uint32_t>(root->shadowConstants.isPointLightPerPixelEnabled));
 		hasSpecializationConstant_PointLightConstants = true;
 	}
+	if (shaderInfo.spec_constants & gfx_api::spec_contact_shadows)
+	{
+		appendSpecializationConstant_uint32(5, static_cast<uint32_t>(root->shadowConstants.contactShadowsEnabled));
+		hasSpecializationConstant_ShadowConstants = true;
+	}
 	if (!specializationEntries.empty())
 	{
 		// the fragment stage is always last in pipelineStages

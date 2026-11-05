@@ -2029,8 +2029,7 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 
 
 template<typename PSO>
-
-static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
+static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (!terrainDecalVBO || !terrainDecalIndexVBO)
 	{
@@ -2041,7 +2040,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
-		shadowMap);
+		lighting.shadowMap, lighting.contactShadow);
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	gfx_api::context::get().bind_index_buffer(*terrainDecalIndexVBO, gfx_api::index_type::u32);
 	glm::mat4 groundScale = glm::mat4(0);
@@ -2058,6 +2057,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
 		gfx_api::context::get().linearLightingEnabled() ? 1 : 0,
+		lighting.contactUvScaleClamp,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2081,7 +2081,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 }
 
 template<typename PSO>
-static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
+static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (!terrainDecalVBO || !terrainPatchIndexVBO)
 	{
@@ -2092,7 +2092,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
-		shadowMap,
+		lighting.shadowMap, lighting.contactShadow,
 		terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
@@ -2110,6 +2110,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), gfx_api::context::get().getSceneMipLodBias(),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
 		gfx_api::context::get().linearLightingEnabled() ? 1 : 0,
+		lighting.contactUvScaleClamp,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::TerrainCombinedUniforms>());
@@ -2140,17 +2141,17 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 	gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
 }
 
-static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
+static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
 	{
 		switch (terrainShaderQuality)
 		{
 			case TerrainShaderQuality::MEDIUM:
-				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 				return;
 			case TerrainShaderQuality::NORMAL_MAPPING:
-				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+				drawTerrainCombinedTessImpl<gfx_api::TerrainCombinedTess_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 				return;
 			default:
 				break; // Classic never uses HardwareTess - fall through to the CPU path
@@ -2159,13 +2160,13 @@ static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm:
 	switch (terrainShaderQuality)
 	{
 		case TerrainShaderQuality::CLASSIC:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 			break;
 		case TerrainShaderQuality::MEDIUM:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 			break;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 			break;
 		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
 			// should not happen
@@ -2383,7 +2384,7 @@ void drawWaterDepthOnlyPrepass(const glm::mat4& projection, const glm::mat4& vie
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
  * on it one by one. Finally the decals are drawn.
  */
-void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
+void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	WZ_PROFILE_SCOPE(drawTerrain);
 	const glm::vec4& paramsXLight = lightmapValues.paramsXLight;
@@ -2407,7 +2408,7 @@ void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector
 
 	///////////////////////////////////
 	// terrain + decals
-	drawTerrainCombined(mvp, viewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+	drawTerrainCombined(mvp, viewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 }
 
 /**
@@ -2470,7 +2471,7 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 }
 
 template<typename PSO>
-void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
+void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	if (!waterIndexVBO)
 	{
@@ -2490,7 +2491,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		waterTexturesHigh.tex_nm,
 		waterTexturesHigh.tex_sm,
 		lightmap_texture,
-		shadowMap);
+		lighting.shadowMap, lighting.contactShadow);
 	PSO::get().bind_vertex_buffers(waterVBO);
 	auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 	gfx_api::constant_buffer_type<SHADER_WATER_HIGH> uniforms = {
@@ -2502,6 +2503,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		static_cast<int>(dimension.first), static_cast<int>(dimension.second),
 		static_cast<int>(getCurrentLightingManager().getPointLightBuckets().bucketDimensionUsed),
 		gfx_api::context::get().linearLightingEnabled() ? 1 : 0, 0.f,
+		lighting.contactUvScaleClamp,
 		getCurrentLightingManager().getPointLightBuckets().bucketOffsetAndSize
 	};
 	PSO::get().template set_uniforms_at<0>(uniforms, gfx_api::globals_block_active_size<gfx_api::constant_buffer_type<SHADER_WATER_HIGH>>());
@@ -2587,7 +2589,7 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 
 #include <lib/ivis_opengl/pieblitfunc.h>
 
-void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
+void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, const gfx_api::SceneLightingInputs& lighting, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights)
 {
 	switch (terrainShaderQuality)
 	{
@@ -2598,7 +2600,7 @@ void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix
 			drawWaterNormalImpl<gfx_api::WaterPSO>(ModelViewProjection, cameraPos, sunPos);
 			return;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, viewMatrix, cameraPos, sunPos, shadowCascades, shadowMap, pointLights);
+			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, viewMatrix, cameraPos, sunPos, shadowCascades, lighting, pointLights);
 			return;
 		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
 			// should not happen

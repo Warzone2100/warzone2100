@@ -19,6 +19,7 @@
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 #define WZ_POINT_LIGHT_ENABLED 0
+#define WZ_CONTACT_SHADOWS 0
 //
 
 
@@ -47,6 +48,7 @@ uniform sampler2DArray decalHeight;
 
 // shadow map
 uniform sampler2DArrayShadow shadowMap;
+uniform sampler2D contactShadowTex;
 
 
 // sun light colors/intensity:

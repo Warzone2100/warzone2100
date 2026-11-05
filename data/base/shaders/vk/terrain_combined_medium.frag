@@ -6,6 +6,7 @@
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 5) const uint WZ_CONTACT_SHADOWS = 0;
 
 layout(set = 2, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -23,6 +24,7 @@ layout(set = 2, binding = 8) uniform sampler2DArray decalHeight;
 
 // depth map
 layout(set = 2, binding = 9) uniform sampler2DArrayShadow shadowMap;
+layout(set = 2, binding = 10) uniform sampler2D contactShadowTex;
 
 layout(location = 0) in FragData frag;
 layout(location = 10) flat in FragFlatData fragf;

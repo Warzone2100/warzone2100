@@ -92,6 +92,7 @@
 #include "warzoneconfig.h"
 #include "ssao.h"
 #include "ssr.h"
+#include "contact_shadows.h"
 #include "range_rings.h"
 #include "scene_effect_surfaces.h"
 #include "multistat.h"
@@ -1577,6 +1578,7 @@ bool init3DView()
 
 	ssao::init();
 	ssr::init();
+	contact_shadows::init();
 	if (!range_rings::init())
 	{
 		debug(LOG_ERROR, "Failed to initialize range-ring buffers");
@@ -1619,6 +1621,7 @@ void shutdown3DView_FullReset()
 
 	ssao::shutdown();
 	ssr::shutdown();
+	contact_shadows::shutdown();
 	range_rings::shutdown();
 
 	setLightingManager(nullptr);

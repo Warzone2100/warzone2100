@@ -322,6 +322,16 @@ enum class SSR_MODE : uint8_t
 SSR_MODE war_getSsrMode();
 void war_setSsrMode(SSR_MODE mode);
 
+enum class CONTACT_SHADOWS_MODE : uint8_t
+{
+	OFF,
+	LOW,
+	NORMAL,
+	HIGH,
+};
+CONTACT_SHADOWS_MODE war_getContactShadowsMode();
+void war_setContactShadowsMode(CONTACT_SHADOWS_MODE mode);
+
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
 uint8_t war_getOptionsButtonVisibility();

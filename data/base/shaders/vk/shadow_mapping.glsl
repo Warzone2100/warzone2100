@@ -6,12 +6,25 @@ float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeIn
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
+float wzApplyContactVisibility(float sunVisibility)
+{
+	if (WZ_CONTACT_SHADOWS != 0)
+	{
+		vec2 csUv = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
+		csUv = clamp(csUv * contactShadowUvScaleClamp.xy, vec2(0.0), contactShadowUvScaleClamp.zw);
+		// Same sun as the cascades. Lift the mask into that [0.5, 1] range, then take the darker estimate.
+		float contact = clamp(texture(contactShadowTex, csUv).r, 0.5, 1.0);
+		return min(sunVisibility, contact);
+	}
+	return sunVisibility;
+}
+
 float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float NdotL, float offset)
 {
 	if (WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0)
 	{
 		// no shadow-mapping
-		return 1.0;
+		return wzApplyContactVisibility(1.0);
 	}
 	else
 	{
@@ -220,7 +233,6 @@ float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float N
 		} // (WZ_SHADOW_MODE == 2)
 
 		visibility = clamp(visibility, 0.5, 1.0); //to-do: min value must be the value of final ambient component
-
-		return visibility;
+		return wzApplyContactVisibility(visibility);
 	}
 }

@@ -48,7 +48,8 @@ uint64_t RenderTopologySnapshot::topologyHash() const
 		sceneEffects.ssr ? 1u : 0u,
 		sceneEffects.fog ? 1u : 0u,
 		sceneEffects.rangeRings ? 1u : 0u,
-		sceneEffects.bloom ? 1u : 0u);
+		sceneEffects.bloom ? 1u : 0u,
+		sceneEffects.contactShadows ? 1u : 0u);
 	return static_cast<uint64_t>(h);
 }
 
@@ -65,7 +66,9 @@ uint64_t RenderTopologySnapshot::materializeHash() const
 		sceneEffects.ssaoResolution.generateDivisor,
 		sceneEffects.ssaoResolution.blurDivisor,
 		sceneEffects.ssrResolution.generateDivisor,
-		sceneEffects.ssrResolution.blurDivisor);
+		sceneEffects.ssrResolution.blurDivisor,
+		sceneEffects.contactShadowsResolution.generateDivisor,
+		sceneEffects.contactShadowsResolution.blurDivisor);
 	return static_cast<uint64_t>(h);
 }
 
@@ -158,6 +161,12 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 	};
 	deriveDownsample(ScenePostEffectId::Ssao, RenderFeatures::SSAODownsample);
 	deriveDownsample(ScenePostEffectId::Ssr, RenderFeatures::SSRDownsample);
+	if (snapshot.screenKind == RenderScreenKind::InGame
+		&& snapshot.sceneEffects.contactShadows
+		&& blurIsCoarser(snapshot.sceneW, snapshot.sceneH, snapshot.sceneEffects.contactShadowsResolution))
+	{
+		snapshot.features |= RenderFeatures::ContactShadowsDownsample;
+	}
 
 	return snapshot;
 }

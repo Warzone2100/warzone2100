@@ -25,10 +25,12 @@
 
 #include "scene_prepass.h"
 
+#include "contact_shadows.h"
 #include "display3d_render_graph.h"
 #include "terrain.h"
 
 #include "lib/ivis_opengl/piedraw.h"
+#include "lib/ivis_opengl/scene_lighting_inputs.h"
 
 void recordScenePrepass(const gfx_api::RenderPassContext& passCtx)
 {
@@ -58,6 +60,7 @@ void recordScenePrepass(const gfx_api::RenderPassContext& passCtx)
 		drawWaterDepthOnlyPrepass(fc.perspectiveMatrix, fc.viewMatrix);
 	}
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix,
-		cameraPos, fc.shadowCascadesInfo, nullptr, fc.pointLights,
+		cameraPos, fc.shadowCascadesInfo,
+		gfx_api::SceneLightingInputs::dummy(nullptr, contact_shadows::dummyLitTexture()), fc.pointLights,
 		writesNormals ? MeshDepthPassMode::ScenePrepass : MeshDepthPassMode::ScenePrepassDepthOnly);
 }

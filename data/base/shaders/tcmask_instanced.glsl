@@ -26,6 +26,7 @@ layout(std140) uniform globaluniforms {
 	int bucketDimensionUsed;
 	float additiveCoreBoost; // gain on additive effects' bright cores (0 = none)
 	float pad2;
+	vec4 contactShadowUvScaleClamp;
 	// Last because its length follows the grid dimension
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 };

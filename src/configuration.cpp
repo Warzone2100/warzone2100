@@ -946,6 +946,29 @@ bool loadConfig()
 			war_setSsrMode(SSR_MODE::OFF);
 		}
 	}
+	{
+		std::string contactShadowsValue = iniGetString("contactShadows", "off").value();
+		if (contactShadowsValue == "low")
+		{
+			war_setContactShadowsMode(CONTACT_SHADOWS_MODE::LOW);
+		}
+		else if (contactShadowsValue == "normal")
+		{
+			war_setContactShadowsMode(CONTACT_SHADOWS_MODE::NORMAL);
+		}
+		else if (contactShadowsValue == "high")
+		{
+			war_setContactShadowsMode(CONTACT_SHADOWS_MODE::HIGH);
+		}
+		else
+		{
+			if (contactShadowsValue != "off")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid contactShadows value: \"%s\"; using \"off\"", contactShadowsValue.c_str());
+			}
+			war_setContactShadowsMode(CONTACT_SHADOWS_MODE::OFF);
+		}
+	}
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
@@ -1221,6 +1244,13 @@ bool saveConfig()
 		case SSR_MODE::NORMAL: iniSetString("ssr", "normal"); break;
 		case SSR_MODE::HIGH: iniSetString("ssr", "high"); break;
 		case SSR_MODE::ULTRA: iniSetString("ssr", "ultra"); break;
+	}
+	switch (war_getContactShadowsMode())
+	{
+		case CONTACT_SHADOWS_MODE::OFF: iniSetString("contactShadows", "off"); break;
+		case CONTACT_SHADOWS_MODE::LOW: iniSetString("contactShadows", "low"); break;
+		case CONTACT_SHADOWS_MODE::NORMAL: iniSetString("contactShadows", "normal"); break;
+		case CONTACT_SHADOWS_MODE::HIGH: iniSetString("contactShadows", "high"); break;
 	}
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
