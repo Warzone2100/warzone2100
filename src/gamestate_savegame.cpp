@@ -504,7 +504,7 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(jopt.at("playerLeaveMode").get<uint8_t>());
 	game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(jopt.at("playerReconnectWaitSeconds").get<uint32_t>());
 	// default to the legacy A* planner for snapshots written before this setting existed
-	game.pathfindingBackend = jopt.value("pathfindingBackend", static_cast<uint16_t>(0));
+	game.pathfindingBackend = jopt.value("pathfindingBackend", static_cast<uint32_t>(0));
 	// A movement bench scenario stays one when loaded, since its scripts run their top level again and keep
 	// calling the bench script functions. Absent for any other game.
 	const auto jbench = jopt.find("movementBench");
