@@ -27,8 +27,10 @@
 #include "render_graph/blueprint.h"
 #include "render_graph/topology.h"
 
+#include <cstdarg>
 #include <cstdio>
 #include <initializer_list>
+#include <source_location>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -111,9 +113,102 @@ static const char* passIdName(PassId id)
 	case PassId::LoadingBackdrop: return "LoadingBackdrop";
 	case PassId::LoadingScreen: return "LoadingScreen";
 	case PassId::VideoPlayback: return "VideoPlayback";
+	case PassId::ContactShadowGenerate: return "ContactShadowGenerate";
+	case PassId::ContactShadowDownsample: return "ContactShadowDownsample";
+	case PassId::ContactShadowBlurH: return "ContactShadowBlurH";
+	case PassId::ContactShadowBlurV: return "ContactShadowBlurV";
 	case PassId::Count: return "Count";
 	}
 	return "?";
+}
+
+static const char* surfaceName(gfx_api::PipelineSurfaceId id)
+{
+	switch (id)
+	{
+	case gfx_api::PipelineSurfaceId::SceneColor: return "SceneColor";
+	case gfx_api::PipelineSurfaceId::SceneMSAAColor: return "SceneMSAAColor";
+	case gfx_api::PipelineSurfaceId::SceneDepth: return "SceneDepth";
+	case gfx_api::PipelineSurfaceId::UpscaledColor: return "UpscaledColor";
+	case gfx_api::PipelineSurfaceId::SmaaEdges: return "SmaaEdges";
+	case gfx_api::PipelineSurfaceId::SmaaWeights: return "SmaaWeights";
+	case gfx_api::PipelineSurfaceId::SmaaColor: return "SmaaColor";
+	case gfx_api::PipelineSurfaceId::ScenePrepassDepth: return "ScenePrepassDepth";
+	case gfx_api::PipelineSurfaceId::ScenePrepassNormals: return "ScenePrepassNormals";
+	case gfx_api::PipelineSurfaceId::ContactShadowRaw: return "ContactShadowRaw";
+	case gfx_api::PipelineSurfaceId::ContactShadowBlurH: return "ContactShadowBlurH";
+	case gfx_api::PipelineSurfaceId::ContactShadowBlurred: return "ContactShadowBlurred";
+	case gfx_api::PipelineSurfaceId::SSAORaw: return "SSAORaw";
+	case gfx_api::PipelineSurfaceId::SSAOBlurH: return "SSAOBlurH";
+	case gfx_api::PipelineSurfaceId::SSAOBlurred: return "SSAOBlurred";
+	case gfx_api::PipelineSurfaceId::SSAOComposedColor: return "SSAOComposedColor";
+	case gfx_api::PipelineSurfaceId::SsrRaw: return "SsrRaw";
+	case gfx_api::PipelineSurfaceId::SsrBlurH: return "SsrBlurH";
+	case gfx_api::PipelineSurfaceId::SsrBlurred: return "SsrBlurred";
+	case gfx_api::PipelineSurfaceId::SsrComposedColor: return "SsrComposedColor";
+	case gfx_api::PipelineSurfaceId::FogColor: return "FogColor";
+	case gfx_api::PipelineSurfaceId::RangeRingSdf: return "RangeRingSdf";
+	case gfx_api::PipelineSurfaceId::RangeRingSdfDepth: return "RangeRingSdfDepth";
+	case gfx_api::PipelineSurfaceId::RangeRingColor: return "RangeRingColor";
+	case gfx_api::PipelineSurfaceId::BloomMip0: return "BloomMip0";
+	case gfx_api::PipelineSurfaceId::BloomMip1: return "BloomMip1";
+	case gfx_api::PipelineSurfaceId::BloomMip2: return "BloomMip2";
+	case gfx_api::PipelineSurfaceId::BloomMip3: return "BloomMip3";
+	case gfx_api::PipelineSurfaceId::BloomMip4: return "BloomMip4";
+	case gfx_api::PipelineSurfaceId::BloomMip5: return "BloomMip5";
+	case gfx_api::PipelineSurfaceId::TonemapColor: return "TonemapColor";
+	case gfx_api::PipelineSurfaceId::ShadowMap: return "ShadowMap";
+	case gfx_api::PipelineSurfaceId::SwapchainColor: return "SwapchainColor";
+	case gfx_api::PipelineSurfaceId::SwapchainMSAAColor: return "SwapchainMSAAColor";
+	case gfx_api::PipelineSurfaceId::SwapchainDepth: return "SwapchainDepth";
+	case gfx_api::PipelineSurfaceId::Count: return "Count";
+	}
+	return "?";
+}
+
+static const char* loadOpName(gfx_api::AttachmentLoadOp op)
+{
+	switch (op)
+	{
+	case gfx_api::AttachmentLoadOp::Clear: return "Clear";
+	case gfx_api::AttachmentLoadOp::Load: return "Load";
+	case gfx_api::AttachmentLoadOp::DontCare: return "DontCare";
+	}
+	return "?";
+}
+
+static const char* roleName(gfx_api::AttachmentRole role)
+{
+	switch (role)
+	{
+	case gfx_api::AttachmentRole::PrimaryColor: return "PrimaryColor";
+	case gfx_api::AttachmentRole::Color: return "Color";
+	case gfx_api::AttachmentRole::Depth: return "Depth";
+	case gfx_api::AttachmentRole::Resolve: return "Resolve";
+	}
+	return "?";
+}
+
+static std::string describe(PassId id) { return passIdName(id); }
+static std::string describe(gfx_api::PipelineSurfaceId id) { return surfaceName(id); }
+static std::string describe(gfx_api::AttachmentLoadOp op) { return loadOpName(op); }
+static std::string describe(gfx_api::AttachmentRole role) { return roleName(role); }
+
+
+static void noteCheck()
+{
+	++checks;
+}
+
+static void failAt(std::source_location loc, const char* fmt, ...)
+{
+	++failures;
+	std::printf("FAIL %s:%u: ", loc.file_name(), static_cast<unsigned>(loc.line()));
+	va_list args;
+	va_start(args, fmt);
+	std::vprintf(fmt, args);
+	va_end(args);
+	std::printf("\n");
 }
 
 static std::string formatPassIds(const std::vector<PassId>& ids)
@@ -144,23 +239,25 @@ static RenderTopologySnapshot inGameBase()
 	return snapshot;
 }
 
-static void expectPassIds(const char* name, const RenderTopologySnapshot& snapshot, const std::vector<PassId>& expected)
+static void expectPassIds(const char* name, const RenderTopologySnapshot& snapshot,
+	const std::vector<PassId>& expected, std::source_location loc)
 {
-	++checks;
+	noteCheck();
 	const gfx_api::PassGraphTopologyBlueprint blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
 	const std::vector<PassId> actual = gfx_api::blueprintPassIds(blueprint);
 	if (actual == expected)
 	{
 		return;
 	}
-	++failures;
-	std::printf("FAIL %s\n  expected: [%s]\n  actual:   [%s]\n",
+	failAt(loc, "%s\n  expected: [%s]\n  actual:   [%s]",
 		name, formatPassIds(expected).c_str(), formatPassIds(actual).c_str());
 }
 
-static void expectPassIds(const char* name, const RenderTopologySnapshot& snapshot, std::initializer_list<PassId> expected)
+static void expectPassIds(const char* name, const RenderTopologySnapshot& snapshot,
+	std::initializer_list<PassId> expected,
+	std::source_location loc = std::source_location::current())
 {
-	expectPassIds(name, snapshot, std::vector<PassId>(expected));
+	expectPassIds(name, snapshot, std::vector<PassId>(expected), loc);
 }
 
 static std::vector<PassId> withInGameTail(std::initializer_list<PassId> head)
@@ -176,9 +273,11 @@ static std::vector<PassId> withInGameTail(std::initializer_list<PassId> head)
 	return ids;
 }
 
-static void expectInGame(const char* name, const RenderTopologySnapshot& snapshot, std::initializer_list<PassId> head)
+static void expectInGame(const char* name, const RenderTopologySnapshot& snapshot,
+	std::initializer_list<PassId> head,
+	std::source_location loc = std::source_location::current())
 {
-	expectPassIds(name, snapshot, withInGameTail(head));
+	expectPassIds(name, snapshot, withInGameTail(head), loc);
 }
 
 static const gfx_api::BlueprintPass* findPass(const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id)
@@ -191,43 +290,6 @@ static const gfx_api::BlueprintPass* findPass(const gfx_api::PassGraphTopologyBl
 		}
 	}
 	return nullptr;
-}
-
-/// The pass exists, writes `surface` with `load` as its first color attachment, and reads exactly `producer`
-static void expectPassWiring(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
-	gfx_api::PipelineSurfaceId surface, gfx_api::AttachmentLoadOp load, PassId producer)
-{
-	++checks;
-	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
-	const bool ok = pass != nullptr
-		&& !pass->colorAttachments.empty()
-		&& pass->colorAttachments[0].surfaceId == surface
-		&& pass->colorAttachments[0].loadOp == load
-		&& pass->reads.size() == 1
-		&& pass->reads[0].producerPass == producer;
-	if (!ok)
-	{
-		++failures;
-		std::printf("FAIL %s: %s wiring\n", name, passIdName(id));
-	}
-}
-
-/// The pass exists and reads exactly `producers`, in order
-static void expectPassReads(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
-	const std::vector<PassId>& producers)
-{
-	++checks;
-	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
-	bool ok = pass != nullptr && pass->reads.size() == producers.size();
-	for (size_t i = 0; ok && i < producers.size(); ++i)
-	{
-		ok = pass->reads[i].producerPass == producers[i];
-	}
-	if (!ok)
-	{
-		++failures;
-		std::printf("FAIL %s: %s reads\n", name, passIdName(id));
-	}
 }
 
 static const std::vector<PassId>& bloomPasses()
@@ -248,7 +310,9 @@ static std::vector<PassId> withBloom(std::vector<PassId> before, std::vector<Pas
 	return before;
 }
 
-static void expectInGame(const char* name, const RenderTopologySnapshot& snapshot, std::vector<PassId> head)
+static void expectInGame(const char* name, const RenderTopologySnapshot& snapshot,
+	std::vector<PassId> head,
+	std::source_location loc = std::source_location::current())
 {
 	head.insert(head.end(), {
 		PassId::TargettingEffects,
@@ -257,7 +321,155 @@ static void expectInGame(const char* name, const RenderTopologySnapshot& snapsho
 		PassId::GameStartFade,
 		PassId::InGameUI,
 	});
-	expectPassIds(name, snapshot, head);
+	expectPassIds(name, snapshot, head, loc);
+}
+
+
+static bool isUnoccludedWhite(const gfx_api::ClearValue& clear)
+{
+	const auto& color = clear.color;
+	return color[0] == 1.f && color[1] == 1.f && color[2] == 1.f && color[3] == 1.f;
+}
+
+struct ExpectedRead
+{
+	PassId producer;
+	gfx_api::AttachmentRole role = gfx_api::AttachmentRole::PrimaryColor;
+	uint32_t attachmentIndex = 0;
+};
+
+static bool sameRead(const ExpectedRead& expected, const gfx_api::BlueprintReadEdge& actual)
+{
+	return expected.producer == actual.producerPass
+		&& expected.role == actual.producerRole
+		&& expected.attachmentIndex == actual.attachmentIndex;
+}
+
+static std::string formatExpectedReads(const std::vector<ExpectedRead>& reads)
+{
+	std::stringstream strm;
+	for (size_t i = 0; i < reads.size(); ++i)
+	{
+		if (i != 0)
+		{
+			strm << ", ";
+		}
+		strm << describe(reads[i].producer) << "/" << describe(reads[i].role)
+			<< "/" << reads[i].attachmentIndex;
+	}
+	return strm.str();
+}
+
+static std::string formatActualReads(const std::vector<gfx_api::BlueprintReadEdge>& reads)
+{
+	std::stringstream strm;
+	for (size_t i = 0; i < reads.size(); ++i)
+	{
+		if (i != 0)
+		{
+			strm << ", ";
+		}
+		strm << describe(reads[i].producerPass) << "/" << describe(reads[i].producerRole)
+			<< "/" << reads[i].attachmentIndex;
+	}
+	return strm.str();
+}
+
+/// The pass exists and its read edges match `expected` in order.
+static void expectReads(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	std::initializer_list<ExpectedRead> expected,
+	std::source_location loc = std::source_location::current())
+{
+	noteCheck();
+	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
+	const std::vector<ExpectedRead> expectedReads(expected);
+	bool ok = pass != nullptr && pass->reads.size() == expectedReads.size();
+	for (size_t i = 0; ok && i < expectedReads.size(); ++i)
+	{
+		ok = sameRead(expectedReads[i], pass->reads[i]);
+	}
+	if (ok)
+	{
+		return;
+	}
+	failAt(loc, "%s: %s reads\n  expected: [%s]\n  actual:   [%s]",
+		name, passIdName(id), formatExpectedReads(expectedReads).c_str(),
+		pass != nullptr ? formatActualReads(pass->reads).c_str() : "missing");
+}
+
+static void expectColorChecked(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	gfx_api::PipelineSurfaceId surface, const gfx_api::AttachmentLoadOp* load, std::source_location loc)
+{
+	noteCheck();
+	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
+	const bool surfaceOk = pass != nullptr
+		&& pass->colorAttachments.size() == 1
+		&& pass->colorAttachments[0].surfaceId == surface;
+	const bool loadOk = load == nullptr
+		|| (surfaceOk && pass->colorAttachments[0].loadOp == *load);
+	if (surfaceOk && loadOk)
+	{
+		return;
+	}
+	const char* actualSurface = (pass != nullptr && !pass->colorAttachments.empty())
+		? surfaceName(pass->colorAttachments[0].surfaceId) : "missing";
+	if (load == nullptr)
+	{
+		failAt(loc, "%s: %s color: expected %s, got %s", name, passIdName(id), describe(surface).c_str(), actualSurface);
+		return;
+	}
+	failAt(loc, "%s: %s color: expected %s %s, got %s",
+		name, passIdName(id), describe(surface).c_str(), describe(*load).c_str(), actualSurface);
+}
+
+/// The pass exists and its single color attachment is `surface`.
+static void expectColor(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	gfx_api::PipelineSurfaceId surface,
+	std::source_location loc = std::source_location::current())
+{
+	expectColorChecked(name, blueprint, id, surface, nullptr, loc);
+}
+
+/// The pass exists and its single color attachment is `surface` with `load`.
+static void expectColor(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	gfx_api::PipelineSurfaceId surface, gfx_api::AttachmentLoadOp load,
+	std::source_location loc = std::source_location::current())
+{
+	expectColorChecked(name, blueprint, id, surface, &load, loc);
+}
+
+/// The pass exists and its single color attachment is `surface`, cleared to unoccluded white.
+static void expectUnoccludedColor(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	gfx_api::PipelineSurfaceId surface,
+	std::source_location loc = std::source_location::current())
+{
+	noteCheck();
+	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
+	const bool ok = pass != nullptr
+		&& pass->colorAttachments.size() == 1
+		&& pass->colorAttachments[0].surfaceId == surface
+		&& pass->colorAttachments[0].loadOp == gfx_api::AttachmentLoadOp::Clear
+		&& isUnoccludedWhite(pass->colorAttachments[0].clearValue);
+	if (!ok)
+	{
+		failAt(loc, "%s: %s clear: expected %s cleared to white", name, passIdName(id), describe(surface).c_str());
+	}
+}
+
+/// The pass exists and its depth attachment is `surface`.
+static void expectDepth(const char* name, const gfx_api::PassGraphTopologyBlueprint& blueprint, PassId id,
+	gfx_api::PipelineSurfaceId surface,
+	std::source_location loc = std::source_location::current())
+{
+	noteCheck();
+	const gfx_api::BlueprintPass* pass = findPass(blueprint, id);
+	const bool ok = pass != nullptr
+		&& pass->depthAttachment.has_value()
+		&& pass->depthAttachment.value().surfaceId == surface;
+	if (!ok)
+	{
+		failAt(loc, "%s: %s depth: expected %s", name, passIdName(id), describe(surface).c_str());
+	}
 }
 
 int main()
@@ -305,11 +517,15 @@ int main()
 		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
 		using gfx_api::AttachmentLoadOp;
 		using gfx_api::PipelineSurfaceId;
-		expectPassWiring("hdr-bloom", blueprint, PassId::BloomDownsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::DontCare, PassId::ScenePass);
-		expectPassWiring("hdr-bloom", blueprint, PassId::BloomDownsample5, PipelineSurfaceId::BloomMip5, AttachmentLoadOp::DontCare, PassId::BloomDownsample4);
-		expectPassWiring("hdr-bloom", blueprint, PassId::BloomUpsample4, PipelineSurfaceId::BloomMip4, AttachmentLoadOp::Load, PassId::BloomDownsample5);
-		expectPassWiring("hdr-bloom", blueprint, PassId::BloomUpsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::Load, PassId::BloomUpsample1);
-		expectPassReads("hdr-bloom", blueprint, PassId::SceneTonemap, {PassId::ScenePass, PassId::BloomUpsample0});
+		expectColor("hdr-bloom", blueprint, PassId::BloomDownsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::DontCare);
+		expectReads("hdr-bloom", blueprint, PassId::BloomDownsample0, {{PassId::ScenePass}});
+		expectColor("hdr-bloom", blueprint, PassId::BloomDownsample5, PipelineSurfaceId::BloomMip5, AttachmentLoadOp::DontCare);
+		expectReads("hdr-bloom", blueprint, PassId::BloomDownsample5, {{PassId::BloomDownsample4}});
+		expectColor("hdr-bloom", blueprint, PassId::BloomUpsample4, PipelineSurfaceId::BloomMip4, AttachmentLoadOp::Load);
+		expectReads("hdr-bloom", blueprint, PassId::BloomUpsample4, {{PassId::BloomDownsample5}});
+		expectColor("hdr-bloom", blueprint, PassId::BloomUpsample0, PipelineSurfaceId::BloomMip0, AttachmentLoadOp::Load);
+		expectReads("hdr-bloom", blueprint, PassId::BloomUpsample0, {{PassId::BloomUpsample1}});
+		expectReads("hdr-bloom", blueprint, PassId::SceneTonemap, {{PassId::ScenePass}, {PassId::BloomUpsample0}});
 	}
 
 	{
@@ -322,9 +538,10 @@ int main()
 			PassId::SceneTransparent}, {PassId::SceneTonemap, PassId::SceneBlit}));
 
 		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
-		expectPassWiring("hdr-fog-bloom", blueprint, PassId::BloomDownsample0, gfx_api::PipelineSurfaceId::BloomMip0,
-			gfx_api::AttachmentLoadOp::DontCare, PassId::SceneTransparent);
-		expectPassReads("hdr-fog-bloom", blueprint, PassId::SceneTonemap, {PassId::SceneTransparent, PassId::BloomUpsample0});
+		expectColor("hdr-fog-bloom", blueprint, PassId::BloomDownsample0, gfx_api::PipelineSurfaceId::BloomMip0,
+			gfx_api::AttachmentLoadOp::DontCare);
+		expectReads("hdr-fog-bloom", blueprint, PassId::BloomDownsample0, {{PassId::SceneTransparent}});
+		expectReads("hdr-fog-bloom", blueprint, PassId::SceneTonemap, {{PassId::SceneTransparent}, {PassId::BloomUpsample0}});
 	}
 
 	{
@@ -431,6 +648,135 @@ int main()
 			PassId::SSRCompose, PassId::FogApply,
 			PassId::RangeRingSdfSensor, PassId::RangeRingSdfWeapon, PassId::RangeRingSdfMin,
 			PassId::RangeRingComposite, PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		// Contact shadows are lighting-prepare: prepass, mask, blur, then the scene.
+		// Transparents stay fused in ScenePass. There is no compose pass.
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.contactShadows = true;
+		expectInGame("contact", snapshot, {
+			PassId::ScenePrepass,
+			PassId::ContactShadowGenerate, PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+			PassId::ScenePass, PassId::SceneBlit});
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		using gfx_api::AttachmentRole;
+		using gfx_api::PipelineSurfaceId;
+
+		expectColor("contact", blueprint, PassId::ScenePrepass, PipelineSurfaceId::ScenePrepassNormals);
+		expectDepth("contact", blueprint, PassId::ScenePrepass, PipelineSurfaceId::ScenePrepassDepth);
+		expectUnoccludedColor("contact", blueprint, PassId::ContactShadowGenerate, PipelineSurfaceId::ContactShadowRaw);
+		expectReads("contact", blueprint, PassId::ContactShadowGenerate, {
+			{PassId::ScenePrepass, AttachmentRole::Depth},
+			{PassId::ScenePrepass, AttachmentRole::Color, 0},
+		});
+		expectUnoccludedColor("contact", blueprint, PassId::ContactShadowBlurH, PipelineSurfaceId::ContactShadowBlurH);
+		expectReads("contact", blueprint, PassId::ContactShadowBlurH, {
+			{PassId::ContactShadowGenerate},
+			{PassId::ScenePrepass, AttachmentRole::Depth},
+		});
+		expectUnoccludedColor("contact", blueprint, PassId::ContactShadowBlurV, PipelineSurfaceId::ContactShadowRaw);
+		expectReads("contact", blueprint, PassId::ContactShadowBlurV, {
+			{PassId::ContactShadowBlurH},
+			{PassId::ScenePrepass, AttachmentRole::Depth},
+		});
+		expectReads("contact", blueprint, PassId::ScenePass, {{PassId::ContactShadowBlurV}});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.contactShadows = true;
+		snapshot.features |= RenderFeatures::ContactShadowsDownsample;
+		expectInGame("contact-downsample", snapshot, {
+			PassId::ScenePrepass,
+			PassId::ContactShadowGenerate, PassId::ContactShadowDownsample,
+			PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+			PassId::ScenePass, PassId::SceneBlit});
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		expectUnoccludedColor("contact-downsample", blueprint, PassId::ContactShadowDownsample, gfx_api::PipelineSurfaceId::ContactShadowBlurred);
+		expectReads("contact-downsample", blueprint, PassId::ContactShadowDownsample, {{PassId::ContactShadowGenerate}});
+		expectReads("contact-downsample", blueprint, PassId::ContactShadowBlurH, {
+			{PassId::ContactShadowDownsample},
+			{PassId::ScenePrepass, gfx_api::AttachmentRole::Depth},
+		});
+		expectColor("contact-downsample", blueprint, PassId::ContactShadowBlurV, gfx_api::PipelineSurfaceId::ContactShadowBlurred);
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.contactShadows = true;
+		snapshot.sceneEffects.fog = true;
+		expectInGame("contact-fog", snapshot, {
+			PassId::ScenePrepass,
+			PassId::ContactShadowGenerate, PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+			PassId::ScenePass, PassId::FogApply, PassId::SceneTransparent, PassId::SceneBlit});
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		expectReads("contact-fog", blueprint, PassId::ScenePass, {{PassId::ContactShadowBlurV}});
+		expectReads("contact-fog", blueprint, PassId::SceneTransparent, {{PassId::ContactShadowBlurV}});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.contactShadows = true;
+		snapshot.sceneEffects.ssao = true;
+		expectInGame("contact-ssao", snapshot, {
+			PassId::ScenePrepass,
+			PassId::ContactShadowGenerate, PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+			PassId::ScenePass,
+			PassId::SSAOGenerate, PassId::SSAOBlurH, PassId::SSAOBlurV, PassId::SSAOCompose,
+			PassId::SceneTransparent, PassId::SceneBlit});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.contactShadows = true;
+		snapshot.numShadowCascades = 1;
+		expectInGame("contact-cascade", snapshot, {
+			PassId::ShadowCascade0,
+			PassId::ScenePrepass,
+			PassId::ContactShadowGenerate, PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+			PassId::ScenePass, PassId::SceneBlit});
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		expectReads("contact-cascade", blueprint, PassId::ScenePass, {
+			{PassId::ShadowCascade0, gfx_api::AttachmentRole::Depth},
+			{PassId::ContactShadowBlurV},
+		});
+	}
+
+	{
+		// Contact does not split transparents, so bloom still reads ScenePass.
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.sceneEffects.contactShadows = true;
+		snapshot.sceneEffects.bloom = true;
+		snapshot.features |= RenderFeatures::HdrScene;
+		expectInGame("contact-hdr-bloom", snapshot, withBloom({
+			PassId::ScenePrepass,
+			PassId::ContactShadowGenerate, PassId::ContactShadowBlurH, PassId::ContactShadowBlurV,
+			PassId::ScenePass}, {PassId::SceneTonemap, PassId::SceneBlit}));
+
+		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
+		expectColor("contact-hdr-bloom", blueprint, PassId::BloomDownsample0, gfx_api::PipelineSurfaceId::BloomMip0,
+			gfx_api::AttachmentLoadOp::DontCare);
+		expectReads("contact-hdr-bloom", blueprint, PassId::BloomDownsample0, {{PassId::ScenePass}});
+		expectReads("contact-hdr-bloom", blueprint, PassId::SceneTonemap, {{PassId::ScenePass}, {PassId::BloomUpsample0}});
+	}
+
+	{
+		RenderTopologySnapshot snapshot;
+		snapshot.screenKind = RenderScreenKind::Title;
+		snapshot.sceneEffects.contactShadows = true;
+		expectPassIds("title-ignores-contact", snapshot, {PassId::TitleUI});
+	}
+
+	{
+		RenderTopologySnapshot snapshot = inGameBase();
+		snapshot.features |= RenderFeatures::FrozenWorldOverlay;
+		snapshot.sceneEffects.contactShadows = true;
+		expectPassIds("frozen-ignores-contact", snapshot, {PassId::InGameUI});
 	}
 
 	{
