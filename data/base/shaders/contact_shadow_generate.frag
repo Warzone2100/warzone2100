@@ -113,6 +113,33 @@ bool csPickAxis(ivec2 base, ivec2 step, ivec2 depthSize, ivec2 usedSize, vec3 su
 	return false;
 }
 
+// Geometric plane of the rasterized triangle from the center depth texel
+// and one in-plane neighbor on each axis. Flip so G points toward the camera
+// (visible surfaces have G.z < 0 in this +Z view space).
+bool csBuildReceiverPlane(ivec2 base, ivec2 depthSize, ivec2 usedSize, vec3 surfacePos, float reach, out vec3 G)
+{
+	G = vec3(0.0, 0.0, -1.0);
+	vec3 axisX;
+	vec3 axisY;
+	if (!csPickAxis(base, ivec2(1, 0), depthSize, usedSize, surfacePos, reach, axisX)
+		|| !csPickAxis(base, ivec2(0, 1), depthSize, usedSize, surfacePos, reach, axisY))
+	{
+		return false;
+	}
+	vec3 Graw = cross(axisX, axisY);
+	float planeArea = length(Graw);
+	if (planeArea <= 1e-4)
+	{
+		return false;
+	}
+	G = Graw / planeArea;
+	if (G.z > 0.0)
+	{
+		G = -G;
+	}
+	return G.z < -0.02;
+}
+
 void writeVis(float v)
 {
 #ifdef NEWGL
@@ -166,10 +193,6 @@ void main()
 		return;
 	}
 
-	// Geometric plane of the rasterized triangle from the center depth texel
-	// and one in-plane neighbor on each axis. Shading N stays the bias /
-	// NdotL / fallback axis. Flip so G points toward the camera (visible
-	// surfaces have G.z < 0 in this +Z view space).
 	// P[0][0] = 330/xangle with xangle = videoBufferWidth/6. NDC X maps onto the
 	// used prepass width, not the allocated texture width, so a dynamic-resolution
 	// fraction of 0.5 makes one texel twice as wide. generatePixelUV is the
@@ -178,26 +201,6 @@ void main()
 	float texelWorld = abs(surfacePos.z) * 2.0
 		/ (float(usedSize.x) * max(abs(projectionMatrix[0][0]), 1e-4));
 	float reach = max(texelWorld, 1e-3) * PLANE_TAP_SCALE;
-	vec3 axisX;
-	vec3 axisY;
-	vec3 G = vec3(0.0, 0.0, -1.0);
-	bool planeSmooth = csPickAxis(base, ivec2(1, 0), depthSize, usedSize, surfacePos, reach, axisX)
-		&& csPickAxis(base, ivec2(0, 1), depthSize, usedSize, surfacePos, reach, axisY);
-	if (planeSmooth)
-	{
-		vec3 Graw = cross(axisX, axisY);
-		float planeArea = length(Graw);
-		planeSmooth = planeArea > 1e-4;
-		if (planeSmooth)
-		{
-			G = Graw / planeArea;
-			if (G.z > 0.0)
-			{
-				G = -G;
-			}
-			planeSmooth = G.z < -0.02;
-		}
-	}
 
 	// Bias along the shading normal. Keep surfacePos unbiased for the plane.
 	vec3 rayPos = surfacePos + N * params.w;
@@ -228,6 +231,9 @@ void main()
 	float jitter = wzInterleavedGradientNoise(viewportUv / pixelUV);
 
 	float prevZ = rayOrig.z;
+	bool planeBuilt = false;
+	bool planeSmooth = false;
+	vec3 G = vec3(0.0, 0.0, -1.0);
 	bool hit = false;
 	float hitT = 0.0;
 	vec2 hitViewportUv = viewportUv;
@@ -275,6 +281,11 @@ void main()
 			continue;
 		}
 
+		if (!planeBuilt)
+		{
+			planeSmooth = csBuildReceiverPlane(base, depthSize, usedSize, surfacePos, reach, G);
+			planeBuilt = true;
+		}
 		vec3 samplePos = wzGetViewPosition(csViewportUv(sampleTexel, depthSize), sampleDepth, invProjectionMatrix);
 		float marched = max(length(rayView - surfacePos), 1.0);
 		float eps = planeSmooth ? PLANE_EPS : max(PLANE_EPS_FALLBACK, marched * PLANE_FALLBACK_SLOPE);
