@@ -2494,6 +2494,43 @@ static bool droidMovingToWork(const DROID *psDroid)
 }
 
 
+static void moveRecoverOrphanedPause(DROID *droid, PROPULSION_TYPE propulsion)
+{
+	auto &move = droid->sMove;
+	auto &retry = move.pauseRetry;
+	const Vector2i position = droid->pos.xy();
+	if (retry.attempts != 0 && iHypot(position - retry.position) >= TILE_UNITS / 2)
+	{
+		retry.attempts = 0;
+	}
+	if (move.Status != MOVEPAUSE || move.bumpTime != 0 || bMultiPlayer || droid->player != selectedPlayer
+	    || droid->order.type != DORDER_MOVE || droid->action != DACTION_MOVE
+	    || propulsion == PROPULSION_TYPE_LIFT || droid->isTransporter())
+	{
+		retry.delay = 0;
+		return;
+	}
+
+	// The bump-clock pause logic cannot resume a droid once the clock has been cleared.
+	if (retry.delay == 0)
+	{
+		const unsigned maxDelay = std::min(800u << retry.attempts, 2000u);
+		uint32_t seed = droid->id * 0x9e3779b9u ^ gameTime;
+		seed ^= seed >> 16;
+		seed *= 0x7feb352du;
+		seed ^= seed >> 15;
+		retry.start = gameTime;
+		retry.delay = 200u + seed % (maxDelay - 200u + 1u);
+		retry.position = position;
+	}
+	if (gameTime - retry.start >= retry.delay)
+	{
+		retry.delay = 0;
+		retry.attempts = std::min(retry.attempts + 1, 2u);
+		move.Status = MOVEPOINTTOPOINT;
+	}
+}
+
 /* Frame update for the movement of a tracked droid */
 void moveUpdateDroid(DROID *psDroid)
 {
@@ -2540,6 +2577,8 @@ void moveUpdateDroid(DROID *psDroid)
 
 	moveSpeed = 0;
 	moveDir = psDroid->rot.direction;
+
+	moveRecoverOrphanedPause(psDroid, psPropStats->propulsionType);
 
 	switch (psDroid->sMove.Status)
 	{
