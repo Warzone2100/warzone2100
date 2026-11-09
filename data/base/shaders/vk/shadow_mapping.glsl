@@ -13,7 +13,7 @@ float wzApplyContactVisibility(float sunVisibility)
 		vec2 csUv = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
 		csUv = clamp(csUv * contactShadowUvScaleClamp.xy, vec2(0.0), contactShadowUvScaleClamp.zw);
 		// Same sun as the cascades. Lift the mask into that [0.5, 1] range, then take the darker estimate.
-		float contact = clamp(texture(contactShadowTex, csUv).r, 0.5, 1.0);
+		float contact = mix(0.5, 1.0, clamp(texture(contactShadowTex, csUv).r, 0.0, 1.0));
 		return min(sunVisibility, contact);
 	}
 	return sunVisibility;
