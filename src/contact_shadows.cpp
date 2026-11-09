@@ -33,14 +33,13 @@
 #include "display3d_render_graph.h"
 #include "display3d_render_internal.h"
 #include "depth_aware_blur.h"
+#include "lighting.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 #include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
-
-Vector3f getTheSun();
 
 #include <algorithm>
 #include <cstdint>
@@ -101,7 +100,7 @@ struct Tuning
 	float blurDepthSigma = 0.0015f;
 };
 
-Tuning s_tuning {};
+static constexpr Tuning kTuning {};
 gfx_api::texture* s_dummyLit = nullptr;
 
 } // namespace
@@ -171,10 +170,10 @@ void recordGenerate(const gfx_api::RenderPassContext& passCtx)
 	c.projectionMatrix = fc.perspectiveMatrix;
 	c.viewMatrix = fc.viewMatrix;
 	c.sunDirWorld = glm::vec4(glm::normalize(-getTheSun()), 0.f);
-	c.params = glm::vec4(s_tuning.maxRayLength, s_tuning.thicknessCap,
-		pie_getPerspectiveZClose(), s_tuning.rayBias);
-	c.fadeParams = glm::vec4(s_tuning.minRayStart, s_tuning.fadeStartViewZ,
-		s_tuning.fadeEndViewZ, s_tuning.edgeFadeWidth);
+	c.params = glm::vec4(kTuning.maxRayLength, kTuning.thicknessCap,
+		pie_getPerspectiveZClose(), kTuning.rayBias);
+	c.fadeParams = glm::vec4(kTuning.minRayStart, kTuning.fadeStartViewZ,
+		kTuning.fadeEndViewZ, kTuning.edgeFadeWidth);
 	const auto vp = passCtx.writeViewportSize();
 	const float invW = (vp && vp->first > 0) ? 1.f / static_cast<float>(vp->first) : 0.f;
 	const float invH = (vp && vp->second > 0) ? 1.f / static_cast<float>(vp->second) : 0.f;
@@ -193,14 +192,14 @@ void recordDownsample(const gfx_api::RenderPassContext& passCtx)
 void recordBlurH(const gfx_api::RenderPassContext& passCtx)
 {
 	post_effect_blur::recordDepthAwareBlur<SHADER_CONTACT_SHADOW_BLUR, gfx_api::ContactShadowBlurPSO>(
-		passCtx, post_effect_blur::Axis::Horizontal, s_tuning.blurDepthSigma,
+		passCtx, post_effect_blur::Axis::Horizontal, kTuning.blurDepthSigma,
 		static_cast<uint32_t>(activeSettings().blurTapPairs), "ContactShadow blur");
 }
 
 void recordBlurV(const gfx_api::RenderPassContext& passCtx)
 {
 	post_effect_blur::recordDepthAwareBlur<SHADER_CONTACT_SHADOW_BLUR, gfx_api::ContactShadowBlurPSO>(
-		passCtx, post_effect_blur::Axis::Vertical, s_tuning.blurDepthSigma,
+		passCtx, post_effect_blur::Axis::Vertical, kTuning.blurDepthSigma,
 		static_cast<uint32_t>(activeSettings().blurTapPairs), "ContactShadow blur");
 }
 
