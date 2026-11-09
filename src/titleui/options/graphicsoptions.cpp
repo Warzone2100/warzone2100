@@ -30,7 +30,6 @@
 #include "../../display.h"
 #include "../../display3d.h"
 #include "../../scene_effect_surfaces.h"
-#include "../../contact_shadows.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -356,7 +355,6 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			[](const auto& newValue) -> bool {
 				war_setContactShadowsMode(newValue);
 				applySceneEffectSurfaces();
-				contact_shadows::syncLightingConstant();
 				return true;
 			}, false
 		);
