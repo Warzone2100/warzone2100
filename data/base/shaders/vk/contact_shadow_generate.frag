@@ -60,6 +60,11 @@ vec2 csViewportUv(ivec2 coord, ivec2 depthSize)
 	return texUv / max(prepassUvScaleClamp.xy, vec2(WZ_SS_UV_EPS));
 }
 
+ivec2 csTexel(vec2 texUv, ivec2 depthSize, ivec2 usedSize)
+{
+	return ivec2(clamp(floor(texUv * vec2(depthSize)), vec2(0.0), vec2(usedSize) - vec2(1.0)));
+}
+
 // Explicit depth taps, not dFdx/dFdy. Each invocation fetches its own texels.
 // coord is limited to the used sub-rect, so padding outside the dynamic-resolution
 // viewport is never read.
@@ -117,13 +122,16 @@ void main()
 	// texCoords is viewport UV. Depth and normals live in texture UV.
 	vec2 viewportUv = texCoords;
 	vec2 texUv = csTexUv(viewportUv);
-	float depth = texture(depthTexture, texUv).r;
+	ivec2 depthSize = textureSize(depthTexture, 0);
+	ivec2 usedSize = max(ivec2(prepassUvScaleClamp.xy * vec2(depthSize) + 0.5), ivec2(1));
+	ivec2 base = csTexel(texUv, depthSize, usedSize);
+	float depth = texelFetch(depthTexture, base, 0).r;
 	if (depth >= WZ_SS_SKY_DEPTH)
 	{
 		writeVis(1.0);
 		return;
 	}
-	vec3 surfacePos = wzGetViewPosition(viewportUv, depth, invProjectionMatrix);
+	vec3 surfacePos = wzGetViewPosition(csViewportUv(base, depthSize), depth, invProjectionMatrix);
 	float recvWeight = texture(normalsTexture, texUv).a;
 	if (recvWeight < WEIGHT_EPS)
 	{
@@ -152,9 +160,6 @@ void main()
 	// fraction of 0.5 makes one texel twice as wide. generatePixelUV is the
 	// contact-pass pixel and must not be used here (Low/Normal are coarser than
 	// the prepass).
-	ivec2 depthSize = textureSize(depthTexture, 0);
-	ivec2 usedSize = max(ivec2(prepassUvScaleClamp.xy * vec2(depthSize) + 0.5), ivec2(1));
-	ivec2 base = ivec2(clamp(floor(texUv * vec2(depthSize)), vec2(0.0), vec2(usedSize) - vec2(1.0)));
 	float texelWorld = abs(surfacePos.z) * 2.0
 		/ (float(usedSize.x) * max(abs(projectionMatrix[0][0]), 1e-4));
 	float reach = max(texelWorld, 1e-3) * PLANE_TAP_SCALE;
@@ -233,13 +238,13 @@ void main()
 		{
 			break;
 		}
-		vec2 sampleTexUv = csTexUv(sampleViewportUv);
+		ivec2 sampleTexel = csTexel(csTexUv(sampleViewportUv), depthSize, usedSize);
 
 		float rayZMin = min(prevZ, rayView.z);
 		float rayZMax = max(prevZ, rayView.z);
 		prevZ = rayView.z;
 
-		float sampleDepth = texture(depthTexture, sampleTexUv).r;
+		float sampleDepth = texelFetch(depthTexture, sampleTexel, 0).r;
 		if (sampleDepth >= WZ_SS_SKY_DEPTH)
 		{
 			continue;
@@ -255,7 +260,7 @@ void main()
 			continue;
 		}
 
-		vec3 samplePos = wzGetViewPosition(sampleViewportUv, sampleDepth, invProjectionMatrix);
+		vec3 samplePos = wzGetViewPosition(csViewportUv(sampleTexel, depthSize), sampleDepth, invProjectionMatrix);
 		float marched = max(length(rayView - surfacePos), 1.0);
 		float eps = planeSmooth ? PLANE_EPS : max(PLANE_EPS_FALLBACK, marched * PLANE_FALLBACK_SLOPE);
 		vec3 axis = planeSmooth ? G : N;
