@@ -230,7 +230,6 @@ void main()
 	// is already 1/usedWriteViewport, so dynamic resolution does not rescale it.
 	float jitter = wzInterleavedGradientNoise(viewportUv / pixelUV);
 
-	float prevZ = rayOrig.z;
 	bool planeBuilt = false;
 	bool planeSmooth = false;
 	vec3 G = vec3(0.0, 0.0, -1.0);
@@ -261,10 +260,6 @@ void main()
 		}
 		ivec2 sampleTexel = csTexel(csTexUv(sampleViewportUv), depthSize, usedSize);
 
-		float rayZMin = min(prevZ, rayView.z);
-		float rayZMax = max(prevZ, rayView.z);
-		prevZ = rayView.z;
-
 		float sampleDepth = texelFetch(depthTexture, sampleTexel, 0).r;
 		if (sampleDepth >= WZ_SS_SKY_DEPTH)
 		{
@@ -272,11 +267,10 @@ void main()
 		}
 		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
 		float thickness = wzViewThickness(surfZ, params.y, THICKNESS_RELATIVE, THICKNESS_MIN);
-		// Pen is the sample's own view Z, not rayZMax. rayZMax lets the far
-		// end of a long step confirm a hit while this texel is still in front.
+		// Pen is the sample's own view Z, not the far end of the step.
+		// That end may confirm a hit while this texel is still in front.
 		float pen = rayView.z - surfZ;
-		if (!(pen > 0.0 && pen <= thickness
-			&& wzRayOverlapsSurface(rayZMin, rayZMax, surfZ, thickness)))
+		if (!(pen > 0.0 && pen <= thickness))
 		{
 			continue;
 		}
