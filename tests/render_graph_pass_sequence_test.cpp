@@ -715,7 +715,7 @@ int main()
 
 		const auto blueprint = gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
 		expectReads("contact-fog", blueprint, PassId::ScenePass, {{PassId::ContactShadowBlurV}});
-		expectReads("contact-fog", blueprint, PassId::SceneTransparent, {{PassId::ContactShadowBlurV}});
+		expectReads("contact-fog", blueprint, PassId::SceneTransparent, {});
 	}
 
 	{

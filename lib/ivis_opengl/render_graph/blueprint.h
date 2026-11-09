@@ -224,7 +224,7 @@ void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
 	uint32_t numShadowCascades, bool readContactShadows = false);
 /// Append the forward transparent pass after opaque post-effects.
 void addSceneTransparentPassToBuilder(BlueprintBuilder& builder, PipelineSurfaceId incomingColor,
-	uint32_t numShadowCascades, bool readContactShadows = false);
+	uint32_t numShadowCascades);
 /// Append a swapchain-target pass (MSAA resolve when enabled) with shared depth setup.
 void addSwapchainPassToBuilder(BlueprintBuilder& builder, PassId id, std::string debugName,
 	bool swapchainMsaa, AttachmentLoadOp colorLoad,

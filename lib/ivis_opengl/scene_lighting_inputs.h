@@ -48,6 +48,7 @@ struct SceneLightingInputs
 {
 	abstract_texture* shadowMap = nullptr;
 	abstract_texture* contactShadow = nullptr;
+	abstract_texture* contactShadowNeutral = nullptr;
 	glm::vec4 contactUvScaleClamp{1.f, 1.f, 1.f, 1.f};
 
 	static SceneLightingInputs dummy(abstract_texture* shadowMap, abstract_texture* dummyLit)
@@ -55,7 +56,15 @@ struct SceneLightingInputs
 		SceneLightingInputs lighting;
 		lighting.shadowMap = shadowMap;
 		lighting.contactShadow = dummyLit;
+		lighting.contactShadowNeutral = dummyLit;
 		lighting.contactUvScaleClamp = {1.f, 1.f, 1.f, 1.f};
+		return lighting;
+	}
+
+	SceneLightingInputs withoutContact() const
+	{
+		SceneLightingInputs lighting = *this;
+		lighting.contactShadow = contactShadowNeutral;
 		return lighting;
 	}
 };

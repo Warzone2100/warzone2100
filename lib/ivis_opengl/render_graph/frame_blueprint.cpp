@@ -281,8 +281,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 	// and scene MSAA covers the transparents again.
 	if (anyScenePostEffectEnabled(snapshot))
 	{
-		addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades,
-			snapshot.sceneEffects.contactShadows);
+		addSceneTransparentPassToBuilder(builder, incomingColorSurface, snapshot.numShadowCascades);
 		incomingColor = PassId::SceneTransparent;
 	}
 
