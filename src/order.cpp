@@ -300,6 +300,9 @@ DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
 /// structures reachable by staying inside a square area (centered on the truck) are
 /// considered. The square's size is determined by radius (strictly, the inradius).
 /// A radius of 0 means the constructor won't leave the tile it's standing on.
+static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_PURSUE = 7;
+static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_GUARD = 4;
+static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_HOLD = 0;
 
 namespace
 {
@@ -343,10 +346,14 @@ static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 
 	// Only structures within a certain radius are considered.
 	const auto haltType = secondaryGetState(psDroid, DSO_HALTTYPE);
-	int radius = REPAIR_MAXDIST / TILE_UNITS;
+	int radius = CONSTRUCTOR_AUTOHELP_RADIUS_TILES_GUARD;
 	if (psDroid->order.type == DORDER_HOLD || (psDroid->order.type == DORDER_NONE && haltType == DSS_HALT_HOLD))
 	{
-		radius = 0;
+		radius = CONSTRUCTOR_AUTOHELP_RADIUS_TILES_HOLD;
+	}
+	else if (haltType == DSS_HALT_PURSUE)
+	{
+		radius = CONSTRUCTOR_AUTOHELP_RADIUS_TILES_PURSUE;
 	}
 
 	WZ_PERF_SCOPE(T_chooseAutohelpTarget);
