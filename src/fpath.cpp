@@ -456,6 +456,17 @@ static Position findNonblockingPosition(const WorldMapState& mapState, Position 
 
 
 
+/// The move type a route for this droid is planned with when moveType is asked for.
+static FPATH_MOVETYPE fpathDroidMoveType(const DROID *psDroid, FPATH_MOVETYPE moveType)
+{
+	// override for AI to blast our way through stuff
+	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
+	{
+		moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
+	}
+	return moveType;
+}
+
 static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY)
 {
 	psMoveCntl->destination = Vector2i(targetX, targetY);
@@ -707,11 +718,7 @@ protected:
 		bool acceptNearest;
 		PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 
-		// override for AI to blast our way through stuff
-		if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
-		{
-			moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
-		}
+		moveType = fpathDroidMoveType(psDroid, moveType);
 
 		ASSERT_OR_RETURN(FPR_FAILED, psPropStats != nullptr, "invalid propulsion stats pointer");
 		ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
