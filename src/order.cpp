@@ -25,6 +25,9 @@
  */
 
 #include <string.h>
+#include <algorithm>
+#include <tuple>
+#include <vector>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -37,6 +40,7 @@
 #include "ordersource.h"
 #include "action.h"
 #include "map.h"
+#include "geometry.h"
 #include "formationdef.h"
 #include "formation.h"
 #include "objmem.h"
@@ -292,10 +296,42 @@ DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
 	return _findSomeoneToRepair(nullptr, queue, psTurret->pos.x, psTurret->pos.y, radius, psTurret->player);
 }
 
+/// Autohelp: idle trucks automatically help work on nearby structures. Only
+/// structures reachable by staying inside a square area (centered on the truck) are
+/// considered. The square's size is determined by radius (strictly, the inradius).
+/// A radius of 0 means the constructor won't leave the tile it's standing on.
+
+namespace
+{
+struct AutohelpCandidate
+{
+	STRUCTURE *structure;
+	DROID_ACTION action;     ///< DACTION_REPAIR or DACTION_BUILD (help build).
+	unsigned distanceSq;
+};
+}
+
+/// Whether the droid can drive to some tile it could work on the structure from (actionBuildPosBounds).
+static bool autohelpCandidateReachable(const PathReachableTiles &reach, const STRUCTURE *psStruct)
+{
+	const StructureBounds b = actionBuildPosBounds(psStruct->pos.x, psStruct->pos.y, psStruct->rot.direction, psStruct->pStructureType);
+	for (int y = b.map.y; y < b.map.y + b.size.y; ++y)
+	{
+		for (int x = b.map.x; x < b.map.x + b.size.x; ++x)
+		{
+			if (reach.reachable(Vector2i(x, y)))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 /** Returns an autohelp target and the help action (e.g. build, repair).
- * Autohelp: idle trucks automatically help work on nearby structures, within REPAIR_RANGE
- * of the droid if it is on hold, and REPAIR_MAXDIST if not.
  * If no autohelp targets are available, returns nullptr.
+ * Autohelp targets are first collected by radius then filtered by reachability.
+ * Therefore the droid ignores candidates that require travel beyond the radius.
  */
 static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 {
@@ -305,51 +341,80 @@ static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 		psFailedTarget = (STRUCTURE *)psDroid->psActionTarget[0];
 	}
 
-	unsigned radius = ((psDroid->order.type == DORDER_HOLD) || (psDroid->order.type == DORDER_NONE && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)) ? REPAIR_RANGE : REPAIR_MAXDIST;
-
-	unsigned bestDistanceSq = radius * radius;
-	std::pair<STRUCTURE *, DROID_ACTION> best = {nullptr, DACTION_NONE};
+	// Only structures within a certain radius are considered.
+	const auto haltType = secondaryGetState(psDroid, DSO_HALTTYPE);
+	int radius = REPAIR_MAXDIST / TILE_UNITS;
+	if (psDroid->order.type == DORDER_HOLD || (psDroid->order.type == DORDER_NONE && haltType == DSS_HALT_HOLD))
+	{
+		radius = 0;
+	}
 
 	WZ_PERF_SCOPE(T_chooseAutohelpTarget);
 
-	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
+	// A structure has a tile to work on it from inside the search square exactly when it stands on a tile of the
+	// square grown by one tile each way, so scan those.
+	const Vector2i tile = map_coord(psDroid->pos.xy());
+	std::vector<STRUCTURE *> seen;
+	std::vector<AutohelpCandidate> candidates;
+	for (int y = tile.y - radius - 1; y <= tile.y + radius + 1; ++y)
 	{
-		STRUCTURE *structure = castStructure(object);
-		if (structure == nullptr ||  // Must be a structure.
-		    structure->died ||  // Must not be dead (the grid keeps it until the end of the tick).
-		    structure == psFailedTarget ||  // Must not have just failed to reach it.
-		    !aiCheckAlliances(psDroid->player, structure->player))  // Must be a friendly structure.
+		for (int x = tile.x - radius - 1; x <= tile.x + radius + 1; ++x)
 		{
-			continue;
-		}
+			STRUCTURE *structure = tileOnMap(gameWorld.map, x, y) ? getTileStructure(gameWorld.map, x, y) : nullptr;
+			if (structure == nullptr || std::find(seen.begin(), seen.end(), structure) != seen.end())
+			{
+				continue;  // No structure, or one already looked at from another of its tiles.
+			}
+			seen.push_back(structure);
+			if (structure->died ||
+			    structure == psFailedTarget ||  // Must not have just failed to reach it.
+			    !aiCheckAlliances(psDroid->player, structure->player))  // Must be friendly.
+			{
+				continue;
+			}
 
-		DROID_ACTION action = DACTION_NONE;
-		if (structure->status == SS_BUILT && structure->isDamaged())
-		{
-			action = DACTION_REPAIR;
+			DROID_ACTION action = DACTION_NONE;
+			if (structure->status == SS_BUILT && structure->isDamaged())
+			{
+				action = DACTION_REPAIR;
+			}
+			else if (structure->status == SS_BEING_BUILT)
+			{
+				action = DACTION_BUILD;
+			}
+			if (action == DACTION_NONE ||
+			    !visibleObject(psDroid, structure, false) ||  // Must be able to sense it.
+			    checkDroidsDemolishing(structure))  // Must not be trying to get rid of it.
+			{
+				continue;
+			}
+			candidates.push_back({structure, action, static_cast<unsigned>(objPosDiffSq(psDroid->pos, structure->pos))});
 		}
-		else if (structure->status == SS_BEING_BUILT)
-		{
-			action = DACTION_BUILD;
-		}
-		if (action == DACTION_NONE)
-		{
-			continue;
-		}
-
-		unsigned distanceSq = droidSqDist(psDroid, object);  // droidSqDist returns -1 if unreachable, (unsigned)-1 is a big number.
-		if (distanceSq > bestDistanceSq ||  // Must be as close as possible.
-		    !visibleObject(psDroid, structure, false) ||  // Must be able to sense it.
-		    checkDroidsDemolishing(structure))  // Must not be trying to get rid of it.
-		{
-			continue;
-		}
-
-		bestDistanceSq = distanceSq;
-		best = {structure, action};
+	}
+	if (candidates.empty())
+	{
+		return {nullptr, DACTION_NONE};
 	}
 
-	return best;
+	// Sort by straight-line squared distance to each candidate's centre.
+	// Tiebreak by object id (sync-safe)
+	std::sort(candidates.begin(), candidates.end(), [](const AutohelpCandidate &a, const AutohelpCandidate &b) {
+		return std::tie(a.distanceSq, a.structure->id) < std::tie(b.distanceSq, b.structure->id);
+	});
+
+	// Pick the first structure that has a reachable build position (not walled
+	// off).
+	const PathReachableTiles reach = fpathDroidReachableTiles(psDroid, gameWorld.map, radius);
+	for (const AutohelpCandidate &candidate : candidates)
+	{
+		const STRUCTURE *s = candidate.structure;
+		// Already close enough counts too: the fill starts where a route would, which may not be the droid's own tile.
+		if (actionReachedBuildPos(psDroid, s->pos.x, s->pos.y, s->rot.direction, s->pStructureType) || autohelpCandidateReachable(reach, s))
+		{
+			return {candidate.structure, candidate.action};
+		}
+	}
+	return {nullptr, DACTION_NONE};
 }
 
 static bool isRepairlikeAction(DROID_ACTION action)
