@@ -162,6 +162,42 @@ public:
 	FPathDroidUpdateScope &operator=(FPathDroidUpdateScope &&) = delete;
 };
 
+/// The tiles of a square window that a droid can drive to, as found by fpathDroidReachableTiles.
+struct PathReachableTiles
+{
+	Vector2i origin = Vector2i(0, 0);  ///< Top left tile of the window.
+	int width = 0;
+	int height = 0;
+	std::vector<uint8_t> flags;        ///< One 0/1 per tile of the window, row by row.
+
+	bool inWindow(Vector2i tile) const
+	{
+		return tile.x >= origin.x && tile.y >= origin.y && tile.x < origin.x + width && tile.y < origin.y + height;
+	}
+	/// Convert a map tile coordinate to an index into the flags vector.
+	size_t index(Vector2i tile) const
+	{
+		return static_cast<size_t>((tile.x - origin.x) + (tile.y - origin.y) * width);
+	}
+	/// Whether the tile can be driven to. Any tile outside the window reads as out of reach.
+	bool reachable(Vector2i tile) const
+	{
+		return inWindow(tile) && flags[index(tile)] != 0;
+	}
+};
+
+/** Returns the tiles that are reachable without leaving a square area. Tiles
+ *  only reachable by exiting the square area are excluded. The radius parameter
+ *  defines the size of the square area (clipped to the map).
+ *
+ *  Unlike fpathCheck, structures and features count as obstacles.
+ *
+ *  It reads the map as it is now, whereas a route reads the blocking map taken
+ *  for its tick, so the two can differ for a structure that changed since that
+ *  map was taken.
+ */
+PathReachableTiles fpathDroidReachableTiles(const DROID *psDroid, const WorldMapState &mapState, int radius);
+
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */
 bool fpathCheck(WorldMapState& mapState, Position orig, Position dest, PROPULSION_TYPE propulsion);
