@@ -26,6 +26,7 @@
 
 #include <string.h>
 #include <algorithm>
+#include <optional>
 #include <tuple>
 #include <vector>
 
@@ -303,6 +304,10 @@ DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
 static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_PURSUE = 7;
 static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_GUARD = 4;
 static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_HOLD = 0;
+/// An idle truck searches for an autohelp target only once every this many game updates (1 second),
+/// staggered by droid id, rather than every update. A truck that finds a target stops being idle,
+/// so this only throttles trucks whose search keeps finding nothing (e.g. everything nearby is walled off).
+static constexpr unsigned CONSTRUCTOR_AUTOHELP_SEARCH_INTERVAL_UPDATES = GAME_UPDATES_PER_SEC;
 
 namespace
 {
@@ -338,6 +343,12 @@ static bool autohelpCandidateReachable(const PathReachableTiles &reach, const ST
  */
 static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 {
+	// Throttle: derived only from synchronised game state, so every client skips the same updates.
+	if ((gameTime / GAME_TICKS_PER_UPDATE + psDroid->id) % CONSTRUCTOR_AUTOHELP_SEARCH_INTERVAL_UPDATES != 0)
+	{
+		return {nullptr, DACTION_NONE};
+	}
+
 	STRUCTURE *psFailedTarget = nullptr;
 	if (psDroid->action == DACTION_SULK)
 	{
@@ -389,9 +400,7 @@ static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 			{
 				action = DACTION_BUILD;
 			}
-			if (action == DACTION_NONE ||
-			    !visibleObject(psDroid, structure, false) ||  // Must be able to sense it.
-			    checkDroidsDemolishing(structure))  // Must not be trying to get rid of it.
+			if (action == DACTION_NONE)
 			{
 				continue;
 			}
@@ -410,13 +419,27 @@ static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 	});
 
 	// Pick the first structure that has a reachable build position (not walled
-	// off).
-	const PathReachableTiles reach = fpathDroidReachableTiles(psDroid, gameWorld.map, radius);
+	// off). The fill is only done once a candidate needs it.
+	std::optional<PathReachableTiles> reach;
 	for (const AutohelpCandidate &candidate : candidates)
 	{
 		const STRUCTURE *s = candidate.structure;
+		// Checked here, nearest first, so the costlier checks run only until a target is found.
+		if (!visibleObject(psDroid, s, false) ||  // Must be able to sense it.
+		    checkDroidsDemolishing(s))  // Must not be trying to get rid of it.
+		{
+			continue;
+		}
 		// Already close enough counts too: the fill starts where a route would, which may not be the droid's own tile.
-		if (actionReachedBuildPos(psDroid, s->pos.x, s->pos.y, s->rot.direction, s->pStructureType) || autohelpCandidateReachable(reach, s))
+		if (actionReachedBuildPos(psDroid, s->pos.x, s->pos.y, s->rot.direction, s->pStructureType))
+		{
+			return {candidate.structure, candidate.action};
+		}
+		if (!reach)
+		{
+			reach.emplace(fpathDroidReachableTiles(psDroid, gameWorld.map, radius));
+		}
+		if (autohelpCandidateReachable(*reach, s))
 		{
 			return {candidate.structure, candidate.action};
 		}
