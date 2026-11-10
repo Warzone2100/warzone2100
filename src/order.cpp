@@ -292,10 +292,12 @@ DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
 	return _findSomeoneToRepair(nullptr, queue, psTurret->pos.x, psTurret->pos.y, radius, psTurret->player);
 }
 
-/** This function checks if there are any structures to repair or help build in a given radius near the droid defined by REPAIR_RANGE if it is on hold, and REPAIR_MAXDIST if not on hold.
- * It returns a damaged or incomplete structure if any was found or nullptr if none was found.
+/** Returns an autohelp target and the help action (e.g. build, repair).
+ * Autohelp: idle trucks automatically help work on nearby structures, within REPAIR_RANGE
+ * of the droid if it is on hold, and REPAIR_MAXDIST if not.
+ * If no autohelp targets are available, returns nullptr.
  */
-static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid)
+static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 {
 	STRUCTURE *psFailedTarget = nullptr;
 	if (psDroid->action == DACTION_SULK)
@@ -308,7 +310,7 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 	unsigned bestDistanceSq = radius * radius;
 	std::pair<STRUCTURE *, DROID_ACTION> best = {nullptr, DACTION_NONE};
 
-	WZ_PERF_SCOPE(T_checkForDamagedStruct);
+	WZ_PERF_SCOPE(T_chooseAutohelpTarget);
 
 	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
 	{
@@ -400,17 +402,16 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
 		case DROID_CONSTRUCT:
 		case DROID_CYBORG_CONSTRUCT:
 		{
-			//construct droids default to repairing and helping structures within a given range
-			auto damaged = checkForDamagedStruct(psDroid);
-			if (damaged.second == DACTION_REPAIR)
+			const auto [target, action] = chooseAutohelpTarget(psDroid);
+			if (action == DACTION_REPAIR)
 			{
-				actionDroid(psDroid, damaged.second, damaged.first);
+				actionDroid(psDroid, action, target);
 			}
-			else if (damaged.second == DACTION_BUILD)
+			else if (action == DACTION_BUILD)
 			{
-				psDroid->order.psStats = damaged.first->pStructureType;
-				psDroid->order.direction = damaged.first->rot.direction;
-				actionDroid(psDroid, damaged.second, damaged.first->pos.x, damaged.first->pos.y);
+				psDroid->order.psStats = target->pStructureType;
+				psDroid->order.direction = target->rot.direction;
+				actionDroid(psDroid, action, target->pos.x, target->pos.y);
 			}
 			break;
 		}

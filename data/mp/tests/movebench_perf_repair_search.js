@@ -2,7 +2,7 @@ include("tests/movebench_common.js");
 
 // Idle construction trucks standing in a field of damaged and half-built structures.
 //
-// checkForDamagedStruct runs once per tick for every idle truck, and reaches the tests past the
+// chooseAutohelpTarget runs once per tick for every idle truck, and reaches the tests past the
 // status check only when a friendly structure within five tiles is damaged or unfinished. Nothing
 // else in the suite gets there: the standard scenarios field no construction droids, and
 // perf_battle's towers stand clear of the fighting and stay whole.
