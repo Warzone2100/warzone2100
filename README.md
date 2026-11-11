@@ -301,7 +301,7 @@ Warzone 2100 is free software; you can redistribute it and/or modify it under th
 
 [![SPDX-License-Identifier: GPL-2.0-or-later](https://img.shields.io/static/v1?label=SPDX-License-Identifier&message=GPL-2.0-or-later&color=blue&logo=open-source-initiative&logoColor=white&logoWidth=10&style=flat-square)](COPYING)
 
-More information: [COPYING.README](COPYING.README), [COPYING.NONGPL](COPYING.NONGPL)
+More information: [COPYING.ORIGRELEASE](doc/licenses/COPYING.ORIGRELEASE), [COPYING.NONGPL](COPYING.NONGPL)
 
 # Special thanks
 
