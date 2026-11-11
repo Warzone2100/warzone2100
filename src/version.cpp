@@ -26,6 +26,7 @@
 #include "stringdef.h"
 
 #include <algorithm>
+#include <cstdlib>
 #include <vector>
 #include <regex>
 #include <utility>
@@ -198,6 +199,40 @@ const char *version_getLatestTag()
 const char *version_getVcsFullHash()
 {
 	return VCS_FULL_HASH;
+}
+
+// The upstream source ref (for links into the official repository) that this build corresponds to:
+// - the tag, for tagged builds
+// - the full commit hash, for other official builds
+// - "master", for all other builds (a fork's commit may not exist upstream)
+std::string version_getUpstreamSourceRef()
+{
+	if (strlen(vcs_tag))
+	{
+		return vcs_tag;
+	}
+	if (strcmp(PACKAGE_DISTRIBUTOR, "wz2100.net") == 0 && strlen(VCS_FULL_HASH))
+	{
+		return VCS_FULL_HASH;
+	}
+	return "master";
+}
+
+// The copyright notice designated in ATTRIBUTION.txt
+// [Year] is the year of the committer date of the most recent commit
+const char *version_getProjectCopyrightNotice()
+{
+	static const std::string notice = []() {
+		// This function dates from 2026, so any build of it is from 2026 or later by definition
+		int year = std::max(atoi(VCS_MOST_RECENT_COMMIT_YEAR), 2026);
+		return "Copyright (C) 2005-" + std::to_string(year) + " Warzone 2100 Project";
+	}();
+	return notice.c_str();
+}
+
+const char *version_getOriginalReleaseCopyrightNotice()
+{
+	return "Copyright (C) 1999-2004 Eidos Interactive";
 }
 
 // Should follow the form:

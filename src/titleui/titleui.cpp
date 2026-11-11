@@ -26,6 +26,7 @@
 #include "titleui.h"
 #include "../intdisplay.h"
 #include "../hci.h"
+#include "../screens/aboutscreen.h"
 
 std::shared_ptr<WzTitleUI> wzTitleUICurrent;
 
@@ -44,7 +45,10 @@ void changeTitleUI(std::shared_ptr<WzTitleUI> target)
 	{
 		// Deletes the backdrop, which in turn deletes the rest of the UI from whatever was on screen before this UI
 		widgDelete(psWScreen, FRONTEND_BACKDROP);
+		// The main menu's copyright notice is attached to the root form (outside the backdrop)
+		widgDelete(psWScreen, FRONTEND_ABOUT);
 	}
+	closeAboutScreen();
 	if (target)
 	{
 		target->start();

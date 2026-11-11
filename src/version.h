@@ -34,6 +34,10 @@ std::string version_getVersionedAppDirFolderName();
 std::string version_getVersionedModsFolderPath(std::string subFolders = "");
 const char* WZ_DECL_PURE version_getLatestTag();
 const char* WZ_DECL_PURE version_getVcsFullHash();
+std::string version_getUpstreamSourceRef();
+
+const char *version_getProjectCopyrightNotice();
+const char *version_getOriginalReleaseCopyrightNotice();
 
 std::string version_getBuildIdentifierReleaseString();
 std::string version_getBuildIdentifierReleaseEnvironment();

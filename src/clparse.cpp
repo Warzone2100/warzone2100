@@ -782,6 +782,11 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 
 		case CLI_VERSION:
 			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
+			printf("%s, %s\n", version_getProjectCopyrightNotice(), version_getOriginalReleaseCopyrightNotice());
+			printf("https://wz2100.net\n\n");
+			printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
+			printf("This is free software, and you are welcome to redistribute it under certain conditions;\n");
+			printf("see COPYING and COPYING.SECTION7 for details.\n");
 			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
 
 		case CLI_GAMESTATE_SELFTEST:
