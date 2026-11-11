@@ -331,7 +331,7 @@ set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 
 set(CPACK_RPM_PACKAGE_SUMMARY   "Innovative 3D real-time strategy")
 set(CPACK_RPM_PACKAGE_GROUP     "Amusements/Games")
-set(CPACK_RPM_PACKAGE_LICENSE   "GPLv2+ and CC-BY-SA")
+set(CPACK_RPM_PACKAGE_LICENSE   "GPLv3+ and CC-BY-SA")
 set(CPACK_RPM_PACKAGE_URL       "https://wz2100.net/")
 
 #####################

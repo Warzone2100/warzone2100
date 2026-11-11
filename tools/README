@@ -9,4 +9,4 @@ This directory (will) contain all sorts of Warzone 2100 related tools.
   - This file should contain the full licensing conditions applied to the entire tool.
   - If parts of this tool are licensed differently this *must* be made note of in this file.
   - Preferrably all tools should be licensed GPL (or maybe LGPL if it's easily reusable for other projects?).
-  - In case the GPL is used it is best copied from /trunk/COPYING using the `svn copy` command.
+  - In case the GPL is used, copy its text from the top-level COPYING (GPL version 3) or from doc/licenses/COPYING.GPL-2.0 (GPL version 2).

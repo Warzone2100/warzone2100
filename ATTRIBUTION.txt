@@ -1,0 +1,115 @@
+========================================================================
+WARZONE 2100 - DESIGNATED ATTRIBUTION
+For files under the Warzone 2100 additional terms (COPYING.SECTION7)
+========================================================================
+
+This file designates the copyright notice and project website link
+referred to in clause 1 of the Warzone 2100 additional terms under
+Section 7 of the GNU General Public License version 3
+(COPYING.SECTION7). Clause 1 sets out how they apply to works
+containing material under those terms.
+
+The designated values that apply are those in this file as published
+by the Warzone 2100 Project in the version from which the material was
+obtained or derived. A copy of this file edited by anyone else does not
+change them. Revisions to this file apply to versions published after
+the revision and do not change what is required of copies already
+distributed.
+
+------------------------------------------------------------------------
+1. DESIGNATED VALUES
+------------------------------------------------------------------------
+
+Copyright notice:
+
+    Copyright (C) 2005-[Year] Warzone 2100 Project
+
+Project website link:
+
+    https://wz2100.net
+
+"[Year]" is a placeholder for the year of the committer date of the
+most recent commit in the version-control history of the source tree
+from which the build was produced or, where that is unavailable, the
+year recorded for that purpose in the source distribution. A work other
+than the original version may instead use the year of the most recent
+commit from the official Warzone 2100 source repository that it
+includes.
+
+The notice is not translated. "©" may be used in place of "(C)", and
+the notice may be preceded by "Portions" or similar words where it
+covers only part of a work.
+
+------------------------------------------------------------------------
+2. MAINTENANCE OF THIS FILE
+------------------------------------------------------------------------
+
+This file is maintained by the Warzone 2100 Project maintainers, who
+may revise the designated values in future releases. Contributors
+agree to this as described in CONTRIBUTING.md.
+
+As of this revision, the Warzone 2100 Project maintainers are:
+
+  - past-due (GitHub: @past-due)
+  - Per Inge Mathisen (GitHub: @perim)
+  - the administrators of the Warzone2100 GitHub organization
+    (https://github.com/Warzone2100), or of any successor
+    infrastructure designated by them.
+
+------------------------------------------------------------------------
+3. SUMMARY FOR DISTRIBUTORS AND FORKS (informational)
+------------------------------------------------------------------------
+
+This section is a summary only. The binding terms are those in
+COPYING.SECTION7; where this summary differs from them, those terms
+govern.
+
+- Distribution packages: builds whose changes are limited to selecting
+  build options the build system provides, building and packaging,
+  system and platform compatibility, launchers and sandboxing wrappers,
+  security fixes (disabling features only as far as reasonably
+  necessary), bug fixes from upstream, and upstream translations need no
+  renaming and no "unofficial modified version" notice. This holds
+  provided that, apart from the direct effects of those changes, the
+  game is otherwise unchanged; that they remove or disable nothing
+  except through those build options or as a security fix requires; that
+  they add no data collection, data transmission, or advertising; and
+  that the required notices are left intact.
+
+- Modified versions and forks of the game that are distributed: may
+  say they are based on Warzone 2100, but must use a product name that
+  does not include "Warzone 2100" (or a variant such as "Warzone2100"
+  or "WZ2100"); must clearly display a notice identifying them as an
+  unofficial modified version of Warzone 2100 on the main menu (or
+  somewhere at least as prominent), and in their startup banner or
+  version output where the original version prints one; and must
+  include the designated copyright notice above in their Appropriate
+  Legal Notices, and are asked to include the project website link as
+  well. Executable, application bundle, package, file, and directory
+  names need not change, though they may. Versions modified only for
+  private use, and never distributed, need no marking.
+
+- Not affected by the marking rules: separate programs that use only
+  portions of material under these terms and are not likely to be taken
+  for the game; mods, maps, and add-ons (unless a distribution installs
+  or enables by default mods, other than those published by the
+  Warzone 2100 Project, that modify or replace material under these
+  terms); and test builds of changes proposed upstream that are labeled
+  as such. All of these must still not misrepresent their origin, and
+  those that display Appropriate Legal Notices must include the
+  designated copyright notice in them.
+
+- Build provenance: builds record information about their origin, such
+  as the DISTRIBUTOR value, version-control details (commit, branch,
+  tag), and build manifest publisher. Under clause 2(a) of
+  COPYING.SECTION7, only builds produced by the Warzone 2100 Project
+  (including builds made on its behalf) may use the DISTRIBUTOR value
+  "wz2100.net" or carry provenance information copied from an official
+  build, and provenance information may not be set or altered so that
+  another build appears to come from the Warzone 2100 Project.
+  Information a build generates itself, from the source and data it was
+  actually built from or from its own outputs (such as file hashes, or
+  the commit recorded in a source archive it was built from), is not
+  copied, even where it matches an official build's.
+
+========================================================================
