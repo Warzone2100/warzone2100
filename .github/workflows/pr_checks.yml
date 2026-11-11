@@ -1,0 +1,38 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions: {}
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  contributing-md-checkbox:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for the ticked CONTRIBUTING.md checkbox
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+        run: |
+          if [ "${PR_AUTHOR_TYPE}" = "Bot" ]; then
+            echo "Pull request opened by a bot account (${PR_AUTHOR}): skipping"
+            exit 0
+          fi
+          case "${PR_AUTHOR}" in
+            "wzdev-ci")
+              echo "Pull request opened by an automation account (${PR_AUTHOR}): skipping"
+              exit 0
+              ;;
+          esac
+          if printf '%s\n' "${PR_BODY}" | tr -d '\r' | grep -qiE '^[[:space:]]*[-*][[:space:]]+\[[xX]\][[:space:]]+I have read \[CONTRIBUTING\.md\]'; then
+            echo "CONTRIBUTING.md checkbox is ticked."
+            exit 0
+          fi
+          echo "::error title=CONTRIBUTING.md checkbox not ticked::Please tick the CONTRIBUTING.md checkbox in the pull request description. If the description doesn't have one, add this line and tick it: - [x] I have read [CONTRIBUTING.md](https://github.com/Warzone2100/warzone2100/blob/master/CONTRIBUTING.md), I have the right to submit this contribution, and I license it as CONTRIBUTING.md describes."
+          exit 1
