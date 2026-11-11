@@ -2,7 +2,7 @@
 <component type="desktop">
 	<id>@WZ_APPSTREAM_ID@@WZ_OUTPUT_NAME_SUFFIX@</id>
 	<metadata_license>CC0-1.0</metadata_license>
-	<project_license>GPL-2.0-or-later</project_license>
+	<project_license>GPL-3.0-or-later</project_license>
 	<name>Warzone 2100@WZ_NAME_SUFFIX@</name>
 	<summary>Command the forces of The Project in a battle to rebuild the world</summary>
 	<summary xml:lang="de">Befehlige die Truppen des Projektes in dem Kampf die Welt wieder aufzubauen</summary>

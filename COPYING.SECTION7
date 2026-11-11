@@ -1,0 +1,214 @@
+========================================================================
+WARZONE 2100 ADDITIONAL TERMS UNDER SECTION 7 OF THE GNU GPL VERSION 3
+Version 1.0
+SPDX identifiers: AdditionRef-WZ2100-GPL-3.0-Section-7-1.0 (this version
+only); AdditionRef-WZ2100-GPL-3.0-Section-7-1.0-or-later (this version
+or any later version)
+========================================================================
+
+These terms ask that the Warzone 2100 Project be credited, and that
+modified versions of the game not be mistaken for official releases.
+They are not intended to restrict any other use permitted by the
+License, and they set out in detail what does not require marking, for
+the avoidance of doubt.
+
+These additional terms apply to any file whose license notice applies
+version 1.0 of the Warzone 2100 additional terms to it, including a
+notice that allows any later version. They are added pursuant to
+Section 7 of the GNU General Public License version 3 and supplement
+that License for the material in those files.
+
+A file whose license notice names a version of these terms "or (at your
+option) any later version" is governed by that version or, at your
+option, by any later version published by the Warzone 2100 Project.
+Otherwise, a file is governed only by the version its notice names.
+Each version of these terms will remain available.
+
+When conveying such a file, you must keep its license notice intact and
+include a copy of the version of these terms that applies.
+
+------------------------------------------------------------------------
+0. Definitions
+------------------------------------------------------------------------
+
+In these terms:
+
+"The License" means the GNU General Public License, version 3, or any
+later version of that License that you choose to apply to this
+material. These terms apply whichever version of the License you
+choose. References to numbered sections of the License are to the
+sections of version 3 of the License; where a later version of the
+License applies, they refer to the corresponding provisions of that
+version.
+
+"This material" means the material in any file whose license notice
+applies these terms, except material in such a file that is identified
+as being under other terms.
+
+"The Warzone 2100 Project" means the project that maintains the
+official Warzone 2100 source repository at
+https://github.com/Warzone2100/warzone2100, or any successor to that
+repository that it designates.
+
+"The original version" means this material, and the Warzone 2100 game,
+as published by the Warzone 2100 Project.
+
+"A modified version" means a version of a work containing this
+material in which this material has been modified from the original
+version, except as provided in clause 2(d).
+
+"Appropriate Legal Notices" has the meaning given in Section 0 of the
+License.
+
+------------------------------------------------------------------------
+1. Attribution (Section 7(b))
+------------------------------------------------------------------------
+
+Works containing this material that display Appropriate Legal Notices
+must include in those notices the copyright notice designated in
+ATTRIBUTION.txt as published by the Warzone 2100 Project in the version
+from which this material was obtained or derived.
+
+The Warzone 2100 Project also asks that those notices include the
+project website link designated in ATTRIBUTION.txt, as an active
+hyperlink where they can display hyperlinks, so that users can find
+the official project.
+
+Nothing in this clause shall be construed to prohibit additional
+notices otherwise permitted or required by the License, provided that
+such notices do not obscure or replace the notices required above.
+
+------------------------------------------------------------------------
+2. Origin and modified versions (Sections 7(c) and 7(d))
+------------------------------------------------------------------------
+
+(a) Origin
+
+You may not misrepresent the origin of this material, including by:
+
+  - representing this material, or any copy or build containing it, as
+    provided, distributed, or endorsed by the Warzone 2100 Project when
+    it is not; or
+
+  - setting, copying, or altering build or version information (such
+    as a distributor identifier, version-control data, or a build
+    manifest) so that a build appears to have been produced or released
+    by the Warzone 2100 Project when it was not.
+
+Information that a build generates itself, from the source and data it
+was actually built from or from its own outputs, is not copied or
+altered for this purpose. Builds made on behalf of, or under the
+direction of, the Warzone 2100 Project are produced by it for this
+purpose.
+
+Conveying the original version, or a version of it whose changes from
+the original version are all of the kinds listed in clause 2(d) and
+meet the conditions of that clause, under the name "Warzone 2100" and
+with the notices these terms require is not by itself a
+misrepresentation. Including the notices required by clause 1 is not by
+itself a representation that a copy or build is provided, distributed,
+or endorsed by the Warzone 2100 Project.
+
+(b) Marking of modified versions
+
+A modified version that you convey must be marked as different from
+the original version as follows:
+
+  (i)  It may truthfully describe itself as based on Warzone 2100, but
+       it must be presented under a product name that does not include
+       "Warzone 2100" or a variant spelling or abbreviation of it (such
+       as "Warzone2100" or "WZ2100"). The product name is the name
+       shown in the program's own interface (such as its window title
+       and main menu), in application launchers and software centers,
+       and in store listings and similar descriptions of it.
+
+  (ii) Where it has an interactive user interface, it must clearly and
+       legibly display a notice identifying it as an unofficial
+       modified version of Warzone 2100 (for example, "Based on
+       Warzone 2100 - unofficial modified version") on its main menu
+       (or equivalent primary screen), or in another place at least as
+       prominent. Where the original version prints a startup banner
+       or version output, the corresponding output of the modified
+       version must also include such a notice.
+
+This clause does not require changing the names of executables,
+application bundles, packages, files, directories, or other identifiers
+by which the program is invoked, installed, or located.
+
+(c) Scope of marking
+
+Clause 2(b) applies to a modified version that is, or is derived from,
+the Warzone 2100 game as a whole (including with material added or
+removed), or that is likely to be taken for a version of it. It does
+not apply to:
+
+  - a separate program that incorporates only portions of this
+    material, and is not likely to be taken for a version of the
+    Warzone 2100 game;
+
+  - mods, maps, or other add-ons; or
+
+  - a build distributed only for testing changes proposed for inclusion
+    in the original version, and clearly identified as a test build in
+    its version information.
+
+Those remain subject to clause 2(a).
+
+Using the program's built-in mod, map, or add-on mechanisms does not by
+itself create a modified version for the purposes of this clause.
+However, a version distributed with mods, maps, or add-ons installed or
+enabled by default, other than those of the original version or
+otherwise published by the Warzone 2100 Project, is a modified version
+if they modify or replace this material, and the exclusion of mods,
+maps, and add-ons in this clause does not apply to it.
+
+(d) Changes that do not create a modified version
+
+For the purposes of this clause, a version is not a modified version if
+its changes from the original version are limited to:
+
+  (1) selecting build options provided by the original version's build
+      system (for example, to disable optional integrations);
+
+  (2) changes to building, packaging, installation, file locations, and
+      packaging metadata;
+
+  (3) changes for compatibility with, or to use, libraries, fonts, or
+      other components of the host system;
+
+  (4) launchers or wrappers whose only function is to start the program
+      and configure its execution environment, such as sandboxing;
+
+  (5) fixes for security vulnerabilities, provided that they do not
+      remove or disable features of the original version beyond what
+      is reasonably necessary to fix the vulnerability;
+
+  (6) fixes for defects that correspond to fixes made in the original
+      version, including adaptations of those fixes to earlier
+      releases; and
+
+  (7) translations taken from the original version's translation
+      sources;
+
+provided that, apart from the direct effects of those changes, the
+version's gameplay, features, content, and behavior are those of the
+original version; that the changes do not remove or disable features
+or content of the original version, except by selecting options under
+item (1) or as permitted by item (5); that they do not cause it to
+collect or transmit data it otherwise would not, or to display
+advertising; and that they do not alter or obscure the notices required
+by these terms.
+
+------------------------------------------------------------------------
+3. Construction
+------------------------------------------------------------------------
+
+These additional terms are intended to fall wholly within Sections
+7(b), 7(c) and 7(d) of the License and shall be construed accordingly.
+If any provision of these terms, or any portion of a provision, is
+unenforceable or is a further restriction within the meaning of
+Section 10 of the License, only that provision or portion shall be
+disregarded, and only to the extent necessary; the remainder of these
+terms shall continue to apply.
+
+========================================================================

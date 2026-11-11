@@ -898,16 +898,11 @@ add_subdirectory(3rdparty)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
 
 # Determine distribution license
-set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
-if(WZ_ENABLE_BACKEND_VULKAN OR WZ_ENABLE_BASIS_UNIVERSAL)
-	# If Vulkan or Basis Universal is enabled, use the GPL3 license for distribution
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pkg/licenses/COPYING.gpl3" "${WZ_DIST_LICENSE}" COPYONLY)
-else()
-	# GPLv2
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/licenses/COPYING.GPL-2.0" "${WZ_DIST_LICENSE}" COPYONLY)
-endif()
+# Warzone 2100 as a whole is licensed under the GNU GPL version 3 or later
+# (see README-LICENSING.md). COPYING contains the GPLv3 text.
+set(WZ_DIST_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
 
-set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL "${WZ_DIST_LICENSE}" doc/licenses/COPYING.ORIGRELEASE README.md)
+set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL "${WZ_DIST_LICENSE}" README-LICENSING.md COPYING.SECTION7 doc/licenses/COPYING.ORIGRELEASE doc/licenses/COPYING.GPL-2.0 ATTRIBUTION.txt README.md)
 
 CONFIGURE_WZ_COMPILER_WARNINGS()
 add_subdirectory(build_tools)
@@ -988,8 +983,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			# Convert all LFs to CRLFs
 			string(REPLACE "\n" "\r\n" _contents "${_contents}")
 		endif()
-		# Write out the converted file
-		set(_rfile_newfilename "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}.txt")
+		# Write out the converted file (adding ".txt" unless it already has it)
+		if(_rfile_filename MATCHES "\\.txt$")
+			set(_rfile_newfilename "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}")
+		else()
+			set(_rfile_newfilename "${CMAKE_CURRENT_BINARY_DIR}/${_rfile_filename}.txt")
+		endif()
 		file(WRITE "${_rfile_newfilename}" "${_contents}")
 		list(APPEND _new_wz2100_ROOT_FILES "${_rfile_newfilename}")
 	endforeach()

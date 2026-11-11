@@ -1,6 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Warzone 2100
 Source: https://github.com/Warzone2100/warzone2100
+Comment: The work as a whole is distributed under GPL-3+. Files that do not
+ state otherwise are GPL-2+ (see README-LICENSING.md). Files whose header
+ applies the Warzone 2100 additional terms are GPL-3+ with the additional
+ terms in COPYING.SECTION7; list them in their own stanza as they are added.
 
 Files: *
 Copyright: 1999-2004, Eidos Interactive
