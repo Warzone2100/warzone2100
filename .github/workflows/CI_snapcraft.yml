@@ -71,7 +71,7 @@ jobs:
         echo "WZ_NAME_SUFFIX=${WZ_NAME_SUFFIX}" >> $GITHUB_ENV
 
         WZ_DISTRIBUTOR="UNKNOWN"
-        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ] && echo "${GITHUB_EVENT_NAME}" | grep -qE '^(push|workflow_run|release|workflow_dispatch)$'; then
           WZ_DISTRIBUTOR="wz2100.net"
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"

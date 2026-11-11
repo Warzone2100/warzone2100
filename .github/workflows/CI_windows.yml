@@ -250,7 +250,7 @@ jobs:
 
         $WZ_DISTRIBUTOR = "UNKNOWN"
         $WZ_BUILDMANIFEST_PUBLISHER = ""
-        if (${env:GITHUB_REPOSITORY} -eq "Warzone2100/warzone2100") {
+        if ((${env:GITHUB_REPOSITORY} -eq "Warzone2100/warzone2100") -and (@("push", "workflow_run", "release", "workflow_dispatch") -contains ${env:GITHUB_EVENT_NAME})) {
           $WZ_DISTRIBUTOR = "wz2100.net"
           $WZ_BUILDMANIFEST_PUBLISHER = "wz2100-project"
         }
