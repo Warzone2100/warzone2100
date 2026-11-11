@@ -108,7 +108,7 @@ jobs:
         echo "OUTPUT_DIR=output" >> $GITHUB_ENV
 
         WZ_DISTRIBUTOR="UNKNOWN"
-        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ] && echo "${GITHUB_EVENT_NAME}" | grep -qE '^(push|workflow_run|release|workflow_dispatch)$'; then
           WZ_DISTRIBUTOR="wz2100.net"
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
@@ -270,7 +270,7 @@ jobs:
           cmake --build "${{ github.workspace }}/buildmanifest"
           echo "WZ_BUILDMANIFEST_TOOL=${{ github.workspace }}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
           WZ_BUILDMANIFEST_PUBLISHER=""
-          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ] && echo "${GITHUB_EVENT_NAME}" | grep -qE '^(push|workflow_run|release|workflow_dispatch)$'; then
             WZ_BUILDMANIFEST_PUBLISHER="wz2100-project"
           fi
           echo "WZ_BUILDMANIFEST_PUBLISHER=${WZ_BUILDMANIFEST_PUBLISHER}"
@@ -456,7 +456,7 @@ jobs:
           cmake --build "${{ github.workspace }}/buildmanifest"
           echo "WZ_BUILDMANIFEST_TOOL=${{ github.workspace }}/buildmanifest/wzbuildmanifest" >> $GITHUB_ENV
           WZ_BUILDMANIFEST_PUBLISHER=""
-          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ] && echo "${GITHUB_EVENT_NAME}" | grep -qE '^(push|workflow_run|release|workflow_dispatch)$'; then
             WZ_BUILDMANIFEST_PUBLISHER="wz2100-project"
           fi
           echo "WZ_BUILDMANIFEST_PUBLISHER=${WZ_BUILDMANIFEST_PUBLISHER}" >> $GITHUB_ENV
