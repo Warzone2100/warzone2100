@@ -582,8 +582,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	if (wz2100_ROOT_FILES)
 		set(_fullpath_wz2100_ROOT_FILES)
 		foreach(rfile ${wz2100_ROOT_FILES})
-			get_filename_component(_rfile_filename "${rfile}" NAME)
-			list(APPEND _fullpath_wz2100_ROOT_FILES "${PROJECT_SOURCE_DIR}/${_rfile_filename}")
+			if(IS_ABSOLUTE "${rfile}")
+				list(APPEND _fullpath_wz2100_ROOT_FILES "${rfile}")
+			else()
+				list(APPEND _fullpath_wz2100_ROOT_FILES "${PROJECT_SOURCE_DIR}/${rfile}")
+			endif()
 		endforeach()
 
 		set_property(
