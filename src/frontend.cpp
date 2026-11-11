@@ -85,6 +85,7 @@
 #include "notifications.h"
 #include "activity.h"
 #include "hci/groups.h"
+#include "screens/aboutscreen.h"
 
 #if defined(__EMSCRIPTEN__)
 # include "emscripten_helpers.h"
@@ -204,6 +205,124 @@ static void closeMissingVideosNotification()
 	cancelOrDismissNotificationsWithTag(VIDEO_TAG);
 }
 
+// ////////////////////////////////////////////////////////////////////////////
+// Copyright notice in the bottom-left corner of the main menu, which opens the About screen
+
+#define TITLE_LEGAL_NOTICE_X 10
+#define TITLE_LEGAL_NOTICE_ICON_GAP 4
+
+// Baseline of the bottom line of text in the bottom-left corner of the title screens
+static int titleBottomLineBaseline()
+{
+	return pie_GetVideoBufferHeight() - 11;
+}
+
+static int titleMenuPanelX0()
+{
+	return (pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2 + FRONTEND_BOTFORMX;
+}
+
+static int titleMenuPanelY0()
+{
+	return (pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT) / 2 + FRONTEND_BOTFORMY;
+}
+
+// Whether a line of small text with the given baseline would sit below the main menu panel
+static bool titleSmallTextLineFitsBelowMenuPanel(int baseline)
+{
+	return baseline + iV_GetTextAboveBase(font_small) >= titleMenuPanelY0() + FRONTEND_BOTFORMH;
+}
+
+static std::weak_ptr<WIDGET> titleLegalNotice;
+
+class TitleLegalNoticeButton : public W_BUTTON
+{
+public:
+	TitleLegalNoticeButton()
+	{
+		FontID = font_small;
+	}
+
+	int32_t idealWidth() override
+	{
+		int iconSize = iV_GetTextLineSize(FontID);
+		return iV_GetTextWidth(pText, FontID) + TITLE_LEGAL_NOTICE_ICON_GAP + iconSize;
+	}
+
+	int32_t idealHeight() override
+	{
+		return iV_GetTextLineSize(FontID);
+	}
+
+	void display(int xOffset, int yOffset) override
+	{
+		int x0 = xOffset + x();
+		int y0 = yOffset + y();
+		text.setText(pText, FontID);
+		int baseline = y0 - text.aboveBase();
+
+		bool highlighted = (getState() & WBUT_HIGHLIGHT) != 0;
+		PIELIGHT colour = (highlighted) ? WZCOL_YELLOW : WZCOL_TEXT_BRIGHT;
+
+		// Drop shadow, as for the other text drawn on the title screen backdrop
+		text.render(x0 - 1, baseline + 1, WZCOL_GREY);
+		text.render(x0, baseline, colour);
+
+		int iconSize = text.lineSize();
+		int iconX0 = x0 + text.width() + TITLE_LEGAL_NOTICE_ICON_GAP;
+		iV_DrawImageFileAnisotropicTint(FrontImages, IMAGE_INFO_CIRCLE, iconX0, y0 + (height() - iconSize) / 2, Vector2f(iconSize, iconSize), colour);
+	}
+
+private:
+	WzText text;
+};
+
+static void addTitleLegalNotice()
+{
+	auto notice = std::make_shared<TitleLegalNoticeButton>();
+	psWScreen->psForm->attach(notice);
+	notice->id = FRONTEND_ABOUT;
+	notice->setString(version_getProjectCopyrightNotice()); // not translated
+	notice->setTip(_("About Warzone 2100 and its license"));
+	notice->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		int w = psWidget->idealWidth();
+		int h = psWidget->idealHeight();
+		if (titleSmallTextLineFitsBelowMenuPanel(titleBottomLineBaseline()))
+		{
+			// The bottom line of the bottom-left corner of the screen
+			psWidget->setGeometry(TITLE_LEGAL_NOTICE_X, titleBottomLineBaseline() + iV_GetTextAboveBase(font_small), w, h);
+		}
+		else
+		{
+			// Small windows: the empty top row of the menu panel, after the version-check button
+			psWidget->setGeometry(titleMenuPanelX0() + 7 + MULTIOP_BUTW + 10, titleMenuPanelY0() + 7 + (MULTIOP_BUTH - h) / 2, w, h);
+		}
+	}));
+	titleLegalNotice = notice;
+}
+
+// The renderer info normally sits on the bottom line of the bottom-left corner.
+// On the main menu, it moves one line up when the copyright notice is on the bottom line,
+// and is hidden if it would overlap the menu panel.
+static optional<int> titleRendererInfoBaseline()
+{
+	auto notice = titleLegalNotice.lock();
+	if (!notice || notice->parent() == nullptr)
+	{
+		return titleBottomLineBaseline();
+	}
+	int baseline = titleBottomLineBaseline();
+	if (titleSmallTextLineFitsBelowMenuPanel(baseline))
+	{
+		baseline -= iV_GetTextLineSize(font_small);
+	}
+	if (!titleSmallTextLineFitsBelowMenuPanel(baseline))
+	{
+		return nullopt;
+	}
+	return baseline;
+}
+
 void startTitleMenu()
 {
 	intRemoveReticule();
@@ -251,6 +370,8 @@ void startTitleMenu()
 	moveToParentRightEdge(pRightAlignedButton, 6);
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
+
+	addTitleLegalNotice();
 }
 
 void runContinue()
@@ -299,6 +420,9 @@ bool runTitleMenu()
 		break;
 	case FRONTEND_CHATLINK:
 		runchatlink();
+		break;
+	case FRONTEND_ABOUT:
+		showAboutScreen();
 		break;
 	case FRONTEND_CONTINUE:
 		runContinue();
@@ -696,7 +820,11 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 		cache.modListText.render(9, 14, WZCOL_GREY);
 	}
 
-	cache.gfxBackend.render(9, pie_GetVideoBufferHeight() - 10, WZCOL_GREY);
+	optional<int> gfxBackendBaseline = titleRendererInfoBaseline();
+	if (gfxBackendBaseline.has_value())
+	{
+		cache.gfxBackend.render(9, gfxBackendBaseline.value() + 1, WZCOL_GREY);
+	}
 
 	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, WZCOL_TEXT_BRIGHT, 270.f);
 
@@ -705,7 +833,10 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 		cache.modListText.render(10, 15, WZCOL_TEXT_BRIGHT);
 	}
 
-	cache.gfxBackend.render(10, pie_GetVideoBufferHeight() - 11, WZCOL_TEXT_BRIGHT);
+	if (gfxBackendBaseline.has_value())
+	{
+		cache.gfxBackend.render(10, gfxBackendBaseline.value(), WZCOL_TEXT_BRIGHT);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////

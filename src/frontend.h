@@ -190,6 +190,7 @@ enum
 	FRONTEND_UPGRDLINK,
 	FRONTEND_DONATELINK,
 	FRONTEND_CHATLINK,
+	FRONTEND_ABOUT,						// copyright notice that opens the About screen
 	// begin menu
 	FRONTEND_SINGLEPLAYER	= 20100,	// title screen
 	FRONTEND_MULTIPLAYER,
