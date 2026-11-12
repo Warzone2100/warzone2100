@@ -90,7 +90,7 @@ namespace
 
 struct Tuning
 {
-	float maxRayLength = 96.f;
+	float maxRayLength = 128.f;
 	float thicknessCap = 24.f;
 	float rayBias = 2.f;
 	float minRayStart = 0.5f;
