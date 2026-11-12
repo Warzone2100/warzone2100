@@ -347,7 +347,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 					{ _("Off"), "", CONTACT_SHADOWS_MODE::OFF },
 					{ _("Low"), "", CONTACT_SHADOWS_MODE::LOW },
 					{ _("Normal"), "", CONTACT_SHADOWS_MODE::NORMAL },
-					{ _("High"), "", CONTACT_SHADOWS_MODE::HIGH },
+					{ _("High"), _("Warning: This preset can significantly reduce frame rate!"), CONTACT_SHADOWS_MODE::HIGH },
 				};
 				result.setCurrentIdxForValue(war_getContactShadowsMode());
 				return result;
