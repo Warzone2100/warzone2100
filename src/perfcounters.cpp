@@ -47,7 +47,7 @@ static const char *counterNames[] =
 	"T_gameStateUpdate", "T_processVisibility", "T_visibleObject", "T_checkFireLine", "T_gridQuery",
 	"T_droidUpdate", "T_moveUpdateDroid", "T_moveCalcDroidSlide", "T_moveCheckSquished", "T_steeringScan",
 	"T_aiBestNearestTarget", "T_aiChooseTargetStruct", "T_aiChooseTargetDroid", "T_structureUpdate", "T_projUpdateAll", "T_projInFlight",
-	"T_checkForDamagedStruct",
+	"T_chooseAutohelpTarget",
 	"T_fpathRoute", "T_fpathRouteWait", "T_fpathSetBlockingMap", "T_fpathAStarRoute", "T_corridorGateUpdate",
 	"T_congestionOverlay", "T_objmemUpdate", "T_checkReferences",
 	"T_displayDynamicObjects", "T_display3DProjectiles", "T_processEffects", "T_bucketSort",

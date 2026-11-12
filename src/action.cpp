@@ -554,19 +554,25 @@ bool actionReachedDroid(DROID const *psDroid, DROID const *psOther)
 }
 
 
+StructureBounds actionBuildPosBounds(int x, int y, uint16_t dir, BASE_STATS const *psStats)
+{
+	ASSERT_OR_RETURN(StructureBounds(), psStats != nullptr, "Bad stat");
+	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), dir);
+	return StructureBounds(b.map - Vector2i(1, 1), b.size + Vector2i(2, 2));
+}
+
 // check whether a droid is in the neighboring tile to a build position
 bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t dir, BASE_STATS const *psStats)
 {
 	ASSERT_OR_RETURN(false, psStats != nullptr && psDroid != nullptr, "Bad stat or droid");
 	CHECK_DROID(psDroid);
 
-	StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), dir);
-
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
 	// NOT ANY MORE - JOHN
+	StructureBounds b = actionBuildPosBounds(x, y, dir, psStats);
 	Vector2i delta = map_coord(psDroid->pos.xy()) - b.map;
-	return delta.x >= -1 && delta.x <= b.size.x && delta.y >= -1 && delta.y <= b.size.y;
+	return delta.x >= 0 && delta.x < b.size.x && delta.y >= 0 && delta.y < b.size.y;
 }
 
 // How long a truck may be blocked on its way to a build site before it may build from where it is

@@ -37,7 +37,7 @@ include("tests/movebench_common.js");
 //   The first squishes him, and the second must not squish him again
 //   (moveCheckSquished: experience and the mowed-down score would count him twice).
 // - helpbuild: a structure being built is destroyed by a script
-//   in the tick a truck first looks for a structure to help build (checkForDamagedStruct).
+//   in the tick a truck first looks for a structure to autohelp (chooseAutohelpTarget).
 //   The truck must not start building a new one where the dead one was.
 // - repair: the same, with a damaged structure
 //   (the truck must not try to repair it: actionDroid asserts on a dead target, "Droid dead").

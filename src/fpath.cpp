@@ -456,6 +456,65 @@ static Position findNonblockingPosition(const WorldMapState& mapState, Position 
 
 
 
+/// The move type a route for this droid is planned with when moveType is asked for.
+static FPATH_MOVETYPE fpathDroidMoveType(const DROID *psDroid, FPATH_MOVETYPE moveType)
+{
+	// override for AI to blast our way through stuff
+	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
+	{
+		moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
+	}
+	return moveType;
+}
+
+PathReachableTiles fpathDroidReachableTiles(const DROID *psDroid, const WorldMapState &mapState, int radius)
+{
+	PathReachableTiles out;
+	const PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
+	ASSERT_OR_RETURN(out, psPropStats != nullptr, "invalid propulsion stats pointer");
+
+	// Same move type and start tile as a route request for this droid (routeInternal).
+	const PROPULSION_TYPE propulsion = psPropStats->propulsionType;
+	const int owner = psDroid->player;
+	const FPATH_MOVETYPE moveType = fpathDroidMoveType(psDroid, FMT_MOVE);
+	const Vector2i start = map_coord(findNonblockingPosition(mapState, psDroid->pos, propulsion, owner, moveType).xy());
+
+	// Centre the window on the droid, not the start tile, which can be a couple of tiles away.
+	const Vector2i centre = map_coord(psDroid->pos.xy());
+	const Vector2i origin(std::max(centre.x - radius, 0), std::max(centre.y - radius, 0));
+	const Vector2i end(std::min(centre.x + radius + 1, mapState.width), std::min(centre.y + radius + 1, mapState.height));
+	if (start.x < origin.x || start.y < origin.y || start.x >= end.x || start.y >= end.y)
+	{
+		return out;  // The start is off the map or outside the window.
+	}
+	out.origin = origin;
+	out.width = end.x - origin.x;
+	out.height = end.y - origin.y;
+	out.flags.assign(static_cast<size_t>(out.width) * static_cast<size_t>(out.height), 0);
+	auto flag = [&](Vector2i t) -> uint8_t & { return out.flags[out.index(t)]; };
+
+	// Orthogonal steps reach the same tiles a route can: a route never cuts a corner (fpathAStarExplore), so both tiles
+	// beside a diagonal step are open and two orthogonal steps reach the same tile. Like a route, start even if blocked.
+	static const Vector2i steps[] = {Vector2i(0, 1), Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, 0)};
+	std::vector<Vector2i> open(1, start);
+	flag(start) = 1;
+	while (!open.empty())
+	{
+		const Vector2i tile = open.back();
+		open.pop_back();
+		for (const Vector2i &step : steps)
+		{
+			const Vector2i next = tile + step;
+			if (out.inWindow(next) && !flag(next) && !fpathBaseBlockingTile(mapState, next.x, next.y, propulsion, owner, moveType))
+			{
+				flag(next) = 1;
+				open.push_back(next);
+			}
+		}
+	}
+	return out;
+}
+
 static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY)
 {
 	psMoveCntl->destination = Vector2i(targetX, targetY);
@@ -707,11 +766,7 @@ protected:
 		bool acceptNearest;
 		PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 
-		// override for AI to blast our way through stuff
-		if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
-		{
-			moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
-		}
+		moveType = fpathDroidMoveType(psDroid, moveType);
 
 		ASSERT_OR_RETURN(FPR_FAILED, psPropStats != nullptr, "invalid propulsion stats pointer");
 		ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
