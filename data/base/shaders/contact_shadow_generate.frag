@@ -233,6 +233,7 @@ void main()
 	// is already 1/usedWriteViewport, so dynamic resolution does not rescale it.
 	float jitter = wzInterleavedGradientNoise(viewportUv / pixelUV);
 
+	float prevZ = rayOrig.z;
 	bool planeBuilt = false;
 	bool planeSmooth = false;
 	vec3 G = vec3(0.0, 0.0, -1.0);
@@ -252,6 +253,8 @@ void main()
 			break;
 		}
 		vec3 rayView = wzHomogeneousView(ray, ddaT);
+		float zStride = abs(rayView.z - prevZ);
+		prevZ = rayView.z;
 		// Homogeneous UV is viewport UV (wzClipToUV). Comparing it to
 		// prepassUvScaleClamp.zw (texture UV, about `fraction`) would end the
 		// ray partway across the image whenever dynamic resolution is below 1.
@@ -270,8 +273,10 @@ void main()
 		}
 		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
 		float thickness = wzViewThickness(surfZ, params.y, THICKNESS_RELATIVE, THICKNESS_MIN);
-		// Pen is the sample's own view Z, not the far end of the step.
-		// That end may confirm a hit while this texel is still in front.
+		// The depth-scaled slab can be thinner than this step's view-Z gap.
+		// Widen to the gap, capped by params.y. Still test this sample only:
+		// a texel the ray has not reached stays lit.
+		thickness = min(params.y, max(thickness, zStride));
 		float pen = rayView.z - surfZ;
 		if (!(pen > 0.0 && pen <= thickness))
 		{
