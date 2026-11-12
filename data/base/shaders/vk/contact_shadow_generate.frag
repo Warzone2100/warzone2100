@@ -44,8 +44,6 @@ const float PLANE_FALLBACK_SLOPE = 0.5;
 // many times that. 80 degrees of slope is about 6 footprints, so 8 keeps the
 // face and drops the discontinuity.
 const float PLANE_TAP_SCALE = 8.0;
-// At homogeneous t = 1 the shadow is lifted 25% of the way back to lit.
-const float RAY_FADE = 0.25;
 
 // Viewport UV is 0..1 across the rendered sub-rect (texCoords, and wzClipToUV).
 // Texture UV is that rect inside a target that may be larger. prepassUvScaleClamp
@@ -223,7 +221,6 @@ void main()
 	bool planeSmooth = false;
 	vec3 G = vec3(0.0, 0.0, -1.0);
 	bool hit = false;
-	float hitT = 0.0;
 	vec2 hitViewportUv = viewportUv;
 
 	for (int i = 1; i <= MAX_STEPS; ++i)
@@ -283,7 +280,6 @@ void main()
 		}
 
 		hit = true;
-		hitT = ddaT;
 		hitViewportUv = sampleViewportUv;
 		break;
 	}
@@ -295,15 +291,14 @@ void main()
 	}
 
 	// Each factor is 1 for a confident hit and 0 when the hit should disappear.
-	// mix(lit, shadowed, factor) therefore returns to white at distance, at the
-	// screen edge, and at the far end of the ray.
+	// mix(lit, shadowed, factor) therefore returns to white at distance and at
+	// the screen edge. A hit stays dark along the ray. The blur softens that edge.
 	// Width is a fraction of the rendered image. Passing texture UV and zw
 	// fades the left edge in absolute texture units, which grows when the
 	// used rect shrinks. Viewport UV with a (1, 1) clamp keeps 5% of the image.
 	float edgeFade = wzScreenEdgeFade(viewportUv, vec2(1.0), fadeParams.w)
 		* wzScreenEdgeFade(hitViewportUv, vec2(1.0), fadeParams.w);
 	float distFade = 1.0 - smoothstep(fadeParams.y, fadeParams.z, abs(surfacePos.z));
-	float rayFade = 1.0 - clamp(hitT, 0.0, 1.0) * RAY_FADE;
-	float fade = clamp(edgeFade * distFade * rayFade, 0.0, 1.0);
+	float fade = clamp(edgeFade * distFade, 0.0, 1.0);
 	writeVis(mix(1.0, 0.0, fade));
 }
