@@ -94,8 +94,12 @@ struct Tuning
 	float thicknessCap = 24.f;
 	float rayBias = 2.f;
 	float minRayStart = 0.5f;
-	float fadeStartViewZ = 1500.f;
-	float fadeEndViewZ = 4000.f;
+	// The camera look-at sits at this view Z. A game starts at
+	// STARTDISTANCE (2600) and zooms out to MAXDISTANCE (5000). A
+	// replay zooms out to MAXDISTANCE_REPLAY (7000). Full strength
+	// through the game limit, then fade across the replay range.
+	float fadeStartViewZ = 5000.f;
+	float fadeEndViewZ = 7000.f;
 	float edgeFadeWidth = 0.05f;
 	float blurDepthSigma = 0.0015f;
 };
