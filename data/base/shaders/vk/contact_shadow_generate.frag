@@ -27,7 +27,10 @@ const int MAX_STEPS = 32;
 const float MIN_SCREEN_TRAVEL_PX = 0.5;
 const float WEIGHT_EPS = 1e-3;
 const float THICKNESS_RELATIVE = 0.008;
-const float THICKNESS_MIN = 4.0;
+// Close casters are only a few units thick in view Z when the camera
+// sees the shadow side. The depth-scaled term is already 16 by view Z
+// 2000, and params.y still caps the slab at 24.
+const float THICKNESS_MIN = 16.0;
 // Same-triangle residual after the geometric plane is unit length. Above float
 // noise on view positions of a few thousand, below a droid.
 const float PLANE_EPS = 1.5;
