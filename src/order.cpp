@@ -3412,8 +3412,8 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 	case DSS_REPLEV_NEVER: repairLevel = 0;              break;
 	}
 
-	// psDroid->body / psDroid->originalBody < repairLevel / 100, without integer truncation
-	if (psDroid->body * 100 <= repairLevel * psDroid->originalBody)
+	// psDroid->body / psDroid->originalBody <= repairLevel / 100, without integer truncation
+	if (isAtOrBelowPercent(psDroid->body, psDroid->originalBody, repairLevel))
 	{
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
