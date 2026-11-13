@@ -32,7 +32,14 @@ Files: lib/exceptionhandler/exceptionhandler.*
        lib/framework/vector.h
        lib/framework/wzpaths.*
        lib/framework/wzstring.*
-       lib/ivis_opengl/gfx_api*.*
+       lib/ivis_opengl/gfx_api.*
+       lib/ivis_opengl/gfx_api_formats_def.h
+       lib/ivis_opengl/gfx_api_gl.*
+       lib/ivis_opengl/gfx_api_image_basis_priv.*
+       lib/ivis_opengl/gfx_api_image_compress_priv.*
+       lib/ivis_opengl/gfx_api_null.*
+       lib/ivis_opengl/gfx_api_texture_array_load.cpp
+       lib/ivis_opengl/gfx_api_vk.*
        lib/netplay/netqueue.*
        lib/netplay/nettypes.*
        lib/sdl/main_sdl.cpp
@@ -393,12 +400,56 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        data/mp/tests/movebench_wallline.js
        data/mp/tests/pathbench.js
        lib/framework/gamepad_input.h
+       lib/framework/hash_combine.h
+       lib/framework/memory_pool.*
+       lib/framework/object_list_iteration.h
+       lib/framework/paged_entity_container.h
+       lib/framework/pool_allocator.h
        lib/framework/stringsearch.*
        lib/gamelib/framepacer.*
+       lib/ivis_opengl/gfx_api_frame_resource_cache.h
+       lib/ivis_opengl/gfx_api_mipmap_priv.h
        lib/ivis_opengl/jpeg_util.*
        lib/ivis_opengl/png_util_spng.cpp
+       lib/ivis_opengl/render_graph/attachment.h
+       lib/ivis_opengl/render_graph/blueprint_materializer.*
+       lib/ivis_opengl/render_graph/layout_subresource.*
+       lib/ivis_opengl/render_graph/layout_timeline.h
+       lib/ivis_opengl/render_graph/pass_resolve.h
+       lib/ivis_opengl/render_graph/read_scope.cpp
+       lib/ivis_opengl/render_graph/scene_post_effect_id.h
+       lib/ivis_opengl/vk/handle_storage.h
+       lib/ivis_opengl/vk/layout_key_builder.*
+       lib/ivis_opengl/vk/layout_translation.h
+       lib/ivis_opengl/vk/pass_layout_key.*
+       lib/ivis_opengl/vk/render_pass_layout_cache.*
+       lib/ivis_opengl/vk/screen_frame_coordinator.*
+       lib/ivis_opengl/vk/screenshot_readback.*
+       lib/ivis_opengl/vk/swapchain_presentation_state.*
+       lib/ivis_opengl/vk/vulkan_hpp_include.h
+       lib/ivis_opengl/vk/warm_entry.h
+       lib/ivis_opengl/vk/wz_vk.h
+       lib/netplay/address_resolver.h
+       lib/netplay/byteorder_funcs_wrapper.*
+       lib/netplay/compression_adapter.h
+       lib/netplay/connection_address.h
+       lib/netplay/connection_poll_group.h
+       lib/netplay/error_categories.*
+       lib/netplay/gns/gns_connection_address.*
+       lib/netplay/gns/gns_connection_poll_group.*
+       lib/netplay/gns/gns_error_categories.*
        lib/netplay/ip_helpers.*
+       lib/netplay/listen_socket.*
+       lib/netplay/net_result.h
        lib/netplay/netlobby.*
+       lib/netplay/open_connection_result.h
+       lib/netplay/polling_util.*
+       lib/netplay/tcp/sock_error.*
+       lib/netplay/tcp/tcp_address_resolver.*
+       lib/netplay/tcp/tcp_connection_address.*
+       lib/netplay/tcp/tcp_connection_poll_group.*
+       lib/netplay/wz_compression_provider.*
+       lib/netplay/wzfile.*
        lib/sdl/gfx_api_null_sdl.*
        lib/sdl/resume_init_helpers.cpp
        lib/sdl/sdl_gamepad.*
@@ -426,9 +477,13 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/corridor_gate.*
        src/corridor_map.*
        src/corridordump.*
+       src/depth_aware_blur.h
        src/dynamicresolution.*
        src/effectlights.*
        src/emscripten_helpers.*
+       src/fog_pass.*
+       src/frame_render_init.*
+       src/game_world.*
        src/gamestate_harness.*
        src/gamestate_replay_seek.*
        src/gamestate_savegame.*
@@ -442,12 +497,16 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/input/gamepadcursor.*
        src/movebench.*
        src/nethelpers.*
+       src/object_lists_types.h
        src/ordersource.*
        src/pathbench.*
        src/perfcounters.*
        src/playerstatsgraph.*
        src/researchlogviewer.*
        src/researchtree/*
+       src/resource_loading_dispatch.*
+       src/scene_effect_surfaces.*
+       src/scene_prepass.*
        src/screens/aboutscreen.*
        src/screens/gamepadlayoutscreen.*
        src/screens/guidescreen.*
@@ -455,6 +514,10 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/screens/netpregamescreen.*
        src/screens/researchtreescreen.*
        src/seqsubtitles.*
+       src/ssao.*
+       src/ssr.*
+       src/steering/steering.*
+       src/steering/utils.h
        src/terrain_bake.*
        src/terrain_surface.*
        src/terrain_surface_math.h
