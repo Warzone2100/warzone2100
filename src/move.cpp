@@ -1945,7 +1945,15 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 
 	// lovely hack to keep transporters just on the map
 	// two weeks to go and the hacks just get better !!!
-	if (psDroid->isTransporter())
+	if (psDroid->isTransporter() && bMultiPlayer)
+	{
+		// In multiplayer, transporters move like VTOLs but skip the map edge blocking check,
+		// so clamp them to the map here. A transporter left off the map can no longer be
+		// given orders (fpathCheck rejects an off map origin), and would be stuck forever.
+		psDroid->pos.x = clip<int>(psDroid->pos.x, 1, world_coord(gameWorld.map.width) - 1);
+		psDroid->pos.y = clip<int>(psDroid->pos.y, 1, world_coord(gameWorld.map.height) - 1);
+	}
+	else if (psDroid->isTransporter())
 	{
 		if (psDroid->pos.x == 0)
 		{
