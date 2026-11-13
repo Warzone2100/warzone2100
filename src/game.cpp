@@ -2952,6 +2952,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 
 			if (bMultiPlayer)
 			{
+				assignSoloTeams();
 				loadMultiStats(sPlayer, &playerStats);				// stats stuff
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);

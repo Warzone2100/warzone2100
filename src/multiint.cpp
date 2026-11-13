@@ -5823,6 +5823,13 @@ void startMultiplayerGame()
 
 		resetDataHash();	// need to reset it, since host's data has changed.
 		createLimitSet();
+		if (assignSoloTeams())
+		{
+			for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+			{
+				NETBroadcastPlayerInfo(i);
+			}
+		}
 		debug(LOG_NET, "sending our options to all clients");
 		sendOptions();
 		NEThaltJoining(true);						// stop new players entering.

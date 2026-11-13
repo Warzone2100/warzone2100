@@ -90,6 +90,7 @@
 #include "main.h"								// for gamemode
 #include "multiint.h"
 #include "multivote.h"
+#include "ai.h"
 #include "activity.h"
 #include "lib/framework/wztime.h"
 #include "chat.h" // for InGameChatMessage
@@ -932,6 +933,27 @@ int scavengerSlot()
 int scavengerPlayer()
 {
 	return (game.scavengers != NO_SCAVENGERS) ? scavengerSlot() : -1;
+}
+
+// Outside locked-teams modes, put each player on their own team (team = player index).
+// Also applied when loading saves, since older versions kept stale lobby teams in these modes.
+bool assignSoloTeams()
+{
+	if (alliancesSetTeamsBeforeGame(game.alliance))
+	{
+		return false;
+	}
+
+	bool changed = false;
+	for (int32_t i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (NetPlay.players[i].team != i)
+		{
+			NetPlay.players[i].team = i;
+			changed = true;
+		}
+	}
+	return changed;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
