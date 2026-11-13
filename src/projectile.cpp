@@ -1721,9 +1721,11 @@ ObjectShape establishTargetShape(const BASE_OBJECT *psTarget)
 		case DROID_CYBORG_SUPER:
 			//Watermelon:'hitbox' size is now based on imd size
 			return abs(psTarget->sDisplay.imd->radius) * 2;
-		case DROID_DEFAULT:
 		case DROID_TRANSPORTER:
 		case DROID_SUPERTRANSPORTER:
+			// Unlike the other droid types, transporters don't need an oversized hitbox
+			return abs(psTarget->sDisplay.imd->radius);
+		case DROID_DEFAULT:
 		default:
 			return TILE_UNITS / 4; // how will we arrive at this?
 		}
