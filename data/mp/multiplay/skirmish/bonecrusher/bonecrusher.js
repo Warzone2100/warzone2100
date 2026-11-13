@@ -1,4 +1,5 @@
 namespace("bc_");
+include("/multiplay/skirmish/common/scrollLimits.js"); // Ignore everything outside the scroll limits
 const vernum = "bonecrusher"; // v1.1.1
 const verdate = "12.01.2021";
 const vername = "BoneCrusher!";

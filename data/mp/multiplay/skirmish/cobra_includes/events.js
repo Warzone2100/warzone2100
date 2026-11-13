@@ -149,6 +149,12 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
+	// Ignore attackers outside the scroll limits, they can't be reached
+	if (!withinScrollLimits(attacker))
+	{
+		return;
+	}
+
 	const __scavAttacker = (attacker.player === scavengerPlayer);
 	const __groupScanRadius = subPersonalities[personality].retreatScanRange;
 

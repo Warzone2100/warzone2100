@@ -37,7 +37,7 @@ function eventAttacked(victim, attacker)
 	const GROUP_SCAN_RADIUS = 7;
 
 	// TBD, for now -- SEND EVERYONE!!!
-	if (attacker && victim && attacker.player !== me && !allianceExistsBetween(attacker.player, me))
+	if (attacker && victim && attacker.player !== me && !allianceExistsBetween(attacker.player, me) && withinScrollLimits(attacker))
 	{
 		//Flee if we are outnumbered to an extent
 		if (victim.type === DROID && victim.player === me)
