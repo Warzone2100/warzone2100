@@ -29,6 +29,7 @@
 #include "lib/framework/paged_entity_container.h"
 
 struct GameWorld;
+struct WorldMapState;
 
 /* The statistics for the features */
 extern std::vector<FEATURE_STATS> asFeatureStats;
@@ -45,6 +46,9 @@ void featureStatsShutDown();
 /* Create a feature on the map */
 FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
 FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id);
+
+/* Set the direction of a feature, and update its pitch and roll to match the terrain */
+void setFeatureDirection(FEATURE *psFeature, uint16_t direction, const WorldMapState& mapState);
 
 /* Update routine for features */
 void featureUpdate(FEATURE *psFeat);

@@ -7400,7 +7400,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize, GameWorld& world)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->rot.direction = DEG(psSaveFeature->direction);
+		setFeatureDirection(pFeature, DEG(psSaveFeature->direction), world.map);
 		pFeature->periodicalDamage = psSaveFeature->periodicalDamage;
 		if (psHeader->version >= VERSION_14)
 		{
@@ -7457,7 +7457,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWOR
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 
-		pFeature->rot.direction = feature.direction;
+		setFeatureDirection(pFeature, feature.direction, gameWorld.map);
 		pFeature->player = (feature.player.has_value()) ? feature.player.value() : PLAYER_FEATURE;
 	}
 
