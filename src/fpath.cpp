@@ -962,6 +962,11 @@ bool pathfindingBuildFromHereEnabled()
 	return (game.pathfindingBackend & PF_BUILD_FROM_HERE) != 0;
 }
 
+bool pathfindingSlideClearEnabled()
+{
+	return (game.pathfindingBackend & PF_SLIDE_CLEAR) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
