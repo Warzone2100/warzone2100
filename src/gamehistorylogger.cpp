@@ -384,8 +384,6 @@ void GameStoryLogger::logStartGame()
 		}
 	}
 
-	const auto aidata = getAIData();
-
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		FixedPlayerAttributes playerAttrib;
@@ -400,11 +398,8 @@ void GameStoryLogger::logStartGame()
 		if (NetPlay.players[i].ai >= 0 && NetPlay.players[i].ai != AI_CUSTOM)
 		{
 			AIPlayerAttributes aiAttr;
-			if (NetPlay.players[i].ai < aidata.size())
-			{
-				aiAttr.scriptName = aidata[NetPlay.players[i].ai].js;
-			}
-			else
+			aiAttr.scriptName = getPlayerAIScript(i);
+			if (aiAttr.scriptName.empty())
 			{
 				aiAttr.scriptName = "<unknown ai>";
 			}

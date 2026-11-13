@@ -133,10 +133,10 @@ static nlohmann::ordered_json writePlayers()
 		jp["difficulty"] = static_cast<int>(static_cast<int8_t>(pl.difficulty));
 		jp["ai"] = static_cast<int>(pl.ai);
 		// The index above is into the local AI list, whose order differs between machines: save the script too
-		const std::vector<AIDATA> &ais = getAIData();
-		if (bMultiPlayer && pl.ai >= 0 && static_cast<size_t>(pl.ai) < ais.size())
+		const std::string aiScript = bMultiPlayer ? getPlayerAIScript(p) : std::string();
+		if (!aiScript.empty())
 		{
-			jp["aiScript"] = std::string(ais[pl.ai].js);
+			jp["aiScript"] = aiScript;
 		}
 		jp["allocated"] = pl.allocated;
 		jp["isSpectator"] = pl.isSpectator;
@@ -176,9 +176,12 @@ static void readPlayers(const nlohmann::ordered_json &jplayers, SetupHeaderInfo 
 		pl.faction = uintToFactionID(jp.at("faction").get<uint8_t>()).value_or(FACTION_NORMAL);
 		pl.difficulty = static_cast<AIDifficulty>(static_cast<int8_t>(jp.at("difficulty").get<int>()));
 		pl.ai = static_cast<int8_t>(jp.at("ai").get<int>());
+		pl.aiScript.clear();
 		if (jp.contains("aiScript"))
 		{
-			info.aiScripts.emplace_back(static_cast<unsigned>(idx), jp.at("aiScript").get<std::string>());
+			// Kept on the slot too, so getPlayerAIScript() names it even where this machine lacks the AI
+			pl.aiScript = jp.at("aiScript").get<std::string>();
+			info.aiScripts.emplace_back(static_cast<unsigned>(idx), pl.aiScript);
 		}
 		pl.allocated = jp.at("allocated").get<bool>();
 		pl.isSpectator = jp.at("isSpectator").get<bool>();

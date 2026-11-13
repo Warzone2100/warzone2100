@@ -502,10 +502,40 @@ std::string getDefaultSkirmishAI(const bool& displayNameOnly/*=false*/)
 	return name;
 }
 
+std::string getPlayerAIScript(uint32_t player)
+{
+	ASSERT_OR_RETURN("", player < NetPlay.players.size(), "Invalid player: %" PRIu32, player);
+	const PLAYER &p = NetPlay.players[player];
+	if (p.ai < 0 || p.ai == AI_CUSTOM)
+	{
+		return "";
+	}
+	if (!p.aiScript.empty())
+	{
+		// Set by the host (or restored from a replay): our own AI list may be ordered differently, or lack this AI
+		return p.aiScript;
+	}
+	if (static_cast<size_t>(p.ai) < aidata.size())
+	{
+		return aidata[p.ai].js;
+	}
+	return "";
+}
+
 const char *getAIName(int player)
 {
 	if (NetPlay.players[player].ai >= 0 && NetPlay.players[player].ai != AI_CUSTOM)
 	{
+		// The index is into the host's AI list: look up the AI by its script where the host told us it
+		const std::string &aiScript = NetPlay.players[player].aiScript;
+		if (!aiScript.empty())
+		{
+			auto it = std::find_if(aidata.begin(), aidata.end(), [&aiScript](const AIDATA &ai) { return aiScript == ai.js; });
+			if (it != aidata.end())
+			{
+				return it->name;
+			}
+		}
 		ASSERT_OR_RETURN(_("Commander"), NetPlay.players[player].ai < aidata.size(), "Invalid AI (index: %" PRIi8 ", num AIs: %zu)", NetPlay.players[player].ai, aidata.size());
 		return aidata[NetPlay.players[player].ai].name;
 	}
@@ -7988,6 +8018,10 @@ inline void to_json(nlohmann::json& j, const PLAYER& p) {
 	j["team"] = p.team;
 	j["ready"] = p.ready;
 	j["ai"] = p.ai;
+	if (!p.aiScript.empty())
+	{
+		j["aiScript"] = p.aiScript;
+	}
 	j["difficulty"] = static_cast<int8_t>(p.difficulty);
 	//j["autoGame"] = p.autoGame; // MAYBE NOT?
 	// Do not persist wzFiles
@@ -8008,6 +8042,11 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	p.team = j.at("team").get<int32_t>();
 	p.ready = j.at("ready").get<bool>();
 	p.ai = j.at("ai").get<int8_t>();
+	p.aiScript.clear();
+	if (j.contains("aiScript"))
+	{
+		p.aiScript = j.at("aiScript").get<std::string>();
+	}
 	auto difficultyInt = j.at("difficulty").get<int8_t>();
 	p.difficulty = static_cast<AIDifficulty>(difficultyInt); // TODO CHECK
 	// autoGame // MAYBE NOT?
@@ -8094,6 +8133,15 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 
 	// Save `NetPlay.players` -- possibly recreate NetPlay.playerReferences on load?
 	object["netplay.players"] = NetPlay.players;
+	// `ai` indexes this machine's AI list, which a machine viewing the replay may not share, so also store each AI's script
+	for (size_t i = 0; i < NetPlay.players.size(); ++i)
+	{
+		const std::string aiScript = getPlayerAIScript(static_cast<uint32_t>(i));
+		if (!aiScript.empty())
+		{
+			object["netplay.players"][i]["aiScript"] = aiScript;
+		}
+	}
 
 	// Save `NetPlay.hostPlayer`
 	object["netplay.hostPlayer"] = NetPlay.hostPlayer;

@@ -236,6 +236,7 @@ struct PLAYER
 	int32_t             team;               ///< Which team we are on (int32_t::max for spectator team)
 	bool                ready;              ///< player ready to start?
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
+	std::string         aiScript;           ///< AI script (js file name) the host chose for this slot. `ai` indexes each machine's own AI list, which can differ between machines, so it can't identify the AI on its own (use getPlayerAIScript())
 	AIDifficulty        difficulty;         ///< difficulty level of AI
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
 	FactionID			faction;			///< which faction the player has
@@ -263,6 +264,7 @@ struct PLAYER
 		team = -1;
 		ready = false;
 		ai = 0;
+		aiScript.clear();
 		difficulty = AIDifficulty::DISABLED;
 		autoGame = false;
 		IPtextAddress[0] = '\0';
