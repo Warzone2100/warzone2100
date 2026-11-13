@@ -14,6 +14,23 @@
 // cheat - true(читерим, видя через туман войны), null/false/undefined(не читерим, возвращем только то, что можем видеть)
 // inc - true(прибавляем value+1 и возвращаем), null/false/undefined(просто возвращаем value)
 
+// Engine value of DROID_CYBORG_SUPER. The JS API does not have a constant for it,
+// but enumDroid() accepts the engine value.
+const DROID_CYBORG_SUPER_ENGINE = 12;
+
+// Before the fix for issue #5022, enumDroid(player, DROID_WEAPON) also returned
+// super cyborgs. Bonecrusher was made with that behavior.
+// This function returns the same droids as before, so that Bonecrusher does not change.
+function enumWeaponDroids(player, playerFilter)
+{
+	if (typeof playerFilter === "undefined")
+	{
+		playerFilter = ALL_PLAYERS;
+	}
+
+	return enumDroid(player, DROID_WEAPON, playerFilter).concat(enumDroid(player, DROID_CYBORG_SUPER_ENGINE, playerFilter));
+}
+
 var _globalInfoNear = {};
 
 function getInfoNear(x, y, command, range, time, obj, cheat, inc)
@@ -668,11 +685,11 @@ function getEnemyNearAlly()
 			continue;
 		}
 
-		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
+		targ = targ.concat(enumWeaponDroids(e, me));
 	}
 	if (scavengers !== NO_SCAVENGERS)
 	{
-		targ = targ.concat(enumDroid(scavengerPlayer, DROID_WEAPON, me));
+		targ = targ.concat(enumWeaponDroids(scavengerPlayer, me));
 	}
 
 	for (let p = 0; p < maxPlayers; ++p)
@@ -723,12 +740,12 @@ function getEnemyNearPos(x, y, r)
 			continue;
 		}
 
-		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
+		targ = targ.concat(enumWeaponDroids(e, me));
 	}
 
 	if (scavengers !== NO_SCAVENGERS)
 	{
-		targ = targ.concat(enumDroid(scavengerPlayer, DROID_WEAPON, me));
+		targ = targ.concat(enumWeaponDroids(scavengerPlayer, me));
 	}
 
 	enemy = enemy.concat(targ.filter((e) => (distBetweenTwoPoints_p(e.x, e.y, x, y) < r)));
@@ -747,7 +764,7 @@ function getAllyArmy()
 			continue;
 		}
 
-		army = army.concat(enumDroid(p, DROID_WEAPON));
+		army = army.concat(enumWeaponDroids(p));
 	}
 
 	return army;
@@ -1124,7 +1141,7 @@ function getEnemyWarriors()
 			continue;
 		}
 
-		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
+		targ = targ.concat(enumWeaponDroids(e, me));
 		targ = targ.concat(enumDroid(e, DROID_CYBORG, me));
 	}
 
@@ -1643,7 +1660,7 @@ function longCycle()
 	{
 		debugMsg("-island-", 'debug');
 
-		let droids = enumDroid(me, DROID_WEAPON);
+		let droids = enumWeaponDroids(me);
 
 		debugMsg("warriors: " + droids.length, 'debug');
 		droids = droids.concat(enumGroup(buildersHunters));
