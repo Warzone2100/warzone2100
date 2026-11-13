@@ -174,6 +174,12 @@ static std::array<optional<uint32_t>, MAX_PLAYERS> lastKickVoteForEachPlayer;
 static bool handleVoteKickResult(PendingVoteKick& pendingVote);
 static void sendPlayerMultiOptPreferencesBuiltin(uint32_t playerIdx);
 
+// Changes to the local player's option preferences (stars) are debounced:
+// the UI updates immediately, but the host is only notified once no further
+// changes have been made for this long
+constexpr uint32_t MULTIOPT_PREFS_SEND_DEBOUNCE_MS = 1000;
+static optional<uint32_t> lastUnsentMultiOptPrefsChangeTime;
+
 // MARK: - PlayerPreferences
 
 PlayerPreferences::BuiltinPreferences::BuiltinPreferences()
@@ -497,6 +503,7 @@ void resetAllMultiOptionPrefValues()
 	{
 		pref.reset();
 	}
+	lastUnsentMultiOptPrefsChangeTime.reset();
 }
 
 void multiOptionPrefValuesSwap(uint32_t playerIndexA, uint32_t playerIndexB)
@@ -518,10 +525,29 @@ void setMultiOptionPrefValueT(T val, bool pref)
 	{
 		if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost)
 		{
-			// Notify host of change
-			sendPlayerMultiOptPreferencesBuiltin(selectedPlayer);
+			// Notify host of change (debounced - see processPendingMultiOptPreferences)
+			lastUnsentMultiOptPrefsChangeTime = realTime;
 		}
 	}
+}
+
+void processPendingMultiOptPreferences()
+{
+	if (!lastUnsentMultiOptPrefsChangeTime.has_value())
+	{
+		return;
+	}
+	if (!NetPlay.bComms || ingame.side != InGameSide::MULTIPLAYER_CLIENT || NetPlay.isHost || GetGameMode() == GS_NORMAL)
+	{
+		lastUnsentMultiOptPrefsChangeTime.reset();
+		return;
+	}
+	if (realTime - lastUnsentMultiOptPrefsChangeTime.value() < MULTIOPT_PREFS_SEND_DEBOUNCE_MS)
+	{
+		return;
+	}
+	// Notify host of change
+	sendPlayerMultiOptPreferencesBuiltin(selectedPlayer);
 }
 
 void setMultiOptionPrefValue(ScavType val, bool pref)
@@ -870,6 +896,9 @@ static void sendPlayerMultiOptPreferencesBuiltin(uint32_t playerIdx)
 	ASSERT_OR_RETURN(, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid player idx: %" PRIu32, playerIdx);
 	ASSERT_OR_RETURN(, whosResponsible(playerIdx) == selectedPlayer || NetPlay.isHost, "Sending unexpected player prefs: %" PRIu32, playerIdx);
 	ASSERT_OR_RETURN(, GetGameMode() != GS_NORMAL, "Trying to send multiopt preferences after game started?");
+
+	// This sends the complete current preferences, so any pending (debounced) change is included
+	lastUnsentMultiOptPrefsChangeTime.reset();
 
 	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_VOTE);
 	NETuint32_t(w, selectedPlayer);
