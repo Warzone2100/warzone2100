@@ -726,6 +726,7 @@ void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpec
 	{
 		NetPlay.players[i].ai = 0;
 	}
+	NetPlay.players[i].aiScript.clear();
 	NetPlay.players[i].faction = FACTION_NORMAL;
 	if (initSpectator)
 	{
@@ -825,6 +826,8 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint32_t(w, NetPlay.players[index[n]].team);
 		NETbool(w, NetPlay.players[index[n]].ready);
 		NETint8_t(w, NetPlay.players[index[n]].ai);
+		// `ai` is an index into the host's AI list, which other machines may not share, so also send the AI's script
+		NETstring(w, getPlayerAIScript(index[n]), MAX_LEN_AI_NAME);
 		NETint8_t(w, static_cast<int8_t>(NetPlay.players[index[n]].difficulty));
 		NETuint8_t(w, static_cast<uint8_t>(NetPlay.players[index[n]].faction));
 		NETbool(w, NetPlay.players[index[n]].isSpectator);
@@ -2767,6 +2770,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			int32_t position = 0;
 			int32_t team = 0;
 			int8_t ai = 0;
+			std::string aiScript;
 			int8_t difficulty = 0;
 			uint8_t faction = FACTION_NORMAL;
 			bool isSpectator = false;
@@ -2833,6 +2837,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				NETint32_t(r, team);
 				NETbool(r, ready);
 				NETint8_t(r, ai);
+				NETstring(r, aiScript, MAX_LEN_AI_NAME);
 				NETint8_t(r, difficulty);
 				NETuint8_t(r, faction);
 				NETbool(r, isSpectator);
@@ -2872,6 +2877,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 						NetPlay.players[index].position = position;
 						NetPlay.players[index].team = team;
 						NetPlay.players[index].ai = ai;
+						NetPlay.players[index].aiScript = aiScript;
 						NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 						NetPlay.players[index].faction = newFactionId.value();
 						NetPlay.players[index].isSpectator = isSpectator;

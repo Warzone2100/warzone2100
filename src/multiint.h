@@ -78,6 +78,9 @@ const WzString &getLaunchScriptsPath();
 /// Set by a savegame load: the next loadMultiScripts uses these when the game was not itself launched with them.
 void setRestoredLaunchScripts(const WzString &ini, const WzString &path);
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
+/// Script (js file name) of the AI in a player's slot, the same on every machine in the game; empty if the slot has no
+/// (known) AI. Use this, not getAIData()[NetPlay.players[player].ai], which differs when machines have different AI lists.
+std::string getPlayerAIScript(uint32_t player);
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
 
