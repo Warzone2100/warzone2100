@@ -7401,6 +7401,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize, GameWorld& world)
 		}
 		//restore values
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
+		updateFeatureOrientation(pFeature, world.map);
 		pFeature->periodicalDamage = psSaveFeature->periodicalDamage;
 		if (psHeader->version >= VERSION_14)
 		{
@@ -7458,6 +7459,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWOR
 		}
 
 		pFeature->rot.direction = feature.direction;
+		updateFeatureOrientation(pFeature, gameWorld.map);
 		pFeature->player = (feature.player.has_value()) ? feature.player.value() : PLAYER_FEATURE;
 	}
 
