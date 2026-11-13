@@ -212,20 +212,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 // If shaking is allowed
 static bool bShakingPermitted = true;
 
-static auto viewDistanceAnimation = Animation<float>(realTime);
 static uint32_t viewDistanceIncrementCooldownTime = 0;
-
-void animateToViewDistance(float target, float speed)
-{
-	const float distance = std::abs(target - getViewDistance());
-	const double duration = (speed > 0 && distance > 1) ? glm::log(distance) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed : 0;
-	viewDistanceAnimation
-		.setInitialData(getViewDistance())
-		.setFinalData(target)
-		.setEasing(viewDistanceAnimation.isActive() ? EASE_OUT : EASE_IN_OUT)
-		.setDuration(static_cast<uint32_t>(std::min<double>(duration, std::numeric_limits<uint32_t>::max())))
-		.start();
-}
 
 void incrementViewDistance(float amount)
 {
@@ -236,22 +223,13 @@ void incrementViewDistance(float amount)
 
 	viewDistanceIncrementCooldownTime = realTime + GAME_TICKS_PER_SEC / 50;
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	auto target = (viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance()) + amount;
+	auto target = getViewDistanceTarget() + amount;
 	if (!dbgInputManager.debugMappingsAllowed())
 	{
 		CLIP(target, MINDISTANCE, (!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY);
 	}
 
 	animateToViewDistance(target);
-}
-
-static void updateViewDistanceAnimation()
-{
-	if (viewDistanceAnimation.isActive())
-	{
-		viewDistanceAnimation.update();
-		setViewDistance(viewDistanceAnimation.getCurrent());
-	}
 }
 
 bool getShakeStatus()
@@ -1210,7 +1188,7 @@ void processGestureInput()
 		{
 			if (pinchScaleUpdate.value() != 1.0f)
 			{
-				float startingDistance = viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance();
+				float startingDistance = getViewDistanceTarget();
 				float target = std::max<float>(startingDistance, 100.f) * pinchScaleUpdate.value();
 
 				target = std::clamp(target, static_cast<float>(MINDISTANCE), static_cast<float>((!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY));

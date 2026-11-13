@@ -258,9 +258,6 @@ void AddDerrickBurningMessage();
 // check whether the queue order keys are pressed
 bool ctrlShiftDown();
 
-#define	DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED (5000)
-
-void animateToViewDistance(float target, float speed = DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED);
 void incrementViewDistance(float amount);
 void displayRenderLoop();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &perspectiveViewMatrix);
