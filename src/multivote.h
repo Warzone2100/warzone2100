@@ -62,6 +62,7 @@ void setMultiOptionPrefValue(PowerSetting val, bool pref);
 void setMultiOptionPrefValue(CampType val, bool pref);
 void setMultiOptionPrefValue(TechLevel val, bool pref);
 void setMultiOptionBuiltinPrefValues(bool pref);
+void processPendingMultiOptPreferences();
 
 bool getMultiOptionPrefValue(ScavType val);
 bool getMultiOptionPrefValue(AllianceType val);

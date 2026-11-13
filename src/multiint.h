@@ -154,6 +154,12 @@ bool multiplayIsStartingGame();
 
 bool sendReadyRequest(UBYTE player, bool bReady);
 
+// Debounced toggling of the local player's ready status (see READY_REQUEST_DEBOUNCE_MS)
+void multiLobbyToggleLocalReadyRequest();
+optional<bool> multiLobbyGetPendingLocalReadyState(); // the requested (but not yet confirmed) local ready state, if any
+void multiLobbyProcessPendingLocalReadyRequest();
+void multiLobbyClearPendingLocalReadyRequest();
+
 /**
  * Updates structure limit flags. Flags indicate which structures are disabled.
  */

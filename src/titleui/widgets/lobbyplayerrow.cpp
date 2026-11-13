@@ -882,7 +882,13 @@ void WzPlayerRow::updateReadyButton()
 	deleteExistingDifficultyButton();
 
 	const bool isMe = playerIdx == selectedPlayer;
-	const int isReady = NETgetDownloadProgress(playerIdx) != 100 ? 2 : NetPlay.players[playerIdx].ready ? 1 : 0;
+	bool playerReady = NetPlay.players[playerIdx].ready;
+	if (isMe)
+	{
+		// show a requested (debounced / not yet confirmed by the host) ready state immediately
+		playerReady = multiLobbyGetPendingLocalReadyState().value_or(playerReady);
+	}
+	const int isReady = NETgetDownloadProgress(playerIdx) != 100 ? 2 : playerReady ? 1 : 0;
 	char const *const toolTips[2][3] = {{_("Waiting for player"), _("Player is ready"), _("Player is downloading")}, {_("Click when ready"), _("Waiting for other players"), _("Waiting for download")}};
 	unsigned images[2][3] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON, IMAGE_CHECK_DOWNLOAD}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI, IMAGE_CHECK_DOWNLOAD_HI}};
 
@@ -896,7 +902,8 @@ void WzPlayerRow::updateReadyButton()
 		readyButtonContainerForm->setShowAnimatedHighlight((isMe && !isReady && !greyedOutReady && multiplayPlayersShouldCheckReady()));
 	}
 	ASSERT_OR_RETURN(, readyButton != nullptr, "Failed to create ready button");
-	readyButton->minClickInterval = GAME_TICKS_PER_SEC;
+	// Clients' clicks are debounced instead (see multiLobbyToggleLocalReadyRequest)
+	readyButton->minClickInterval = (NetPlay.isHost) ? GAME_TICKS_PER_SEC : 0;
 	readyButton->unlock();
 	if (greyedOutReady && !NetPlay.isHost)
 	{
@@ -919,8 +926,7 @@ void WzPlayerRow::updateReadyButton()
 				auto strongTitleUI = weakTitleUi.lock();
 				ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 
-				if (player == selectedPlayer
-					&& (!NetPlay.players[player].isSpectator || !NetPlay.players[player].ready || NetPlay.isHost)) // spectators can never toggle off "ready"
+				if (player == selectedPlayer && NetPlay.isHost)
 				{
 					// Lock the "ready" button (until the request is processed)
 					pButton->setState(WBUT_LOCK);
@@ -928,12 +934,18 @@ void WzPlayerRow::updateReadyButton()
 					sendReadyRequest(selectedPlayer, !NetPlay.players[player].ready);
 
 					// if hosting try to start the game if everyone is ready
-					if (NetPlay.isHost && multiplayPlayersReady())
+					if (multiplayPlayersReady())
 					{
 						startMultiplayerGame();
 						// reset flag in case people dropped/quit on join screen
 						NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
 					}
+				}
+				else if (player == selectedPlayer)
+				{
+					// The ready state shown updates immediately, but the request is only sent to the host
+					// once the button hasn't been clicked for a moment (spectators can never toggle off "ready")
+					multiLobbyToggleLocalReadyRequest();
 				}
 
 				if (NetPlay.isHost && !alliancesSetTeamsBeforeGame(game.alliance))

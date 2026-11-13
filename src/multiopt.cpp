@@ -760,6 +760,7 @@ bool multiGameShutdown()
 
 	resetKickVoteData();
 	resetAllMultiOptionPrefValues();
+	multiLobbyClearPendingLocalReadyRequest();
 
 	return true;
 }
