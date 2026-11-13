@@ -1,4 +1,6 @@
 
+include("/multiplay/skirmish/common/scrollLimits.js"); // Ignore everything outside the scroll limits
+
 // -- definitions
 const OIL_RES_STAT = "OilResource";
 const RES_LAB_STAT = "A0ResearchFacility";

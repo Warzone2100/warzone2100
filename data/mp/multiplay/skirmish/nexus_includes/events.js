@@ -41,6 +41,12 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
+	// Ignore attackers outside the scroll limits, they can't be reached
+	if (!withinScrollLimits(attacker))
+	{
+		return;
+	}
+
 	//Try to repair a buddy
 	if (victim.type === DROID)
 	{
