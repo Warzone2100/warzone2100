@@ -1139,7 +1139,8 @@ void	kf_PitchForward()
 void	kf_ResetPitch()
 {
 	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH);
-	setViewDistance(STARTDISTANCE);
+	// Go through the view distance animation (instantly) so an in-progress zoom doesn't override the reset
+	animateToViewDistance(war_GetMapZoom(), 0);
 }
 
 // --------------------------------------------------------------------------
@@ -1152,7 +1153,8 @@ void	kf_ResetCamera()
 	{
 		camToggleStatus();
 	}
-	setViewDistance(war_GetMapZoom());
+	// Go through the view distance animation (instantly) so an in-progress zoom doesn't override the reset
+	animateToViewDistance(war_GetMapZoom(), 0);
 }
 
 // --------------------------------------------------------------------------
