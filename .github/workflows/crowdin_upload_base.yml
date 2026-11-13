@@ -24,12 +24,13 @@ jobs:
     environment: crowdin_sync
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.1.0
         with:
+          persist-credentials: false
           ref: 'master'
 
       - name: Crowdin Action
-        uses: crowdin/github-action@v2
+        uses: crowdin/github-action@v2.17.1
         with:
           config: 'crowdin.yml'
           upload_sources: true

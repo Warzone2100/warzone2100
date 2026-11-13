@@ -19,12 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.1.0
       with:
+        persist-credentials: false
         # Full git history is needed to get a proper list of changed files within `super-linter`
         fetch-depth: 0
     - name: Lint Code Base
-      uses: super-linter/super-linter@v8
+      uses: super-linter/super-linter@v8.7.0
       env:
         VALIDATE_ALL_CODEBASE: false
         # .eslintrc.json allows non-standard comments
