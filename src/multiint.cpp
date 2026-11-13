@@ -5778,6 +5778,26 @@ void WzMultiplayerOptionsTitleUI::setOption_SpectatorHost(bool value)
 	}
 }
 
+// Teams are only chosen in the lobby for alliance types that set them before the game.
+// For the others (No Alliances, Allow Alliances), the team values left over from the lobby
+// are meaningless, so give every player their own team.
+static void assignUniqueTeamsIfNotSetBeforeGame()
+{
+	if (alliancesSetTeamsBeforeGame(game.alliance))
+	{
+		return;
+	}
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (NetPlay.players[i].team != static_cast<int32_t>(i))
+		{
+			NetPlay.players[i].team = i;
+			NETBroadcastPlayerInfo(i);
+		}
+	}
+}
+
 /* Start a multiplayer or skirmish game */
 void startMultiplayerGame()
 {
@@ -5823,6 +5843,7 @@ void startMultiplayerGame()
 
 		resetDataHash();	// need to reset it, since host's data has changed.
 		createLimitSet();
+		assignUniqueTeamsIfNotSetBeforeGame();
 		debug(LOG_NET, "sending our options to all clients");
 		sendOptions();
 		NEThaltJoining(true);						// stop new players entering.
