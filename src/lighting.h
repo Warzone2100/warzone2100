@@ -25,6 +25,7 @@
 #include "lib/ivis_opengl/pielighting.h"
 
 struct WorldMapState;
+struct DROID;
 
 namespace rendering1999
 {

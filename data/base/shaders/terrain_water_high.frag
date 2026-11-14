@@ -8,6 +8,7 @@
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
 #define WZ_POINT_LIGHT_ENABLED 0
+#define WZ_CONTACT_SHADOWS 0
 //
 
 
@@ -18,6 +19,7 @@ uniform sampler2D lightmap_tex;
 
 // shadow map
 uniform sampler2DArrayShadow shadowMap;
+uniform sampler2D contactShadowTex;
 
 
 // light colors/intensity:

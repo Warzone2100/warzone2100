@@ -187,7 +187,7 @@ uint64_t PassGraphTopologyBlueprint::topologyHash() const
 }
 
 void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
-	uint32_t numShadowCascades)
+	uint32_t numShadowCascades, bool readContactShadows)
 {
 	builder.beginPass(id, "ScenePass");
 	if (sceneMsaa)
@@ -205,6 +205,10 @@ void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
 	for (uint32_t i = 0; i < numShadowCascades; ++i)
 	{
 		builder.readFrom(shadowCascadePassId(i), AttachmentRole::Depth);
+	}
+	if (readContactShadows)
+	{
+		builder.readFrom(PassId::ContactShadowBlurV, AttachmentRole::PrimaryColor);
 	}
 }
 

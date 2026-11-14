@@ -47,6 +47,7 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count,
 	BlurResolutionStage blurResolutionStage = BlurResolutionStage::None,
 	ScenePostEffectId sceneEffect = ScenePostEffectId::Count,
+	BlurOwnerId blurOwner = BlurOwnerId::None,
 	uint32_t extentDivisor = 1)
 {
 	PipelineSurfaceCatalogEntry entry;
@@ -63,6 +64,7 @@ constexpr PipelineSurfaceCatalogEntry makeCatalogEntry(
 	entry.formatCompanion = formatCompanion;
 	entry.blurResolutionStage = blurResolutionStage;
 	entry.sceneEffect = sceneEffect;
+	entry.blurOwner = blurOwner;
 	entry.extentDivisor = extentDivisor;
 	return entry;
 }
@@ -83,6 +85,7 @@ constexpr PipelineSurfaceCatalogEntry makeBloomLevelEntry(uint32_t divisor)
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::None,
 		ScenePostEffectId::Count,
+		BlurOwnerId::None,
 		divisor);
 }
 
@@ -200,6 +203,54 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::SampledColor2D,
 		SurfaceLifetimePolicy::SwapchainBound),
+	// ContactShadowRaw - generate / shared-size blur V (R8, 1 = lit)
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SingleChannelR8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::ContactShadows,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::Generate,
+		ScenePostEffectId::Count,
+		BlurOwnerId::ContactShadows),
+	// ContactShadowBlurH - horizontal-blur ping-pong at blur resolution
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SingleChannelR8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::ContactShadows,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::Blur,
+		ScenePostEffectId::Count,
+		BlurOwnerId::ContactShadows),
+	// ContactShadowBlurred - blur-res dest when blur is coarser than generate
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchSceneDivided,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SingleChannelR8,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::SeparateBlurBuffers,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound,
+		PipelineSurfaceId::Count,
+		BlurResolutionStage::Blur,
+		ScenePostEffectId::Count,
+		BlurOwnerId::ContactShadows),
 	// SSAORaw - generate output / final blurred AO
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -214,7 +265,8 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Generate,
-		ScenePostEffectId::Ssao),
+		ScenePostEffectId::Ssao,
+		BlurOwnerId::Ssao),
 	// SSAOBlurH - horizontal-blur ping-pong at blur resolution
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -229,7 +281,8 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Blur,
-		ScenePostEffectId::Ssao),
+		ScenePostEffectId::Ssao,
+		BlurOwnerId::Ssao),
 	// SSAOBlurred - blur-res dest when blur is coarser than generate
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -244,7 +297,8 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Blur,
-		ScenePostEffectId::Ssao),
+		ScenePostEffectId::Ssao,
+		BlurOwnerId::Ssao),
 	// SSAOComposedColor - lit scene with AO applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -276,7 +330,8 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Generate,
-		ScenePostEffectId::Ssr),
+		ScenePostEffectId::Ssr,
+		BlurOwnerId::Ssr),
 	// SsrBlurH - horizontal-blur ping-pong at blur resolution (same premul contract)
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -291,7 +346,8 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Blur,
-		ScenePostEffectId::Ssr),
+		ScenePostEffectId::Ssr,
+		BlurOwnerId::Ssr),
 	// SsrBlurred - blur-res destination when blur is coarser than generate (same premul contract)
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -306,7 +362,8 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceLifetimePolicy::SwapchainBound,
 		PipelineSurfaceId::Count,
 		BlurResolutionStage::Blur,
-		ScenePostEffectId::Ssr),
+		ScenePostEffectId::Ssr,
+		BlurOwnerId::Ssr),
 	// SsrComposedColor - lit(+AO) scene with SSR applied
 	makeCatalogEntry(
 		PipelineSurfaceUsage::ColorResolve,
@@ -516,15 +573,19 @@ void validatePipelineSurfaceCatalog()
 				"MatchCompanion companion index must precede dependent (row %zu)", i);
 		}
 
-		const bool effectOwned = cat.enablePolicy == SurfaceEnablePolicy::ScenePostEffect
-			|| cat.enablePolicy == SurfaceEnablePolicy::SeparateBlurBuffers
-			|| cat.blurResolutionStage != BlurResolutionStage::None;
-		if (effectOwned)
+		if (cat.enablePolicy == SurfaceEnablePolicy::ScenePostEffect)
 		{
 			ASSERT(cat.sceneEffect != ScenePostEffectId::Count,
-				"Effect-owned catalog row %zu requires sceneEffect", i);
+				"ScenePostEffect catalog row %zu requires sceneEffect", i);
 		}
-		else
+		else if (cat.enablePolicy == SurfaceEnablePolicy::ContactShadows)
+		{
+			ASSERT(cat.sceneEffect == ScenePostEffectId::Count,
+				"ContactShadows catalog row %zu must not use sceneEffect", i);
+			ASSERT(cat.blurOwner == BlurOwnerId::ContactShadows,
+				"ContactShadows catalog row %zu requires blurOwner ContactShadows", i);
+		}
+		else if (cat.enablePolicy != SurfaceEnablePolicy::SeparateBlurBuffers)
 		{
 			ASSERT(cat.sceneEffect == ScenePostEffectId::Count,
 				"sceneEffect is only valid for effect-owned rows (row %zu)", i);
@@ -532,8 +593,8 @@ void validatePipelineSurfaceCatalog()
 		if (cat.blurResolutionStage != BlurResolutionStage::None
 			|| cat.enablePolicy == SurfaceEnablePolicy::SeparateBlurBuffers)
 		{
-			ASSERT(cat.sceneEffect == ScenePostEffectId::Ssao || cat.sceneEffect == ScenePostEffectId::Ssr,
-				"Blur catalog row %zu requires an SSAO/SSR owner", i);
+			ASSERT(cat.blurOwner != BlurOwnerId::None,
+				"Blur catalog row %zu requires blurOwner", i);
 		}
 	}
 	ASSERT(persistentCount == 1, "Expected exactly one Persistent catalog surface, got %zu", persistentCount);
@@ -575,8 +636,10 @@ bool evalEnablePolicy(const PipelineSurfaceCatalogEntry& cat, const PipelineSurf
 	case SurfaceEnablePolicy::ScenePostEffect:
 		return inputs.effects.enabled(cat.sceneEffect);
 	case SurfaceEnablePolicy::SeparateBlurBuffers:
-		return inputs.effects.enabled(cat.sceneEffect)
-			&& blurIsCoarser(inputs.sceneW, inputs.sceneH, inputs.effects.blurResolution(cat.sceneEffect));
+		return blurOwnerEnabled(inputs.effects, cat.blurOwner)
+			&& blurIsCoarser(inputs.sceneW, inputs.sceneH, blurResolution(inputs.effects, cat.blurOwner));
+	case SurfaceEnablePolicy::ContactShadows:
+		return inputs.effects.contactShadows;
 	case SurfaceEnablePolicy::ScenePrepassActive:
 		return inputs.prepassNeeds != PrepassNeed::None;
 	case SurfaceEnablePolicy::ScenePrepassNormalsActive:
@@ -665,7 +728,7 @@ void resolveExtent(const PipelineSurfaceCatalogEntry& cat, const PipelineSurface
 		uint32_t divisor = cat.extentDivisor;
 		if (cat.blurResolutionStage != BlurResolutionStage::None)
 		{
-			const BlurResolution& resolution = inputs.effects.blurResolution(cat.sceneEffect);
+			const BlurResolution resolution = blurResolution(inputs.effects, cat.blurOwner);
 			divisor = cat.blurResolutionStage == BlurResolutionStage::Generate
 				? resolution.generateDivisor
 				: resolution.blurDivisor;

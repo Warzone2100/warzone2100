@@ -28,6 +28,7 @@ layout(location = 0) out vec4 FragColor;
 
 #include "view_position.glsl"
 #include "srgb.glsl"
+#include "screen_space_ray.glsl"
 #include "sky_radiance.glsl"
 
 // Water SSR: march reflect(V, N) with homogeneous (1/w) steps. A hit is the ray's
@@ -88,33 +89,9 @@ bool ssrIsReflectorPixel(vec2 uv)
 	return (1.0 - texture(normalsTexture, uv).a) > SSR_WEIGHT_EPSILON;
 }
 
-// Farther = larger +Z. Thickness is a view-Z slab, not a radial length.
-bool ssrRayOverlapsSurface(float rayZMin, float rayZMax, float surfZ, float thickness)
-{
-	return rayZMax >= surfZ && rayZMin <= surfZ + thickness;
-}
-
 float ssrViewThickness(float surfZ, float thicknessCap)
 {
-	return min(thicknessCap, max(THICKNESS_MIN, abs(surfZ) * THICKNESS_RELATIVE));
-}
-
-float ssrClipRayToNearPlane(vec3 origin, vec3 R, float maxDist)
-{
-	if (R.z < -1e-5)
-	{
-		float tNear = (params.z - origin.z) / R.z;
-		if (tNear > 0.0)
-		{
-			maxDist = min(maxDist, tNear);
-		}
-	}
-	return maxDist;
-}
-
-vec2 clipToUV(vec4 clip)
-{
-	return vec2(clip.x, -clip.y) * 0.5 + 0.5;
+	return wzViewThickness(surfZ, thicknessCap, THICKNESS_RELATIVE, THICKNESS_MIN);
 }
 
 vec3 getViewNormal(vec2 uv)
@@ -127,18 +104,6 @@ vec3 getViewNormal(vec2 uv)
 		return SSR_FALLBACK_VIEW_NORMAL;
 	}
 	return n / len;
-}
-
-float edgeFade(vec2 uv, vec2 clampZW)
-{
-	// Screen-space rays cannot recover data beyond the rendered prepass extent.
-	// Fade hits near that boundary instead of exposing a hard reflection cutoff.
-	vec2 n = uv / max(clampZW, vec2(UV_EPSILON));
-	float fadeX = smoothstep(0.0, EDGE_FADE_WIDTH, uv.x)
-		* (1.0 - smoothstep(1.0 - EDGE_FADE_WIDTH, 1.0, n.x));
-	float fadeY = smoothstep(0.0, EDGE_FADE_WIDTH, uv.y)
-		* (1.0 - smoothstep(1.0 - EDGE_FADE_WIDTH, 1.0, n.y));
-	return fadeX * fadeY;
 }
 
 void writePremul(vec3 rgb, float confidence)
@@ -207,7 +172,7 @@ void main()
 		writeMiss(ssrWeight, N, V, R);
 		return;
 	}
-	float maxDist = ssrClipRayToNearPlane(origin, R, max(params.x, 1.0));
+	float maxDist = wzClipRayToNearPlane(origin, R, max(params.x, 1.0), params.z);
 	if (maxDist <= MIN_RAY_START_ABS)
 	{
 		writeMiss(ssrWeight, N, V, R);
@@ -216,18 +181,10 @@ void main()
 
 	vec3 rayOrig = origin + R * MIN_RAY_START_ABS;
 	vec3 rayEnd = origin + R * maxDist;
-	vec4 H0 = projectionMatrix * vec4(rayOrig, 1.0);
-	vec4 H1 = projectionMatrix * vec4(rayEnd, 1.0);
-	float k0 = 1.0 / H0.w;
-	float k1 = 1.0 / H1.w;
-	vec2 uv0 = clipToUV(vec4(H0.xyz * k0, 1.0));
-	vec2 uv1 = clipToUV(vec4(H1.xyz * k1, 1.0));
-	// Homogeneous interpolators: k = 1/w, Q = view * k, rayView = Q/k.
-	vec3 Q0 = rayOrig * k0;
-	vec3 Q1 = rayEnd * k1;
+	WzHomogeneousRay ray = wzMakeHomogeneousRay(projectionMatrix, rayOrig, rayEnd);
 
 	vec2 pixelUV = max(generatePixelUV.xy, vec2(UV_EPSILON));
-	float pixelCount = length((uv1 - uv0) / pixelUV);
+	float pixelCount = length((ray.uv1 - ray.uv0) / pixelUV);
 	if (pixelCount < MIN_SCREEN_TRAVEL_PX)
 	{
 		writeMiss(ssrWeight, N, V, R);
@@ -236,8 +193,8 @@ void main()
 
 	// uv0/uv1 are logical (NDC mapped to 0..1 over the used viewport).
 	// The march samples the prepass allocation, so convert once here - the DDA stays linear.
-	uv0 *= prepassUvScaleClamp.xy;
-	uv1 *= prepassUvScaleClamp.xy;
+	ray.uv0 *= prepassUvScaleClamp.xy;
+	ray.uv1 *= prepassUvScaleClamp.xy;
 
 	int n = int(min(pixelCount + 0.5, stepCount));
 	n = clamp(n, 1, MAX_STEPS);
@@ -262,10 +219,9 @@ void main()
 			break;
 		}
 		float ddaT = float(i) / float(n);
-		float k = mix(k0, k1, ddaT);
-		vec3 rayView = mix(Q0, Q1, ddaT) / max(k, 1e-8);
+		vec3 rayView = wzHomogeneousView(ray, ddaT);
 		// Homogeneous t is linear in UV: mix(uv0, uv1, t) == project(Q/k).
-		vec2 sampleUV = mix(uv0, uv1, ddaT);
+		vec2 sampleUV = wzHomogeneousUV(ray, ddaT);
 		if (sampleUV.x < 0.0 || sampleUV.y < 0.0 || sampleUV.x > prepassUvScaleClamp.z || sampleUV.y > prepassUvScaleClamp.w)
 		{
 			break;
@@ -284,7 +240,7 @@ void main()
 			continue;
 		}
 		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
-		if (!ssrRayOverlapsSurface(rayZMin, rayZMax, surfZ, ssrViewThickness(surfZ, thicknessCap)))
+		if (!wzRayOverlapsSurface(rayZMin, rayZMax, surfZ, ssrViewThickness(surfZ, thicknessCap)))
 		{
 			lastMissT = ddaT;
 			lastMissZ = rayView.z;
@@ -315,9 +271,8 @@ void main()
 	for (int b = 0; b < BINARY_SEARCH_STEPS; ++b)
 	{
 		float midT = 0.5 * (lastMissT + hitDdaT);
-		float k = mix(k0, k1, midT);
-		vec3 midView = mix(Q0, Q1, midT) / max(k, 1e-8);
-		vec2 sampleUV = clamp(mix(uv0, uv1, midT), vec2(0.0), prepassUvScaleClamp.zw);
+		vec3 midView = wzHomogeneousView(ray, midT);
+		vec2 sampleUV = clamp(wzHomogeneousUV(ray, midT), vec2(0.0), prepassUvScaleClamp.zw);
 		float sampleDepth = texture(depthTexture, sampleUV).r;
 		if (sampleDepth >= SKY_DEPTH_THRESHOLD)
 		{
@@ -326,7 +281,7 @@ void main()
 			continue;
 		}
 		float surfZ = wzGetViewZ(sampleDepth, projZCoeffs);
-		if (!ssrRayOverlapsSurface(min(lastMissZ, midView.z), max(lastMissZ, midView.z),
+		if (!wzRayOverlapsSurface(min(lastMissZ, midView.z), max(lastMissZ, midView.z),
 			surfZ, ssrViewThickness(surfZ, thicknessCap)))
 		{
 			lastMissT = midT;
@@ -348,7 +303,7 @@ void main()
 	// fades far hits; facing weight stays in compose so this alpha can stay high.
 	float confidence = ssrWeight
 		* mix(HIT_CONFIDENCE_MIN, HIT_CONFIDENCE_MAX, 1.0 - clamp(hitT / max(maxDist, UV_EPSILON), 0.0, 1.0))
-		* edgeFade(hitUV, prepassUvScaleClamp.zw);
+		* wzScreenEdgeFade(hitUV, prepassUvScaleClamp.zw, EDGE_FADE_WIDTH);
 
 	// Convert from prepass allocation coordinates back through logical screen UV
 	// into the populated extent of the opaque scene-color texture.

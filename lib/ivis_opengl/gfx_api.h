@@ -364,13 +364,15 @@ namespace gfx_api
 		uint32_t shadowFilterSize = 5;
 		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
 		bool isPointLightPerPixelEnabled = false;
+		bool contactShadowsEnabled = false;
 
 		bool operator==(const lighting_constants& rhs) const
 		{
 			return shadowMode == rhs.shadowMode
 			&& shadowFilterSize == rhs.shadowFilterSize
 			&& shadowCascadesCount == rhs.shadowCascadesCount
-			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled;
+			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled
+			&& contactShadowsEnabled == rhs.contactShadowsEnabled;
 		}
 	};
 
@@ -803,6 +805,7 @@ namespace gfx_api
 			};
 			normalizeBlurResolution(cfg.ssaoResolution);
 			normalizeBlurResolution(cfg.ssrResolution);
+			normalizeBlurResolution(cfg.contactShadowsResolution);
 			return cfg;
 		}
 		void storeSceneEffectSurfaces(SceneEffectSurfaces cfg)
@@ -905,6 +908,7 @@ namespace gfx_api
 	inline constexpr char kSampler_TextureNormal[] = "TextureNormal";
 	inline constexpr char kSampler_TextureSpecular[] = "TextureSpecular";
 	inline constexpr char kSampler_shadowMap[] = "shadowMap";
+	inline constexpr char kSampler_contactShadowTex[] = "contactShadowTex";
 	inline constexpr char kSampler_lightmap_tex[] = "lightmap_tex";
 	inline constexpr char kSampler_groundTex[] = "groundTex";
 	inline constexpr char kSampler_groundNormal[] = "groundNormal";
@@ -1332,10 +1336,12 @@ namespace gfx_api
 		/// Gain on additive effects' bright cores (0 = none)
 		float additiveCoreBoost = 0.f;
 		float pad2 = 0.f;
+		glm::vec4 contactShadowUvScaleClamp{1.f, 1.f, 1.f, 1.f};
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
+	static_assert(offsetof(Draw3DShapeInstancedGlobalUniforms, contactShadowUvScaleClamp) % 16 == 0, "Instanced contact-shadow UV clamp must sit where std140 puts a vec4");
 	static_assert(offsetof(Draw3DShapeInstancedGlobalUniforms, bucketOffsetAndSize) % 16 == 0, "Instanced bucket table must sit where std140 puts it");
 
 	// Only change per mesh
@@ -1456,10 +1462,14 @@ namespace gfx_api
 		int bucketDimensionUsed;
 		/// 1 when linear lighting is on
 		int linearLighting = 0;
+		// bucketDimensionUsed begins 8 bytes into a 16-byte slot, so this int
+		// finishes that slot and the vec4 below starts where std140 puts it.
+		glm::vec4 contactShadowUvScaleClamp{1.f, 1.f, 1.f, 1.f};
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
+	static_assert(offsetof(TerrainCombinedUniforms, contactShadowUvScaleClamp) % 16 == 0, "Terrain contact-shadow UV clamp must sit where std140 puts a vec4");
 	static_assert(offsetof(TerrainCombinedUniforms, bucketOffsetAndSize) % 16 == 0, "Terrain bucket table must sit where std140 puts it");
 	static_assert(WZ_MAX_SHADOW_CASCADES <= 4, "Packing the ShadowMapCascadeSplits into a vec4 won't work...");
 

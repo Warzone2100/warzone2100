@@ -7,6 +7,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_CONTACT_SHADOWS = 0;
 
 layout(set = 3, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 3, binding = 1) uniform sampler2D TextureTcmask; // tcmask
@@ -14,6 +15,7 @@ layout(set = 3, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 3, binding = 3) uniform sampler2D TextureSpecular; // specular map
 layout(set = 3, binding = 4) uniform sampler2DArrayShadow shadowMap; // shadow map
 layout(set = 3, binding = 5) uniform sampler2D lightmap_tex;
+layout(set = 3, binding = 6) uniform sampler2D contactShadowTex;
 
 layout(location = 0) in vec3 normal;
 layout(location = 1) in vec3 lightDir;

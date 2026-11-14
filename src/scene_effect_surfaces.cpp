@@ -34,6 +34,7 @@
 #include "display3d.h"
 #include "ssao.h"
 #include "ssr.h"
+#include "contact_shadows.h"
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/gfx_api.h"
@@ -43,6 +44,7 @@ bool applySceneEffectSurfaces()
 {
 	const ssao::SsaoSettings ssaoSettings = ssao::activeSettings();
 	const ssr::SsrSettings ssrSettings = ssr::activeSettings();
+	const contact_shadows::ContactShadowSettings contactSettings = contact_shadows::activeSettings();
 	gfx_api::SceneEffectSurfaces cfg;
 	cfg.ssao = ssaoSettings.enabled;
 	cfg.ssaoResolution = {ssaoSettings.generateDivisor, ssaoSettings.blurDivisor};
@@ -52,12 +54,16 @@ bool applySceneEffectSurfaces()
 	cfg.rangeRings = rangeOnScreen;
 	cfg.bloom = bloom_pass::intensity() > 0.f;
 	pie_SetAdditiveCoreBoost(bloom_pass::additiveCoreBoost());
+	cfg.contactShadows = contactSettings.enabled;
+	cfg.contactShadowsResolution = {contactSettings.generateDivisor, contactSettings.blurDivisor};
 	if (!gfx_api::context::get().setSceneEffectSurfaces(cfg))
 	{
-		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d ssr=%d fog=%d rangeRings=%d)",
+		debug(LOG_ERROR, "Failed to sync pipeline surfaces after scene-effect config change (ssao=%d ssr=%d fog=%d rangeRings=%d contactShadows=%d)",
 			static_cast<int>(cfg.ssao), static_cast<int>(cfg.ssr),
-			static_cast<int>(cfg.fog), static_cast<int>(cfg.rangeRings));
+			static_cast<int>(cfg.fog), static_cast<int>(cfg.rangeRings),
+			static_cast<int>(cfg.contactShadows));
 		return false;
 	}
+	contact_shadows::syncLightingConstant();
 	return true;
 }

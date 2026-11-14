@@ -73,6 +73,8 @@ struct RenderFeatures
 		SSRDownsample      = 1u << 8,
 		/// Scene color is HDR, so a tonemap pass converts it to display range.
 		HdrScene           = 1u << 9,
+		/// Downsample generated contact shadows into the blur target when blur is coarser.
+		ContactShadowsDownsample = 1u << 10,
 	};
 };
 

@@ -23,6 +23,7 @@
  */
 
 #include "scene_post_effects.h"
+#include "separable_blur_prepare.h"
 
 #include "lib/framework/wzapp.h"
 
@@ -31,56 +32,6 @@ namespace gfx_api
 
 namespace
 {
-
-struct SeparableBlurPrepareChainDesc
-{
-	PassId generatePass;
-	PassId downsamplePass;
-	PassId horizontalPass;
-	PassId verticalPass;
-	PipelineSurfaceId rawSurface;
-	PipelineSurfaceId horizontalSurface;
-	PipelineSurfaceId coarseSurface;
-	const char* downsampleName;
-	const char* horizontalName;
-	const char* verticalName;
-	ClearValue clearValue;
-	uint32_t downsampleFeature;
-	/// Generate is emitted by the effect. This covers downsample + H + V.
-	/// SSAO keeps Clear (unoccluded 1 if a pixel is skipped). SSR overwrites every pixel.
-	AttachmentLoadOp blurLoadOp = AttachmentLoadOp::Clear;
-};
-
-void emitSeparableBlurPasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot,
-	const SeparableBlurPrepareChainDesc& desc)
-{
-	// The routing mechanics are common to SSAO, SSR, and future screen-space effects.
-	// Formats, clear values, validity, accumulation, and compose contracts remain effect-owned.
-	const bool downsample = (snapshot.features & desc.downsampleFeature) != 0;
-	PassId horizontalInput = desc.generatePass;
-	PipelineSurfaceId verticalOutput = desc.rawSurface;
-	if (downsample)
-	{
-		builder.beginPass(desc.downsamplePass, desc.downsampleName)
-			.color(desc.coarseSurface, desc.blurLoadOp, AttachmentStoreOp::Store, desc.clearValue)
-			.viewport(ViewportRule::ColorTarget)
-			.readFrom(desc.generatePass, AttachmentRole::PrimaryColor);
-		horizontalInput = desc.downsamplePass;
-		verticalOutput = desc.coarseSurface;
-	}
-
-	builder.beginPass(desc.horizontalPass, desc.horizontalName)
-		.color(desc.horizontalSurface, desc.blurLoadOp, AttachmentStoreOp::Store, desc.clearValue)
-		.viewport(ViewportRule::ColorTarget)
-		.readFrom(horizontalInput, AttachmentRole::PrimaryColor)
-		.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
-
-	builder.beginPass(desc.verticalPass, desc.verticalName)
-		.color(verticalOutput, desc.blurLoadOp, AttachmentStoreOp::Store, desc.clearValue)
-		.viewport(ViewportRule::ColorTarget)
-		.readFrom(desc.horizontalPass, AttachmentRole::PrimaryColor)
-		.readFrom(PassId::ScenePrepass, AttachmentRole::Depth);
-}
 
 void emitSsaoPreparePasses(BlueprintBuilder& builder, const RenderTopologySnapshot& snapshot, PassId)
 {
@@ -226,6 +177,7 @@ PrepassNeed prepassNeeds(const RenderTopologySnapshot& snapshot)
 		// (With no effect enabled, the passes fuse - transparents draw in ScenePass - and no prepass is required at all.)
 		needs = needs | PrepassNeed::Depth;
 	}
+	needs = needs | snapshot.sceneEffects.contactPrepassNeed();
 	return needs;
 }
 
@@ -237,6 +189,7 @@ PrepassNeed prepassNeeds(const SceneEffectSurfaces& cfg)
 	{
 		needs = needs | PrepassNeed::Depth;
 	}
+	needs = needs | cfg.contactPrepassNeed();
 	return needs;
 }
 

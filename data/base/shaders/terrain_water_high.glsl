@@ -23,6 +23,7 @@ layout(std140) uniform cbuffer {
 	int bucketDimensionUsed;
 	int linearLighting;
 	float pad2;
+	vec4 contactShadowUvScaleClamp;
 	// Last because its length follows the grid dimension
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 };

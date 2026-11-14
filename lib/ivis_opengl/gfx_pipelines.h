@@ -91,7 +91,8 @@ namespace gfx_api
 	texture_description<2, sampler_type::anisotropic, kSampler_TextureNormal>, // normal map
 	texture_description<3, sampler_type::anisotropic, kSampler_TextureSpecular>, // specular map
 	texture_description<4, sampler_type::bilinear_border, kSampler_shadowMap, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
-	texture_description<5, sampler_type::bilinear, kSampler_lightmap_tex> // lightmap
+	texture_description<5, sampler_type::bilinear, kSampler_lightmap_tex>, // lightmap
+	texture_description<6, sampler_type::bilinear, kSampler_contactShadowTex> // contact shadow visibility
 	>, shader>;
 
 	using Draw3DShapeOpaque_Instanced = Draw3DShapeInstanced<REND_OPAQUE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_ON>;
@@ -317,7 +318,8 @@ namespace gfx_api
 	texture_description<6, sampler_type::anisotropic, kSampler_decalNormal, pixel_format_target::texture_2d_array>, // decal normal
 	texture_description<7, sampler_type::anisotropic, kSampler_decalSpecular, pixel_format_target::texture_2d_array>, // decal specular
 	texture_description<8, sampler_type::anisotropic, kSampler_decalHeight, pixel_format_target::texture_2d_array>,  // decal height
-	texture_description<9, sampler_type::bilinear_border, kSampler_shadowMap, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
+	texture_description<9, sampler_type::bilinear_border, kSampler_shadowMap, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+	texture_description<10, sampler_type::bilinear, kSampler_contactShadowTex> // contact shadow visibility
 	>, shader>;
 
 	using TerrainCombined_Classic = TerrainCombinedTemplate<REND_ALPHA, SHADER_TERRAIN_COMBINED_CLASSIC>;
@@ -355,9 +357,10 @@ namespace gfx_api
 	texture_description<7, sampler_type::anisotropic, kSampler_decalSpecular, pixel_format_target::texture_2d_array>, // decal specular
 	texture_description<8, sampler_type::anisotropic, kSampler_decalHeight, pixel_format_target::texture_2d_array>,  // decal height
 	texture_description<9, sampler_type::bilinear_border, kSampler_shadowMap, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
-	tess_texture_description<10, sampler_type::bilinear, kSampler_terrainBakedHeight>, // baked terrain height
-	tess_texture_description<11, sampler_type::bilinear, kSampler_terrainBakedOffset>, // baked terrain outline offset
-	tess_texture_description<12, sampler_type::bilinear, kSampler_terrainBakedNormal>  // baked terrain normal
+	texture_description<10, sampler_type::bilinear, kSampler_contactShadowTex>, // contact shadow visibility
+	tess_texture_description<11, sampler_type::bilinear, kSampler_terrainBakedHeight>, // baked terrain height
+	tess_texture_description<12, sampler_type::bilinear, kSampler_terrainBakedOffset>, // baked terrain outline offset
+	tess_texture_description<13, sampler_type::bilinear, kSampler_terrainBakedNormal>  // baked terrain normal
 	>, shader>;
 
 	using TerrainCombinedTess_Medium = TerrainCombinedTessTemplate<SHADER_TERRAIN_COMBINED_MEDIUM_TESS>;
@@ -470,11 +473,15 @@ namespace gfx_api
 		/// 1 when linear lighting is on
 		int linearLighting = 0;
 		float pad2 = 0.f;
+		// bucketDimensionUsed begins 4 bytes into a 16-byte slot. linearLighting
+		// and pad2 finish it, so the vec4 starts where std140 puts it.
+		glm::vec4 contactShadowUvScaleClamp{1.f, 1.f, 1.f, 1.f};
 		// The bucket table is last because its length follows the grid dimension, which may become variable.
 		// (Anything placed after it would shift whenever that changed.)
 		std::array<glm::ivec4, max_bucket_dimension * max_bucket_dimension> bucketOffsetAndSize;
 	};
 	// std140 starts an ivec4 array on a 16-byte boundary, while glm::ivec4 only needs 4, so the C++ side must pad by hand.
+	static_assert(offsetof(constant_buffer_type<SHADER_WATER_HIGH>, contactShadowUvScaleClamp) % 16 == 0, "Water contact-shadow UV clamp must sit where std140 puts a vec4");
 	static_assert(offsetof(constant_buffer_type<SHADER_WATER_HIGH>, bucketOffsetAndSize) % 16 == 0, "Water bucket table must sit where std140 puts it");
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -486,7 +493,8 @@ namespace gfx_api
 		texture_description<1, sampler_type::anisotropic_repeat, kSampler_tex_nm, pixel_format_target::texture_2d_array>, // normal maps
 		texture_description<2, sampler_type::anisotropic_repeat, kSampler_tex_sm, pixel_format_target::texture_2d_array>, // specular maps
 		texture_description<3, sampler_type::bilinear, kSampler_lightmap_tex>, // lightmap
-		texture_description<4, sampler_type::bilinear_border, kSampler_shadowMap, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
+		texture_description<4, sampler_type::bilinear_border, kSampler_shadowMap, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+		texture_description<5, sampler_type::bilinear, kSampler_contactShadowTex> // contact shadow visibility
 	>, SHADER_WATER_HIGH>;
 
 	template<>
@@ -913,6 +921,8 @@ namespace gfx_api
 		glm::vec4 valueUvScaleClamp;
 		glm::vec4 depthUvScaleClamp;
 	};
+	static_assert(sizeof(DepthAwareBlurConstants) == 48, "Depth-aware blur cbuffer must match std140");
+	static_assert(offsetof(DepthAwareBlurConstants, valueUvScaleClamp) % 16 == 0, "Blur UV clamp must sit where std140 puts a vec4");
 
 	template<>
 	struct constant_buffer_type<SHADER_SSAO_BLUR> : DepthAwareBlurConstants {};
@@ -1020,6 +1030,54 @@ namespace gfx_api
 		texture_description<0, sampler_type::nearest_clamped, kSampler_ssrTexture, pixel_format_target::texture_2d>, // premul SSR
 		texture_description<1, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>  // depth
 	>, SHADER_SSR_BLUR>;
+
+	template<>
+	struct constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>
+	{
+		glm::mat4 invProjectionMatrix;
+		glm::mat4 projectionMatrix;
+		glm::mat4 viewMatrix;
+		glm::vec4 sunDirWorld;
+		glm::vec4 params;              // x=maxRayLength, y=thicknessCap, z=nearPlane, w=rayBias
+		glm::vec4 fadeParams;          // x=minRayStart, y=fadeStartViewZ, z=fadeEndViewZ, w=edgeFadeWidth
+		glm::vec4 generatePixelUV;     // xy = 1 / generate viewport
+		glm::vec4 prepassUvScaleClamp;
+		glm::vec2 projZCoeffs;
+		float stepCount;
+		float padding = 0.f;
+	};
+	// 3 mat4 + 5 vec4 + one std140 vec2/float/float group. The vec2 starts on a
+	// 16-byte boundary, so the two floats pack beside it and the block ends on one.
+	static_assert(sizeof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>) == 288, "Contact-shadow generate cbuffer must match std140");
+	static_assert(offsetof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>, projZCoeffs) % 16 == 0, "projZCoeffs must sit where std140 puts a vec2 after a vec4");
+	static_assert(offsetof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>, stepCount) == offsetof(constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>, projZCoeffs) + sizeof(glm::vec2), "stepCount must follow projZCoeffs with no gap");
+
+	using ContactShadowGeneratePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_CONTACT_SHADOW_GENERATE>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, kSampler_normalsTexture, pixel_format_target::texture_2d>
+	>, SHADER_CONTACT_SHADOW_GENERATE>;
+
+	template<>
+	struct constant_buffer_type<SHADER_CONTACT_SHADOW_BLUR> : DepthAwareBlurConstants {};
+
+	using ContactShadowBlurPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_CONTACT_SHADOW_BLUR>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, kSampler_occlusionTexture, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>
+	>, SHADER_CONTACT_SHADOW_BLUR>;
 
 	template<>
 	struct constant_buffer_type<SHADER_SCENE_COMPOSE_SSR>

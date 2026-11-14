@@ -336,6 +336,30 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
+	{
+		auto optionInfo = OptionInfo("gfx.contactShadows", N_("Contact Shadows"),
+			N_("Screen-space contact shadows. Adds small-scale shadow detail next to shadow mapping. May impact performance."));
+		optionInfo.addAvailabilityCondition(SupportsShadowMapping);
+		auto valueChanger = OptionsDropdown<CONTACT_SHADOWS_MODE>::make(
+			[]() {
+				OptionChoices<CONTACT_SHADOWS_MODE> result;
+				result.choices = {
+					{ _("Off"), "", CONTACT_SHADOWS_MODE::OFF },
+					{ _("Low"), "", CONTACT_SHADOWS_MODE::LOW },
+					{ _("Normal"), "", CONTACT_SHADOWS_MODE::NORMAL },
+					{ _("High"), _("Warning: This preset can significantly reduce frame rate!"), CONTACT_SHADOWS_MODE::HIGH },
+				};
+				result.setCurrentIdxForValue(war_getContactShadowsMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setContactShadowsMode(newValue);
+				applySceneEffectSurfaces();
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
 
 	// Lighting:
 	result->addSection(OptionsSection(N_("Lighting"), ""), true);

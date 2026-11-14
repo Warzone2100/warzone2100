@@ -67,9 +67,10 @@ struct BlurResolution
 	}
 };
 
-/// Independent SSAO/SSR/fog/range-ring catalog requests.
-/// When any effect is enabled the scene prepass provides depth for the separated forward transparents, plus effect-specific capabilities via `prepassNeeds(cfg)`.
-/// With all effects off the transparents draw fused in ScenePass and no prepass runs.
+/// Independent SSAO/SSR/fog/range-ring/contact-shadow catalog requests.
+/// When any post-effect is enabled the scene prepass provides depth for the separated forward transparents, plus effect-specific capabilities via `prepassNeeds(cfg)`.
+/// Contact shadows can also enable the prepass as lighting-prepare while transparents stay fused.
+/// With all requests off the transparents draw fused in ScenePass and no prepass runs.
 struct SceneEffectSurfaces
 {
 	bool ssao = false;
@@ -80,6 +81,13 @@ struct SceneEffectSurfaces
 	bool rangeRings = false;
 	/// Bloom requested (its passes and surfaces exist only while the scene is HDR)
 	bool bloom = false;
+	bool contactShadows = false;
+	BlurResolution contactShadowsResolution;
+
+	PrepassNeed contactPrepassNeed() const
+	{
+		return contactShadows ? (PrepassNeed::Depth | PrepassNeed::Normals) : PrepassNeed::None;
+	}
 
 	bool operator==(const SceneEffectSurfaces& other) const
 	{
@@ -89,7 +97,9 @@ struct SceneEffectSurfaces
 			&& ssrResolution == other.ssrResolution
 			&& fog == other.fog
 			&& rangeRings == other.rangeRings
-			&& bloom == other.bloom;
+			&& bloom == other.bloom
+			&& contactShadows == other.contactShadows
+			&& contactShadowsResolution == other.contactShadowsResolution;
 	}
 
 	bool enabled(ScenePostEffectId id) const
@@ -120,6 +130,47 @@ struct SceneEffectSurfaces
 	}
 };
 
+/// Owner of a separable blur chain. Not a ScenePostEffectId — contact shadows are lighting-prepare.
+enum class BlurOwnerId : uint8_t
+{
+	None,
+	Ssao,
+	Ssr,
+	ContactShadows,
+};
+
+inline BlurResolution blurResolution(const SceneEffectSurfaces& cfg, BlurOwnerId owner)
+{
+	switch (owner)
+	{
+	case BlurOwnerId::Ssao:
+		return cfg.ssaoResolution;
+	case BlurOwnerId::Ssr:
+		return cfg.ssrResolution;
+	case BlurOwnerId::ContactShadows:
+		return cfg.contactShadowsResolution;
+	case BlurOwnerId::None:
+		break;
+	}
+	return BlurResolution{};
+}
+
+inline bool blurOwnerEnabled(const SceneEffectSurfaces& cfg, BlurOwnerId owner)
+{
+	switch (owner)
+	{
+	case BlurOwnerId::Ssao:
+		return cfg.ssao;
+	case BlurOwnerId::Ssr:
+		return cfg.ssr;
+	case BlurOwnerId::ContactShadows:
+		return cfg.contactShadows;
+	case BlurOwnerId::None:
+		break;
+	}
+	return false;
+}
+
 /// <summary>
 /// Named persistent render targets shared across passes (scene, swapchain, shadow map).
 ///
@@ -145,6 +196,12 @@ enum class PipelineSurfaceId : uint8_t
 	/// Scene-sized view-space normals (RGB) + SSAO application weight (A).
 	/// Water writes A = 0 so SSAO skips lakes; SSR uses (1-A) as the reflector mask.
 	ScenePrepassNormals,
+	/// Contact-shadow generate / shared-size blur V output (R8 visibility, 1 = lit).
+	ContactShadowRaw,
+	/// Horizontal contact-shadow blur ping-pong (R8).
+	ContactShadowBlurH,
+	/// Blur-resolution dest when contact-shadow blur is coarser than generate (R8).
+	ContactShadowBlurred,
 	/// SSAO generate output / final blurred AO when generate and blur share a size.
 	SSAORaw,
 	/// Horizontal SSAO blur intermediate.
@@ -323,8 +380,10 @@ enum class SurfaceEnablePolicy : uint8_t
 	HdrSceneActive,
 	/// Catalog row owned by a `ScenePostEffectId` (`sceneEffect`).
 	ScenePostEffect,
-	/// Extra effect-owned buffer when blur resolves smaller than generate.
+	/// Extra buffer when blur resolves smaller than generate (`blurOwner`).
 	SeparateBlurBuffers,
+	/// Contact-shadow lighting-prepare surfaces (`effects.contactShadows`).
+	ContactShadows,
 	/// Scene prepass depth/normals when `prepassNeeds` is not None.
 	ScenePrepassActive,
 	/// Scene prepass normals only when `prepassNeeds` includes Normals (example: SSAO).
@@ -374,8 +433,10 @@ struct PipelineSurfaceCatalogEntry
 	SurfaceLifetimePolicy lifetimePolicy = SurfaceLifetimePolicy::SwapchainBound;
 	PipelineSurfaceId formatCompanion = PipelineSurfaceId::Count; // MatchCompanion only
 	BlurResolutionStage blurResolutionStage = BlurResolutionStage::None;
-	/// Owner used by ScenePostEffect/SeparateBlurBuffers and divided blur extents.
+	/// Owner used by ScenePostEffect enable policy (SSAO/SSR/Fog/Rings).
 	ScenePostEffectId sceneEffect = ScenePostEffectId::Count;
+	/// Owner used by SeparateBlurBuffers and divided blur extents.
+	BlurOwnerId blurOwner = BlurOwnerId::None;
 	/// Fixed divisor for `MatchSceneDivided` rows without a blur-resolution stage (bloom levels).
 	uint32_t extentDivisor = 1;
 };

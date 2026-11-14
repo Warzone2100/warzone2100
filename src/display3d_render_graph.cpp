@@ -39,6 +39,8 @@
 #include "scene_prepass.h"
 #include "ssao.h"
 #include "ssr.h"
+#include "contact_shadows.h"
+#include "lib/ivis_opengl/scene_lighting_inputs.h"
 #include "fog_pass.h"
 #include "tonemap_pass.h"
 #include "bloom_pass.h"
@@ -87,21 +89,41 @@ static Vector3f toVector3f(const glm::vec3& v)
 	return Vector3f(v.x, v.y, v.z);
 }
 
-/// Scene draw pass reads are exclusively ordered ShadowCascade Depth outputs; all share one array texture.
+/// Scene draw pass reads: ShadowCascade Depth outputs (shared array) plus optional contact mask.
 static gfx_api::abstract_texture* shadowMapFromCascadeReads(const gfx_api::RenderPassContext& ctx)
 {
-	if (ctx.readCount() == 0)
-	{
-		return nullptr;
-	}
-	gfx_api::abstract_texture* shadowMap = ctx.getRead(0);
+	gfx_api::abstract_texture* shadowMap = nullptr;
 	for (size_t i = 0; i < ctx.readCount(); ++i)
 	{
 		const auto& read = ctx.resolvedRead(i);
+		if (gfx_api::isContactShadowMaskRead(read))
+		{
+			continue;
+		}
 		ASSERT(read.isDepth, "Scene draw read %zu must be Depth (cascade)", i);
+		if (shadowMap == nullptr)
+		{
+			shadowMap = ctx.getRead(i);
+		}
 		ASSERT(read.texture == shadowMap, "Scene draw cascade reads must share ShadowMap texture");
 	}
 	return shadowMap;
+}
+
+static gfx_api::SceneLightingInputs sceneLightingInputsFromPass(const gfx_api::RenderPassContext& ctx)
+{
+	gfx_api::SceneLightingInputs lighting = gfx_api::SceneLightingInputs::dummy(
+		shadowMapFromCascadeReads(ctx), contact_shadows::dummyLitTexture());
+	for (size_t i = 0; i < ctx.readCount(); ++i)
+	{
+		if (gfx_api::isContactShadowMaskRead(ctx.resolvedRead(i)))
+		{
+			lighting.contactShadow = ctx.getRead(i);
+			display3d_fillPassReadUvScaleClamp(ctx, i, lighting.contactUvScaleClamp);
+			break;
+		}
+	}
+	return lighting;
 }
 
 static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
@@ -114,11 +136,11 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos = toVector3f(fc.cameraPos);
 	const Vector3f sunPos = toVector3f(-getTheSun());
-	gfx_api::abstract_texture* shadowMap = shadowMapFromCascadeReads(passCtx);
+	gfx_api::SceneLightingInputs lighting = sceneLightingInputsFromPass(passCtx);
 
 	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
-	drawTerrain(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, shadowMap, fc.pointLights);
+	drawTerrain(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, lighting, fc.pointLights);
 	wzPerfEnd(PERF_TERRAIN);
 
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
@@ -127,7 +149,7 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 
 	wzPerfBegin(PERF_WATER, "3D scene - water");
 	pie_SetFogStatus(true);
-	drawWater(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, shadowMap, fc.pointLights);
+	drawWater(fc.perspectiveViewMatrix, fc.viewMatrix, cameraPos, sunPos, fc.shadowCascadesInfo, lighting, fc.pointLights);
 	wzPerfEnd(PERF_WATER);
 
 	// When no post-effect is enabled, the blueprint emits no SceneTransparent pass and the transparents fuse back into this pass
@@ -142,7 +164,7 @@ static void recordScenePass(const gfx_api::RenderPassContext& passCtx)
 		// Opaque meshes keep per-mesh fog disabled either way (fogOutput is Disabled outside the transparent buckets),
 		// so ForwardDistance in the fused case only fogs the transparent buckets, from fragment distance.
 		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
-			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None,
+			fc.shadowCascadesInfo, lighting, fc.pointLights, MeshDepthPassMode::None,
 			fusedTransparents ? MeshDrawParts::All : MeshDrawParts::Opaque,
 			fusedTransparents ? MeshFogMode::ForwardDistance : MeshFogMode::Disabled);
 	}
@@ -165,7 +187,7 @@ static void recordSceneTransparent(const gfx_api::RenderPassContext& passCtx)
 
 	const auto& fc = pie_GetInGame3DFrameContext();
 	const Vector3f cameraPos = toVector3f(fc.cameraPos);
-	gfx_api::abstract_texture* shadowMap = shadowMapFromCascadeReads(passCtx);
+	gfx_api::SceneLightingInputs lighting = sceneLightingInputsFromPass(passCtx);
 
 	{
 		WZ_PROFILE_SCOPE(pie_DrawTransparentMeshes);
@@ -173,7 +195,7 @@ static void recordSceneTransparent(const gfx_api::RenderPassContext& passCtx)
 		// composited result with it would assign that unrelated depth to every
 		// transparent layer, so forward transparents fog from fragment distance.
 		pie_DrawAllMeshes(fc.currentGameFrame, fc.perspectiveMatrix, fc.viewMatrix, cameraPos,
-			fc.shadowCascadesInfo, shadowMap, fc.pointLights, MeshDepthPassMode::None,
+			fc.shadowCascadesInfo, lighting, fc.pointLights, MeshDepthPassMode::None,
 			MeshDrawParts::Translucent | MeshDrawParts::Additive, MeshFogMode::ForwardDistance);
 	}
 
@@ -202,7 +224,7 @@ static void recordShadowCascade(const gfx_api::RenderPassContext& passCtx)
 		drawTerrainDepthOnly(fc.cascadeProj[cascadeIndex] * fc.cascadeView[cascadeIndex], fc.perspectiveViewMatrix);
 	}
 	pie_DrawAllMeshes(fc.currentGameFrame, fc.cascadeProj[cascadeIndex], fc.cascadeView[cascadeIndex],
-		cameraPos, fc.shadowCascadesInfo, nullptr, fc.pointLights, MeshDepthPassMode::ShadowMap);
+		cameraPos, fc.shadowCascadesInfo, gfx_api::SceneLightingInputs::dummy(nullptr, contact_shadows::dummyLitTexture()), fc.pointLights, MeshDepthPassMode::ShadowMap);
 }
 
 static void recordSceneBlit(const gfx_api::RenderPassContext& passCtx)
@@ -290,6 +312,10 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SSRBlurH, ssr::recordBlurH);
 	table.set(gfx_api::PassId::SSRBlurV, ssr::recordBlurV);
 	table.set(gfx_api::PassId::SSRCompose, ssr::recordCompose);
+	table.set(gfx_api::PassId::ContactShadowGenerate, contact_shadows::recordGenerate);
+	table.set(gfx_api::PassId::ContactShadowDownsample, contact_shadows::recordDownsample);
+	table.set(gfx_api::PassId::ContactShadowBlurH, contact_shadows::recordBlurH);
+	table.set(gfx_api::PassId::ContactShadowBlurV, contact_shadows::recordBlurV);
 	table.set(gfx_api::PassId::FogApply, fog_pass::recordApply);
 	for (gfx_api::PassId id : {gfx_api::PassId::BloomDownsample0, gfx_api::PassId::BloomDownsample1, gfx_api::PassId::BloomDownsample2,
 		gfx_api::PassId::BloomDownsample3, gfx_api::PassId::BloomDownsample4, gfx_api::PassId::BloomDownsample5})
