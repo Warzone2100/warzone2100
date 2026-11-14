@@ -962,8 +962,9 @@ void droidUpdate(DROID *psDroid)
 		// need to clip this value to prevent overflow condition
 		percentDamage = 100 - clip<UDWORD>(PERCENT(psDroid->body, psDroid->originalBody), 0, 100);
 
-		// Is there any damage?
-		if (percentDamage >= 25)
+		// Is there any damage? Start smoking at the same threshold at which the
+		// health bar turns yellow and "Retreat at Medium Damage" kicks in.
+		if (isAtOrBelowPercent(psDroid->body, psDroid->originalBody, REPAIRLEV_HIGH))
 		{
 			if (percentDamage >= 100)
 			{

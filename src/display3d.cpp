@@ -3539,9 +3539,30 @@ bool	eitherSelected(DROID *psDroid)
 	return false;
 }
 
+// Pick the health bar colour for current / max, using the exact same thresholds (and comparison) as the
+// automatic "Retreat at Medium/Heavy Damage" logic, so that a yellow / red bar always matches when units retreat.
+static void getHealthBarColours(int64_t current, int64_t max, PIELIGHT &powerCol, PIELIGHT &powerColShadow)
+{
+	if (!isAtOrBelowPercent(current, max, REPAIRLEV_HIGH))
+	{
+		powerCol = WZCOL_HEALTH_HIGH;
+		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
+	}
+	else if (!isAtOrBelowPercent(current, max, REPAIRLEV_LOW))
+	{
+		powerCol = WZCOL_HEALTH_MEDIUM;
+		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
+	}
+	else
+	{
+		powerCol = WZCOL_HEALTH_LOW;
+		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
+	}
+}
+
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
-	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+	UDWORD damage = 0;
 	UDWORD shields = 0;
 
 	if (psDroid->shieldPoints >= 0)
@@ -3558,21 +3579,7 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	PIELIGHT powerCol = WZCOL_BLACK;
 	PIELIGHT powerColShadow = WZCOL_BLACK;
 
-	if (damage > REPAIRLEV_HIGH)
-	{
-		powerCol = WZCOL_HEALTH_HIGH;
-		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
-	}
-	else if (damage > REPAIRLEV_LOW)
-	{
-		powerCol = WZCOL_HEALTH_MEDIUM;
-		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
-	}
-	else
-	{
-		powerCol = WZCOL_HEALTH_LOW;
-		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
-	}
+	getHealthBarColours(psDroid->body, psDroid->originalBody, powerCol, powerColShadow);
 
 	damage = static_cast<UDWORD>((float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR);
 	if (damage > psDroid->sDisplay.screenR)
@@ -3621,32 +3628,16 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 	{
 		if (psDroid->resistance)
 		{
-			damage = PERCENT(psDroid->resistance, psDroid->droidResistance());
+			getHealthBarColours(psDroid->resistance, psDroid->droidResistance(), powerCol, powerColShadow);
 		}
 		else
 		{
-			damage = 100;
+			getHealthBarColours(1, 1, powerCol, powerColShadow);
 		}
 	}
 	else
 	{
-		damage = PERCENT(psDroid->body, psDroid->originalBody);
-	}
-
-	if (damage > REPAIRLEV_HIGH)
-	{
-		powerCol = WZCOL_HEALTH_HIGH;
-		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
-	}
-	else if (damage > REPAIRLEV_LOW)
-	{
-		powerCol = WZCOL_HEALTH_MEDIUM;
-		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
-	}
-	else
-	{
-		powerCol = WZCOL_HEALTH_LOW;
-		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
+		getHealthBarColours(psDroid->body, psDroid->originalBody, powerCol, powerColShadow);
 	}
 
 	//show resistance values if CTRL/SHIFT depressed

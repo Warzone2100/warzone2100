@@ -40,6 +40,14 @@
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
 #define REPAIRLEV_HIGH	75	// ditto, but this will repair much sooner..
 
+/// Returns true if current / max <= percent / 100, compared exactly (without integer truncation of the percentage).
+/// Use this when comparing body points against REPAIRLEV_LOW / REPAIRLEV_HIGH, so that the health bar colour,
+/// damage smoke and the automatic retreat logic all agree on the same thresholds.
+static inline bool isAtOrBelowPercent(int64_t current, int64_t max, int64_t percent)
+{
+	return current * 100 <= percent * max;
+}
+
 #define DROID_RESISTANCE_FACTOR     30
 
 // Changing this breaks campaign saves!
