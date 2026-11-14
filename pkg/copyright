@@ -418,6 +418,8 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        lib/ivis_opengl/render_graph/pass_resolve.h
        lib/ivis_opengl/render_graph/read_scope.cpp
        lib/ivis_opengl/render_graph/scene_post_effect_id.h
+       lib/ivis_opengl/render_graph/separable_blur_prepare.*
+       lib/ivis_opengl/scene_lighting_inputs.h
        lib/ivis_opengl/vk/handle_storage.h
        lib/ivis_opengl/vk/layout_key_builder.*
        lib/ivis_opengl/vk/layout_translation.h
@@ -474,6 +476,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/bloom_pass.*
        src/buildprovenance/*
        src/cameratrace.*
+       src/contact_shadows.*
        src/corridor_gate.*
        src/corridor_map.*
        src/corridordump.*
