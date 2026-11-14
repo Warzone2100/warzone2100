@@ -30,7 +30,9 @@ Files whose license is not stated in the file itself, in a license file
 accompanying it (such as a LICENSE or COPYING file in its directory, or in a
 parent directory below the top level of the source tree), or in
 COPYING.NONGPL, are licensed under the GNU General Public License, version 2
-or (at your option) any later version.
+or (at your option) any later version. This does not apply to the text of
+COPYING.SECTION7, which states its own copying terms, including where it is
+reproduced in another file.
 
 Where this overview and a file's header differ, the file's header governs.
 

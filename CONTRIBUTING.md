@@ -10,3 +10,5 @@ By submitting a contribution to Warzone 2100, you agree that:
 4. **You have the right** to submit the contribution under these terms.
 
 Code taken from other projects keeps its original license and header, and must be compatible with version 3 of the GNU General Public License. Do not apply the Warzone 2100 header or the Section 7 additional terms to it, and list it in [COPYING.NONGPL](COPYING.NONGPL) if it is not GPL-licensed.
+
+Changes to [COPYING.SECTION7](COPYING.SECTION7) itself are an exception to item 1: they are licensed only under the copying terms stated in that file, and you also agree that the Warzone 2100 Project maintainers may use and modify them in any version of those terms published by the Warzone 2100 Project.
