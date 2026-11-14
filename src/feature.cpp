@@ -233,6 +233,13 @@ static void updateFeatureOrientation(FEATURE *psFeature, const WorldMapState& ma
 	psFeature->rot.roll = iAtan2(dzdw, (2 * d) << 16);		// pitch = atan(∂z(x, y)/∂w)/2π << 16
 }
 
+/* Set the direction of a feature, and update its pitch and roll to match the terrain */
+void setFeatureDirection(FEATURE *psFeature, uint16_t direction, const WorldMapState& mapState)
+{
+	psFeature->rot.direction = direction;
+	updateFeatureOrientation(psFeature, mapState);
+}
+
 /* Create a feature on the map */
 FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
