@@ -11,10 +11,10 @@
 
 	Additional terms under Section 7 of the GNU General Public License
 	version 3 apply to this file: version 1.0 of the Warzone 2100
-	additional terms, or (at your option) any later version published by
-	the Warzone 2100 Project, set out in COPYING.SECTION7 in the
-	top-level directory of the source distribution. This notice must be
-	kept intact.
+	additional terms, or (at your option) any later version, as published
+	by the Warzone 2100 Project. They are provided in COPYING.SECTION7 in
+	the top-level directory of the source distribution. This notice must
+	be kept intact.
 
 	Warzone 2100 is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
