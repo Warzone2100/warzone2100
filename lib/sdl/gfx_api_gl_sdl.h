@@ -45,6 +45,8 @@ public:
 
 	enum GLContextRequests {
 		// Desktop OpenGL Context Requests
+		// 4.3 is the minimum with compute shaders. Creation falls through to 3.3 when it is unavailable.
+		OpenGLCore_4_3,
 		OpenGLCore_3_3,
 		OpenGLCore_3_2,
 		OpenGLCore_3_1,
@@ -54,7 +56,7 @@ public:
 		//
 		MAX_CONTEXT_REQUESTS
 	};
-	static constexpr GLContextRequests OpenGLCore_HighestAvailable = OpenGLCore_3_3;
+	static constexpr GLContextRequests OpenGLCore_HighestAvailable = OpenGLCore_4_3;
 
 	static bool configureOpenGLContextRequest(GLContextRequests request, bool useOpenGLESLibrary);
 	static GLContextRequests getInitialContextRequest(bool useOpenglES = false);

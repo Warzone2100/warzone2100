@@ -126,6 +126,14 @@ enum class ViewportRule : uint8_t
 	DepthCascade,
 };
 
+/// Pipeline-surface subresource a compute pass samples or stores into.
+struct BlueprintComputeImage
+{
+	PipelineSurfaceId surface = PipelineSurfaceId::Count;
+	uint32_t arrayLayer = 0;
+	uint32_t mipLevel = 0;
+};
+
 /// <summary>
 /// One node in the pass graph: attachments, viewport rule, and inbound read edges.
 ///
@@ -136,7 +144,10 @@ struct BlueprintPass
 {
 	/// Stable pass identity; used to look up `RecordFuncTable` entries.
 	PassId id = PassId::Count;
+	PassKind kind = PassKind::Graphics;
 	std::string debugName;
+	std::vector<BlueprintComputeImage> sampledInputs;
+	std::vector<BlueprintComputeImage> storageImages;
 	std::vector<BlueprintAttachment> colorAttachments;
 	optional<BlueprintAttachment> depthAttachment;
 	optional<BlueprintAttachment> resolveAttachment;
@@ -195,6 +206,10 @@ class BlueprintBuilder
 public:
 	/// Start a new pass; subsequent calls append to this pass until the next `beginPass`.
 	BlueprintBuilder& beginPass(PassId id, std::string debugName);
+	/// Start a compute pass. It has no color, depth, or resolve attachments.
+	BlueprintBuilder& beginComputePass(PassId id, std::string debugName);
+	BlueprintBuilder& readSampled(PipelineSurfaceId surface, uint32_t arrayLayer = 0, uint32_t mipLevel = 0);
+	BlueprintBuilder& useStorageImage(PipelineSurfaceId surface, uint32_t arrayLayer = 0, uint32_t mipLevel = 0);
 	/// Add a color attachment bound to a pipeline surface.
 	BlueprintBuilder& color(PipelineSurfaceId surface, AttachmentLoadOp load, AttachmentStoreOp store,
 		ClearValue clear = ClearValue::colorClear());

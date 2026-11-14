@@ -1,13 +1,20 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-WZ2100-GPL-3.0-Section-7-1.0-or-later
 
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
-	Warzone 2100 is free software; you can redistribute it and/or modify
+	Warzone 2100 is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
+	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
+
+	Additional terms under Section 7 of the GNU General Public License
+	version 3 apply to this file: version 1.0 of the Warzone 2100
+	additional terms, or (at your option) any later version published by
+	the Warzone 2100 Project, set out in COPYING.SECTION7 in the
+	top-level directory of the source distribution. This notice must be
+	kept intact.
 
 	Warzone 2100 is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,8 +22,7 @@
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Warzone 2100; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+	along with Warzone 2100. If not, see <https://www.gnu.org/licenses/>.
 */
 /** @file render_pass.h
  * `RenderPassDesc`, read descriptors, and `RenderPassContext` for graph pass recording.
@@ -43,6 +49,29 @@ namespace gfx_api
 {
 
 struct abstract_texture;
+struct buffer;
+
+/// Whether a pass records draws or a compute dispatch.
+enum class PassKind : uint8_t
+{
+	Graphics,
+	Compute,
+};
+
+/// Image subresource a compute pass samples or stores into.
+struct ComputeImageUse
+{
+	abstract_texture* texture = nullptr;
+	uint32_t arrayLayer = 0;
+	uint32_t mipLevel = 0;
+	bool isDepth = false;
+};
+
+/// Storage buffer a compute pass binds.
+struct ComputeBufferUse
+{
+	buffer* buf = nullptr;
+};
 
 /// Runtime index of a pass within a materialized `vector<RenderPassDesc>` (execution order).
 using PassHandle = size_t;
@@ -61,6 +90,8 @@ enum class AttachmentRole : uint8_t
 	Depth,
 	/// `resolveAttachment`.
 	Resolve,
+	/// `storageImages[attachmentIndex]` written by a compute pass.
+	Storage,
 };
 
 /// <summary>
@@ -114,6 +145,7 @@ class RenderPassContext;
 struct RenderPassDesc
 {
 	std::string debugName;
+	PassKind kind = PassKind::Graphics;
 
 	/// Records draw calls for this pass; must only call gfx_api bind/draw while the pass is active.
 	using RecordFunc = std::function<void(const RenderPassContext&)>;
@@ -125,8 +157,14 @@ struct RenderPassDesc
 	optional<AttachmentDesc> resolveAttachment;
 	optional<std::pair<uint32_t, uint32_t>> viewportSize;
 	std::vector<ReadDesc> reads;
+	std::vector<ComputeImageUse> sampledInputs;
+	std::vector<ComputeImageUse> storageImages;
+	std::vector<ComputeBufferUse> storageBuffers;
 	/// Stable pass identity; `PassId::Count` means unset.
+	/// A hand-built compute desc may use `Count`. Blueprint materialize still rejects it.
 	PassId passId = PassId::Count;
+
+	void addStorageBuffer(buffer* buf);
 };
 
 /// <summary>
@@ -152,6 +190,9 @@ public:
 	size_t writeCount() const { return _desc.colorAttachments.size(); }
 	/// Color write texture (null if unresolved or out of range). Parallel to `getRead`.
 	abstract_texture* getWrite(size_t index = 0) const;
+	abstract_texture* getSampledInput(size_t index) const;
+	abstract_texture* getStorageImage(size_t index) const;
+	buffer* getStorageBuffer(size_t index) const;
 	/// Full tracked color-write attachment (texture + load/store + `pipelineSurfaceId`).
 	const AttachmentDesc& writeAttachment(size_t index = 0) const;
 	/// Catalog id of the tracked color write; unset if the write is not a pipeline surface.
