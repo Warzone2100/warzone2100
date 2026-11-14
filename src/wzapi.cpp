@@ -1271,7 +1271,7 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 	case DROID_CONSTRUCT:
 		droidType2 = DROID_CYBORG_CONSTRUCT; break;
 	case DROID_WEAPON:
-		droidType2 = DROID_CYBORG_SUPER; break;
+		droidType2 = DROID_DEFAULT; break;
 	case DROID_REPAIR:
 		droidType2 = DROID_CYBORG_REPAIR; break;
 	case DROID_CYBORG:
