@@ -2761,6 +2761,127 @@ bool sendReadyRequest(UBYTE player, bool bReady)
 	return true;
 }
 
+// Clicks on the local player's "ready" button (as a client) are debounced:
+// the button reflects the new state immediately, but the request is only sent
+// to the host once the button hasn't been clicked for READY_REQUEST_DEBOUNCE_MS
+constexpr uint32_t READY_REQUEST_DEBOUNCE_MS = 1000;
+// After the request is sent, keep showing the requested state until the host
+// confirms it (or for at most this long, in case the host ignores the request)
+constexpr uint32_t READY_REQUEST_CONFIRM_TIMEOUT_MS = 5000;
+
+struct PendingLocalReadyRequest
+{
+	uint32_t player = 0;
+	bool desiredReady = false;
+	bool confirmedReadyAtStart = false; // the player's (host-confirmed) ready state when this pending request began
+	uint32_t lastChangeTime = 0;
+	bool sent = false;
+};
+static optional<PendingLocalReadyRequest> pendingLocalReadyRequest;
+
+static bool pendingLocalReadyRequestIsStale(const PendingLocalReadyRequest& pending)
+{
+	return pending.player != selectedPlayer
+		|| pending.player >= MAX_CONNECTED_PLAYERS
+		|| NetPlay.players[pending.player].ready != pending.confirmedReadyAtStart // confirmed (if sent), or changed by the host (e.g. a ready status reset)
+		|| NetPlay.isHost
+		|| !NetPlay.bComms
+		|| GetGameMode() == GS_NORMAL;
+}
+
+void multiLobbyClearPendingLocalReadyRequest()
+{
+	if (pendingLocalReadyRequest.has_value())
+	{
+		pendingLocalReadyRequest.reset();
+		netPlayersUpdated = true;
+	}
+}
+
+optional<bool> multiLobbyGetPendingLocalReadyState()
+{
+	if (!pendingLocalReadyRequest.has_value() || pendingLocalReadyRequestIsStale(pendingLocalReadyRequest.value()))
+	{
+		return nullopt;
+	}
+	return pendingLocalReadyRequest.value().desiredReady;
+}
+
+void multiLobbyToggleLocalReadyRequest()
+{
+	if (NetPlay.isHost || !NetPlay.bComms)
+	{
+		// no network round-trip involved - apply directly
+		sendReadyRequest(selectedPlayer, !NetPlay.players[selectedPlayer].ready);
+		return;
+	}
+
+	if (pendingLocalReadyRequest.has_value() && pendingLocalReadyRequestIsStale(pendingLocalReadyRequest.value()))
+	{
+		pendingLocalReadyRequest.reset();
+	}
+
+	if (pendingLocalReadyRequest.has_value() && pendingLocalReadyRequest.value().sent)
+	{
+		// waiting for the host to process the already-sent request
+		return;
+	}
+
+	bool currentReady = multiLobbyGetPendingLocalReadyState().value_or(NetPlay.players[selectedPlayer].ready);
+	if (NetPlay.players[selectedPlayer].isSpectator && currentReady)
+	{
+		return; // spectators can never toggle off "ready"
+	}
+
+	if (!pendingLocalReadyRequest.has_value())
+	{
+		PendingLocalReadyRequest pending;
+		pending.player = selectedPlayer;
+		pending.confirmedReadyAtStart = NetPlay.players[selectedPlayer].ready;
+		pendingLocalReadyRequest = pending;
+	}
+	pendingLocalReadyRequest.value().desiredReady = !currentReady;
+	pendingLocalReadyRequest.value().lastChangeTime = realTime;
+
+	netPlayersUpdated = true; // refresh the ready button
+}
+
+void multiLobbyProcessPendingLocalReadyRequest()
+{
+	if (!pendingLocalReadyRequest.has_value())
+	{
+		return;
+	}
+	auto& pending = pendingLocalReadyRequest.value();
+	if (pendingLocalReadyRequestIsStale(pending))
+	{
+		multiLobbyClearPendingLocalReadyRequest();
+		return;
+	}
+	if (pending.sent)
+	{
+		if (realTime - pending.lastChangeTime >= READY_REQUEST_CONFIRM_TIMEOUT_MS)
+		{
+			// host didn't change our ready status - stop showing the requested state
+			multiLobbyClearPendingLocalReadyRequest();
+		}
+		return;
+	}
+	if (realTime - pending.lastChangeTime < READY_REQUEST_DEBOUNCE_MS)
+	{
+		return;
+	}
+	if (pending.desiredReady == pending.confirmedReadyAtStart)
+	{
+		// toggled back to the current state - nothing to send
+		multiLobbyClearPendingLocalReadyRequest();
+		return;
+	}
+	sendReadyRequest(selectedPlayer, pending.desiredReady);
+	pending.sent = true;
+	pending.lastChangeTime = realTime;
+}
+
 bool recvReadyRequest(NETQUEUE queue)
 {
 	ASSERT_HOST_ONLY(return true);
@@ -5871,6 +5992,7 @@ void handleAutoReadyRequest()
 	if (desiredReadyState != NetPlay.players[selectedPlayer].ready)
 	{
 		// Automatically set ready status
+		pendingLocalReadyRequest.reset();
 		sendReadyRequest(selectedPlayer, desiredReadyState);
 	}
 }
@@ -6711,6 +6833,10 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		// send it for each player that needs it
 		sendMap();
 	}
+
+	// send any debounced local changes to the host
+	processPendingMultiOptPreferences();
+	multiLobbyProcessPendingLocalReadyRequest();
 
 	// update boxes?
 	if (netPlayersUpdated || (NetPlay.isHost && mouseDown(MOUSE_LMB) && gameTime - lastrefresh > 500))

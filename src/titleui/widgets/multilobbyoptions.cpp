@@ -653,7 +653,6 @@ private:
 		if (showLocalPrefValue)
 		{
 			button->setMode(WzLobbyMultiOptionButton::MultiOptionButtonMode::CLIENT);
-			button->minClickInterval = GAME_TICKS_PER_SEC;
 		}
 		button->setShowTotalVotes((ingame.side == InGameSide::HOST_OR_SINGLEPLAYER) && NetPlay.isHost);
 
