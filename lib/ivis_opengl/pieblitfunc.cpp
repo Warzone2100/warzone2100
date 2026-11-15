@@ -497,6 +497,16 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 
 /***************************************************************************/
 
+void pie_DeclareInterfacePipelines(std::vector<void (*)()>& out)
+{
+	out.insert(out.end(), {
+		&gfx_api::DrawImagePSO::prewarm, &gfx_api::DrawImageAnisotropicPSO::prewarm, &gfx_api::DrawImageTextPSO::prewarm,
+		&gfx_api::BoxFillPSO::prewarm, &gfx_api::BoxFillAlphaPSO::prewarm, &gfx_api::BoxFillPSO_Instanced::prewarm,
+		&gfx_api::UIBoxPSO::prewarm, &gfx_api::UniTransBoxPSO::prewarm, &gfx_api::ShadowBox2DPSO::prewarm, &gfx_api::LinePSO::prewarm,
+		&gfx_api::RadarPSO::prewarm, &gfx_api::RadarViewInsideFillPSO::prewarm, &gfx_api::RadarViewOutlinePSO::prewarm,
+	});
+}
+
 void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_DrawRect<gfx_api::BoxFillPSO>(x0, y0, x1, y1, colour);

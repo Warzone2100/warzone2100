@@ -144,6 +144,9 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 {
 	iV_Box2(x0, y0, x1, y1, first, first);
 }
+/// The pipelines the interface's drawing binds - images, text, boxes, lines, the radar (to build them ahead: see
+/// render_graph/pipeline_prewarm.h)
+void pie_DeclareInterfacePipelines(std::vector<void (*)()>& out);
 void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour);
 void pie_BoxFillf(float x0, float y0, float x1, float y1, PIELIGHT colour);
 void pie_BoxFill_alpha(int x0, int y0, int x1, int y1, PIELIGHT colour);

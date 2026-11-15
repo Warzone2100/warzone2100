@@ -39,6 +39,7 @@
 
 #include "display3d_render_graph.h"
 #include "display.h"
+#include "game_pipeline_prewarm.h"
 #include "hci.h"
 #include "loop.h"
 #include "profiling.h"
@@ -46,6 +47,8 @@
 #include "wrappers.h"
 
 #include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piedraw.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -105,13 +108,33 @@ static void registerAllFrameRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::InGameUI, recordInGameUI);
 }
 
+/// The pipelines the game's passes may bind, to build ahead (game_pipeline_prewarm.h)
+static void registerAllFramePassPipelines(gfx_api::PassPipelineTable& table)
+{
+	registerInGame3DPassPipelines(table);
+	// The interface over the game: the widgets (images, text, boxes, the radar), models on design and production
+	// buttons, a research video
+	table.set(gfx_api::PassId::InGameUI, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) {
+		pie_DeclareInterfacePipelines(out);
+		pie_DeclareButtonPipelines(out);
+		out.push_back(&gfx_api::VideoPSO::prewarm);
+	});
+	table.set(gfx_api::PassId::GameStartFade, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) {
+		out.push_back(&gfx_api::UniTransBoxPSO::prewarm);
+	});
+}
+
 void pie_InitRenderGraphs()
 {
 	gfx_api::RecordFuncTable funcs;
 	registerAllFrameRecordFuncs(funcs);
+	gfx_api::PassPipelineTable pipelines;
+	registerAllFramePassPipelines(pipelines);
 
 	gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
 	graph.setRecordFuncs(std::move(funcs));
+	graph.setPassPipelines(std::move(pipelines));
+	gamePipelinePrewarm_Init();
 	graph.setBlueprintFactory([](const gfx_api::RenderTopologySnapshot& snapshot) {
 		return gfx_api::PassGraphTopologyBlueprint::fromSnapshot(snapshot);
 	});

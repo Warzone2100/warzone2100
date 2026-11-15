@@ -485,6 +485,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/emscripten_helpers.*
        src/fog_pass.*
        src/frame_render_init.*
+       src/game_pipeline_prewarm.*
        src/game_world.*
        src/gamestate_harness.*
        src/gamestate_replay_seek.*
@@ -504,6 +505,7 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        src/pathbench.*
        src/perfcounters.*
        src/playerstatsgraph.*
+       src/render_topology_game.*
        src/researchlogviewer.*
        src/researchtree/*
        src/resource_loading_dispatch.*

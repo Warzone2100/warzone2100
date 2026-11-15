@@ -64,6 +64,6 @@ void display3d_recordSceneOverlays(const gfx_api::RenderPassContext& passCtx);
 void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext& passCtx);
 
 void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table);
-/// The pipelines the scene-referred passes may bind (the bloom, the tonemap: the title scene uses them too), for
-/// building them ahead (`CachedRenderGraph::prewarmJob`). (The world's passes don't declare theirs yet.)
+/// The pipelines the in-game 3D passes may bind with the current options - the world, the post effects, the overlays on
+/// the world - for building them ahead (`CachedRenderGraph::prewarmJob`, game_pipeline_prewarm.h)
 void registerInGame3DPassPipelines(gfx_api::PassPipelineTable& table);

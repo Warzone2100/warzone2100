@@ -38,7 +38,7 @@
 #include "lib/ivis_opengl/render_graph/topology.h"
 #include "lib/ivis_opengl/screen.h"
 
-class GameRenderTopologyQuery final : public gfx_api::IRenderTopologyQuery
+class GameRenderTopologyQuery : public gfx_api::IRenderTopologyQuery
 {
 public:
 	bool isTitleScreenActive() const override
@@ -162,4 +162,26 @@ gfx_api::IRenderTopologyQuery& gfx_api::getGameRenderTopologyQuery()
 {
 	static GameRenderTopologyQuery instance;
 	return instance;
+}
+
+/// The game as its first frame will show it, from behind the loading screen that comes before it: in the game (not the
+/// loading screen nor a video), its world not frozen, the range rings' passes in (as their surfaces are allocated:
+/// they come and go with what is selected)
+class GameAsItWillShowQuery final : public GameRenderTopologyQuery
+{
+public:
+	bool isTitleScreenActive() const override { return false; }
+	bool headlessOrSkipDrawing() const override { return false; }
+	bool isLoadingScreenActive() const override { return false; }
+	bool isVideoPlaybackActive() const override { return false; }
+	bool inGameWorldFrozen() const override { return false; }
+	gfx_api::SceneEffectSurfaces sceneEffectSurfaces() const override
+	{
+		return gfx_api::context::get().storedSceneEffectSurfaces();
+	}
+};
+
+gfx_api::RenderTopologySnapshot gameTopologySnapshotAsItWillShow()
+{
+	return gfx_api::render_topology::snapshot(GameAsItWillShowQuery());
 }

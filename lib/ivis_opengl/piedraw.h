@@ -67,4 +67,13 @@ enum class MeshFogMode : uint8_t
 void pie_StartMeshes();
 void pie_UpdateLightmap(gfx_api::texture* lightmapTexture, const glm::mat4& modelUVLightmapMatrix);
 void pie_FinalizeMeshes(uint64_t currentGameFrame);
+/// The pipelines pie_DrawAllMeshes may bind for these arguments, with the current options (to build them ahead: see
+/// render_graph/pipeline_prewarm.h): every variant a part could need - a translucent or additive one, a no-depth-write
+/// one, lit or unlit - not only those on screen now
+void pie_DeclareMeshPipelines(MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter, std::vector<void (*)()>& out);
+/// The pipelines pie_Draw3DButton binds (a model in the interface: a design or production button)
+void pie_DeclareButtonPipelines(std::vector<void (*)()>& out);
+/// What pie_DeclareMeshPipelines goes by besides its arguments (instancing, shadows, the stencil shadows' fallback):
+/// when it changes, so may the pipelines
+uint32_t pie_MeshPipelineVariant();
 void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None, MeshDrawParts drawFilter = MeshDrawParts::All, MeshFogMode fogMode = MeshFogMode::Disabled);

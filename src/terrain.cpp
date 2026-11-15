@@ -2606,6 +2606,62 @@ void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix
 	}
 }
 
+void terrain_DeclareShadowPipelines(std::vector<void (*)()>& out)
+{
+	// (as drawDepthOnlyForDepthMap)
+	out.push_back((terrainMeshStrategy == TerrainMeshStrategy::HardwareTess) ? &gfx_api::TerrainDepthOnlyForDepthMapTess::prewarm : &gfx_api::TerrainDepthOnlyForDepthMap::prewarm);
+}
+
+void terrain_DeclarePrepassPipelines(bool normals, bool writeSsrWaterNormals, std::vector<void (*)()>& out)
+{
+	// (as drawTerrainScenePrepassImpl and the water prepasses)
+	const bool tess = terrainMeshStrategy == TerrainMeshStrategy::HardwareTess;
+	if (normals)
+	{
+		out.push_back(tess ? &gfx_api::TerrainDepthPrepassTess::prewarm : &gfx_api::TerrainDepthPrepass::prewarm);
+		const bool bumpPrepass = writeSsrWaterNormals && (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING) && (waterTexturesHigh.tex_nm != nullptr);
+		out.push_back(bumpPrepass ? &gfx_api::WaterDepthPrepassBump::prewarm : &gfx_api::WaterDepthPrepass::prewarm);
+	}
+	else
+	{
+		out.push_back(tess ? &gfx_api::TerrainDepthPrepassTessDepthOnly::prewarm : &gfx_api::TerrainDepthPrepassDepthOnly::prewarm);
+		out.push_back(&gfx_api::WaterDepthPrepassDepthOnly::prewarm);
+	}
+}
+
+void terrain_DeclareScenePipelines(std::vector<void (*)()>& out)
+{
+	// (as drawTerrain: the depth canvas, classic water first, the terrain and decals, then drawWater)
+	const bool tess = terrainMeshStrategy == TerrainMeshStrategy::HardwareTess;
+	if (!tess)
+	{
+		out.push_back(&gfx_api::TerrainDepth::prewarm);
+	}
+	switch (terrainShaderQuality)
+	{
+		case TerrainShaderQuality::CLASSIC:
+			// (Classic never uses hardware tessellation)
+			out.push_back(&gfx_api::WaterClassicPSO::prewarm);
+			out.push_back(&gfx_api::TerrainCombined_Classic::prewarm);
+			break;
+		case TerrainShaderQuality::MEDIUM:
+			out.push_back(tess ? &gfx_api::TerrainCombinedTess_Medium::prewarm : &gfx_api::TerrainCombined_Medium::prewarm);
+			out.push_back(&gfx_api::WaterPSO::prewarm);
+			break;
+		case TerrainShaderQuality::NORMAL_MAPPING:
+			out.push_back(tess ? &gfx_api::TerrainCombinedTess_High::prewarm : &gfx_api::TerrainCombined_High::prewarm);
+			out.push_back(&gfx_api::WaterHighPSO::prewarm);
+			break;
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			break;
+	}
+}
+
+uint32_t terrain_PipelineVariant()
+{
+	return static_cast<uint32_t>(terrainShaderQuality) | (static_cast<uint32_t>(terrainMeshStrategy) << 8) | ((waterTexturesHigh.tex_nm != nullptr) ? (1u << 16) : 0u);
+}
+
 // MARK: Terrain shader quality / appearance
 
 bool determineTerrainShaderRequirementsMet()

@@ -46,6 +46,7 @@
 #include "terrain.h"
 
 #include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piedraw.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/render_graph/cached_render_graph.h"
@@ -277,17 +278,87 @@ static void recordTargettingEffects(const gfx_api::RenderPassContext&)
 
 void registerInGame3DPassPipelines(gfx_api::PassPipelineTable& table)
 {
+	using Out = std::vector<gfx_api::PipelinePrewarmFn>;
+	using Context = gfx_api::PassPipelineContext;
+	// One pipeline, whatever the options
+	auto one = [&table](gfx_api::PassId id, gfx_api::PipelinePrewarmFn fn) {
+		table.set(id, [fn](const Context&, Out& out) { out.push_back(fn); });
+	};
+
+	// The world (as the record callbacks above, and scene_prepass.cpp, draw it)
+	for (uint32_t i = 0; i < WZ_MAX_SHADOW_CASCADES; ++i)
+	{
+		table.set(gfx_api::shadowCascadePassId(i), [](const Context&, Out& out) {
+			if (getDrawTerrainShadows())
+			{
+				terrain_DeclareShadowPipelines(out);
+			}
+			pie_DeclareMeshPipelines(MeshDepthPassMode::ShadowMap, MeshDrawParts::All, out);
+		});
+	}
+	table.set(gfx_api::PassId::ScenePrepass, [](const Context& ctx, Out& out) {
+		// (with a normals target, or depth only: as the pass is built)
+		const bool normals = !ctx.pass.colorAttachments.empty();
+		terrain_DeclarePrepassPipelines(normals, gfx_api::context::get().storedSceneEffectSurfaces().ssr, out);
+		pie_DeclareMeshPipelines(normals ? MeshDepthPassMode::ScenePrepass : MeshDepthPassMode::ScenePrepassDepthOnly, MeshDrawParts::All, out);
+	});
+	table.set(gfx_api::PassId::ScenePass, [](const Context& ctx, Out& out) {
+		terrain_DeclareScenePipelines(out);
+		out.push_back(&gfx_api::SkyboxPSO::prewarm);
+		// (without a SceneTransparent pass, the transparent parts and the construction beams are drawn here too)
+		const bool fusedTransparents = !ctx.graphContains(gfx_api::PassId::SceneTransparent);
+		pie_DeclareMeshPipelines(MeshDepthPassMode::None, fusedTransparents ? MeshDrawParts::All : MeshDrawParts::Opaque, out);
+		if (fusedTransparents)
+		{
+			out.push_back(&gfx_api::TransColouredTrianglePSO::prewarm);
+		}
+	});
+	table.set(gfx_api::PassId::SceneTransparent, [](const Context&, Out& out) {
+		pie_DeclareMeshPipelines(MeshDepthPassMode::None, MeshDrawParts::Translucent | MeshDrawParts::Additive, out);
+		out.push_back(&gfx_api::TransColouredTrianglePSO::prewarm);
+	});
+
+	// The post effects
+	one(gfx_api::PassId::SSAOGenerate, &gfx_api::SSAOGeneratePSO::prewarm);
+	one(gfx_api::PassId::SSAODownsample, &gfx_api::BilinearResamplePSO::prewarm);
+	one(gfx_api::PassId::SSAOBlurH, &gfx_api::SSAOBlurPSO::prewarm);
+	one(gfx_api::PassId::SSAOBlurV, &gfx_api::SSAOBlurPSO::prewarm);
+	one(gfx_api::PassId::SSAOCompose, &gfx_api::SceneComposeSSAOPSO::prewarm);
+	one(gfx_api::PassId::SSRGenerate, &gfx_api::SSRGeneratePSO::prewarm);
+	one(gfx_api::PassId::SSRDownsample, &gfx_api::BilinearResamplePSO::prewarm);
+	one(gfx_api::PassId::SSRBlurH, &gfx_api::SSRBlurPSO::prewarm);
+	one(gfx_api::PassId::SSRBlurV, &gfx_api::SSRBlurPSO::prewarm);
+	one(gfx_api::PassId::SSRCompose, &gfx_api::SceneComposeSSRPSO::prewarm);
+	one(gfx_api::PassId::FogApply, &gfx_api::SceneFogPSO::prewarm);
+	one(gfx_api::PassId::RangeRingSdfSensor, &gfx_api::RangeRingSdfSensorPSO::prewarm);
+	one(gfx_api::PassId::RangeRingSdfWeapon, &gfx_api::RangeRingSdfWeaponPSO::prewarm);
+	one(gfx_api::PassId::RangeRingSdfMin, &gfx_api::RangeRingSdfMinPSO::prewarm);
+	one(gfx_api::PassId::RangeRingComposite, &gfx_api::RangeRingCompositePSO::prewarm);
 	for (gfx_api::PassId id : {gfx_api::PassId::BloomDownsample0, gfx_api::PassId::BloomDownsample1, gfx_api::PassId::BloomDownsample2,
 		gfx_api::PassId::BloomDownsample3, gfx_api::PassId::BloomDownsample4, gfx_api::PassId::BloomDownsample5})
 	{
-		table.set(id, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) { out.push_back(&gfx_api::BloomDownsamplePSO::prewarm); });
+		one(id, &gfx_api::BloomDownsamplePSO::prewarm);
 	}
 	for (gfx_api::PassId id : {gfx_api::PassId::BloomUpsample0, gfx_api::PassId::BloomUpsample1, gfx_api::PassId::BloomUpsample2,
 		gfx_api::PassId::BloomUpsample3, gfx_api::PassId::BloomUpsample4})
 	{
-		table.set(id, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) { out.push_back(&gfx_api::BloomUpsamplePSO::prewarm); });
+		one(id, &gfx_api::BloomUpsamplePSO::prewarm);
 	}
-	table.set(gfx_api::PassId::SceneTonemap, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) { out.push_back(&gfx_api::SceneTonemapPSO::prewarm); });
+	one(gfx_api::PassId::SceneTonemap, &gfx_api::SceneTonemapPSO::prewarm);
+	one(gfx_api::PassId::SceneBlit, &gfx_api::WorldToScreenPSO::prewarm);
+	one(gfx_api::PassId::SceneUpscaleEASU, &gfx_api::Fsr1EasuPSO::prewarm);
+	one(gfx_api::PassId::SceneUpscaleRCAS, &gfx_api::Fsr1RcasPSO::prewarm);
+	one(gfx_api::PassId::SmaaEdges, &gfx_api::SmaaEdgesPSO::prewarm);
+	one(gfx_api::PassId::SmaaWeights, &gfx_api::SmaaWeightsPSO::prewarm);
+	one(gfx_api::PassId::SmaaBlend, &gfx_api::SmaaBlendPSO::prewarm);
+
+	// The overlays on the world: target markers, selections, the drag box, labels (interface drawing)
+	table.set(gfx_api::PassId::TargettingEffects, [](const Context&, Out& out) {
+		pie_DeclareInterfacePipelines(out);
+		out.push_back(&gfx_api::TransColouredTrianglePSO::prewarm);
+	});
+	table.set(gfx_api::PassId::SceneOverlays, [](const Context&, Out& out) { pie_DeclareInterfacePipelines(out); });
+	// (SceneDebugOverlays: debug drawing, left to build as it is turned on)
 }
 
 void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
