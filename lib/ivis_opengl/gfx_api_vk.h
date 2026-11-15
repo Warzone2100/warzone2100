@@ -870,6 +870,9 @@ struct VkRoot final : gfx_api::context
 
 	bool frameHasDrawCommands = false;
 	bool hasActivePass = false;
+	/// Between beginPipelinePrewarm and endPipelinePrewarm, currentRenderPassId is the prewarmed pass's
+	/// (no pass is recording)
+	bool prewarmingPipelines = false;
 	const size_t maxErrorHandlingDepth = 10;
 	std::vector<vk::Result> errorHandlingDepth;
 
@@ -1070,6 +1073,9 @@ public:
 	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
 		gfx_api::PassGraphCompileResult& compileResult) override;
+	virtual bool beginPipelinePrewarm(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass& compiledPass) override;
+	virtual void prewarmPipeline(gfx_api::pipeline_state_object* pso) override;
+	virtual void endPipelinePrewarm() override;
 	virtual void set_polygon_offset(const float& factor, const float& units) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 private:

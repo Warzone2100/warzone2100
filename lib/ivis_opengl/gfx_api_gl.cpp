@@ -2531,6 +2531,10 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 		psoID = existingPSOId->psoID;
 	}
 
+	if (!psoID.has_value())
+	{
+		reportPipelineBuiltOnFirstUse(createInfo, nullopt);
+	}
 	auto pipeline = new gl_pipeline_state_object(*this, createInfo, shadowConstants);
 	if (!psoID.has_value())
 	{

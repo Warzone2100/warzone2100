@@ -96,6 +96,12 @@ void pie_ShutDown()
 /***************************************************************************/
 
 static bool renderingFrame = false;
+static std::function<void(const gfx_api::RenderTopologySnapshot&)> beforeFrameGraphHook;
+
+void pie_SetBeforeFrameGraphHook(std::function<void(const gfx_api::RenderTopologySnapshot&)> hook)
+{
+	beforeFrameGraphHook = std::move(hook);
+}
 static gfx_api::CachedRenderGraph g_cachedFrameRenderGraph;
 
 gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph()
@@ -154,6 +160,10 @@ void pie_ScreenFrameRenderEnd()
 		if (drawSwapchain)
 		{
 			const gfx_api::RenderTopologySnapshot snapshot = gfx_api::render_topology::snapshot(query);
+			if (beforeFrameGraphHook)
+			{
+				beforeFrameGraphHook(snapshot);
+			}
 			gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
 			graph.ensureBuilt(snapshot);
 			graph.execute();

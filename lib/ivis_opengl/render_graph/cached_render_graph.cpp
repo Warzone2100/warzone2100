@@ -62,6 +62,29 @@ bool CachedRenderGraph::blueprintContainsPass(PassId id) const
 	return _blueprint.containsPass(id);
 }
 
+void CachedRenderGraph::setPassPipelines(PassPipelineTable table)
+{
+	_passPipelines = std::move(table);
+}
+
+PipelinePrewarmJob CachedRenderGraph::prewarmJob(const RenderTopologySnapshot& snapshot) const
+{
+	if (!_blueprintFactory)
+	{
+		return {};
+	}
+	// (not warmCompiledRenderGraph: that holds the cached graph's own layouts)
+	const PassGraphTopologyBlueprint blueprint = _blueprintFactory(snapshot);
+	std::vector<RenderPassDesc> passes = BlueprintMaterializer(snapshot).materialize(blueprint, _recordFuncs);
+	PassGraphCompileResult compileResult;
+	if (passes.empty() || !compilePassGraph(passes, compileResult))
+	{
+		debug(LOG_WARNING, "CachedRenderGraph: the graph to prewarm can't be built");
+		return {};
+	}
+	return PipelinePrewarmJob(std::move(passes), std::move(compileResult), _passPipelines);
+}
+
 void CachedRenderGraph::ensureBuilt(const RenderTopologySnapshot& snapshot)
 {
 	const uint64_t materializeHash = snapshot.materializeHash();

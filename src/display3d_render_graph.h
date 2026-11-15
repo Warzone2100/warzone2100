@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include "lib/ivis_opengl/render_graph/pipeline_prewarm.h"
+
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -62,3 +64,6 @@ void display3d_recordSceneOverlays(const gfx_api::RenderPassContext& passCtx);
 void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext& passCtx);
 
 void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table);
+/// The pipelines the scene-referred passes may bind (the bloom, the tonemap: the title scene uses them too), for
+/// building them ahead (`CachedRenderGraph::prewarmJob`). (The world's passes don't declare theirs yet.)
+void registerInGame3DPassPipelines(gfx_api::PassPipelineTable& table);

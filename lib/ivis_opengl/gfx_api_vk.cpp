@@ -2999,6 +2999,10 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	}
 
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
+	if (!psoID.has_value() && !prewarmingPipelines)
+	{
+		reportPipelineBuiltOnFirstUse(createInfo, static_cast<size_t>(currentRenderPassId));
+	}
 	VkPSO* pipeline = nullptr;
 	try {
 		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, currentRenderPass().msaaSamples, vkDynLoader, *this);
@@ -6261,6 +6265,7 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 	if (!newPSO)
 	{
 		// Must build this pipeline for a different render pass
+		reportPipelineBuiltOnFirstUse(pipelineInfo.createInfo, static_cast<size_t>(currentRenderPassId));
 		auto& renderPass = renderPasses[currentRenderPassId];
 		newPSO = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 		pipelineInfo.renderPassPSO[currentRenderPassId] = newPSO;
@@ -7237,6 +7242,52 @@ void VkRoot::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passe
 		warm.renderPassLayoutId = getOrCreatePassRenderPassId(_passLayoutScratch);
 		warm.warmEpoch = epoch;
 	}
+}
+
+bool VkRoot::beginPipelinePrewarm(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass& compiledPass)
+{
+	ASSERT_OR_RETURN(false, !hasActivePass && !renderGraphExecuting() && !prewarmingPipelines,
+		"beginPipelinePrewarm: only between frames' recording");
+	// (the layout the graph's own frames will find for this pass: compiled the same way)
+	if (!buildPassLayoutKey(_passLayoutScratch, pass, &compiledPass))
+	{
+		return false;
+	}
+	currentRenderPassId = getOrCreatePassRenderPassId(_passLayoutScratch);
+	prewarmingPipelines = true;
+	return true;
+}
+
+void VkRoot::prewarmPipeline(gfx_api::pipeline_state_object* pso)
+{
+	ASSERT_OR_RETURN(, prewarmingPipelines, "prewarmPipeline: outside beginPipelinePrewarm / endPipelinePrewarm");
+	VkPSOId* psoId = static_cast<VkPSOId*>(pso);
+	ASSERT_OR_RETURN(, psoId != nullptr && psoId->psoID < createdPipelines.size(), "prewarmPipeline: unknown pipeline");
+	auto& pipelineInfo = createdPipelines[psoId->psoID];
+	if (pipelineInfo.renderPassPSO.size() <= currentRenderPassId)
+	{
+		pipelineInfo.renderPassPSO.resize(currentRenderPassId + 1, nullptr);
+	}
+	if (pipelineInfo.renderPassPSO[currentRenderPassId] != nullptr)
+	{
+		return; // (built for this render pass already: as it was first created, or in an earlier frame)
+	}
+	auto& renderPass = renderPasses[currentRenderPassId];
+	try
+	{
+		pipelineInfo.renderPassPSO[currentRenderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
+	}
+	catch (const std::exception& e)
+	{
+		// (not fatal here: its first bind builds it again, and reports)
+		debug(LOG_ERROR, "Failed to prewarm a pipeline: %s", e.what());
+	}
+}
+
+void VkRoot::endPipelinePrewarm()
+{
+	prewarmingPipelines = false;
+	currentRenderPassId = INVALID_RENDER_PASS_ID;
 }
 
 void VkRoot::resizeWarmEntries(size_t passCount)
