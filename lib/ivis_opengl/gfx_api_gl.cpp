@@ -2727,6 +2727,10 @@ gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& c
 			glUniform1i(location, static_cast<GLint>(texture.id));
 		}
 	}
+	// The shader declares these bindings with layout(binding = N), so they're checked here, not set.
+	// (GLES 3.1 can't set them: it has no glShaderStorageBlockBinding, and glUniform* on an image uniform
+	// is GL_INVALID_OPERATION.)
+	bool bindingMismatch = false;
 	for (const auto& image : storage_images)
 	{
 		if (image.glsl_name == nullptr)
@@ -2734,9 +2738,18 @@ gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& c
 			continue;
 		}
 		const GLint location = glGetUniformLocation(program, image.glsl_name);
-		if (location >= 0)
+		if (location < 0)
 		{
-			glUniform1i(location, static_cast<GLint>(image.slot));
+			continue;
+		}
+		const GLint unit = static_cast<GLint>(image.slot);
+		GLint declared = -1;
+		glGetUniformiv(program, location, &declared);
+		if (declared != unit)
+		{
+			debug(LOG_ERROR, "Compute shader [%s]: image \"%s\" must be declared with layout(binding = %d), not %d",
+				sourcePath.c_str(), image.glsl_name, unit, declared);
+			bindingMismatch = true;
 		}
 	}
 	for (const auto& storageBuffer : storage_buffers)
@@ -2746,12 +2759,27 @@ gl_compute_pipeline_state_object::gl_compute_pipeline_state_object(gl_context& c
 			continue;
 		}
 		const GLuint blockIndex = glGetProgramResourceIndex(program, GL_SHADER_STORAGE_BLOCK, storageBuffer.glsl_name);
-		if (blockIndex != GL_INVALID_INDEX)
+		if (blockIndex == GL_INVALID_INDEX)
 		{
-			glShaderStorageBlockBinding(program, blockIndex, glComputeStorageBufferBinding(storageBuffer.slot));
+			continue;
+		}
+		const GLuint binding = glComputeStorageBufferBinding(storageBuffer.slot);
+		const GLenum bindingProp = GL_BUFFER_BINDING;
+		GLint declared = -1;
+		glGetProgramResourceiv(program, GL_SHADER_STORAGE_BLOCK, blockIndex, 1, &bindingProp, 1, nullptr, &declared);
+		if (declared != static_cast<GLint>(binding))
+		{
+			debug(LOG_ERROR, "Compute shader [%s]: storage block \"%s\" must be declared with layout(std430, binding = %u), not %d",
+				sourcePath.c_str(), storageBuffer.glsl_name, binding, declared);
+			bindingMismatch = true;
 		}
 	}
 	glUseProgram(static_cast<GLuint>(previousProgram));
+	if (bindingMismatch)
+	{
+		broken = true;
+		return;
+	}
 
 	uniformBlockSizes.resize(createInfo.uniform_block_names.size(), 0);
 	uniformBlockRanges.resize(createInfo.uniform_block_names.size(), {gl_uniform_block_allocator::Allocation{}, 0});
@@ -4460,7 +4488,8 @@ bool gl_context::initGLContext()
 #else
 	// Glad loads these from desktop core 4.2/4.3 and from GLES 3.0/3.1.
 	// A context that advertises the version but did not resolve an entry point cannot dispatch.
-	if (computeShadersSupported && (glDispatchCompute == nullptr || glBindImageTexture == nullptr || glTexStorage2D == nullptr))
+	if (computeShadersSupported && (glDispatchCompute == nullptr || glBindImageTexture == nullptr || glTexStorage2D == nullptr
+		|| glMemoryBarrier == nullptr || glGetProgramResourceIndex == nullptr || glGetProgramResourceiv == nullptr))
 	{
 		computeShadersSupported = false;
 	}

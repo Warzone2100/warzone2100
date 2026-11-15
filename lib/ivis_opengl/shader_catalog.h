@@ -32,6 +32,9 @@
  * 6. Draw with the PSO.
  * A compute mode uses shader_program_desc::make_compute and one .comp stage instead of
  * vertex/fragment, and compute_pipeline_helper instead of pipeline_state_helper.
+ * Its GL source declares layout(binding = slot) on each storage image and
+ * layout(std430, binding = 2 + slot) on each storage block (0 and 1 are the light blocks).
+ * A mismatch breaks the pipeline, on desktop and GLES alike.
  * Do not add rows to gfx_api_gl.cpp / gfx_api_vk.cpp.
  *
  * Ownership:
