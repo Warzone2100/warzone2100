@@ -30,7 +30,6 @@
 #include "clparse.h"
 #include "main.h"
 #include "multivote.h"
-#include "hci/teamstrategy.h"
 #include "hci/quickchat.h"
 
 #include <string>
@@ -1806,7 +1805,7 @@ void wz_command_interface_output_room_status_json(bool queued)
 			auto j = nlohmann::ordered_json::object();
 
 			j["pos"] = p.position;
-			j["team"] = checkedGetPlayerTeam(player);
+			j["team"] = NetPlay.players[player].team;
 			j["col"] = p.colour;
 			j["fact"] = static_cast<int32_t>(p.faction);
 
