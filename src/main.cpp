@@ -86,6 +86,7 @@
 #include "frontend.h"
 #include "frame_render_init.h"
 #include "game.h"
+#include "game_pipeline_prewarm.h"
 #include "gamestate_savegame.h"
 #include "init.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -956,6 +957,17 @@ bool startGameAfterLevelLoad()
  * Preparations before entering the game loop
  * Would start the timer in an event based mainloop
  */
+/// The end of loading a game: its pipelines built ahead (game_pipeline_prewarm.h), the loading screen still up
+LoadingTask<> prewarmGamePipelinesTask(ResourceLoadingController &controller)
+{
+	gamePipelinePrewarm_Start();
+	while (!gamePipelinePrewarm_Step(std::chrono::milliseconds(25)))
+	{
+		co_await controller.yieldFrame();
+	}
+	co_return load_ok();
+}
+
 LoadingTask<> startGameResourceTaskImpl(ResourceLoadingController &controller)
 {
 	co_await controller.yieldFrame();
@@ -975,6 +987,12 @@ LoadingTask<> startGameResourceTaskImpl(ResourceLoadingController &controller)
 	}
 
 	co_await controller.yieldFrame();
+
+	// (before the loading screen closes)
+	if (!(co_await prewarmGamePipelinesTask(controller)))
+	{
+		co_return load_fail();
+	}
 
 	co_return startGameAfterLevelLoad() ? load_ok() : load_fail();
 }
@@ -1025,6 +1043,12 @@ LoadingTask<> loadSaveGameResourceTaskImpl(ResourceLoadingController &controller
 	}
 
 	co_await controller.yieldFrame();
+
+	// (before the loading screen closes)
+	if (!(co_await prewarmGamePipelinesTask(controller)))
+	{
+		co_return load_fail();
+	}
 
 	co_return saveGameLoadAfter() ? load_ok() : load_fail();
 }

@@ -72,6 +72,18 @@ void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix
 	const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap,
 	const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights);
 
+// The pipelines the terrain and water draws bind with the current options (to build them ahead: see
+// lib/ivis_opengl/render_graph/pipeline_prewarm.h)
+/// - drawTerrainDepthOnly (a shadow cascade)
+void terrain_DeclareShadowPipelines(std::vector<void (*)()>& out);
+/// - the scene prepass: drawTerrainDepthNormalPrepass and drawWaterDepthNormalPrepass (`normals`), or the depth-only ones
+void terrain_DeclarePrepassPipelines(bool normals, bool writeSsrWaterNormals, std::vector<void (*)()>& out);
+/// - drawTerrain, then drawWater (the scene pass)
+void terrain_DeclareScenePipelines(std::vector<void (*)()>& out);
+/// What these declarations go by (the shader quality, the mesh strategy, the water's normal map): when it changes, so
+/// may the pipelines
+uint32_t terrain_PipelineVariant();
+
 gfx_api::texture* getTerrainLightmapTexture();
 const glm::mat4& getModelUVLightmapMatrix();
 

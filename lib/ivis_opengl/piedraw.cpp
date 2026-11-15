@@ -1096,6 +1096,10 @@ public:
 	};
 	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes | DrawParts::AdditiveShapes;
 
+	/// The pipelines DrawAll may bind for these parts (as Draw3DShapes_Instanced / Draw3DShapes_Old pick them)
+	void DeclarePipelines(int drawParts, MeshDepthPassMode depthPassMode, std::vector<void (*)()>& out) const;
+	bool instancedRendering() const { return useInstancedRendering; }
+
 	// Draws all queued meshes, given a projection + view matrix
 	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, int drawParts = DrawParts_All, MeshDepthPassMode depthPassMode = MeshDepthPassMode::None, MeshFogMode fogMode = MeshFogMode::Disabled);
 public:
@@ -1592,7 +1596,8 @@ static_assert(static_cast<int>(MeshDrawParts::All)
 static_assert((static_cast<int>(MeshDrawParts::All) & InstancedMeshRenderer::DrawParts::OldShadows) == 0,
 	"MeshDrawParts must omit the OldShadows bit");
 
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter, MeshFogMode fogMode)
+/// The draw parts pie_DrawAllMeshes draws for these arguments
+static int meshDrawParts(MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter)
 {
 	int drawParts = static_cast<int>(drawFilter);
 	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows
@@ -1613,7 +1618,85 @@ void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMat
 		// Opaque bucket only (no translucent / additive / stencil shadows).
 		drawParts = InstancedMeshRenderer::DrawParts::ShadowCastingShapes;
 	}
+	return drawParts;
+}
 
+void InstancedMeshRenderer::DeclarePipelines(int drawParts, MeshDepthPassMode depthPassMode, std::vector<void (*)()>& out) const
+{
+	auto add = [&out](std::initializer_list<void (*)()> fns) { out.insert(out.end(), fns); };
+	if ((drawParts & DrawParts::OldShadows) != 0)
+	{
+		// (pie_DrawShadows: the stencil volumes, then the darkening)
+		add({&gfx_api::DrawStencilShadow::prewarm, &gfx_api::BoxFillAlphaPSO::prewarm});
+	}
+	if (!useInstancedRendering)
+	{
+		// Draw3DShapes_Old, through pie_Draw3DShape2: opaque parts lit, translucent, premultiplied and additive ones
+		// unlit unless they are ECM'd
+		if ((drawParts & DrawParts::ShadowCastingShapes) != 0)
+		{
+			add({&gfx_api::Draw3DShapeOpaque::prewarm});
+		}
+		if ((drawParts & DrawParts::TranslucentShapes) != 0)
+		{
+			add({&gfx_api::Draw3DShapeAdditive::prewarm, &gfx_api::Draw3DShapeAlpha::prewarm, &gfx_api::Draw3DShapeAlphaNoDepthWRT::prewarm, &gfx_api::Draw3DShapePremul::prewarm,
+				&gfx_api::Draw3DShapeNoLightAdditive::prewarm, &gfx_api::Draw3DShapeNoLightAlpha::prewarm, &gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT::prewarm, &gfx_api::Draw3DShapeNoLightPremul::prewarm});
+		}
+		return;
+	}
+	// Draw3DShapes_Instanced, through pie_Draw3DShape2_Instanced
+	if ((drawParts & DrawParts::ShadowCastingShapes) != 0)
+	{
+		switch (depthPassMode)
+		{
+		case MeshDepthPassMode::ShadowMap: add({&gfx_api::Draw3DShapeDepthOnly_Instanced::prewarm}); break;
+		case MeshDepthPassMode::ScenePrepass: add({&gfx_api::Draw3DShapeDepthPrepass_Instanced::prewarm}); break;
+		case MeshDepthPassMode::ScenePrepassDepthOnly: add({&gfx_api::Draw3DShapeDepthPrepassDepthOnly_Instanced::prewarm}); break;
+		case MeshDepthPassMode::None: add({&gfx_api::Draw3DShapeOpaque_Instanced::prewarm}); break; // (the opaque bucket is lit)
+		}
+	}
+	if (depthPassMode != MeshDepthPassMode::None)
+	{
+		return;
+	}
+	// (translucent and additive parts are unlit, unless they are ECM'd or forced lit)
+	if ((drawParts & DrawParts::TranslucentShapes) != 0)
+	{
+		add({&gfx_api::Draw3DShapeAlpha_Instanced::prewarm, &gfx_api::Draw3DShapeAlphaNoDepthWRT_Instanced::prewarm,
+			&gfx_api::Draw3DShapeNoLightAlpha_Instanced::prewarm, &gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT_Instanced::prewarm});
+	}
+	if ((drawParts & DrawParts::AdditiveShapes) != 0)
+	{
+		// (the additive bucket holds the premultiplied parts too)
+		add({&gfx_api::Draw3DShapeAdditive_Instanced::prewarm, &gfx_api::Draw3DShapeAdditiveNoDepthWRT_Instanced::prewarm,
+			&gfx_api::Draw3DShapePremul_Instanced::prewarm, &gfx_api::Draw3DShapePremulNoDepthWRT_Instanced::prewarm,
+			&gfx_api::Draw3DShapeNoLightAdditive_Instanced::prewarm, &gfx_api::Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced::prewarm,
+			&gfx_api::Draw3DShapeNoLightPremul_Instanced::prewarm, &gfx_api::Draw3DShapeNoLightPremulNoDepthWRT_Instanced::prewarm});
+	}
+}
+
+void pie_DeclareMeshPipelines(MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter, std::vector<void (*)()>& out)
+{
+	const int drawParts = meshDrawParts(depthPassMode, drawFilter);
+	if (drawParts != 0)
+	{
+		instancedMeshRenderer.DeclarePipelines(drawParts, depthPassMode, out);
+	}
+}
+
+void pie_DeclareButtonPipelines(std::vector<void (*)()>& out)
+{
+	out.push_back(&gfx_api::Draw3DShapeOpaque::prewarm);
+}
+
+uint32_t pie_MeshPipelineVariant()
+{
+	return (instancedMeshRenderer.instancedRendering() ? 1u : 0u) | (shadows ? 2u : 0u) | (static_cast<uint32_t>(shadowMode) << 8);
+}
+
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap, const gfx_api::frame_uniform_block_ref<gfx_api::PointLightsUniforms>& pointLights, MeshDepthPassMode depthPassMode, MeshDrawParts drawFilter, MeshFogMode fogMode)
+{
+	const int drawParts = meshDrawParts(depthPassMode, drawFilter);
 	if (drawParts == 0)
 	{
 		return;
