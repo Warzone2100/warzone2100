@@ -34,6 +34,8 @@
 #include "lib/framework/frame.h"
 #include "ivisdef.h"
 
+#include <functional>
+
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -59,10 +61,14 @@ namespace gfx_api
 {
 
 class CachedRenderGraph;
+struct RenderTopologySnapshot;
 
 } // namespace gfx_api
 
 gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph();
+/// Called in each frame drawn, with its render graph's topology, before the graph is built and executed (between
+/// frames' recording: pipelines can be built ahead there)
+void pie_SetBeforeFrameGraphHook(std::function<void(const gfx_api::RenderTopologySnapshot&)> hook);
 
 void pie_ResetInGame3DFrameContextForFrame();
 bool pie_IsInGame3DFrameContextReady();

@@ -275,6 +275,21 @@ static void recordTargettingEffects(const gfx_api::RenderPassContext&)
 	display3d_processDestinationTarget();
 }
 
+void registerInGame3DPassPipelines(gfx_api::PassPipelineTable& table)
+{
+	for (gfx_api::PassId id : {gfx_api::PassId::BloomDownsample0, gfx_api::PassId::BloomDownsample1, gfx_api::PassId::BloomDownsample2,
+		gfx_api::PassId::BloomDownsample3, gfx_api::PassId::BloomDownsample4, gfx_api::PassId::BloomDownsample5})
+	{
+		table.set(id, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) { out.push_back(&gfx_api::BloomDownsamplePSO::prewarm); });
+	}
+	for (gfx_api::PassId id : {gfx_api::PassId::BloomUpsample0, gfx_api::PassId::BloomUpsample1, gfx_api::PassId::BloomUpsample2,
+		gfx_api::PassId::BloomUpsample3, gfx_api::PassId::BloomUpsample4})
+	{
+		table.set(id, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) { out.push_back(&gfx_api::BloomUpsamplePSO::prewarm); });
+	}
+	table.set(gfx_api::PassId::SceneTonemap, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) { out.push_back(&gfx_api::SceneTonemapPSO::prewarm); });
+}
+
 void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 {
 	table.set(gfx_api::PassId::ScenePrepass, recordScenePrepass);

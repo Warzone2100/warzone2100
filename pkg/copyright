@@ -416,6 +416,8 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        lib/ivis_opengl/render_graph/layout_subresource.*
        lib/ivis_opengl/render_graph/layout_timeline.h
        lib/ivis_opengl/render_graph/pass_resolve.h
+       lib/ivis_opengl/render_graph/pipeline_prewarm.*
+       lib/ivis_opengl/render_graph/pipeline_prewarm_step.cpp
        lib/ivis_opengl/render_graph/read_scope.cpp
        lib/ivis_opengl/render_graph/scene_post_effect_id.h
        lib/ivis_opengl/vk/handle_storage.h

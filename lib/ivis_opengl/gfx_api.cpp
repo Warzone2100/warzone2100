@@ -24,6 +24,7 @@
 #include "gfx_api_null.h"
 #include "render_graph/pass_resolve.h"
 #include "render_graph/compile.h"
+#include "shader_catalog.h"
 #include "gfx_api_image_compress_priv.h"
 #include "gfx_api_image_basis_priv.h"
 #include "gfx_api_mipmap_priv.h"
@@ -984,6 +985,26 @@ std::pair<uint32_t, uint32_t> gfx_api::context::getSceneRenderTargetDimensions()
 		targetDims.second = std::min(targetDims.second, std::max<uint32_t>(static_cast<uint32_t>(std::lround(targetDims.second * fraction)), 2));
 	}
 	return targetDims;
+}
+
+void gfx_api::context::reportPipelineBuiltOnFirstUse(const pipeline_create_info& createInfo, optional<size_t> renderPass) const
+{
+	if (!_pipelineMissReporting)
+	{
+		return;
+	}
+	const shader_program_desc& program = shader_catalog(createInfo.shader_mode);
+	const shader_stage_file* fragment = find_stage(program, shader_stage_kind::fragment);
+	if (renderPass.has_value())
+	{
+		debug(LOG_INFO, "Pipeline built as first bound, not ahead: %s (%s), render pass %zu", program.friendly_name,
+			(fragment != nullptr && fragment->basename != nullptr) ? fragment->basename : "?", renderPass.value());
+	}
+	else
+	{
+		debug(LOG_INFO, "Pipeline built as first bound, not ahead: %s (%s)", program.friendly_name,
+			(fragment != nullptr && fragment->basename != nullptr) ? fragment->basename : "?");
+	}
 }
 
 void gfx_api::context::warmCompiledRenderGraph(std::vector<RenderPassDesc>& /*passes*/,

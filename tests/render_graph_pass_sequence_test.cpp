@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzapp.h"
 #include "render_graph/blueprint.h"
+#include "render_graph/pipeline_prewarm.h"
 #include "render_graph/topology.h"
 
 #include <cstdio>
@@ -260,8 +261,60 @@ static void expectInGame(const char* name, const RenderTopologySnapshot& snapsho
 	expectPassIds(name, snapshot, head);
 }
 
+// The pipelines a prewarm job builds (PipelinePrewarmJob): each compiled pass's declared ones, once each, none for a
+// skipped pass. A declaration can go by the pass's attachments and the graph's other passes.
+static void prewarmA() {}
+static void prewarmB() {}
+static void prewarmC() {}
+static void prewarmD() {}
+static void prewarmE() {}
+static void prewarmF() {}
+
+static void expectPrewarmTotal(const char* name, bool withTransparent, size_t expected)
+{
+	++checks;
+	std::vector<gfx_api::RenderPassDesc> passes(3);
+	passes[0].passId = PassId::ScenePass;
+	passes[0].colorAttachments.resize(1);
+	passes[1].passId = PassId::SceneTransparent;
+	passes[2].passId = PassId::SceneTonemap;
+	gfx_api::PassGraphCompileResult compiled;
+	compiled.passes.resize(3);
+	for (size_t i = 0; i < 3; ++i)
+	{
+		compiled.passes[i].graphIndex = i;
+	}
+	compiled.passes[1].skipped = !withTransparent;
+	compiled.passes[2].skipped = true;
+
+	gfx_api::PassPipelineTable table;
+	table.set(PassId::ScenePass, [](const gfx_api::PassPipelineContext& ctx, std::vector<gfx_api::PipelinePrewarmFn>& out) {
+		out.insert(out.end(), {&prewarmA, &prewarmB, &prewarmA}); // (a duplicate: built once)
+		if (!ctx.graphContains(PassId::SceneTransparent) && !ctx.pass.colorAttachments.empty())
+		{
+			out.insert(out.end(), {&prewarmC, &prewarmF}); // (what the transparent pass would have drawn, drawn here)
+		}
+	});
+	table.set(PassId::SceneTransparent, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) {
+		out.push_back(&prewarmD);
+	});
+	table.set(PassId::SceneTonemap, [](const gfx_api::PassPipelineContext&, std::vector<gfx_api::PipelinePrewarmFn>& out) {
+		out.push_back(&prewarmE); // (skipped: not built)
+	});
+	const gfx_api::PipelinePrewarmJob job(passes, compiled, table);
+	if (job.total() == expected && job.built() == 0 && !job.finished())
+	{
+		return;
+	}
+	++failures;
+	std::printf("FAIL %s\n  expected %zu pipelines, got %zu (built %zu)\n", name, expected, job.total(), job.built());
+}
+
 int main()
 {
+	expectPrewarmTotal("prewarm: with a transparent pass", true, 3);
+	expectPrewarmTotal("prewarm: transparents in the scene pass", false, 4);
+
 	expectInGame("bare", inGameBase(), {PassId::ScenePass, PassId::SceneBlit});
 
 	{

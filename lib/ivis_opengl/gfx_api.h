@@ -731,6 +731,17 @@ namespace gfx_api
 		/// Pre-warm backend pass resources after compile (e.g. Vulkan render-pass layout ids).
 		virtual void warmCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
 			PassGraphCompileResult& compileResult);
+		/// Pipeline prewarm (`PipelinePrewarmJob`): build pipelines ahead of their first use, for the render pass a
+		/// compiled graph pass will run in. Between frames' recording only (not while a graph executes). Between
+		/// begin and end, `pipeline_state_helper<...>::prewarm()` builds a pipeline for that pass
+		/// (Vulkan: a pipeline belongs to its render pass's layout, so one bound in several passes is built for each)
+		virtual bool beginPipelinePrewarm(const RenderPassDesc& pass, const CompiledPass& compiledPass) { return true; }
+		virtual void prewarmPipeline(pipeline_state_object* pso) { }
+		virtual void endPipelinePrewarm() { }
+		/// When enabled, logs each pipeline built as it is first bound
+		/// (one missing from its pass's declarations in `PassPipelineTable`)
+		void setPipelineMissReporting(bool enabled) { _pipelineMissReporting = enabled; }
+		bool pipelineMissReporting() const { return _pipelineMissReporting; }
 		// Emit any out-of-graph pre-pass layout/sync barriers for a batch of passes (the passes
 		// sharing one render pass). Called once before beginPass, outside any active render pass.
 		virtual void emitPrePassBarriers(const ExecutionBatch& batch,
@@ -815,6 +826,9 @@ namespace gfx_api
 		optional<GpuFrameTiming> _lastGpuFrameTiming;
 
 	protected:
+		/// Called by backends to report pipeline builds when first bound (logs when miss reporting is on)
+		void reportPipelineBuiltOnFirstUse(const pipeline_create_info& createInfo, optional<size_t> renderPass) const;
+
 		/// Called by backends where the per-frame uniform storage rotates
 		/// (This is what makes every reference from the previous frame stale)
 		void advanceFrameUniformGeneration()
@@ -823,6 +837,7 @@ namespace gfx_api
 		}
 
 	private:
+		bool _pipelineMissReporting = false;
 		uint32_t _frameUniformGeneration = 0;
 		bool _renderGraphExecuting = false;
 		uint64_t _renderGraphEpoch = 1;
@@ -1101,6 +1116,17 @@ namespace gfx_api
 		bool isBroken()
 		{
 			return nextpso ? nextpso->broken : pso->broken;
+		}
+
+		/// Build this pipeline ahead of its first use: for the pass being prewarmed (`context::beginPipelinePrewarm`)
+		static void prewarm()
+		{
+			auto& helper = get();
+			pipeline_state_object* built = helper.nextpso ? helper.nextpso : helper.pso;
+			if (built != nullptr && !built->broken)
+			{
+				gfx_api::context::get().prewarmPipeline(built);
+			}
 		}
 
 	private:

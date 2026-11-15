@@ -28,6 +28,7 @@
 #include "blueprint.h"
 #include "compile.h"
 #include "topology.h"
+#include "pipeline_prewarm.h"
 
 #include <cstdint>
 #include <functional>
@@ -62,6 +63,13 @@ public:
 	/// Valid during `execute` (record callbacks may consult it to learn the frame's pass composition).
 	bool blueprintContainsPass(PassId id) const;
 
+	/// The pipelines each pass may bind (for `prewarmJob`).
+	void setPassPipelines(PassPipelineTable table);
+	/// The graph `snapshot` describes (one not shown yet, ex. behind a loading screen), built and compiled
+	/// apart from the cached one (which it leaves as it is), and the pipelines its passes declare, to build ahead
+	/// of its first frame. Empty if it can't be built.
+	PipelinePrewarmJob prewarmJob(const RenderTopologySnapshot& snapshot) const;
+
 private:
 	PassGraphTopologyBlueprint _blueprint;
 	uint64_t _cachedTopologyHash = 0;
@@ -73,6 +81,7 @@ private:
 	PassGraphCompileResult _compileResult;
 	BlueprintFactory _blueprintFactory;
 	RecordFuncTable _recordFuncs;
+	PassPipelineTable _passPipelines;
 
 	void invalidateCache(bool clearTopologyHash = true);
 };
