@@ -137,6 +137,31 @@ bool isHostOrAdmin();
 bool isPlayerHostOrAdmin(uint32_t playerIdx);
 bool isSpectatorOnlySlot(UDWORD playerIdx);
 
+/// The host-only lobby actions that a (non-host) lobby admin can ask the host to perform on their behalf.
+/// (The host checks the sender's admin privileges, the "locked" options, and the parameters before performing them.)
+enum class LobbyAdminAction : uint8_t
+{
+	SetScavengers = 0,		///< value: the new ScavType
+	SetAlliances,			///< value: the new AllianceType
+	SetPower,				///< value: the new PowerSetting
+	SetBase,				///< value: the new CampType
+	KickPlayer,				///< target: the index of the (human) player to kick
+	BanPlayer,				///< target: the index of the (human) player to ban
+	MovePlayerToSpectators,	///< target: the index of the (human) player to move to spectators
+	AskSpectatorToPlay,		///< target: the index of the spectator to ask to move to players
+	SetSlotAI,				///< target: the index of a slot without a human player, value: AI_OPEN, AI_CLOSED, or 0 for the AI whose script filename is passed as the string value
+	SetAIDifficulty,		///< target: the index of an AI player, value: the new AIDifficulty
+	DistributeAI,			///< target: the index of an AI player, whose AI + difficulty get copied to all other AI players
+	Last = DistributeAI
+};
+
+/// Whether the local player is a (non-host) lobby admin (who must ask the host to perform host-only lobby actions).
+bool isLobbyAdminClient();
+/// Ask the host to perform a host-only lobby action. Returns false if the local player is not a (non-host) lobby admin.
+bool sendLobbyAdminActionRequest(LobbyAdminAction action, uint32_t target, int32_t value = 0, const std::string& stringValue = std::string());
+/// Ask the host to switch a slot without a human player to the AI at \c aiIdx in the (local) list of AIs, to AI_OPEN, or to AI_CLOSED.
+bool sendLobbyAdminSlotAIRequest(uint32_t player, int8_t aiIdx);
+
 void printBlindModeHelpMessagesToConsole();
 
 /**
@@ -201,6 +226,7 @@ void displayLobbyDisabledNotification();
 void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions);
 
 void multiLobbyRandomizeOptions();
+void multiLobbyDistributeSlotAI(uint32_t player); ///< (host only) distribute a slot's AI (and its difficulty) to all other AIs
 
 bool SendColourRequest(UBYTE player, UBYTE col);
 

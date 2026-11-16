@@ -501,6 +501,23 @@ static bool canChooseTeamFor(int i)
 	return (i == selectedPlayer || isHostOrAdmin());
 }
 
+// Whether the local player can change the AI (or the open / closed status) of a slot
+// (The host can change any slot without a human player, a lobby admin can ask the host to change player slots)
+static bool canChangeSlotAIFor(uint32_t playerIdx)
+{
+	if (NetPlay.players[playerIdx].allocated || getLockedOptions().ai)
+	{
+		return false;
+	}
+	return NetPlay.isHost || (isLobbyAdminClient() && !isSpectatorOnlySlot(playerIdx));
+}
+
+// Whether the local player can change the difficulty of AIs (as the host, or as a lobby admin asking the host)
+static bool canChangeAIDifficulty()
+{
+	return !getLockedOptions().difficulty && (NetPlay.isHost || isLobbyAdminClient());
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Lobby player row
 
@@ -530,7 +547,7 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 		auto strongTitleUI = titleUI.lock();
 		ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 		const auto& locked = getLockedOptions();
-		if ((!locked.teams || !locked.spectators))  // Clicked on a team chooser
+		if ((!locked.teams || !locked.spectators || isHostOrAdmin()))  // Clicked on a team chooser (which also has the kick / ban buttons for the host / admins)
 		{
 			if (canChooseTeamFor(playerIdx))
 			{
@@ -616,32 +633,25 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 					strongTitleUI->openPositionChooser(player);
 				});
 			}
-			else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost)
+			else if (canChangeSlotAIFor(player))
 			{
-				if (button.getOnClickButtonPressed() == WKEY_SECONDARY && player < MAX_PLAYERS)
+				const bool isRightClick = button.getOnClickButtonPressed() == WKEY_SECONDARY && player < MAX_PLAYERS;
+				if (isRightClick && NetPlay.isHost)
 				{
 					// Right clicking distributes selected AI's type and difficulty to all other AIs
-					bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
-					for (int i = 0; i < MAX_PLAYERS; ++i)
-					{
-						// Don't change open/closed slots or humans or spectator-only slots
-						if (NetPlay.players[i].ai >= 0 && i != player && !isHumanPlayer(i) && !isSpectatorOnlySlot(i))
-						{
-							NetPlay.players[i].ai = NetPlay.players[player].ai;
-							NetPlay.players[i].isSpectator = NetPlay.players[player].isSpectator;
-							NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
-							setPlayerName(i, getAIName(player));
-							NETBroadcastPlayerInfo(i);
-						}
-					}
-					if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
-					{
-						handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
-					}
+					multiLobbyDistributeSlotAI(player);
 					widgScheduleTask([strongTitleUI] {
 						strongTitleUI->updatePlayers();
 						resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 					});
+				}
+				else if (isRightClick)
+				{
+					// Lobby admin: Ask the host to distribute the selected AI's type and difficulty to all other AIs
+					if (NetPlay.players[player].ai >= 0)
+					{
+						sendLobbyAdminActionRequest(LobbyAdminAction::DistributeAI, player);
+					}
 				}
 				else
 				{
@@ -706,7 +716,7 @@ void WzPlayerRow::updateState()
 	}
 
 	// update color tooltip
-	if ((selectedPlayer == playerIdx || NetPlay.isHost) && (!NetPlay.players[playerIdx].isSpectator))
+	if ((selectedPlayer == playerIdx || isHostOrAdmin()) && (!NetPlay.players[playerIdx].isSpectator))
 	{
 		colorButton->setTip(_("Click to change player colour"));
 	}
@@ -717,7 +727,7 @@ void WzPlayerRow::updateState()
 
 	// update player info box tooltip
 	std::string playerInfoTooltip;
-	if ((selectedPlayer == playerIdx || NetPlay.isHost)
+	if ((selectedPlayer == playerIdx || isHostOrAdmin())
 		&& NetPlay.players[playerIdx].allocated
 		&& !locked.position
 		&& !isSpectatorOnlySlot(playerIdx)
@@ -727,7 +737,7 @@ void WzPlayerRow::updateState()
 	}
 	else if (!NetPlay.players[playerIdx].allocated)
 	{
-		if (NetPlay.isHost && !locked.ai)
+		if (canChangeSlotAIFor(playerIdx))
 		{
 			if (!isSpectatorOnlySlot(playerIdx))
 			{
@@ -782,7 +792,6 @@ static std::shared_ptr<W_FORM> createReadyButtonContainerForm(int x, int y, int 
 void WzPlayerRow::updateReadyButton()
 {
 	const auto& aidata = getAIData();
-	const auto& locked = getLockedOptions();
 
 	if (!readyButtonContainer)
 	{
@@ -843,8 +852,9 @@ void WzPlayerRow::updateReadyButton()
 			}
 		}
 		bool freshDifficultyButton = (difficultyChooserButton == nullptr);
+		const bool canChangeDifficulty = canChangeAIDifficulty();
 		difficultyChooserButton = addMultiBut(*readyButtonContainer, MULTIOP_DIFFICULTY_INIT_START + playerIdx, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-					(NetPlay.isHost && !locked.difficulty) ? _("Click to change difficulty") : tooltip, icon, icon, icon, MAX_PLAYERS, (NetPlay.isHost && !locked.difficulty) ? 255 : 125);
+					(canChangeDifficulty) ? _("Click to change difficulty") : tooltip, icon, icon, icon, MAX_PLAYERS, (canChangeDifficulty) ? 255 : 125);
 		auto player = playerIdx;
 		auto weakTitleUi = parentTitleUI;
 		if (freshDifficultyButton)
@@ -852,8 +862,7 @@ void WzPlayerRow::updateReadyButton()
 			difficultyChooserButton->addOnClickHandler([player, weakTitleUi](W_BUTTON&){
 				auto strongTitleUI = weakTitleUi.lock();
 				ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
-				const auto& locked = getLockedOptions();
-				if (!locked.difficulty && NetPlay.isHost)
+				if (canChangeAIDifficulty())
 				{
 					widgScheduleTask([strongTitleUI, player] {
 						strongTitleUI->openDifficultyChooser(player);
