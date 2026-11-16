@@ -3161,6 +3161,7 @@ bool changeColour(unsigned player, int col, uint32_t responsibleIdx)
 			NETBroadcastTwoPlayerInfo(player, i);
 			informIfAdminChangedOtherColor(player, responsibleIdx);
 			netPlayersUpdated = true;
+			wz_command_interface_output_room_status_json(true);
 			return true;
 		}
 	}
@@ -3173,6 +3174,7 @@ bool changeColour(unsigned player, int col, uint32_t responsibleIdx)
 		NETBroadcastPlayerInfo(player);
 		informIfAdminChangedOtherColor(player, responsibleIdx);
 		netPlayersUpdated = true;
+		wz_command_interface_output_room_status_json(true);
 		return true;
 	}
 	return false;
@@ -3225,6 +3227,7 @@ bool changeFaction(unsigned player, FactionID faction, uint32_t responsibleIdx)
 
 	informIfAdminChangedOtherFaction(player, responsibleIdx);
 
+	wz_command_interface_output_room_status_json(true);
 	return true;
 }
 
