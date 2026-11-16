@@ -143,7 +143,7 @@ static void informPowerGen(STRUCTURE *psStruct);
 static bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer);
 static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 static void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer);
-static void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD player);
+static void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD player, const FLAG_POSITION *psAssemblyPoint);
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(const STRUCTURE *psStruct);
 static void parseFavoriteStructs();
@@ -5105,8 +5105,8 @@ bool checkSpecificStructExists(const WorldObjectState& objState, UDWORD structIn
 }
 
 
-/*finds a suitable position for the assembly point based on one passed in*/
-void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD player)
+/*finds a suitable position for the assembly point based on one passed in, avoiding the player's other assembly points*/
+void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD player, const FLAG_POSITION *psAssemblyPoint)
 {
 	//set up a dummy stat pointer
 	STRUCTURE_STATS     sStats;
@@ -5117,12 +5117,20 @@ void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD 
 	sStats.baseWidth = 1;
 	sStats.baseBreadth = 1;
 
+	auto isSuitable = [&](int x, int y) {
+		const auto& flags = world.objects.flags[player];
+		return validLocation(world, &sStats, world_coord(Vector2i(x, y)), 0, player, false)
+			&& std::none_of(flags.begin(), flags.end(), [&](const FLAG_POSITION *psFlag) {
+				return psFlag != psAssemblyPoint && map_coord(psFlag->coords.xy()) == Vector2i(x, y);
+			});
+	};
+
 	/* Initial box dimensions and set iteration count to zero */
 	startX = endX = *pX;	startY = endY = *pY;
 	passes = 0;
 
 	//if the value passed in is not a valid location - find one!
-	if (!validLocation(world, &sStats, world_coord(Vector2i(*pX, *pY)), 0, player, false))
+	if (!isSuitable(*pX, *pY))
 	{
 		/* Keep going until we get a tile or we exceed distance */
 		while (passes < LOOK_FOR_EMPTY_TILE)
@@ -5136,7 +5144,7 @@ void findAssemblyPointPosition(GameWorld& world, UDWORD *pX, UDWORD *pY, UDWORD 
 					if (i == startX || i == endX || j == startY || j == endY)
 					{
 						/* Good enough? */
-						if (validLocation(world, &sStats, world_coord(Vector2i(i, j)), 0, player, false))
+						if (isSuitable(i, j))
 						{
 							/* Set exit conditions and get out NOW */
 							*pX = i;
@@ -5173,7 +5181,7 @@ void setAssemblyPoint(GameWorld& world, FLAG_POSITION *psAssemblyPoint, UDWORD x
 	y = map_coord(y);
 	if (bCheck)
 	{
-		findAssemblyPointPosition(world, &x, &y, player);
+		findAssemblyPointPosition(world, &x, &y, player, psAssemblyPoint);
 	}
 	//add half a tile so the centre is in the middle of the tile
 	x = world_coord(x) + TILE_UNITS / 2;
