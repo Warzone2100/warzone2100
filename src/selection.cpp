@@ -125,7 +125,7 @@ static bool selCombatCyborg(DROID *droid)
 }
 static bool selDamaged(DROID *droid)
 {
-	return PERCENT(droid->body, droid->originalBody) < REPAIRLEV_LOW && !selTransporter(droid);
+	return PERCENT(droid->body, droid->originalBody) < HEALTH_LEVEL_LOW_PERCENT && !selTransporter(droid);
 }
 static bool selNoGroup(DROID *psDroid)
 {
@@ -133,7 +133,7 @@ static bool selNoGroup(DROID *psDroid)
 }
 static bool selCombatLandMildlyOrNotDamaged(DROID *psDroid)
 {
-	return PERCENT(psDroid->body, psDroid->originalBody) > REPAIRLEV_LOW && selCombatLand(psDroid) && !selNoGroup(psDroid);
+	return PERCENT(psDroid->body, psDroid->originalBody) > HEALTH_LEVEL_LOW_PERCENT && selCombatLand(psDroid) && !selNoGroup(psDroid);
 }
 
 // ---------------------------------------------------------------------
