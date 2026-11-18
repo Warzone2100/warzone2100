@@ -787,6 +787,7 @@ include_directories(".")
 include_directories("3rdparty")
 include_directories(SYSTEM "3rdparty/glm")
 include_directories(SYSTEM "3rdparty/date/include")
+include_directories(SYSTEM "3rdparty/fmt/include") # Always before vcpkg's include folder, which can also have its own fmt (ex. for openal-soft)
 
 SET(STDC_HEADERS ON)
 
