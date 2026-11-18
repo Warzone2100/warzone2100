@@ -265,6 +265,7 @@ int whosResponsible(int player);
 bool canGiveOrdersFor(int player, int playerInQuestion);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
+bool assignSoloTeams(); // Outside locked-teams modes, puts each player on their own team. Returns true if any team changed.
 Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave);
 
 bool multiPlayerLoop();							// for loop.c

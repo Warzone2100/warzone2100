@@ -40,7 +40,6 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/netplay/netplay.h"
 
-#include "../ai.h"
 #include "../intimage.h"
 #include "../display.h"
 #include "../hci.h"
@@ -133,11 +132,6 @@ std::array<WzPlayerStrategyPlan, MAX_PLAYERS> playerStrategyPlans; // NOTE: Only
 
 // MARK: -
 
-int32_t checkedGetPlayerTeam(int32_t i)
-{
-	return alliancesSetTeamsBeforeGame(game.alliance) ? NetPlay.players[i].team : i;
-}
-
 void sendStrategyPlanUpdate(uint32_t forPlayer)
 {
 	ASSERT_OR_RETURN(, forPlayer < playerStrategyPlans.size(), "Unexpected player: %" PRIu32, forPlayer);
@@ -159,14 +153,14 @@ void sendStrategyPlanUpdate(uint32_t forPlayer)
 	}
 
 	// send updates to every (human) team member
-	auto sendingPlayerTeam = checkedGetPlayerTeam(forPlayer);
+	auto sendingPlayerTeam = NetPlay.players[forPlayer].team;
 	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
 		if (player == forPlayer)
 		{
 			continue;
 		}
-		if (checkedGetPlayerTeam(player) != sendingPlayerTeam)
+		if (NetPlay.players[player].team != sendingPlayerTeam)
 		{
 			continue;
 		}
@@ -219,8 +213,8 @@ bool recvStrategyPlanUpdate(NETQUEUE queue)
 		return false;
 	}
 
-	auto selectedPlayerTeam = checkedGetPlayerTeam(selectedPlayer);
-	if (checkedGetPlayerTeam(sender) != selectedPlayerTeam)
+	auto selectedPlayerTeam = NetPlay.players[selectedPlayer].team;
+	if (NetPlay.players[sender].team != selectedPlayerTeam)
 	{
 		return false;
 	}
@@ -965,7 +959,7 @@ std::shared_ptr<TeamStrategyView> TeamStrategyView::make(bool allowAIs)
 	}
 
 	// Check if current player has teammates
-	auto selectedPlayerTeam = checkedGetPlayerTeam(selectedPlayer);
+	auto selectedPlayerTeam = NetPlay.players[selectedPlayer].team;
 	std::vector<uint32_t> playersOnSameTeamAsSelectedPlayer;
 	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
@@ -973,7 +967,7 @@ std::shared_ptr<TeamStrategyView> TeamStrategyView::make(bool allowAIs)
 		{
 			continue;
 		}
-		if (checkedGetPlayerTeam(player) != selectedPlayerTeam)
+		if (NetPlay.players[player].team != selectedPlayerTeam)
 		{
 			continue;
 		}
@@ -1186,7 +1180,7 @@ bool gameHasTeamStrategyView(bool allowAIs)
 			|| (allowAIs && playerStrategyPlans[player].hasBeenSet) // an AI that set a strategy (only would happen in-game, not pre-game waiting screen)
 			)
 		{
-			auto teamNumber = checkedGetPlayerTeam(player);
+			auto teamNumber = NetPlay.players[player].team;
 			auto result = teamsWithIncludedPlayers.insert(teamNumber);
 			if (!result.second)
 			{

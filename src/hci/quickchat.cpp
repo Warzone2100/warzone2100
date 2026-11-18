@@ -33,7 +33,6 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "quickchat.h"
-#include "teamstrategy.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
 #include "lib/widget/margin.h"
@@ -222,7 +221,7 @@ static optional<size_t> numberButtonPressed()
 
 static std::vector<uint32_t> getPlayerTeammates(uint32_t playerIdx, bool includeAIs = false, bool includeAlliances = false)
 {
-	auto inputPlayerTeam = checkedGetPlayerTeam(playerIdx);
+	auto inputPlayerTeam = NetPlay.players[playerIdx].team;
 	std::vector<uint32_t> playersOnSameTeamAsInputPlayer;
 	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
@@ -230,7 +229,7 @@ static std::vector<uint32_t> getPlayerTeammates(uint32_t playerIdx, bool include
 		{
 			continue;
 		}
-		if ((checkedGetPlayerTeam(player) != inputPlayerTeam) && (!includeAlliances || !aiCheckAlliances(playerIdx, player)))
+		if ((NetPlay.players[player].team != inputPlayerTeam) && (!includeAlliances || !aiCheckAlliances(playerIdx, player)))
 		{
 			continue;
 		}
@@ -3437,7 +3436,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 	}
 
 	bool isInGame = (GetGameMode() == GS_NORMAL);
-	auto senderTeam = checkedGetPlayerTeam(fromPlayer);
+	auto senderTeam = NetPlay.players[fromPlayer].team;
 	bool senderIsSpectator = NetPlay.players[fromPlayer].isSpectator;
 	bool senderCanUseSecuredMessages = realSelectedPlayer == NetPlay.hostPlayer || realSelectedPlayer < MAX_PLAYERS; // non-host spectator slots don't currently support / send secured messages
 
@@ -3495,7 +3494,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		{
 			// human player that's connected
 			if (targeting.all
-				|| (targeting.humanTeammates && checkedGetPlayerTeam(playerIdx) == senderTeam)
+				|| (targeting.humanTeammates && NetPlay.players[playerIdx].team == senderTeam)
 				)
 			{
 				recipients.insert(playerIdx);
@@ -3506,7 +3505,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		{
 			// AI player that's still in the game
 			if (targeting.all
-				|| (targeting.aiTeammates && checkedGetPlayerTeam(playerIdx) == senderTeam)
+				|| (targeting.aiTeammates && NetPlay.players[playerIdx].team == senderTeam)
 				)
 			{
 				recipients.insert(playerIdx);

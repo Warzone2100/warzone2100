@@ -524,6 +524,10 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	}
 
 	readPlayers(j.at("players"), info);
+	if (bMultiPlayer)
+	{
+		assignSoloTeams();
+	}
 	readStructureLimits(j.at("structureLimits"));
 	ingame.flags = j.at("flags").get<uint8_t>();
 
