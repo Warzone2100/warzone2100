@@ -162,15 +162,16 @@ public:
 	FPathDroidUpdateScope &operator=(FPathDroidUpdateScope &&) = delete;
 };
 
-/// The tiles of a square window that a droid can drive to, as found by fpathDroidReachableTiles.
+/// The tiles that a droid can drive to, as found by fpathDroidReachableTiles.
 struct PathReachableTiles
 {
-	Vector2i origin = Vector2i(0, 0);  ///< Top left tile of the window.
+	Vector2i origin = Vector2i(0, 0);  ///< Top left tile of the bounding rectangle.
 	int width = 0;
 	int height = 0;
-	std::vector<uint8_t> flags;        ///< One 0/1 per tile of the window, row by row.
+	std::vector<uint8_t> flags;        ///< One 0/1 per tile of the rectangle, row by row.
 
-	bool inWindow(Vector2i tile) const
+	/// Is the tile within the bounding rectangle?
+	bool inBounds(Vector2i tile) const
 	{
 		return tile.x >= origin.x && tile.y >= origin.y && tile.x < origin.x + width && tile.y < origin.y + height;
 	}
@@ -179,16 +180,14 @@ struct PathReachableTiles
 	{
 		return static_cast<size_t>((tile.x - origin.x) + (tile.y - origin.y) * width);
 	}
-	/// Whether the tile can be driven to. Any tile outside the window reads as out of reach.
 	bool reachable(Vector2i tile) const
 	{
-		return inWindow(tile) && flags[index(tile)] != 0;
+		return inBounds(tile) && flags[index(tile)] != 0;
 	}
 };
 
-/** Returns the tiles that are reachable without leaving a square area. Tiles
- *  only reachable by exiting the square area are excluded. The radius parameter
- *  defines the size of the square area (clipped to the map).
+/** Returns the tiles that are reachable without leaving a circle, centred on
+ *  the droid's tile. Tiles only reachable by exiting the circle are excluded.
  *
  *  Unlike fpathCheck, structures and features count as obstacles.
  *

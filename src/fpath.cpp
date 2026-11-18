@@ -479,22 +479,33 @@ PathReachableTiles fpathDroidReachableTiles(const DROID *psDroid, const WorldMap
 	const FPATH_MOVETYPE moveType = fpathDroidMoveType(psDroid, FMT_MOVE);
 	const Vector2i start = map_coord(findNonblockingPosition(mapState, psDroid->pos, propulsion, owner, moveType).xy());
 
-	// Centre the window on the droid, not the start tile, which can be a couple of tiles away.
+	// Centre the circular area on the droid, not the start tile, which can be a
+	// couple of tiles away.
+	// The bounding rectangle contains the circle, clipped to the map. Its tiles
+	// outside the circle are never flagged.
 	const Vector2i centre = map_coord(psDroid->pos.xy());
 	const Vector2i origin(std::max(centre.x - radius, 0), std::max(centre.y - radius, 0));
 	const Vector2i end(std::min(centre.x + radius + 1, mapState.width), std::min(centre.y + radius + 1, mapState.height));
-	if (start.x < origin.x || start.y < origin.y || start.x >= end.x || start.y >= end.y)
+
+	// Only consider tiles within radius + 1/4 tiles
+	const int discLimitSq = radius * radius + radius / 2;
+	auto inCircle = [&](Vector2i t) {
+		const Vector2i d = t - centre;
+		return d.x * d.x + d.y * d.y <= discLimitSq;
+	};
+
+	if (!tileOnMap(mapState, start) || !inCircle(start))
 	{
-		return out;  // The start is off the map or outside the window.
+		return out;
 	}
+
 	out.origin = origin;
 	out.width = end.x - origin.x;
 	out.height = end.y - origin.y;
 	out.flags.assign(static_cast<size_t>(out.width) * static_cast<size_t>(out.height), 0);
 	auto flag = [&](Vector2i t) -> uint8_t & { return out.flags[out.index(t)]; };
 
-	// Orthogonal steps reach the same tiles a route can: a route never cuts a corner (fpathAStarExplore), so both tiles
-	// beside a diagonal step are open and two orthogonal steps reach the same tile. Like a route, start even if blocked.
+	// Flood-fill using orthogonal steps.
 	static const Vector2i steps[] = {Vector2i(0, 1), Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, 0)};
 	std::vector<Vector2i> open(1, start);
 	flag(start) = 1;
@@ -505,7 +516,7 @@ PathReachableTiles fpathDroidReachableTiles(const DROID *psDroid, const WorldMap
 		for (const Vector2i &step : steps)
 		{
 			const Vector2i next = tile + step;
-			if (out.inWindow(next) && !flag(next) && !fpathBaseBlockingTile(mapState, next.x, next.y, propulsion, owner, moveType))
+			if (out.inBounds(next) && inCircle(next) && !flag(next) && !fpathBaseBlockingTile(mapState, next.x, next.y, propulsion, owner, moveType))
 			{
 				flag(next) = 1;
 				open.push_back(next);

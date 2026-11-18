@@ -297,14 +297,14 @@ DROID *findSomeoneToRepair(const DROID *psTurret, int radius)
 	return _findSomeoneToRepair(nullptr, queue, psTurret->pos.x, psTurret->pos.y, radius, psTurret->player);
 }
 
-/// Autohelp: idle trucks automatically help work on nearby structures. Only
-/// structures reachable by staying inside a square area (centered on the truck) are
-/// considered. The square's size is determined by radius (strictly, the inradius).
+/// Autohelp: idle trucks automatically help work on nearby structures that are
+/// reachable by staying inside a circular area.
 /// A radius of 0 means the constructor won't leave the tile it's standing on.
-static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_PURSUE = 7;
-static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_GUARD = 4;
+static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_PURSUE = 8;
+static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_GUARD = 3;
 static constexpr int CONSTRUCTOR_AUTOHELP_RADIUS_TILES_HOLD = 0;
-/// An idle truck searches for an autohelp target once every this many game updates, staggered by droid id.
+/// An idle truck searches for an autohelp target once every this many game
+/// updates, staggered by droid id.
 static constexpr unsigned CONSTRUCTOR_AUTOHELP_SEARCH_INTERVAL_UPDATES = GAME_UPDATES_PER_SEC;
 
 namespace
@@ -367,8 +367,10 @@ static std::pair<STRUCTURE *, DROID_ACTION> chooseAutohelpTarget(DROID *psDroid)
 
 	WZ_PERF_SCOPE(T_chooseAutohelpTarget);
 
-	// A structure has a tile to work on it from inside the search square exactly when it stands on a tile of the
-	// square grown by one tile each way, so scan those.
+	// Collect candidate structures. The search square is expanded by 1 tile in
+	// each direction so that it will include all possible structures that could
+	// have an adjacent tile inside the original radius. This adjacent tile
+	// could be a valid build position.
 	const Vector2i tile = map_coord(psDroid->pos.xy());
 	std::vector<STRUCTURE *> seen;
 	std::vector<AutohelpCandidate> candidates;
