@@ -364,7 +364,7 @@ static uint8_t prop2bits(PROPULSION_TYPE propulsion)
 bool fpathBaseBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int mapIndex, FPATH_MOVETYPE moveType)
 {
 	/* All tiles outside of the map and on map border are blocking. */
-	if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
+	if (x < 1 || y < 1 || x >= mapState.width - 1 || y >= mapState.height - 1)
 	{
 		return true;
 	}

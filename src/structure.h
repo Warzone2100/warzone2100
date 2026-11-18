@@ -350,6 +350,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 StructureBounds getStructureBounds(const STRUCTURE *object);
 StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction);
+/// Whether any part of the structure is within TOO_NEAR_EDGE tiles of the map edge
+bool structureTooNearEdge(const StructureBounds &b, int mapWidth, int mapHeight);
 
 bool canStructureHaveAModuleAdded(const STRUCTURE* const structure);
 

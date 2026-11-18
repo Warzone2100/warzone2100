@@ -6542,15 +6542,9 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize, GameWorld& world)
 		}
 
 		//check not trying to build too near the edge
-		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > world.map.width - TOO_NEAR_EDGE)
+		if (structureTooNearEdge(getStructureBounds(psStats, Vector2i(psSaveStructure->x, psSaveStructure->y), DEG(psSaveStructure->direction)), world.map.width, world.map.height))
 		{
-			debug(LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
-			//ignore this
-			continue;
-		}
-		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > world.map.height - TOO_NEAR_EDGE)
-		{
-			debug(LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
+			debug(LOG_ERROR, "Structure %s too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
 			continue;
 		}
@@ -6631,8 +6625,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > world.map.width - TOO_NEAR_EDGE
-		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > world.map.height - TOO_NEAR_EDGE)
+		if (structureTooNearEdge(getStructureBounds(psStats, Vector2i(structure.position.x, structure.position.y), structure.direction), world.map.width, world.map.height))
 		{
 			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.c_str());
 			continue; // skip it
@@ -6774,8 +6767,7 @@ static bool loadSaveStructure2(const char *pFileName, GameWorld& world)
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > world.map.width - TOO_NEAR_EDGE
-		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > world.map.height - TOO_NEAR_EDGE)
+		if (structureTooNearEdge(getStructureBounds(psStats, pos.xy(), rot.direction), world.map.width, world.map.height))
 		{
 			debug(LOG_ERROR, "Structure %s (%s), coord too near the edge of the map", name.toUtf8().c_str(), list[i].toUtf8().c_str());
 			ini.endGroup();

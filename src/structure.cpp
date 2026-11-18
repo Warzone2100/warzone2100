@@ -1591,22 +1591,10 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		y = (y & ~TILE_MASK) + size.y % 2 * TILE_UNITS / 2;
 
 		//check not trying to build too near the edge
-		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (world.map.width - TOO_NEAR_EDGE))
-		{
-			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
-			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
-			return nullptr;
-		}
-		if (map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > (world.map.height - TOO_NEAR_EDGE))
-		{
-			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
-			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
-			return nullptr;
-		}
 		const StructureBounds footprint = getStructureBounds(pStructureType, Vector2i(x, y), direction);
-		if (footprint.map.x < 0 || footprint.map.y < 0 || footprint.map.x + footprint.size.x > world.map.width || footprint.map.y + footprint.size.y > world.map.height)
+		if (structureTooNearEdge(footprint, world.map.width, world.map.height))
 		{
-			debug(LOG_ERROR, "Structure %s at (%d, %d) would extend past the map edge", getStatsName(pStructureType), map_coord((int)x), map_coord((int)y));
+			debug(LOG_WARNING, "Structure %s at (%d, %d) is too near the map edge (req. distance is %d)", getStatsName(pStructureType), map_coord((int)x), map_coord((int)y), TOO_NEAR_EDGE);
 			return nullptr;
 		}
 
@@ -7301,6 +7289,12 @@ StructureBounds getStructureBounds(const STRUCTURE *object)
 	const Vector2i size = object->size();
 	const Vector2i map = map_coord(object->pos.xy()) - size / 2;
 	return StructureBounds(map, size);
+}
+
+bool structureTooNearEdge(const StructureBounds &b, int mapWidth, int mapHeight)
+{
+	return b.map.x < TOO_NEAR_EDGE || b.map.y < TOO_NEAR_EDGE
+	       || b.map.x + b.size.x > mapWidth - TOO_NEAR_EDGE || b.map.y + b.size.y > mapHeight - TOO_NEAR_EDGE;
 }
 
 StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction)
