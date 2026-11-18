@@ -8,6 +8,7 @@
 // but rather their ID mostly. This helps reduce a measurable performance impact.
 ////////////////////////////////////////////////////////////////////////////////
 
+include("/multiplay/skirmish/common/scrollLimits.js"); // Ignore everything outside the scroll limits
 const NEXUS_INCLUDES = "multiplay/skirmish/nexus_includes/";
 const NEXUS_STANDARDS = "multiplay/skirmish/nexus_standards/";
 const MAX_DROID_LIMIT = getDroidLimit();

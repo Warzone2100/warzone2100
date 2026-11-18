@@ -669,7 +669,7 @@ _global.fallBack = function(droid, threat) {
 	const x = droid.x - (baseScale / 7) * (threat.x - droid.x) / distance(threat, droid);
 	const y = droid.y - (baseScale / 7) * (threat.y - droid.y) / distance(threat, droid);
 
-	if (x < 1 || y < 1 || x > mapWidth - 2 || y > mapHeight - 2)
+	if (!withinScrollLimits(x, y, 1))
 	{
 		return;
 	}

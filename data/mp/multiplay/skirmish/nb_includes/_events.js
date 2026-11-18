@@ -89,6 +89,11 @@ function eventAttacked(victim, attacker)
 		return; // don't respond to accidental friendly fire
 	}
 
+	if (!withinScrollLimits(attacker))
+	{
+		return; // can't reach attackers outside the scroll limits
+	}
+
 	if (victim.type === DROID)
 	{
 		if (!isVTOL(victim) && defined(victim.group))

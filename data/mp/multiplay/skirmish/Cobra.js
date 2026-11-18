@@ -4,6 +4,7 @@
 // Use _ for global consts that are objects/arrays, and __ for other globals. CAPITALIZE these ones as well with _ seperating words.
 
 //globals/constants/definitions and whatever. Includes at the bottom.
+include("/multiplay/skirmish/common/scrollLimits.js"); // Ignore everything outside the scroll limits
 const __COBRA_INCLUDES = "/multiplay/skirmish/cobra_includes/";
 const __COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
 

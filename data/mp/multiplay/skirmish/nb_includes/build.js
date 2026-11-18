@@ -12,7 +12,7 @@ function randomLocation()
 	const x = baseLocation.x + random(baseScale) - baseScale / 2;
 	const y = baseLocation.y + random(baseScale) - baseScale / 2;
 
-	if (x < 3 || y < 3 || x > mapWidth - 4 || y > mapHeight - 4)
+	if (!withinScrollLimits(x, y, 3))
 	{
 		return baseLocation;
 	}
