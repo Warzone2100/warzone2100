@@ -1,0 +1,11 @@
+{
+	"AI": {
+		"js": "wally.js",
+		"name": "Wally",
+		"tip": "Smart, defensive and cooperative AI focused on rockets, machineguns, and VTOL bombs",
+		"easy_tip": "15 seconds delay on each action",
+		"medium_tip": "5 seconds delay on each action",
+		"hard_tip": "Normal speed, no delay",
+		"insane_tip": "Normal speed, no delay"
+	}
+}
