@@ -51,12 +51,22 @@ enum iV_fonts
 	font_count
 };
 
+struct WzTextFit
+{
+	bool truncated = false;   ///< it's cut, and ends in an ellipsis
+	size_t shownLength = 0;   ///< how many of its code points show, from its start (in reading order)
+	int naturalWidth = 0;     ///< the whole text's width (in points)
+};
+
 class WzText
 {
 public:
 	WzText() {}
 	WzText(const WzString &text, iV_fonts fontID);
 	void setText(const WzString &text, iV_fonts fontID/*, bool delayRender = false*/);
+	/// Sets the text, cut at its logical end to fit `maxWidth` (in points) and ending in an ellipsis
+	/// (0 or less for no limit). Setting the same text with a width that cuts it in the same place is a no-op.
+	void setText(const WzString &text, iV_fonts fontID, int maxWidth);
 	~WzText();
 	// Width (in points)
 	int width();
@@ -79,6 +89,8 @@ public:
 public:
 	const WzString& getText() const { return mText; }
 	iV_fonts getFontID() const { return mFontID; }
+	/// How the text fits the width it was set with
+	const WzTextFit &fit() const { return mFit; }
 
 private:
 	void drawAndCacheText(const WzString &text, iV_fonts fontID);
@@ -97,6 +109,11 @@ private:
 	iV_fonts mFontID = font_count;
 	uint32_t mFontGeneration = 0;
 	Vector2i layoutMetrics = Vector2i(0, 0);
+	int mMaxWidth = 0;   // (in points, 0 for no limit)
+	WzTextFit mFit;
+	// Widths (in pixels) from mFitFromPixels up to, not including, mFitBelowPixels cut the text in the same place
+	int32_t mFitFromPixels = 0;
+	int32_t mFitBelowPixels = 0;
 };
 
 class WidthLimitedWzText: public WzText
@@ -148,6 +165,8 @@ void iV_UnbindVideoFonts();
 
 int iV_GetEllipsisWidth(iV_fonts fontID);
 void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour, float rotation = 0.0f);
+/// The text, cut at its logical end to fit `maxWidth` (in points) and ending in an ellipsis
+WzString iV_TruncateTextToWidth(const WzString &text, iV_fonts fontID, int maxWidth);
 
 int iV_GetTextAboveBase(iV_fonts fontID);
 int iV_GetTextBelowBase(iV_fonts fontID);

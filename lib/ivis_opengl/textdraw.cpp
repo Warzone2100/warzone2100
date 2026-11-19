@@ -624,6 +624,7 @@ struct TextShaper
 		FTFace& face;
 
 		HarfbuzzPosition(hb_codepoint_t c, uint32_t cl, Vector2i &&p, FTFace& f) : codepoint(c), cluster(cl), penPosition(p), face(f) {}
+		int32_t advance = 0;   ///< how far the pen moves for it
 	};
 
 	struct ShapingResult
@@ -777,8 +778,12 @@ struct TextShaper
 	// Draws the text and returns the text buffer, width and height, etc *IN PIXELS*
 	DrawTextResult drawText(const WzString& text, iV_fonts fontID)
 	{
-		ShapingResult shapingResult = shapeText(text, fontID);
+		return drawShapedText(shapeText(text, fontID), text);
+	}
 
+	// Draws what was shaped (`text` names it in errors)
+	DrawTextResult drawShapedText(const ShapingResult &shapingResult, const WzString& text)
+	{
 		if (shapingResult.glyphes.empty())
 		{
 			return DrawTextResult(RenderedText(), TextLayoutMetrics(shapingResult.x_advance / 64, shapingResult.y_advance / 64));
@@ -860,6 +865,124 @@ struct TextShaper
 				RenderedText(std::move(stringBitmap), min_x, min_y),
 				TextLayoutMetrics(std::max(texture_width, x_advance), std::max(texture_height, y_advance))
 		);
+	}
+
+	struct TextFit
+	{
+		bool truncated = false;
+		size_t shownLength = 0;
+		int32_t naturalWidth = 0;   // (in pixels)
+		bool keptWhole = false;     // (no wider than an ellipsis, so it isn't cut at any width)
+		// Widths (in pixels) from fromWidth up to, not including, belowWidth cut it in the same place
+		int32_t fromWidth = 0;
+		int32_t belowWidth = std::numeric_limits<int32_t>::max();
+	};
+
+	// Shapes `codePoints` to fit `maxWidth` (in pixels, 0 or less for no limit): all of them,
+	// or the longest start (in reading order, ending on a cluster) that fits with an ellipsis after it.
+	// `codePoints` becomes what's shaped.
+	ShapingResult shapeToFit(std::vector<uint32_t> &codePoints, iV_fonts fontID, int32_t maxWidth, TextFit &fit)
+	{
+		const uint32_t ELLIPSIS = 0x2026;
+		fit = TextFit();
+		ShapingResult whole = shapeText(codePoints, fontID);
+		fit.shownLength = codePoints.size();
+		fit.naturalWidth = whole.x_advance / 64;
+		// (widths compare in whole pixels, as a text's width is measured)
+		if (maxWidth <= 0 || whole.x_advance / 64 <= maxWidth)
+		{
+			return whole;
+		}
+		const int64_t ellipsisAdvance = shapeText(std::vector<uint32_t>{ELLIPSIS}, fontID).x_advance;
+		// A text no wider than an ellipsis stays whole (cutting it wouldn't make it narrower)
+		if (ellipsisAdvance / 64 >= whole.x_advance / 64)
+		{
+			fit.keptWhole = true;
+			return whole;
+		}
+		fit.truncated = true;
+
+		// Each cluster's advance, in reading order (a width doesn't depend on the glyphs' visual order)
+		const size_t length = codePoints.size();
+		std::vector<int64_t> advances(length, 0);
+		std::vector<bool> starts(length + 1, false);
+		for (const HarfbuzzPosition &g : whole.glyphes)
+		{
+			if (g.cluster < length)
+			{
+				advances[g.cluster] += g.advance;
+				starts[g.cluster] = true;
+			}
+		}
+		starts[length] = true;
+
+		size_t cut = 0;
+		int64_t width = 0;
+		int64_t nextWidth = 0;   // (the width with the cluster after the cut)
+		for (size_t i = 0; i < length; ++i)
+		{
+			if (starts[i])
+			{
+				if ((width + ellipsisAdvance) / 64 > maxWidth)
+				{
+					nextWidth = width;
+					break;
+				}
+				cut = i;
+			}
+			width += advances[i];
+		}
+		fit.belowWidth = static_cast<int32_t>((nextWidth + ellipsisAdvance) / 64);
+
+		const auto isSpace = [](uint32_t c) { return c == ' ' || c == '\t' || c == 0xA0 || c == 0x3000; };
+		const std::vector<uint32_t> text = codePoints;
+		for (;;)
+		{
+			size_t end = cut;
+			while (end > 0 && isSpace(text[end - 1]))
+			{
+				--end;
+			}
+			codePoints.assign(text.begin(), text.begin() + static_cast<std::ptrdiff_t>(end));
+			codePoints.push_back(ELLIPSIS);
+			ShapingResult shown = shapeText(codePoints, fontID);
+			// (the join with the ellipsis can widen it, ex. a letter's final form)
+			if (cut == 0 || shown.x_advance / 64 <= maxWidth)
+			{
+				fit.shownLength = end;
+				return shown;
+			}
+			do
+			{
+				--cut;
+			} while (cut > 0 && !starts[cut]);
+		}
+	}
+
+	// Draws the text to fit `maxWidth` (in pixels, 0 or less for no limit), as shapeToFit() shapes it
+	DrawTextResult drawTextToFit(const WzString& text, iV_fonts fontID, int32_t maxWidth, TextFit &fit)
+	{
+		const std::vector<uint32_t> codePoints = text.toUtf32();
+		int32_t limit = maxWidth;
+		for (int attempt = 0; ; ++attempt)
+		{
+			std::vector<uint32_t> shown = codePoints;
+			const ShapingResult shaped = shapeToFit(shown, fontID, limit, fit);
+			DrawTextResult result = drawShapedText(shaped, text);
+			const int32_t drawn = static_cast<int32_t>(result.layoutMetrics.width);
+			if (maxWidth <= 0 || drawn <= maxWidth || fit.keptWhole || attempt == 2 || limit <= 1)
+			{
+				fit.fromWidth = fit.keptWhole ? 0 : drawn;
+				if (fit.truncated)
+				{
+					fit.belowWidth += maxWidth - limit;
+				}
+				return result;
+			}
+			// Its drawn pixels reach past its advance (ex. an overhanging last letter): fit it narrower by that much
+			const int32_t overhang = std::max(1, drawn - shaped.x_advance / 64);
+			limit = std::max(1, std::min(limit - 1, maxWidth - overhang));
+		}
 	}
 
 	struct SplitTextRunsResult
@@ -1054,6 +1177,7 @@ struct TextShaper
 
 				uint32_t clusterIdx = (run.glyphInfos[glyphIndex].cluster + run.startOffset);
 				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, clusterIdx, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset), *run.fontFace);
+				shapingResult.glyphes.back().advance = run.glyphPositions[glyphIndex].x_advance;
 
 				x += run.glyphPositions[glyphIndex].x_advance;
 				y += run.glyphPositions[glyphIndex].y_advance;
@@ -1496,6 +1620,23 @@ int iV_GetEllipsisWidth(iV_fonts fontID)
 void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour, float rotation /*= 0.0f*/)
 {
 	iV_Internal_GetEllipsis(fontID).render(position, colour, rotation);
+}
+
+static int32_t widthPointsToPixels(int widthInPoints)
+{
+	return (widthInPoints > 0) ? std::max<int32_t>(1, static_cast<int32_t>(floorf(static_cast<float>(widthInPoints) * _horizScaleFactor))) : 0;
+}
+
+WzString iV_TruncateTextToWidth(const WzString &text, iV_fonts fontID, int maxWidth)
+{
+	if (maxWidth <= 0)
+	{
+		return text;
+	}
+	std::vector<uint32_t> codePoints = text.toUtf32();
+	TextShaper::TextFit fit;
+	getShaper().shapeToFit(codePoints, fontID, widthPointsToPixels(maxWidth), fit);
+	return fit.truncated ? WzString::fromUtf32(codePoints) : text;
 }
 
 unsigned int width_pixelsToPoints(unsigned int widthInPixels)
@@ -1944,10 +2085,23 @@ static uint32_t getFontGeneration(iV_fonts fontID)
 
 void WzText::setText(const WzString &text, iV_fonts fontID/*, bool delayRender*/)
 {
+	setText(text, fontID, 0);
+}
+
+void WzText::setText(const WzString &text, iV_fonts fontID, int maxWidth)
+{
+	maxWidth = std::max(maxWidth, 0);
 	if (mText == text && fontID == mFontID)
 	{
-		return; // cached
+		// (cached, if the width cuts it in the same place)
+		const int32_t pixels = (maxWidth > 0) ? widthPointsToPixels(maxWidth) : std::numeric_limits<int32_t>::max();
+		if (maxWidth == mMaxWidth || (mFontGeneration == getFontGeneration(fontID) && pixels >= mFitFromPixels && (!mFit.truncated || pixels < mFitBelowPixels)))
+		{
+			mMaxWidth = maxWidth;
+			return;
+		}
 	}
+	mMaxWidth = maxWidth;
 	drawAndCacheText(text, fontID);
 }
 
@@ -1967,7 +2121,13 @@ void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
 	mPtsLineSize = metricsHeight_PixelsToPoints((type->size->metrics.ascender - type->size->metrics.descender) >> 6);
 	mPtsBelowBase = metricsHeight_PixelsToPoints(type->size->metrics.descender >> 6);
 
-	DrawTextResult drawResult = getShaper().drawText(string, fontID);
+	TextShaper::TextFit fit;
+	DrawTextResult drawResult = getShaper().drawTextToFit(string, fontID, widthPointsToPixels(mMaxWidth), fit);
+	mFit.truncated = fit.truncated;
+	mFit.shownLength = fit.shownLength;
+	mFit.naturalWidth = static_cast<int>(width_pixelsToPoints(fit.truncated ? static_cast<uint32_t>(fit.naturalWidth) : drawResult.layoutMetrics.width));
+	mFitFromPixels = fit.fromWidth;
+	mFitBelowPixels = fit.belowWidth;
 	dimensions = (drawResult.text.bitmap) ? Vector2i(drawResult.text.bitmap->width(), drawResult.text.bitmap->height()) : Vector2i(0,0);
 	offsets = Vector2i(drawResult.text.offset_x, drawResult.text.offset_y);
 	layoutMetrics = Vector2i(drawResult.layoutMetrics.width, drawResult.layoutMetrics.height);
@@ -2024,6 +2184,10 @@ WzText& WzText::operator=(WzText&& other)
 		mRenderingHorizScaleFactor = other.mRenderingHorizScaleFactor;
 		mRenderingVertScaleFactor = other.mRenderingVertScaleFactor;
 		layoutMetrics = other.layoutMetrics;
+		mMaxWidth = other.mMaxWidth;
+		mFit = other.mFit;
+		mFitFromPixels = other.mFitFromPixels;
+		mFitBelowPixels = other.mFitBelowPixels;
 
 		// Reset other's texture
 		other.texture = nullptr;
