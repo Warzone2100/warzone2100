@@ -1,13 +1,20 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-WZ2100-GPL-3.0-Section-7-1.0-or-later
 
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
-	Warzone 2100 is free software; you can redistribute it and/or modify
+	Warzone 2100 is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
+	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
+
+	Additional terms under Section 7 of the GNU General Public License
+	version 3 apply to this file: version 1.0 of the Warzone 2100
+	additional terms, or (at your option) any later version published by
+	the Warzone 2100 Project, set out in COPYING.SECTION7 in the
+	top-level directory of the source distribution. This notice must be
+	kept intact.
 
 	Warzone 2100 is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,8 +22,7 @@
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Warzone 2100; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+	along with Warzone 2100. If not, see <https://www.gnu.org/licenses/>.
 */
 /** @file pass_resolve.cpp
  * Implementation of pass description resolution, read binding, and batch merging rules.
@@ -31,6 +37,7 @@
 #include "lib/framework/wzapp.h"
 
 #include <algorithm>
+#include <unordered_set>
 
 namespace gfx_api
 {
@@ -217,6 +224,42 @@ AttachmentStoreOp attachmentStoreOpOr(const AttachmentDesc& attachment)
 bool resolvePassDescription(RenderPassDesc& pass)
 {
 	auto& ctx = gfx_api::context::get();
+
+	if (pass.kind == PassKind::Compute)
+	{
+		if (!ctx.supportsComputeShaders())
+		{
+			static std::unordered_set<std::string> logged;
+			if (logged.insert(pass.debugName).second)
+			{
+				debug(LOG_ERROR, "Compute shaders are unavailable; skipping pass \"%s\"", pass.debugName.c_str());
+			}
+			return false;
+		}
+		ASSERT_OR_RETURN(false, pass.colorAttachments.empty() && !pass.depthAttachment.has_value() && !pass.resolveAttachment.has_value(),
+			"Compute pass \"%s\" cannot have graphics attachments", pass.debugName.c_str());
+		for (const ComputeImageUse& image : pass.sampledInputs)
+		{
+			ASSERT_OR_RETURN(false, image.texture != nullptr, "Compute pass \"%s\" has a null sampled input", pass.debugName.c_str());
+		}
+		for (const ComputeImageUse& image : pass.storageImages)
+		{
+			ASSERT_OR_RETURN(false, image.texture != nullptr, "Compute pass \"%s\" has a null storage image", pass.debugName.c_str());
+			for (const ComputeImageUse& sampled : pass.sampledInputs)
+			{
+				ASSERT_OR_RETURN(false, !(image.texture == sampled.texture && image.arrayLayer == sampled.arrayLayer && image.mipLevel == sampled.mipLevel),
+					"Compute pass \"%s\" uses one image as both sampled and storage", pass.debugName.c_str());
+			}
+		}
+		for (const ComputeBufferUse& bufferUse : pass.storageBuffers)
+		{
+			ASSERT_OR_RETURN(false, bufferUse.buf != nullptr, "Compute pass \"%s\" has a null storage buffer", pass.debugName.c_str());
+		}
+		return true;
+	}
+
+	ASSERT_OR_RETURN(false, pass.sampledInputs.empty() && pass.storageImages.empty() && pass.storageBuffers.empty(),
+		"Graphics pass \"%s\" cannot declare compute resources", pass.debugName.c_str());
 
 	uint32_t width = 0;
 	uint32_t height = 0;
@@ -425,6 +468,10 @@ bool canExtendPassBatch(const CompiledPass& batchHead, const CompiledPass& candi
 	const RenderPassDesc& headDesc = batchHead.desc;
 	const RenderPassDesc& candidateDesc = candidate.desc;
 
+	if (headDesc.kind != PassKind::Graphics || candidateDesc.kind != PassKind::Graphics)
+	{
+		return false;
+	}
 	if (!passAttachmentBindingsMatch(headDesc, candidateDesc))
 	{
 		return false;
@@ -637,6 +684,16 @@ std::optional<PassOutputView> getPassOutputAttachment(
 		view.arrayLayer = producer.depthAttachment->arrayLayer;
 		view.isDepth = true;
 		view.pipelineSurfaceId = producer.depthAttachment->pipelineSurfaceId;
+		break;
+	case AttachmentRole::Storage:
+		if (colorIndex >= producer.storageImages.size() || producer.storageImages[colorIndex].texture == nullptr)
+		{
+			return std::nullopt;
+		}
+		view.texture = producer.storageImages[colorIndex].texture;
+		view.mipLevel = producer.storageImages[colorIndex].mipLevel;
+		view.arrayLayer = producer.storageImages[colorIndex].arrayLayer;
+		view.isDepth = producer.storageImages[colorIndex].isDepth;
 		break;
 	}
 

@@ -414,13 +414,15 @@ Files: data/mp/multiplay/maps/MoveBench-*/game.js
        lib/ivis_opengl/render_graph/attachment.h
        lib/ivis_opengl/render_graph/blueprint_materializer.*
        lib/ivis_opengl/render_graph/layout_subresource.*
-       lib/ivis_opengl/render_graph/layout_timeline.h
-       lib/ivis_opengl/render_graph/pass_resolve.h
-       lib/ivis_opengl/render_graph/read_scope.cpp
+       lib/ivis_opengl/render_graph/layout_timeline.*
+       lib/ivis_opengl/render_graph/pass_resolve.*
+       lib/ivis_opengl/render_graph/read_scope.*
+       lib/ivis_opengl/render_graph/render_pass.h
        lib/ivis_opengl/render_graph/scene_post_effect_id.h
        lib/ivis_opengl/vk/handle_storage.h
        lib/ivis_opengl/vk/layout_key_builder.*
-       lib/ivis_opengl/vk/layout_translation.h
+       lib/ivis_opengl/vk/layout_sync.*
+       lib/ivis_opengl/vk/layout_translation.*
        lib/ivis_opengl/vk/pass_layout_key.*
        lib/ivis_opengl/vk/render_pass_layout_cache.*
        lib/ivis_opengl/vk/screen_frame_coordinator.*
