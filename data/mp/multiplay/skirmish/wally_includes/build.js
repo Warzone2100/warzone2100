@@ -182,7 +182,7 @@ function baseMaintenance() {
 	let success = false;
 
 	// List of modules with their required amount and corresponding structure type.
-	const modList = [
+	const moduleList = [
 		{ "mod": "A0PowMod1", "amount": 1, "structure": POW_GEN_STAT },
 		{ "mod": "A0ResearchModule1", "amount": 1, "structure": RES_LAB_STAT },
 		{ "mod": "A0FacMod1", "amount": 2, "structure": FACTORY_STAT },
@@ -190,14 +190,14 @@ function baseMaintenance() {
 	];
 
 	// Iterate through the module list to find a suitable structure for upgrade.
-	for (let i = 0; i < modList.length; ++i) {
-		if (isStructureAvailable(modList[i].mod)) {
-			const structList = enumStruct(me, modList[i].structure).sort(sortByDistToBase);
+	for (let i = 0; i < moduleList.length; ++i) {
+		if (isStructureAvailable(moduleList[i].mod)) {
+			const structList = enumStruct(me, moduleList[i].structure).sort(sortByDistToBase);
 
 			for (let c = 0; c < structList.length; c++) {
-				if (structList[c].status === BUILT && structList[c].modules < modList[i].amount) {
+				if (structList[c].status === BUILT && structList[c].modules < moduleList[i].amount) {
 					struct = structList[c];
-					module = modList[i].mod;
+					module = moduleList[i].mod;
 					break;
 				}
 			}
@@ -218,7 +218,7 @@ function baseMaintenance() {
 		let assigned = 0;
 		for (const truck of idleTrucks) {
 			// Check if the truck can help with building at the selected location
-			if (struct && canDroidHelp(truck, struct.x, struct.y)) {
+			if (canDroidHelp(truck, struct.x, struct.y)) {
 				if (orderDroidBuild(truck, DORDER_BUILD, module, struct.x, struct.y)) {
 					success = true;
 					assigned++;
@@ -311,7 +311,8 @@ function buildDefensesForAllies() {
 	// Process each ally
 	for (const ally of alliesList) {
 		// Get the ally's base position
-		const allyBasePosition = enumStruct(ally.position, PLAYER_HQ_STAT)[0] ?? startPositions[ally.position];
+		const allyHQ = enumStruct(ally.position, PLAYER_HQ_STAT)[0];
+		const allyBasePosition = allyHQ || startPositions[ally.position];
 
 		// If an ally is too far or if my base is in trouble, skip this ally
 		if (distBetweenTwoPoints(BASE.x, BASE.y, allyBasePosition.x, allyBasePosition.y) > 60 || isMyBaseInTrouble) {
@@ -432,15 +433,15 @@ function buildForwardRepairFacilities(maxLimit = 5) {
 
 	if (currentEnemy && currentEnemy.base) {
 		const baseToEnemy = distBetweenTwoPoints(BASE.x, BASE.y, currentEnemy.base.x, currentEnemy.base.y);
-		
+
 		// Filter out derricks that are further from the enemy than we are (must be between us and them)
-		remoteDerricks = remoteDerricks.filter(d => 
+		remoteDerricks = remoteDerricks.filter(d =>
 			distBetweenTwoPoints(d.x, d.y, currentEnemy.base.x, currentEnemy.base.y) < baseToEnemy
 		);
 
 		// Sort by distance to enemy base (closest to enemy first)
 		remoteDerricks.sort((a, b) => {
-			return distBetweenTwoPoints(a.x, a.y, currentEnemy.base.x, currentEnemy.base.y) - 
+			return distBetweenTwoPoints(a.x, a.y, currentEnemy.base.x, currentEnemy.base.y) -
 				   distBetweenTwoPoints(b.x, b.y, currentEnemy.base.x, currentEnemy.base.y);
 		});
 	} else {
@@ -470,7 +471,7 @@ function buildForwardRepairFacilities(maxLimit = 5) {
 }
 
 
-let lastAttemptTime = 0;
+var lastAttemptTime = 0;
 const RETRY_DELAY = 20000; // 20-second delay in milliseconds
 
 function buildDefenses() {
@@ -713,11 +714,11 @@ function returnBestDefense(isDerrickDefense = false) {
 	} else if (random(100) < EMP_CHANCE) {
 		defenses = EMP_DEFENSES;
 	} else if (random(100) < ARTILLERY_CHANCE) {
-		defenses = ARTILLERY_DEFENSES
+		defenses = ARTILLERY_DEFENSES;
 	} else if (random(100) < BASTION_CHANCE) {
-		defenses = FORTRESS_DEFENSES
+		defenses = FORTRESS_DEFENSES;
 	} else {
-		defenses = ARTILLERY_DEFENSES
+		defenses = ARTILLERY_DEFENSES;
 	}
 
 	for (let i = 0; i < defenses.length; i++) {
@@ -794,7 +795,7 @@ function buildAntiAir(trucks) {
 	}
 
 	let bestAADefense = null;
-	
+
 	// Find the strongest available AA defense
 	for (let i = 0; i < AA_DEFENSES.length; i++) {
 		if (isStructureAvailable(AA_DEFENSES[i])) {

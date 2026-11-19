@@ -50,7 +50,6 @@ var currentlyDead;
 var isSeaMap; // Used to determine if it is a hover map.
 var isMyBaseInTrouble = false; // Used to determine if the base is in danger.
 var isHighOilMap;
-var useBunkerBuster = false;
 var enemiesHaveVTOLs = false; // Used to determine if VTOLs are allowed.
 var areAllEnemiesDead = false;
 var isHelpingAlly = false;
@@ -80,12 +79,10 @@ function getDesiredTruckCount() {
 
 /** @type {PlayerData[]} */
 var alliesList = [];
-var enemiesList = [];
 var currentHelpedAlly;
 
 /** @type {PlayerData} */
 var currentEnemy; // Current enemy Wally is attacking.
-var currentEnemyTarget; // Current enemy target Wally is attacking.
 
 var scavengerIndex = undefined;
 
@@ -99,14 +96,14 @@ var pendingBuildOrders = new Map();
 var truckIdleTracker = new Map();
 
 // Difficulty
-var reactionSpeedDelay = 0
+var reactionSpeedDelay = 0;
 
 // And include the rest here.
 include("/multiplay/skirmish/wally_includes/start.js");
 include("/multiplay/skirmish/wally_includes/functionsUtility.js");
 include("/multiplay/skirmish/wally_includes/production.js");
 include("/multiplay/skirmish/wally_includes/productionUtility.js");
-include("/multiplay/skirmish/wally_includes/productionTactics.js")
+include("/multiplay/skirmish/wally_includes/productionTactics.js");
 include("/multiplay/skirmish/wally_includes/research.js");
 include("/multiplay/skirmish/wally_includes/researchUtility.js");
 include("/multiplay/skirmish/wally_includes/build.js");

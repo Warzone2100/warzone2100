@@ -1,38 +1,40 @@
+var enemiesList = [];
+
 function eventStartLevel() {
 	// Greets the player
-	chat(ALLIES, "Hello! I'm Wally, your best defensive ally. I'll help you win this game.")
+	chat(ALLIES, "Hello! I'm Wally, your best defensive ally. I'll help you win this game.");
 
 	// setup groups
-	baseBuildersGroup = newGroup()
-	defensesBuildersGroup = newGroup()
-	attackerGroup = newGroup()
-	bunkerBusterGroup = newGroup()
-	helperGroup = newGroup()
-	vtolGroup = newGroup()
+	baseBuildersGroup = newGroup();
+	defensesBuildersGroup = newGroup();
+	attackerGroup = newGroup();
+	bunkerBusterGroup = newGroup();
+	helperGroup = newGroup();
+	vtolGroup = newGroup();
 
 	enumDroid(me).forEach(droid => {
 		eventDroidBuilt(droid);
 	});
 
-	isSeaMap = isHoverMap()
+	isSeaMap = isHoverMap();
 
 	// Set Difficulty
-	setDifficulty()
+	setDifficulty();
 
 	// Check if the Technology level is 4
-	isMultiTech4()
+	isMultiTech4();
 
 	// Recycle old builder if possible
-	recycleOldBuilders()
+	recycleOldBuilders();
 
 	// Set the allies
-	alliesList = getAliveAllyPlayersData()
+	alliesList = getAliveAllyPlayersData();
 
 	// Set the enemies
-	enemiesList = getAliveEnemyPlayersData()
+	enemiesList = getAliveEnemyPlayersData();
 
 	// Set the current enemy
-	setCurrentEnemy()
+	setCurrentEnemy();
 
 	// Kickstart early game actions immediately at tick 0 (crucial in Low Oil / No Bases)
 	// Run build() before lookForOil() so core base structures are started before trucks scatter for oil
@@ -45,25 +47,25 @@ function eventStartLevel() {
 
 	// Set the timer call randomly so as not to calculate in the same tick.
 	setTimer("produceDroids", reactionSpeedDelay + 1500 + ((1 + random(30)) * random(10))); // 1,5 Seconds
-	setTimer("research", reactionSpeedDelay + 1500 + ((1 + random(30)) * random(10))) // 1,5 Seconds
-	setTimer("build", reactionSpeedDelay + 1500 + ((1 + random(14)) * random(46))) // 1,5 Seconds
-	setTimer("attack", reactionSpeedDelay + 1000 + ((1 + random(30)) * random(10))) // 1 Second
-	setTimer("checkIsHighOilMap", reactionSpeedDelay + 30000 + ((1 + random(30)) * random(10))) // 30 Seconds
-	setTimer("setCurrentEnemy", reactionSpeedDelay + 180000 + ((1 + random(30)) * random(10))) // 3 Minutes
-	setTimer("lookForOil", reactionSpeedDelay + 1500 + ((1 + random(30)) * random(10))) // 1,5 Seconds
-	setTimer("myBaseInTrouble", reactionSpeedDelay + 5000 + ((1 + random(30)) * random(10))) // 5 Seconds
-	setTimer("checkAllyBaseInTrouble", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))) // 15 Seconds
-	setTimer("recycleOldBuilders", reactionSpeedDelay + 20000 + ((1 + random(30)) * random(10))) // 20 Seconds
-	setTimer("checkTrucksCount", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))) // 2 Minutes
-	setTimer("donateOil", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))) // 2 Minutes
-	setTimer("checkAllies", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))) // 2 Minutes
-	setTimer("checkForDefeatedAllies", reactionSpeedDelay + 120000 + ((1 + random(33)) * random(88))) // 2 Minutes
-	setTimer("swapBuildersRole", reactionSpeedDelay + 10000 + ((1 + random(30)) * random(10))) // 10 Seconds
-	setTimer("callIdleBuildersToBase", reactionSpeedDelay + 5000 + ((1 + random(30)) * random(10))) // 5 Seconds
-	setTimer("checkIfDead", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))) // 15 Seconds
-	setTimer("askForTruck", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))) // 2 Minutes
-	setTimer("scanForVTOLs", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))) // 15 Seconds
-	setTimer("recycleObsoleteUnits", reactionSpeedDelay + 45000 + ((1 + random(30)) * random(10))) // 45 Seconds
+	setTimer("research", reactionSpeedDelay + 1500 + ((1 + random(30)) * random(10))); // 1,5 Seconds
+	setTimer("build", reactionSpeedDelay + 1500 + ((1 + random(14)) * random(46))); // 1,5 Seconds
+	setTimer("attack", reactionSpeedDelay + 1000 + ((1 + random(30)) * random(10))); // 1 Second
+	setTimer("checkIsHighOilMap", reactionSpeedDelay + 30000 + ((1 + random(30)) * random(10))); // 30 Seconds
+	setTimer("setCurrentEnemy", reactionSpeedDelay + 180000 + ((1 + random(30)) * random(10))); // 3 Minutes
+	setTimer("lookForOil", reactionSpeedDelay + 1500 + ((1 + random(30)) * random(10))); // 1,5 Seconds
+	setTimer("myBaseInTrouble", reactionSpeedDelay + 5000 + ((1 + random(30)) * random(10))); // 5 Seconds
+	setTimer("checkAllyBaseInTrouble", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))); // 15 Seconds
+	setTimer("recycleOldBuilders", reactionSpeedDelay + 20000 + ((1 + random(30)) * random(10))); // 20 Seconds
+	setTimer("checkTrucksCount", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
+	setTimer("donateOil", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
+	setTimer("checkAllies", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
+	setTimer("checkForDefeatedAllies", reactionSpeedDelay + 120000 + ((1 + random(33)) * random(88))); // 2 Minutes
+	setTimer("swapBuildersRole", reactionSpeedDelay + 10000 + ((1 + random(30)) * random(10))); // 10 Seconds
+	setTimer("callIdleBuildersToBase", reactionSpeedDelay + 5000 + ((1 + random(30)) * random(10))); // 5 Seconds
+	setTimer("checkIfDead", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))); // 15 Seconds
+	setTimer("askForTruck", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
+	setTimer("scanForVTOLs", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))); // 15 Seconds
+	setTimer("recycleObsoleteUnits", reactionSpeedDelay + 45000 + ((1 + random(30)) * random(10))); // 45 Seconds
 }
 
 // Re-initialize state and groups when loading a saved game
@@ -148,18 +150,18 @@ function swapBuildersRole() {
 
 // Check and update the alive allies
 function checkAllies() {
-	alliesList = getAliveAllyPlayersData()
+	alliesList = getAliveAllyPlayersData();
 }
 
 // Check if Wally has been defeated
 function checkIfDead() {
-	isPlayerAlive(me) ? currentlyDead = false : currentlyDead = true
+	currentlyDead = !isPlayerAlive(me);
 }
 
 // Ask for a truck if Wally is dead
 function askForTruck() {
 	if (currentlyDead) {
-		chat(ALLIES, "need truck")
+		chat(ALLIES, "need truck");
 	}
 }
 
@@ -188,26 +190,26 @@ function setCurrentEnemy(enemyPlayerData) {
 }
 
 function shutdownScripts() {
-	removeTimer("produceDroids")
-	removeTimer("research")
-	removeTimer("build")
-	removeTimer("attack")
-	removeTimer("checkIsHighOilMap")
-	removeTimer("setCurrentEnemy")
-	removeTimer("lookForOil")
-	removeTimer("myBaseInTrouble")
-	removeTimer("checkAllyBaseInTrouble")
-	removeTimer("recycleOldBuilders")
-	removeTimer("checkTrucksCount")
-	removeTimer("donateOil")
-	removeTimer("checkAllies")
-	removeTimer("checkForDefeatedAllies")
-	removeTimer("swapBuildersRole")
-	removeTimer("callIdleBuildersToBase")
-	removeTimer("checkIfDead")
-	removeTimer("askForTruck")
-	removeTimer("scanForVTOLs")
-	removeTimer("recycleObsoleteUnits")
+	removeTimer("produceDroids");
+	removeTimer("research");
+	removeTimer("build");
+	removeTimer("attack");
+	removeTimer("checkIsHighOilMap");
+	removeTimer("setCurrentEnemy");
+	removeTimer("lookForOil");
+	removeTimer("myBaseInTrouble");
+	removeTimer("checkAllyBaseInTrouble");
+	removeTimer("recycleOldBuilders");
+	removeTimer("checkTrucksCount");
+	removeTimer("donateOil");
+	removeTimer("checkAllies");
+	removeTimer("checkForDefeatedAllies");
+	removeTimer("swapBuildersRole");
+	removeTimer("callIdleBuildersToBase");
+	removeTimer("checkIfDead");
+	removeTimer("askForTruck");
+	removeTimer("scanForVTOLs");
+	removeTimer("recycleObsoleteUnits");
 }
 
 function setDifficulty() {
@@ -229,8 +231,8 @@ function setDifficulty() {
 
 function isMultiTech4() {
 	if (getMultiTechLevel() === 4) {
-		researchDone = true
-		recycleOldBuilders()
+		researchDone = true;
+		recycleOldBuilders();
 	}
 }
 
@@ -254,9 +256,9 @@ function eventDroidBuilt(droid) {
 		return;
 	}
 
-	if (droid.droidType === DROID_WEAPON && droid.weapons?.[0]?.name === BUNKER_BUSTER_WEAPON[0]) {
-		groupAdd(bunkerBusterGroup, droid)
-		retreatToBase([droid])
+	if (droid.droidType === DROID_WEAPON && droid.weapons && droid.weapons[0] && droid.weapons[0].name === BUNKER_BUSTER_WEAPON[0]) {
+		groupAdd(bunkerBusterGroup, droid);
+		retreatToBase([droid]);
 		return;
 	}
 

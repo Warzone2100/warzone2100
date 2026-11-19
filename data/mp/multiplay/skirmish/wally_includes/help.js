@@ -33,30 +33,30 @@ var lastSorryChatTime = 0;
 
 // Returns true if the ally is helped, false otherwise
 function helpAlly(allyPlayerData) {
-	currentHelpedAlly = allyPlayerData
+	currentHelpedAlly = allyPlayerData;
 
-	const playerData = allyPlayerData;
+	const allyData = allyPlayerData;
 	const allAttackers = enumGroup(attackerGroup);
 
-    if (allAttackers.length < 10) {
+	if (allAttackers.length < 10) {
 		if (gameTime - lastSorryChatTime > 120000) {
-			chat(ALLIES, `Sorry ${playerData.name}! I don't have enough units to help you right now.`);
+			chat(ALLIES, `Sorry ${allyData.name}! I don't have enough units to help you right now.`);
 			lastSorryChatTime = gameTime;
 		}
 		return false; // Early exit if not enough droids
 	}
 
-    const enemiesDroids = enumRange(playerData.base.x, playerData.base.y, BASE_THREAT_RANGE, ENEMIES, true)
-		.filter(obj => obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG))
+	const enemiesDroids = enumRange(allyData.base.x, allyData.base.y, BASE_THREAT_RANGE, ENEMIES, true)
+		.filter(obj => obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG));
 
-    if (enemiesDroids.length === 0) {
+	if (enemiesDroids.length === 0) {
 		return false; // No enemiesDroids found
 	}
 
 	// Sort our attackers by distance to the ally's base (closest first)
 	const sortedAttackers = allAttackers.sort((a, b) => {
-		return distBetweenTwoPoints(a.x, a.y, playerData.base.x, playerData.base.y) - 
-			   distBetweenTwoPoints(b.x, b.y, playerData.base.x, playerData.base.y);
+		return distBetweenTwoPoints(a.x, a.y, allyData.base.x, allyData.base.y) -
+			   distBetweenTwoPoints(b.x, b.y, allyData.base.x, allyData.base.y);
 	});
 
 	// Transfer up to half of our attackers (max 20) to the helperGroup
@@ -64,14 +64,14 @@ function helpAlly(allyPlayerData) {
 	for (let i = 0; i < numToTransfer; i++) {
 		groupAdd(helperGroup, sortedAttackers[i]);
 		// Immediately order them to move toward the ally's base
-		orderDroidLoc(sortedAttackers[i], DORDER_MOVE, playerData.base.x, playerData.base.y);
+		orderDroidLoc(sortedAttackers[i], DORDER_MOVE, allyData.base.x, allyData.base.y);
 	}
 
-    chat(ALLIES, `Hold on ${playerData.name}! I'm coming to help you, ${numToTransfer} units are on the way`);
+	chat(ALLIES, `Hold on ${allyData.name}! I'm coming to help you, ${numToTransfer} units are on the way`);
 
-    helpingAlly();
+	helpingAlly();
 
-    return true;
+	return true;
 }
 
 function helpingAlly() {
@@ -84,7 +84,7 @@ function helpingAlly() {
 
 function stopHelpingAlly() {
 	if (isHelpingAlly === false) {
-		return
+		return;
 	}
 
 	// Transfer all helpers back to the main attackerGroup
@@ -93,9 +93,9 @@ function stopHelpingAlly() {
 		groupAdd(attackerGroup, droid);
 	}
 
-	setCurrentEnemy()
-	setTimer("checkAllyBaseInTrouble", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))) // 15 Seconds
-	isHelpingAlly = false
+	setCurrentEnemy();
+	setTimer("checkAllyBaseInTrouble", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))); // 15 Seconds
+	isHelpingAlly = false;
 }
 
 function myBaseInTrouble() {
@@ -107,59 +107,57 @@ function myBaseInTrouble() {
 	} else {
 		isMyBaseInTrouble = true;
 		if (isHelpingAlly === true) {
-			stopHelpingAlly()
-			chat(ALLIES, "Sorry! I have to stop helping you, my base is in danger!")
+			stopHelpingAlly();
+			chat(ALLIES, "Sorry! I have to stop helping you, my base is in danger!");
 		}
 		return true;
 	}
 }
 
 function donateOil() {
-    let currentPower = getRealPower(me);
+	let currentPower = getRealPower(me);
 
-    // Do not proceed if power is below 5000 or no allies exist
-    if (currentPower < 5000 || alliesList.length === 0) {
-        return;
-    }
+	// Do not proceed if power is below 5000 or no allies exist
+	if (currentPower < 5000 || alliesList.length === 0) {
+		return;
+	}
 
-    // Sort allies by power (lowest first) so we always help the poorest ally
-    const sortedAllies = [...alliesList]
-        .filter(ally => isPlayerAlive(ally.position))
-        .sort((a, b) => getRealPower(a.position) - getRealPower(b.position));
+	// Sort allies by power (lowest first) so we always help the poorest ally
+	const sortedAllies = [...alliesList]
+		.filter(ally => isPlayerAlive(ally.position))
+		.sort((a, b) => getRealPower(a.position) - getRealPower(b.position));
 
-    for (const ally of sortedAllies) {
-        const allyPower = getRealPower(ally.position);
-        // Check if the ally needs power
-        if (allyPower < 50 && friendlyPlayer(ally.position)) {
-            let powerToDonate;
+	for (const ally of sortedAllies) {
+		const allyPower = getRealPower(ally.position);
+		// Check if the ally needs power
+		if (allyPower < 50 && friendlyPlayer(ally.position)) {
+			let powerToDonate;
 
-            // Calculate power to donate based on current power levels
-            if (currentPower >= 15000) {
-                powerToDonate = currentPower / 3.5;
-            } else if (currentPower >= 10000) {
-                powerToDonate = currentPower / 3;
-            } else if (currentPower >= 5000) {
-                powerToDonate = currentPower / 2.5;
-            } else {
-                continue; // Skip if not enough power to donate
-            }
+			// Calculate power to donate based on current power levels
+			if (currentPower >= 15000) {
+				powerToDonate = currentPower / 3.5;
+			} else if (currentPower >= 10000) {
+				powerToDonate = currentPower / 3;
+			} else {
+				powerToDonate = currentPower / 2.5;
+			}
 
-            // Ensure donation will not drop below 5000 power
-            if (currentPower - powerToDonate < 5000) {
-                continue; // Skip this ally if donation would drop power too low
-            }
+			// Ensure donation will not drop below 5000 power
+			if (currentPower - powerToDonate < 5000) {
+				continue; // Skip this ally if donation would drop power too low
+			}
 
-            // Donate power to the ally
-            donatePower(powerToDonate, ally.position);
-            chat(ally.position, `I've sent you: ${powerToDonate.toFixed(2)} power to help you out.`);
+			// Donate power to the ally
+			donatePower(powerToDonate, ally.position);
+			chat(ally.position, `I've sent you: ${powerToDonate.toFixed(2)} power to help you out.`);
 
-            // Update current power after donation
-            currentPower -= powerToDonate;
+			// Update current power after donation
+			currentPower -= powerToDonate;
 
-            // Exit loop after donating to the poorest ally
-            break;
-        }
-    }
+			// Exit loop after donating to the poorest ally
+			break;
+		}
+	}
 }
 
 
@@ -175,8 +173,8 @@ function checkForDefeatedAllies() {
 		if (trucks.length < 5) break;
 
 		const truckForAlly = trucks[0];
-        if (truckForAlly && donateObject(truckForAlly, ally.position)) {
-            chat(ALLIES, `${ally.name} I've sent you a truck :P`);
-        }
+		if (truckForAlly && donateObject(truckForAlly, ally.position)) {
+			chat(ALLIES, `${ally.name} I've sent you a truck :P`);
+		}
 	}
 }

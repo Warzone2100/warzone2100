@@ -1,11 +1,11 @@
 // Objects
 function playerDataObject(playerIndex) {
-    if (playerIndex === undefined) {
-        return
-    }
+	if (playerIndex === undefined) {
+		return;
+	}
 
-    const player = playerData[playerIndex];
-    const baseData = enumStruct(playerIndex, PLAYER_HQ_STAT)[0] ?? startPositions[playerIndex]
+	const player = playerData[playerIndex];
+	const baseData = enumStruct(playerIndex, PLAYER_HQ_STAT)[0] || startPositions[playerIndex];
 
 	return {
 		"difficulty": player.difficulty,
@@ -15,33 +15,33 @@ function playerDataObject(playerIndex) {
 		"isHuman": player.isHuman,
 		"name": player.name,
 		"team": player.team,
-        "base": {
-            x: baseData.x,
-            y: baseData.y
-        }
+		"base": {
+			x: baseData.x,
+			y: baseData.y
+		}
 	};
 }
 
 // Functions
 
 function isHoverMap() {
-    for (let i = 0; i < maxPlayers; ++i) {
-        if (i === me || !startPositions[i]) continue;
+	for (let i = 0; i < maxPlayers; ++i) {
+		if (i === me || !startPositions[i]) continue;
 
-        // If wheeled propulsion cannot reach player i's starting position, but hover can, it's a hover/water map
-        if (!propulsionCanReach("wheeled01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y)) {
-            if (propulsionCanReach("hover01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y)) {
-                return true;
-            }
-        }
-    }
+		// If wheeled propulsion cannot reach player i's starting position, but hover can, it's a hover/water map
+		if (!propulsionCanReach("wheeled01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y)) {
+			if (propulsionCanReach("hover01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y)) {
+				return true;
+			}
+		}
+	}
 
-    return false;
+	return false;
 }
 
 // Return a number in the range of 0 to (max - 1).
 function random(max) {
-    return (Math.random() * max) >>> 0;
+	return (Math.random() * max) >>> 0;
 }
 
 
@@ -56,13 +56,13 @@ function getRealPower(player) {
 
 // Sort an object according to the distance from the base
 function sortByDistToPlayerBase(obj1, obj2, playerIndex) {
-    if (playerIndex === undefined) {
-        return 0;
-    }
+	if (playerIndex === undefined) {
+		return 0;
+	}
 
-    const ally = alliesList.find(a => a.position === playerIndex);
-    const playerBase = ally ? ally.base : startPositions[playerIndex];
-    if (!playerBase) return 0;
+	const ally = alliesList.find(a => a.position === playerIndex);
+	const playerBase = ally ? ally.base : startPositions[playerIndex];
+	if (!playerBase) return 0;
 
 	let dist1 = distBetweenTwoPoints(playerBase.x, playerBase.y, obj1.x, obj1.y);
 	let dist2 = distBetweenTwoPoints(playerBase.x, playerBase.y, obj2.x, obj2.y);
@@ -71,18 +71,18 @@ function sortByDistToPlayerBase(obj1, obj2, playerIndex) {
 
 // Sort an object from farthest to closest to the player's base
 function sortByDistToFarthestPlayerBase(obj1, obj2, playerIndex) {
-    if (playerIndex === undefined) {
-        return 0;
-    }
+	if (playerIndex === undefined) {
+		return 0;
+	}
 
-    const ally = alliesList.find(a => a.position === playerIndex);
-    const playerBase = ally ? ally.base : startPositions[playerIndex];
-    if (!playerBase) return 0;
+	const ally = alliesList.find(a => a.position === playerIndex);
+	const playerBase = ally ? ally.base : startPositions[playerIndex];
+	if (!playerBase) return 0;
 
-    let dist1 = distBetweenTwoPoints(playerBase.x, playerBase.y, obj1.x, obj1.y);
-    let dist2 = distBetweenTwoPoints(playerBase.x, playerBase.y, obj2.x, obj2.y);
-    
-    return (dist2 - dist1);
+	let dist1 = distBetweenTwoPoints(playerBase.x, playerBase.y, obj1.x, obj1.y);
+	let dist2 = distBetweenTwoPoints(playerBase.x, playerBase.y, obj2.x, obj2.y);
+
+	return (dist2 - dist1);
 }
 
 // Sort an object according to the distance from the base
@@ -94,65 +94,65 @@ function sortByDistToBase(obj1, obj2) {
 
 // Get all the allies alive players data
 function getAliveAllyPlayersData() {
-    const allies = [];
+	const allies = [];
 
-    for (let i = 0; i < maxPlayers; ++i) {
-        if (i !== me && allianceExistsBetween(me, i) && isPlayerAlive(i)) {
-            const allyPlayerData = playerDataObject(i);
-            if (allyPlayerData) {
-                allies.push(allyPlayerData);
-            }
-        }
-    }
+	for (let i = 0; i < maxPlayers; ++i) {
+		if (i !== me && allianceExistsBetween(me, i) && isPlayerAlive(i)) {
+			const allyPlayerData = playerDataObject(i);
+			if (allyPlayerData) {
+				allies.push(allyPlayerData);
+			}
+		}
+	}
 
-    return allies;
+	return allies;
 }
 
 // Get all the allies defeated players data
 function getDefeatedAllyPlayersData() {
-    const allies = [];
+	const allies = [];
 
-    for (let i = 0; i < maxPlayers; ++i) {
-        if (i !== me && allianceExistsBetween(me, i) && !isPlayerAlive(i)) {
-            const allyPlayerData = playerDataObject(i);
-            if (allyPlayerData) {
-                allies.push(allyPlayerData);
-            }
-        }
-    }
+	for (let i = 0; i < maxPlayers; ++i) {
+		if (i !== me && allianceExistsBetween(me, i) && !isPlayerAlive(i)) {
+			const allyPlayerData = playerDataObject(i);
+			if (allyPlayerData) {
+				allies.push(allyPlayerData);
+			}
+		}
+	}
 
-    return allies;
+	return allies;
 }
 
 // Return all enemy players that are still alive
 function getAliveEnemyPlayersData() {
-    const enemies = [];
+	const enemies = [];
 
-    for (let i = 0; i < maxPlayers; ++i) {
-        if (i !== me && !allianceExistsBetween(me, i) && isPlayerAlive(i)) {
-            const enemyPlayerData = playerDataObject(i);
-            if (enemyPlayerData) {
-                enemies.push(enemyPlayerData);
-            }
-        }
-    }
+	for (let i = 0; i < maxPlayers; ++i) {
+		if (i !== me && !allianceExistsBetween(me, i) && isPlayerAlive(i)) {
+			const enemyPlayerData = playerDataObject(i);
+			if (enemyPlayerData) {
+				enemies.push(enemyPlayerData);
+			}
+		}
+	}
 
-    // Check for scavenger player
-    if (scavengers) {
-        const hasScavengerStructures = countStruct("A0BaBaFactory", scavengerPlayer) +
-                                       countStruct(DERRICK_STAT, scavengerPlayer);
-        const hasScavengerDroids = countDroid(DROID_ANY, scavengerPlayer);
+	// Check for scavenger player
+	if (scavengers) {
+		const hasScavengerStructures = countStruct("A0BaBaFactory", scavengerPlayer) +
+			countStruct(DERRICK_STAT, scavengerPlayer);
+		const hasScavengerDroids = countDroid(DROID_ANY, scavengerPlayer);
 
-        if (hasScavengerStructures > 0 || hasScavengerDroids > 0) {
-            scavengerIndex = scavengerPlayer;
-            const scavengerData = createScavengerPlayerData(scavengerPlayer);
-            if (scavengerData) {
-                enemies.push(scavengerData);
-            }
-        }
-    }
+		if (hasScavengerStructures > 0 || hasScavengerDroids > 0) {
+			scavengerIndex = scavengerPlayer;
+			const scavengerData = createScavengerPlayerData(scavengerPlayer);
+			if (scavengerData) {
+				enemies.push(scavengerData);
+			}
+		}
+	}
 
-    return enemies;
+	return enemies;
 }
 
 /**
@@ -161,28 +161,28 @@ function getAliveEnemyPlayersData() {
  * @returns {PlayerData}
  */
 function createScavengerPlayerData(scavengerIndex) {
-    let scavengerBase = { x: mapWidth / 2, y: mapHeight / 2 }; // Fallback to center of map
-    let scavStructs = enumStruct(scavengerIndex);
-    
-    if (scavStructs.length > 0) {
-        scavengerBase = { x: scavStructs[0].x, y: scavStructs[0].y };
-    } else {
-        let scavDroids = enumDroid(scavengerIndex);
-        if (scavDroids.length > 0) {
-            scavengerBase = { x: scavDroids[0].x, y: scavDroids[0].y };
-        }
-    }
+	let scavengerBase = { x: mapWidth / 2, y: mapHeight / 2 }; // Fallback to center of map
+	let scavStructs = enumStruct(scavengerIndex);
 
-    return {
-        difficulty: null,
-        colour: null,
-        position: scavengerIndex, // only position index is filled
-        isAI: true,
-        isHuman: false,
-        name: "Scavenger",
-        team: -1,
-        base: scavengerBase
-    };
+	if (scavStructs.length > 0) {
+		scavengerBase = { x: scavStructs[0].x, y: scavStructs[0].y };
+	} else {
+		let scavDroids = enumDroid(scavengerIndex);
+		if (scavDroids.length > 0) {
+			scavengerBase = { x: scavDroids[0].x, y: scavDroids[0].y };
+		}
+	}
+
+	return {
+		difficulty: null,
+		colour: null,
+		position: scavengerIndex, // only position index is filled
+		isAI: true,
+		isHuman: false,
+		name: "Scavenger",
+		team: -1,
+		base: scavengerBase
+	};
 }
 
 
@@ -320,8 +320,8 @@ function isAreaSafe(x, y, range = 18) {
 }
 
 function numWeapObjectsInRange(x, y, enemies, allyIndex, scanRadius, visible) {
-    let isSafe = true;
-    
+	let isSafe = true;
+
 	if (x === undefined || y === undefined) {
 		return isSafe; // Seems to be the best fail-safe
 	}
@@ -345,15 +345,15 @@ function numWeapObjectsInRange(x, y, enemies, allyIndex, scanRadius, visible) {
 		}
 	}
 
-    let enemiesStuff = enumRange(x, y, scanRadius, enemies, visible);
-    let enemyDroidsCount = 0;
+	let enemiesStuff = enumRange(x, y, scanRadius, enemies, visible);
+	let enemyDroidsCount = 0;
 
-    for (let i = 0, l = enemiesStuff.length; i < l; ++i) {
+	for (let i = 0, l = enemiesStuff.length; i < l; ++i) {
 		let obj = enemiesStuff[i];
 
 		if (obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG) && obj.droidType !== DROID_CONSTRUCT) {
-            enemyDroidsCount++;
-        }
+			enemyDroidsCount++;
+		}
 	}
 
 	if (enemyDroidsCount > allyDroidsCount) {
@@ -364,18 +364,18 @@ function numWeapObjectsInRange(x, y, enemies, allyIndex, scanRadius, visible) {
 }
 
 function isBaseStructure(type) {
-    return [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, POWER_GEN, RESEARCH_LAB, HQ].includes(type);
+	return [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, POWER_GEN, RESEARCH_LAB, HQ].includes(type);
 }
 
 function isNearBase(x, y) {
-    return distBetweenTwoPoints(x, y, BASE.x, BASE.y) <= BASE_THREAT_RANGE;
+	return distBetweenTwoPoints(x, y, BASE.x, BASE.y) <= BASE_THREAT_RANGE;
 }
 
 // Fisher-Yates shuffle for better randomization
 function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-    }
-    return array;
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]]; // Swap elements
+	}
+	return array;
 }

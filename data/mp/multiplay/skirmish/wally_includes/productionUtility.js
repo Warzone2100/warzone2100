@@ -2,15 +2,15 @@
 
 const BUILDER_BODY_LIST = [
 	"Body3MBT", // Retaliation
-    "Body2SUP", // Leopard
-    "Body4ABT", // Bug
-    "Body1REC", // viper
-]
+	"Body2SUP", // Leopard
+	"Body4ABT", // Bug
+	"Body1REC", // viper
+];
 
 const BUILDER_PROP_LIST = [
-    "hover01", // Hover
+	"hover01", // Hover
 	"wheeled01", // Wheels
-]
+];
 
 const SCANNER_BODY_LIST = [
 	"Body7ABT", // Retribution
@@ -18,7 +18,7 @@ const SCANNER_BODY_LIST = [
 	"Body2SUP", // Leopard
 	"Body4ABT", // Bug
 	"Body1REC", // viper
-]
+];
 
 // ========================
 // TANK BODY SECTION
@@ -57,7 +57,7 @@ const TANK_BODY_LIST_THERMIC = [
 // TANK PROP SECTION
 // ========================
 const TANK_PROP_LIST = [
-    "tracked01", // track
+	"tracked01", // track
 	"HalfTrack", // half-track
 	"wheeled01" // wheels (early T1 fallback before Half-Tracks are researched)
 ];
@@ -100,7 +100,7 @@ const MACHINEGUN_WEAPON_LIST = [
 	"MG3Mk1", // Heavy machine gun
 	"MG2Mk1", // Twin machine gun
 	"MG1Mk1" // Machine gun (early T1 fallback)
-]
+];
 
 // ========================
 // TANK FLAME SECTION
@@ -123,7 +123,7 @@ const CYBORG_HEAVY_ROCKETS = [
 const CYBORG_LIGHT_ROCKETS = [
 	"Cyb-Wpn-Atmiss", // Cyborg scourge
 	"CyborgRocket" // Cyborg lancer
-]
+];
 
 // ========================
 // CYBORG ROCKETS SECTION
