@@ -2990,59 +2990,92 @@ bool IsPlayerDroidLimitReached(int player)
 	return numDroids >= getMaxDroids(player);
 }
 
+// Reasons why a factory can't produce a template right now.
+enum class ProductionBlock
+{
+	None,
+	DroidLimit,       // overall unit limit reached, this blocks every template
+	NoCommandRelay,   // commanders can't be built without a Command Relay Center
+	CommanderLimit,   // commander limit reached
+	ConstructorLimit, // construction unit limit reached
+};
+
+static ProductionBlock getProductionBlock(int player, const DROID_TEMPLATE *psTemplate, const WorldObjectState& objState)
+{
+	if (IsPlayerDroidLimitReached(player))
+	{
+		return ProductionBlock::DroidLimit;
+	}
+	switch (droidTemplateType(psTemplate))
+	{
+	case DROID_COMMAND:
+		if (!structureExists(objState, player, REF_COMMAND_CONTROL, true))
+		{
+			return ProductionBlock::NoCommandRelay;
+		}
+		if (getNumCommandDroids(player) >= getMaxCommanders(player))
+		{
+			return ProductionBlock::CommanderLimit;
+		}
+		break;
+	case DROID_CONSTRUCT:
+	case DROID_CYBORG_CONSTRUCT:
+		if (getNumConstructorDroids(player) >= getMaxConstructors(player))
+		{
+			return ProductionBlock::ConstructorLimit;
+		}
+		break;
+	default:
+		break;
+	}
+	return ProductionBlock::None;
+}
+
+static bool factorySkipBlockedProduction(STRUCTURE *psStructure, const WorldObjectState& objState);
+
 // Check for max number of units reached and halt production.
 static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, const WorldObjectState& objState)
 {
 	CHECK_STRUCTURE(psStructure);
 
-	char limitMsg[300];
-	bool isLimit = false;
+	char limitMsg[300] = {'\0'};
 	int player = psStructure->player;
 
 	DROID_TEMPLATE *templ = psStructure->pFunctionality->factory.psSubject;
 
 	// if the players that owns the factory has reached his (or hers) droid limit
 	// then put production on hold & return - we need a message to be displayed here !!!!!!!
-	if (IsPlayerDroidLimitReached(player))
+	switch (getProductionBlock(player, templ, objState))
 	{
-		isLimit = true;
+	case ProductionBlock::None:
+		return false;
+	case ProductionBlock::DroidLimit:
 		sstrcpy(limitMsg, _("Can't build any more units, Unit Limit Reached — Production Halted"));
+		break;
+	case ProductionBlock::NoCommandRelay:
+		ssprintf(limitMsg, _("Can't build \"%s\" without a Command Relay Center — Production Halted"), templ->name.toUtf8().c_str());
+		break;
+	case ProductionBlock::CommanderLimit:
+		ssprintf(limitMsg, _("Can't build \"%s\", Commander Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
+		break;
+	case ProductionBlock::ConstructorLimit:
+		ssprintf(limitMsg, _("Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
+		break;
 	}
-	else switch (droidTemplateType(templ))
-		{
-		case DROID_COMMAND:
-		{
-			if (!structureExists(objState, player, REF_COMMAND_CONTROL, true))
-			{
-				isLimit = true;
-				ssprintf(limitMsg, _("Can't build \"%s\" without a Command Relay Center — Production Halted"), templ->name.toUtf8().c_str());
-			}
-			else if (getNumCommandDroids(player) >= getMaxCommanders(player))
-			{
-				isLimit = true;
-				ssprintf(limitMsg, _("Can't build \"%s\", Commander Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
-			}
-			break;
-		}
-		case DROID_CONSTRUCT:
-		case DROID_CYBORG_CONSTRUCT:
-			if (getNumConstructorDroids(player) >= getMaxConstructors(player))
-			{
-				isLimit = true;
-				ssprintf(limitMsg, _("Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
-			}
-			break;
-		default:
-			break;
-		}
 
-	if (isLimit && player == selectedPlayer && (lastMaxUnitMessage == 0 || lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE <= gameTime))
+	// Rather than sitting idle, move on to something else in the production run that can be built.
+	if (factorySkipBlockedProduction(psStructure, objState))
+	{
+		return true;
+	}
+
+	if (player == selectedPlayer && (lastMaxUnitMessage == 0 || lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE <= gameTime))
 	{
 		addConsoleMessage(limitMsg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		lastMaxUnitMessage = gameTime;
 	}
 
-	return isLimit;
+	return true;
 }
 
 void aiUpdateRepair_handleState(STRUCTURE &station)
@@ -6490,6 +6523,74 @@ bool ProductionRunEntry::operator ==(DROID_TEMPLATE *t) const
 	return psTemplate->multiPlayerID == t->multiPlayerID;
 }
 
+// The object lists a structure lives in: those of the current map, or of the map left behind while away on a mission.
+static const WorldObjectState &structureObjectState(const STRUCTURE *psStructure)
+{
+	const auto &missionStructures = mission.gameWorld.objects.structures[psStructure->player];
+	const bool isMission = std::find(missionStructures.begin(), missionStructures.end(), psStructure) != missionStructures.end();
+	return isMission ? mission.gameWorld.objects : gameWorld.objects;
+}
+
+/* Returns the next template to build from the production run - if any.
+ * Entries which can't be built right now (see ProductionBlock) are skipped for as long as something else can be built.
+ * They stay in the production run, and get their turn again whenever production comes back to them. */
+static DROID_TEMPLATE *factoryProdNext(STRUCTURE *psStructure, ProductionRun &productionRun, const WorldObjectState& objState)
+{
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	const int player = psStructure->player;
+	const auto isIncomplete = [](const ProductionRunEntry &entry) {
+		return !entry.isComplete();
+	};
+	const auto isBuildable = [player, &objState](const ProductionRunEntry &entry) {
+		return getProductionBlock(player, entry.psTemplate, objState) == ProductionBlock::None;
+	};
+
+	//find the next template to build - this just looks for the first uncompleted run which can be built
+	for (ProductionRunEntry &entry : productionRun)
+	{
+		if (isIncomplete(entry) && isBuildable(entry))
+		{
+			return entry.psTemplate;
+		}
+	}
+	// Anything left uncompleted is blocked.
+	ProductionRun::iterator blocked = std::find_if(productionRun.begin(), productionRun.end(), isIncomplete);
+
+	// Check that we aren't looping doing nothing.
+	if (productionRun.empty())
+	{
+		if (psFactory->productionLoops != INFINITE_PRODUCTION)
+		{
+			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
+		}
+	}
+	else if (psFactory->productionLoops != 0)  //If you've got here there's nothing left to build unless factory is on loop production
+	{
+		ProductionRun::iterator buildable = std::find_if(productionRun.begin(), productionRun.end(), isBuildable);
+		if (blocked == productionRun.end() || buildable != productionRun.end())
+		{
+			//reduce the loop count if not infinite
+			if (psFactory->productionLoops != INFINITE_PRODUCTION)
+			{
+				psFactory->productionLoops--;
+			}
+
+			//need to reset the quantity built for each entry in the production list
+			std::for_each(productionRun.begin(), productionRun.end(), std::mem_fn(&ProductionRunEntry::restart));
+
+			//get the first to build again
+			return (buildable != productionRun.end() ? buildable : productionRun.begin())->psTemplate;
+		}
+	}
+	if (blocked != productionRun.end())
+	{
+		return blocked->psTemplate;  // Nothing else to build, so wait for this one to become buildable.
+	}
+	//if got to here then nothing left to produce so clear the array
+	productionRun.clear();
+	return nullptr;
+}
+
 /*this is called when a factory produces a droid. The Template returned is the next
 one to build - if any*/
 DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
@@ -6506,6 +6607,7 @@ DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemp
 		return nullptr;  // Don't even have a production list.
 	}
 	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+	const WorldObjectState &objState = structureObjectState(psStructure);
 
 	if (psTemplate != nullptr)
 	{
@@ -6516,47 +6618,57 @@ DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemp
 			entry->built = std::min(entry->built + 1, entry->quantity);
 			if (!entry->isComplete())
 			{
-				return psTemplate;  // Build another of the same type.
+				if (getProductionBlock(psStructure->player, psTemplate, objState) == ProductionBlock::None)
+				{
+					return psTemplate;  // Build another of the same type.
+				}
 			}
-			if (psFactory->productionLoops == 0)
+			else if (psFactory->productionLoops == 0)
 			{
 				productionRun.erase(entry);
 			}
 		}
 	}
-	//find the next template to build - this just looks for the first uncompleted run
-	for (unsigned inc = 0; inc < productionRun.size(); ++inc)
-	{
-		if (!productionRun[inc].isComplete())
-		{
-			return productionRun[inc].psTemplate;
-		}
-	}
-	// Check that we aren't looping doing nothing.
-	if (productionRun.empty())
-	{
-		if (psFactory->productionLoops != INFINITE_PRODUCTION)
-		{
-			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
-		}
-	}
-	else if (psFactory->productionLoops != 0)  //If you've got here there's nothing left to build unless factory is on loop production
-	{
-		//reduce the loop count if not infinite
-		if (psFactory->productionLoops != INFINITE_PRODUCTION)
-		{
-			psFactory->productionLoops--;
-		}
+	return factoryProdNext(psStructure, productionRun, objState);
+}
 
-		//need to reset the quantity built for each entry in the production list
-		std::for_each(productionRun.begin(), productionRun.end(), std::mem_fn(&ProductionRunEntry::restart));
-
-		//get the first to build again
-		return productionRun[0].psTemplate;
+/* Called when a factory is halted, because the template it is set to build is blocked.
+ * If the production run has something else which can be built, switches production to that and returns true. */
+static bool factorySkipBlockedProduction(STRUCTURE *psStructure, const WorldObjectState& objState)
+{
+	if (psStructure->player != productionPlayer)
+	{
+		return false;  // Production lists not currently synchronised.
 	}
-	//if got to here then nothing left to produce so clear the array
-	productionRun.clear();
-	return nullptr;
+
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	if (psFactory->statusPending != FACTORY_NOTHING_PENDING)
+	{
+		return true;  // Production is about to change anyway, wait for that to be synchronised.
+	}
+	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	{
+		return false;  // Don't even have a production list.
+	}
+	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+	const int player = psStructure->player;
+	const auto isBlocked = [player, &objState](const DROID_TEMPLATE *psTemplate) {
+		return getProductionBlock(player, psTemplate, objState) != ProductionBlock::None;
+	};
+
+	if (std::all_of(productionRun.begin(), productionRun.end(), [&isBlocked](const ProductionRunEntry &entry) { return isBlocked(entry.psTemplate); }))
+	{
+		return false;  // Nothing else to build. (Checked first, so that the production run is left alone while waiting.)
+	}
+	DROID_TEMPLATE *psNextTemplate = factoryProdNext(psStructure, productionRun, objState);
+	if (psNextTemplate == nullptr || isBlocked(psNextTemplate))
+	{
+		return false;  // Nothing else left to build.
+	}
+
+	// Any power already spent on the blocked template is refunded when the switch arrives.
+	structSetManufacture(psStructure, psNextTemplate, ModeQueue);  // ModeQueue, since production lists aren't currently synchronised.
+	return true;
 }
 
 
