@@ -98,6 +98,10 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 /** Return whether a droid can see a target to fire on it. */
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
 
+/** The tiles a droid may stand on to work on a structure at (x, y): its footprint plus a one-tile ring.
+ *  These are the bounds actionReachedBuildPos tests against. */
+StructureBounds actionBuildPosBounds(int x, int y, uint16_t dir, BASE_STATS const *psStats);
+
 /** Check whether a droid is in the neighboring tile to a build position. */
 bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t direction, BASE_STATS const *psStats);
 
