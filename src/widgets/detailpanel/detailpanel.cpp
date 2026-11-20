@@ -136,8 +136,8 @@ public:
 		{
 			m_fittedTo = width();
 			iV_fonts font = TITLE_FONT;
-			m_text.setText(m_string, font);
-			while (m_text.width() > width())
+			m_text.setText(m_string, font, width());
+			while (m_text.fit().truncated)
 			{
 				const auto smaller = iV_ShrinkFont(font);
 				if (!smaller.has_value())
@@ -145,28 +145,14 @@ public:
 					break;
 				}
 				font = smaller.value();
-				m_text.setText(m_string, font);
+				m_text.setText(m_string, font, width());
 			}
-			m_cut = m_text.width() > width();
-			setTip(m_cut ? m_string.toUtf8() : std::string());
+			setTip(m_text.fit().truncated ? m_string.toUtf8() : std::string());
 		}
 
 		const float baseline = static_cast<float>(yOffset + y())
 			+ (static_cast<float>(height()) - m_text.lineSize()) / 2.f - m_text.aboveBase();
-		const float left = static_cast<float>(xOffset + x());
-		if (!m_cut)
-		{
-			m_text.render(left, baseline, WZCOL_TEXT_BRIGHT);
-			return;
-		}
-		const int shown = width() - iV_GetEllipsisWidth(m_text.getFontID()) - 2;
-		if (shown <= 0)
-		{
-			return;
-		}
-		m_text.renderClipped(Vector2f(left, baseline), WZCOL_TEXT_BRIGHT,
-		                     WzRect(static_cast<int>(left), yOffset + y(), shown, height()), shown);
-		iV_DrawEllipsis(m_text.getFontID(), Vector2f(left + static_cast<float>(shown) + 2.f, baseline), WZCOL_TEXT_BRIGHT);
+		m_text.render(static_cast<float>(xOffset + x()), baseline, WZCOL_TEXT_BRIGHT);
 	}
 
 private:
@@ -176,7 +162,6 @@ private:
 	WzText m_text;
 	int m_natural = 0;
 	int m_fittedTo = -1;
-	bool m_cut = false;
 	std::string m_tip;
 };
 
@@ -196,8 +181,8 @@ public:
 
 	int32_t idealWidth() override
 	{
-		const int value = iconSize() + (m_icon.has_value() ? ICON_GAP : 0) + m_valueText.width();
-		return std::max(m_labelText.width(), value) + PAD_X * 2;
+		const int value = iconSize() + (m_icon.has_value() ? ICON_GAP : 0) + m_valueText.fit().naturalWidth;
+		return std::max(m_labelText.fit().naturalWidth, value) + PAD_X * 2;
 	}
 	int32_t idealHeight() override { return STAT_HEIGHT; }
 
@@ -214,12 +199,12 @@ public:
 		                   pal_RGBA(0, 0, 0, 0), 3.f, EDGE, 1.f);
 
 		const int availableWidth = width() - PAD_X * 2;
-		renderCut(m_labelText, x0 + PAD_X, y0 + PAD_TOP - m_labelText.aboveBase(), EDGE, availableWidth, y0);
+		renderCut(m_labelText, x0 + PAD_X, y0 + PAD_TOP - m_labelText.aboveBase(), EDGE, availableWidth);
 
 		const float valueTop = y0 + PAD_TOP + static_cast<float>(m_labelText.lineSize());
 		float at = x0 + PAD_X;
 		const bool withIcon = m_icon.has_value()
-			&& (iconSize() + ICON_GAP - static_cast<int>(ICON_NUDGE) + m_valueText.width()) <= availableWidth;
+			&& (iconSize() + ICON_GAP - static_cast<int>(ICON_NUDGE) + m_valueText.fit().naturalWidth) <= availableWidth;
 		if (withIcon)
 		{
 			// Centered on the ascent rather than the line, because a line reserves room
@@ -235,7 +220,7 @@ public:
 			at += size + static_cast<float>(ICON_GAP) - ICON_NUDGE;
 		}
 		renderCut(m_valueText, at, valueTop - m_valueText.aboveBase(), WZCOL_TEXT_BRIGHT,
-		          static_cast<int>(static_cast<float>(x0 + PAD_X) + static_cast<float>(availableWidth) - at), y0);
+		          static_cast<int>(static_cast<float>(x0 + PAD_X) + static_cast<float>(availableWidth) - at));
 	}
 
 	static constexpr int STAT_HEIGHT = 28;
@@ -250,24 +235,14 @@ private:
 
 	int iconSize() { return m_icon.has_value() ? m_valueText.lineSize() - 3 : 0; }
 
-	void renderCut(WzText& text, float atX, float baseline, PIELIGHT color, int maxWidth, float boxTop)
+	void renderCut(WzText& text, float atX, float baseline, PIELIGHT color, int maxWidth)
 	{
 		if (maxWidth <= 0)
 		{
 			return;
 		}
-		const bool cut = text.width() > maxWidth;
-		const int shown = cut ? maxWidth - iV_GetEllipsisWidth(text.getFontID()) - 2 : maxWidth;
-		if (shown <= 0)
-		{
-			return;
-		}
-		text.renderClipped(Vector2f(atX, baseline), color,
-		                   WzRect(static_cast<int>(atX), static_cast<int>(boxTop), shown, height()), shown);
-		if (cut)
-		{
-			iV_DrawEllipsis(text.getFontID(), Vector2f(atX + static_cast<float>(shown) + 2.f, baseline), color);
-		}
+		text.setText(text.getText(), text.getFontID(), maxWidth);
+		text.render(atX, baseline, color);
 	}
 
 	static const PIELIGHT EDGE;
@@ -513,7 +488,7 @@ public:
 
 	int32_t idealWidth() override
 	{
-		int32_t wanted = m_standing.width();
+		int32_t wanted = m_standing.fit().naturalWidth;
 		if (!m_names.empty())
 		{
 			wanted += (m_standing.getText().isEmpty() ? 0 : static_cast<int32_t>(GAP)) + m_prefix.width() + static_cast<int32_t>(SPACE);
@@ -541,12 +516,13 @@ public:
 		const auto fits = [&](const WzText& text) {
 			return at + static_cast<float>(const_cast<WzText&>(text).width()) <= right;
 		};
-		if (!fits(m_standing))
+		if (at + static_cast<float>(m_standing.fit().naturalWidth) > right)
 		{
-			m_standing.renderClipped(Vector2f(at, baseline), m_color,
-			                         WzRect(static_cast<int>(at), 0, static_cast<int>(right - at), height()));
+			m_standing.setText(m_standing.getText(), m_standing.getFontID(), std::max(1, static_cast<int>(right - at)));
+			m_standing.render(at, baseline, m_color);
 			return;
 		}
+		m_standing.setText(m_standing.getText(), m_standing.getFontID());
 		put(m_standing, m_color);
 		if (m_names.empty())
 		{
@@ -608,7 +584,7 @@ public:
 		return widget;
 	}
 
-	int32_t idealWidth() override { return m_text.width() + 14; }
+	int32_t idealWidth() override { return m_text.fit().naturalWidth + 14; }
 
 	void display(int xOffset, int yOffset) override
 	{
@@ -617,9 +593,9 @@ public:
 		const float x1 = x0 + static_cast<float>(width());
 		const float y1 = y0 + static_cast<float>(height());
 		pie_DrawRoundedBox(x0, y0, x1, y1, m_fill, static_cast<float>(height()) / 2.f, m_textColor, 1.f);
-		m_text.renderClipped(Vector2f(x0 + 7.f, y0 + (static_cast<float>(height()) - static_cast<float>(m_text.lineSize())) / 2.f
-		                                        - static_cast<float>(m_text.aboveBase())),
-		                     m_textColor, WzRect(static_cast<int>(x0) + 4, static_cast<int>(y0), width() - 8, height()));
+		m_text.setText(m_text.getText(), m_text.getFontID(), std::max(1, width() - 14));
+		m_text.render(x0 + 7.f, y0 + (static_cast<float>(height()) - static_cast<float>(m_text.lineSize())) / 2.f
+		                        - static_cast<float>(m_text.aboveBase()), m_textColor);
 	}
 
 private:

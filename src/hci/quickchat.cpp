@@ -303,10 +303,9 @@ public:
 		{
 			fontID = FontID;
 		}
-		wzMessageText.setText(pText, fontID);
-
 		int availableButtonTextWidth = w - (QuickChatButtonHorizontalPadding * 2);
-		if (wzMessageText.width() > availableButtonTextWidth)
+		wzMessageText.setText(pText, fontID, availableButtonTextWidth);
+		if (wzMessageText.fit().truncated)
 		{
 			// text would exceed the bounds of the button area
 			// try to shrink font so it fits
@@ -321,27 +320,16 @@ public:
 					break;
 				}
 				fontID = result.value();
-				wzMessageText.setText(pText, fontID);
-			} while (wzMessageText.width() > availableButtonTextWidth);
+				wzMessageText.setText(pText, fontID, availableButtonTextWidth);
+			} while (wzMessageText.fit().truncated);
 		}
 		lastWidgetWidth = width();
 
 		int textX0 = xPos + QuickChatButtonHorizontalPadding;
 		int textY0 = static_cast<int>(yPos + (h - wzMessageText.lineSize()) / 2 - float(wzMessageText.aboveBase()));
 
-		int maxTextDisplayableWidth = w - (QuickChatButtonHorizontalPadding * 2);
-		isTruncated = maxTextDisplayableWidth < wzMessageText.width();
-		if (isTruncated)
-		{
-			maxTextDisplayableWidth -= (iV_GetEllipsisWidth(wzMessageText.getFontID()) + 2);
-		}
-		wzMessageText.render(textX0, textY0, msgColour, 0.0f, maxTextDisplayableWidth);
-
-		if (isTruncated)
-		{
-			// Render ellipsis
-			iV_DrawEllipsis(wzMessageText.getFontID(), Vector2f(textX0 + maxTextDisplayableWidth + 2, textY0), msgColour);
-		}
+		isTruncated = wzMessageText.fit().truncated;
+		wzMessageText.render(textX0, textY0, msgColour);
 	}
 
 	std::string getTip() override

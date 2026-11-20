@@ -2126,27 +2126,14 @@ void WzResearchTreeCanvas::display(int xOffset, int yOffset)
 	// path is a good deal, so laying it down once in black first helps keeps it legible
 	// without a box. Cut to the room it has.
 	const auto renderNamed = [&view](WzCachedText& text, int textX, int textY, PIELIGHT color, int room) {
-		int shown = room;
-		const bool truncated = text.getTextWidth() > room;
-		if (truncated)
-		{
-			shown -= iV_GetEllipsisWidth(text.getFontID()) + 2;
-		}
-		if (shown <= 0)
+		if (room <= 0)
 		{
 			return;
 		}
+		text->setText(text.getText(), text.getFontID(), room);
 		PIELIGHT shade = pal_RGBA(0, 0, 0, static_cast<uint8_t>(static_cast<float>(color.byte.a) * 0.7f));
-		text->renderClipped(Vector2f(static_cast<float>(textX) + 1.f, static_cast<float>(textY) + 1.f), shade, view, shown);
-		text->renderClipped(Vector2f(textX, textY), color, view, shown);
-		if (truncated)
-		{
-			const Vector2f at(static_cast<float>(textX + shown + 2), static_cast<float>(textY));
-			if (at.x >= static_cast<float>(view.x()) && at.x <= static_cast<float>(view.x() + view.width()))
-			{
-				iV_DrawEllipsis(text.getFontID(), at, color);
-			}
-		}
+		text->renderClipped(Vector2f(static_cast<float>(textX) + 1.f, static_cast<float>(textY) + 1.f), shade, view);
+		text->renderClipped(Vector2f(textX, textY), color, view);
 	};
 
 	for (const auto unit : m_visibleUnits)

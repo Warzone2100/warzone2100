@@ -162,10 +162,9 @@ public:
 		{
 			fontID = FontID;
 		}
-		wzMessageText.setText(pText, fontID);
-
 		int availableButtonTextWidth = w - (ChatOptionsButtonHorizontalPadding * 2);
-		if (wzMessageText.width() > availableButtonTextWidth)
+		wzMessageText.setText(pText, fontID, availableButtonTextWidth);
+		if (wzMessageText.fit().truncated)
 		{
 			// text would exceed the bounds of the button area
 			// try to shrink font so it fits
@@ -180,27 +179,16 @@ public:
 					break;
 				}
 				fontID = result.value();
-				wzMessageText.setText(pText, fontID);
-			} while (wzMessageText.width() > availableButtonTextWidth);
+				wzMessageText.setText(pText, fontID, availableButtonTextWidth);
+			} while (wzMessageText.fit().truncated);
 		}
 		lastWidgetWidth = width();
 
 		int textX0 = std::max(xPos + ChatOptionsButtonHorizontalPadding, xPos + ((w - wzMessageText.width()) / 2));
 		int textY0 = static_cast<int>(yPos + (h - wzMessageText.lineSize()) / 2 - float(wzMessageText.aboveBase()));
 
-		int maxTextDisplayableWidth = w - (ChatOptionsButtonHorizontalPadding * 2);
-		isTruncated = maxTextDisplayableWidth < wzMessageText.width();
-		if (isTruncated)
-		{
-			maxTextDisplayableWidth -= (iV_GetEllipsisWidth(wzMessageText.getFontID()) + 2);
-		}
-		wzMessageText.render(textX0, textY0, msgColour, 0.0f, maxTextDisplayableWidth);
-
-		if (isTruncated)
-		{
-			// Render ellipsis
-			iV_DrawEllipsis(wzMessageText.getFontID(), Vector2f(textX0 + maxTextDisplayableWidth + 2, textY0), msgColour);
-		}
+		isTruncated = wzMessageText.fit().truncated;
+		wzMessageText.render(textX0, textY0, msgColour);
 	}
 
 	std::string getTip() override
@@ -273,16 +261,9 @@ public:
 
 		bool muteStatus = getMuteStatus();
 
-		wzText.setText(pText, FontID);
-
 		int fx = CHATOPT_PLAYER_BUTTON_EXTERNAL_PADDING_X + 16 + CHATOPT_PLAYER_BUTTON_INTERNAL_PADDING_X;
+		wzText.setText(pText, FontID, width() - fx);
 		int fy = (height() - wzText.lineSize()) / 2 - wzText.aboveBase();
-		int maxTextDisplayableWidth = width() - fx;
-		bool isTruncated = maxTextDisplayableWidth < wzText.width();
-		if (isTruncated)
-		{
-			maxTextDisplayableWidth -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
-		}
 		int textX0 = x0 + fx;
 		int textY0 = y0 + fy;
 
@@ -295,12 +276,7 @@ public:
 		{
 			textColor = WZCOL_TEXT_MEDIUM;
 		}
-		wzText.render(textX0, textY0, textColor, 0.0f, maxTextDisplayableWidth);
-		if (isTruncated)
-		{
-			// Render ellipsis
-			iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxTextDisplayableWidth + 2, textY0), textColor);
-		}
+		wzText.render(textX0, textY0, textColor);
 
 		UWORD ImageID = IMAGE_INTFAC_VOLUME_UP;
 		uint8_t imageAlpha = (!isDisabled) ? 255 : 125;
@@ -530,16 +506,9 @@ public:
 
 		bool muteStatus = getMuteStatus();
 
-		wzText.setText(pText, FontID);
-
 		int fx = CHATOPT_PLAYER_BUTTON_EXTERNAL_PADDING_X + 16 + CHATOPT_PLAYER_BUTTON_INTERNAL_PADDING_X;
+		wzText.setText(pText, FontID, width() - fx);
 		int fy = (height() - wzText.lineSize()) / 2 - wzText.aboveBase();
-		int maxTextDisplayableWidth = width() - fx;
-		bool isTruncated = maxTextDisplayableWidth < wzText.width();
-		if (isTruncated)
-		{
-			maxTextDisplayableWidth -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
-		}
 		int textX0 = x0 + fx;
 		int textY0 = y0 + fy;
 
@@ -552,12 +521,7 @@ public:
 		{
 			textColor = WZCOL_TEXT_MEDIUM;
 		}
-		wzText.render(textX0, textY0, textColor, 0.0f, maxTextDisplayableWidth);
-		if (isTruncated)
-		{
-			// Render ellipsis
-			iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxTextDisplayableWidth + 2, textY0), textColor);
-		}
+		wzText.render(textX0, textY0, textColor);
 
 		UWORD ImageID = IMAGE_INTFAC_VOLUME_UP;
 		uint8_t imageAlpha = (!isDisabled) ? 255 : 125;
