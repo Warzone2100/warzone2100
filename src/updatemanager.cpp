@@ -27,6 +27,7 @@ using json = nlohmann::json;
 #include <unordered_set>
 #include <functional>
 #include <chrono>
+#include <atomic>
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/frame.h"
