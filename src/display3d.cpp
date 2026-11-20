@@ -3406,12 +3406,12 @@ static void queueStructureHealth(STRUCTURE *psStruct, BatchedMultiRectRenderer& 
 		int maxBodyBuilt = structureBodyBuilt(psStruct);
 		width = (uint64_t)width * maxBodyBuilt / maxBody;
 	}
-	if (health > REPAIRLEV_HIGH)
+	if (health > HEALTH_LEVEL_HIGH_PERCENT)
 	{
 		powerCol = WZCOL_HEALTH_HIGH;
 		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
 	}
-	else if (health > REPAIRLEV_LOW)
+	else if (health > HEALTH_LEVEL_LOW_PERCENT)
 	{
 		powerCol = WZCOL_HEALTH_MEDIUM;
 		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
@@ -3539,9 +3539,41 @@ bool	eitherSelected(DROID *psDroid)
 	return false;
 }
 
+struct HealthBarColours
+{
+	PIELIGHT bar;
+	PIELIGHT shadow;
+};
+
+static HealthBarColours healthBarColours(DroidHealthLevel level)
+{
+	switch (level)
+	{
+	case DroidHealthLevel::High:   return {WZCOL_HEALTH_HIGH, WZCOL_HEALTH_HIGH_SHADOW};
+	case DroidHealthLevel::Medium: return {WZCOL_HEALTH_MEDIUM, WZCOL_HEALTH_MEDIUM_SHADOW};
+	case DroidHealthLevel::Low:    break;
+	}
+	return {WZCOL_HEALTH_LOW, WZCOL_HEALTH_LOW_SHADOW};
+}
+
+// The droid's (electronic warfare) resistance, expressed on the same scale as its health level.
+static DroidHealthLevel droidResistanceLevel(const DROID *psDroid)
+{
+	const UDWORD percent = psDroid->resistance ? PERCENT(psDroid->resistance, psDroid->droidResistance()) : 100;
+	if (percent > HEALTH_LEVEL_HIGH_PERCENT)
+	{
+		return DroidHealthLevel::High;
+	}
+	if (percent > HEALTH_LEVEL_LOW_PERCENT)
+	{
+		return DroidHealthLevel::Medium;
+	}
+	return DroidHealthLevel::Low;
+}
+
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
-	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+	UDWORD damage = 0;
 	UDWORD shields = 0;
 
 	if (psDroid->shieldPoints >= 0)
@@ -3555,24 +3587,7 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 		}
 	}
 
-	PIELIGHT powerCol = WZCOL_BLACK;
-	PIELIGHT powerColShadow = WZCOL_BLACK;
-
-	if (damage > REPAIRLEV_HIGH)
-	{
-		powerCol = WZCOL_HEALTH_HIGH;
-		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
-	}
-	else if (damage > REPAIRLEV_LOW)
-	{
-		powerCol = WZCOL_HEALTH_MEDIUM;
-		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
-	}
-	else
-	{
-		powerCol = WZCOL_HEALTH_LOW;
-		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
-	}
+	const HealthBarColours colours = healthBarColours(droidHealthLevel(psDroid));
 
 	damage = static_cast<UDWORD>((float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR);
 	if (damage > psDroid->sDisplay.screenR)
@@ -3592,8 +3607,8 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 
 	/* Power bars */
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, colours.bar), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, colours.shadow), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
 		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
 		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
@@ -3610,44 +3625,12 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 
 static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
-	PIELIGHT powerCol = WZCOL_BLACK;
-	PIELIGHT powerColShadow = WZCOL_BLACK;
 	PIELIGHT boxCol;
 	UDWORD damage;
 	float mulH;
 
 	//show resistance values if CTRL/SHIFT depressed
-	if (ctrlShiftDown())
-	{
-		if (psDroid->resistance)
-		{
-			damage = PERCENT(psDroid->resistance, psDroid->droidResistance());
-		}
-		else
-		{
-			damage = 100;
-		}
-	}
-	else
-	{
-		damage = PERCENT(psDroid->body, psDroid->originalBody);
-	}
-
-	if (damage > REPAIRLEV_HIGH)
-	{
-		powerCol = WZCOL_HEALTH_HIGH;
-		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
-	}
-	else if (damage > REPAIRLEV_LOW)
-	{
-		powerCol = WZCOL_HEALTH_MEDIUM;
-		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
-	}
-	else
-	{
-		powerCol = WZCOL_HEALTH_LOW;
-		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
-	}
+	const HealthBarColours colours = healthBarColours(ctrlShiftDown() ? droidResistanceLevel(psDroid) : droidHealthLevel(psDroid));
 
 	//show resistance values if CTRL/SHIFT depressed
 	if (ctrlShiftDown())
@@ -3685,8 +3668,8 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 
 		/* Power bars */
 		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
-		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, powerCol), rectGroup);
-		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow), rectGroup);
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, colours.bar), rectGroup);
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, colours.shadow), rectGroup);
 	}
 }
 
