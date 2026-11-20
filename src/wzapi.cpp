@@ -5069,7 +5069,6 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	//==   * ```team``` the number of the team the player is part of
 	//==   * ```scriptName``` File name of the AI's JS file. (4.6.2+ only)
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
-	const auto& aidata = getAIData();
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
@@ -5093,8 +5092,9 @@ nlohmann::json wzapi::constructStaticPlayerData()
 		vector["type"] = SCRIPT_PLAYER;
 		if (aiPlayer)
 		{
-			std::string js = (NetPlay.players[i].ai < aidata.size()) ? aidata[NetPlay.players[i].ai].js : "AI";
-			vector["scriptName"] = js;
+			// Not the local AI list's entry at NetPlay.players[i].ai: that list can differ between machines, which desyncs scripts reading this
+			std::string js = getPlayerAIScript(i);
+			vector["scriptName"] = (!js.empty()) ? js : "AI";
 		}
 		playerData.push_back(std::move(vector));
 	}
