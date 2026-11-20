@@ -134,18 +134,6 @@ private:
 	int32_t mFitBelowPixels = 0;
 };
 
-class WidthLimitedWzText: public WzText
-{
-private:
-	WzString mFullText;
-	size_t mLimitWidthPts = 0;
-
-public:
-	// Sets the text, truncating to a desired width limit (in *points*) if needed
-	// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
-	size_t setTruncatableText(const WzString &text, iV_fonts fontID, size_t limitWidthInPoints);
-};
-
 /**
  Initialize the text rendering subsystem.
 

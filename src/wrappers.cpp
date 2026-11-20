@@ -100,7 +100,7 @@ static std::vector<STAR> loadingStars;
 
 static std::string loadingDomainLabelPath;
 static WzString loadingDomainLabelFullText;
-static WidthLimitedWzText loadingDomainLabelText;
+static WzText loadingDomainLabelText;
 
 static STAR newStar(const LoadingBarLayout& layout)
 {
@@ -172,8 +172,7 @@ static void drawLoadingDomainLabel()
 		loadingDomainLabelFullText = WzString::format(_("Loading %s"), loadingDomainLabelPath.c_str());
 	}
 	// No-op unless the text, font or width changed.
-	const size_t barWidth = static_cast<size_t>(loadingBar.boxWidth);
-	loadingDomainLabelText.setTruncatableText(loadingDomainLabelFullText, font, barWidth);
+	loadingDomainLabelText.setText(loadingDomainLabelFullText, font, loadingBar.boxWidth);
 
 	const int lineSize = iV_GetTextLineSize(font);
 	const int aboveBase = iV_GetTextAboveBase(font);
@@ -446,7 +445,7 @@ void closeLoadingScreen()
 	// Release the cached texture before graphics shutdown.
 	loadingDomainLabelPath.clear();
 	loadingDomainLabelFullText = WzString();
-	loadingDomainLabelText = WidthLimitedWzText();
+	loadingDomainLabelText = WzText();
 #if defined(__EMSCRIPTEN__)
 	wzemscripten_display_web_loading_indicator(0);
 #endif

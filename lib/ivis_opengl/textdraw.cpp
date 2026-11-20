@@ -2480,29 +2480,3 @@ void WzText::renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColou
 	}
 	render(x, y, colour);
 }
-
-// Sets the text, truncating to a desired width limit (in *points*) if needed
-// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
-size_t WidthLimitedWzText::setTruncatableText(const WzString &text, iV_fonts fontID, size_t limitWidthInPoints)
-{
-	if ((mFullText == text) && (mLimitWidthPts == limitWidthInPoints) && (getFontID() == fontID))
-	{
-		return getText().length(); // skip; no change
-	}
-
-	mFullText = text;
-	mLimitWidthPts = limitWidthInPoints;
-
-	WzString truncatedText = text;
-	while ((truncatedText.length() > 0) && (iV_GetTextWidth(truncatedText, fontID) > limitWidthInPoints))
-	{
-		if (!truncatedText.pop_back())
-		{
-			ASSERT(false, "WzString::pop_back() failed??");
-			break;
-		}
-	}
-
-	WzText::setText(truncatedText, fontID);
-	return truncatedText.length();
-}
