@@ -183,8 +183,8 @@ FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD
 	return buildFeature(world, psStats, x, y, FromSave, id);
 }
 
-/* Get pitch and roll from direction and tile data */
-static void updateFeatureOrientation(FEATURE *psFeature, const WorldMapState& mapState)
+/* Set a feature's pitch and roll, from the feature's direction and the map tile data. */
+void updateFeatureOrientation(FEATURE *psFeature, const WorldMapState& mapState)
 {
 	int32_t hx0, hx1, hy0, hy1;
 	int newPitch, deltaPitch; //, pitchLimit;
