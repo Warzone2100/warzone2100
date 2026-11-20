@@ -149,21 +149,8 @@ public:
 			: (over ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT);
 		const float textY = y0 + (static_cast<float>(height()) - m_text.lineSize()) / 2.f
 			- static_cast<float>(m_text.aboveBase());
-		const int room = width() - 10;
-		if (m_text.width() <= room)
-		{
-			m_text.render(x0 + 5.f, textY, textColor);
-		}
-		else
-		{
-			const int shown = room - iV_GetEllipsisWidth(font_small) - 2;
-			if (shown > 0)
-			{
-				m_text.renderClipped(Vector2f(x0 + 5.f, textY), textColor,
-				                     WzRect(static_cast<int>(x0) + 5, static_cast<int>(y0), shown, height()), shown);
-				iV_DrawEllipsis(font_small, Vector2f(x0 + 5.f + static_cast<float>(shown) + 2.f, textY), textColor);
-			}
-		}
+		m_text.setText(m_text.getText(), m_text.getFontID(), std::max(1, width() - 10));
+		m_text.render(x0 + 5.f, textY, textColor);
 
 		if (!m_lab.idle && m_lab.currentPercent > 0)
 		{
@@ -357,12 +344,12 @@ public:
 		float at = y0 + 4.f;
 		m_headingText.render(x0 + OVERLAY_INSET, at - m_headingText.aboveBase(), WZCOL_FORM_TEXT);
 		at += static_cast<float>(m_headingText.lineSize());
-		m_subjectText.renderClipped(Vector2f(x0 + OVERLAY_INSET, at - m_subjectText.aboveBase()), WZCOL_TEXT_BRIGHT,
-		                            WzRect(static_cast<int>(x0) + OVERLAY_INSET, static_cast<int>(y0), room, height()), room);
+		m_subjectText.setText(m_subjectText.getText(), m_subjectText.getFontID(), room);
+		m_subjectText.render(x0 + OVERLAY_INSET, at - m_subjectText.aboveBase(), WZCOL_TEXT_BRIGHT);
 
 		at += static_cast<float>(m_subjectText.lineSize()) + 1.f;
-		m_detailText.renderClipped(Vector2f(x0 + OVERLAY_INSET, at - m_detailText.aboveBase()), WZCOL_TEXT_MEDIUM,
-		                           WzRect(static_cast<int>(x0) + OVERLAY_INSET, static_cast<int>(y0), room, height()), room);
+		m_detailText.setText(m_detailText.getText(), m_detailText.getFontID(), room);
+		m_detailText.render(x0 + OVERLAY_INSET, at - m_detailText.aboveBase(), WZCOL_TEXT_MEDIUM);
 	}
 
 private:
@@ -447,21 +434,8 @@ public:
 			const float hintBase = static_cast<float>(hintTop) + static_cast<float>(LEGEND_ROW_HEIGHT) / 2.f
 				- static_cast<float>(m_hint.aboveBase()) / 2.f;
 			const float right = static_cast<float>(boxX + width() - OVERLAY_INSET);
-			if (m_hint.width() <= hintRoomForText)
-			{
-				m_hint.render(right - static_cast<float>(m_hint.width()), hintBase, legendHintColor());
-			}
-			else
-			{
-				const float left = right - static_cast<float>(hintRoomForText);
-				const int shown = hintRoomForText - iV_GetEllipsisWidth(font_small) - 2;
-				if (shown > 0)
-				{
-					m_hint.renderClipped(Vector2f(left, hintBase), legendHintColor(),
-					                     WzRect(static_cast<int>(left), hintTop, shown, LEGEND_ROW_HEIGHT), shown);
-					iV_DrawEllipsis(font_small, Vector2f(left + static_cast<float>(shown) + 2.f, hintBase), legendHintColor());
-				}
-			}
+			m_hint.setText(m_hint.getText(), m_hint.getFontID(), std::max(1, hintRoomForText));
+			m_hint.render(right - static_cast<float>(m_hint.width()), hintBase, legendHintColor());
 		}
 	}
 
@@ -486,7 +460,7 @@ private:
 		{
 			return 0;
 		}
-		return std::min(m_hint.width() + LEGEND_ITEM_GAP, usable / 2); // never more than half
+		return std::min(m_hint.fit().naturalWidth + LEGEND_ITEM_GAP, usable / 2); // never more than half
 	}
 
 	int roomIn(int forWidth)
@@ -744,7 +718,7 @@ public:
 		return row;
 	}
 
-	int32_t idealWidth() override { return m_text.width(); }
+	int32_t idealWidth() override { return m_text.fit().naturalWidth; }
 
 	void display(int xOffset, int yOffset) override
 	{
@@ -760,17 +734,8 @@ public:
 
 		const int textY = y0 + (height() - m_text.lineSize()) / 2 - m_text.aboveBase();
 		const PIELIGHT textColor = over ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
-		int room = width();
-		const bool truncated = m_text.width() > room;
-		if (truncated)
-		{
-			room -= iV_GetEllipsisWidth(m_text.getFontID()) + 2;
-		}
-		m_text.render(x0, textY, textColor, 0.f, room);
-		if (truncated)
-		{
-			iV_DrawEllipsis(m_text.getFontID(), Vector2f(x0 + room + 2, textY), textColor);
-		}
+		m_text.setText(m_text.getText(), m_text.getFontID(), std::max(1, width()));
+		m_text.render(x0, textY, textColor);
 	}
 
 private:

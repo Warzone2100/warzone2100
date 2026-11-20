@@ -788,15 +788,7 @@ public:
 			m_text.render(x0 + (static_cast<float>(width()) - static_cast<float>(m_text.width())) / 2.f, baseline, ink);
 			return;
 		}
-		const float left = x0 + PAD_X;
-		const int shown = width() - PAD_X * 2 - iV_GetEllipsisWidth(m_text.getFontID()) - 2;
-		if (shown <= 0)
-		{
-			return;
-		}
-		m_text.renderClipped(Vector2f(left, baseline), ink,
-		                     WzRect(static_cast<int>(left), yOffset + y(), shown, height()), shown);
-		iV_DrawEllipsis(m_text.getFontID(), Vector2f(left + static_cast<float>(shown) + 2.f, baseline), ink);
+		m_text.render(x0 + PAD_X, baseline, ink);
 	}
 
 private:
@@ -809,8 +801,8 @@ private:
 		}
 		m_fittedTo = room;
 		iV_fonts font = FONT;
-		m_text.setText(m_string, font);
-		while (m_text.width() > room)
+		m_text.setText(m_string, font, room);
+		while (m_text.fit().truncated)
 		{
 			const auto smaller = iV_ShrinkFont(font);
 			if (!smaller.has_value())
@@ -818,9 +810,9 @@ private:
 				break;
 			}
 			font = smaller.value();
-			m_text.setText(m_string, font);
+			m_text.setText(m_string, font, room);
 		}
-		m_cut = m_text.width() > room;
+		m_cut = m_text.fit().truncated;
 	}
 
 public:

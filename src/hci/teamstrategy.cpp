@@ -660,20 +660,9 @@ void WzTeamStrategyIconColumnHeader::display(int xOffset, int yOffset)
 	// Draw the text, sideways
 	int textX0 = ((width() - columnText.lineSize()) / 2) + (-columnText.aboveBase());
 	int textY0 = height() - (WZ_TEAMSTRAT_COLUMN_HEADER_PADDING_Y + WZ_TEAMSTRAT_COLUMN_HEADER_IMAGE_DISPLAY_SIZE + WZ_TEAMSTRAT_COLUMN_HEADER_INTERNAL_PADDING);
-	int maxTextDisplayableWidth = textY0 - WZ_TEAMSTRAT_COLUMN_HEADER_PADDING_Y;
-	bool willTruncate = maxTextDisplayableWidth < columnText.width();
-	if (willTruncate)
-	{
-		maxTextDisplayableWidth -= (iV_GetEllipsisWidth(columnText.getFontID()) + 2);
-	}
+	columnText.setText(columnText.getText(), columnText.getFontID(), textY0 - WZ_TEAMSTRAT_COLUMN_HEADER_PADDING_Y);
 	PIELIGHT textColor = (!disabledColumn) ? WZCOL_TEXT_DARK : WZCOL_GREY;
-	columnText.render(x0 + textX0, y0 + textY0, textColor, 270.f, maxTextDisplayableWidth);
-
-	if (willTruncate)
-	{
-		// Render ellipsis, also sideways
-		iV_DrawEllipsis(columnText.getFontID(), Vector2f(x0 + textX0, (y0 + textY0) - (maxTextDisplayableWidth + 2)), textColor, 270.f);
-	}
+	columnText.render(x0 + textX0, y0 + textY0, textColor, 270.f);
 }
 
 int32_t WzTeamStrategyIconColumnHeader::idealWidth()
