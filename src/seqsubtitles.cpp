@@ -92,7 +92,7 @@ struct LineLayout
 	std::vector<Fragment> fragments;
 	std::vector<int> lineWidths;
 	size_t shownLines = 0;
-	std::unique_ptr<WidthLimitedWzText> clippedLine;	// the last shown line of clipped text, shortened for an ellipsis
+	std::unique_ptr<WzText> clippedLine;	// the last shown line of clipped text, ending in an ellipsis
 };
 
 struct SeqSubtitles
@@ -576,7 +576,7 @@ static void layOut(SeqSubtitles &subtitles, int videoX, int videoY, int videoWid
 		}
 		if (clipped)
 		{
-			// the last shown line, shortened to leave room for an ellipsis
+			// the last shown line, ending in an ellipsis
 			const size_t last = lineLayout.shownLines - 1;
 			WzString lastLine;
 			unsigned int lastEnd = 0;
@@ -589,10 +589,10 @@ static void layOut(SeqSubtitles &subtitles, int videoX, int videoY, int videoWid
 				lastLine.append(fragment.text);
 				lastEnd = fragment.offset + fragment.width;
 			}
-			const int ellipsisWidth = iV_GetEllipsisWidth(areaLayout.font);
-			lineLayout.clippedLine = std::make_unique<WidthLimitedWzText>();
-			lineLayout.clippedLine->setTruncatableText(lastLine, areaLayout.font, static_cast<size_t>(std::max(0, areaLayout.width - ellipsisWidth)));
-			lineLayout.lineWidths[last] = lineLayout.clippedLine->width() + ellipsisWidth;
+			lastLine.append(WzString::fromUtf8("\u2026"));
+			lineLayout.clippedLine = std::make_unique<WzText>();
+			lineLayout.clippedLine->setText(lastLine, areaLayout.font, std::max(areaLayout.width, 1));
+			lineLayout.lineWidths[last] = lineLayout.clippedLine->width();
 		}
 	}
 
@@ -666,7 +666,6 @@ void seqSubtitles_Draw(SeqSubtitles &subtitles, double time, bool showSubtitles,
 			const int x = areaLayout.x + (areaLayout.width - lineLayout.lineWidths[last]) / 2;
 			const int y = top + static_cast<int>(last) * areaLayout.lineSize - lineLayout.clippedLine->aboveBase();
 			drawOutlined(*lineLayout.clippedLine, x, y);
-			iV_DrawEllipsis(areaLayout.font, Vector2f(x + lineLayout.clippedLine->width(), y), WZCOL_WHITE);
 		}
 	}
 }
