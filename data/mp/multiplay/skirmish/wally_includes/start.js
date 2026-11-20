@@ -169,7 +169,7 @@ function askForTruck() {
 function setCurrentEnemy(enemyPlayerData) {
 	enemiesList = getAliveEnemyPlayersData();
 
-	if (enemyPlayerData !== undefined) {
+	if (enemyPlayerData && enemyPlayerData.position !== undefined) {
 		currentEnemy = enemyPlayerData;
 	} else if (enemiesList.length > 0) {
 		// Prioritize normal players over scavengers if available, and pick the closest enemy to our base
@@ -305,7 +305,7 @@ function eventBeacon(x, y, from, to, message) {
 	const nearbyEnemies = enumRange(x, y, 20, ENEMIES, false);
 	if (nearbyEnemies.length > 0) {
 		const targetPlayer = nearbyEnemies[0].player;
-		const enemyData = targetPlayer === scavengerIndex ? createScavengerPlayerData(scavengerIndex) : playerDataObject(targetPlayer);
+		const enemyData = isScavengerPlayer(targetPlayer) ? createScavengerPlayerData(targetPlayer) : playerDataObject(targetPlayer);
 		if (enemyData) {
 			setCurrentEnemy(enemyData);
 		}

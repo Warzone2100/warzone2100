@@ -708,20 +708,26 @@ function eventAttacked(victim, attacker) {
 
 		if ((victim.type === STRUCTURE && isBaseStructure(victim.stattype)) ||
 			(victim.stattype === DEFENSE && isNearBase(attacker.x, attacker.y))) {
-			const enemy = attacker.player === scavengerIndex ? createScavengerPlayerData(scavengerIndex) : playerDataObject(attacker.player);
-			setCurrentEnemy(enemy);
+			const enemy = isScavengerPlayer(attacker.player) ? createScavengerPlayerData(attacker.player) : playerDataObject(attacker.player);
+			if (enemy) {
+				setCurrentEnemy(enemy);
+			}
 			isMyBaseInTrouble = true;
 		}
 
 		if (!isHelpingAlly && !isMyBaseInTrouble) {
-			if (attacker.player === scavengerIndex) {
-				const scavenger = createScavengerPlayerData(scavengerIndex);
-				setCurrentEnemy(scavenger);
+			if (isScavengerPlayer(attacker.player)) {
+				const scavenger = createScavengerPlayerData(attacker.player);
+				if (scavenger) {
+					setCurrentEnemy(scavenger);
+				}
 				return;
 			}
 
 			const enemy = playerDataObject(attacker.player);
-			setCurrentEnemy(enemy);
+			if (enemy) {
+				setCurrentEnemy(enemy);
+			}
 		}
 	}
 }

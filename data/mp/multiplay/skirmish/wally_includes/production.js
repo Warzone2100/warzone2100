@@ -39,6 +39,13 @@ function produceDroids() {
 				const desiredTrucks = getDesiredTruckCount();
 				const currentPower = getRealPower();
 				const armySize = enumGroup(attackerGroup).length;
+				const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
+				const hasUnfinishedGen = enumStruct(me, POW_GEN_STAT).some(s => s.status !== BUILT);
+				const mustSavePowerForGen = (completedGens === 0 || hasUnfinishedGen || numUnusedDerricks() > 0) && currentPower < 150;
+
+				if (mustSavePowerForGen && numTrucks > 0) {
+					continue;
+				}
 
 				// Check if any research lab is sitting idle waiting for power
 				const hasIdleLab = !researchDone && enumStruct(me, RES_LAB_STAT).some(
@@ -54,7 +61,7 @@ function produceDroids() {
 				if (FAC_LIST[i] === FACTORY_STAT) {
 
 					// Standard factories: Always prioritize essential trucks, then check if we can afford combat units
-					if (numTrucks < desiredTrucks) {
+					if (numTrucks < desiredTrucks && (numTrucks < 2 || completedGens > 0 || currentPower >= 200)) {
 						if (produceBuilder(factory)) {
 							virtualTrucks += 1;
 						}

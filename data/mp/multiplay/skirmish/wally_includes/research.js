@@ -52,7 +52,13 @@ function research() {
 	}
 
 	// Always allow at least 1 research lab to start researching even when power is low,
-	// and require MIN_RESEARCH_POWER only when running multiple labs simultaneously
+	// unless we need to preserve power for Power Generators; require MIN_RESEARCH_POWER when running multiple labs simultaneously
+	const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
+	const hasUnfinishedGen = enumStruct(me, POW_GEN_STAT).some(s => s.status !== BUILT);
+	if ((completedGens === 0 || hasUnfinishedGen || numUnusedDerricks() > 0) && getRealPower() < 200) {
+		return;
+	}
+
 	const totalLabs = enumStruct(me, RES_LAB_STAT).filter(lab => lab.status === BUILT).length;
 	const busyLabs = totalLabs - labList.length;
 	if (busyLabs >= 1 && getRealPower() < MIN_RESEARCH_POWER) {

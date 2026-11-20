@@ -1,11 +1,26 @@
 // Objects
+function isScavengerPlayer(playerIndex) {
+	return playerIndex !== undefined && (
+		(typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0 && playerIndex === scavengerPlayer) ||
+		(scavengerIndex !== undefined && playerIndex === scavengerIndex)
+	);
+}
+
 function playerDataObject(playerIndex) {
-	if (playerIndex === undefined) {
-		return;
+	if (playerIndex === undefined || playerIndex < 0) {
+		return undefined;
+	}
+
+	if (isScavengerPlayer(playerIndex)) {
+		return createScavengerPlayerData(playerIndex);
 	}
 
 	const player = playerData[playerIndex];
-	const baseData = enumStruct(playerIndex, PLAYER_HQ_STAT)[0] || startPositions[playerIndex];
+	if (!player) {
+		return undefined;
+	}
+
+	const baseData = enumStruct(playerIndex, PLAYER_HQ_STAT)[0] || startPositions[playerIndex] || BASE || { x: Math.floor(mapWidth / 2), y: Math.floor(mapHeight / 2) };
 
 	return {
 		"difficulty": player.difficulty,
@@ -45,13 +60,26 @@ function random(max) {
 }
 
 
-// Return our real power level
+// Return our real power level (also deducting uncommitted pending build orders of walking trucks)
 function getRealPower(player) {
 	if (player === undefined) {
 		player = me;
 	}
 
-	return (playerPower(player) - queuedPower(player));
+	let power = playerPower(player) - queuedPower(player);
+	if (player === me && typeof pendingBuildOrders !== "undefined" && pendingBuildOrders instanceof Map) {
+		for (const [, info] of pendingBuildOrders.entries()) {
+			if (gameTime - info.time <= 25000 && info.stat !== DERRICK_STAT && info.stat !== "A0PowMod1") {
+				const alreadyPlaced = enumStruct(me, info.stat).some(
+					s => distBetweenTwoPoints(s.x, s.y, info.x, info.y) <= 2
+				);
+				if (!alreadyPlaced) {
+					power -= (info.stat === POW_GEN_STAT) ? 50 : 100;
+				}
+			}
+		}
+	}
+	return power;
 }
 
 // Sort an object according to the distance from the base
@@ -138,13 +166,12 @@ function getAliveEnemyPlayersData() {
 	}
 
 	// Check for scavenger player
-	if (scavengers) {
-		const hasScavengerStructures = countStruct("A0BaBaFactory", scavengerPlayer) +
-			countStruct(DERRICK_STAT, scavengerPlayer);
+	if (scavengers && typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0) {
+		scavengerIndex = scavengerPlayer;
+		const hasScavengerStructures = enumStruct(scavengerPlayer).filter(s => s.stattype !== WALL).length;
 		const hasScavengerDroids = countDroid(DROID_ANY, scavengerPlayer);
 
 		if (hasScavengerStructures > 0 || hasScavengerDroids > 0) {
-			scavengerIndex = scavengerPlayer;
 			const scavengerData = createScavengerPlayerData(scavengerPlayer);
 			if (scavengerData) {
 				enemies.push(scavengerData);
@@ -192,8 +219,8 @@ function isPlayerAlive(playerIndex) {
 		return false;
 	}
 
-	if (playerIndex === scavengerIndex) {
-		return (countStruct("A0BaBaFactory", scavengerIndex) + countStruct(DERRICK_STAT, scavengerIndex) + countDroid(DROID_ANY, scavengerIndex)) > 0;
+	if (isScavengerPlayer(playerIndex)) {
+		return (enumStruct(playerIndex).filter(s => s.stattype !== WALL).length + countDroid(DROID_ANY, playerIndex)) > 0;
 	}
 
 	if (countDroid(DROID_CONSTRUCT, playerIndex) + countStruct(FACTORY_STAT, playerIndex) + countStruct(CYBORG_FACTORY_STAT, playerIndex) > 0) {

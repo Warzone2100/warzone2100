@@ -14,6 +14,7 @@
 // You must keep this notice to preserve authorship.
 
 // -- definitions
+const DORDER_NONE = 0;
 const OIL_RES_STAT = "OilResource";
 const OIL_DRUM_STAT = "OilDrum";
 const ARTIFACT_STAT = "Crate";
@@ -54,15 +55,16 @@ var enemiesHaveVTOLs = false; // Used to determine if VTOLs are allowed.
 var areAllEnemiesDead = false;
 var isHelpingAlly = false;
 
-// Returns the desired truck count based on current economy
-// Always maintain at least 5 trucks so base construction and oil capture happen in parallel without dead time
+// Returns the desired truck count based on current economy (powered derricks only)
+// Always maintain enough trucks so base construction and oil capture happen in parallel without starving power
 function getDesiredTruckCount() {
-	const derricks = countStruct(DERRICK_STAT);
+	const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
+	const derricks = Math.min(countStruct(DERRICK_STAT), completedGens * 4);
 	if (derricks >= 20) return 11;
 	if (derricks >= 14) return 9;
 	if (derricks >= 8) return 7;
 	if (derricks >= 4) return 6;
-	return 5;
+	return completedGens > 0 ? 5 : 4;
 }
 
 /**
@@ -84,7 +86,7 @@ var currentHelpedAlly;
 /** @type {PlayerData} */
 var currentEnemy; // Current enemy Wally is attacking.
 
-var scavengerIndex = undefined;
+var scavengerIndex = (typeof scavengers !== "undefined" && scavengers && typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0) ? scavengerPlayer : undefined;
 
 // Map of dangerous coordinates {"x_y": expirationGameTime} where our units/derricks were recently attacked
 var dangerZones = new Map();
