@@ -2291,6 +2291,7 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	case NET_POSITIONREQUEST:            ///< position in GUI player list
 	case NET_DATA_CHECK:                 ///< Data integrity check
 	case NET_DATA_CHECK2:
+	case NET_ADMIN_ACTION_REQUEST:       ///< lobby admin asks the host to perform a host-only lobby action
 		return true; // filter / ignore
 
 	// one slot / index change at a time...
@@ -2532,7 +2533,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 					  || msgType == NET_DATA_CHECK
 				      || msgType == NET_JOIN
 				      || msgType == NET_PLAYERNAME_CHANGEREQUEST
-					  || msgType == NET_PLAYER_SWAP_INDEX_ACK) && receiver != NetPlay.hostPlayer)
+					  || msgType == NET_PLAYER_SWAP_INDEX_ACK
+					  || msgType == NET_ADMIN_ACTION_REQUEST) && receiver != NetPlay.hostPlayer)
 					||
 					((msgType == NET_PLAYER_SLOTTYPE_REQUEST
 					  || msgType == NET_DATA_CHECK2) && (sender != NetPlay.hostPlayer && receiver != NetPlay.hostPlayer)))
@@ -5381,6 +5383,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_TEAM_STRATEGY:				return "NET_TEAM_STRATEGY";
 	case NET_QUICK_CHAT_MSG:			return "NET_QUICK_CHAT_MSG";
 	case NET_HOST_CONFIG:				return "NET_HOST_CONFIG";
+	case NET_ADMIN_ACTION_REQUEST:		return "NET_ADMIN_ACTION_REQUEST";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

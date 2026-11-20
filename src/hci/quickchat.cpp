@@ -2480,27 +2480,91 @@ namespace WzQuickChatDataContexts {
 
 // - INTERNAL_ADMIN_ACTION_NOTICE
 namespace INTERNAL_ADMIN_ACTION_NOTICE {
-	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdx)
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdxOrValue)
 	{
-		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), responsiblePlayerIdx, targetPlayerIdx };
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), responsiblePlayerIdx, targetPlayerIdxOrValue };
+	}
+
+	static const char* scavengersSettingName(uint32_t value)
+	{
+		switch (value)
+		{
+			case NO_SCAVENGERS: return _("No Scavengers");
+			case SCAVENGERS: return _("Scavengers");
+			case ULTIMATE_SCAVENGERS: return _("Ultimate Scavengers");
+			default: return "";
+		}
+	}
+
+	static const char* alliancesSettingName(uint32_t value)
+	{
+		switch (value)
+		{
+			case NO_ALLIANCES: return _("No Alliances");
+			case ALLIANCES: return _("Allow Alliances");
+			case ALLIANCES_TEAMS: return _("Locked Teams");
+			case ALLIANCES_UNSHARED: return _("Locked Teams, No Shared Research");
+			default: return "";
+		}
+	}
+
+	static const char* powerSettingName(uint32_t value)
+	{
+		switch (value)
+		{
+			case LEV_LOW: return _("Low Power Levels");
+			case LEV_MED: return _("Medium Power Levels");
+			case LEV_HI: return _("High Power Levels");
+			default: return "";
+		}
+	}
+
+	static const char* baseSettingName(uint32_t value)
+	{
+		switch (value)
+		{
+			case CAMP_CLEAN: return _("Start with No Bases");
+			case CAMP_BASE: return _("Start with Bases");
+			case CAMP_WALLS: return _("Start with Advanced Bases");
+			default: return "";
+		}
+	}
+
+	static bool contextHasTargetPlayer(uint32_t dataContext)
+	{
+		switch (dataContext)
+		{
+			case static_cast<uint32_t>(Context::Scavengers):
+			case static_cast<uint32_t>(Context::Alliances):
+			case static_cast<uint32_t>(Context::Power):
+			case static_cast<uint32_t>(Context::Base):
+			case static_cast<uint32_t>(Context::RequestFailed):
+				return false;
+			default:
+				return true;
+		}
 	}
 
 	std::string to_output_string(WzQuickChatMessageData messageData)
 	{
 		uint32_t responsiblePlayerIdx = messageData.dataA;
+		// (depending on the context, either the target player index or the new value of a setting)
 		uint32_t targetPlayerIdx = messageData.dataB;
+		uint32_t newValue = messageData.dataB;
 
 		if (responsiblePlayerIdx >= MAX_CONNECTED_PLAYERS)
 		{
 			return std::string();
 		}
-		if (targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
+
+		const bool hasTargetPlayer = contextHasTargetPlayer(messageData.dataContext);
+		if (hasTargetPlayer && targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
 		{
 			return std::string();
 		}
 
 		const char* responsiblePlayerName = getPlayerName(responsiblePlayerIdx);
-		const char* targetPlayerName = getPlayerName(targetPlayerIdx);
+		const char* targetPlayerName = (hasTargetPlayer) ? getPlayerName(targetPlayerIdx) : "";
 
 		const char* responsiblePlayerType = _("Player");
 		if (responsiblePlayerIdx == NetPlay.hostPlayer)
@@ -2524,9 +2588,38 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 				return astringf(_("%s (%s) changed color of player (%s) to: %s"), responsiblePlayerType, responsiblePlayerName, targetPlayerName, getPlayerColourName(targetPlayerIdx));
 			case static_cast<uint32_t>(Context::Faction):
 				return astringf(_("%s (%s) changed faction of player (%s) to: %s"), responsiblePlayerType, responsiblePlayerName, targetPlayerName, to_localized_string(static_cast<FactionID>(NetPlay.players[targetPlayerIdx].faction)));
+			case static_cast<uint32_t>(Context::Kick):
+				return astringf(_("%s (%s) kicked player (%s)"), responsiblePlayerType, responsiblePlayerName, targetPlayerName);
+			case static_cast<uint32_t>(Context::Ban):
+				return astringf(_("%s (%s) banned player (%s)"), responsiblePlayerType, responsiblePlayerName, targetPlayerName);
+			case static_cast<uint32_t>(Context::MoveToSpectators):
+				return astringf(_("%s (%s) moved player (%s) to Spectators"), responsiblePlayerType, responsiblePlayerName, targetPlayerName);
+			case static_cast<uint32_t>(Context::AskSpectatorToPlay):
+				return astringf(_("%s (%s) asked spectator (%s) to move to Players"), responsiblePlayerType, responsiblePlayerName, targetPlayerName);
+			case static_cast<uint32_t>(Context::Scavengers):
+				return astringf(_("%s (%s) changed the scavengers setting to: %s"), responsiblePlayerType, responsiblePlayerName, scavengersSettingName(newValue));
+			case static_cast<uint32_t>(Context::Alliances):
+				return astringf(_("%s (%s) changed the alliances setting to: %s"), responsiblePlayerType, responsiblePlayerName, alliancesSettingName(newValue));
+			case static_cast<uint32_t>(Context::Power):
+				return astringf(_("%s (%s) changed the power setting to: %s"), responsiblePlayerType, responsiblePlayerName, powerSettingName(newValue));
+			case static_cast<uint32_t>(Context::Base):
+				return astringf(_("%s (%s) changed the base setting to: %s"), responsiblePlayerType, responsiblePlayerName, baseSettingName(newValue));
+			case static_cast<uint32_t>(Context::RequestFailed):
+				return _("The host was unable to perform the requested action");
 		}
 
 		return ""; // Silence compiler warning
+	}
+
+	int32_t to_output_sender(WzQuickChatMessageData messageData)
+	{
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::RequestFailed):
+				return NOTIFY_MESSAGE;
+			default:
+				return SYSTEM_MESSAGE;
+		}
 	}
 } // namespace INTERNAL_ADMIN_ACTION_NOTICE
 
@@ -2966,6 +3059,7 @@ int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender, const optional
 	{
 		// WZ-generated internal messages - not for users to deliberately send
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			return WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::to_output_sender(messageData.value());
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
 			// override the "sender" to SYSTEM_MESSAGE type
 			return SYSTEM_MESSAGE;
@@ -3408,7 +3502,6 @@ bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message, cons
 	switch (message)
 	{
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
-			return false;
 		case WzQuickChatMessage::INTERNAL_LOCALIZED_HOST_NOTICE:
 		case WzQuickChatMessage::INTERNAL_LOBBY_COMMAND_RESPONSE:
 			return !targeting.all && targeting.specificPlayers.count(selectedPlayer) == 0;
@@ -3601,6 +3694,21 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 	{
 		recordPlayerMessageSent(fromPlayer);
 	}
+}
+
+void sendAdminActionNotice(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdxOrValue, optional<uint32_t> receiver)
+{
+	ASSERT_HOST_ONLY(return);
+	WzQuickChatTargeting targeting;
+	if (receiver.has_value())
+	{
+		targeting.specificPlayers.insert(receiver.value());
+	}
+	else
+	{
+		targeting.all = true;
+	}
+	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(ctx, responsiblePlayerIdx, targetPlayerIdxOrValue));
 }
 
 void sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData, optional<uint32_t> targetPlayerIdx)

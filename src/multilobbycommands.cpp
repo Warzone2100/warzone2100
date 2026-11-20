@@ -123,9 +123,9 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	sendLobbyCommandResponse(receiver, Context::Help, Command::Help, senderHasLobbyCommandAdminPrivs(receiver, true) ? 1 : 0);
 }
 
-bool lobbyCommandSenderHasAdminPrivs(uint32_t playerIdx)
+bool lobbyCommandSenderHasAdminPrivs(uint32_t playerIdx, bool quiet /*= true*/)
 {
-	return senderHasLobbyCommandAdminPrivs(playerIdx, true);
+	return senderHasLobbyCommandAdminPrivs(playerIdx, quiet);
 }
 
 static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()

@@ -50,7 +50,9 @@ public:
 void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_prefix, optional<std::string> _senderhash = nullopt, optional<std::string> _senderPublicKeyB64 = nullopt);
 
 bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyOperationsInterface& cmdInterface);
-bool lobbyCommandSenderHasAdminPrivs(uint32_t playerIdx);
+/// Whether a player currently has permission to execute admin commands
+/// \param quiet if false, a player whose admin privileges are not yet enabled (i.e. whose identity is not yet verified) is informed
+bool lobbyCommandSenderHasAdminPrivs(uint32_t playerIdx, bool quiet = true);
 
 bool identityMatchesAdmin(const EcKey& identity);
 
