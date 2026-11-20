@@ -8,15 +8,88 @@ function getPoweredDerrickCount() {
 	return Math.min(countStruct(DERRICK_STAT, me), countCompletedStruct(POW_GEN_STAT, me) * 4);
 }
 
+// Cleans up expired, completed, or already-placed pending build orders
+function cleanupPendingBuildOrders() {
+	if (typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
+		return;
+	}
+
+	const activeTrucks = new Map(enumDroid(me, DROID_CONSTRUCT).map(t => [t.id, t]));
+	for (const [truckId, info] of pendingBuildOrders.entries()) {
+		const truck = activeTrucks.get(truckId);
+		if (!truck || gameTime - info.time > 25000) {
+			pendingBuildOrders.delete(truckId);
+			continue;
+		}
+
+		if (info.stat === "__HELPBUILD__") {
+			const stillUnfinished = enumStruct(me).some(
+				s => s.status !== BUILT && distBetweenTwoPoints(s.x, s.y, info.x, info.y) <= 2
+			);
+			if (!stillUnfinished || truck.order === DORDER_HELPBUILD || gameTime - info.time >= 2500) {
+				pendingBuildOrders.delete(truckId);
+			}
+			continue;
+		}
+
+		if (info.stat === "__DEMOLISH__" || info.stat === "__MODULE__" || info.stat === "__RECOVER__") {
+			if (truck.order === DORDER_DEMOLISH || truck.order === DORDER_BUILD || truck.order === DORDER_RECOVER || gameTime - info.time >= 2500) {
+				pendingBuildOrders.delete(truckId);
+			}
+			continue;
+		}
+
+		const matchingStruct = enumStruct(me, info.stat).find(
+			s => distBetweenTwoPoints(s.x, s.y, info.x, info.y) <= 2
+		);
+
+		// Once the foundation is on the map and the engine reflects DORDER_BUILD (or it's already BUILT), remove from pending
+		if (matchingStruct) {
+			if (matchingStruct.status === BUILT || truck.order === DORDER_BUILD || gameTime - info.time >= 2500) {
+				pendingBuildOrders.delete(truckId);
+			}
+			continue;
+		}
+
+		// Allow 2500ms for Warzone 2100's queuedOrders (sendDroidInfo) to update truck.order to DORDER_BUILD in C++
+		if (gameTime - info.time >= 2500 && truck.order !== DORDER_BUILD) {
+			pendingBuildOrders.delete(truckId);
+		}
+	}
+}
+
+// Returns true if the constructor droid is currently busy or has a pending order queued in this tick
+function isTruckBusy(mydroid) {
+	if (!mydroid) {
+		return true;
+	}
+	if (mydroid.order === DORDER_BUILD ||
+		mydroid.order === DORDER_HELPBUILD ||
+		mydroid.order === DORDER_LINEBUILD ||
+		mydroid.order === DORDER_RECYCLE ||
+		mydroid.order === DORDER_DEMOLISH ||
+		mydroid.order === DORDER_RECOVER ||
+		mydroid.order === DORDER_RTB) {
+		return true;
+	}
+	cleanupPendingBuildOrders();
+	if (typeof pendingBuildOrders !== "undefined" && pendingBuildOrders instanceof Map && pendingBuildOrders.has(mydroid.id)) {
+		return true;
+	}
+	return false;
+}
+
 // Returns true when power generation or the core base is in a critical bootstrap state
 function isPowerOrCoreBaseCritical() {
+	const completedHQ = countCompletedStruct(PLAYER_HQ_STAT);
 	const completedGens = countCompletedStruct(POW_GEN_STAT);
+	const completedLabs = countCompletedStruct(RES_LAB_STAT);
 	const completedFacs = countCompletedStruct(FACTORY_STAT);
 	const neededGens = Math.max(1, Math.ceil(countStruct(DERRICK_STAT) / 4));
 	const hasUnfinishedGen = enumStruct(me, POW_GEN_STAT).some(s => s.status !== BUILT);
 
-	// Critical if we lack our 1st completed Power Generator or 1st completed Factory
-	if (completedGens === 0 || completedFacs === 0) {
+	// Critical until our core base (HQ, 1st Power Generator, 1st Research Lab, and 1st Factory) is completed
+	if (completedHQ === 0 || completedGens === 0 || (!researchDone && completedLabs === 0) || completedFacs === 0) {
 		return true;
 	}
 	// Critical if a Power Generator is currently being built and power is below 350
@@ -32,32 +105,77 @@ function isPowerOrCoreBaseCritical() {
 
 // Returns the number of existing structures of a given type PLUS any truck currently walking to place its foundation
 function countStructWithPending(stat) {
+	cleanupPendingBuildOrders();
 	let count = countStruct(stat, me);
 	if (typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
 		return count;
 	}
 
-	const activeTrucks = new Map(enumDroid(me, DROID_CONSTRUCT).map(t => [t.id, t]));
-	for (const [truckId, info] of pendingBuildOrders.entries()) {
-		const truck = activeTrucks.get(truckId);
-		// Remove expired or completed pending build orders
-		if (!truck || truck.order !== DORDER_BUILD || gameTime - info.time > 25000) {
-			pendingBuildOrders.delete(truckId);
-			continue;
-		}
+	for (const [, info] of pendingBuildOrders.entries()) {
 		if (info.stat === stat) {
-			// Check if the foundation has already been placed at (info.x, info.y)
 			const placed = enumStruct(me, info.stat).some(
 				s => distBetweenTwoPoints(s.x, s.y, info.x, info.y) <= 2
 			);
-			if (placed) {
-				pendingBuildOrders.delete(truckId);
-			} else {
+			if (!placed) {
 				count++;
 			}
 		}
 	}
 	return count;
+}
+
+// Returns the number of trucks currently walking to place a new Oil Derrick foundation
+function countPendingDerricks(maxDistFromBase) {
+	cleanupPendingBuildOrders();
+	if (typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
+		return 0;
+	}
+
+	let count = 0;
+	for (const [, info] of pendingBuildOrders.entries()) {
+		if (info.stat === DERRICK_STAT) {
+			if (maxDistFromBase !== undefined && distBetweenTwoPoints(BASE.x, BASE.y, info.x, info.y) > maxDistFromBase) {
+				continue;
+			}
+			const placed = enumStruct(me, DERRICK_STAT).some(
+				s => distBetweenTwoPoints(s.x, s.y, info.x, info.y) <= 2
+			);
+			if (!placed) {
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+// If a distant truck is walking from far away to place a core base structure that hasn't been placed yet,
+// and another idle truck is now much closer to BASE, free the distant truck so the closer truck builds it immediately
+function reassignPendingBaseBuildIfCloserTruck(stat) {
+	cleanupPendingBuildOrders();
+	if (countStruct(stat, me) > 0 || typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
+		return;
+	}
+
+	const idleTrucks = findIdleTrucks(BASE);
+	if (idleTrucks.length === 0) {
+		return;
+	}
+	const closestIdle = idleTrucks[0];
+	const closestIdleDist = distBetweenTwoPoints(closestIdle.x, closestIdle.y, BASE.x, BASE.y);
+
+	const activeTrucks = new Map(enumDroid(me, DROID_CONSTRUCT).map(t => [t.id, t]));
+	for (const [truckId, info] of pendingBuildOrders.entries()) {
+		if (info.stat === stat) {
+			const pendingTruck = activeTrucks.get(truckId);
+			if (pendingTruck) {
+				const pendingDist = distBetweenTwoPoints(pendingTruck.x, pendingTruck.y, info.x, info.y);
+				if (closestIdleDist + 8 < pendingDist) {
+					pendingBuildOrders.delete(truckId);
+					orderDroid(pendingTruck, DORDER_STOP);
+				}
+			}
+		}
+	}
 }
 
 // Handle Build in a linear, non-blocking progression so idle trucks never sit around doing nothing
@@ -106,90 +224,116 @@ function build() {
 	checkUncompletedStructures();
 }
 
-// Linear base bootstrap so that in a "No Bases / No Research" match every idle truck immediately gets a distinct job
+// Strict early-game base bootstrap order:
+// 1. Base / Command Center (HQ) -> 2. Safe Oil Derricks -> 3. Power Generator(s) -> 4. Research Centers -> 5. Factories
 function buildBasicBase() {
 	let assignedAny = false;
-	const trucks = enumDroid(me, DROID_CONSTRUCT);
-	const neededGens = Math.max(1, Math.ceil(countStruct(DERRICK_STAT) / 4));
 
-	// Priority 1: Emergency 1st Power Generator if we already have derricks, low power, or a factory started
-	if (countStructWithPending(POW_GEN_STAT) === 0 &&
-		(countStruct(DERRICK_STAT) > 0 || getRealPower() < 350 || countStructWithPending(FACTORY_STAT) > 0) &&
-		grabTrucksAndBuild(POW_GEN_STAT, BASE, trucks)) {
+	// Priority 1: Base / Command Center (HQ) MUST always be built first
+	if (countStruct(PLAYER_HQ_STAT) === 0) {
+		reassignPendingBaseBuildIfCloserTruck(PLAYER_HQ_STAT);
+	}
+	if (countStructWithPending(PLAYER_HQ_STAT) === 0 && grabTrucksAndBuild(PLAYER_HQ_STAT, BASE)) {
 		assignedAny = true;
 	}
 
-	// Priority 2: 1st Tank Factory (immediate truck & unit production)
-	if (countStructWithPending(FACTORY_STAT) === 0 && grabTrucksAndBuild(FACTORY_STAT, BASE, trucks)) {
+	// Do not start any other tasks until HQ has at least been assigned to a truck
+	if (countStructWithPending(PLAYER_HQ_STAT) === 0) {
+		return assignedAny;
+	}
+
+	// Priority 2: Build all available Oil Derricks in safe areas right after HQ is started
+	if (lookForOil()) {
 		assignedAny = true;
 	}
 
-	// Priority 3: 1st Power Generator (start generating power from derricks & oil drums)
-	if (countStructWithPending(POW_GEN_STAT) === 0 && grabTrucksAndBuild(POW_GEN_STAT, BASE, trucks)) {
+	// Before starting our 1st Power Generator, ensure:
+	// 1) The Base (HQ) is completed
+	// 2) All reachable safe oil wells (up to 8 initial derricks) have trucks assigned to them
+	// 3) Trucks walking to nearby safe oil wells have placed their derrick foundations
+	if (countStruct(POW_GEN_STAT) === 0) {
+		const hasMoreInitialSafeOils = countStructWithPending(DERRICK_STAT) < 8 && getUnassignedSafeOils().length > 0;
+		const waitingForFirstDerricks = (countPendingDerricks(35) > 0 && countStruct(DERRICK_STAT) < 4) ||
+			(countStruct(DERRICK_STAT) === 0 && countPendingDerricks() > 0);
+		if (countCompletedStruct(PLAYER_HQ_STAT) === 0 || hasMoreInitialSafeOils || waitingForFirstDerricks) {
+			return assignedAny;
+		}
+	}
+
+	// Priority 3: Power Generator(s) needed to power our derricks
+	const neededGens = Math.max(1, Math.ceil(countStructWithPending(DERRICK_STAT) / 4));
+	if (countStruct(POW_GEN_STAT) < neededGens) {
+		reassignPendingBaseBuildIfCloserTruck(POW_GEN_STAT);
+	}
+	while (countStructWithPending(POW_GEN_STAT) < neededGens && grabTrucksAndBuild(POW_GEN_STAT, BASE)) {
 		assignedAny = true;
 	}
 
-	// Priority 4: Additional Power Generators whenever derricks outpace generators or power is low
-	if (countStructWithPending(POW_GEN_STAT) < neededGens &&
-		(numUnusedDerricks() >= 4 || getRealPower() < 400) &&
-		grabTrucksAndBuild(POW_GEN_STAT, BASE, trucks)) {
+	// Do not start Research Centers or Factories until our 1st Power Generator is completed
+	// and enough Power Generators for our derricks have been queued
+	if (countCompletedStruct(POW_GEN_STAT) === 0 || countStructWithPending(POW_GEN_STAT) < neededGens) {
+		return assignedAny;
+	}
+
+	// Priority 4: Research Centers (1st Research Lab, plus 2nd Research Lab when economy/trucks allow)
+	if (!researchDone) {
+		if (countStruct(RES_LAB_STAT) === 0) {
+			reassignPendingBaseBuildIfCloserTruck(RES_LAB_STAT);
+		}
+		if (countStructWithPending(RES_LAB_STAT) === 0 && grabTrucksAndBuild(RES_LAB_STAT, BASE)) {
+			assignedAny = true;
+		}
+		if ((countDroid(DROID_CONSTRUCT) >= 3 || getPoweredDerrickCount() >= 2) &&
+			countStructWithPending(RES_LAB_STAT) < 2 && grabTrucksAndBuild(RES_LAB_STAT, BASE)) {
+			assignedAny = true;
+		}
+		// Ensure at least the 1st Research Center foundation is placed on the map before starting the Factory
+		if (countStruct(RES_LAB_STAT) === 0) {
+			return assignedAny;
+		}
+	}
+
+	// Priority 5: 1st Tank Factory (truck & unit production)
+	if (countStruct(FACTORY_STAT) === 0) {
+		reassignPendingBaseBuildIfCloserTruck(FACTORY_STAT);
+	}
+	if (countStructWithPending(FACTORY_STAT) === 0 && grabTrucksAndBuild(FACTORY_STAT, BASE)) {
 		assignedAny = true;
 	}
 
-	// Priority 5: 1st Research Lab (start unlocking weapons & engineering immediately)
-	if (!researchDone && countStructWithPending(RES_LAB_STAT) === 0 && grabTrucksAndBuild(RES_LAB_STAT, BASE, trucks)) {
-		assignedAny = true;
-	}
-
-	// Priority 6: Command Center / HQ (unlocks radar & tank design)
-	if (countStructWithPending(PLAYER_HQ_STAT) === 0 && grabTrucksAndBuild(PLAYER_HQ_STAT, BASE, trucks)) {
-		assignedAny = true;
-	}
-
-	// Stop here if any of the Big 4 core buildings haven't even been started yet, or if our 1st Power Generator isn't completed yet
-	if (countStructWithPending(FACTORY_STAT) === 0 ||
+	// Stop here if any of the Big 4 core buildings haven't been started yet
+	if (countStructWithPending(PLAYER_HQ_STAT) === 0 ||
+		countStructWithPending(POW_GEN_STAT) < neededGens ||
 		(!researchDone && countStructWithPending(RES_LAB_STAT) === 0) ||
-		countStructWithPending(POW_GEN_STAT) === 0 ||
-		countStructWithPending(PLAYER_HQ_STAT) === 0 ||
-		countCompletedStruct(POW_GEN_STAT) === 0) {
+		countStructWithPending(FACTORY_STAT) === 0) {
 		return assignedAny;
 	}
 
-	// Priority 7: Any remaining needed Power Generators
-	if (countStructWithPending(POW_GEN_STAT) < neededGens && grabTrucksAndBuild(POW_GEN_STAT, BASE, trucks)) {
+	// Priority 6: 2nd Research Lab (if not already started above)
+	if (!researchDone && countStructWithPending(RES_LAB_STAT) < 2 && grabTrucksAndBuild(RES_LAB_STAT, BASE)) {
 		assignedAny = true;
 	}
 
-	// Never expand secondary buildings until enough Power Generators for our derricks are started
-	if (countStructWithPending(POW_GEN_STAT) < neededGens) {
-		return assignedAny;
-	}
-
-	// Priority 8: 2nd Research Lab (crucial in "No Research" starts to research weapons + propulsion in parallel)
-	if (!researchDone && countStructWithPending(RES_LAB_STAT) < 2 && grabTrucksAndBuild(RES_LAB_STAT, BASE, trucks)) {
+	// Priority 7: 1st Cyborg Factory (as soon as researched on land maps)
+	if (!isSeaMap && isStructureAvailable(CYBORG_FACTORY_STAT) && countStructWithPending(CYBORG_FACTORY_STAT) === 0 && grabTrucksAndBuild(CYBORG_FACTORY_STAT, BASE)) {
 		assignedAny = true;
 	}
 
-	// Priority 9: 1st Cyborg Factory (as soon as researched on land maps)
-	if (!isSeaMap && isStructureAvailable(CYBORG_FACTORY_STAT) && countStructWithPending(CYBORG_FACTORY_STAT) === 0 && grabTrucksAndBuild(CYBORG_FACTORY_STAT, BASE, trucks)) {
-		assignedAny = true;
-	}
-
-	// Priority 10: 1st Repair Facility on outer base perimeter (as soon as researched)
+	// Priority 8: 1st Repair Facility on outer base perimeter (as soon as researched)
 	if (isStructureAvailable(REPAIR_FACILITY_STAT) && countStructWithPending(REPAIR_FACILITY_STAT) === 0) {
 		const perimeterPos = getOuterBaseRepairPosition();
-		if (grabTrucksAndBuild(REPAIR_FACILITY_STAT, perimeterPos, trucks)) {
+		if (grabTrucksAndBuild(REPAIR_FACILITY_STAT, perimeterPos)) {
 			assignedAny = true;
 		}
 	}
 
-	// Priority 11: 3rd Research Lab once we have at least 4 powered derricks and healthy power
-	if (!researchDone && getPoweredDerrickCount() >= 4 && getRealPower() >= 200 && countStructWithPending(RES_LAB_STAT) < 3 && grabTrucksAndBuild(RES_LAB_STAT, BASE, trucks)) {
+	// Priority 9: 3rd Research Lab once we have at least 4 powered derricks and healthy power
+	if (!researchDone && getPoweredDerrickCount() >= 4 && getRealPower() >= 200 && countStructWithPending(RES_LAB_STAT) < 3 && grabTrucksAndBuild(RES_LAB_STAT, BASE)) {
 		assignedAny = true;
 	}
 
-	// Priority 12: 2nd Tank Factory once we have at least 4 powered derricks and healthy power
-	if (getPoweredDerrickCount() >= 4 && getRealPower() >= 200 && countStructWithPending(FACTORY_STAT) < 2 && grabTrucksAndBuild(FACTORY_STAT, BASE, trucks)) {
+	// Priority 10: 2nd Tank Factory once we have at least 4 powered derricks and healthy power
+	if (getPoweredDerrickCount() >= 4 && getRealPower() >= 200 && countStructWithPending(FACTORY_STAT) < 2 && grabTrucksAndBuild(FACTORY_STAT, BASE)) {
 		assignedAny = true;
 	}
 
@@ -200,13 +344,22 @@ function buildBasicBase() {
 function checkUncompletedStructures(includeDefenseBuilders = false) {
 	let hasAssignedTask = false;
 
-	// Find uncompleted structures near the base, prioritizing Power Generators first, then core base structures, then closest to base
+	// Find uncompleted structures near the base (excluding 1x1 oil derricks),
+	// prioritizing HQ first, then Power Generators, then Research Centers, then Factories, then closest to base
 	let structlist = enumStruct(me).filter((structure) => (
 		structure.status !== BUILT &&
+		structure.stattype !== RESOURCE_EXTRACTOR &&
 		distBetweenTwoPoints(BASE.x, BASE.y, structure.x, structure.y) < 40
 	)).sort((a, b) => {
-		const prioA = a.stattype === POWER_GEN ? 0 : (isBaseStructure(a.stattype) ? 1 : 2);
-		const prioB = b.stattype === POWER_GEN ? 0 : (isBaseStructure(b.stattype) ? 1 : 2);
+		const getPrio = (type) => {
+			if (type === HQ) return 0;
+			if (type === POWER_GEN) return 1;
+			if (type === RESEARCH_LAB) return 2;
+			if (isBaseStructure(type)) return 3;
+			return 4;
+		};
+		const prioA = getPrio(a.stattype);
+		const prioB = getPrio(b.stattype);
 		if (prioA !== prioB) return prioA - prioB;
 		return sortByDistToBase(a, b);
 	});
@@ -215,9 +368,9 @@ function checkUncompletedStructures(includeDefenseBuilders = false) {
 		return false;
 	}
 
-	const hasUncompletedGen = structlist.some(s => s.stattype === POWER_GEN);
+	const hasUncompletedCritical = structlist.some(s => s.stattype === HQ || s.stattype === POWER_GEN);
 	// Gather idle trucks from baseBuildersGroup first, or all idle trucks when power/core base needs help
-	const idleTrucks = (includeDefenseBuilders || hasUncompletedGen)
+	const idleTrucks = (includeDefenseBuilders || hasUncompletedCritical)
 		? enumDroid(me, DROID_CONSTRUCT)
 			.filter(d => canDroidHelp(d, structlist[0].x, structlist[0].y))
 			.sort((a, b) => distBetweenTwoPoints(a.x, a.y, structlist[0].x, structlist[0].y) - distBetweenTwoPoints(b.x, b.y, structlist[0].x, structlist[0].y))
@@ -228,9 +381,20 @@ function checkUncompletedStructures(includeDefenseBuilders = false) {
 
 	let structIdx = 0;
 	for (let j = 0; j < idleTrucks.length; ++j) {
-		const targetStruct = structlist[structIdx % structlist.length];
+		// If the highest priority uncompleted structure is HQ or Power Generator, rally all helpers onto it first
+		const targetStruct = (structlist[0].stattype === HQ || structlist[0].stattype === POWER_GEN)
+			? structlist[0]
+			: structlist[structIdx % structlist.length];
 		if (canDroidHelp(idleTrucks[j], targetStruct.x, targetStruct.y)) {
 			if (orderDroidObj(idleTrucks[j], DORDER_HELPBUILD, targetStruct)) {
+				if (typeof pendingBuildOrders !== "undefined") {
+					pendingBuildOrders.set(idleTrucks[j].id, {
+						stat: "__HELPBUILD__",
+						x: targetStruct.x,
+						y: targetStruct.y,
+						time: gameTime
+					});
+				}
 				hasAssignedTask = true;
 				structIdx++;
 			}
@@ -296,6 +460,14 @@ function baseMaintenance() {
 			// Check if the truck can help with building at the selected location
 			if (canDroidHelp(truck, struct.x, struct.y)) {
 				if (orderDroidBuild(truck, DORDER_BUILD, module, struct.x, struct.y)) {
+					if (typeof pendingBuildOrders !== "undefined") {
+						pendingBuildOrders.set(truck.id, {
+							stat: "__MODULE__",
+							x: struct.x,
+							y: struct.y,
+							time: gameTime
+						});
+					}
 					success = true;
 					assigned++;
 					if (assigned >= 2) break;
@@ -990,16 +1162,23 @@ function buildResearchLabs() {
 		return false;
 	}
 
-	const derrCount = getPoweredDerrickCount();
-	let amount = 2;
+	// Never build Research Centers before HQ and our 1st Power Generator are completed
+	if (countCompletedStruct(PLAYER_HQ_STAT) === 0 || countCompletedStruct(POW_GEN_STAT) === 0) {
+		return false;
+	}
 
-	// Scale research labs linearly with powered derricks or available power
-	if (derrCount >= 18 || getRealPower() >= 1000) {
+	const derrCount = getPoweredDerrickCount();
+	let amount = 1;
+
+	// Scale research labs with powered derricks (avoid overbuilding 4-5 labs on low-oil maps just from CAMP_CLEAN starting power)
+	if (derrCount >= 18 || (derrCount >= 8 && getRealPower() >= 1200)) {
 		amount = 5;
-	} else if (derrCount >= 10 || getRealPower() >= 500) {
+	} else if (derrCount >= 10 || (derrCount >= 6 && getRealPower() >= 700)) {
 		amount = 4;
-	} else if (derrCount >= 4 || getRealPower() >= 200) {
+	} else if (derrCount >= 4 && getRealPower() >= 200) {
 		amount = 3;
+	} else if (derrCount >= 2 || getRealPower() >= 200) {
+		amount = 2;
 	}
 
 	// Do not expand beyond 2 research labs while derricks are unpowered or power is low
@@ -1082,7 +1261,15 @@ function findIdleTrucks(obj, builderGroupName) {
 		obj = BASE;
 	}
 
-	let builders = builderGroupName ? enumGroup(builderGroupName) : enumGroup(baseBuildersGroup);
+	let builders;
+	if (builderGroupName) {
+		builders = enumGroup(builderGroupName);
+	} else if (isPowerOrCoreBaseCritical()) {
+		builders = enumDroid(me, DROID_CONSTRUCT);
+	} else {
+		builders = enumGroup(baseBuildersGroup);
+	}
+
 	let droidlist = builders.filter(d => canDroidHelp(d, obj.x, obj.y));
 
 	// If the requested group has no free trucks, fall back to all constructor droids so idle trucks in the other group help out
@@ -1106,6 +1293,14 @@ function demolishThis(structure) {
 	for (let i = 0, d = droidList.length; i < d; ++i) {
 		if (canDroidHelp(droidList[i], structure.x, structure.y)) {
 			if (orderDroidObj(droidList[i], DORDER_DEMOLISH, structure)) {
+				if (typeof pendingBuildOrders !== "undefined") {
+					pendingBuildOrders.set(droidList[i].id, {
+						stat: "__DEMOLISH__",
+						x: structure.x,
+						y: structure.y,
+						time: gameTime
+					});
+				}
 				success = true;
 				break; // One truck is enough to demolish a structure
 			}
@@ -1117,11 +1312,12 @@ function demolishThis(structure) {
 
 // Returns true if (loc.x, loc.y) overlaps with an active pending build order from another truck
 function isLocationNearPendingBuild(loc) {
+	cleanupPendingBuildOrders();
 	if (!loc || typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
 		return false;
 	}
 	for (const [, info] of pendingBuildOrders.entries()) {
-		if (gameTime - info.time <= 25000 && distBetweenTwoPoints(loc.x, loc.y, info.x, info.y) <= 3) {
+		if (!info.stat.startsWith("__") && gameTime - info.time <= 25000 && distBetweenTwoPoints(loc.x, loc.y, info.x, info.y) <= 3) {
 			return true;
 		}
 	}
@@ -1229,13 +1425,7 @@ function grabTrucksAndBuild(structure, base, trucks, allowMultipleLocations = fa
 }
 
 function canDroidHelp(mydroid, bx, by) {
-	if (mydroid.order === DORDER_BUILD ||
-		mydroid.order === DORDER_HELPBUILD ||
-		mydroid.order === DORDER_LINEBUILD ||
-		mydroid.order === DORDER_RECYCLE ||
-		mydroid.order === DORDER_DEMOLISH ||
-		mydroid.order === DORDER_RECOVER ||
-		mydroid.order === DORDER_RTB) {
+	if (isTruckBusy(mydroid)) {
 		return false;
 	}
 
@@ -1247,84 +1437,113 @@ function canDroidHelp(mydroid, bx, by) {
 		droidCanReach(mydroid, bx, by - 2);
 }
 
-function lookForOil() {
-	// Also try to grab nearby free Oil Drums and Artifacts (Crates)
-	grabFreeObjects();
-
-	// Limit the number of unpowered "extra" derricks so trucks prioritize completing Power Generators first.
-	const completedGens = countCompletedStruct(POW_GEN_STAT);
-	const maxExcessDerricks = completedGens === 0 ? 2 : 4;
-	if (countStruct(DERRICK_STAT) - (completedGens * 4) >= maxExcessDerricks) {
+// Returns true if an oil well at (ox, oy) already has a pending derrick build order from one of our walking trucks
+function isOilTargetedByPendingBuild(ox, oy) {
+	cleanupPendingBuildOrders();
+	if (typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
 		return false;
 	}
+	for (const [, info] of pendingBuildOrders.entries()) {
+		if (info.stat === DERRICK_STAT && distBetweenTwoPoints(info.x, info.y, ox, oy) <= 3) {
+			return true;
+		}
+	}
+	return false;
+}
 
-	// Get all available idle constructor droids from baseBuildersGroup (keep defensesBuildersGroup dedicated to defenses!)
-	let droids = enumGroup(baseBuildersGroup).filter(droid =>
-		droid.order !== DORDER_BUILD &&
-		droid.order !== DORDER_HELPBUILD &&
-		droid.order !== DORDER_LINEBUILD &&
-		droid.order !== DORDER_RECYCLE &&
-		droid.order !== DORDER_DEMOLISH &&
-		droid.order !== DORDER_RECOVER &&
-		droid.order !== DORDER_RTB
-	);
-
-	// In a "No Bases" start where core structures or needed Power Generators aren't started/finished yet,
-	// reserve closest trucks near BASE so oil capture never leaves base power starved
-	const neededGens = Math.max(1, Math.ceil(countStruct(DERRICK_STAT) / 4));
-	const missingGens = Math.max(0, neededGens - countStructWithPending(POW_GEN_STAT));
-	const uncompletedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status !== BUILT).length;
-	const missingCoreBuildings =
-		(countStructWithPending(FACTORY_STAT) === 0 ? 1 : 0) +
-		(!researchDone && countStructWithPending(RES_LAB_STAT) === 0 ? 1 : 0) +
-		(countStructWithPending(POW_GEN_STAT) === 0 ? 1 : 0) +
-		(countStructWithPending(PLAYER_HQ_STAT) === 0 ? 1 : 0) +
-		Math.max(missingGens, uncompletedGens);
-
-	if (missingCoreBuildings > 0) {
-		droids.sort((a, b) => distBetweenTwoPoints(a.x, a.y, BASE.x, BASE.y) - distBetweenTwoPoints(b.x, b.y, BASE.x, BASE.y));
-		droids = droids.slice(missingCoreBuildings); // Reserve closest trucks for missing core buildings and power generators
+// Returns all available, safe, reachable oil wells that do not yet have a truck assigned to them, sorted closest to BASE first
+function getUnassignedSafeOils() {
+	cleanupPendingBuildOrders();
+	const UNSAFE_AREA_RANGE = 18;
+	const allyBasePositions = alliesList.map(a => a.base);
+	const allTrucks = enumDroid(me, DROID_CONSTRUCT);
+	if (allTrucks.length === 0) {
+		return [];
 	}
 
-	if (droids.length === 0) return false;
-
-	const UNSAFE_AREA_RANGE = 18;
-	let success = false;
-
-	// Allied base positions
-	let allyBasePositions = alliesList.map((a) => a.base);
-
-	// Get all constructor droids that are currently building something
-	let busyTrucks = enumDroid(me, DROID_CONSTRUCT).filter(truck =>
+	const busyTrucks = allTrucks.filter(truck =>
 		truck.order === DORDER_BUILD || truck.order === DORDER_HELPBUILD
 	);
 
-	// Pre-filter oils with cheap distance checks and sort by distance to base
-	let oils = enumFeature(ALL_PLAYERS, OIL_RES_STAT)
-		.filter((oil) => {
-			let tooCloseToAlly = allyBasePositions.some(base =>
+	return enumFeature(ALL_PLAYERS, OIL_RES_STAT)
+		.filter(oil => {
+			const tooCloseToAlly = allyBasePositions.some(base =>
 				base && distBetweenTwoPoints(base.x, base.y, oil.x, oil.y) < 15
 			);
 			if (tooCloseToAlly) return false;
 
-			// Check if any of our trucks are already building near this oil
-			let alreadyTargeted = busyTrucks.some(truck =>
+			const alreadyTargetedByBusy = busyTrucks.some(truck =>
 				distBetweenTwoPoints(truck.x, truck.y, oil.x, oil.y) < 5
 			);
-			return !alreadyTargeted;
+			if (alreadyTargetedByBusy) return false;
+
+			if (isOilTargetedByPendingBuild(oil.x, oil.y)) return false;
+
+			if (!isAreaSafe(oil.x, oil.y, UNSAFE_AREA_RANGE)) return false;
+
+			// Verify at least one of our trucks can safely reach this oil well
+			return allTrucks.some(droid => {
+				if (!droidCanReach(droid, oil.x, oil.y)) return false;
+				const dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
+				if (dist > 20) {
+					const midX = Math.round((droid.x + oil.x) / 2);
+					const midY = Math.round((droid.y + oil.y) / 2);
+					if (!isAreaSafe(midX, midY, 12)) return false;
+				}
+				return true;
+			});
 		})
 		.sort(sortByDistToBase);
+}
 
+function lookForOil() {
+	// Also try to grab nearby free Oil Drums and Artifacts (Crates)
+	grabFreeObjects();
+
+	// Always ensure the Base (HQ) is started first before sending trucks to capture oil
+	if (countStructWithPending(PLAYER_HQ_STAT) === 0) {
+		grabTrucksAndBuild(PLAYER_HQ_STAT, BASE);
+		if (countStructWithPending(PLAYER_HQ_STAT) === 0) {
+			return false;
+		}
+	}
+
+	// Allow capturing up to 8 safe oil derricks before the 1st Power Generator, and up to +8 excess derricks beyond completed generators
+	const completedGens = countCompletedStruct(POW_GEN_STAT);
+	const maxExcessDerricks = 8;
+	if (countStructWithPending(DERRICK_STAT) - (completedGens * 4) >= maxExcessDerricks) {
+		return false;
+	}
+
+	// During initial base bootstrap (or while power/core base is critical), use all available idle constructor droids
+	// so no truck sits idle while safe oil wells need capturing
+	const candidateTrucks = isPowerOrCoreBaseCritical()
+		? enumDroid(me, DROID_CONSTRUCT)
+		: enumGroup(baseBuildersGroup);
+
+	let droids = candidateTrucks.filter(droid => !isTruckBusy(droid));
+
+	// Once we already have 4+ derricks on the map and our HQ is completed, reserve 1 truck near BASE if we lack a needed Power Generator
+	const neededGens = Math.max(1, Math.ceil(countStruct(DERRICK_STAT) / 4));
+	if (countCompletedStruct(PLAYER_HQ_STAT) > 0 &&
+		countStruct(DERRICK_STAT) >= 4 &&
+		countStructWithPending(POW_GEN_STAT) < neededGens &&
+		droids.length > 1) {
+		droids.sort((a, b) => distBetweenTwoPoints(a.x, a.y, BASE.x, BASE.y) - distBetweenTwoPoints(b.x, b.y, BASE.x, BASE.y));
+		droids = droids.slice(1);
+	}
+
+	if (droids.length === 0) return false;
+
+	const oils = getUnassignedSafeOils();
 	if (oils.length === 0) return false;
 
-	// Assign one truck per oil — closest idle truck to each oil
+	let success = false;
 	let assignedDroids = new Set();
 
 	for (const oil of oils) {
-		if (assignedDroids.size >= droids.length) break; // All idle trucks assigned!
-
-		// Check if the oil area AND the midpoint along the route are safe from all enemies and ambushes
-		if (!isAreaSafe(oil.x, oil.y, UNSAFE_AREA_RANGE)) continue;
+		if (assignedDroids.size >= droids.length) break;
+		if (countStructWithPending(DERRICK_STAT) - (completedGens * 4) >= maxExcessDerricks) break;
 
 		let bestDroid = null;
 		let bestDist = 99999;
@@ -1332,7 +1551,7 @@ function lookForOil() {
 		for (const droid of droids) {
 			if (assignedDroids.has(droid.id)) continue;
 
-			let dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
+			const dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
 			if (dist < bestDist && droidCanReach(droid, oil.x, oil.y)) {
 				// Also verify that the midpoint along the truck's travel path isn't blocked by enemies
 				const midX = Math.round((droid.x + oil.x) / 2);
@@ -1348,6 +1567,14 @@ function lookForOil() {
 		if (bestDroid) {
 			assignedDroids.add(bestDroid.id);
 			if (orderDroidBuild(bestDroid, DORDER_BUILD, DERRICK_STAT, oil.x, oil.y)) {
+				if (typeof pendingBuildOrders !== "undefined") {
+					pendingBuildOrders.set(bestDroid.id, {
+						stat: DERRICK_STAT,
+						x: oil.x,
+						y: oil.y,
+						time: gameTime
+					});
+				}
 				success = true;
 			}
 		}
@@ -1366,14 +1593,18 @@ function grabFreeObjects() {
 		return false;
 	}
 
-	// Use idle combat units or defense builders so we don't slow down base oil trucks
-	const collectors = enumGroup(attackerGroup)
-		.concat(enumGroup(defensesBuildersGroup))
+	// Only use combat units during initial base/power bootstrap so construction trucks focus 100% on HQ, safe oil derricks, and generators
+	const candidateCollectors = isPowerOrCoreBaseCritical()
+		? enumGroup(attackerGroup)
+		: enumGroup(attackerGroup).concat(enumGroup(defensesBuildersGroup));
+
+	const collectors = candidateCollectors
 		.filter(d =>
 			d.order !== DORDER_RECOVER &&
 			d.order !== DORDER_BUILD &&
 			d.order !== DORDER_HELPBUILD &&
-			d.order !== DORDER_RTR
+			d.order !== DORDER_RTR &&
+			!isTruckBusy(d)
 		);
 
 	if (collectors.length === 0) {
@@ -1405,8 +1636,17 @@ function grabFreeObjects() {
 
 		if (bestDroid) {
 			assignedCollectors.add(bestDroid.id);
-			orderDroidObj(bestDroid, DORDER_RECOVER, item);
-			count++;
+			if (orderDroidObj(bestDroid, DORDER_RECOVER, item)) {
+				if (bestDroid.droidType === DROID_CONSTRUCT && typeof pendingBuildOrders !== "undefined") {
+					pendingBuildOrders.set(bestDroid.id, {
+						stat: "__RECOVER__",
+						x: item.x,
+						y: item.y,
+						time: gameTime
+					});
+				}
+				count++;
+			}
 		}
 	}
 

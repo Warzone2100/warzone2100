@@ -69,7 +69,11 @@ function getRealPower(player) {
 	let power = playerPower(player) - queuedPower(player);
 	if (player === me && typeof pendingBuildOrders !== "undefined" && pendingBuildOrders instanceof Map) {
 		for (const [, info] of pendingBuildOrders.entries()) {
-			if (gameTime - info.time <= 25000 && info.stat !== DERRICK_STAT && info.stat !== "A0PowMod1") {
+			if (gameTime - info.time <= 25000 &&
+				info.stat &&
+				!info.stat.startsWith("__") &&
+				info.stat !== DERRICK_STAT &&
+				info.stat !== "A0PowMod1") {
 				const alreadyPlaced = enumStruct(me, info.stat).some(
 					s => distBetweenTwoPoints(s.x, s.y, info.x, info.y) <= 2
 				);
