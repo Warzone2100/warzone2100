@@ -83,6 +83,15 @@ const ROCKET_WEAPON_LIST = [
 ];
 
 // ========================
+// TANK ROCKET ARRAY SECTION (Anti-Personnel / Splash Support sharing Rocket upgrades)
+// ========================
+const ROCKET_ARRAY_WEAPON_LIST = [
+	"Missile-MdArt", // Seraph Missile Array
+	"Rocket-MRL-Hvy", // Heavy Rocket Array
+	"Rocket-MRL" // Mini-Rocket Array
+];
+
+// ========================
 // TANK BUNKER BUSTER
 // ========================
 const BUNKER_BUSTER_WEAPON = [
@@ -176,10 +185,17 @@ const VTOL_BODY_LIST = [
 	"Body1REC", // Viper
 ];
 
-const VTOL_WEAPONS = [
+const VTOL_ROCKET_WEAPONS = [
+	"Missile-VTOL-AT", // Scourge VTOL
+	"Rocket-VTOL-HvyA-T", // Tank-Killer VTOL
+	"Rocket-VTOL-LtA-T", // Lancer VTOL
+	"Rocket-VTOL-Pod", // Mini-Rocket Pod VTOL
+];
+
+const VTOL_BOMB_WEAPONS = [
 	"Bomb5-VTOL-Plasmite", // Plasmite Bomb Bay
 	"Bomb4-VTOL-HvyINC", // Thermite Bomb Bay
 	"Bomb2-VTOL-HvHE", // HEAP Bomb Bay
-	"Bomb3-VTOL-LtINC", // Phosphor Bomb Bay
-	"Bomb1-VTOL-LtHE", // Cluster Bomb Bay
 ];
+
+const VTOL_WEAPONS = VTOL_ROCKET_WEAPONS.concat(VTOL_BOMB_WEAPONS);

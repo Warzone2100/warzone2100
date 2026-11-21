@@ -75,8 +75,7 @@ function research() {
 		isSeaMap ? ["R-Vehicle-Prop-Hover"] : null,
 		START_COMPONENTS,
 
-		// T1 (Machinegun upgrades first for immediate T1 combat efficiency, then Rockets/Body/Economy)
-		FUNDAMENTALS_MACHINEGUN_WEAPON_T1,
+		// T1 (Twin MG covered in START_COMPONENTS, then focus strictly on the unified Rocket/Missile/Economy tree)
 		FUNDAMENTALS_ROCKET_WEAPON_T1,
 		FUNDAMENTALS_BODY_T1,
 		FUNDAMENTALS_PROPULSION_T1,
@@ -87,18 +86,16 @@ function research() {
 
 		// T2
 		FUNDAMENTALS_ROCKET_WEAPON_T2,
-		FUNDAMENTALS_MACHINEGUN_WEAPON_T2,
 		FUNDAMENTALS_BODY_T2,
 		FUNDAMENTALS_PROPULSION_T2,
 		["R-Vehicle-Prop-VTOL"],
 		FUNDAMENTALS_UPGRADES_T2,
-		FUNDAMENTALS_VTOL_BOMBS_T2,
 		FUNDAMENTALS_DEFENCE_T2,
 
-		// T3
+		// T3 (Rocket/Missile focus + HEAP/Thermite VTOL bombs alongside Rocket VTOLs)
 		FUNDAMENTALS_ROCKET_WEAPON_T3,
-		FUNDAMENTALS_MACHINEGUN_WEAPON_T3,
 		FUNDAMENTALS_BODY_T3,
+		FUNDAMENTALS_VTOL_BOMBS_T2,
 		FUNDAMENTALS_VTOL_BOMBS_T3,
 		FUNDAMENTALS_PROPULSION_T3,
 		FUNDAMENTALS_UPGRADES_T3,
@@ -106,7 +103,6 @@ function research() {
 
 		// T4
 		FUNDAMENTALS_ROCKET_WEAPON_T4,
-		FUNDAMENTALS_MACHINEGUN_WEAPON_T4,
 		FUNDAMENTALS_BODY_T4,
 		FUNDAMENTALS_DEFENCE_T4,
 		FUNDAMENTALS_PROPULSION_T4,
@@ -135,14 +131,16 @@ function research() {
 		}
 
 		// Last step: if all priority branches are currently locked by another lab's in-progress prerequisite,
-		// pick an available non-cannon/non-mortar/non-howitzer research item first
+		// avoid drifting into off-branch Cannon/Mortar/Howitzer/Flame/Laser/late-MG trees while Rocket branches are active
 		if (!found) {
 			const currentAvailable = enumResearch();
 			const filteredAvailable = currentAvailable.filter(r =>
 				!r.name.includes("Cannon") &&
 				!r.name.includes("Mortar") &&
 				!r.name.includes("Howitzer") &&
-				!r.name.includes("Flame")
+				!r.name.includes("Flame") &&
+				!r.name.includes("Laser") &&
+				!r.name.includes("Assault Gun")
 			);
 			const pool = filteredAvailable.length > 0 ? filteredAvailable : currentAvailable;
 			if (pool.length > 0) {

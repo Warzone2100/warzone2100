@@ -160,6 +160,8 @@ function produceTank(factory) {
 		tankProp = "HalfTrack";
 	}
 
+	const hasRocketArray = ROCKET_ARRAY_WEAPON_LIST.some(w => componentAvailable(w));
+
 	if (random(100) < BUNKER_BUSTER_PROBABILITY) {
 		firstWeapon = BUNKER_BUSTER_WEAPON;
 		secondWeapon = BUNKER_BUSTER_WEAPON;
@@ -168,8 +170,10 @@ function produceTank(factory) {
 		firstWeapon = AA_WEAPON_LIST;
 		secondWeapon = AA_WEAPON_LIST;
 	} else if (random(100) < ANTIPERSONELL_WEAPON_PROBABILITY) {
-		firstWeapon = MACHINEGUN_WEAPON_LIST;
-		secondWeapon = MACHINEGUN_WEAPON_LIST;
+		// Hybrid strategy: use Twin MG/T1 MG early, then switch AP role to Rocket Arrays (MRL/HRA/Seraph) sharing Rocket upgrades
+		const antiPersonnelList = hasRocketArray ? ROCKET_ARRAY_WEAPON_LIST : MACHINEGUN_WEAPON_LIST;
+		firstWeapon = antiPersonnelList;
+		secondWeapon = antiPersonnelList;
 	} else {
 		firstWeapon = ROCKET_WEAPON_LIST;
 		secondWeapon = ROCKET_WEAPON_LIST;
@@ -187,9 +191,9 @@ function produceTank(factory) {
 		return true;
 	}
 
-	// Fallback: if the rolled weapon/propulsion isn't researched yet (e.g. No Research start),
-	// try any available Machinegun or Rocket weapon with standard TANK_PROP_LIST so the factory never sits idle
-	const fallbackWeapons = MACHINEGUN_WEAPON_LIST.concat(ROCKET_WEAPON_LIST);
+	// Fallback: if the rolled weapon/propulsion isn't researched yet,
+	// try any available Rocket, Rocket Array, or T1 MG weapon with standard TANK_PROP_LIST so the factory never sits idle
+	const fallbackWeapons = ROCKET_WEAPON_LIST.concat(ROCKET_ARRAY_WEAPON_LIST).concat(MACHINEGUN_WEAPON_LIST);
 	const fallbackProp = (isSeaMap === true || enemyUnreachableByLand) ? ["hover01", ...TANK_PROP_LIST] : TANK_PROP_LIST;
 	return createDroid(factory, "Attacker", TANK_BODY_LIST, fallbackProp, fallbackWeapons, fallbackWeapons);
 }
@@ -206,7 +210,9 @@ function produceCyborgBuilder(factory) {
 }
 
 function produceCyborg(factory) {
-	const CYBORG_ANTITANK_WEAPON_PROBABILITY = 70;
+	// Once Rocket Arrays cover anti-personnel duties, focus cyborgs on Anti-Tank (85%), using MG cyborgs early T1 or as fallback
+	const hasRocketArray = ROCKET_ARRAY_WEAPON_LIST.some(w => componentAvailable(w));
+	const CYBORG_ANTITANK_WEAPON_PROBABILITY = hasRocketArray ? 85 : 70;
 
 	if (random(100) < CYBORG_ANTITANK_WEAPON_PROBABILITY) {
 		if (createDroid(factory, "Cyborg Heavy Rocket", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_ROCKETS)) {
@@ -215,19 +221,14 @@ function produceCyborg(factory) {
 		if (createDroid(factory, "Cyborg Rocket", "CyborgLightBody", "CyborgLegs", CYBORG_LIGHT_ROCKETS)) {
 			return true;
 		}
-		// Fallback to Laser / Machinegun Cyborgs if Rocket Cyborgs are not yet researched (early T1)
-		if (createDroid(factory, "Cyborg Laser", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_LASER)) {
-			return true;
-		}
 		return createDroid(factory, "Cyborg Machinegun", "CyborgLightBody", "CyborgLegs", CYBORG__LIGHT_MACHINEGUN);
 	} else {
-		if (createDroid(factory, "Cyborg Laser", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_LASER)) {
-			return true;
-		}
 		if (createDroid(factory, "Cyborg Machinegun", "CyborgLightBody", "CyborgLegs", CYBORG__LIGHT_MACHINEGUN)) {
 			return true;
 		}
-		// Fallback to Rocket Cyborgs if Machinegun Cyborgs are unavailable
+		if (createDroid(factory, "Cyborg Laser", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_LASER)) {
+			return true;
+		}
 		if (createDroid(factory, "Cyborg Heavy Rocket", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_ROCKETS)) {
 			return true;
 		}
@@ -236,7 +237,31 @@ function produceCyborg(factory) {
 }
 
 function produceVTOL(factory) {
-	return createDroid(factory, "VTOL Bomber", VTOL_BODY_LIST, "V-Tol", VTOL_WEAPONS);
+	const hasRocketVTOL = VTOL_ROCKET_WEAPONS.some(w => componentAvailable(w));
+	const hasHeavyBombVTOL = VTOL_BOMB_WEAPONS.some(w => componentAvailable(w));
+	const hasBBVTOL = componentAvailable("Rocket-VTOL-BB");
+
+	if (hasBBVTOL && currentEnemy && currentEnemy.position !== undefined &&
+		enumStruct(currentEnemy.position, DEFENSE).length >= 3 && random(100) < 12) {
+		if (createDroid(factory, "VTOL Bunker Buster", VTOL_BODY_LIST, "V-Tol", "Rocket-VTOL-BB")) {
+			return true;
+		}
+	}
+
+	if (hasRocketVTOL && (!hasHeavyBombVTOL || random(100) < 65)) {
+		if (createDroid(factory, "VTOL Rocket", VTOL_BODY_LIST, "V-Tol", VTOL_ROCKET_WEAPONS)) {
+			return true;
+		}
+	}
+
+	if (hasHeavyBombVTOL) {
+		if (createDroid(factory, "VTOL Bomber", VTOL_BODY_LIST, "V-Tol", VTOL_BOMB_WEAPONS)) {
+			return true;
+		}
+	}
+
+	const fallbackVTOL = VTOL_ROCKET_WEAPONS.concat(VTOL_BOMB_WEAPONS).concat(["Bomb1-VTOL-LtHE"]);
+	return createDroid(factory, "VTOL Striker", VTOL_BODY_LIST, "V-Tol", fallbackVTOL);
 }
 
 /**

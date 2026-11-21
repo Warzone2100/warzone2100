@@ -7,24 +7,21 @@ const START_COMPONENTS = [
 	"R-Wpn-MG1Mk1", // Machinegun (unlocks immediate first tank turret & MG tower)
 	"R-Sys-Engineering01", // Engineering (unlocks modules, repair facility & cyborg path)
 	"R-Struc-Factory-Cyborg", // Cyborg Factory (enables cheap early cyborgs alongside tanks)
-	"R-Wpn-MG-Damage01", // +25% MG damage right away
+	"R-Wpn-MG-Damage01", // +25% MG damage right away for T1 early defense
 	"R-Wpn-MG-Damage02", // +25% MG damage (prerequisite for Twin MG)
-	"R-Wpn-MG2Mk1", // Twin Machinegun
-	"R-Vehicle-Engine01", // Fuel Injection Engine Mk1 (unlocks Power Module & Half-Tracks)
+	"R-Wpn-MG2Mk1", // Twin Machinegun (strong early T1 AP until Rocket Arrays unlock)
+	"R-Vehicle-Engine01", // Fuel Injection Engine Mk1 (unlocks Power Module, Mini-Pod & Half-Tracks)
 	"R-Struc-PowerModuleMk1", // Power Module (+25% power generation per derrick)
 	"R-Vehicle-Prop-Halftracks", // Half-tracked Propulsion (core fast/affordable T1 propulsion)
 	"R-Struc-Research-Module", // Research Module (accelerates all subsequent research)
 	"R-Struc-Research-Upgrade01", // Synaptic Link Data Analysis (faster lab research)
-	"R-Wpn-Rocket05-MiniPod", // Mini-Rocket Pod (unlocks rocket path toward Lancer)
+	"R-Wpn-Rocket05-MiniPod", // Mini-Rocket Pod (entry into unified Rocket/Missile/Array/VTOL tree)
 	"R-Vehicle-Metals01", // Composite Alloys Mk1 (T1 armor, required for Cobra)
 	"R-Vehicle-Body04", // Bug light body
 	"R-Vehicle-Body05", // Cobra medium body (core T1/T2 tank body)
-	"R-Wpn-MG-Damage03", // Further MG damage scaling
 	"R-Defense-Tower01", // Machinegun Guard Tower (earliest base defense)
 	"R-Struc-RepairFacility", // Repair Facility
 	"R-Defense-Tower06", // Mini-Rocket Guard Tower
-	"R-Defense-Pillbox01", // Heavy Machinegun Bunker
-	"R-Struc-Factory-Module", // Factory Module
 ];
 
 // ------------------ BODY ------------------
@@ -156,33 +153,40 @@ const FUNDAMENTALS_MACHINEGUN_WEAPON_T4 = [
 // ------------------ ROCKETS ------------------
 
 const FUNDAMENTALS_ROCKET_WEAPON_T1 = [
+	"R-Wpn-Rocket-Damage01", // T1 Rocket Damage
 	"R-Wpn-Rocket-Accuracy01", // T1 Accuracy upgrades
-	"R-Wpn-Rocket-Damage01", // T1 Damage upgrades
+	"R-Wpn-Rocket-Damage02", // Unlocks Mini-Rocket Array
+	"R-Wpn-Rocket02-MRL", // Mini-Rocket Array (replaces MG as AP/splash support)
 	"R-Wpn-Rocket-ROF01", // T1 ReloadTime upgrades
 ];
 
 const FUNDAMENTALS_ROCKET_WEAPON_T2 = [
-	"R-Wpn-Rocket01-LtAT", // Lancer
-	"R-Wpn-Rocket01-LtAT", // Cyborg Lancer
+	"R-Wpn-Rocket-Damage03", // Prerequisite for Lancer
+	"R-Wpn-Rocket01-LtAT", // Lancer (tank + cyborg + VTOL)
 	"R-Wpn-Rocket-Accuracy02", // T2 Accuracy upgrades
-	"R-Wpn-Rocket-Damage02", // T2 Damage upgrades
 	"R-Wpn-Rocket-ROF02", // T2 ReloadTime upgrades
+	"R-Wpn-Rocket02-MRLHvy", // Heavy Rocket Array
 ];
 
 const FUNDAMENTALS_ROCKET_WEAPON_T3 = [
-	"R-Wpn-Rocket07-Tank-Killer", // Tank Killer
+	"R-Wpn-Rocket07-Tank-Killer", // Tank Killer (tank + VTOL)
 	"R-Cyborg-Hvywpn-TK", // Super Cyborg Tank Killer
 	"R-Wpn-RocketSlow-Accuracy01", // T3 Slow Rocket Accuracy upgrades
-	"R-Wpn-Rocket-Damage03", // T3 Damage upgrades
 	"R-Wpn-Rocket-ROF03", // T3 ReloadTime upgrades
-	"R-Wpn-Rocket03-HvAT", // Bunker Buster (low priority)
+	"R-Wpn-Rocket03-HvAT", // Bunker Buster (tank + VTOL)
+	"R-Wpn-MdArtMissile", // Seraph Missile Array
 ];
 
 const FUNDAMENTALS_ROCKET_WEAPON_T4 = [
-	"R-Wpn-Missile2A-T", // Scourge Missile
+	"R-Wpn-Missile2A-T", // Scourge Missile (tank + cyborg + VTOL)
 	"R-Cyborg-Hvywpn-A-T", // Super Cyborg Scourge
 	"R-Wpn-RocketSlow-Accuracy02", // T4 Slow Rocket Accuracy upgrades
-	"R-Wpn-Rocket-Damage09", // T4 Damage upgrades
+	"R-Wpn-Rocket-Damage09", // T4 Rocket Damage upgrades
+	"R-Wpn-Missile-Damage01", // Missile Damage upgrades (Scourge/Seraph/Archangel/SAM)
+	"R-Wpn-Missile-ROF01", // Missile ROF upgrades
+	"R-Wpn-Missile-Accuracy02", // Missile Accuracy upgrades
+	"R-Wpn-Missile-Damage03", // Endgame Missile Damage
+	"R-Wpn-Missile-ROF03", // Endgame Missile ROF
 ];
 
 // ------------------ FIRE ------------------
@@ -200,19 +204,16 @@ const FUNDAMENTALS_HOWITZER_WEAPON = [
 	"R-Wpn-HowitzerMk1", // Howitzer
 ];
 
-// ------------------ VTOL BOMBS ------------------
+// ------------------ VTOL BOMBS (Heavy anti-armor bombs alongside Rocket VTOLs) ------------------
 
 const FUNDAMENTALS_VTOL_BOMBS_T2 = [
-	"R-Wpn-Bomb01", // Cluster Bombs Bay
-	"R-Wpn-Bomb-Damage01", // HE Bomb Shells
+	"R-Struc-VTOLPad-Upgrade01", // Automated VTOL Rearming
 	"R-Wpn-Bomb02", // HEAP Bomb Bay
-	"R-Wpn-Bomb03", // Phosphor Bomb Bay
 ];
 
 const FUNDAMENTALS_VTOL_BOMBS_T3 = [
 	"R-Wpn-Bomb-Damage02", // Improved Bomb Warhead
 	"R-Wpn-Bomb04", // Thermite Bomb Bay
-	"R-Struc-VTOLPad-Upgrade01", // Automated VTOL Rearming
 	"R-Struc-VTOLPad-Upgrade03", // Automated VTOL Rearming Mk3
 	"R-Struc-VTOLPad-Upgrade06", // Robotic VTOL Rearming Mk3
 ];
@@ -220,28 +221,25 @@ const FUNDAMENTALS_VTOL_BOMBS_T3 = [
 // ------------------ DEFENCES ------------------
 
 const AA_RESEARCH = [
-	"R-Wpn-AAGun03", // Hurricane AA Turret
-	"R-Defense-AASite-QuadMg1", // Hurricane AA Site
-	"R-Wpn-AAGun02", // Cyclone Flak Turret
-	"R-Defense-AASite-QuadBof", // Cyclone AA Flak Site
-	"R-Wpn-AAGun04", // Whirlwind AA Turret
-	"R-Defense-AASite-QuadRotMg", // Whirlwind AA Site
+	"R-Wpn-Sunburst", // Sunburst AA Rocket Array (Rocket tree synergy)
+	"R-Defense-Sunburst", // Sunburst AA Site
 	"R-Wpn-Missile-LtSAM", // Avenger SAM
 	"R-Defense-SamSite1", // Avenger SAM Site
 	"R-Wpn-Missile-HvSAM", // Vindicator SAM
-	"R-Defense-SamSite2" // Vindicator SAM Site
+	"R-Defense-SamSite2", // Vindicator SAM Site
+	"R-Wpn-AAGun03", // Hurricane AA Turret (early fallback only)
+	"R-Defense-AASite-QuadMg1", // Hurricane AA Site
 ];
 
 const FUNDAMENTALS_DEFENCE_T1 = [
 	"R-Defense-Tower01", // Machinegun Guard Tower
 	"R-Defense-Tower06", // Mini-Rocket Guard Tower
-	"R-Defense-Pillbox01", // Heavy Machinegun Bunker
 	"R-Defense-WallUpgrade03", // T1 defences upgrades
 ];
 
 const FUNDAMENTALS_DEFENCE_T2 = [
+	"R-Defense-MRL", // Mini-Rocket Array Emplacement
 	"R-Defense-WallTower06", // Lancer Hardpoint
-	"R-Defense-RotMG", // Rotary Machine Gun Bunker
 	"R-Defense-IDFRocket", // Ripple Rocket Battery
 	"R-Defense-WallUpgrade06", // T2 defences upgrades
 ];
@@ -268,6 +266,7 @@ const FUNDAMENTALS_UPGRADES_T1 = [
 	"R-Struc-Research-Upgrade01", // Research speed
 	"R-Struc-Research-Upgrade02", // Research speed
 	"R-Struc-Factory-Upgrade01", // Factory production speed
+	"R-Struc-Factory-Module", // Factory Module
 	"R-Struc-RprFac-Upgrade01", // Repair facility speed
 	"R-Sys-Sensor-Upgrade01", // Sensor range
 ];

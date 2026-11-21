@@ -37,35 +37,37 @@ function checkTankKillerWeapons() {
 	);
 }
 
-// Dynamically adjust Anti-Personnel (MG/Laser) vs Anti-Tank (Rockets) ratio based on enemy unit composition
+// Dynamically adjust Anti-Personnel (Rocket Array, or T1 MG before MRL unlocks) vs Anti-Tank (Rockets) ratio
 function checkEnemyAntiPersonnelProbability() {
+	const hasRocketArray = ROCKET_ARRAY_WEAPON_LIST.some(w => componentAvailable(w));
+	const hasLancerOrBetter = componentAvailable("Rocket-LtA-T") || componentAvailable("Rocket-HvyA-T") || componentAvailable("Missile-A-T");
+	const hasMGWeapon = MACHINEGUN_WEAPON_LIST.some(w => componentAvailable(w));
+
+	// In early T1 before Rocket Arrays or Lancers unlock, favor available MG turrets over Mini-Rocket Pods
+	if (!hasLancerOrBetter && !hasRocketArray && hasMGWeapon) {
+		return 85;
+	}
+
 	if (!currentEnemy || currentEnemy.position === undefined) {
-		return 60;
+		return hasRocketArray ? 40 : 60;
 	}
 
 	const enemyTanks = enumDroid(currentEnemy.position, DROID_WEAPON).length;
 	const enemyCyborgs = enumDroid(currentEnemy.position, DROID_CYBORG).length;
 	const totalCombat = enemyTanks + enemyCyborgs;
-	const hasLancerOrBetter = componentAvailable("Rocket-LtA-T") || componentAvailable("Rocket-HvyA-T") || componentAvailable("Missile-A-T");
-	const hasMGWeapon = MACHINEGUN_WEAPON_LIST.some(w => componentAvailable(w));
-
-	// In early T1 before Lancers unlock, favor available MG turrets over Mini-Rocket Pods if MG is researched
-	if (!hasLancerOrBetter && hasMGWeapon) {
-		return 85;
-	}
 
 	if (totalCombat < 5) {
-		return 65; // Default early game favors MG/Lasers unless anti-tank rockets are needed
+		return hasRocketArray ? 45 : 65; // Balanced mix of Rocket Arrays (or MG early) + AT Rockets
 	}
 
 	const cyborgRatio = (enemyCyborgs / totalCombat) * 100;
 	if (cyborgRatio >= 45) {
-		return 70; // Heavy cyborg enemy -> 70% Anti-Personnel (MG/Lasers)
+		return hasRocketArray ? 60 : 70; // Heavy cyborg enemy -> emphasize AP Rocket Arrays / MG
 	} else if (cyborgRatio <= 20) {
-		return 35; // Tank-heavy enemy -> 35% Anti-Personnel, 65% Anti-Tank Rockets
+		return 30; // Tank-heavy enemy -> 30% AP Rocket Arrays, 70% AT Rockets
 	}
 
-	return 55;
+	return 45;
 }
 
 // If the enemies have defenses and our army is close enough to engage them, produce some bunker busters
