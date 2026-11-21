@@ -1201,6 +1201,7 @@ void WzCampaignTweakOptionsSummaryWidget::update(const std::vector<WzCampaignTwe
 			continue;	// skip non-editable settings
 		}
 		auto newStatusLabel = makeTweakOptionSmallLabel((setting.currentValue) ? "✓" : "x", statusLabelWidth);
+		newStatusLabel->setCanTruncate(false);
 		auto newTweakLabel = makeTweakOptionSmallLabel(setting.displayName);
 		grid->place({col++, 1, false}, row, Margin(0, 3, 0, 0).wrap(newStatusLabel));
 		grid->place({col++, 1, true}, row, newTweakLabel);
