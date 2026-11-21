@@ -25,6 +25,9 @@ function evalResearch(lab, list) {
 			// Skip power research if we have enough power
 			continue;
 		}
+		if (isSeaMap && list[i] === "R-Struc-Factory-Cyborg") {
+			continue;
+		}
 
 		if (pursueResearch(lab, list[i])) {
 			return true; // Research found and pursued
@@ -51,11 +54,14 @@ function research() {
 		return;
 	}
 
-	// Always allow at least 1 research lab to start researching even when power is low,
-	// unless we need to preserve power for Power Generators; require MIN_RESEARCH_POWER when running multiple labs simultaneously
+	// Preserve power only before our first generator is placed/built or when an additional unplaced generator is needed;
+	// avoid holding labs idle once Gen #1 exists and needed generators are already queued
+	const totalGens = countStruct(POW_GEN_STAT, me);
 	const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
-	const hasUnfinishedGen = enumStruct(me, POW_GEN_STAT).some(s => s.status !== BUILT);
-	if ((completedGens === 0 || hasUnfinishedGen || numUnusedDerricks() > 0) && getRealPower() < 200) {
+	const neededGens = Math.ceil(countStruct(DERRICK_STAT, me) / 4);
+	if ((totalGens === 0 && getRealPower() < 150) ||
+		(completedGens === 0 && totalGens > 0 && getRealPower() < 60) ||
+		(numUnusedDerricks() > 0 && totalGens < neededGens && getRealPower() < 120)) {
 		return;
 	}
 
@@ -69,9 +75,9 @@ function research() {
 		isSeaMap ? ["R-Vehicle-Prop-Hover"] : null,
 		START_COMPONENTS,
 
-		// T1
-		FUNDAMENTALS_ROCKET_WEAPON_T1,
+		// T1 (Machinegun upgrades first for immediate T1 combat efficiency, then Rockets/Body/Economy)
 		FUNDAMENTALS_MACHINEGUN_WEAPON_T1,
+		FUNDAMENTALS_ROCKET_WEAPON_T1,
 		FUNDAMENTALS_BODY_T1,
 		FUNDAMENTALS_PROPULSION_T1,
 		FUNDAMENTALS_UPGRADES_T1,

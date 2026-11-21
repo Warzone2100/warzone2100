@@ -192,13 +192,13 @@ function getAliveEnemyPlayersData() {
  * @returns {PlayerData}
  */
 function createScavengerPlayerData(scavengerIndex) {
-	let scavengerBase = { x: mapWidth / 2, y: mapHeight / 2 }; // Fallback to center of map
-	let scavStructs = enumStruct(scavengerIndex);
+	let scavengerBase = { x: Math.floor(mapWidth / 2), y: Math.floor(mapHeight / 2) }; // Fallback to center of map
+	let scavStructs = enumStruct(scavengerIndex).filter(s => s.stattype !== WALL).sort(sortByDistToBase);
 
 	if (scavStructs.length > 0) {
 		scavengerBase = { x: scavStructs[0].x, y: scavStructs[0].y };
 	} else {
-		let scavDroids = enumDroid(scavengerIndex);
+		let scavDroids = enumDroid(scavengerIndex).sort(sortByDistToBase);
 		if (scavDroids.length > 0) {
 			scavengerBase = { x: scavDroids[0].x, y: scavDroids[0].y };
 		}
@@ -264,7 +264,7 @@ function isDerrick(obj) {
 
 // Used for deciding if a truck will capture oil or build/recover in an area.
 function isUnsafeEnemyObject(obj) {
-	if (obj.player === me || allianceExistsBetween(me, obj.player)) {
+	if (!obj || obj.player === me || (!isScavengerPlayer(obj.player) && allianceExistsBetween(me, obj.player))) {
 		return false;
 	}
 
@@ -272,9 +272,15 @@ function isUnsafeEnemyObject(obj) {
 		return true;
 	}
 
-	// Any enemy structure (even a derrick, unfinished defense, or scavenger bunker) means enemy presence
+	// Any enemy or scavenger structure (including scavenger camps, walls/lookout towers, bunkers, factories, derricks) means enemy presence
 	if (obj.type === STRUCTURE) {
-		const dangerousStats = [DEFENSE, FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR];
+		if (isScavengerPlayer(obj.player)) {
+			return true;
+		}
+		const dangerousStats = [
+			DEFENSE, FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR,
+			POWER_GEN, RESEARCH_LAB, REPAIR_FACILITY, REARM_PAD, LASSAT, SAT_UPLINK, COMMAND_CONTROL
+		];
 		return dangerousStats.includes(obj.stattype);
 	}
 
@@ -307,7 +313,42 @@ function isInDangerZone(x, y, radiusTiles = 16) {
 	return false;
 }
 
-// Evaluates if an area at (x, y) is safe from ALL enemy bases, enemy units/structures, and recent ambushes
+// Evaluates if an oil resource at (x, y) is safe to capture (Cobra & SemperFi strategy, including Scavengers)
+function isOilAreaSafe(x, y, range = 7) {
+	if (x === undefined || y === undefined) {
+		return false;
+	}
+
+	if (isInDangerZone(x, y, 10)) {
+		return false;
+	}
+
+	let nearby = enumRange(x, y, range, ENEMIES, false);
+	if (typeof scavengers !== "undefined" && scavengers && typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0) {
+		scavengerIndex = scavengerPlayer;
+	}
+	if (scavengerIndex !== undefined) {
+		nearby = nearby.concat(enumRange(x, y, range, scavengerIndex, false));
+	}
+
+	return !nearby.some(obj => {
+		if (!obj || obj.player === me || (!isScavengerPlayer(obj.player) && allianceExistsBetween(me, obj.player))) {
+			return false;
+		}
+		if (obj.type === DROID) {
+			return true;
+		}
+		// Only armed enemy/scavenger defenses or factories block oil capture (undefended enemy derricks do NOT block us!)
+		return obj.type === STRUCTURE && (
+			(obj.stattype === DEFENSE && obj.status === BUILT) ||
+			obj.stattype === FACTORY ||
+			obj.stattype === CYBORG_FACTORY ||
+			obj.stattype === VTOL_FACTORY
+		);
+	});
+}
+
+// Evaluates if an area at (x, y) is safe from ALL enemy bases (including Scavengers), enemy/scavenger units/structures, and recent ambushes
 function isAreaSafe(x, y, range = 18) {
 	if (x === undefined || y === undefined) {
 		return false;
@@ -318,18 +359,34 @@ function isAreaSafe(x, y, range = 18) {
 		return false;
 	}
 
-	// 2. Check distance against ALL alive enemy bases (not just currentEnemy!)
+	// 2. Check distance against ALL alive enemy bases AND all Scavenger factories/bases
 	const myDistToPoint = distBetweenTwoPoints(BASE.x, BASE.y, x, y);
+	const enemyBasesToCheck = [];
 	for (const enemy of enemiesList) {
-		if (!enemy || !enemy.base) continue;
-		const enemyDistToPoint = distBetweenTwoPoints(enemy.base.x, enemy.base.y, x, y);
+		if (enemy && enemy.base) {
+			enemyBasesToCheck.push(enemy.base);
+		}
+	}
+	if (typeof scavengers !== "undefined" && scavengers && typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0) {
+		scavengerIndex = scavengerPlayer;
+	}
+	if (scavengerIndex !== undefined) {
+		const scavBases = enumStruct(scavengerIndex, FACTORY)
+			.concat(enumStruct(scavengerIndex, VTOL_FACTORY));
+		for (const sb of scavBases) {
+			enemyBasesToCheck.push({ x: sb.x, y: sb.y });
+		}
+	}
 
-		// Never send trucks within 28 tiles of any enemy base
-		if (enemyDistToPoint < 28) {
+	for (const enemyBase of enemyBasesToCheck) {
+		const enemyDistToPoint = distBetweenTwoPoints(enemyBase.x, enemyBase.y, x, y);
+
+		// Never send trucks outside our base within 28 tiles of any enemy or scavenger base
+		if (!isNearBase(x, y) && enemyDistToPoint < 28) {
 			return false;
 		}
 
-		// If the point is closer to an enemy base than to our base, only consider it safe if our/allied combat units are nearby guarding it
+		// If the point is closer to an enemy/scavenger base than to our base, only consider it safe if our/allied combat units are nearby guarding it
 		if (enemyDistToPoint < myDistToPoint && myDistToPoint > BASE_THREAT_RANGE) {
 			const localFriendlyGuards = enumRange(x, y, 14, ALLIES, false)
 				.concat(enumRange(x, y, 14, me, false))
@@ -340,13 +397,16 @@ function isAreaSafe(x, y, range = 18) {
 		}
 	}
 
-	// 3. Check if there are any dangerous enemy droids or structures in range
-	const hasUnsafeObjects = enumRange(x, y, range, ENEMIES, false).some(isUnsafeEnemyObject);
-	if (hasUnsafeObjects) {
+	// 3. Check if there are any dangerous enemy or scavenger droids or structures in range
+	let nearbyObjects = enumRange(x, y, range, ENEMIES, false);
+	if (scavengerIndex !== undefined) {
+		nearbyObjects = nearbyObjects.concat(enumRange(x, y, range, scavengerIndex, false));
+	}
+	if (nearbyObjects.some(isUnsafeEnemyObject)) {
 		return false;
 	}
 
-	// 4. Local combat balance check (compare local enemies against local friendly units, NOT global map units)
+	// 4. Local combat balance check (compare local enemies & scavengers against local friendly units)
 	return numWeapObjectsInRange(x, y, ENEMIES, me, range, false);
 }
 
@@ -377,12 +437,22 @@ function numWeapObjectsInRange(x, y, enemies, allyIndex, scanRadius, visible) {
 	}
 
 	let enemiesStuff = enumRange(x, y, scanRadius, enemies, visible);
+	if (enemies === ENEMIES && scavengerIndex !== undefined) {
+		enemiesStuff = enemiesStuff.concat(enumRange(x, y, scanRadius, scavengerIndex, visible));
+	}
 	let enemyDroidsCount = 0;
+	const seenIds = new Set();
 
 	for (let i = 0, l = enemiesStuff.length; i < l; ++i) {
 		let obj = enemiesStuff[i];
+		if (!obj || seenIds.has(obj.id)) continue;
+		seenIds.add(obj.id);
 
-		if (obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG) && obj.droidType !== DROID_CONSTRUCT) {
+		if (obj.type === DROID &&
+			(obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON) &&
+			obj.droidType !== DROID_CONSTRUCT) {
+			enemyDroidsCount++;
+		} else if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT) {
 			enemyDroidsCount++;
 		}
 	}

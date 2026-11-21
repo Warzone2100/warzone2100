@@ -46,9 +46,16 @@ function checkEnemyAntiPersonnelProbability() {
 	const enemyTanks = enumDroid(currentEnemy.position, DROID_WEAPON).length;
 	const enemyCyborgs = enumDroid(currentEnemy.position, DROID_CYBORG).length;
 	const totalCombat = enemyTanks + enemyCyborgs;
+	const hasLancerOrBetter = componentAvailable("Rocket-LtA-T") || componentAvailable("Rocket-HvyA-T") || componentAvailable("Missile-A-T");
+	const hasMGWeapon = MACHINEGUN_WEAPON_LIST.some(w => componentAvailable(w));
+
+	// In early T1 before Lancers unlock, favor available MG turrets over Mini-Rocket Pods if MG is researched
+	if (!hasLancerOrBetter && hasMGWeapon) {
+		return 85;
+	}
 
 	if (totalCombat < 5) {
-		return 60; // Default early game favors MG/Lasers
+		return 65; // Default early game favors MG/Lasers unless anti-tank rockets are needed
 	}
 
 	const cyborgRatio = (enemyCyborgs / totalCombat) * 100;
@@ -82,7 +89,7 @@ function checkCurrentEnemyDefenses() {
 	// Only produce Bunker Busters if our main attack army is already reasonably close to the enemy defenses
 	const closestDefense = currentEnemyDefenses[0];
 	const attackers = enumGroup(attackerGroup);
-	if (attackers.length < 10) {
+	if (attackers.length < (isHighOilMap ? 10 : 3)) {
 		return 0;
 	}
 
@@ -90,8 +97,8 @@ function checkCurrentEnemyDefenses() {
 		distBetweenTwoPoints(droid.x, droid.y, closestDefense.x, closestDefense.y) <= BASE_THREAT_RANGE + 10
 	).length;
 
-	// Require at least 4 of our combat units (or useBunkerBuster already active) to be near the enemy defense line
-	if (!useBunkerBuster && closeAttackersCount < 4) {
+	// Require enough combat units (or useBunkerBuster already active) to be near the enemy defense line
+	if (!useBunkerBuster && closeAttackersCount < (isHighOilMap ? 4 : 2)) {
 		return 0;
 	}
 

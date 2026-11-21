@@ -5,23 +5,26 @@
 
 const START_COMPONENTS = [
 	"R-Wpn-MG1Mk1", // Machinegun (unlocks immediate first tank turret & MG tower)
-	"R-Sys-Engineering01", // Engineering (unlocks modules, repair facility & engine path)
+	"R-Sys-Engineering01", // Engineering (unlocks modules, repair facility & cyborg path)
+	"R-Struc-Factory-Cyborg", // Cyborg Factory (enables cheap early cyborgs alongside tanks)
+	"R-Wpn-MG-Damage01", // +25% MG damage right away
+	"R-Wpn-MG-Damage02", // +25% MG damage (prerequisite for Twin MG)
 	"R-Wpn-MG2Mk1", // Twin Machinegun
-	"R-Vehicle-Engine01", // Fuel Injection Engine Mk1
-	"R-Vehicle-Prop-Halftracks", // Half-tracked Propulsion (core tank propulsion)
-	"R-Wpn-Rocket05-MiniPod", // Mini-Rocket Pod (unlocks rocket tanks & rocket towers)
+	"R-Vehicle-Engine01", // Fuel Injection Engine Mk1 (unlocks Power Module & Half-Tracks)
+	"R-Struc-PowerModuleMk1", // Power Module (+25% power generation per derrick)
+	"R-Vehicle-Prop-Halftracks", // Half-tracked Propulsion (core fast/affordable T1 propulsion)
 	"R-Struc-Research-Module", // Research Module (accelerates all subsequent research)
-	"R-Struc-PowerModuleMk1", // Power Module (boosts power generation)
+	"R-Struc-Research-Upgrade01", // Synaptic Link Data Analysis (faster lab research)
+	"R-Wpn-Rocket05-MiniPod", // Mini-Rocket Pod (unlocks rocket path toward Lancer)
 	"R-Vehicle-Metals01", // Composite Alloys Mk1 (T1 armor, required for Cobra)
 	"R-Vehicle-Body04", // Bug light body
 	"R-Vehicle-Body05", // Cobra medium body (core T1/T2 tank body)
-	"R-Struc-RepairFacility", // Repair Facility
+	"R-Wpn-MG-Damage03", // Further MG damage scaling
 	"R-Defense-Tower01", // Machinegun Guard Tower (earliest base defense)
+	"R-Struc-RepairFacility", // Repair Facility
 	"R-Defense-Tower06", // Mini-Rocket Guard Tower
 	"R-Defense-Pillbox01", // Heavy Machinegun Bunker
-	"R-Struc-Factory-Cyborg", // Cyborg Factory
 	"R-Struc-Factory-Module", // Factory Module
-	"R-Vehicle-Prop-Hover", // Hover Propulsion
 ];
 
 // ------------------ BODY ------------------
@@ -67,6 +70,7 @@ const FUNDAMENTALS_PROPULSION_T1 = [
 	"R-Vehicle-Prop-Halftracks", // Half Tracks
 	"R-Vehicle-Engine01",
 	"R-Vehicle-Engine02",
+	"R-Vehicle-Prop-Hover", // Hover Propulsion (after core T1 weapons, upgrades, and half-tracks on land maps)
 ];
 
 const FUNDAMENTALS_PROPULSION_T2 = [

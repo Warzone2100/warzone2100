@@ -38,7 +38,8 @@ function helpAlly(allyPlayerData) {
 	const allyData = allyPlayerData;
 	const allAttackers = enumGroup(attackerGroup);
 
-	if (allAttackers.length < 10) {
+	const minAttackersForHelp = isHighOilMap ? 10 : 4;
+	if (allAttackers.length < minAttackersForHelp) {
 		if (gameTime - lastSorryChatTime > 120000) {
 			chat(ALLIES, `Sorry ${allyData.name}! I don't have enough units to help you right now.`);
 			lastSorryChatTime = gameTime;
@@ -47,7 +48,7 @@ function helpAlly(allyPlayerData) {
 	}
 
 	const enemiesDroids = enumRange(allyData.base.x, allyData.base.y, BASE_THREAT_RANGE, ENEMIES, true)
-		.filter(obj => obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG));
+		.filter(obj => obj.type === DROID && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON));
 
 	if (enemiesDroids.length === 0) {
 		return false; // No enemiesDroids found

@@ -90,6 +90,20 @@ const BUNKER_BUSTER_WEAPON = [
 ];
 
 // ========================
+// TANK ANTI-AIR SECTION
+// ========================
+const AA_WEAPON_LIST = [
+	"AAGunLaser",      // Stormbringer AA Laser
+	"Missile-HvySAM",  // Vindicator SAM
+	"Missile-LtSAM",   // Avenger SAM
+	"QuadRotAAGun",    // Whirlwind AA Turret
+	"AAGun2Mk1Quad",   // Quad AA Flak Cannon
+	"Rocket-Sunburst", // Sunburst AA Rocket Array
+	"AAGun2Mk1",       // AA Flak Cannon
+	"QuadMg1AAGun",    // Hurricane AA Turret
+];
+
+// ========================
 // TANK MACHINE GUN SECTION
 // ========================
 const MACHINEGUN_WEAPON_LIST = [

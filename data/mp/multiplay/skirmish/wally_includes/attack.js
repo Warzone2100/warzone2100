@@ -7,12 +7,70 @@ function isDroidRepairing(droid) {
 	return false;
 }
 
+// Dynamically calculates the minimum squad size before launching an offensive,
+// reacting immediately to threats near our base or derricks while scaling on low-oil maps
+function getMinAttackGroupSize(attackerDroids) {
+	if (isMyBaseInTrouble) {
+		return 1;
+	}
+
+	// If enemy ground forces are threatening near our base perimeter, intercept immediately
+	const basePerimeter = BASE_THREAT_RANGE + 14;
+	const nearbyEnemyThreat = enumRange(BASE.x, BASE.y, basePerimeter, ENEMIES, true)
+		.some(o => o.type === DROID && !o.isVTOL && (o.droidType === DROID_WEAPON || o.droidType === DROID_CYBORG || o.droidType === DROID_PERSON));
+	if (nearbyEnemyThreat) {
+		return 2;
+	}
+
+	if (isHighOilMap) {
+		return gameTime < 480000 ? 15 : 25;
+	}
+
+	// If any of our derricks is actively threatened nearby, send a fast response squad
+	const threatenedDerrick = enumStruct(me, DERRICK_STAT).some(d =>
+		enumRange(d.x, d.y, 10, ENEMIES, true).some(
+			o => o.type === DROID && !o.isVTOL && (o.droidType === DROID_WEAPON || o.droidType === DROID_CYBORG || o.droidType === DROID_PERSON)
+		)
+	);
+	if (threatenedDerrick) {
+		return 2;
+	}
+
+	// Hysteresis: if we are already engaged near the current target, don't pull survivors back mid-fight
+	if (currentEnemyTarget && attackerDroids.length >= 2) {
+		const alreadyEngaged = attackerDroids.filter(
+			d => distBetweenTwoPoints(d.x, d.y, currentEnemyTarget.x, currentEnemyTarget.y) <= 14
+		).length;
+		if (alreadyEngaged >= 2) {
+			return 2;
+		}
+	}
+
+	if (!currentEnemy || currentEnemy.position === undefined) {
+		return 4;
+	}
+
+	// Against Scavengers on low oil, small squads clear camps quickly without waiting too long
+	if (isScavengerPlayer(currentEnemy.position)) {
+		return 3;
+	}
+
+	// Scale low-oil attack threshold dynamically against the current enemy's combat strength (4 to 12)
+	const enemyIdx = currentEnemy.position;
+	const enemyCombatCount = enumDroid(enemyIdx, DROID_WEAPON, false).filter(d => !d.isVTOL).length +
+		enumDroid(enemyIdx, DROID_CYBORG, false).length;
+	const enemyDefCount = enumStruct(enemyIdx, DEFENSE).filter(d => d.stattype !== WALL && d.canHitGround).length;
+	const dynamicTarget = Math.ceil(enemyCombatCount * 0.6) + Math.min(3, Math.floor(enemyDefCount / 2));
+
+	return Math.max(4, Math.min(12, dynamicTarget));
+}
+
 function attack() {
 	const attackerDroids = enumGroup(attackerGroup).filter(
 		attacker => !isDroidRepairing(attacker) && attacker.order !== DORDER_RECOVER
 	);
 
-	let MIN_GROUP_SIZE = isMyBaseInTrouble ? 1 : isHighOilMap ? 25 : 10;
+	const MIN_GROUP_SIZE = getMinAttackGroupSize(attackerDroids);
 
 	if (attackerDroids.length < MIN_GROUP_SIZE && !isMyBaseInTrouble) {
 		retreatToBase(attackerDroids);
@@ -83,7 +141,7 @@ function manageVTOLs() {
 		}
 	}
 
-	const MIN_VTOL_STRIKE_SIZE = isMyBaseInTrouble ? 1 : 4;
+	const MIN_VTOL_STRIKE_SIZE = isMyBaseInTrouble ? 1 : (isHighOilMap ? 4 : 2);
 	if (readyVTOLs.length < MIN_VTOL_STRIKE_SIZE) {
 		return;
 	}
@@ -93,11 +151,12 @@ function manageVTOLs() {
 	if (currentEnemy && currentEnemy.position !== undefined) {
 		const enemyIdx = currentEnemy.position;
 
-		// Gather all ground enemy tanks, cyborgs, sensors, and trucks (strictly excluding enemy VTOLs!)
+		// Gather all ground enemy tanks, cyborgs, scavenger infantry, sensors, and trucks (strictly excluding enemy VTOLs!)
 		const enemyGroundUnits = enumDroid(enemyIdx, DROID_ANY, false)
 			.filter(d => !d.isVTOL && (
 				d.droidType === DROID_WEAPON ||
 				d.droidType === DROID_CYBORG ||
+				d.droidType === DROID_PERSON ||
 				d.droidType === DROID_SENSOR ||
 				d.droidType === DROID_COMMAND ||
 				d.droidType === DROID_CONSTRUCT
@@ -141,7 +200,7 @@ function manageVTOLs() {
 function helpAttackEnemy(helperDroids, allyBasePos) {
 	// Find visible enemy ground combat units near the ally's base (ignore enemy VTOLs)
 	const nearbyEnemies = enumRange(allyBasePos.x, allyBasePos.y, BASE_THREAT_RANGE * 2, ENEMIES, true)
-		.filter(obj => obj.type === DROID && !obj.isVTOL && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG));
+		.filter(obj => obj.type === DROID && !obj.isVTOL && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON));
 
 	// Sort enemies by distance to ally base (closest threats first)
 	nearbyEnemies.sort((a, b) =>
@@ -185,6 +244,7 @@ function attackEnemy(attackerDroids) {
 	// Ground combat units (strictly exclude enemy VTOLs so ground tanks never chase aircraft!)
 	const enemyDroid = enumDroid(enemyIndex, DROID_WEAPON, false)
 		.concat(enumDroid(enemyIndex, DROID_CYBORG, false))
+		.concat(enumDroid(enemyIndex, DROID_PERSON, false))
 		.filter(d => !d.isVTOL)
 		.sort(sortFunc)[0];
 
@@ -226,7 +286,10 @@ function attackEnemy(attackerDroids) {
 		} else if (closestDefense) {
 			currentEnemyTarget = closestDefense;
 		} else {
-			let enemyStructs = enumStruct(enemyIndex);
+			let enemyStructs = enumStruct(enemyIndex).filter(s => s.stattype !== WALL);
+			if (enemyStructs.length === 0) {
+				enemyStructs = enumStruct(enemyIndex);
+			}
 			if (enemyStructs.length > 0) {
 				currentEnemyTarget = enemyStructs.sort(sortByDistToBase)[0];
 			} else {
@@ -240,12 +303,6 @@ function attackEnemy(attackerDroids) {
 	// Destroy defenses that are too close to the base
 	if (closestDefense && isNearBase(closestDefense.x, closestDefense.y)) {
 		currentEnemyTarget = closestDefense;
-	}
-
-	// If the enemy is the scavenger, attack all the structures and the visible ground droids
-	if (enemyIndex === scavengerIndex) {
-		currentEnemyTarget = [...enumStruct(scavengerIndex), ...enumDroid(scavengerIndex, DROID_ANY, true).filter(d => !d.isVTOL)]
-			.sort(sortByDistToBase)[0];
 	}
 
 	if (!currentEnemyTarget) {
@@ -289,10 +346,12 @@ function attackEnemyDefenses(attackerDroids) {
 	const enemyIndex = currentEnemy.position;
 	const enemyStructures = enumStruct(enemyIndex, DEFENSE).sort(sortByDistToBase);
 	const closestEnemyStructure = enemyStructures[0];
+	const minBunkerBusters = isHighOilMap ? 5 : 2;
+	const minEscortCount = isHighOilMap ? 5 : 2;
 
 	if (!closestEnemyStructure) {
 		useBunkerBuster = false;
-		if (bunkerBusterDroids.length >= 5) {
+		if (bunkerBusterDroids.length >= minBunkerBusters) {
 			let realObject = getObject(currentEnemyTarget.type, enemyIndex, currentEnemyTarget.id);
 			if (realObject) {
 				sendDroidsToAttackTarget(bunkerBusterDroids, currentEnemyTarget);
@@ -306,8 +365,8 @@ function attackEnemyDefenses(attackerDroids) {
 		distBetweenTwoPoints(droid.x, droid.y, closestEnemyStructure.x, closestEnemyStructure.y) <= BASE_THREAT_RANGE
 	).length;
 
-	// Only engage with Bunker Busters if at least 5 attack units are in range of the enemy defense (or it's right at our base)
-	useBunkerBuster = escortCount >= 5 || isNearBase(closestEnemyStructure.x, closestEnemyStructure.y);
+	// Only engage with Bunker Busters if enough attack units are in range of the enemy defense (or it's right at our base)
+	useBunkerBuster = escortCount >= minEscortCount || isNearBase(closestEnemyStructure.x, closestEnemyStructure.y);
 
 	if (!useBunkerBuster) {
 		// Pull Bunker Busters back to base so they don't wander alone and die in vain
@@ -315,8 +374,8 @@ function attackEnemyDefenses(attackerDroids) {
 		return;
 	}
 
-	// If there are less than 5 Bunker Busters, keep them safe at base until a strike group is ready
-	if (bunkerBusterDroids.length < 5) {
+	// Keep Bunker Busters safe at base until a strike group is ready
+	if (bunkerBusterDroids.length < minBunkerBusters) {
 		retreatToBase(bunkerBusterDroids);
 		return;
 	}
@@ -591,6 +650,9 @@ function sendDroidsToAttackTarget(droids, target) {
 
 	const sensors = enumDroid(me, DROID_SENSOR);
 	const activeSensor = sensors.length > 0 ? sensors[0] : null;
+	const visibleEnemyVTOLs = (currentEnemy && currentEnemy.position !== undefined)
+		? enumDroid(currentEnemy.position, DROID_ANY, true).filter(d => d.isVTOL)
+		: [];
 
 	// Look for nearby wounded ground enemies around the target (within 8 tiles) so we can finish off low-HP units
 	// while strictly respecting each droid's minimum weapon range and ignoring enemy VTOLs
@@ -645,6 +707,25 @@ function sendDroidsToAttackTarget(droids, target) {
 				}
 			}
 
+			// Air-only AA tanks must target visible VTOLs directly or escort via DORDER_SCOUT instead of DORDER_ATTACK on ground targets
+			if (droid.canHitAir === true && droid.canHitGround === false) {
+				if (visibleEnemyVTOLs.length > 0) {
+					let closestVtol = visibleEnemyVTOLs[0];
+					let minDist = distBetweenTwoPoints(droid.x, droid.y, closestVtol.x, closestVtol.y);
+					for (let v = 1; v < visibleEnemyVTOLs.length; v++) {
+						const d = distBetweenTwoPoints(droid.x, droid.y, visibleEnemyVTOLs[v].x, visibleEnemyVTOLs[v].y);
+						if (d < minDist) {
+							minDist = d;
+							closestVtol = visibleEnemyVTOLs[v];
+						}
+					}
+					orderDroidObj(droid, DORDER_ATTACK, closestVtol);
+				} else {
+					orderDroidLoc(droid, DORDER_SCOUT, bestTarget.x, bestTarget.y);
+				}
+				continue;
+			}
+
 			if (droidCanReach(droid, bestTarget.x, bestTarget.y)) {
 				orderDroidObj(droid, DORDER_ATTACK, bestTarget);
 			} else if (droid.order !== DORDER_MOVE) {
@@ -655,11 +736,11 @@ function sendDroidsToAttackTarget(droids, target) {
 	}
 }
 
-// Return the nearest factory (normal factory has precedence)
+// Return the nearest factory (normal factory has precedence, supports both player and scavenger factories)
 function findNearestFactory(player) {
-	let facs = enumStruct(player, FACTORY_STAT).sort(sortByDistToBase);
-	let cybFacs = enumStruct(player, CYBORG_FACTORY_STAT).sort(sortByDistToBase);
-	let vtolFacs = enumStruct(player, VTOL_FACTORY_STAT).sort(sortByDistToBase);
+	let facs = enumStruct(player, FACTORY).sort(sortByDistToBase);
+	let cybFacs = enumStruct(player, CYBORG_FACTORY).sort(sortByDistToBase);
+	let vtolFacs = enumStruct(player, VTOL_FACTORY).sort(sortByDistToBase);
 	let target;
 
 	if (facs.length > 0) {
@@ -676,7 +757,7 @@ function findNearestFactory(player) {
 // Return closest player derrick ID
 function findNearestDerrick(player) {
 	let target;
-	let derr = enumStruct(player, DERRICK_STAT, true).sort(sortByDistToBase);
+	let derr = enumStruct(player, RESOURCE_EXTRACTOR, false).sort(sortByDistToBase);
 
 	if (derr.length > 0) {
 		target = derr[0];
@@ -708,7 +789,7 @@ function eventAttacked(victim, attacker) {
 
 		if ((victim.type === STRUCTURE && isBaseStructure(victim.stattype)) ||
 			(victim.stattype === DEFENSE && isNearBase(attacker.x, attacker.y))) {
-			const enemy = isScavengerPlayer(attacker.player) ? createScavengerPlayerData(attacker.player) : playerDataObject(attacker.player);
+			const enemy = playerDataObject(attacker.player);
 			if (enemy) {
 				setCurrentEnemy(enemy);
 			}
@@ -716,14 +797,6 @@ function eventAttacked(victim, attacker) {
 		}
 
 		if (!isHelpingAlly && !isMyBaseInTrouble) {
-			if (isScavengerPlayer(attacker.player)) {
-				const scavenger = createScavengerPlayerData(attacker.player);
-				if (scavenger) {
-					setCurrentEnemy(scavenger);
-				}
-				return;
-			}
-
 			const enemy = playerDataObject(attacker.player);
 			if (enemy) {
 				setCurrentEnemy(enemy);

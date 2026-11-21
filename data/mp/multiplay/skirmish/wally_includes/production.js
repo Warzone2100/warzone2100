@@ -2,20 +2,24 @@ function produceDroids() {
 	// List of factory types
 	const FAC_LIST = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT];
 	let virtualTrucks = 0; // Count of trucks currently being produced
+	let virtualAttackers = 0; // Count of combat units currently being produced
 
-	// Step 1: Count the number of construction units (trucks) being built
-	let factories = enumStruct(me, FACTORY_STAT);
-
-	let allGroundFactory = enumStruct(me, FACTORY_STAT).concat(enumStruct(me, CYBORG_FACTORY_STAT));
+	// Step 1: Count trucks and combat units currently being built across all factories
+	const allGroundFactory = enumStruct(me, FACTORY_STAT).concat(enumStruct(me, CYBORG_FACTORY_STAT));
 
 	if (allGroundFactory.length === 0) {
 		return; // Stop function if there are no factories
 	}
 
-	for (let i = 0; i < factories.length; ++i) {
-		let droid = getDroidProduction(factories[i]); // Get the droid being built
-		if (droid !== null && droid.droidType === DROID_CONSTRUCT) {
-			virtualTrucks += 1; // Increment virtual truck count
+	const allFactories = allGroundFactory.concat(enumStruct(me, VTOL_FACTORY_STAT));
+	for (let i = 0; i < allFactories.length; ++i) {
+		const droid = getDroidProduction(allFactories[i]); // Get the droid being built
+		if (droid !== null) {
+			if (droid.droidType === DROID_CONSTRUCT) {
+				virtualTrucks += 1;
+			} else if (droid.droidType === DROID_WEAPON || droid.droidType === DROID_CYBORG || droid.isVTOL === true) {
+				virtualAttackers += 1;
+			}
 		}
 	}
 
@@ -38,10 +42,16 @@ function produceDroids() {
 				const numTrucks = countDroid(DROID_CONSTRUCT) + virtualTrucks;
 				const desiredTrucks = getDesiredTruckCount();
 				const currentPower = getRealPower();
-				const armySize = enumGroup(attackerGroup).length;
+				const armySize = enumGroup(attackerGroup).length + virtualAttackers;
+				const totalGens = countStruct(POW_GEN_STAT, me);
 				const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
-				const hasUnfinishedGen = enumStruct(me, POW_GEN_STAT).some(s => s.status !== BUILT);
-				const mustSavePowerForGen = (completedGens === 0 || hasUnfinishedGen || numUnusedDerricks() > 0) && currentPower < 150;
+				const neededGens = Math.ceil(countStruct(DERRICK_STAT, me) / 4);
+
+				// Only save power to pay for an unplaced Power Generator (not when already paid/under construction or before our first 4 combat units exist)
+				const mustSavePowerForGen = !isMyBaseInTrouble && (
+					(totalGens === 0 && currentPower < 120) ||
+					(armySize >= 4 && numUnusedDerricks() > 0 && totalGens < neededGens && currentPower < 110)
+				);
 
 				if (mustSavePowerForGen && numTrucks > 0) {
 					continue;
@@ -52,24 +62,36 @@ function produceDroids() {
 					lab => lab.status === BUILT && structureIdle(lab)
 				);
 
-				// Allow combat production when power is healthy, or if base is in danger, or if we have < 4 units to defend early game.
-				// If a research lab is idle and we are low on power (< 150) and not in danger, pause unit production so research can start!
-				const canAffordCombatUnit = isMyBaseInTrouble ||
+				// Allow early combat production once at least 1 Power Generator and 1 Oil Derrick exist (or base is under attack)
+				const hasEconomyForCombat = isMyBaseInTrouble || (totalGens > 0 && countStruct(DERRICK_STAT) > 0);
+				const canAffordCombatUnit = hasEconomyForCombat && (
+					isMyBaseInTrouble ||
 					(armySize < 4 && currentPower > -50) ||
-					(currentPower >= MIN_PRODUCTION_POWER && (!hasIdleLab || currentPower >= 150));
+					(armySize < 6 && currentPower >= 25) ||
+					(currentPower >= MIN_PRODUCTION_POWER && (!hasIdleLab || currentPower >= 100))
+				);
 
 				if (FAC_LIST[i] === FACTORY_STAT) {
+					// On low resources / no bases, only require a minimal workforce (3 trucks, then 4 after first 2 combat units)
+					// before producing our initial tanks, then top up remaining trucks afterward
+					const minEarlyTrucks = isMyBaseInTrouble ? 2 : (isHighOilMap ? 6 : (armySize < 2 ? 3 : 4));
+					const minEarlyArmy = isHighOilMap ? 6 : 4;
+					const canBuildEarlyCombat = canAffordCombatUnit && (!isSeaMap || componentAvailable("hover01") || isMyBaseInTrouble);
+					const shouldBuildTruck = numTrucks < desiredTrucks && (
+						numTrucks < minEarlyTrucks ||
+						(!canBuildEarlyCombat && (completedGens > 0 || currentPower >= 150)) ||
+						(armySize >= minEarlyArmy && (completedGens > 0 || currentPower >= 150))
+					);
 
-					// Standard factories: Always prioritize essential trucks, then check if we can afford combat units
-					if (numTrucks < desiredTrucks && (numTrucks < 2 || completedGens > 0 || currentPower >= 200)) {
+					if (shouldBuildTruck) {
 						if (produceBuilder(factory)) {
 							virtualTrucks += 1;
 						}
 					} else if (canAffordCombatUnit) {
 						if (random(100) < createSensorProbability()) {
 							produceSensors(factory); // Occasionally build sensors
-						} else {
-							produceTank(factory); // Build an attacker unit
+						} else if (produceTank(factory)) {
+							virtualAttackers += 1; // Build an attacker unit
 						}
 					}
 				} else {
@@ -81,14 +103,18 @@ function produceDroids() {
 								virtualTrucks += 1;
 							}
 						} else if (canAffordCombatUnit) {
-							produceCyborg(factory); // Build cyborg units
+							if (produceCyborg(factory)) {
+								virtualAttackers += 1; // Build cyborg units
+							}
 						}
 					} else {
 						// For VTOL factory, ensure power generator exists and we can afford combat units
 						if (!countStruct(POW_GEN_STAT) || !canAffordCombatUnit) {
 							continue;
 						}
-						produceVTOL(factory); // Build VTOL units
+						if (produceVTOL(factory)) {
+							virtualAttackers += 1; // Build VTOL units
+						}
 					}
 				}
 			}
@@ -111,6 +137,8 @@ function produceTank(factory) {
 	const ANTIPERSONELL_WEAPON_PROBABILITY = checkEnemyAntiPersonnelProbability();
 	const THERMAL_BODY_PROBABILITY = checkFlameWeapons();
 	const BUNKER_BUSTER_PROBABILITY = isMyBaseInTrouble ? 0 : checkCurrentEnemyDefenses();
+	const hasAAWeaponAvailable = enemiesHaveVTOLs && AA_WEAPON_LIST.some(w => componentAvailable(w));
+	const ANTI_AIR_TANK_PROBABILITY = hasAAWeaponAvailable ? 12 : 0;
 
 	let FAST_PROP_PROBABILITY = 0;
 
@@ -120,9 +148,15 @@ function produceTank(factory) {
 
 	if (random(100) < THERMAL_BODY_PROBABILITY) {
 		tankBody = TANK_BODY_LIST_THERMIC;
+	} else if (!isHighOilMap && getMultiTechLevel() === 1 && gameTime < 600000 && getRealPower() < 260 && random(100) < 40) {
+		// In early low-power T1, mix affordable light/medium bodies to put more hulls on the field faster
+		tankBody = ["Body4ABT", "Body5REC", "Body1REC"];
 	}
 
-	if (random(100) < FAST_PROP_PROBABILITY) {
+	if (getMultiTechLevel() === 1 && gameTime < 600000) {
+		// Favor faster, more affordable Half-Track/Wheeled propulsion in the first 10 minutes of T1
+		tankProp = ["HalfTrack", "wheeled01"];
+	} else if (random(100) < FAST_PROP_PROBABILITY) {
 		tankProp = "HalfTrack";
 	}
 
@@ -130,6 +164,9 @@ function produceTank(factory) {
 		firstWeapon = BUNKER_BUSTER_WEAPON;
 		secondWeapon = BUNKER_BUSTER_WEAPON;
 		tankProp = "hover01";
+	} else if (random(100) < ANTI_AIR_TANK_PROBABILITY) {
+		firstWeapon = AA_WEAPON_LIST;
+		secondWeapon = AA_WEAPON_LIST;
 	} else if (random(100) < ANTIPERSONELL_WEAPON_PROBABILITY) {
 		firstWeapon = MACHINEGUN_WEAPON_LIST;
 		secondWeapon = MACHINEGUN_WEAPON_LIST;

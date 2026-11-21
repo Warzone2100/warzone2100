@@ -41,6 +41,7 @@ const MIN_PRODUCTION_POWER = 60;
 const BASE_THREAT_RANGE = Math.ceil(17 + (mapWidth + mapHeight) / 2 / 20);
 var BASE = startPositions[me];
 var baseBuildersGroup;
+var oilGrabbersGroup;
 var defensesBuildersGroup;
 var attackerGroup;
 var bunkerBusterGroup;
@@ -55,16 +56,13 @@ var enemiesHaveVTOLs = false; // Used to determine if VTOLs are allowed.
 var areAllEnemiesDead = false;
 var isHelpingAlly = false;
 
-// Returns the desired truck count based on current economy (powered derricks only)
-// Always maintain enough trucks so base construction and oil capture happen in parallel without starving power
+// Returns the desired truck count based on current economy (Cobra strategy: minimum 6 trucks on low/normal oil, scaling up with derricks)
 function getDesiredTruckCount() {
-	const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
-	const derricks = Math.min(countStruct(DERRICK_STAT), completedGens * 4);
-	if (derricks >= 20) return 11;
+	const derricks = countStruct(DERRICK_STAT);
+	if (isHighOilMap || derricks >= 20) return 11;
 	if (derricks >= 14) return 9;
 	if (derricks >= 8) return 7;
-	if (derricks >= 4) return 6;
-	return completedGens > 0 ? 5 : 4;
+	return 6;
 }
 
 /**
