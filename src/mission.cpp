@@ -28,6 +28,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "hud/hudresults.h"
 #include "mission.h"
 #include "gamestate_harness.h" // continueLevels (test-only)
 
@@ -97,7 +98,11 @@
 #include "game_world.h"
 #include "wzapi.h"
 #include "screens/guidescreen.h"
+#include "hud/hudskin.h"
+#include "hud/hudpanelextension.h"
+#include "hud/intel/intelmodel.h"
 #include "lib/framework/loading_task.h"
+#include "hud/hudlayout.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -1384,6 +1389,7 @@ LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, G
 
 	// Clear out all intelligence screen messages
 	freeMessages();
+	hudIntelReset();
 
 	// Check no units left with any settings that are invalid
 	clearCampaignUnits();
@@ -1403,6 +1409,7 @@ LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, 
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
+	hudIntelReset();
 
 	// Cancel any research active in a lab
 	CancelAllResearch(selectedPlayer);
@@ -2119,18 +2126,38 @@ bool intAddMissionTimer()
 	sLabInit.y = TIMER_LABELY;
 	sLabInit.width = sFormInit.width;//TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;//TIMER_HEIGHT;
+	sLabInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(TIMER_LABELX + currentHudSkin().timerIconGutter(), TIMER_LABELY);
+	});
 	sLabInit.pText = WzString::fromUtf8("00:00:00");
 	sLabInit.pCallback = intUpdateMissionTimer;
 
-	if (!widgAddLabel(psWScreen, &sLabInit))
+	W_LABEL *psTime = widgAddLabel(psWScreen, &sLabInit);
+	if (!psTime)
 	{
 		return false;
 	}
+	hudSetSkinPlacedWidget(psTime->shared_from_this());
 
 	return true;
 }
 
 //add the Transporter timer into the top left hand corner of the screen
+bool missionShowTimerRowForTests(bool launch)
+{
+	bool ok = intAddMissionTimer();
+	if (!launch)
+	{
+		return intAddTransporterTimer() && ok;
+	}
+	// (the launch button is campaign only)
+	const bool multiPlayer = bMultiPlayer;
+	bMultiPlayer = false;
+	ok = intAddTransporterLaunch(nullptr) && ok;
+	bMultiPlayer = multiPlayer;
+	return ok;
+}
+
 bool intAddTransporterTimer()
 {
 	// Make sure that Transporter Launch button isn't up as well
@@ -2147,12 +2174,15 @@ bool intAddTransporterTimer()
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANTIMER_BUTTON;
 	sFormInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
-	sFormInit.x = TRAN_FORM_X;
+	sFormInit.x = hudTransporterButtonX(TRAN_FORM_X);
 	sFormInit.y = TRAN_FORM_Y;
+	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(hudTransporterButtonX(TRAN_FORM_X), TRAN_FORM_Y);
+	});
 	sFormInit.width = iV_GetImageWidth(IntImages, IMAGE_TRANSETA_UP);
 	sFormInit.height = iV_GetImageHeight(IntImages, IMAGE_TRANSETA_UP);
 	sFormInit.pTip = _("Load Transport");
-	sFormInit.pDisplay = intDisplayImageHilight;
+	sFormInit.pDisplay = intDisplayTransporterButton;
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_TRANSETA_DOWN, IMAGE_TRANSETA_UP);
 
 	W_FORM * pForm = widgAddForm(psWScreen, &sFormInit);
@@ -2580,6 +2610,45 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	// ensure these widgets are deleted before attempting to create
 	intDestroyMissionResultWidgets();
 
+	if (hudResultsEnabled())
+	{
+		// the Modern skin's screens, with the same buttons (and ids) as below
+		const bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+		std::vector<HudResultsButton> buttons;
+		if (result || bMultiPlayer)
+		{
+			// (in multiplayer, the game can't go on for long once over: only in a skirmish)
+			if ((!bMultiPlayer && !testPlayerHasWon()) || (bMultiPlayer && !NetPlay.bComms && !multiplayerHostQuit))
+			{
+				buttons.push_back({IDMISSIONRES_CONTINUE, _("Continue Game"), !bMultiPlayer, nullptr});
+			}
+			if (bMultiPlayer || testPlayerHasWon())
+			{
+				buttons.push_back({IDMISSIONRES_QUIT, _("Quit To Main Menu"), true, nullptr});
+			}
+		}
+		else
+		{
+			buttons.push_back({IDMISSIONRES_QUIT, _("Quit To Main Menu"), false, nullptr});
+			buttons.push_back({IDMISSIONRES_LOAD, _("Load Saved Game"), true, nullptr});
+		}
+		auto root = bMultiPlayer ? hudMakeGameResults(false, result, customTitle ? customTitle : "", std::move(buttons))
+		                         : hudMakeCampaignResults(result, std::move(buttons));
+		root->id = IDMISSIONRES_BACKFORM;
+		if (!root->children().empty())
+		{
+			root->children().front()->id = IDMISSIONRES_FORM;
+		}
+		psWScreen->psForm->attach(root);
+		intMode = INT_MISSIONRES;
+		MissionResUp = true;
+		if (result && bPlaySuccess)
+		{
+			audio_QueueTrack(ID_SOUND_OBJECTIVE_ACCOMPLISHED);
+		}
+		return true;
+	}
+
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
 	sFormInit.style			= WFORM_PLAIN;
@@ -2746,6 +2815,14 @@ void intRemoveMissionResultNoAnim()
 
 	intShowPowerBar();
 	intShowGroupSelectionMenu();
+}
+
+void intSetMissionResultVisible(bool visible)
+{
+	if (WIDGET *results = widgGetFromID(psWScreen, IDMISSIONRES_BACKFORM))
+	{
+		results->show(visible);
+	}
 }
 
 void intRunMissionResult()

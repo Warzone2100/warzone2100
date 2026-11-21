@@ -69,6 +69,10 @@ bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag);
 // Moves the system mouse pointer to the given logical screen coordinates
 void wzWarpMouseToLogicalPos(int logicalX, int logicalY);
 
+// Simulates one finger going down (0), moving (1) or up (2) at the given logical screen coordinates, for tests
+// (as SDL reports a touchscreen's first finger: a finger event and a mouse event from touch)
+void wzSimulateTouch(int phase, int logicalX, int logicalY);
+
 class VideoInitProgress
 {
 public:

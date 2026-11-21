@@ -87,6 +87,8 @@
 #include "gamehistorylogger.h"
 #include "hci/quickchat.h"
 #include "screens/guidescreen.h"
+#include "hud/intel/intelmodel.h"
+#include "objectives.h"
 
 #include <list>
 #include <cmath>
@@ -879,6 +881,116 @@ bool wzapi::autoSave(WZAPI_NO_PARAMS)
 	return ::autoSave();
 }
 
+//-- ## setObjective(id, text[, options])
+//--
+//-- Adds an objective for the players, or replaces the one with the same ```id``` (for the same player): what they
+//-- have to do, shown by the HUD (in the intelligence screen, and in the configured Objectives display), or printed to
+//-- the console when the HUD doesn't show it. The objectives are kept with the game (saved, and loaded with it), and a
+//-- new level starts with none. ```text``` is shown as given (translate it with ```_()```). ```options``` (an object,
+//-- whatever is left out takes its default):
+//--
+//-- * ```state```: ```"active"``` (the default), ```"done"``` or ```"failed"```
+//-- * ```primary```: ```true``` (the default), or ```false``` for a secondary objective, listed after the primary ones
+//-- * ```progress```: ```[current, total]```, ex. ```[2, 3]``` for 2 of 3 artifacts collected
+//-- * ```marker```: the name of a proximity message's view data: the HUD's "Show on map" centers the view on it
+//-- * ```order```: a number, the display order among the primary (or secondary) objectives (by default 0, equal ones
+//--   listed as they were added)
+//-- * ```player```: the player whose objective it is (by default, or -1, every player's)
+//--
+//-- An invalid option is a script error. (4.8+ only)
+//--
+bool wzapi::setObjective(WZAPI_PARAMS(std::string id, std::string text, optional<objective_options> _options))
+{
+	SCRIPT_ASSERT(false, context, !id.empty(), "An objective needs an id");
+	ObjectiveOptions options;
+	if (_options.has_value())
+	{
+		const objective_options &given = *_options;
+		if (given.state.has_value())
+		{
+			auto state = objectiveStateFromName(*given.state);
+			SCRIPT_ASSERT(false, context, state.has_value(), "Invalid objective state: %s (active, done or failed)", given.state->c_str());
+			options.state = *state;
+		}
+		options.primary = given.primary.value_or(true);
+		if (given.progress.has_value())
+		{
+			const std::vector<int> &progress = *given.progress;
+			SCRIPT_ASSERT(false, context, progress.size() == 2 && progress[1] > 0 && progress[0] >= 0,
+			              "An objective's progress is [current, total], with total > 0");
+			options.progress = std::make_pair(progress[0], progress[1]);
+		}
+		if (given.marker.has_value() && !given.marker->empty())
+		{
+			VIEWDATA *viewData = getViewData(WzString::fromUtf8(*given.marker));
+			SCRIPT_ASSERT(false, context, viewData != nullptr && viewData->type == VIEW_PROX, "%s is not a proximity message's view data", given.marker->c_str());
+			options.marker = *given.marker;
+		}
+		options.order = given.order.value_or(0);
+		if (given.player.has_value() && *given.player != OBJECTIVES_ALL_PLAYERS)
+		{
+			SCRIPT_ASSERT_PLAYER(false, context, *given.player);
+			options.player = *given.player;
+		}
+	}
+	objectivesSet(id, text, options);
+	return true;
+}
+
+//-- ## removeObjective(id[, player])
+//--
+//-- Removes the objective ```id```: the player's, or every player's (no player). Returns false when there was none.
+//-- (4.8+ only)
+//--
+bool wzapi::removeObjective(WZAPI_PARAMS(std::string id, optional<int> player))
+{
+	if (player.has_value() && *player != OBJECTIVES_ALL_PLAYERS)
+	{
+		SCRIPT_ASSERT_PLAYER(false, context, *player);
+	}
+	return objectivesRemove(id, player.has_value() ? nonstd::optional<int32_t>(*player) : nonstd::nullopt);
+}
+
+//-- ## clearObjectives([player])
+//--
+//-- Removes the player's objectives, or every objective (no player). (4.8+ only)
+//--
+bool wzapi::clearObjectives(WZAPI_PARAMS(optional<int> player))
+{
+	if (player.has_value() && *player != OBJECTIVES_ALL_PLAYERS)
+	{
+		SCRIPT_ASSERT_PLAYER(false, context, *player);
+	}
+	objectivesClear(player.has_value() ? nonstd::optional<int32_t>(*player) : nonstd::nullopt);
+	return true;
+}
+
+//-- ## setObjectivesTitle(title)
+//--
+//-- Sets the title over the objectives (the HUD's objectives card), for every player: ex. the mission's name. An empty
+//-- ```title``` gives back the default ("Objectives"). It's kept with the objectives (saved, and loaded with them), and a
+//-- new level starts without one. ```title``` is shown as given (translate it with ```_()```). (4.8+ only)
+//--
+bool wzapi::setObjectivesTitle(WZAPI_PARAMS(std::string title))
+{
+	objectivesSetTitle(title);
+	return true;
+}
+
+//-- ## showObjectives([player[, reminder]])
+//--
+//-- Brings the player's objectives to their attention (by default, the script's player): the HUD shows them, or the
+//-- console lists those still to do. With ```reminder``` true, a periodic reminder: only printed to the console, where
+//-- the objectives scroll away (the HUD keeps them in view). (4.8+ only)
+//--
+bool wzapi::showObjectives(WZAPI_PARAMS(optional<int> player, optional<bool> reminder))
+{
+	const int who = player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER(false, context, who);
+	objectivesShow(who, reminder.value_or(false));
+	return true;
+}
+
 // MARK: - horrible hacks follow -- do not rely on these being present!
 
 //-- ## hackNetOff()
@@ -920,6 +1032,7 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 	{
 		psMessage->pViewData = psViewData;
 		debug(LOG_MSG, "Adding %s pViewData=%p", psViewData->name.toUtf8().c_str(), static_cast<void *>(psMessage->pViewData));
+		hudIntelNoteMessage(psMessage, !immediate);
 		if (msgType == MSG_PROXIMITY)
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;

@@ -49,6 +49,7 @@
 #include "qtscript.h"
 #include "stats.h"
 #include "wzapi.h"
+#include "hud/intel/intelmodel.h"
 
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
@@ -1393,6 +1394,7 @@ static void applyResearchResult(UDWORD researchIndex, UBYTE player, bool bDispla
 			if (pMessage != nullptr)
 			{
 				pMessage->pViewData = pResearch->pViewData;
+				hudIntelNoteMessage(pMessage);
 				jsDebugMessageUpdate();
 			}
 		}

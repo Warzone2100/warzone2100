@@ -35,6 +35,7 @@
 #include "widgbase.h"
 #include <string>
 #include <chrono>
+#include <functional>
 
 /***********************************************************************************
  *
@@ -369,6 +370,21 @@ enum _w_colour
 /** Set the global toop tip text colour. */
 void widgSetTipColour(PIELIGHT colour);
 
+/** How tooltips look (by default, as they always have). */
+struct WzTipStyle
+{
+	optional<iV_fonts> font;          ///< (default: the screen's tip font)
+	optional<PIELIGHT> textColor;     ///< (default: the color from widgSetTipColour)
+	int horizontalGap = 6;
+	int verticalGap = 3;
+	std::function<void (const WzRect &rect)> drawFrame;  ///< (default: the shadow box)
+};
+void widgSetTipStyle(const optional<WzTipStyle> &style);
+/** Time the pointer must rest on a widget before its tip shows (default 200 ms) */
+void widgSetTipDelay(uint32_t milliseconds);
+/** Widgets the predicate picks show no tip, ex. while something else describes them */
+void widgSetTipSuppressed(const std::function<bool (const WIDGET &widget)> &predicate);
+
 void widgSetButtonFlash(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 void widgClearButtonFlash(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
@@ -415,6 +431,26 @@ bool getWidgetsStatus();
 std::weak_ptr<WIDGET> getMouseOverWidget();
 
 std::chrono::milliseconds widgGetClickHoldMS();
+
+/// Touch: a press held still on a button for `delay` (a long-press) is offered to `handler` first (ex. to show what
+/// the button is). If it takes it, the press ends there for the button, with no click and no hold
+void widgSetTouchLongPress(std::function<std::chrono::milliseconds ()> delay, std::function<bool (WIDGET &)> handler);
+
+/// A finger is down in a list that scrolls by touch (its press, or its drag): a second finger is no gesture for the
+/// world (ex. pinch to zoom)
+bool widgTouchHeldInList();
+/// A touch press that a list may still take over as a scroll only looks pressed after a moment: true while it waits
+bool widgTouchPressedLookWaits(bool pressMayBeTakenOver, const optional<std::chrono::steady_clock::time_point> &pressStart);
+
+enum class WzTouchLongPress
+{
+	NotYet,
+	Declined,
+	Taken,
+};
+/// (For buttons) For a touch press made at `since` and still held: whether it's a long-press yet, and if so whether
+/// the handler took it
+WzTouchLongPress widgOfferTouchLongPress(WIDGET &widget, std::chrono::steady_clock::time_point since);
 
 /** @} */
 

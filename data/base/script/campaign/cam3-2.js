@@ -106,6 +106,7 @@ function getAlphaUnitIDs()
 		alphaUnitIDs.push(dr.id);
 	}
 	startExtraLoss = true;
+	camSetObjectiveState("alpha", "done");
 }
 
 function phantomFactoryNE()
@@ -294,7 +295,7 @@ function alphaTeamAlive()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Rescue Alpha team from Nexus"));
+	camSetExtraObjectiveMessage({id: "alpha", text: _("Rescue Alpha team from Nexus"), marker: "C3-2_OBJ1"});
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");

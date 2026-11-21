@@ -53,6 +53,13 @@ struct TabSelectionStyle
 
 class ListWidget;
 
+enum class TabSelectionButtonRole
+{
+	Tab,
+	PreviousPage,
+	NextPage
+};
+
 class TabSelectionWidget : public WIDGET
 {
 protected:
@@ -81,6 +88,11 @@ public:
 
 	void addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHANGED_FUNC& onTabChangedFunc);
 
+	/// Draws a tab or page button instead of its style's images, unless it returns false
+	typedef std::function<bool (W_BUTTON& button, TabSelectionButtonRole role, int xOffset, int yOffset)> W_TABSELECTION_DRAW_BUTTON_FUNC;
+	void setDrawButtonFunction(const W_TABSELECTION_DRAW_BUTTON_FUNC& drawButtonFunc);
+	const W_TABSELECTION_DRAW_BUTTON_FUNC& drawButtonFunction() const { return drawButton; }
+
 public:
 	void setTab(size_t tab);
 	void setNumberOfTabs(size_t tabs);
@@ -104,6 +116,7 @@ private:
 	std::shared_ptr<W_BUTTON> prevTabPageButton;
 	std::shared_ptr<W_BUTTON> nextTabPageButton;
 	std::vector<W_TABSELECTION_ON_TAB_CHANGED_FUNC> onTabChangedHandlers;
+	W_TABSELECTION_DRAW_BUTTON_FUNC drawButton;
 };
 
 class ListWidget : public WIDGET
@@ -246,16 +259,28 @@ public:
 
 	int32_t heightOfTabsLabel() const;
 
+	// Touch: a horizontal swipe over the list turns its page (a drag past a quarter of its width, or a flick)
+	WzDragAxes touchDragAxes() override;
+	void mouseDragged(WIDGET_KEY key, W_CONTEXT *start, W_CONTEXT *current) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
+
 	void goToChildPage(size_t childIndex)
 	{
 		setCurrentPage(childIndex / widgets->widgetsPerPage());
 	}
+
+protected:
+	/// A swipe turned the page (ex. to show the new one coming in)
+	virtual void pageTurnedByTouch(size_t from, size_t to) { (void)from; (void)to; }
 
 private:
 	std::shared_ptr<TabSelectionWidget> tabs;
 	std::shared_ptr<ListWidget> widgets;
 	std::shared_ptr<W_LABEL> label;
 	TabPosition tabPos;
+	bool swiping = false;
+	int swipeDistance = 0;
+	std::vector<std::pair<uint32_t, int>> swipeSamples;  ///< (the finger's last 100 ms: time, x)
 };
 
 #endif //THISISALISTWIDGET_H

@@ -25,6 +25,7 @@
 #include "lib/framework/file.h"
 #include "lib/netplay/netplay.h"
 #include "objmem.h"
+#include "droid.h"
 #include "loop.h"
 #include "power.h"
 #include "multiint.h"
@@ -38,7 +39,7 @@
 #include <string>
 #include <tuple>
 
-constexpr size_t CurrentGameLogOutputJSONVersion = 12;
+constexpr size_t CurrentGameLogOutputJSONVersion = 13;
 
 GameStoryLogger::AIPlayerAttributes::AIPlayerAttributes()
 : difficulty(-1)
@@ -81,15 +82,17 @@ static uint32_t countAllStructures(uint32_t player)
 	return total;
 }
 
-static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t player)
+// The units' HP percentage (on average), experience (in sum), and value (their power cost)
+static std::tuple<uint32_t, uint32_t, uint64_t> getDroidHPPercentageExperienceAndValue(uint32_t player)
 {
 	if (player >= MAX_PLAYERS)
 	{
-		return std::tuple<uint32_t, uint32_t>(0, 0);
+		return std::tuple<uint32_t, uint32_t, uint64_t>(0, 0, 0);
 	}
 
 	uint64_t totalHP = 0;
 	uint64_t totalExp = 0;
+	uint64_t totalValue = 0;
 	uint64_t numDroids = 0;
 	for (const DROID *psDroid : gameWorld.objects.droids[player])
 	{
@@ -102,9 +105,10 @@ static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t
 			totalHP += static_cast<uint64_t>(100.0 / (double)psDroid->originalBody * (double)psDroid->body);
 		}
 		totalExp += static_cast<uint64_t>((double)psDroid->experience / 65536.0);
+		totalValue += calcDroidPower(psDroid);
 		numDroids++;
 	}
-	return std::tuple<uint32_t, uint32_t>((numDroids > 0) ? static_cast<uint32_t>(totalHP / numDroids) : 0, static_cast<uint32_t>(totalExp));
+	return std::tuple<uint32_t, uint32_t, uint64_t>((numDroids > 0) ? static_cast<uint32_t>(totalHP / numDroids) : 0, static_cast<uint32_t>(totalExp), totalValue);
 }
 
 static uint32_t getNumOilRigs(uint32_t player)
@@ -293,6 +297,7 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j[mapPlayerDataOutputName("recentPowerWon", naming)] = p.recentPowerWon;
 		j[mapPlayerDataOutputName("recentResearchPotential", naming)] = p.recentResearchPotential;
 		j[mapPlayerDataOutputName("recentResearchPerformance", naming)] = p.recentResearchPerformance;
+		j[mapPlayerDataOutputName("armyValue", naming)] = p.armyValue;
 		j[mapPlayerDataOutputName("usertype", naming)] = mapPlayerUserTypeOutputValue(p.usertype, naming);
 
 		if (p.playerLeftGameTime.has_value())
@@ -557,9 +562,10 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 		playerStats.researchComplete = mStats.recentResearchComplete;
 		playerStats.power = getPower(i);
 		playerStats.score = static_cast<int32_t>(mStats.recentScore);
-		auto hpAndSummExp = getDroidHPPercentageAndExperience(i);
-		playerStats.hp = std::get<0>(hpAndSummExp);
-		playerStats.summExp = std::get<1>(hpAndSummExp);
+		auto droidTotals = getDroidHPPercentageExperienceAndValue(i);
+		playerStats.hp = std::get<0>(droidTotals);
+		playerStats.summExp = std::get<1>(droidTotals);
+		playerStats.armyValue = std::get<2>(droidTotals);
 		playerStats.oilRigs = getNumOilRigs(i);
 		playerStats.recentPowerLost = mStats.recentPowerLost;
 		playerStats.recentDroidPowerLost = mStats.recentDroidPowerLost;
@@ -687,6 +693,7 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerS
 	j["recentPowerWon"] = p.recentPowerWon;
 	j["recentResearchPotential"] = p.recentResearchPotential;
 	j["recentResearchPerformance"] = p.recentResearchPerformance;
+	j["armyValue"] = p.armyValue;
 	j["usertype"] = p.usertype;
 	if (p.playerLeftGameTime.has_value())
 	{
@@ -715,6 +722,7 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::Playe
 	p.recentPowerWon = j.at("recentPowerWon").get<uint64_t>();
 	p.recentResearchPotential = j.at("recentResearchPotential").get<uint64_t>();
 	p.recentResearchPerformance = j.at("recentResearchPerformance").get<uint64_t>();
+	p.armyValue = j.at("armyValue").get<uint64_t>();
 	p.usertype = j.at("usertype").get<std::string>();
 
 	p.playerLeftGameTime = nullopt;

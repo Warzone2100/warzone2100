@@ -30,6 +30,7 @@
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/vectorimage.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -65,6 +66,7 @@ bool wz_texture_compression = true;
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
+static bool		screendump_quiet = false;
 
 static GFX *backdropGfx = nullptr;
 static bool backdropIsMapPreview = false;
@@ -229,6 +231,7 @@ void screenShutDown()
 	pie_ShutDown();
 	pie_TexShutDown();
 	iV_TextShutdown();
+	iV_VectorImagesShutdown();
 
 	pie_Skybox_Shutdown();
 
@@ -470,11 +473,13 @@ public:
 	typedef std::function<void (const ScreenshotSaveRequest&)> onDeleteFunc;
 
 	WzString fileName;
+	bool quiet;
 	std::unique_ptr<iV_Image> image;
 	onDeleteFunc onDelete;
 
-	ScreenshotSaveRequest(const WzString & fileName, std::unique_ptr<iV_Image>&& image, const onDeleteFunc & onDelete)
+	ScreenshotSaveRequest(const WzString & fileName, bool quiet, std::unique_ptr<iV_Image>&& image, const onDeleteFunc & onDelete)
 	: fileName(fileName)
+	, quiet(quiet)
 	, image(std::move(image))
 	, onDelete(onDelete)
 	{ }
@@ -505,7 +510,7 @@ static int saveScreenshotThreadFunc(void * saveRequest)
 			}
 		);
 	}
-	else
+	else if (!pSaveRequest->quiet)
 	{
 		// display message to user about screenshot
 		// this must be dispatched back to the main thread
@@ -544,6 +549,8 @@ void screenDoDumpToDiskIfRequired()
 	WzString fileName = screendump_filename;
 	debug(LOG_3D, "Saving screenshot %s", fileName.toUtf8().c_str());
 	screendump_required = false;
+	const bool quiet = screendump_quiet;
+	screendump_quiet = false;
 
 	bool bSentRequest = gfx_api::context::get().getScreenshot([=](std::unique_ptr<iV_Image> image)
 	{
@@ -554,11 +561,15 @@ void screenDoDumpToDiskIfRequired()
 		}
 
 		// Dispatch encoding and saving screenshot to a background thread (since this is fairly costly)
-		snprintf(ConsoleString, sizeof(ConsoleString), "Saving screenshot %s ...", fileName.toUtf8().c_str());
-		addConsoleMessage(ConsoleString, LEFT_JUSTIFY, INFO_MESSAGE);
+		if (!quiet)
+		{
+			snprintf(ConsoleString, sizeof(ConsoleString), "Saving screenshot %s ...", fileName.toUtf8().c_str());
+			addConsoleMessage(ConsoleString, LEFT_JUSTIFY, INFO_MESSAGE);
+		}
 		ScreenshotSaveRequest * pSaveRequest =
 			new ScreenshotSaveRequest(
 				fileName,
+				quiet,
 				std::move(image),
 				[](const ScreenshotSaveRequest& request)
 				{
@@ -612,6 +623,13 @@ void screenDumpToDisk(const char *path, const char *level)
 		ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, level, ++screendump_num);
 	}
 	screendump_required = true;
+}
+
+void screenDumpToFile(const char *filename)
+{
+	sstrcpy(screendump_filename, filename);
+	screendump_required = true;
+	screendump_quiet = true;
 }
 
 void screen_FlipIfBackDropTransition()

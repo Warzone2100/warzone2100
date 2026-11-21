@@ -26,6 +26,8 @@
 
 #include "messagedef.h"
 
+struct RESEARCH;
+
 /* Intelligence Map screen IDs */
 #define IDINTMAP_FORM			6000	//The intelligence map base form
 #define IDINTMAP_MSGVIEW		6002	//The message 3D view for the intelligence screen
@@ -45,6 +47,8 @@ void intRemoveIntelMap();
 
 /* Remove the Intelligence Map widgets from the screen without animation*/
 void intRemoveIntelMapNoAnim();
+/// Opens the screen again when it is open in the skin it no longer belongs to
+void intRebuildIntelMap();
 
 /*sets psCurrentMsg for the Intelligence screen*/
 void setCurrentMsg();
@@ -65,5 +69,11 @@ void setMessageImmediate(bool state);
 
 /* run intel map (in the game loop) */
 void intRunIntelMap();
+
+/// Plays a message's videos full screen (for the HUD's intelligence screen)
+bool intPlayMessageSequences(MESSAGE *psMessage);
+/// A research report's voice-over, as the intelligence screen plays it (stopping the one playing)
+void intPlayResearchReportAudio(const RESEARCH *psResearch);
+void intStopResearchReportAudio();
 
 #endif	// __INCLUDED_SRC_INTELMAP_H__

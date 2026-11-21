@@ -60,6 +60,7 @@
 #include "multiplay.h"
 #include "hci/groups.h"
 #include "wzapi.h"
+#include "hud/hudlayout.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CLOSE			9002	//The close button icon
@@ -218,6 +219,7 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 	auto const &parent = psWScreen->psForm;
 
 	auto transForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	transForm->setHudSkinned(true);
 	parent->attach(transForm);
 	transForm->id = IDTRANS_FORM;
 	transForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -233,8 +235,7 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -280,6 +281,7 @@ bool intAddTransporterContents()
 	auto const &parent = psWScreen->psForm;
 
 	auto transContentForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	transContentForm->setHudSkinned(true);
 	parent->attach(transContentForm);
 	transContentForm->id = IDTRANS_CONTENTFORM;
 	transContentForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -294,8 +296,7 @@ bool intAddTransporterContents()
 		psWidget->setGeometry(STAT_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -331,7 +332,7 @@ bool intAddTransporterContents()
 		sButFInit.width = iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 		sButFInit.pTip = _("Launch Transport");
-		sButFInit.pDisplay = intDisplayImageHilight;
+		sButFInit.pDisplay = intDisplayTransporterButton;
 
 		sButFInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 
@@ -378,12 +379,15 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	sButInit.formID = 0;
 	sButInit.id = IDTRANS_LAUNCH;
 	sButInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
-	sButInit.x = RET_X;
+	sButInit.x = hudTransporterButtonX(RET_X);
 	sButInit.y = (SWORD)TIMER_Y;
+	sButInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->move(hudTransporterButtonX(RET_X), TIMER_Y);
+	});
 	sButInit.width = (UWORD)(10 + iV_GetImageWidth(IntImages, IMAGE_LAUNCHUP));
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_LAUNCHUP);
 	sButInit.pTip = _("Launch Transport");
-	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.pDisplay = intDisplayTransporterButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 	auto psForm = widgAddForm(psWScreen, &sButInit);
 	if (!psForm)
@@ -398,7 +402,7 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	W_LABINIT sLabInit;
 	sLabInit.formID = IDTRANS_LAUNCH;
 	sLabInit.id = IDTRANS_CAPACITY;
-	sLabInit.x = (SWORD)(sButInit.x + 40);
+	sLabInit.x = (SWORD)(RET_X + 40);
 	sLabInit.y = 0;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
@@ -445,6 +449,7 @@ bool intAddTransButtonForm()
 
 	/* Add the button form */
 	auto transList = IntListTabWidget::make();
+	transList->setHudSkinned();
 	transForm->attach(transList);
 	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	transList->setChildSpacing(OBJ_GAP, OBJ_GAP);
@@ -473,11 +478,13 @@ bool intAddTransButtonForm()
 			transList->addWidgetToLayout(buttonHolder);
 
 			auto statButton = std::make_shared<IntStatusButton>();
+			statButton->setHudSkinned(true);
 			buttonHolder->attach(statButton);
 			statButton->id = nextStatButtonId;
 			statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
 			auto objButton = std::make_shared<IntObjectButton>();
+			objButton->setHudSkinned(true);
 			buttonHolder->attach(objButton);
 			objButton->id = nextObjButtonId;
 			objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
@@ -520,6 +527,7 @@ bool intAddTransContentsForm()
 
 	/* Add the contents form */
 	auto contList = IntListTabWidget::make();
+	contList->setHudSkinned();
 	contForm->attach(contList);
 	contList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	contList->setChildSpacing(OBJ_GAP, OBJ_GAP);
@@ -550,6 +558,7 @@ bool intAddTransContentsForm()
 
 		/* Set the tip and add the button */
 		auto button = std::make_shared<IntTransportButton>();
+		button->setHudSkinned(true);
 		contList->attach(button);
 		button->id = nextButtonId;
 		button->setTip(droidGetName(psDroid));
@@ -585,6 +594,7 @@ bool intAddDroidsAvailForm()
 
 	/* Add the droids available form */
 	auto transDroids = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	transDroids->setHudSkinned(true);
 	parent->attach(transDroids);
 	transDroids->id = IDTRANS_DROIDS;
 	transDroids->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -599,8 +609,7 @@ bool intAddDroidsAvailForm()
 		psWidget->setGeometry(TRANSDROID_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -608,6 +617,7 @@ bool intAddDroidsAvailForm()
 
 	//now add the tabbed droids available form
 	auto droidList = IntListTabWidget::make();
+	droidList->setHudSkinned();
 	transDroids->attach(droidList);
 	droidList->id = IDTRANS_DROIDTAB;
 	droidList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -646,6 +656,7 @@ bool intAddDroidsAvailForm()
 		{
 			/* Set the tip and add the button */
 			auto button = std::make_shared<IntTransportButton>();
+			button->setHudSkinned(true);
 			droidList->attach(button);
 			button->id = nextButtonId;
 			button->setTip(droidGetName(psDroid));

@@ -63,9 +63,19 @@ void ScrollBarWidget::geometryChanged()
 	slider->setGeometry(0, 0, width(), height());
 }
 
+void ScrollBarWidget::setSliderDisplay(WIDGET_DISPLAY display)
+{
+	slider->displayFunction = display;
+}
+
 uint32_t ScrollBarWidget::position() const
 {
 	return slider->pos;
+}
+
+uint32_t ScrollBarWidget::maxPosition() const
+{
+	return slider->numStops;
 }
 
 void ScrollBarWidget::setPosition(uint32_t newPosition)

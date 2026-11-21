@@ -46,7 +46,7 @@ function cam_eventChat(from, to, message)
 {
 	if (message === "win info")
 	{
-		__camShowVictoryConditions();
+		__camShowVictoryInfo();
 	}
 	if (message.lastIndexOf("rank ", 0) === 0)
 	{
@@ -133,6 +133,8 @@ function cam_eventStartLevel()
 	__camNeverGroupDroids = [];
 	__camNumTransporterExits = 0;
 	__camAllowVictoryMsgClear = true;
+	__camObjectiveIds = [];
+	__camObjectiveStates = {};
 	__camExpLevel = 0;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
@@ -146,6 +148,7 @@ function cam_eventStartLevel()
 	setTimer("__camShowVictoryConditions", camMinutesToMilliseconds(5));
 	setTimer("__camTacticsTick", camSecondsToMilliseconds(0.1));
 	queue("__camShowBetaHintEarly", camSecondsToMilliseconds(4));
+	queue("__camUpdateObjectives", camSecondsToMilliseconds(0.1)); // once the mission script has set its conditions
 	queue("__camGrantSpecialResearch", camSecondsToMilliseconds(0.5));
 	queue("__camEnableGuideTopics", camSecondsToMilliseconds(0.1)); // delayed to handle when mission scripts add research
 }
@@ -365,6 +368,7 @@ function cam_eventGameLoaded()
 {
 	receiveAllEvents(true);
 	__camSaveLoading = true;
+	__camUpdateObjectives(); // (for saves from before objectives existed)
 	const scavKevlarMissions = [
 		cam_levels.alpha7, cam_levels.alpha8.pre, cam_levels.alpha8.offWorld,
 		cam_levels.alpha9.pre, cam_levels.alpha9.offWorld, cam_levels.alpha10,

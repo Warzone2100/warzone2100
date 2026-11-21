@@ -30,6 +30,12 @@ bool specLayerInit(bool showButton = true);
 void specToggleOverlays();
 bool specStatsViewShutdown();
 void specStatsViewCreate();
+void specStatsViewClose();
+bool specStatsViewShown();
+/// Built again when open in the skin it no longer belongs to
+void specStatsViewSkinChanged();
+// Hides the stats button for as long as something else opens the stats (the HUD's spectator strip)
+void specSetStatsButtonHidden(bool hidden);
 // The overlay the spectator widgets live on, so anything opened over them can say
 // which screen to sit above. Null when there is none.
 std::shared_ptr<W_SCREEN> specOverlayScreen();

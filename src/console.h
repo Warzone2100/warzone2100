@@ -21,21 +21,16 @@
 #ifndef __INCLUDED_SRC_CONSOLE_H__
 #define __INCLUDED_SRC_CONSOLE_H__
 
+#include <deque>
 #include <functional>
 #include <memory>
 #include "lib/ivis_opengl/pietypes.h"
+#include "console_history.h"
 
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
-
-enum CONSOLE_TEXT_JUSTIFICATION
-{
-	LEFT_JUSTIFY,
-	DEFAULT_JUSTIFY = LEFT_JUSTIFY,
-	RIGHT_JUSTIFY,
-	CENTRE_JUSTIFY
-};
+#define MAX_CONSOLE_HISTORY				(500)
 
 // Declare any messages that you want to be debounced here, along with their debounce time.
 // This has to be done as a 1-member struct rather than an enum to allow distinguishing
@@ -56,14 +51,20 @@ struct ConsoleMessage
 
 const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING = {2500};
 
-
-/* ID to use for addConsoleMessage() in case of a system message */
-#define	SYSTEM_MESSAGE				(-1)
-#define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
-#define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
-
 #define MAX_CONSOLE_MESSAGE_DURATION	((UDWORD)-1)
 #define DEFAULT_CONSOLE_MESSAGE_DURATION	0
+
+/// A line in the console's feed, the recent messages shown until they expire
+struct ConsoleFeedMessage
+{
+	uint32_t id;		///< One more than the line added before it
+	WzString text;
+	UDWORD timeAdded;	///< The realTime it arrived
+	UDWORD duration;	///< MAX_CONSOLE_MESSAGE_DURATION for a line that stays
+	CONSOLE_TEXT_JUSTIFICATION justification;
+	int player;
+	bool team;			///< Sent to a team (or a private message)
+};
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
@@ -74,24 +75,22 @@ void initConsoleMessages();
 void shutdownConsoleMessages();
 void removeTopConsoleMessage();
 void displayConsoleMessages();
-void displayOldMessages();
 void flushConsoleMessages();
-void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
 bool getConsoleDisplayStatus();
-void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 void clearActiveConsole();
-bool mouseOverConsoleBox();
-bool mouseOverHistoryConsoleBox();
 int getNumberConsoleMessages();
 void setConsoleLineInfo(UDWORD vis);
 UDWORD getConsoleLineInfo();
 void permitNewConsoleMessages(bool allow);
-void toggleConsoleDrop();
-void setHistoryMode(bool mode);
 void clearInfoMessages();
 PIELIGHT getConsoleTextColor(int player);
+
+const std::deque<ConsoleFeedMessage> &getConsoleFeed();
+/// Changes whenever the feed does
+uint32_t getConsoleFeedRevision();
+const ConsoleHistory &getConsoleHistory();
 
 typedef std::function<void(ConsoleMessage const &)> CONSOLE_MESSAGE_LISTENER;
 void consoleAddMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER>& listener);
@@ -131,14 +130,6 @@ static inline void CONPRINTF(char const *format, P &&... params) WZ_DECL_FORMAT_
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
-
-
-#include <functional>
-
-typedef std::function<void ()> CONSOLE_CALC_LAYOUT_FUNC;
-void setConsoleCalcLayout(const CONSOLE_CALC_LAYOUT_FUNC& layoutFunc);
-
-void consoleScreenDidChangeSize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

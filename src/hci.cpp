@@ -85,6 +85,8 @@
 #include "uiobjectrefs.h"
 #include "notifications.h"
 #include "hci/groups.h"
+#include "hci/ingameconsole.h"
+#include "hud/hudconsole.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
 #include "screens/researchtreescreen.h"
@@ -92,6 +94,20 @@
 #include "hci/quickchat.h"
 #include "hci/replay_controller.h"
 #include "warzoneconfig.h"
+#include "hud/hudkeys.h"
+#include "hud/hudreticule.h"
+#include "hud/hudmodel.h"
+#include "hud/hudskin.h"
+#include "hud/intel/intelnotices.h"
+#include "hud/intel/intelpanel.h"
+#include "hud/intel/objectivescard.h"
+#include "hud/hudiconbutton.h"
+#include "hud/hud.h"
+#include "hud/hudlayout.h"
+#include "hud/hudpagecontrol.h"
+#include "hud/hudresults.h"
+#include "hud/huddetail.h"
+#include "hud/huddetailcontents.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -363,21 +379,37 @@ void setReticuleFlash(int ButId, bool flash)
 }
 
 // set up the button's size & hit-testing based on the dimensions of the "normal" image
-void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
+static AtlasImageDef *reticuleButtonImage(const WzString &filename)
 {
-	AtlasImageDef *image = nullptr;
 	if (!filename.isEmpty())
 	{
-		image = iV_GetImage(filename);
+		return iV_GetImage(filename);
 	}
-	else
+	ASSERT(IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY, "IMAGE_RETICULE_GREY isn't in IntImages?");
+	if (IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY)
 	{
-		ASSERT(IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY, "IMAGE_RETICULE_GREY isn't in IntImages?");
-		if (IntImages->imageDefs.size() >= IMAGE_RETICULE_GREY)
-		{
-			image = &(IntImages->imageDefs[IMAGE_RETICULE_GREY]);
-		}
+		return &(IntImages->imageDefs[IMAGE_RETICULE_GREY]);
 	}
+	return nullptr;
+}
+
+/// Places a reticule button. In the cluster: at its image's size and offset. In the band: fitted to its hex
+static void layoutReticuleButton(WIDGET *button, int slot)
+{
+	const AtlasImageDef *image = reticuleButtonImage(retbutstats[slot].filename);
+	const int width = image ? image->Width / 2 : button->width();
+	const int height = image ? image->Height / 2 : button->height();
+	if (hudCompactReticule())
+	{
+		button->setGeometry(hudReticuleBandButtonRect(slot, width, height));
+		return;
+	}
+	button->setGeometry(ReticuleOffsets[slot].x, ReticuleOffsets[slot].y, width, height);
+}
+
+void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
+{
+	AtlasImageDef *image = reticuleButtonImage(filename);
 
 	if (image)
 	{
@@ -437,6 +469,7 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	}
 
 	setReticuleButtonDimensions(*retbutstats[ButId].button, retbutstats[ButId].filename);
+	retbutstats[ButId].button->callCalcLayout();
 
 	if (!retbutstats[ButId].tip.empty())
 	{
@@ -524,8 +557,6 @@ void setReticulesEnabled(bool enabled)
 
 static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
 	int DownTime = retbutstats[psWidget->UserData].downTime;
 	bool flashing = retbutstats[psWidget->UserData].flashing;
 	int flashTime = retbutstats[psWidget->UserData].flashTime;
@@ -539,30 +570,30 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		retbutstats[psWidget->UserData].button->setState(WBUT_DISABLE);
 	}
 
+	HudReticuleButtonLook look;
+	look.slot = psWidget->UserData;
+	look.x = xOffset + psWidget->x();
+	look.y = yOffset + psWidget->y();
+	look.width = psWidget->width();
+	look.height = psWidget->height();
+	look.upImage = retbutstats[psWidget->UserData].filename;
+	look.downImage = retbutstats[psWidget->UserData].filenameDown;
+	look.isCancel = psWidget->UserData == RETBUT_CANCEL;
+	look.paused = gamePaused();
+	look.panelOpen = (psButton->state & WBUT_CLICKLOCK) != 0;
+
 	if (butDisabled)
 	{
-		if (psWidget->UserData != RETBUT_CANCEL)
-		{
-			iV_DrawImage2("image_reticule_grey.png", x, y, psWidget->width(), psWidget->height());
-		}
-		else
-		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
-		}
+		look.disabled = true;
+		currentHudSkin().drawReticuleButton(look);
 		return;
 	}
 
 	bool Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
 	if (Down && buttonIsClickable(psButton->id))
 	{
-		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
-		{
-			iV_DrawImage2("image_reticule_butdown.png", x, y, psWidget->width(), psWidget->height());
-		}
-		else
-		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
-		}
+		look.pressed = true;
+		look.firstPressedFrame = DownTime < 1;
 		DownTime++;
 		flashing = false;	// stop the reticule from flashing if it was
 	}
@@ -572,34 +603,24 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		{
 			if (((realTime / 250) % 2) != 0)
 			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
 				flashTime = 0;
-			}
-			else
-			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
 			}
 			flashTime++;
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
 			DownTime = 0;
 		}
+		look.flashing = flashing;
 	}
 
-	bool highlighted = buttonIsHighlighted(psButton);
-	if (highlighted)
+	look.highlighted = buttonIsHighlighted(psButton);
+	if (psWidget->UserData == RETBUT_INTELMAP)
 	{
-		if (psWidget->UserData == RETBUT_CANCEL)
-		{
-			iV_DrawImage2("image_cancel_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
-		}
-		else
-		{
-			iV_DrawImage2("image_reticule_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
-		}
+		look.count = hudIntelButtonCount();
+		look.dot = hudObjectivesUnseen();
 	}
+	currentHudSkin().drawReticuleButton(look);
 	retbutstats[psWidget->UserData].flashTime = flashTime;
 	retbutstats[psWidget->UserData].flashing = flashing;
 	retbutstats[psWidget->UserData].downTime = DownTime;
@@ -651,6 +672,7 @@ bool intInitialise()
 			debug(LOG_ERROR, "Couldn't create power Bar widget(Out of memory ?)");
 			return false;
 		}
+		inGameConsoleAdd(psWScreen);
 	}
 
 	/* Note the current screen state */
@@ -692,6 +714,13 @@ bool intInitialise()
 		});
 	}, GAME_TICKS_PER_SEC + GAME_TICKS_PER_SEC);
 
+	hudModel().reset();
+	intUpdateFuncs.emplace_back([]() {
+		hudModel().update();
+		hudUpdate();
+	}, HudModel::REFRESH_INTERVAL_MS);
+	hudInitialize();
+
 	// refresh defaults for quick chat
 	quickChatInitInGame();
 
@@ -706,6 +735,8 @@ void interfaceShutDown()
 
 	destroyReplayControllerOverlay();
 
+	hudShutdown();
+	intUpdateFuncs.clear();
 	groupsUI = nullptr;
 
 	psWScreen = nullptr;
@@ -971,7 +1002,8 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 		triggerEvent(TRIGGER_DESIGN_QUIT);
 		break;
 	case INT_INTELMAP:
-		if (!bMultiPlayer)
+		// (The HUD's intelligence screen restarts the game time it stopped when it closes)
+		if (!bMultiPlayer && !hudIntelScreenIsOpen())
 		{
 			gameTimeStart();
 		}
@@ -1732,21 +1764,25 @@ static void intStopStructPosition()
 }
 
 
+bool intConsoleShown()
+{
+	if (!gameUpdatePaused())
+	{
+		return true;
+	}
+	// A single player game pauses for the design screen, and for the intelligence screen,
+	// where the tutorial still needs its messages
+	return !bMultiPlayer && (intMode == INT_DESIGN || (bInTutorial && intMode == INT_INTELMAP));
+}
+
 /* Display the widgets for the in game interface */
 void intDisplayWidgets()
 {
-	/*draw the background for the design screen and the Intelligence screen*/
-	if (intMode == INT_DESIGN || intMode == INT_INTELMAP)
+	hudFrame();
+
+	if (intConsoleShown())
 	{
-		// When will they ever learn!!!!
-		if (!bMultiPlayer)
-		{
-			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
-			if ((intMode == INT_DESIGN) || (bInTutorial && intMode == INT_INTELMAP))
-			{
-				displayConsoleMessages();
-			}
-		}
+		displayConsoleMessages();
 	}
 
 	bool desiredRadarVisibility = false;
@@ -1755,9 +1791,6 @@ void intDisplayWidgets()
 		desiredRadarVisibility = radarVisible();
 
 		cleanupOldBeaconMessages();
-
-		/* Ensure that any text messages are displayed at bottom of screen */
-		displayConsoleMessages();
 	}
 
 	auto radarWidget = getRadarWidget();
@@ -1766,6 +1799,7 @@ void intDisplayWidgets()
 		(desiredRadarVisibility) ? radarWidget->show() : radarWidget->hide();
 	}
 
+	inGameConsoleKeepOnTop(hudResultsRoot());
 	widgDisplayScreen(psWScreen);
 
 	if (bLoadSaveUp)
@@ -1837,6 +1871,7 @@ void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHe
 {
 	if (psWScreen == nullptr) return;
 	psWScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	hudLayoutScreenSizeChanged();
 }
 
 /* Are we in build select mode*/
@@ -1935,6 +1970,21 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
+void intRebuildGroupSelectionMenu()
+{
+	if (!groupsUI || groupsUI->builtSlim() == hudCompactLayout())
+	{
+		return;
+	}
+	const bool shown = widgGetFromID(psWScreen, IDOBJ_GROUP) != nullptr && groupsUI->visible();
+	widgDelete(psWScreen, IDOBJ_GROUP);
+	groupsUI.reset();
+	if (shown)
+	{
+		intShowGroupSelectionMenu();
+	}
+}
+
 // MARK: W_INGAMEOPTIONS_BUTTON
 
 std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
@@ -1976,6 +2026,20 @@ void W_INGAMEOPTIONS_BUTTON::display(int xOffset, int yOffset)
 
 	uint8_t alphaValue = currentAlphaValue();
 
+	HudIconButtonLook look;
+	look.rect = WzRect(x0, y0, width(), height());
+	look.icon = HudIcon::Options;
+	look.style = HudIconButtonStyle::Card;
+	look.down = (getState() & WBUT_DOWN) != 0;
+	look.highlighted = (getState() & WBUT_HIGHLIGHT) != 0;
+	look.active = InGameOpUp;
+	look.disabled = butDisabled;
+	look.opacity = alphaValue / 255.f;
+	if (currentHudSkin().drawIconButton(look))
+	{
+		return;
+	}
+
 	if (butDisabled)
 	{
 		iV_DrawImageTint(IntImages, IMAGE_RETICULE_GREY, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
@@ -2002,7 +2066,7 @@ std::string W_INGAMEOPTIONS_BUTTON::getTip()
 {
 	if (!InGameOpUp)
 	{
-		return  _("Open In-Game Options");
+		return hudTipWithKeyBinding(_("Open In-Game Options"), "addInGameOptions");
 	}
 	else
 	{
@@ -2037,6 +2101,10 @@ bool intAddInGameOptionsButton()
 	{
 		psWScreen->psForm->attach(button);
 		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
+		button->setHelp(WidgetHelp()
+			.setTitle(_("In-Game Options"))
+			.setDescription(_("Opens the in-game menu: options, saving and loading, and quitting."))
+			.addRelatedKeybinding("addInGameOptions"));
 		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			auto psIngameOptButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(psWidget->shared_from_this());
 			ASSERT_OR_RETURN(, psIngameOptButton != nullptr, "Wrong button type?");
@@ -2084,11 +2152,14 @@ bool intAddReticule()
 	}
 	auto const &parent = psWScreen->psForm;
 	auto retForm = std::make_shared<IntFormAnimated>(false);
+	retForm->setHudSkinned(true);
 	parent->attach(retForm);
 	retForm->id = IDRET_FORM;
-	retForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
-	}));
+	retForm->setCalcLayout([](WIDGET *psWidget) {
+		psWidget->setGeometry(hudReticuleRect());
+		// (Like the radar, the compact band has no accent along its top)
+		static_cast<IntFormAnimated *>(psWidget)->setAccentEdge(!hudCompactReticule());
+	});
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
 		// Set the x,y members of a button widget initialiser
@@ -2108,16 +2179,14 @@ bool intAddReticule()
 		retbutstats[i].downTime = 0;
 		retbutstats[i].flashing = false;
 		retbutstats[i].flashTime = 0;
-		auto pButton = widgAddButton(psWScreen, &sButInit);
-		retbutstats[i].button = (pButton) ? std::dynamic_pointer_cast<W_BUTTON>(pButton->shared_from_this()) : nullptr;
-		if (!retbutstats[i].button)
-		{
-			debug(LOG_ERROR, "Failed to add reticule button");
-		}
-		else
-		{
-			setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
-		}
+		auto button = makeReticuleButton(&sButInit);
+		retForm->attach(button);
+		retbutstats[i].button = button;
+		setReticuleButtonDimensions(*retbutstats[i].button, retbutstats[i].filename);
+		button->setCalcLayout([i](WIDGET *psWidget) {
+			layoutReticuleButton(psWidget, i);
+		});
+		button->setHelp(reticuleButtonHelp(i));
 	}
 	ReticuleUp = true;
 	return true;
@@ -2165,6 +2234,11 @@ bool intAddPower()
 	psBarGraph->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 	}));
+
+	hudDetailRegister(psBarGraph, HudDetailProvider{hudPowerDetail, HudDetailPlacement::Above, 0, nullptr});
+	psBarGraph->setHelp(WidgetHelp()
+		.setTitle(_("Power"))
+		.setDescription(_("The power you have left once everything queued is paid for. Pointing at something to build shows its cost on the bar. It turns red when the queue costs more than you have.")));
 
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen);
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, psWScreen->psForm);
@@ -2227,8 +2301,10 @@ void intRemoveStatsNoAnim()
 
 void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 {
-	auto obsoleteButton = std::make_shared<MultipleChoiceButton>();
+	auto obsoleteButton = std::make_shared<HudIconChoiceButton>();
 	parent->attach(obsoleteButton);
+	obsoleteButton->setIcon(false, HudIcon::ObsoleteHidden);
+	obsoleteButton->setIcon(true, HudIcon::ObsoleteShown);
 	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
 	obsoleteButton->style |= WBUT_SECONDARY;
 	obsoleteButton->setChoice(includeRedundantDesigns);
@@ -2242,6 +2318,14 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
+/* The cost bar on a debug menu button (drawn by the HUD skin) */
+static void addDebugCostBar(WIDGET &button, const W_BARINIT &init)
+{
+	auto bar = std::make_shared<HudButtonBar>(&init);
+	button.attach(bar);
+	bar->setBackgroundColour(WZCOL_BLACK);
+}
+
 static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 {
 	// should this ever be called with psOwner == NULL?
@@ -2264,10 +2348,11 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 	/* Create the basic form */
 	auto statForm = std::make_shared<IntFormAnimated>(false);
+	statForm->setHudSkinned(true);
 	parent->attach(statForm);
 	statForm->id = IDSTAT_FORM;
 	statForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
+		psWidget->setGeometry(hudStatsPanelRect());
 	}));
 
 	/* Add the close button */
@@ -2279,7 +2364,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -2288,12 +2373,26 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 	// Add the tabbed form
 	auto statList = IntListTabWidget::make();
+	statList->setHudSkinned();
 	statForm->attach(statList);
 	statList->id = IDSTAT_TABFORM;
 	statList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
 	statList->setChildSpacing(STAT_GAP, STAT_GAP);
 	int statListWidth = STAT_BUTWIDTH * 2 + STAT_GAP;
-	statList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, STAT_HEIGHT - STAT_TABFORMY);
+	if (hudCompactLayout())
+	{
+		// The rows under the close button's row, the pages in it
+		const WzRect rect = hudStatsPanelRect();
+		statList->setTabRowHidden();
+		statList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, rect.height() - STAT_TABFORMY);
+		auto pages = HudPageControl::make(statList);
+		statForm->attach(pages);
+		pages->setGeometry(4, 1, STAT_WIDTH - CLOSE_WIDTH - 8, CLOSE_HEIGHT);
+	}
+	else
+	{
+		statList->setGeometry((STAT_WIDTH - statListWidth) / 2, STAT_TABFORMY, statListWidth, STAT_HEIGHT - STAT_TABFORMY);
+	}
 
 	/* Add the stat buttons */
 	int nextButtonId = IDSTAT_START;
@@ -2320,6 +2419,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 		}
 
 		auto button = std::make_shared<IntStatsButton>();
+		button->setHudSkinned(true);
 		statList->attach(button);
 		button->id = nextButtonId;
 		button->style |= WFORM_SECONDARY;
@@ -2329,7 +2429,6 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 		BASE_STATS *Stat = _ppsStatsList[i];
 		WzString tipString = getLocalizedStatsName(_ppsStatsList[i]);
 		unsigned powerCost = 0;
-		W_BARGRAPH *bar;
 		if (Stat->hasType(STAT_STRUCTURE))  // It's a structure.
 		{
 			powerCost = ((STRUCTURE_STATS *)Stat)->powerToBuild;
@@ -2341,8 +2440,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 			sBarInit.formID = nextButtonId;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
-			bar = widgAddBarGraph(psWScreen, &sBarInit);
-			bar->setBackgroundColour(WZCOL_BLACK);
+			addDebugCostBar(*button, sBarInit);
 		}
 		else if (Stat->hasType(STAT_TEMPLATE))  // It's a droid.
 		{
@@ -2355,8 +2453,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 
 			sBarInit.formID = nextButtonId;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
-			bar = widgAddBarGraph(psWScreen, &sBarInit);
-			bar->setBackgroundColour(WZCOL_BLACK);
+			addDebugCostBar(*button, sBarInit);
 		}
 		WzString costString = WzString::format(_("Cost: %u"), powerCost);
 		tipString.append("\n");
@@ -2432,6 +2529,45 @@ static bool intAddCommand()
 	return setController(std::make_shared<CommanderController>(), INT_CMDORDER, IOBJ_COMMAND);
 }
 
+OBJECT_MODE intOpenObjectPanel()
+{
+	if (intMode != INT_OBJECT && intMode != INT_STAT && intMode != INT_CMDORDER)
+	{
+		return IOBJ_NONE;
+	}
+	switch (objMode)
+	{
+	case IOBJ_BUILD:
+	case IOBJ_MANUFACTURE:
+	case IOBJ_RESEARCH:
+	case IOBJ_COMMAND:
+		return objMode;
+	default:
+		return IOBJ_NONE;
+	}
+}
+
+bool intReopenObjectPanel(OBJECT_MODE mode)
+{
+	switch (mode)
+	{
+	case IOBJ_BUILD:
+		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
+		return intAddBuild();
+	case IOBJ_MANUFACTURE:
+		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
+		return intAddManufacture();
+	case IOBJ_RESEARCH:
+		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
+		return intAddResearch();
+	case IOBJ_COMMAND:
+		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
+		return intAddCommand();
+	default:
+		return false;
+	}
+}
+
 bool intTestShowForm(unsigned which)
 {
 	switch (which % 6)
@@ -2445,6 +2581,24 @@ bool intTestShowForm(unsigned which)
 		intResetScreen(true);
 		return true;
 	}
+}
+
+bool intTestShowDesign()
+{
+	intResetScreen(true);
+	widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
+	intShowPowerBar();
+	if (!intAddDesign(false))
+	{
+		return false;
+	}
+	intMode = INT_DESIGN;
+	if (widgGetFromID(psWScreen, IDDES_TEMPLSTART + 1) == nullptr)
+	{
+		return false;
+	}
+	intProcessDesign(IDDES_TEMPLSTART + 1);
+	return true;
 }
 
 //sets up the Intelligence Screen as far as the interface is concerned
@@ -2841,9 +2995,25 @@ void chatDialog(int mode, bool startWithQuickChatFocused)
 		ChatDialogUp = true;
 
 		WzChatMode initialChatMode = (mode == CHAT_GLOB) ? WzChatMode::Glob : WzChatMode::Team;
-		createChatScreen([]() {
+
+		// Chat docks under the console's history, which shows the chat's own messages while it's open
+		const bool consoleWasExpanded = inGameConsoleIsExpanded();
+		const ConsoleHistoryFilter previousFilter = inGameConsoleFilter();
+		inGameConsoleExpand((mode == CHAT_GLOB) ? ConsoleHistoryFilter::All : ConsoleHistoryFilter::Team);
+		inGameConsoleSetChatOpen(true);
+		createChatScreen([consoleWasExpanded, previousFilter]() {
 			ChatDialogUp = false;
-		}, initialChatMode, startWithQuickChatFocused);
+			inGameConsoleSetChatOpen(false);
+			if (consoleWasExpanded)
+			{
+				// (In the skin, the history shows the chat bar's channel)
+				inGameConsoleExpand(hudConsoleSkinned() ? inGameConsoleFilter() : previousFilter);
+			}
+			else
+			{
+				inGameConsoleCollapse();
+			}
+		}, initialChatMode, startWithQuickChatFocused, inGameConsolePanel());
 	}
 	else
 	{
@@ -2883,6 +3053,7 @@ void intShowInterface()
 	intAddReticule();
 	intShowPowerBar();
 	intShowGroupSelectionMenu();
+	hudInterfaceShown(true);
 }
 
 ScriptInterfaceRequest getScriptInterfaceRequest()
@@ -2915,4 +3086,5 @@ void intHideInterface(bool forceHidePowerbar)
 		intHidePowerBar();
 	}
 	intHideGroupSelectionMenu();
+	hudInterfaceShown(false);
 }

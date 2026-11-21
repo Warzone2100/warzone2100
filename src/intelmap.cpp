@@ -71,6 +71,7 @@
 
 #include "multimenu.h"
 #include "qtscript.h"
+#include "hud/intel/intelpanel.h"
 
 /* Intelligence Map screen IDs */
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
@@ -174,6 +175,7 @@ private:
 };
 
 static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static const char *researchReportAudio(const RESEARCH *psResearch);
 static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
@@ -704,31 +706,7 @@ void W_INTELLIGENCEOVERLAY_FORM::intIntelButtonPressed(const std::shared_ptr<Int
 						sound_StopStream(playing);
 					}
 
-					char const *audio = nullptr;
-					switch (psResearch->iconID)
-					{
-					case IMAGE_RES_DROIDTECH:
-					case IMAGE_RES_CYBORGTECH:
-						audio = "sequenceaudio/res_droid.ogg";
-						break;
-					case IMAGE_RES_WEAPONTECH:
-						audio = "sequenceaudio/res_weapons.ogg";
-						break;
-					case IMAGE_RES_COMPUTERTECH:
-						audio = "sequenceaudio/res_com.ogg";
-						break;
-					case IMAGE_RES_POWERTECH:
-						audio = "sequenceaudio/res_pow.ogg";
-						break;
-					case IMAGE_RES_SYSTEMTECH:
-						audio = "sequenceaudio/res_systech.ogg";
-						break;
-					case IMAGE_RES_STRUCTURETECH:
-					case IMAGE_RES_DEFENCE:
-						audio = "sequenceaudio/res_strutech.ogg";
-						break;
-					}
-
+					char const *audio = researchReportAudio(psResearch);
 					if (audio != nullptr)
 					{
 						std::weak_ptr<W_INTELLIGENCEOVERLAY_FORM> weakSelf = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(shared_from_this());
@@ -806,9 +784,16 @@ std::shared_ptr<W_SCREEN> createIntelligenceScreen()
 
 bool intAddIntelMap()
 {
-	if (intelligenceOverlayScreen)
+	if (intelligenceOverlayScreen || hudIntelScreenIsOpen())
 	{
 		// overlay screen already up
+		return true;
+	}
+
+	if (hudIntelScreenEnabled())
+	{
+		audio_StopAll();
+		hudIntelScreenOpen(psCurrentMsg, psCurrentMsg != nullptr);
 		return true;
 	}
 
@@ -912,7 +897,7 @@ static bool StartMessageSequences(MESSAGE *psMessage, bool Start)
 	return true;
 }
 
-static void intCleanUpIntelMap()
+static void intCleanUpIntelMap(bool classicScreen = true)
 {
 	bool removedAMessage = false;
 
@@ -933,15 +918,30 @@ static void intCleanUpIntelMap()
 	{
 		jsDebugMessageUpdate();
 	}
-	resetIntelligencePauseState();
+	if (classicScreen)
+	{
+		resetIntelligencePauseState();
+	}
 	immediateMessage = false;
+}
+
+/// The HUD's intelligence screen (src/hud/intel), when it is the one up
+static bool intRemoveHudIntelScreen()
+{
+	if (!hudIntelScreenIsOpen())
+	{
+		return false;
+	}
+	hudIntelScreenClose();
+	intCleanUpIntelMap(false);
+	return true;
 }
 
 
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMap()
 {
-	if (!intelligenceOverlayScreen)
+	if (intRemoveHudIntelScreen() || !intelligenceOverlayScreen)
 	{
 		return;
 	}
@@ -972,7 +972,7 @@ void intRemoveIntelMap()
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMapNoAnim()
 {
-	if (!intelligenceOverlayScreen)
+	if (intRemoveHudIntelScreen() || !intelligenceOverlayScreen)
 	{
 		return;
 	}
@@ -981,6 +981,17 @@ void intRemoveIntelMapNoAnim()
 	intelligenceOverlayScreen.reset();
 
 	intCleanUpIntelMap();
+}
+
+void intRebuildIntelMap()
+{
+	const bool hudOpen = hudIntelScreenIsOpen();
+	if ((!hudOpen && !intelligenceOverlayScreen) || hudOpen == hudIntelScreenEnabled())
+	{
+		return;
+	}
+	intRemoveIntelMapNoAnim();
+	intAddIntelMap();
 }
 
 IntMessageButton::IntMessageButton()
@@ -1304,12 +1315,67 @@ void setMessageImmediate(bool state)
 /* run intel map (in the game loop) */
 void intRunIntelMap()
 {
-	if (keyPressed(KEY_ESC))
+	// (The HUD's screen gives up its search first)
+	if (keyPressed(KEY_ESC) && !hudIntelScreenIsOpen())
 	{
 		intResetScreen(false);
 		// clear key press so we don't enter in-game options
 		inputLoseFocus();
 	}
+}
+
+bool intPlayMessageSequences(MESSAGE *psMessage)
+{
+	return psMessage != nullptr && StartMessageSequences(psMessage, true);
+}
+
+static const char *researchReportAudio(const RESEARCH *psResearch)
+{
+	switch (psResearch->iconID)
+	{
+	case IMAGE_RES_DROIDTECH:
+	case IMAGE_RES_CYBORGTECH:
+		return "sequenceaudio/res_droid.ogg";
+	case IMAGE_RES_WEAPONTECH:
+		return "sequenceaudio/res_weapons.ogg";
+	case IMAGE_RES_COMPUTERTECH:
+		return "sequenceaudio/res_com.ogg";
+	case IMAGE_RES_POWERTECH:
+		return "sequenceaudio/res_pow.ogg";
+	case IMAGE_RES_SYSTEMTECH:
+		return "sequenceaudio/res_systech.ogg";
+	case IMAGE_RES_STRUCTURETECH:
+	case IMAGE_RES_DEFENCE:
+		return "sequenceaudio/res_strutech.ogg";
+	default:
+		return nullptr;
+	}
+}
+
+static AUDIO_STREAM *researchReportStream = nullptr;
+
+void intPlayResearchReportAudio(const RESEARCH *psResearch)
+{
+	intStopResearchReportAudio();
+	const char *audio = psResearch != nullptr ? researchReportAudio(psResearch) : nullptr;
+	if (audio != nullptr)
+	{
+		researchReportStream = audio_PlayStream(audio, sound_GetUIVolume(), [](const AUDIO_STREAM *stream, const void *) {
+			if (stream == researchReportStream)
+			{
+				researchReportStream = nullptr;
+			}
+		}, nullptr);
+	}
+}
+
+void intStopResearchReportAudio()
+{
+	if (sound_isStreamPlaying(researchReportStream))
+	{
+		sound_StopStream(researchReportStream);
+	}
+	researchReportStream = nullptr;
 }
 
 static const char* getMessageTitle(const MESSAGE& message)

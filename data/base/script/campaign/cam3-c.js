@@ -160,6 +160,7 @@ function insaneReinforcementSpawn()
 function discoverGammaBase()
 {
 	reunited = true;
+	camSetObjectiveState("reunite", "done");
 	const lz = getObject("landingZone");
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
@@ -233,7 +234,7 @@ function betaAlive()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Reunite a part of Beta team with a Gamma team outpost"));
+	camSetExtraObjectiveMessage({id: "reunite", text: _("Reunite a part of Beta team with a Gamma team outpost"), marker: "CM3C_GAMMABASE"});
 
 	const startPos = getObject("startPosition");
 	const limboLZ = getObject("limboDroidLZ");

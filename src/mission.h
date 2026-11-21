@@ -124,6 +124,8 @@ void resetLimboMission();
 extern bool MissionResUp;
 
 void intRemoveMissionResultNoAnim();
+/// Hides the results (while the in-game menu is open over them), or shows them again
+void intSetMissionResultVisible(bool visible);
 void intProcessMissionResult(UDWORD id);
 void intRunMissionResult();
 
@@ -153,6 +155,9 @@ void missionTimerUpdate();
 void addMissionTimerInterface();
 
 void intRemoveMissionTimer();
+/// (tests) Shows the campaign's timer row in any game: the mission timer,
+/// and the transporter's ETA button or its launch button
+bool missionShowTimerRowForTests(bool launch);
 
 //access functions for bPlayCountDown flag
 void setPlayCountDown(UBYTE set);

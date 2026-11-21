@@ -45,6 +45,8 @@
 #include "loop.h"
 #include "gamestate_serialize.h"
 #include "gamestate_harness.h"
+#include "hud/hudgeometrydump.h"
+#include "hud/intel/intelpanel.h"
 #include "movebench.h"
 #include "pathbench.h"
 #include "corridordump.h"
@@ -215,6 +217,7 @@ static GAMECODE renderLoop()
 		/* Always refresh the widgets' backing stores if needed, even if we don't process clicks below */
 		intDoScreenRefresh();
 		gamestate::harness::afterScreenRefresh();
+		hudGeometryDumpFrame();
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */
 		if (!getRotActive() && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
@@ -365,6 +368,11 @@ static GAMECODE renderLoop()
 		else
 		{
 			gamepadProcessPausedBindings();
+			// The HUD's intelligence screen pauses as the Classic one, but shows the paused world behind it
+			if (hudIntelScreenIsOpen() && !gameStateRestoreFailed())
+			{
+				displayWorld();
+			}
 		}
 	}
 
@@ -747,6 +755,7 @@ GAMECODE gameLoop()
 		// Saves and snapshots requested while the messages for the next tick were still to arrive (networked games)
 		runPendingGameStateCaptures();
 		gamestate::harness::afterMessages();  // (the harness save point)
+		hudGeometryDumpAfterMessages();
 		// (Both do nothing unless started)
 		gamestate::replaySeekAtCapturePoint();
 		gamestate::snapshotRingAtCapturePoint();

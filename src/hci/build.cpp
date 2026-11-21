@@ -29,6 +29,11 @@
 #include "../power.h"
 #include "../map.h"
 #include "../game_world.h"
+#include "../stats.h"
+#include "../hud/huddetailcontents.h"
+#include "../hud/hudiconbutton.h"
+#include "../hud/hudpanelextension.h"
+#include "../hud/hudtext.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
 
@@ -68,6 +73,24 @@ void BuildController::updateBuildOptionsList()
 	auto newBuildOptions = fillStructureList(gameWorld.objects, selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
 
 	stats = std::vector<STRUCTURE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
+}
+
+unsigned BuildController::constructionPointsPerSecond() const
+{
+	unsigned selectedPoints = 0;
+	for (DROID *droid : builders)
+	{
+		if (droid->selected && droid->died == 0 && droid->getConstructStats() != nullptr)
+		{
+			selectedPoints += constructorPoints(*droid->getConstructStats(), droid->player);
+		}
+	}
+	if (selectedPoints > 0)
+	{
+		return selectedPoints;
+	}
+	auto builder = getHighlightedObject();
+	return builder != nullptr && builder->getConstructStats() != nullptr ? constructorPoints(*builder->getConstructStats(), builder->player) : 0;
 }
 
 STRUCTURE_STATS *BuildController::getObjectStatsAt(size_t objectIndex) const
@@ -419,6 +442,17 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto droid = controller->getObjectAt(objectIndex);
+		auto highlighted = controller->getHighlightedObject();
+		if (droid == nullptr || highlighted == nullptr)
+		{
+			return {};
+		}
+		return {secondaryAction(_("Build with this truck"), "category-trucks", false, droid == highlighted || !highlighted->selected)};
+	}
+
 	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
@@ -466,7 +500,10 @@ protected:
 		displayIfHighlight(xOffset, yOffset);
 		if (asStructureStats[stat->index].isFavorite && !controller->shouldShowFavorites())
 		{
-			iV_DrawImage(IntImages, IMAGE_ALLY_RESEARCH_TC, xOffset + x() + 44, yOffset + y() + 3);
+			if (!currentHudSkin().drawHudIcon(HudIcon::Favorite, WzRect(xOffset + x() + width() - 16, yOffset + y() + 4, 12, 12)))
+			{
+				iV_DrawImage(IntImages, IMAGE_ALLY_RESEARCH_TC, xOffset + x() + 44, yOffset + y() + 3);
+			}
 		}
 	}
 
@@ -496,12 +533,30 @@ private:
 		}
 
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
+		tintCostBar();
 	}
 
 	uint32_t getCost() override
 	{
 		STRUCTURE_STATS * psStats = getStats();
 		return psStats ? psStats->powerToBuild : 0;
+	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		return hudStructureDetail(getStats(), controller->constructionPointsPerSecond());
+	}
+
+	std::string getTip() override
+	{
+		std::string tip = BaseWidget::getTip();
+		STRUCTURE_STATS *psStats = getStats();
+		const unsigned rate = controller->constructionPointsPerSecond();
+		if (psStats != nullptr && rate > 0 && psStats != structGetDemolishStat())
+		{
+			tip += "\n" + astringf(_("Build Time: %s"), hudFormatDuration(hudWorkSeconds(psStats->buildPoints, rate)).c_str());
+		}
+		return tip;
 	}
 
 	void clickPrimary() override
@@ -513,6 +568,20 @@ private:
 		widgScheduleTask([clickedStats, controllerRef]() {
 			controllerRef->startBuildPosition(clickedStats);
 		});
+	}
+
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto stats = controller->getStatsAt(buildOptionIndex);
+		if (stats == nullptr)
+		{
+			return {};
+		}
+		if (controller->shouldShowFavorites() || asStructureStats[stats->index].isFavorite)
+		{
+			return {secondaryAction(_("Remove from favorites"), "favorite")};
+		}
+		return {secondaryAction(_("Add to favorites"), "favorite")};
 	}
 
 	void clickSecondary(bool synthesizedFromHold) override
@@ -601,9 +670,35 @@ private:
 		addFavoriteButton();
 	}
 
+	// Nothing takes the delivery point's place (manufacture's) on their left
+	WzRect layoutCompactHeader(int drop, int grow, bool) override
+	{
+		const int y = STAT_SLDY + drop - grow;
+		sizeHeaderButton(*obsoleteButton, grow);
+		sizeHeaderButton(*favoriteButton, grow);
+		obsoleteButton->move(4, y);
+		favoriteButton->move(obsoleteButton->x() + obsoleteButton->width() + 4, y);
+		hudSetMovedPanelControl(obsoleteButton);
+		hudSetMovedPanelControl(favoriteButton);
+		const int right = favoriteButton->x() + favoriteButton->width();
+		return WzRect(4, y, right - 4, std::max(obsoleteButton->height(), favoriteButton->height()));
+	}
+
+	std::vector<HudHeaderMenuEntry> headerMenuEntries() override
+	{
+		HudHeaderMenuEntry obsolete;
+		obsolete.button = obsoleteButton;
+		HudHeaderMenuEntry favorites;
+		favorites.button = favoriteButton;
+		return {obsolete, favorites};
+	}
+
 	void addObsoleteButton()
 	{
-		attach(obsoleteButton = std::make_shared<MultipleChoiceButton>());
+		auto iconButton = std::make_shared<HudIconChoiceButton>();
+		iconButton->setIcon(false, HudIcon::ObsoleteHidden);
+		iconButton->setIcon(true, HudIcon::ObsoleteShown);
+		attach(obsoleteButton = iconButton);
 		obsoleteButton->style |= WBUT_SECONDARY;
 		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
 		obsoleteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
@@ -626,7 +721,10 @@ private:
 
 	void addFavoriteButton()
 	{
-		attach(favoriteButton = std::make_shared<MultipleChoiceButton>());
+		auto iconButton = std::make_shared<HudIconChoiceButton>(HudIconButtonStyle::Bare);
+		iconButton->setIcon(false, HudIcon::Favorite);
+		iconButton->setIcon(true, HudIcon::Favorite, true);
+		attach(favoriteButton = iconButton);
 		favoriteButton->style |= WBUT_SECONDARY;
 		favoriteButton->setChoice(controller->shouldShowFavorites());
 		favoriteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_ALLY_RESEARCH), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH)));
@@ -661,6 +759,7 @@ bool BuildController::showInterface()
 	}
 
 	auto objectsForm = BuildObjectsForm::make(shared_from_this());
+	objectsForm->addHudExtension();
 	psWScreen->psForm->attach(objectsForm);
 	displayStatsForm();
 	triggerEvent(TRIGGER_MENU_BUILD_UP);

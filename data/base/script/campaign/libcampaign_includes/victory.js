@@ -117,6 +117,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			break;
 	}
 	__camNextLevel = nextLevel;
+	__camUpdateObjectives();
 }
 
 //;; ## camCheckExtraObjective()
@@ -149,20 +150,47 @@ function camCheckExtraObjective()
 
 //;; ## camSetExtraObjectiveMessage(message)
 //;;
-//;; Message(s) the mission script can set to further explain specific victory conditions.
-//;; Allows a single string or an array of strings.
+//;; Message(s) the mission script can set to further explain specific victory conditions: the mission's own objectives,
+//;; listed before the library's (see `setObjective()`). Allows a single string or an array of strings. An item can
+//;; also be an object `{id, text, marker}`, where `id` names it for `camSetObjectiveState()`, and `marker` names the
+//;; proximity message that shows where it's done.
 //;;
-//;; @param {string|Object[]} message
+//;; @param {string|Object|Object[]} message
 //;; @returns {void}
 //;;
 function camSetExtraObjectiveMessage(message)
 {
 	__camExtraObjectiveMessage = message;
+	__camUpdateObjectives();
+}
+
+//;; ## camSetObjectiveState(id, state)
+//;;
+//;; Marks the mission's objective `id` (see `camSetExtraObjectiveMessage()`) "done", "failed" or "active" again, when the
+//;; mission script knows it's met (or lost). Objectives start active.
+//;;
+//;; @param {string} id
+//;; @param {string} state
+//;; @returns {void}
+//;;
+function camSetObjectiveState(id, state)
+{
+	if (!camDef(__camObjectiveStates))
+	{
+		__camObjectiveStates = {}; // (for saves from before objectives existed)
+	}
+	if (__camObjectiveStates[id] === state)
+	{
+		return;
+	}
+	__camObjectiveStates[id] = state;
+	__camUpdateObjectives();
 }
 
 //;; ## camClearConsoleOnVictoryMessage(clear)
 //;;
 //;; If the script wants to allow `__camSetupConsoleForVictoryConditions()` to clear the console.
+//;; (No longer used: the victory conditions are objectives, and aren't printed when they change.)
 //;;
 //;; @param {boolean} clear
 //;; @returns {void}
@@ -193,6 +221,7 @@ function __camGameLost()
 function __camGameWon()
 {
 	__camLevelEnded = true;
+	__camUpdateObjectives(true); // all met, even if the last hasn't been noticed yet (ex. the units being back at the LZ)
 	if (camDef(__camNextLevel))
 	{
 		camTrace(__camNextLevel);
@@ -435,10 +464,13 @@ function __camVictoryOffworld()
 					{
 						const pos = camMakePos(lz);
 						playSound(cam_sounds.lz.returnToLZ, pos.x, pos.y, 0);
-						console(_("Return to LZ"));
 					}
 				}
 				++__camRTLZTicker;
+				if (__camRTLZTicker === 1)
+				{
+					__camUpdateObjectives(); // ("Return to LZ")
+				}
 			}
 		}
 	}
@@ -481,12 +513,8 @@ function __camVictoryOffworld()
 
 function __camSetupConsoleForVictoryConditions()
 {
-	// Console clears are only done when collecting artifacts or destroying bases.
-	if (__camAllowVictoryMsgClear)
-	{
-		clearConsole();
-	}
-	queue("__camShowVictoryConditions", camSecondsToMilliseconds(0.5));
+	// An artifact was collected or a base destroyed: update the objectives' counts
+	__camUpdateObjectives();
 }
 
 function __camShowBetaHint()
@@ -506,6 +534,150 @@ function __camShowBetaHintEarly()
 	}
 }
 
+function __camShowBetaHintMessage()
+{
+	console(_("Insane difficulty hint:"));
+	console(_("Fortify a strong base across the map to protect yourself from the Collective"));
+}
+
+// The mission's own objectives (camSetExtraObjectiveMessage()), as {id, text, marker} items
+function __camExtraObjectiveItems()
+{
+	if (!camDef(__camExtraObjectiveMessage))
+	{
+		return [];
+	}
+	const messages = (__camExtraObjectiveMessage instanceof Array) ? __camExtraObjectiveMessage : [__camExtraObjectiveMessage];
+	return messages.map((item) => ((typeof item === "string") ? {text: item} : item));
+}
+
+// A detected enemy base still standing, where "Show on map" goes
+function __camEnemyBaseMarker()
+{
+	for (const baseLabel in __camEnemyBases)
+	{
+		const bi = __camEnemyBases[baseLabel];
+		if (!bi.eliminated && bi.detected && camDef(bi.detectMsg))
+		{
+			return bi.detectMsg;
+		}
+	}
+	return undefined;
+}
+
+// Sets the victory conditions as the player's objectives (see setObjective()): the mission's own, the artifacts and
+// bases to count, what to destroy, surviving the timer, and returning to the LZ when needed. Called whenever any of
+// these change. The engine shows them, or prints the changes to the console when the HUD doesn't. When the mission is
+// `won`, its primary objectives are all marked done.
+function __camUpdateObjectives(won)
+{
+	if (!camDef(__camNextLevel) || !camDef(__camWinLossCallback))
+	{
+		return; // fastplay / tutorial
+	}
+	if (__camLevelEnded && won !== true)
+	{
+		return; // the level is over: keep the objectives as they were at its end
+	}
+	const __KIND = __camWinLossCallback;
+	const __DATA = camDef(__camVictoryData) ? __camVictoryData : {};
+	const __REQUIRED = (__KIND === CAM_VICTORY_STANDARD || __KIND === CAM_VICTORY_OFFWORLD);
+	const objectives = [];
+	__camExtraObjectiveItems().forEach((item, index) => {
+		const options = {order: 0};
+		if (camDef(item.marker))
+		{
+			options.marker = item.marker;
+		}
+		if (camDef(item.id) && camDef(__camObjectiveStates) && camDef(__camObjectiveStates[item.id]))
+		{
+			options.state = __camObjectiveStates[item.id];
+		}
+		objectives.push(["cam_extra_" + (camDef(item.id) ? item.id : index), item.text, options]);
+	});
+	const __ARTIFACTS = Object.keys(__camArtifacts).length;
+	if (__ARTIFACTS > 0)
+	{
+		objectives.push(["cam_artifacts", _("Artifacts collected"), {
+			order: 1,
+			primary: __REQUIRED,
+			progress: [__camNumArtifacts, __ARTIFACTS],
+			state: camAllArtifactsPickedUp() ? "done" : "active"
+		}]);
+	}
+	const __BASES = Object.keys(__camEnemyBases).length;
+	if (__BASES > 0)
+	{
+		const options = {
+			order: 2,
+			primary: (__KIND === CAM_VICTORY_STANDARD) || (__KIND === CAM_VICTORY_OFFWORLD && __DATA.eliminateBases === true),
+			progress: [__camNumEnemyBases, __BASES],
+			state: camAllEnemyBasesEliminated() ? "done" : "active"
+		};
+		const __MARKER = __camEnemyBaseMarker();
+		if (camDef(__MARKER))
+		{
+			options.marker = __MARKER;
+		}
+		objectives.push(["cam_bases", _("Bases destroyed"), options]);
+	}
+	if (__KIND === CAM_VICTORY_STANDARD || (__KIND === CAM_VICTORY_OFFWORLD && __DATA.annihilate === true))
+	{
+		objectives.push(["cam_destroy", _("Destroy all enemy units and structures"), {order: 3}]);
+	}
+	else if (__KIND === CAM_VICTORY_OFFWORLD && __DATA.eliminateBases === true)
+	{
+		objectives.push(["cam_destroy", _("Destroy all enemy units and bases"), {order: 3}]);
+	}
+	else if (__KIND === CAM_VICTORY_TIMEOUT)
+	{
+		objectives.push(["cam_survive", _("Survive until the timer reaches zero"), {order: 3}]);
+	}
+	// Returning to the LZ: from the start when the mission requires it, otherwise once the rest is done
+	if (__KIND === CAM_VICTORY_OFFWORLD && (__DATA.retlz === true || __camRTLZTicker > 0))
+	{
+		const options = {order: 4};
+		if (camDef(__DATA.message))
+		{
+			options.marker = __DATA.message;
+		}
+		objectives.push(["cam_lz", _("Return to LZ"), options]);
+	}
+	if (won === true)
+	{
+		// All met, even if the last hasn't been noticed yet. One whose count is still short (ex. when cheating) stays undone
+		objectives.forEach((objective) => {
+			const options = objective[2];
+			const __SHORT = camDef(options.progress) && options.progress[0] < options.progress[1];
+			if (options.primary !== false && options.state !== "failed" && !__SHORT)
+			{
+				options.state = "done";
+			}
+		});
+	}
+	__camSetObjectives(objectives);
+}
+
+function __camSetObjectives(objectives)
+{
+	if (!camDef(__camObjectiveIds))
+	{
+		__camObjectiveIds = []; // (for saves from before objectives existed)
+	}
+	const __IDS = objectives.map((objective) => (objective[0]));
+	__camObjectiveIds.forEach((id) => {
+		if (!__IDS.includes(id))
+		{
+			removeObjective(id);
+		}
+	});
+	objectives.forEach((objective) => {
+		setObjective(objective[0], objective[1], objective[2]);
+	});
+	__camObjectiveIds = __IDS;
+}
+
+// Every few minutes (the Victory Hints option): prints the objectives to the console again, as they scroll away there
 function __camShowVictoryConditions()
 {
 	if (camDef(tweakOptions.victoryHints) && !tweakOptions.victoryHints)
@@ -520,12 +692,21 @@ function __camShowVictoryConditions()
 	{
 		if (__camShowBetaHint())
 		{
-			console(_("Insane difficulty hint:"));
-			console(_("Fortify a strong base across the map to protect yourself from the Collective"));
+			__camShowBetaHintMessage();
 		}
 		return; // do not need this on these missions.
 	}
-	const __ANNIHILATE_MESSAGE = _("Destroy all enemy units and structures");
+	__camUpdateObjectives();
+	showObjectives(CAM_HUMAN_PLAYER, true);
+}
+
+// The "win info" chat command: the objectives, and what's left of the enemy
+function __camShowVictoryInfo()
+{
+	if (!camDef(__camNextLevel) || __camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
+	{
+		return;
+	}
 	let unitsOnMap = 0;
 	let structuresOnMap = 0;
 	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach((obj) => {
@@ -538,47 +719,8 @@ function __camShowVictoryConditions()
 			++structuresOnMap;
 		}
 	});
-	console(__camNumArtifacts + "/" + Object.keys(__camArtifacts).length + " " + _("Artifacts collected"));
-	console(__camNumEnemyBases + "/" + Object.keys(__camEnemyBases).length + " " + _("Bases destroyed"));
 	console(unitsOnMap + " " + _("Enemy units remaining"));
 	console(structuresOnMap + " " + _("Enemy structures remaining"));
-	if (__camWinLossCallback === CAM_VICTORY_OFFWORLD)
-	{
-		if (camDef(__camVictoryData.retlz) && __camVictoryData.retlz)
-		{
-			console(_("Return to LZ required"));
-		}
-		if (camDef(__camVictoryData.annihilate) && __camVictoryData.annihilate)
-		{
-			console(__ANNIHILATE_MESSAGE);
-		}
-		if (camDef(__camVictoryData.eliminateBases) && __camVictoryData.eliminateBases)
-		{
-			console(_("Destroy all enemy units and bases"));
-		}
-	}
-	else if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
-	{
-		console(_("Survive until the timer reaches zero"));
-	}
-	else if (__camWinLossCallback === CAM_VICTORY_STANDARD)
-	{
-		console(__ANNIHILATE_MESSAGE);
-	}
-	//More specific messages set through the mission scripts.
-	if (camDef(__camExtraObjectiveMessage))
-	{
-		if (__camExtraObjectiveMessage instanceof Array)
-		{
-			for (let i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
-			{
-				const __MES = __camExtraObjectiveMessage[i];
-				console(__MES);
-			}
-		}
-		else
-		{
-			console(__camExtraObjectiveMessage);
-		}
-	}
+	__camUpdateObjectives();
+	showObjectives(CAM_HUMAN_PLAYER);
 }

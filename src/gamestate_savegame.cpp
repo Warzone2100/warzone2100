@@ -62,6 +62,7 @@
 #include "init.h"           // rebuildSearchPath, buildMapList, searchPathMode
 #include "levels.h"         // levShutDown, levInitialise, levFindDataSet, makeLevLoadDataLoadingTask
 #include "gamedef.h"        // GAME_TYPE, GTYPE_SAVE_START
+#include "hud/intel/intelmodel.h"
 #include "lib/gamelib/gtime.h"      // gameTime, setGameTime
 #include "lib/ivis_opengl/piepalette.h" // pal_Init
 #include "lib/framework/file.h"     // saveFile, loadFileToBufferVector
@@ -883,6 +884,9 @@ static nlohmann::ordered_json writeLocalState()
 	j["effects"] = serializeActiveEffects();
 
 	j["interface"] = writeLocalInterface();
+
+	// The intelligence screen's log: when each research report and briefing arrived (per-client, display-only)
+	j["intelligence"] = hudIntelSaveLog();
 	return j;
 }
 
@@ -919,6 +923,12 @@ static void readLocalState(const nlohmann::ordered_json &j)
 			restoreLoadedGuideTopics(guide.at("loaded").get<std::vector<std::string>>());
 		}
 		setGameGuideDisableTopicPopups(guide.value("disableTopicPopups", false));
+	}
+
+	// Absent in older saves: the intelligence screen's history starts at the load
+	if (j.contains("intelligence"))
+	{
+		hudIntelRestoreLog(j.at("intelligence"));
 	}
 
 	// The interface is applied later, once the scripts are loaded and the interface is up

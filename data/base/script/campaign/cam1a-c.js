@@ -57,6 +57,7 @@ function extraVictoryCondition()
 	const enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 	if (sentTransports.total >= MIS_TOTAL_TRANSPORTS && enemies.length === 0)
 	{
+		camSetObjectiveState("reinforcements", "done");
 		return true;
 	}
 }
@@ -206,7 +207,7 @@ function startTransporterAttack()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Destroy all New Paradigm reinforcements"));
+	camSetExtraObjectiveMessage({id: "reinforcements", text: _("Destroy all New Paradigm reinforcements")});
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha11.pre, {
 		callback: "extraVictoryCondition"

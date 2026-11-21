@@ -36,6 +36,7 @@
 #include "../playerstatsgraph.h"
 #include "../researchlogviewer.h"
 #include "../mission.h"
+#include "../hud/hudresults.h"
 
 // layout within a centered 640x480 design space (mirrors the mission results screen)
 constexpr int SPECGAMEOVER_BACKFORM_W = 640;
@@ -59,6 +60,7 @@ constexpr int SPECGAMEOVER_BUTTON_TEXT_H = 16;
 
 static std::shared_ptr<W_SCREEN> spectatorGameOverScreen;
 static std::shared_ptr<WIDGET> spectatorGameOverBackForm;
+static bool spectatorGameOverHudResults = false;
 
 void showSpectatorGameOverScreen()
 {
@@ -71,6 +73,18 @@ void showSpectatorGameOverScreen()
 
 	auto screen = W_SCREEN::make();
 	screen->psForm->hide(); // the hidden root form still displays children, but does not accept mouse-over itself
+
+	if (hudResultsEnabled())
+	{
+		// The Modern skin's results, as the players' (spectating, or a replay)
+		auto results = hudMakeGameResults(true, false, std::string(), {{0, _("Quit To Main Menu"), true, []() { intRequestQuitToMainMenu(); }}});
+		screen->psForm->attach(results);
+		widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
+		spectatorGameOverScreen = screen;
+		spectatorGameOverBackForm = results;
+		spectatorGameOverHudResults = true;
+		return;
+	}
 
 	// backform: centered 640x480 design space, mirroring the mission results screen
 	auto backForm = std::make_shared<WIDGET>();
@@ -182,6 +196,7 @@ void closeSpectatorGameOverScreen()
 		spectatorGameOverScreen = nullptr;
 	}
 	spectatorGameOverBackForm = nullptr;
+	spectatorGameOverHudResults = false;
 }
 
 void setSpectatorGameOverScreenVisible(bool visible)
@@ -190,4 +205,9 @@ void setSpectatorGameOverScreenVisible(bool visible)
 	{
 		spectatorGameOverBackForm->show(visible);
 	}
+}
+
+bool spectatorGameOverScreenShowsHudResults()
+{
+	return spectatorGameOverHudResults && spectatorGameOverBackForm && spectatorGameOverBackForm->visible();
 }

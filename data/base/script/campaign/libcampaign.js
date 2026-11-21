@@ -390,6 +390,8 @@ var __camLastAttackTriggered;
 var __camLevelEnded;
 var __camExtraObjectiveMessage;
 var __camAllowVictoryMsgClear;
+var __camObjectiveIds;
+var __camObjectiveStates;
 
 //video
 var __camVideoSequences;

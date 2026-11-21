@@ -968,6 +968,14 @@ if(WZ_BUILD_VIRTUAL_KEYBOARD_TEST)
 	target_link_libraries(virtual_keyboard_test PRIVATE framework utf8proc nlohmann_json optional-lite)
 endif()
 
+# The in-game console's history and layout (src/console_history.cpp, src/hci/ingameconsole_layout.h)
+option(WZ_BUILD_CONSOLE_TEST "Build the in-game console unit test (tests/console_test.cpp)" OFF)
+if(WZ_BUILD_CONSOLE_TEST)
+	add_executable(console_test "${PROJECT_SOURCE_DIR}/tests/console_test.cpp" "${PROJECT_SOURCE_DIR}/src/console_history.cpp")
+	target_include_directories(console_test PRIVATE "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/src")
+	target_link_libraries(console_test PRIVATE framework utf8proc)
+endif()
+
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Target system is Windows

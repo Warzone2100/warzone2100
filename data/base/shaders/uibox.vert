@@ -13,6 +13,8 @@ layout(std140) uniform cbuffer {
 	float gradientExponent;
 	float borderWidth;
 	float edgeSoftness;
+	float dashLength;
+	float dashGap;
 };
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))

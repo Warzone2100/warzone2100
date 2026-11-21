@@ -44,6 +44,8 @@
 #include "warcam.h"
 #include "display.h"
 #include "qtscript.h"
+#include "intdisplay.h"
+#include "multiplay.h"
 #include <algorithm>
 #include <functional>
 #include <vector>
@@ -533,6 +535,30 @@ void selNextSpecifiedBuilding(WorldObjectState& objState, STRUCTURE_TYPE structT
 		// Can't find required building
 		addConsoleMessage(_("Cannot find required building!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
+}
+
+// ---------------------------------------------------------------------
+unsigned selSetDroidSelection(WorldObjectState& objState, unsigned player, const std::function<bool (const DROID *)> &shouldSelect)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+	bool changed = false;
+	unsigned count = 0;
+	for (DROID *psDroid : objState.droids[player])
+	{
+		const bool selected = shouldSelect(psDroid) && isSelectable(psDroid);
+		changed = changed || (psDroid->selected != selected);
+		psDroid->selected = selected;
+		count += selected;
+	}
+	if (changed)
+	{
+		intRefreshScreen();
+		triggerEventSelected();
+	}
+	return count;
 }
 
 // ---------------------------------------------------------------------

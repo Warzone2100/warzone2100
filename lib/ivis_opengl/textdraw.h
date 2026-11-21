@@ -48,7 +48,20 @@ enum iV_fonts
 	font_video_2,
 	font_video_3,
 	font_video_4,
+	font_display_1, // display text: DejaVu Sans Condensed Bold, sized and letter-spaced by iV_BindDisplayFont
+	font_display_2,
+	font_display_3,
+	font_display_4,
+	font_display_5,
+	font_display_6,
 	font_count
+};
+
+struct WzTextFit
+{
+	bool truncated = false;   ///< it's cut, and ends in an ellipsis
+	size_t shownLength = 0;   ///< how many of its code points show, from its start (in reading order)
+	int naturalWidth = 0;     ///< the whole text's width (in points)
 };
 
 class WzText
@@ -57,6 +70,9 @@ public:
 	WzText() {}
 	WzText(const WzString &text, iV_fonts fontID);
 	void setText(const WzString &text, iV_fonts fontID/*, bool delayRender = false*/);
+	/// Sets the text, cut at its logical end to fit `maxWidth` (in points) and ending in an ellipsis
+	/// (0 or less for no limit). Setting the same text with a width that cuts it in the same place is a no-op.
+	void setText(const WzString &text, iV_fonts fontID, int maxWidth);
 	~WzText();
 	// Width (in points)
 	int width();
@@ -69,6 +85,15 @@ public:
 	int aboveBase(); // (in points)
 	int belowBase(); // (in points)
 	int lineSize(); // (in points)
+	// The drawn pixels' top, from the baseline, and their height (in points)
+	float inkTop();
+	float inkHeight();
+	/// The pen position across that centers the drawn pixels in the rectangle (in points), on whole pixels of the display
+	float inkCenteredX(const WzRect &rect);
+	/// With its drawn pixels centered in the rectangle (in points), on whole pixels of the display.
+	/// Vertically, when `aboveBaseline` is given, the height of its drawn pixels above the baseline instead
+	/// (ex. all the digits', so numbers share a baseline)
+	void renderCenteredOnInk(const WzRect &rect, PIELIGHT colour, WzText *aboveBaseline = nullptr);
 
 public:
 	WzText(const WzText& other) = delete; // non-copyable
@@ -79,6 +104,8 @@ public:
 public:
 	const WzString& getText() const { return mText; }
 	iV_fonts getFontID() const { return mFontID; }
+	/// How the text fits the width it was set with
+	const WzTextFit &fit() const { return mFit; }
 
 private:
 	void drawAndCacheText(const WzString &text, iV_fonts fontID);
@@ -92,23 +119,19 @@ private:
 	int mPtsLineSize = 0;
 	Vector2i offsets = Vector2i(0, 0);
 	Vector2i dimensions = Vector2i(0, 0);
+	// The drawn pixels (the bitmap's can have empty edges), from the pen position like `offsets`
+	Vector2i inkOffsets = Vector2i(0, 0);
+	Vector2i inkDimensions = Vector2i(0, 0);
 	float mRenderingHorizScaleFactor = 0.f;
 	float mRenderingVertScaleFactor = 0.f;
 	iV_fonts mFontID = font_count;
 	uint32_t mFontGeneration = 0;
 	Vector2i layoutMetrics = Vector2i(0, 0);
-};
-
-class WidthLimitedWzText: public WzText
-{
-private:
-	WzString mFullText;
-	size_t mLimitWidthPts = 0;
-
-public:
-	// Sets the text, truncating to a desired width limit (in *points*) if needed
-	// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
-	size_t setTruncatableText(const WzString &text, iV_fonts fontID, size_t limitWidthInPoints);
+	int mMaxWidth = 0;   // (in points, 0 for no limit)
+	WzTextFit mFit;
+	// Widths (in pixels) from mFitFromPixels up to, not including, mFitBelowPixels cut the text in the same place
+	int32_t mFitFromPixels = 0;
+	int32_t mFitBelowPixels = 0;
 };
 
 /**
@@ -145,9 +168,15 @@ void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBol
 bool iV_BindVideoFont(iV_fonts fontID, float pointSize);
 /// Unbinds all video text fonts and frees their faces.
 void iV_UnbindVideoFonts();
+/// Sets the size (in points) and letter spacing (in ems) of a display text font (font_display_1 ... font_display_6).
+/// Text in it re-renders at the new size. (DejaVu Sans Bold if DejaVu Sans Condensed Bold can't be loaded, CJK text
+/// in the bundled CJK font's bold without the spacing)
+bool iV_BindDisplayFont(iV_fonts fontID, float pointSize, float letterSpacing = 0.f);
 
 int iV_GetEllipsisWidth(iV_fonts fontID);
 void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour, float rotation = 0.0f);
+/// The text, cut at its logical end to fit `maxWidth` (in points) and ending in an ellipsis
+WzString iV_TruncateTextToWidth(const WzString &text, iV_fonts fontID, int maxWidth);
 
 int iV_GetTextAboveBase(iV_fonts fontID);
 int iV_GetTextBelowBase(iV_fonts fontID);

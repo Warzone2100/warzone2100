@@ -62,6 +62,8 @@ public:
 		return &(help.value());
 	}
 	void setHelp(optional<WidgetHelp> help) override;
+	/// Whether it was built as the Compact layout's slim bar
+	bool builtSlim() const { return slim; }
 private:
 	std::shared_ptr<GroupButton> makeGroupButton(size_t groupNumber);
 	void addTabList();
@@ -69,6 +71,7 @@ private:
 	std::shared_ptr<IntListTabWidget> groupsList;
 	std::shared_ptr<GroupsUIController> groupsUIController;
 	optional<WidgetHelp> help;
+	bool slim = false;
 };
 
 #endif // __INCLUDED_SRC_HCI_GROUPS_H__

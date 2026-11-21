@@ -47,6 +47,7 @@
 #include "../multivote.h"
 
 #include "../hci/teamstrategy.h"
+#include "../hud/pregamescreen.h"
 
 #include <array>
 #include <chrono>
@@ -65,7 +66,42 @@ struct WzGameStartOverlayScreen;
 
 // MARK: - Globals
 
-static std::weak_ptr<WzGameStartOverlayScreen> psCurrentGameStartScreen;
+static std::weak_ptr<W_SCREEN> psCurrentGameStartScreen;
+
+bool pregameCanKickLoadingPlayer(uint32_t player)
+{
+	return NetPlay.isHost && player < MAX_CONNECTED_PLAYERS && isHumanPlayer(player) && player != NetPlay.hostPlayer && ingame.JoiningInProgress[player]
+	       && !ingame.PendingDisconnect[player];
+}
+
+bool pregameKickStartsVote(uint32_t targetPlayer)
+{
+	uint32_t numHumanPlayers = 0;
+	for (uint32_t i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (isHumanPlayer(i))
+		{
+			++numHumanPlayers;
+		}
+	}
+	return !(NetPlay.players[targetPlayer].isSpectator || (numHumanPlayers <= 2 && !NetPlay.players[NetPlay.hostPlayer].isSpectator));
+}
+
+void pregameKickLoadingPlayer(uint32_t targetPlayer)
+{
+	if (!pregameCanKickLoadingPlayer(targetPlayer))
+	{
+		return;
+	}
+	if (!pregameKickStartsVote(targetPlayer))
+	{
+		kickPlayer(targetPlayer, _("The host has kicked you from the game."), ERROR_KICKED, false);
+	}
+	else
+	{
+		startKickVote(targetPlayer);
+	}
+}
 
 // MARK: - WzGameStartOverlayScreen definition
 
@@ -324,22 +360,7 @@ private:
 				auto targetPlayer = strongParent->player;
 				if (isHumanPlayer(targetPlayer) && targetPlayer != NetPlay.hostPlayer && strongParent->status == LoadingStatus::Loading)
 				{
-					uint32_t numHumanPlayers = 0;
-					for (uint32_t i = 0; i < MAX_PLAYERS; i++)
-					{
-						if (isHumanPlayer(i))
-						{
-							++numHumanPlayers;
-						}
-					}
-					if (NetPlay.players[targetPlayer].isSpectator || (numHumanPlayers <= 2 && !NetPlay.players[NetPlay.hostPlayer].isSpectator))
-					{
-						kickPlayer(targetPlayer, _("The host has kicked you from the game."), ERROR_KICKED, false);
-					}
-					else
-					{
-						startKickVote(targetPlayer);
-					}
+					pregameKickLoadingPlayer(targetPlayer);
 				}
 			}
 		}));
@@ -704,8 +725,6 @@ int32_t WzCountdownLabel::idealHeight()
 
 // MARK: - WzGameStartOverlayScreen_CLICKFORM
 
-#define WZ_TEAMPLANNING_COUNTDOWN_MS 20000
-#define WZ_FINAL_COUNTDOWN_MS 3000
 
 class WzGameStartOverlayScreen_CLICKFORM : public W_CLICKFORM
 {
@@ -1112,6 +1131,13 @@ void WzGameStartOverlayScreen::closeScreen()
 
 std::shared_ptr<W_SCREEN> createGameStartScreen(std::function<void ()> onCloseFunc)
 {
+	if (hudPregameScreenEnabled())
+	{
+		auto modern = hudMakePregameScreen(onCloseFunc);
+		widgRegisterOverlayScreenOnTopOfScreen(modern, psWScreen);
+		psCurrentGameStartScreen = modern;
+		return modern;
+	}
 	auto screen = WzGameStartOverlayScreen::make(onCloseFunc);
 	widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
 	psCurrentGameStartScreen = screen;

@@ -29,9 +29,13 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/widget/button.h"
 #include "modding.h"
 
 #include "intimage.h"
+#include "hud/hudskin.h"
+#include "hud/hudsettings.h"
+#include "lib/gamelib/gtime.h"
 
 #define INCEND	(0)
 
@@ -253,8 +257,70 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 void IntListTabWidget::initialize()
 {
 	ListTabWidget::initialize();
-	tabWidget()->setHeight(15);
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
+	intSetupPageTabs(*tabWidget(), tabAlignment);
+}
+
+void IntListTabWidget::setTabRowHidden()
+{
+	tabRowHidden = true;
+	tabWidget()->hide();
+	geometryChanged();
+}
+
+void IntListTabWidget::geometryChanged()
+{
+	ListTabWidget::geometryChanged();
+	if (tabRowHidden)
+	{
+		listWidget()->setGeometry(0, 0, width(), height());
+	}
+}
+
+void IntListTabWidget::setHudSkinned()
+{
+	intSetHudPageTabs(*tabWidget());
+	hudSkinned = true;
+}
+
+void IntListTabWidget::pageTurnedByTouch(size_t, size_t)
+{
+	if (hudSkinned && !hudReduceMotion())
+	{
+		pageTurnedAt = realTime;
+	}
+}
+
+void IntListTabWidget::displayRecursive(WidgetGraphicsContext const &context)
+{
+	ListTabWidget::displayRecursive(context);
+	if (!pageTurnedAt.has_value())
+	{
+		return;
+	}
+	const float t = static_cast<float>(realTime - pageTurnedAt.value()) / 160.f;
+	if (t >= 1.f)
+	{
+		pageTurnedAt.reset();
+		return;
+	}
+	const ListWidget *list = listWidget();
+	const float eased = (1.f - t) * (1.f - t);
+	currentHudSkin().drawPageTurnFade(WzRect(list->screenPosX(), list->screenPosY(), list->width(), list->height()), eased);
+}
+
+void intSetupPageTabs(TabSelectionWidget &tabs, TabAlignment tabAlignment)
+{
+	tabs.setHeight(15);
+	tabs.addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabs.addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabs.addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
+}
+
+void intSetHudPageTabs(TabSelectionWidget &tabs)
+{
+	tabs.setDrawButtonFunction([](W_BUTTON &button, TabSelectionButtonRole role, int xOffset, int yOffset) {
+		const unsigned state = button.getState();
+		return currentHudSkin().drawPageTab(WzRect(xOffset + button.x(), yOffset + button.y(), button.width(), button.height()), role,
+		                                    (state & (WBUT_LOCK | WBUT_CLICKLOCK | WBUT_DOWN)) != 0, (state & WBUT_HIGHLIGHT) != 0);
+	});
 }

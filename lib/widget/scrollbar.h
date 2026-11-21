@@ -43,6 +43,7 @@ public:
 	}
 
 	uint32_t position() const;
+	uint32_t maxPosition() const;
 	void setPosition(uint32_t newPosition);
 	void setScrollableSize(uint32_t value);
 	void setViewSize(uint32_t value);
@@ -55,6 +56,8 @@ public:
 	void enable();
 	void disable();
 	bool isEnabled() const;
+	/// Draws the slider (its track and handle) instead of the default look
+	void setSliderDisplay(WIDGET_DISPLAY display);
 
 protected:
 	void geometryChanged() override;

@@ -47,6 +47,8 @@ bool toggleResearchTreeScreen();
 // tree opens underneath it.
 void showResearchTreeScreen(const ResearchTreeContext& context, const std::shared_ptr<W_SCREEN>& aboveScreen = nullptr);
 void closeResearchTreeScreen();
+// Show a topic in the open tree (ex. a research report's)
+void researchTreeScreenRevealResearch(uint16_t researchIndex);
 bool researchTreeScreenIsUp();
 
 // Driven by the research tree key mappings, which are only live while the view

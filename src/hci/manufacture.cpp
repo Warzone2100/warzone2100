@@ -23,6 +23,14 @@
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "manufacture.h"
+#include "../hud/hudbadges.h"
+#include "../hud/huddetailcontents.h"
+#include "../hud/hudiconbutton.h"
+#include "../hud/hudpanelextension.h"
+#include "../hud/hudranks.h"
+#include "../hud/hudsettings.h"
+#include "../hud/hudskin.h"
+#include "../hud/hudtext.h"
 #include "../mission.h"
 #include "../qtscript.h"
 #include "../display3d.h"
@@ -53,6 +61,20 @@ static uint8_t getProductionLoops(STRUCTURE *structure)
 	auto psFactory = getFactoryOrNullptr(structure);
 	ASSERT_NOT_NULLPTR_OR_RETURN(0, psFactory);
 	return psFactory->productionLoops;
+}
+
+/// A looping factory's count: the runs (the loops and the one in progress), or infinity
+static std::string loopCountText(uint8_t productionLoops)
+{
+	switch (productionLoops)
+	{
+	case 0:
+		return "";
+	case INFINITE_PRODUCTION:
+		return "∞";
+	default:
+		return astringf("%u", productionLoops + 1);
+	}
 }
 
 static std::shared_ptr<W_LABEL> makeProductionRunSizeLabel()
@@ -343,13 +365,14 @@ protected:
 
 		if (productionPending && StructureIsOnHoldPending(factory))
 		{
-			iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+			currentHudSkin().drawFancyButtonOnHold(hudLook(xOffset, yOffset));
 		}
 		else
 		{
 			displayIfHighlight(xOffset, yOffset);
 		}
 		drawNextDroidRank(xOffset, yOffset);
+		hudDrawJobBadges(factory, xOffset + x(), yOffset + y(), height());
 	}
 
 	// show a little icon on the bottom, indicating what rank next unit will be
@@ -392,7 +415,8 @@ protected:
 			lvl = getDroidLevel(exp, player, nullBrainComponent);
 		}
 		const auto expgfx = getDroidRankGraphicFromLevel(lvl);
-		if (expgfx != UDWORD_MAX)
+		const bool insignia = currentHudSkin().drawsRankInsignia() && hudDrawRank(lvl, xOffset + 44, yOffset + 4, HudRankSize::Button);
+		if (!insignia && expgfx != UDWORD_MAX)
 		{
 			// FIXME: use offsets relative to template positon, not hardcoded values ?
 			iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);
@@ -428,7 +452,7 @@ private:
 	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
 	{
 		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
-		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory))
+		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory) && !hudModuleActive(HudModuleId::ObjectBadges))
 		{
 			productionRunSizeLabel->setString(WzString::format("%d", productionRemaining));
 			productionRunSizeLabel->show();
@@ -486,6 +510,21 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		auto factory = controller->getObjectAt(objectIndex);
+		if (factory == nullptr || !StructureIsManufacturingPending(factory))
+		{
+			return {};
+		}
+		// (as the right-click: a first one puts it on hold, the next cancels it)
+		if (StructureIsOnHoldPending(factory))
+		{
+			return {secondaryAction(_("Cancel production"), "never", true)};
+		}
+		return {secondaryAction(_("Pause production"), "replay-pause")};
+	}
+
 	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto factory = controller->getObjectAt(objectIndex);
@@ -528,6 +567,10 @@ protected:
 
 		displayIMD(AtlasImage(), ImdObject::DroidTemplate(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
+		if (!runSizeBadge.empty())
+		{
+			runSizeBadge.draw(xOffset + x() + 2, yOffset + y() + 2);
+		}
 	}
 
 private:
@@ -554,6 +597,12 @@ private:
 		{
 			auto productionLoops = getProductionLoops(structure);
 			auto labelText = astringf(productionLoops > 0 ? "%d/%d" : "%d", production.numRemaining(), production.quantity);
+			if (currentHudSkin().drawsProductionRunBadge())
+			{
+				productionRunSizeLabel->hide();
+				runSizeBadge.set(productionLoops > 0 ? labelText : "×" + labelText, false);
+				return;
+			}
 			productionRunSizeLabel->setString(WzString::fromUtf8(labelText));
 			productionRunSizeLabel->show();
 		}
@@ -561,6 +610,7 @@ private:
 		{
 			productionRunSizeLabel->hide();
 		}
+		runSizeBadge.set(std::string(), false);
 	}
 
 	bool isHighlighted() const override
@@ -576,6 +626,7 @@ private:
 			intSetShadowPower(getCost());
 		}
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
+		tintCostBar();
 		updateProductionRunSizeLabel(controller->getHighlightedObject(), getStats());
 	}
 
@@ -585,9 +636,43 @@ private:
 		return psTemplate ? calcTemplatePower(psTemplate) : 0;
 	}
 
+	std::shared_ptr<WIDGET> makeHudDetail() override
+	{
+		return hudTemplateDetail(getStats(), controller->getHighlightedObject());
+	}
+
+	std::string getTip() override
+	{
+		std::string tip = BaseWidget::getTip();
+		DROID_TEMPLATE *psTemplate = getStats();
+		STRUCTURE *factory = controller->getHighlightedObject();
+		const int rate = factory != nullptr ? getBuildingProductionPoints(factory) : 0;
+		if (psTemplate != nullptr && rate > 0)
+		{
+			tip += "\n" + astringf(_("Production Time: %s"), hudFormatDuration(hudWorkSeconds(calcTemplateBuild(psTemplate), rate)).c_str());
+		}
+		return tip;
+	}
+
 	void clickPrimary() override
 	{
 		adjustFactoryProduction(true);
+	}
+
+	std::vector<HudDetailAction> hudSecondaryActions() override
+	{
+		STRUCTURE *factory = controller->getHighlightedObject();
+		DROID_TEMPLATE *psTemplate = getStats();
+		if (factory == nullptr || psTemplate == nullptr)
+		{
+			return {};
+		}
+		auto production = getProduction(factory, psTemplate);
+		if (!production.isValid() || production.numRemaining() <= 0)
+		{
+			return {};
+		}
+		return {secondaryAction(_("Remove one"), "minimize", false, true, WzString::fromUtf8(astringf(_("%d in the queue"), production.numRemaining())))};
 	}
 
 	void clickSecondary(bool synthesizedFromHold) override
@@ -608,6 +693,7 @@ private:
 
 	std::shared_ptr<ManufactureController> controller;
 	std::shared_ptr<W_LABEL> productionRunSizeLabel;
+	HudCountBadge runSizeBadge;
 	size_t manufactureOptionIndex;
 };
 
@@ -679,14 +765,66 @@ private:
 	{
 		BaseWidget::initialize();
 		addObsoleteButton();
-		attach(std::make_shared<DeliveryPointButton>(controller));
+		attach(deliveryPointButton = std::make_shared<DeliveryPointButton>(controller));
 		addLoopProductionWidgets();
+	}
+
+	// The buttons 2 px apart, with the loop count on the loop button, to leave room for the pages
+	WzRect layoutCompactHeader(int drop, int grow, bool) override
+	{
+		const int y = STAT_SLDY + drop - grow;
+		const AtlasImage deliveryPointImage(IntImages, IMAGE_FDP_UP);
+		sizeHeaderButton(*deliveryPointButton, grow, deliveryPointImage);
+		sizeHeaderButton(*obsoleteButton, grow);
+		sizeHeaderButton(*loopProductionButton, grow);
+		// (the delivery point button takes its size from its images when it's first drawn)
+		deliveryPointButton->move(4, y);
+		obsoleteButton->move(deliveryPointButton->x() + deliveryPointImage.width() + grow + 2, y);
+		loopProductionButton->move(obsoleteButton->x() + obsoleteButton->width() + 2, y);
+		// (in the header menu, its item shows the count)
+		loopProductionButton->countBadge = !usesHeaderMenu();
+		loopProductionLabel->setGeometry(loopProductionButton->geometry());
+		loopProductionLabel->setTransparentToMouse(true);
+		loopProductionLabel->drawn = false;
+		for (const auto &control : std::initializer_list<std::shared_ptr<WIDGET>>{deliveryPointButton, obsoleteButton, loopProductionButton, loopProductionLabel})
+		{
+			hudSetMovedPanelControl(control);
+		}
+		const int right = loopProductionButton->x() + loopProductionButton->width();
+		return WzRect(4, y, right - 4, loopProductionButton->height());
+	}
+
+	size_t compactHeaderMaxPages() const override
+	{
+		return 2;
+	}
+
+	std::vector<HudHeaderMenuEntry> headerMenuEntries() override
+	{
+		HudHeaderMenuEntry deliveryPoint;
+		deliveryPoint.button = deliveryPointButton;
+		deliveryPoint.closesMenu = true;
+		HudHeaderMenuEntry obsolete;
+		obsolete.button = obsoleteButton;
+		HudHeaderMenuEntry loop;
+		loop.button = loopProductionButton;
+		std::weak_ptr<ManufactureController> weakController = controller;
+		loop.stepperValue = [weakController]() {
+			auto strongController = weakController.lock();
+			const std::string count = strongController != nullptr ? loopCountText(getProductionLoops(strongController->getHighlightedObject())) : std::string();
+			return WzString::fromUtf8(count.empty() ? _("Off") : count);
+		};
+		loop.stepperLessTip = _("One loop fewer");
+		loop.stepperMoreTip = _("One loop more");
+		return {deliveryPoint, obsolete, loop};
 	}
 
 	void addObsoleteButton()
 	{
-		auto obsoleteButton = std::make_shared<MultipleChoiceButton>();
-		attach(obsoleteButton);
+		auto iconButton = std::make_shared<HudIconChoiceButton>();
+		attach(obsoleteButton = iconButton);
+		iconButton->setIcon(false, HudIcon::ObsoleteHidden);
+		iconButton->setIcon(true, HudIcon::ObsoleteShown);
 		obsoleteButton->style |= WBUT_SECONDARY;
 		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
 		obsoleteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
@@ -699,26 +837,34 @@ private:
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto manufactureController = weakController.lock())
 			{
-				auto &obsoleteButton = static_cast<MultipleChoiceButton &>(button);
-				auto newValue = !obsoleteButton.getChoice();
+				auto &_obsoleteButton = static_cast<MultipleChoiceButton &>(button);
+				auto newValue = !_obsoleteButton.getChoice();
 				manufactureController->setShouldShowRedundantDesign(newValue);
-				obsoleteButton.setChoice(newValue);
+				_obsoleteButton.setChoice(newValue);
 			}
 		});
 	}
 
 	void addLoopProductionWidgets()
 	{
-		auto loopProductionButton = std::make_shared<LoopProductionButton>(controller);
+		loopProductionButton = std::make_shared<LoopProductionButton>(controller);
 		attach(loopProductionButton);
 		loopProductionButton->move(STAT_SLDX + STAT_SLDWIDTH + 2, STAT_SLDY);
 
-		auto loopProductionLabel = std::make_shared<LoopProductionLabel>(controller);
+		loopProductionLabel = std::make_shared<LoopProductionLabel>(controller, loopProductionButton->height());
 		attach(loopProductionLabel);
 		loopProductionLabel->setGeometry(loopProductionButton->x() - 15, loopProductionButton->y(), 12, 15);
 	}
 
+	class DeliveryPointButton;
+	class LoopProductionButton;
+	class LoopProductionLabel;
+
 	std::shared_ptr<ManufactureController> controller;
+	std::shared_ptr<MultipleChoiceButton> obsoleteButton;
+	std::shared_ptr<DeliveryPointButton> deliveryPointButton;
+	std::shared_ptr<LoopProductionButton> loopProductionButton;
+	std::shared_ptr<LoopProductionLabel> loopProductionLabel;
 
 	class DeliveryPointButton: public W_BUTTON
 	{
@@ -744,7 +890,10 @@ private:
 		void display(int xOffset, int yOffset)
 		{
 			updateLayout();
-			BaseWidget::display(xOffset, yOffset);
+			if (!hudDrawIconButton(*this, HudIcon::DeliveryPoint, false, HudIconButtonStyle::Framed, xOffset, yOffset))
+			{
+				BaseWidget::display(xOffset, yOffset);
+			}
 		}
 
 	private:
@@ -790,20 +939,36 @@ private:
 			controller->adjustFactoryLoop(key == WKEY_PRIMARY);
 		}
 
-protected:
+		/// The loop count over its top-right corner (in place of the label on its left)
+		bool countBadge = false;
+
+	protected:
 		void display(int xOffset, int yOffset) override
 		{
 			updateLayout();
-			BaseWidget::display(xOffset, yOffset);
+			if (!hudDrawIconButton(*this, HudIcon::Loop, (getState() & WBUT_CLICKLOCK) != 0, HudIconButtonStyle::Framed, xOffset, yOffset))
+			{
+				BaseWidget::display(xOffset, yOffset);
+			}
+			if (countBadge && !badge.empty())
+			{
+				badge.draw(xOffset + x() + width() + 3 - badge.width(), yOffset + y() - 5);
+			}
 		}
 
 		void updateLayout()
 		{
-			setState(getProductionLoops(controller->getHighlightedObject()) == 0 ? 0: WBUT_CLICKLOCK);
+			const uint8_t loops = getProductionLoops(controller->getHighlightedObject());
+			setState(loops == 0 ? 0: WBUT_CLICKLOCK);
+			if (countBadge)
+			{
+				badge.set(loopCountText(loops), false);
+			}
 		}
 
 	private:
 		std::shared_ptr<ManufactureController> controller;
+		HudCountBadge badge;
 	};
 
 	class LoopProductionLabel: public W_LABEL
@@ -812,15 +977,22 @@ protected:
 		typedef W_LABEL BaseWidget;
 
 	public:
-		LoopProductionLabel(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
+		LoopProductionLabel(const std::shared_ptr<ManufactureController> &controller, int buttonHeight): BaseWidget(), controller(controller), buttonHeight(buttonHeight)
 		{
 		}
+
+		/// (the loop button shows the count)
+		bool drawn = true;
 
 	protected:
 		void display(int xOffset, int yOffset) override
 		{
 			updateLayout();
-			BaseWidget::display(xOffset, yOffset);
+			// Centered on the loop button, which is shorter than the label (the label keeps its area, for hit tests)
+			if (drawn && !text.getText().isEmpty())
+			{
+				text.render(xOffset + x(), yOffset + y() + (buttonHeight - text.lineSize()) / 2 - text.aboveBase(), WZCOL_FORM_TEXT);
+			}
 		}
 
 		void updateLayout()
@@ -829,26 +1001,16 @@ protected:
 			if (productionLoops != lastProductionLoop)
 			{
 				lastProductionLoop = productionLoops;
-				setString(WzString::fromUtf8(getNewString()));
+				setString(WzString::fromUtf8(loopCountText(productionLoops)));
+				text.setText(WzString::fromUtf8(loopCountText(productionLoops)), font_regular);
 			}
 		}
 
 	private:
-		std::string getNewString()
-		{
-			switch (lastProductionLoop)
-			{
-			case 0:
-				return "";
-			case INFINITE_PRODUCTION:
-				return "∞";
-			default:
-				return astringf("%u", lastProductionLoop + 1);
-			}
-		}
-
 		uint8_t lastProductionLoop = 0;
 		std::shared_ptr<ManufactureController> controller;
+		int buttonHeight;
+		WzText text;
 	};
 };
 
@@ -861,6 +1023,7 @@ bool ManufactureController::showInterface()
 	}
 
 	auto objectsForm = ManufactureObjectsForm::make(shared_from_this());
+	objectsForm->addHudExtension();
 	psWScreen->psForm->attach(objectsForm);
 	displayStatsForm();
 	triggerEvent(TRIGGER_MENU_MANUFACTURE_UP);

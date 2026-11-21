@@ -72,6 +72,10 @@
 
 #include "multiplay.h"
 #include "qtscript.h"
+#include "hud/hudmodel.h"
+#include "hud/hudradarblips.h"
+#include "hud/hudranks.h"
+#include "hud/hudskin.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
@@ -170,22 +174,54 @@ void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 std::string PowerBar::getTip()
 {
 	auto income = getApproxPowerGeneratedPerSecForDisplay(selectedPlayer);
-	return astringf("%s\n%s: %s", _("Power"), _("Power Per Second"), income.c_str());
+	std::string tip = astringf("%s\n%s: %s", _("Power"), _("Power Per Second"), income.c_str());
+	const auto &power = hudModel().power();
+	if (power.incomePerMinute.has_value())
+	{
+		tip += "\n" + astringf(_("Income: %d per minute"), power.incomePerMinute.value());
+	}
+	if (hudModuleActive(HudModuleId::PowerDetails))
+	{
+		tip += "\n" + astringf(_("Queued: %d · After queued: %d"), power.queued, power.afterQueued);
+		tip += "\n" + power.derrickSummary();
+	}
+	return tip;
+}
+
+void PowerBar::display(int xOffset, int yOffset)
+{
+	currentHudSkin().drawPowerBar(*this, xOffset, yOffset);
+}
+
+double PowerBar::smoothedPower()
+{
+	double desiredPower = getPowerMinusQueued(selectedPlayer);
+	static double displayPower;
+	static unsigned lastRealTime;
+	displayPower = desiredPower + (displayPower - desiredPower) * exp((realTime - lastRealTime) / -80.); // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
+	lastRealTime = realTime;
+	return displayPower;
+}
+
+PowerBar::DisplayValues PowerBar::takeDisplayValues()
+{
+	DisplayValues values;
+	values.power = smoothedPower();
+	values.hoverCost = static_cast<int>(ManuPower);
+	ManuPower = 0;
+	values.unusedDerricks = countPlayerUnusedDerricks(gameWorld.objects);
+	return values;
 }
 
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
-void PowerBar::display(int xOffset, int yOffset)
+void PowerBar::displayClassic(int xOffset, int yOffset)
 {
 	SDWORD		Avail, ManPow, realPower;
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
 	SDWORD		iX, iY;
 
-	double desiredPower = getPowerMinusQueued(selectedPlayer);
-	static double displayPower;
-	static unsigned lastRealTime;
-	displayPower = desiredPower + (displayPower - desiredPower) * exp((realTime - lastRealTime) / -80.); // If realTime < lastRealTime, then exp() returns 0 due to unsigned overflow.
-	lastRealTime = realTime;
+	double displayPower = smoothedPower();
 
 	ManPow = ManuPower / POWERBAR_SCALE;
 	Avail = static_cast<SDWORD>((displayPower + 1e-8) / POWERBAR_SCALE);
@@ -361,11 +397,30 @@ void IntFancyButton::initDisplay()
 	}
 }
 
+HudSkin &IntFancyButton::hudSkin() const
+{
+	return hudSkinned ? currentHudSkin() : classicHudSkin();
+}
+
+HudFancyButtonLook IntFancyButton::hudLook(int xOffset, int yOffset) const
+{
+	HudFancyButtonLook look;
+	look.x = xOffset + x();
+	look.y = yOffset + y();
+	look.width = width();
+	look.height = height();
+	look.bottomButton = buttonType == BTMBUTTON;
+	look.down = isDown();
+	look.hovered = (getState() & WBUT_HIGHLIGHT) != 0;
+	look.emptyBackground = buttonBackgroundEmpty;
+	return look;
+}
+
 void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
 {
 	if (isHighlighted())
 	{
-		iV_DrawImage(IntImages, buttonType == TOPBUTTON ? IMAGE_BUT_HILITE : IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
+		hudSkin().drawFancyButtonHighlight(hudLook(xOffset, yOffset));
 	}
 }
 
@@ -511,7 +566,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
-		iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+		hudSkin().drawFancyButtonOnHold(hudLook(xOffset, yOffset));
 	}
 	else
 	{
@@ -669,6 +724,10 @@ void IntFormAnimated::closeAnimateDelete(const W_ANIMATED_ON_CLOSE_FUNC& _onClos
 	currentAction = 3;
 	disableChildren = true;
 	onCloseAnimFinished = _onCloseAnimFinished;
+	for (const auto &handler : onCloseStarted)
+	{
+		handler();
+	}
 }
 
 bool IntFormAnimated::isClosing() const
@@ -678,7 +737,7 @@ bool IntFormAnimated::isClosing() const
 
 void IntFormAnimated::display(int xOffset, int yOffset)
 {
-	WzRect aOpen(xOffset + x(), yOffset + y(), width(), height());
+	WzRect aOpen(xOffset + x(), yOffset + y(), std::max(0, width() - frameRightTrim), height());
 	WzRect aClosed(aOpen.x() + aOpen.width() / 4, aOpen.y() + aOpen.height() / 2 - 4, aOpen.width() / 2, 8);
 	WzRect aBegin;
 	WzRect aEnd;
@@ -744,7 +803,15 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) * num / den,
 	                   aBegin.height() + (aEnd.height() - aBegin.height()) * num / den);
 
-	RenderWindowFrame(FRAME_NORMAL, aCur.x(), aCur.y(), aCur.width(), aCur.height());
+	HudSkin &skin = hudSkinned ? currentHudSkin() : classicHudSkin();
+	if (opaque && skin.id() != HudSkinId::Classic && aCur == aOpen)
+	{
+		PIELIGHT backing = skin.colors().panelBackgroundBottom;
+		backing.byte.a = 255;
+		pie_DrawRoundedBox(static_cast<float>(aCur.x()), static_cast<float>(aCur.y()), static_cast<float>(aCur.right()),
+		                   static_cast<float>(aCur.bottom()), backing, skin.metrics().panelRadius);
+	}
+	skin.drawPanelFrame(aCur, aOpen, accentEdge);
 }
 
 // Display an image for a widget.
@@ -764,19 +831,40 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 
-	// Draw the background image
-	iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	// Need to flash the timer when < 5 minutes remaining, but > 4 minutes
 	bool flash = UNPACKDWORD_TRI_A(psWidget->UserData);
-	if (flash && ((realTime / 250) % 2) == 0)
-	{
-		iV_DrawImage(IntImages, UNPACKDWORD_TRI_C(psWidget->UserData), x, y);
-	}
+	currentHudSkin().drawTimerBackground(x, y, UNPACKDWORD_TRI_B(psWidget->UserData), flash && ((realTime / 250) % 2) == 0,
+	                                     UNPACKDWORD_TRI_C(psWidget->UserData));
 }
 
 
+void intDisplayTransporterButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	const UWORD image = UNPACKDWORD_TRI_C(psWidget->UserData);
+	HudTransporterButtonLook look;
+	look.rect = WzRect(xOffset + psWidget->x(), yOffset + psWidget->y(), iV_GetImageWidth(IntImages, image), iV_GetImageHeight(IntImages, image));
+	look.launch = psWidget->id == IDTRANS_LAUNCH;
+	look.highlighted = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
+	look.flashOn = look.launch && UNPACKDWORD_TRI_A(psWidget->UserData) && ((realTime / 250) % 2) == 0;
+	if (!currentHudSkin().drawTransporterButton(look))
+	{
+		intDisplayImageHilight(psWidget, xOffset, yOffset);
+	}
+}
+
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
+void intDisplayHudCloseButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	currentHudSkin().drawCloseButton(xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height(),
+	                                 (psWidget->getState() & WBUT_HIGHLIGHT) != 0);
+}
+
+void HudButtonBar::display(int xOffset, int yOffset)
+{
+	currentHudSkin().drawButtonBar(*this, xOffset, yOffset);
+}
+
 void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
@@ -946,24 +1034,7 @@ bool intInitialiseGraphics()
 // Clear a button bitmap. ( copy the button background ).
 void IntFancyButton::displayClear(int xOffset, int yOffset)
 {
-	UWORD buttonId = 0;
-	switch (buttonType)
-	{
-		case IntFancyButton::ButtonType::TOPBUTTON:
-			if (buttonBackgroundEmpty)
-			{
-				buttonId = (isDown() ? IMAGE_BUT_EMPTY_DOWN : IMAGE_BUT_EMPTY_UP);
-			}
-			else
-			{
-				buttonId = (isDown() ? IMAGE_BUT0_DOWN : IMAGE_BUT0_UP);
-			}
-			break;
-		case IntFancyButton::ButtonType::BTMBUTTON:
-			buttonId = (isDown() ? IMAGE_BUTB0_DOWN : IMAGE_BUTB0_UP);
-			break;
-	}
-	iV_DrawImage(IntImages, buttonId, xOffset + x(), yOffset + y());
+	hudSkin().drawFancyButtonBackground(hudLook(xOffset, yOffset));
 }
 
 // Create a button by rendering an IMD object into it.
@@ -1287,6 +1358,11 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset, bool withQuestionMar
 	else
 	{
 		ox = oy = 0;
+	}
+
+	if (withQuestionMark && hudSkin().drawFancyButtonEmpty(hudLook(xOffset, yOffset)))
+	{
+		return;
 	}
 
 	displayClear(xOffset, yOffset);
@@ -1679,12 +1755,15 @@ void IntTransportButton::display(int xOffset, int yOffset)
 
 	if (psDroid)
 	{
-		// Add the experience level for each droid
-		unsigned gfxId = getDroidRankGraphic(psDroid);
-		if (gfxId != UDWORD_MAX)
+		// Add the experience level for each droid (the insignia are 8 px wide, where the images are 6)
+		if (!hudSkin().drawsRankInsignia() || !hudDrawRank(getDroidLevel(psDroid), xOffset + x() + 49, yOffset + y() + 10, HudRankSize::Button))
 		{
-			/* Render the rank graphic at the correct location */
-			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 10);
+			unsigned gfxId = getDroidRankGraphic(psDroid);
+			if (gfxId != UDWORD_MAX)
+			{
+				/* Render the rank graphic at the correct location */
+				iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 10);
+			}
 		}
 	}
 }
@@ -1701,6 +1780,19 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	static const uint16_t imagesArtifact[] = {IMAGE_RAD_ARTREAD, IMAGE_RAD_ART1, IMAGE_RAD_ART2, IMAGE_RAD_ART3};
 	static const uint16_t imagesBurningResource[] = {IMAGE_RAD_BURNRESREAD, IMAGE_RAD_BURNRES1, IMAGE_RAD_BURNRES2, IMAGE_RAD_BURNRES3, IMAGE_RAD_BURNRES4, IMAGE_RAD_BURNRES5, IMAGE_RAD_BURNRES6};
 	static const uint16_t *const imagesProxTypes[] = {imagesEnemy, imagesResource, imagesArtifact};
+	static const HudRadarBlip blipProxTypes[] = {HudRadarBlip::Enemy, HudRadarBlip::Resource, HudRadarBlip::Artifact};
+	// (the skin's shapes, all in one batch, a flame's six steps flickering through three sizes)
+	static const int flameFrames[] = {0, 1, 2, 2, 1, 0};
+	const bool shapes = currentHudSkin().drawsRadarBlips();
+	// The image at `index` in its list (0: read, then the animation's steps) as the skin's shape, if it draws them
+	auto queueShape = [shapes](HudRadarBlip kind, unsigned index, int x, int y) {
+		int frame = -1;
+		if (index > 0)
+		{
+			frame = kind == HudRadarBlip::BurningResource ? flameFrames[(index - 1) % 6] : static_cast<int>(index - 1);
+		}
+		return shapes && hudQueueRadarBlip(kind, frame, static_cast<float>(x), static_cast<float>(y));
+	};
 
 	// store the width & height of the radar/mini-map
 	width = gameWorld.map.scroll.maxX - gameWorld.map.scroll.minX;
@@ -1713,6 +1805,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 		{
 			unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
 			const uint16_t* images;
+			HudRadarBlip kind = HudRadarBlip::Enemy;
+			unsigned index = 0;
 
 			if (psProxDisp->psMessage->player != selectedPlayer)
 			{
@@ -1727,6 +1821,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				}
 				PROX_TYPE proxType = ((VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData)->proxType;
 				images = imagesProxTypes[proxType];
+				kind = blipProxTypes[proxType];
 			}
 			else
 			{
@@ -1736,22 +1831,26 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 				{
 					images = imagesResource;
+					kind = HudRadarBlip::Resource;
 					if (fireOnLocation(gameWorld.map, psFeature->pos.x, psFeature->pos.y))
 					{
 						images = imagesBurningResource;
+						kind = HudRadarBlip::BurningResource;
 						animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
 					}
 				}
 				else
 				{
 					images = imagesArtifact;
+					kind = HudRadarBlip::Artifact;
 				}
 			}
 
 			// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
 			if (psProxDisp->psMessage->read)
 			{
-				imageID = images[0];
+				index = 0;
+				imageID = images[index];
 			}
 			else
 			{
@@ -1762,7 +1861,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 					psProxDisp->timeLastDrawn = realTime;
 				}
 				psProxDisp->strobe %= animationLength;
-				imageID = images[1 + psProxDisp->strobe];
+				index = 1 + psProxDisp->strobe;
+				imageID = images[index];
 			}
 
 			if (psProxDisp->type == POS_PROXDATA)
@@ -1790,7 +1890,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				&& (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 			{
 				// Draw the 'blip'
-				iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+				if (!queueShape(kind, index, x + radarX, y + radarY))
+				{
+					iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+				}
 			}
 		}
 	}
@@ -1809,9 +1912,13 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 		{
 			// Draw the 'blip'
-			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			if (!queueShape(HudRadarBlip::Enemy, static_cast<unsigned>(strobe), x + radarX, y + radarY))
+			{
+				iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			}
 		}
 	}
+	hudDrawQueuedRadarBlips(modelViewProjection);
 }
 
 

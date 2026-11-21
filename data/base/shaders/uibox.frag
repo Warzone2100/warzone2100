@@ -16,6 +16,8 @@ layout(std140) uniform cbuffer {
 	float gradientExponent;	// 1.0 = linear, 2.0 = (1-t)^2 falloff from colorA
 	float borderWidth;		// pixels, 0 = none
 	float edgeSoftness;		// alpha fade width at the SDF edge, pixels (1.0 = crisp AA)
+	float dashLength;		// border dashes, pixels along each straight side, 0 = solid border
+	float dashGap;			// least gap between dashes, pixels
 };
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -24,6 +26,42 @@ out vec4 FragColor;
 #else
 varying vec2 uv;
 #endif
+
+// How much of a border fragment a dash covers: along each straight side, whole dashes evenly spaced with a gap at
+// both ends, with the rounded corners whole
+float dashCoverage(vec2 p, float cornerRadius)
+{
+	vec2 halfSize = size * 0.5;
+	if (abs(p.x) > halfSize.x - cornerRadius && abs(p.y) > halfSize.y - cornerRadius)
+	{
+		return 1.0;
+	}
+	float along;
+	float sideLength;
+	if (halfSize.y - abs(p.y) < halfSize.x - abs(p.x))
+	{
+		vec2 ends = (p.y < 0.0) ? cornerRadii.xy : cornerRadii.zw;
+		along = p.x + halfSize.x - ends.x;
+		sideLength = size.x - ends.x - ends.y;
+	}
+	else
+	{
+		vec2 ends = (p.x < 0.0) ? cornerRadii.xz : cornerRadii.yw;
+		along = p.y + halfSize.y - ends.x;
+		sideLength = size.y - ends.x - ends.y;
+	}
+	float count = max(1.0, floor((sideLength - dashGap) / (dashLength + dashGap)));
+	float gap = (sideLength - count * dashLength) / (count + 1.0);
+	float local = along - gap;
+	float period = dashLength + gap;
+	float index = floor(local / period);
+	if (index < 0.0 || index >= count)
+	{
+		return 0.0;
+	}
+	float within = local - index * period;
+	return clamp(min(within, dashLength - within) + 0.5, 0.0, 1.0);
+}
 
 void main()
 {
@@ -51,6 +89,10 @@ void main()
 	if (borderWidth > 0.0)
 	{
 		float borderMix = clamp(dist + borderWidth + 0.5, 0.0, 1.0);
+		if (dashLength > 0.0)
+		{
+			borderMix *= dashCoverage(p, cornerRadius);
+		}
 		shaded = mix(fill, borderColor, borderMix);
 	}
 	// Anti-aliased edge - widths > 1px give a soft, blurred-looking rim.

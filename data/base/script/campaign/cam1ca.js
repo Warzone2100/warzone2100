@@ -60,6 +60,7 @@ function extraVictoryCondition()
 	// No enemies on map and at least eleven New Paradigm transport runs.
 	if (baseEstablished() && (totalTransportLoads > MIN_TRANSPORT_RUNS) && !enemies.length)
 	{
+		camSetObjectiveState("plateau", "done");
 		return true;
 	}
 	// otherwise returns 'undefined', which suppresses victory;
@@ -169,7 +170,7 @@ function startTransporterAttack()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"));
+	camSetExtraObjectiveMessage({id: "plateau", text: _("Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"), marker: "C1CA_OBJ1"});
 
 	totalTransportLoads = 0;
 	blipActive = false;

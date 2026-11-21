@@ -12,6 +12,8 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float gradientExponent;
 	float borderWidth;
 	float edgeSoftness;
+	float dashLength;
+	float dashGap;
 };
 
 layout(location = 0) in vec4 vertex;

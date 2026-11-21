@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <unordered_set>
+#include <functional>
 
 class TableRow: public W_BUTTON
 {
@@ -156,6 +157,12 @@ public:
 	// - the actual newColumnWidth, on success, which may differ from the input newColumnWidth if required to satisfy layout constraints
 	optional<size_t> changeColumnWidth(size_t col, size_t newColumnWidth, bool overrideUserColumnResizing = false);
 
+	// Whether the user resized the columns (then changeColumnWidths only applies with overrideUserColumnResizing)
+	bool userResizedColumnWidths() const { return userDidResizeColumnWidths; }
+
+	// Change the column widths to ones the user chose (ex. in an earlier copy of the table), as if the user resized them
+	bool restoreUserColumnWidths(const std::vector<size_t>& newColumnWidths);
+
 	// Get the current minimum column width layout constraints
 	const std::vector<size_t>& getMinimumColumnWidths() const { return minColumnWidths; }
 
@@ -188,6 +195,10 @@ public:
 
 	void setColumnPadding(Vector2i padding);
 	const Vector2i& getColumnPadding();
+
+	// Draws the header's background instead (given its rectangle, and where the lines between its columns go across)
+	typedef std::function<void (const WzRect& rect, const std::vector<int>& columnLinesX)> HeaderBackgroundFunc;
+	void setHeaderBackgroundFunc(const HeaderBackgroundFunc& func);
 
 	virtual int32_t idealHeight() override;
 
@@ -231,6 +242,7 @@ private:
 
 	std::vector<glm::ivec4> lines;
 	bool drawColumnLines = false;
+	HeaderBackgroundFunc headerBackgroundFunc;
 
 	bool userDidResizeColumnWidths = false;
 };

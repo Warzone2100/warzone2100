@@ -41,6 +41,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/imd.h"
+#include "lib/ivis_opengl/vectorimage.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/sync_debug.h" // resetSyncDebug (clear cold-load reconstruction syncDebug)
 #include "lib/sound/audio_id.h"
@@ -580,6 +581,20 @@ std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures()
  * Priority:
  * maps > mods > base > base.wz
  */
+bool isGameDataFile(const char *path)
+{
+	const char *realDir = PHYSFS_getRealDir(path);
+	if (realDir == nullptr)
+	{
+		return false;
+	}
+	const std::string source(realDir);
+	return std::any_of(searchPathRegistry.begin(), searchPathRegistry.end(), [&source](const std::unique_ptr<wzSearchPath> &searchPath) {
+		return source == searchPath->path + "base" || source == searchPath->path + "base.wz"
+			|| source == searchPath->path + "mp" || source == searchPath->path + "mp.wz";
+	});
+}
+
 bool rebuildSearchPath(searchPathMode mode, bool force)
 {
 	std::string tmpstr;
@@ -1130,6 +1145,7 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 	// Initialize the iVis text rendering module
 	wzSceneBegin("Main menu loop");
 	iV_TextInit(horizScalePercentage, vertScalePercentage);
+	iV_VectorImagesUpdateScaleFactor(horizScalePercentage, vertScalePercentage);
 
 	pie_InitRadar();
 

@@ -36,7 +36,10 @@
 #include "display3d.h"
 #include "edit3d.h"
 #include "keybind.h"
+#include "hud/intel/intelpanel.h"
+#include "hud/hudresults.h"
 #include "screens/researchtreescreen.h"
+#include "hci/ingameconsole.h"
 #include "mechanics.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -70,6 +73,7 @@
 #include "loop.h"
 #include "mission.h"
 #include "selection.h"
+#include "selectionidle.h"
 #include "difficulty.h"
 #include "research.h"
 #include "template.h"
@@ -87,6 +91,7 @@
 
 #include "screens/ingameopscreen.h"
 #include "titleui/options/optionsforms.h"
+#include "hud/hudpanelfilters.h"
 
 /*
 	KeyBind.c
@@ -575,9 +580,35 @@ void	kf_ToggleConsoleDrop()
 {
 	if (!bInTutorial)
 	{
-		setHistoryMode(false);
-		toggleConsoleDrop();
+		inGameConsoleToggle(ConsoleHistoryFilter::All);
 	}
+}
+
+// The rest of these run only while the console history is open
+
+void	kf_ConsoleHistoryPageUp()
+{
+	inGameConsoleScroll(ConsoleScroll::PageUp);
+}
+
+void	kf_ConsoleHistoryPageDown()
+{
+	inGameConsoleScroll(ConsoleScroll::PageDown);
+}
+
+void	kf_ConsoleHistoryOldest()
+{
+	inGameConsoleScroll(ConsoleScroll::Oldest);
+}
+
+void	kf_ConsoleHistoryNewest()
+{
+	inGameConsoleScroll(ConsoleScroll::Newest);
+}
+
+void	kf_ConsoleHistoryClose()
+{
+	inGameConsoleCollapse();
 }
 
 void	kf_ToggleResearchTree()
@@ -637,8 +668,7 @@ void kf_ToggleTeamChat()
 {
 	if (!bInTutorial)
 	{
-		setHistoryMode(true);
-		toggleConsoleDrop();
+		inGameConsoleToggle(ConsoleHistoryFilter::Team);
 	}
 }
 // --------------------------------------------------------------------------
@@ -1284,7 +1314,11 @@ void	kf_ToggleDroidInfo()
 void	kf_addInGameOptions()
 {
 	setWidgetsStatus(true);
-	intResetScreen(false);
+	// (the Modern skin's results stay, under the menu, and are back when it closes)
+	if (!(MissionResUp && hudResultsEnabled()))
+	{
+		intResetScreen(false);
+	}
 	intAddInGameOptions();
 }
 
@@ -1292,6 +1326,19 @@ void	kf_addInGameOptions()
 // Display multiplayer guff.
 void	kf_addMultiMenu()
 {
+	if (bMultiPlayer && hudIntelScreenEnabled())
+	{
+		// The HUD's screen: its players view, which it opens on (or closes it)
+		if (hudIntelScreenIsOpen())
+		{
+			intResetScreen(false);
+		}
+		else
+		{
+			addIntelScreen();
+		}
+		return;
+	}
 	if (bMultiPlayer && (intMode != INT_INTELMAP))
 	{
 		intAddMultiMenu();
@@ -1847,6 +1894,15 @@ void	kf_ToggleOverlays()
 }
 
 // --------------------------------------------------------------------------
+void kf_ShowHudHelp()
+{
+	if (getWidgetsStatus() && !intHelpOverlayIsUp() && intMode != INT_DESIGN && intMode != INT_INGAMEOP)
+	{
+		intShowWidgetHelp();
+	}
+}
+
+// --------------------------------------------------------------------------
 void	kf_ChooseCommand()
 {
 	/* not supported if a spectator */
@@ -2039,6 +2095,52 @@ MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 		}
 		triggerEventSelected();
 	};
+}
+
+// --------------------------------------------------------------------------
+MappableFunction kf_SelectNextIdleFactory(const bool bJumpToSelected)
+{
+	return [bJumpToSelected]() {
+		SPECTATOR_NO_OP();
+
+		if (selNextIdleBuilding(gameWorld.objects, REF_FACTORY, bJumpToSelected) && intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+		{
+			setKeyButtonMapping(IDRET_MANUFACTURE);
+		}
+	};
+}
+
+MappableFunction kf_SelectNextIdleResearch(const bool bJumpToSelected)
+{
+	return [bJumpToSelected]() {
+		SPECTATOR_NO_OP();
+
+		if (selNextIdleBuilding(gameWorld.objects, REF_RESEARCH, bJumpToSelected) && intCheckReticuleButEnabled(IDRET_RESEARCH))
+		{
+			setKeyButtonMapping(IDRET_RESEARCH);
+		}
+	};
+}
+
+MappableFunction kf_SelectNextIdleTruck(const bool bJumpToSelected)
+{
+	return [bJumpToSelected]() {
+		SPECTATOR_NO_OP();
+
+		selNextIdleTruck(gameWorld.objects, bJumpToSelected);
+	};
+}
+
+void kf_SelectAllIdleTrucks()
+{
+	SPECTATOR_NO_OP();
+
+	selAllIdleTrucks(gameWorld.objects);
+}
+
+void kf_FocusPanelSearch()
+{
+	hudFocusPanelSearch();
 }
 
 // --------------------------------------------------------------------------
