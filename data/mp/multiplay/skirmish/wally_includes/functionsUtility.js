@@ -57,6 +57,24 @@ function isScavengerPlayer(playerIndex) {
 	);
 }
 
+// Only important functional Scavenger buildings are valid targets (ignore walls, corner walls/look-out towers, gates, and generic/decorative structures)
+function isImportantScavengerStructure(s) {
+	if (!s || s.type !== STRUCTURE) {
+		return false;
+	}
+	return (
+		s.stattype === FACTORY ||
+		s.stattype === VTOL_FACTORY ||
+		s.stattype === CYBORG_FACTORY ||
+		s.stattype === DEFENSE ||
+		s.stattype === RESOURCE_EXTRACTOR ||
+		s.stattype === POWER_GEN ||
+		s.stattype === REPAIR_FACILITY ||
+		s.stattype === REARM_PAD ||
+		s.stattype === HQ
+	);
+}
+
 function playerDataObject(playerIndex) {
 	if (playerIndex === undefined || playerIndex < 0) {
 		return undefined;
@@ -223,10 +241,10 @@ function getAliveEnemyPlayersData() {
 	// Check for scavenger player
 	if (scavengers && typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0) {
 		scavengerIndex = scavengerPlayer;
-		const hasScavengerStructures = enumStruct(scavengerPlayer).filter(s => s.stattype !== WALL).length;
-		const hasScavengerDroids = countDroid(DROID_ANY, scavengerPlayer);
+		const hasScavengerStructures = enumStruct(scavengerPlayer).some(isImportantScavengerStructure);
+		const hasScavengerDroids = countDroid(DROID_ANY, scavengerPlayer) > 0;
 
-		if (hasScavengerStructures > 0 || hasScavengerDroids > 0) {
+		if (hasScavengerStructures || hasScavengerDroids) {
 			const scavengerData = createScavengerPlayerData(scavengerPlayer);
 			if (scavengerData) {
 				enemies.push(scavengerData);
@@ -244,7 +262,7 @@ function getAliveEnemyPlayersData() {
  */
 function createScavengerPlayerData(scavengerIndex) {
 	let scavengerBase = { x: Math.floor(mapWidth / 2), y: Math.floor(mapHeight / 2) }; // Fallback to center of map
-	let scavStructs = enumStruct(scavengerIndex).filter(s => s.stattype !== WALL).sort(sortByDistToBase);
+	let scavStructs = enumStruct(scavengerIndex).filter(isImportantScavengerStructure).sort(sortByDistToBase);
 
 	if (scavStructs.length > 0) {
 		scavengerBase = { x: scavStructs[0].x, y: scavStructs[0].y };
@@ -275,7 +293,7 @@ function isPlayerAlive(playerIndex) {
 	}
 
 	if (isScavengerPlayer(playerIndex)) {
-		return (enumStruct(playerIndex).filter(s => s.stattype !== WALL).length + countDroid(DROID_ANY, playerIndex)) > 0;
+		return enumStruct(playerIndex).some(isImportantScavengerStructure) || countDroid(DROID_ANY, playerIndex) > 0;
 	}
 
 	if (countDroid(DROID_CONSTRUCT, playerIndex) + countStruct(FACTORY_STAT, playerIndex) + countStruct(CYBORG_FACTORY_STAT, playerIndex) > 0) {

@@ -7,6 +7,7 @@ var armyUrgentResponse = false; // True while the army is reacting to a threat a
 var armyCommitted = false; // True once the army decided to take on the current target (see shouldEngageTarget)
 var armyRetreatUntil = 0; // After breaking off a losing fight, the army stays away until this time
 var lastBaseAttacker = null; // {type, player, id, time}: the last ground enemy that hit one of our base structures
+var armyWaitingSince = 0; // Time when a ready army started holding back due to shouldEngageTarget
 
 // Rough fighting value of a unit or defense: its build cost scaled by its remaining health
 function combatWeight(obj) {
@@ -40,11 +41,18 @@ function alliedStrengthNear(x, y, range) {
 //  - Once committed it tolerates some losses, but when the units actually in the fight are clearly outmatched
 //    the whole army breaks off together and stays away for a while instead of feeding units in one by one.
 //  - Fights at home, emergencies and a full unit cap always go ahead.
-function shouldEngageTarget(attackerDroids, target) {
+function shouldEngageTarget(attackerDroids, target, dryRun = false) {
 	if (isMyBaseInTrouble || distBetweenTwoPoints(target.x, target.y, BASE.x, BASE.y) <= BASE_THREAT_RANGE + 14) {
+		if (!dryRun) {
+			armyWaitingSince = 0;
+		}
 		return true; // At home we fight with our defenses and repair bays behind us
 	}
 	if (countDroid(DROID_ANY, me) >= 135) {
+		if (!dryRun) {
+			armyCommitted = true;
+			armyWaitingSince = 0;
+		}
 		return true; // Close to the unit cap: waiting cannot make the army any bigger
 	}
 
@@ -53,9 +61,20 @@ function shouldEngageTarget(attackerDroids, target) {
 		return false;
 	}
 
+	if (fighters.length >= (isHighOilMap ? 32 : 16)) {
+		if (!dryRun) {
+			armyCommitted = true;
+			armyWaitingSince = 0;
+		}
+		return true; // Substantial strike force pushes out instead of sitting idle
+	}
+
 	const enemyPower = cached("enemyPowerAt" + target.id, 1500, () => enemyStrengthNear(target.x, target.y, 12));
 	if (enemyPower <= 0) {
-		armyCommitted = true; // Undefended target (derrick, truck, lone building)
+		if (!dryRun) {
+			armyCommitted = true; // Undefended target (derrick, truck, lone building)
+			armyWaitingSince = 0;
+		}
 		return true;
 	}
 
@@ -71,26 +90,52 @@ function shouldEngageTarget(attackerDroids, target) {
 		// Units still on their way count for half: they will arrive, but not all at once
 		const localPower = sumCombatWeight(inTheFight);
 		const effectivePower = localPower + (ourPower - localPower) * 0.5 + alliedPower;
-		if (effectivePower < enemyPower * 0.6) {
-			armyCommitted = false;
-			armyRetreatUntil = gameTime + 25000;
-			wallyLog("breaking off: " + Math.round(effectivePower) + " vs " + Math.round(enemyPower) + " at the target");
+		if (effectivePower < enemyPower * 0.55) {
+			if (!dryRun) {
+				armyCommitted = false;
+				armyRetreatUntil = gameTime + 15000;
+				armyWaitingSince = 0;
+				wallyLog("breaking off: " + Math.round(effectivePower) + " vs " + Math.round(enemyPower) + " at the target");
+			}
 			return false;
 		}
-		armyCommitted = true;
+		if (!dryRun) {
+			armyCommitted = true;
+			armyWaitingSince = 0;
+		}
 		return true;
 	}
 
-	// Not in contact yet: commit at 90% of the enemy's strength, keep going as long as we stay above 70%
-	const needed = armyCommitted ? 0.7 : 0.9;
+	// Not in contact yet: commit at 75% of the enemy's strength, keep going as long as we stay above 65%
+	const needed = armyCommitted ? 0.65 : 0.75;
 	if (ourPower + alliedPower >= enemyPower * needed) {
-		armyCommitted = true;
+		if (!dryRun) {
+			armyCommitted = true;
+			armyWaitingSince = 0;
+		}
 		return true;
 	}
-	if (armyCommitted) {
-		wallyLog("target got too strong on the way: " + Math.round(ourPower + alliedPower) + " vs " + Math.round(enemyPower));
+
+	// Never let a ready army sit idle at base indefinitely when not attacked: force an offensive after 60s
+	if (armyWaitingSince === 0 || gameTime < armyWaitingSince) {
+		if (!dryRun) {
+			armyWaitingSince = gameTime;
+		}
+	} else if (gameTime - armyWaitingSince >= 60000) {
+		if (!dryRun) {
+			armyCommitted = true;
+			armyWaitingSince = 0;
+			wallyLog("max hold wait elapsed: forcing offensive");
+		}
+		return true;
 	}
-	armyCommitted = false;
+
+	if (!dryRun) {
+		if (armyCommitted) {
+			wallyLog("target got too strong on the way: " + Math.round(ourPower + alliedPower) + " vs " + Math.round(enemyPower));
+		}
+		armyCommitted = false;
+	}
 	return false;
 }
 
@@ -280,7 +325,7 @@ function getMinAttackGroupSize(attackerDroids) {
 
 	if (isHighOilMap) {
 		armyUrgentResponse = false;
-		return gameTime < 480000 ? 15 : 25;
+		return gameTime < 480000 ? 12 : 20;
 	}
 
 	// If any of our derricks is actively threatened nearby, send a fast response squad
@@ -317,14 +362,14 @@ function getMinAttackGroupSize(attackerDroids) {
 		return 3;
 	}
 
-	// Scale low-oil attack threshold dynamically against the current enemy's combat strength (4 to 12)
+	// Scale low-oil attack threshold dynamically against the current enemy's combat strength (4 to 10)
 	const enemyIdx = currentEnemy.position;
 	const enemyCombatCount = enumDroid(enemyIdx, DROID_WEAPON, false).filter(d => !d.isVTOL).length +
 		enumDroid(enemyIdx, DROID_CYBORG, false).length;
 	const enemyDefCount = enumStruct(enemyIdx, DEFENSE).filter(d => d.stattype !== WALL && d.canHitGround).length;
 	const dynamicTarget = Math.ceil(enemyCombatCount * 0.6) + Math.min(3, Math.floor(enemyDefCount / 2));
 
-	return Math.max(4, Math.min(12, dynamicTarget));
+	return Math.max(4, Math.min(10, dynamicTarget));
 }
 
 function attack() {
@@ -351,6 +396,7 @@ function attackTick() {
 
 	if (attackerDroids.length < MIN_GROUP_SIZE && !isMyBaseInTrouble) {
 		armyCommitted = false;
+		armyWaitingSince = 0;
 		retreatToBase(filterOutNeedingRepair(attackerDroids));
 	} else if (attackerDroids.length > 0) {
 		attackEnemy(attackerDroids);
@@ -645,17 +691,14 @@ function helpAttackEnemy(helperDroids, allyBasePos) {
 	}
 }
 
-// Scavengers only: every scavenger object is a target (fighters, cranes and other vehicles, bunkers and towers,
-// factories, derricks, generators, huts...), strictly in order of distance from our base, so their camps are
-// cleared completely one after the other. Helicopters are left to the anti-air; walls and gates are only shot
-// at when nothing else is left. Returns the nearest target our army can reach, or null.
+// Scavengers only: destroy ONLY Scavenger units (excluding VTOL helicopters left to anti-air) and important
+// functional buildings (factories, defenses, derricks, generators, repair centers, rearm pads, HQ), ignoring
+// walls, corner walls/look-out towers, gates, and non-essential decorative structures. Returns nearest reachable target or null.
 function getScavengerTarget(scavIndex, refDroid) {
 	const targets = cached("scavengerTargets", 2000, () => {
 		const droids = enumDroid(scavIndex, DROID_ANY, false).filter(d => !d.isVTOL);
-		const structs = enumStruct(scavIndex);
-		const solid = structs.filter(s => s.stattype !== WALL && s.stattype !== GATE);
-		const list = droids.concat((solid.length > 0 || droids.length > 0) ? solid : structs);
-		return list.sort(sortByDistToBase);
+		const structs = enumStruct(scavIndex).filter(isImportantScavengerStructure);
+		return droids.concat(structs).sort(sortByDistToBase);
 	});
 
 	if (targets.length === 0) {
@@ -672,28 +715,14 @@ function getScavengerTarget(scavIndex, refDroid) {
 	return targets[0];
 }
 
-function attackEnemy(attackerDroids) {
-	if (!currentEnemy || currentEnemy.position === undefined) {
-		setCurrentEnemy();
-		return;
-	}
-
-	const enemyIndex = currentEnemy.position;
-
-	// If the current enemy is dead, choose another one
-	if (!isPlayerAlive(enemyIndex)) {
-		setCurrentEnemy();
-		return;
-	}
-
-	let sortFunc = sortByDistToBase;
-
+// Selects the primary ground target for `enemyIndex` plus alternative reachable non-defense targets for raiding
+function getEnemyTargetCandidates(enemyIndex, refDroid) {
 	// Ground combat units (strictly exclude enemy VTOLs so ground tanks never chase aircraft!)
 	const enemyDroid = enumDroid(enemyIndex, DROID_WEAPON, false)
 		.concat(enumDroid(enemyIndex, DROID_CYBORG, false))
 		.concat(enumDroid(enemyIndex, DROID_PERSON, false))
 		.filter(d => !d.isVTOL)
-		.sort(sortFunc)[0];
+		.sort(sortByDistToBase)[0];
 
 	const enemyTruck = enumDroid(enemyIndex, DROID_CONSTRUCT, false)
 		.filter(d => !d.isVTOL)
@@ -704,18 +733,14 @@ function attackEnemy(attackerDroids) {
 		.sort(sortByDistToBase)[0];
 
 	const enemyDerrick = findNearestDerrick(enemyIndex);
+	const enemyFactory = findNearestFactory(enemyIndex);
 
-	// Get closest among droid, truck, derrick — prefer reachable targets
-	const basePos = BASE;
-	const candidates = [enemyDroid, enemyTruck, enemyDerrick, closestDefense].filter(Boolean);
-
-	// Use a representative droid to check reachability
-	const refDroid = attackerDroids[0];
-
+	let primary = null;
 	if (isScavengerPlayer(enemyIndex)) {
 		// Scavengers: not just their fighters. Units, buildings and derricks alike, nearest to our base first.
-		currentEnemyTarget = getScavengerTarget(enemyIndex, refDroid);
+		primary = getScavengerTarget(enemyIndex, refDroid);
 	} else {
+		const candidates = [enemyDroid, enemyTruck, enemyDerrick, closestDefense].filter(Boolean);
 		const reachableCandidates = refDroid
 			? candidates.filter(c => droidCanReach(refDroid, c.x, c.y))
 			: candidates;
@@ -723,47 +748,98 @@ function attackEnemy(attackerDroids) {
 		// Prefer reachable targets, fall back to all candidates if none are reachable
 		const pool = reachableCandidates.length > 0 ? reachableCandidates : candidates;
 
-		currentEnemyTarget = pool.length > 0
-			? pool.sort((a, b) =>
-				distBetweenTwoPoints(basePos.x, basePos.y, a.x, a.y) -
-				distBetweenTwoPoints(basePos.x, basePos.y, b.x, b.y)
-			)[0]
+		primary = pool.length > 0
+			? pool.sort(sortByDistToBase)[0]
 			: null;
 	}
 
-	// Fallback if no droid/truck/derrick found
-	if (!currentEnemyTarget) {
-		const enemyFactory = findNearestFactory(enemyIndex);
+	// Fallback if no droid/truck/derrick found (never fall back to non-essential walls/features for Scavengers)
+	if (!primary && !isScavengerPlayer(enemyIndex)) {
 		if (enemyFactory) {
-			currentEnemyTarget = enemyFactory;
+			primary = enemyFactory;
 		} else if (closestDefense) {
-			currentEnemyTarget = closestDefense;
+			primary = closestDefense;
 		} else {
 			let enemyStructs = enumStruct(enemyIndex).filter(s => s.stattype !== WALL);
 			if (enemyStructs.length === 0) {
 				enemyStructs = enumStruct(enemyIndex);
 			}
 			if (enemyStructs.length > 0) {
-				currentEnemyTarget = enemyStructs.sort(sortByDistToBase)[0];
+				primary = enemyStructs.sort(sortByDistToBase)[0];
 			} else {
-				currentEnemyTarget = enumDroid(enemyIndex, DROID_ANY, false)
+				primary = enumDroid(enemyIndex, DROID_ANY, false)
 					.filter(d => !d.isVTOL)
-					.sort(sortByDistToBase)[0];
+					.sort(sortByDistToBase)[0] || null;
 			}
 		}
 	}
+
+	const softerSeen = new Set();
+	const softerTargets = [];
+	for (const candidate of [enemyDerrick, enemyTruck, enemyFactory, enemyDroid]) {
+		if (!candidate || softerSeen.has(candidate.id)) continue;
+		if (refDroid && !droidCanReach(refDroid, candidate.x, candidate.y)) continue;
+		softerSeen.add(candidate.id);
+		softerTargets.push(candidate);
+	}
+
+	return {
+		primary: primary,
+		closestDefense: closestDefense,
+		softerTargets: softerTargets
+	};
+}
+
+function attackEnemy(attackerDroids) {
+	const hasRealEnemy = enemiesList.some(e => !isScavengerPlayer(e.position) && isPlayerAlive(e.position));
+	if (!currentEnemy || currentEnemy.position === undefined || !isPlayerAlive(currentEnemy.position) ||
+		(isScavengerPlayer(currentEnemy.position) && (hasRealEnemy || !throttled("scavSwitchCheck", 2000)))) {
+		setCurrentEnemy();
+		if (!currentEnemy || currentEnemy.position === undefined || !isPlayerAlive(currentEnemy.position)) {
+			return;
+		}
+	}
+
+	const refDroid = attackerDroids[0];
+	let enemyIndex = currentEnemy.position;
+	let targetSet = getEnemyTargetCandidates(enemyIndex, refDroid);
+
+	// If the chosen enemy currently has no valid ground target (e.g. only VTOLs left), pick another alive enemy immediately
+	if (!targetSet.primary) {
+		const liveEnemies = getAliveEnemyPlayersData();
+		const orderedEnemies = liveEnemies
+			.filter(e => e.position !== undefined && e.position !== enemyIndex && isPlayerAlive(e.position))
+			.sort((a, b) => (isScavengerPlayer(a.position) ? 1 : 0) - (isScavengerPlayer(b.position) ? 1 : 0));
+		for (const other of orderedEnemies) {
+			const altSet = getEnemyTargetCandidates(other.position, refDroid);
+			if (altSet.primary) {
+				setCurrentEnemy(other);
+				enemyIndex = other.position;
+				targetSet = altSet;
+				break;
+			}
+		}
+	}
+
+	currentEnemyTarget = targetSet.primary;
+	const closestDefense = targetSet.closestDefense;
+	const softerTargets = targetSet.softerTargets;
 
 	// Whoever threatens our home comes first, whichever enemy player it belongs to: Wally keeps one main enemy
 	// for its offensives, but always answers an attack on its base or derricks.
 	const homeThreat = getHomeThreatTarget();
 	const derrickThreat = homeThreat ? null : getDerrickThreatTarget();
+	let isUrgentThreat = false;
 	if (homeThreat) {
 		currentEnemyTarget = homeThreat;
+		isUrgentThreat = true;
 	} else if (closestDefense && isNearBase(closestDefense.x, closestDefense.y)) {
 		// Destroy defenses that are too close to the base
 		currentEnemyTarget = closestDefense;
+		isUrgentThreat = true;
 	} else if (derrickThreat && !isMyBaseInTrouble) {
 		currentEnemyTarget = derrickThreat;
+		isUrgentThreat = true;
 	} else if (!isMyBaseInTrouble) {
 		// Armed enemies (of any enemy player) holding a free oil well on our side of the map come first,
 		// unless the regular target is even closer to home
@@ -783,9 +859,28 @@ function attackEnemy(attackerDroids) {
 		return; // Just for extra precaution
 	}
 
+	// If the closest main target is heavily fortified, probe softer reachable targets (derricks/trucks/factories) instead of idling at home
+	if (!isUrgentThreat && softerTargets.length > 0 && !shouldEngageTarget(attackerDroids, currentEnemyTarget, true)) {
+		const rankedAlternatives = softerTargets
+			.filter(t => t.id !== currentEnemyTarget.id)
+			.map(t => ({ obj: t, strength: enemyStrengthNear(t.x, t.y, 10) }))
+			.sort((a, b) => a.strength - b.strength);
+
+		for (const entry of rankedAlternatives) {
+			if (shouldEngageTarget(attackerDroids, entry.obj, true)) {
+				const liveAlt = getObject(entry.obj.type, entry.obj.player, entry.obj.id);
+				if (liveAlt) {
+					currentEnemyTarget = liveAlt;
+					realObject = liveAlt;
+					break;
+				}
+			}
+		}
+	}
+
 	// Judge the fight before (and while) taking it: do not walk into a force we cannot beat, and break off together when losing
 	const wasCommitted = armyCommitted;
-	if (!shouldEngageTarget(attackerDroids, currentEnemyTarget)) {
+	if (!shouldEngageTarget(attackerDroids, currentEnemyTarget, false)) {
 		retreatToBase(filterOutNeedingRepair(attackerDroids));
 		return;
 	}
@@ -826,7 +921,10 @@ function attackEnemyDefenses(attackerDroids) {
 
 	// Send all to attack anything if the base is in trouble
 	if (isMyBaseInTrouble) {
-		sendDroidsToAttackTarget(bunkerBusterDroids, currentEnemyTarget);
+		const realTarget = getObject(currentEnemyTarget.type, currentEnemyTarget.player, currentEnemyTarget.id);
+		if (realTarget) {
+			sendDroidsToAttackTarget(bunkerBusterDroids, realTarget);
+		}
 		return;
 	}
 
@@ -874,7 +972,7 @@ function attackEnemyDefenses(attackerDroids) {
 	if (!realObject) return;
 
 	for (const bunkerBuster of readyBunkerBusters) {
-		orderDroidObj(bunkerBuster, DORDER_ATTACK, closestEnemyStructure);
+		orderDroidObj(bunkerBuster, DORDER_ATTACK, realObject);
 	}
 }
 
@@ -1161,9 +1259,16 @@ function sendDroidsToAttackTarget(droids, target) {
 	const activeSensor = sensors.length > 0 ? sensors[0] : null;
 
 	// Look for nearby wounded ground enemies around the target (within 8 tiles) so we can finish off low-HP units
-	// while strictly respecting each droid's minimum weapon range and ignoring enemy VTOLs
+	// while strictly respecting each droid's minimum weapon range, ignoring VTOLs and useless Scavenger features/walls
 	const localEnemies = enumRange(target.x, target.y, 8, ENEMIES, true)
-		.filter(obj => (obj.type === DROID && !obj.isVTOL) || (obj.type === STRUCTURE && obj.stattype !== WALL))
+		.filter(obj =>
+			(obj.type === DROID && !obj.isVTOL) ||
+			(obj.type === STRUCTURE && (
+				isScavengerPlayer(obj.player)
+					? isImportantScavengerStructure(obj)
+					: (obj.stattype !== WALL && obj.stattype !== GATE && (typeof STRUCT_GENERIC === "undefined" || obj.stattype !== STRUCT_GENERIC))
+			))
+		)
 		.sort((a, b) => (a.health !== undefined ? a.health : 100) - (b.health !== undefined ? b.health : 100));
 
 	const weaponToLimit = getWeaponRangeMap();
@@ -1301,7 +1406,10 @@ function eventDestroyed(object) {
 // Check if enemies have VTOLs (or VTOL factories/pads) so we can prepare AA defenses in advance
 function scanForVTOLs() {
 	if (enemiesHaveVTOLs || !vtolsEnabled) {
-		removeTimer("scanForVTOLs");
+		if (scanForVTOLsTimerActive) {
+			removeTimer("scanForVTOLs");
+			scanForVTOLsTimerActive = false;
+		}
 		return; // Already aware of VTOLs
 	}
 

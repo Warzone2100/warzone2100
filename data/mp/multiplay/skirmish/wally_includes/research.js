@@ -167,6 +167,9 @@ function pursueFallbackResearch(lab) {
 	const available = enumResearch();
 	const usable = available.filter(r =>
 		!r.name.includes("Cannon") &&
+		!r.name.includes("Acannon") &&
+		!r.name.includes("Mcannon") &&
+		!r.name.includes("HPV") &&
 		!r.name.includes("Mortar") &&
 		!r.name.includes("Howitzer") &&
 		!r.name.includes("Flame") &&

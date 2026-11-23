@@ -254,7 +254,12 @@ function produceCyborgBuilder(factory) {
 }
 
 function produceCyborg(factory) {
-	// Once Rocket Arrays cover anti-personnel duties, focus cyborgs on Anti-Tank (85%), using MG cyborgs early T1 or as fallback
+	// Early T1: produce ONLY Machinegun cyborgs (never Cannon cyborgs)
+	if (getMultiTechLevel() === 1 && gameTime < 420000) {
+		return createDroid(factory, "Cyborg Machinegun", "CyborgLightBody", "CyborgLegs", CYBORG__LIGHT_MACHINEGUN);
+	}
+
+	// Mid/late game: mix Anti-Tank Rocket cyborgs with MG cyborgs (no Cannon or Laser cyborgs)
 	const hasRocketArray = ROCKET_ARRAY_WEAPON_LIST.some(w => componentAvailable(w));
 	const CYBORG_ANTITANK_WEAPON_PROBABILITY = hasRocketArray ? 85 : 70;
 
@@ -268,9 +273,6 @@ function produceCyborg(factory) {
 		return createDroid(factory, "Cyborg Machinegun", "CyborgLightBody", "CyborgLegs", CYBORG__LIGHT_MACHINEGUN);
 	} else {
 		if (createDroid(factory, "Cyborg Machinegun", "CyborgLightBody", "CyborgLegs", CYBORG__LIGHT_MACHINEGUN)) {
-			return true;
-		}
-		if (createDroid(factory, "Cyborg Laser", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_LASER)) {
 			return true;
 		}
 		if (createDroid(factory, "Cyborg Heavy Rocket", "CyborgHeavyBody", "CyborgLegs", CYBORG_HEAVY_ROCKETS)) {

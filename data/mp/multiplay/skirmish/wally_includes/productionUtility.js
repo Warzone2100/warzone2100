@@ -168,9 +168,8 @@ const CYBORG_HEAVY_LASER = [
 ];
 
 const CYBORG__LIGHT_MACHINEGUN = [
-	"Cyb-Wpn-Laser", // Flashlight
-	"CyborgRotMG", // Heavy machinegun
-	"CyborgChaingun" // Machinegun
+	"CyborgRotMG", // Assault Gunner (Heavy machinegun)
+	"CyborgChaingun" // Machinegunner
 ];
 
 // ========================
