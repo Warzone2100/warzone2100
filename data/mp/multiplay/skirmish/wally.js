@@ -37,7 +37,6 @@ const MAX_BASE_TRUCKS = 12;
 const MIN_TRUCKS_TO_KEEP = 3; // Trucks Wally always keeps for itself before donating one to an ally
 const WALLY_DEBUG = false; // Set to true to log slow ticks and ally-support decisions to the debug console
 const MIN_BUILD_POWER = 30;
-const MIN_RESEARCH_POWER = -50;
 const MIN_PRODUCTION_POWER = 60;
 const BASE_THREAT_RANGE = Math.ceil(17 + (mapWidth + mapHeight) / 2 / 20);
 var BASE = startPositions[me];

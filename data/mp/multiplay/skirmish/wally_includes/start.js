@@ -414,6 +414,11 @@ function eventBeacon(x, y, from, to, message) {
 
 // Chain nearby oil resources immediately after finishing a derrick and defend remote derricks (Cobra & SemperFi strategy)
 function eventStructureBuilt(structure, droid) {
+	// A finished Research Lab (or its module) starts working at once instead of waiting for the research timer
+	if (structure && structure.player === me && structure.stattype === RESEARCH_LAB && reactionSpeedDelay === 0) {
+		research();
+	}
+
 	if (!droid || droid.player !== me || droid.droidType !== DROID_CONSTRUCT) {
 		return;
 	}

@@ -126,57 +126,91 @@ function getResearchPriorities() {
 	].filter(list => list && list.length > 0);
 }
 
+// Game time at which research first had to wait for a missing Power Generator (0 = not waiting)
+var researchHoldSince = 0;
+
+// True while research should wait because the power is needed for something that comes first.
+// These are short bootstrap situations only; none of them can keep the labs idle for long.
+function shouldHoldResearch() {
+	const power = getRealPower();
+
+	// No truck left: keep enough power to build one before anything else
+	if (countDroid(DROID_CONSTRUCT) === 0 && power < 100) {
+		return true;
+	}
+
+	// The very first generator is not placed / not finished yet
+	const totalGens = countStruct(POW_GEN_STAT, me);
+	const completedGens = countCompletedStruct(POW_GEN_STAT, me);
+	if ((totalGens === 0 && power < 150) || (completedGens === 0 && totalGens > 0 && power < 60)) {
+		return true;
+	}
+
+	// Derricks are waiting for a generator that has not been placed yet: hold the labs so the generator is paid first,
+	// but for 30 seconds at most. (If the generator cannot be placed for any reason, research must not stall with it.)
+	const neededGens = Math.ceil(countStruct(DERRICK_STAT, me) / 4);
+	if (numUnusedDerricks() > 0 && totalGens < neededGens && power < 120) {
+		if (researchHoldSince === 0 || gameTime < researchHoldSince) {
+			researchHoldSince = gameTime;
+		}
+		return gameTime - researchHoldSince < 30000;
+	}
+
+	researchHoldSince = 0;
+	return false;
+}
+
+// Last resort for a lab when every branch of the plan is finished or waiting for a topic another lab is working on:
+// the cheapest available topic outside the weapon lines Wally does not use. An off-plan upgrade beats an idle lab.
+function pursueFallbackResearch(lab) {
+	const skipVtol = shouldSkipVtolResearch();
+	const available = enumResearch();
+	const usable = available.filter(r =>
+		!r.name.includes("Cannon") &&
+		!r.name.includes("Mortar") &&
+		!r.name.includes("Howitzer") &&
+		!r.name.includes("Flame") &&
+		!r.name.includes("Laser") &&
+		!r.name.includes("RailGun") &&
+		!r.name.includes("Rail-") &&
+		!(skipVtol && isVtolResearch(r.name)) &&
+		!(!vtolsEnabled && (r.name.includes("AAGun") || r.name.includes("SAM") || r.name.includes("Sunburst")))
+	);
+	const pool = (usable.length > 0 ? usable : available).slice().sort((a, b) => a.points - b.points);
+
+	for (let i = 0; i < pool.length; ++i) {
+		if (pursueResearch(lab, pool[i].name)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// Gives a research topic to every idle Research Lab.
+//
+// There is deliberately NO power threshold here any more. A lab only pays once, when its topic starts, and then works
+// for one to three minutes: research costs about half a power point per second and lab (roughly what one derrick with
+// its generator produces). How much of the economy goes into research is therefore decided by how many labs get BUILT
+// (see getDesiredLabCount in build.js: 2 labs up to 4 derricks, 3 up to 7, 4 up to 9, then 5), and every lab that
+// exists is always kept working. A topic started without enough power simply waits its turn in the game's power queue.
 function research() {
-	// Don't research if:
-	// We don't have builders
-	// We finished all the researches
-	if (!countDroid(DROID_CONSTRUCT) || researchDone) {
+	if (researchDone) {
 		return;
 	}
 
 	const builtLabs = enumStruct(me, RES_LAB_STAT).filter(lab => lab.status === BUILT);
-	let labList = builtLabs.filter(lab => structureIdle(lab));
+	const labList = builtLabs.filter(lab => structureIdle(lab));
 
 	if (labList.length === 0) {
 		return;
 	}
 
-	// Preserve power only before our first generator is placed/built or when an additional unplaced generator is needed;
-	// avoid holding labs idle once Gen #1 exists and needed generators are already queued
-	const totalGens = countStruct(POW_GEN_STAT, me);
-	const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
-	const neededGens = Math.ceil(countStruct(DERRICK_STAT, me) / 4);
-	if ((totalGens === 0 && getRealPower() < 150) ||
-		(completedGens === 0 && totalGens > 0 && getRealPower() < 60) ||
-		(numUnusedDerricks() > 0 && totalGens < neededGens && getRealPower() < 120)) {
+	if (shouldHoldResearch()) {
 		return;
 	}
 
 	const totalLabs = builtLabs.length;
-	let busyLabs = totalLabs - labList.length;
-
-	// Power rules. High oil: a busy lab only needs the usual minimum.
-	// Low oil: research and the army share the same trickle of power, so
-	//  - the number of labs working at once follows the derrick count (unless power is piling up), and
-	//  - while the army is still below what the economy can support, the factories get first call on power.
-	let maxBusyLabs = totalLabs;
-	let firstLabPowerFloor = -Infinity;
-	let extraLabPowerFloor = MIN_RESEARCH_POWER;
-	if (!isHighOilMap) {
-		if (getRealPower() <= 300) {
-			maxBusyLabs = Math.max(1, Math.min(totalLabs, Math.ceil(countStruct(DERRICK_STAT, me) / 2)));
-		}
-		if (isArmyThin() && !isMyBaseInTrouble) {
-			firstLabPowerFloor = 20;
-			extraLabPowerFloor = 80;
-		} else {
-			extraLabPowerFloor = 20;
-		}
-	}
-
-	if (busyLabs >= maxBusyLabs || getRealPower() < (busyLabs === 0 ? firstLabPowerFloor : extraLabPowerFloor)) {
-		return;
-	}
+	const busyLabs = totalLabs - labList.length;
 
 	// List of all currently available research items
 	const allResearchList = enumResearch();
@@ -191,46 +225,38 @@ function research() {
 	}
 
 	const researchPriorities = getResearchPriorities();
+	let started = 0;
 
-	for (let lab of labList) {
-		// Re-check the power rules for every lab we start in this tick
-		if (busyLabs >= maxBusyLabs || getRealPower() < (busyLabs === 0 ? firstLabPowerFloor : extraLabPowerFloor)) {
-			break;
-		}
-
+	for (const lab of labList) {
 		let found = false;
 
 		// Try each research priority
-		for (let researchCategory of researchPriorities) {
+		for (const researchCategory of researchPriorities) {
 			if (found) break;
 			found = evalResearch(lab, researchCategory);
 		}
 
-		// Last step: if all priority branches are currently locked by another lab's in-progress prerequisite,
-		// avoid drifting into off-branch Cannon/Mortar/Howitzer/Flame/Laser trees while the Rocket and Machinegun branches are active.
-		// On low oil an idle lab is cheaper than an off-plan topic, unless power is piling up.
-		if (!found && (isHighOilMap || getRealPower() >= 150)) {
-			const skipVtol = shouldSkipVtolResearch();
-			const currentAvailable = enumResearch();
-			const filteredAvailable = currentAvailable.filter(r =>
-				!r.name.includes("Cannon") &&
-				!r.name.includes("Mortar") &&
-				!r.name.includes("Howitzer") &&
-				!r.name.includes("Flame") &&
-				!r.name.includes("Laser") &&
-				!r.name.includes("RailGun") &&
-				!(skipVtol && isVtolResearch(r.name)) &&
-				!(!vtolsEnabled && (r.name.includes("AAGun") || r.name.includes("SAM") || r.name.includes("Sunburst")))
-			);
-			const pool = filteredAvailable.length > 0 ? filteredAvailable : currentAvailable;
-			if (pool.length > 0) {
-				const idx = Math.floor(Math.random() * pool.length);
-				found = pursueResearch(lab, pool[idx].name);
-			}
+		if (!found) {
+			found = pursueFallbackResearch(lab);
 		}
 
 		if (found) {
-			busyLabs++;
+			started++;
 		}
+	}
+
+	if (started < labList.length) {
+		wallyLog("research: " + (labList.length - started) + " lab(s) found no topic (" + allResearchList.length + " topics available)");
+	}
+}
+
+// A topic just finished: give that lab its next one right away instead of waiting for the research timer.
+// (Only at full reaction speed: on Easy and Medium the announced reaction delay still applies.)
+function eventResearched(finishedResearch, structure, player) {
+	if (player !== undefined && player !== me) {
+		return;
+	}
+	if (reactionSpeedDelay === 0 && structure && !throttled("researchOnEvent", 200)) {
+		research();
 	}
 }

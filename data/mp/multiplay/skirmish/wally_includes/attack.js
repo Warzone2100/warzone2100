@@ -645,6 +645,33 @@ function helpAttackEnemy(helperDroids, allyBasePos) {
 	}
 }
 
+// Scavengers only: every scavenger object is a target (fighters, cranes and other vehicles, bunkers and towers,
+// factories, derricks, generators, huts...), strictly in order of distance from our base, so their camps are
+// cleared completely one after the other. Helicopters are left to the anti-air; walls and gates are only shot
+// at when nothing else is left. Returns the nearest target our army can reach, or null.
+function getScavengerTarget(scavIndex, refDroid) {
+	const targets = cached("scavengerTargets", 2000, () => {
+		const droids = enumDroid(scavIndex, DROID_ANY, false).filter(d => !d.isVTOL);
+		const structs = enumStruct(scavIndex);
+		const solid = structs.filter(s => s.stattype !== WALL && s.stattype !== GATE);
+		const list = droids.concat((solid.length > 0 || droids.length > 0) ? solid : structs);
+		return list.sort(sortByDistToBase);
+	});
+
+	if (targets.length === 0) {
+		return null;
+	}
+	if (refDroid) {
+		// Only the nearest few are tested for reachability (cliffs, water): enough to skip an island camp
+		for (let i = 0; i < Math.min(targets.length, 10); ++i) {
+			if (droidCanReach(refDroid, targets[i].x, targets[i].y)) {
+				return targets[i];
+			}
+		}
+	}
+	return targets[0];
+}
+
 function attackEnemy(attackerDroids) {
 	if (!currentEnemy || currentEnemy.position === undefined) {
 		setCurrentEnemy();
@@ -684,19 +711,25 @@ function attackEnemy(attackerDroids) {
 
 	// Use a representative droid to check reachability
 	const refDroid = attackerDroids[0];
-	const reachableCandidates = refDroid
-		? candidates.filter(c => droidCanReach(refDroid, c.x, c.y))
-		: candidates;
 
-	// Prefer reachable targets, fall back to all candidates if none are reachable
-	const pool = reachableCandidates.length > 0 ? reachableCandidates : candidates;
+	if (isScavengerPlayer(enemyIndex)) {
+		// Scavengers: not just their fighters. Units, buildings and derricks alike, nearest to our base first.
+		currentEnemyTarget = getScavengerTarget(enemyIndex, refDroid);
+	} else {
+		const reachableCandidates = refDroid
+			? candidates.filter(c => droidCanReach(refDroid, c.x, c.y))
+			: candidates;
 
-	currentEnemyTarget = pool.length > 0
-		? pool.sort((a, b) =>
-			distBetweenTwoPoints(basePos.x, basePos.y, a.x, a.y) -
-			distBetweenTwoPoints(basePos.x, basePos.y, b.x, b.y)
-		)[0]
-		: null;
+		// Prefer reachable targets, fall back to all candidates if none are reachable
+		const pool = reachableCandidates.length > 0 ? reachableCandidates : candidates;
+
+		currentEnemyTarget = pool.length > 0
+			? pool.sort((a, b) =>
+				distBetweenTwoPoints(basePos.x, basePos.y, a.x, a.y) -
+				distBetweenTwoPoints(basePos.x, basePos.y, b.x, b.y)
+			)[0]
+			: null;
+	}
 
 	// Fallback if no droid/truck/derrick found
 	if (!currentEnemyTarget) {
