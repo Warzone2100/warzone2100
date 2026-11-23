@@ -1,3 +1,29 @@
+// Game times at which a mobile anti-air tank was recently ordered, so several factories do not all fill the same gap
+var recentAntiAirOrders = [];
+
+// Number of mobile AA tanks we want escorting the army: scales with the enemy VTOL fleet, capped at a quarter of the army
+function getDesiredMobileAA(armySize) {
+	if (!vtolsEnabled || !enemiesHaveVTOLs || !AA_WEAPON_LIST.some(w => componentAvailable(w))) {
+		return 0;
+	}
+	const wanted = Math.max(2, Math.ceil(countEnemyVTOLs() * 0.6));
+	const cap = Math.max(3, Math.floor(armySize * 0.25));
+	return Math.min(wanted, cap, 16);
+}
+
+// How many more mobile AA tanks should be ordered right now (built + already in production are subtracted)
+function getMobileAADeficit(armySize) {
+	const desired = getDesiredMobileAA(armySize);
+	if (desired === 0) {
+		return 0;
+	}
+	if (!Array.isArray(recentAntiAirOrders)) {
+		recentAntiAirOrders = [];
+	}
+	recentAntiAirOrders = recentAntiAirOrders.filter(t => gameTime >= t && gameTime - t < 45000);
+	return desired - enumGroup(aaGroup).length - recentAntiAirOrders.length;
+}
+
 function produceDroids() {
 	// List of factory types
 	const FAC_LIST = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT];
@@ -42,7 +68,9 @@ function produceDroids() {
 				const numTrucks = countDroid(DROID_CONSTRUCT) + virtualTrucks;
 				const desiredTrucks = getDesiredTruckCount();
 				const currentPower = getRealPower();
-				const armySize = enumGroup(attackerGroup).length + virtualAttackers;
+				const armySize = enumGroup(attackerGroup).length + enumGroup(rallyGroup).length + virtualAttackers;
+				// Low oil: until the army reaches the size the economy can support, units get first call on power
+				const armyThin = !isHighOilMap && armySize < getLowOilArmyTarget();
 				const totalGens = countStruct(POW_GEN_STAT, me);
 				const completedGens = enumStruct(me, POW_GEN_STAT).filter(s => s.status === BUILT).length;
 				const neededGens = Math.ceil(countStruct(DERRICK_STAT, me) / 4);
@@ -68,6 +96,7 @@ function produceDroids() {
 					isMyBaseInTrouble ||
 					(armySize < 4 && currentPower > -50) ||
 					(armySize < 6 && currentPower >= 25) ||
+					(armyThin && currentPower >= 40) ||
 					(currentPower >= MIN_PRODUCTION_POWER && (!hasIdleLab || currentPower >= 100))
 				);
 
@@ -77,7 +106,11 @@ function produceDroids() {
 					const minEarlyTrucks = isMyBaseInTrouble ? 2 : (isHighOilMap ? 6 : (armySize < 2 ? 3 : 4));
 					const minEarlyArmy = isHighOilMap ? 6 : 4;
 					const canBuildEarlyCombat = canAffordCombatUnit && (!isSeaMap || componentAvailable("hover01") || isMyBaseInTrouble);
+					// An ally has no truck left and we could not spare one: build one more so it can be given away
+					const truckOwedToAlly = allyTruckRequestTime > 0 && gameTime >= allyTruckRequestTime &&
+						gameTime - allyTruckRequestTime < 120000 && numTrucks <= MIN_TRUCKS_TO_KEEP;
 					const shouldBuildTruck = numTrucks < desiredTrucks && (
+						truckOwedToAlly ||
 						numTrucks < minEarlyTrucks ||
 						(!canBuildEarlyCombat && (completedGens > 0 || currentPower >= 150)) ||
 						(armySize >= minEarlyArmy && (completedGens > 0 || currentPower >= 150))
@@ -90,7 +123,7 @@ function produceDroids() {
 					} else if (canAffordCombatUnit) {
 						if (random(100) < createSensorProbability()) {
 							produceSensors(factory); // Occasionally build sensors
-						} else if (produceTank(factory)) {
+						} else if (produceTank(factory, getMobileAADeficit(armySize))) {
 							virtualAttackers += 1; // Build an attacker unit
 						}
 					}
@@ -108,8 +141,9 @@ function produceDroids() {
 							}
 						}
 					} else {
-						// For VTOL factory, ensure power generator exists and we can afford combat units
-						if (!countStruct(POW_GEN_STAT) || !canAffordCombatUnit) {
+						// For VTOL factory, ensure power generator exists and we can afford combat units.
+						// On low oil the ground army comes first: no VTOLs while it is still thin.
+						if (!countStruct(POW_GEN_STAT) || !canAffordCombatUnit || (armyThin && !isMyBaseInTrouble)) {
 							continue;
 						}
 						if (produceVTOL(factory)) {
@@ -126,8 +160,8 @@ function produceBuilder(factory) {
 	return createDroid(factory, "Constructor", BUILDER_BODY_LIST, BUILDER_PROP_LIST, "Spade1Mk1");
 }
 
-function produceTank(factory) {
-	// Default components (strictly Rockets and Machineguns/Lasers only — no cannons, mortars, or howitzers)
+function produceTank(factory, antiAirDeficit) {
+	// Default components (strictly Rockets and Machineguns only, plus anti-air when VTOLs are around — no cannons, mortars, or howitzers)
 	let firstWeapon;
 	let secondWeapon;
 	let tankProp = TANK_PROP_LIST;
@@ -137,8 +171,10 @@ function produceTank(factory) {
 	const ANTIPERSONELL_WEAPON_PROBABILITY = checkEnemyAntiPersonnelProbability();
 	const THERMAL_BODY_PROBABILITY = checkFlameWeapons();
 	const BUNKER_BUSTER_PROBABILITY = isMyBaseInTrouble ? 0 : checkCurrentEnemyDefenses();
-	const hasAAWeaponAvailable = enemiesHaveVTOLs && AA_WEAPON_LIST.some(w => componentAvailable(w));
-	const ANTI_AIR_TANK_PROBABILITY = hasAAWeaponAvailable ? 12 : 0;
+	// Anti-air is built to a target count (see getDesiredMobileAA) instead of a flat dice roll:
+	// the very first AA tank is immediate, the rest of the gap is filled with 60% of the new tanks
+	const needsAntiAir = antiAirDeficit !== undefined && antiAirDeficit > 0;
+	const ANTI_AIR_TANK_PROBABILITY = !needsAntiAir ? 0 : (enumGroup(aaGroup).length === 0 ? 100 : 60);
 
 	let FAST_PROP_PROBABILITY = 0;
 
@@ -161,17 +197,22 @@ function produceTank(factory) {
 	}
 
 	const hasRocketArray = ROCKET_ARRAY_WEAPON_LIST.some(w => componentAvailable(w));
+	const hasMachinegun = MACHINEGUN_WEAPON_LIST.some(w => componentAvailable(w));
+	let isAntiAirOrder = false;
 
-	if (random(100) < BUNKER_BUSTER_PROBABILITY) {
+	if (random(100) < ANTI_AIR_TANK_PROBABILITY) {
+		firstWeapon = AA_WEAPON_LIST;
+		secondWeapon = AA_WEAPON_LIST;
+		isAntiAirOrder = true;
+	} else if (random(100) < BUNKER_BUSTER_PROBABILITY) {
 		firstWeapon = BUNKER_BUSTER_WEAPON;
 		secondWeapon = BUNKER_BUSTER_WEAPON;
 		tankProp = "hover01";
-	} else if (random(100) < ANTI_AIR_TANK_PROBABILITY) {
-		firstWeapon = AA_WEAPON_LIST;
-		secondWeapon = AA_WEAPON_LIST;
 	} else if (random(100) < ANTIPERSONELL_WEAPON_PROBABILITY) {
-		// Hybrid strategy: use Twin MG/T1 MG early, then switch AP role to Rocket Arrays (MRL/HRA/Seraph) sharing Rocket upgrades
-		const antiPersonnelList = hasRocketArray ? ROCKET_ARRAY_WEAPON_LIST : MACHINEGUN_WEAPON_LIST;
+		// Mixed MG + Rocket army: the anti-personnel role is shared between the Machinegun line
+		// (Twin MG -> HMG -> Assault Gun -> Twin Assault Gun, direct fire) and Rocket Arrays (MRA/HRA/Seraph, splash)
+		const useMachinegun = hasMachinegun && (!hasRocketArray || random(100) < MACHINEGUN_SHARE_OF_AP);
+		const antiPersonnelList = useMachinegun ? MACHINEGUN_WEAPON_LIST : ROCKET_ARRAY_WEAPON_LIST;
 		firstWeapon = antiPersonnelList;
 		secondWeapon = antiPersonnelList;
 	} else {
@@ -187,7 +228,10 @@ function produceTank(factory) {
 		tankProp = "hover01";
 	}
 
-	if (createDroid(factory, "Attacker", tankBody, tankProp, firstWeapon, secondWeapon)) {
+	if (createDroid(factory, isAntiAirOrder ? "Anti-Air" : "Attacker", tankBody, tankProp, firstWeapon, secondWeapon)) {
+		if (isAntiAirOrder) {
+			recentAntiAirOrders.push(gameTime);
+		}
 		return true;
 	}
 

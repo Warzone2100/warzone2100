@@ -108,22 +108,3 @@ function checkCurrentEnemyDefenses() {
 
 	return probability;
 }
-
-// Produce long distance support tanks in case we have a huge group of front tanks
-function checkLongRangeSupport() {
-	let probability = 5;
-
-	const myDroidsSize = enumGroup(attackerGroup)
-		.filter(droid => !HOWITZERS_WEAPON_LIST.includes((droid.weapons && droid.weapons[0] && droid.weapons[0].name) ? droid.weapons[0].name : ""))
-		.length;
-
-	if (myDroidsSize >= 100) {
-		probability = 25;
-	} else if (myDroidsSize >= 80) {
-		probability = 20;
-	} else if (myDroidsSize >= 50) {
-		probability = 10;
-	}
-
-	return probability;
-}

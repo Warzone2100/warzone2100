@@ -3,18 +3,58 @@ const structuresBeingDemolished = new Map();
 // Tracks whether capturable safe oil wells currently remain on the map so oilGrabbersGroup helps at base once all safe oils are taken
 let hasFreeSafeOils = true;
 
+// Oil the army should help secure: a free oil well on our side of the map that armed enemies are sitting on ({x, y, time})
+var contestedOil;
+// Game time of the last pending-order cleanup, so the cleanup runs at most once per game tick
+let lastPendingCleanupTime = -1;
+// "stat@sector" -> game time until which we stop searching a build spot there after a failed search
+const placementBackoff = new Map();
+// "x_y" -> {t, ok}: whether any of our trucks can reach that oil well (refreshed every minute)
+const oilReachCache = new Map();
+
+// Remembers that `truck` is on its way to build/demolish something at (x, y), so other trucks do not duplicate the job.
+// The entry lives longer for far targets, so a long walk to a distant oil well is not forgotten half-way.
+function setPendingOrder(truck, stat, x, y) {
+	if (!truck || typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
+		return;
+	}
+	const dist = distBetweenTwoPoints(truck.x, truck.y, x, y);
+	pendingBuildOrders.set(truck.id, {
+		stat: stat,
+		x: x,
+		y: y,
+		time: gameTime,
+		ttl: Math.max(25000, Math.min(150000, 25000 + dist * 1500))
+	});
+}
+
+// All of our structures that are not finished yet (shared by every build helper within the same half second)
+function getUnfinishedStructures() {
+	return cached("unfinishedStructs", 500, () => enumStruct(me).filter(s => s.status !== BUILT));
+}
+
+// Number of our defensive structures around the main base
+function countBaseDefenses() {
+	return cached("baseDefenses", 2000, () => enumRange(BASE.x, BASE.y, BASE_THREAT_RANGE, me, false)
+		.filter(obj => obj.type === STRUCTURE && obj.stattype === DEFENSE).length);
+}
+
 // Upgrade mappings where old defenses become obsolete once the replacement is unlocked (evaluated lazily after all includes load)
 function getObsoleteDefenseUpgrades() {
 	return [
 		{ new: "Emplacement-Rocket06-IDF", old: WEAK_DEFENSES },
 		{ new: "Sys-SensoTowerWS", old: ["Sys-SensoTower02"] },
 		{ new: "Emplacement-HvART-pit", old: ["Emplacement-Rocket06-IDF"] },
-		{ new: "X-Super-MassDriver", old: ["X-Super-Cannon"] }
+		{ new: "X-Super-MassDriver", old: ["X-Super-Cannon"] } // only relevant when an ally shares those technologies
 	];
 }
 
 // Returns a Set of owned structure IDs that are obsolete and eligible for demolition
 function getObsoleteStructureIds() {
+	return cached("obsoleteStructIds", 3000, computeObsoleteStructureIds);
+}
+
+function computeObsoleteStructureIds() {
 	const obsoleteIds = new Set();
 	if (isSeaMap) {
 		for (const cybFac of enumStruct(me, CYBORG_FACTORY_STAT)) {
@@ -48,8 +88,9 @@ function isStructureBeingDemolished(structure, obsoleteIds) {
 	if (resolvedObsolete.has(structure.id)) {
 		return true;
 	}
-	const hasActiveDemolisher = enumDroid(me, DROID_CONSTRUCT).some(
-		d => d.order === DORDER_DEMOLISH && distBetweenTwoPoints(d.x, d.y, structure.x, structure.y) <= 4
+	const demolishers = cached("activeDemolishers", 0, () => enumDroid(me, DROID_CONSTRUCT).filter(d => d.order === DORDER_DEMOLISH));
+	const hasActiveDemolisher = demolishers.some(
+		d => distBetweenTwoPoints(d.x, d.y, structure.x, structure.y) <= 4
 	);
 	if (hasActiveDemolisher) {
 		return true;
@@ -76,6 +117,12 @@ function getPoweredDerrickCount() {
 
 // Cleans up expired, completed, or already-placed pending build orders and finished demolitions
 function cleanupPendingBuildOrders() {
+	// This is called from almost every build helper: do the real work only once per game tick
+	if (lastPendingCleanupTime === gameTime) {
+		return;
+	}
+	lastPendingCleanupTime = gameTime;
+
 	for (const structId of structuresBeingDemolished.keys()) {
 		if (getObject(STRUCTURE, me, structId) === null) {
 			structuresBeingDemolished.delete(structId);
@@ -89,7 +136,7 @@ function cleanupPendingBuildOrders() {
 	const activeTrucks = new Map(enumDroid(me, DROID_CONSTRUCT).map(t => [t.id, t]));
 	for (const [truckId, info] of pendingBuildOrders.entries()) {
 		const truck = activeTrucks.get(truckId);
-		if (!truck || gameTime - info.time > 25000) {
+		if (!truck || gameTime - info.time > (info.ttl || 25000)) {
 			pendingBuildOrders.delete(truckId);
 			continue;
 		}
@@ -153,6 +200,10 @@ function isTruckBusy(mydroid) {
 
 // Returns true when power generation or the core base is in a critical bootstrap state
 function isPowerOrCoreBaseCritical() {
+	return cached("powerOrCoreCritical", 0, computePowerOrCoreBaseCritical);
+}
+
+function computePowerOrCoreBaseCritical() {
 	const completedHQ = countCompletedStruct(PLAYER_HQ_STAT);
 	const completedGens = countCompletedStruct(POW_GEN_STAT);
 	const completedLabs = countCompletedStruct(RES_LAB_STAT);
@@ -220,36 +271,6 @@ function countPendingDerricks(maxDistFromBase) {
 	return count;
 }
 
-// If a distant truck is walking from far away to place a core base structure that hasn't been placed yet,
-// and another idle truck is now much closer to BASE, free the distant truck so the closer truck builds it immediately
-function reassignPendingBaseBuildIfCloserTruck(stat) {
-	cleanupPendingBuildOrders();
-	if (countStruct(stat, me) > 0 || typeof pendingBuildOrders === "undefined" || !(pendingBuildOrders instanceof Map)) {
-		return;
-	}
-
-	const idleTrucks = findIdleTrucks(BASE);
-	if (idleTrucks.length === 0) {
-		return;
-	}
-	const closestIdle = idleTrucks[0];
-	const closestIdleDist = distBetweenTwoPoints(closestIdle.x, closestIdle.y, BASE.x, BASE.y);
-
-	const activeTrucks = new Map(enumDroid(me, DROID_CONSTRUCT).map(t => [t.id, t]));
-	for (const [truckId, info] of pendingBuildOrders.entries()) {
-		if (info.stat === stat) {
-			const pendingTruck = activeTrucks.get(truckId);
-			if (pendingTruck) {
-				const pendingDist = distBetweenTwoPoints(pendingTruck.x, pendingTruck.y, info.x, info.y);
-				if (closestIdleDist + 8 < pendingDist) {
-					pendingBuildOrders.delete(truckId);
-					orderDroid(pendingTruck, DORDER_STOP);
-				}
-			}
-		}
-	}
-}
-
 // Build a certain number of a structure (Cobra's countAndBuild helper)
 function countAndBuild(stat, count) {
 	if (countStructWithPending(stat) < count) {
@@ -274,11 +295,10 @@ function strangeBuildOrder() {
 			(!isSeaMap && countAndBuild(CYBORG_FACTORY_STAT, 1)) ||
 			countAndBuild(PLAYER_HQ_STAT, 1) ||
 			(getMultiTechLevel() < 4 && !researchDone && countAndBuild(RES_LAB_STAT, 1)) ||
-			countAndBuild(FACTORY_STAT, 2) ||
-			countAndBuild(POW_GEN_STAT, 2) ||
 			(numUnusedDerricks() > 0 && countAndBuild(POW_GEN_STAT, countStruct(POW_GEN_STAT) + 1)) ||
+			(getDesiredFactoryCount() >= 2 && countAndBuild(FACTORY_STAT, 2)) ||
 			baseMaintenance() ||
-			(getMultiTechLevel() < 4 && !researchDone && countAndBuild(RES_LAB_STAT, 2))) {
+			countAndBuild(RES_LAB_STAT, Math.min(2, getDesiredLabCount()))) {
 			return true;
 		}
 	} else {
@@ -294,7 +314,8 @@ function strangeBuildOrder() {
 			(!isSeaMap && countAndBuild(CYBORG_FACTORY_STAT, 5)) ||
 			(numUnusedDerricks() > 0 && countAndBuild(POW_GEN_STAT, 9)) ||
 			(getMultiTechLevel() < 4 && !researchDone && countAndBuild(RES_LAB_STAT, 5)) ||
-			countAndBuild(FACTORY_STAT, 5)) {
+			countAndBuild(FACTORY_STAT, 5) ||
+			(numUnusedDerricks() > 0 && countAndBuild(POW_GEN_STAT, countStruct(POW_GEN_STAT) + 1))) {
 			return true;
 		}
 	}
@@ -311,9 +332,83 @@ function shouldPrioritizeFirstArmyOverDefenses() {
 	return countStruct(DERRICK_STAT) <= 6 && enumGroup(attackerGroup).length < 4;
 }
 
+// ---- Low-oil economy scaling ----
+// On low-oil maps every structure competes with the army for the same trickle of power, so the number of
+// labs, factories and repair bays follows the number of derricks instead of fixed counts.
+
+// How many Research Labs the current economy can keep busy
+function getDesiredLabCount() {
+	if (researchDone || getMultiTechLevel() === 4) {
+		return 0;
+	}
+	if (isHighOilMap) {
+		return 5;
+	}
+	const derricks = countStruct(DERRICK_STAT);
+	let labs = 2;
+	if (derricks >= 10) {
+		labs = 5;
+	} else if (derricks >= 8) {
+		labs = 4;
+	} else if (derricks >= 5) {
+		labs = 3;
+	}
+	if (isSeaMap) {
+		labs = Math.max(labs, 3); // hover maps are won by tech, not by early ground pushes
+	}
+	// A large unspent bank means the economy can afford more research than the derrick count suggests
+	if (getRealPower() > 700) {
+		labs = Math.min(5, labs + 1);
+	}
+	return labs;
+}
+
+// How many tank factories the current economy can feed
+function getDesiredFactoryCount() {
+	const derricks = countStruct(DERRICK_STAT);
+	if (isHighOilMap || derricks >= 20) {
+		return 5;
+	}
+	if (derricks >= 16) {
+		return 4;
+	}
+	if (derricks >= 9) {
+		return 3;
+	}
+	if (derricks >= 6 || getRealPower() > 500) {
+		return 2;
+	}
+	return 1;
+}
+
+// Army size a low-oil economy should reach before research and static defenses get first call on power
+function getLowOilArmyTarget() {
+	return Math.max(6, Math.min(24, 4 + countStruct(DERRICK_STAT) * 2));
+}
+
+// True on low-oil maps while the ground army is still smaller than the economy can support
+function isArmyThin() {
+	if (isHighOilMap) {
+		return false;
+	}
+	return cached("armyThin", 1000, () =>
+		enumGroup(attackerGroup).length + enumGroup(rallyGroup).length < getLowOilArmyTarget());
+}
+
 // Handle Build following Cobra's buildOrders() progression
 function build() {
-	if (!countDroid(DROID_CONSTRUCT)) {
+	return profiled("build", buildTick);
+}
+
+function buildTick() {
+	const trucks = enumDroid(me, DROID_CONSTRUCT);
+	if (trucks.length === 0) {
+		return;
+	}
+
+	// Nothing below can be assigned while every truck is already working: skip the whole (expensive) decision tree
+	cleanupPendingBuildOrders();
+	if (!trucks.some(t => !isTruckBusy(t))) {
 		return;
 	}
 
@@ -337,9 +432,11 @@ function build() {
 		return;
 	}
 
-	// 5. Dedicated defense builders finish half-built defenses first, then build base/forward or Anti-VTOL defenses
+	// 5. Dedicated defense builders finish half-built defenses first, then build base/forward or Anti-VTOL defenses.
+	// Defenses are never urgent to the millisecond: this lane runs about once per second to keep the script light.
 	const defensesBuilders = enumGroup(defensesBuildersGroup);
 	if (defensesBuilders.length >= 1 &&
+		!throttled("defenseBuildersLane", 1200) &&
 		!shouldPrioritizeFirstArmyOverDefenses() &&
 		gameTime >= lastAttemptTime &&
 		numUnusedDerricks() <= 0 &&
@@ -347,7 +444,9 @@ function build() {
 		if (getUnfinishedSafeDefenses().length > 0) {
 			checkUncompletedStructures(true);
 		} else if (!(enemiesHaveVTOLs && shouldBuildAntiAirNow() && buildAntiAir(defensesBuilders))) {
-			const def = returnBestDefense();
+			// While the low-oil army is still thin, a small base perimeter is enough: the power goes to units
+			const holdBackForArmy = isArmyThin() && !isMyBaseInTrouble && countBaseDefenses() >= 3;
+			const def = holdBackForArmy ? null : returnBestDefense();
 			if (def) {
 				const buildPos = getDefenseBuildPosition(defensesBuilders);
 				grabTrucksAndBuild(def, buildPos, defensesBuilders, true);
@@ -375,15 +474,15 @@ function buildBasicBase() {
 			countAndBuild(POW_GEN_STAT, 1) ||
 			countAndBuild(PLAYER_HQ_STAT, 1) ||
 			(!isSeaMap && countAndBuild(CYBORG_FACTORY_STAT, 1)) ||
-			(getMultiTechLevel() < 4 && !researchDone && countAndBuild(RES_LAB_STAT, 2)) ||
+			// A generator only pays off once it has derricks to burn: build one per 4 derricks, never ahead of them
 			(numUnusedDerricks() > 0 && countAndBuild(POW_GEN_STAT, countStruct(POW_GEN_STAT) + 1)) ||
-			countAndBuild(FACTORY_STAT, 2) ||
-			countAndBuild(POW_GEN_STAT, 2) ||
-			(getMultiTechLevel() < 4 && !researchDone && countAndBuild(RES_LAB_STAT, 3)) ||
-			// Build power modules on low oil after initial combat factories and labs are running
+			// The power module is the cheapest income boost on low oil: take it before any second lab or factory
 			(countStruct(POW_GEN_STAT) <= 3 && gameTime < 900000 && baseMaintenance(true)) ||
+			countAndBuild(RES_LAB_STAT, Math.min(2, getDesiredLabCount())) ||
+			(getDesiredFactoryCount() >= 2 && countAndBuild(FACTORY_STAT, 2)) ||
+			countAndBuild(RES_LAB_STAT, Math.min(3, getDesiredLabCount())) ||
 			countAndBuild(REPAIR_FACILITY_STAT, 1) ||
-			(countStruct(DERRICK_STAT) >= 6 && countAndBuild(VTOL_FACTORY_STAT, 1))) {
+			(vtolsEnabled && countStruct(DERRICK_STAT) >= 8 && countAndBuild(VTOL_FACTORY_STAT, 1))) {
 			return true;
 		}
 	} else {
@@ -402,12 +501,14 @@ function buildBasicBase() {
 			countAndBuild(FACTORY_STAT, 5) ||
 			(numUnusedDerricks() > 0 && countAndBuild(POW_GEN_STAT, 8)) ||
 			(!isSeaMap && countAndBuild(CYBORG_FACTORY_STAT, 5)) ||
+			// Keep adding generators while derricks are unpowered (up to the game limit), instead of stopping at 8
+			(numUnusedDerricks() > 0 && countAndBuild(POW_GEN_STAT, countStruct(POW_GEN_STAT) + 1)) ||
 			(goodPowerLevel && countAndBuild(REPAIR_FACILITY_STAT, 3))) {
 			return true;
 		}
 	}
 
-	if (getMultiTechLevel() > 1 && countStruct(VTOL_FACTORY_STAT) > 0 && countAndBuild(VTOL_PAD_STAT, 3)) {
+	if (vtolsEnabled && getMultiTechLevel() > 1 && countStruct(VTOL_FACTORY_STAT) > 0 && countAndBuild(VTOL_PAD_STAT, 3)) {
 		return true;
 	}
 
@@ -417,8 +518,7 @@ function buildBasicBase() {
 // Returns unfinished defense structures in safe or base-adjacent areas that need completion
 function getUnfinishedSafeDefenses() {
 	const obsoleteIds = getObsoleteStructureIds();
-	return enumStruct(me).filter((s) =>
-		s.status !== BUILT &&
+	return getUnfinishedStructures().filter((s) =>
 		s.stattype === DEFENSE &&
 		!isStructureBeingDemolished(s, obsoleteIds) &&
 		(isNearBase(s.x, s.y) || isAreaSafe(s.x, s.y, 12))
@@ -428,11 +528,20 @@ function getUnfinishedSafeDefenses() {
 // Ensures any structure marked for demolition or half-demolished obsolete structure finishes being demolished
 function continuePendingDemolitions(obsoleteIds) {
 	cleanupPendingBuildOrders();
-	const structs = enumStruct(me);
-	for (let i = 0; i < structs.length; ++i) {
-		const s = structs[i];
-		const isHalfDemolishedObsolete = s.status !== BUILT && (obsoleteIds.has(s.id) || (isSeaMap && s.stattype === CYBORG_FACTORY));
-		if (structuresBeingDemolished.has(s.id) || isHalfDemolishedObsolete) {
+
+	// Structures we already decided to demolish (looked up by id instead of scanning the whole base every tick)
+	for (const structId of Array.from(structuresBeingDemolished.keys())) {
+		const scheduled = getObject(STRUCTURE, me, structId);
+		if (scheduled) {
+			demolishThis(scheduled);
+		}
+	}
+
+	// Half-demolished obsolete structures that lost their demolisher
+	const unfinished = getUnfinishedStructures();
+	for (let i = 0; i < unfinished.length; ++i) {
+		const s = unfinished[i];
+		if (!structuresBeingDemolished.has(s.id) && (obsoleteIds.has(s.id) || (isSeaMap && s.stattype === CYBORG_FACTORY))) {
 			demolishThis(s);
 		}
 	}
@@ -444,13 +553,18 @@ function checkUncompletedStructures(includeDefenseBuilders = false) {
 	const obsoleteIds = getObsoleteStructureIds();
 	continuePendingDemolitions(obsoleteIds);
 
+	const unfinishedStructs = getUnfinishedStructures();
+	if (unfinishedStructs.length === 0) {
+		return false;
+	}
+
 	const activeBuilders = enumDroid(me, DROID_CONSTRUCT).filter(
 		t => t.order === DORDER_BUILD || t.order === DORDER_HELPBUILD
 	);
 
 	// Include uncompleted base/defense structures in safe areas and orphaned oil derricks with no truck working on them
-	const structlist = enumStruct(me).filter((structure) => {
-		if (structure.status === BUILT || isStructureBeingDemolished(structure, obsoleteIds)) {
+	const structlist = unfinishedStructs.filter((structure) => {
+		if (isStructureBeingDemolished(structure, obsoleteIds)) {
 			return false;
 		}
 		if (structure.stattype === RESOURCE_EXTRACTOR) {
@@ -507,14 +621,7 @@ function checkUncompletedStructures(includeDefenseBuilders = false) {
 		const maxTrucks = targetStruct.stattype === RESOURCE_EXTRACTOR ? Math.min(2, idleTrucks.length) : idleTrucks.length;
 		for (let j = 0; j < maxTrucks; ++j) {
 			if (orderDroidObj(idleTrucks[j], DORDER_HELPBUILD, targetStruct)) {
-				if (typeof pendingBuildOrders !== "undefined") {
-					pendingBuildOrders.set(idleTrucks[j].id, {
-						stat: "__HELPBUILD__",
-						x: targetStruct.x,
-						y: targetStruct.y,
-						time: gameTime
-					});
-				}
+				setPendingOrder(idleTrucks[j], "__HELPBUILD__", targetStruct.x, targetStruct.y);
 				hasAssignedTask = true;
 			}
 		}
@@ -581,14 +688,7 @@ function baseMaintenance(earlyGen = false) {
 		for (const truck of idleTrucks) {
 			if (canDroidHelp(truck, struct.x, struct.y)) {
 				if (orderDroidBuild(truck, DORDER_BUILD, module, struct.x, struct.y)) {
-					if (typeof pendingBuildOrders !== "undefined") {
-						pendingBuildOrders.set(truck.id, {
-							stat: "__MODULE__",
-							x: struct.x,
-							y: struct.y,
-							time: gameTime
-						});
-					}
+					setPendingOrder(truck, "__MODULE__", struct.x, struct.y);
 					success = true;
 					break;
 				}
@@ -605,10 +705,11 @@ function baseMaintenance(earlyGen = false) {
 
 function buildFundamentals() {
 	let vtols = enumGroup(vtolGroup);
-	let needVtolPads = 2 * countStructWithPending(VTOL_PAD_STAT) < vtols.length;
+	// One rearming pad per VTOL (like Cobra): with one pad for two, half of the air force was always queueing
+	let needVtolPads = countStructWithPending(VTOL_PAD_STAT) < vtols.length;
 
-	// Prioritize Research Labs first if we have fewer than 3 so research never stalls
-	if (!researchDone && countStructWithPending(RES_LAB_STAT) < 3 && buildResearchLabs()) {
+	// Prioritize Research Labs first while we have fewer than the economy can keep busy (at most 3 here) so research never stalls
+	if (!researchDone && countStructWithPending(RES_LAB_STAT) < Math.min(3, getDesiredLabCount()) && buildResearchLabs()) {
 		return true;
 	}
 
@@ -620,8 +721,8 @@ function buildFundamentals() {
 		return true;
 	}
 
-	// Build VTOL pads if needed
-	if (needVtolPads && grabTrucksAndBuild(VTOL_PAD_STAT)) {
+	// Build VTOL pads if needed (pads are allowed between other structures, see getPlacementBlockingSteps)
+	if (vtolsEnabled && needVtolPads && grabTrucksAndBuild(VTOL_PAD_STAT)) {
 		return true;
 	}
 
@@ -637,6 +738,11 @@ function buildFundamentals() {
 		if (buildRepairFacilities()) {
 			return true;
 		}
+	}
+
+	// Demolition and extra defenses are never urgent: evaluate this lane about once per second to keep the script light
+	if (throttled("defenseFundamentalsLane", 1000)) {
+		return false;
 	}
 
 	// Check if there are old defenses to demolish
@@ -712,7 +818,11 @@ function buildDefensesForAllies() {
 // Builds Repair Facilities up to the maximum structure limit (5 in standard skirmish),
 // placing them on the outer perimeter of the base (away from essential core buildings) and at safe forward positions.
 function buildRepairFacilities() {
-	const maxLimit = typeof getStructureLimit === "function" ? getStructureLimit(REPAIR_FACILITY_STAT, me) : 5;
+	const engineLimit = typeof getStructureLimit === "function" ? getStructureLimit(REPAIR_FACILITY_STAT, me) : 5;
+	// Low-oil economies cannot afford a full set of repair bays: scale them with the derrick count
+	const derrickCount = countStruct(DERRICK_STAT);
+	const economyLimit = isHighOilMap ? 5 : (derrickCount >= 12 ? 3 : (derrickCount >= 8 ? 2 : 1));
+	const maxLimit = Math.min(engineLimit, economyLimit);
 	const currentCount = countStructWithPending(REPAIR_FACILITY_STAT);
 
 	if (currentCount >= maxLimit) {
@@ -860,8 +970,9 @@ function buildDefenses() {
 		return checkUncompletedStructures(true);
 	}
 
-	const baseDefensesCount = enumRange(BASE.x, BASE.y, BASE_THREAT_RANGE, me, false)
-		.filter(obj => obj.type === STRUCTURE && obj.stattype === DEFENSE).length;
+	const baseDefensesCount = countBaseDefenses();
+	// While the low-oil army is still thin, keep only a minimal perimeter and one tower per remote derrick
+	const armyFirst = isArmyThin() && !isMyBaseInTrouble;
 
 	// Priority 0: If enemies have VTOLs, keep a balanced forward AA shield in front of essential structures
 	if (enemiesHaveVTOLs && shouldBuildAntiAirNow() && buildAntiAir()) {
@@ -874,7 +985,7 @@ function buildDefenses() {
 	}
 
 	// Priority 1: Ensure our main base has a quick initial defense perimeter (6 defenses) or is defended when under attack
-	if (isMyBaseInTrouble || baseDefensesCount < 6) {
+	if (isMyBaseInTrouble || baseDefensesCount < (armyFirst ? 3 : 6)) {
 		let def = returnBestDefense(false);
 		if (def !== null && grabTrucksAndBuild(def, BASE, null, true)) {
 			return true;
@@ -887,30 +998,21 @@ function buildDefenses() {
 	}
 
 	// Priority 3: Protect remote conquered derricks ONLY if the area around them is safe
-	const derricks = enumStruct(me, DERRICK_STAT).filter(
-		derrick => !isNearBase(derrick.x, derrick.y) && isAreaSafe(derrick.x, derrick.y, 16)
-	);
-
 	let allProtected = true;
-	const requiredDerrickDefs = (isHighOilMap || gameTime < 480000 || getRealPower() < 350) ? 1 : 2;
+	const requiredDerrickDefs = (isHighOilMap || armyFirst || gameTime < 480000 || getRealPower() < 350) ? 1 : 2;
 
-	for (const derrick of derricks) {
-		const hasDerrickEnoughDefenses = enumRange(derrick.x, derrick.y, 7, me, true)
-			.filter(obj => obj.stattype === DEFENSE).length >= requiredDerrickDefs;
-
-		// build defenses if derrick has not enough (1 defense at a time so we don't drain power)
-		if (!hasDerrickEnoughDefenses) {
-			let def = returnBestDefense(true);
-			if (def !== null) {
-				return grabTrucksAndBuild(def, derrick, null, false);
-			}
-			allProtected = false;
-			break;
+	// build defenses if a derrick has not enough (1 defense at a time so we don't drain power)
+	const exposedDerrick = findDerrickNeedingDefense(requiredDerrickDefs);
+	if (exposedDerrick) {
+		let def = returnBestDefense(true);
+		if (def !== null) {
+			return grabTrucksAndBuild(def, exposedDerrick, null, false);
 		}
+		allProtected = false;
 	}
 
 	// If all safe derricks are protected, build a defense near the base or push forward along our territory
-	if (allProtected) {
+	if (allProtected && !armyFirst) {
 		let def = returnBestDefense(false);
 		if (def !== null) {
 			const buildPos = getDefenseBuildPosition();
@@ -921,6 +1023,39 @@ function buildDefenses() {
 	return false; // No defenses built
 }
 
+// Game time until which we already know that every safe remote derrick has its defenses (see findDerrickNeedingDefense)
+let derricksProtectedUntil = 0;
+let derricksProtectedFor = 0;
+
+// Returns the first remote derrick in a safe area with fewer than `requiredDefs` defenses next to it, or null.
+// The cheap "count the towers" test runs before the expensive area-safety test, the search stops at the first hit,
+// and a "nothing to do" answer is remembered for 5 seconds: with 40+ derricks this used to cost hundreds of scans per second.
+function findDerrickNeedingDefense(requiredDefs) {
+	if (derricksProtectedFor === requiredDefs && gameTime < derricksProtectedUntil && gameTime > derricksProtectedUntil - 6000) {
+		return null;
+	}
+
+	const derricks = enumStruct(me, DERRICK_STAT);
+	for (let i = 0; i < derricks.length; ++i) {
+		const derrick = derricks[i];
+		if (isNearBase(derrick.x, derrick.y)) {
+			continue;
+		}
+		const localDefenses = enumRange(derrick.x, derrick.y, 7, me, false)
+			.filter(obj => obj.type === STRUCTURE && obj.stattype === DEFENSE).length;
+		if (localDefenses >= requiredDefs) {
+			continue;
+		}
+		if (isAreaSafe(derrick.x, derrick.y, 16)) {
+			return derrick;
+		}
+	}
+
+	derricksProtectedUntil = gameTime + 5000;
+	derricksProtectedFor = requiredDefs;
+	return null;
+}
+
 // Determines whether to fortify the main base or push defenses forward as we gain territory
 function getDefenseBuildPosition(builders) {
 	// Always prioritize the main base if it is under attack
@@ -928,8 +1063,7 @@ function getDefenseBuildPosition(builders) {
 		return BASE;
 	}
 
-	const baseDefensesCount = enumRange(BASE.x, BASE.y, BASE_THREAT_RANGE, me, false)
-		.filter(obj => obj.type === STRUCTURE && obj.stattype === DEFENSE).length;
+	const baseDefensesCount = countBaseDefenses();
 
 	// Once the home base has at least 8 core defenses, send 70% of new defenses forward to expand territory
 	if (baseDefensesCount < 8 || random(100) < 30) {
@@ -951,13 +1085,12 @@ function getDefenseBuildPosition(builders) {
 		}
 		forwardDerricks.sort(sortByDistToBase);
 
+		// (Cheap tower count first; the expensive safety test only for derricks that still need towers)
 		for (const derrick of forwardDerricks) {
-			if (!isAreaSafe(derrick.x, derrick.y, 16)) continue;
-
 			const localDefenses = enumRange(derrick.x, derrick.y, 12, me, false)
 				.filter(obj => obj.type === STRUCTURE && obj.stattype === DEFENSE).length;
 
-			if (localDefenses < 6) {
+			if (localDefenses < 6 && isAreaSafe(derrick.x, derrick.y, 16)) {
 				return { x: derrick.x, y: derrick.y };
 			}
 		}
@@ -1120,42 +1253,44 @@ function returnBestDefense(isDerrickDefense = false) {
 	return bestDefense;
 }
 
-// Counts active VTOL units belonging to living enemy players
+// Counts active VTOL units belonging to living enemy players (refreshed every 8 seconds)
 function countEnemyVTOLs() {
-	let total = 0;
-	for (let i = 0; i < maxPlayers; ++i) {
-		if (i !== me && !allianceExistsBetween(me, i) && isPlayerAlive(i)) {
-			total += enumDroid(i, DROID_ANY, false).filter(d => d.isVTOL === true).length;
+	return cached("enemyVtolCount", 8000, () => {
+		let total = 0;
+		for (let i = 0; i < maxPlayers; ++i) {
+			if (i !== me && !allianceExistsBetween(me, i) && isPlayerAlive(i)) {
+				total += enumDroid(i, DROID_ANY, false).filter(d => d.isVTOL === true).length;
+			}
 		}
-	}
-	return total;
+		return total;
+	});
 }
 
-// Determines if we should prioritize building an Anti-Air defense right now without starving Artillery/Ripple batteries
-function shouldBuildAntiAirNow() {
-	if (!enemiesHaveVTOLs) {
-		return false;
-	}
+function countAASites() {
+	return AA_DEFENSES.reduce((sum, stat) => sum + countStructWithPending(stat), 0);
+}
 
-	const aaCount = AA_DEFENSES.reduce((sum, stat) => sum + countStructWithPending(stat), 0);
-	const artilleryCount = ARTILLERY_DEFENSES.reduce((sum, stat) => sum + countStructWithPending(stat), 0);
-	const hasArtilleryUnlocked = ARTILLERY_DEFENSES.some(stat => isStructureAvailable(stat));
-
-	// Once we have a baseline of 2 AA sites and long-range artillery is unlocked, avoid building more AA until artillery outnumbers AA
-	if (aaCount >= 2 && hasArtilleryUnlocked && artilleryCount <= aaCount) {
-		return false;
-	}
-
+// Number of static AA sites we want: one per enemy VTOL on low oil (two on high oil), like Cobra, within sane limits
+function getDesiredAASites() {
 	const enemyVtolCount = countEnemyVTOLs();
-	const desiredAA = Math.max(2, Math.min(6, Math.ceil(enemyVtolCount / 2) + 1));
+	const cap = isHighOilMap ? 20 : 10;
+	return Math.max(2, Math.min(cap, isHighOilMap ? enemyVtolCount * 2 : enemyVtolCount));
+}
 
-	if (aaCount < desiredAA) {
-		return random(100) < 40;
+// Determines if the next defense should be an Anti-Air site
+function shouldBuildAntiAirNow() {
+	if (!enemiesHaveVTOLs || !vtolsEnabled) {
+		return false;
 	}
-	if (aaCount < 6) {
-		return random(100) < 20;
+
+	const aaCount = countAASites();
+	const desiredAA = getDesiredAASites();
+	if (aaCount >= desiredAA) {
+		return false;
 	}
-	return random(100) < 8;
+
+	// The first half of the AA shield is urgent; the rest alternates with ground defenses so Ripples are not starved
+	return aaCount < Math.ceil(desiredAA / 2) || random(100) < 50;
 }
 
 // Calculates a position in front of our furthest essential base structures (Factories, Labs, Power Gens, HQ)
@@ -1168,6 +1303,16 @@ function getForwardAntiAirPosition() {
 	const totalDist = distBetweenTwoPoints(BASE.x, BASE.y, targetPos.x, targetPos.y);
 	if (totalDist < 12) {
 		return BASE;
+	}
+
+	// Every second site goes where enemy VTOLs actually dropped their bombs in the last 5 minutes (base or remote derricks),
+	// as long as that spot has fewer than 2 AA sites covering it
+	if (lastVtolStrike && gameTime - lastVtolStrike.time < 300000 && countAASites() % 2 === 1) {
+		const coveringSites = enumRange(lastVtolStrike.x, lastVtolStrike.y, 7, me, false)
+			.filter(obj => obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.canHitAir === true).length;
+		if (coveringSites < 2) {
+			return { x: lastVtolStrike.x, y: lastVtolStrike.y };
+		}
 	}
 
 	// Unit vector from BASE toward enemy
@@ -1204,7 +1349,7 @@ function getForwardAntiAirPosition() {
 }
 
 function buildAntiAir(trucks) {
-	if (!enemiesHaveVTOLs) {
+	if (!enemiesHaveVTOLs || !vtolsEnabled) {
 		return false;
 	}
 
@@ -1229,19 +1374,17 @@ function buildAntiAir(trucks) {
 // Order all builders in danger OR stationary/idle for > 60 seconds to return to base immediately!
 function callIdleBuildersToBase() {
 	const allBuilders = enumDroid(me, DROID_CONSTRUCT);
-	const uncompletedStructs = enumStruct(me).filter(s => s.status !== BUILT);
+	const uncompletedStructs = getUnfinishedStructures();
 
 	allBuilders.forEach(truck => {
-		// 1. Immediate danger check outside base (including Scavengers)
-		if (!isNearBase(truck.x, truck.y)) {
-			let nearbyThreats = enumRange(truck.x, truck.y, 12, ENEMIES, false);
-			if (scavengerIndex !== undefined) {
-				nearbyThreats = nearbyThreats.concat(enumRange(truck.x, truck.y, 12, scavengerIndex, false));
-			}
-			const isUnsafe = nearbyThreats.some(isUnsafeEnemyObject) || isInDangerZone(truck.x, truck.y, 12);
+		// 1. Immediate danger check outside base (including Scavengers).
+		// Only armed enemies that outnumber our local guards make a truck run: an enemy truck or derrick nearby does not,
+		// and an old danger zone alone does not either (that used to spread the blacklist across the whole map).
+		if (!isNearBase(truck.x, truck.y) && truck.order !== DORDER_RTB) {
+			const balance = localThreatBalance(truck.x, truck.y, 8);
 
-			if (isUnsafe && truck.order !== DORDER_RTB) {
-				markDangerZone(truck.x, truck.y, 120000);
+			if (balance.threats > balance.guards) {
+				markDangerZone(truck.x, truck.y, 60000);
 				if (typeof pendingBuildOrders !== "undefined") pendingBuildOrders.delete(truck.id);
 				orderDroid(truck, DORDER_RTB);
 				return;
@@ -1276,21 +1419,11 @@ function callIdleBuildersToBase() {
 	});
 }
 
-// Build factories following Cobra's factoryBuildOrder()
+// Build factories following Cobra's factoryBuildOrder(), scaled to what the economy can feed
 function factoryBuildOrder() {
 	const FAC_ORDER = [FACTORY_STAT, CYBORG_FACTORY_STAT, VTOL_FACTORY_STAT];
 	const derrNum = countStruct(DERRICK_STAT);
-	let num = 1;
-
-	if (derrNum >= 20) {
-		num = 5;
-	} else if (derrNum >= 16) {
-		num = 4;
-	} else if (derrNum >= 9) {
-		num = 3;
-	} else if (derrNum >= 6) {
-		num = 2;
-	}
+	const num = getDesiredFactoryCount();
 
 	for (const fac of FAC_ORDER) {
 		if (!isStructureAvailable(fac)) {
@@ -1299,11 +1432,24 @@ function factoryBuildOrder() {
 		if (fac === CYBORG_FACTORY_STAT && isSeaMap) {
 			continue;
 		}
-		if (fac === VTOL_FACTORY_STAT && !getResearch("R-Struc-VTOLPad").done) {
-			continue;
+
+		let wanted = num;
+		if (fac === VTOL_FACTORY_STAT) {
+			if (!vtolsEnabled || !getResearch("R-Struc-VTOLPad").done) {
+				continue;
+			}
+			// VTOLs are a luxury on low oil: none below 8 derricks, a single factory below 12
+			if (!isHighOilMap) {
+				if (derrNum < 8) {
+					continue;
+				}
+				if (derrNum < 12) {
+					wanted = 1;
+				}
+			}
 		}
 
-		if (countAndBuild(fac, num)) {
+		if (countAndBuild(fac, wanted)) {
 			return true;
 		}
 	}
@@ -1311,29 +1457,14 @@ function factoryBuildOrder() {
 	return false;
 }
 
-// Build the research labs following Cobra's researchBuildOrder()
+// Build the research labs the economy can keep busy (see getDesiredLabCount)
 function buildResearchLabs() {
 	if (researchDone || getMultiTechLevel() === 4 || !isStructureAvailable(RES_LAB_STAT)) {
 		return false;
 	}
 
-	const currentLabs = countStructWithPending(RES_LAB_STAT);
-	if (currentLabs < 5) {
-		let amount = 3;
-		const derrCount = countStruct(DERRICK_STAT);
-
-		if (derrCount >= 10) {
-			amount = 5;
-		} else if (derrCount >= 6 || isSeaMap) {
-			amount = 4;
-		}
-
-		if (currentLabs < amount && countAndBuild(RES_LAB_STAT, amount)) {
-			return true;
-		}
-	}
-
-	return false;
+	const amount = getDesiredLabCount();
+	return countStructWithPending(RES_LAB_STAT) < amount && countAndBuild(RES_LAB_STAT, amount);
 }
 
 
@@ -1369,21 +1500,14 @@ function demolishCyborgFactories() {
 
 // If positive, there are oil derricks that unused due to lack of power generators.
 function numUnusedDerricks() {
-	return countStruct(DERRICK_STAT) - countStruct(POW_GEN_STAT) * 4;
-}
-
-// Function to check if more derricks are needed due to unused power generators
-function needMoreDerricks() {
-	var powGenCount = countStruct(POW_GEN_STAT, me);
-	var derrickCount = countStruct(DERRICK_STAT, me);
-
-	var minDerricksNeeded = powGenCount * 5; // A power generator can support 4 derricks but we set 5 to be safe
-
-	if (derrickCount >= minDerricksNeeded) {
-		return false;
+	const gens = countStruct(POW_GEN_STAT);
+	// Once the generator limit is reached no further generator can be built: extra derricks must not
+	// keep the base in "save power for a generator" mode forever (that used to stop all defenses on huge oil maps)
+	const genLimit = typeof getStructureLimit === "function" ? getStructureLimit(POW_GEN_STAT, me) : 10;
+	if (gens >= genLimit) {
+		return 0;
 	}
-
-	return true;
+	return countStruct(DERRICK_STAT) - gens * 4;
 }
 
 // Return all the trucks that are currently free to build, sorted closest to `obj` first.
@@ -1442,14 +1566,7 @@ function demolishThis(structure) {
 
 	for (let i = 0; i < nearbyRepairing.length; ++i) {
 		if (orderDroidObj(nearbyRepairing[i], DORDER_DEMOLISH, structure)) {
-			if (typeof pendingBuildOrders !== "undefined" && pendingBuildOrders instanceof Map) {
-				pendingBuildOrders.set(nearbyRepairing[i].id, {
-					stat: "__DEMOLISH__",
-					x: structure.x,
-					y: structure.y,
-					time: gameTime
-				});
-			}
+			setPendingOrder(nearbyRepairing[i], "__DEMOLISH__", structure.x, structure.y);
 			structuresBeingDemolished.set(structure.id, nearbyRepairing[i].id);
 		}
 	}
@@ -1483,14 +1600,7 @@ function demolishThis(structure) {
 	for (let i = 0, d = droidList.length; i < d; ++i) {
 		if (canDroidHelp(droidList[i], structure.x, structure.y)) {
 			if (orderDroidObj(droidList[i], DORDER_DEMOLISH, structure)) {
-				if (typeof pendingBuildOrders !== "undefined" && pendingBuildOrders instanceof Map) {
-					pendingBuildOrders.set(droidList[i].id, {
-						stat: "__DEMOLISH__",
-						x: structure.x,
-						y: structure.y,
-						time: gameTime
-					});
-				}
+				setPendingOrder(droidList[i], "__DEMOLISH__", structure.x, structure.y);
 				structuresBeingDemolished.set(structure.id, droidList[i].id);
 				success = true;
 				break; // One truck is enough to demolish a structure
@@ -1508,30 +1618,59 @@ function isLocationNearPendingBuild(loc) {
 		return false;
 	}
 	for (const [, info] of pendingBuildOrders.entries()) {
-		if (!info.stat.startsWith("__") && gameTime - info.time <= 25000 && distBetweenTwoPoints(loc.x, loc.y, info.x, info.y) <= 3) {
+		if (!info.stat.startsWith("__") && gameTime - info.time <= (info.ttl || 25000) && distBetweenTwoPoints(loc.x, loc.y, info.x, info.y) <= 3) {
 			return true;
 		}
 	}
 	return false;
 }
 
+// How many blocked sides a build spot may have, in the order we try them.
+// VTOL rearming pads can be driven over, so they are allowed in the gaps between other structures (Cobra does the same);
+// everything else keeps a free ring around it so units are not walled in.
+function getPlacementBlockingSteps(structure) {
+	return structure === VTOL_PAD_STAT ? [8] : [0, 1];
+}
+
+// True while a recent search found no room for `structure` around (x, y): there is no point asking again yet
+function isPlacementBackedOff(structure, x, y) {
+	const backoffUntil = placementBackoff.get(structure + "@" + (x >> 3) + "_" + (y >> 3));
+	return backoffUntil !== undefined && gameTime < backoffUntil && gameTime > backoffUntil - 20000;
+}
+
 // Picks a build location near (baseX, baseY) that does not overlap with any pending build order from another truck
 function pickNonOverlappingLocation(truck, structure, baseX, baseY) {
+	// A failed search scans thousands of tiles in the engine. When an area is full, do not repeat it every tick.
+	const backoffKey = structure + "@" + (baseX >> 3) + "_" + (baseY >> 3);
+	if (isPlacementBackedOff(structure, baseX, baseY)) {
+		return null;
+	}
+
 	const originOffsets = [
 		[0, 0],
 		[4, 0], [-4, 0], [0, 4], [0, -4],
 		[4, 4], [-4, -4], [4, -4], [-4, 4],
 		[8, 0], [-8, 0], [0, 8], [0, -8]
 	];
+	const blockingSteps = getPlacementBlockingSteps(structure);
 
 	for (const [ox, oy] of originOffsets) {
 		const sx = Math.max(0, Math.min(mapWidth - 1, baseX + ox));
 		const sy = Math.max(0, Math.min(mapHeight - 1, baseY + oy));
-		let loc = pickStructLocation(truck, structure, sx, sy, 0);
-		if (!loc) {
-			loc = pickStructLocation(truck, structure, sx, sy, 1);
+		let loc = null;
+		for (let b = 0; b < blockingSteps.length && !loc; ++b) {
+			loc = pickStructLocation(truck, structure, sx, sy, blockingSteps[b]);
 		}
-		if (loc && !isLocationNearPendingBuild(loc)) {
+		if (!loc) {
+			if (ox === 0 && oy === 0) {
+				// The engine already searched a 30-tile radius around the origin: the shifted origins below
+				// cover the same ground, so give up and retry in a few seconds
+				placementBackoff.set(backoffKey, gameTime + 6000 + random(4000));
+				return null;
+			}
+			continue;
+		}
+		if (!isLocationNearPendingBuild(loc)) {
 			return loc;
 		}
 	}
@@ -1546,7 +1685,7 @@ function grabTrucksAndBuild(structure, base, trucks, allowMultipleLocations = fa
 		base = BASE;
 	}
 
-	if (!structure || !isStructureAvailable(structure)) {
+	if (!structure || !isStructureAvailable(structure) || isPlacementBackedOff(structure, base.x, base.y)) {
 		return false;
 	}
 
@@ -1575,9 +1714,7 @@ function grabTrucksAndBuild(structure, base, trucks, allowMultipleLocations = fa
 			const loc = pickNonOverlappingLocation(truck, structure, base.x, base.y);
 			if (loc && canDroidHelp(truck, loc.x, loc.y)) {
 				if (orderDroidBuild(truck, DORDER_BUILD, structure, loc.x, loc.y)) {
-					if (typeof pendingBuildOrders !== "undefined") {
-						pendingBuildOrders.set(truck.id, { stat: structure, x: loc.x, y: loc.y, time: gameTime });
-					}
+					setPendingOrder(truck, structure, loc.x, loc.y);
 					buildSuccessful = true;
 					startedCount++;
 				}
@@ -1599,14 +1736,7 @@ function grabTrucksAndBuild(structure, base, trucks, allowMultipleLocations = fa
 	for (const truck of idleTrucks) {
 		if (canDroidHelp(truck, buildLocation.x, buildLocation.y)) {
 			if (orderDroidBuild(truck, DORDER_BUILD, structure, buildLocation.x, buildLocation.y)) {
-				if (typeof pendingBuildOrders !== "undefined") {
-					pendingBuildOrders.set(truck.id, {
-						stat: structure,
-						x: buildLocation.x,
-						y: buildLocation.y,
-						time: gameTime
-					});
-				}
+				setPendingOrder(truck, structure, buildLocation.x, buildLocation.y);
 				return true;
 			}
 		}
@@ -1647,14 +1777,7 @@ function buildDefenseNearTruck(truck) {
 		loc = pickStructLocation(truck, def, truck.x, truck.y, 0);
 	}
 	if (loc && orderDroidBuild(truck, DORDER_BUILD, def, loc.x, loc.y)) {
-		if (typeof pendingBuildOrders !== "undefined") {
-			pendingBuildOrders.set(truck.id, {
-				stat: def,
-				x: loc.x,
-				y: loc.y,
-				time: gameTime
-			});
-		}
+		setPendingOrder(truck, def, loc.x, loc.y);
 		return true;
 	}
 	return false;
@@ -1700,9 +1823,7 @@ function scanAndDefendPosition(structure, droid) {
 			if (isStructureAvailable(sen)) {
 				const loc = pickStructLocation(droid, sen, droid.x, droid.y, 1);
 				if (loc && orderDroidBuild(droid, DORDER_BUILD, sen, loc.x, loc.y)) {
-					if (typeof pendingBuildOrders !== "undefined") {
-						pendingBuildOrders.set(droid.id, { stat: sen, x: loc.x, y: loc.y, time: gameTime });
-					}
+					setPendingOrder(droid, sen, loc.x, loc.y);
 					return true;
 				}
 				break;
@@ -1726,44 +1847,90 @@ function isOilTargetedByPendingBuild(ox, oy) {
 	return false;
 }
 
-// Returns all available, safe, reachable oil wells (Cobra & SemperFi 7-tile safety criteria) sorted closest to BASE first
-function getUnassignedSafeOils() {
+// True if at least one of our trucks can drive to this oil well (cached for a minute per well)
+function isOilReachable(oil, trucks) {
+	const key = oil.x + "_" + oil.y;
+	const hit = oilReachCache.get(key);
+	if (hit !== undefined && gameTime >= hit.t && gameTime - hit.t < 60000) {
+		return hit.ok;
+	}
+	const ok = trucks.some(droid => droidCanReach(droid, oil.x, oil.y));
+	oilReachCache.set(key, { t: gameTime, ok: ok });
+	return ok;
+}
+
+// Returns up to `maxCount` available, safe, reachable oil wells, closest to BASE first.
+// Stops scanning as soon as it has enough, so maps with a hundred wells are not fully re-validated every second.
+function getUnassignedSafeOils(maxCount) {
 	cleanupPendingBuildOrders();
 	const allyBasePositions = alliesList.map(a => a.base);
 	const allTrucks = enumDroid(me, DROID_CONSTRUCT);
 	if (allTrucks.length === 0) {
 		return [];
 	}
+	if (maxCount === undefined) {
+		maxCount = Infinity;
+	}
 
 	const busyTrucks = allTrucks.filter(truck =>
 		truck.order === DORDER_BUILD
 	);
 
-	return enumFeature(ALL_PLAYERS, OIL_RES_STAT)
-		.filter(oil => {
-			const tooCloseToAlly = allyBasePositions.some(base =>
-				base && distBetweenTwoPoints(base.x, base.y, oil.x, oil.y) < 12
-			);
-			if (tooCloseToAlly) return false;
+	const oils = enumFeature(ALL_PLAYERS, OIL_RES_STAT).sort(sortByDistToBase);
+	const result = [];
+	let firstContested = null;
 
-			const alreadyTargetedByBusy = busyTrucks.some(truck =>
-				distBetweenTwoPoints(truck.x, truck.y, oil.x, oil.y) < 4
-			);
-			if (alreadyTargetedByBusy) return false;
+	for (let i = 0; i < oils.length && result.length < maxCount; ++i) {
+		const oil = oils[i];
 
-			if (isOilTargetedByPendingBuild(oil.x, oil.y)) return false;
+		const tooCloseToAlly = allyBasePositions.some(base =>
+			base && distBetweenTwoPoints(base.x, base.y, oil.x, oil.y) < 12
+		);
+		if (tooCloseToAlly) continue;
 
-			if (!isOilAreaSafe(oil.x, oil.y)) return false;
+		const alreadyTargetedByBusy = busyTrucks.some(truck =>
+			distBetweenTwoPoints(truck.x, truck.y, oil.x, oil.y) < 4
+		);
+		if (alreadyTargetedByBusy) continue;
 
-			// Verify at least one of our trucks can reach this oil well
-			return allTrucks.some(droid => droidCanReach(droid, oil.x, oil.y));
-		})
-		.sort(sortByDistToBase);
+		if (isOilTargetedByPendingBuild(oil.x, oil.y)) continue;
+
+		if (!isOilReachable(oil, allTrucks)) continue;
+
+		if (!isOilAreaSafe(oil.x, oil.y)) {
+			if (!firstContested) {
+				firstContested = oil;
+			}
+			continue;
+		}
+
+		result.push(oil);
+	}
+
+	// Remember the closest free oil that armed enemies are sitting on, if it is on our side of the map:
+	// the army uses it as a target so the trucks can come back and claim it (see attack.js)
+	if (firstContested) {
+		const distToUs = distBetweenTwoPoints(BASE.x, BASE.y, firstContested.x, firstContested.y);
+		const distToEnemy = (currentEnemy && currentEnemy.base)
+			? distBetweenTwoPoints(currentEnemy.base.x, currentEnemy.base.y, firstContested.x, firstContested.y)
+			: Infinity;
+		if (distToUs <= distToEnemy * 1.25) {
+			contestedOil = { x: firstContested.x, y: firstContested.y, time: gameTime };
+		}
+	}
+
+	return result;
 }
 
 function lookForOil() {
+	return profiled("lookForOil", lookForOilTick);
+}
+
+function lookForOilTick() {
 	// Also try to grab nearby free Oil Drums and Artifacts (Crates)
-	grabFreeObjects();
+	if (!throttled("grabFreeObjects", 3000)) {
+		grabFreeObjects();
+	}
 
 	const allTrucks = enumDroid(me, DROID_CONSTRUCT);
 	if (allTrucks.length === 0) {
@@ -1793,7 +1960,8 @@ function lookForOil() {
 
 	if (droids.length === 0) return false;
 
-	const oils = getUnassignedSafeOils();
+	// A couple more candidates than free trucks is enough for a good truck/oil matching
+	const oils = getUnassignedSafeOils(droids.length + 2);
 	hasFreeSafeOils = oils.length > 0;
 	if (oils.length === 0) {
 		// Cobra strategy: once free oils are exhausted, occasionally fortify unguarded remote derricks
@@ -1825,14 +1993,7 @@ function lookForOil() {
 		if (bestDroid) {
 			assignedDroids.add(bestDroid.id);
 			if (orderDroidBuild(bestDroid, DORDER_BUILD, DERRICK_STAT, oil.x, oil.y)) {
-				if (typeof pendingBuildOrders !== "undefined") {
-					pendingBuildOrders.set(bestDroid.id, {
-						stat: DERRICK_STAT,
-						x: oil.x,
-						y: oil.y,
-						time: gameTime
-					});
-				}
+				setPendingOrder(bestDroid, DERRICK_STAT, oil.x, oil.y);
 				success = true;
 			}
 		}

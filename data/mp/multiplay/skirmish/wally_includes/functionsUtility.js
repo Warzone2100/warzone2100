@@ -1,3 +1,54 @@
+// ---- Performance helpers ----
+// Short-lived cache for expensive lookups, so the same enumeration is not repeated many times within a tick.
+// Not a var global on purpose: it is rebuilt from scratch after loading a saved game.
+const wallyCache = new Map();
+const wallyThrottle = new Map();
+
+// Returns the cached value of `key` if it is at most `ttl` ms old (ttl 0 = this game tick only), otherwise recomputes it
+function cached(key, ttl, fn) {
+	const hit = wallyCache.get(key);
+	if (hit !== undefined && gameTime >= hit.t && gameTime - hit.t <= ttl) {
+		return hit.v;
+	}
+	const value = fn();
+	wallyCache.set(key, { t: gameTime, v: value });
+	return value;
+}
+
+function invalidateCache(key) {
+	wallyCache.delete(key);
+}
+
+// Returns true if `key` already ran less than `ms` ago (the caller should skip its work), otherwise records this run
+function throttled(key, ms) {
+	const last = wallyThrottle.get(key);
+	if (last !== undefined && gameTime >= last && gameTime - last < ms) {
+		return true;
+	}
+	wallyThrottle.set(key, gameTime);
+	return false;
+}
+
+function wallyLog(message) {
+	if (WALLY_DEBUG) {
+		debug("[Wally " + me + " @" + Math.floor(gameTime / 1000) + "s] " + message);
+	}
+}
+
+// Runs `fn` and, in debug mode, reports it when it takes longer than 8 ms of real time
+function profiled(name, fn) {
+	if (!WALLY_DEBUG) {
+		return fn();
+	}
+	const start = Date.now();
+	const result = fn();
+	const elapsed = Date.now() - start;
+	if (elapsed >= 8) {
+		wallyLog("slow tick: " + name + " took " + elapsed + " ms");
+	}
+	return result;
+}
+
 // Objects
 function isScavengerPlayer(playerIndex) {
 	return playerIndex !== undefined && (
@@ -234,6 +285,27 @@ function isPlayerAlive(playerIndex) {
 	return false;
 }
 
+// True for an allied slot that is a real, still-participating player (not an empty slot or a spectator)
+function isActiveAllySlot(playerIndex) {
+	if (playerIndex === undefined || playerIndex === me || playerIndex < 0 || playerIndex >= maxPlayers) {
+		return false;
+	}
+	const data = playerData[playerIndex];
+	if (!data || !(data.isHuman || data.isAI) || !allianceExistsBetween(me, playerIndex)) {
+		return false;
+	}
+	return !(typeof isSpectator === "function" && isSpectator(playerIndex));
+}
+
+// An ally needs a truck from us when it has no constructor left and no finished factory able to make one
+function allyNeedsTruck(playerIndex) {
+	if (!isActiveAllySlot(playerIndex) || countDroid(DROID_CONSTRUCT, playerIndex) > 0) {
+		return false;
+	}
+	const factories = enumStruct(playerIndex, FACTORY_STAT).concat(enumStruct(playerIndex, CYBORG_FACTORY_STAT));
+	return !factories.some(f => f.status === BUILT);
+}
+
 // Check if a player is an ally
 function friendlyPlayer(player) {
 	if (player === undefined) {
@@ -252,9 +324,39 @@ function getPlayerName(player) {
 	return playerData[player].name;
 }
 
-// Check if we have a lot of derricks
+// Counts every oil resource on the map (free or already owned) and divides it by the number of players
+function measureMapOilPerPlayer() {
+	let total = enumFeature(ALL_PLAYERS, OIL_RES_STAT).length;
+	let players = 0;
+	for (let i = 0; i < maxPlayers; ++i) {
+		total += countStruct(DERRICK_STAT, i);
+		if (playerData[i] && (playerData[i].isHuman || playerData[i].isAI)) {
+			players++;
+		}
+	}
+	if (scavengerIndex !== undefined) {
+		total += enumStruct(scavengerIndex, DERRICK_STAT).length;
+	}
+	return Math.floor(total / Math.max(1, players));
+}
+
+// Classify the map from the oil available per player (same 20+ rule as Cobra) instead of waiting until we own 30 derricks,
+// so high-oil maps such as NTW use the high-oil build order from the first second. Once high, it stays high.
 function checkIsHighOilMap() {
-	isHighOilMap = countStruct(DERRICK_STAT, me) >= 30;
+	if (mapOilPerPlayer === undefined) {
+		mapOilPerPlayer = measureMapOilPerPlayer();
+	}
+	if (isHighOilMap !== true) {
+		isHighOilMap = mapOilPerPlayer >= 20 || countStruct(DERRICK_STAT, me) >= 30;
+	}
+}
+
+// VTOLs (and therefore anti-air) are only relevant when the VTOL factory is not disabled in the game limits
+function checkVtolsEnabled() {
+	vtolsEnabled = typeof getStructureLimit !== "function" || getStructureLimit(VTOL_FACTORY_STAT, me) > 0;
+	if (!vtolsEnabled) {
+		enemiesHaveVTOLs = false;
+	}
 }
 
 // Check if an object is a derrick
@@ -287,6 +389,39 @@ function isUnsafeEnemyObject(obj) {
 	return false;
 }
 
+// True for enemy/scavenger objects that can actually hurt a truck: ground combat units and finished ground-capable defenses.
+// Enemy trucks, sensors, derricks and other unarmed buildings are deliberately not threats, so contested oil is still claimed.
+function isArmedEnemyObject(obj) {
+	if (!obj || obj.player === me || (!isScavengerPlayer(obj.player) && allianceExistsBetween(me, obj.player))) {
+		return false;
+	}
+	if (obj.type === DROID) {
+		return !obj.isVTOL && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON);
+	}
+	return obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT && obj.canHitGround !== false;
+}
+
+// True for our own or allied objects that can protect a truck: ground combat units and finished ground-capable defenses
+function isFriendlyGuardObject(obj) {
+	if (!obj) {
+		return false;
+	}
+	if (obj.type === DROID) {
+		return !obj.isVTOL && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG);
+	}
+	return obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT && obj.canHitGround !== false;
+}
+
+// Returns {threats, guards}: armed enemies versus friendly protectors within `range` tiles of (x, y)
+function localThreatBalance(x, y, range) {
+	const threats = enumRange(x, y, range, ENEMIES, false).filter(isArmedEnemyObject).length;
+	if (threats === 0) {
+		return { threats: 0, guards: 0 };
+	}
+	const guards = enumRange(x, y, range, ALLIES, false).filter(isFriendlyGuardObject).length;
+	return { threats: threats, guards: guards };
+}
+
 // Records a dangerous zone for 2 minutes when a truck or remote structure is attacked/destroyed
 function markDangerZone(x, y, durationMs = 120000) {
 	if (x === undefined || y === undefined || isNearBase(x, y)) return;
@@ -313,39 +448,29 @@ function isInDangerZone(x, y, radiusTiles = 16) {
 	return false;
 }
 
-// Evaluates if an oil resource at (x, y) is safe to capture (Cobra & SemperFi strategy, including Scavengers)
+// Evaluates if an oil resource at (x, y) is safe to capture.
+// Only armed enemies count (an enemy truck or derrick next to the oil does not stop us), and an oil that our own
+// units or towers cover at least as well as the enemy threatens it is still worth taking.
 function isOilAreaSafe(x, y, range = 7) {
 	if (x === undefined || y === undefined) {
 		return false;
 	}
 
-	if (isInDangerZone(x, y, 10)) {
+	const balance = localThreatBalance(x, y, range);
+	if (balance.threats > 0) {
+		return balance.guards >= balance.threats;
+	}
+
+	// An oil well inside an enemy production area is a trap even when no unit is standing there at this moment
+	const insideEnemyBase = enumRange(x, y, range, ENEMIES, false).some(obj =>
+		obj.type === STRUCTURE && (obj.stattype === FACTORY || obj.stattype === CYBORG_FACTORY || obj.stattype === VTOL_FACTORY)
+	);
+	if (insideEnemyBase) {
 		return false;
 	}
 
-	let nearby = enumRange(x, y, range, ENEMIES, false);
-	if (typeof scavengers !== "undefined" && scavengers && typeof scavengerPlayer !== "undefined" && scavengerPlayer >= 0) {
-		scavengerIndex = scavengerPlayer;
-	}
-	if (scavengerIndex !== undefined) {
-		nearby = nearby.concat(enumRange(x, y, range, scavengerIndex, false));
-	}
-
-	return !nearby.some(obj => {
-		if (!obj || obj.player === me || (!isScavengerPlayer(obj.player) && allianceExistsBetween(me, obj.player))) {
-			return false;
-		}
-		if (obj.type === DROID) {
-			return true;
-		}
-		// Only armed enemy/scavenger defenses or factories block oil capture (undefended enemy derricks do NOT block us!)
-		return obj.type === STRUCTURE && (
-			(obj.stattype === DEFENSE && obj.status === BUILT) ||
-			obj.stattype === FACTORY ||
-			obj.stattype === CYBORG_FACTORY ||
-			obj.stattype === VTOL_FACTORY
-		);
-	});
+	// Nobody is there right now: stay away only while a recent ambush on this very spot is still fresh
+	return !isInDangerZone(x, y, 6);
 }
 
 // Evaluates if an area at (x, y) is safe from ALL enemy bases (including Scavengers), enemy/scavenger units/structures, and recent ambushes
@@ -448,9 +573,9 @@ function numWeapObjectsInRange(x, y, enemies, allyIndex, scanRadius, visible) {
 		if (!obj || seenIds.has(obj.id)) continue;
 		seenIds.add(obj.id);
 
-		if (obj.type === DROID &&
-			(obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON) &&
-			obj.droidType !== DROID_CONSTRUCT) {
+		// Enemy VTOLs are ignored here: ground units cannot fight them, so they must not trigger a ground-army recall
+		if (obj.type === DROID && !obj.isVTOL &&
+			(obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON)) {
 			enemyDroidsCount++;
 		} else if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT) {
 			enemyDroidsCount++;

@@ -1,5 +1,263 @@
 var currentEnemyTarget; // Current enemy target Wally is attacking.
 var useBunkerBuster = false;
+var rallyStartTime = 0; // When the current batch of reinforcements started waiting at base (0 = nobody waiting)
+var armyRegroupUntil = 0; // While gameTime is below this, the marching army closes ranks instead of advancing
+var armyNoRegroupUntil = 0; // No new regroup is started before this time (prevents endless stop-and-go)
+var armyUrgentResponse = false; // True while the army is reacting to a threat at home (no waiting, no regrouping)
+var armyCommitted = false; // True once the army decided to take on the current target (see shouldEngageTarget)
+var armyRetreatUntil = 0; // After breaking off a losing fight, the army stays away until this time
+var lastBaseAttacker = null; // {type, player, id, time}: the last ground enemy that hit one of our base structures
+
+// Rough fighting value of a unit or defense: its build cost scaled by its remaining health
+function combatWeight(obj) {
+	const cost = (obj.cost !== undefined && obj.cost > 0) ? obj.cost : 100;
+	const health = (obj.health !== undefined) ? Math.max(10, Math.min(100, obj.health)) : 100;
+	return cost * health / 100;
+}
+
+function sumCombatWeight(objects) {
+	let total = 0;
+	for (let i = 0; i < objects.length; ++i) {
+		total += combatWeight(objects[i]);
+	}
+	return total;
+}
+
+// Fighting value of the armed enemies (units and ground defenses, of any enemy player) within `range` tiles of (x, y)
+function enemyStrengthNear(x, y, range) {
+	return sumCombatWeight(enumRange(x, y, range, ENEMIES, false).filter(isArmedEnemyObject));
+}
+
+// Fighting value of our allies' ground units within `range` tiles of (x, y)
+function alliedStrengthNear(x, y, range) {
+	return sumCombatWeight(enumRange(x, y, range, ALLIES, false).filter(
+		o => o.player !== me && o.type === DROID && isFriendlyGuardObject(o)
+	));
+}
+
+// Decides whether the army should take on (or keep fighting) the enemy force around `target`.
+//  - It commits only when it is about as strong as what is waiting there (allies on the spot count for half).
+//  - Once committed it tolerates some losses, but when the units actually in the fight are clearly outmatched
+//    the whole army breaks off together and stays away for a while instead of feeding units in one by one.
+//  - Fights at home, emergencies and a full unit cap always go ahead.
+function shouldEngageTarget(attackerDroids, target) {
+	if (isMyBaseInTrouble || distBetweenTwoPoints(target.x, target.y, BASE.x, BASE.y) <= BASE_THREAT_RANGE + 14) {
+		return true; // At home we fight with our defenses and repair bays behind us
+	}
+	if (countDroid(DROID_ANY, me) >= 135) {
+		return true; // Close to the unit cap: waiting cannot make the army any bigger
+	}
+
+	const fighters = attackerDroids.filter(d => d.droidType !== DROID_SENSOR);
+	if (fighters.length === 0) {
+		return false;
+	}
+
+	const enemyPower = cached("enemyPowerAt" + target.id, 1500, () => enemyStrengthNear(target.x, target.y, 12));
+	if (enemyPower <= 0) {
+		armyCommitted = true; // Undefended target (derrick, truck, lone building)
+		return true;
+	}
+
+	if (gameTime < armyRetreatUntil) {
+		return false;
+	}
+
+	const alliedPower = cached("alliedPowerAt" + target.id, 1500, () => alliedStrengthNear(target.x, target.y, 12)) * 0.5;
+	const ourPower = sumCombatWeight(fighters);
+	const inTheFight = fighters.filter(d => distBetweenTwoPoints(d.x, d.y, target.x, target.y) <= 16);
+
+	if (inTheFight.length > 0) {
+		// Units still on their way count for half: they will arrive, but not all at once
+		const localPower = sumCombatWeight(inTheFight);
+		const effectivePower = localPower + (ourPower - localPower) * 0.5 + alliedPower;
+		if (effectivePower < enemyPower * 0.6) {
+			armyCommitted = false;
+			armyRetreatUntil = gameTime + 25000;
+			wallyLog("breaking off: " + Math.round(effectivePower) + " vs " + Math.round(enemyPower) + " at the target");
+			return false;
+		}
+		armyCommitted = true;
+		return true;
+	}
+
+	// Not in contact yet: commit at 90% of the enemy's strength, keep going as long as we stay above 70%
+	const needed = armyCommitted ? 0.7 : 0.9;
+	if (ourPower + alliedPower >= enemyPower * needed) {
+		armyCommitted = true;
+		return true;
+	}
+	if (armyCommitted) {
+		wallyLog("target got too strong on the way: " + Math.round(ourPower + alliedPower) + " vs " + Math.round(enemyPower));
+	}
+	armyCommitted = false;
+	return false;
+}
+
+// The armed ground enemy (of ANY enemy player) that threatens our home right now, or null:
+// enemy units around the base, enemy defenses built inside it, or whoever just shot at a base structure from further away.
+// This is what lets Wally keep one main enemy (see setCurrentEnemy) and still answer every attack on its base.
+function getHomeThreatTarget() {
+	return cached("homeThreatTarget", 1500, () => {
+		const perimeter = BASE_THREAT_RANGE + 14;
+		const threats = enumRange(BASE.x, BASE.y, perimeter, ENEMIES, true).filter(obj =>
+			isArmedEnemyObject(obj) && (obj.type === DROID || isNearBase(obj.x, obj.y))
+		).sort(sortByDistToBase);
+		if (threats.length > 0) {
+			return threats[0];
+		}
+		if (lastBaseAttacker && gameTime >= lastBaseAttacker.time && gameTime - lastBaseAttacker.time < 15000) {
+			const attacker = getObject(lastBaseAttacker.type, lastBaseAttacker.player, lastBaseAttacker.id);
+			if (attacker && attacker.isVTOL !== true) {
+				return attacker;
+			}
+		}
+		return null;
+	});
+}
+
+// The closest armed enemy unit (of ANY enemy player) raiding one of our derricks, or null
+function getDerrickThreatTarget() {
+	return cached("derrickThreatTarget", 2000, () => {
+		const derricks = enumStruct(me, DERRICK_STAT);
+		for (let i = 0; i < derricks.length; ++i) {
+			const raiders = enumRange(derricks[i].x, derricks[i].y, 10, ENEMIES, true)
+				.filter(o => o.type === DROID && isArmedEnemyObject(o));
+			if (raiders.length > 0) {
+				return raiders[0];
+			}
+		}
+		return null;
+	});
+}
+
+// Middle of a group of droids (median of x and y, so a few stragglers do not drag it away from the main body)
+function getArmyCenter(droids) {
+	if (!droids || droids.length === 0) {
+		return null;
+	}
+	const xs = droids.map(d => d.x).sort((a, b) => a - b);
+	const ys = droids.map(d => d.y).sort((a, b) => a - b);
+	const mid = Math.floor(droids.length / 2);
+	return { x: xs[mid], y: ys[mid] };
+}
+
+// A point `tiles` away from BASE in the direction of the current enemy (or the map centre)
+function getPointInFrontOfBase(tiles) {
+	const targetPos = (currentEnemy && currentEnemy.base)
+		? currentEnemy.base
+		: { x: Math.floor(mapWidth / 2), y: Math.floor(mapHeight / 2) };
+	const totalDist = distBetweenTwoPoints(BASE.x, BASE.y, targetPos.x, targetPos.y);
+	if (totalDist < tiles + 4) {
+		return { x: BASE.x, y: BASE.y };
+	}
+	return {
+		x: Math.max(2, Math.min(mapWidth - 3, Math.round(BASE.x + (targetPos.x - BASE.x) / totalDist * tiles))),
+		y: Math.max(2, Math.min(mapHeight - 3, Math.round(BASE.y + (targetPos.y - BASE.y) / totalDist * tiles)))
+	};
+}
+
+// True while the main army is away from home
+function isArmyDeployed() {
+	const attackers = enumGroup(attackerGroup);
+	if (attackers.length < 3) {
+		return false;
+	}
+	const center = getArmyCenter(attackers);
+	return distBetweenTwoPoints(center.x, center.y, BASE.x, BASE.y) > BASE_THREAT_RANGE + 10;
+}
+
+// Fresh units wait at base (rallyGroup) while the army is away, so they reach the front as a batch and not one by one
+function shouldHoldReinforcements() {
+	if (isMyBaseInTrouble || armyUrgentResponse || attackerGroup === undefined || rallyGroup === undefined) {
+		return false;
+	}
+	return cached("armyDeployed", 2000, isArmyDeployed);
+}
+
+// Releases the waiting reinforcements to the army once the batch is big enough, has waited long enough, or home needs them
+function manageReinforcements() {
+	const waiting = enumGroup(rallyGroup);
+	if (waiting.length === 0) {
+		rallyStartTime = 0;
+		return;
+	}
+	if (rallyStartTime === 0 || gameTime < rallyStartTime) {
+		rallyStartTime = gameTime;
+	}
+
+	const batchSize = isHighOilMap ? 6 : 3;
+	if (waiting.length >= batchSize || gameTime - rallyStartTime > 45000 || !shouldHoldReinforcements()) {
+		for (const droid of waiting) {
+			groupAdd(attackerGroup, droid);
+		}
+		rallyStartTime = 0;
+		return;
+	}
+
+	// Keep them together just in front of the base, where they also help against raids
+	const rallyPoint = getPointInFrontOfBase(8);
+	for (const droid of waiting) {
+		if (!isDroidRepairing(droid) && droid.order !== DORDER_MOVE &&
+			distBetweenTwoPoints(droid.x, droid.y, rallyPoint.x, rallyPoint.y) > 6) {
+			orderDroidLoc(droid, DORDER_MOVE, rallyPoint.x, rallyPoint.y);
+		}
+	}
+}
+
+// On the march, fast units pull ahead and arrive alone. When the army is strung out and still far from its target,
+// everybody closes ranks on the middle of the column for a moment. Returns true while the army is regrouping.
+function regroupArmyIfSpread(attackingDroids, target) {
+	if (isMyBaseInTrouble || armyUrgentResponse) {
+		armyRegroupUntil = 0;
+		return false;
+	}
+
+	const fighters = attackingDroids.filter(d => d.droidType !== DROID_SENSOR);
+	if (fighters.length < 4) {
+		return false;
+	}
+
+	const center = getArmyCenter(fighters);
+	const engaged = distBetweenTwoPoints(center.x, center.y, target.x, target.y) < 20;
+	const together = fighters.filter(d => distBetweenTwoPoints(d.x, d.y, center.x, center.y) <= 9).length / fighters.length;
+	const regrouping = gameTime < armyRegroupUntil;
+
+	if (regrouping) {
+		if (engaged || together >= 0.75) {
+			armyRegroupUntil = 0;
+			armyNoRegroupUntil = gameTime + 30000;
+			return false;
+		}
+	} else {
+		if (engaged || together >= 0.6 || gameTime < armyNoRegroupUntil) {
+			return false;
+		}
+		// Start closing ranks: at most 20 seconds, then march on for at least 30 seconds whatever happens
+		armyRegroupUntil = gameTime + 20000;
+		armyNoRegroupUntil = gameTime + 50000;
+	}
+
+	if (!throttled("armyRegroupOrders", 3000)) {
+		for (const droid of fighters) {
+			if (distBetweenTwoPoints(droid.x, droid.y, center.x, center.y) > 5) {
+				orderDroidLoc(droid, DORDER_MOVE, center.x, center.y);
+			}
+		}
+	}
+	return true;
+}
+
+// Armed enemies sitting on the free oil well our trucks want (see getUnassignedSafeOils), closest to our base first
+function getContestedOilSquatters() {
+	if (!contestedOil || gameTime < contestedOil.time || gameTime - contestedOil.time > 20000) {
+		return [];
+	}
+	return cached("contestedOilSquatters", 2000, () =>
+		enumRange(contestedOil.x, contestedOil.y, 8, ENEMIES, false)
+			.filter(isArmedEnemyObject)
+			.sort(sortByDistToBase));
+}
 
 function isDroidRepairing(droid) {
 	if (droid.order === DORDER_RTR) return true;
@@ -10,30 +268,34 @@ function isDroidRepairing(droid) {
 // Dynamically calculates the minimum squad size before launching an offensive,
 // reacting immediately to threats near our base or derricks while scaling on low-oil maps
 function getMinAttackGroupSize(attackerDroids) {
+	armyUrgentResponse = true;
 	if (isMyBaseInTrouble) {
 		return 1;
 	}
 
 	// If enemy ground forces are threatening near our base perimeter, intercept immediately
-	const basePerimeter = BASE_THREAT_RANGE + 14;
-	const nearbyEnemyThreat = enumRange(BASE.x, BASE.y, basePerimeter, ENEMIES, true)
-		.some(o => o.type === DROID && !o.isVTOL && (o.droidType === DROID_WEAPON || o.droidType === DROID_CYBORG || o.droidType === DROID_PERSON));
-	if (nearbyEnemyThreat) {
+	if (getHomeThreatTarget() !== null) {
 		return 2;
 	}
 
 	if (isHighOilMap) {
+		armyUrgentResponse = false;
 		return gameTime < 480000 ? 15 : 25;
 	}
 
 	// If any of our derricks is actively threatened nearby, send a fast response squad
-	const threatenedDerrick = enumStruct(me, DERRICK_STAT).some(d =>
-		enumRange(d.x, d.y, 10, ENEMIES, true).some(
-			o => o.type === DROID && !o.isVTOL && (o.droidType === DROID_WEAPON || o.droidType === DROID_CYBORG || o.droidType === DROID_PERSON)
-		)
-	);
-	if (threatenedDerrick) {
+	if (getDerrickThreatTarget() !== null) {
 		return 2;
+	}
+
+	// From here on nothing at home is burning: the army may wait for reinforcements and close ranks on the march
+	armyUrgentResponse = false;
+
+	// Armed enemies are sitting on a free oil well on our side of the map: clear them with a squad just big enough,
+	// so the trucks can claim it (this is what wins or loses low-oil maps)
+	const squatters = getContestedOilSquatters();
+	if (squatters.length > 0) {
+		return Math.max(2, Math.min(6, squatters.length + 1));
 	}
 
 	// Hysteresis: if we are already engaged near the current target, don't pull survivors back mid-fight
@@ -66,18 +328,37 @@ function getMinAttackGroupSize(attackerDroids) {
 }
 
 function attack() {
+	return profiled("attack", attackTick);
+}
+
+function attackTick() {
+	// Anti-air tanks that ended up in the main army (older saved game, gift from an ally) move to their own group
+	if (!throttled("antiAirMigration", 10000)) {
+		for (const droid of enumGroup(attackerGroup)) {
+			if (isAntiAirDroid(droid)) {
+				groupAdd(aaGroup, droid);
+			}
+		}
+	}
+
 	const attackerDroids = enumGroup(attackerGroup).filter(
 		attacker => !isDroidRepairing(attacker) && attacker.order !== DORDER_RECOVER
 	);
 
 	const MIN_GROUP_SIZE = getMinAttackGroupSize(attackerDroids);
 
+	manageReinforcements();
+
 	if (attackerDroids.length < MIN_GROUP_SIZE && !isMyBaseInTrouble) {
+		armyCommitted = false;
 		retreatToBase(filterOutNeedingRepair(attackerDroids));
 	} else if (attackerDroids.length > 0) {
 		attackEnemy(attackerDroids);
 		attackEnemyDefenses(attackerDroids);
 	}
+
+	// Mobile anti-air follows the army (and guards the base) instead of attacking with it
+	manageAntiAir(attackerDroids);
 
 	// Manage VTOL strikes and rearming independently
 	manageVTOLs();
@@ -92,17 +373,95 @@ function attack() {
 	}
 }
 
-// Scores enemy ground units by relevance for VTOL bombers:
-// 1 = Mobile Anti-Air / Anti-VTOL tanks (highest threat to our VTOLs!)
-// 2 = Long-range Artillery / Howitzers / Sensors / Commanders (high-value backline targets)
-// 3 = Main Battle Tanks & Cyborgs (direct frontline support)
-// 4 = Constructor Trucks (economy & building denial)
-function getVTOLUnitPriority(droid) {
-	if (droid.droidType === DROID_CONSTRUCT) {
-		return 4;
+// Positions the mobile anti-air tanks.
+// Escorts hold a few tiles behind the middle of the army, between it and our base: their AA range still covers the
+// front line, but they are no longer the first units the enemy meets and they never chase a VTOL across the map.
+// When the army is at home, or enemy VTOLs bombed the base recently, AA tanks stand where the bombs fell.
+function manageAntiAir(attackerDroids) {
+	const antiAir = enumGroup(aaGroup).filter(d => !isDroidRepairing(d));
+	if (antiAir.length === 0 || throttled("antiAirStations", 2000)) {
+		return;
 	}
+
+	const repairFacilities = getBuiltRepairFacilities();
+	const repairLoadMap = buildRepairLoadMap(repairFacilities);
+	const ready = antiAir.filter(d => !droidNeedsRepair(d, repairFacilities, repairLoadMap));
+	if (ready.length === 0) {
+		return;
+	}
+
+	const armyCenter = getArmyCenter(attackerDroids.filter(d => d.droidType !== DROID_SENSOR));
+	const armyAway = armyCenter !== null && attackerDroids.length >= 3 &&
+		distBetweenTwoPoints(armyCenter.x, armyCenter.y, BASE.x, BASE.y) > BASE_THREAT_RANGE;
+	const recentStrike = (lastVtolStrike && gameTime >= lastVtolStrike.time && gameTime - lastVtolStrike.time < 180000)
+		? lastVtolStrike
+		: null;
+	const strikeAtHome = recentStrike !== null &&
+		distBetweenTwoPoints(recentStrike.x, recentStrike.y, BASE.x, BASE.y) <= BASE_THREAT_RANGE + 8;
+
+	// Who stays home: everybody when the army is home, a third when the base was bombed recently, nobody otherwise
+	let homeCount = ready.length;
+	if (armyAway) {
+		homeCount = strikeAtHome ? Math.ceil(ready.length / 3) : 0;
+	}
+
+	ready.sort(sortByDistToBase);
+	const homeGuards = ready.slice(0, homeCount);
+	const escorts = ready.slice(homeCount);
+
+	if (homeGuards.length > 0) {
+		const homePost = strikeAtHome ? recentStrike : getPointInFrontOfBase(6);
+		stationAntiAir(homeGuards, homePost, 7, "home");
+	}
+
+	if (escorts.length > 0 && armyCenter !== null) {
+		// 4 tiles behind the middle of the army, on the side of our base
+		const distToBase = distBetweenTwoPoints(armyCenter.x, armyCenter.y, BASE.x, BASE.y);
+		const back = Math.min(4, distToBase);
+		const escortPost = distToBase < 1 ? armyCenter : {
+			x: Math.round(armyCenter.x + (BASE.x - armyCenter.x) / distToBase * back),
+			y: Math.round(armyCenter.y + (BASE.y - armyCenter.y) / distToBase * back)
+		};
+		stationAntiAir(escorts, escortPost, 4, "escort");
+	}
+}
+
+// droid id -> "home" / "escort": the duty each AA tank had last time (rebuilt after loading a saved game)
+const antiAirDuties = new Map();
+
+// Sends each AA tank that strayed more than `leash` tiles from its post back to a slot around that post.
+// Tanks already in place are left alone: standing still, they engage every VTOL in weapon range on their own.
+// A tank whose duty just changed always gets a fresh order, so it does not keep driving to its previous post.
+function stationAntiAir(droids, post, leash, duty) {
+	const slots = [[0, 0], [2, 0], [-2, 0], [0, 2], [0, -2], [2, 2], [-2, -2], [2, -2], [-2, 2]];
+	if (antiAirDuties.size > 300) {
+		antiAirDuties.clear();
+	}
+	for (let i = 0; i < droids.length; ++i) {
+		const droid = droids[i];
+		const sameDuty = antiAirDuties.get(droid.id) === duty;
+		antiAirDuties.set(droid.id, duty);
+		if (sameDuty && distBetweenTwoPoints(droid.x, droid.y, post.x, post.y) <= leash) {
+			continue;
+		}
+		const slot = slots[i % slots.length];
+		const sx = Math.max(1, Math.min(mapWidth - 2, post.x + slot[0]));
+		const sy = Math.max(1, Math.min(mapHeight - 2, post.y + slot[1]));
+		orderDroidLoc(droid, DORDER_MOVE, sx, sy);
+	}
+}
+
+// Scores enemy ground units by relevance for VTOL bombers (lower = attacked first):
+// 1 = Long-range Artillery / Howitzers / Sensors / Commanders (high-value backline targets)
+// 2 = Main Battle Tanks & Cyborgs (direct frontline support)
+// 3 = Constructor Trucks (economy & building denial)
+// 5 = Mobile Anti-Air: the units built to kill our VTOLs are the last thing we fly into
+function getVTOLUnitPriority(droid) {
 	if (droid.canHitAir === true) {
-		return 1; // Mobile AA tanks or multi-role anti-air units first!
+		return 5;
+	}
+	if (droid.droidType === DROID_CONSTRUCT) {
+		return 3;
 	}
 	const weapName = (droid.weapons && droid.weapons[0] && droid.weapons[0].name) ? droid.weapons[0].name : "";
 	if (droid.droidType === DROID_SENSOR ||
@@ -110,9 +469,16 @@ function getVTOLUnitPriority(droid) {
 		HOWITZERS_WEAPON_LIST.includes(weapName) ||
 		weapName.includes("Mortar") ||
 		weapName.includes("Howitzer")) {
-		return 2; // Long-range artillery & sensors second!
+		return 1;
 	}
-	return 3; // Standard combat tanks & cyborgs third!
+	return 2;
+}
+
+// Number of enemy anti-air guns (static sites AND mobile AA units) covering the area around (x, y)
+function countEnemyAntiAirNear(x, y) {
+	return enumRange(x, y, 9, ENEMIES, true).filter(
+		o => (o.type === STRUCTURE || o.type === DROID) && o.canHitAir === true
+	).length;
 }
 
 function manageVTOLs() {
@@ -164,7 +530,7 @@ function manageVTOLs() {
 				d.droidType === DROID_CONSTRUCT
 			));
 
-		// Sort by VTOL relevance priority first (1: AA tanks -> 2: Artillery/Sensors -> 3: Combat Tanks/Cyborgs -> 4: Trucks),
+		// Sort by VTOL relevance priority first (artillery/sensors -> combat tanks/cyborgs -> trucks -> anti-air last),
 		// and then by closest distance to our base
 		enemyGroundUnits.sort((a, b) => {
 			const prioDiff = getVTOLUnitPriority(a) - getVTOLUnitPriority(b);
@@ -172,10 +538,9 @@ function manageVTOLs() {
 			return distBetweenTwoPoints(BASE.x, BASE.y, a.x, a.y) - distBetweenTwoPoints(BASE.x, BASE.y, b.x, b.y);
 		});
 
-		// Prefer high-priority ground units that aren't sitting inside heavy static AA defenses (up to 4 for target splitting)
-		const safeUnitTargets = enemyGroundUnits.filter(u =>
-			enumRange(u.x, u.y, 9, ENEMIES, true).filter(o => o.type === STRUCTURE && o.canHitAir === true).length <= 2
-		).slice(0, 4);
+		// Prefer high-priority ground units that aren't covered by more than 2 anti-air guns, static or mobile
+		// (only the first 12 candidates are checked, up to 4 are kept for target splitting)
+		const safeUnitTargets = enemyGroundUnits.slice(0, 12).filter(u => countEnemyAntiAirNear(u.x, u.y) <= 2).slice(0, 4);
 
 		unitTargets = safeUnitTargets.length > 0 ? safeUnitTargets : enemyGroundUnits.slice(0, 4);
 
@@ -183,9 +548,7 @@ function manageVTOLs() {
 			const enemyStructs = enumStruct(enemyIdx, DEFENSE, false)
 				.concat(enumStruct(enemyIdx, FACTORY, false))
 				.concat(enumStruct(enemyIdx, RESOURCE_EXTRACTOR, false));
-			const safeStruct = enemyStructs.find(s =>
-				enumRange(s.x, s.y, 9, ENEMIES, true).filter(o => o.type === STRUCTURE && o.canHitAir === true).length <= 2
-			);
+			const safeStruct = enemyStructs.find(s => countEnemyAntiAirNear(s.x, s.y) <= 2);
 			const fallbackTarget = (currentEnemyTarget && !currentEnemyTarget.isVTOL && currentEnemyTarget.type === STRUCTURE)
 				? currentEnemyTarget
 				: null;
@@ -237,6 +600,24 @@ function manageVTOLs() {
 }
 
 function helpAttackEnemy(helperDroids, allyBasePos) {
+	// Phase 1: gather on the staging point chosen in helpAlly() until 70% of the group is there or time is up
+	if (helpStage) {
+		const gathered = helperDroids.filter(
+			d => distBetweenTwoPoints(d.x, d.y, helpStage.x, helpStage.y) <= 7
+		).length;
+		const expired = gameTime >= helpStage.until || gameTime < helpStage.until - 60000;
+		if (!expired && gathered < Math.ceil(helperDroids.length * 0.7)) {
+			for (const droid of helperDroids) {
+				if (droid.order !== DORDER_MOVE && distBetweenTwoPoints(droid.x, droid.y, helpStage.x, helpStage.y) > 4) {
+					orderDroidLoc(droid, DORDER_MOVE, helpStage.x, helpStage.y);
+				}
+			}
+			return;
+		}
+		helpStage = null;
+	}
+
+	// Phase 2: advance together
 	// Find visible enemy ground combat units near the ally's base (ignore enemy VTOLs)
 	const nearbyEnemies = enumRange(allyBasePos.x, allyBasePos.y, BASE_THREAT_RANGE * 2, ENEMIES, true)
 		.filter(obj => obj.type === DROID && !obj.isVTOL && (obj.droidType === DROID_WEAPON || obj.droidType === DROID_CYBORG || obj.droidType === DROID_PERSON));
@@ -256,9 +637,9 @@ function helpAttackEnemy(helperDroids, allyBasePos) {
 			// Close enough to fight — attack the closest enemy to the ally base
 			orderDroidObj(droid, DORDER_ATTACK, nearbyEnemies[0]);
 		} else {
-			// Not there yet or no visible enemies — move toward the ally's base
-			if (droid.order !== DORDER_MOVE && droid.order !== DORDER_ATTACK) {
-				orderDroidLoc(droid, DORDER_MOVE, allyBasePos.x, allyBasePos.y);
+			// Not there yet or no visible enemies — attack-move toward the ally's base (fights whatever it meets on the way)
+			if (droid.order !== DORDER_SCOUT && droid.order !== DORDER_ATTACK) {
+				orderDroidLoc(droid, DORDER_SCOUT, allyBasePos.x, allyBasePos.y);
 			}
 		}
 	}
@@ -339,18 +720,52 @@ function attackEnemy(attackerDroids) {
 		}
 	}
 
-	// Destroy defenses that are too close to the base
-	if (closestDefense && isNearBase(closestDefense.x, closestDefense.y)) {
+	// Whoever threatens our home comes first, whichever enemy player it belongs to: Wally keeps one main enemy
+	// for its offensives, but always answers an attack on its base or derricks.
+	const homeThreat = getHomeThreatTarget();
+	const derrickThreat = homeThreat ? null : getDerrickThreatTarget();
+	if (homeThreat) {
+		currentEnemyTarget = homeThreat;
+	} else if (closestDefense && isNearBase(closestDefense.x, closestDefense.y)) {
+		// Destroy defenses that are too close to the base
 		currentEnemyTarget = closestDefense;
+	} else if (derrickThreat && !isMyBaseInTrouble) {
+		currentEnemyTarget = derrickThreat;
+	} else if (!isMyBaseInTrouble) {
+		// Armed enemies (of any enemy player) holding a free oil well on our side of the map come first,
+		// unless the regular target is even closer to home
+		const squatters = getContestedOilSquatters();
+		if (squatters.length > 0 && squatters.length <= attackerDroids.length &&
+			(!currentEnemyTarget || sortByDistToBase(squatters[0], currentEnemyTarget) < 0)) {
+			currentEnemyTarget = squatters[0];
+		}
 	}
 
 	if (!currentEnemyTarget) {
 		return;
 	}
 
-	let realObject = getObject(currentEnemyTarget.type, enemyIndex, currentEnemyTarget.id);
+	let realObject = getObject(currentEnemyTarget.type, currentEnemyTarget.player, currentEnemyTarget.id);
 	if (!realObject) {
 		return; // Just for extra precaution
+	}
+
+	// Judge the fight before (and while) taking it: do not walk into a force we cannot beat, and break off together when losing
+	const wasCommitted = armyCommitted;
+	if (!shouldEngageTarget(attackerDroids, currentEnemyTarget)) {
+		retreatToBase(filterOutNeedingRepair(attackerDroids));
+		return;
+	}
+
+	// Tell the team where the offensive is going (beacon + quick chat), once per push
+	if (!wasCommitted && armyCommitted && !armyUrgentResponse &&
+		distBetweenTwoPoints(currentEnemyTarget.x, currentEnemyTarget.y, BASE.x, BASE.y) > BASE_THREAT_RANGE + 14) {
+		notifyAllies("attacking", currentEnemyTarget.x, currentEnemyTarget.y);
+	}
+
+	// Strung-out column far from the target: close ranks first instead of arriving one by one
+	if (regroupArmyIfSpread(attackerDroids, currentEnemyTarget)) {
+		return;
 	}
 
 	// Filter attacker droids based on distance
@@ -391,7 +806,7 @@ function attackEnemyDefenses(attackerDroids) {
 	if (!closestEnemyStructure) {
 		useBunkerBuster = false;
 		if (bunkerBusterDroids.length >= minBunkerBusters) {
-			let realObject = getObject(currentEnemyTarget.type, enemyIndex, currentEnemyTarget.id);
+			let realObject = getObject(currentEnemyTarget.type, currentEnemyTarget.player, currentEnemyTarget.id);
 			if (realObject) {
 				sendDroidsToAttackTarget(bunkerBusterDroids, currentEnemyTarget);
 			}
@@ -711,9 +1126,6 @@ function sendDroidsToAttackTarget(droids, target) {
 
 	const sensors = enumDroid(me, DROID_SENSOR);
 	const activeSensor = sensors.length > 0 ? sensors[0] : null;
-	const visibleEnemyVTOLs = (currentEnemy && currentEnemy.position !== undefined)
-		? enumDroid(currentEnemy.position, DROID_ANY, true).filter(d => d.isVTOL)
-		: [];
 
 	// Look for nearby wounded ground enemies around the target (within 8 tiles) so we can finish off low-HP units
 	// while strictly respecting each droid's minimum weapon range and ignoring enemy VTOLs
@@ -725,6 +1137,10 @@ function sendDroidsToAttackTarget(droids, target) {
 
 	for (let j = 0; j < droids.length; j++) {
 		const droid = droids[j];
+		// Anti-air tanks are positioned by manageAntiAir(): they never get ground attack orders
+		if (isAntiAirDroid(droid)) {
+			continue;
+		}
 		if (droid.droidType === DROID_SENSOR) {
 			if (droid.order !== DORDER_OBSERVE) {
 				orderDroidObj(droid, DORDER_OBSERVE, target);
@@ -756,25 +1172,6 @@ function sendDroidsToAttackTarget(droids, target) {
 						break;
 					}
 				}
-			}
-
-			// Air-only AA tanks must target visible VTOLs directly or escort via DORDER_SCOUT instead of DORDER_ATTACK on ground targets
-			if (droid.canHitAir === true && droid.canHitGround === false) {
-				if (visibleEnemyVTOLs.length > 0) {
-					let closestVtol = visibleEnemyVTOLs[0];
-					let minDist = distBetweenTwoPoints(droid.x, droid.y, closestVtol.x, closestVtol.y);
-					for (let v = 1; v < visibleEnemyVTOLs.length; v++) {
-						const d = distBetweenTwoPoints(droid.x, droid.y, visibleEnemyVTOLs[v].x, visibleEnemyVTOLs[v].y);
-						if (d < minDist) {
-							minDist = d;
-							closestVtol = visibleEnemyVTOLs[v];
-						}
-					}
-					orderDroidObj(droid, DORDER_ATTACK, closestVtol);
-				} else {
-					orderDroidLoc(droid, DORDER_SCOUT, bestTarget.x, bestTarget.y);
-				}
-				continue;
 			}
 
 			if (droidCanReach(droid, bestTarget.x, bestTarget.y)) {
@@ -820,38 +1217,38 @@ function findNearestDerrick(player) {
 function eventAttacked(victim, attacker) {
 	if (!attacker || !victim || attacker.player === me || allianceExistsBetween(attacker.player, me)) return;
 
+	// Enemy VTOLs: remember where the bombs fell so anti-air goes there. They are not a job for the ground army,
+	// so they neither raise the "base in trouble" alarm nor blacklist the area for trucks.
+	if (attacker.type === DROID && attacker.isVTOL === true) {
+		if (vtolsEnabled) {
+			enemiesHaveVTOLs = true;
+		}
+		if (victim.player === me) {
+			lastVtolStrike = { x: victim.x, y: victim.y, time: gameTime };
+		}
+		return;
+	}
+
 	// If a constructor truck or a remote derrick/structure outside our base is attacked,
 	// mark that sector as a danger zone and pull back any vulnerable trucks in that area!
 	if (victim.player === me && !isNearBase(victim.x, victim.y)) {
 		if ((victim.type === DROID && victim.droidType === DROID_CONSTRUCT) ||
 			(victim.type === STRUCTURE && victim.stattype === RESOURCE_EXTRACTOR)) {
-			markDangerZone(victim.x, victim.y, 120000);
+			markDangerZone(victim.x, victim.y, 90000);
 			if (victim.type === DROID && victim.order !== DORDER_RTB) {
 				orderDroid(victim, DORDER_RTB);
 			}
 		}
 	}
 
-	// Check if the base is in trouble
+	// Check if the base is in trouble.
+	// The main enemy is no longer swapped for whoever fired last (that made Wally change opponent all the time):
+	// the attacker is remembered instead, and the army deals with it through getHomeThreatTarget() whoever it belongs to.
 	if (attacker.type === DROID || attacker.type === STRUCTURE) {
-		if (attacker.type === DROID && attacker.isVTOL === true) {
-			enemiesHaveVTOLs = true;
-		}
-
 		if ((victim.type === STRUCTURE && isBaseStructure(victim.stattype)) ||
 			(victim.stattype === DEFENSE && isNearBase(attacker.x, attacker.y))) {
-			const enemy = playerDataObject(attacker.player);
-			if (enemy) {
-				setCurrentEnemy(enemy);
-			}
+			lastBaseAttacker = { type: attacker.type, player: attacker.player, id: attacker.id, time: gameTime };
 			isMyBaseInTrouble = true;
-		}
-
-		if (!isHelpingAlly && !isMyBaseInTrouble) {
-			const enemy = playerDataObject(attacker.player);
-			if (enemy) {
-				setCurrentEnemy(enemy);
-			}
 		}
 	}
 }
@@ -863,14 +1260,14 @@ function eventDestroyed(object) {
 	if (!isNearBase(object.x, object.y)) {
 		if ((object.type === DROID && object.droidType === DROID_CONSTRUCT) ||
 			(object.type === STRUCTURE && object.stattype === RESOURCE_EXTRACTOR)) {
-			markDangerZone(object.x, object.y, 150000);
+			markDangerZone(object.x, object.y, 120000);
 		}
 	}
 }
 
 // Check if enemies have VTOLs (or VTOL factories/pads) so we can prepare AA defenses in advance
 function scanForVTOLs() {
-	if (enemiesHaveVTOLs) {
+	if (enemiesHaveVTOLs || !vtolsEnabled) {
 		removeTimer("scanForVTOLs");
 		return; // Already aware of VTOLs
 	}

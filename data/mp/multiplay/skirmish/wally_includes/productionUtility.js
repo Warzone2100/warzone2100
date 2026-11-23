@@ -112,6 +112,18 @@ const AA_WEAPON_LIST = [
 	"QuadMg1AAGun",    // Hurricane AA Turret
 ];
 
+// True for a ground tank carrying a dedicated anti-air turret
+function isAntiAirDroid(droid) {
+	if (!droid || droid.droidType !== DROID_WEAPON || droid.isVTOL === true) {
+		return false;
+	}
+	const weaponName = (droid.weapons && droid.weapons[0]) ? droid.weapons[0].name : "";
+	return AA_WEAPON_LIST.includes(weaponName);
+}
+
+// Share (%) of anti-personnel tanks that carry Machineguns once Rocket Arrays are also available
+const MACHINEGUN_SHARE_OF_AP = 50;
+
 // ========================
 // TANK MACHINE GUN SECTION
 // ========================

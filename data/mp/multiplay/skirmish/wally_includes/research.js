@@ -17,8 +17,40 @@ function isPowerResearch(research) {
 	return false;
 }
 
+// VTOL technology (propulsion, factory, pads, bombs)
+function isVtolResearch(research) {
+	return research.includes("VTOL") || research.startsWith("R-Wpn-Bomb");
+}
+
+// VTOL technology is skipped when VTOLs are disabled in the game, and postponed on low oil
+// until the economy can pay for an air force (same 8-derrick rule as the VTOL factory)
+function shouldSkipVtolResearch() {
+	return !vtolsEnabled || (!isHighOilMap && countStruct(DERRICK_STAT) < 8);
+}
+
+function isResearchDone(research) {
+	const info = getResearch(research);
+	return info !== null && info !== undefined && info.done === true;
+}
+
+// Research that must not wait for its turn in the tier lists.
+// The Super Scourge Cyborg is promoted the moment the Scourge Missile is finished: it is the only Scourge unit
+// that can also shoot VTOLs. Before that, the Super Tank-Killer Cyborg gets the same treatment after the Tank Killer.
+function getHotResearch() {
+	const hot = [];
+	if (!isSeaMap) {
+		if (isResearchDone("R-Wpn-Missile2A-T")) {
+			hot.push("R-Cyborg-Hvywpn-A-T");
+		} else if (isResearchDone("R-Wpn-Rocket07-Tank-Killer")) {
+			hot.push("R-Cyborg-Hvywpn-TK");
+		}
+	}
+	return hot;
+}
+
 function evalResearch(lab, list) {
 	const sufficientPower = getRealPower() > 15000;
+	const skipVtol = shouldSkipVtolResearch();
 
 	for (let i = 0; i < list.length; ++i) {
 		if (sufficientPower && isPowerResearch(list[i])) {
@@ -26,6 +58,9 @@ function evalResearch(lab, list) {
 			continue;
 		}
 		if (isSeaMap && list[i] === "R-Struc-Factory-Cyborg") {
+			continue;
+		}
+		if (skipVtol && isVtolResearch(list[i])) {
 			continue;
 		}
 
@@ -37,6 +72,59 @@ function evalResearch(lab, list) {
 	return false; // No research pursued
 }
 
+// Builds the ordered list of research branches for the current game situation
+function getResearchPriorities() {
+	const lowOil = !isHighOilMap;
+	const antiAirNeeded = vtolsEnabled && enemiesHaveVTOLs;
+
+	return [
+		isSeaMap ? ["R-Vehicle-Prop-Hover"] : null,
+		START_COMPONENTS,
+		getHotResearch(),
+
+		// Enemy VTOLs are flying: get a working AA weapon before anything else
+		antiAirNeeded ? AA_RESEARCH_EARLY : null,
+
+		// T1 (unified Rocket/Missile tree + Machinegun line + economy)
+		FUNDAMENTALS_ROCKET_WEAPON_T1,
+		FUNDAMENTALS_MACHINEGUN_WEAPON_T1,
+		lowOil ? LOW_OIL_ECONOMY_T1 : null,
+		FUNDAMENTALS_BODY_T1,
+		FUNDAMENTALS_PROPULSION_T1,
+		FUNDAMENTALS_UPGRADES_T1,
+		FUNDAMENTALS_DEFENCE_T1,
+
+		// T2
+		FUNDAMENTALS_ROCKET_WEAPON_T2,
+		FUNDAMENTALS_MACHINEGUN_WEAPON_T2,
+		vtolsEnabled ? AA_RESEARCH_PROACTIVE : null,
+		lowOil ? LOW_OIL_ECONOMY_T2 : null,
+		antiAirNeeded ? AA_RESEARCH_MID : null,
+		FUNDAMENTALS_BODY_T2,
+		FUNDAMENTALS_PROPULSION_T2,
+		FUNDAMENTALS_UPGRADES_T2,
+		FUNDAMENTALS_DEFENCE_T2,
+
+		// T3 (Rocket/Missile + Twin Assault Gun, HEAP/Thermite VTOL bombs alongside Rocket VTOLs)
+		FUNDAMENTALS_ROCKET_WEAPON_T3,
+		FUNDAMENTALS_MACHINEGUN_WEAPON_T3,
+		FUNDAMENTALS_BODY_T3,
+		FUNDAMENTALS_VTOL_BOMBS_T2,
+		FUNDAMENTALS_VTOL_BOMBS_T3,
+		FUNDAMENTALS_PROPULSION_T3,
+		FUNDAMENTALS_UPGRADES_T3,
+		FUNDAMENTALS_DEFENCE_T3,
+
+		// T4
+		FUNDAMENTALS_ROCKET_WEAPON_T4,
+		antiAirNeeded ? AA_RESEARCH_LATE : null,
+		FUNDAMENTALS_MACHINEGUN_WEAPON_T4,
+		FUNDAMENTALS_BODY_T4,
+		FUNDAMENTALS_DEFENCE_T4,
+		FUNDAMENTALS_PROPULSION_T4,
+		FUNDAMENTALS_UPGRADES_T4
+	].filter(list => list && list.length > 0);
+}
 
 function research() {
 	// Don't research if:
@@ -46,9 +134,8 @@ function research() {
 		return;
 	}
 
-	let labList = enumStruct(me, RES_LAB_STAT).filter((lab) => (
-		lab.status === BUILT && structureIdle(lab)
-	));
+	const builtLabs = enumStruct(me, RES_LAB_STAT).filter(lab => lab.status === BUILT);
+	let labList = builtLabs.filter(lab => structureIdle(lab));
 
 	if (labList.length === 0) {
 		return;
@@ -65,49 +152,31 @@ function research() {
 		return;
 	}
 
-	const totalLabs = enumStruct(me, RES_LAB_STAT).filter(lab => lab.status === BUILT).length;
-	const busyLabs = totalLabs - labList.length;
-	if (busyLabs >= 1 && getRealPower() < MIN_RESEARCH_POWER) {
-		return;
+	const totalLabs = builtLabs.length;
+	let busyLabs = totalLabs - labList.length;
+
+	// Power rules. High oil: a busy lab only needs the usual minimum.
+	// Low oil: research and the army share the same trickle of power, so
+	//  - the number of labs working at once follows the derrick count (unless power is piling up), and
+	//  - while the army is still below what the economy can support, the factories get first call on power.
+	let maxBusyLabs = totalLabs;
+	let firstLabPowerFloor = -Infinity;
+	let extraLabPowerFloor = MIN_RESEARCH_POWER;
+	if (!isHighOilMap) {
+		if (getRealPower() <= 300) {
+			maxBusyLabs = Math.max(1, Math.min(totalLabs, Math.ceil(countStruct(DERRICK_STAT, me) / 2)));
+		}
+		if (isArmyThin() && !isMyBaseInTrouble) {
+			firstLabPowerFloor = 20;
+			extraLabPowerFloor = 80;
+		} else {
+			extraLabPowerFloor = 20;
+		}
 	}
 
-	const researchPriorities = [
-		isSeaMap ? ["R-Vehicle-Prop-Hover"] : null,
-		START_COMPONENTS,
-
-		// T1 (Twin MG covered in START_COMPONENTS, then focus strictly on the unified Rocket/Missile/Economy tree)
-		FUNDAMENTALS_ROCKET_WEAPON_T1,
-		FUNDAMENTALS_BODY_T1,
-		FUNDAMENTALS_PROPULSION_T1,
-		FUNDAMENTALS_UPGRADES_T1,
-		FUNDAMENTALS_DEFENCE_T1,
-
-		enemiesHaveVTOLs ? AA_RESEARCH : null,
-
-		// T2
-		FUNDAMENTALS_ROCKET_WEAPON_T2,
-		FUNDAMENTALS_BODY_T2,
-		FUNDAMENTALS_PROPULSION_T2,
-		["R-Vehicle-Prop-VTOL"],
-		FUNDAMENTALS_UPGRADES_T2,
-		FUNDAMENTALS_DEFENCE_T2,
-
-		// T3 (Rocket/Missile focus + HEAP/Thermite VTOL bombs alongside Rocket VTOLs)
-		FUNDAMENTALS_ROCKET_WEAPON_T3,
-		FUNDAMENTALS_BODY_T3,
-		FUNDAMENTALS_VTOL_BOMBS_T2,
-		FUNDAMENTALS_VTOL_BOMBS_T3,
-		FUNDAMENTALS_PROPULSION_T3,
-		FUNDAMENTALS_UPGRADES_T3,
-		FUNDAMENTALS_DEFENCE_T3,
-
-		// T4
-		FUNDAMENTALS_ROCKET_WEAPON_T4,
-		FUNDAMENTALS_BODY_T4,
-		FUNDAMENTALS_DEFENCE_T4,
-		FUNDAMENTALS_PROPULSION_T4,
-		FUNDAMENTALS_UPGRADES_T4
-	].filter(Boolean); // Removes any null values
+	if (busyLabs >= maxBusyLabs || getRealPower() < (busyLabs === 0 ? firstLabPowerFloor : extraLabPowerFloor)) {
+		return;
+	}
 
 	// List of all currently available research items
 	const allResearchList = enumResearch();
@@ -121,7 +190,14 @@ function research() {
 		return;
 	}
 
+	const researchPriorities = getResearchPriorities();
+
 	for (let lab of labList) {
+		// Re-check the power rules for every lab we start in this tick
+		if (busyLabs >= maxBusyLabs || getRealPower() < (busyLabs === 0 ? firstLabPowerFloor : extraLabPowerFloor)) {
+			break;
+		}
+
 		let found = false;
 
 		// Try each research priority
@@ -131,8 +207,10 @@ function research() {
 		}
 
 		// Last step: if all priority branches are currently locked by another lab's in-progress prerequisite,
-		// avoid drifting into off-branch Cannon/Mortar/Howitzer/Flame/Laser/late-MG trees while Rocket branches are active
-		if (!found) {
+		// avoid drifting into off-branch Cannon/Mortar/Howitzer/Flame/Laser trees while the Rocket and Machinegun branches are active.
+		// On low oil an idle lab is cheaper than an off-plan topic, unless power is piling up.
+		if (!found && (isHighOilMap || getRealPower() >= 150)) {
+			const skipVtol = shouldSkipVtolResearch();
 			const currentAvailable = enumResearch();
 			const filteredAvailable = currentAvailable.filter(r =>
 				!r.name.includes("Cannon") &&
@@ -140,13 +218,19 @@ function research() {
 				!r.name.includes("Howitzer") &&
 				!r.name.includes("Flame") &&
 				!r.name.includes("Laser") &&
-				!r.name.includes("Assault Gun")
+				!r.name.includes("RailGun") &&
+				!(skipVtol && isVtolResearch(r.name)) &&
+				!(!vtolsEnabled && (r.name.includes("AAGun") || r.name.includes("SAM") || r.name.includes("Sunburst")))
 			);
 			const pool = filteredAvailable.length > 0 ? filteredAvailable : currentAvailable;
 			if (pool.length > 0) {
 				const idx = Math.floor(Math.random() * pool.length);
-				pursueResearch(lab, pool[idx].name);
+				found = pursueResearch(lab, pool[idx].name);
 			}
+		}
+
+		if (found) {
+			busyLabs++;
 		}
 	}
 }

@@ -12,6 +12,12 @@ function eventStartLevel() {
 	bunkerBusterGroup = newGroup();
 	helperGroup = newGroup();
 	vtolGroup = newGroup();
+	aaGroup = newGroup();
+	rallyGroup = newGroup();
+
+	// Classify the map from its oil per player at tick 0 (before any truck is assigned a role)
+	checkIsHighOilMap();
+	checkVtolsEnabled();
 
 	enumDroid(me).forEach(droid => {
 		eventDroidBuilt(droid);
@@ -24,9 +30,6 @@ function eventStartLevel() {
 
 	// Check if the Technology level is 4
 	isMultiTech4();
-
-	// Initialize high/low oil classification at tick 0 instead of waiting 30s
-	checkIsHighOilMap();
 
 	// Recycle old builder if possible
 	recycleOldBuilders();
@@ -63,7 +66,7 @@ function eventStartLevel() {
 	setTimer("checkTrucksCount", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
 	setTimer("donateOil", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
 	setTimer("checkAllies", reactionSpeedDelay + 120000 + ((1 + random(30)) * random(10))); // 2 Minutes
-	setTimer("checkForDefeatedAllies", reactionSpeedDelay + 120000 + ((1 + random(33)) * random(88))); // 2 Minutes
+	setTimer("checkForDefeatedAllies", reactionSpeedDelay + 20000 + ((1 + random(33)) * random(88))); // 20 Seconds
 	setTimer("swapBuildersRole", reactionSpeedDelay + 10000 + ((1 + random(30)) * random(10))); // 10 Seconds
 	setTimer("callIdleBuildersToBase", reactionSpeedDelay + 5000 + ((1 + random(30)) * random(10))); // 5 Seconds
 	setTimer("checkIfDead", reactionSpeedDelay + 15000 + ((1 + random(30)) * random(10))); // 15 Seconds
@@ -91,11 +94,14 @@ function eventGameLoaded() {
 	if (bunkerBusterGroup === undefined) bunkerBusterGroup = newGroup();
 	if (helperGroup === undefined) helperGroup = newGroup();
 	if (vtolGroup === undefined) vtolGroup = newGroup();
+	if (aaGroup === undefined) aaGroup = newGroup();
+	if (rallyGroup === undefined) rallyGroup = newGroup();
 
 	isSeaMap = isHoverMap();
 	setDifficulty();
 	isMultiTech4();
 	checkIsHighOilMap();
+	checkVtolsEnabled();
 
 	alliesList = getAliveAllyPlayersData();
 	enemiesList = getAliveEnemyPlayersData();
@@ -109,7 +115,9 @@ function eventGameLoaded() {
 		...enumGroup(attackerGroup).map(d => d.id),
 		...enumGroup(bunkerBusterGroup).map(d => d.id),
 		...enumGroup(helperGroup).map(d => d.id),
-		...enumGroup(vtolGroup).map(d => d.id)
+		...enumGroup(vtolGroup).map(d => d.id),
+		...enumGroup(aaGroup).map(d => d.id),
+		...enumGroup(rallyGroup).map(d => d.id)
 	]);
 	for (const droid of enumDroid(me)) {
 		if (droid.droidType !== DROID_CONSTRUCT && !assignedCombatIds.has(droid.id)) {
@@ -182,27 +190,77 @@ function checkIfDead() {
 function askForTruck() {
 	if (currentlyDead) {
 		chat(ALLIES, "need truck");
+		// Human teammates read the quick chat line more easily than free text
+		if (typeof quickChat === "function" && typeof WzQuickChatMessages !== "undefined") {
+			quickChat(ALLIES, WzQuickChatMessages.TEAM_REQUEST_TRANSFER_REBUILD);
+		}
 	}
 }
 
-// Set the nearest enemy player (including scavengers) as enemy to attack
-function setCurrentEnemy(enemyPlayerData) {
+// While gameTime is below this, the main enemy was chosen by a teammate (beacon) and is not re-evaluated
+var enemyLockUntil = 0;
+
+// Allied (not our own) ground units operating around an enemy's base: the sign that our team is already fighting that enemy
+function countAlliedPressure(enemy) {
+	if (!enemy || !enemy.base) {
+		return 0;
+	}
+	return enumRange(enemy.base.x, enemy.base.y, 22, ALLIES, false).filter(
+		o => o.type === DROID && o.player !== me && !o.isVTOL && (o.droidType === DROID_WEAPON || o.droidType === DROID_CYBORG)
+	).length;
+}
+
+// Lower is better: the distance from our base, minus up to 40 tiles for an enemy our allies are already attacking
+function scoreEnemy(enemy) {
+	const dist = (enemy && enemy.base) ? distBetweenTwoPoints(BASE.x, BASE.y, enemy.base.x, enemy.base.y) : 9999;
+	return dist - Math.min(10, countAlliedPressure(enemy)) * 4;
+}
+
+// Chooses the main enemy for our offensives.
+// With an argument (ally beacon / explicit request) that enemy is taken, optionally locked for `lockMs`.
+// Without one, Wally STAYS on its current enemy until it is dead, and only moves to another one when that one is
+// clearly the better choice (much closer, or the one our allies are fighting). Attacks on our own base do not change
+// the main enemy any more: the army answers them directly (see getHomeThreatTarget in attack.js).
+function setCurrentEnemy(enemyPlayerData, lockMs) {
 	enemiesList = getAliveEnemyPlayersData();
 
 	if (enemyPlayerData && enemyPlayerData.position !== undefined) {
 		currentEnemy = enemyPlayerData;
-	} else if (enemiesList.length > 0) {
-		// Treat all enemies (including scavengers) equally and pick the closest enemy to our base
-		enemiesList.sort((a, b) => {
-			if (!a.base || !b.base) return 0;
-			return distBetweenTwoPoints(BASE.x, BASE.y, a.base.x, a.base.y) -
-				   distBetweenTwoPoints(BASE.x, BASE.y, b.base.x, b.base.y);
-		});
+		if (typeof lockMs === "number" && lockMs > 0) {
+			enemyLockUntil = gameTime + lockMs;
+		}
+		return;
+	}
 
-		currentEnemy = enemiesList[0];
-	} else {
+	if (enemiesList.length === 0) {
 		areAllEnemiesDead = true;
 		shutdownScripts();
+		return;
+	}
+
+	const current = (currentEnemy && currentEnemy.position !== undefined)
+		? enemiesList.find(e => e.position === currentEnemy.position)
+		: undefined;
+	if (current && gameTime < enemyLockUntil && gameTime > enemyLockUntil - 600000) {
+		currentEnemy = current;
+		return;
+	}
+
+	let best = enemiesList[0];
+	let bestScore = scoreEnemy(best);
+	for (let i = 1; i < enemiesList.length; ++i) {
+		const score = scoreEnemy(enemiesList[i]);
+		if (score < bestScore) {
+			best = enemiesList[i];
+			bestScore = score;
+		}
+	}
+
+	// Refresh the data of the current enemy (its base position can change); switch only for a clear improvement
+	if (current && (best.position === current.position || bestScore > scoreEnemy(current) - 15)) {
+		currentEnemy = current;
+	} else {
+		currentEnemy = best;
 	}
 }
 
@@ -293,8 +351,19 @@ function eventDroidBuilt(droid) {
 		return;
 	}
 
+	// Dedicated anti-air tanks escort the army from behind instead of charging with it (see manageAntiAir in attack.js)
+	if (isAntiAirDroid(droid)) {
+		groupAdd(aaGroup, droid);
+		return;
+	}
+
 	if (droid.droidType === DROID_WEAPON || droid.droidType === DROID_SENSOR || droid.droidType === DROID_CYBORG) {
-		groupAdd(attackerGroup, droid);
+		// While the army is away, fresh units wait at base and join the front as a batch instead of one by one
+		if (droid.droidType !== DROID_SENSOR && shouldHoldReinforcements()) {
+			groupAdd(rallyGroup, droid);
+		} else {
+			groupAdd(attackerGroup, droid);
+		}
 		return;
 	}
 }
@@ -330,10 +399,15 @@ function eventBeacon(x, y, from, to, message) {
 	// Otherwise, check if the beacon points at an enemy base or enemy units (ally requesting coordinated attack)
 	const nearbyEnemies = enumRange(x, y, 20, ENEMIES, false);
 	if (nearbyEnemies.length > 0) {
+		// A human teammate is always followed. Between AI teammates the lower player number leads,
+		// so two bots announcing different targets do not keep swapping enemies with each other.
+		if (playerData[from] && playerData[from].isAI && from > me) {
+			return;
+		}
 		const targetPlayer = nearbyEnemies[0].player;
 		const enemyData = playerDataObject(targetPlayer);
 		if (enemyData) {
-			setCurrentEnemy(enemyData);
+			setCurrentEnemy(enemyData, 300000); // Stay on the requested enemy for 5 minutes
 		}
 	}
 }
@@ -360,14 +434,7 @@ function eventStructureBuilt(structure, droid) {
 	if (nearbyOils.length > 0) {
 		const nextOil = nearbyOils[0];
 		if (orderDroidBuild(droid, DORDER_BUILD, DERRICK_STAT, nextOil.x, nextOil.y)) {
-			if (typeof pendingBuildOrders !== "undefined") {
-				pendingBuildOrders.set(droid.id, {
-					stat: DERRICK_STAT,
-					x: nextOil.x,
-					y: nextOil.y,
-					time: gameTime
-				});
-			}
+			setPendingOrder(droid, DERRICK_STAT, nextOil.x, nextOil.y);
 			return;
 		}
 	}
@@ -400,14 +467,7 @@ function eventDroidIdle(droid) {
 	if (nearbyOils.length > 0) {
 		const nextOil = nearbyOils[0];
 		if (orderDroidBuild(droid, DORDER_BUILD, DERRICK_STAT, nextOil.x, nextOil.y)) {
-			if (typeof pendingBuildOrders !== "undefined") {
-				pendingBuildOrders.set(droid.id, {
-					stat: DERRICK_STAT,
-					x: nextOil.x,
-					y: nextOil.y,
-					time: gameTime
-				});
-			}
+			setPendingOrder(droid, DERRICK_STAT, nextOil.x, nextOil.y);
 			return;
 		}
 	}

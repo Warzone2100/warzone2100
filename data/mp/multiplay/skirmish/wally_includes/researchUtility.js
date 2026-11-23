@@ -119,35 +119,30 @@ const FUNDAMENTALS_CANNON_WEAPON = [
 ];
 
 // ------------------ MACHINEGUN ------------------
+// Second half of the ground army (anti-personnel, direct fire). It also carries the Machinegun AA line:
+// Rapid Fire Chaingun unlocks the Hurricane, the Assault Gun + Hyper Fire unlock the Whirlwind.
 
 const FUNDAMENTALS_MACHINEGUN_WEAPON_T1 = [
-	"R-Wpn-MG3Mk1", // Heavy Machine Gun
-	"R-Wpn-MG-Damage01", // T1 Damage upgrades
-	"R-Wpn-MG-ROF01", // T1 ReloadTime upgrades
+	"R-Wpn-MG-Damage03", // APDSB MG Bullets Mk2 (prerequisite for Heavy Machinegun)
+	"R-Wpn-MG3Mk1", // Heavy Machinegun
+	"R-Wpn-MG-Damage04", // T1 Damage upgrades
+	"R-Wpn-MG-ROF01", // Chaingun Upgrade
 ];
 
 const FUNDAMENTALS_MACHINEGUN_WEAPON_T2 = [
-	"R-Wpn-MG4", // Cyborg Assault Gun
-	"R-Wpn-MG-Damage05", // T2 Damage upgrades
-	"R-Wpn-MG-ROF02", // T2 ReloadTime upgrades
+	"R-Wpn-MG-ROF02", // Rapid Fire Chaingun (prerequisite for Assault Gun and Hurricane AA)
+	"R-Wpn-MG4", // Assault Gun (tank + cyborg)
+	"R-Wpn-MG-Damage06", // T2 Damage upgrades
+	"R-Wpn-MG-ROF03", // Hyper Fire Chaingun (prerequisite for Whirlwind AA)
 ];
 
 const FUNDAMENTALS_MACHINEGUN_WEAPON_T3 = [
 	"R-Wpn-MG5", // Twin Assault Gun
-	"R-Wpn-Laser01", // Cyborg Flashlight
 	"R-Wpn-MG-Damage08", // T3 Damage upgrades
-	"R-Wpn-MG-ROF03", // T3 ReloadTime upgrades
 ];
 
 const FUNDAMENTALS_MACHINEGUN_WEAPON_T4 = [
 	"R-Wpn-MG-Damage10", // T4 Damage upgrades
-	"R-Wpn-Laser02", // Pulse Laser
-	"R-Cyborg-Hvywpn-PulseLsr", // Super Cyborg Pulse Laser
-	"R-Wpn-Energy-Damage01", // T4 Laser Damage upgrades
-	"R-Wpn-Energy-ROF01", // T4 Laser ReloadTime upgrades
-	"R-Wpn-HvyLaser", // Heavy Laser
-	"R-Wpn-Energy-Damage03", // T4+ Laser Damage upgrades
-	"R-Wpn-Energy-ROF03", // T4+ Laser ReloadTime upgrades
 ];
 
 // ------------------ ROCKETS ------------------
@@ -220,43 +215,81 @@ const FUNDAMENTALS_VTOL_BOMBS_T3 = [
 
 // ------------------ DEFENCES ------------------
 
-const AA_RESEARCH = [
-	"R-Wpn-Sunburst", // Sunburst AA Rocket Array (Rocket tree synergy)
+// Anti-air is only researched when VTOLs are enabled in the game (see vtolsEnabled).
+// Cheapest working answer first: the Hurricane needs only Machinegun upgrades and the Sunburst only the Lancer,
+// while the SAMs sit behind the Scourge Missile and are picked up in T4.
+const AA_RESEARCH_EARLY = [
+	"R-Wpn-AAGun03", // Hurricane AA Turret (Machinegun line)
+	"R-Defense-AASite-QuadMg1", // Hurricane AA Site
+	"R-Wpn-Sunburst", // Sunburst AA Rocket Array (Rocket line)
 	"R-Defense-Sunburst", // Sunburst AA Site
-	"R-Wpn-Missile-LtSAM", // Avenger SAM
+];
+
+const AA_RESEARCH_MID = [
+	"R-Wpn-AAGun04", // Whirlwind AA Turret (Machinegun line)
+	"R-Defense-AASite-QuadRotMg", // Whirlwind AA Site
+];
+
+const AA_RESEARCH_LATE = [
+	"R-Wpn-Missile-LtSAM", // Avenger SAM (Missile line, needs Scourge)
 	"R-Defense-SamSite1", // Avenger SAM Site
 	"R-Wpn-Missile-HvSAM", // Vindicator SAM
 	"R-Defense-SamSite2", // Vindicator SAM Site
-	"R-Wpn-AAGun03", // Hurricane AA Turret (early fallback only)
-	"R-Defense-AASite-QuadMg1", // Hurricane AA Site
 ];
+
+// Researched once in T2 even before any enemy VTOL is seen, so the first AA tank can be built the moment one shows up
+const AA_RESEARCH_PROACTIVE = [
+	"R-Wpn-AAGun03", // Hurricane AA Turret
+];
+
+// ------------------ LOW-OIL ECONOMY ------------------
+// On low oil every bit of income counts: generator upgrades are pulled forward (they also bring the research-speed upgrades they depend on)
+
+const LOW_OIL_ECONOMY_T1 = [
+	"R-Struc-PowerModuleMk1", // Power Module
+	"R-Struc-Research-Module", // Research Module
+	"R-Struc-Power-Upgrade01", // Gas Turbine Generator
+];
+
+const LOW_OIL_ECONOMY_T2 = [
+	"R-Struc-Power-Upgrade01b", // Gas Turbine Generator Mk2
+	"R-Struc-Power-Upgrade01c", // Gas Turbine Generator Mk3
+];
+
+// Defensive structures come from the same two weapon lines as the army (Rocket/Missile and Machinegun).
+// Each one costs very little once its weapon is researched, so they are picked up right after the weapon.
+// No Cannon Fortress, Mass Driver, Heavy Plasma Launcher or EMP Mortar any more: each of those dragged the labs
+// through a whole foreign weapon tree (cannon, rail gun, flamer, mortar).
 
 const FUNDAMENTALS_DEFENCE_T1 = [
 	"R-Defense-Tower01", // Machinegun Guard Tower
 	"R-Defense-Tower06", // Mini-Rocket Guard Tower
+	"R-Defense-Pillbox01", // Heavy Machinegun Bunker
 	"R-Defense-WallUpgrade03", // T1 defences upgrades
 ];
 
 const FUNDAMENTALS_DEFENCE_T2 = [
-	"R-Defense-MRL", // Mini-Rocket Array Emplacement
+	"R-Defense-MRL", // Mini-Rocket Battery
 	"R-Defense-WallTower06", // Lancer Hardpoint
+	"R-Defense-WallTower01", // Heavy Machinegun Hardpoint
 	"R-Defense-IDFRocket", // Ripple Rocket Battery
+	"R-Defense-RotMG", // Assault Gun Bunker
 	"R-Defense-WallUpgrade06", // T2 defences upgrades
 ];
 
 const FUNDAMENTALS_DEFENCE_T3 = [
+	"R-Defense-WallTower-HvyA-Trocket", // Tank Killer Hardpoint
+	"R-Defense-WallTower-TwinAGun", // Twin Assault Gun Hardpoint
 	"R-Sys-Sensor-WSTower", // Wide Spectrum Sensor Tower
+	"R-Defense-Super-Rocket", // Rocket Bastion
 	"R-Defense-WallUpgrade09", // T3 defences upgrades
 ];
 
 const FUNDAMENTALS_DEFENCE_T4 = [
-	"R-Defense-Super-Cannon", // Cannon Fortress
-	"R-Defense-EMPMortar", // EMP Mortar Pit
-	"R-Defense-HeavyPlasmaLauncher", // Heavy Plasma Launcher
-	"R-Defense-WallUpgrade12", // T4 defences upgrades
+	"R-Defense-WallTower-A-Tmiss", // Scourge Missile Hardpoint
 	"R-Defense-HvyArtMissile", // Archangel Missile Battery
+	"R-Defense-WallUpgrade12", // T4 defences upgrades
 	"R-Defense-Super-Missile", // Missile Fortress
-	"R-Defense-MassDriver", // Mass Driver Fortress
 ];
 
 // ------------------ UPGRADES ------------------

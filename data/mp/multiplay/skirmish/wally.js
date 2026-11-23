@@ -33,8 +33,9 @@ const LASERLINK_STAT = "A0LasSatCommand";
 const ELECTRONIC_DEFENSES = ["Sys-SpyTower", "WallTower-EMP", "Emplacement-MortarEMP"];
 
 // -- globals
-const MIN_BASE_TRUCKS = 2;
 const MAX_BASE_TRUCKS = 12;
+const MIN_TRUCKS_TO_KEEP = 3; // Trucks Wally always keeps for itself before donating one to an ally
+const WALLY_DEBUG = false; // Set to true to log slow ticks and ally-support decisions to the debug console
 const MIN_BUILD_POWER = 30;
 const MIN_RESEARCH_POWER = -50;
 const MIN_PRODUCTION_POWER = 60;
@@ -47,12 +48,17 @@ var attackerGroup;
 var bunkerBusterGroup;
 var helperGroup;
 var vtolGroup;
+var aaGroup; // Mobile anti-air tanks: escort the army instead of leading it
+var rallyGroup; // Fresh reinforcements waiting at base to join the front as a batch
 var researchDone;
 var currentlyDead;
 var isSeaMap; // Used to determine if it is a hover map.
 var isMyBaseInTrouble = false; // Used to determine if the base is in danger.
 var isHighOilMap;
+var mapOilPerPlayer; // Oil resources per player on this map, measured once at game start
 var enemiesHaveVTOLs = false; // Used to determine if VTOLs are allowed.
+var vtolsEnabled = true; // False when the VTOL factory is disabled in the game limits (no AA is researched or built then)
+var lastVtolStrike; // {x, y, time} of the last enemy VTOL hit on our stuff, used to position anti-air
 var areAllEnemiesDead = false;
 var isHelpingAlly = false;
 
@@ -62,6 +68,8 @@ function getDesiredTruckCount() {
 	if (isHighOilMap || derricks >= 20) return 11;
 	if (derricks >= 14) return 9;
 	if (derricks >= 8) return 7;
+	// Once every reachable oil is taken on a small economy, 5 trucks are enough and the saved power goes to the army
+	if (typeof hasFreeSafeOils !== "undefined" && !hasFreeSafeOils && gameTime > 240000) return 5;
 	return 6;
 }
 
