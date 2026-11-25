@@ -3,12 +3,14 @@
 # and restored with their contents, iteration order, shared identity and prototypes.
 #
 # A global test mod adds a skirmish AI whose globals hold Maps, Sets and Dates
-# (nested, shared between globals, cyclic, subclass instances, with attached own properties,
-# with -0 / NaN / object keys, a large Map with most of its entries deleted ...),
-# and changes them every second.
+# (nested, shared between globals, cyclic, subclass instances, held by class instances,
+# with attached own properties, with -0 / NaN / object keys, a large Map with most of its entries deleted,
+# a Map with a deleted entry a live iterator still points at ...), and changes them every second.
 # Every second it also logs a digest of all of them
 # (their full contents in iteration order, which objects are the same object, their prototypes)
 # and the result of checks on them (ex. `reg instanceof Registry`, `cyc.get("self") === cyc`).
+# Two of them also have Map keys / Set values that can't be saved (Symbols, BigInts, functions),
+# which must be left out (with a warning when saving) rather than restored as colliding keys.
 #
 # Run A plays the game, saves at the save tick and keeps going, and run B loads that save.
 # Run C loads the same save from its legacy files only
@@ -58,6 +60,12 @@ cat > "$MOD/multiplay/skirmish/builtins.js" <<'EOF'
 
 class Registry extends Map { lookup(k) { return this.has(k) ? this.get(k) : "none"; } }
 class Stamp extends Date { label() { return "T" + this.getTime(); } }
+class Bag extends Set { total() { let t = 0; for (const x of this) t += x; return t; } }
+class Inventory
+{
+	constructor() { this.items = new Map(); this.tags = new Set(); }
+	count(kind) { return this.items.has(kind) ? this.items.get(kind) : 0; }
+}
 
 var n;          // tick counter
 var shared;     // a plain object referenced from several globals
@@ -74,11 +82,21 @@ var cyc;        // a Map that contains itself (as a key and as a value)
 var bigm;       // a large Map with most of its entries deleted
 var meta;       // a Set with an attached own property
 var emptyMap;   // an empty Map
-// The same objects as d, s and the Map nested in m, under names that sort before theirs
+var bag;        // a Set subclass instance
+var inv;        // a class instance holding a Map and a Set
+var depots;     // a Map whose value is a class instance (only referenced from there) holding a Map and a Set
+var zm;         // a Map with a deleted entry that a live iterator still points at (a "zombie" record) when saved
+var holdIter = function () {}; // a function (so never saved) whose closure keeps zm's iterator alive
+var lossy;      // a Map with some keys that can't be saved (Symbols, a BigInt, a function and a class)
+var lossySet;   // a Set with some values that can't be saved
+// The same objects as d, s, the Map nested in m, reg, stamped and bag, under names that sort before theirs
 // (so they are forward references in the legacy scriptstate.json, which sorts the globals)
 var aliasOfD;
 var aliasOfS;
 var aliasOfInner;
+var aliasOfReg;
+var aliasOfStamped;
+var aliasOfBag;
 
 function setUp()
 {
@@ -111,9 +129,26 @@ function setUp()
 	meta = new Set([1]);
 	meta.note = { text: "attached", to: meta };
 	emptyMap = new Map();
+	bag = new Bag([1, 2, 3]);
+	inv = new Inventory();
+	inv.items.set("tank", 2);
+	inv.tags.add("armored");
+	depots = new Map([["north", new Inventory()]]);
+	depots.get("north").items.set("rock", 0);
+	zm = new Map([["a", 1], ["b", 2], ["c", 3]]);
+	// `it` points at "a"'s record, which stays allocated (empty) after the delete while `it` is alive
+	const it = zm.keys();
+	it.next();
+	zm.delete("a");
+	holdIter = () => it;
+	lossy = new Map([["keep1", 1], [Symbol("a"), 2], [Symbol("b"), 3], [setUp, 4], [Registry, 5], [10n, 6], ["keep2", 7]]);
+	lossySet = new Set(["v", Symbol("s"), 5n, () => 1, "w"]);
 	aliasOfD = d;
 	aliasOfS = s;
 	aliasOfInner = m.get("inner");
+	aliasOfReg = reg;
+	aliasOfStamped = stamped;
+	aliasOfBag = bag;
 }
 
 // Changes every global a bit, deterministically
@@ -135,6 +170,15 @@ function mutate()
 	bigm.delete("k" + (n * 100));
 	bigm.set("new" + n, n);
 	meta.add(n);
+	bag.add(10 + n);
+	inv.items.set("tank", inv.count("tank") + 1);
+	depots.get("north").items.set("rock", n);
+}
+
+// Map keys / Set values the save format can't recreate (they are left out when saving)
+function saveable(k)
+{
+	return typeof k !== "symbol" && typeof k !== "bigint" && typeof k !== "function";
 }
 
 // A canonical description of v: contents in iteration order, prototypes, and identity (#<id> on revisits)
@@ -156,8 +200,8 @@ function describe(v, ids)
 	const proto = Object.getPrototypeOf(v);
 	const pname = (proto === null) ? "null" : (proto.constructor ? proto.constructor.name : "?");
 	let body = "";
-	if (v instanceof Map) body = [...v].map((e) => describe(e[0], ids) + "=>" + describe(e[1], ids)).join(",");
-	else if (v instanceof Set) body = [...v].map((x) => describe(x, ids)).join(",");
+	if (v instanceof Map) body = [...v].filter((e) => saveable(e[0])).map((e) => describe(e[0], ids) + "=>" + describe(e[1], ids)).join(",");
+	else if (v instanceof Set) body = [...v].filter(saveable).map((x) => describe(x, ids)).join(",");
 	else if (v instanceof Date) body = String(v.getTime());
 	else if (Array.isArray(v)) body = v.map((x) => describe(x, ids)).join(",");
 	const own = Object.keys(v).filter((k) => !Array.isArray(v) || !/^\d+$/.test(k)).map((k) => k + ":" + describe(v[k], ids)).join(",");
@@ -191,13 +235,24 @@ function checks()
 	c("meta", meta.note.text === "attached" && meta.note.to === meta);
 	c("empty", emptyMap.size === 0);
 	c("aliases", aliasOfD === d && aliasOfS === s && aliasOfInner === m.get("inner") && aliasOfInner === nested.inner);
+	c("subaliases", aliasOfReg === reg && aliasOfStamped === stamped && aliasOfBag === bag);
+	c("setsubclass", bag instanceof Bag && bag instanceof Set && bag.total() === 6 + 10 * n + n * (n + 1) / 2);
+	c("classholds", inv instanceof Inventory && inv.items instanceof Map && inv.tags instanceof Set && inv.tags.has("armored")
+		&& inv.count("tank") === 2 + n && depots.get("north") instanceof Inventory && depots.get("north").count("rock") === n);
+	c("zombie", zm.size === 2 && [...zm.keys()].join() === "b,c" && zm.get("b") === 2);
+	// All keys / values before a restore, only the saveable ones after (never merged ones like null, "10" or "5")
+	c("lossy", (lossy.size === 7 || lossy.size === 2) && lossy.get("keep1") === 1 && lossy.get("keep2") === 7
+		&& !lossy.has(null) && !lossy.has("10") && !lossy.has(undefined)
+		&& (lossySet.size === 5 || lossySet.size === 2) && lossySet.has("v") && lossySet.has("w")
+		&& !lossySet.has(null) && !lossySet.has("5") && !lossySet.has(undefined));
 	return failed.length ? "FAILED:" + failed.join(",") : "ok";
 }
 
 function digest()
 {
 	const ids = new Map();
-	const all = [n, shared, objKey, m, s, d, dInvalid, dates, reg, stamped, nested, cyc, bigm, meta, emptyMap, aliasOfD, aliasOfS, aliasOfInner];
+	const all = [n, shared, objKey, m, s, d, dInvalid, dates, reg, stamped, nested, cyc, bigm, meta, emptyMap, bag, inv, depots, zm,
+		lossy, lossySet, aliasOfD, aliasOfS, aliasOfInner, aliasOfReg, aliasOfStamped, aliasOfBag];
 	const str = all.map((v) => describe(v, ids)).join(";");
 	return hash(str) + " len=" + str.length + " checks=" + checks();
 }
@@ -206,6 +261,7 @@ function tick()
 {
 	mutate();
 	debug("builtins: me=" + me + " t=" + gameTime + " " + digest());
+	debug("builtins: me=" + me + " lossy=" + lossy.size + "/" + lossySet.size + " at t=" + gameTime);
 }
 
 function eventStartLevel()
@@ -230,7 +286,7 @@ with zipfile.ZipFile(dest, "w") as z:
 EOF
 
 COMMON="--configdir=$CFG --headless --autogame --mod=builtins.wz --gamestate-test-seed=1 --gamestate-exit-at-tick=$ENDTICK"
-timeout "$RUN_TIMEOUT" "$BIN" $COMMON --skirmish=builtins.json \
+timeout "$RUN_TIMEOUT" "$BIN" $COMMON --skirmish=builtins.json --debug=script \
 	--gamestate-save-at-tick="$SAVETICK:savegames/skirmish/$SAVENAME.gam" > "$OUT/builtins.A.log" 2>&1
 [ -f "$CFG/savegames/skirmish/$SAVENAME/gamestate.wz" ] || { echo "builtins: RUN A FAILED (no save; see $OUT/builtins.A.log)"; exit 2; }
 timeout "$RUN_TIMEOUT" "$BIN" $COMMON --loadskirmish="$SAVENAME" > "$OUT/builtins.B.log" 2>&1
@@ -277,6 +333,31 @@ for RUN in B C R; do
 	fi
 done
 [ "$STATUS" -eq 2 ] && exit 2
+# Keys / values that can't be saved are left out with a warning when saving,
+# so the runs that restored the save keep only the others (2 / 2), and run A keeps them all (7 / 5)
+LOSSY_STATUS=0
+for W in "left out 5 entries whose keys cannot be saved (1 BigInt, 2 Symbol, 2 function)" \
+	"left out 3 values that cannot be saved (1 BigInt, 1 Symbol, 1 function)"; do
+	if ! grep -qF "$W" "$OUT/builtins.A.log"; then
+		echo "builtins: run A DID NOT WARN: $W"
+		LOSSY_STATUS=1
+	fi
+done
+for RUN in A B C R; do
+	EXPECT="2/2"
+	[ "$RUN" = A ] && EXPECT="7/5"
+	GOT=$(sed -n 's/^.*builtins: me=[0-9]* lossy=\([0-9]*\/[0-9]*\) .*$/\1/p' "$OUT/builtins.$RUN.log" | tail -1)
+	if [ "$GOT" != "$EXPECT" ]; then
+		echo "builtins: run $RUN: Map / Set sizes with unsaveable keys are \"$GOT\", expected $EXPECT"
+		LOSSY_STATUS=1
+	fi
+done
+if [ "$LOSSY_STATUS" -eq 0 ]; then
+	echo "builtins: unsaveable Map keys / Set values were left out with a warning (sizes 7/5 -> 2/2 after a restore)"
+else
+	STATUS=1
+fi
+
 LOGS="$OUT/builtins.A.log $OUT/builtins.B.log $OUT/builtins.C.log $OUT/builtins.R.log"
 FAILED=$(cat $LOGS | grep 'builtins: ' | grep -c 'checks=FAILED')
 TOTAL=$(cat $LOGS | grep -c 'builtins: .*checks=')

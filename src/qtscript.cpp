@@ -880,7 +880,8 @@ bool scriptsAreReady()
 // 2: A single structured JSON document with top-level "instances" and "timers" arrays
 //    Each instance bundles its own "globals", "groups" and per-instance flags
 //    (ex. "isReceivingAllEvents"). "timers" is an ordered array restored in-order.
-static const int SCRIPTSTATE_VERSION = 2;
+// 3: Same layout as 2, but globals may also hold "map" / "set" / "date" tagged values (see quickjs_backend.cpp)
+static const int SCRIPTSTATE_VERSION = 3;
 
 bool scripting_engine::saveScriptStates(const char *filename)
 {
@@ -1180,7 +1181,7 @@ static T jsonValueOr(const JsonType &j, const char *key, T fallback, bool *misma
 	}
 }
 
-// Loader for save format v2 (see SCRIPTSTATE_VERSION): a structured JSON document with top-level
+// Loader for save format v2 and later (see SCRIPTSTATE_VERSION): a structured JSON document with top-level
 // "instances" and "triggers" arrays - 'root' is the parsed document object.
 //
 // The restore is total: it wipes each restored instance's live timers/groups and the label maps up front,
