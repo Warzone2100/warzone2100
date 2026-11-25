@@ -98,6 +98,7 @@ MSVC_PRAGMA(warning( disable : 4191 )) // disable "warning C4191: 'type cast': u
 #include "quickjs.h"
 #include "quickjs-debugger.h"
 #include "quickjs-limitedcontext.h"
+#include "quickjs-serialization.h"
 MSVC_PRAGMA(warning( pop ))
 #if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
 #pragma clang diagnostic pop
@@ -199,26 +200,34 @@ struct JSToJsonContext
 // NOTES:
 // - Script globals are not expected to use property names beginning with "@@".
 //
-static const char* WZ_JSON_TAG_KEY    = "@@wztype"; // "class" / "object" / "array" / "ref" / "number"
+static const char* WZ_JSON_TAG_KEY    = "@@wztype"; // one of the tags below
 static const char* WZ_JSON_TAG_CLASS  = "class";
 static const char* WZ_JSON_TAG_OBJECT = "object";
 static const char* WZ_JSON_TAG_ARRAY  = "array";
+static const char* WZ_JSON_TAG_MAP    = "map";      // a Map (@@data = [[key, value], ...] in iteration order)
+static const char* WZ_JSON_TAG_SET    = "set";      // a Set (@@data = [value, ...] in iteration order)
+static const char* WZ_JSON_TAG_DATE   = "date";     // a Date (@@value = its time value)
 static const char* WZ_JSON_TAG_REF    = "ref";
 static const char* WZ_JSON_TAG_NUMBER = "number";   // a non-finite double (NaN / Infinity / -Infinity)
 static const char* WZ_JSON_TAG_UNDEF  = "undef";    // JS undefined (distinct from JSON null == JS null)
 static const char* WZ_JSON_ID_KEY     = "@@id";     // reference identity (int)
 static const char* WZ_JSON_CLASS_KEY  = "@@class";  // class name (string)
 static const char* WZ_JSON_DATA_KEY   = "@@data";   // own data properties (object) / elements (array)
-static const char* WZ_JSON_KIND_KEY   = "@@kind";   // on a "ref": type ("array", possibly others in the future). Absent = object.
+static const char* WZ_JSON_KIND_KEY   = "@@kind";   // on a "ref": "array" / "map" / "set" / "date" (absent = object)
 static const char* WZ_JSON_KIND_ARRAY = "array";
 static const char* WZ_JSON_VALUE_KEY  = "@@value";  // on a "number": "NaN" / "Infinity" / "-Infinity"
-static const char* WZ_JSON_PROPS_KEY  = "@@props";  // on an "array": named (non-index) own properties (object)
+static const char* WZ_JSON_PROPS_KEY  = "@@props";  // on an "array" / "map" / "set" / "date": named own properties (object)
 
 // NOTE ON SAVE FORMAT COMPATIBILITY:
 // - When tagging is enabled (the save / restore path), *every* object and array is wrapped in a tag object
 //   carrying an "@@id", so that shared references and cycles of any kind round-trip correctly.
 // - Older saves wrote bare objects and arrays with no tags - the loader detects the absence of "@@wztype"
 //   and falls back to the legacy plain-object / plain-array decoding, so old saves continue to load.
+// - Map / Set / Date ("map" / "set" / "date") also save their internal state,
+//   which does not live in own properties: the entries (in iteration order) and the time value.
+//   The quickjs-serialization extension reads and recreates it without calling any script-visible method.
+//   A subclass instance also carries "@@class".
+//   An older build doesn't know these tags (it decodes them as plain objects holding the tag's keys).
 
 // True if `key` is a canonical array index string ("0", "1", ... - no leading zeros, and
 // strictly less than 2^32-1, the max array index). Such keys are array *elements* (already
@@ -340,14 +349,15 @@ static bool isOwnAccessorProperty(JSContext* ctx, JSValue obj, JSAtom atom)
 }
 
 // If `value` is an instance of a built-in exotic type (Map/Set/Date/RegExp/typed array/...),
-// this function returns its constructor name.
+// this function returns its constructor name (going by its prototype's `constructor`).
 //
-// Such objects currently serialize to an essentially empty object (i.e. their contents are lost)
+// Apart from Map / Set / Date (see the "map" / "set" / "date" tags),
+// such objects currently serialize to an essentially empty object (their contents are lost)
 // because their internal state does not live in own properties, and specialized handling would be
 // required to round-trip them properly.
 //
 // Returns empty for plain objects and script-defined classes (which are handled separately).
-// Used purely to emit a diagnostic for script authors.
+// Used purely to emit diagnostics for script authors.
 static std::string getBuiltinExoticClassName(JSToJsonContext& c, JSValue value)
 {
 	JSContext* ctx = c.ctx;
@@ -407,6 +417,38 @@ private:
 };
 
 bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::function<void (const char *key, JSAtom& atom)>& func, bool enumerableOnly = true); // forward-declare
+
+// Returns the tag (also the "@@kind" of a reference) of a built-in kind whose internal state is saved, or nullptr
+static const char* serializableBuiltinKindTag(JSBuiltinObjectKind kind)
+{
+	switch (kind)
+	{
+		case JS_BUILTIN_OBJECT_KIND_MAP: return WZ_JSON_TAG_MAP;
+		case JS_BUILTIN_OBJECT_KIND_SET: return WZ_JSON_TAG_SET;
+		case JS_BUILTIN_OBJECT_KIND_DATE: return WZ_JSON_TAG_DATE;
+		default: return nullptr;
+	}
+}
+
+static JSBuiltinObjectKind serializableBuiltinKindFromTag(const std::string& tag)
+{
+	if (tag == WZ_JSON_TAG_MAP) { return JS_BUILTIN_OBJECT_KIND_MAP; }
+	if (tag == WZ_JSON_TAG_SET) { return JS_BUILTIN_OBJECT_KIND_SET; }
+	if (tag == WZ_JSON_TAG_DATE) { return JS_BUILTIN_OBJECT_KIND_DATE; }
+	return JS_BUILTIN_OBJECT_KIND_OTHER;
+}
+
+// The name of the constructor of a built-in kind whose internal state is saved
+static const char* serializableBuiltinKindConstructorName(JSBuiltinObjectKind kind)
+{
+	switch (kind)
+	{
+		case JS_BUILTIN_OBJECT_KIND_MAP: return "Map";
+		case JS_BUILTIN_OBJECT_KIND_SET: return "Set";
+		case JS_BUILTIN_OBJECT_KIND_DATE: return "Date";
+		default: return "";
+	}
+}
 
 class quickjs_scripting_instance;
 static std::map<JSContext*, quickjs_scripting_instance *> engineToInstanceMap;
@@ -1133,6 +1175,17 @@ static JSValue resolveClassPrototype(JSContext* ctx, const std::string& classNam
 
 JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ordered_json& instance, uint8_t prop_flags); // forward-declare
 
+// Creates an empty Map / Set, or an invalid Date, with the built-in prototype
+// (for a "map" / "set" / "date" definition, or the placeholder of a forward reference to one)
+static JSValue newEmptySerializableBuiltinObject(JSContext* ctx, JSBuiltinObjectKind kind)
+{
+	if (kind == JS_BUILTIN_OBJECT_KIND_DATE)
+	{
+		return JS_NewDate(ctx, std::numeric_limits<double>::quiet_NaN());
+	}
+	return JS_NewMapOrSet(ctx, kind);
+}
+
 static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nlohmann::ordered_json& obj_json, uint8_t prop_flags)
 {
 	for (auto it = obj_json.begin(); it != obj_json.end(); ++it)
@@ -1140,6 +1193,108 @@ static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nloh
 		JSValue prop_val = mapJsonToQuickJSValueWithContext(c, it.value(), prop_flags);
 		JS_DefinePropertyValueStr(c.ctx, obj, it.key().c_str(), prop_val, prop_flags);
 	}
+}
+
+// Decodes a "map" / "set" / "date" tagged value (`kind`) with reference id `id` (or -1)
+static JSValue restoreSerializableBuiltinObject(JsonToJSContext& c, const nlohmann::ordered_json& instance, JSBuiltinObjectKind kind, int id, uint8_t prop_flags)
+{
+	JSContext* ctx = c.ctx;
+	const char* typeName = serializableBuiltinKindConstructorName(kind);
+
+	// Re-use the placeholder an earlier forward reference created (if any) when it has the right internal type
+	JSValue obj = JS_UNINITIALIZED;
+	auto existing = (id >= 0) ? c.idMap.find(id) : c.idMap.end();
+	if (existing != c.idMap.end())
+	{
+		if (JS_GetBuiltinObjectKind(existing->second) == kind)
+		{
+			obj = JS_DupValue(ctx, existing->second);
+		}
+		else
+		{
+			// (a malformed save, where the reference's @@kind differs: its holders keep the placeholder)
+			debug(LOG_ERROR, "Reference @@id %d does not match the kind of its definition (%s) while restoring globals", id, typeName);
+			JS_FreeValue(ctx, existing->second);
+			c.idMap.erase(existing);
+		}
+	}
+	if (JS_IsUninitialized(obj))
+	{
+		obj = newEmptySerializableBuiltinObject(ctx, kind);
+		if (JS_IsException(obj))
+		{
+			debug(LOG_ERROR, "Failed to create a %s while restoring globals: %s", typeName, QuickJS_DumpError(ctx).c_str());
+			return JS_UNDEFINED;
+		}
+		// Registered before decoding the contents, which may refer back to it
+		if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, obj); }
+	}
+
+	// A subclass instance gets its class prototype back (its constructor is not run)
+	auto classIt = instance.find(WZ_JSON_CLASS_KEY);
+	if (classIt != instance.end() && classIt->is_string())
+	{
+		const std::string className = classIt->get<std::string>();
+		JSValue proto = resolveClassPrototype(ctx, className);
+		if (!JS_IsUninitialized(proto))
+		{
+			JS_SetPrototype(ctx, obj, proto);
+			JS_FreeValue(ctx, proto);
+		}
+		else
+		{
+			debug(LOG_SCRIPT, "Could not resolve class \"%s\" while restoring globals; restoring as a plain %s", className.c_str(), typeName);
+		}
+	}
+
+	if (kind == JS_BUILTIN_OBJECT_KIND_DATE)
+	{
+		// A number, or a "number"-tagged NaN for an invalid date (anything else is treated as NaN)
+		double timeValue = std::numeric_limits<double>::quiet_NaN();
+		auto valueIt = instance.find(WZ_JSON_VALUE_KEY);
+		if (valueIt != instance.end() && valueIt->is_number())
+		{
+			timeValue = valueIt->get<double>();
+		}
+		if (JS_SetDateTimeValue(ctx, obj, timeValue) != 0)
+		{
+			JS_FreeValue(ctx, JS_GetException(ctx)); // (can't happen, obj is a Date)
+		}
+	}
+	else
+	{
+		// The entries are in iteration order, which adding them in order recreates
+		const bool isMap = (kind == JS_BUILTIN_OBJECT_KIND_MAP);
+		auto dataIt = instance.find(WZ_JSON_DATA_KEY);
+		if (dataIt != instance.end() && dataIt->is_array())
+		{
+			for (const auto& item : *dataIt)
+			{
+				if (isMap && !(item.is_array() && item.size() == 2))
+				{
+					debug(LOG_ERROR, "Skipping a malformed Map entry while restoring globals");
+					continue;
+				}
+				JSValue key = mapJsonToQuickJSValueWithContext(c, isMap ? item.at(0) : item, prop_flags);
+				JSValue value = isMap ? mapJsonToQuickJSValueWithContext(c, item.at(1), prop_flags) : JS_UNDEFINED;
+				if (JS_MapOrSetAdd(ctx, obj, key, value) != 0)
+				{
+					debug(LOG_ERROR, "Failed to restore a %s entry: %s", typeName, QuickJS_DumpError(ctx).c_str());
+				}
+				JS_FreeValue(ctx, key);
+				JS_FreeValue(ctx, value);
+			}
+		}
+	}
+
+	// Own properties a script attached
+	auto propsIt = instance.find(WZ_JSON_PROPS_KEY);
+	if (propsIt != instance.end() && propsIt->is_object())
+	{
+		populateObjectProperties(c, obj, *propsIt, prop_flags);
+	}
+
+	return obj;
 }
 
 // Like mapJsonToQuickJSValue, but additionally decodes the tagged wrappers emitted by
@@ -1193,9 +1348,34 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ord
 				std::string refKind;
 				auto kindIt = instance.find(WZ_JSON_KIND_KEY);
 				if (kindIt != instance.end() && kindIt->is_string()) { refKind = kindIt->get<std::string>(); }
-				JSValue placeholder = (refKind == WZ_JSON_KIND_ARRAY) ? JS_NewArray(ctx) : JS_NewObject(ctx);
+				JSValue placeholder = JS_UNDEFINED;
+				const JSBuiltinObjectKind refBuiltinKind = serializableBuiltinKindFromTag(refKind);
+				if (refKind == WZ_JSON_KIND_ARRAY)
+				{
+					placeholder = JS_NewArray(ctx);
+				}
+				else if (refBuiltinKind != JS_BUILTIN_OBJECT_KIND_OTHER)
+				{
+					// (an object's internal type can't change when its definition populates it later)
+					placeholder = newEmptySerializableBuiltinObject(ctx, refBuiltinKind);
+				}
+				else
+				{
+					placeholder = JS_NewObject(ctx);
+				}
+				if (JS_IsException(placeholder))
+				{
+					debug(LOG_ERROR, "Failed to create a placeholder while restoring globals: %s", QuickJS_DumpError(ctx).c_str());
+					return JS_UNDEFINED;
+				}
 				if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, placeholder); }
 				return placeholder;
+			}
+
+			const JSBuiltinObjectKind builtinKind = serializableBuiltinKindFromTag(tag);
+			if (builtinKind != JS_BUILTIN_OBJECT_KIND_OTHER)
+			{
+				return restoreSerializableBuiltinObject(c, instance, builtinKind, id, prop_flags);
 			}
 
 			if (tag == WZ_JSON_TAG_CLASS || tag == WZ_JSON_TAG_OBJECT || tag == WZ_JSON_TAG_ARRAY)
@@ -4276,6 +4456,108 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	return true;
 }
 
+// Serializes the own data properties of `value` (string and symbol keys, enumerable or not, in order),
+// skipping accessor properties
+static OrderedJsonObjectBuilder collectOwnDataPropertiesForSave(JSToJsonContext& c, JSValue value)
+{
+	OrderedJsonObjectBuilder data;
+	QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &data](const char *key, JSAtom &atom) {
+		if (isOwnAccessorProperty(c.ctx, value, atom))
+		{
+			// can't serialize getter/setter closures
+			debug(LOG_SCRIPT, "Skipping own accessor property \"%s\" when saving script global: getter/setter closures cannot be serialized", key);
+			return;
+		}
+		JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+		auto free_jsVal = gsl::finally([&c, jsVal] { JS_FreeValue(c.ctx, jsVal); });
+		std::string nameStr = key;
+		if (!JS_IsException(jsVal))
+		{
+			if (!JS_IsConstructor(c.ctx, jsVal))
+			{
+				data.set(nameStr, wz_qjs_to_json(c, jsVal));
+			}
+			else if (!c.skip_constructors)
+			{
+				data.set(nameStr, "<constructor>");
+			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
+		}
+	}, false);
+	return data;
+}
+
+// Serializes a Map / Set / Date (`kind`) into `j`, which already holds its "@@id"
+static void serializeBuiltinObjectForSave(JSToJsonContext& c, JSValue value, JSBuiltinObjectKind kind, nlohmann::ordered_json& j)
+{
+	JSContext* ctx = c.ctx;
+	j[WZ_JSON_TAG_KEY] = serializableBuiltinKindTag(kind);
+
+	// A subclass instance (ex. `class Registry extends Map`) also records its class
+	std::string className = getSerializableClassName(c, value);
+	if (!className.empty())
+	{
+		j[WZ_JSON_CLASS_KEY] = className;
+	}
+	else if (getBuiltinExoticClassName(c, value) != serializableBuiltinKindConstructorName(kind))
+	{
+		debug(LOG_SCRIPT, "Saving a script global of built-in type \"%s\" whose prototype is not a global class: its contents are saved, but it will be restored with the built-in %s prototype", serializableBuiltinKindConstructorName(kind), serializableBuiltinKindConstructorName(kind));
+	}
+
+	if (kind == JS_BUILTIN_OBJECT_KIND_DATE)
+	{
+		double timeValue = std::numeric_limits<double>::quiet_NaN();
+		if (JS_GetDateTimeValue(ctx, value, &timeValue) != 0)
+		{
+			JS_FreeValue(ctx, JS_GetException(ctx)); // (can't happen, the kind was checked)
+		}
+		// (an invalid date is a NaN, encoded like any other non-finite number)
+		j[WZ_JSON_VALUE_KEY] = wz_qjs_to_json(c, JS_NewFloat64(ctx, timeValue));
+	}
+	else
+	{
+		// Serializing a value can run script code (ex. a Proxy trap) that may mutate the Map / Set,
+		// so this walks a snapshot of the entries
+		nlohmann::ordered_json data = nlohmann::ordered_json::array();
+		JSValue* entries = nullptr;
+		uint32_t count = 0;
+		if (JS_GetMapOrSetEntries(ctx, value, &entries, &count) == 0)
+		{
+			auto free_entries = gsl::finally([ctx, entries, count] { JS_FreeMapOrSetEntries(ctx, entries, count); });
+			const bool isMap = (kind == JS_BUILTIN_OBJECT_KIND_MAP);
+			for (uint32_t i = 0; i < count; i++)
+			{
+				if (isMap)
+				{
+					nlohmann::ordered_json entry = nlohmann::ordered_json::array();
+					entry.push_back(wz_qjs_to_json(c, entries[2 * i]));
+					entry.push_back(wz_qjs_to_json(c, entries[2 * i + 1]));
+					data.push_back(std::move(entry));
+				}
+				else
+				{
+					data.push_back(wz_qjs_to_json(c, entries[2 * i]));
+				}
+			}
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to read the entries of a %s when saving script globals: %s", serializableBuiltinKindConstructorName(kind), QuickJS_DumpError(ctx).c_str());
+		}
+		j[WZ_JSON_DATA_KEY] = std::move(data);
+	}
+
+	// Own properties a script attached (ex. `map.meta = ...`)
+	OrderedJsonObjectBuilder props = collectOwnDataPropertiesForSave(c, value);
+	if (props.size() > 0)
+	{
+		j[WZ_JSON_PROPS_KEY] = props.take();
+	}
+}
+
 // Enable JSON support for custom types
 
 // NOTE: May throw if there is a circular reference!
@@ -4303,6 +4585,9 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 		}
 
 		bool isArray = WZ_QJS_IsArray(c.ctx, value) != 0;
+		// Map / Set / Date, by internal class (so including subclass instances)
+		const JSBuiltinObjectKind builtinKind = JS_GetBuiltinObjectKind(value);
+		const char* builtinKindTag = serializableBuiltinKindTag(builtinKind);
 
 		if (c.tag_class_instances)
 		{
@@ -4318,6 +4603,7 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				// Record the targets's kind so a forward reference can build a matching
 				// placeholder. Object is the default (no @@kind).
 				if (isArray) { ref[WZ_JSON_KIND_KEY] = WZ_JSON_KIND_ARRAY; }
+				else if (builtinKindTag) { ref[WZ_JSON_KIND_KEY] = builtinKindTag; }
 				return ref;
 			}
 		}
@@ -4393,36 +4679,14 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 					j[WZ_JSON_PROPS_KEY] = std::move(props);
 				}
 			}
+			else if (builtinKindTag)
+			{
+				serializeBuiltinObjectForSave(c, value, builtinKind, j);
+			}
 			else
 			{
 				std::string className = getSerializableClassName(c, value);
-				OrderedJsonObjectBuilder data;
-				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &data](const char *key, JSAtom &atom) {
-					if (isOwnAccessorProperty(c.ctx, value, atom))
-					{
-						// can't serialize getter/setter closures
-						debug(LOG_SCRIPT, "Skipping own accessor property \"%s\" when saving script global: getter/setter closures cannot be serialized", key);
-						return;
-					}
-					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
-					auto free_jsVal = gsl::finally([&c, jsVal] { JS_FreeValue(c.ctx, jsVal); });
-					std::string nameStr = key;
-					if (!JS_IsException(jsVal))
-					{
-						if (!JS_IsConstructor(c.ctx, jsVal))
-						{
-							data.set(nameStr, wz_qjs_to_json(c, jsVal));
-						}
-						else if (!c.skip_constructors)
-						{
-							data.set(nameStr, "<constructor>");
-						}
-					}
-					else
-					{
-						debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
-					}
-				}, false);
+				OrderedJsonObjectBuilder data = collectOwnDataPropertiesForSave(c, value);
 				if (!className.empty())
 				{
 					j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_CLASS;
@@ -4431,9 +4695,10 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				else
 				{
 					j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_OBJECT;
-					// Warn script authors when a built-in exotic object (Map/Set/Date/...) is
-					// being saved: its internal state lives in internal slots, not own
+					// Warn script authors when a built-in exotic object (WeakMap/RegExp/typed array/...)
+					// is being saved: its internal state lives in internal slots, not own
 					// properties, so it degrades to an (essentially empty) plain object.
+					// (Map / Set / Date are handled above.)
 					std::string builtinName = getBuiltinExoticClassName(c, value);
 					if (!builtinName.empty())
 					{
