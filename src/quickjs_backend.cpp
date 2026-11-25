@@ -82,6 +82,7 @@
 #include <unordered_set>
 #include "lib/framework/file.h"
 #include <unordered_map>
+#include <map>
 #include <limits>
 #include <cmath>
 
@@ -227,7 +228,8 @@ static const char* WZ_JSON_PROPS_KEY  = "@@props";  // on an "array" / "map" / "
 //   which does not live in own properties: the entries (in iteration order) and the time value.
 //   The quickjs-serialization extension reads and recreates it without calling any script-visible method.
 //   A subclass instance also carries "@@class".
-//   An older build doesn't know these tags (it decodes them as plain objects holding the tag's keys).
+//   Map keys / Set values that can't be saved (Symbols, BigInts, functions) are left out, with a warning.
+//   Script state that may hold these tags is version 3 (see SCRIPTSTATE_VERSION in qtscript.cpp).
 
 // True if `key` is a canonical array index string ("0", "1", ... - no leading zeros, and
 // strictly less than 2^32-1, the max array index). Such keys are array *elements* (already
@@ -1186,6 +1188,43 @@ static JSValue newEmptySerializableBuiltinObject(JSContext* ctx, JSBuiltinObject
 	return JS_NewMapOrSet(ctx, kind);
 }
 
+// Whether a forward reference's placeholder `obj` has the internal type a definition tagged `tag` creates
+// (an array, a Map / Set / Date, or an ordinary object for "object" / "class")
+static bool placeholderMatchesTaggedDefinition(JSContext* ctx, JSValueConst obj, const std::string& tag)
+{
+	const bool isArray = WZ_QJS_IsArray(ctx, obj) != 0;
+	const JSBuiltinObjectKind kind = JS_GetBuiltinObjectKind(obj);
+	if (tag == WZ_JSON_TAG_ARRAY) { return isArray; }
+	if (tag == WZ_JSON_TAG_OBJECT || tag == WZ_JSON_TAG_CLASS) { return !isArray && kind == JS_BUILTIN_OBJECT_KIND_OTHER; }
+	return !isArray && kind != JS_BUILTIN_OBJECT_KIND_OTHER && kind == serializableBuiltinKindFromTag(tag);
+}
+
+// Returns (a new reference to) the object that a definition tagged `tag`, with reference id `id` (or -1), populates.
+// That is the placeholder an earlier forward reference created, or else a new object from `create`, registered under `id` before the caller decodes its contents.
+// A placeholder of the wrong internal type (only in a malformed save) stays with its holders, and the definition gets a new object.
+// Returns JS_EXCEPTION (with the exception pending) if `create` fails.
+static JSValue takePlaceholderOrCreate(JsonToJSContext& c, int id, const std::string& tag, const std::function<JSValue()>& create)
+{
+	JSContext* ctx = c.ctx;
+	auto existing = (id >= 0) ? c.idMap.find(id) : c.idMap.end();
+	if (existing != c.idMap.end())
+	{
+		if (placeholderMatchesTaggedDefinition(ctx, existing->second, tag))
+		{
+			return JS_DupValue(ctx, existing->second);
+		}
+		debug(LOG_ERROR, "Reference @@id %d does not match the kind of its definition (\"%s\") while restoring globals", id, tag.c_str());
+		JS_FreeValue(ctx, existing->second);
+		c.idMap.erase(existing);
+	}
+	JSValue obj = create();
+	if (!JS_IsException(obj) && id >= 0)
+	{
+		c.idMap[id] = JS_DupValue(ctx, obj);
+	}
+	return obj;
+}
+
 static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nlohmann::ordered_json& obj_json, uint8_t prop_flags)
 {
 	for (auto it = obj_json.begin(); it != obj_json.end(); ++it)
@@ -1201,33 +1240,11 @@ static JSValue restoreSerializableBuiltinObject(JsonToJSContext& c, const nlohma
 	JSContext* ctx = c.ctx;
 	const char* typeName = serializableBuiltinKindConstructorName(kind);
 
-	// Re-use the placeholder an earlier forward reference created (if any) when it has the right internal type
-	JSValue obj = JS_UNINITIALIZED;
-	auto existing = (id >= 0) ? c.idMap.find(id) : c.idMap.end();
-	if (existing != c.idMap.end())
+	JSValue obj = takePlaceholderOrCreate(c, id, serializableBuiltinKindTag(kind), [ctx, kind]() { return newEmptySerializableBuiltinObject(ctx, kind); });
+	if (JS_IsException(obj))
 	{
-		if (JS_GetBuiltinObjectKind(existing->second) == kind)
-		{
-			obj = JS_DupValue(ctx, existing->second);
-		}
-		else
-		{
-			// (a malformed save, where the reference's @@kind differs: its holders keep the placeholder)
-			debug(LOG_ERROR, "Reference @@id %d does not match the kind of its definition (%s) while restoring globals", id, typeName);
-			JS_FreeValue(ctx, existing->second);
-			c.idMap.erase(existing);
-		}
-	}
-	if (JS_IsUninitialized(obj))
-	{
-		obj = newEmptySerializableBuiltinObject(ctx, kind);
-		if (JS_IsException(obj))
-		{
-			debug(LOG_ERROR, "Failed to create a %s while restoring globals: %s", typeName, QuickJS_DumpError(ctx).c_str());
-			return JS_UNDEFINED;
-		}
-		// Registered before decoding the contents, which may refer back to it
-		if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, obj); }
+		debug(LOG_ERROR, "Failed to create a %s while restoring globals: %s", typeName, QuickJS_DumpError(ctx).c_str());
+		return JS_UNDEFINED;
 	}
 
 	// A subclass instance gets its class prototype back (its constructor is not run)
@@ -1298,9 +1315,9 @@ static JSValue restoreSerializableBuiltinObject(JsonToJSContext& c, const nlohma
 }
 
 // Like mapJsonToQuickJSValue, but additionally decodes the tagged wrappers emitted by
-// wz_qjs_to_json on the save path (class instances, plain objects, arrays and shared
-// references). JSON values without an "@@wztype" tag are decoded the legacy way, so older
-// saves (which wrote bare objects/arrays) continue to load.
+// wz_qjs_to_json on the save path (class instances, plain objects, arrays, Maps, Sets, Dates,
+// shared references, and non-finite numbers / undefined). JSON values without an "@@wztype" tag
+// are decoded the legacy way, so older saves (which wrote bare objects/arrays) continue to load.
 JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ordered_json& instance, uint8_t prop_flags)
 {
 	JSContext* ctx = c.ctx;
@@ -1341,10 +1358,10 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ord
 				{
 					return JS_DupValue(ctx, found->second);
 				}
-				// Forward reference: create a placeholder of the correct kind that the
-				// matching definition will populate in-place later, so all holders share one
-				// identity. The kind comes from @@kind ("array"; possibly others later). An
-				// absent @@kind means a plain object.
+				// Forward reference: create a placeholder of the correct kind that the matching
+				// definition will populate in-place later, so all holders share one identity.
+				// The kind comes from @@kind ("array" / "map" / "set" / "date"), and an absent
+				// @@kind means a plain object (or a class instance).
 				std::string refKind;
 				auto kindIt = instance.find(WZ_JSON_KIND_KEY);
 				if (kindIt != instance.end() && kindIt->is_string()) { refKind = kindIt->get<std::string>(); }
@@ -1384,16 +1401,11 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ord
 
 				// Re-use a placeholder created by an earlier forward reference (if any), so
 				// every reference ends up pointing at the same object.
-				JSValue obj;
-				auto existing = (id >= 0) ? c.idMap.find(id) : c.idMap.end();
-				if (existing != c.idMap.end())
+				JSValue obj = takePlaceholderOrCreate(c, id, tag, [ctx, isArray]() { return isArray ? JS_NewArray(ctx) : JS_NewObject(ctx); });
+				if (JS_IsException(obj))
 				{
-					obj = JS_DupValue(ctx, existing->second);
-				}
-				else
-				{
-					obj = isArray ? JS_NewArray(ctx) : JS_NewObject(ctx);
-					if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, obj); }
+					debug(LOG_ERROR, "Failed to create an object while restoring globals: %s", QuickJS_DumpError(ctx).c_str());
+					return JS_UNDEFINED;
 				}
 
 				if (tag == WZ_JSON_TAG_CLASS)
@@ -4490,6 +4502,17 @@ static OrderedJsonObjectBuilder collectOwnDataPropertiesForSave(JSToJsonContext&
 	return data;
 }
 
+// Returns the type name of a Map key / Set value the save format can't recreate, or nullptr
+// (such keys would be restored as colliding keys, ex. every Symbol as null)
+static const char* unsaveableMapKeyTypeName(JSContext* ctx, JSValueConst key)
+{
+	const int tag = JS_VALUE_GET_TAG(key);
+	if (tag == JS_TAG_SYMBOL) { return "Symbol"; }
+	if (tag == JS_TAG_BIG_INT || tag == JS_TAG_SHORT_BIG_INT) { return "BigInt"; }
+	if (JS_IsFunction(ctx, key)) { return "function"; } // (including classes)
+	return nullptr;
+}
+
 // Serializes a Map / Set / Date (`kind`) into `j`, which already holds its "@@id"
 static void serializeBuiltinObjectForSave(JSToJsonContext& c, JSValue value, JSBuiltinObjectKind kind, nlohmann::ordered_json& j)
 {
@@ -4528,8 +4551,14 @@ static void serializeBuiltinObjectForSave(JSToJsonContext& c, JSValue value, JSB
 		{
 			auto free_entries = gsl::finally([ctx, entries, count] { JS_FreeMapOrSetEntries(ctx, entries, count); });
 			const bool isMap = (kind == JS_BUILTIN_OBJECT_KIND_MAP);
+			std::map<std::string, uint32_t> skippedKeyTypes; // type name -> count
 			for (uint32_t i = 0; i < count; i++)
 			{
+				if (const char* unsaveableTypeName = unsaveableMapKeyTypeName(ctx, entries[2 * i]))
+				{
+					skippedKeyTypes[unsaveableTypeName]++;
+					continue;
+				}
 				if (isMap)
 				{
 					nlohmann::ordered_json entry = nlohmann::ordered_json::array();
@@ -4541,6 +4570,20 @@ static void serializeBuiltinObjectForSave(JSToJsonContext& c, JSValue value, JSB
 				{
 					data.push_back(wz_qjs_to_json(c, entries[2 * i]));
 				}
+			}
+			if (!skippedKeyTypes.empty())
+			{
+				uint32_t skippedCount = 0;
+				std::string skippedDescription;
+				for (const auto& it : skippedKeyTypes)
+				{
+					skippedCount += it.second;
+					if (!skippedDescription.empty()) { skippedDescription += ", "; }
+					skippedDescription += std::to_string(it.second) + " " + it.first;
+				}
+				debug(LOG_SCRIPT, (isMap) ? "Saving a Map in script globals: left out %u entries whose keys cannot be saved (%s)"
+					: "Saving a Set in script globals: left out %u values that cannot be saved (%s)",
+					skippedCount, skippedDescription.c_str());
 			}
 		}
 		else
@@ -4827,6 +4870,8 @@ nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			}
 			else
 			{
+				// (not convertible, ex. a Symbol, so clear the pending exception)
+				JS_FreeValue(c.ctx, JS_GetException(c.ctx));
 				j = nlohmann::ordered_json(); // null value
 			}
 			return j;
