@@ -513,11 +513,13 @@ std::string testScriptPrelude()
 	}
 	// 2026-01-01T00:00:00Z plus the seed in minutes
 	const uint64_t fixedTime = 1767225600000ull + static_cast<uint64_t>(g_testSeed % 1440) * 60000ull;
+	// (constructs through Reflect.construct with new.target, so `class Foo extends Date` makes Foo instances)
 	return "(function (fixedTime) {\n"
 	       "\tconst RealDate = Date;\n"
+	       "\tconst construct = Reflect.construct;\n"
 	       "\tfunction FixedDate(...args) {\n"
 	       "\t\tif (!new.target) { return new RealDate(fixedTime).toString(); }\n"
-	       "\t\treturn args.length === 0 ? new RealDate(fixedTime) : new RealDate(...args);\n"
+	       "\t\treturn construct(RealDate, args.length === 0 ? [fixedTime] : args, new.target);\n"
 	       "\t}\n"
 	       "\tFixedDate.prototype = RealDate.prototype;\n"
 	       "\tFixedDate.now = function () { return fixedTime; };\n"

@@ -13,6 +13,7 @@
 # - mb:gamestate_rewind has script state only a rewind can get wrong
 # The miza 28102 cells are saved right before the messages for the next tick request a route.
 # The betweenticks cell (betweenticks.sh) is saved between two ticks with coverage changes pending.
+# The builtins cell (builtins.sh) saves, loads and rewinds Map / Set / Date script globals.
 # "cam:" tests are campaign games, which run campaign scripts but no AI bots
 # (keep their end ticks short of the level ending).
 # The skirmish tests run bundled AIs.
@@ -166,6 +167,9 @@ if echo "deadgrid" | grep -qE "$FILTER"; then
 fi
 if echo "camtakeover" | grep -qE "$FILTER"; then
 	"$HERE/camtakeover.sh" "$BIN" | grep -v '^  '
+fi
+if echo "builtins" | grep -qE "$FILTER"; then
+	"$HERE/builtins.sh" "$BIN" | grep -v '^  '
 fi
 if echo "replayrewind" | grep -qE "$FILTER"; then
 	echo "$REPLAY_CELLS" | while read -r cell; do
