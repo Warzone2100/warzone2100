@@ -236,6 +236,12 @@ static bool _checkDroidReferences(BASE_OBJECT *psVictim, const DroidList& psPlay
 				ASSERT_OR_RETURN_REPORT(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i], psDroid));
 			}
 		}
+
+		for (size_t i = 0; i < psDroid->asOrderList.size(); ++i)
+		{
+			const DROID_ORDER_DATA &queued = psDroid->asOrderList[i];
+			ASSERT_OR_RETURN_REPORT(false, queued.psObj != psVictim, "Illegal reference to p%d:%s:%d (%s) in asOrderList[%zu] in %s[%u] (%s:%d - %s) (order.type: %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), i, listName, player, objTypeToStr(psDroid->type), psDroid->id, getObjDebugDescriptiveName(psDroid), getDroidOrderName(queued.type));
+		}
 	}
 	return true;
 }
