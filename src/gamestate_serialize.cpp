@@ -5771,6 +5771,10 @@ void gameStateFromJson(const nlohmann::ordered_json &j, ScriptScope scriptScope,
 	g_mistypedObjRefs = 0;
 	g_formationRepairs = 0;
 
+	// Let the path workers finish before the map is replaced.
+	// A running search reads the live map's size and corridors.
+	fpathActiveBackend().waitForIdle();
+
 	// Drop the pathfinding caches. The current tick's blocking maps are only discarded when a request comes
 	// at a different gameTime, so after an in-process restore to an earlier moment,
 	// a request at the tick the live game last pathed in would reuse that tick's map (and its search contexts)
