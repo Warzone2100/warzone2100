@@ -49,13 +49,6 @@ function eventSyncRequest(from, reqId, x, y, obj1, obj2)
 	debug("betweenticks: raised player 0's sensor ranges at gameTime " + gameTime);
 }
 EOF
-python3 -I - "$MOD" "$CFG/mods/global/betweenticks.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/betweenticks.wz"
 
 EXTRA="--mod=betweenticks.wz" OUT="$OUT" exec "$HERE/forkcrc.sh" "$BIN" mb:perf_battle 20000 60000 --no-loaded --coverage-pending

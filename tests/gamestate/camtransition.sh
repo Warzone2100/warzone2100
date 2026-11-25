@@ -55,14 +55,7 @@ EOF
 }
 make_advancing cam2-a.js cam_levels.beta2.offWorld 20000
 make_advancing cam2-1x.js cam_levels.beta3 300
-python3 -I - "$MOD" "$CFG/mods/global/camtransition.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/camtransition.wz"
 
 # play <log> <trace>: play the game until the return from the off-world mission has freed its objects
 # and the next tick has run

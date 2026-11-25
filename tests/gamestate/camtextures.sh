@@ -89,14 +89,7 @@ make_advancing cam2-b.js cam_levels.gamma1 300
 # CAM_3A only stays
 { cat "$CAMSCRIPTS/cam3-a.js"; printf '\n// camtextures.sh: no guide topic pop-ups or videos (with the GUI, they pause the game)\naddGuideTopic = function() {};\ncamPlayVideos = function() {};\n'; } \
 	> "$MOD/script/campaign/cam3-a.js"
-python3 -I - "$MOD" "$CFG/mods/global/camtextures.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/camtextures.wz"
 
 Xvfb ":$DISPLAYNUM" -screen 0 1024x768x24 > "$OUT/camtextures.xvfb.log" 2>&1 &
 XVFB=$!

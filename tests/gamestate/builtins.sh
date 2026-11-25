@@ -276,14 +276,7 @@ function eventGameLoaded()
 	debug("builtins: me=" + me + " loaded t=" + gameTime + " " + digest());
 }
 EOF
-python3 -I - "$MOD" "$CFG/mods/global/builtins.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/builtins.wz"
 
 COMMON="--configdir=$CFG --headless --autogame --mod=builtins.wz --gamestate-test-seed=1 --gamestate-exit-at-tick=$ENDTICK"
 timeout "$RUN_TIMEOUT" "$BIN" $COMMON --skirmish=builtins.json --debug=script \

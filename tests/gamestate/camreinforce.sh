@@ -74,14 +74,7 @@ function eventTransporterLanded(t) { debug("camreinforce: transporter landed at 
 function eventTransporterExit(t) { debug("camreinforce: transporter exited at " + gameTime); }
 function eventTransporterArrived(t) { debug("camreinforce: reinforcements arrived at " + gameTime); }
 EOF
-python3 -I - "$MOD" "$CFG/mods/global/camreinforce.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/camreinforce.wz"
 
 GAME="--mod=camreinforce.wz --game=CAM_2A --gamestate-test-seed=$SEED --gamestate-test-reinforce=$REINFORCE"
 arrived() { sed -n 's/.*camreinforce: reinforcements arrived at \([0-9]*\).*/\1/p' "$1" | tr '\n' ' ' | sed 's/ $//'; }
