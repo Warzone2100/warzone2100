@@ -11,18 +11,19 @@ layout(location = 6) in uvec4 grounds;		// ground types for splatting
 layout(location = 7) in vec4 groundWeights;	// ground weights for splatting
 
 layout(location = 0) out FragData frag;
-layout(location = 10) out flat FragFlatData fragf;
+layout(location = 10) out flat int fragf_tileNo;
+layout(location = 11) out flat uvec4 fragf_grounds;
 layout(location = 12) out mat3 ModelTangentMatrix;
 
 void main()
 {
-	fragf.tileNo = tileNo;
+	fragf_tileNo = tileNo;
 
 	frag.uvLightmap = (ModelUVLightmapMatrix * vertex).xy;
 	frag.uvGround = vec2(-vertex.z, vertex.x);
 	frag.uvDecal = vertexTexCoord;
 
-	fragf.grounds = grounds;
+	fragf_grounds = grounds;
 	if (groundWeights == vec4(0)) {
 		frag.groundWeights = vec4(0.25);
 	} else {

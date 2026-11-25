@@ -25,7 +25,8 @@ layout(set = 2, binding = 8) uniform sampler2DArray decalHeight;
 layout(set = 2, binding = 9) uniform sampler2DArrayShadow shadowMap;
 
 layout(location = 0) in FragData frag;
-layout(location = 10) flat in FragFlatData fragf;
+layout(location = 10) flat in int fragf_tileNo;
+layout(location = 11) flat in uvec4 fragf_grounds;
 
 layout(location = 0) out vec4 FragColor;
 
@@ -37,7 +38,7 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 }
 
 vec4 main_classic() {
-	vec4 decal = fragf.tileNo >= 0 ? texture(decalTex, vec3(frag.uvDecal, fragf.tileNo), WZ_MIP_LOAD_BIAS) : vec4(0);
+	vec4 decal = fragf_tileNo >= 0 ? texture(decalTex, vec3(frag.uvDecal, fragf_tileNo), WZ_MIP_LOAD_BIAS) : vec4(0);
 
 	vec3 L = normalize(frag.groundLightDir);
 	vec3 N = vec3(0,0,1);

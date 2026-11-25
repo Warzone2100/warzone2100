@@ -26,7 +26,8 @@ layout(location = 4) in vec4 teGroundWeights[];
 
 // must match terrain_combined.vert's output interface (consumed by the terrain fragment shaders)
 layout(location = 0) out FragData frag;
-layout(location = 10) out flat FragFlatData fragf;
+layout(location = 10) out flat int fragf_tileNo;
+layout(location = 11) out flat uvec4 fragf_grounds;
 layout(location = 12) out mat3 ModelTangentMatrix;
 
 void main()
@@ -48,13 +49,13 @@ void main()
 	vec4 groundWeights = WZ_PATCH_BILINEAR(teGroundWeights, uv.x, uv.y);
 
 	// from here on: same computations as terrain_combined.vert
-	fragf.tileNo = teTileNo[0];
+	fragf_tileNo = teTileNo[0];
 
 	frag.uvLightmap = (ModelUVLightmapMatrix * vertex).xy;
 	frag.uvGround = vec2(-vertex.z, vertex.x);
 	frag.uvDecal = vertexTexCoord;
 
-	fragf.grounds = teGrounds[0];
+	fragf_grounds = teGrounds[0];
 	if (groundWeights == vec4(0)) {
 		frag.groundWeights = vec4(0.25);
 	} else {

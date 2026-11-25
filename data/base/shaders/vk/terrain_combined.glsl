@@ -58,9 +58,3 @@ struct FragData {
 	vec3 posModelSpace;
 	vec3 posViewSpace;
 };
-
-// non-interpolated data
-struct FragFlatData {
-	int tileNo;
-	uvec4 grounds;
-};
