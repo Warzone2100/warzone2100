@@ -4578,17 +4578,18 @@ void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::C
 			glGenFramebuffers(1, &fbo);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 			bindDynamicPassFramebufferAttachments(pass);
+			// (draw buffers are framebuffer state, and depend only on the attachments in the key)
+			configureDynamicPassDrawBuffers(pass);
+			// Checked once, when created: the status can't change while its attachments live, and in WebGL
+			// each check waits for the GPU process
 			const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			ASSERT_OR_RETURN(0, fboStatus == GL_FRAMEBUFFER_COMPLETE,
-				"Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
+				"Dynamic pass framebuffer incomplete (%s): %s", pass.debugName.c_str(),
+				cbframebuffererror(fboStatus));
 			return fbo;
 		});
 		ASSERT_OR_RETURN(, _dynamicPassFBO != 0, "Failed to acquire dynamic pass framebuffer");
 		glBindFramebuffer(GL_FRAMEBUFFER, _dynamicPassFBO);
-		configureDynamicPassDrawBuffers(pass);
-
-		const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		ASSERT_OR_RETURN(, fboStatus == GL_FRAMEBUFFER_COMPLETE, "Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
 	}
 
 	glViewport(0, 0, static_cast<GLsizei>(passWidth), static_cast<GLsizei>(passHeight));
