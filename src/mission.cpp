@@ -235,6 +235,44 @@ static void clearDroidTargetsIf(DROID *psDroid, Pred pred)
 	}
 }
 
+// Clear a droid's queued and pending orders whose target matches pred
+template <typename Pred>
+static void clearDroidOrderListTargetsIf(DROID *psDroid, Pred pred)
+{
+	std::vector<BASE_OBJECT *> listTargets;
+	for (const DroidOrder &order : psDroid->asOrderList)
+	{
+		if (order.psObj && pred(order.psObj))
+		{
+			listTargets.push_back(order.psObj);
+		}
+	}
+	for (BASE_OBJECT *psTarget : listTargets)
+	{
+		orderClearTargetFromDroidList(psDroid, psTarget);
+	}
+}
+
+// Call fn for every droid in the list, and for every droid carried by a transporter in it
+template <typename Fn>
+static void forEachDroidAndCargo(const DroidList &droids, Fn fn)
+{
+	for (DROID *psDroid : droids)
+	{
+		fn(psDroid);
+		if (psDroid->isTransporter() && psDroid->psGroup)
+		{
+			for (DROID *psCargo : psDroid->psGroup->psList)
+			{
+				if (psCargo != psDroid)
+				{
+					fn(psCargo);
+				}
+			}
+		}
+	}
+}
+
 // Clear a structure's weapon targets that match pred
 template <typename Pred>
 static void clearStructureTargetsIf(STRUCTURE *psStruct, Pred pred)
@@ -320,18 +358,7 @@ static void clearReferencesToOffWorldObjects()
 
 	auto clearDroidReferences = [&isOffWorld](DROID *psDroid) {
 		clearDroidTargetsIf(psDroid, isOffWorld);
-		std::vector<BASE_OBJECT *> listTargets;
-		for (const DroidOrder &order : psDroid->asOrderList)
-		{
-			if (isOffWorld(order.psObj))
-			{
-				listTargets.push_back(order.psObj);
-			}
-		}
-		for (BASE_OBJECT *psTarget : listTargets)
-		{
-			orderClearTargetFromDroidList(psDroid, psTarget);
-		}
+		clearDroidOrderListTargetsIf(psDroid, isOffWorld);
 	};
 	for (const PerPlayerDroidLists *droidLists : {&mission.gameWorld.objects.droids, &apsLimboDroids})
 	{
@@ -3287,7 +3314,21 @@ void missionDestroyObjects()
 		clearStructureTargetsIf(psStruct, isDead);
 	}
 
-	// FIXME: check that orders do not reference anything bad?
+	// The objects removed above are freed below with no tick in between,
+	// so no droid update clears its references to them.
+	// NOTE: only what is being freed is cleared, not a droid that merely left the current list.
+	auto isBeingFreed = [](const BASE_OBJECT *psObj) { return ::isDead(psObj); };
+	auto clearReferencesToFreed = [&isBeingFreed](DROID *psDroid) {
+		clearDroidTargetsIf(psDroid, isBeingFreed);
+		clearDroidOrderListTargetsIf(psDroid, isBeingFreed);
+	};
+	for (const PerPlayerDroidLists *droidLists : {&gameWorld.objects.droids, &mission.gameWorld.objects.droids, &apsLimboDroids})
+	{
+		for (const DroidList &droids : *droidLists)
+		{
+			forEachDroidAndCargo(droids, clearReferencesToFreed);
+		}
+	}
 
 	if (!psDestroyedObj.empty())
 	{
