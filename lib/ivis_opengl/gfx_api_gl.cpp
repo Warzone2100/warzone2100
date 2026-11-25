@@ -4980,6 +4980,13 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 	}
+
+	// Multisampled color, and the RGBA8 pipeline surfaces (WebGL 2 requires RGBA8 renderbuffers)
+	multiSampledBufferInternalFormat = GL_RGBA8;
+	multiSampledBufferBaseFormat = GL_RGBA;
+	maxMultiSampleBufferFormatSamples = 0;
+	glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferInternalFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
+	maxMultiSampleBufferFormatSamples = std::min<GLint>(std::max<GLint>(maxMultiSampleBufferFormatSamples, 0), 16);
 }
 
 #else // !defined(__EMSCRIPTEN__) // Regular OpenGL / OpenGL ES implementation
