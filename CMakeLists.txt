@@ -162,8 +162,26 @@ endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# Check minimum Emscripten version
-	if (NOT "${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.57)
-		message(FATAL_ERROR "Emscripten version must be at least 3.1.58")
+	if ("${EMSCRIPTEN_VERSION}" VERSION_LESS 7.0.0)
+		message(FATAL_ERROR "Emscripten version must be at least 7.0.0 (found: ${EMSCRIPTEN_VERSION})")
+	endif()
+
+	# Wasm exception handling format
+	# NOTE: The vcpkg dependencies use the format the WZ_WASM_LEGACY_EXCEPTIONS environment variable selects,
+	# so this option follows it.
+	# (Switching to the standard format also requires changing the Wasm exceptions check in shell.html.)
+	set(_wz_wasm_legacy_exceptions_default ON)
+	if(DEFINED ENV{WZ_WASM_LEGACY_EXCEPTIONS})
+		set(_wz_wasm_legacy_exceptions_default "$ENV{WZ_WASM_LEGACY_EXCEPTIONS}")
+	endif()
+	OPTION(WZ_WASM_LEGACY_EXCEPTIONS "Use the legacy Wasm exception handling format (broader browser support)" ${_wz_wasm_legacy_exceptions_default})
+	if((WZ_WASM_LEGACY_EXCEPTIONS AND NOT _wz_wasm_legacy_exceptions_default) OR (NOT WZ_WASM_LEGACY_EXCEPTIONS AND _wz_wasm_legacy_exceptions_default))
+		message(FATAL_ERROR "WZ_WASM_LEGACY_EXCEPTIONS must match the WZ_WASM_LEGACY_EXCEPTIONS environment variable (default: ON), which the vcpkg dependencies are built with. Set the environment variable instead, in a fresh build folder.")
+	endif()
+	if(WZ_WASM_LEGACY_EXCEPTIONS)
+		set(WZ_WASM_LEGACY_EXCEPTIONS_FLAG "-sWASM_LEGACY_EXCEPTIONS=1")
+	else()
+		set(WZ_WASM_LEGACY_EXCEPTIONS_FLAG "-sWASM_LEGACY_EXCEPTIONS=0")
 	endif()
 
 	# For Emscripten, we must currently get the following packages from Emscripten ports:
@@ -176,10 +194,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	#	- WebGL 2.0 support [LINK - see src/CMakeLists.txt]
 	#	- Fetch API [LINK - see src/CMakeLists.txt]
 
-	set(COMP_AND_LINK_FLAGS "-fwasm-exceptions")
-	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER_EQUAL 4.0.0)
-		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -sWASM_LEGACY_EXCEPTIONS")
-	endif()
+	set(COMP_AND_LINK_FLAGS "-fwasm-exceptions ${WZ_WASM_LEGACY_EXCEPTIONS_FLAG}")
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -fsanitize=address -fsanitize-recover=address")
 	endif()
@@ -193,12 +208,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# -fwasm-exceptions must be passed to linker as well
 	add_link_options(
 		"$<$<LINK_LANGUAGE:CXX,C>:-fwasm-exceptions>"
+		"$<$<LINK_LANGUAGE:CXX,C>:${WZ_WASM_LEGACY_EXCEPTIONS_FLAG}>"
 	)
-	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER_EQUAL 4.0.0)
-		add_link_options(
-			"$<$<LINK_LANGUAGE:CXX,C>:-sWASM_LEGACY_EXCEPTIONS>"
-		)
-	endif()
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		add_link_options(
 			"$<$<LINK_LANGUAGE:CXX,C>:-fsanitize=address>"

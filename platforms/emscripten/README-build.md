@@ -3,7 +3,7 @@
 ## Prerequisites:
 
 - **Git**
-- [**Emscripten 3.1.58+**](https://emscripten.org/docs/getting_started/downloads.html)
+- [**Emscripten 7.0.0+**](https://emscripten.org/docs/getting_started/downloads.html)
 - [**CMake 3.27+**](https://cmake.org/download/#latest)
 - [**workbox-cli**](https://developer.chrome.com/docs/workbox/modules/workbox-cli) (to generate a service worker)
 - For language support: [_Gettext_](https://www.gnu.org/software/gettext/)
@@ -33,6 +33,10 @@
    ```
    cmake --build . --target install
    ```
+
+### Wasm exception handling
+
+The build uses the legacy Wasm exception handling format by default (Chrome 95+, Firefox 100+, Safari 15.2+). To use the standard format instead (Chrome 137+, Firefox 131+, Safari 18.4+), set the `WZ_WASM_LEGACY_EXCEPTIONS` environment variable to `OFF` before configuring a fresh build folder, so the vcpkg dependencies are built the same way.
 
 ## Testing:
 

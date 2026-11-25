@@ -25,8 +25,14 @@ endif()
 include("${EMSCRIPTEN_ROOT}/cmake/Modules/Platform/Emscripten.cmake")
 
 # Always enable PThreads & -fwasm-exceptions
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fwasm-exceptions")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -fwasm-exceptions")
+# The exception handling format must match WZ's WZ_WASM_LEGACY_EXCEPTIONS option
+if(DEFINED ENV{WZ_WASM_LEGACY_EXCEPTIONS} AND NOT "$ENV{WZ_WASM_LEGACY_EXCEPTIONS}")
+   set(_wz_wasm_eh_flags "-fwasm-exceptions -sWASM_LEGACY_EXCEPTIONS=0")
+else()
+   set(_wz_wasm_eh_flags "-fwasm-exceptions -sWASM_LEGACY_EXCEPTIONS=1")
+endif()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread ${_wz_wasm_eh_flags}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread ${_wz_wasm_eh_flags}")
 
 # Enable optimizations for release builds
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")

@@ -281,13 +281,22 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MAX_WEBGL_VERSION=2")
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s FETCH=1")
-	target_link_options(warzone2100 PRIVATE "SHELL:-s WASM_BIGINT")
+
+	# Minimum browser versions the exception handling format requires
+	if(WZ_WASM_LEGACY_EXCEPTIONS)
+		target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_CHROME_VERSION=95")
+		target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_FIREFOX_VERSION=100")
+	else()
+		target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_CHROME_VERSION=137")
+		target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_FIREFOX_VERSION=131")
+		target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_SAFARI_VERSION=180400")
+	endif()
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s ENVIRONMENT=web,worker") # Worker must also be enabled because multithreading is enabled
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MINIFY_HTML=0") # Disable MINIFY_HTML
 
-	# Specify properties set on incoming Module object (see shell.html, postjs.js, prejs.js)
+	# Specify properties set on incoming Module object (see shell.html, prejs.js)
 	target_link_options(warzone2100 PRIVATE "SHELL:-s INCOMING_MODULE_JS_API=[wasmMemory,arguments,preRun,postRun,print,printErr,canvas,setStatus,monitorRunDependencies,locateFile,onExit]")
 
 	# Stack and memory usage
@@ -302,9 +311,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s PTHREAD_POOL_SIZE=8")
 
 	# Needed for SDL2
-	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.50)
-		target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ENABLE_GET_PROC_ADDRESS=1")
-	endif()
+	target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ENABLE_GET_PROC_ADDRESS=1")
 
 	# Offscreen canvas and proxy to pthread support
 	# - not currently supported - seems to lead to eventual freezes in Firefox and flickering in Safari
@@ -314,8 +321,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:-lidbfs.js") # Explicitly include IDBFS, see: https://github.com/emscripten-core/emscripten/issues/9406
 
 	target_link_options(warzone2100 PRIVATE "SHELL:--shell-file ${PROJECT_SOURCE_DIR}/platforms/emscripten/shell.html")
+	# NOTE: --post-js code only runs after main(), too late for preRun / onExit
 	target_link_options(warzone2100 PRIVATE "SHELL:--pre-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/prejs.js")
-	target_link_options(warzone2100 PRIVATE "SHELL:--post-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/postjs.js")
 
 	# Autorevision extern-postjs
 	add_dependencies(warzone2100 autorevision autorevision_externpostjs)
@@ -894,13 +901,6 @@ else()
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.data"
 			COMPONENT Core
 			DESTINATION "${WZ_APP_INSTALL_DEST}")
-	if ("${EMSCRIPTEN_VERSION}" VERSION_LESS 3.1.58)
-		# Versions prior to 3.1.58 generated a separate .worker.js file
-		install(FILES
-			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.worker.js"
-			COMPONENT Core
-			DESTINATION "${WZ_APP_INSTALL_DEST}")
-	endif()
 
 	# Install manifest file
 	configure_file("${CMAKE_SOURCE_DIR}/platforms/emscripten/manifest.json" "${CMAKE_CURRENT_BINARY_DIR}/manifest.json" COPYONLY)

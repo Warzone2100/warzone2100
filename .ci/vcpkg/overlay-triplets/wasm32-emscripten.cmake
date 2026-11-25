@@ -1,4 +1,6 @@
 set(VCPKG_ENV_PASSTHROUGH_UNTRACKED EMSCRIPTEN_ROOT EMSDK PATH)
+# Tracked, so the exception handling format is part of the package ABI
+set(VCPKG_ENV_PASSTHROUGH WZ_WASM_LEGACY_EXCEPTIONS)
 
 if(NOT DEFINED ENV{EMSCRIPTEN_ROOT})
    find_path(EMSCRIPTEN_ROOT "emcc")
@@ -29,8 +31,15 @@ set(VCPKG_LIBRARY_LINKAGE static)
 set(VCPKG_CMAKE_SYSTEM_NAME Emscripten)
 set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE "${WZ_WASM_META_TOOLCHAIN}")
 
+# Must match WZ's WZ_WASM_LEGACY_EXCEPTIONS option
+if(DEFINED ENV{WZ_WASM_LEGACY_EXCEPTIONS} AND NOT "$ENV{WZ_WASM_LEGACY_EXCEPTIONS}")
+   set(_wz_wasm_eh_flags "-fwasm-exceptions -sWASM_LEGACY_EXCEPTIONS=0")
+else()
+   set(_wz_wasm_eh_flags "-fwasm-exceptions -sWASM_LEGACY_EXCEPTIONS=1")
+endif()
+
 # For certain non-CMake vcpkg ports (like libvpx)
-set(ENV{EMCC_CFLAGS} "$ENV{EMCC_CFLAGS} -pthread -fwasm-exceptions")
-set(ENV{EMCC_CXXFLAGS} "$ENV{EMCC_CXXFLAGS} -pthread -fwasm-exceptions")
+set(ENV{EMCC_CFLAGS} "$ENV{EMCC_CFLAGS} -pthread ${_wz_wasm_eh_flags}")
+set(ENV{EMCC_CXXFLAGS} "$ENV{EMCC_CXXFLAGS} -pthread ${_wz_wasm_eh_flags}")
 
 set(VCPKG_BUILD_TYPE "release")
