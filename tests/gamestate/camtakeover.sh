@@ -85,14 +85,7 @@ function __testCheckFactory()
 	debug("camtakeover: NEXUS has " + factories.length + " cyborg factory(ies) at the site" + factories.map((s) => (" (" + s.x + "," + s.y + ")")).join(""));
 }
 EOF
-python3 -I - "$MOD" "$CFG/mods/global/camtakeover.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/camtakeover.wz"
 
 STATUS=0
 EXTRA="--mod=camtakeover.wz ${EXTRA:-}" OUT="$OUT" "$HERE/forkcrc.sh" "$BIN" cam:CAM_3A $SAVETICK $ENDTICK --no-loaded

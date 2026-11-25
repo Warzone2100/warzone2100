@@ -76,14 +76,7 @@ function eventStartLevel()
 	__testOrigStartLevel();
 }
 EOF
-	python3 -I - "$MOD" "$CFG/mods/global/camlaunch-$1.wz" <<'EOF'
-import os, sys, zipfile
-root, dest = sys.argv[1], sys.argv[2]
-with zipfile.ZipFile(dest, "w") as z:
-    for d, _, files in os.walk(root):
-        for f in files:
-            z.write(os.path.join(d, f), os.path.relpath(os.path.join(d, f), root))
-EOF
+	python3 -I "$HERE/mkmod.py" "$MOD" "$CFG/mods/global/camlaunch-$1.wz"
 }
 
 STATUS=0
