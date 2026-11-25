@@ -898,7 +898,7 @@ namespace gfx_api
 		>
 	>,
 	std::tuple<
-		texture_description<0, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>, // depth
+		texture_description<0, sampler_type::nearest_depth, kSampler_depthTexture, pixel_format_target::texture_2d>, // depth
 		texture_description<1, sampler_type::nearest_clamped, kSampler_normalsTexture, pixel_format_target::texture_2d>, // normals
 		texture_description<2, sampler_type::bilinear_repeat, kSampler_noiseTexture, pixel_format_target::texture_2d> // noise
 	>, SHADER_SSAO_GENERATE>;
@@ -926,7 +926,7 @@ namespace gfx_api
 	>,
 	std::tuple<
 		texture_description<0, sampler_type::bilinear, kSampler_occlusionTexture, pixel_format_target::texture_2d>, // occlusion
-		texture_description<1, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d> // depth
+		texture_description<1, sampler_type::nearest_depth, kSampler_depthTexture, pixel_format_target::texture_2d> // depth
 	>, SHADER_SSAO_BLUR>;
 
 	struct BilinearResampleConstants
@@ -1001,7 +1001,7 @@ namespace gfx_api
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
 	>,
 	std::tuple<
-		texture_description<0, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>,
+		texture_description<0, sampler_type::nearest_depth, kSampler_depthTexture, pixel_format_target::texture_2d>,
 		texture_description<1, sampler_type::nearest_clamped, kSampler_normalsTexture, pixel_format_target::texture_2d>,
 		texture_description<2, sampler_type::bilinear, kSampler_sceneTexture, pixel_format_target::texture_2d>,
 		texture_description<3, sampler_type::bilinear_repeat, kSampler_skyboxTexture, pixel_format_target::texture_2d>
@@ -1018,7 +1018,7 @@ namespace gfx_api
 	>,
 	std::tuple<
 		texture_description<0, sampler_type::nearest_clamped, kSampler_ssrTexture, pixel_format_target::texture_2d>, // premul SSR
-		texture_description<1, sampler_type::nearest_clamped, kSampler_depthTexture, pixel_format_target::texture_2d>  // depth
+		texture_description<1, sampler_type::nearest_depth, kSampler_depthTexture, pixel_format_target::texture_2d>  // depth
 	>, SHADER_SSR_BLUR>;
 
 	template<>
@@ -1046,7 +1046,7 @@ namespace gfx_api
 		texture_description<0, sampler_type::bilinear, kSampler_sceneTexture, pixel_format_target::texture_2d>,
 		texture_description<1, sampler_type::bilinear, kSampler_ssrTexture, pixel_format_target::texture_2d>,
 		texture_description<2, sampler_type::nearest_clamped, kSampler_prepassNormals, pixel_format_target::texture_2d>,
-		texture_description<3, sampler_type::nearest_clamped, kSampler_prepassDepth, pixel_format_target::texture_2d>
+		texture_description<3, sampler_type::nearest_depth, kSampler_prepassDepth, pixel_format_target::texture_2d>
 	>, SHADER_SCENE_COMPOSE_SSR>;
 
 	template<>
@@ -1070,7 +1070,7 @@ namespace gfx_api
 	>,
 	std::tuple<
 		texture_description<0, sampler_type::bilinear, kSampler_sceneTexture, pixel_format_target::texture_2d>, // scene
-		texture_description<1, sampler_type::nearest_clamped, kSampler_prepassDepth, pixel_format_target::texture_2d> // prepassDepth
+		texture_description<1, sampler_type::nearest_depth, kSampler_prepassDepth, pixel_format_target::texture_2d> // prepassDepth
 	>, SHADER_SCENE_FOG>;
 
 	template<>
@@ -1190,7 +1190,7 @@ namespace gfx_api
 		>,
 		std::tuple<
 			texture_description<0, sampler_type::bilinear, kSampler_sceneTexture, pixel_format_target::texture_2d>, // scene
-			texture_description<1, sampler_type::nearest_clamped, kSampler_prepassDepth, pixel_format_target::texture_2d>, // prepassDepth
+			texture_description<1, sampler_type::nearest_depth, kSampler_prepassDepth, pixel_format_target::texture_2d>, // prepassDepth
 			texture_description<2, sampler_type::bilinear, kSampler_rangeRingSdf, pixel_format_target::texture_2d> // rangeRingSdf
 		>,
 		SHADER_RANGE_RING_COMPOSITE>;

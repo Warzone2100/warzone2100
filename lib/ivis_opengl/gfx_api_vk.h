@@ -614,6 +614,7 @@ struct VkDepthMapImage final : public gfx_api::abstract_texture
 
 	virtual void bind() override;
 	virtual bool isArray() const override;
+	virtual bool isDepthFormat() const override { return true; }
 	virtual size_t backend_internal_value() const override;
 
 	void destroy(vk::Device dev, const VmaAllocator& allocator, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
@@ -645,6 +646,7 @@ struct VkRenderedImage final : public gfx_api::abstract_texture
 
 	virtual void bind() override;
 	virtual bool isArray() const override;
+	virtual bool isDepthFormat() const override;
 	virtual size_t backend_internal_value() const override;
 
 	void destroy(vk::Device dev, const VmaAllocator& allocator, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
@@ -673,6 +675,7 @@ struct VkAttachmentImage final : public gfx_api::abstract_texture
 	virtual ~VkAttachmentImage() override;
 	virtual void bind() override;
 	virtual bool isArray() const override { return false; }
+	virtual bool isDepthFormat() const override;
 	virtual size_t backend_internal_value() const override;
 };
 
@@ -700,6 +703,7 @@ struct VkSwapchainDepthSurface final : public gfx_api::abstract_texture
 	virtual ~VkSwapchainDepthSurface() override;
 	virtual void bind() override;
 	virtual bool isArray() const override { return false; }
+	virtual bool isDepthFormat() const override { return true; }
 	virtual 	size_t backend_internal_value() const override;
 };
 

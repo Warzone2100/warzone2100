@@ -1713,6 +1713,7 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 		return result;
 	}
 	case gfx_api::sampler_type::nearest_clamped:
+	case gfx_api::sampler_type::nearest_depth:
 		return vk::SamplerCreateInfo()
 			.setMinFilter(vk::Filter::eNearest)
 			.setMagFilter(vk::Filter::eNearest)
@@ -2707,6 +2708,16 @@ void VkRenderedImage::destroy(vk::Device _dev, const VmaAllocator& allocator, co
 }
 
 void VkRenderedImage::bind() { }
+
+bool VkRenderedImage::isDepthFormat() const
+{
+	return static_cast<bool>(vkImageAspectForFormat(imageFormat) & vk::ImageAspectFlagBits::eDepth);
+}
+
+bool VkAttachmentImage::isDepthFormat() const
+{
+	return static_cast<bool>(vkImageAspectForFormat(imageFormat) & vk::ImageAspectFlagBits::eDepth);
+}
 
 bool VkRenderedImage::isArray() const
 {

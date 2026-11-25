@@ -101,6 +101,7 @@ namespace gfx_api
 	{
 		virtual void bind() = 0;
 		virtual bool isArray() const = 0;
+		virtual bool isDepthFormat() const { return false; }
 		virtual void flush() {};
 		virtual size_t backend_internal_value() const = 0; // used for backend-specific internal purposes
 		virtual ~abstract_texture() {};
@@ -290,6 +291,7 @@ namespace gfx_api
 		nearest_clamped,
 		nearest_border,
 		anisotropic_repeat,
+		nearest_depth, // nearest_clamped, for a slot that may receive a depth-format texture read as a float
 	};
 
 	enum class border_color
@@ -332,12 +334,14 @@ namespace gfx_api
 		gfx_api::state_description state_desc;
 		SHADER_MODE shader_mode;
 		gfx_api::primitive_type primitive;
+		gfx_api::index_type index;
 		std::vector<std::type_index> uniform_blocks;
 		std::vector<gfx_api::texture_input> texture_desc;
 		std::vector<gfx_api::vertex_buffer> attribute_descriptions;
 		std::vector<const char*> uniform_block_names;
 
 		pipeline_create_info(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+								  const gfx_api::index_type& index,
 								  const std::vector<std::type_index>& uniform_blocks,
 								  const std::vector<gfx_api::texture_input>& texture_desc,
 								  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions,
@@ -345,6 +349,7 @@ namespace gfx_api
 		: state_desc(state_desc)
 		, shader_mode(shader_mode)
 		, primitive(primitive)
+		, index(index)
 		, uniform_blocks(uniform_blocks)
 		, texture_desc(texture_desc)
 		, attribute_descriptions(attribute_descriptions)
@@ -994,6 +999,28 @@ namespace gfx_api
 		static constexpr const char* value = "cbuffer";
 	};
 
+	// Debug builds check that depth-format textures are only bound to depth_map or nearest_depth slots
+#if !defined(WZ_GFX_API_DEPTH_SLOT_CHECKS)
+#  if !defined(NDEBUG)
+#    define WZ_GFX_API_DEPTH_SLOT_CHECKS 1
+#  else
+#    define WZ_GFX_API_DEPTH_SLOT_CHECKS 0
+#  endif
+#endif
+
+	inline void check_depth_texture_slots(const std::vector<texture_input>& texture_descs, const std::vector<abstract_texture*>& textures)
+	{
+		for (size_t i = 0; i < textures.size() && i < texture_descs.size(); ++i)
+		{
+			if (textures[i] == nullptr || !textures[i]->isDepthFormat())
+			{
+				continue;
+			}
+			ASSERT(texture_descs[i].target == pixel_format_target::depth_map || texture_descs[i].sampler == sampler_type::nearest_depth,
+				   "Depth-format texture bound to texture slot %zu, which is declared neither pixel_format_target::depth_map nor sampler_type::nearest_depth", texture_descs[i].id);
+		}
+	}
+
 	template<typename rasterizer, primitive_type primitive, index_type index, typename uniform_inputs, typename vertex_buffer_inputs, typename texture_inputs, SHADER_MODE shader>
 	struct pipeline_state_helper
 	{
@@ -1034,6 +1061,9 @@ namespace gfx_api
 		void bind_textures(Args&&... args)
 		{
 			static_assert(sizeof...(args) == std::tuple_size<texture_inputs>::value, "Wrong number of textures");
+#if WZ_GFX_API_DEPTH_SLOT_CHECKS
+			check_depth_texture_slots(texture_descriptions(), { args... });
+#endif
 			gfx_api::context::get().bind_textures(texture_descriptions(), { args... });
 		}
 
@@ -1109,7 +1139,7 @@ namespace gfx_api
 
 		bool recompile()
 		{
-			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), texture_descriptions(), untuple<vertex_buffer>(vertex_buffer_inputs{}), untuple_block_names(uniform_inputs{})));
+			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, index, untuple_typeinfo(uniform_inputs{}), texture_descriptions(), untuple<vertex_buffer>(vertex_buffer_inputs{}), untuple_block_names(uniform_inputs{})));
 			return nextpso != nullptr && !nextpso->broken;
 		}
 

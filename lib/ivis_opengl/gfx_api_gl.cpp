@@ -2431,6 +2431,7 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = false;
+	new_texture->_isDepthFormat = (format == GL_DEPTH_COMPONENT || format == GL_DEPTH_STENCIL);
 	new_texture->tex_width = static_cast<uint32_t>(width);
 	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -2459,6 +2460,7 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = true;
+	new_texture->_isDepthFormat = (format == GL_DEPTH_COMPONENT || format == GL_DEPTH_STENCIL);
 	new_texture->tex_width = static_cast<uint32_t>(width);
 	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -2757,6 +2759,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 		switch (desc.sampler)
 		{
 			case gfx_api::sampler_type::nearest_clamped:
+			case gfx_api::sampler_type::nearest_depth:
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
