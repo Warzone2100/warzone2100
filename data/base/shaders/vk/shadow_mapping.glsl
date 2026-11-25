@@ -1,9 +1,27 @@
 // common shadow map functions shared by terrainDecails.frag / tcmask_instanced.frag shaders
 
+// Set to 1 for targets without sampler border colors
+#ifndef WZ_EMULATE_SAMPLER_BORDER
+#define WZ_EMULATE_SAMPLER_BORDER 0
+#endif
+
+// Shadow map lookup with depth comparison (1.0 where lit).
+// Outside the map it returns the sampler's opaque white border.
+// (When emulated, the border is applied after the lookup, which must stay in uniform control flow.)
+float wzShadowTexture(vec4 uvLayerDepthRef)
+{
+	float lit = texture( shadowMap, uvLayerDepthRef );
+#if WZ_EMULATE_SAMPLER_BORDER
+	bool outsideMap = any(lessThan(uvLayerDepthRef.xy, vec2(0.0))) || any(greaterThan(uvLayerDepthRef.xy, vec2(1.0)));
+	lit = outsideMap ? 1.0 : lit;
+#endif
+	return lit;
+}
+
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
 	vec2 uv = base_uv + vec2(u, v) * shadowMapSizeInv;
-	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
+	return wzShadowTexture( vec4(uv, cascadeIndex, z) );
 }
 
 float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float NdotL, float offset)
@@ -200,7 +218,7 @@ float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float N
 		{
 			// PCF
 
-			visibility = texture( shadowMap, vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
+			visibility = wzShadowTexture( vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
 
 			if (WZ_SHADOW_FILTER_SIZE >= 2)
 			{
@@ -213,7 +231,7 @@ float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float N
 				{
 					for (float x=startVal; x<endVal; x+=1.0)
 					{
-						visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), cascadeIndex, (pos.z+bias)) ));
+						visibility -= visibilityIncrement*(1.0-wzShadowTexture( vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), cascadeIndex, (pos.z+bias)) ));
 					}
 				}
 			} // (WZ_SHADOW_FILTER_SIZE >= 2)
