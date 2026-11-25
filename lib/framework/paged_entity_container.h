@@ -31,6 +31,7 @@
  */
 #pragma once
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -422,12 +423,18 @@ public:
 		return *res;
 	}
 
-	void erase(const PageIndex& pageIdx)
+	// Returns `true` if a live element was erased.
+	// Does nothing if `pageIdx` holds no live element (ex. the index of `end()`, or a slot erased already).
+	bool erase(const PageIndex& pageIdx)
 	{
+		if (!is_addressable_page_index(pageIdx))
+		{
+			return false;
+		}
 		auto& slotMetadata = get_slot_metadata(pageIdx);
 		if (!slotMetadata.is_alive())
 		{
-			return;
+			return false;
 		}
 
 		// Either advance slot generation number or invalidate the slot right away,
@@ -468,11 +475,12 @@ public:
 			// Put the erased index into freelist for recycled IDs.
 			_pages[pageIdx.first].recycle_index(pageIdx.second);
 		}
+		return true;
 	}
 
-	void erase(SlotIndexType idx)
+	bool erase(SlotIndexType idx)
 	{
-		erase(global_to_page_index(idx));
+		return erase(global_to_page_index(idx));
 	}
 
 	/// <summary>
@@ -708,16 +716,16 @@ public:
 		return const_iterator(const_cast<PagedEntityContainer*>(this)->find(const_cast<T&>(x)));
 	}
 
-	void erase(const_iterator it)
+	bool erase(const_iterator it)
 	{
 		assert(&it._c == this);
-		erase(it.index());
+		return erase(it.index());
 	}
 
-	void erase(iterator it)
+	bool erase(iterator it)
 	{
 		assert(&it._c == this);
-		erase(it.index());
+		return erase(it.index());
 	}
 
 	// Destroys all elements and frees all data pages except first to save up on memory.
@@ -783,6 +791,14 @@ private:
 		{
 			element->~T();
 		}
+	}
+
+	// Whether the metadata of the slot at `idx` can be read (an expired page may have no storage).
+	bool is_addressable_page_index(const PageIndex& idx) const
+	{
+		return idx.first < _pages.size()
+			&& idx.second < MaxElementsPerPage
+			&& _pages[idx.first].slotMetadata() != nullptr;
 	}
 
 	SlotMetadata& get_slot_metadata(const PageIndex& idx)
