@@ -296,24 +296,27 @@ bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 		// Droids are managed by a separate droid container.
 		auto& droidContainer = GlobalDroidContainer();
 		auto it = droidContainer.find(*static_cast<DROID*>(psObj));
-		ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
-		droidContainer.erase(it);
+		ASSERT_OR_RETURN(false, it != droidContainer.end(), "Droid not found in the global container!");
+		const bool erased = droidContainer.erase(it);
+		ASSERT_OR_RETURN(false, erased, "Droid was already freed!");
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
 		// Structs are managed by a separate struct container.
 		auto& structContainer = GlobalStructContainer();
 		auto it = structContainer.find(*static_cast<STRUCTURE*>(psObj));
-		ASSERT(it != structContainer.end(), "Structure not found in the global container!");
-		structContainer.erase(it);
+		ASSERT_OR_RETURN(false, it != structContainer.end(), "Structure not found in the global container!");
+		const bool erased = structContainer.erase(it);
+		ASSERT_OR_RETURN(false, erased, "Structure was already freed!");
 	}
 	else if (psObj->type == OBJ_FEATURE)
 	{
 		// Features are managed by a separate feature container.
 		auto& featureContainer = GlobalFeatureContainer();
 		auto it = featureContainer.find(*static_cast<FEATURE*>(psObj));
-		ASSERT(it != featureContainer.end(), "Feature not found in the global container!");
-		featureContainer.erase(it);
+		ASSERT_OR_RETURN(false, it != featureContainer.end(), "Feature not found in the global container!");
+		const bool erased = featureContainer.erase(it);
+		ASSERT_OR_RETURN(false, erased, "Feature was already freed!");
 	}
 	else
 	{

@@ -470,7 +470,7 @@ DROID::~DROID()
 				}
 				// This will cause each droid to self-remove from `psGroup->psList`.
 				auto it = droidContainer.find(*psCurr);
-				ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
+				ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, it != droidContainer.end(), "Droid not found in the global container!");
 				droidContainer.erase(it);
 				return IterationResult::CONTINUE_ITERATION;
 			});
