@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 layout(std140, set = 0, binding = 0) uniform cbuffer
 {
 	mat4 posMatrix;
@@ -28,4 +30,6 @@ void main()
 	{
 		fog = vertex.y < 0.5 ? fog_color : vec4(fog_color.xyz, 0);
 	}
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

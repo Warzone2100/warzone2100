@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
 	mat4 ProjectionMatrix;
@@ -48,4 +50,6 @@ void main()
 
 	mat3 normalMatrix = mat3(transpose(inverse(instanceModelMatrix)));
 	viewNormal = wzViewShadingNormal(mat3(ViewMatrix), normalMatrix, vertexNormal, hasTangents);
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

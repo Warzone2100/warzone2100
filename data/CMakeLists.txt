@@ -331,6 +331,26 @@ if(GLSLC)
 		endif()
 		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
 	endforeach()
+
+	set(_vk_shader_list_file "${CMAKE_CURRENT_BINARY_DIR}/vk_shader_stages.txt")
+	string(REPLACE ";" "\n" _vk_shader_list_contents "${VK_SHADERS}\n")
+	set(_vk_shader_list_previous "")
+	if(EXISTS "${_vk_shader_list_file}")
+		file(READ "${_vk_shader_list_file}" _vk_shader_list_previous)
+	endif()
+	if(NOT _vk_shader_list_previous STREQUAL _vk_shader_list_contents)
+		file(WRITE "${_vk_shader_list_file}" "${_vk_shader_list_contents}")
+	endif()
+	set(_vk_shader_conventions_stamp "${CMAKE_CURRENT_BINARY_DIR}/vk_shader_conventions.stamp")
+	add_custom_command(OUTPUT "${_vk_shader_conventions_stamp}"
+		COMMAND "${CMAKE_COMMAND}" "-DSHADER_LIST_FILE=${_vk_shader_list_file}" "-DSTAMP_FILE=${_vk_shader_conventions_stamp}"
+			-P "${PROJECT_SOURCE_DIR}/cmake/WZCheckVulkanShaderConventions.cmake"
+		DEPENDS ${VK_SHADERS} "${_vk_shader_list_file}" "${PROJECT_SOURCE_DIR}/cmake/WZCheckVulkanShaderConventions.cmake"
+		COMMENT "Checking Vulkan shader conventions"
+		VERBATIM
+	)
+	list(APPEND SHADER_LIST "${_vk_shader_conventions_stamp}")
+
 	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})
 	set_property(TARGET glsl_compilation PROPERTY FOLDER "data")
 else()

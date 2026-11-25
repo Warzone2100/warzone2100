@@ -1,4 +1,6 @@
 #version 450
+
+#include "wz_clip_space.glsl"
 //#pragma debug(on)
 
 #include "tcmask_instanced.glsl"
@@ -43,4 +45,6 @@ void main()
 	colour = instanceColour;
 	texCoord_vertexDistance = vec4(texCoord.x, texCoord.y, 0.f, 0.f);
 	packed_ecmState_alphaTest = vec4(0.f, alphaTest, 0.f, 0.f);
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // Evaluates the baked terrain surface and produces exactly the interface of
 // terrain_combined.vert, so the existing terrain fragment shaders (.frag.spv)
 // are reused unchanged.
@@ -90,4 +92,6 @@ void main()
 	// Vulkan clip-space fixup (this is the final position-producing stage)
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }
