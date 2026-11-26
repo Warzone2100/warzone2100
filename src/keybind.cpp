@@ -1139,7 +1139,7 @@ void	kf_PitchForward()
 void	kf_ResetPitch()
 {
 	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH);
-	setViewDistance(STARTDISTANCE);
+	setViewDistance(war_GetMapZoom());
 }
 
 // --------------------------------------------------------------------------
