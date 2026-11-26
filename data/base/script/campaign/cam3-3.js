@@ -246,6 +246,7 @@ function defeatedWaves()
 		if (!tanks.length)
 		{
 			stopWaves = true;
+			camSetObjectiveState("waves", "done");
 			return true; // You can only win once all tanks are gone.
 		}
 	}
@@ -253,7 +254,7 @@ function defeatedWaves()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Prevent any Nexus hover tanks from escaping the area"));
+	camSetExtraObjectiveMessage({id: "waves", text: _("Prevent any Nexus hover tanks from escaping the area")});
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.gamma6, {
 		area: "RTLZ",

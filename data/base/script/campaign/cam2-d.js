@@ -114,6 +114,7 @@ function insaneSetupSpawns()
 function captureUplink()
 {
 	playSound(cam_sounds.objectiveCaptured);
+	camSetObjectiveState("uplink", "done");
 	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
@@ -134,7 +135,7 @@ function checkNASDACentral()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Secure the Uplink from The Collective"));
+	camSetExtraObjectiveMessage({id: "uplink", text: _("Secure the Uplink from The Collective"), marker: "C2D_OBJ1"});
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta8.pre, {
 		area: "RTLZ",

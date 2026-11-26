@@ -224,7 +224,11 @@ function setupNextMission()
 {
 	if (missileSilosDestroyed())
 	{
-		camSetExtraObjectiveMessage(_("Move all units into the valley"));
+		camSetObjectiveState("silos", "done");
+		camSetExtraObjectiveMessage([
+			{id: "silos", text: _("Destroy the missile silos")},
+			{id: "valley", text: _("Move all units into the valley"), marker: "CM31_HIDE_LOC"}
+		]);
 
 		camPlayVideos([cam_sounds.missile.launch.missileLaunchAborted, {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
@@ -316,6 +320,7 @@ function unitsInValley()
 		if (nukeAndCountSurvivors())
 		{
 			allInValley = true;
+			camSetObjectiveState("valley", "done");
 			return true;
 		}
 		else
@@ -327,7 +332,7 @@ function unitsInValley()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Destroy the missile silos"));
+	camSetExtraObjectiveMessage({id: "silos", text: _("Destroy the missile silos")});
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");

@@ -24,33 +24,17 @@
 	You should have received a copy of the GNU General Public License
 	along with Warzone 2100. If not, see <https://www.gnu.org/licenses/>.
 */
-/** @file
- *  Construct descriptions of research effects, generated from the topic's results.
- *
- *  Nothing here may depend on lib/widget.
- */
 
-#ifndef __INCLUDED_SRC_RESEARCHTREE_RESEARCHEFFECTTEXT_H__
-#define __INCLUDED_SRC_RESEARCHTREE_RESEARCHEFFECTTEXT_H__
+#ifndef __INCLUDED_SRC_HUD_HUDKEYS_H__
+#define __INCLUDED_SRC_HUD_HUDKEYS_H__
 
-#include "lib/framework/frame.h"
-#include "lib/framework/wzstring.h"
-#include "../researchdef.h"
+#include <string>
 
-#include <vector>
+/// The key (or gamepad buttons, while the gamepad is the active input) currently bound to a key function,
+/// by its name in src/input/keyconfig.cpp, or "" when it has none
+std::string hudKeyBindingText(const std::string &keyFunctionName);
 
-struct EffectPhrase
-{
-	WzString text;		// ex. "+25% damage - A-A"
-	bool isBuff = true;	// which way this moves things (for coloring)
-};
+/// The tooltip with the current binding of the key function appended, unless the tooltip already shows it
+std::string hudTipWithKeyBinding(const std::string &tip, const std::string &keyFunctionName);
 
-// One phrase per idea, not per row: a topic that raises the same thing for several weapon kinds,
-// or that lowers fire pause and reload time together, is described as one change.
-std::vector<EffectPhrase> describeResearchEffects(const RESEARCH& research);
-
-// A title for a progression of upgrades, from the same reading of its results,
-// ex. "Cannon Damage". Empty when the topic changes nothing describable.
-WzString nameResearchProgression(const RESEARCH& research);
-
-#endif // __INCLUDED_SRC_RESEARCHTREE_RESEARCHEFFECTTEXT_H__
+#endif // __INCLUDED_SRC_HUD_HUDKEYS_H__

@@ -54,6 +54,7 @@ public:
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	virtual bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key);
+	void playPendingClickSound();
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
@@ -76,6 +77,9 @@ public:
 
 	void setImages(Images const &images);
 	void setImages(AtlasImage image, AtlasImage imageDown, AtlasImage imageHighlight, AtlasImage imageDisabled = AtlasImage());
+	/// A size other than its images' (ex. a larger touch target), kept when they change, with them drawn in its middle
+	/// (a size of 0×0 goes back to theirs)
+	void setImageButtonSize(int width, int height);
 
 	using WIDGET::setString;
 	using WIDGET::setTip;
@@ -153,6 +157,7 @@ public:
 	unsigned        state;                          // The current button state
 	WzString        pText;                          // The text for the button
 	Images          images;                         ///< The images for the button.
+	bool            ownSize = false;                ///< Its size isn't its images' (setImageButtonSize)
 	std::string     pTip;                           // The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
@@ -168,6 +173,8 @@ private:
 	optional<WidgetHelp>	help;
 	optional<std::chrono::steady_clock::time_point> clickDownStart; // the start time of click down on this button
 	optional<WIDGET_KEY> clickDownKey;
+	bool clickSoundPending = false;  // a touch press a list may still take over: play its click sound on release (or hold)
+	bool touchLongPressPending = false;  // a touch press not yet offered as a long-press (widgOfferTouchLongPress)
 };
 
 class MultipleChoiceButton : public W_BUTTON

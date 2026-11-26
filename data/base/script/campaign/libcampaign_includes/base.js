@@ -146,6 +146,7 @@ function camSetEnemyBases(bases)
 		//camTrace("Resetting label", baseLabel);
 		resetLabel(baseLabel, CAM_HUMAN_PLAYER); // subscribe for eventGroupSeen
 	}
+	__camUpdateObjectives();
 }
 
 //;; ## camDetectEnemyBase(baseLabel)
@@ -191,6 +192,7 @@ function camDetectEnemyBase(baseLabel)
 	{
 		callback();
 	}
+	__camUpdateObjectives(); // (where "Bases destroyed" shows on the map)
 }
 
 //;; ## camAllEnemyBasesEliminated()

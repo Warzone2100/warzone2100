@@ -30,7 +30,7 @@
 
 #include "researchtracks.h"
 
-#include "researcheffecttext.h"
+#include "../widgets/detailpanel/research/researcheffecttext.h"
 #include "../research.h"
 #include "../researchdef.h"
 #include "../statsdef.h"

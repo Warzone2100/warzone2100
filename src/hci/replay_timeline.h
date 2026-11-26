@@ -25,6 +25,7 @@
 #pragma once
 
 #include "lib/widget/widget.h"
+#include "../hud/hudskin.h"
 
 #include <memory>
 #include <nonstd/optional.hpp>
@@ -54,7 +55,7 @@ private:
 	int msToX(int x0, uint32_t duration, uint32_t timeMs) const;
 	uint32_t xToMs(int localX) const;
 	uint32_t seekMsFromContext(W_CONTEXT *psContext) const;
-	void drawPlayhead(float centerX, float centerY, PIELIGHT colour) const;
+	void drawPlayhead(float centerX, float centerY, PIELIGHT colour, HudReplayPlayhead kind) const;
 	void drawCursorTimeTip(uint32_t timeMs) const;
 
 	nonstd::optional<uint32_t> ghostMs_;

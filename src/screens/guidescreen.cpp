@@ -52,6 +52,7 @@
 #include "../loop.h"
 #include "../intdisplay.h"
 #include "../intorder.h"
+#include "../hud/hudskin.h"
 #include "../hci/objects_stats.h"
 #include "../activity.h"
 #include "../feature.h"
@@ -692,11 +693,14 @@ void WzGuideRetButtonView::display(int xOffset, int yOffset)
 	{
 		return;
 	}
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	float w = width();
-	float h = height();
-	iV_DrawImage2(retButtonDisplayFilename, x0, y0, w, h);
+	HudReticuleButtonLook look;
+	look.x = x() + xOffset;
+	look.y = y() + yOffset;
+	look.width = width();
+	look.height = height();
+	look.upImage = retButtonDisplayFilename;
+	look.downImage = retButtonDisplayFilename;
+	hudSkinForSetting().drawReticuleButton(look);
 }
 
 // MARK: - Stat image view
@@ -952,6 +956,8 @@ private:
 	std::vector<int32_t> imageHeights;
 	int32_t maxImageHeight = 0;
 	int32_t totalIdealWidth = 0;
+public:
+	bool drawOrderButtons = false;  ///< (the unit orders panel's buttons: drawn by the HUD skin)
 };
 
 void W_ATLASIMAGE::display(int xOffset, int yOffset)
@@ -967,7 +973,10 @@ void W_ATLASIMAGE::display(int xOffset, int yOffset)
 		auto imageHeight = imageHeights[idx];
 		auto imageID = ImageIDs[idx];
 		int imageY0 = y0 + (h - imageHeight) / 2;
-		iV_DrawImageTint(ImageFile, imageID, currImageX0, imageY0, pal_RGBA(255, 255, 255, 255));
+		if (!drawOrderButtons || !intDrawOrderButton(hudSkinForSetting(), imageID, WzRect(currImageX0, imageY0, imageWidth, imageHeight), false, false, false))
+		{
+			iV_DrawImageTint(ImageFile, imageID, currImageX0, imageY0, pal_RGBA(255, 255, 255, 255));
+		}
 		currImageX0 += imageWidth + 2;
 	}
 }
@@ -1385,6 +1394,7 @@ void WzGuideTopicDisplayWidget::initialize(const WzWrappedGuideTopic& psWrappedT
 				auto orderButtonImagesWidg = W_ATLASIMAGE::make(IntImages, orderButtonImages);
 				if (orderButtonImagesWidg)
 				{
+					orderButtonImagesWidg->drawOrderButtons = true;
 					attach(orderButtonImagesWidg, ChildZPos::Back);
 					int32_t imageHeight = std::min<int32_t>(maxVisualHeight, orderButtonImagesWidg->idealHeight());
 					orderButtonImagesWidg->setGeometry(0, 0, orderButtonImagesWidg->idealWidth(), imageHeight);
@@ -1578,10 +1588,9 @@ public:
 		{
 			fontID = FontID;
 		}
-		wzMessageText.setText(pText, fontID);
-
 		int availableButtonTextWidth = w - (GuideNavBarButtonHorizontalPadding * 2);
-		if (wzMessageText.width() > availableButtonTextWidth)
+		wzMessageText.setText(pText, fontID, availableButtonTextWidth);
+		if (wzMessageText.fit().truncated)
 		{
 			// text would exceed the bounds of the button area
 			// try to shrink font so it fits
@@ -1596,27 +1605,16 @@ public:
 					break;
 				}
 				fontID = result.value();
-				wzMessageText.setText(pText, fontID);
-			} while (wzMessageText.width() > availableButtonTextWidth);
+				wzMessageText.setText(pText, fontID, availableButtonTextWidth);
+			} while (wzMessageText.fit().truncated);
 		}
 		lastWidgetWidth = width();
 
 		int textX0 = std::max(xPos + GuideNavBarButtonHorizontalPadding, xPos + ((w - wzMessageText.width()) / 2));
 		int textY0 = static_cast<int>(yPos + (h - wzMessageText.lineSize()) / 2 - float(wzMessageText.aboveBase()));
 
-		int maxTextDisplayableWidth = w - (GuideNavBarButtonHorizontalPadding * 2);
-		isTruncated = maxTextDisplayableWidth < wzMessageText.width();
-		if (isTruncated)
-		{
-			maxTextDisplayableWidth -= (iV_GetEllipsisWidth(wzMessageText.getFontID()) + 2);
-		}
-		wzMessageText.render(textX0, textY0, msgColour, 0.0f, maxTextDisplayableWidth);
-
-		if (isTruncated)
-		{
-			// Render ellipsis
-			iV_DrawEllipsis(wzMessageText.getFontID(), Vector2f(textX0 + maxTextDisplayableWidth + 2, textY0), msgColour);
-		}
+		isTruncated = wzMessageText.fit().truncated;
+		wzMessageText.render(textX0, textY0, msgColour);
 	}
 
 	std::string getTip() override
@@ -2037,17 +2035,9 @@ void WzGuideSidebarTopicButton::display(int xOffset, int yOffset)
 		int textY0 = y0 + (h - wzText->lineSize()) / 2 - wzText->aboveBase();
 		maxTextDisplayableWidth -= indentOffsetX;
 
-		isTruncated = maxTextDisplayableWidth < wzText->width();
-		if (isTruncated)
-		{
-			maxTextDisplayableWidth -= (iV_GetEllipsisWidth(FontID) + 2);
-		}
-		wzText->render(textX0, textY0, textColor, 0.0f, maxTextDisplayableWidth);
-		if (isTruncated)
-		{
-			// Render ellipsis
-			iV_DrawEllipsis(FontID, Vector2f(textX0 + maxTextDisplayableWidth + 2, textY0), textColor);
-		}
+		wzText->setText(pText, FontID, std::max(maxTextDisplayableWidth, 1));
+		isTruncated = wzText->fit().truncated;
+		wzText->render(textX0, textY0, textColor);
 	}
 }
 

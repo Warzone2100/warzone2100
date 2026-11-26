@@ -64,6 +64,7 @@ bool hostQuitConfirmation = true;
 bool	InGameOpUp		= false;
 static bool inGameHostQuitHandled = false;
 static bool		isInGameConfirmQuitUp = false;
+static bool menuPausedGame = false; // whether opening the menu paused the game
 
 // ////////////////////////////////////////////////////////////////////////////
 // functions
@@ -160,8 +161,11 @@ static bool _intAddInGameOptions()
 
 	// hide the spectator game over screen (if it's up) while the menu is open, so it doesn't block the menu
 	setSpectatorGameOverScreenVisible(false);
+	// and the results (the Modern skin's, which stay under the menu)
+	intSetMissionResultVisible(false);
 
 	// Pause the game.
+	menuPausedGame = !gamePaused();
 	if (!gamePaused())
 	{
 		kf_TogglePauseMode();
@@ -362,17 +366,20 @@ void handleInGameHostQuit()
 
 static void ProcessOptionFinished()
 {
-	intMode		= INT_NORMAL;
+	// (back to the results, if they stayed under the menu)
+	intMode		= MissionResUp ? INT_MISSIONRES : INT_NORMAL;
 
-	if (gamePaused())
+	// (a campaign mission's results keep their own pause)
+	if (gamePaused() && (!MissionResUp || menuPausedGame))
 	{
 		kf_TogglePauseMode();
 	}
 
 	setReticulesEnabled(true);
 
-	// re-show the spectator game over screen (if it's up)
+	// re-show the spectator game over screen (if it's up), and the results
 	setSpectatorGameOverScreenVisible(true);
+	intSetMissionResultVisible(true);
 }
 
 void intCloseInGameOptionsNoAnim()

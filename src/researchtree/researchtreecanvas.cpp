@@ -1781,8 +1781,10 @@ void WzResearchTreeCanvas::applyGamepadZoom()
 void WzResearchTreeCanvas::applyGestureInput()
 {
 	bool moved = false;
+	// (a second finger while the first scrolls a list: the gesture is dropped)
+	const bool fingerInList = widgTouchHeldInList();
 
-	if (auto scale = consumePinchGestureScaleUpdate())
+	if (auto scale = consumePinchGestureScaleUpdate(); scale && !fingerInList)
 	{
 		const float before = m_zoom;
 		m_zoom = std::clamp(m_zoom * scale.value(), minimumZoom(), ZOOM_MAX);
@@ -1795,7 +1797,7 @@ void WzResearchTreeCanvas::applyGestureInput()
 		}
 	}
 
-	if (auto delta = consumePanGestureDeltaUpdate())
+	if (auto delta = consumePanGestureDeltaUpdate(); delta && !fingerInList)
 	{
 		if (delta.value().deltaX != 0.f || delta.value().deltaY != 0.f)
 		{
@@ -1995,7 +1997,7 @@ void WzResearchTreeCanvas::openDetail(TreePick pick, bool pinned, const std::sha
 		return;
 	}
 	// No more than half the canvas height
-	contents->setMaxHeight(std::min<int32_t>(WzResearchDetailContents::MAX_PANEL_HEIGHT, height() / 2));
+	contents->setMaxHeight(std::min<int32_t>(DetailPanelContents::MAX_PANEL_HEIGHT, height() / 2));
 
 	// Park an empty widget over the node so the popover has something to anchor to,
 	// since it aligns to a widget (and a node is only a rectangle).
@@ -2124,27 +2126,14 @@ void WzResearchTreeCanvas::display(int xOffset, int yOffset)
 	// path is a good deal, so laying it down once in black first helps keeps it legible
 	// without a box. Cut to the room it has.
 	const auto renderNamed = [&view](WzCachedText& text, int textX, int textY, PIELIGHT color, int room) {
-		int shown = room;
-		const bool truncated = text.getTextWidth() > room;
-		if (truncated)
-		{
-			shown -= iV_GetEllipsisWidth(text.getFontID()) + 2;
-		}
-		if (shown <= 0)
+		if (room <= 0)
 		{
 			return;
 		}
+		text->setText(text.getText(), text.getFontID(), room);
 		PIELIGHT shade = pal_RGBA(0, 0, 0, static_cast<uint8_t>(static_cast<float>(color.byte.a) * 0.7f));
-		text->renderClipped(Vector2f(static_cast<float>(textX) + 1.f, static_cast<float>(textY) + 1.f), shade, view, shown);
-		text->renderClipped(Vector2f(textX, textY), color, view, shown);
-		if (truncated)
-		{
-			const Vector2f at(static_cast<float>(textX + shown + 2), static_cast<float>(textY));
-			if (at.x >= static_cast<float>(view.x()) && at.x <= static_cast<float>(view.x() + view.width()))
-			{
-				iV_DrawEllipsis(text.getFontID(), at, color);
-			}
-		}
+		text->renderClipped(Vector2f(static_cast<float>(textX) + 1.f, static_cast<float>(textY) + 1.f), shade, view);
+		text->renderClipped(Vector2f(textX, textY), color, view);
 	};
 
 	for (const auto unit : m_visibleUnits)

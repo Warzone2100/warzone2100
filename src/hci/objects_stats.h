@@ -22,6 +22,10 @@
 
 #include "../hci.h"
 #include "../intdisplay.h"
+#include "../hud/huddetail.h"
+#include "../hud/hudheadermenu.h"
+
+#include <limits>
 
 #define STAT_GAP	   2
 #define STAT_BUTWIDTH  60
@@ -29,6 +33,7 @@
 
 class StatsForm;
 class ObjectStatsForm;
+class HudPageControl;
 
 class BaseObjectsController
 {
@@ -123,8 +128,13 @@ protected:
 	virtual void clickSecondary(bool synthesizedFromHold) {}
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
 	bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	/// Its right-click as an action, for a long-press's popover
+	HudDetailAction secondaryAction(const WzString &label, const char *icon, bool destructive = false, bool enabled = true, const WzString &note = WzString());
 public:
 	DynamicIntFancyButton();
+	/// What its right-click does now, for a long-press's popover (none: nothing)
+	virtual std::vector<HudDetailAction> hudSecondaryActions() { return {}; }
+	void runSecondary() { clickSecondary(true); }
 };
 
 class StatsButton: public DynamicIntFancyButton
@@ -142,13 +152,18 @@ protected:
 	std::shared_ptr<W_BARGRAPH> progressBar;
 };
 
-class ObjectButton : public DynamicIntFancyButton
+class ObjectButton : public DynamicIntFancyButton, public HudDetailSource
 {
 public:
 	ObjectButton()
 	{
 		buttonType = BTMBUTTON;
 	}
+
+	std::shared_ptr<WIDGET> makeHudDetail() override;
+	uint32_t hudDetailPanelId() const override { return IDOBJ_FORM; }
+	std::vector<HudDetailAction> hudDetailActions() override;
+	std::vector<HudDetailAction> hudSecondaryActions() override;
 
 protected:
 	bool isHighlighted() const override
@@ -170,10 +185,21 @@ private:
 	Vector2i jumpPosition = {0, 0};
 };
 
-class StatsFormButton : public StatsButton
+/// The right-click actions of both buttons in a column of the object row (the task button over the object), the
+/// object's first
+std::vector<HudDetailAction> hudObjectColumnActions(const std::shared_ptr<WIDGET> &holder);
+
+class StatsFormButton : public StatsButton, public HudDetailSource
 {
 public:
 	void addCostBar();
+
+	HudDetailPlacement hudDetailPlacement() const override
+	{
+		return HudDetailPlacement::Right;
+	}
+	uint32_t hudDetailPanelId() const override { return IDSTAT_FORM; }
+	std::vector<HudDetailAction> hudDetailActions() override { return hudSecondaryActions(); }
 
 protected:
 	std::string getTip() override
@@ -187,6 +213,8 @@ protected:
 	}
 
 	virtual uint32_t getCost() = 0;
+	/// The cost bar's color: whether it can be afforded now
+	void tintCostBar();
 
 	std::shared_ptr<W_BARGRAPH> costBar;
 };
@@ -195,6 +223,16 @@ class ObjectsForm: public IntFormAnimated
 {
 private:
 	typedef IntFormAnimated BaseWidget;
+
+public:
+	/// Lists only the objects the filter keeps, in their Classic order (none: all of them, exactly as in Classic)
+	void setObjectFilter(const std::function<bool (BASE_OBJECT *)> &filter);
+	BaseObjectsController &objectsController() const { return getController(); }
+	/// The object whose button (or job button) the pointer is on, if any
+	BASE_OBJECT *objectUnderPointer() const;
+	/// The row summary strip and its filter chips, when that module is on
+	void addHudExtension();
+	const std::shared_ptr<IntListTabWidget> &objectsListWidget() const { return objectsList; }
 
 protected:
 	ObjectsForm(): BaseWidget(false) {}
@@ -205,6 +243,7 @@ protected:
 	void addTabList();
 	void updateButtons();
 	void addNewButton();
+	void addNewButton(size_t buttonIndex);
 	void removeLastButton();
 	void goToHighlightedTab();
 	virtual std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const = 0;
@@ -212,14 +251,33 @@ protected:
 	virtual BaseObjectsController &getController() const = 0;
 
 	std::shared_ptr<IntListTabWidget> objectsList;
+	std::shared_ptr<W_BUTTON> closeButton;
 	size_t buttonsCount = 0;
 	BASE_OBJECT *previousHighlighted = nullptr;
+
+private:
+	void updateFilteredButtons();
+	void removeAllButtons();
+	/// (A filter hid the highlighted object: the first shown one takes its place, as if clicked)
+	void highlightFirstShown();
+	optional<size_t> listPositionOf(size_t objectIndex) const;
+
+	std::function<bool (BASE_OBJECT *)> objectFilter;
+	std::vector<size_t> shownIndices;
+	bool filteredLayout = false;
 };
 
 class StatsForm: public IntFormAnimated
 {
 private:
 	typedef IntFormAnimated BaseWidget;
+
+public:
+	/// Lists only the options the filter keeps, in their Classic order (none: all of them, exactly as in Classic)
+	void setOptionFilter(const std::function<bool (BASE_STATS *)> &filter);
+	BaseStatsController &statsController() const { return getController(); }
+	/// The filters and search field, when that module is on
+	void addHudExtension();
 
 protected:
 	StatsForm(): BaseWidget(false) {}
@@ -230,16 +288,42 @@ protected:
 	void addCloseButton();
 	void addTabList();
 	void addNewButton();
+	void addNewButton(size_t buttonIndex);
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
 	virtual BaseStatsController &getController() const = 0;
+	/// With the page control in place of the page tabs (panel filters), or Larger Touch Targets: puts the header's
+	/// controls side by side, `drop` below their Classic row, `grow` larger (up from their bottom edge), and returns
+	/// their bounds. `besidePages`: the page control is in their row
+	virtual WzRect layoutCompactHeader(int drop, int grow, bool besidePages) { return WzRect(0, STAT_SLDY + drop - grow, 0, 13 + grow); }
+	/// `grow` px wider and taller than its images (Larger Touch Targets), or their size
+	static void sizeHeaderButton(W_BUTTON &button, int grow, AtlasImage fallback = AtlasImage());
+	/// With more pages than this, the page control takes the page tabs' row, and the header keeps its own
+	virtual size_t compactHeaderMaxPages() const { return std::numeric_limits<size_t>::max(); }
+	/// The header's buttons, for the header menu that takes their place (the Compact layout with Larger Touch Targets)
+	virtual std::vector<HudHeaderMenuEntry> headerMenuEntries() { return {}; }
+	bool usesHeaderMenu() const { return headerMenu != nullptr; }
 
 	std::shared_ptr<IntListTabWidget> optionList;
+	std::shared_ptr<W_BUTTON> closeButton;
+	optional<size_t> listPositionOf(size_t statsIndex) const;
 
 private:
+	void addPageControl();
+	bool compactHeaderInRow() const;
+	/// Larger Touch Targets, Standard layout: the header's controls are this much taller, the panel this much higher
+	int headerGrowth() const;
+	void layoutHudHeader();
 	void updateButtons();
+	void updateFilteredButtons();
+	void removeAllButtons();
 
 	size_t buttonsCount = 0;
+	std::shared_ptr<HudPageControl> pageControl;
+	std::shared_ptr<HudHeaderMenuButton> headerMenu;
+	std::function<bool (BASE_STATS *)> optionFilter;
+	std::vector<size_t> shownIndices;
+	bool filteredLayout = false;
 };
 
 class ObjectStatsForm: public StatsForm

@@ -29,4 +29,7 @@ void closeSpectatorGameOverScreen();
 // Temporarily hide / re-show the spectator game over screen (if it's up) - ex. while the in-game options menu is open
 void setSpectatorGameOverScreenVisible(bool visible);
 
+// Whether the Modern skin's results are up (they cover the screen's top-left corner)
+bool spectatorGameOverScreenShowsHudResults();
+
 #endif // __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__

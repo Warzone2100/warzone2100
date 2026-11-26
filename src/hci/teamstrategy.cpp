@@ -74,7 +74,7 @@ bool to_WzStrategyPlanningState(uint8_t value, WzStrategyPlanningState& output)
 	return false;
 }
 
-WzStrategyPlanningState cycleWzStrategyPlanningState(WzStrategyPlanningState state, bool directionForward = true)
+WzStrategyPlanningState teamStrategyNextState(WzStrategyPlanningState state, bool directionForward)
 {
 	switch (state)
 	{
@@ -90,7 +90,7 @@ WzStrategyPlanningState cycleWzStrategyPlanningState(WzStrategyPlanningState sta
 	return WzStrategyPlanningState::NotSpecified; // silence warning
 }
 
-const char* getUnitTypeDisplayName(WzStrategyPlanningUnitTypes unitType)
+const char *teamStrategyUnitTypeName(WzStrategyPlanningUnitTypes unitType)
 {
 	switch (unitType)
 	{
@@ -269,6 +269,138 @@ void strategyPlansInit()
 	}
 }
 
+std::vector<uint32_t> teamStrategyTeammates(bool allowAIs)
+{
+	std::vector<uint32_t> result;
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return result;
+	}
+	auto selectedPlayerTeam = checkedGetPlayerTeam(selectedPlayer);
+	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
+	{
+		if (player == selectedPlayer)
+		{
+			continue;
+		}
+		if (checkedGetPlayerTeam(player) != selectedPlayerTeam)
+		{
+			continue;
+		}
+		// Only include human players (or future AIs that actually set a strategy)
+		if (isHumanPlayer(player) // is an active (connected) human player
+			|| NetPlay.players[player].difficulty == AIDifficulty::HUMAN // was a human player (probably disconnected)
+			|| (allowAIs && playerStrategyPlans[player].hasBeenSet) // an AI that set a strategy (only would happen in-game, not pre-game waiting screen)
+			)
+		{
+			result.push_back(static_cast<uint32_t>(player));
+		}
+	}
+	// sort by player position
+	std::sort(result.begin(), result.end(), [](uint32_t playerA, uint32_t playerB) -> bool {
+		return NetPlay.players[playerA].position < NetPlay.players[playerB].position;
+	});
+	return result;
+}
+
+WzStrategyPlanningState teamStrategyWeaponPlan(uint32_t player, WEAPON_SUBCLASS subClass)
+{
+	ASSERT_OR_RETURN(WzStrategyPlanningState::NotSpecified, player < playerStrategyPlans.size() && subClass < WSC_NUM_WEAPON_SUBCLASSES, "Invalid plan");
+	return playerStrategyPlans[player].weaponPlans[subClass].state;
+}
+
+WzStrategyPlanningState teamStrategyUnitPlan(uint32_t player, WzStrategyPlanningUnitTypes unitType)
+{
+	ASSERT_OR_RETURN(WzStrategyPlanningState::NotSpecified, player < playerStrategyPlans.size() && static_cast<size_t>(unitType) < WzStrategyPlanningUnitTypes_NUM_TYPES, "Invalid plan");
+	return playerStrategyPlans[player].unitPlans[static_cast<size_t>(unitType)].state;
+}
+
+void teamStrategyStepWeaponPlan(WEAPON_SUBCLASS subClass, bool forward, bool send)
+{
+	ASSERT_OR_RETURN(, selectedPlayer < playerStrategyPlans.size() && subClass < WSC_NUM_WEAPON_SUBCLASSES, "Invalid plan");
+	// Change the actual stored value for this player + weapon subclass
+	auto &plan = playerStrategyPlans[selectedPlayer];
+	plan.weaponPlans[subClass].state = teamStrategyNextState(plan.weaponPlans[subClass].state, forward);
+	plan.hasBeenSet = true;
+	if (send)
+	{
+		// Send the change to other team players
+		sendStrategyPlanUpdate(selectedPlayer);
+	}
+}
+
+void teamStrategyStepUnitPlan(WzStrategyPlanningUnitTypes unitType, bool forward, bool send)
+{
+	ASSERT_OR_RETURN(, selectedPlayer < playerStrategyPlans.size() && static_cast<size_t>(unitType) < WzStrategyPlanningUnitTypes_NUM_TYPES, "Invalid plan");
+	auto &plan = playerStrategyPlans[selectedPlayer];
+	auto &unitPlan = plan.unitPlans[static_cast<size_t>(unitType)];
+	unitPlan.state = teamStrategyNextState(unitPlan.state, forward);
+	plan.hasBeenSet = true;
+	if (send)
+	{
+		// Send the change to other team players
+		sendStrategyPlanUpdate(selectedPlayer);
+	}
+}
+
+void teamStrategySendLocalPlan()
+{
+	if (selectedPlayer < playerStrategyPlans.size())
+	{
+		sendStrategyPlanUpdate(selectedPlayer);
+	}
+}
+
+bool teamStrategyUnitTypeDisabled(WzStrategyPlanningUnitTypes unitType)
+{
+	switch (unitType)
+	{
+		case WzStrategyPlanningUnitTypes::Tanks:
+			return (ingame.flags & MPFLAGS_NO_TANKS) != 0;
+		case WzStrategyPlanningUnitTypes::VTOL:
+			return (ingame.flags & MPFLAGS_NO_VTOLS) != 0;
+		case WzStrategyPlanningUnitTypes::Cyborg:
+			return (ingame.flags & MPFLAGS_NO_CYBORGS) != 0;
+	}
+	return false;
+}
+
+size_t teamStrategyFillForTests(size_t teammates)
+{
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return 0;
+	}
+	const auto team = checkedGetPlayerTeam(selectedPlayer);
+	std::vector<uint32_t> players = {selectedPlayer};
+	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS) && players.size() <= teammates; ++player)
+	{
+		if (player != selectedPlayer && checkedGetPlayerTeam(player) == team && NetPlay.players[player].difficulty != AIDifficulty::DISABLED)
+		{
+			NetPlay.players[player].difficulty = AIDifficulty::HUMAN;
+			players.push_back(static_cast<uint32_t>(player));
+		}
+	}
+	// (Sample plans: a few classes each, varied by player)
+	for (size_t i = 0; i < players.size(); ++i)
+	{
+		auto &plan = playerStrategyPlans[players[i]];
+		plan.reset();
+		for (size_t c = 0; c < plan.weaponPlans.size(); ++c)
+		{
+			const size_t v = (c * 7 + i * 5 + c * i) % 11;
+			plan.weaponPlans[c].state = v == 0 ? WzStrategyPlanningState::HeavilyPlanned : (v <= 2 ? WzStrategyPlanningState::Planned : (v == 3 ? WzStrategyPlanningState::Never : WzStrategyPlanningState::NotSpecified));
+		}
+		for (size_t u = 0; u < plan.unitPlans.size(); ++u)
+		{
+			const size_t v = (u * 3 + i * 2) % 5;
+			plan.unitPlans[u].state = v == 0 ? WzStrategyPlanningState::HeavilyPlanned : (v <= 2 ? WzStrategyPlanningState::Planned : (v == 3 ? WzStrategyPlanningState::Never : WzStrategyPlanningState::NotSpecified));
+		}
+		plan.hasBeenSet = true;
+	}
+	return players.size() - 1;
+}
+
 void WzPlayerStrategyPlan::reset()
 {
 	for (size_t i = 0; i < weaponPlans.size(); ++i)
@@ -415,21 +547,23 @@ gfx_api::texture* WzTeamStrategyColumnImagesManager::getWeaponSubclassImageTextu
 	return loadedWeaponSubclassImages[subClass];
 }
 
-static gfx_api::texture* loadImageForUnitType(WzStrategyPlanningUnitTypes unitType)
+const char *teamStrategyUnitTypeImagePath(WzStrategyPlanningUnitTypes unitType)
 {
-	const char* imagePath = nullptr;
 	switch (unitType)
 	{
 		case WzStrategyPlanningUnitTypes::Tanks:
-			imagePath = "images/intfac/unittype_tank.png";
-			break;
+			return "images/intfac/unittype_tank.png";
 		case WzStrategyPlanningUnitTypes::VTOL:
-			imagePath = "images/intfac/unittype_vtol.png";
-			break;
+			return "images/intfac/unittype_vtol.png";
 		case WzStrategyPlanningUnitTypes::Cyborg:
-			imagePath = "images/intfac/unittype_cyborg.png";
-			break;
+			return "images/intfac/unittype_cyborg.png";
 	}
+	return nullptr;
+}
+
+static gfx_api::texture* loadImageForUnitType(WzStrategyPlanningUnitTypes unitType)
+{
+	const char* imagePath = teamStrategyUnitTypeImagePath(unitType);
 	ASSERT_OR_RETURN(nullptr, imagePath != nullptr, "No image path");
 	WZ_Notification_Image img(imagePath);
 	return img.loadImageToTexture();
@@ -526,20 +660,9 @@ void WzTeamStrategyIconColumnHeader::display(int xOffset, int yOffset)
 	// Draw the text, sideways
 	int textX0 = ((width() - columnText.lineSize()) / 2) + (-columnText.aboveBase());
 	int textY0 = height() - (WZ_TEAMSTRAT_COLUMN_HEADER_PADDING_Y + WZ_TEAMSTRAT_COLUMN_HEADER_IMAGE_DISPLAY_SIZE + WZ_TEAMSTRAT_COLUMN_HEADER_INTERNAL_PADDING);
-	int maxTextDisplayableWidth = textY0 - WZ_TEAMSTRAT_COLUMN_HEADER_PADDING_Y;
-	bool willTruncate = maxTextDisplayableWidth < columnText.width();
-	if (willTruncate)
-	{
-		maxTextDisplayableWidth -= (iV_GetEllipsisWidth(columnText.getFontID()) + 2);
-	}
+	columnText.setText(columnText.getText(), columnText.getFontID(), textY0 - WZ_TEAMSTRAT_COLUMN_HEADER_PADDING_Y);
 	PIELIGHT textColor = (!disabledColumn) ? WZCOL_TEXT_DARK : WZCOL_GREY;
-	columnText.render(x0 + textX0, y0 + textY0, textColor, 270.f, maxTextDisplayableWidth);
-
-	if (willTruncate)
-	{
-		// Render ellipsis, also sideways
-		iV_DrawEllipsis(columnText.getFontID(), Vector2f(x0 + textX0, (y0 + textY0) - (maxTextDisplayableWidth + 2)), textColor, 270.f);
-	}
+	columnText.render(x0 + textX0, y0 + textY0, textColor, 270.f);
 }
 
 int32_t WzTeamStrategyIconColumnHeader::idealWidth()
@@ -681,7 +804,7 @@ public:
 		return handleClick(false);
 	}
 protected:
-	virtual WzStrategyPlanningState currentState() override { return playerStrategyPlans[playerIdx].weaponPlans[subClass].state; }
+	virtual WzStrategyPlanningState currentState() override { return teamStrategyWeaponPlan(playerIdx, subClass); }
 private:
 	bool handleClick(bool primary)
 	{
@@ -690,20 +813,8 @@ private:
 			return false;
 		}
 
-		// Change the actual stored value for this player + weapon subclass
-		auto newState = cycleWzStrategyPlanningState(playerStrategyPlans[playerIdx].weaponPlans[subClass].state, primary);
-		playerStrategyPlans[playerIdx].weaponPlans[subClass].state = newState;
-		playerStrategyPlans[playerIdx].hasBeenSet = true;
-
-		if (auto strongParent = parentStrategyView.lock())
-		{
-			if (strongParent->getUpdatingPlayer())
-			{
-				// Send the change to other team players
-				sendStrategyPlanUpdate(selectedPlayer);
-			}
-		}
-
+		auto strongParent = parentStrategyView.lock();
+		teamStrategyStepWeaponPlan(subClass, primary, strongParent && strongParent->getUpdatingPlayer());
 		return true;
 	}
 private:
@@ -729,7 +840,7 @@ public:
 		return handleClick(false);
 	}
 protected:
-	virtual WzStrategyPlanningState currentState() override { return playerStrategyPlans[playerIdx].unitPlans[static_cast<size_t>(unitType)].state; }
+	virtual WzStrategyPlanningState currentState() override { return teamStrategyUnitPlan(playerIdx, unitType); }
 private:
 	bool handleClick(bool primary)
 	{
@@ -738,20 +849,8 @@ private:
 			return false;
 		}
 
-		// Change the actual stored value for this player + weapon subclass
-		auto newState = cycleWzStrategyPlanningState(playerStrategyPlans[playerIdx].unitPlans[static_cast<size_t>(unitType)].state, primary);
-		playerStrategyPlans[playerIdx].unitPlans[static_cast<size_t>(unitType)].state = newState;
-		playerStrategyPlans[playerIdx].hasBeenSet = true;
-
-		if (auto strongParent = parentStrategyView.lock())
-		{
-			if (strongParent->getUpdatingPlayer())
-			{
-				// Send the change to other team players
-				sendStrategyPlanUpdate(selectedPlayer);
-			}
-		}
-
+		auto strongParent = parentStrategyView.lock();
+		teamStrategyStepUnitPlan(unitType, primary, strongParent && strongParent->getUpdatingPlayer());
 		return true;
 	}
 private:
@@ -965,27 +1064,7 @@ std::shared_ptr<TeamStrategyView> TeamStrategyView::make(bool allowAIs)
 	}
 
 	// Check if current player has teammates
-	auto selectedPlayerTeam = checkedGetPlayerTeam(selectedPlayer);
-	std::vector<uint32_t> playersOnSameTeamAsSelectedPlayer;
-	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
-	{
-		if (player == selectedPlayer)
-		{
-			continue;
-		}
-		if (checkedGetPlayerTeam(player) != selectedPlayerTeam)
-		{
-			continue;
-		}
-		// Only include human players (or future AIs that actually set a strategy)
-		if (isHumanPlayer(player) // is an active (connected) human player
-			|| NetPlay.players[player].difficulty == AIDifficulty::HUMAN // was a human player (probably disconnected)
-			|| (allowAIs && playerStrategyPlans[player].hasBeenSet) // an AI that set a strategy (only would happen in-game, not pre-game waiting screen)
-			)
-		{
-			playersOnSameTeamAsSelectedPlayer.push_back(static_cast<uint32_t>(player));
-		}
-	}
+	std::vector<uint32_t> playersOnSameTeamAsSelectedPlayer = teamStrategyTeammates(allowAIs);
 
 	class make_shared_enabler: public TeamStrategyView {};
 	auto result = std::make_shared<make_shared_enabler>();
@@ -1016,25 +1095,13 @@ std::shared_ptr<TeamStrategyView> TeamStrategyView::make(bool allowAIs)
 	for (size_t i = 0; i < WzStrategyPlanningUnitTypes_NUM_TYPES; ++i)
 	{
 		auto unitType = static_cast<WzStrategyPlanningUnitTypes>(i);
-		bool typeDisabled = false;
-		switch (unitType)
-		{
-			case WzStrategyPlanningUnitTypes::Tanks:
-				typeDisabled = (ingame.flags & MPFLAGS_NO_TANKS) != 0;
-				break;
-			case WzStrategyPlanningUnitTypes::VTOL:
-				typeDisabled = (ingame.flags & MPFLAGS_NO_VTOLS) != 0;
-				break;
-			case WzStrategyPlanningUnitTypes::Cyborg:
-				typeDisabled = (ingame.flags & MPFLAGS_NO_CYBORGS) != 0;
-				break;
-		}
+		bool typeDisabled = teamStrategyUnitTypeDisabled(unitType);
 		if (typeDisabled)
 		{
 			disabledUnitTypes.insert(unitType);
 		}
-		auto unitTypeColumHeader = WzTeamStrategyIconColumnHeader::make(getUnitTypeDisplayName(unitType), result->columnImagesManager->getUnitTypeImageRef(unitType), typeDisabled);
-		unitTypeColumHeader->setTip(getUnitTypeDisplayName(unitType));
+		auto unitTypeColumHeader = WzTeamStrategyIconColumnHeader::make(teamStrategyUnitTypeName(unitType), result->columnImagesManager->getUnitTypeImageRef(unitType), typeDisabled);
+		unitTypeColumHeader->setTip(teamStrategyUnitTypeName(unitType));
 		unitTypeColumHeader->setGeometry(0, 0, unitTypeColumHeader->idealWidth(), unitTypeColumHeader->idealHeight());
 		columns.push_back({unitTypeColumHeader, TableColumn::ResizeBehavior::FIXED_WIDTH});
 	}
@@ -1060,10 +1127,6 @@ std::shared_ptr<TeamStrategyView> TeamStrategyView::make(bool allowAIs)
 	result->table->addRow(result->newPlayerStrategyRow(selectedPlayer, displayedWeaponSubclasses, disabledUnitTypes));
 
 	// Add rows for all players on same team as selectedPlayer
-	// sort by player position
-	std::sort(playersOnSameTeamAsSelectedPlayer.begin(), playersOnSameTeamAsSelectedPlayer.end(), [](uint32_t playerA, uint32_t playerB) -> bool {
-		return NetPlay.players[playerA].position < NetPlay.players[playerB].position;
-	});
 	for (auto player : playersOnSameTeamAsSelectedPlayer)
 	{
 		if (player == selectedPlayer)
@@ -1196,6 +1259,16 @@ bool gameHasTeamStrategyView(bool allowAIs)
 		}
 	}
 	return false;
+}
+
+bool teamStrategyViewAvailable(bool allowAIs)
+{
+	// (As TeamStrategyView::make, after the multiplayer menu's own check)
+	if (!gameHasTeamStrategyView(allowAIs) || !gameHasTeamStrategyView())
+	{
+		return false;
+	}
+	return selectedPlayer < MAX_PLAYERS && !(selectedPlayer < MAX_CONNECTED_PLAYERS && NetPlay.players[selectedPlayer].isSpectator);
 }
 
 std::shared_ptr<WIDGET> createTeamStrategyView(bool allowAIs)

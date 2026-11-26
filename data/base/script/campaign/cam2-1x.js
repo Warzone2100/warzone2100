@@ -76,6 +76,7 @@ function preDamageUnits()
 function triggerWin()
 {
 	victoryFlag = true;
+	camSetObjectiveState("rescue", "done");
 }
 
 function setupCyborgGroups()
@@ -115,6 +116,11 @@ function checkCrashedTeam()
 		return false;
 	}
 
+	if (camAllowInsaneSpawns() && camAllEnemyBasesEliminated())
+	{
+		camSetObjectiveState("bases", "done");
+	}
+
 	if (camDef(victoryFlag) && victoryFlag)
 	{
 		if (camAllowInsaneSpawns())
@@ -131,8 +137,8 @@ function checkCrashedTeam()
 
 function eventStartLevel()
 {
-	const VIC_MSG = _("Locate and rescue your units from the shot down transporter");
-	const VIC_MSG_SPAWNS = _("Destroy all enemy bases");
+	const VIC_MSG = {id: "rescue", text: _("Locate and rescue your units from the shot down transporter"), marker: "C21_OBJECTIVE"};
+	const VIC_MSG_SPAWNS = {id: "bases", text: _("Destroy all enemy bases")};
 	const vicMessages = (!camAllowInsaneSpawns()) ? VIC_MSG : [VIC_MSG, VIC_MSG_SPAWNS];
 	camSetExtraObjectiveMessage(vicMessages);
 

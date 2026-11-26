@@ -86,6 +86,7 @@
 
 #include "random.h"
 #include "perfcounters.h"
+#include "hud/hudbuildcategories.h"
 #include "3rdparty/gsl_finally.h"
 #include <functional>
 #include <unordered_map>
@@ -594,6 +595,10 @@ bool loadStructureStats(WzConfig &ini)
 			continue;
 		}
 		psStats->type = structType[type];
+		if (ini.contains("buildCategory"))
+		{
+			hudSetStructureBuildCategory(psStats->id.toUtf8(), ini.value("buildCategory").toWzString().toUtf8());
+		}
 
 		// save indexes of special structures for futher use
 		initModuleStats(statWriteIdx, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
@@ -891,6 +896,7 @@ bool structureStatsShutDown()
 {
 	packFavoriteStructs();
 	releaseStructureStats(numStructureStats);
+	hudResetBuildCategories();
 	return true;
 }
 

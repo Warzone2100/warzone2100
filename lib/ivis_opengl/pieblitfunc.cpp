@@ -503,6 +503,7 @@ void pie_DeclareInterfacePipelines(std::vector<void (*)()>& out)
 		&gfx_api::DrawImagePSO::prewarm, &gfx_api::DrawImageAnisotropicPSO::prewarm, &gfx_api::DrawImageTextPSO::prewarm,
 		&gfx_api::BoxFillPSO::prewarm, &gfx_api::BoxFillAlphaPSO::prewarm, &gfx_api::BoxFillPSO_Instanced::prewarm,
 		&gfx_api::UIBoxPSO::prewarm, &gfx_api::UniTransBoxPSO::prewarm, &gfx_api::ShadowBox2DPSO::prewarm, &gfx_api::LinePSO::prewarm,
+		&gfx_api::Shapes2DPSO::prewarm,
 		&gfx_api::RadarPSO::prewarm, &gfx_api::RadarViewInsideFillPSO::prewarm, &gfx_api::RadarViewOutlinePSO::prewarm,
 	});
 }
@@ -536,12 +537,13 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 	pie_DrawRect<gfx_api::UniTransBoxPSO>(x0, y0, x1, y1, light);
 }
 
-static void pie_DrawUIBoxWithMVP(const glm::mat4& mvp, float w, float h, PIELIGHT from, PIELIGHT to, glm::vec2 gradientDir, float falloffExponent, glm::vec4 cornerRadii, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f, glm::vec4 clipRectLocal = glm::vec4(0.f))
+static void pie_DrawUIBoxWithMVP(const glm::mat4& mvp, float w, float h, PIELIGHT from, PIELIGHT to, glm::vec2 gradientDir, float falloffExponent, glm::vec4 cornerRadii, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f, glm::vec4 clipRectLocal = glm::vec4(0.f), glm::vec2 dash = glm::vec2(0.f))
 {
 	gfx_api::UIBoxPSO::get().bind();
 	gfx_api::UIBoxPSO::get().bind_constants({ mvp, Vector2f(w, h), gradientDir,
 		pielightToRGBAVec4(from), pielightToRGBAVec4(to), pielightToRGBAVec4(borderColour),
-		cornerRadii, clipRectLocal, std::max(falloffExponent, 0.001f), borderWidth, std::max(edgeSoftness, 1.f) });
+		cornerRadii, clipRectLocal, std::max(falloffExponent, 0.001f), borderWidth, std::max(edgeSoftness, 1.f),
+		std::max(dash.x, 0.f), std::max(dash.y, 0.f) });
 	gfx_api::UIBoxPSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
 	gfx_api::UIBoxPSO::get().draw(4, 0);
 	gfx_api::UIBoxPSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
@@ -550,7 +552,7 @@ static void pie_DrawUIBoxWithMVP(const glm::mat4& mvp, float w, float h, PIELIGH
 // screenClip (optional): the visible region in the same (screen) space as
 // x0/y0/x1/y1 - the box's shape is computed for the full rect, then cut at
 // the clip edges (partially visible corners render as truncated arcs)
-static void pie_DrawUIBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, glm::vec2 gradientDir, float falloffExponent, glm::vec4 cornerRadii, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f, const WzRect* screenClip = nullptr)
+static void pie_DrawUIBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, glm::vec2 gradientDir, float falloffExponent, glm::vec4 cornerRadii, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f, const WzRect* screenClip = nullptr, glm::vec2 dash = glm::vec2(0.f))
 {
 	if (x0 > x1)
 	{
@@ -584,7 +586,7 @@ static void pie_DrawUIBox(float x0, float y0, float x1, float y1, PIELIGHT from,
 		// else: fully visible - leave clipping disabled
 	}
 	const auto& mvp = defaultProjectionMatrix() * glm::translate(Vector3f(x0, y0, 0.f)) * glm::scale(glm::vec3(w, h, 1.f));
-	pie_DrawUIBoxWithMVP(mvp, w, h, from, to, gradientDir, falloffExponent, cornerRadii, borderColour, borderWidth, edgeSoftness, clipRectLocal);
+	pie_DrawUIBoxWithMVP(mvp, w, h, from, to, gradientDir, falloffExponent, cornerRadii, borderColour, borderWidth, edgeSoftness, clipRectLocal, dash);
 }
 
 void pie_FillGradientBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontal /*= false*/, float falloffExponent /*= 1.f*/)
@@ -600,6 +602,11 @@ void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, f
 void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth)
 {
 	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), borderColour, borderWidth);
+}
+
+void pie_DrawDashedRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, float dashLength, float dashGap)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), borderColour, borderWidth, 1.f, nullptr, glm::vec2(dashLength, dashGap));
 }
 
 void pie_DrawSoftRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, float edgeSoftness)
@@ -622,6 +629,18 @@ void pie_DrawSoftRoundedBoxRotated(float centerX, float centerY, float width, fl
 		* glm::translate(Vector3f(-width / 2.f, -height / 2.f, 0.f))
 		* glm::scale(glm::vec3(width, height, 1.f));
 	pie_DrawUIBoxWithMVP(mvp, width, height, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), pal_RGBA(0, 0, 0, 0), 0.f, edgeSoftness);
+}
+
+void pie_DrawRoundedBoxTransformed(const glm::mat4 &modelViewProjection, float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, float edgeSoftness)
+{
+	const float w = x1 - x0;
+	const float h = y1 - y0;
+	if (w <= 0.f || h <= 0.f)
+	{
+		return;
+	}
+	const glm::mat4 mvp = modelViewProjection * glm::translate(Vector3f(x0, y0, 0.f)) * glm::scale(glm::vec3(w, h, 1.f));
+	pie_DrawUIBoxWithMVP(mvp, w, h, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), borderColour, borderWidth, edgeSoftness);
 }
 
 void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, float cornerRadius, PIELIGHT borderColour, float borderWidth)
@@ -687,6 +706,43 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f o
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
 
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
+}
+
+void iV_DrawTextureTinted(gfx_api::texture& TextureID, Vector2f position, Vector2f size, PIELIGHT colour, const glm::mat4 &modelViewProjection)
+{
+	const glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3(position.x, position.y, 0.f));
+	iv_DrawImageImpl<gfx_api::DrawImagePSO>(TextureID, Vector2f(0.f, 0.f), size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
+}
+
+void iV_DrawTextureRegions(gfx_api::texture& TextureID, Vector2i textureSize, const std::vector<TextureRegionDraw> &regions)
+{
+	iV_DrawTextureRegions(TextureID, textureSize, regions, defaultProjectionMatrix());
+}
+
+void iV_DrawTextureRegions(gfx_api::texture& TextureID, Vector2i textureSize, const std::vector<TextureRegionDraw> &regions, const glm::mat4 &modelViewProjection)
+{
+	if (regions.empty() || textureSize.x <= 0 || textureSize.y <= 0)
+	{
+		return;
+	}
+	const glm::mat4 &projection = modelViewProjection;
+	const float invWidth = 1.f / static_cast<float>(textureSize.x);
+	const float invHeight = 1.f / static_cast<float>(textureSize.y);
+	gfx_api::DrawImagePSO::get().bind();
+	gfx_api::DrawImagePSO::get().bind_textures(&TextureID);
+	gfx_api::DrawImagePSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
+	for (const TextureRegionDraw &region : regions)
+	{
+		const glm::mat4 transform = projection * glm::translate(glm::vec3(region.position.x, region.position.y, 0.f)) * glm::scale(glm::vec3(region.size.x, region.size.y, 1.f));
+		gfx_api::DrawImagePSO::get().bind_constants({ transform,
+			Vector2f(region.texturePosition.x * invWidth, region.texturePosition.y * invHeight),
+			Vector2f(region.textureSize.x * invWidth, region.textureSize.y * invHeight),
+			pielightToRGBAVec4(region.colour),
+			0
+		});
+		gfx_api::DrawImagePSO::get().draw(4, 0);
+	}
+	gfx_api::DrawImagePSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
 }
 
 void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, const WzClippingRectF& clippingRect)

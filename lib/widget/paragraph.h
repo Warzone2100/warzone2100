@@ -104,7 +104,7 @@ public:
 			}
 			return cachedTextWidth.value();
 		}
-		return cachedText->width();
+		return cachedText->fit().naturalWidth;
 	}
 	inline int32_t getTextLineSize() const
 	{

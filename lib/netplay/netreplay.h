@@ -27,6 +27,8 @@
 
 std::string NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename = false);
 bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler);
+/// The replay file the game is saving (or saved last), in the write directory (empty when none)
+std::string const &NETreplaySaveFilename();
 void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player);
 
 bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optionsHandler, uint32_t& output_replayFormatVer);

@@ -28,6 +28,7 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/piematrix.h"
 
 #include "component.h"
@@ -230,14 +231,47 @@ static void resolveResearchFit(RESEARCH *psResearch, UDWORD boxSize, BASE_STATS 
 	*scaleOut = rescaleButtonObject(static_cast<SDWORD>(radius), flatScale, targetRadius);
 }
 
+/// How high the model drawn for a research topic reaches, above and below its origin (in model units)
+static bool researchModelHeights(const BASE_STATS *psResGraphic, UDWORD IMDType, int *bottom, int *top)
+{
+	const iIMDShape *shapes[2] = {nullptr, nullptr};
+	if (IMDType == IMDTYPE_STRUCTURESTAT)
+	{
+		const STRUCTURE_STATS *stats = (const STRUCTURE_STATS *)psResGraphic;
+		shapes[0] = safeGetDisplayModelFromBase(stats->pIMD[0]);
+	}
+	else if (IMDType == IMDTYPE_COMPONENT)
+	{
+		const iIMDShape *mount = nullptr;
+		StatGetComponentIMD(psResGraphic, StatIsComponent(psResGraphic), &shapes[0], &mount);
+		shapes[1] = mount;
+	}
+	else
+	{
+		const RESEARCH *research = (const RESEARCH *)psResGraphic;
+		shapes[0] = safeGetDisplayModelFromBase(research->pIMD);
+		shapes[1] = safeGetDisplayModelFromBase(research->pIMD2);
+	}
+	bool found = false;
+	for (const iIMDShape *shape : shapes)
+	{
+		if (shape == nullptr)
+		{
+			continue;
+		}
+		*bottom = found ? std::min(*bottom, shape->min.y) : shape->min.y;
+		*top = found ? std::max(*top, shape->max.y) : shape->max.y;
+		found = true;
+	}
+	return found && *top > *bottom;
+}
+
 void renderResearchFittedToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY, UDWORD boxSize, bool rotate)
 {
 	if (psResearch == nullptr || boxSize == 0)
 	{
 		return;
 	}
-
-	pie_SetGeometricOffset(OriginX, OriginY + static_cast<int>(boxSize) / 8);
 
 	const int angle = (rotate) ? static_cast<int>((realTime % PREVIEW_ROTATE_TIME) * 360 / PREVIEW_ROTATE_TIME) : 45;
 	Vector3i Position = Vector3i(0, 0, BUTTON_DEPTH);
@@ -248,6 +282,20 @@ void renderResearchFittedToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD O
 	UDWORD radius = 0;
 	SDWORD scale = 0;
 	resolveResearchFit(psResearch, boxSize, &psResGraphic, &IMDType, &radius, &scale);
+
+	// Centered on the middle of its height, as it's tilted to the view: a model stands on its origin, so a tall one
+	// (a tower) came out high in the box and a flat one low
+	int bottom = 0;
+	int top = 0;
+	if (researchModelHeights(psResGraphic, IMDType, &bottom, &top))
+	{
+		pie_SetGeometricOffset(OriginX, OriginY);
+		Position.y = -static_cast<int>(std::lround((bottom + top) / 2.0 * std::cos(30.0 * M_PI / 180.0) * scale / 100.0));
+	}
+	else
+	{
+		pie_SetGeometricOffset(OriginX, OriginY + static_cast<int>(boxSize) / 8);
+	}
 
 	if (IMDType == IMDTYPE_COMPONENT)
 	{

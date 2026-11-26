@@ -2515,6 +2515,48 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		};
 
 		template<>
+		struct unbox<wzapi::objective_options>
+		{
+			wzapi::objective_options operator()(size_t& idx, JSContext *ctx, int argc, JSValueConst *argv, const char *function)
+			{
+				wzapi::objective_options options;
+				if (argc <= idx)
+					return options;
+				JSValueConst value = argv[idx++];
+				if (!JS_IsObject(value))
+					return options;
+				const auto property = [ctx, value](const char *name, auto &&read) {
+					JSValue prop = JS_GetPropertyStr(ctx, value, name);
+					if (!JS_IsUndefined(prop) && !JS_IsNull(prop))
+					{
+						read(prop);
+					}
+					JS_FreeValue(ctx, prop);
+				};
+				property("state", [&](JSValueConst v) { options.state = JSValueToStdString(ctx, v); });
+				property("primary", [&](JSValueConst v) { options.primary = JS_ToBool(ctx, v) != 0; });
+				property("marker", [&](JSValueConst v) { options.marker = JSValueToStdString(ctx, v); });
+				property("order", [&](JSValueConst v) { options.order = JSValueToInt32(ctx, v); });
+				property("player", [&](JSValueConst v) { options.player = JSValueToInt32(ctx, v); });
+				property("progress", [&](JSValueConst v) {
+					std::vector<int> progress;
+					uint64_t length = 0;
+					if (JS_IsArray(ctx, v) && QuickJS_GetArrayLength(ctx, v, length))
+					{
+						for (uint32_t i = 0; i < length; ++i)
+						{
+							JSValue item = JS_GetPropertyUint32(ctx, v, i);
+							progress.push_back(JSValueToInt32(ctx, item));
+							JS_FreeValue(ctx, item);
+						}
+					}
+					options.progress = progress;
+				});
+				return options;
+			}
+		};
+
+		template<>
 		struct unbox<wzapi::label_or_position_values>
 		{
 			wzapi::label_or_position_values operator()(size_t& idx, JSContext *ctx, int argc, JSValueConst *argv, const char *function)
@@ -4007,6 +4049,11 @@ IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
 IMPL_JS_FUNC(addGuideTopic, wzapi::addGuideTopic)
+IMPL_JS_FUNC(setObjective, wzapi::setObjective)
+IMPL_JS_FUNC(removeObjective, wzapi::removeObjective)
+IMPL_JS_FUNC(clearObjectives, wzapi::clearObjectives)
+IMPL_JS_FUNC(setObjectivesTitle, wzapi::setObjectivesTitle)
+IMPL_JS_FUNC(showObjectives, wzapi::showObjectives)
 
 //-- ## removeReticuleButton(buttonId)
 //--
@@ -4411,6 +4458,11 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(playSound, 1, 4); // WZAPI
 	JS_REGISTER_FUNC2(gameOverMessage, 1, 3); // WZAPI
 	JS_REGISTER_FUNC2(addGuideTopic, 1, 3); // WZAPI
+	JS_REGISTER_FUNC2(setObjective, 2, 3); // WZAPI
+	JS_REGISTER_FUNC2(removeObjective, 1, 2); // WZAPI
+	JS_REGISTER_FUNC2(clearObjectives, 0, 1); // WZAPI
+	JS_REGISTER_FUNC(setObjectivesTitle, 1); // WZAPI
+	JS_REGISTER_FUNC2(showObjectives, 0, 2); // WZAPI
 
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI

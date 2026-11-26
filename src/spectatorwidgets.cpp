@@ -40,6 +40,11 @@
 #include "component.h"
 #include "loop.h" // for getNumDroids
 #include "screens/researchtreescreen.h"
+#include "hud/hudskin.h"
+#include "hud/hudspectator.h"
+#include "hud/hudwidgets.h"
+#include "hud/intel/intelpanel.h"
+#include "screens/spectatorgameoverscreen.h"
 
 #include <unordered_set>
 #include <unordered_map>
@@ -52,6 +57,16 @@
 #define PLAYER_COLOR_COL_SIZE 8
 #define RESEARCH_TREE_COL_WIDTH 34
 #define RESEARCH_TREE_COL_HEIGHT 12
+// As a panel (HudSkin::drawsSpectatorStats): the table inset in it, the title row's, header's and rows' heights, the
+// title row's close button (as far from its top as from the panel's right), the title's place
+#define SPEC_STATS_PANEL_PADDING 4
+#define SPEC_STATS_PANEL_TITLE_HEIGHT 22
+#define SPEC_STATS_PANEL_HEADER_HEIGHT 24
+#define SPEC_STATS_PANEL_ROW_HEIGHT 20
+#define SPEC_STATS_PANEL_BUTTON_SIZE 16
+#define SPEC_STATS_PANEL_BUTTON_INSET (SPEC_STATS_PANEL_PADDING + (SPEC_STATS_PANEL_TITLE_HEIGHT - SPEC_STATS_PANEL_BUTTON_SIZE) / 2)
+#define SPEC_STATS_PANEL_TITLE_X 10
+#define SPEC_STATS_PANEL_TREE_HEIGHT 14
 #define INFO_UPDATE_INTERVAL_TICKS GAME_TICKS_PER_SEC
 
 class WzWeaponGradesColumnManager;
@@ -69,14 +84,20 @@ public:
 	virtual void geometryChanged() override;
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
+	void rememberLayout();
+	/// Built as the skin's panel
+	bool builtAsPanel() const { return asPanel; }
 private:
 	std::shared_ptr<TableRow> newPlayerStatsRow(uint32_t playerIdx, int rowHeight = 0);
 	void resizeTableColumnWidths();
 	std::pair<std::vector<size_t>, size_t> getMaxTableColumnDataWidths();
 private:
 	std::shared_ptr<W_BUTTON> optionsButton;
+	std::shared_ptr<W_LABEL> titleLabel;
+	std::shared_ptr<W_BUTTON> minimizeButton;
 	std::shared_ptr<W_BUTTON> closeButton;
 	std::shared_ptr<ScrollableTableWidget> table;
+	bool asPanel = false;
 	std::shared_ptr<WzWeaponGradesColumnManager> weaponGradesManager;
 	size_t playerNameColIdx = 1;
 };
@@ -84,13 +105,37 @@ private:
 static std::shared_ptr<W_SCREEN> statsOverlay = nullptr;
 static std::shared_ptr<W_BUTTON> specStatsButton = nullptr;
 static std::shared_ptr<SpectatorStatsView> globalStatsForm = nullptr;
+// Where the view was and the column widths the user chose, when it last closed: kept for the rest of the match
+static optional<Vector2i> lastStatsViewPosition;
+static std::vector<size_t> lastStatsViewColumnWidths;
+static bool statsButtonHidden = false;
 
 #define SPEC_STATS_BUTTON_X RET_X
 #define SPEC_STATS_BUTTON_Y 20
+// As a card (HudSkin::drawsSpectatorStats): mirroring the in-game options button (its margins in hci.cpp)
+#define SPEC_STATS_CARD_BUTTON_X 16
+#define SPEC_STATS_CARD_BUTTON_Y 18
+
+// The Modern skin's intelligence and results screens cover the button's corner, as they do the options button's
+static bool specStatsButtonCovered()
+{
+	return hudIntelScreenIsOpen() || spectatorGameOverScreenShowsHudResults();
+}
 
 void intDisplayImageHilightOnceStarted(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	if (bDisplayMultiJoiningStatus)
+	if (bDisplayMultiJoiningStatus || specStatsButtonCovered())
+	{
+		return;
+	}
+	const auto state = static_cast<W_BUTTON *>(psWidget)->getState();
+	HudIconButtonLook look;
+	look.rect = WzRect(xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
+	look.icon = HudIcon::Statistics;
+	look.style = HudIconButtonStyle::Card;
+	look.down = (state & WBUT_DOWN) != 0;
+	look.highlighted = (state & WBUT_HIGHLIGHT) != 0;
+	if (currentHudSkin().drawIconButton(look))
 	{
 		return;
 	}
@@ -117,6 +162,14 @@ bool specLayerInit(bool showButton /*= true*/)
 			int width = iV_GetImageWidth(IntImages, IMAGE_SPECSTATS_UP);
 			int height = iV_GetImageHeight(IntImages, IMAGE_SPECSTATS_UP);
 			ASSERT_OR_RETURN(true, width > 0 && height > 0, "Possibly missing specstats button image?");
+			if (currentHudSkin().drawsSpectatorStats())
+			{
+				x = SPEC_STATS_CARD_BUTTON_X;
+				y = SPEC_STATS_CARD_BUTTON_Y;
+				// (half its image's size, as setReticuleButtonDimensions does)
+				width = iV_GetImageWidth(IntImages, IMAGE_INGAMEOPTIONS_UP) / 2;
+				height = iV_GetImageHeight(IntImages, IMAGE_INGAMEOPTIONS_UP) / 2;
+			}
 
 			specStatsButton = std::make_shared<W_BUTTON>();
 			specStatsButton->displayFunction = intDisplayImageHilightOnceStarted;
@@ -128,7 +181,7 @@ bool specLayerInit(bool showButton /*= true*/)
 				});
 			});
 			specStatsButton->setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
-				if (bDisplayMultiJoiningStatus)
+				if (bDisplayMultiJoiningStatus || specStatsButtonCovered())
 				{
 					// effectively: make this unclickable until the game actually starts
 					return false;
@@ -136,6 +189,7 @@ bool specLayerInit(bool showButton /*= true*/)
 				return true; // revert back to default hit-testing behavior
 			});
 			specStatsButton->setGeometry(x, y, width, height);
+			specStatsButton->show(!statsButtonHidden);
 			statsOverlay->psForm->attach(specStatsButton);
 		}
 
@@ -154,6 +208,7 @@ void specStatsViewClose()
 {
 	if (globalStatsForm)
 	{
+		globalStatsForm->rememberLayout();
 		globalStatsForm->deleteLater();
 		globalStatsForm = nullptr;
 	}
@@ -161,7 +216,30 @@ void specStatsViewClose()
 	// Show the spec stats button
 	if (specStatsButton)
 	{
-		specStatsButton->show();
+		specStatsButton->show(!statsButtonHidden);
+	}
+}
+
+bool specStatsViewShown()
+{
+	return globalStatsForm != nullptr;
+}
+
+void specStatsViewSkinChanged()
+{
+	if (globalStatsForm && globalStatsForm->builtAsPanel() != currentHudSkin().drawsSpectatorStats())
+	{
+		specStatsViewClose();
+		specStatsViewCreate();
+	}
+}
+
+void specSetStatsButtonHidden(bool hidden)
+{
+	statsButtonHidden = hidden;
+	if (specStatsButton && !globalStatsForm)
+	{
+		specStatsButton->show(!hidden);
 	}
 }
 
@@ -185,6 +263,8 @@ bool specStatsViewShutdown()
 		widgRemoveOverlayScreen(statsOverlay);
 	}
 	specStatsViewClose();
+	lastStatsViewPosition.reset();
+	lastStatsViewColumnWidths.clear();
 	specStatsButton = nullptr; // widget is owned by parent form, so will be detached / destroyed there as long as we don't keep a ref
 	statsOverlay = nullptr;
 	return true;
@@ -231,6 +311,20 @@ void SpectatorStatsView::display(int xOffset, int yOffset)
 {
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
+	auto &skin = currentHudSkin();
+	if (asPanel && skin.drawsSpectatorStats())
+	{
+		skin.drawSpectatorStatsPanel(WzRect(x0, y0, width(), height()));
+		if (table)
+		{
+			size_t index = 0;
+			for (auto &row : table->getRows())
+			{
+				row->setBackgroundColor((index++ % 2 == 1) ? optional<PIELIGHT>(skin.spectatorStatsAlternateRowFill()) : nullopt);
+			}
+		}
+		return;
+	}
 	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), pal_RGBA(0, 0, 0, 80));
 }
 
@@ -635,6 +729,11 @@ public:
 	{
 		int x0 = x() + xOffset;
 		int y0 = y() + yOffset;
+		if (currentHudSkin().drawsSpectatorStats())
+		{
+			hudDrawPlayerMark(x0 + (width() - PLAYER_COLOR_COL_SIZE) / 2, y0 + (height() - PLAYER_COLOR_COL_SIZE) / 2, PLAYER_COLOR_COL_SIZE, playerIdx);
+			return;
+		}
 
 		int posX0 = x0 + 1;
 		int posY0 = y0;
@@ -664,6 +763,18 @@ public:
 		const float y0 = static_cast<float>(yOffset + y());
 		const bool down = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
 		const bool over = (getState() & WBUT_HIGHLIGHT) != 0;
+
+		auto &skin = currentHudSkin();
+		if (skin.drawsSpectatorStats())
+		{
+			const int top = yOffset + y() + (height() - SPEC_STATS_PANEL_TREE_HEIGHT) / 2;
+			skin.drawCard(WzRect(xOffset + x(), top, width(), SPEC_STATS_PANEL_TREE_HEIGHT), down ? HudCardState::Selected : (over ? HudCardState::Highlighted : HudCardState::Normal));
+			const int fx = xOffset + x() + (width() - iV_GetTextWidth(pText, FontID)) / 2;
+			const int fy = top + (SPEC_STATS_PANEL_TREE_HEIGHT - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
+			iV_SetTextColour((down || over) ? skin.colors().textPrimary : skin.colors().textSecondary);
+			iV_DrawText(pText.toUtf8().c_str(), static_cast<float>(fx), static_cast<float>(fy), FontID);
+			return;
+		}
 
 		const PIELIGHT border = down ? WZCOL_TEXT_BRIGHT : (over ? WZCOL_FORM_TEXT : WZCOL_TEXT_MEDIUM);
 		const PIELIGHT ink = (down || over) ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT;
@@ -713,10 +824,12 @@ if ((!NetPlay.players[playerIdx].allocated && NetPlay.players[playerIdx].ai < 0)
 		columnWidgets.push_back(playerColWidget);
 
 		// Player Name widget
-		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+		auto nameLabel = WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
 			label.setString(getPlayerName(playerIdx));
 			ADJUST_LABEL_COLOR_FOR_PLAYERS();
-		}, INFO_UPDATE_INTERVAL_TICKS));
+		}, INFO_UPDATE_INTERVAL_TICKS);
+		nameLabel->setCanTruncate(true);
+		columnWidgets.push_back(nameLabel);
 		// Power info
 		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
 			WzString powerStr = WzString::number(getPower(playerIdx)) + "/" + WzString::fromUtf8(getApproxPowerGeneratedPerSecForDisplay(playerIdx));
@@ -783,33 +896,61 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	class make_shared_enabler: public SpectatorStatsView {};
 	auto result = std::make_shared<make_shared_enabler>();
 
-	// make minimizable
-	result->enableMinimizing("Player Stats", WZCOL_FORM_TEXT);
-
 	// Main "parent" form
 	int newFormWidth = FRONTEND_TOPFORM_WIDEW;
-	result->setGeometry((pie_GetVideoBufferWidth() - newFormWidth) / 2, 10, newFormWidth, pie_GetVideoBufferHeight() - 50);
+	const int top = std::max(10, hudSpectatorStripBottom() + 6);
+	result->setGeometry((pie_GetVideoBufferWidth() - newFormWidth) / 2, top, newFormWidth, pie_GetVideoBufferHeight() - top - 40);
+	if (lastStatsViewPosition.has_value())
+	{
+		result->move(lastStatsViewPosition->x, lastStatsViewPosition->y);
+	}
 	result->userMovable = true;
+	// As a panel, a slim title row holds its title and close button (and moves it). It isn't minimizable, as the buttons
+	// that open it also close it
+	result->asPanel = currentHudSkin().drawsSpectatorStats();
+	if (result->asPanel)
+	{
+		result->titleLabel = std::make_shared<W_LABEL>();
+		result->titleLabel->setFont(font_regular_bold, currentHudSkin().colors().textSecondary);
+		result->titleLabel->setString(_("Player Stats"));
+		result->titleLabel->setTransparentToMouse(true);
+		result->titleLabel->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			if (auto psParent = psWidget->parent())
+			{
+				const int x0 = SPEC_STATS_PANEL_TITLE_X;
+				psWidget->setGeometry(x0, SPEC_STATS_PANEL_PADDING, std::max(0, psParent->width() - x0 * 2), SPEC_STATS_PANEL_TITLE_HEIGHT);
+			}
+		}));
+		result->attach(result->titleLabel);
+	}
+	else
+	{
+		// make minimizable
+		result->enableMinimizing("Player Stats", WZCOL_FORM_TEXT);
 
-	// Add the "minimize" button
-	auto minimizeButton = makeFormTransparentCornerButton("\u21B8", 10, pal_RGBA(0, 0, 0, 60)); // ↸
-	result->attach(minimizeButton);
-	minimizeButton->addOnClickHandler([](W_BUTTON& button){
-		auto psParent = std::dynamic_pointer_cast<SpectatorStatsView>(button.parent());
-		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-		widgScheduleTask([psParent](){
-			psParent->toggleMinimized();
+		// Add the "minimize" button
+		result->minimizeButton = makeFormTransparentCornerButton("\u21B8", 10, pal_RGBA(0, 0, 0, 60)); // ↸
+		result->attach(result->minimizeButton);
+		result->minimizeButton->addOnClickHandler([](W_BUTTON& button){
+			auto psParent = std::dynamic_pointer_cast<SpectatorStatsView>(button.parent());
+			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+			widgScheduleTask([psParent](){
+				psParent->toggleMinimized();
+			});
 		});
-	});
+	}
 
 	// Add the "close" button
 	W_BUTINIT sButInit;
 	sButInit.id = IDOBJ_CLOSE;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.pDisplay = result->asPanel ? intDisplayHudCloseButton : intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT, IMAGE_CLOSE);
 	result->closeButton = std::make_shared<W_BUTTON>(&sButInit);
-	result->attach(result->closeButton);
+	if (!result->asPanel)
+	{
+		result->attach(result->closeButton);
+	}
 	result->closeButton->addOnClickHandler([](W_BUTTON& button){
 		auto psParent = std::dynamic_pointer_cast<SpectatorStatsView>(button.parent());
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
@@ -820,6 +961,13 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	result->closeButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		auto psParent = std::dynamic_pointer_cast<SpectatorStatsView>(psWidget->parent());
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		if (psParent->asPanel)
+		{
+			// The skin's close button is a square, a pixel inside the top and bottom and two inside the right
+			const int size = SPEC_STATS_PANEL_BUTTON_SIZE + 2;
+			psWidget->setGeometry(psParent->width() - SPEC_STATS_PANEL_BUTTON_INSET - size + 2, SPEC_STATS_PANEL_BUTTON_INSET - 1, size, size);
+			return;
+		}
 		psWidget->setGeometry(psParent->width() - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 
@@ -847,6 +995,13 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	auto thermalArmorLabel = createArmorColWidget(true);
 	thermalArmorLabel->setTip(std::string(_("Thermal Armor")) + "\n" + _("(Tanks / Cyborgs)"));
 	auto researchTreeLabel = createColHeaderLabel("");
+	if (result->asPanel)
+	{
+		for (auto &label : {playerLabel, powerRateLabel, powerLostLabel, powerWonLabel, labActivityLabel, killsLabel, unitsLabel})
+		{
+			label->setFontColour(currentHudSkin().colors().textSecondary);
+		}
+	}
 	result->weaponGradesManager = WzWeaponGradesColumnManager::make();
 	std::vector<TableColumn> columns {
 		{colorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
@@ -880,9 +1035,16 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	});
 
 	// Create + attach "Triggers" scrollable table view
-	result->table = ScrollableTableWidget::make(columns);
+	result->table = ScrollableTableWidget::make(columns, result->asPanel ? SPEC_STATS_PANEL_HEADER_HEIGHT : -1);
 	result->attach(result->table);
-	result->table->setBackgroundColor(pal_RGBA(0, 0, 0, 25));
+	if (result->asPanel)
+	{
+		result->table->setHeaderBackgroundFunc([](const WzRect &rect, const std::vector<int> &columnLinesX) {
+			currentHudSkin().drawSpectatorStatsHeader(rect, columnLinesX);
+		});
+		result->attach(result->closeButton);
+	}
+	result->table->setBackgroundColor(result->asPanel ? pal_RGBA(0, 0, 0, 0) : pal_RGBA(0, 0, 0, 25));
 	result->table->setMinimumColumnWidths(minimumColumnWidths);
 
 	// Add rows for all players
@@ -910,15 +1072,17 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 		{
 			return nullptr;
 		}
-		result->table->addRow(result->newPlayerStatsRow(player));
+		result->table->addRow(result->newPlayerStatsRow(player, result->asPanel ? SPEC_STATS_PANEL_ROW_HEIGHT : 0));
 	}
 
 	result->table->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		auto psParent = std::dynamic_pointer_cast<SpectatorStatsView>(psWidget->parent());
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 		int oldWidth = psWidget->width();
-		int y0 = SPEC_STATS_WINDOW_TITLE_HEIGHT;
-		psWidget->setGeometry(0, y0, psParent->width(), std::min<int>(psParent->height() - (y0 + SPEC_STATS_WINDOW_BOTTOM_PADDING), psParent->table->idealHeight()));
+		const int inset = psParent->asPanel ? SPEC_STATS_PANEL_PADDING : 0;
+		int y0 = psParent->asPanel ? SPEC_STATS_PANEL_PADDING + SPEC_STATS_PANEL_TITLE_HEIGHT : SPEC_STATS_WINDOW_TITLE_HEIGHT;
+		const int bottomPadding = psParent->asPanel ? SPEC_STATS_PANEL_PADDING : SPEC_STATS_WINDOW_BOTTOM_PADDING;
+		psWidget->setGeometry(inset, y0, psParent->width() - inset * 2, std::min<int>(psParent->height() - (y0 + bottomPadding), psParent->table->idealHeight()));
 
 		if (oldWidth != psWidget->width())
 		{
@@ -967,14 +1131,36 @@ std::pair<std::vector<size_t>, size_t> SpectatorStatsView::getMaxTableColumnData
 	return {maxColumnDataWidths, totalNeededColumnWidth};
 }
 
+void SpectatorStatsView::rememberLayout()
+{
+	lastStatsViewPosition = Vector2i(x(), y());
+	if (table && table->userResizedColumnWidths())
+	{
+		lastStatsViewColumnWidths = table->getColumnWidths();
+	}
+}
+
 void SpectatorStatsView::resizeTableColumnWidths()
 {
+	if (!table->userResizedColumnWidths() && lastStatsViewColumnWidths.size() == table->getNumColumns()
+		&& table->restoreUserColumnWidths(lastStatsViewColumnWidths))
+	{
+		return;
+	}
 	auto maxColumnDataWidthsResult = getMaxTableColumnDataWidths();
 	table->changeColumnWidths(maxColumnDataWidthsResult.first);
 }
 
 void SpectatorStatsView::geometryChanged()
 {
+	if (titleLabel)
+	{
+		titleLabel->callCalcLayout();
+	}
+	if (minimizeButton)
+	{
+		minimizeButton->callCalcLayout();
+	}
 	if (closeButton)
 	{
 		closeButton->callCalcLayout();
@@ -989,10 +1175,14 @@ int32_t SpectatorStatsView::idealWidth()
 {
 	ASSERT_OR_RETURN(0, table != nullptr, "Table is null");
 	auto maxColumnDataWidthsResult = getMaxTableColumnDataWidths();
-	return table->getTableWidthNeededForTotalColumnWidth(table->getNumColumns(), maxColumnDataWidthsResult.second);
+	return table->getTableWidthNeededForTotalColumnWidth(table->getNumColumns(), maxColumnDataWidthsResult.second) + (asPanel ? SPEC_STATS_PANEL_PADDING * 2 : 0);
 }
 
 int32_t SpectatorStatsView::idealHeight()
 {
+	if (asPanel)
+	{
+		return SPEC_STATS_PANEL_PADDING + SPEC_STATS_PANEL_TITLE_HEIGHT + ((table) ? table->idealHeight() : 0) + SPEC_STATS_PANEL_PADDING;
+	}
 	return SPEC_STATS_WINDOW_TITLE_HEIGHT + ((table) ? table->idealHeight() : 0) + SPEC_STATS_WINDOW_BOTTOM_PADDING;
 }

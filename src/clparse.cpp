@@ -40,6 +40,7 @@
 #include "gamestate_serialize.h"
 #include "gamestate_savegame.h"
 #include "gamestate_harness.h"
+#include "hud/hudgeometrydump.h"
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
@@ -389,6 +390,7 @@ typedef enum
 	CLI_GAMESTATE_SEEKTEST,
 	CLI_GAMESTATE_SEEKFAULT,
 	CLI_GAMESTATE_UISTRESS,
+	CLI_HUD_GEOMETRY_DUMP,
 	CLI_GAMESTATE_TESTREINFORCE,
 	CLI_GAMESTATE_SUPPRESSLOADEDEVENT,
 	CLI_GAMESTATE_TESTCONTINUELEVELS,
@@ -515,6 +517,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamestate-seek-test", POPT_ARG_STRING, CLI_GAMESTATE_SEEKTEST, "Test only: during replay playback, seek to a game time when another is reached", "at:target[,at:target...]", true },
 		{ "gamestate-seek-fault", POPT_ARG_STRING, CLI_GAMESTATE_SEEKFAULT, "Test only: damage the snapshots replay seeks restore (the first given number of them), as --gamestate-rewind-fault does", "kind[,restores]", true },
 		{ "gamestate-test-reinforce", POPT_ARG_STRING, CLI_GAMESTATE_TESTREINFORCE, "Test only: at this game tick, during an off-world campaign mission, send reinforcements as the player does", "tick", true },
+		{ "hud-geometry-dump", POPT_ARG_STRING, CLI_HUD_GEOMETRY_DUMP, "Test only: at a game time, write the HUD's widget geometry in each panel state to a JSON file, with screenshots, and quit", "file[,game time ms[,states]]", true },
 		{ "gamestate-ui-stress", POPT_ARG_STRING, CLI_GAMESTATE_UISTRESS, "Test only: every given number of ticks, point the UI at the droid most likely to die next, and check every frame that the UI references no freed object", "ticks", true },
 		{ "gamestate-rewind-test", POPT_ARG_STRING, CLI_GAMESTATE_REWINDTEST, "Snapshot the GameState at a tick, then restore it in-process the given number of ticks later and keep running", "tick:ticks later", true },
 		{ "gamestate-test-suppress-loaded-event", POPT_ARG_NONE, CLI_GAMESTATE_SUPPRESSLOADEDEVENT, "Test only: on a GameState load, do not fire eventGameLoaded or replay eventResearched", nullptr, true },
@@ -1083,6 +1086,13 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			if (token == nullptr || !gamestate::harness::setUiStress(token))
 			{
 				qFatal("Bad value for --gamestate-ui-stress (expected <ticks>)");
+			}
+			break;
+		case CLI_HUD_GEOMETRY_DUMP:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || !hudSetGeometryDump(token))
+			{
+				qFatal("Bad value for --hud-geometry-dump (expected <file>[,<game time ms>[,<states>]])");
 			}
 			break;
 		case CLI_GAMESTATE_REWINDTEST:

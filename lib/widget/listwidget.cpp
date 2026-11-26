@@ -25,8 +25,33 @@
 #include "button.h"
 #include "label.h"
 #include "lib/framework/math_ext.h"
+#include "lib/gamelib/gtime.h"
 
 #include <algorithm>
+
+namespace
+{
+
+class TabSelectionButton : public W_BUTTON
+{
+public:
+	explicit TabSelectionButton(TabSelectionButtonRole role): role(role) {}
+
+	void display(int xOffset, int yOffset) override
+	{
+		auto owner = std::dynamic_pointer_cast<TabSelectionWidget>(parent());
+		if (owner != nullptr && owner->drawButtonFunction() && owner->drawButtonFunction()(*this, role, xOffset, yOffset))
+		{
+			return;
+		}
+		W_BUTTON::display(xOffset, yOffset);
+	}
+
+private:
+	TabSelectionButtonRole role;
+};
+
+}
 
 TabSelectionStyle::TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap, TabAlignment alignment)
 	: tabSize(tab.width(), tab.height())
@@ -45,8 +70,8 @@ TabSelectionStyle::TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasIm
 
 void TabSelectionWidget::initialize()
 {
-	attach(prevTabPageButton = std::make_shared<W_BUTTON>());
-	attach(nextTabPageButton = std::make_shared<W_BUTTON>());
+	attach(prevTabPageButton = std::make_shared<TabSelectionButton>(TabSelectionButtonRole::PreviousPage));
+	attach(nextTabPageButton = std::make_shared<TabSelectionButton>(TabSelectionButtonRole::NextPage));
 
 	prevTabPageButton->addOnClickHandler([](W_BUTTON& button) {
 		auto pParent = std::static_pointer_cast<TabSelectionWidget>(button.parent());
@@ -109,6 +134,11 @@ void TabSelectionWidget::addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHAN
 	onTabChangedHandlers.push_back(onTabChangedFunc);
 }
 
+void TabSelectionWidget::setDrawButtonFunction(const W_TABSELECTION_DRAW_BUTTON_FUNC& drawButtonFunc)
+{
+	drawButton = drawButtonFunc;
+}
+
 void TabSelectionWidget::setNumberOfTabs(size_t tabs)
 {
 	tabs = std::max<size_t>(tabs, 1);
@@ -120,7 +150,7 @@ void TabSelectionWidget::setNumberOfTabs(size_t tabs)
 	tabButtons.resize(tabs);
 	for (size_t n = previousSize; n < tabButtons.size(); ++n)
 	{
-		attach(tabButtons[n] = std::make_shared<W_BUTTON>());
+		attach(tabButtons[n] = std::make_shared<TabSelectionButton>(TabSelectionButtonRole::Tab));
 		tabButtons[n]->addOnClickHandler([n](W_BUTTON& button) {
 			auto pParent = std::static_pointer_cast<TabSelectionWidget>(button.parent());
 			assert(pParent != nullptr);
@@ -443,6 +473,54 @@ void ListTabWidget::addWidgetToLayout(const std::shared_ptr<WIDGET> &widget)
 
 	widgets->attach(widget);
 	widgets->addWidgetToLayout(widget);
+}
+
+WzDragAxes ListTabWidget::touchDragAxes()
+{
+	return pages() > 1 ? WzDragAxes::Horizontal : WzDragAxes::None;
+}
+
+void ListTabWidget::mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current)
+{
+	if (!swiping)
+	{
+		swiping = true;
+		swipeSamples.clear();
+	}
+	swipeDistance = current->mx - start->mx;
+	swipeSamples.emplace_back(realTime, current->mx);
+	while (swipeSamples.size() > 2 && realTime - swipeSamples.front().first > 100)
+	{
+		swipeSamples.erase(swipeSamples.begin());
+	}
+}
+
+void ListTabWidget::released(W_CONTEXT *, WIDGET_KEY)
+{
+	if (!swiping)
+	{
+		return;
+	}
+	swiping = false;
+	float velocity = 0.f;  // (px per ms)
+	if (swipeSamples.size() >= 2 && realTime - swipeSamples.back().first < 60 && swipeSamples.back().first > swipeSamples.front().first)
+	{
+		velocity = static_cast<float>(swipeSamples.back().second - swipeSamples.front().second) / static_cast<float>(swipeSamples.back().first - swipeSamples.front().first);
+	}
+	swipeSamples.clear();
+	// Leftwards to the next page, rightwards to the one before: far enough, or fast enough the same way
+	int direction = 0;
+	if (std::abs(swipeDistance) > widgets->width() / 4 || (std::abs(velocity) > 0.3f && velocity * static_cast<float>(swipeDistance) > 0.f))
+	{
+		direction = swipeDistance < 0 ? 1 : -1;
+	}
+	const size_t from = currentPage();
+	if ((direction > 0 && from + 1 < pages()) || (direction < 0 && from > 0))
+	{
+		const size_t to = direction > 0 ? from + 1 : from - 1;
+		setCurrentPage(to);
+		pageTurnedByTouch(from, to);
+	}
 }
 
 void ListTabWidget::setTabPosition(TabPosition pos)

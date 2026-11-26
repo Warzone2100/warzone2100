@@ -149,21 +149,8 @@ public:
 			: (over ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT);
 		const float textY = y0 + (static_cast<float>(height()) - m_text.lineSize()) / 2.f
 			- static_cast<float>(m_text.aboveBase());
-		const int room = width() - 10;
-		if (m_text.width() <= room)
-		{
-			m_text.render(x0 + 5.f, textY, textColor);
-		}
-		else
-		{
-			const int shown = room - iV_GetEllipsisWidth(font_small) - 2;
-			if (shown > 0)
-			{
-				m_text.renderClipped(Vector2f(x0 + 5.f, textY), textColor,
-				                     WzRect(static_cast<int>(x0) + 5, static_cast<int>(y0), shown, height()), shown);
-				iV_DrawEllipsis(font_small, Vector2f(x0 + 5.f + static_cast<float>(shown) + 2.f, textY), textColor);
-			}
-		}
+		m_text.setText(m_text.getText(), m_text.getFontID(), std::max(1, width() - 10));
+		m_text.render(x0 + 5.f, textY, textColor);
 
 		if (!m_lab.idle && m_lab.currentPercent > 0)
 		{
@@ -357,12 +344,12 @@ public:
 		float at = y0 + 4.f;
 		m_headingText.render(x0 + OVERLAY_INSET, at - m_headingText.aboveBase(), WZCOL_FORM_TEXT);
 		at += static_cast<float>(m_headingText.lineSize());
-		m_subjectText.renderClipped(Vector2f(x0 + OVERLAY_INSET, at - m_subjectText.aboveBase()), WZCOL_TEXT_BRIGHT,
-		                            WzRect(static_cast<int>(x0) + OVERLAY_INSET, static_cast<int>(y0), room, height()), room);
+		m_subjectText.setText(m_subjectText.getText(), m_subjectText.getFontID(), room);
+		m_subjectText.render(x0 + OVERLAY_INSET, at - m_subjectText.aboveBase(), WZCOL_TEXT_BRIGHT);
 
 		at += static_cast<float>(m_subjectText.lineSize()) + 1.f;
-		m_detailText.renderClipped(Vector2f(x0 + OVERLAY_INSET, at - m_detailText.aboveBase()), WZCOL_TEXT_MEDIUM,
-		                           WzRect(static_cast<int>(x0) + OVERLAY_INSET, static_cast<int>(y0), room, height()), room);
+		m_detailText.setText(m_detailText.getText(), m_detailText.getFontID(), room);
+		m_detailText.render(x0 + OVERLAY_INSET, at - m_detailText.aboveBase(), WZCOL_TEXT_MEDIUM);
 	}
 
 private:
@@ -447,21 +434,8 @@ public:
 			const float hintBase = static_cast<float>(hintTop) + static_cast<float>(LEGEND_ROW_HEIGHT) / 2.f
 				- static_cast<float>(m_hint.aboveBase()) / 2.f;
 			const float right = static_cast<float>(boxX + width() - OVERLAY_INSET);
-			if (m_hint.width() <= hintRoomForText)
-			{
-				m_hint.render(right - static_cast<float>(m_hint.width()), hintBase, legendHintColor());
-			}
-			else
-			{
-				const float left = right - static_cast<float>(hintRoomForText);
-				const int shown = hintRoomForText - iV_GetEllipsisWidth(font_small) - 2;
-				if (shown > 0)
-				{
-					m_hint.renderClipped(Vector2f(left, hintBase), legendHintColor(),
-					                     WzRect(static_cast<int>(left), hintTop, shown, LEGEND_ROW_HEIGHT), shown);
-					iV_DrawEllipsis(font_small, Vector2f(left + static_cast<float>(shown) + 2.f, hintBase), legendHintColor());
-				}
-			}
+			m_hint.setText(m_hint.getText(), m_hint.getFontID(), std::max(1, hintRoomForText));
+			m_hint.render(right - static_cast<float>(m_hint.width()), hintBase, legendHintColor());
 		}
 	}
 
@@ -486,7 +460,7 @@ private:
 		{
 			return 0;
 		}
-		return std::min(m_hint.width() + LEGEND_ITEM_GAP, usable / 2); // never more than half
+		return std::min(m_hint.fit().naturalWidth + LEGEND_ITEM_GAP, usable / 2); // never more than half
 	}
 
 	int roomIn(int forWidth)
@@ -744,7 +718,7 @@ public:
 		return row;
 	}
 
-	int32_t idealWidth() override { return m_text.width(); }
+	int32_t idealWidth() override { return m_text.fit().naturalWidth; }
 
 	void display(int xOffset, int yOffset) override
 	{
@@ -760,17 +734,8 @@ public:
 
 		const int textY = y0 + (height() - m_text.lineSize()) / 2 - m_text.aboveBase();
 		const PIELIGHT textColor = over ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
-		int room = width();
-		const bool truncated = m_text.width() > room;
-		if (truncated)
-		{
-			room -= iV_GetEllipsisWidth(m_text.getFontID()) + 2;
-		}
-		m_text.render(x0, textY, textColor, 0.f, room);
-		if (truncated)
-		{
-			iV_DrawEllipsis(m_text.getFontID(), Vector2f(x0 + room + 2, textY), textColor);
-		}
+		m_text.setText(m_text.getText(), m_text.getFontID(), std::max(1, width()));
+		m_text.render(x0, textY, textColor);
 	}
 
 private:
@@ -834,7 +799,7 @@ void WzResearchTreeView::addSearch()
 		}
 	});
 
-	m_names = makeResearchActionButton(_("Names"), _("Show a name on every topic"));
+	m_names = makeDetailPanelActionButton(_("Names"), _("Show a name on every topic"));
 	attach(m_names);
 	m_names->addOnClickHandler([](W_BUTTON& button) {
 		auto view = std::dynamic_pointer_cast<WzResearchTreeView>(button.parent());
@@ -847,7 +812,7 @@ void WzResearchTreeView::addSearch()
 	if (m_ownSeat.has_value())
 	{
 		// Beside the switcher on the title bar, so not attached here
-		m_ownSeatChip = makeResearchActionButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("My tree")),
+		m_ownSeatChip = makeDetailPanelActionButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("My tree")),
 		                                         WzString::fromUtf8(_("Go back to your own research")));
 		m_ownSeatChip->hide();
 		std::weak_ptr<WzResearchTreeView> weakSelf = std::dynamic_pointer_cast<WzResearchTreeView>(shared_from_this());
@@ -879,7 +844,7 @@ void WzResearchTreeView::addSearch()
 			}
 		});
 
-		m_idleChip = makeResearchActionButton(WzString(), WzString());
+		m_idleChip = makeDetailPanelActionButton(WzString(), WzString());
 		attach(m_idleChip);
 		m_idleChip->hide();
 		m_idleChip->addOnClickHandler([](W_BUTTON& button) {
@@ -890,7 +855,7 @@ void WzResearchTreeView::addSearch()
 			}
 		});
 
-		m_wasteChip = makeResearchActionButton(WzString(), WzString());
+		m_wasteChip = makeDetailPanelActionButton(WzString(), WzString());
 		attach(m_wasteChip);
 		m_wasteChip->hide();
 		m_wasteChip->addOnClickHandler([](W_BUTTON& button) {
@@ -906,7 +871,7 @@ void WzResearchTreeView::addSearch()
 	attach(m_traceBar);
 	m_traceBar->hide();
 
-	m_traceExit = makeResearchQuietButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("Tree View")),
+	m_traceExit = makeDetailPanelQuietButton(WzString::fromUtf8(BACK_ARROW) + WzString::fromUtf8(_("Tree View")),
 	                                       WzString::fromUtf8(_("Go back to the whole tree")));
 	attach(m_traceExit);
 	m_traceExit->hide();
@@ -1287,6 +1252,21 @@ void WzResearchTreeView::revealSomethingToResearch()
 	else
 	{
 		addConsoleMessage(_("Nothing can be started right now"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+}
+
+void WzResearchTreeView::revealResearch(uint16_t researchIndex)
+{
+	if (m_canvas == nullptr)
+	{
+		return;
+	}
+	if (!m_canvas->revealResearch(researchIndex) && m_canvas->isFocused())
+	{
+		m_canvas->toggleFocusOnSelection();
+		updateTraceBar();
+		geometryChanged();
+		m_canvas->revealResearch(researchIndex);
 	}
 }
 

@@ -101,19 +101,39 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 	}
 }
 
-void W_SLIDER::clicked(W_CONTEXT *psContext, WIDGET_KEY)
+void W_SLIDER::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	if (isEnabled())
 	{
 		dirty = true;
 		state |= SLD_DRAG;
 		isHandlingDrag = true;
-		updateSliderFromMousePosition(psContext);
+		// (a touch that may yet scroll a list around it moves the slider once it's known to be the slider's:
+		// with its drag, or as a tap on its release)
+		touchPressPending = touchPressMayBeTakenOver(key);
+		if (!touchPressPending)
+		{
+			updateSliderFromMousePosition(psContext);
+		}
 	}
+}
+
+void W_SLIDER::pressCancelled(WIDGET_KEY)
+{
+	state &= ~(SLD_DRAG | SLD_HILITE);
+	isHandlingDrag = false;
+	touchPressPending = false;
+	dirty = true;
 }
 
 void W_SLIDER::released(W_CONTEXT *psContext, WIDGET_KEY)
 {
+	if (touchPressPending && isEnabled())
+	{
+		// a tap
+		updateSliderFromMousePosition(psContext);
+	}
+	touchPressPending = false;
 	isHandlingDrag = false;
 }
 
@@ -198,8 +218,14 @@ bool W_SLIDER::capturesMouseDrag(WIDGET_KEY)
 	return true;
 }
 
+WzDragAxes W_SLIDER::capturedDragAxes() const
+{
+	return (orientation == WSLD_LEFT || orientation == WSLD_RIGHT) ? WzDragAxes::Horizontal : WzDragAxes::Vertical;
+}
+
 void W_SLIDER::mouseDragged(WIDGET_KEY, W_CONTEXT *, W_CONTEXT *psContext)
 {
+	touchPressPending = false;
 	if (isEnabled())
 	{
 		updateSliderFromMousePosition(psContext);

@@ -108,6 +108,74 @@ add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
 add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
 set_property(TARGET qjs PROPERTY FOLDER "3rdparty")
 
+# ThorVG (vector images, lib/ivis_opengl/vectorimage.cpp): only the CPU raster engine and the SVG loader (plus the raw
+# image loader, which the core always uses), without threads, file access, logging, SIMD or partial rendering
+set(THORVG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thorvg")
+set(THORVG_SOURCES
+	thorvg/src/common/tvgCompressor.cpp
+	thorvg/src/common/tvgMath.cpp
+	thorvg/src/common/tvgStr.cpp
+	thorvg/src/renderer/tvgAccessor.cpp
+	thorvg/src/renderer/tvgAnimation.cpp
+	thorvg/src/renderer/tvgCanvas.cpp
+	thorvg/src/renderer/tvgFill.cpp
+	thorvg/src/renderer/tvgInitializer.cpp
+	thorvg/src/renderer/tvgLoaderMgr.cpp
+	thorvg/src/renderer/tvgPaint.cpp
+	thorvg/src/renderer/tvgPicture.cpp
+	thorvg/src/renderer/tvgRender.cpp
+	thorvg/src/renderer/tvgSaver.cpp
+	thorvg/src/renderer/tvgScene.cpp
+	thorvg/src/renderer/tvgShape.cpp
+	thorvg/src/renderer/tvgTaskScheduler.cpp
+	thorvg/src/renderer/tvgText.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwBlendOp.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwFill.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwImage.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwMemPool.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwPostEffect.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwRaster.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwRasterCore.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwRenderer.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwRle.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwShape.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwStroke.cpp
+	thorvg/src/renderer/cpu_engine/tvgSwUtil.cpp
+	thorvg/src/loaders/raw/tvgRawLoader.cpp
+	thorvg/src/loaders/svg/tvgSvgBuilder.cpp
+	thorvg/src/loaders/svg/tvgSvgCssStyle.cpp
+	thorvg/src/loaders/svg/tvgSvgLoader.cpp
+	thorvg/src/loaders/svg/tvgSvgPath.cpp
+	thorvg/src/loaders/svg/tvgSvgUtil.cpp
+	thorvg/src/loaders/svg/tvgXmlParser.cpp
+)
+# (ThorVG's meson build generates config.h from its options)
+set(THORVG_CONFIG_DIR "${CMAKE_CURRENT_BINARY_DIR}/thorvg-config")
+file(WRITE "${THORVG_CONFIG_DIR}/config.h.in"
+	"#define THORVG_VERSION_STRING \"1.1.3\"\n"
+	"#define THORVG_CPU_ENGINE_SUPPORT 1\n"
+	"#define THORVG_SVG_LOADER_SUPPORT 1\n"
+)
+configure_file("${THORVG_CONFIG_DIR}/config.h.in" "${THORVG_CONFIG_DIR}/config.h" COPYONLY)
+add_library(thorvg STATIC ${THORVG_SOURCES})
+set_property(TARGET thorvg PROPERTY FOLDER "3rdparty")
+target_include_directories(thorvg BEFORE PRIVATE
+	"${THORVG_CONFIG_DIR}"
+	"${THORVG_DIR}/src/common"
+	"${THORVG_DIR}/src/renderer"
+	"${THORVG_DIR}/src/renderer/cpu_engine"
+	"${THORVG_DIR}/src/loaders/raw"
+	"${THORVG_DIR}/src/loaders/svg"
+)
+target_include_directories(thorvg SYSTEM PUBLIC "${THORVG_DIR}/inc")
+target_compile_definitions(thorvg PUBLIC "TVG_STATIC")
+if(WIN32)
+	target_compile_definitions(thorvg PRIVATE "NOMINMAX" "WIN32_LEAN_AND_MEAN")
+endif()
+if(NOT MSVC)
+	target_compile_options(thorvg PRIVATE "-Wno-unknown-pragmas")
+endif()
+
 
 if (WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 

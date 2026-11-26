@@ -30,6 +30,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/framework/input.h"
 
 #include "widget.h"
 
@@ -69,6 +70,13 @@ public:
 	W_CONTEXT dragStartPos = W_CONTEXT::ZeroContext();
 	W_CONTEXT dragLastPos = W_CONTEXT::ZeroContext();
 	std::shared_ptr<WIDGET> capturedDragWidget;
+	// A touch press an ancestor's touch drag may yet take over (WIDGET::touchDragAxes), and where it started
+	std::weak_ptr<WIDGET> touchPressedWidget;
+	W_CONTEXT touchPressStart = W_CONTEXT::ZeroContext();
+	// The pressed widget's own drag, held back until the touch slop decides whose it is
+	bool touchDragHeld = false;
+	// The ancestor that took the drag over (the pointer's hover goes to it until the release)
+	std::weak_ptr<WIDGET> touchDragContainer;
 public:
 	void reset()
 	{
@@ -76,9 +84,19 @@ public:
 		dragStartPos = W_CONTEXT::ZeroContext();
 		dragLastPos = W_CONTEXT::ZeroContext();
 		capturedDragWidget.reset();
+		resetTouch();
+	}
+	void resetTouch()
+	{
+		touchPressedWidget.reset();
+		touchPressStart = W_CONTEXT::ZeroContext();
+		touchDragHeld = false;
+		touchDragContainer.reset();
 	}
 };
 static std::array<WIDGET_KEYSTATE, WKEY_SECONDARY + 1> widgetKeyCurrentState;
+// The widget a touch drag was last taken over by: while it goes on scrolling (a flick), the hover stays on it
+static std::weak_ptr<WIDGET> lastTouchDragContainer;
 
 static WIDGET_AUDIOCALLBACK AudioCallback = nullptr;
 static SWORD HilightAudioID = -1;
@@ -1449,12 +1467,108 @@ static void widgProcessMouseOver(const std::shared_ptr<WIDGET>& widget, W_CONTEX
 	}
 }
 
+/* How far (logical pixels) a touch moves before it's a drag rather than a press */
+static const int TOUCH_DRAG_SLOP = 8;
+
+static bool isTouchPress(WIDGET_KEY key)
+{
+	return key == WKEY_PRIMARY && inputLastPointerInputWasTouch();
+}
+
+/* A screen position as a widget's events have it (relative to its parent) */
+static W_CONTEXT contextForWidget(const W_CONTEXT &screenContext, const WIDGET &widget)
+{
+	W_CONTEXT context(screenContext);
+	if (auto parent = widget.parent())
+	{
+		context.xOffset = parent->screenPosX();
+		context.yOffset = parent->screenPosY();
+		context.mx -= context.xOffset;
+		context.my -= context.yOffset;
+	}
+	return context;
+}
+
+bool WIDGET::touchPressMayBeTakenOver(WIDGET_KEY key)
+{
+	if (!isTouchPress(key))
+	{
+		return false;
+	}
+	// (the widget itself counts: a list pressed between its items scrolls too)
+	const uint8_t own = static_cast<uint8_t>(capturesMouseDrag(key) ? capturedDragAxes() : WzDragAxes::None);
+	for (auto ancestor = shared_from_this(); ancestor != nullptr; ancestor = ancestor->parent())
+	{
+		if ((static_cast<uint8_t>(ancestor->touchDragAxes()) & ~own) != 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/* A touch that has moved past the slop: the nearest widget scrolling its way (the pressed one or an ancestor)
+ * takes the drag over */
+static void widgDecideTouchDrag(WIDGET_KEYSTATE &state, WIDGET_KEY key, int mx, int my)
+{
+	auto pressed = state.touchPressedWidget.lock();
+	if (pressed == nullptr)
+	{
+		return;
+	}
+	const int dx = mx - state.touchPressStart.mx;
+	const int dy = my - state.touchPressStart.my;
+	if (std::max(std::abs(dx), std::abs(dy)) <= TOUCH_DRAG_SLOP)
+	{
+		return;
+	}
+	const WzDragAxes axis = std::abs(dx) > std::abs(dy) ? WzDragAxes::Horizontal : WzDragAxes::Vertical;
+	state.touchPressedWidget.reset();
+	state.touchDragHeld = false;
+	if (state.capturedDragWidget == pressed && hasDragAxis(pressed->capturedDragAxes(), axis))
+	{
+		return;  // the pressed widget's own drag
+	}
+	for (auto ancestor = pressed; ancestor != nullptr; ancestor = ancestor->parent())
+	{
+		if (ancestor->visible() && hasDragAxis(ancestor->touchDragAxes(), axis))
+		{
+			pressed->pressCancelled(key);
+			state.capturedDragWidget = ancestor;
+			state.dragStartPos = state.dragLastPos = state.touchPressStart;
+			state.touchDragContainer = ancestor;
+			lastTouchDragContainer = ancestor;
+			return;
+		}
+	}
+}
+
 static void widgProcessMouseClick(const std::shared_ptr<WIDGET>& widget, W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	widgProcessMouseOver(widget, psContext);
 
 	if (widget->isMouseOverWidget())
 	{
+		if (wasPressed && isTouchPress(key))
+		{
+			// A widget may take the touch presses inside it (ex. to stop its own scrolling)
+			for (auto interceptor = widget; interceptor != nullptr; interceptor = interceptor->parent())
+			{
+				if (interceptor->interceptsTouchPress())
+				{
+					const W_CONTEXT screenContext = psContext->convertToScreenContext();
+					W_CONTEXT interceptorContext = contextForWidget(screenContext, *interceptor);
+					interceptor->clicked(&interceptorContext, key);
+					psClickDownWidgetScreen = interceptor->screenPointer.lock();
+					auto &state = widgetKeyCurrentState[key];
+					state.capturedDragWidget = interceptor;
+					state.dragLastPos = state.dragStartPos = screenContext;
+					state.touchDragContainer = interceptor;
+					lastTouchDragContainer = interceptor;
+					return;
+				}
+			}
+		}
 		auto psClickedWidget = widget->processClick(psContext, key, wasPressed);
 		if (!psClickedWidget)
 		{
@@ -1467,6 +1581,13 @@ static void widgProcessMouseClick(const std::shared_ptr<WIDGET>& widget, W_CONTE
 			{
 				widgetKeyCurrentState[key].capturedDragWidget = psClickedWidget;
 				widgetKeyCurrentState[key].dragLastPos = widgetKeyCurrentState[key].dragStartPos = psContext->convertToScreenContext();
+			}
+			if (psClickedWidget->touchPressMayBeTakenOver(key))
+			{
+				auto &state = widgetKeyCurrentState[key];
+				state.touchPressedWidget = psClickedWidget;
+				state.touchPressStart = psContext->convertToScreenContext();
+				state.touchDragHeld = state.capturedDragWidget == psClickedWidget;
 			}
 		}
 		else
@@ -1595,6 +1716,10 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 			sContext.my = c->pos.y;
 			std::shared_ptr<WIDGET> mouseOverWidget = nullptr;
 
+			if (!pressed)
+			{
+				widgetKeyCurrentState[wkey].resetTouch();
+			}
 			if (!pressed || (pressed && widgetKeyCurrentState[wkey].capturedDragWidget != nullptr))
 			{
 				if (widgetKeyCurrentState[wkey].capturedDragWidget)
@@ -1642,8 +1767,12 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	// For each current key state
 	for (int key = WKEY_PRIMARY; key <= WKEY_SECONDARY; ++key)
 	{
+		if (widgetKeyCurrentState[key].pressed)
+		{
+			widgDecideTouchDrag(widgetKeyCurrentState[key], static_cast<WIDGET_KEY>(key), sContext.mx, sContext.my);
+		}
 		// If widget_key is captured, and is down at the end of this batch of mouse events
-		if (widgetKeyCurrentState[key].pressed && widgetKeyCurrentState[key].capturedDragWidget)
+		if (widgetKeyCurrentState[key].pressed && widgetKeyCurrentState[key].capturedDragWidget && !widgetKeyCurrentState[key].touchDragHeld)
 		{
 			// Trigger a mouseDragged event for the capture widget, with the final position (sourced from mouseX / mouseY)
 			WIDGET::processMouseDragEvent(sContext, static_cast<WIDGET_KEY>(key), &widgetKeyCurrentState[key], false);
@@ -1651,12 +1780,38 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	}
 
 	std::shared_ptr<WIDGET> mouseOverWidget = nullptr;
-	forEachOverlayScreen([&sContext, &mouseOverWidget](const OverlayScreen& overlay) -> bool
+	// While a touch drag is taken over, the pointer is over the widget scrolling (no hover under the moving finger)
+	for (int key = WKEY_PRIMARY; key <= WKEY_SECONDARY && mouseOverWidget == nullptr; ++key)
 	{
-		mouseOverWidget = overlay.psScreen->psForm->findMouseTargetRecursive(&sContext, WKEY_NONE, true);
-		return !mouseOverWidget;
-	});
-	if (!mouseOverWidget)
+		if (widgetKeyCurrentState[key].pressed)
+		{
+			mouseOverWidget = widgetKeyCurrentState[key].touchDragContainer.lock();
+		}
+	}
+	if (mouseOverWidget == nullptr)
+	{
+		auto scrolling = lastTouchDragContainer.lock();
+		if (scrolling != nullptr && scrolling->isTouchScrolling())
+		{
+			mouseOverWidget = scrolling;
+		}
+	}
+	// After a finger lifts, nothing is under the pointer (it stays where the finger was, but nothing hovers there)
+	const bool fingerLifted = mouseOverWidget == nullptr && inputLastPointerInputWasTouch()
+		&& !widgetKeyCurrentState[WKEY_PRIMARY].pressed && !widgetKeyCurrentState[WKEY_SECONDARY].pressed;
+	if (mouseOverWidget != nullptr)
+	{
+		sContext = contextForWidget(sContext, *mouseOverWidget);
+	}
+	else if (!fingerLifted)
+	{
+		forEachOverlayScreen([&sContext, &mouseOverWidget](const OverlayScreen& overlay) -> bool
+		{
+			mouseOverWidget = overlay.psScreen->psForm->findMouseTargetRecursive(&sContext, WKEY_NONE, true);
+			return !mouseOverWidget;
+		});
+	}
+	if (!mouseOverWidget && !fingerLifted)
 	{
 		mouseOverWidget = psScreen->psForm->findMouseTargetRecursive(&sContext, WKEY_NONE, true);
 	}
@@ -1969,4 +2124,48 @@ std::weak_ptr<WIDGET> getMouseOverWidget()
 std::chrono::milliseconds widgGetClickHoldMS()
 {
 	return std::chrono::milliseconds(2000); // TODO: Make this configurable?
+}
+
+static std::function<std::chrono::milliseconds ()> touchLongPressDelay;
+static std::function<bool (WIDGET &)> touchLongPressHandler;
+
+bool widgTouchHeldInList()
+{
+	const auto &state = widgetKeyCurrentState[WKEY_PRIMARY];
+	return state.pressed && (state.touchPressedWidget.lock() != nullptr || state.touchDragContainer.lock() != nullptr);
+}
+
+bool widgTouchPressedLookWaits(bool pressMayBeTakenOver, const optional<std::chrono::steady_clock::time_point> &pressStart)
+{
+	static constexpr std::chrono::milliseconds TOUCH_PRESSED_LOOK_DELAY(100);
+	return pressMayBeTakenOver && pressStart.has_value() && std::chrono::steady_clock::now() - *pressStart < TOUCH_PRESSED_LOOK_DELAY;
+}
+
+void widgSetTouchLongPress(std::function<std::chrono::milliseconds ()> delay, std::function<bool (WIDGET &)> handler)
+{
+	touchLongPressDelay = std::move(delay);
+	touchLongPressHandler = std::move(handler);
+}
+
+WzTouchLongPress widgOfferTouchLongPress(WIDGET &widget, std::chrono::steady_clock::time_point since)
+{
+	if (!touchLongPressHandler || !touchLongPressDelay)
+	{
+		return WzTouchLongPress::Declined;
+	}
+	if (std::chrono::steady_clock::now() - since < touchLongPressDelay())
+	{
+		return WzTouchLongPress::NotYet;
+	}
+	if (!touchLongPressHandler(widget))
+	{
+		return WzTouchLongPress::Declined;
+	}
+	// The press is over: no list takes it over now
+	auto &state = widgetKeyCurrentState[WKEY_PRIMARY];
+	if (state.touchPressedWidget.lock().get() == &widget)
+	{
+		state.resetTouch();
+	}
+	return WzTouchLongPress::Taken;
 }

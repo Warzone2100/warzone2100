@@ -33,6 +33,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <chrono>
+#include <string>
+#include <vector>
 
 #define FOREACH_QUICKCHATMSG(MSG) \
 	/* LOBBY ONLY */ \
@@ -289,6 +291,18 @@ namespace INTERNAL_LOBBY_COMMAND_RESPONSE {
 void sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData = 0, optional<uint32_t> targetPlayerIdx = nullopt);
 void sendHostNoticeToPlayer(uint32_t receiver, WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData = 0, optional<uint32_t> targetPlayerIdx = nullopt);
 void sendLobbyCommandResponse(optional<uint32_t> receiver, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Context ctx, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Command cmd = WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Command::None, uint32_t additionalData = 0);
+
+struct WzQuickChatSectionInfo
+{
+	std::string title;
+	std::vector<WzQuickChatMessage> messages;
+};
+// The in-game messages of a mode (Global, Team or EndGame), by section, as the quick chat panel shows them
+std::vector<WzQuickChatSectionInfo> quickChatInGameSections(WzQuickChatMode mode);
+// The local player's teammates and allies, humans and AIs (the Team mode's recipients)
+std::vector<uint32_t> quickChatTeammates();
+// The Team mode's recipients until the player chooses: human teammates in a networked game, AI teammates in a skirmish
+WzQuickChatTargeting quickChatDefaultTeamTargeting();
 
 std::shared_ptr<W_FORM> createQuickChatForm(WzQuickChatContext context, const std::function<void ()>& onQuickChatSent, optional<WzQuickChatMode> startingPanel = nullopt);
 

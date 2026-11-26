@@ -85,6 +85,8 @@ public:
 	void refresh() override;
 	void clearData() override;
 	void toggleBuilderSelection(DROID *droid);
+	/// The construction rate a structure placed now would be built at: the selected trucks', or else the highlighted one's
+	unsigned constructionPointsPerSecond() const;
 	std::shared_ptr<StatsForm> makeStatsForm() override;
 
 	static void resetShowFavorites()

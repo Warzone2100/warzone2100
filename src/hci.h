@@ -298,6 +298,9 @@ void intRequestQuitToMainMenu();
 /* Display the widgets for the in game interface */
 void intDisplayWidgets();
 
+/* Whether the console shows on the in-game screen this frame */
+bool intConsoleShown();
+
 void intShowWidgetHelp();
 bool intHelpOverlayIsUp();
 
@@ -305,6 +308,8 @@ bool intHelpOverlayIsUp();
 bool intAddReticule();
 bool intAddInGameOptionsButton();
 bool intShowGroupSelectionMenu();
+/// Builds the groups panel again when it was built for the other layout
+void intRebuildGroupSelectionMenu();
 bool intAddPower();
 void intRemoveReticule();
 void intHideInGameOptionsButton();
@@ -381,6 +386,12 @@ void intScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHe
 void intRefreshScreen();
 /// Test-only (--gamestate-ui-stress): open the build, manufacture, research, commander or order form, or close them
 bool intTestShowForm(unsigned which);
+/// Test-only (--hud-geometry-dump): open the design screen on the first design after the new one
+bool intTestShowDesign();
+/// Which of the build, manufacture, research or commander panels is open (IOBJ_NONE: none)
+OBJECT_MODE intOpenObjectPanel();
+/// Open one of them again, as its reticule button does (after the HUD was rebuilt)
+bool intReopenObjectPanel(OBJECT_MODE mode);
 
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats();

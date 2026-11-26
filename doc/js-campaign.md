@@ -833,15 +833,27 @@ Checks for extra win conditions defined in level scripts being met, if any.
 
 ## camSetExtraObjectiveMessage(message)
 
-Message(s) the mission script can set to further explain specific victory conditions.
-Allows a single string or an array of strings.
+Message(s) the mission script can set to further explain specific victory conditions: the mission's own objectives,
+listed before the library's (see `setObjective()`). Allows a single string or an array of strings. An item can
+also be an object `{id, text, marker}`, where `id` names it for `camSetObjectiveState()`, and `marker` names the
+proximity message that shows where it's done.
 
-@param {string|Object[]} message
+@param {string|Object|Object[]} message
+@returns {void}
+
+## camSetObjectiveState(id, state)
+
+Marks the mission's objective `id` (see `camSetExtraObjectiveMessage()`) "done", "failed" or "active" again, when the
+mission script knows it's met (or lost). Objectives start active.
+
+@param {string} id
+@param {string} state
 @returns {void}
 
 ## camClearConsoleOnVictoryMessage(clear)
 
 If the script wants to allow `__camSetupConsoleForVictoryConditions()` to clear the console.
+(No longer used: the victory conditions are objectives, and aren't printed when they change.)
 
 @param {boolean} clear
 @returns {void}

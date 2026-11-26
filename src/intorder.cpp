@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include <map>
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/bitimage.h"//bitmap routines
 
@@ -28,6 +29,8 @@
 #include "objects.h"
 #include "order.h"
 #include "game_world.h"
+#include "hud/hudskin.h"
+#include "hud/hudlayout.h"
 
 #include <set>
 #include <algorithm>
@@ -41,6 +44,8 @@
 #define ORDER_BUTY		16
 #define ORDER_BUTGAP	4
 #define ORDER_BOTTOMY	318	+ E_H
+#define ORDER_COMPACT_TOP	2
+#define ORDER_COLUMN_OFFSET	(ORDER_WIDTH - ORDER_BUTX / 2)
 
 #define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
@@ -546,10 +551,101 @@ std::vector<UWORD> intOrderGetButtonImageIDs(SECONDARY_ORDER secondaryOrder)
 }
 
 
+namespace
+{
+
+struct OrderIcon
+{
+	UWORD image;
+	const char *icon;
+	HudTone fillTone;
+};
+
+const OrderIcon ORDER_ICONS[] = {
+	{IMAGE_ORD_RANGE3UP, "order-range-optimum", HudTone::Neutral},
+	{IMAGE_ORD_RANGE1UP, "order-range-short", HudTone::Neutral},
+	{IMAGE_ORD_RANGE2UP, "order-range-long", HudTone::Neutral},
+	{IMAGE_ORD_REPAIR3UP, "order-repair-never", HudTone::Neutral},
+	{IMAGE_ORD_REPAIR2UP, "order-repair-heavy", HudTone::Bad},
+	{IMAGE_ORD_REPAIR1UP, "order-repair-medium", HudTone::Warn},
+	{IMAGE_ORD_FATWILLUP, "order-fire-at-will", HudTone::Neutral},
+	{IMAGE_ORD_RETFIREUP, "order-return-fire", HudTone::Neutral},
+	{IMAGE_ORD_HOLDFIREUP, "order-hold-fire", HudTone::Neutral},
+	{IMAGE_ORD_FIREDES_UP, "order-fire-support", HudTone::Neutral},
+	{IMAGE_ORD_ACCREP_UP, "order-accept-retreat", HudTone::Neutral},
+	{IMAGE_ORD_PATROLUP, "order-patrol", HudTone::Neutral},
+	{IMAGE_ORD_CIRCLEUP, "order-circle", HudTone::Neutral},
+	{IMAGE_ORD_PURSUEUP, "order-pursue", HudTone::Neutral},
+	{IMAGE_ORD_GUARDUP, "order-guard", HudTone::Neutral},
+	{IMAGE_ORD_HALTUP, "order-hold-position", HudTone::Neutral},
+	{IMAGE_ORD_RTRUP, "order-return-repair", HudTone::Neutral},
+	{IMAGE_ORD_GOTOHQUP, "order-return-hq", HudTone::Neutral},
+	{IMAGE_ORD_EMBARKUP, "order-embark", HudTone::Neutral},
+	{IMAGE_ORD_DESTRUCT1UP, "order-return-recycle", HudTone::Neutral},
+	{IMAGE_ORD_DESTRUCT2UP, "order-recycle", HudTone::Neutral},
+};
+
+void displayOrderButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	const unsigned state = psWidget->getState();
+	const bool disabled = (state & WBUT_DISABLE) != 0;
+	const WzRect rect(xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
+	if (!intDrawOrderButton(currentHudSkin(), UNPACKDWORD_TRI_C(psWidget->UserData), rect, (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0,
+	                        !disabled && (state & WBUT_HIGHLIGHT) != 0, disabled))
+	{
+		intDisplayButtonHilight(psWidget, xOffset, yOffset);
+	}
+}
+
+}
+
+bool intDrawOrderButton(HudSkin &skin, UWORD imageId, const WzRect &rect, bool down, bool highlighted, bool disabled)
+{
+	HudOrderButtonLook look;
+	look.rect = rect;
+	look.down = down;
+	look.highlighted = highlighted;
+	look.disabled = disabled;
+	if (imageId >= IMAGE_ORD_FAC1UP && imageId <= IMAGE_ORD_FAC5DOWN)
+	{
+		look.number = (imageId - IMAGE_ORD_FAC1UP) / 2 + 1;
+		return skin.drawOrderButton(look);
+	}
+	for (const OrderIcon &entry : ORDER_ICONS)
+	{
+		if (entry.image == imageId)
+		{
+			look.icon = entry.icon;
+			look.fillTone = entry.fillTone;
+			return skin.drawOrderButton(look);
+		}
+	}
+	return false;
+}
+
 // Add the droid order screen.
 // Returns true if the form was displayed ok.
 //
 //changed to a BASE_OBJECT to accommodate the factories - AB 21/04/99
+// In the Compact layout's two-column orders panel: where the unit goes and what becomes of it (halt type, return to,
+// recycle, production), rather than how it fights
+static bool inRightOrderColumn(SECONDARY_ORDER order)
+{
+	switch (order)
+	{
+	case DSO_HALTTYPE:
+	case DSO_RETURN_TO_LOC:
+	case DSO_RECYCLE:
+	case DSO_ASSIGN_PRODUCTION:
+	case DSO_ASSIGN_CYBORG_PRODUCTION:
+	case DSO_ASSIGN_VTOL_PRODUCTION:
+	case DSO_CLEAR_PRODUCTION:
+		return true;
+	default:
+		return false;
+	}
+}
+
 bool intAddOrder(BASE_OBJECT *psObj)
 {
 	bool Animate = true;
@@ -557,7 +653,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	UWORD OrdIndex;
 	UWORD Height, NumDisplayedOrders;
 	UWORD NumButs;
-	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore;
+	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore, PlaceOnLine;
 	bool  bLastCombine, bHidden;
 	DROID *Droid;
 	STRUCTURE *psStructure;
@@ -648,6 +744,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	/* Create the basic form */
 	auto orderForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	orderForm->setHudSkinned(true);
 	parent->attach(orderForm);
 	orderForm->id = IDORDER_FORM;
 	orderForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -663,8 +760,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	sButInit.pDisplay = intDisplayHudCloseButton;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -673,11 +769,20 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	sButInit = W_BUTINIT();
 	sButInit.formID = IDORDER_FORM;
 	sButInit.id = IDORDER_CLOSE + 1;
-	sButInit.pDisplay = intDisplayButtonHilight;
+	sButInit.pDisplay = displayOrderButton;
 	sButInit.y = ORDER_BUTY;
 
 	Height = 0;
 	NumDisplayedOrders = 0;
+	// Each button, its order's column (when two are needed) and its row's place in one column
+	struct PlacedButton
+	{
+		UDWORD id;
+		bool rightColumn;
+		int rowY;
+		int rowHeight;
+	};
+	std::vector<PlacedButton> placedButtons;
 
 	for (unsigned j = 0; j < AvailableOrders.size() && NumDisplayedOrders < MAX_DISPLAYABLE_ORDERS; ++j)
 	{
@@ -753,14 +858,15 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				}
 			}
 
-			// get position on line
-			NumCombineButs = (UWORD)(NumCombineButs - (NumCombineBefore - (NumCombineBefore % ORD_MAX_COMBINE_BUTS)));
+			// its place on its line, and how many buttons that line has
+			PlaceOnLine = (UWORD)(NumCombineBefore % ORD_MAX_COMBINE_BUTS);
+			NumCombineButs = (UWORD)std::min<int>(ORD_MAX_COMBINE_BUTS, NumCombineButs - (NumCombineBefore - PlaceOnLine));
 
 			if (NumCombineButs >= ORD_MAX_COMBINE_BUTS)
 			{
 				// the buttons will fill the line
 				sButInit.x = (SWORD)(ORDER_BUTX +
-				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * NumCombineBefore);
+				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * PlaceOnLine);
 			}
 			else
 			{
@@ -769,11 +875,11 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				             (NumCombineButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
 				              (NumCombineButs - 1) * ORDER_BUTGAP) / 2;
 				sButInit.x = (SWORD)(sButInit.x +
-				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * NumCombineBefore);
+				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * PlaceOnLine);
 			}
 
-			// see if need to start a new line of buttons
-			if ((NumCombineBefore + 1) == (NumCombineButs % ORD_MAX_COMBINE_BUTS))
+			// start a new line of buttons after the line's last one
+			if (PlaceOnLine + 1 == NumCombineButs)
 			{
 				bLastCombine = true;
 			}
@@ -793,6 +899,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			{
 				return false;
 			}
+			placedButtons.push_back({sButInit.id, inRightOrderColumn(OrderButtons[OrdIndex].Order), sButInit.y, sButInit.height + ORDER_BUTGAP});
 
 			// Set the default state for the button.
 			switch (OrderButtons[OrdIndex].ButType)
@@ -867,9 +974,50 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
-	orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
-		psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
-	});
+	if (hudCompactLayout() && ORDER_BOTTOMY - newHeight < ORDER_COMPACT_TOP)
+	{
+		// Too tall for the Compact layout: two columns, the unit's own behavior on the left, where it goes and
+		// what happens to it on the right
+		std::map<int, int> newRowY[2];
+		int columnHeight[2] = {0, 0};
+		for (const auto &placed : placedButtons)
+		{
+			auto &rows = newRowY[placed.rightColumn ? 1 : 0];
+			if (rows.find(placed.rowY) == rows.end())
+			{
+				rows[placed.rowY] = ORDER_BUTY + columnHeight[placed.rightColumn ? 1 : 0];
+				columnHeight[placed.rightColumn ? 1 : 0] += placed.rowHeight;
+			}
+		}
+		for (const auto &placed : placedButtons)
+		{
+			if (auto button = widgGetFromID(psWScreen, placed.id))
+			{
+				button->move(button->x() + (placed.rightColumn ? ORDER_COLUMN_OFFSET : 0), newRowY[placed.rightColumn ? 1 : 0][placed.rowY]);
+			}
+		}
+		const int twoColumnHeight = std::max(columnHeight[0], columnHeight[1]) + CLOSE_HEIGHT + ORDER_BUTGAP;
+		constexpr int twoColumnWidth = ORDER_WIDTH + ORDER_COLUMN_OFFSET;
+		if (auto closeButton = widgGetFromID(psWScreen, IDORDER_CLOSE))
+		{
+			closeButton->move(twoColumnWidth - CLOSE_WIDTH, 0);
+		}
+		orderForm->setCalcLayout([twoColumnHeight](WIDGET *psWidget) {
+			// Wider than the left column: above the object row too when the commander's shows beside it
+			int bottom = ORDER_BOTTOMY;
+			if (intMode == INT_CMDORDER)
+			{
+				bottom = std::min(bottom, hudObjectsPanelRect().y() - BASE_GAP);
+			}
+			psWidget->setGeometry(ORDER_X, std::max(ORDER_COMPACT_TOP, bottom - twoColumnHeight), twoColumnWidth, twoColumnHeight);
+		});
+	}
+	else
+	{
+		orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
+			psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
+		});
+	}
 
 	OrderUp = true;
 	setSecondaryWindowUp(true);

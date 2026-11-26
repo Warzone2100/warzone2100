@@ -32,6 +32,7 @@
 #include "../statsdef.h"
 
 #include <unordered_map>
+#include <vector>
 
 struct NETQUEUE;
 
@@ -52,6 +53,29 @@ enum class WzStrategyPlanningUnitTypes : uint8_t
 constexpr size_t WzStrategyPlanningUnitTypes_NUM_TYPES = 3;
 
 bool gameHasTeamStrategyView(bool allowAIs = false);
+/// Whether the in-game team strategy view is shown (the multiplayer menu's tab, the HUD's view): AIs that set a plan
+/// count in a game without other humans' computers (`!NetPlay.bComms`)
+bool teamStrategyViewAvailable(bool allowAIs);
+/// The local player's teammates the view lists after the local player, in their positions' order: humans (connected or
+/// not), and AIs that set a plan when `allowAIs`
+std::vector<uint32_t> teamStrategyTeammates(bool allowAIs);
+WzStrategyPlanningState teamStrategyWeaponPlan(uint32_t player, WEAPON_SUBCLASS subClass);
+WzStrategyPlanningState teamStrategyUnitPlan(uint32_t player, WzStrategyPlanningUnitTypes unitType);
+/// Moves the local player's plan for a class a step forward (a click) or back (a right-click or a held click), and
+/// tells the team when `send`
+void teamStrategyStepWeaponPlan(WEAPON_SUBCLASS subClass, bool forward, bool send);
+void teamStrategyStepUnitPlan(WzStrategyPlanningUnitTypes unitType, bool forward, bool send);
+/// The state a step forward or back goes to: Not specified, Planned, Heavily planned, Never, and around
+WzStrategyPlanningState teamStrategyNextState(WzStrategyPlanningState state, bool forward);
+/// Tells the local player's team its plan
+void teamStrategySendLocalPlan();
+/// Unit types the game's rules turn off (no tanks, VTOLs or cyborgs)
+bool teamStrategyUnitTypeDisabled(WzStrategyPlanningUnitTypes unitType);
+const char *teamStrategyUnitTypeName(WzStrategyPlanningUnitTypes unitType);
+const char *teamStrategyUnitTypeImagePath(WzStrategyPlanningUnitTypes unitType);
+/// For the HUD geometry dump: up to `teammates` of the local player's AI teammates count as players who were human, and
+/// they and the local player have sample plans. Returns how many teammates it found.
+size_t teamStrategyFillForTests(size_t teammates);
 std::shared_ptr<WIDGET> createTeamStrategyView(bool allowAIs = false);
 bool transformTeamStrategyViewMode(const std::shared_ptr<WIDGET>& teamStrategyView, bool updatingPlayers);
 bool teamStrategyViewSetBackgroundColor(const std::shared_ptr<WIDGET>& view, PIELIGHT color);

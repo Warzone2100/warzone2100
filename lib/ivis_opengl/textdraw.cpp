@@ -315,6 +315,7 @@ struct FTFace
 	FT_Face &face() { return m_face; }
 
 	hb_font_t *m_font;
+	int32_t letterSpacing = 0; // added after each glyph that advances, except the last (in 26.6 fixed-point pixels)
 	std::shared_ptr<std::vector<char>> pFileData;
 
 private:
@@ -624,6 +625,7 @@ struct TextShaper
 		FTFace& face;
 
 		HarfbuzzPosition(hb_codepoint_t c, uint32_t cl, Vector2i &&p, FTFace& f) : codepoint(c), cluster(cl), penPosition(p), face(f) {}
+		int32_t advance = 0;   ///< how far the pen moves for it
 	};
 
 	struct ShapingResult
@@ -777,8 +779,12 @@ struct TextShaper
 	// Draws the text and returns the text buffer, width and height, etc *IN PIXELS*
 	DrawTextResult drawText(const WzString& text, iV_fonts fontID)
 	{
-		ShapingResult shapingResult = shapeText(text, fontID);
+		return drawShapedText(shapeText(text, fontID), text);
+	}
 
+	// Draws what was shaped (`text` names it in errors)
+	DrawTextResult drawShapedText(const ShapingResult &shapingResult, const WzString& text)
+	{
 		if (shapingResult.glyphes.empty())
 		{
 			return DrawTextResult(RenderedText(), TextLayoutMetrics(shapingResult.x_advance / 64, shapingResult.y_advance / 64));
@@ -860,6 +866,124 @@ struct TextShaper
 				RenderedText(std::move(stringBitmap), min_x, min_y),
 				TextLayoutMetrics(std::max(texture_width, x_advance), std::max(texture_height, y_advance))
 		);
+	}
+
+	struct TextFit
+	{
+		bool truncated = false;
+		size_t shownLength = 0;
+		int32_t naturalWidth = 0;   // (in pixels)
+		bool keptWhole = false;     // (no wider than an ellipsis, so it isn't cut at any width)
+		// Widths (in pixels) from fromWidth up to, not including, belowWidth cut it in the same place
+		int32_t fromWidth = 0;
+		int32_t belowWidth = std::numeric_limits<int32_t>::max();
+	};
+
+	// Shapes `codePoints` to fit `maxWidth` (in pixels, 0 or less for no limit): all of them,
+	// or the longest start (in reading order, ending on a cluster) that fits with an ellipsis after it.
+	// `codePoints` becomes what's shaped.
+	ShapingResult shapeToFit(std::vector<uint32_t> &codePoints, iV_fonts fontID, int32_t maxWidth, TextFit &fit)
+	{
+		const uint32_t ELLIPSIS = 0x2026;
+		fit = TextFit();
+		ShapingResult whole = shapeText(codePoints, fontID);
+		fit.shownLength = codePoints.size();
+		fit.naturalWidth = whole.x_advance / 64;
+		// (widths compare in whole pixels, as a text's width is measured)
+		if (maxWidth <= 0 || whole.x_advance / 64 <= maxWidth)
+		{
+			return whole;
+		}
+		const int64_t ellipsisAdvance = shapeText(std::vector<uint32_t>{ELLIPSIS}, fontID).x_advance;
+		// A text no wider than an ellipsis stays whole (cutting it wouldn't make it narrower)
+		if (ellipsisAdvance / 64 >= whole.x_advance / 64)
+		{
+			fit.keptWhole = true;
+			return whole;
+		}
+		fit.truncated = true;
+
+		// Each cluster's advance, in reading order (a width doesn't depend on the glyphs' visual order)
+		const size_t length = codePoints.size();
+		std::vector<int64_t> advances(length, 0);
+		std::vector<bool> starts(length + 1, false);
+		for (const HarfbuzzPosition &g : whole.glyphes)
+		{
+			if (g.cluster < length)
+			{
+				advances[g.cluster] += g.advance;
+				starts[g.cluster] = true;
+			}
+		}
+		starts[length] = true;
+
+		size_t cut = 0;
+		int64_t width = 0;
+		int64_t nextWidth = 0;   // (the width with the cluster after the cut)
+		for (size_t i = 0; i < length; ++i)
+		{
+			if (starts[i])
+			{
+				if ((width + ellipsisAdvance) / 64 > maxWidth)
+				{
+					nextWidth = width;
+					break;
+				}
+				cut = i;
+			}
+			width += advances[i];
+		}
+		fit.belowWidth = static_cast<int32_t>((nextWidth + ellipsisAdvance) / 64);
+
+		const auto isSpace = [](uint32_t c) { return c == ' ' || c == '\t' || c == 0xA0 || c == 0x3000; };
+		const std::vector<uint32_t> text = codePoints;
+		for (;;)
+		{
+			size_t end = cut;
+			while (end > 0 && isSpace(text[end - 1]))
+			{
+				--end;
+			}
+			codePoints.assign(text.begin(), text.begin() + static_cast<std::ptrdiff_t>(end));
+			codePoints.push_back(ELLIPSIS);
+			ShapingResult shown = shapeText(codePoints, fontID);
+			// (the join with the ellipsis can widen it, ex. a letter's final form)
+			if (cut == 0 || shown.x_advance / 64 <= maxWidth)
+			{
+				fit.shownLength = end;
+				return shown;
+			}
+			do
+			{
+				--cut;
+			} while (cut > 0 && !starts[cut]);
+		}
+	}
+
+	// Draws the text to fit `maxWidth` (in pixels, 0 or less for no limit), as shapeToFit() shapes it
+	DrawTextResult drawTextToFit(const WzString& text, iV_fonts fontID, int32_t maxWidth, TextFit &fit)
+	{
+		const std::vector<uint32_t> codePoints = text.toUtf32();
+		int32_t limit = maxWidth;
+		for (int attempt = 0; ; ++attempt)
+		{
+			std::vector<uint32_t> shown = codePoints;
+			const ShapingResult shaped = shapeToFit(shown, fontID, limit, fit);
+			DrawTextResult result = drawShapedText(shaped, text);
+			const int32_t drawn = static_cast<int32_t>(result.layoutMetrics.width);
+			if (maxWidth <= 0 || drawn <= maxWidth || fit.keptWhole || attempt == 2 || limit <= 1)
+			{
+				fit.fromWidth = fit.keptWhole ? 0 : drawn;
+				if (fit.truncated)
+				{
+					fit.belowWidth += maxWidth - limit;
+				}
+				return result;
+			}
+			// Its drawn pixels reach past its advance (ex. an overhanging last letter): fit it narrower by that much
+			const int32_t overhang = std::max(1, drawn - shaped.x_advance / 64);
+			limit = std::max(1, std::min(limit - 1, maxWidth - overhang));
+		}
 	}
 
 	struct SplitTextRunsResult
@@ -1041,6 +1165,7 @@ struct TextShaper
 
 		int32_t x = 0;
 		int32_t y = 0;
+		int32_t trailingSpacing = 0;
 
 		// Shaping a run resets the shared HarfBuzz buffer its glyph arrays point into, so each run is
 		// shaped and consumed in the same step rather than shaping them all up front. Runs shape
@@ -1054,9 +1179,16 @@ struct TextShaper
 
 				uint32_t clusterIdx = (run.glyphInfos[glyphIndex].cluster + run.startOffset);
 				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, clusterIdx, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset), *run.fontFace);
+				shapingResult.glyphes.back().advance = run.glyphPositions[glyphIndex].x_advance;
 
 				x += run.glyphPositions[glyphIndex].x_advance;
 				y += run.glyphPositions[glyphIndex].y_advance;
+				if (run.glyphPositions[glyphIndex].x_advance != 0)
+				{
+					x += run.fontFace->letterSpacing;
+					shapingResult.glyphes.back().advance += run.fontFace->letterSpacing;
+					trailingSpacing = run.fontFace->letterSpacing;
+				}
 			}
 		};
 
@@ -1074,7 +1206,7 @@ struct TextShaper
 		}
 #endif // defined(WZ_FRIBIDI_ENABLED)
 
-		shapingResult.x_advance += x;
+		shapingResult.x_advance += x - trailingSpacing;
 		shapingResult.y_advance += y;
 
 		// Step 7: Finalize.
@@ -1165,14 +1297,17 @@ static WZFontCollection* baseFonts = nullptr;
 static WZFontCollection* cjkFonts = nullptr;
 static bool failedToLoadCJKFonts = false;
 
-// Video text fonts: faces are created on demand at the bound size (a char size of 0 is unbound)
-struct VideoFontSlot
+// Video and display text fonts: faces are created on demand at the bound size (a char size of 0 is unbound)
+struct SizedFontSlot
 {
 	int32_t charSize = 0; // 26.6 points
+	float letterSpacing = 0.f; // ems
 	std::unique_ptr<FTFace> base;
 	std::unique_ptr<FTFace> cjk;
 };
-static VideoFontSlot videoFontSlots[font_video_4 - font_video_1 + 1];
+static SizedFontSlot videoFontSlots[font_video_4 - font_video_1 + 1];
+static SizedFontSlot displayFontSlots[font_display_6 - font_display_1 + 1];
+static bool failedToLoadDisplayFont = false;
 
 static optional<size_t> videoFontSlotIndex(iV_fonts fontID)
 {
@@ -1181,6 +1316,15 @@ static optional<size_t> videoFontSlotIndex(iV_fonts fontID)
 		return nullopt;
 	}
 	return static_cast<size_t>(fontID - font_video_1);
+}
+
+static optional<size_t> displayFontSlotIndex(iV_fonts fontID)
+{
+	if (fontID < font_display_1 || fontID > font_display_6)
+	{
+		return nullopt;
+	}
+	return static_cast<size_t>(fontID - font_display_1);
 }
 
 struct iVFontsHash
@@ -1241,7 +1385,7 @@ static bool usesCJKFont(hb_script_t script)
 
 static FTFace *getVideoFontFace(size_t index, hb_script_t script)
 {
-	VideoFontSlot &slot = videoFontSlots[index];
+	SizedFontSlot &slot = videoFontSlots[index];
 	ASSERT_OR_RETURN(nullptr, slot.charSize > 0, "Video font %zu is not bound", index + 1);
 	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
@@ -1266,6 +1410,47 @@ static FTFace *getVideoFontFace(size_t index, hb_script_t script)
 	return slot.base.get();
 }
 
+static FTFace *getDisplayFontFace(size_t index, hb_script_t script)
+{
+	SizedFontSlot &slot = displayFontSlots[index];
+	ASSERT_OR_RETURN(nullptr, slot.charSize > 0, "Display font %zu is not bound", index + 1);
+	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
+	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
+	try {
+		if (usesCJKFont(script) && initializeCJKFontsIfNeeded())
+		{
+			if (!slot.cjk)
+			{
+				slot.cjk = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, slot.charSize, horizDPI, vertDPI, 700);
+			}
+			return slot.cjk.get();
+		}
+		if (!slot.base)
+		{
+			if (!failedToLoadDisplayFont)
+			{
+				try {
+					slot.base = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSansCondensed-Bold.ttf", slot.charSize, horizDPI, vertDPI);
+				}
+				catch (const std::exception &e) {
+					debug(LOG_WARNING, "Failed to load the display font, using DejaVu Sans Bold:\n%s", e.what());
+					failedToLoadDisplayFont = true;
+				}
+			}
+			if (!slot.base)
+			{
+				slot.base = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", slot.charSize, horizDPI, vertDPI);
+			}
+			slot.base->letterSpacing = static_cast<int32_t>(std::lround(slot.letterSpacing * static_cast<float>(slot.charSize) * horizDPI / DEFAULT_DPI));
+		}
+	}
+	catch (const std::exception &e) {
+		debug(LOG_ERROR, "Failed to load display font:\n%s", e.what());
+		return nullptr;
+	}
+	return slot.base.get();
+}
+
 static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 {
 	if (auto index = videoFontSlotIndex(FontID))
@@ -1275,6 +1460,14 @@ static FTFace &getFTFace(iV_fonts FontID, hb_script_t script)
 			return *face;
 		}
 		FontID = font_regular;
+	}
+	if (auto index = displayFontSlotIndex(FontID))
+	{
+		if (FTFace *face = getDisplayFontFace(index.value(), script))
+		{
+			return *face;
+		}
+		FontID = font_regular_bold;
 	}
 	if (usesCJKFont(script) && initializeCJKFontsIfNeeded())
 	{
@@ -1413,6 +1606,11 @@ void iV_TextShutdown()
 		slot.base.reset();
 		slot.cjk.reset();
 	}
+	for (auto &slot : displayFontSlots)
+	{
+		slot.base.reset();
+		slot.cjk.reset();
+	}
 	delete textureID;
 	textureID = nullptr;
 	fontToEllipsisMap.clear();
@@ -1430,8 +1628,8 @@ void iV_TextUpdateScaleFactor(unsigned int horizScalePercentage, unsigned int ve
 	iV_TextInit(horizScalePercentage, vertScalePercentage);
 }
 
-// The glyph cache is keyed by face pointer, so it is cleared whenever video font faces are freed
-static void releaseVideoFontFaces(VideoFontSlot &slot)
+// The glyph cache is keyed by face pointer, so it is cleared whenever sized font faces are freed
+static void releaseSizedFontFaces(SizedFontSlot &slot)
 {
 	if (!slot.base && !slot.cjk)
 	{
@@ -1451,12 +1649,12 @@ bool iV_BindVideoFont(iV_fonts fontID, float pointSize)
 	ASSERT_OR_RETURN(false, index.has_value(), "Not a video font: %d", static_cast<int>(fontID));
 	ASSERT_OR_RETURN(false, pointSize > 0.f, "Invalid video font size: %f", pointSize);
 	int32_t charSize = std::max<int32_t>(1, static_cast<int32_t>(std::lround(pointSize * 64.f)));
-	VideoFontSlot &slot = videoFontSlots[index.value()];
+	SizedFontSlot &slot = videoFontSlots[index.value()];
 	if (slot.charSize == charSize)
 	{
 		return true;
 	}
-	releaseVideoFontFaces(slot);
+	releaseSizedFontFaces(slot);
 	slot.charSize = charSize;
 	fontGeneration[fontID] = ++lastFontGeneration;
 	return true;
@@ -1466,15 +1664,33 @@ void iV_UnbindVideoFonts()
 {
 	for (size_t i = 0; i < ARRAY_SIZE(videoFontSlots); ++i)
 	{
-		VideoFontSlot &slot = videoFontSlots[i];
+		SizedFontSlot &slot = videoFontSlots[i];
 		if (slot.charSize == 0)
 		{
 			continue;
 		}
-		releaseVideoFontFaces(slot);
+		releaseSizedFontFaces(slot);
 		slot.charSize = 0;
 		fontGeneration[font_video_1 + i] = ++lastFontGeneration;
 	}
+}
+
+bool iV_BindDisplayFont(iV_fonts fontID, float pointSize, float letterSpacing)
+{
+	auto index = displayFontSlotIndex(fontID);
+	ASSERT_OR_RETURN(false, index.has_value(), "Not a display font: %d", static_cast<int>(fontID));
+	ASSERT_OR_RETURN(false, pointSize > 0.f, "Invalid display font size: %f", pointSize);
+	int32_t charSize = std::max<int32_t>(1, static_cast<int32_t>(std::lround(pointSize * 64.f)));
+	SizedFontSlot &slot = displayFontSlots[index.value()];
+	if (slot.charSize == charSize && slot.letterSpacing == letterSpacing)
+	{
+		return true;
+	}
+	releaseSizedFontFaces(slot);
+	slot.charSize = charSize;
+	slot.letterSpacing = letterSpacing;
+	fontGeneration[fontID] = ++lastFontGeneration;
+	return true;
 }
 
 static WzText& iV_Internal_GetEllipsis(iV_fonts fontID)
@@ -1496,6 +1712,23 @@ int iV_GetEllipsisWidth(iV_fonts fontID)
 void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour, float rotation /*= 0.0f*/)
 {
 	iV_Internal_GetEllipsis(fontID).render(position, colour, rotation);
+}
+
+static int32_t widthPointsToPixels(int widthInPoints)
+{
+	return (widthInPoints > 0) ? std::max<int32_t>(1, static_cast<int32_t>(floorf(static_cast<float>(widthInPoints) * _horizScaleFactor))) : 0;
+}
+
+WzString iV_TruncateTextToWidth(const WzString &text, iV_fonts fontID, int maxWidth)
+{
+	if (maxWidth <= 0)
+	{
+		return text;
+	}
+	std::vector<uint32_t> codePoints = text.toUtf32();
+	TextShaper::TextFit fit;
+	getShaper().shapeToFit(codePoints, fontID, widthPointsToPixels(maxWidth), fit);
+	return fit.truncated ? WzString::fromUtf32(codePoints) : text;
 }
 
 unsigned int width_pixelsToPoints(unsigned int widthInPixels)
@@ -1623,6 +1856,14 @@ optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
 			case font_small:
 				return font_bar;
 
+			case font_display_1: // display fonts are bold
+			case font_display_2:
+			case font_display_3:
+			case font_display_4:
+			case font_display_5:
+			case font_display_6:
+				return fontID;
+
 			case font_video_1:
 			case font_video_2:
 			case font_video_3:
@@ -1656,6 +1897,12 @@ optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
 			case font_video_4:
 				return fontID; // already non-bolded
 
+			case font_display_1: // no non-bold display fonts
+			case font_display_2:
+			case font_display_3:
+			case font_display_4:
+			case font_display_5:
+			case font_display_6:
 			case font_count:
 				return nullopt;
 		}
@@ -1687,11 +1934,17 @@ optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID)
 		case font_small:
 			return nullopt;
 
-		// video fonts are sized by their caller
+		// video and display fonts are sized by their caller
 		case font_video_1:
 		case font_video_2:
 		case font_video_3:
 		case font_video_4:
+		case font_display_1:
+		case font_display_2:
+		case font_display_3:
+		case font_display_4:
+		case font_display_5:
+		case font_display_6:
 		case font_count:
 			return nullopt;
 	}
@@ -1936,6 +2189,50 @@ int WzText::lineSize()
 	return mPtsLineSize;
 }
 
+float WzText::inkTop()
+{
+	updateCacheIfNecessary();
+	return (mRenderingVertScaleFactor > 0.f) ? static_cast<float>(inkOffsets.y) / mRenderingVertScaleFactor : 0.f;
+}
+float WzText::inkHeight()
+{
+	updateCacheIfNecessary();
+	return (mRenderingVertScaleFactor > 0.f) ? static_cast<float>(inkDimensions.y) / mRenderingVertScaleFactor : 0.f;
+}
+float WzText::inkCenteredX(const WzRect &rect)
+{
+	updateCacheIfNecessary();
+	const float centerX = static_cast<float>(rect.x()) + static_cast<float>(rect.width()) / 2.f;
+	if (texture == nullptr || mRenderingHorizScaleFactor <= 0.f)
+	{
+		return centerX - static_cast<float>(width()) / 2.f;
+	}
+	const float inkX = std::round(centerX * mRenderingHorizScaleFactor - static_cast<float>(inkDimensions.x) / 2.f);
+	return (inkX - static_cast<float>(inkOffsets.x)) / mRenderingHorizScaleFactor;
+}
+
+void WzText::renderCenteredOnInk(const WzRect &rect, PIELIGHT colour, WzText *aboveBaseline)
+{
+	updateCacheIfNecessary();
+	if (texture == nullptr || mRenderingHorizScaleFactor <= 0.f || mRenderingVertScaleFactor <= 0.f)
+	{
+		return;
+	}
+	// In the display's pixels, where the ink's corner (and so the texture's) must land on a whole pixel.
+	// The offsets are from the pen position, on the baseline
+	const float centerX = (static_cast<float>(rect.x()) + static_cast<float>(rect.width()) / 2.f) * mRenderingHorizScaleFactor;
+	const float centerY = (static_cast<float>(rect.y()) + static_cast<float>(rect.height()) / 2.f) * mRenderingVertScaleFactor;
+	const float inkX = std::round(centerX - static_cast<float>(inkDimensions.x) / 2.f);
+	float penY = std::round(centerY - static_cast<float>(inkDimensions.y) / 2.f) - static_cast<float>(inkOffsets.y);
+	if (aboveBaseline != nullptr)
+	{
+		aboveBaseline->updateCacheIfNecessary();
+		const float height = -static_cast<float>(aboveBaseline->inkOffsets.y);
+		penY = std::round(centerY - height / 2.f) + height;
+	}
+	render((inkX - static_cast<float>(inkOffsets.x)) / mRenderingHorizScaleFactor, penY / mRenderingVertScaleFactor, colour);
+}
+
 static uint32_t getFontGeneration(iV_fonts fontID)
 {
 	ASSERT_OR_RETURN(0, fontID < font_count, "Invalid font: %d", static_cast<int>(fontID));
@@ -1944,10 +2241,23 @@ static uint32_t getFontGeneration(iV_fonts fontID)
 
 void WzText::setText(const WzString &text, iV_fonts fontID/*, bool delayRender*/)
 {
+	setText(text, fontID, 0);
+}
+
+void WzText::setText(const WzString &text, iV_fonts fontID, int maxWidth)
+{
+	maxWidth = std::max(maxWidth, 0);
 	if (mText == text && fontID == mFontID)
 	{
-		return; // cached
+		// (cached, if the width cuts it in the same place)
+		const int32_t pixels = (maxWidth > 0) ? widthPointsToPixels(maxWidth) : std::numeric_limits<int32_t>::max();
+		if (maxWidth == mMaxWidth || (mFontGeneration == getFontGeneration(fontID) && pixels >= mFitFromPixels && (!mFit.truncated || pixels < mFitBelowPixels)))
+		{
+			mMaxWidth = maxWidth;
+			return;
+		}
 	}
+	mMaxWidth = maxWidth;
 	drawAndCacheText(text, fontID);
 }
 
@@ -1967,10 +2277,42 @@ void WzText::drawAndCacheText(const WzString& string, iV_fonts fontID)
 	mPtsLineSize = metricsHeight_PixelsToPoints((type->size->metrics.ascender - type->size->metrics.descender) >> 6);
 	mPtsBelowBase = metricsHeight_PixelsToPoints(type->size->metrics.descender >> 6);
 
-	DrawTextResult drawResult = getShaper().drawText(string, fontID);
+	TextShaper::TextFit fit;
+	DrawTextResult drawResult = getShaper().drawTextToFit(string, fontID, widthPointsToPixels(mMaxWidth), fit);
+	mFit.truncated = fit.truncated;
+	mFit.shownLength = fit.shownLength;
+	mFit.naturalWidth = static_cast<int>(width_pixelsToPoints(fit.truncated ? static_cast<uint32_t>(fit.naturalWidth) : drawResult.layoutMetrics.width));
+	mFitFromPixels = fit.fromWidth;
+	mFitBelowPixels = fit.belowWidth;
 	dimensions = (drawResult.text.bitmap) ? Vector2i(drawResult.text.bitmap->width(), drawResult.text.bitmap->height()) : Vector2i(0,0);
 	offsets = Vector2i(drawResult.text.offset_x, drawResult.text.offset_y);
 	layoutMetrics = Vector2i(drawResult.layoutMetrics.width, drawResult.layoutMetrics.height);
+	inkOffsets = offsets;
+	inkDimensions = dimensions;
+	if (dimensions.x > 0 && dimensions.y > 0)
+	{
+		const iV_Image &bitmap = *drawResult.text.bitmap;
+		const unsigned channels = bitmap.channels();
+		const unsigned char *pixels = bitmap.bmp();
+		int x0 = dimensions.x, y0 = dimensions.y, x1 = -1, y1 = -1;
+		for (int y = 0; y < dimensions.y; ++y)
+		{
+			for (int x = 0; x < dimensions.x; ++x)
+			{
+				const unsigned char *pixel = pixels + (static_cast<size_t>(y) * dimensions.x + x) * channels;
+				if (std::any_of(pixel, pixel + channels, [](unsigned char value) { return value != 0; }))
+				{
+					x0 = std::min(x0, x); x1 = std::max(x1, x);
+					y0 = std::min(y0, y); y1 = std::max(y1, y);
+				}
+			}
+		}
+		if (x1 >= 0)
+		{
+			inkOffsets = offsets + Vector2i(x0, y0);
+			inkDimensions = Vector2i(x1 - x0 + 1, y1 - y0 + 1);
+		}
+	}
 
 	if (texture)
 	{
@@ -2020,10 +2362,16 @@ WzText& WzText::operator=(WzText&& other)
 		mPtsLineSize = other.mPtsLineSize;
 		offsets = other.offsets;
 		dimensions = other.dimensions;
+		inkOffsets = other.inkOffsets;
+		inkDimensions = other.inkDimensions;
 		mFontGeneration = other.mFontGeneration;
 		mRenderingHorizScaleFactor = other.mRenderingHorizScaleFactor;
 		mRenderingVertScaleFactor = other.mRenderingVertScaleFactor;
 		layoutMetrics = other.layoutMetrics;
+		mMaxWidth = other.mMaxWidth;
+		mFit = other.mFit;
+		mFitFromPixels = other.mFitFromPixels;
+		mFitBelowPixels = other.mFitBelowPixels;
 
 		// Reset other's texture
 		other.texture = nullptr;
@@ -2131,30 +2479,4 @@ void WzText::renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColou
 		}
 	}
 	render(x, y, colour);
-}
-
-// Sets the text, truncating to a desired width limit (in *points*) if needed
-// returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
-size_t WidthLimitedWzText::setTruncatableText(const WzString &text, iV_fonts fontID, size_t limitWidthInPoints)
-{
-	if ((mFullText == text) && (mLimitWidthPts == limitWidthInPoints) && (getFontID() == fontID))
-	{
-		return getText().length(); // skip; no change
-	}
-
-	mFullText = text;
-	mLimitWidthPts = limitWidthInPoints;
-
-	WzString truncatedText = text;
-	while ((truncatedText.length() > 0) && (iV_GetTextWidth(truncatedText, fontID) > limitWidthInPoints))
-	{
-		if (!truncatedText.pop_back())
-		{
-			ASSERT(false, "WzString::pop_back() failed??");
-			break;
-		}
-	}
-
-	WzText::setText(truncatedText, fontID);
-	return truncatedText.length();
 }

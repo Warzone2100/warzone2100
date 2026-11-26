@@ -43,6 +43,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/vectorimage.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -170,7 +171,6 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 	challengesScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	multiMenuScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
-	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);
 	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	widgOverlaysScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight); // must be last!
 }
@@ -182,6 +182,7 @@ void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
 	unsigned int horizGameToRendererScaleFactor = 0, vertGameToRendererScaleFactor = 0;
 	wzGetGameToRendererScaleFactorInt(&horizGameToRendererScaleFactor, &vertGameToRendererScaleFactor);
 	iV_TextUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
+	iV_VectorImagesUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
 }
 
 static unsigned int currentGameVersion = 410;

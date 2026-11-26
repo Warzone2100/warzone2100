@@ -41,6 +41,7 @@
 #include "screens/spectatorgameoverscreen.h"
 #include "structure.h"
 #include "terrain.h"
+#include "hud/hudmodel.h"
 
 #include <unordered_set>
 
@@ -145,6 +146,7 @@ void uiAfterObjectsReplaced(const UiViewerState &state)
 			psStruct->selected = true;
 		}
 	}
+	hudModel().reset();
 	intRefreshScreen();
 	dirtyAllSectors();  // the restore wrote the tiles' heights and textures directly
 }

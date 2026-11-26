@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/input.h"
 #include "widget.h"
 #include "widgint.h"
 #include "form.h"
@@ -75,7 +76,12 @@ W_CLICKFORM::W_CLICKFORM()
 
 unsigned W_CLICKFORM::getState() const
 {
-	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
+	unsigned shown = state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
+	if (widgTouchPressedLookWaits(clickSoundPending, clickDownStart))
+	{
+		shown &= ~WBUT_DOWN;
+	}
+	return shown;
 }
 
 void W_CLICKFORM::setState(unsigned newState)
@@ -104,6 +110,20 @@ void W_CLICKFORM::run(W_CONTEXT *psContext)
 {
 	W_FORM::run(psContext);
 
+	if (clickDownStart.has_value() && touchLongPressPending)
+	{
+		const WzTouchLongPress longPress = widgOfferTouchLongPress(*this, clickDownStart.value());
+		touchLongPressPending = longPress == WzTouchLongPress::NotYet;
+		if (longPress == WzTouchLongPress::Taken)
+		{
+			state &= ~WBUT_DOWN;
+			clickDownStart.reset();
+			clickDownKey.reset();
+			clickSoundPending = false;
+			dirty = true;
+			return;
+		}
+	}
 	if (clickDownStart.has_value())
 	{
 		const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
@@ -115,6 +135,7 @@ void W_CLICKFORM::run(W_CONTEXT *psContext)
 				{
 					// clear button down state, as the clickHeld event "consumed" this click
 					state &= ~WBUT_DOWN;
+					playPendingClickSound();
 				}
 			}
 			clickDownStart.reset();
@@ -225,7 +246,10 @@ void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 			clickDownKey = key;
 			dirty = true;
 
-			if (AudioCallback != nullptr)
+			// (for a touch in a list, once it's known not to be a scroll)
+			clickSoundPending = touchPressMayBeTakenOver(key);
+			touchLongPressPending = key == WKEY_PRIMARY && inputLastPointerInputWasTouch();
+			if (AudioCallback != nullptr && !clickSoundPending)
 			{
 				AudioCallback(ClickedAudioID);
 			}
@@ -241,6 +265,7 @@ void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
+			playPendingClickSound();
 			if (auto lockedScreen = screenPointer.lock())
 			{
 				lockedScreen->setReturn(shared_from_this());
@@ -252,6 +277,17 @@ void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 
 	clickDownStart = nullopt;
 	clickDownKey = nullopt;
+	clickSoundPending = false;
+	touchLongPressPending = false;
+}
+
+void W_CLICKFORM::playPendingClickSound()
+{
+	if (clickSoundPending && AudioCallback != nullptr)
+	{
+		AudioCallback(ClickedAudioID);
+	}
+	clickSoundPending = false;
 }
 
 
@@ -280,6 +316,8 @@ void W_CLICKFORM::highlightLost()
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 	clickDownStart = nullopt;
 	clickDownKey = nullopt;
+	clickSoundPending = false;
+	touchLongPressPending = false;
 	dirty = true;
 }
 
@@ -478,7 +516,7 @@ void W_CLICKFORM::setHelp(optional<WidgetHelp> _help)
 
 bool W_CLICKFORM::isDown() const
 {
-	return (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	return (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 }
 
 bool W_CLICKFORM::isHighlighted() const

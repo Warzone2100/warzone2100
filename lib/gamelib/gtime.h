@@ -271,6 +271,7 @@ static inline Vector3i gameTimeAdjustedAverage(Vector3i numerator, int denominat
 
 void sendPlayerGameTime();                                ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
 void recvPlayerGameTime(NETQUEUE queue);                  ///< Processes a GAME_GAME_TIME message.
+uint32_t gameTimeWaitingForPlayersDuration();           ///< How long (realTime) game time has been held, waiting for a GAME_GAME_TIME message (0 if it isn't).
 bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
 

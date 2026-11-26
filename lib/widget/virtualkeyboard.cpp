@@ -316,8 +316,6 @@ private:
 	VirtualKeyboardForm* owner;
 	size_t index;
 	WzText labelText;
-	WzString cachedLabel;
-	iV_fonts cachedFont = font_count;
 	WzText popupHintText;
 	WzString cachedPopupHint;
 };
@@ -352,8 +350,6 @@ private:
 	VirtualKeyboardForm* owner;
 	size_t index;
 	WzText labelText;
-	WzString cachedLabel;
-	iV_fonts cachedFont = font_count;
 };
 
 // The pop-up's panel, holding its items
@@ -1280,16 +1276,10 @@ void VirtualKeyWidget::display(int xOffset, int yOffset)
 	{
 		return;
 	}
-	if (label != cachedLabel || font != cachedFont)
-	{
-		cachedLabel = label;
-		cachedFont = font;
-		labelText.setText(label, font);
-	}
-	const int maxLabelWidth = width() - 6;
+	labelText.setText(label, font, std::max(width() - 6, 1));
 	const float textX = x0 + static_cast<float>(std::max(3, (width() - labelText.width()) / 2));
 	const float textY = y0 + static_cast<float>((height() - labelText.lineSize()) / 2 - labelText.aboveBase());
-	labelText.render(textX, textY, WZCOL_TEXT_BRIGHT, 0.f, maxLabelWidth);
+	labelText.render(textX, textY, WZCOL_TEXT_BRIGHT);
 
 	// a hint that holding the key opens a pop-up
 	const WzString popupHint = owner->popupHint(index);
@@ -1335,15 +1325,10 @@ void PopupItemWidget::display(int xOffset, int yOffset)
 
 	const WzString& label = owner->popupLabel(index);
 	const iV_fonts font = owner->keyLabelFont();
-	if (!(label == cachedLabel) || font != cachedFont)
-	{
-		cachedLabel = label;
-		cachedFont = font;
-		labelText.setText(label, font);
-	}
+	labelText.setText(label, font, std::max(width() - 6, 1));
 	const float textX = x0 + static_cast<float>(std::max(3, (width() - labelText.width()) / 2));
 	const float textY = y0 + static_cast<float>((height() - labelText.lineSize()) / 2 - labelText.aboveBase());
-	labelText.render(textX, textY, WZCOL_TEXT_BRIGHT, 0.f, width() - 6);
+	labelText.render(textX, textY, WZCOL_TEXT_BRIGHT);
 }
 
 // MARK: - Showing and hiding
