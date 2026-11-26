@@ -34,6 +34,11 @@
 
 // 65536 / 360 = 8192 / 45, with a bit less overflow risk.
 #define DEG(degrees) ((degrees) * 8192 / 45)
+// Inverse of DEG(): internal 0-65535 units -> whole degrees 0-359 (as stored in BJO files)
+static inline uint32_t directionToDegrees(uint16_t direction)
+{
+	return ((static_cast<uint32_t>(direction) * 360u + 32768u) / 65536u) % 360u;
+}
 
 // MARK: - Handling game.map / MapData files
 
@@ -1048,7 +1053,7 @@ bool writeMapStructureInitBJO(const std::vector<Structure>& structures, uint32_t
 
 		if (!pStream->writeULE32(structureId)
 			|| !pStream->writeULE32(structure.position.x) || !pStream->writeULE32(structure.position.y) || !pStream->writeULE32(0)
-			|| !pStream->writeULE32(static_cast<uint32_t>(structure.direction)) // TODO: Conversion / manipulation needed?
+			|| !pStream->writeULE32(directionToDegrees(structure.direction))
 			|| !pStream->writeULE32(bjoPlayer)
 			|| !pStream->writeSLE32(0) // BOOL inFire
 			|| !pStream->writeULE32(0) // burnStart
@@ -1420,7 +1425,7 @@ bool writeMapDroidInitBJO(const std::vector<Droid>& droids, uint32_t mapMaxPlaye
 
 		if (!pStream->writeULE32(droidId)
 			|| !pStream->writeULE32(droid.position.x) || !pStream->writeULE32(droid.position.y) || !pStream->writeULE32(0)
-			|| !pStream->writeULE32(static_cast<uint32_t>(droid.direction)) // TODO: Conversion / manipulation needed?
+			|| !pStream->writeULE32(directionToDegrees(droid.direction))
 			|| !pStream->writeULE32(bjoPlayer)
 			|| !pStream->writeSLE32(0) // BOOL inFire
 			|| !pStream->writeULE32(0) // burnStart
@@ -1810,7 +1815,7 @@ bool writeMapFeatureInitBJO(const std::vector<Feature>& features, uint32_t mapMa
 
 		if (!pStream->writeULE32(featureId)
 			|| !pStream->writeULE32(feature.position.x) || !pStream->writeULE32(feature.position.y) || !pStream->writeULE32(0)
-			|| !pStream->writeULE32(static_cast<uint32_t>(feature.direction)) // TODO: Conversion / manipulation needed?
+			|| !pStream->writeULE32(directionToDegrees(feature.direction))
 			|| !pStream->writeULE32(bjoPlayer)
 			|| !pStream->writeSLE32(0) // BOOL inFire
 			|| !pStream->writeULE32(0) // burnStart
