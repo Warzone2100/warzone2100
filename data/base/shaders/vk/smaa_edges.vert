@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // SMAA 1x luma edge detection pass, vertex shader port.
 // Based on SMAA (Enhanced Subpixel Morphological Antialiasing), http://www.iryoku.com/smaa/
 //
@@ -53,4 +55,6 @@ void main()
 	offset0 = uv.xyxy + rtMetrics.xyxy * vec4(-1.0, 0.0, 0.0, -1.0);
 	offset1 = uv.xyxy + rtMetrics.xyxy * vec4( 1.0, 0.0, 0.0,  1.0);
 	offset2 = uv.xyxy + rtMetrics.xyxy * vec4(-2.0, 0.0, 0.0, -2.0);
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

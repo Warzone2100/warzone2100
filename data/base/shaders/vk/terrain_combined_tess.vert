@@ -16,6 +16,7 @@ layout(location = 2) out flat int tcTileNo;
 layout(location = 3) out flat uvec4 tcGrounds;
 layout(location = 4) out vec4 tcGroundWeights;
 
+// WZ_CLIP_NOT_FINAL: outputs tessellation control points
 void main()
 {
 	gl_Position = vertex;

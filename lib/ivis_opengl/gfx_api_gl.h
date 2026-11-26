@@ -133,6 +133,7 @@ private:
 	GLuint _id;
 	bool gles = false;
 	bool _isArray = false;
+	bool _isDepthFormat = false;
 	uint32_t tex_width = 0;
 	uint32_t tex_height = 0;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -144,6 +145,7 @@ private:
 public:
 	virtual void bind() override;
 	virtual bool isArray() const override { return _isArray; }
+	virtual bool isDepthFormat() const override { return _isDepthFormat; }
 	virtual size_t backend_internal_value() const override;
 	GLenum target() const;
 	unsigned id() const;

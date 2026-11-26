@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 #include "terrain_tess.glsl"
 
 layout(quads, fractional_odd_spacing, ccw) in;
@@ -28,4 +30,6 @@ void main()
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 	viewNormal = mat3(ViewMatrix) * normalModel;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

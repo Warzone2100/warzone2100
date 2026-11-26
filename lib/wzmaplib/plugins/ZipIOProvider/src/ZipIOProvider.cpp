@@ -25,6 +25,8 @@
 #include <memory>
 #include <unordered_set>
 #include <cstring>
+#include <cstdlib>
+#include <cerrno>
 #include <algorithm>
 
 #include <limits>

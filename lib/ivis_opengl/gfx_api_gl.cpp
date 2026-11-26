@@ -2431,6 +2431,7 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = false;
+	new_texture->_isDepthFormat = (format == GL_DEPTH_COMPONENT || format == GL_DEPTH_STENCIL);
 	new_texture->tex_width = static_cast<uint32_t>(width);
 	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -2459,6 +2460,7 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = true;
+	new_texture->_isDepthFormat = (format == GL_DEPTH_COMPONENT || format == GL_DEPTH_STENCIL);
 	new_texture->tex_width = static_cast<uint32_t>(width);
 	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -2757,6 +2759,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 		switch (desc.sampler)
 		{
 			case gfx_api::sampler_type::nearest_clamped:
+			case gfx_api::sampler_type::nearest_depth:
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -4575,17 +4578,18 @@ void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::C
 			glGenFramebuffers(1, &fbo);
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 			bindDynamicPassFramebufferAttachments(pass);
+			// (draw buffers are framebuffer state, and depend only on the attachments in the key)
+			configureDynamicPassDrawBuffers(pass);
+			// Checked once, when created: the status can't change while its attachments live, and in WebGL
+			// each check waits for the GPU process
 			const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			ASSERT_OR_RETURN(0, fboStatus == GL_FRAMEBUFFER_COMPLETE,
-				"Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
+				"Dynamic pass framebuffer incomplete (%s): %s", pass.debugName.c_str(),
+				cbframebuffererror(fboStatus));
 			return fbo;
 		});
 		ASSERT_OR_RETURN(, _dynamicPassFBO != 0, "Failed to acquire dynamic pass framebuffer");
 		glBindFramebuffer(GL_FRAMEBUFFER, _dynamicPassFBO);
-		configureDynamicPassDrawBuffers(pass);
-
-		const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		ASSERT_OR_RETURN(, fboStatus == GL_FRAMEBUFFER_COMPLETE, "Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
 	}
 
 	glViewport(0, 0, static_cast<GLsizei>(passWidth), static_cast<GLsizei>(passHeight));
@@ -4976,6 +4980,13 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_SRGB)
 	}
+
+	// Multisampled color, and the RGBA8 pipeline surfaces (WebGL 2 requires RGBA8 renderbuffers)
+	multiSampledBufferInternalFormat = GL_RGBA8;
+	multiSampledBufferBaseFormat = GL_RGBA;
+	maxMultiSampleBufferFormatSamples = 0;
+	glGetInternalformativ(GL_RENDERBUFFER, multiSampledBufferInternalFormat, GL_SAMPLES, 1, &maxMultiSampleBufferFormatSamples);
+	maxMultiSampleBufferFormatSamples = std::min<GLint>(std::max<GLint>(maxMultiSampleBufferFormatSamples, 0), 16);
 }
 
 #else // !defined(__EMSCRIPTEN__) // Regular OpenGL / OpenGL ES implementation

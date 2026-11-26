@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ProjectionMatrix;
 };
@@ -26,4 +28,6 @@ void main()
 
 	// pack outputs for fragment shader
 	colour = instanceColour;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

@@ -1204,30 +1204,35 @@
           canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
           return canvas;
         })(),
-        setStatus: function(text) {
-          if (!this.setStatus.last) this.setStatus.last = { time: Date.now(), text: '' };
-          if (text === this.setStatus.last.text) return;
-          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-          var now = Date.now();
-          if (m && now - this.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
-          this.setStatus.last.time = now;
-          this.setStatus.last.text = text;
-          if (m) {
-            progressElement.value = parseInt(m[2])*100;
-            progressElement.max = parseInt(m[4])*100;
-            progressElement.hidden = false;
-          } else {
-            progressElement.value = null;
-            progressElement.max = null;
-            progressElement.hidden = true;
-          }
-          statusElement.innerHTML = text;
-        },
-        totalDependencies: 0,
-        monitorRunDependencies: function(left) {
-          this.totalDependencies = Math.max(this.totalDependencies, left);
-          this.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
-        }
+        // NOTE: Emscripten calls setStatus as a plain function (no `this`)
+        setStatus: (function() {
+          var last = { time: Date.now(), text: '' };
+          return function(text) {
+            if (text === last.text) return;
+            var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+            var now = Date.now();
+            if (m && now - last.time < 30) return; // if this is a progress update, skip it if too soon
+            last.time = now;
+            last.text = text;
+            if (m) {
+              progressElement.value = parseInt(m[2])*100;
+              progressElement.max = parseInt(m[4])*100;
+              progressElement.hidden = false;
+            } else {
+              progressElement.value = null;
+              progressElement.max = null;
+              progressElement.hidden = true;
+            }
+            statusElement.innerHTML = text;
+          };
+        })(),
+        monitorRunDependencies: (function() {
+          var totalDependencies = 0;
+          return function(left) {
+            totalDependencies = Math.max(totalDependencies, left);
+            Module.setStatus(left ? 'Preparing... (' + (totalDependencies-left) + '/' + totalDependencies + ')' : 'All downloads complete.');
+          };
+        })()
       };
     
       function wz_pre_run_fixup_canvas(Module) {
@@ -1724,7 +1729,9 @@
     // inspired from: https://github.com/WordPress/wordpress-playground/pull/46 (but modified)
     function monkeyPatchWASMInst(progressFun) {
       const _instantiateStreaming = WebAssembly.instantiateStreaming;
-      WebAssembly.instantiateStreaming = (response, ...args) => {
+      WebAssembly.instantiateStreaming = async (responseOrPromise, ...args) => {
+        // Emscripten passes the pending fetch() promise
+        const response = await responseOrPromise;
         const file = response.url.substring(
           new URL(response.url).origin.length + 1
         );
@@ -1784,6 +1791,15 @@
       document.getElementById('nav-options-button').disabled = false;
     }
     
+    // Errors during startup may surface as unhandled promise rejections
+    window.addEventListener('unhandledrejection', function(event) {
+      let reason = event.reason;
+      if (reason === 'unwind' || (reason && typeof reason === 'object' && reason.name === 'ExitStatus')) {
+        return; // exit() or main loop unwind
+      }
+      window.onerror((reason && reason.message) ? reason.message : String(reason));
+    });
+
     window.onerror = function(event) {
       progressElement.hidden = true;
       statusElement.innerHTML = 'Exception thrown, see JavaScript console';

@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // SMAA 1x neighborhood blending pass, vertex shader port.
 // Based on SMAA (Enhanced Subpixel Morphological Antialiasing), http://www.iryoku.com/smaa/
 //
@@ -47,4 +49,6 @@ void main()
 	gl_Position = vec4(vertexPos.x, vertexPos.y, 0.0, 1.0);
 	uv = (0.5 * gl_Position.xy + vec2(0.5)) * uvScaleClamp.xy;
 	offset0 = uv.xyxy + rtMetrics.xyxy * vec4(1.0, 0.0, 0.0, 1.0);
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

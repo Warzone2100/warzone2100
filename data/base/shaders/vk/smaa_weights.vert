@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // SMAA 1x blending weight calculation pass, vertex shader port.
 // Based on SMAA (Enhanced Subpixel Morphological Antialiasing), http://www.iryoku.com/smaa/
 //
@@ -61,4 +63,6 @@ void main()
 
 	// the far ends of the orthogonal search loops
 	offset2 = vec4(offset0.xz, offset1.yw) + vec4(-2.0, 2.0, -2.0, 2.0) * rtMetrics.xxyy * params.x;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

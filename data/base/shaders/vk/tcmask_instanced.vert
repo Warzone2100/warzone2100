@@ -1,4 +1,6 @@
 #version 450
+
+#include "wz_clip_space.glsl"
 //#pragma debug(on)
 
 #include "tcmask_instanced.glsl"
@@ -97,4 +99,6 @@ void main()
 	}
 	teamcolour = instanceTeamColour;
 	packed_ecmState_alphaTest_texCoord = vec4(ecmState, alphaTest, texCoord.x, texCoord.y);
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

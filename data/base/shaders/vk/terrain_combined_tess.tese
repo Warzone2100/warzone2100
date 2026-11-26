@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // Evaluates the baked terrain surface and produces exactly the interface of
 // terrain_combined.vert, so the existing terrain fragment shaders (.frag.spv)
 // are reused unchanged.
@@ -26,7 +28,8 @@ layout(location = 4) in vec4 teGroundWeights[];
 
 // must match terrain_combined.vert's output interface (consumed by the terrain fragment shaders)
 layout(location = 0) out FragData frag;
-layout(location = 10) out flat FragFlatData fragf;
+layout(location = 10) out flat int fragf_tileNo;
+layout(location = 11) out flat uvec4 fragf_grounds;
 layout(location = 12) out mat3 ModelTangentMatrix;
 
 void main()
@@ -48,13 +51,13 @@ void main()
 	vec4 groundWeights = WZ_PATCH_BILINEAR(teGroundWeights, uv.x, uv.y);
 
 	// from here on: same computations as terrain_combined.vert
-	fragf.tileNo = teTileNo[0];
+	fragf_tileNo = teTileNo[0];
 
 	frag.uvLightmap = (ModelUVLightmapMatrix * vertex).xy;
 	frag.uvGround = vec2(-vertex.z, vertex.x);
 	frag.uvDecal = vertexTexCoord;
 
-	fragf.grounds = teGrounds[0];
+	fragf_grounds = teGrounds[0];
 	if (groundWeights == vec4(0)) {
 		frag.groundWeights = vec4(0.25);
 	} else {
@@ -89,4 +92,6 @@ void main()
 	// Vulkan clip-space fixup (this is the final position-producing stage)
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

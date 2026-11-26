@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // gl_VertexID seems to not be supported on 120, despite documentation to the contrary.
 
 // Old comment:
@@ -25,4 +27,6 @@ void main()
 	uv = tuv_scale * vertex.xy + tuv_offset;
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

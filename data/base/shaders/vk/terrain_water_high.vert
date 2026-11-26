@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 #include "terrain_water_high.glsl"
 
 layout(location = 0) in vec4 vertex; // .w is depth
@@ -44,4 +46,6 @@ void main()
 	gl_Position = position;
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

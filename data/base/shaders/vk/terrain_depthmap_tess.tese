@@ -1,5 +1,7 @@
 #version 450
 
+#include "wz_clip_space.glsl"
+
 // Shadow/depth-map TES: evaluates the same baked surface as
 // terrain_combined_tess.tese (positions must stay bit-identical), and
 // mirrors terrain_depth_only.vert.
@@ -36,4 +38,6 @@ void main()
 
 //	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
+
+	gl_Position = wzFinalizeClip(gl_Position);
 }

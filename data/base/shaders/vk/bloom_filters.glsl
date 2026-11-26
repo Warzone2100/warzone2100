@@ -29,7 +29,9 @@ vec3 bloomThreshold(vec3 c, float threshold, float knee)
 vec3 bloomSceneTap(vec2 uv, vec2 texel, float threshold)
 {
 	vec3 c = bloomTap(uv, texel);
-	c = mix(c, vec3(0.0), vec3(isnan(c)));
+	// Bit-pattern NaN test (some targets lack isnan(), and fast-math compilers may fold it away)
+	bvec3 tapIsNaN = greaterThan(floatBitsToUint(c) & uvec3(0x7fffffffu), uvec3(0x7f800000u));
+	c = mix(c, vec3(0.0), tapIsNaN);
 	c = clamp(c, vec3(0.0), vec3(65000.0));
 	return bloomThreshold(c, threshold, 0.25 * threshold);
 }

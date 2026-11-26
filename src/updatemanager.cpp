@@ -44,6 +44,8 @@ using json = nlohmann::json;
 #include <sodium.h>
 #include <re2/re2.h>
 
+#include <atomic>
+
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && ((4 < __GNUC__) || ((4 == __GNUC__) && (7 <= __GNUC_MINOR__)))
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wmaybe-uninitialized" // Ignore on GCC 4.7+
