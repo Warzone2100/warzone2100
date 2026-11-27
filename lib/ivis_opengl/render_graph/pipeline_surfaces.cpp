@@ -480,6 +480,9 @@ void validatePipelineSurfaceCatalog()
 		case SurfaceStorageKind::SampledColor2D:
 			expected = SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled;
 			break;
+		case SurfaceStorageKind::StorageColor2D:
+			expected = SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled;
+			break;
 		case SurfaceStorageKind::MsaaColorAttachment:
 			expected = SurfaceGpuUsage::ColorAttachment;
 			break;
