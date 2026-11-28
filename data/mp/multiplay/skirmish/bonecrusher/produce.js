@@ -84,7 +84,7 @@ function prepeareProduce()
 		/*.sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));*/
 		for (const i in _cyb)
 		{
-			avail_cyborgs.push([_cyb[i][1], _cyb[i][2]]);
+			avail_cyborgs.push([_cyb[i][1], _cyb[i][2], _cyb[i][3]]);
 		}
 
 		avail_cyborgs.reverse();
@@ -372,10 +372,11 @@ function produceCyborgs()
 		const _body = _cyb[0];
 		// const _body = 'CyborgLightBody';
 		const _weapon = _cyb[1];
+		const _leg = _cyb[2];
 
 		debugMsg("Cyborg: body=" + _body + "; weapon=" + _weapon, 'production');
-		// buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", "", _weapon);
-		buildDroid(cyborg_factories[0], _weapon, _body, "CyborgLegs", "", "", _weapon);
+		// buildDroid(cyborg_factories[0], "Terminator", _body, _leg, "", "", _weapon);
+		buildDroid(cyborg_factories[0], _weapon, _body, _leg, "", "", _weapon);
 	}
 }
 
