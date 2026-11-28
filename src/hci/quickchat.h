@@ -183,9 +183,21 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 		Team,
 		Position,
 		Color,
-		Faction
+		Faction,
+		// For the following contexts: the last parameter is the target player index
+		Kick,
+		Ban,
+		MoveToSpectators,
+		AskSpectatorToPlay,
+		// For the following contexts: the last parameter is the new value of the setting (not a target player index)
+		Scavengers,
+		Alliances,
+		Power,
+		Base,
+		// Sent only to the admin that requested an action (the last parameter is unused)
+		RequestFailed
 	};
-	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdx);
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdxOrValue);
 } // namespace INTERNAL_ADMIN_ACTION_NOTICE
 
 // - INTERNAL_LOCALIZED_LOBBY_NOTICE
@@ -286,6 +298,7 @@ namespace INTERNAL_LOBBY_COMMAND_RESPONSE {
 
 } // namespace WzQuickChatDataContexts
 
+void sendAdminActionNotice(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdxOrValue, optional<uint32_t> receiver = nullopt);
 void sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData = 0, optional<uint32_t> targetPlayerIdx = nullopt);
 void sendHostNoticeToPlayer(uint32_t receiver, WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context ctx, uint32_t additionalData = 0, optional<uint32_t> targetPlayerIdx = nullopt);
 void sendLobbyCommandResponse(optional<uint32_t> receiver, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Context ctx, WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Command cmd = WzQuickChatDataContexts::INTERNAL_LOBBY_COMMAND_RESPONSE::Command::None, uint32_t additionalData = 0);

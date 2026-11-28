@@ -379,6 +379,7 @@ public:
 	virtual void display(int xOffset, int yOffset) override;
 
 	bool isInEditMode() { return editMode; }
+	void setEditMode(bool newEditMode);
 
 protected:
 	virtual void stateChanged() override;
@@ -397,6 +398,17 @@ LobbyMultiOptionsChoiceWidget::LobbyMultiOptionsChoiceWidget(bool editMode)
 void LobbyMultiOptionsChoiceWidget::display(int xOffset, int yOffset)
 {
 	// no-op
+}
+
+void LobbyMultiOptionsChoiceWidget::setEditMode(bool newEditMode)
+{
+	if (editMode == newEditMode)
+	{
+		return;
+	}
+	editMode = newEditMode;
+	lockCurrent = editMode;
+	stateChanged();
 }
 
 void LobbyMultiOptionsChoiceWidget::stateChanged()
@@ -620,6 +632,42 @@ WzString formatMapName(const WzString& name)
 	return withoutTechlevel + " (" + WzString::number(game.maxPlayers) + "P)";
 }
 
+// MARK: - Lobby admin helpers
+
+// The action with which a (non-host) lobby admin can ask the host to change a match option
+// (or nullopt if the option can't be changed by lobby admins, or is currently locked)
+static optional<LobbyAdminAction> lobbyAdminActionForOption(ScavType)
+{
+	return (!getLockedOptions().scavengers) ? optional<LobbyAdminAction>(LobbyAdminAction::SetScavengers) : nullopt;
+}
+
+static optional<LobbyAdminAction> lobbyAdminActionForOption(AllianceType)
+{
+	return (!getLockedOptions().alliances) ? optional<LobbyAdminAction>(LobbyAdminAction::SetAlliances) : nullopt;
+}
+
+static optional<LobbyAdminAction> lobbyAdminActionForOption(PowerSetting)
+{
+	return (!getLockedOptions().power) ? optional<LobbyAdminAction>(LobbyAdminAction::SetPower) : nullopt;
+}
+
+static optional<LobbyAdminAction> lobbyAdminActionForOption(CampType)
+{
+	return (!getLockedOptions().bases) ? optional<LobbyAdminAction>(LobbyAdminAction::SetBase) : nullopt;
+}
+
+static optional<LobbyAdminAction> lobbyAdminActionForOption(TechLevel)
+{
+	return nullopt;
+}
+
+// Whether the local player is a (non-host) lobby admin, who can currently ask the host to change a match option
+template<typename T>
+static bool canLobbyAdminClientChangeOption(T optionValue)
+{
+	return (ingame.side == InGameSide::MULTIPLAYER_CLIENT) && isLobbyAdminClient() && lobbyAdminActionForOption(optionValue).has_value();
+}
+
 // MARK: - WzMultiLobbyOptionsImpl
 
 class WzMultiLobbyOptionsImpl : public WzMultiLobbyOptionsWidgetBase
@@ -661,7 +709,10 @@ private:
 		auto updateDataFunc = [pref, weakSelf]() {
 			auto strongSelf = weakSelf.lock();
 			ASSERT_OR_RETURN(, strongSelf != nullptr, "No longer valid");
-			bool showLocalPrefValue = (ingame.side == InGameSide::MULTIPLAYER_CLIENT) && !(NetPlay.isHost);
+			// A lobby admin that can change the option gets the same buttons as the host (instead of voting for preferred values)
+			bool showLocalPrefValue = (ingame.side == InGameSide::MULTIPLAYER_CLIENT) && !(NetPlay.isHost) && !canLobbyAdminClientChangeOption(pref);
+			strongSelf->setMode((showLocalPrefValue) ? WzLobbyMultiOptionButton::MultiOptionButtonMode::CLIENT : WzLobbyMultiOptionButton::MultiOptionButtonMode::HOST_CONFIGURATION);
+			strongSelf->setShowLocalVoteIndicatorOnHighlight(showLocalPrefValue);
 			if (showLocalPrefValue)
 			{
 				bool prefValue = getMultiOptionPrefValue(pref);
@@ -689,12 +740,22 @@ private:
 			button->addOnClickHandler([pref](W_BUTTON& b) {
 				auto psButton = std::dynamic_pointer_cast<WzLobbyMultiOptionButton>(b.shared_from_this());
 				ASSERT_OR_RETURN(, psButton != nullptr, "Null button?");
+				if (canLobbyAdminClientChangeOption(pref))
+				{
+					// Lobby admin: Ask the host to change the option (the buttons are updated once the host sends the new options)
+					auto psParent = std::dynamic_pointer_cast<MultibuttonWidget>(b.parent());
+					bool isCurrentValue = (psParent != nullptr) && (psParent->currentValue() == static_cast<int>(pref));
+					if (!isCurrentValue)
+					{
+						sendLobbyAdminActionRequest(lobbyAdminActionForOption(pref).value(), 0, static_cast<int32_t>(pref));
+					}
+					return;
+				}
 				// Toggle pref value state and update setLocalVoteIndicator
 				bool newValue = !getMultiOptionPrefValue(pref);
 				setMultiOptionPrefValue(pref, newValue);
 				psButton->setLocalVoteIndicator(newValue);
 			});
-			button->setShowLocalVoteIndicatorOnHighlight(true);
 		}
 
 		mbw->addButton(static_cast<int>(pref), button);
@@ -1204,6 +1265,13 @@ void WzMultiLobbyOptionsImpl::setGameOptionStates()
 			pButton->setState(state);
 		}
 	};
+
+	// Update MultiButtonWidget edit mode (lobby admins can ask the host to change the options that aren't locked)
+	const bool hostEditMode = (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER);
+	scavengerChoice->setEditMode(hostEditMode || canLobbyAdminClientChangeOption(NO_SCAVENGERS));
+	allianceChoice->setEditMode(hostEditMode || canLobbyAdminClientChangeOption(NO_ALLIANCES));
+	powerChoice->setEditMode(hostEditMode || canLobbyAdminClientChangeOption(LEV_LOW));
+	baseTypeChoice->setEditMode(hostEditMode || canLobbyAdminClientChangeOption(CAMP_CLEAN));
 
 	if (!game.mapHasScavengers)
 	{

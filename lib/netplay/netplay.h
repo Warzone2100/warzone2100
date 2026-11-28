@@ -119,6 +119,7 @@ enum MESSAGE_TYPES
 	NET_TEAM_STRATEGY,				///< Player is sending an updated strategy notice to team members
 	NET_QUICK_CHAT_MSG,				///< Quick chat message
 	NET_HOST_CONFIG,				///< Host configuration sent both before the game has started (in lobby), and after the game has started
+	NET_ADMIN_ACTION_REQUEST,		///< a (non-host) lobby admin is asking the host to perform a host-only lobby action on their behalf
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

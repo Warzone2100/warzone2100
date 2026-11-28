@@ -296,6 +296,7 @@ bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts)
 		return false;
 	}
 	locked = newOpts;
+	netPlayersUpdated = true; // refresh the lobby UI, as what the local player can change may have changed
 	return true;
 }
 
@@ -1374,6 +1375,41 @@ bool isPlayerHostOrAdmin(uint32_t playerIdx)
 	return (playerIdx == NetPlay.hostPlayer) || NetPlay.players[playerIdx].isAdmin;
 }
 
+bool isLobbyAdminClient()
+{
+	return NetPlay.bComms && !NetPlay.isHost && selectedPlayer < MAX_CONNECTED_PLAYERS && NetPlay.players[selectedPlayer].isAdmin;
+}
+
+bool sendLobbyAdminActionRequest(LobbyAdminAction action, uint32_t target, int32_t value, const std::string& stringValue)
+{
+	ASSERT_OR_RETURN(false, !NetPlay.isHost, "The host should perform the action directly");
+	if (!isLobbyAdminClient())
+	{
+		return false;
+	}
+
+	debug(LOG_NET, "Requesting the host to perform admin action %u (target: %" PRIu32 ", value: %" PRIi32 ")", static_cast<unsigned>(action), target, value);
+	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_ADMIN_ACTION_REQUEST);
+	NETuint8_t(w, static_cast<uint8_t>(action));
+	NETuint32_t(w, target);
+	NETint32_t(w, value);
+	NETstring(w, stringValue, MAX_LEN_AI_NAME);
+	NETend(w);
+	return true;
+}
+
+bool sendLobbyAdminSlotAIRequest(uint32_t player, int8_t aiIdx)
+{
+	if (aiIdx < 0)
+	{
+		ASSERT_OR_RETURN(false, aiIdx == AI_OPEN || aiIdx == AI_CLOSED, "Invalid AI: %" PRIi8, aiIdx);
+		return sendLobbyAdminActionRequest(LobbyAdminAction::SetSlotAI, player, aiIdx);
+	}
+	// The order of the list of AIs may differ from the host's - so identify the AI by its script
+	ASSERT_OR_RETURN(false, static_cast<size_t>(aiIdx) < aidata.size(), "Invalid AI (index: %" PRIi8 ", num AIs: %zu)", aiIdx, aidata.size());
+	return sendLobbyAdminActionRequest(LobbyAdminAction::SetSlotAI, player, 0, aidata[aiIdx].js);
+}
+
 static bool shouldInformOfAdminAction(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
 {
 	ASSERT_OR_RETURN(false, targetPlayerIdx < MAX_CONNECTED_PLAYERS, "Invalid targetPlayerIdx: %" PRIu32, targetPlayerIdx);
@@ -1546,9 +1582,99 @@ static std::shared_ptr<WzMultiButton> addMultiButWithClickHandler(const std::sha
 	return psButton;
 }
 
-void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
+static void changeAI(uint32_t player, int8_t ai)
+{
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, player);
+
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
+
+	NetPlay.players[player].ai = ai;
+
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
+	}
+}
+
+// Host-only: Switch a slot that has no human player to an AI, or to open / closed
+// - ai: the index of the AI (in the list of AIs), AI_OPEN, or AI_CLOSED
+// - openForSpectators: whether an open slot is for spectators (instead of players)
+static bool changeSlotAI(uint32_t player, int8_t ai, bool openForSpectators = false)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, player);
+	ASSERT_OR_RETURN(false, ai == AI_OPEN || ai == AI_CLOSED || (ai >= 0 && static_cast<size_t>(ai) < aidata.size()), "Invalid AI: %" PRIi8, ai);
+
+	if (NetPlay.players[player].allocated)
+	{
+		debug(LOG_INFO, "Player joined slot %" PRIu32 " before its AI could be changed", player);
+		return false;
+	}
+
+	if (ai >= 0)
+	{
+		NetPlay.players[player].isSpectator = false;
+		changeAI(player, ai);
+		setPlayerName(player, getAIName(player));
+		// Difficulty is preserved when switching open AI slots.
+		if (NetPlay.players[player].difficulty == AIDifficulty::DISABLED)
+		{
+			NetPlay.players[player].difficulty = AIDifficulty::DEFAULT;
+		}
+		NETBroadcastPlayerInfo(player);
+		resetReadyStatus(false);
+	}
+	else
+	{
+		changeAI(player, ai);
+		NetPlay.players[player].isSpectator = (ai == AI_OPEN) && openForSpectators;
+		NetPlay.players[player].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
+		NETBroadcastPlayerInfo(player);
+		resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+	}
+	return true;
+}
+
+// Host-only: Change the difficulty of an AI player
+static bool changeAIDifficulty(uint32_t player, AIDifficulty difficulty)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, player);
+
+	NetPlay.players[player].difficulty = difficulty;
+	NETBroadcastPlayerInfo(player);
+	resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+	return true;
+}
+
+// Host-only: Distribute a slot's AI (and its difficulty) to all other AIs
+void multiLobbyDistributeSlotAI(uint32_t player)
 {
 	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
+	for (uint32_t i = 0; i < MAX_PLAYERS; ++i)
+	{
+		// Don't change open/closed slots or humans or spectator-only slots
+		if (NetPlay.players[i].ai >= 0 && i != player && !isHumanPlayer(i) && !isSpectatorOnlySlot(i))
+		{
+			NetPlay.players[i].ai = NetPlay.players[player].ai;
+			NetPlay.players[i].isSpectator = NetPlay.players[player].isSpectator;
+			NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
+			setPlayerName(i, getAIName(player));
+			NETBroadcastPlayerInfo(i);
+		}
+	}
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
+	}
+}
+
+void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
+{
+	ASSERT_OR_RETURN(, NetPlay.isHost || isLobbyAdminClient(), "Only the host or a lobby admin can change the difficulty");
 
 	std::shared_ptr<IntFormAnimated> aiForm = initRightSideChooser(_("DIFFICULTY"));
 	if (!aiForm)
@@ -1564,9 +1690,15 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 		auto onClickHandler = [psWeakTitleUI, difficultyIdx, player](W_BUTTON& clickedButton) {
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
-			NetPlay.players[player].difficulty = difficultyValue[difficultyIdx];
-			NETBroadcastPlayerInfo(player);
-			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+			if (NetPlay.isHost)
+			{
+				changeAIDifficulty(player, difficultyValue[difficultyIdx]);
+			}
+			else
+			{
+				// Ask the host to change the difficulty
+				sendLobbyAdminActionRequest(LobbyAdminAction::SetAIDifficulty, player, static_cast<int32_t>(difficultyValue[difficultyIdx]));
+			}
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeDifficultyChooser();
 				pStrongPtr->addPlayerBox(true);
@@ -1596,7 +1728,8 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 		}
 		else
 		{
-			ASSERT(false, "Invalid AI (index: %" PRIi8 ", num AIs: %zu)", NetPlay.players[player].ai, aidata.size());
+			// (the list of AIs of a lobby admin may differ from the host's)
+			ASSERT(!NetPlay.isHost, "Invalid AI (index: %" PRIi8 ", num AIs: %zu)", NetPlay.players[player].ai, aidata.size());
 		}
 		pDifficultyRow->setTip(tipStr);
 		pDifficultyRow->displayFunction = displayDifficulty;
@@ -1614,23 +1747,9 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 	difficultyChooserUp = player;
 }
 
-static void changeAI(uint32_t player, int8_t ai)
-{
-	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, player);
-
-	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
-
-	NetPlay.players[player].ai = ai;
-
-	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
-	{
-		handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
-	}
-}
-
 void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 {
-	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, NetPlay.isHost || isLobbyAdminClient(), "Only the host or a lobby admin can change the AI");
 
 	std::shared_ptr<IntFormAnimated> aiForm = initRightSideChooser(_("CHOOSE AI"));
 	if (!aiForm)
@@ -1664,21 +1783,20 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 
 		if (!NetPlay.players[player].allocated)
 		{
+			int8_t newAI = AI_CLOSED;
+			bool openForSpectators = false;
 			switch (clickedButton.id)
 			{
 			case MULTIOP_AI_CLOSED:
-				changeAI(player, AI_CLOSED);
-				NetPlay.players[player].isSpectator = false;
+				newAI = AI_CLOSED;
 				break;
 			case MULTIOP_AI_OPEN:
-				changeAI(player, AI_OPEN);
-				NetPlay.players[player].isSpectator = false;
+				newAI = AI_OPEN;
 				break;
 			case MULTIOP_AI_SPECTATOR:
-				// set slot to open
-				changeAI(player, AI_OPEN);
-				// but also a spectator
-				NetPlay.players[player].isSpectator = true;
+				// set slot to open, but also a spectator
+				newAI = AI_OPEN;
+				openForSpectators = true;
 				break;
 			default:
 				debug(LOG_ERROR, "Unexpected button id");
@@ -1686,10 +1804,15 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 				break;
 			}
 
-			// common code
-			NetPlay.players[player].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
-			NETBroadcastPlayerInfo(player);
-			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+			if (NetPlay.isHost)
+			{
+				changeSlotAI(player, newAI, openForSpectators);
+			}
+			else
+			{
+				// Ask the host to open / close the slot
+				sendLobbyAdminSlotAIRequest(player, newAI);
+			}
 		}
 		else
 		{
@@ -1784,16 +1907,15 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 				ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 				if (!NetPlay.players[player].allocated)
 				{
-					NetPlay.players[player].isSpectator = false;
-					changeAI(player, aiIdx);
-					setPlayerName(player, getAIName(player));
-					// Difficulty is preserved when switching open AI slots.
-					if (NetPlay.players[player].difficulty == AIDifficulty::DISABLED)
+					if (NetPlay.isHost)
 					{
-						NetPlay.players[player].difficulty = AIDifficulty::DEFAULT;
+						changeSlotAI(player, static_cast<int8_t>(aiIdx));
 					}
-					NETBroadcastPlayerInfo(player);
-					resetReadyStatus(false);
+					else
+					{
+						// Ask the host to change the AI
+						sendLobbyAdminSlotAIRequest(player, static_cast<int8_t>(aiIdx));
+					}
 				}
 				else
 				{
@@ -2134,9 +2256,12 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 	bool isSpectator = NetPlay.players[player].isSpectator;
 	bool canChangeTeams = !locked.teams && !isSpectator && alliancesSetTeamsBeforeGame(game.alliance);
-	bool canKickPlayer = player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated;
-	bool canChangeSpectatorStatus = !locked.spectators && NetPlay.bComms && isHumanPlayer(player) && (player != NetPlay.hostPlayer) && (NetPlay.isHost || player == selectedPlayer);
-	bool displayMoveToSpectatorsButton = canChangeSpectatorStatus && !isSpectator && (currSpectatorInfo.availableSpectatorSlots() > 0 || (NetPlay.isHost && NETcanOpenNewSpectatorSlot()));
+	// A lobby admin can ask the host to kick / ban other players, or to change their spectator status
+	const bool isAdminActingOnOtherPlayer = isLobbyAdminClient() && player != selectedPlayer;
+	const bool isHostOrAdminActingOnOtherPlayer = NetPlay.isHost || isAdminActingOnOtherPlayer;
+	bool canKickPlayer = player != selectedPlayer && player != NetPlay.hostPlayer && NetPlay.bComms && isHostOrAdminActingOnOtherPlayer && NetPlay.players[player].allocated;
+	bool canChangeSpectatorStatus = !locked.spectators && NetPlay.bComms && isHumanPlayer(player) && (player != NetPlay.hostPlayer) && (isHostOrAdminActingOnOtherPlayer || player == selectedPlayer);
+	bool displayMoveToSpectatorsButton = canChangeSpectatorStatus && !isSpectator && (currSpectatorInfo.availableSpectatorSlots() > 0 || (isHostOrAdminActingOnOtherPlayer && NETcanOpenNewSpectatorSlot()));
 	bool displayMoveToPlayersButton = canChangeSpectatorStatus && isSpectator;
 	canChangeSpectatorStatus = canChangeSpectatorStatus && (displayMoveToSpectatorsButton || displayMoveToPlayersButton);
 
@@ -2219,9 +2344,17 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-			kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
-			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostKickedPlayer, 0, player);
-			resetReadyStatus(true);		//reset and send notification to all clients
+			if (NetPlay.isHost)
+			{
+				kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostKickedPlayer, 0, player);
+				resetReadyStatus(true);		//reset and send notification to all clients
+			}
+			else
+			{
+				// Ask the host to kick the player
+				sendLobbyAdminActionRequest(LobbyAdminAction::KickPlayer, player);
+			}
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeTeamChooser();
 			});
@@ -2238,9 +2371,17 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-			kickPlayer(player, _("The host has banned you from the game."), ERROR_KICKED, true);
-			sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostBannedPlayer, 0, player);
-			resetReadyStatus(true);		//reset and send notification to all clients
+			if (NetPlay.isHost)
+			{
+				kickPlayer(player, _("The host has banned you from the game."), ERROR_KICKED, true);
+				sendHostNotice(WzQuickChatDataContexts::INTERNAL_LOCALIZED_HOST_NOTICE::Context::HostBannedPlayer, 0, player);
+				resetReadyStatus(true);		//reset and send notification to all clients
+			}
+			else
+			{
+				// Ask the host to ban the player
+				sendLobbyAdminActionRequest(LobbyAdminAction::BanPlayer, player);
+			}
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeTeamChooser();
 			});
@@ -2286,6 +2427,19 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 					});
 				};
 			}
+			else if (isAdminActingOnOtherPlayer)
+			{
+				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+					// Ask the host to move the player to spectators
+					sendLobbyAdminActionRequest(LobbyAdminAction::MovePlayerToSpectators, player);
+					widgScheduleTask([pStrongPtr] {
+						pStrongPtr->closeTeamChooser();
+					});
+				};
+			}
 			else
 			{
 				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
@@ -2318,6 +2472,20 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 					// Ask the spectator if they are okay with a move from spectator -> player?
 					SendPlayerSlotTypeRequest(player, false);
+					widgScheduleTask([pStrongPtr] {
+						pStrongPtr->closeTeamChooser();
+					});
+				};
+				toolTip = _("Ask Spectator to Play");
+			}
+			else if (isAdminActingOnOtherPlayer)
+			{
+				onSpecClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+					auto pStrongPtr = psWeakTitleUI.lock();
+					ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+					// Ask the host to ask the spectator if they are okay with a move from spectator -> player
+					sendLobbyAdminActionRequest(LobbyAdminAction::AskSpectatorToPlay, player);
 					widgScheduleTask([pStrongPtr] {
 						pStrongPtr->closeTeamChooser();
 					});
@@ -2664,12 +2832,14 @@ private:
 static LobbyRequestRateLimit teamRequestLimit(3, std::chrono::seconds(5));
 static LobbyRequestRateLimit slotTypeRequestLimit(1, std::chrono::seconds(5));
 static LobbyRequestRateLimit nameChangeRequestLimit(3, std::chrono::seconds(10));
+static LobbyRequestRateLimit adminActionRequestLimit(10, std::chrono::seconds(5));
 
 void lobbyRequestRateLimitsNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB)
 {
 	teamRequestLimit.swap(playerIndexA, playerIndexB);
 	slotTypeRequestLimit.swap(playerIndexA, playerIndexB);
 	nameChangeRequestLimit.swap(playerIndexA, playerIndexB);
+	adminActionRequestLimit.swap(playerIndexA, playerIndexB);
 }
 
 void lobbyRequestRateLimitsReset(uint32_t playerIndex)
@@ -2677,6 +2847,7 @@ void lobbyRequestRateLimitsReset(uint32_t playerIndex)
 	teamRequestLimit.reset(playerIndex);
 	slotTypeRequestLimit.reset(playerIndex);
 	nameChangeRequestLimit.reset(playerIndex);
+	adminActionRequestLimit.reset(playerIndex);
 }
 
 bool lobbyNameChangeRequestAllowed(uint32_t sender)
@@ -2990,6 +3161,7 @@ bool changeColour(unsigned player, int col, uint32_t responsibleIdx)
 			NETBroadcastTwoPlayerInfo(player, i);
 			informIfAdminChangedOtherColor(player, responsibleIdx);
 			netPlayersUpdated = true;
+			wz_command_interface_output_room_status_json(true);
 			return true;
 		}
 	}
@@ -3002,6 +3174,7 @@ bool changeColour(unsigned player, int col, uint32_t responsibleIdx)
 		NETBroadcastPlayerInfo(player);
 		informIfAdminChangedOtherColor(player, responsibleIdx);
 		netPlayersUpdated = true;
+		wz_command_interface_output_room_status_json(true);
 		return true;
 	}
 	return false;
@@ -3054,6 +3227,7 @@ bool changeFaction(unsigned player, FactionID faction, uint32_t responsibleIdx)
 
 	informIfAdminChangedOtherFaction(player, responsibleIdx);
 
+	wz_command_interface_output_room_status_json(true);
 	return true;
 }
 
@@ -6097,6 +6271,338 @@ public:
 
 static WzHostLobbyOperationsInterface cmdInterface;
 
+// MARK: - Lobby admin action requests
+
+static void logLobbyAdminAction(uint32_t adminIdx, const std::string& description)
+{
+	std::string adminPublicKeyB64 = base64Encode(getOutputPlayerIdentity(adminIdx).toBytes(EcKey::Public));
+	debug(LOG_INFO, "Admin %s (%s) %s", getPlayerName(adminIdx), adminPublicKeyB64.c_str(), description.c_str());
+}
+
+// Host-only: Change the power level
+static bool changePowerLevel(uint8_t powerValue)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, powerValue == LEV_LOW || powerValue == LEV_MED || powerValue == LEV_HI, "Invalid powerValue: %" PRIu8, powerValue);
+	if (locked.power)
+	{
+		debug(LOG_INFO, "Unable to change power to %" PRIu8 " - power is locked", powerValue);
+		return false;
+	}
+	game.power = powerValue;
+	resetReadyStatus(false);
+	sendOptions();
+	refreshMultiplayerOptionsTitleUIIfActive();
+	NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+	return true;
+}
+
+// Host-only: Perform a host-only lobby action on behalf of a lobby admin
+// (The caller is expected to have verified that adminIdx currently has admin privileges)
+// Returns false if the action is invalid, not currently permitted (ex. due to the "locked" options), or failed
+static bool performLobbyAdminAction(uint32_t adminIdx, LobbyAdminAction action, uint32_t target, int32_t value, const std::string& stringValue)
+{
+	ASSERT_HOST_ONLY(return false);
+
+	using AdminNoticeContext = WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context;
+
+	switch (action)
+	{
+		case LobbyAdminAction::SetScavengers:
+		{
+			if (locked.scavengers)
+			{
+				return false;
+			}
+			if (value != NO_SCAVENGERS && value != SCAVENGERS && value != ULTIMATE_SCAVENGERS)
+			{
+				return false;
+			}
+			if (game.scavengers == value)
+			{
+				return true; // nothing to do
+			}
+			if (!cmdInterface.changeScavengers(static_cast<uint8_t>(value)))
+			{
+				return false;
+			}
+			sendAdminActionNotice(AdminNoticeContext::Scavengers, adminIdx, static_cast<uint32_t>(value));
+			logLobbyAdminAction(adminIdx, astringf("changed scavengers to: %" PRIi32, value));
+			return true;
+		}
+		case LobbyAdminAction::SetAlliances:
+		{
+			if (locked.alliances)
+			{
+				return false;
+			}
+			if (value != NO_ALLIANCES && value != ALLIANCES && value != ALLIANCES_TEAMS && value != ALLIANCES_UNSHARED)
+			{
+				return false;
+			}
+			if (game.alliance == value)
+			{
+				return true; // nothing to do
+			}
+			if (!cmdInterface.changeAlliances(static_cast<uint8_t>(value)))
+			{
+				return false;
+			}
+			sendAdminActionNotice(AdminNoticeContext::Alliances, adminIdx, static_cast<uint32_t>(value));
+			logLobbyAdminAction(adminIdx, astringf("changed alliances to: %" PRIi32, value));
+			return true;
+		}
+		case LobbyAdminAction::SetPower:
+		{
+			if (locked.power)
+			{
+				return false;
+			}
+			if (value != LEV_LOW && value != LEV_MED && value != LEV_HI)
+			{
+				return false;
+			}
+			if (game.power == static_cast<uint32_t>(value))
+			{
+				return true; // nothing to do
+			}
+			if (!changePowerLevel(static_cast<uint8_t>(value)))
+			{
+				return false;
+			}
+			sendAdminActionNotice(AdminNoticeContext::Power, adminIdx, static_cast<uint32_t>(value));
+			logLobbyAdminAction(adminIdx, astringf("changed power to: %" PRIi32, value));
+			return true;
+		}
+		case LobbyAdminAction::SetBase:
+		{
+			if (locked.bases)
+			{
+				return false;
+			}
+			if (value != CAMP_CLEAN && value != CAMP_BASE && value != CAMP_WALLS)
+			{
+				return false;
+			}
+			if (game.base == value)
+			{
+				return true; // nothing to do
+			}
+			if (!cmdInterface.changeBase(static_cast<uint8_t>(value)))
+			{
+				return false;
+			}
+			sendAdminActionNotice(AdminNoticeContext::Base, adminIdx, static_cast<uint32_t>(value));
+			logLobbyAdminAction(adminIdx, astringf("changed base to: %" PRIi32, value));
+			return true;
+		}
+		case LobbyAdminAction::KickPlayer:
+		case LobbyAdminAction::BanPlayer:
+		{
+			const bool isBan = (action == LobbyAdminAction::BanPlayer);
+			if (target >= MAX_CONNECTED_PLAYERS || target == NetPlay.hostPlayer || target == adminIdx || !NetPlay.players[target].allocated)
+			{
+				return false;
+			}
+			logLobbyAdminAction(adminIdx, astringf("%s player: [%" PRIu32 "] %s", (isBan) ? "banned" : "kicked", target, getPlayerName(target)));
+			sendAdminActionNotice((isBan) ? AdminNoticeContext::Ban : AdminNoticeContext::Kick, adminIdx, target);
+			::kickPlayer(target, (isBan) ? _("Administrator has banned you from the game.") : _("Administrator has kicked you from the game."), ERROR_KICKED, isBan);
+			resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());
+			return true;
+		}
+		case LobbyAdminAction::MovePlayerToSpectators:
+		{
+			if (locked.spectators)
+			{
+				return false;
+			}
+			// (an admin moves themselves the same way as any other player - which also ensures the requester's player index doesn't change here)
+			if (target >= MAX_PLAYER_SLOTS || target == NetPlay.hostPlayer || target == adminIdx || !isHumanPlayer(target) || NetPlay.players[target].isSpectator)
+			{
+				return false;
+			}
+			auto newSpectatorIdx = NETmovePlayerToSpectatorOnlySlot(target, true);
+			if (!newSpectatorIdx.has_value())
+			{
+				// failure is already logged by NETmovePlayerToSpectatorOnlySlot
+				return false;
+			}
+			sendAdminActionNotice(AdminNoticeContext::MoveToSpectators, adminIdx, newSpectatorIdx.value());
+			logLobbyAdminAction(adminIdx, astringf("moved player to spectators: [%" PRIu32 "] %s", newSpectatorIdx.value(), getPlayerName(newSpectatorIdx.value())));
+			resetReadyStatus(true);		//reset and send notification to all clients
+			return true;
+		}
+		case LobbyAdminAction::AskSpectatorToPlay:
+		{
+			if (locked.spectators)
+			{
+				return false;
+			}
+			if (target >= MAX_CONNECTED_PLAYERS || target == NetPlay.hostPlayer || target == adminIdx || !isHumanPlayer(target) || !NetPlay.players[target].isSpectator)
+			{
+				return false;
+			}
+			// Ask the spectator if they are okay with a move from spectator -> player?
+			SendPlayerSlotTypeRequest(target, false);
+			sendAdminActionNotice(AdminNoticeContext::AskSpectatorToPlay, adminIdx, target);
+			logLobbyAdminAction(adminIdx, astringf("asked spectator to move to players: [%" PRIu32 "] %s", target, getPlayerName(target)));
+			return true;
+		}
+		case LobbyAdminAction::SetSlotAI:
+		{
+			if (locked.ai)
+			{
+				return false;
+			}
+			if (target >= MAX_PLAYERS || isSpectatorOnlySlot(target) || NetPlay.players[target].allocated)
+			{
+				return false;
+			}
+			int8_t newAI = AI_CLOSED;
+			if (value == AI_OPEN || value == AI_CLOSED)
+			{
+				newAI = static_cast<int8_t>(value);
+			}
+			else if (value == 0 && !stringValue.empty())
+			{
+				// (the order of the list of AIs may differ between the host and clients - so AIs are identified by their script)
+				optional<size_t> aiIdx;
+				for (size_t i = 0; i < aidata.size(); ++i)
+				{
+					if (stringValue == aidata[i].js)
+					{
+						aiIdx = i;
+						break;
+					}
+				}
+				if (!aiIdx.has_value())
+				{
+					debug(LOG_INFO, "Unable to change slot %" PRIu32 " to AI \"%s\" - not available on the host", target, stringValue.c_str());
+					return false;
+				}
+				newAI = static_cast<int8_t>(aiIdx.value());
+			}
+			else
+			{
+				return false;
+			}
+			if (NetPlay.players[target].ai == newAI)
+			{
+				return true; // nothing to do
+			}
+			if (!changeSlotAI(target, newAI))
+			{
+				return false;
+			}
+			logLobbyAdminAction(adminIdx, astringf("changed slot %" PRIu32 " to: %s", target, (newAI == AI_OPEN) ? "open" : ((newAI == AI_CLOSED) ? "closed" : stringValue.c_str())));
+			return true;
+		}
+		case LobbyAdminAction::SetAIDifficulty:
+		{
+			if (locked.difficulty)
+			{
+				return false;
+			}
+			if (target >= MAX_PLAYERS || NetPlay.players[target].allocated || NetPlay.players[target].ai < 0)
+			{
+				return false;
+			}
+			if (value < static_cast<int32_t>(AIDifficulty::EASY) || value > static_cast<int32_t>(AIDifficulty::INSANE))
+			{
+				return false;
+			}
+			const auto newDifficulty = static_cast<AIDifficulty>(value);
+			if (NetPlay.players[target].difficulty == newDifficulty)
+			{
+				return true; // nothing to do
+			}
+			if (!changeAIDifficulty(target, newDifficulty))
+			{
+				return false;
+			}
+			logLobbyAdminAction(adminIdx, astringf("changed difficulty of AI in slot %" PRIu32 " to: %" PRIi32, target, value));
+			return true;
+		}
+		case LobbyAdminAction::DistributeAI:
+		{
+			// (distributes both the AI and its difficulty)
+			if (locked.ai || locked.difficulty)
+			{
+				return false;
+			}
+			if (target >= MAX_PLAYERS || isSpectatorOnlySlot(target) || NetPlay.players[target].allocated || NetPlay.players[target].ai < 0)
+			{
+				return false;
+			}
+			multiLobbyDistributeSlotAI(target);
+			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+			logLobbyAdminAction(adminIdx, astringf("distributed the AI in slot %" PRIu32 " to all other AIs", target));
+			return true;
+		}
+	}
+
+	return false;
+}
+
+// Host-only: A (non-host) lobby admin is asking the host to perform a host-only lobby action on their behalf
+static bool recvLobbyAdminActionRequest(NETQUEUE queue)
+{
+	ASSERT_HOST_ONLY(return false);
+
+	uint8_t actionValue = 0;
+	uint32_t target = 0;
+	int32_t value = 0;
+	std::string stringValue;
+
+	auto r = NETbeginDecode(queue, NET_ADMIN_ACTION_REQUEST);
+	NETuint8_t(r, actionValue);
+	NETuint32_t(r, target);
+	NETint32_t(r, value);
+	NETstring(r, stringValue, MAX_LEN_AI_NAME);
+	const bool validMessage = NETend(r);
+
+	const uint32_t sender = queue.index;
+
+	if (!validMessage || actionValue > static_cast<uint8_t>(LobbyAdminAction::Last))
+	{
+		if (recordInvalidMessage(queue.index, NET_ADMIN_ACTION_REQUEST))
+		{
+			debug(LOG_INFO, "Invalid NET_ADMIN_ACTION_REQUEST from player %" PRIu32 " - further ones will not be logged", sender);
+		}
+		return false;
+	}
+
+	// Only (verified) lobby admins may ask for these actions
+	// (Do not treat a request from a non-admin as a kickable offense, since admin privileges may have changed while the request was in flight)
+	if (sender == NetPlay.hostPlayer || !lobbyCommandSenderHasAdminPrivs(sender, false))
+	{
+		if (recordInvalidMessage(queue.index, NET_ADMIN_ACTION_REQUEST))
+		{
+			debug(LOG_INFO, "Ignoring NET_ADMIN_ACTION_REQUEST from player %" PRIu32 ", who does not have admin privileges - further ones will not be logged", sender);
+		}
+		return false;
+	}
+
+	if (!adminActionRequestLimit.allow(sender))
+	{
+		debug(LOG_NET, "Ignoring NET_ADMIN_ACTION_REQUEST from %" PRIu32 ": too many requests", sender);
+		sendAdminActionNotice(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::RequestFailed, sender, 0, sender);
+		return false;
+	}
+
+	if (!performLobbyAdminAction(sender, static_cast<LobbyAdminAction>(actionValue), target, value, stringValue))
+	{
+		debug(LOG_INFO, "Unable to perform admin action %u requested by player %" PRIu32 " (target: %" PRIu32 ", value: %" PRIi32 ")", static_cast<unsigned>(actionValue), sender, target, value);
+		// Let the admin know that the action was not performed
+		sendAdminActionNotice(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::RequestFailed, sender, 0, sender);
+		return false;
+	}
+
+	// Ensure that any listeners get the updated room status
+	wz_command_interface_output_room_status_json(true);
+	return true;
+}
+
 static int getBoundedMinAutostartPlayerCount()
 {
 	int minAutoStartPlayerCount = min_autostart_player_count();
@@ -6353,6 +6859,21 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				break;
 			}
 			recvTeamRequest(queue);
+			break;
+
+		case NET_ADMIN_ACTION_REQUEST:
+			if (!NetPlay.isHost)
+			{
+				// only the host handles these requests
+				ignoredMessage = true;
+				break;
+			}
+			if (multiplayIsStartingGame())
+			{
+				debug(LOG_NET, "Ignoring %s while the game is starting", messageTypeToString(type));
+				break;
+			}
+			recvLobbyAdminActionRequest(queue);
 			break;
 
 		case NET_READY_REQUEST:

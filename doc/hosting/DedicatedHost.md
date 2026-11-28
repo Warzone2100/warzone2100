@@ -32,6 +32,8 @@ You can provide more arguments to fine-tune your environment.
 * `--addlobbyadminhash=<hash>` grants admin right to the given player, identified by their hash. This argument must be repeated to add multiple administrators. See `PlayerKeys.md` for details about hashes.
 * `--addlobbyadminpublickey=<public key>` grants admin rights to the given player, by their public key. This argument must be repeated to add multiple administrators. See `PlayerKeys.md` for details about keys.
 
+Administrators can manage the game room by clicking the same buttons as a host, whether or not slash commands are enabled: they can change the teams, positions, colours and factions of players, kick or ban players, move players to spectators (or ask spectators to play), change the scavengers, alliances, power and base settings, and change the AIs (and their difficulty) or open / close player slots. Settings that are locked in the autohost file (see `AutohostConfig.md`) cannot be changed by administrators.
+
 
 #### Advanced usage
 

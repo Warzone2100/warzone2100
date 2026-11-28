@@ -41,6 +41,9 @@ The `locked` object sets which game parameters can be changed by the host and ro
 * `scavengers` locks the `scavengers` value.
 * `position` prevents player from changing their starting location.
 * `bases` locks the `bases` value.
+* `spectators` prevents players from being moved between the players and the spectators.
+
+Room administrators change the unlocked parameters the same way as the host: by clicking them in the game room (see `DedicatedHost.md`).
 
 ## Player objects
 
