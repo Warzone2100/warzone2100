@@ -1351,7 +1351,7 @@ static bool afterMapLoad(WorldMapState& mapState)
 			auxClearAll(mapState, x, y, AUXBITS_ALL);
 
 			/* All tiles outside of the map and on map border are blocking. */
-			if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
+			if (x < 1 || y < 1 || x >= mapState.width - 1 || y >= mapState.height - 1)
 			{
 				auxSetBlocking(mapState, x, y, AUXBITS_ALL);	// block everything
 			}
@@ -1420,7 +1420,7 @@ bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState)
 			auxClearBlocking(mapState, x, y, AUXBITS_ALL);
 			auxClearAll(mapState, x, y, AUXBITS_ALL);
 
-			if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
+			if (x < 1 || y < 1 || x >= mapState.width - 1 || y >= mapState.height - 1)
 			{
 				auxSetBlocking(mapState, x, y, AUXBITS_ALL);
 			}

@@ -97,7 +97,7 @@ void initLighting(WorldMapState& mapState, UDWORD x1, UDWORD y1, UDWORD x2, UDWO
 			MAPTILE	*psTile = mapTile(mapState, i, j);
 
 			// always make the edge tiles dark
-			if (i == 0 || j == 0 || i >= mapState.width - 1 || j >= mapState.height - 1)
+			if (i <= 1 || j <= 1 || i >= mapState.width - 1 || j >= mapState.height - 1)
 			{
 				psTile->illumination = 16;
 				psTile->ambientOcclusion = 16.0;

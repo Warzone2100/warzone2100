@@ -5536,15 +5536,10 @@ void checkWorld(const nlohmann::ordered_json &w, std::pair<int, int> mapSize, Do
 		const Vector2i size = psStats->size(direction);
 		const int x = (s.at("pos")[0].get<int>() & ~TILE_MASK) + size.x % 2 * TILE_UNITS / 2;
 		const int y = (s.at("pos")[1].get<int>() & ~TILE_MASK) + size.y % 2 * TILE_UNITS / 2;
-		if (!hasMap || map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > mapSize.first - TOO_NEAR_EDGE
-		    || map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > mapSize.second - TOO_NEAR_EDGE)
+		const StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), direction);
+		if (!hasMap || structureTooNearEdge(b, mapSize.first, mapSize.second))
 		{
 			documentCheckFail(std::string(worldName) + ": structure " + std::to_string(id) + " is too near the map edge, or off the map");
-		}
-		const StructureBounds b = getStructureBounds(psStats, Vector2i(x, y), direction);
-		if (!onMap(b))
-		{
-			documentCheckFail(std::string(worldName) + ": structure " + std::to_string(id) + " extends past the map");
 		}
 		for (int ty = b.map.y; ty < b.map.y + b.size.y; ++ty)
 		{
