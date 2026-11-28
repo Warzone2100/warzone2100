@@ -257,17 +257,17 @@ function produceDroids()
 
 			if (seer)
 			{
-				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
+				enemyarmy = enemyarmy.concat(enumWeaponDroids(e));
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG));
 			}
 			else
 			{
-				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON, me));
+				enemyarmy = enemyarmy.concat(enumWeaponDroids(e, me));
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
 
-		const myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
+		const myarmy = enumWeaponDroids(me).concat(enumDroid(me, DROID_CYBORG));
 
 		if (myarmy.length <= enemyarmy.length)
 		{
@@ -331,17 +331,17 @@ function produceCyborgs()
 
 			if (seer)
 			{
-				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
+				enemyarmy = enemyarmy.concat(enumWeaponDroids(e));
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG));
 			}
 			else
 			{
-				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON, me));
+				enemyarmy = enemyarmy.concat(enumWeaponDroids(e, me));
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
 
-		const myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
+		const myarmy = enumWeaponDroids(me).concat(enumDroid(me, DROID_CYBORG));
 		if (myarmy.length <= enemyarmy.length)
 		{
 			debugMsg("Cyborg forceproduce: my " + myarmy.length + " <= enemy " + enemyarmy.length, 'berserk');
@@ -409,17 +409,17 @@ function produceVTOL()
 
 			if (seer)
 			{
-				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON));
+				enemyarmy = enemyarmy.concat(enumWeaponDroids(e));
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG));
 			}
 			else
 			{
-				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_WEAPON, me));
+				enemyarmy = enemyarmy.concat(enumWeaponDroids(e, me));
 				enemyarmy = enemyarmy.concat(enumDroid(e, DROID_CYBORG, me));
 			}
 		}
 
-		const myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
+		const myarmy = enumWeaponDroids(me).concat(enumDroid(me, DROID_CYBORG));
 
 		if (myarmy.length <= enemyarmy.length)
 		{

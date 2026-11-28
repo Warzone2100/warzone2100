@@ -480,7 +480,7 @@ function bc_eventAttacked(victim, attacker)
 
 	if (victim.type === DROID && victim.droidType === DROID_SENSOR)
 	{
-		let point = enumDroid(me, DROID_WEAPON);
+		let point = enumWeaponDroids(me);
 
 		// Отходим к союзникам, если союзная армия ближе
 		point = point.concat(getAllyArmy());

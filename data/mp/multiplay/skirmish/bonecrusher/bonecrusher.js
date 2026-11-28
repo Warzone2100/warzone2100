@@ -744,7 +744,7 @@ function letsRockThisFxxxingWorld(init)
 	enumDroid(me, DROID_CYBORG).forEach((e) => {
 		groupAdd(armyCyborgs, e);
 	});
-	enumDroid(me, DROID_WEAPON).forEach((e) => {
+	enumWeaponDroids(me).forEach((e) => {
 		groupAdd(armyCyborgs, e);
 	}); // <-- Это не ошибка, первых бесплатных определяем как киборгов (работа у них будет киборгская)
 
