@@ -962,8 +962,8 @@ void droidUpdate(DROID *psDroid)
 		// need to clip this value to prevent overflow condition
 		percentDamage = 100 - clip<UDWORD>(PERCENT(psDroid->body, psDroid->originalBody), 0, 100);
 
-		// Is there any damage?
-		if (percentDamage >= 25)
+		// Is there any meaningful damage?
+		if (droidHealthLevel(psDroid) != DroidHealthLevel::High)
 		{
 			if (percentDamage >= 100)
 			{
@@ -1108,6 +1108,22 @@ void droidUpdateShields(DROID *psDroid)
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
 {
 	return 0; // currently disabled, but left for experimentation with different implementations
+}
+
+DroidHealthLevel droidHealthLevel(const DROID *psDroid)
+{
+	// Body points are compared exactly, without integer truncation of the percentage.
+	const uint64_t body = static_cast<uint64_t>(psDroid->body) * 100;
+	const uint64_t originalBody = psDroid->originalBody;
+	if (body > HEALTH_LEVEL_HIGH_PERCENT * originalBody)
+	{
+		return DroidHealthLevel::High;
+	}
+	if (body > HEALTH_LEVEL_LOW_PERCENT * originalBody)
+	{
+		return DroidHealthLevel::Medium;
+	}
+	return DroidHealthLevel::Low;
 }
 
 /* See if a droid is next to a structure */

@@ -37,8 +37,17 @@
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 
-#define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
-#define REPAIRLEV_HIGH	75	// ditto, but this will repair much sooner..
+#define HEALTH_LEVEL_HIGH_PERCENT	75	// above this percentage of body points remaining, health is high.
+#define HEALTH_LEVEL_LOW_PERCENT	50	// at or below this percentage of body points remaining, health is low.
+
+enum class DroidHealthLevel
+{
+	High,
+	Medium,
+	Low,
+};
+
+DroidHealthLevel droidHealthLevel(const DROID *psDroid);
 
 #define DROID_RESISTANCE_FACTOR     30
 

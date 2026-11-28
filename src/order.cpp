@@ -3398,22 +3398,20 @@ static char *secondaryPrintFactories(UDWORD state)
 #endif
 
 
-/** This function returns true if the droid needs repair according to the repair state, and in case there are some other droids selected, deselect those that are going to repair.
- * @todo there is some problem related with the values of REPAIRLEV_HIGH and REPAIRLEV_LOW that needs to be fixed.
- */
+/** This function returns true if the droid needs repair according to the repair state, and in case there are some other droids selected, deselect those that are going to repair. */
 static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE repairState)
 {
-	unsigned repairLevel;
+	const DroidHealthLevel healthLevel = droidHealthLevel(psDroid);
+	bool needsRepair;
 	switch (repairState)
 	{
-	case DSS_REPLEV_LOW:   repairLevel = REPAIRLEV_HIGH; break;  // LOW → HIGH, seems DSS_REPLEV_LOW and DSS_REPLEV_HIGH are badly named?
-	case DSS_REPLEV_HIGH:  repairLevel = REPAIRLEV_LOW;  break;
+	case DSS_REPLEV_LOW:   needsRepair = healthLevel != DroidHealthLevel::High; break;  // Retreat at medium damage
+	case DSS_REPLEV_HIGH:  needsRepair = healthLevel == DroidHealthLevel::Low;  break;  // Retreat at heavy damage
 	default:
-	case DSS_REPLEV_NEVER: repairLevel = 0;              break;
+	case DSS_REPLEV_NEVER: needsRepair = false;                                 break;
 	}
 
-	// psDroid->body / psDroid->originalBody < repairLevel / 100, without integer truncation
-	if (psDroid->body * 100 <= repairLevel * psDroid->originalBody)
+	if (needsRepair)
 	{
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
