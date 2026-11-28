@@ -3479,7 +3479,8 @@ static void	drawStructureSelections()
 
 	if (bMouseOverStructure && !bMouseOverOwnStructure)
 	{
-		if (mouseDown(getRightClickOrders() ? MOUSE_LMB : MOUSE_RMB))
+		// Only show the health of enemy structures that are actually being drawn (i.e. visible to the local player)
+		if (mouseDown(getRightClickOrders() ? MOUSE_LMB : MOUSE_RMB) && psClickedOn->sDisplay.frameNumber == currentGameFrame)
 		{
 			psStruct = (STRUCTURE *)psClickedOn;
 			batchedObjectStatusRenderer.addEnemyStructureHealthToRender(psStruct);
