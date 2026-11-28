@@ -146,7 +146,6 @@ static PIELIGHT flashColours[] =
 };
 
 static size_t radarWidth, radarHeight, radarTexWidth, radarTexHeight;
-static SDWORD radarCenterX, radarCenterY;
 static uint8_t RadarZoom;
 static float RadarZoomMultiplier = 1.0f;
 static size_t radarBufferSize = 0;
@@ -206,29 +205,50 @@ static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix);
 static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix);
 static void setViewingWindow(const WorldMapState& mapState);
 
+/** The bottom-right corner of the screen area that the radar is aligned to. */
+static Vector2i radarAnchor()
+{
+	return Vector2i(pie_GetVideoBufferWidth() - BASE_GAP * 4, pie_GetVideoBufferHeight() - BASE_GAP * 4);
+}
+
+/**
+ * Screen position of the center of the radar.
+ *
+ * The radar's (possibly rotated) bounding box is aligned to the bottom-right corner, so that non-square maps
+ * don't leave a gap between the radar and the screen edges. When the radar rotates, the bounding box of the
+ * rotated map changes with the camera direction, so the center is recalculated from the current rotation.
+ */
+static Vector2i radarCenter()
+{
+	float halfWidth = static_cast<float>(radarWidth) / 2.f;
+	float halfHeight = static_cast<float>(radarHeight) / 2.f;
+	if (rotateRadar)
+	{
+		const float c = std::abs(static_cast<float>(iCos(static_cast<uint16_t>(playerPos.r.y))) / 65536.f);
+		const float s = std::abs(static_cast<float>(iSin(static_cast<uint16_t>(playerPos.r.y))) / 65536.f);
+		const float w = static_cast<float>(radarWidth);
+		const float h = static_cast<float>(radarHeight);
+		halfWidth = (w * c + h * s) / 2.f;
+		halfHeight = (w * s + h * c) / 2.f;
+	}
+	const Vector2i anchor = radarAnchor();
+	return Vector2i(anchor.x - static_cast<int>(std::ceil(halfWidth)), anchor.y - static_cast<int>(std::ceil(halfHeight)));
+}
+
 static void radarSize(int ZoomLevel)
 {
 	float zoom = static_cast<float>(ZoomLevel) * RadarZoomMultiplier / 16.0f;
 	radarWidth = static_cast<size_t>(radarTexWidth * zoom);
 	radarHeight = static_cast<size_t>(radarTexHeight * zoom);
-	if (rotateRadar)
-	{
-		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - static_cast<int>(MAX(radarHeight, radarWidth)) / 2;
-		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - static_cast<int>(MAX(radarWidth, radarHeight)) / 2;
-	}
-	else
-	{
-		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - static_cast<int>(radarWidth) / 2;
-		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - static_cast<int>(radarHeight) / 2;
-	}
-	debug(LOG_WZ, "radar=(%u,%u) tex=(%zu,%zu) size=(%zu,%zu)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
+	debug(LOG_WZ, "tex=(%zu,%zu) size=(%zu,%zu)", radarTexWidth, radarTexHeight, radarWidth, radarHeight);
 
 	if (pRadarWidget)
 	{
-		auto radarDiag = static_cast<size_t>(ceil(sqrt(double((radarWidth + 1) * (radarWidth + 1)) + double((radarHeight + 1) * (radarHeight + 1)))));
-		int radarX0 = radarCenterX - (radarDiag / 2);
-		int radarY0 = radarCenterY - (radarDiag / 2);
-		pRadarWidget->setGeometry(radarX0, radarY0, radarDiag, radarDiag);
+		// The radar is aligned to the bottom-right corner, and (when rotating) never extends more than its diagonal
+		// from that corner, so this area covers every position it can be in. (hitTest() checks the exact area.)
+		auto radarDiag = static_cast<int>(ceil(sqrt(double((radarWidth + 1) * (radarWidth + 1)) + double((radarHeight + 1) * (radarHeight + 1)))));
+		const Vector2i anchor = radarAnchor();
+		pRadarWidget->setGeometry(anchor.x - radarDiag, anchor.y - radarDiag, radarDiag, radarDiag);
 	}
 }
 
@@ -334,9 +354,10 @@ void CalcRadarPosition(const WorldMapState& mapState, int mX, int mY, int *PosX,
 	int		sPosX, sPosY;
 	float		pixSizeH, pixSizeV;
 
+	const Vector2i center = radarCenter();
 	Vector2f pos;
-	pos.x = mX - radarCenterX;
-	pos.y = mY - radarCenterY;
+	pos.x = mX - center.x;
+	pos.y = mY - center.y;
 	if (rotateRadar)
 	{
 		pos = Vector2f_Rotate2f(pos, -playerPos.r.y);
@@ -385,7 +406,8 @@ void drawRadar(GameWorld& world)
 		camtrace::markRadarRedraw();
 	}
 	frameSkip--;
-	glm::mat4 radarMatrix = glm::translate(glm::vec3(radarCenterX, radarCenterY, 0));
+	const Vector2i center = radarCenter();
+	glm::mat4 radarMatrix = glm::translate(glm::vec3(center.x, center.y, 0));
 	glm::mat4 orthoMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
 	if (rotateRadar)
 	{
@@ -802,9 +824,10 @@ static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix)
 /** Does a screen coordinate lie within the radar area? */
 bool CoordInRadar(int x, int y)
 {
+	const Vector2i center = radarCenter();
 	Vector2f pos;
-	pos.x = x - radarCenterX;
-	pos.y = y - radarCenterY;
+	pos.x = x - center.x;
+	pos.y = y - center.y;
 	if (rotateRadar)
 	{
 		pos = Vector2f_Rotate2f(pos, -playerPos.r.y);
