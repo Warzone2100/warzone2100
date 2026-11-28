@@ -115,6 +115,7 @@ bool intAddDesign(bool bShowCentreScreen);
 void intRemoveDesign();
 void intProcessDesign(UDWORD id);
 void intRunDesign();
+void intRefreshDesign();
 
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
 
