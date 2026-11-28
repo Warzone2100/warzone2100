@@ -66,9 +66,14 @@ extern bool showORDERS;
 
 extern int BlueprintTrackAnimationSpeed;
 
+#define	DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED (5000)
+
 float getViewDistance();
+float getViewDistanceTarget();
 bool getIsCloseDistance();
 void setViewDistance(float dist);
+void animateToViewDistance(float target, float speed = DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED);
+void updateViewDistanceAnimation();
 extern bool	radarOnScreen;
 extern bool	radarPermitted;
 bool radarVisible();

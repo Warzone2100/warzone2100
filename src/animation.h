@@ -80,6 +80,7 @@ public:
 	Animation(uint32_t const &time, EasingType easingType = LINEAR, uint16_t duration = 0) : time(time), easingType(easingType), duration(duration) {}
 	virtual ~Animation() {}
 	virtual void start();
+	void stop();
 	void update();
 	bool isActive() const;
 	const AnimatableData &getCurrent() const;

@@ -156,6 +156,12 @@ void Animation<AnimatableData>::start()
 }
 
 template <class AnimatableData>
+void Animation<AnimatableData>::stop()
+{
+	progress = UINT16_MAX;
+}
+
+template <class AnimatableData>
 void Animation<AnimatableData>::update()
 {
 	if (duration > 0)

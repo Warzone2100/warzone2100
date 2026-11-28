@@ -52,6 +52,7 @@
 #endif
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/matrix_interpolation.hpp>
+#include <limits>
 
 #include "loop.h"
 #include "atmos.h"
@@ -2526,10 +2527,18 @@ void setPlayerPos(const WorldMapState& mapState, SDWORD x, SDWORD y)
 	playerPos.r.z = 0;
 }
 
+static auto viewDistanceAnimation = Animation<float>(realTime);
+
 /// Get the distance at which the player views the world
 float getViewDistance()
 {
 	return distance;
+}
+
+/// Get the distance the view is heading to: the end of the in-progress view distance animation, if any, otherwise the current distance
+float getViewDistanceTarget()
+{
+	return viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : distance;
 }
 
 bool getIsCloseDistance()
@@ -2537,12 +2546,41 @@ bool getIsCloseDistance()
 	return bIsCloseDistance;
 }
 
-/// Set the distance at which the player views the world
-void setViewDistance(float dist)
+static void applyViewDistance(float dist)
 {
 	distance = dist;
 	bIsCloseDistance = (distance < 750.f);
 	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
+}
+
+/// Set the distance at which the player views the world, cancelling any in-progress view distance animation
+void setViewDistance(float dist)
+{
+	viewDistanceAnimation.stop();
+	applyViewDistance(dist);
+}
+
+/// Animate the distance at which the player views the world to target (instantly if speed is 0)
+void animateToViewDistance(float target, float speed)
+{
+	const float delta = std::abs(target - distance);
+	const double duration = (speed > 0 && delta > 1) ? glm::log(delta) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed : 0;
+	viewDistanceAnimation
+		.setInitialData(distance)
+		.setFinalData(target)
+		.setEasing(viewDistanceAnimation.isActive() ? EASE_OUT : EASE_IN_OUT)
+		.setDuration(static_cast<uint32_t>(std::min<double>(duration, std::numeric_limits<uint32_t>::max())))
+		.start();
+}
+
+/// Advance the in-progress view distance animation, if any
+void updateViewDistanceAnimation()
+{
+	if (viewDistanceAnimation.isActive())
+	{
+		viewDistanceAnimation.update();
+		applyViewDistance(viewDistanceAnimation.getCurrent());
+	}
 }
 
 /// Draw a feature (tree/rock/etc.)
