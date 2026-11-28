@@ -1987,6 +1987,16 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 			psDroid->pos.y = 1;
 		}
 	}
+
+	// Multiplayer transporters fly a straight line to their destination.
+	// They have no real pathfinding and skip the typical blocking checks.
+	// Because of this, transporters can accidentally end up outside the map.
+	if (bMultiPlayer && psDroid->isTransporter())
+	{
+		psDroid->pos.x = clip<int>(psDroid->pos.x, 1, world_coord(gameWorld.map.width) - 1);
+		psDroid->pos.y = clip<int>(psDroid->pos.y, 1, world_coord(gameWorld.map.height) - 1);
+	}
+
 	CHECK_DROID(psDroid);
 }
 
