@@ -98,6 +98,14 @@ struct MOVE_CONTROL
 	/// Paces re-requesting a route the droid was given and could not use.
 	unsigned routeRetryUntil = 0;         ///< No re-request before this time, 0 outside an episode
 	uint16_t routeRetryStreak = 0;        ///< Consecutive failures, widening the gap between re-requests
+	/// A staggered retry for a Move pause with no bump clock. Recomputed after loading.
+	struct PauseRetry
+	{
+		Vector2i position = {0, 0};
+		unsigned start = 0;
+		unsigned delay = 0;
+		unsigned attempts = 0;
+	} pauseRetry;
 
 	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 

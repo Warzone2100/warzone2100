@@ -1463,6 +1463,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		return;
 	}
 
+	psDroid->sMove.pauseRetry = {};
+
 	// deal with a droid receiving a primary order
 	if (!psDroid->isTransporter() && psOrder->type != DORDER_NONE && psOrder->type != DORDER_STOP && psOrder->type != DORDER_GUARD)
 	{
