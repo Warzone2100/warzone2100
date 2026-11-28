@@ -27,7 +27,6 @@
 #include "multiplay.h"
 #include "multiint.h"
 #include "notifications.h"
-#include "hci/teamstrategy.h"
 #include "ai.h"
 #include "wzjsonhelpers.h"
 #include "main.h"
@@ -1162,7 +1161,7 @@ static std::vector<uint32_t> filterPlayersByTeam(const std::vector<uint32_t>& pl
 	std::vector<uint32_t> playersOnSameTeamAsDesired;
 	for (auto player : playersToFilter)
 	{
-		if (checkedGetPlayerTeam(player) != specifiedTeam)
+		if (NetPlay.players[player].team != specifiedTeam)
 		{
 			continue;
 		}
@@ -1177,7 +1176,7 @@ static std::vector<uint32_t> getPlayersNotOnTeam(const std::vector<uint32_t>& pl
 	std::vector<uint32_t> playersNotOnTeam;
 	for (auto player : playersToFilter)
 	{
-		if (checkedGetPlayerTeam(player) == specifiedTeam)
+		if (NetPlay.players[player].team == specifiedTeam)
 		{
 			continue;
 		}
@@ -1207,7 +1206,7 @@ optional<bool> PendingVoteKick::getKickVoteResult()
 			// If there's only 1 eligible voter, let them kick (presumably kicking an AI)
 			return true;
 		}
-		if (checkedGetPlayerTeam(eligible_voters[0]) == checkedGetPlayerTeam(eligible_voters[1]))
+		if (NetPlay.players[eligible_voters[0]].team == NetPlay.players[eligible_voters[1]].team)
 		{
 			// If they are on the *same* team, just allow it (presumably they are against bots or the game would have already ended)
 			return true;
@@ -1216,7 +1215,7 @@ optional<bool> PendingVoteKick::getKickVoteResult()
 		return false;
 	}
 
-	auto target_player_team = checkedGetPlayerTeam(target_player_id);
+	auto target_player_team = NetPlay.players[target_player_id].team;
 	auto target_player_teammembers = filterPlayersByTeam(eligible_voters, target_player_team);
 	bool target_player_is_solo = target_player_teammembers.size() <= 1;
 	bool team_voteout_still_possible = false;

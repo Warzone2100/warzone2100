@@ -260,7 +260,6 @@ function checkEndConditions()
 }
 
 //	FIXME allianceExistsBetween() dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
-//	and  team is garbage in NO_ALLIANCES, ALLIANCES mode
 function inOneTeam(playnum, splaynum)
 {
 
