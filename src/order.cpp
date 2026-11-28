@@ -2922,7 +2922,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 					}
 				}
 			}
-			else if (psStruct->body < psStruct->structureBody())
+			else if (psStruct->isDamaged())
 			{
 				order = DroidOrder(DORDER_REPAIR, psObj);
 			}
