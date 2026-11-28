@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-11-23 02:12\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -3033,38 +3033,38 @@ msgid "Replay File Format Unsupported"
 msgstr "Formato de Arquivo de Replay Não Suportado"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "O formato do arquivo de repetição é mais antigo do que esta versão do Warzone 2100 pode suportar."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Não foi possível carregar o replay: O arquivo de replay está incompleto ou corrompido."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: Falha ao inicializar gráficos"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "Falha ao inicializar gráficos para todos os backends."
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Detalhes do erro:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "Por favor, atualize e/ou reinstale os seus controladores de vídeo, e verifique as suas configurações do sistema."
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: Falha no arranque anterior"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "A tentativa anterior de inicializar o seguinte backend gráfico causou uma falha:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Backend Gráfico: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "O Warzone 2100 vai agora tentar iniciar com um backend gráfico diferente."
 
 msgid "Menu"
 msgstr "Menu"
@@ -3795,7 +3795,7 @@ msgid "Buggy"
 msgstr "Buggy"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Edifícios"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistemas de diagnóstico e reparação internos"
@@ -3990,10 +3990,10 @@ msgid "Complete battlefield visibility"
 msgstr "Visibilidade completa do campo de batalha"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Ligas Compósitas Mk2 IA"
 
 msgid "Composite Alloys Buff AI"
-msgstr ""
+msgstr "Ligas Compósitas IA"
 
 msgid "Composite Alloys Mk2"
 msgstr "Ligas Compósitas Mk2"
@@ -4055,13 +4055,13 @@ msgid "Crane2"
 msgstr "Grua2"
 
 msgid "Cyborg Alloys"
-msgstr ""
+msgstr "Ligas para Ciborgues"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Ligas para Ciborgues Mk2 IA"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr ""
+msgstr "Ligas Compósitas para Ciborgues IA"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Ligas Compósitas Cyborg Mk2"
@@ -4130,10 +4130,10 @@ msgid "Cyborg Tank Killer"
 msgstr "Assassino de Tanque Ciborgue"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Proteção Térmica para Ciborgues Mk2 IA"
 
 msgid "Cyborg Thermal Armor Buff AI"
-msgstr ""
+msgstr "Proteção Térmica para Ciborgues IA"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Protecção Térmica Cyborg Mk2"
@@ -4145,7 +4145,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Protecção Térmica Cyborg"
 
 msgid "Cyborg Thermal"
-msgstr ""
+msgstr "Proteção Térmica para Ciborgues"
 
 msgid "Cyborg Thermite"
 msgstr "Ciborgue Termite"

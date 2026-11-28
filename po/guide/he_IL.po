@@ -1,0 +1,1038 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: warzone2100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2026-08-14 02:55\n"
+"Last-Translator: \n"
+"Language-Team: Hebrew\n"
+"Language: he_IL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
+"X-Crowdin-Language: he\n"
+"X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
+"X-Crowdin-File-ID: 360\n"
+
+msgid "Artifacts"
+msgstr "ממצאים"
+
+msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
+msgstr "ככל שתתקדם בקמפיין, תאסוף ממצאים מבסיסי האויב (ומיחידות אויב מסוימות)."
+
+msgid "These will unlock valuable technologies that you can research in a Research Facility."
+msgstr "אלה יפתחו טכנולוגיות יקרות ערך שתוכל לחקור במתקן מחקר."
+
+msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
+msgstr "ממצאים הם קופסאות לבנות קטנות עם מחוון ירוק מעליהן, וניתן לאסוף אותם על ידי הזזת כל יחידה שהיא לקרבתם."
+
+msgid "All artifacts must be picked up as part of each level's victory conditions."
+msgstr "כל הממצאים חייבים להיאסף כחלק מתנאי הניצחון של כל שלב."
+
+msgid "Backstory"
+msgstr "רקע העלילה"
+
+msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
+msgstr "בשלהי המאה ה-21, נאס\"דא (הסוכנות האמריקאית-צפונית להגנה אסטרטגית) פיתחה ופרסה מערכת הגנה עצומה נגד טילים, שכללה רשת של לוויינים חמושים בנשק גרעיני ואתרי שיגור קרקעיים."
+
+msgid "However, during a routine maintenance check, something went terribly wrong..."
+msgstr "אך במהלך בדיקת תחזוקה שגרתית, משהו השתבש נוראות..."
+
+msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
+msgstr "הקריסה הגיעה מהר ובעוצמה. בעקבות תקלה טכנית במערכת ההגנה הלוויינית, שוגרו ראשי נפץ גרעיניים אל ערים מרכזיות ברחבי העולם."
+
+msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
+msgstr "דקות לאחר מכן, האתרים הקרקעיים ירו בתגובה לשיגור. מיליונים מתו כשסופות אש גרעיניות מחקו את ערי העולם. מיליארדים נוספים מתו ממגפות ומחלות שסחפו את שרידי הציוויליזציה."
+
+msgid "Less than a million people survived the Collapse."
+msgstr "פחות ממיליון בני אדם שרדו את הקריסה."
+
+msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
+msgstr "כדור הארץ התפורר למאות חבורות גרוטאים קטנות שנלחמות זו בזו על שרידי הציוויליזציה הקודמת. רק למעטים הייתה החזון לנסות לבנות מחדש עולם חדש מן האפר."
+
+msgid "## Present Day:"
+msgstr "## ימינו:"
+
+msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
+msgstr "השחקן (המכונה \"המפקד\") הוא חלק מקבוצת ניצולים שמצאה מחסה בבסיס צבאי בהרי הרוקי."
+
+msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
+msgstr "הם יוצאים מהבסיס במטרה לבנות מחדש את העולם, ומאמצים את השם \"הפרויקט\"."
+
+msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
+msgstr "הפרויקט שולח שלושה צוותים במטרה להשיב ממצאים, ובכך לאפשר את חקירתן ויישומן של טכנולוגיות טרום־קריסה."
+
+msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
+msgstr "- צוות אלפא נשלח למיקום מדברי באריזונה, דרום-מזרחית למטה הפרויקט"
+
+msgid "- Beta team is sent to the remains of Chicago"
+msgstr "- צוות בטא נשלח לשרידי שיקגו"
+
+msgid "- Gamma team is sent into the northern Rockies in Colorado"
+msgstr "- צוות גמא נשלח לצפון הרי הרוקי בקולורדו"
+
+msgid "Command Panel"
+msgstr "לוח פיקוד"
+
+msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
+msgstr "יש שישה ממשקי לוח-פיקוד שונים, בנוסף לכפתור מרכזי. פותחים ממשק פיקוד על ידי לחיצה על הכפתור המתאים."
+
+msgid "The middle / central button closes any open command interface."
+msgstr "הכפתור האמצעי / המרכזי סוגר כל ממשק פיקוד פתוח."
+
+msgid "Defending Your Base"
+msgstr "הגנה על הבסיס שלך"
+
+msgid "In Warzone 2100, your home base persists throughout the campaign."
+msgstr "ב-Warzone 2100, בסיס הבית שלך נשאר קיים לאורך כל הקמפיין."
+
+msgid "As such, preparing for the future defense of your home base is essential."
+msgstr "לכן, ההיערכות להגנה עתידית על בסיס הבית שלך היא חיונית."
+
+msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
+msgstr "בעוד שיחידות מן הסתם מסייעות בהגנה על הבסיס שלך, גם תכנון הבסיס עצמו קריטי."
+
+msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
+msgstr "בנה מבני הגנה שמספקים מחסה, מגבילים גישה, מזהים אויבים וגורמים נזק, כדי שתוכל להתמודד טוב יותר עם התקפות האויב."
+
+msgid "Intelligence Display"
+msgstr "מסך מודיעין"
+
+msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
+msgstr "מסך המודיעין הוא המקום שבו תמצא את מטרות המשימה הנוכחית, תוכל להפעיל מחדש את תדריך המשימה הנוכחי, ולקרוא עוד על פרויקטי מחקר שהושלמו."
+
+msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
+msgstr "כשאתה פותח את מסך המודיעין, שתי שורות של סמלים מופיעות בתחתית המסך."
+
+msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
+msgstr "בחירת סמל תציג מידע על אותו מחקר או מטרת משימה במרכז המסך."
+
+msgid "Using the Mission Timer"
+msgstr "שימוש בטיימר המשימה"
+
+msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
+msgstr "רוב הזמן, תהיה תחת לחץ של השעון. לפעמים תמצא את עצמך מייחל שהיה לך יותר זמן. פעמים אחרות אולי תחשוב שיש לך יותר מדי."
+
+msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
+msgstr "תמיד יש דרכים חכמות לנצל זמן נוסף כדי להתכונן לקרבות הבאים."
+
+msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
+msgstr "בין אם זה השלמת מחקר חדש, בניית הגנות, או מחזור והחלפת יחידות בנשק וטכנולוגיות חדשים... אל תיתן לזמן טוב להתבזבז."
+
+msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
+msgstr "(אם מופעל אצלך הכוונון \"בונוס חשמל לפי טיימר\" - וזו ברירת המחדל - אינך צריך לחכות שהטיימר יגמר כדי לקבל חשמל. תקבל אוטומטית את החשמל שהיית מקבל אילו הנחת לטיימר לרוץ. אבל שאר השימושים עדיין תקפים!)"
+
+msgid "Power"
+msgstr "חשמל"
+
+msgid "In Warzone 2100, power is your key resource."
+msgstr "ב-Warzone 2100, חשמל הוא המשאב המרכזי שלך."
+
+msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
+msgstr "אתה מוציא חשמל כדי לבנות מבנים, לייצר יחידות, ולחקור שדרוגים / טכנולוגיה חדשה."
+
+msgid "Power is generated by Power Generators that are fed by Oil Derricks."
+msgstr "חשמל מיוצר על ידי גנרטורי חשמל שמוזנים על ידי משאבות נפט."
+
+msgid "Researching Technology"
+msgstr "מחקר טכנולוגיה"
+
+msgid "Researching technologies is accomplished using Research Facilities."
+msgstr "מחקר טכנולוגיות מתבצע באמצעות מתקני מחקר."
+
+msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
+msgstr "כאשר בוחרים מתקן מחקר, כל האפשרויות הזמינות מוצגות בצד שמאל של המסך."
+
+msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
+msgstr "כל פרויקט מחקר דורש כמות מסוימת של חשמל וזמן להשלמה. השקעת החשמל אינה ניתנת להחזר."
+
+msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
+msgstr "אך התקדמות המחקר לעולם אינה אובדת, גם אם מתקן המחקר נהרס - יש רק להקצות מחדש את הפרויקט למתקן אחר."
+
+msgid "Completing research of a new technology may:"
+msgstr "השלמת מחקר של טכנולוגיה חדשה עשויה:"
+
+msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
+msgstr "- להנגיש נשק, מבנים, גופי יחידות, הנעה וכו' חדשים"
+
+msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
+msgstr "- לשדרג את היעילות של נשק, מבנים, גופי יחידות קיימים וכו'"
+
+msgid "- Enable the research of additional technologies"
+msgstr "- לאפשר את מחקרן של טכנולוגיות נוספות"
+
+msgid "General"
+msgstr "כללי"
+
+msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
+msgstr "ב-Warzone 2100, אתה מפקד על כוחות \"הפרויקט\" בקרב לבניית העולם מחדש, לאחר שהאנושות נחרבה כמעט כליל בטילים גרעיניים."
+
+msgid "This guide will help walk you through key facets of the game."
+msgstr "מדריך זה יעזור לך להכיר את ההיבטים המרכזיים של המשחק."
+
+msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
+msgstr "(אם אתה משחק בקמפיין, נושאי מדריך חדשים עשויים להיפתח ככל שתתקדם במשחק.)"
+
+msgid "Building Structures"
+msgstr "בניית מבנים"
+
+msgid "Click the \"Build\" button on the Command Panel."
+msgstr "לחץ על כפתור \"בנייה\" בלוח הפיקוד."
+
+msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
+msgstr "פעולה זו תפתח את תפריט המבנים בצד שמאל של המסך, עם כפתור לכל מבנה שתוכל לבנות."
+
+msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
+msgstr "בחר בכפתור המבנה הרצוי. צללית תופיע בעולם המשחק - שם ימוקם המבנה שלך לאחר האישור."
+
+msgid "Move the silhouette by moving the input device."
+msgstr "הזז את הצללית על ידי הזזת התקן הקלט."
+
+msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
+msgstr "- אם ניתן לבנות מבנה במיקום מסוים, הצללית תיצבע ירוק כשתרחף מעל אותו מיקום."
+
+msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
+msgstr "- אם לא ניתן לבנות מבנה במיקום מסוים, הצללית תיצבע אדום."
+
+msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
+msgstr "לאחר שבחרת מיקום תקף, אשר את מיקום אתר הבנייה. משאית תגיע למיקום ותתחיל בבנייה."
+
+msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
+msgstr "תוכל להורות למשאיות נוספות לסייע (ולבנות את המבנה מהר יותר) על ידי בחירתן והוראה להן למקד את המבנה שבבנייה."
+
+msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+msgstr "טיפ: כדי לבנות \"חומות\" (ברגע שהן זמינות), אפשר ללחוץ ולגרור כדי לצייר חומה בקו ישר."
+
+msgid "Cyborg Factory"
+msgstr "מפעל סייבורגים"
+
+msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
+msgstr "מפעל סייבורגים פועל בדומה למפעל רגיל, אך בונה אך ורק סייבורגים."
+
+msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
+msgstr "כל מפעל יכול לבנות סייבורג אחד בכל פעם, אך ניתן להעמיד בתור כמה סייבורגים לייצור."
+
+msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgstr "כשסייבורג מיוצר, הוא מקבל את פקודות היחידה של מפעל הסייבורגים וממשיך לנקודת הכינוס של המפעל."
+
+msgid "Demolishing Structures"
+msgstr "הריסת מבנים"
+
+msgid "Demolishing a building is almost as simple as building one."
+msgstr "הריסת מבנה היא כמעט פשוטה כמו בנייתו."
+
+msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
+msgstr "בחר \"הרוס מבנה\" בתפריט המבנים ולחץ על מבנה כדי להרוס אותו."
+
+msgid "A unit will move to the building and destroy it."
+msgstr "יחידה תגיע למבנה ותהרוס אותו."
+
+msgid "Demolished structures return half the power used to build the structure."
+msgstr "מבנים שנהרסו מחזירים מחצית מהחשמל ששימש לבנייתם."
+
+msgid "Factory"
+msgstr "מפעל"
+
+msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "מפעל משמש לבניית יחידות. כל מפעל יכול לבנות יחידה אחת בכל פעם, אך ניתן להעמיד בתור כמה יחידות לייצור."
+
+msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
+msgstr "כשיחידה מיוצרת, היא מקבלת את פקודות היחידה של המפעל וממשיכה לנקודת הכינוס של המפעל."
+
+msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
+msgstr "הערה: המפעל הבסיסי מסוגל לייצר רק יחידות עם גוף קל. יש לגלות ולבנות מודולי מפעל כדי לשדרג את יכולות הייצור של המפעל."
+
+msgid "Command Center"
+msgstr "מפקדה ראשית"
+
+msgid "The Command Center is the headquarters of your base."
+msgstr "המפקדה הראשית היא מטה הבסיס שלך."
+
+msgid "It provides access to the mini-map / radar, and the ability to design units."
+msgstr "היא מספקת גישה למיני-מפה / מכ\"ם, וכן את היכולת לתכנן יחידות."
+
+msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
+msgstr "כדי לבנות מפקדה ראשית, לחץ על כפתור \"בנייה\" בלוח הפיקוד ובחר במבנה המפקדה הראשית."
+
+msgid "Then, click where you want your builders to construct it."
+msgstr "לאחר מכן, לחץ במקום שבו תרצה שהבונים שלך יקימו אותה."
+
+msgid "Structure Modules"
+msgstr "מודולי מבנה"
+
+msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
+msgstr "ניתן לשדרג גנרטורי חשמל, מפעלים ומתקני מחקר במודולי המבנה המתאימים להם."
+
+msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
+msgstr "לאחר המחקר, תוכל לגשת למודולים הללו מתפריט הבנייה כדי להחיל אותם על המבנים הרלוונטיים."
+
+msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
+msgstr "לחלופין, תוכל לבחור משאית או מהנדס קרבי וללחוץ על המבנה כדי להתחיל בבנייתו."
+
+msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
+msgstr "הערה: בזמן ששדרוג אחד המבנים הללו מתבצע, הוא יהיה זמנית בלתי זמין עד להשלמת השדרוג."
+
+msgid "Upgrade Effects:"
+msgstr "השפעות השדרוג:"
+
+msgid "- Power Generator modules increase the rate of power generation"
+msgstr "- מודולים לגנרטור חשמל מגדילים את קצב ייצור החשמל"
+
+msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
+msgstr "- מודולי מפעל מאפשרים ייצור יחידות בינוניות וכבדות, וכן מקצרים את זמן ייצור היחידות"
+
+msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
+msgstr "- מודולים למתקן מחקר מקצרים את הזמן הדרוש להשלמת פרויקטי המחקר שהוקצו"
+
+msgid "Oil Derrick"
+msgstr "משאבת נפט"
+
+msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
+msgstr "ניתן לבנות משאבת נפט על ידי בחירת משאית ומיקוד מרבץ נפט זמין."
+
+msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
+msgstr "הריסת משאבת נפט תמנע זמנית בניית משאבה נוספת באותו מקום עד שהאש תדעך."
+
+msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
+msgstr "כדי לנצל משאבת נפט ולייצר חשמל נדרש גנרטור חשמל."
+
+msgid "Power Generator"
+msgstr "גנרטור חשמל"
+
+msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
+msgstr "כל גנרטור חשמל משתמש בעד 4 משאבות נפט. כך למשל, אם יש לך 10 משאבות נפט, תזדקק ל-3 גנרטורי חשמל כדי לנצל את כל משאבות הנפט ולייצר את מרב החשמל."
+
+msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
+msgstr "בעוד שמשאבות נפט חייבות להיבנות על מרבצי נפט, ניתן לבנות גנרטורי חשמל בכל מקום על המפה. אך זכור: גנרטורים נוספים מעבר לאחד לכל 4 משאבות לא יעניקו כל תועלת."
+
+msgid "Rally Point"
+msgstr "נקודת כינוס"
+
+msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
+msgstr "כשמפעל מסיים לבנות יחידה, היחידה תופיע ליד המפעל, ולאחר מכן תמשיך לנקודת הכינוס שהוקצתה למפעל."
+
+msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
+msgstr "כברירת מחדל, נקודת הכינוס ממוקמת ליד המפעל. לחיצה על נקודת כינוס תאפשר לך להזיז אותה."
+
+msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
+msgstr "הערה: הזזת נקודת כינוס בזמן שיחידה בדרכה אליה לא תשפיע על נתיב היחידה."
+
+msgid "Repair Facility"
+msgstr "מתקן תיקון"
+
+msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
+msgstr "בניית מתקן תיקון יוצרת מבנה קבוע שאליו יחידות יכולות לסגת כדי להיות מתוקנות."
+
+msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
+msgstr "מתקני תיקון יכולים לתקן יחידות מהר יותר מיחידות ניידות עם צריחי תיקון."
+
+msgid "Research Facility"
+msgstr "מתקן מחקר"
+
+msgid "Research Facilities are required in order to research new technologies."
+msgstr "מתקני מחקר נדרשים כדי לחקור טכנולוגיות חדשות."
+
+msgid "Each Research Facility can research one technology at a time."
+msgstr "כל מתקן מחקר יכול לחקור טכנולוגיה אחת בכל פעם."
+
+msgid "VTOL Factory"
+msgstr "מפעל מנ\"א"
+
+msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
+msgstr "מפעל מנ\"א משמש לבניית יחידות עם הנעת מנ\"א (כלומר יחידות מעופפות)."
+
+msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "כל מפעל מנ\"א יכול לבנות יחידה אחת בכל פעם, אך ניתן להעמיד בתור כמה יחידות לייצור."
+
+msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+msgstr "כשמפעל מנ\"א מסיים לבנות יחידה, הוא יורה לה לטוס ולנחות ליד נקודת הכינוס של המפעל."
+
+msgid "Structures"
+msgstr "מבנים"
+
+msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
+msgstr "בניית מבנים היא חיונית לחלוטין ב-Warzone 2100 - החל ממפעלים שבונים יחידות, וכלה במתקני מחקר שחוקרים טכנולוגיות חדשות."
+
+msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
+msgstr "ניתן לבצע בנייה עם יחידות שיש להן משאית כצריח ו/או עם מהנדסים קרביים."
+
+msgid "Attack Range"
+msgstr "טווח תקיפה"
+
+msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
+msgstr "תוכל להשתמש בתפריט פקודות היחידה כדי להגדיר את \"טווח התקיפה\" של היחידה."
+
+msgid "- Optimum Range: Fires at the most accurate range"
+msgstr "- טווח אופטימלי: יורה בטווח המדויק ביותר"
+
+msgid "- Short Range: Moves to short range and attacks"
+msgstr "- טווח קצר: נע לטווח קצר ותוקף"
+
+msgid "- Long Range: Attacks at long range (default)"
+msgstr "- טווח ארוך: תוקף בטווח ארוך (ברירת מחדל)"
+
+msgid "Firing Mode"
+msgstr "מצב ירי"
+
+msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
+msgstr "תוכל להשתמש בתפריט פקודות היחידה כדי להגדיר את \"מצב הירי\" של היחידה."
+
+msgid "- Fire At Will: Fires at any enemy (default)"
+msgstr "- ירי חופשי: יורה בכל אויב (ברירת מחדל)"
+
+msgid "- Return Fire: Only fire if fired at"
+msgstr "- אש תגובה: יורה רק אם יורים עליו"
+
+msgid "- Do Not Fire: Units will not fire"
+msgstr "- אין ירי: היחידות לא יירו"
+
+msgid "Movement"
+msgstr "תנועה"
+
+msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
+msgstr "תוכל להשתמש בתפריט פקודות היחידה כדי להגדיר את \"תנועת\" היחידה."
+
+msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
+msgstr "- סיור: נע בין שתי נקודות. פשוט לחץ על נקודה במפה לאחר שבחרת אותה"
+
+msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
+msgstr "- מעגל: (מנ\"א בלבד) נע במעגל מעל מיקום. פשוט לחץ על אזור לאחר שבחרת אותו"
+
+msgid "- Pursue: Pursue enemy"
+msgstr "- מרדף: רודף אחר האויב"
+
+msgid "- Guard: Stay near an area or structure. (default)"
+msgstr "- שמירה: נשאר קרוב לאזור או למבנה. (ברירת מחדל)"
+
+msgid "- Hold Position: Do not move under any circumstances"
+msgstr "- החזק עמדה: לא זז בשום מקרה"
+
+msgid "Recycling"
+msgstr "מחזור"
+
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
+msgstr "מחזור יחידה ישלח אותה למפעל או למתקן התיקון הקרוב ביותר, שם היא תוסר מהמשחק."
+
+msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
+msgstr "מחצית מהחשמל ששימש לייצור היחידה יוחזר לך (אם כי הסכום יופחת אם היחידה פגועה)."
+
+msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
+msgstr "נקודות הניסיון של היחידה הממוחזרת יועברו ליחידה הבאה שתיוצר."
+
+msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
+msgstr "כאשר ממחזרים כמה יחידות מנוסות, כמות נקודות הניסיון הגבוהה ביותר מועברת ראשונה."
+
+msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
+msgstr "תוכל להורות ליחידות הנבחרות לחזור למחזור דרך תפריט פקודות היחידה או מקש הקיצור \"חזור למחזור\"."
+
+msgid "Retreating"
+msgstr "נסיגה"
+
+msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
+msgstr "אובדן יחידות (במיוחד יחידות עם דרגות ניסיון) יכול לפגוע קשות ביכולתו של כוח לנהל קרב בהצלחה."
+
+msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
+msgstr "תוכל להשתמש בתפריט פקודות היחידה כדי לבחור \"סף נסיגה\", שיגרום ליחידות לסגת אוטומטית מהקרב כשהן מגיעות לרמת נזק מסוימת."
+
+msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
+msgstr "- עד הסוף: היחידה שלך לא תיסוג אלא אם תורה לה. (ברירת מחדל)"
+
+msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
+msgstr "- נסיגה בנזק בינוני: היחידה שלך תיסוג בנזק בינוני (צהוב)"
+
+msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
+msgstr "- נסיגה בנזק כבד: היחידה שלך תיסוג בנזק כבד (אדום)"
+
+msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
+msgstr "יחידות נסוגות יחזרו למתקן התיקון, ליחידת התיקון, למטה, או לאזור הנחיתה הקרובים ביותר."
+
+msgid "Return To"
+msgstr "חזרה אל"
+
+msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
+msgstr "תוכל להשתמש בתפריט פקודות היחידה כדי להורות במהירות ליחידות לחזור למיקום מסוים."
+
+msgid "- Return for Repair: Unit will return to a Repair Facility"
+msgstr "- חזור לתיקון: היחידה תחזור למתקן תיקון"
+
+msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
+msgstr "- חזור למטה: היחידה תחזור למפקדה הראשית או לאזור הנחיתה (בקמפיין)"
+
+msgid "- Go To Transport: Unit will go to and board transport"
+msgstr "- עלה על מטוס תובלה: היחידה תגיע ותעלה על מטוס תובלה"
+
+msgid "Unit Orders"
+msgstr "פקודות יחידה"
+
+msgid "Right-click a unit or group of units to show their current Unit Orders."
+msgstr "לחץ קליק ימני על יחידה או קבוצת יחידות כדי להציג את פקודות היחידה הנוכחיות שלהן."
+
+msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
+msgstr "לוח פקודות היחידה מאפשר לך להתאים אישית את התנהגות היחידות שלך, מסיור באזור ועד נסיגה בנקודות פגיעה נמוכות."
+
+msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
+msgstr "לחץ קליק ימני על מפעל כדי לכוונן את פקודות היחידה לכל היחידות העתידיות שהמפעל ייצר."
+
+msgid "Building Units"
+msgstr "בניית יחידות"
+
+msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
+msgstr "כדי לבנות יחידות, בחר מפעל, או לחץ על כפתור \"ייצור\" בלוח הפיקוד - פעולה זו תפתח את לוח הייצור בצד שמאל של המסך."
+
+msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+msgstr "לוח הייצור יציג את עיצובי היחידות שניתן לבנות במפעל שנבחר כרגע. ייתכן שמפעלים יהיו מוגבלים לייצור סוגי יחידות מסוימים (או יוכלו לייצר יחידות מסוימות רק אם שודרגו במודולים)."
+
+msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
+msgstr "כדי לבחור מפעל אחר, לחץ על המפעל בעולם המשחק, או לחץ על הכפתור המתאים בלוח המפעלים במרכז-תחתית המסך."
+
+msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
+msgstr "כדי לייצר יחידה במפעל, לחץ על כפתור עיצוב היחידה הרצוי בלוח הייצור. תוכל להעמיד בתור כמה מאותה יחידה על ידי לחיצה חוזרת על כפתור עיצוב היחידה."
+
+msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgstr "בזמן שיחידה נבנית, היא תוצג בלוח המפעלים מעל המפעל שבונה אותה. אם הפס ירוק, המפעל אוסף חשמל כדי לבנות את היחידה. אם הפס צהוב, היחידה נמצאת בבנייה."
+
+msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
+msgstr "כשמפעל מסיים לבנות יחידה, הוא יורה לה להמשיך לנקודת הכינוס של המפעל."
+
+msgid "Attaching Units"
+msgstr "צירוף יחידות"
+
+msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
+msgstr "כדי לצרף יחידות למפקד, בחר את היחידה(ות), ואז לחץ קליק שמאלי על המפקד שאליו תרצה לצרף אותן. סמל יופיע ליד היחידה(ות) שהוקצו כדי לציין את הצירוף."
+
+msgid "## Limits:"
+msgstr "## מגבלות:"
+
+msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
+msgstr "למפקדים יש מגבלה על כמות היחידות שהם יכולים לפקד עליהן, וזו מושפעת מדרגתם. קידום מושג כאשר המפקד מגיע לכמות ייעודית של נקודות ניסיון."
+
+msgid "After each promotion, the Commander is able to control 2 more units."
+msgstr "לאחר כל קידום, המפקד מסוגל לפקד על 2 יחידות נוספות."
+
+msgid "Detaching Units"
+msgstr "ניתוק יחידות"
+
+msgid "To detach a unit from a Commander:"
+msgstr "כדי לנתק יחידה ממפקד:"
+
+msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
+msgstr "1. לחץ קליק ימני על היחידה (או החזק את מקש \"Shift\" בזמן בחירת היחידה) כדי לבחור רק אותה יחידה (במקום כל קבוצת המפקד)"
+
+msgid "2. Give the unit a new order (eg. move)"
+msgstr "2. תן ליחידה פקודה חדשה (למשל, תנועה)"
+
+msgid "Going for repairs, BRB"
+msgstr "יוצא לתיקונים, כבר חוזר"
+
+msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
+msgstr "יחידה שנסוגה מהקרב כדי להגיע למתקן תיקון תישאר מקושרת לקבוצת המפקד שלה."
+
+msgid "When it is done repairing, it will return to its Commander."
+msgstr "כשהיא מסיימת את התיקון, היא תחזור למפקד שלה."
+
+msgid "Targeting"
+msgstr "מיקוד"
+
+msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
+msgstr "כשאתה בוחר מפקד ומכוון ליחידת אויב או מבנה, היחידות המצורפות ינועו כדי לירות במטרה."
+
+msgid "The attached units will have greater accuracy when firing."
+msgstr "ליחידות המצורפות תהיה דיוק גבוה יותר בעת הירי."
+
+msgid "Commanders"
+msgstr "מפקדים"
+
+msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
+msgstr "צריחי פיקוד משמשים בדומה לחיישנים, אלא שהם יכולים לפקד על כל יחידה תוקפת, לא רק על ארטילריה."
+
+msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
+msgstr "מפקדים מעניקים בונוס דיוק, שריון ומהירות תנועה לכל היחידות שהוקצו להם, בונוס שגדל ככל שדרגת המפקד עולה."
+
+msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
+msgstr "בתחילה הם מוגבלים ל-6 יחידות תוקפות שהוקצו להם, אך מגבלה זו עולה ב-2 בכל פעם שהמפקד מקבל דרגה."
+
+msgid "Designing Units"
+msgstr "תכנון יחידות"
+
+msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
+msgstr "תזדקק לתכנן יחידות חדשות אם תרצה לגבור על אויביך ולטעום את טעמו המתוק של הניצחון. זהו היבט מרכזי במשחקיות של Warzone 2100."
+
+msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
+msgstr "כדי להתחיל לתכנן יחידה, בחר בכפתור התכנון בלוח הפיקוד. פעולה זו תגרום לשני טורים להופיע בצד שמאל של המסך."
+
+msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
+msgstr "כדי ליצור תכנון חדש, בחר בגוף הירוק ה\"ריק\" בפינה השמאלית-עליונה. כדי לערוך תכנון יחידה קיים, פשוט בחר בו במקום."
+
+msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
+msgstr "תכנון יחידה חדשה הוא תהליך פשוט בן שלושה שלבים: בחירת גוף, מערכת הנעה, וצריח. שלוש הבחירות הללו יניבו יחידה חדשה."
+
+msgid "Once you have designed a unit, you will need a Factory to build it."
+msgstr "לאחר שתכננת יחידה, תזדקק למפעל כדי לבנות אותה."
+
+msgid "Experience & Ranks"
+msgstr "ניסיון ודרגות"
+
+msgid "Units gain experience when they successfully dispatch enemies."
+msgstr "יחידות צוברות ניסיון כשהן מחסלות אויבים בהצלחה."
+
+msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
+msgstr "רמת ניסיון גבוהה יותר משמעה שהיחידה מדויקת יותר, נעה מהר יותר, וסופגת פחות נזק."
+
+msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
+msgstr "סמל המציג את דרגת היחידה מוצג ליד פס הבריאות של היחידה."
+
+msgid "Units with higher experience levels can make all the difference in battle!"
+msgstr "יחידות עם רמות ניסיון גבוהות יותר יכולות להכריע קרב!"
+
+msgid "Cyborgs"
+msgstr "סייבורגים"
+
+msgid "Cyborgs are your main infantry units."
+msgstr "סייבורגים הם יחידות הרגליות העיקריות שלך."
+
+msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
+msgstr "אלה יחידות מהירות ואמינות, ועמידות מאוד בפני נשק נגד-שריון."
+
+msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
+msgstr "עם זאת, הן פגיעות יותר לנשק נגד-אישי ולארטילריה."
+
+msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
+msgstr "שים לב שלא ניתן לתכנן סייבורגים. תבניות סייבורג נחקרות בנפרד, ודורשות מפעל סייבורגים כדי לייצרן."
+
+msgid "Half-tracks"
+msgstr "זחל\"ם"
+
+msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
+msgstr "זחל\"ם היא הנעה היברידית בין גלגלים לזחלים."
+
+msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
+msgstr "יש להם עלות ומהירות בינוניות, והם מספקים כמות בינונית של נקודות פגיעה."
+
+msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
+msgstr "הם גם מספקים עמידות מפני נזק נגד-אישי וארטילרי, אך עדיין די פגיעים לנשק נגד-שריון."
+
+msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
+msgstr "זחל\"ם מצוינת ליחידות רב-תכליתיות, אך אינה מספקת את העמידות הגבוהה של הזחלים או את המהירות הגבוהה של הגלגלים."
+
+msgid "Hover"
+msgstr "רחפת"
+
+msgid "Hover is a fast, amphibious propulsion for vehicles."
+msgstr "רחפת היא הנעה מהירה ודו-סביבתית לכלי רכב."
+
+msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
+msgstr "הנעת רחפת מספקת מהירויות מקסימליות גבוהות מאוד ואת היכולת לחצות מים בחופשיות, מה שיכול להיות חיוני למציאת נתיבי תקיפה ייחודיים."
+
+msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
+msgstr "עם זאת, הן מגיעות בעלות ייצור גבוהה יותר, מספקות מעט נקודות פגיעה, ופגיעות לרוב סוגי הנזק."
+
+msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
+msgstr "המהירות הגבוהה של הרחפת ויכולתה לחצות מים הופכות אותה מתאימה לטקטיקות הכה-וברח."
+
+msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
+msgstr "בדומה לגלגלים, עם זאת, הן אינן מתאימות במיוחד לקרבות ממושכים בקו החזית."
+
+msgid "Tracks"
+msgstr "זחלים"
+
+msgid "Tracks are a highly-armored propulsion for vehicles."
+msgstr "זחלים הם הנעה משוריינת מאוד לכלי רכב."
+
+msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
+msgstr "הם מספקים כמות גדולה של נקודות פגיעה, וכן עמידות גבוהה מפני נזק נגד-אישי וארטילרי."
+
+msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
+msgstr "עם זאת, הם מגיעים בעלות ייצור גבוהה יותר, בעלי זמני בנייה ארוכים יותר, ועדיין פגיעים מאוד לנשק נגד-שריון."
+
+msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
+msgstr "בנוסף, לזחלים יש קנס משמעותי במהירות המקסימלית."
+
+msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
+msgstr "בזכות עמידותם הגבוהה, הזחלים מושלמים לכלי רכב המיועדים לקרב בקו החזית."
+
+msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
+msgstr "עם זאת, יש לנקוט זהירות. מהירות התנועה האיטית שלהם יכולה להקשות מאוד על בריחה ממצבים לא נוחים."
+
+msgid "Attacking with VTOLs"
+msgstr "תקיפה עם מנ\"א"
+
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr "כדי לתקוף עם מנ\"א, בחר בו ולחץ על אויב כרגיל."
+
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr "עם זאת, ייתכן שתבחין בפס התחמושת הלבן מתחת לפס הבריאות שלו כשתתחיל לתקוף."
+
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr "בניגוד ליחידות קרקעיות, שנטענות מחדש אוטומטית, מנ\"א נושא כמות מוגבלת של תחמושת. ברגע שהתחמושת אוזלת, המנ\"א לא יכול לתקוף עד שיתודלק מחדש."
+
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr "מנ\"א שאזלה תחמושתו ימצא אוטומטית משטח חימוש-מחדש למנ\"א כדי להצטייד ולתקן את עצמו (ויחזור לתקוף ברגע שיצויד מחדש במלואו), או שניתן לחמש אותו מחדש ידנית על ידי בחירתו ולחיצה על משטח חימוש-מחדש."
+
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr "בניגוד ליחידות אחרות שבדרך כלל תוקפות את המטרה הקרובה ביותר, מנ\"א לא יתקוף דבר באופן אוטומטי. עם זאת, על ידי בחירת מנ\"א ולחיצת alt על אזור, המנ\"א יסייר באזור שבין מיקומו הנוכחי לבין המיקום שנלחץ, ויתקוף כל דבר בסביבה."
+
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr "לחלופין, ניתן להקצות מנ\"א למגדלי תקיפת מנ\"א ולמגדלי סוללת-נגד למנ\"א, מה שיגרום להם לפעול בדומה לארטילריה שהוקצתה למגדלי חיישן."
+
+msgid "Defending with VTOLs"
+msgstr "הגנה עם מנ\"א"
+
+msgid "VTOL units may also be used to defend areas of the map."
+msgstr "ניתן להשתמש ביחידות מנ\"א גם כדי להגן על אזורים במפה."
+
+msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
+msgstr "ניתן להקצות מנ\"א לצריח תקיפת מנ\"א או למגדל מכ\"ם למנ\"א, והם יתקפו אוטומטית כל דבר שהחיישן ממקד (בדומה לארטילריה שהוקצתה לחיישן רגיל)."
+
+msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
+msgstr "ניתן גם להורות למנ\"א לסייר או להקיף אזור. בעת כך, הם יתקפו אוטומטית כל אויב שייתקל בנתיבם."
+
+msgid "Defending Against VTOLs"
+msgstr "הגנה מפני מנ\"א"
+
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr "מה זה שם למעלה בשמיים? ... זו יחידת מנ\"א"
+
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr "מכיוון שמנ\"א אינו יחידה קרקעית, רוב הנשק הקרקעי אינו יכול לפגוע בו."
+
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr "ניתן לפגוע בו רק בנשק נ\"מ (נגד-אווירי, לעיתים קרובות בקיצור \"AA\") או בנשק רב-תכליתי (שיכול לפגוע באוויר או בקרקע)."
+
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr "יש רק כמה נשקים רב-תכליתיים: מקלעים, לייזרים, ותא מיני-רקטות."
+
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr "(רקטות וטילים הם גם רב-תכליתיים, אך רק כשהם מותקנים על סייבורג או מנ\"א.)"
+
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr "בנוסף לכך שהם נדירים, נשק רב-תכליתי לא גורם נזק רב למנ\"א כמו נשק נ\"מ ייעודי, ולכן מומלץ להחזיק נשק נ\"מ כלשהו נגד מנ\"א."
+
+msgid "Using VTOLs"
+msgstr "שימוש במנ\"א"
+
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr "תכנון יחידות מנ\"א דומה לתכנון יחידות קרקעיות."
+
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr "כשבוחרים הנעה, פשוט בחר בהנעת \"מנ\"א\"."
+
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr "לאחר מכן תוכל לבחור מתוך נשקי המנ\"א הזמינים."
+
+msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
+msgstr "כדי לייצר את תכנוני המנ\"א שלך, תזדקק להקים מפעל מנ\"א."
+
+msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
+msgstr "כדי לתקן, לחמש מחדש ולתחזק את יחידות המנ\"א שלך, תזדקק להקים משטח חימוש-מחדש למנ\"א אחד או יותר."
+
+msgid "VTOL Weapons"
+msgstr "נשקי מנ\"א"
+
+msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
+msgstr "לרוב הנשקים יש גרסה מקבילה למנ\"א, שגורמת נזק מוגבר, אך בעלת תחמושת מוגבלת."
+
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr "אין צורך לחקור בנפרד גרסאות מנ\"א של נשק רגיל."
+
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr "בנוסף לגרסאות מנ\"א של נשק ישיר קרקעי, מנ\"א יכול להשתמש גם בנשק פצצות. נשק זה שקול לארטילריה, וחזק מאוד."
+
+msgid "VTOL"
+msgstr "מנ\"א"
+
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr "יחידות מנ\"א (המראה ונחיתה אנכיות) הן הכלים האוויריים העיקריים לשליטה בשמיים."
+
+msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
+msgstr "למנ\"א יש מהירות מקסימלית גבוהה מאוד והוא יכול לחצות כל סוגי השטח."
+
+msgid "Additionally, they cannot be targeted by most weapons while airborne."
+msgstr "בנוסף, לא ניתן למקד אותו ברוב הנשק בזמן שהוא באוויר."
+
+msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
+msgstr "שים לב שלמרות שניתן לתכנן יחידות מנ\"א כמו כלי רכב אחרים, ניתן לייצר אותן רק ממפעל מנ\"א ייעודי."
+
+msgid "Wheels"
+msgstr "גלגלים"
+
+msgid "Wheels are the most basic vehicle propulsion."
+msgstr "גלגלים הם ההנעה הבסיסית ביותר לכלי רכב."
+
+msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
+msgstr "הם זולים ומהירים לייצור, ויש להם גם מהירות מקסימלית גבוהה."
+
+msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
+msgstr "עם זאת, הם פגיעים לרוב סוגי הנזק, ואינם מספקים הרבה נקודות פגיעה."
+
+msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
+msgstr "מומלץ להשתמש בגלגלים על כלי רכב שפועלים מאחורי קו החזית, או כלי רכב שמנצלים את המהירות הגבוהה שלהם להתקפות הכה-וברח."
+
+msgid "Propulsions"
+msgstr "הנעות"
+
+msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
+msgstr "בדיוק כמו עם נשק, תוכל לגלות גם סוגים חדשים של הנעות לכלי רכב שניתן להשתמש בהן בתכנונים."
+
+msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
+msgstr "כשתשלים מחקר על הנעה חדשה, הודעה במסך המודיעין תספק מידע על תכונותיה."
+
+msgid "Additionally, you can find descriptions of each propulsion in this guide."
+msgstr "בנוסף, תוכל למצוא תיאורים של כל הנעה במדריך זה."
+
+msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
+msgstr "הבנת היתרונות והחסרונות של כל הנעה חיונית הן לתכנון היחידות שלך והן להתמודדות עם יחידות האויב."
+
+msgid "Repairing Units"
+msgstr "תיקון יחידות"
+
+msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
+msgstr "תוכל לתכנן יחידה עם צריח תיקון במקום נשק, ולהורות לה לתקן את שאר היחידות שלך."
+
+msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
+msgstr "תוכל גם להשאיר את יחידות התיקון מרוחקות מהקרב, ולהשתמש באפשרויות הנסיגה כדי לגרום ליחידות ההתקפיות שלך לסגת אליהן לתיקון ברמת נזק מסוימת."
+
+msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
+msgstr "נסיגה ותיקון של יחידות עדיפים לרוב בהרבה על אובדן יחידות מנוסות בשדה הקרב."
+
+msgid "CB Sensors"
+msgstr "חיישני סוללת-נגד"
+
+msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
+msgstr "חיישני סוללת-נגד (CB) משנים באופן דרמטי את שדה הקרב בכך שהם מאפשרים ליחידות ארטילריה למקד ישירות פלטפורמות ארטילריה מרוחקות - בתנאי שיש להן את הטווח."
+
+msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
+msgstr "מבנים או יחידות שזוהו יסומנו באדום בערפל הקרב ברגע שחיישן סוללת-נגד מזהה שיגור של ארטילריית אויב כלשהי."
+
+msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
+msgstr "אם פעיל, יחידות ארטילריה יעניקו עדיפות למטרות של חיישן סוללת-נגד על פני מטרות שנחשפו על ידי חיישנים רגילים."
+
+msgid "Un-Assigning"
+msgstr "ביטול הקצאה"
+
+msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
+msgstr "כדי לבטל את הקצאתה של יחידה מחיישן, הדרך הקלה ביותר היא ללחוץ קליק ימני על היחידה, ואז להורות לה לנוע למקום כלשהו."
+
+msgid "Multiple units can be selected by holding CTRL while clicking."
+msgstr "ניתן לבחור כמה יחידות על ידי החזקת CTRL בזמן הלחיצה."
+
+msgid "Using Sensors"
+msgstr "שימוש בחיישנים"
+
+msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
+msgstr "מבני ארטילריה הם הקלים ביותר. פשוט בנה מגדל חיישן, ואם מגדל החיישן ממקד משהו בטווח הנשק של מבני הארטילריה שלך, הם יירו בו."
+
+msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
+msgstr "טנק ארטילריה, לעומת זאת, חייב להיות מוקצה במפורש לחיישן כדי לפעול. בחר את טנקי הארטילריה, ואז לחץ על חיישן כדי להקצות את הטנקים לחיישן."
+
+msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
+msgstr "ברגע שהארטילריה מוקצית, אם היא מוקצית למגדל חיישן, המגדל ימקד אוטומטית אויבים שנכנסים לטווח."
+
+msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
+msgstr "אם היא מוקצית לטנק חיישן, ניתן להשתמש בחיישן כדי לתקוף אויבים על ידי בחירת החיישן ומיקוד אויב. כל הארטילריה שהוקצתה לחיישן תתקוף את מטרתו."
+
+msgid "Sensors"
+msgstr "חיישנים"
+
+msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
+msgstr "ניתן להשתמש בחיישנים לסיור ולמעקב, אך יש להם גם שימוש חשוב יותר: איתור מטרות עבור ארטילריה."
+
+msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
+msgstr "נשק ארטילרי, כשלעצמו, אינו יכול לירות מעבר לטווח החיישן העצמי שלו (8 משבצות ללא שדרוגים)."
+
+msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr "עם זאת, אפילו לנשק הארטילרי הבסיסי ביותר יש טווח נשק שחורג מטווח החיישן המובנה שלו. כדי להשתמש בו, תזדקק לבנות ולפרוס חיישנים בשדה הקרב (מגדלי חיישן או טנקים עם צריחי חיישן)."
+
+msgid "Kinetic & Thermal Damage"
+msgstr "נזק קינטי ותרמי"
+
+msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
+msgstr "רוב הנשק גורם נזק באמצעים קינטיים (כדורים, רקטות וכו'), ולכן מושפע משריון קינטי סטנדרטי."
+
+msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
+msgstr "עם זאת, נשק מסוים גורם במקום זאת נזק תרמי, שאינו מושפע משריון קינטי של המטרה."
+
+msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
+msgstr "במקום זאת, נשק תרמי מוחלש על ידי שריון תרמי של המטרה."
+
+msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
+msgstr "ניתן לראות את השריון הקינטי והתרמי של יחידה בתפריט התכנון, במסך בחירת הגוף."
+
+msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
+msgstr "שים לב שלכל היחידות יש פחות שריון תרמי מאשר שריון קינטי. משמעות הדבר היא שנזק תרמי יופחת פחות מנזק קינטי!"
+
+msgid "Attacking"
+msgstr "תקיפה"
+
+msgid "Designing VTOLs"
+msgstr "תכנון מנ\"א"
+
+msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
+msgstr "זכור: תזדקק ל\"מפעל מנ\"א\" כדי לבנות בפועל תכנוני יחידות מנ\"א."
+
+msgid "Weapons"
+msgstr "נשק"
+
+msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
+msgstr "לרוב הנשקים יש גרסה מקבילה למנ\"א, שגורמת לפחות כפול נזק, אך בעלת תחמושת מוגבלת."
+
+msgid "VTOLs"
+msgstr "מנ\"א"
+
+msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
+msgstr "כדי לייצר יחידות מנ\"א, תצטרך לגלות ולחקור את \"הנעת מנ\"א\" ואת \"מפעל מנ\"א\"."
+
+msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
+msgstr "כדאי גם לחקור ולבנות כמה \"משטחי חימוש-מחדש למנ\"א\", כדי שיחידות המנ\"א שלך יוכלו לטעון מחדש תחמושת."
+
+msgid "Weapon Selection"
+msgstr "בחירת נשק"
+
+msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
+msgstr "ככל שתגלה ותחקור עוד נשק, תגלה גם שנשקים מסוימים עשויים לעבוד טוב בהרבה במצבים מסוימים מאחרים (או מול יחידות או מבנים מסוימים של האויב)."
+
+msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
+msgstr "כשתשלים מחקר על נשק חדש, הודעה במסך המודיעין תספק מידע על תכונותיו."
+
+msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
+msgstr "לטובתך להתנסות בסוגי נשק שונים. אם אתה מתקשה ולא בחנת מחדש את הרכב הכוחות שלך זה זמן מה, אולי הגיע הזמן לשקול להחליף את הנשק בנשק חזק יותר, או בגרסאות חדשות!"
+
+msgid "Units"
+msgstr "יחידות"
+
+msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
+msgstr "תזדקק לתכנן ולבנות יחידות חדשות אם תרצה לגבור על אויביך ולטעום את טעמו המתוק של הניצחון."
+
+msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
+msgstr "היבט זה של המשחק הוא מה שהופך את Warzone 2100 לייחודי בדרכו שלו."
+
+msgid "To be able to design units, a Command Center is required."
+msgstr "כדי להיות מסוגל לתכנן יחידות, נדרשת מפקדה ראשית."
+
+msgid "All-Rounder"
+msgstr "רב-תכליתי"
+
+msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
+msgstr "נשק \"רב-תכליתי\" פחות יעיל מנשק מתמחה."
+
+msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
+msgstr "עם זאת, נשק רב-תכליתי יעיל באופן בינוני נגד כל סוגי המטרות, בשונה מנשק מתמחה."
+
+msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
+msgstr "נשק רב-תכליתי גם מעניק בונוס משמעותי בנקודות פגיעה ליחידה שעליה הוא מותקן, במחיר של ערכי משקל גבוהים יותר."
+
+msgid "Anti-Air"
+msgstr "נ\"מ"
+
+msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
+msgstr "נשק נ\"מ (נגד-אווירי, או AA) מתמחה נגד כל סוגי היחידות המעופפות."
+
+msgid "However, AA weapons are incapable of attacking structures or units on the ground."
+msgstr "עם זאת, נשק נ\"מ אינו מסוגל לתקוף מבנים או יחידות על הקרקע."
+
+msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
+msgstr "בעוד שנשק נ\"מ מצוין להתמודדות עם איומים אוויריים, יש להגן עליו מפני איומים על הקרקע."
+
+msgid "Anti-Personnel"
+msgstr "נגד-אישי"
+
+msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
+msgstr "נשק נגד-אישי יעיל מאוד בכיסוח יחידות רגליות של האויב וכלי רכב קלים."
+
+msgid "However, these weapons are less effective against structures and heavily armored targets."
+msgstr "עם זאת, נשק זה פחות יעיל נגד מבנים ומטרות משוריינות היטב."
+
+msgid "Anti-Tank"
+msgstr "נגד-שריון"
+
+msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
+msgstr "נשק נגד-שריון מתמחה נגד כל סוגי כלי הרכב של האויב."
+
+msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
+msgstr "עם זאת, נשק נגד-שריון פחות יעיל נגד מבנים, ובמיוחד לא יעיל נגד יחידות רגליות."
+
+msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
+msgstr "באופן כללי, נשק נגד-שריון קל משקל, אך מספק מעט מאוד נקודות פגיעה. כלי רכב עם נשק זה יהיו שבירים יותר מאלה המצוידים ברוב סוגי הנשק האחרים."
+
+msgid "Artillery"
+msgstr "ארטילריה"
+
+msgid "Artillery weapons are devastating against infantry and most structures."
+msgstr "נשק ארטילרי הרסני נגד יחידות רגליות ורוב המבנים."
+
+msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
+msgstr "עם זאת, נשק ארטילרי פחות יעיל נגד בונקרים וכלי רכב זחליליים."
+
+msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
+msgstr "רוב הנשק הארטילרי (אך לא כולו) חייב להיות נייח כדי לירות. שילוב זה עם כמות נקודות הפגיעה הנמוכה מאוד שמספק נשק ארטילרי משמעו שיחידות המצוידות בארטילריה פגיעות כשהן לבדן."
+
+msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
+msgstr "לכן, מומלץ להשתמש בנשק ארטילרי כדי לתמוך ביחידות או מבנים אחרים תוך הימנעות מעימות ישיר."
+
+msgid "High-Explosive Bombs"
+msgstr "פצצות נפיצות"
+
+msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
+msgstr "פצצות נפיצות פועלות בדומה לנשק ארטילרי קרקעי (כמו מרגמות)."
+
+msgid "These bombs explode on impact, damaging everything caught in the blast."
+msgstr "פצצות אלה מתפוצצות בפגיעה, וגורמות נזק לכל מה שנתפס בפיצוץ."
+
+msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
+msgstr "כמו נשק ארטילרי, פצצות נפיצות מצטיינות בהשמדת רוב המבנים וקבוצות של יחידות רגליות וכלי רכב קלים, אך מתקשות נגד בונקרים וטנקים משוריינים היטב."
+
+msgid "Just make sure your own units and structures aren't caught in the blast!"
+msgstr "רק ודא שהיחידות והמבנים שלך לא נתפסים בפיצוץ!"
+
+msgid "Incendiary Bombs"
+msgstr "פצצות תבערה"
+
+msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
+msgstr "פצצות תבערה פועלות בדומה מסוימת לנשק להביור קרקעי."
+
+msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
+msgstr "פצצות תבערה גורמות נזק נמוך בפגיעה, אך מציתות באופן מיידי שטח נרחב סביב אתר הפגיעה."
+
+msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
+msgstr "יחידות ומבנים של האויב ששוהים באזור זה יספגו כמות גדולה של נזק לאורך זמן."
+
+msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
+msgstr "כמו נשק להביור, פצצות תבערה מצוינות נגד כל סוגי היחידות ונגד בונקרים, אך חלשות נגד מבנים מוקשחים."
+
+msgid "Bomb Bays"
+msgstr "תאי פצצות"
+
+msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
+msgstr "תאי פצצות הם סוג נשק ייחודי שניתן להתקין רק על מנ\"א."
+
+msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
+msgstr "בעוד שטווח התקיפה שלהם קצר וקיבולת התחמושת שלהם נמוכה, תאי פצצות מעניקים בונוס נקודות פגיעה ובדרך כלל נושאים מטען עוצמתי יותר בהשוואה לנשקי מנ\"א אחרים."
+
+msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
+msgstr "כמו כל נשק אחר, לפצצות שונות יש השפעות, עוצמות ושימושים שונים."
+
+msgid "Bunker Buster"
+msgstr "מפצח בונקרים"
+
+msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
+msgstr "מפצח הבונקרים הוא נשק ייחודי שיעיל באופן יוצא דופן נגד כל המבנים."
+
+msgid "However, the Bunker Buster is extremely weak against any non-structure target."
+msgstr "עם זאת, מפצח הבונקרים חלש מאוד נגד כל מטרה שאינה מבנה."
+
+msgid "Flamer"
+msgstr "להביור"
+
+msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
+msgstr "נשק \"להביור\" תבערתי יעיל נגד יחידות רגליות וטנקים עם הנעה חלשה יותר."
+
+msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
+msgstr "נשק להביור מצוין גם נגד בונקרים ומבני גרוטאים, אך חלש יותר נגד מבנים אחרים."
+
+msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
+msgstr "להביורים יכולים \"לחדור\" יחידות, לגרום נזק ואולי להצית כמה יחידות בפרץ יריות בודד, מה שהופך את נשק הלהביור לחסל-המונים מצוין."
+
+msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
+msgstr "עם זאת, בשל טווחי התקיפה הקצרים שלהם, השימוש בנשק להביור יכול להיות מסוכן."
