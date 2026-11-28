@@ -720,13 +720,13 @@ static bool updateSatLaser(EFFECT *psEffect, LightingData& lightData)
 	UDWORD	radius;
 	UDWORD	xDif, yDif;
 	UDWORD	i;
-	UDWORD	startHeight, endHeight;
+	UDWORD	startHeight;
 	UDWORD	xPos, yPos;
+	const UDWORD columnHeight = 1064;
 
 	// Do these here because they are used by the lighting code below this if
 	xPos = static_cast<UDWORD>(psEffect->position.x);
 	startHeight = static_cast<UDWORD>(psEffect->position.y);
-	endHeight = startHeight + 1064;
 	yPos = static_cast<UDWORD>(psEffect->position.z);
 
 	if (psEffect->baseScale)
@@ -751,8 +751,8 @@ static bool updateSatLaser(EFFECT *psEffect, LightingData& lightData)
 		dv.y = startHeight + SHOCK_WAVE_HEIGHT;
 		addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, nullptr, 0);
 
-		/* Now, add the column of light */
-		for (i = startHeight; i < endHeight; i += 56)
+		/* Now, add the column of light (i is the height above the ground) */
+		for (i = 0; i < columnHeight; i += 56)
 		{
 			radius = 80;
 			/* Add 36 around in a circle..! */
