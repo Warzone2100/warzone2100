@@ -7,6 +7,7 @@
  *
  */
 
+include("/multiplay/skirmish/common/scrollLimits.js"); // Ignore everything outside the scroll limits
 // weapon path role
 const ROLE = {
 	AT: 0,

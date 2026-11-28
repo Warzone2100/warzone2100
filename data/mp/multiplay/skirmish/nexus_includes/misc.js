@@ -88,10 +88,12 @@ function sortByDistToBase(obj1, obj2)
 
 function coordinatesOutOfBounds(x, y)
 {
-	return ((x < DARK_ZONE_TILES) ||
-		(x > mapWidth - DARK_ZONE_TILES) ||
-		(y < DARK_ZONE_TILES) ||
-		(y > mapHeight - DARK_ZONE_TILES));
+	const LIMITS = getAIScrollLimits();
+
+	return ((x < LIMITS.x1 + DARK_ZONE_TILES) ||
+		(x > LIMITS.x2 - DARK_ZONE_TILES) ||
+		(y < LIMITS.y1 + DARK_ZONE_TILES) ||
+		(y > LIMITS.y2 - DARK_ZONE_TILES));
 }
 
 function arrayContains(what, array)
@@ -234,9 +236,6 @@ function baseDetails(player)
 		}
 	}
 
-	// A map should have these coordinates at least...
-	const DUMMY_X = 4;
-	const DUMMY_Y = 4;
 	// Extend the radius a few tiles for each limit
 	const EXTRA_TILES_BASE = 10; //6
 	let x1 = tmpBase.x1 - EXTRA_TILES_BASE;
@@ -245,21 +244,23 @@ function baseDetails(player)
 	let y2 = tmpBase.y2 + EXTRA_TILES_BASE;
 	const RAD = baseRadius + EXTRA_TILES_BASE;
 
-	if (coordinatesOutOfBounds(x1, DUMMY_Y))
+	const LIMITS = getAIScrollLimits();
+
+	if (x1 < LIMITS.x1 + DARK_ZONE_TILES)
 	{
-		x1 = DARK_ZONE_TILES;
+		x1 = LIMITS.x1 + DARK_ZONE_TILES;
 	}
-	if (coordinatesOutOfBounds(DUMMY_X, y1))
+	if (y1 < LIMITS.y1 + DARK_ZONE_TILES)
 	{
-		y1 = DARK_ZONE_TILES;
+		y1 = LIMITS.y1 + DARK_ZONE_TILES;
 	}
-	if (coordinatesOutOfBounds(x2 - DARK_ZONE_TILES, DUMMY_Y))
+	if (x2 > LIMITS.x2 - DARK_ZONE_TILES)
 	{
-		x2 = mapWidth - DARK_ZONE_TILES;
+		x2 = LIMITS.x2 - DARK_ZONE_TILES;
 	}
-	if (coordinatesOutOfBounds(DUMMY_X, y2 - DARK_ZONE_TILES))
+	if (y2 > LIMITS.y2 - DARK_ZONE_TILES)
 	{
-		y2 = mapHeight - DARK_ZONE_TILES;
+		y2 = LIMITS.y2 - DARK_ZONE_TILES;
 	}
 
 	if (player === me)

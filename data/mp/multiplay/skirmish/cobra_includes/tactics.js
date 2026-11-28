@@ -309,22 +309,9 @@ function artilleryTactics()
 						let xPos = beacon.x + xRand;
 						let yPos = beacon.y + yRand;
 
-						if (xPos < 2)
-						{
-							xPos = 2;
-						}
-						else if (xPos > mapWidth - 2)
-						{
-							xPos = mapWidth - 2;
-						}
-						if (yPos < 2)
-						{
-							yPos = 2;
-						}
-						else if (yPos > mapHeight - 2)
-						{
-							yPos = mapHeight - 2;
-						}
+						const _pos = clampToScrollLimits(xPos, yPos, 2);
+						xPos = _pos.x;
+						yPos = _pos.y;
 
 						orderDroidLoc(_artilleryUnits[i], DORDER_SCOUT, xPos, yPos);
 						continue;
@@ -373,22 +360,9 @@ function groundTactics()
 						let xPos = beacon.x + xRand;
 						let yPos = beacon.y + yRand;
 
-						if (xPos < 2)
-						{
-							xPos = 2;
-						}
-						else if (xPos > mapWidth - 2)
-						{
-							xPos = mapWidth - 2;
-						}
-						if (yPos < 2)
-						{
-							yPos = 2;
-						}
-						else if (yPos > mapHeight - 2)
-						{
-							yPos = mapHeight - 2;
-						}
+						const _pos = clampToScrollLimits(xPos, yPos, 2);
+						xPos = _pos.x;
+						yPos = _pos.y;
 
 						orderDroidLoc(_units[i], DORDER_SCOUT, xPos, yPos);
 						continue;

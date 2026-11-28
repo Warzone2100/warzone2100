@@ -144,6 +144,12 @@ function bc_eventObjectSeen(sensor, gameObject)
 		}
 	*/
 
+	// Ignore anything outside the scroll limits
+	if (!withinScrollLimits(gameObject))
+	{
+		return;
+	}
+
 	switch (gameObject.type)
 	{
 		case STRUCTURE:
@@ -386,6 +392,12 @@ function bc_eventAttacked(victim, attacker)
 	}
 	// debugMsg(JSON.stringify(victim), 'temp');
 	if (allianceExistsBetween(me, attacker.player))
+	{
+		return;
+	}
+
+	// Ignore attackers outside the scroll limits, they can't be reached
+	if (!withinScrollLimits(attacker))
 	{
 		return;
 	}

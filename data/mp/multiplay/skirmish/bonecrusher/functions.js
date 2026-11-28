@@ -1506,8 +1506,12 @@ function shuffle(a)
 function posRnd(pos, axis)
 {
 	const p = pos + Math.round(Math.random() * 2 - 1);
+	const _limits = getAIScrollLimits();
+	const lo = (axis === 'x') ? _limits.x1 : _limits.y1;
+	const hi = (axis === 'x') ? _limits.x2 : _limits.y2;
 
-	if (p < 1 || ((axis === 'x' && p >= mapWidth) || (axis === 'y' && p >= mapHeight)))
+	// Stay off the outermost tiles of the scroll limits, which ground units can't enter
+	if (p <= lo || p >= hi - 1)
 	{
 		return pos;
 	}

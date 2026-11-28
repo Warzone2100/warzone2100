@@ -41,24 +41,10 @@ function chooseScoutArea()
 		y = (random(2) > 0) ? (scoutInfo.base.y + yAb) : (scoutInfo.base.y - yAb);
 	}
 
-	//Don't go off map
-	if (x < 2)
-	{
-		x = 2;
-	}
-	else if (x > mapWidth - 2)
-	{
-		x = mapWidth - 2;
-	}
-
-	if (y < 2)
-	{
-		y = 2;
-	}
-	else if (y > mapHeight - 2)
-	{
-		y = mapHeight - 2;
-	}
+	//Don't go outside the scroll limits
+	const POS = clampToScrollLimits(x, y, 2);
+	x = POS.x;
+	y = POS.y;
 
 	if (groupCanReach(groups.scouts, x, y))
 	{
